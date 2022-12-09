@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEB1647C8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A91E647C91
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiLIDSY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 22:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
+        id S229640AbiLIDWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiLIDSV (ORCPT
+        with ESMTP id S229556AbiLIDWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:18:21 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DA547D069;
-        Thu,  8 Dec 2022 19:18:17 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2B93GWplC026671, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2B93GWplC026671
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 9 Dec 2022 11:16:32 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 9 Dec 2022 11:17:20 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 9 Dec 2022 11:17:20 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Fri, 9 Dec 2022 11:17:20 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-CC:     Jakub Kicinski <kuba@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>,
-        "Bernie Huang" <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>
-Subject: RE: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
-Thread-Topic: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
-Thread-Index: AQHZA9p/gdNauXKGBEa6UnG4y/tPNK5VjnKAgAALtACADn7s0IAAx4yA
-Date:   Fri, 9 Dec 2022 03:17:19 +0000
-Message-ID: <7699d3f9e4a244349807a34b3981e26c@realtek.com>
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
-        <20221129100754.2753237-9-s.hauer@pengutronix.de>
-        <20221129081753.087b7a35@kernel.org>
-        <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net>
- <87tu260yeb.fsf@kernel.org>
-In-Reply-To: <87tu260yeb.fsf@kernel.org>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/9_=3F=3F_02:13:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 8 Dec 2022 22:22:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FDF11C28;
+        Thu,  8 Dec 2022 19:22:42 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so3615958pjm.2;
+        Thu, 08 Dec 2022 19:22:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EqPq3egEiol+w6ZuI7IGWgmtQxBJEvHkrKfaFZ8quNg=;
+        b=S+DdFYZomTjuCXjcUJuGF5U4ww8T2mz+l/4RXWuehMFqG3FyddtjYDEMg01ZGPMHbd
+         23NtRYJW2U4T2UZa1TYc2f4P5/gsM160/c6b7zQkh1rM4O9Rb47aZUBMap60F26eTr6x
+         tqhLYhmmxciAytv6Nbdm7segG6qykh/f6b7F/Wjv3OEiYRs0siiu2xZINwkD03Tt6lGJ
+         AZNvH/CkDXaY8J/OiO6m93S6jdUIjiIyky3nBF1FPY8Pw9M928pl0PsaB12XKC6tYtlS
+         puFA2Y8Mn3aS74U6jieQtsxrZnTfzA8q2GqVTN2oV+E8VSofIo6tU0/1S3I+CKuAIljq
+         8wsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EqPq3egEiol+w6ZuI7IGWgmtQxBJEvHkrKfaFZ8quNg=;
+        b=kksQ3HMiKA6RI6JrNBXlyFeRQsTLnvfM0boAxaktqZbvZ2+9YzOfkg9CoYIFbBwA0P
+         qrR0tMkTCQeSCNcEM+O/0rCbXZDXqUvRjvBoBMSaGBsobvK0UJeobm1L24TaR+8ok7T1
+         vS6UlKPi/I0TBVIbre9lCuNAQUYlDUXzntvxjdQ9Ckt/la/u4xzi/GWf1S3FCrhLsgPr
+         +8o5rNRRMaZXgFjy3ImT8HAFl0mqsQUsGFoZw209fUhH4rNG8/9V57rs0VMs0sMhje3u
+         6Pbp0I4Cc8Jwc7OmJig2df1POrHMxNqJN64PwZSELssrWuIMeETtED6rZZC2tsisIszR
+         qsAQ==
+X-Gm-Message-State: ANoB5pmyhLvEdc4W8bBnv1/Rsq2c4ENof87GrNr53nXzpjb44wotXcOx
+        B3p4EbjmcXfEd5kvrO7wLUY=
+X-Google-Smtp-Source: AA0mqf42hRfj4NnycexV2/uvo+raASca364axoSA4/q+dS7fBXTTOv43PGc97ux5+A6vfCUc9MsB9Q==
+X-Received: by 2002:a17:902:bcc5:b0:188:ef28:6d55 with SMTP id o5-20020a170902bcc500b00188ef286d55mr4072618pls.13.1670556161605;
+        Thu, 08 Dec 2022 19:22:41 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-21.three.co.id. [116.206.28.21])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b00189adf6770fsm160058plh.233.2022.12.08.19.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 19:22:40 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 219AB1044CD; Fri,  9 Dec 2022 10:22:36 +0700 (WIB)
+Date:   Fri, 9 Dec 2022 10:22:36 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Niklas Cassel <niklas.cassel@wdc.com>, linux-kernel@vger.kernel.org
+Cc:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH 25/25] Documentation: sysfs-block-device: document
+ command duration limits
+Message-ID: <Y5Kp/JhhwF1rjrdu@debian.me>
+References: <20221208105947.2399894-1-niklas.cassel@wdc.com>
+ <20221208105947.2399894-26-niklas.cassel@wdc.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CYmK+XGGjrI5DVYI"
+Content-Disposition: inline
+In-Reply-To: <20221208105947.2399894-26-niklas.cassel@wdc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,89 +77,215 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--CYmK+XGGjrI5DVYI
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -----Original Message-----
-> From: Kalle Valo <kvalo@kernel.org>
-> Sent: Thursday, December 8, 2022 10:21 PM
-> To: Larry Finger <Larry.Finger@lwfinger.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>; Sascha Hauer <s.hauer@pengutronix.de>;
-> linux-wireless@vger.kernel.org; Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke
-> Shih <pkshih@realtek.com>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
-> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
-> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>
-> Subject: Re: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
-> 
-> Larry Finger <Larry.Finger@lwfinger.net> writes:
-> 
-> > On 11/29/22 10:17, Jakub Kicinski wrote:
-> >> On Tue, 29 Nov 2022 11:07:51 +0100 Sascha Hauer wrote:
-> >>> +config RTW88_8821CU
-> >>> +	tristate "Realtek 8821CU USB wireless network adapter"
-> >>> +	depends on USB
-> >>> +	select RTW88_CORE
-> >>> +	select RTW88_USB
-> >>> +	select RTW88_8821C
-> >>> +	help
-> >>> +	  Select this option will enable support for 8821CU chipset
-> >>> +
-> >>> +	  802.11ac USB wireless network adapter
-> >>
-> >> Those kconfig knobs add so little code, why not combine them all into
-> >> one? No point bothering the user with 4 different questions with amount
-> >> to almost nothing.
-> >
-> > I see only one knob there, name RTW88_8821CU. The other configuration
-> > variables select parts of the code that are shared with other drivers
-> > such as RTW88_8821CE and these parts must be there.
-> 
-> I just test compiled these patches and we have four new questions:
-> 
->   Realtek 8822BU USB wireless network adapter (RTW88_8822BU) [N/m/?] (NEW) m
->   Realtek 8822CU USB wireless network adapter (RTW88_8822CU) [N/m/?] (NEW) m
->   Realtek 8723DU USB wireless network adapter (RTW88_8723DU) [N/m/?] (NEW) m
->   Realtek 8821CU USB wireless network adapter (RTW88_8821CU) [N/m/?] (NEW)
-> 
-> To me this looks too fine grained. Does it really make sense, for
-> example, to enable RTW88_8822BU but not RTW88_8822CU? Would just having
-> RTW88_USB containing all USB devices be more sensible? And the same for
-> PCI, and if we have in the future, SDIO devices.
-> 
+On Thu, Dec 08, 2022 at 11:59:41AM +0100, Niklas Cassel wrote:
+> +What:		/sys/block/*/device/duration_limits/enable
+> +Date:		Dec, 2022
+> +KernelVersion:	v6.3
+> +Contact:	linux-scsi@vger.kernel.org
+> +Description:
+> +		(RW) For ATA and SCSI devices supporting the command duration
+> +		limits feature, write to the file to turn on or off the
+> +		feature. By default this feature is turned off. If the device
+> +		does not support the command duration limits feature, this
+> +		attribute does not exist (the directory
+> +		"/sys/block/*/device/duration_limits" does not exist).
+> +		Writing "1" to this file enables the use of command duration
+> +		limits for read and write commands in the kernel and turns on
+> +		the feature on the device. Writing "0" disables the feature.
 
-Summerize Realtek 802.11n/11ac WiFi drivers after this patchset:
+Sphinx reported inline emphasis warning due to unescaped asterisk above:
 
-                        Kconfig
-  driver      #-of-ko   knob   support chips
-  ---------------------------------------------------------------------
-  rtl8xxxu   1          1      8188fu, 8192cu, 8192eu, 8723au, 8723bu
-  rtlwifi    15         9      8192se, 8723ae, 8723be, 8192ee, 8192de, 8188ee, 8192ce, 8821ae
-                               8192cu
-  rtw88      15         8      8723de, 8821ce, 8822be, 8822ce
-                               8723du, 8821cu, 8822bu, 8822cu
+Documentation/ABI/testing/sysfs-block-device:101: WARNING: Inline emphasis =
+start-string without end-string.
 
-If we merge into single one Kconfig knob, we could have a long list name
+I have applied the fixup:
 
-"Realtek 8723DU/8821CU/8822BU/8822CU USB wireless network adapter"
+---- >8 ----
+diff --git a/Documentation/ABI/testing/sysfs-block-device b/Documentation/A=
+BI/testing/sysfs-block-device
+index 44841f91c69bfe..2cf806b638fbb3 100644
+--- a/Documentation/ABI/testing/sysfs-block-device
++++ b/Documentation/ABI/testing/sysfs-block-device
+@@ -107,7 +107,7 @@ Description:
+ 		feature. By default this feature is turned off. If the device
+ 		does not support the command duration limits feature, this
+ 		attribute does not exist (the directory
+-		"/sys/block/*/device/duration_limits" does not exist).
++		"/sys/block/\*/device/duration_limits" does not exist).
+ 		Writing "1" to this file enables the use of command duration
+ 		limits for read and write commands in the kernel and turns on
+ 		the feature on the device. Writing "0" disables the feature.
 
-or an implicit name
+> +
+> +
+> +What:		/sys/block/*/device/duration_limits/read/[1-7]/*
+> +Date:		Dec, 2022
+> +KernelVersion:	v6.3
+> +Contact:	linux-scsi@vger.kernel.org
+> +Description:
+> +		(RO) For ATA and SCSI devices supporting the command duration
+> +		limits feature, this shows the set of 7 command duration limits
+> +		descriptors for read commands currently set on the device. For
+> +		each of the 7 descritors, the following read-only attributes
+> +		are present:
+> +
+> +		  - duration_guideline: specifies the preferred length of time
+> +		    in microseconds for the completion of a command.
+> +
+> +		  - duration_guideline_policy: specifies the policy action
+> +		    taken if the duration_guideline attribute specifies a
+> +		    non-zero command duration guideline that the device is
+> +		    unable to achieve for a command.
+> +
+> +		    Possible values are:
+> +
+> +		      - 0x0: The device will complete the command at the
+> +			     earliest possible time consistent with the
+> +			     specified command duration guideline.
+> +		      - 0x1: If the specified command duration guideline has
+> +			     not been achieved and the command duration
+> +			     guideline policy field is not the seventh command
+> +			     duration limits descriptor, then the device
+> +			     continues processing that command using the
+> +			     command duration limits descriptor that has
+> +			     the next higher number.
+> +		      - 0x2: The device will continue processing the command
+> +			     as with no command duration limits descriptor
+> +			     being used.
+> +		      - 0xD: The device will complete the command and an IO
+> +			     failure will be reported to the user with the ETIME
+> +			     error code.
+> +		      - 0xF: Same as 0xD.
+> +
+> <snipped>...
+> +		    Possible values are:
+> +
+> +		      - 0x0: The device will complete the command at the
+> +			     earliest possible time (i.e, do nothing based on
+> +			     the max limit not being met).
+> +		      - 0xD: The device will complete the command and an IO
+> +			     failure will be reported to the user with the ETIME
+> +			     error code.
+> +		      - 0xE: Same as 0xD.
+> +		      - 0xF: Same as 0xD.
+> +
+> <snipped>...
+> +		    Possible values are:
+> +
+> +		      - 0x0: The device will complete the command at the
+> +			     earliest possible time (i.e, do nothing based on
+> +			     the time limit not being met).
+> +		      - 0xD: The device will complete the command and an IO
+> +			     failure will be reported to the user with the ETIME
+> +			     error code.
+> +		      - 0xF: Same as 0xD.
+> +
 
-"Realtek 802.11n/802.11ac USB wireless network adapter"
+The lists items above looks poorly indented in htmldocs (due to use of
+proportional fonts). The fix is to align to first character after bullet
+list marker, like:
 
-The string mixes "802.11n/802.11ac" because hardware architecture of
-Realtek WiFi chips change during 11n/11ac generations, so rtlwifi (old architecture)
-and rtw88 (new architecture) support both 11n and 11ac chips. That is a little
-bit inconvenient to people who wants to know which driver support his own WiFi
-module explicitly.
+---- >8 ----
+diff --git a/Documentation/ABI/testing/sysfs-block-device b/Documentation/A=
+BI/testing/sysfs-block-device
+index 2cf806b638fbb3..79f67b975d57ac 100644
+--- a/Documentation/ABI/testing/sysfs-block-device
++++ b/Documentation/ABI/testing/sysfs-block-device
+@@ -135,21 +135,25 @@ Description:
+ 		    Possible values are:
+=20
+ 		      - 0x0: The device will complete the command at the
+-			     earliest possible time consistent with the
+-			     specified command duration guideline.
++			earliest possible time consistent with the
++			specified command duration guideline.
++
+ 		      - 0x1: If the specified command duration guideline has
+-			     not been achieved and the command duration
+-			     guideline policy field is not the seventh command
+-			     duration limits descriptor, then the device
+-			     continues processing that command using the
+-			     command duration limits descriptor that has
+-			     the next higher number.
++			not been achieved and the command duration
++			guideline policy field is not the seventh command
++			duration limits descriptor, then the device
++			continues processing that command using the
++			command duration limits descriptor that has
++			the next higher number.
++
+ 		      - 0x2: The device will continue processing the command
+-			     as with no command duration limits descriptor
+-			     being used.
++			as with no command duration limits descriptor
++			being used.
++
+ 		      - 0xD: The device will complete the command and an IO
+-			     failure will be reported to the user with the ETIME
+-			     error code.
++			failure will be reported to the user with the ETIME
++			error code.
++
+ 		      - 0xF: Same as 0xD.
+=20
+ 		  - max_active_time: specifies an upper limit in microseconds
+@@ -165,12 +169,15 @@ Description:
+ 		    Possible values are:
+=20
+ 		      - 0x0: The device will complete the command at the
+-			     earliest possible time (i.e, do nothing based on
+-			     the max limit not being met).
++			earliest possible time (i.e, do nothing based on
++			the max limit not being met).
++
+ 		      - 0xD: The device will complete the command and an IO
+-			     failure will be reported to the user with the ETIME
+-			     error code.
++			failure will be reported to the user with the ETIME
++			error code.
++
+ 		      - 0xE: Same as 0xD.
++
+ 		      - 0xF: Same as 0xD.
+=20
+ 		  - max_inactive_time: specifies an upper limit in microseconds
+@@ -185,11 +192,13 @@ Description:
+ 		    Possible values are:
+=20
+ 		      - 0x0: The device will complete the command at the
+-			     earliest possible time (i.e, do nothing based on
+-			     the time limit not being met).
++			earliest possible time (i.e, do nothing based on
++			the time limit not being met).
++
+ 		      - 0xD: The device will complete the command and an IO
+-			     failure will be reported to the user with the ETIME
+-			     error code.
++			failure will be reported to the user with the ETIME
++			error code.
++
+ 		      - 0xF: Same as 0xD.
+=20
+=20
+Thanks.
 
-Another thing is to save some compile time and disk space to build these .ko if
-we have separated knobs. For Ubuntu or other distros users, I think they
-may not care about this, because distros have already built drivers and disk
-of notebook or desktop is large. But, for embedded users, like Raspberry Pi
-or proprietary embedded system, they may want to highly customize drivers
-due to limit of hardware resource.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Therefore, I prefer to preserve current Kconfig. Though single one knob is
-really simple for anything.
+--CYmK+XGGjrI5DVYI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Ping-Ke
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5Kp8wAKCRD2uYlJVVFO
+o7EiAQDbFwVWhF/CVWXIYKBEOf576MDRyDzz42i92hrpx2BanwEAvM3aItECUxbW
+3suLyS9RuTyeMDquZDebuRurHcvqJw4=
+=QP6J
+-----END PGP SIGNATURE-----
+
+--CYmK+XGGjrI5DVYI--
