@@ -2,213 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7F8647E65
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A641D647E68
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiLIHR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S229966AbiLIHTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLIHRx (ORCPT
+        with ESMTP id S229756AbiLIHTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:17:53 -0500
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8971AA11;
-        Thu,  8 Dec 2022 23:17:50 -0800 (PST)
-Received: by mail-wr1-f47.google.com with SMTP id bx10so4317784wrb.0;
-        Thu, 08 Dec 2022 23:17:50 -0800 (PST)
+        Fri, 9 Dec 2022 02:19:51 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73772654B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 23:19:48 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id y24-20020a5ec818000000b006e2c0847835so1636675iol.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 23:19:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+yITXud0X/ZAcTv3o4ks1/uA+y77wuhRyG/xgZE2LM=;
-        b=ztZK5WJ4fFy9wb0115QUvY9u51YgPPp4QrC1Xj+InENdHtda5WpUBYHnWCs6RF35vm
-         WwL7P0znonO9525UUJ/DtwN6A8634q97mXiQl/XtyEaN+MfpGR73bUW8Yh2tAwa+j5jm
-         /ReCa7oJnKBQLrl90/Y8W3k4+57m9VfwsFZpNpMGXPmDYC1BiMuJbwAGrwIYyOCWuTD4
-         GT67Nyxhr3HH79pC5lt5F8V+Tro3l7Cx0qXld/nD+RpjS62Zr6gkCyoxDwbE81dlI61p
-         VB7oyDoKNbzSNnbtJrDIwUT0PzBHguGuJ6kqOq+zaCaldzTlaTqfz3pfVw8WP5LDCEFu
-         xlEw==
-X-Gm-Message-State: ANoB5pnCjXugRC+TKSbwgfCyD5xt7EU70Eul9aVghThIYSHe/TDftwnf
-        p5fXH0bFvaVTBuZYZffj6mQ=
-X-Google-Smtp-Source: AA0mqf7KNUQWA1LeH8AdJxZntwBQ9+UtMRooxbZdwDVjn6ZA9ejUX6pZ6aMDIfnKejffcCVHUgsWxg==
-X-Received: by 2002:a5d:6f15:0:b0:242:bef:80a1 with SMTP id ay21-20020a5d6f15000000b002420bef80a1mr4943379wrb.2.1670570268813;
-        Thu, 08 Dec 2022 23:17:48 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b0023657e1b980sm615350wri.53.2022.12.08.23.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 23:17:48 -0800 (PST)
-Message-ID: <6614f5d2-d99b-ea8a-f660-7a3433499a9f@kernel.org>
-Date:   Fri, 9 Dec 2022 08:17:47 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fke5yQtt9mF4d6J9mFgP+2VXNvcG/RndOPbe7YXc6UA=;
+        b=s2Hhg3X0Tvy0Nf/cyTcJehWpoMzARFXtKAYVumyqD6mzPwc6fyule6jLGwTufzRiIz
+         t0+VOH+9GYREAaXg5XlQGWUgkb1KfK771oqUXCvBNqTHT1SGxOzd/GTJIfQ9LwUiSikM
+         +Q78Wf+yqJCyf+ejlzAR0VwvJX8VnWBON8RD41i4d8givttug8iDqz6xRs5slqEnubvy
+         DRP8BITomw4kxizjK0z/ycoLiHFGZeEpcB6QZ34yXcXsHJlQyY9gN4ZMYjTCcoKmEoxd
+         Uf17lFnCUNYbZ/Zo/cIexI/rzFIHsWZ0DrEC82pJkvzkgafPJuqGac4dxfhji6UcbzoN
+         /y7w==
+X-Gm-Message-State: ANoB5pmlUOOPlA2VXbYT6SqP9VvCwv7bGT0r0zJDpXK7ykTQeNwjJTYI
+        eQs896Px/a3ga6FJbPFE07q4f1ogPCgT0Lf+l6thv1mAtKzK
+X-Google-Smtp-Source: AA0mqf49cB8fqYlbqkc+fTh8D8MdRTkcL0vAymcDaiPTTLL4DTEwPeTE24YzddN3q+13fNIO6UJswotVLTXKVNJOSlhzXRNe5Tb/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/1] tty: fix out-of-bounds access in
- tty_driver_lookup_tty()
-Content-Language: en-US
-To:     Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <20221207075236.23171-1-svens@linux.ibm.com>
- <20221207075236.23171-2-svens@linux.ibm.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221207075236.23171-2-svens@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cc48:0:b0:38a:32c7:997 with SMTP id
+ i8-20020a02cc48000000b0038a32c70997mr10564009jaq.139.1670570388235; Thu, 08
+ Dec 2022 23:19:48 -0800 (PST)
+Date:   Thu, 08 Dec 2022 23:19:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000902cda05ef5ffad3@google.com>
+Subject: [syzbot] INFO: task hung in rxrpc_destroy_all_calls (3)
+From:   syzbot <syzbot+2aea8e1c8e20cb27a01f@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07. 12. 22, 8:52, Sven Schnelle wrote:
-> When specifying an invalid console= device like console=tty3270,
-> tty_driver_lookup_tty() returns the tty struct without checking
-> whether index is a valid number.
-> 
-> To reproduce:
-> 
-> qemu-system-x86_64 -enable-kvm -nographic -serial mon:stdio \
-> -kernel ../linux-build-x86/arch/x86/boot/bzImage \
-> -append "console=ttyS0 console=tty3270"
-> 
-> This crashes with:
-> 
-> [    0.748921]   No soundcards found.
-> [    0.749293] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
-> [    0.750125] cfg80211: failed to load regulatory.db
-> [    0.750611] ------------[ cut here ]------------
-> [    0.751100] refcount_t: saturated; leaking memory.
-> [    0.751603] WARNING: CPU: 0 PID: 1 at lib/refcount.c:22 refcount_warn_saturate+0x51/0x110
-> [    0.752438] Modules linked in:
-> [    0.752772] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc7-00194-gc911e8eba40a-dirty #15
-> [    0.753609] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
-> [..]
-> [    0.763352] Call Trace:
-> [    0.763648]  <TASK>
-> [    0.763907]  tty_open+0x5be/0x6f0
-> [    0.764304]  chrdev_open+0xbd/0x230
-> [    0.764694]  ? cdev_device_add+0x80/0x80
-> [    0.765217]  do_dentry_open+0x1e0/0x410
-> [    0.765719]  path_openat+0xca9/0x1050
-> [    0.766224]  do_filp_open+0xaa/0x150
-> [    0.766694]  file_open_name+0x133/0x1b0
-> [    0.767260]  filp_open+0x27/0x50
-> [    0.767674]  console_on_rootfs+0x14/0x4d
-> [    0.768189]  kernel_init_freeable+0x1e4/0x20d
-> [    0.768726]  ? rest_init+0xc0/0xc0
-> [    0.769108]  kernel_init+0x11/0x120
-> [    0.769480]  ret_from_fork+0x22/0x30
-> [    0.769863]  </TASK>
-> [    0.770128] ---[ end trace 0000000000000000 ]---
-> [    0.770599] BUG: kernel NULL pointer dereference, address: 00000000000000ef
-> [    0.771265] #PF: supervisor read access in kernel mode
-> [    0.771773] #PF: error_code(0x0000) - not-present page
-> [    0.772311] PGD 0 P4D 0·
-> [    0.772609] Oops: 0000 [#1] PREEMPT SMP PTI
-> [    0.773066] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rc7-00194-gc911e8eba40a-dirty #15
-> [    0.774027] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
-> [    0.774878] RIP: 0010:tty_open+0x268/0x6f0
-> [..]
-> [    0.783386] Call Trace:
-> [    0.783715]  <TASK>
-> [    0.784013]  chrdev_open+0xbd/0x230
-> [    0.784444]  ? cdev_device_add+0x80/0x80
-> [    0.784920]  do_dentry_open+0x1e0/0x410
-> [    0.785389]  path_openat+0xca9/0x1050
-> [    0.785813]  do_filp_open+0xaa/0x150
-> [    0.786240]  file_open_name+0x133/0x1b0
-> [    0.786746]  filp_open+0x27/0x50
-> [    0.787244]  console_on_rootfs+0x14/0x4d
-> [    0.787800]  kernel_init_freeable+0x1e4/0x20d
-> [    0.788383]  ? rest_init+0xc0/0xc0
-> [    0.788881]  kernel_init+0x11/0x120
-> [    0.789356]  ret_from_fork+0x22/0x30
-> [    0.789842]  </TASK>
-> [    0.790163] Modules linked in:
-> [    0.790502] CR2: 00000000000000ef
-> [    0.790861] ---[ end trace 0000000000000000 ]---
-> [    0.791332] RIP: 0010:tty_open+0x268/0x6f0
-> [..]
-> [    0.799648] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009
-> [    0.800479] Kernel Offset: 0x10400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> [    0.801534] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009 ]---
+Hello,
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+syzbot found the following issue on:
 
-Yes, this makes sense as a sanity check for all drivers. But I would 
-_also_ disallow registering such a console in vt:
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3075,6 +3075,11 @@ int vt_kmsg_redirect(int new)
-   * The console must be locked when we get here.
-   */
+HEAD commit:    59d0d52c30d4 AMerge tag 'netfs-fixes-20221115' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a2f8d9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=378c11a9ed9a0efe
+dashboard link: https://syzkaller.appspot.com/bug?extid=2aea8e1c8e20cb27a01f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-+static int vt_console_setup(struct console *co, char *options)
-+{
-+       return co->index >= MAX_NR_CONSOLES ? -EINVAL : 0;
-+}
-+
-  static void vt_console_print(struct console *co, const char *b, 
-unsigned count)
-  {
-         struct vc_data *vc = vc_cons[fg_console].d;
-@@ -3158,6 +3163,7 @@ static struct tty_driver *vt_console_device(struct 
-console *c, int *index)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-  static struct console vt_console_driver = {
-         .name           = "tty",
-+       .setup          = vt_console_setup,
-         .write          = vt_console_print,
-         .device         = vt_console_device,
-         .unblank        = unblank_screen,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e37a2138645c/disk-59d0d52c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/15b7229edb64/vmlinux-59d0d52c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a6a9d898be4a/bzImage-59d0d52c.xz
 
-That means dmesg would say:
-   Console: colour dummy device 80x25
-   printk: console [ttyS0] enabled
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2aea8e1c8e20cb27a01f@syzkaller.appspotmail.com
 
-And not:
-   Console: colour dummy device 80x25
-   printk: console [tty3270] enabled
-   printk: console [ttyS0] enabled
+INFO: task kworker/u4:6:12250 blocked for more than 143 seconds.
+      Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:6    state:D stack:22936 pid:12250 ppid:2      flags:0x00004000
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5191 [inline]
+ __schedule+0x8fc/0xda0 kernel/sched/core.c:6503
+ schedule+0xcb/0x190 kernel/sched/core.c:6579
+ rxrpc_destroy_all_calls+0x595/0x690 net/rxrpc/call_object.c:736
+ rxrpc_exit_net+0x6a/0xc0 net/rxrpc/net_ns.c:123
+ ops_exit_list net/core/net_namespace.c:169 [inline]
+ cleanup_net+0x758/0xc50 net/core/net_namespace.c:601
+ process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-> ---
->   drivers/tty/tty_io.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-> index de06c3c2ff70..1ac6784ea1f9 100644
-> --- a/drivers/tty/tty_io.c
-> +++ b/drivers/tty/tty_io.c
-> @@ -1224,14 +1224,16 @@ static struct tty_struct *tty_driver_lookup_tty(struct tty_driver *driver,
->   {
->   	struct tty_struct *tty;
->   
-> -	if (driver->ops->lookup)
-> +	if (driver->ops->lookup) {
->   		if (!file)
->   			tty = ERR_PTR(-EIO);
->   		else
->   			tty = driver->ops->lookup(driver, file, idx);
-> -	else
-> +	} else {
-> +		if (idx >= driver->num)
-> +			return ERR_PTR(-EINVAL);
->   		tty = driver->ttys[idx];
-> -
-> +	}
->   	if (!IS_ERR(tty))
->   		tty_kref_get(tty);
->   	return tty;
+Showing all locks held in the system:
+3 locks held by kworker/u4:0/9:
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8d323ff0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8d3247f0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+2 locks held by ksoftirqd/0/15:
+1 lock held by khungtaskd/28:
+ #0: ffffffff8d323e20 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+1 lock held by khugepaged/35:
+ #0: ffffffff8d3c9208 (lock#3){+.+.}-{3:3}, at: __lru_add_drain_all+0x66/0x800 mm/swap.c:873
+3 locks held by kworker/1:2/156:
+ #0: ffff88814abc0d38 ((wq_completion)ipv6_addrconf){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
+ #1: ffffc90002f1fd00 ((work_completion)(&(&ifa->dad_work)->work)){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
+ #2: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: addrconf_dad_work+0xd8/0x16e0 net/ipv6/addrconf.c:4083
+5 locks held by syslogd/2979:
+1 lock held by klogd/2986:
+1 lock held by dhcpcd/3210:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0x2cd/0x1ab0 net/ipv4/devinet.c:1070
+2 locks held by getty/3306:
+ #0: ffff8880282a9098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900031262f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6e8/0x1e50 drivers/tty/n_tty.c:2177
+4 locks held by syz-fuzzer/3649:
+3 locks held by kworker/0:7/3724:
+ #0: ffff888012864d38 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
+ #1: ffffc900044cfd00 ((linkwatch_work).work){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
+ #2: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: linkwatch_event+0xa/0x50 net/core/link_watch.c:263
+3 locks held by kworker/0:10/4439:
+3 locks held by kworker/u4:6/12250:
+ #0: ffff8880129c3138 ((wq_completion)netns){+.+.}-{0:0}, at: process_one_work+0x796/0xd10 kernel/workqueue.c:2262
+ #1: ffffc900152f7d00 (net_cleanup_work){+.+.}-{0:0}, at: process_one_work+0x7d0/0xd10 kernel/workqueue.c:2264
+ #2: ffffffff8e471b50 (pernet_ops_rwsem){++++}-{3:3}, at: cleanup_net+0xf0/0xc50 net/core/net_namespace.c:563
+1 lock held by syz-executor.2/16413:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.3/16417:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.1/16425:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.4/16427:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.5/16429:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+2 locks held by syz-executor.0/16430:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+ #1: ffffffff8d3293b8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: exp_funnel_lock kernel/rcu/tree_exp.h:292 [inline]
+ #1: ffffffff8d3293b8 (rcu_state.exp_mutex){+.+.}-{3:3}, at: synchronize_rcu_expedited+0x3a6/0x890 kernel/rcu/tree_exp.h:946
+1 lock held by syz-executor.2/16523:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.3/16527:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.1/16531:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.4/16536:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.0/16538:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
+1 lock held by syz-executor.5/16539:
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:74 [inline]
+ #0: ffffffff8e47de88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x75d/0xe90 net/core/rtnetlink.c:6088
 
-thanks,
--- 
-js
-suse labs
+=============================================
 
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x4e3/0x560 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x19b/0x3e0 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xcf5/0xd40 kernel/hung_task.c:377
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 16544 Comm: syz-executor.2 Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__lock_acquire+0x412/0x1f60 kernel/locking/lockdep.c:4996
+Code: 6c 24 10 83 7d 00 00 0f 95 c0 09 c3 c1 e3 0d 44 09 fb 8b 44 24 44 c1 e0 0f 0f b7 c0 09 d8 8b 74 24 28 83 e6 03 c1 e6 10 09 c6 <41> 83 e4 01 41 c1 e4 12 31 c9 83 7c 24 60 00 0f 95 c1 c1 e1 13 41
+RSP: 0018:ffffc900037ff4a8 EFLAGS: 00000002
+RAX: 00000000000000a7 RBX: 00000000000000a7 RCX: ffffffff81d51ec5
+RDX: dffffc0000000000 RSI: 00000000000000a7 RDI: ffffffff8d3f9ac0
+RBP: ffff88803c732774 R08: 0000000000000001 R09: 0000000000000000
+R10: fffffbfff1d2299e R11: 1ffffffff1d2299d R12: 0000000000000001
+R13: ffff88803c731d40 R14: 0000000000000000 R15: 00000000000000a7
+FS:  000055555575a400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055555575b6e8 CR3: 0000000034847000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+ __fs_reclaim_acquire mm/page_alloc.c:4679 [inline]
+ fs_reclaim_acquire+0x82/0x120 mm/page_alloc.c:4693
+ might_alloc include/linux/sched/mm.h:271 [inline]
+ prepare_alloc_pages+0x145/0x5a0 mm/page_alloc.c:5325
+ __alloc_pages+0x161/0x560 mm/page_alloc.c:5544
+ vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3043 [inline]
+ __vmalloc_node_range+0x8f4/0x1290 mm/vmalloc.c:3213
+ alloc_thread_stack_node+0x307/0x500 kernel/fork.c:311
+ dup_task_struct+0x8b/0x490 kernel/fork.c:974
+ copy_process+0x637/0x3fc0 kernel/fork.c:2084
+ kernel_clone+0x227/0x640 kernel/fork.c:2671
+ __do_sys_clone kernel/fork.c:2812 [inline]
+ __se_sys_clone kernel/fork.c:2796 [inline]
+ __x64_sys_clone+0x276/0x2e0 kernel/fork.c:2796
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe498e8ca61
+Code: 48 85 ff 74 3d 48 85 f6 74 38 48 83 ee 10 48 89 4e 08 48 89 3e 48 89 d7 4c 89 c2 4d 89 c8 4c 8b 54 24 08 b8 38 00 00 00 0f 05 <48> 85 c0 7c 13 74 01 c3 31 ed 58 5f ff d0 48 89 c7 b8 3c 00 00 00
+RSP: 002b:00007ffcee154b08 EFLAGS: 00000206 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 00007fe498000700 RCX: 00007fe498e8ca61
+RDX: 00007fe4980009d0 RSI: 00007fe4980002f0 RDI: 00000000003d0f00
+RBP: 00007ffcee154bc0 R08: 00007fe498000700 R09: 00007fe498000700
+R10: 00007fe4980009d0 R11: 0000000000000206 R12: 00007ffcee154bbe
+R13: 00007ffcee154bbf R14: 00007fe498000300 R15: 0000000000802000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
