@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EF9648868
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D588E64886C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiLISZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S229888AbiLIS0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLISZ2 (ORCPT
+        with ESMTP id S229845AbiLIS0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:25:28 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBA4379E9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:25:27 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id x28so4193745qtv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:25:27 -0800 (PST)
+        Fri, 9 Dec 2022 13:26:33 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887B0389C0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:26:32 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso8584810pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2tFGeL4IKHMOLG8K5mBjsPyTa/gwxZuO/Te7d5SkhM=;
-        b=R1vwKVYxDcZhuATY+em4HS+UfJ6NrYR93eYQSQkP/OWCN4igMlPzqxVqlrHNSJdMuk
-         /E0ywCJEKO+mIaZDAXA6HXw/X1TV964NRZrcyezSbFFg4WgU4w2lnAS1BSNf5QmFx0kz
-         1WkDjTNi3H5RBcykqyMCXLYk65nnMVhnooMyU=
+        bh=y0tIk3sqFNpbfHpA1sauvw8a7wXa2Xcms6EuyEYhvRk=;
+        b=ZAFgp4eeuB30KsOgzpkTWhKYP4oe59cgyqai7KuZpD1LLjw00yzO7fINeDtWdZaIz1
+         N5s+469IBqPdFDVZhfH92bc4fyR1YWmFSToug5cPNFwqj46koW4vG3I8XPMeFZdaZhRf
+         U93lqGZ5wfiQGH2ucaECSaiFfHxIze+3VIOr0yrEUmqJciGcmk7VyyTDS4FGQZvNDbbv
+         qvjpLVp52U2y6qMVQ5az73XIluTz2Vx9fJrY04gsxKyHa4ODqS0IJfnUuqfF0HMqj98d
+         gyaGfmunZHNABei21Bzs/q51SZiuQhRuQM1b+RRJUlPrR05BfymnfTIXVunt+036i0L8
+         LTwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p2tFGeL4IKHMOLG8K5mBjsPyTa/gwxZuO/Te7d5SkhM=;
-        b=Sdk7gTZu0YV8xXaPq2++LcJ8OkNOVqPmvXBV3I4cRCM/7Lns+RFoMc0UptPMUCKGf4
-         Ksg+xE6WAdIgfw8z5ks1PdT8xCa2X52hz8IZKaIaa/KRGiKLTEPYmRzDcx70kHmvj9L+
-         hwcxmxMPLHYO1jsnmShnRU10aUshv7P4AmduYRBpVlhHuBKMMmJVF+4w42A/e7RIDzWY
-         RJrkWJi35YodAHPg1uE4piF5rkih+PGkqr674tZMIcToMTE1vqvKHtmjh9Jezl6OIvZd
-         GpRQvfa9a0v11dZBzxG8y+FVVdQ/ht8yh3IJZ6AN0Kvh78bnNGGjTXeS7gSPho1Pzn0c
-         4BFw==
-X-Gm-Message-State: ANoB5pnVyp8/HlVo1guKStB+P/mvxTJfIxLO0oZ0qNkS/RXruSXL3Zif
-        ubx9+g//fp/kUweuyKvwo4r3+H5oa+ez8pgJ
-X-Google-Smtp-Source: AA0mqf65GqGX0e59qksmzXzBwYcs3sLKQc7tW0et2bRGF9f94vQmh+80Mbx5nBWiuNwReXw0KpUGrA==
-X-Received: by 2002:a05:622a:2514:b0:39c:da20:f7d2 with SMTP id cm20-20020a05622a251400b0039cda20f7d2mr9395889qtb.47.1670610326650;
-        Fri, 09 Dec 2022 10:25:26 -0800 (PST)
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
-        by smtp.gmail.com with ESMTPSA id bl14-20020a05620a1a8e00b006faa2c0100bsm341445qkb.110.2022.12.09.10.25.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 10:25:25 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id s14so3579537qvo.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:25:25 -0800 (PST)
-X-Received: by 2002:ad4:4101:0:b0:4b1:856b:4277 with SMTP id
- i1-20020ad44101000000b004b1856b4277mr69642655qvp.129.1670610325096; Fri, 09
- Dec 2022 10:25:25 -0800 (PST)
+        bh=y0tIk3sqFNpbfHpA1sauvw8a7wXa2Xcms6EuyEYhvRk=;
+        b=wtDqrfxP/wXTOgovpwA/sHEWAFl9eVhZc1ftirMrsH3dGHvhMMC5I2ZrGczXfb0coy
+         kNjLQsy1wbk8jHZT1/y4368gPs6f5k18i6T6N95dKE7Xz94Q/WrHn7aB9b/qHJm8cRtz
+         ztvl+VBJAT8D/QSNP7kXMSyD/jmIgxLNNfQTz1++R4EbtKzg/Fpsz9Mwc63B+Z4fe9s2
+         TsEfRrnx6PuyYsyWxXCseKHe2enPaDYgYmYa9BrN2dMyw8yFihfmDb3xqeolVuzQr7lZ
+         VkPSD1Q6f5kUuGPFiOeBydrazMbDkXEEUHtpYU3MaC+9hNlnfr46rxbiT07bob2XKyhv
+         1KAw==
+X-Gm-Message-State: ANoB5pnsCYELvHRPEXVYQY9RrGyPFJjs4dbhNvHx/j93R53gR6RThT1e
+        7vQ/mCPRCkPYQwJJRq3xnBYdSILoL+Jg7JXzpy9Rkg==
+X-Google-Smtp-Source: AA0mqf7Irxffe4OQflHuywnqDb6sN/nLBFJocgSX8td1o1PYS66eHUpd/ohf1Fhb2Uth0n8S14TGTCuoadwcmR6m4ys=
+X-Received: by 2002:a17:90a:ab84:b0:213:343:9873 with SMTP id
+ n4-20020a17090aab8400b0021303439873mr109320494pjq.102.1670610391716; Fri, 09
+ Dec 2022 10:26:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20221208205639.1799257-1-kuba@kernel.org> <20221208210009.1799399-1-kuba@kernel.org>
-In-Reply-To: <20221208210009.1799399-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 9 Dec 2022 10:25:09 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wji_NB6hO+35Ruty3DjQkZ+0MkAG9RZpfXNTiWv4NZH3w@mail.gmail.com>
-Message-ID: <CAHk-=wji_NB6hO+35Ruty3DjQkZ+0MkAG9RZpfXNTiWv4NZH3w@mail.gmail.com>
-Subject: Re: [PULL] Networking for v6.1 final / v6.1-rc9 (with the diff stat :S)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
+References: <20221122001125.765003-1-irogers@google.com> <20221122001125.765003-5-irogers@google.com>
+In-Reply-To: <20221122001125.765003-5-irogers@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 9 Dec 2022 10:26:20 -0800
+Message-ID: <CAKwvOd=kgXmpfbVa1wiEvwL0tX3gu+dDTGi-HEiRXSojwCLRrg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] objtool: Alter how HOSTCC is forced
+To:     Ian Rogers <irogers@google.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,16 +78,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 1:00 PM Jakub Kicinski <kuba@kernel.org> wrote:
+On Mon, Nov 21, 2022 at 4:12 PM Ian Rogers <irogers@google.com> wrote:
 >
-> There is an outstanding regression in BPF / Peter's static calls stuff,
+> HOSTCC is always wanted when building objtool. Setting CC to HOSTCC
+> happens after tools/scripts/Makefile.include is included, meaning
+> flags are set assuming say CC is gcc, but then it can be later set to
+> HOSTCC which may be clang. tools/scripts/Makefile.include is needed
+> for host set up and common macros in objtool's Makefile. Rather than
+> override CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the
+> libsubcmd builds and the linkage step. This means the Makefiles don't
+> see things like CC changing and tool flag determination, and similar,
+> work properly. To avoid mixing CFLAGS from different compilers just
+> the objtool CFLAGS are determined. HOSTCFLAGS is added to these so
+> that command line flags can add to the CFLAGS.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/objtool/Makefile | 27 ++++++++++++++++-----------
+>  1 file changed, 16 insertions(+), 11 deletions(-)
+>
+> diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+> index 61a00b7acae9..e550a98e2dd9 100644
+> --- a/tools/objtool/Makefile
+> +++ b/tools/objtool/Makefile
+> @@ -2,16 +2,12 @@
+>  include ../scripts/Makefile.include
+>  include ../scripts/Makefile.arch
+>
+> -# always use the host compiler
+> -AR      = $(HOSTAR)
+> -CC      = $(HOSTCC)
+> -LD      = $(HOSTLD)
+> -
+>  ifeq ($(srctree),)
+>  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>
+> +MAKE = make -S
+>  LIBSUBCMD_DIR = $(srctree)/tools/lib/subcmd/
+>  ifneq ($(OUTPUT),)
+>    LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+> @@ -36,13 +32,20 @@ INCLUDES := -I$(srctree)/tools/include \
+>             -I$(srctree)/tools/objtool/include \
+>             -I$(srctree)/tools/objtool/arch/$(SRCARCH)/include \
+>             -I$(LIBSUBCMD_OUTPUT)/include
+> -WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
 
-Looks like it's not related to the static calls. Jiri says that
-reverting that static call change makes no difference, and currently
-suspects a RCU race instead:
+Looking closer at the V=1 diff in meld, I think this is dropping
+EXTRA_WARNINGS.  I think you want to add those back to OBJTOOL_CFLAGS.
 
-  https://lore.kernel.org/bpf/Y5M9P95l85oMHki9@krava/T/#t
+> -CFLAGS   := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
+> -LDFLAGS  += $(LIBELF_LIBS) $(LIBSUBCMD) $(KBUILD_HOSTLDFLAGS)
+> +WARNINGS := -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
+> +OBJTOOL_CFLAGS := -Werror $(WARNINGS) -g $(INCLUDES) $(LIBELF_FLAGS) $(HOSTCFLAGS)
+> +OBJTOOL_LDFLAGS := $(LIBELF_LIBS) $(LIBSUBCMD)
+>
+>  # Allow old libelf to be used:
+>  elfshdr := $(shell echo '$(pound)include <libelf.h>' | $(CC) $(CFLAGS) -x c -E - | grep elf_getshdr)
+> -CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> +OBJTOOL_CFLAGS += $(if $(elfshdr),,-DLIBELF_USE_DEPRECATED)
+> +
+> +# Always want host compilation.
+> +HOST_OVERRIDES := CC="$(HOSTCC)" EXTRA_CFLAGS="$(OBJTOOL_CFLAGS)" \
+> +                 LD="$(HOSTLD)" AR="$(HOSTAR)"
+> +BUILD_HOST_OVERRIDES := CC="$(HOSTCC)" CFLAGS="$(OBJTOOL_CFLAGS)" \
+> +                       LD="$(HOSTLD)" LDFLAGS="$(OBJTOOL_LDFLAGS)" \
+> +                       AR="$(HOSTAR)"
+>
+>  AWK = awk
+>  MKDIR = mkdir
+> @@ -65,10 +68,11 @@ include $(srctree)/tools/build/Makefile.include
+>
+>  $(OBJTOOL_IN): fixdep FORCE
+>         $(Q)$(CONFIG_SHELL) ./sync-check.sh
+> -       $(Q)$(MAKE) $(build)=objtool
+> +       $(Q)$(MAKE) $(build)=objtool $(BUILD_HOST_OVERRIDES)
+> +
+>
+>  $(OBJTOOL): $(LIBSUBCMD) $(OBJTOOL_IN)
+> -       $(QUIET_LINK)$(CC) $(OBJTOOL_IN) $(LDFLAGS) -o $@
+> +       $(QUIET_LINK)$(HOSTCC) $(OBJTOOL_IN) $(KBUILD_HOSTLDFLAGS) $(OBJTOOL_LDFLAGS) -o $@
+>
+>
+>  $(LIBSUBCMD_OUTPUT):
+> @@ -77,6 +81,7 @@ $(LIBSUBCMD_OUTPUT):
+>  $(LIBSUBCMD): fixdep FORCE $(LIBSUBCMD_OUTPUT)
+>         $(Q)$(MAKE) -C $(LIBSUBCMD_DIR) O=$(LIBSUBCMD_OUTPUT) \
+>                 DESTDIR=$(LIBSUBCMD_DESTDIR) prefix= subdir= \
+> +               $(HOST_OVERRIDES) \
+>                 $@ install_headers
+>
+>  $(LIBSUBCMD)-clean:
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
+>
 
-Hmm?
 
-                  Linus
+-- 
+Thanks,
+~Nick Desaulniers
