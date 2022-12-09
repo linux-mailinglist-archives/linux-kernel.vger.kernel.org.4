@@ -2,157 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8616485BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C2E6485BD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiLIPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S230170AbiLIPnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiLIPnA (ORCPT
+        with ESMTP id S229828AbiLIPnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:43:00 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B8E1B9E7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670600578; x=1702136578;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZectTi6kVmIzE23BoUwfhpoNIuw94kGDjFMTqeER7Jw=;
-  b=Pcgw1TA8uBmqSDFOB5bjnAElv2+sFglQJYh6cpfU7/Qv/bt5L8wM0UvZ
-   pf7fuuNJRHSPvoGJMDqYYx2dJBC2doTqYbY4o2WCCD2O3Ozqe5+WFH1cF
-   /QJ0/Tg2DsXR6iEmR7T/gz/1Wnsxq8IGlODsE7WXdXV9NMh1DC/6ykJ1j
-   5+yCEdiA/OZe8jLMg6YNgc/LT3wW/7MWrAB7ix30IrPbOdl5FJuGt19Tn
-   P7rYYqCClyTxteJvNmNQ14cfbjsrI4vr6ZZNoPmW1uteX3kpjpNgdVknq
-   DjkAFgf5SMiprEJzArQcGFxw9z+CWcUJwDKPjoGwr+//DzvqgxhQKnSZ1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="403735887"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="403735887"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:42:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="892708369"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="892708369"
-Received: from rrode-mobl1.amr.corp.intel.com (HELO [10.251.24.37]) ([10.251.24.37])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:42:57 -0800
-Message-ID: <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
-Date:   Fri, 9 Dec 2022 07:42:56 -0800
+        Fri, 9 Dec 2022 10:43:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0885D2314A;
+        Fri,  9 Dec 2022 07:43:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98EE762296;
+        Fri,  9 Dec 2022 15:43:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED432C433D2;
+        Fri,  9 Dec 2022 15:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670600582;
+        bh=oCEIGuHeYhxQrCwVo/soAElAtMLWGb4yuO0SHkYdARw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ik/yRMpIxgLkVL0fgXhIFgSsHW8u0esK0EQWhBy/bY5hAzu3m1YsNUwdBhGcXoYrE
+         hCAkf3JzdJXtnU/SR6apKalZFVs21lPhQzUnJZ62pfj2KGJgt6sHUWfM/YZZw7FxDb
+         7PR6OBtqptEbYnTbj782MsCVZE9I95cyUQIvJN0dK8q4j6upYgVSinVBzmUm/6xd+G
+         PTkMdvx6ftPR1+IWfZlV4ynHnswJ+nTJ0N4WcPIgcXtuu3dSS6ja6V+pFI9mkjtmNl
+         Hc7eoVYYCazXTNYgvi4LEW4fHChYVwzDEe8kqksIwObb48uG16qkF+MIwPEjOaTDa7
+         seddbxDxq4WTw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p3fWw-0001TN-5z; Fri, 09 Dec 2022 16:43:18 +0100
+Date:   Fri, 9 Dec 2022 16:43:18 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+Message-ID: <Y5NXllrF3K+ga/GR@hovoldconsulting.com>
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
- SEPT_VE_DISABLE
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
- <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/9/22 5:25 AM, Kirill A. Shutemov wrote:
-> The check for SEPT_VE_DISABLE happens early in the kernel boot where
-> earlyprintk is not yet functional. Kernel successfully detect broken
-> TD configuration and stops the kernel with panic(), but it cannot
-> communicate the reason to the user.
+On Fri, Dec 09, 2022 at 03:29:47PM +0100, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
 > 
-> Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
-> can encode message up to 64 bytes in eight registers.
+> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+> sm8450: add Inline Crypto Engine registers and clock") so move the
+> compatible to the correct if.
 > 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
->  arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 37 insertions(+), 1 deletion(-)
+> (no cover subject)
 > 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index cfd4c95b9f04..8ad04d101270 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -22,6 +22,7 @@
->  
->  /* TDX hypercall Leaf IDs */
->  #define TDVMCALL_MAP_GPA		0x10001
-> +#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->  
->  /* MMIO direction */
->  #define EPT_READ	0
-> @@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
->  }
->  EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
->  
-> +static void __noreturn tdx_panic(const char *msg)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
-> +		.r12 = 0, /* Error code: 0 is Panic */
-> +	};
-> +	union {
-> +		/* Define register order according to the GHCI */
-> +		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
-> +
-> +		char str[64];
-> +	} message;
-> +
-> +	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
-> +	strncpy(message.str, msg, 64);
-> +
-> +	args.r8  = message.r8;
-> +	args.r9  = message.r9;
-> +	args.r14 = message.r14;
-> +	args.r15 = message.r15;
-> +	args.rdi = message.rdi;
-> +	args.rsi = message.rsi;
-> +	args.rbx = message.rbx;
-> +	args.rdx = message.rdx;
-> +
-> +	/*
-> +	 * Keep calling the hypercall in case VMM did not terminated
-> +	 * the TD as it must.
-> +	 */
-> +	while (1) {
-> +		__tdx_hypercall(&args, 0);
-> +	}
+> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+> and sa8540p-ride.dtb:
+> 
+>   Unevaluated properties are not allowed ('required-opps', 'dma-coherent' were unexpected)
+> 
+> Maybe someone who knows something about this can handle this?
 
-Instead of an infinite loop, I'm wondering if the guest should panic after
-retrying for few times.
+That's being addressed here:
 
-> +}
-> +
->  static void tdx_parse_tdinfo(u64 *cc_mask)
->  {
->  	struct tdx_module_output out;
-> @@ -172,7 +208,7 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
->  	 */
->  	td_attr = out.rdx;
->  	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
-> -		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
-> +		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
->  }
->  
->  /*
+	https://lore.kernel.org/lkml/20221205100837.29212-2-johan+linaro@kernel.org/
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Johan
