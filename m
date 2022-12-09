@@ -2,289 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A5C6488E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A5F6488E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLITPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S229783AbiLITSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiLITPj (ORCPT
+        with ESMTP id S229538AbiLITSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:15:39 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D2B26AFD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:15:38 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id me18-20020a17090b17d200b00219f8dc7cb3so7034483pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 11:15:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zhH0oDn03Su15RrfmiRJ6OPST52/3p/eRjSa0ENEnMA=;
-        b=jfqtSHeX0FVHW8t6gJgWpd21IAtYvgxTU3eW5MA/Co883kzdJClQoXfmdHDHc6gqi8
-         6XKbOQOKRU8YMQ0ZZSXdhirEJpP8Gh7H3anCV41rHYCPoc44GOjXIQWQSklb4JtIlBvK
-         B4hvCW6/MMcYacbylCE3wqvtbD4YYkODe0GmVDlaXRBna98bGa2xEFj+OhkvNX0WHS9K
-         OEHznBG0nBoZSZspKGQIDO9eusiDZyX5X6OYHPe48hE3DNfnQYuyIFTnWWfEFeVT7o4q
-         m6HMfpPVgmLUIvE41kbdh+N5GNZ7/TTw+lbpsHvd1yFuCC8+2kw26uGk78TR6DT+6OAM
-         TFqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhH0oDn03Su15RrfmiRJ6OPST52/3p/eRjSa0ENEnMA=;
-        b=ZQRlz9H2nSWDGczMnyjatO76Gl3K6e8tEfgaTn0IJRgCzkxs8c4VAXgiS/4WH4mWWV
-         NZBpcvrdvuvnSu35nWURRYnPB8Ips7xDL38/FduucEQsEafWm8hbJEDy6uBZLtsZAw5y
-         Dh5bne8KPCPz9oIebD9pk4KKyrhOvGvqgiTA9BaW6Ac6lJeMTQsJfjk9WbquGkv/IRd8
-         r8ahZzX6qSrqTixVwVmFU4L4FH+zpIic+3gt3uOHRytKGbvrYbW8Tn68rbvI5VBxwK4F
-         Ur3b0IS+jqBmkFnm0aTo5unOihCggkjsLOFY5i7u4321msl8kyUoavEZ4IVaZ/5Jr/BM
-         wiZw==
-X-Gm-Message-State: ANoB5pk5gk17iBN2Q/XyrZW2sXQ3nJm14gzkZ7whJ3ESz/2jVz2ZOI0H
-        csfcIwV/qi7evmdam6+E1b/tLVZV9bLXTypmHA==
-X-Google-Smtp-Source: AA0mqf4b8sAMBJ9sciFgRUXmabqkUDyuiODuiCmUhbeC9sM3eChNaYkUckgG4FAVaPsvb2ZHBIqHnoIS3NKZBMQ28w==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:90a:7064:b0:220:1f03:129b with
- SMTP id f91-20020a17090a706400b002201f03129bmr15686pjk.0.1670613337554; Fri,
- 09 Dec 2022 11:15:37 -0800 (PST)
-Date:   Fri, 09 Dec 2022 11:15:35 -0800
-In-Reply-To: <fb337a67e17715977e46523d1344cb2a7f46a37a.1667110240.git.isaku.yamahata@intel.com>
-Mime-Version: 1.0
-Message-ID: <diqz4ju4wfqg.fsf@google.com>
-Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
-        sagis@google.com, dmatlack@google.com,
-        sean.j.christopherson@intel.com, kai.huang@intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 9 Dec 2022 14:18:01 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720851400C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:17:57 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C6C333EEE4;
+        Fri,  9 Dec 2022 20:17:53 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm8150-kumano: Panel framebuffer is 2.5k instead of 4k
+Date:   Fri,  9 Dec 2022 20:17:33 +0100
+Message-Id: <20221209191733.1458031-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The framebuffer configuration for kumano griffin, written in kumano dtsi
+(which is overwritten in bahamut dts for its smaller panel) has to use a
+1096x2560 configuration as this is what the panel (and framebuffer area)
+has been initialized to.  Downstream userspace also has access to (and
+uses) this 2.5k mode by default, and only switches the panel to 4k when
+requested.
 
-In tdx_vm_init, it is possible to have a double-reclaim, which
-eventually causes a host crash. I have a selftest that reliably
-reproduces this, and I believe the problem is that withiin
-tdx_vm_free(), we don't reset kvm->tdcs = NULL and kvm->tdr.added to
-false.
+Fixes: d0a6ce59ea4e ("arm64: dts: qcom: sm8150: Add support for SONY Xperia 1 / 5 (Kumano platform)")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> +int tdx_vm_init(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	cpumask_var_t packages;
-> +	int ret, i;
-> +	u64 err;
-> +
-> +	ret = tdx_keyid_alloc();
-> +	if (ret < 0)
-> +		return ret;
-> +	kvm_tdx->hkid = ret;
-> +
-> +	ret = tdx_alloc_td_page(&kvm_tdx->tdr);
-> +	if (ret)
-> +		goto free_hkid;
-> +
-> +	kvm_tdx->tdcs = kcalloc(tdx_caps.tdcs_nr_pages, sizeof(*kvm_tdx->tdcs),
-> +				GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-> +	if (!kvm_tdx->tdcs)
-> +		goto free_tdr;
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
-> +		ret = tdx_alloc_td_page(&kvm_tdx->tdcs[i]);
-> +		if (ret)
-> +			goto free_tdcs;
-> +	}
-> +
-> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL)) {
-> +		ret = -ENOMEM;
-> +		goto free_tdcs;
-> +	}
-> +	cpus_read_lock();
-> +	/*
-> +	 * Need at least one CPU of the package to be online in order to
-> +	 * program all packages for host key id.  Check it.
-> +	 */
-> +	for_each_present_cpu(i)
-> +		cpumask_set_cpu(topology_physical_package_id(i), packages);
-> +	for_each_online_cpu(i)
-> +		cpumask_clear_cpu(topology_physical_package_id(i), packages);
-> +	if (!cpumask_empty(packages)) {
-> +		ret = -EIO;
-> +		/*
-> +		 * Because it's hard for human operator to figure out the
-> +		 * reason, warn it.
-> +		 */
-> +		pr_warn("All packages need to have online CPU to create TD. Online CPU  
-> and retry.\n");
-> +		goto free_packages;
-> +	}
-> +
-> +	/*
-> +	 * Acquire global lock to avoid TDX_OPERAND_BUSY:
-> +	 * TDH.MNG.CREATE and other APIs try to lock the global Key Owner
-> +	 * Table (KOT) to track the assigned TDX private HKID.  It doesn't spin
-> +	 * to acquire the lock, returns TDX_OPERAND_BUSY instead, and let the
-> +	 * caller to handle the contention.  This is because of time limitation
-> +	 * usable inside the TDX module and OS/VMM knows better about process
-> +	 * scheduling.
-> +	 *
-> +	 * APIs to acquire the lock of KOT:
-> +	 * TDH.MNG.CREATE, TDH.MNG.KEY.FREEID, TDH.MNG.VPFLUSHDONE, and
-> +	 * TDH.PHYMEM.CACHE.WB.
-> +	 */
-> +	mutex_lock(&tdx_lock);
-> +	err = tdh_mng_create(kvm_tdx->tdr.pa, kvm_tdx->hkid);
-> +	mutex_unlock(&tdx_lock);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MNG_CREATE, err, NULL);
-> +		ret = -EIO;
-> +		goto free_packages;
-> +	}
-> +	tdx_mark_td_page_added(&kvm_tdx->tdr);
-> +
-> +	for_each_online_cpu(i) {
-> +		int pkg = topology_physical_package_id(i);
-> +
-> +		if (cpumask_test_and_set_cpu(pkg, packages))
-> +			continue;
-> +
-> +		/*
-> +		 * Program the memory controller in the package with an
-> +		 * encryption key associated to a TDX private host key id
-> +		 * assigned to this TDR.  Concurrent operations on same memory
-> +		 * controller results in TDX_OPERAND_BUSY.  Avoid this race by
-> +		 * mutex.
-> +		 */
-> +		mutex_lock(&tdx_mng_key_config_lock[pkg]);
-> +		ret = smp_call_on_cpu(i, tdx_do_tdh_mng_key_config,
-> +				      &kvm_tdx->tdr.pa, true);
-> +		mutex_unlock(&tdx_mng_key_config_lock[pkg]);
-> +		if (ret)
-> +			break;
-> +	}
-> +	cpus_read_unlock();
-> +	free_cpumask_var(packages);
-> +	if (ret)
-> +		goto teardown;
-> +
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
-> +		err = tdh_mng_addcx(kvm_tdx->tdr.pa, kvm_tdx->tdcs[i].pa);
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_MNG_ADDCX, err, NULL);
-> +			ret = -EIO;
-> +			goto teardown;
-> +		}
-> +		tdx_mark_td_page_added(&kvm_tdx->tdcs[i]);
-> +	}
-> +
-> +	/*
-> +	 * Note, TDH_MNG_INIT cannot be invoked here.  TDH_MNG_INIT requires a  
-> dedicated
-> +	 * ioctl() to define the configure CPUID values for the TD.
-> +	 */
-> +	return 0;
-> +
-> +	/*
-> +	 * The sequence for freeing resources from a partially initialized TD
-> +	 * varies based on where in the initialization flow failure occurred.
-> +	 * Simply use the full teardown and destroy, which naturally play nice
-> +	 * with partial initialization.
-> +	 */
-> +teardown:
-> +	tdx_mmu_release_hkid(kvm);
-> +	tdx_vm_free(kvm);
-> +	return ret;
+diff --git a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+index 8f1ddc969406..9f48a097927e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+@@ -35,9 +35,10 @@ chosen {
+ 		framebuffer: framebuffer@9c000000 {
+ 			compatible = "simple-framebuffer";
+ 			reg = <0 0x9c000000 0 0x2300000>;
+-			width = <1644>;
+-			height = <3840>;
+-			stride = <(1644 * 4)>;
++			/* Griffin BL initializes in 2.5k mode, not 4k */
++			width = <1096>;
++			height = <2560>;
++			stride = <(1096 * 4)>;
+ 			format = "a8r8g8b8";
+ 			/*
+ 			 * That's (going to be) a lot of clocks, but it's necessary due
+-- 
+2.38.1
 
-If there is some error that causes an exit through teardown,
-tdx_vm_free() will be called, which causes the resources to be
-freed. However, tdx_vm_free() is called a second time when the selftest
-(or qemu) exits, which causes a second reclaim to be performed.
-
-> +
-> +free_packages:
-> +	cpus_read_unlock();
-> +	free_cpumask_var(packages);
-> +free_tdcs:
-> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
-> +		if (!kvm_tdx->tdcs[i].va)
-> +			continue;
-> +		free_page(kvm_tdx->tdcs[i].va);
-> +	}
-> +	kfree(kvm_tdx->tdcs);
-> +	kvm_tdx->tdcs = NULL;
-> +free_tdr:
-> +	if (kvm_tdx->tdr.va) {
-> +		free_page(kvm_tdx->tdr.va);
-> +		kvm_tdx->tdr.added = false;
-> +		kvm_tdx->tdr.va = 0;
-> +		kvm_tdx->tdr.pa = 0;
-> +	}
-> +free_hkid:
-> +	if (kvm_tdx->hkid != -1)
-> +		tdx_hkid_free(kvm_tdx);
-> +	return ret;
-> +}
-
-The second reclaim is performed because kvm_tdx->tdcs is still set, and
-kvm_tdx->tdr.added is still set, so the second two if blocks in
-tdx_vm_free() are executed.
-
-> +void tdx_vm_free(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	int i;
-> +
-> +	/* Can't reclaim or free TD pages if teardown failed. */
-> +	if (is_hkid_assigned(kvm_tdx))
-> +		return;
-> +
-> +	if (kvm_tdx->tdcs) {
-> +		for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
-> +			tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
-> +		kfree(kvm_tdx->tdcs);
-> +	}
-> +
-> +	/*
-> +	 * TDX module maps TDR with TDX global HKID.  TDX module may access TDR
-> +	 * while operating on TD (Especially reclaiming TDCS).  Cache flush with
-> +	 * TDX global HKID is needed.
-> +	 */
-> +	if (kvm_tdx->tdr.added &&
-> +		tdx_reclaim_page(kvm_tdx->tdr.va, kvm_tdx->tdr.pa, true,
-> +				tdx_global_keyid))
-> +		return;
-> +
-> +	free_page(kvm_tdx->tdr.va);
-> +}
-
-Here's the fix that stopped the crash I was observing
-
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 2e7916fb72a7..41d1ff1510c3 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -405,6 +405,7 @@ void tdx_vm_free(struct kvm *kvm)
-                 for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
-                         tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
-                 kfree(kvm_tdx->tdcs);
-+               kvm_tdx->tdcs = NULL;
-         }
-
-         /*
-@@ -418,6 +419,9 @@ void tdx_vm_free(struct kvm *kvm)
-                 return;
-
-         free_page(kvm_tdx->tdr.va);
-+       kvm_tdx->tdr.added = false;
-+       kvm_tdx->tdr.va = 0;
-+       kvm_tdx->tdr.pa = 0;
-  }
-
-  static int tdx_do_tdh_mng_key_config(void *param)
