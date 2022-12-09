@@ -2,146 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90DD648917
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE4A64891A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiLITjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S229966AbiLITkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiLITiy (ORCPT
+        with ESMTP id S229885AbiLITjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:38:54 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2070.outbound.protection.outlook.com [40.107.237.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9F8A8492;
-        Fri,  9 Dec 2022 11:38:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dVHzGuWLmYnrkIOSbu9bS13iB38e9tW0g766z+KuGhtlcF3DjKnNv8YdpL0PN9N/1TGKInzqRs8CuqpRfuxGF+2x3NPVdMfYABou+QArMLA+NWhN0mkxLW4thEosuleSt7tiKzqcUGpzzy2xYkqENXjRbW7GQj2RoJ+M/UJD7fQYjvlKKn+QmKIxNmBppvPK0lkyOC9Up6rGInzlVTiF0OvmNAKvhr15jCmJOc0uKAn0Wn8TN5iDRRoAsgaK5cMX/zYY2ZQOgs7tx6XP+Gm9SI/79V4ty/n1vIccVr5sxcd6ZoOf10Gykp0CCopDFEHN/mn547o0kfLG+mEj1s5jyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4kE3EEoROF8TRC85LHQNVGLLOGk4/ncwzq/kMy+zm2w=;
- b=Bm5V4c09ISNLFPeJy49MZ89lkMilwbxLKEDbpRqTRT4gwmXkEkE4aoUYv9bMUif94WhTo/0X5/f++I/tryYTkYSIIPTAAWxneXYDWJFjCYVnk/Spon4UtwtRxF2rT6iHGsqs9ecxouKJWuhUYAZol7lDHIC8QdO6IzI9HTBSz7ti+9Jw+j37DcluT+TZhp2rj9X1bxcY0G3KjBvrXfVsaRm7RyIWp1DBe4KNJhn0jI/fxI6h5LaawkDKfbUWQQQexwlQz6FKRczW1MaZE7iwsZzuQTzoNAhp5fEjtleuSFxz+N9B7vo0SGvGgeiF32stGPgT8EHRdqZ2ZhGQYAscyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4kE3EEoROF8TRC85LHQNVGLLOGk4/ncwzq/kMy+zm2w=;
- b=2E6BCnUuz4ClOnlrHXvIRmrAAv5R3jUt0gNcJctNrQpfOCPYqxjbp0Hz7G9PCQPw19vc8i0LjshnJJeOKwunBIxLg16xFaf1uP3hiTQB7sG8uQEfGabtKBgAzBhvg0LN0HvoNp4Op1jJHKkKrluNsezRb5pV/W7LJvCdWRwnzE0=
-Received: from BN9PR03CA0977.namprd03.prod.outlook.com (2603:10b6:408:109::22)
- by BL1PR12MB5287.namprd12.prod.outlook.com (2603:10b6:208:317::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 19:38:46 +0000
-Received: from BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:109:cafe::54) by BN9PR03CA0977.outlook.office365.com
- (2603:10b6:408:109::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18 via Frontend
- Transport; Fri, 9 Dec 2022 19:38:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT004.mail.protection.outlook.com (10.13.176.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5901.17 via Frontend Transport; Fri, 9 Dec 2022 19:38:46 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Dec
- 2022 13:38:46 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Dec
- 2022 13:38:46 -0600
-Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Fri, 9 Dec 2022 13:38:45 -0600
-From:   Lizhi Hou <lizhi.hou@amd.com>
-To:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
-        <frowand.list@gmail.com>, <helgaas@kernel.org>
-CC:     Lizhi Hou <lizhi.hou@amd.com>, <clement.leger@bootlin.com>,
-        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
-        <brian.xu@amd.com>, <stefano.stabellini@xilinx.com>,
-        <trix@redhat.com>
-Subject: [PATCH V5 3/3] PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
-Date:   Fri, 9 Dec 2022 11:38:14 -0800
-Message-ID: <1670614694-68049-4-git-send-email-lizhi.hou@amd.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1670614694-68049-1-git-send-email-lizhi.hou@amd.com>
-References: <1670614694-68049-1-git-send-email-lizhi.hou@amd.com>
+        Fri, 9 Dec 2022 14:39:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F01A84A2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:39:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2EA5622F2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 19:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F69CC433D2;
+        Fri,  9 Dec 2022 19:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670614762;
+        bh=iiRmRFXrgEHqcGW5VjSEfnrnz4q8HYRxgsmJvwjc7V0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooYPrZu57TO5M+RtXR7W4d6Rq0hWu5f59XTNJQ8n+g807ZvI8/TM1GxCwh4Hj/lZI
+         hYIZTB1GKyiW2lVsO5Fbd2QUbV9kJnGVlMYeIfzM+fOMmlPje3FX2X2MqbW3mStCzz
+         F7zutWMKu3YXAQLfefYok2iRgzeQB9gNO1oDD/Joha7BCYmlUDMakiptdWXoCrGHtj
+         KLynHfNt8XWyOpoc8kDWXW3jd13r3wc5tCROkstd15BQ39igVNAS0riNV9oFJ4J9uf
+         R28EDLwmTi2DeV7Ej/r0rjIsDkA9yZ7hArHZXy3G8SPxx0Nj3LxdEoljNeMxQeAcFi
+         CZ+5Pnb5RtWrQ==
+Date:   Fri, 9 Dec 2022 11:39:20 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH 1/6] f2fs: specify extent cache for read
+ explicitly
+Message-ID: <Y5OO6KNW/E8zhY3s@google.com>
+References: <20221205185433.3479699-1-jaegeuk@kernel.org>
+ <8ffb43dd-3887-aa56-6f0a-1fb6ff0e191e@kernel.org>
+ <Y5IfEkHlpZ0oBRID@google.com>
+ <0c36cfba-f8b8-b899-95db-09ce5b0a8e8a@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT004:EE_|BL1PR12MB5287:EE_
-X-MS-Office365-Filtering-Correlation-Id: 340440f2-887f-4ed7-5138-08dada1cfd32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OwHkSkc+MnM9dV/eJ+m0gsN3wUA1F/TUie8X5XiZVxW4DK9h6VtFuDkiUFXUBKcOU9Uaa+mgxeZ7X3xsH8L6p2LuAp6P0nNYu7IdZHL5MwcgMRzvvhmRyVoXp/aTJyOOjbWCg9BHnXvZNvUMPMZUbmsAu3eZK86B9Oz8+Trka9F0mMg6v79QNtgE6fnUdFOtsz6sx0f2OGTAsiV4yu/H60Ns7+gQCcYveFKympOWr/Yhz14Ksucimh0UQxV1UzgCR6C3EWP5T/Yp7yL4ZZOUu0FM6q4aB4FkVP9R4l96aFngjkhkZR0xb2REfTTdv2WLExjmVKpUXgpejXCIjOE2u5ELa1IFB8WJA0pycNlwy7K8BA8S8uMcQC+EDAY7mkw0cbPTW00oOQX4U33kPb1SLKJ/gCmCfuAZ2Cdg1HyKiJnK3FEwp1Xj2WnpNe+mhueL645PlYKmUgmJwlZM1X7TB4DL1A47egFhn7qjW2T/dUBmvVPKT9j4AjY3WJe3qjiUXgDT3svzjAFffNkanADYLwkBk+htpscntvpM1urfe7IkgqO/bQeB1O9s2td/HzXzeHtwL1VGq8eXh+jCOAegJHvTd1+GGRbETcZebidvahvd52rXg4neNq0gQv1GapSR6FHLc05rNl2ARX2eFGW9Leub+ZoscrOolB7tDtQ8wnJ00AfgUCPioMMwwfRjy+JYO2V1J8tqndsB8W19IjTb7i7bgInC9rw2Xotkt+p9Okc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199015)(40470700004)(36840700001)(46966006)(4326008)(44832011)(36756003)(70586007)(54906003)(110136005)(316002)(5660300002)(70206006)(41300700001)(8676002)(478600001)(2906002)(26005)(82740400003)(426003)(47076005)(2616005)(186003)(336012)(82310400005)(40460700003)(8936002)(36860700001)(40480700001)(6666004)(86362001)(81166007)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 19:38:46.7750
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 340440f2-887f-4ed7-5138-08dada1cfd32
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT004.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5287
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c36cfba-f8b8-b899-95db-09ce5b0a8e8a@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xilinx Alveo U50 PCI card exposes multiple hardware peripherals on
-its PCI BAR. The card firmware provides a flattened device tree to
-describe the hardware peripherals on its BARs. This allows U50 driver to
-load the flattened device tree and generate the device tree node for
-hardware peripherals underneath.
+On 12/09, Chao Yu wrote:
+> On 2022/12/9 1:29, Jaegeuk Kim wrote:
+> > On 12/08, Chao Yu wrote:
+> > > On 2022/12/6 2:54, Jaegeuk Kim wrote:
+> > > > Let's descrbie it's read extent cache.
+> > > > 
+> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > ---
+> > > >    fs/f2fs/extent_cache.c |  4 ++--
+> > > >    fs/f2fs/f2fs.h         | 10 +++++-----
+> > > >    fs/f2fs/inode.c        |  2 +-
+> > > >    fs/f2fs/node.c         |  2 +-
+> > > >    fs/f2fs/node.h         |  2 +-
+> > > >    fs/f2fs/segment.c      |  4 ++--
+> > > >    fs/f2fs/super.c        | 16 ++++++++--------
+> > > >    7 files changed, 20 insertions(+), 20 deletions(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> > > > index 932c070173b9..8cd87aee0292 100644
+> > > > --- a/fs/f2fs/extent_cache.c
+> > > > +++ b/fs/f2fs/extent_cache.c
+> > > > @@ -383,7 +383,7 @@ static void __f2fs_init_extent_tree(struct inode *inode, struct page *ipage)
+> > > >    	if (!i_ext || !i_ext->len)
+> > > >    		return;
+> > > > -	get_extent_info(&ei, i_ext);
+> > > > +	get_read_extent_info(&ei, i_ext);
+> > > >    	write_lock(&et->lock);
+> > > >    	if (atomic_read(&et->node_cnt))
+> > > > @@ -710,7 +710,7 @@ unsigned int f2fs_shrink_extent_tree(struct f2fs_sb_info *sbi, int nr_shrink)
+> > > >    	unsigned int node_cnt = 0, tree_cnt = 0;
+> > > >    	int remained;
+> > > > -	if (!test_opt(sbi, EXTENT_CACHE))
+> > > > +	if (!test_opt(sbi, READ_EXTENT_CACHE))
+> > > >    		return 0;
+> > > >    	if (!atomic_read(&sbi->total_zombie_tree))
+> > > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > > > index eb8c27c4e5fc..1c39f8145b61 100644
+> > > > --- a/fs/f2fs/f2fs.h
+> > > > +++ b/fs/f2fs/f2fs.h
+> > > > @@ -92,7 +92,7 @@ extern const char *f2fs_fault_name[FAULT_MAX];
+> > > >    #define F2FS_MOUNT_FLUSH_MERGE		0x00000400
+> > > >    #define F2FS_MOUNT_NOBARRIER		0x00000800
+> > > >    #define F2FS_MOUNT_FASTBOOT		0x00001000
+> > > > -#define F2FS_MOUNT_EXTENT_CACHE		0x00002000
+> > > > +#define F2FS_MOUNT_READ_EXTENT_CACHE	0x00002000
+> > > >    #define F2FS_MOUNT_DATA_FLUSH		0x00008000
+> > > >    #define F2FS_MOUNT_FAULT_INJECTION	0x00010000
+> > > >    #define F2FS_MOUNT_USRQUOTA		0x00080000
+> > > > @@ -600,7 +600,7 @@ enum {
+> > > >    #define F2FS_MIN_EXTENT_LEN	64	/* minimum extent length */
+> > > >    /* number of extent info in extent cache we try to shrink */
+> > > > -#define EXTENT_CACHE_SHRINK_NUMBER	128
+> > > > +#define READ_EXTENT_CACHE_SHRINK_NUMBER	128
+> > > >    #define RECOVERY_MAX_RA_BLOCKS		BIO_MAX_VECS
+> > > >    #define RECOVERY_MIN_RA_BLOCKS		1
+> > > > @@ -830,7 +830,7 @@ struct f2fs_inode_info {
+> > > >    	loff_t original_i_size;		/* original i_size before atomic write */
+> > > >    };
+> > > > -static inline void get_extent_info(struct extent_info *ext,
+> > > > +static inline void get_read_extent_info(struct extent_info *ext,
+> > > >    					struct f2fs_extent *i_ext)
+> > > >    {
+> > > >    	ext->fofs = le32_to_cpu(i_ext->fofs);
+> > > > @@ -838,7 +838,7 @@ static inline void get_extent_info(struct extent_info *ext,
+> > > >    	ext->len = le32_to_cpu(i_ext->len);
+> > > >    }
+> > > > -static inline void set_raw_extent(struct extent_info *ext,
+> > > > +static inline void set_raw_read_extent(struct extent_info *ext,
+> > > >    					struct f2fs_extent *i_ext)
+> > > >    {
+> > > >    	i_ext->fofs = cpu_to_le32(ext->fofs);
+> > > > @@ -4407,7 +4407,7 @@ static inline bool f2fs_may_extent_tree(struct inode *inode)
+> > > >    {
+> > > >    	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> > > > -	if (!test_opt(sbi, EXTENT_CACHE) ||
+> > > > +	if (!test_opt(sbi, READ_EXTENT_CACHE) ||
+> > > >    			is_inode_flag_set(inode, FI_NO_EXTENT) ||
+> > > >    			(is_inode_flag_set(inode, FI_COMPRESSED_FILE) &&
+> > > >    			 !f2fs_sb_has_readonly(sbi)))
+> > > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > > index 577f109b4e1d..2c705c60019b 100644
+> > > > --- a/fs/f2fs/inode.c
+> > > > +++ b/fs/f2fs/inode.c
+> > > > @@ -629,7 +629,7 @@ void f2fs_update_inode(struct inode *inode, struct page *node_page)
+> > > >    	if (et) {
+> > > >    		read_lock(&et->lock);
+> > > > -		set_raw_extent(&et->largest, &ri->i_ext);
+> > > > +		set_raw_read_extent(&et->largest, &ri->i_ext);
+> > > >    		read_unlock(&et->lock);
+> > > >    	} else {
+> > > >    		memset(&ri->i_ext, 0, sizeof(ri->i_ext));
+> > > > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+> > > > index b9ee5a1176a0..84b147966080 100644
+> > > > --- a/fs/f2fs/node.c
+> > > > +++ b/fs/f2fs/node.c
+> > > > @@ -85,7 +85,7 @@ bool f2fs_available_free_memory(struct f2fs_sb_info *sbi, int type)
+> > > >    						sizeof(struct ino_entry);
+> > > >    		mem_size >>= PAGE_SHIFT;
+> > > >    		res = mem_size < ((avail_ram * nm_i->ram_thresh / 100) >> 1);
+> > > > -	} else if (type == EXTENT_CACHE) {
+> > > > +	} else if (type == READ_EXTENT_CACHE) {
+> > > >    		mem_size = (atomic_read(&sbi->total_ext_tree) *
+> > > >    				sizeof(struct extent_tree) +
+> > > >    				atomic_read(&sbi->total_ext_node) *
+> > > > diff --git a/fs/f2fs/node.h b/fs/f2fs/node.h
+> > > > index 3c09cae058b0..0aa48704c77a 100644
+> > > > --- a/fs/f2fs/node.h
+> > > > +++ b/fs/f2fs/node.h
+> > > > @@ -146,7 +146,7 @@ enum mem_type {
+> > > >    	NAT_ENTRIES,	/* indicates the cached nat entry */
+> > > >    	DIRTY_DENTS,	/* indicates dirty dentry pages */
+> > > >    	INO_ENTRIES,	/* indicates inode entries */
+> > > > -	EXTENT_CACHE,	/* indicates extent cache */
+> > > > +	READ_EXTENT_CACHE,	/* indicates read extent cache */
+> > > >    	DISCARD_CACHE,	/* indicates memory of cached discard cmds */
+> > > >    	COMPRESS_PAGE,	/* indicates memory of cached compressed pages */
+> > > >    	BASE_CHECK,	/* check kernel status */
+> > > > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > > > index 9486ca49ecb1..51de358bc452 100644
+> > > > --- a/fs/f2fs/segment.c
+> > > > +++ b/fs/f2fs/segment.c
+> > > > @@ -449,8 +449,8 @@ void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
+> > > >    		return;
+> > > >    	/* try to shrink extent cache when there is no enough memory */
+> > > > -	if (!f2fs_available_free_memory(sbi, EXTENT_CACHE))
+> > > > -		f2fs_shrink_extent_tree(sbi, EXTENT_CACHE_SHRINK_NUMBER);
+> > > > +	if (!f2fs_available_free_memory(sbi, READ_EXTENT_CACHE))
+> > > > +		f2fs_shrink_extent_tree(sbi, READ_EXTENT_CACHE_SHRINK_NUMBER);
+> > > >    	/* check the # of cached NAT entries */
+> > > >    	if (!f2fs_available_free_memory(sbi, NAT_ENTRIES))
+> > > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > > > index 79bf1faf4161..10bd03bbefec 100644
+> > > > --- a/fs/f2fs/super.c
+> > > > +++ b/fs/f2fs/super.c
+> > > > @@ -814,10 +814,10 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+> > > >    			set_opt(sbi, FASTBOOT);
+> > > >    			break;
+> > > >    		case Opt_extent_cache:
+> > > > -			set_opt(sbi, EXTENT_CACHE);
+> > > > +			set_opt(sbi, READ_EXTENT_CACHE);
+> > > >    			break;
+> > > >    		case Opt_noextent_cache:
+> > > > -			clear_opt(sbi, EXTENT_CACHE);
+> > > > +			clear_opt(sbi, READ_EXTENT_CACHE);
+> > > >    			break;
+> > > >    		case Opt_noinline_data:
+> > > >    			clear_opt(sbi, INLINE_DATA);
+> > > > @@ -1954,10 +1954,10 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+> > > >    		seq_puts(seq, ",barrier");
+> > > >    	if (test_opt(sbi, FASTBOOT))
+> > > >    		seq_puts(seq, ",fastboot");
+> > > > -	if (test_opt(sbi, EXTENT_CACHE))
+> > > > -		seq_puts(seq, ",extent_cache");
+> > > > +	if (test_opt(sbi, READ_EXTENT_CACHE))
+> > > > +		seq_puts(seq, ",read_extent_cache");
+> > > 
+> > > How about keeping consistent w/ description of f2fs.rst?
+> > 
+> > This doesn't change the mount options, but do show the exact name which
+> > would be better to say what's going on.
+> 
+> mount -t f2fs /dev/vda /mnt/f2fs
+> mount|grep f2fs
+> /dev/vda on /mnt/f2fs type f2fs (rw,relatime,lazytime,background_gc=on,discard,no_heap,user_xattr,inline_xattr,acl,inline_data,inline_dentry,flush_merge,barrier,read_extent_cache,mode=adaptive,active_logs=6,alloc_mode=reuse,check)
+> 
+> mount -t f2fs -o remount /mnt/f2fs/
+> [   63.142480] F2FS-fs (vda): Unrecognized mount option "read_extent_cache" or missing value
+> 
+> Quoted from manual of mount
+> 
+> "mount -o remount,rw  /dir
+> 
+> After this call, mount reads fstab and merges these options with the options
+> from the command line (-o).  If no mountpoint is found in fstab, then a
+> remount with unspecified source is allowed."
+> 
+> I guess above command tries to use previous mountoptions which were read
+> via .show_options().
 
-To generate device tree node for U50 card, added PCI quirks to call
-of_pci_make_dev_node() for U50.
+Oh, great. Let me fix this.
 
-Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-Signed-off-by: Max Zhen <max.zhen@amd.com>
-Reviewed-by: Brian Xu <brian.xu@amd.com>
----
- drivers/pci/quirks.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 4944798e75b5..5d76932f59ec 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5956,3 +5956,14 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56b1, aspm_l1_acceptable_latency
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
- #endif
-+
-+/*
-+ * For PCI device which have multiple downstream devices, its driver may use
-+ * a flattened device tree to describe the downstream devices.
-+ * To overlay the flattened device tree, the PCI device and all its ancestor
-+ * devices need to have device tree nodes on system base device tree. Thus,
-+ * before driver probing, it might need to add a device tree node as the final
-+ * fixup.
-+ */
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
--- 
-2.17.1
-
+> 
+> Thanks,
+> 
+> > 
+> > > 
+> > > >    	else
+> > > > -		seq_puts(seq, ",noextent_cache");
+> > > > +		seq_puts(seq, ",no_read_extent_cache");
+> > > 
+> > > Ditto,
+> > > 
+> > > Thanks,
+> > > 
+> > > >    	if (test_opt(sbi, DATA_FLUSH))
+> > > >    		seq_puts(seq, ",data_flush");
+> > > > @@ -2076,7 +2076,7 @@ static void default_options(struct f2fs_sb_info *sbi)
+> > > >    	set_opt(sbi, INLINE_XATTR);
+> > > >    	set_opt(sbi, INLINE_DATA);
+> > > >    	set_opt(sbi, INLINE_DENTRY);
+> > > > -	set_opt(sbi, EXTENT_CACHE);
+> > > > +	set_opt(sbi, READ_EXTENT_CACHE);
+> > > >    	set_opt(sbi, NOHEAP);
+> > > >    	clear_opt(sbi, DISABLE_CHECKPOINT);
+> > > >    	set_opt(sbi, MERGE_CHECKPOINT);
+> > > > @@ -2218,7 +2218,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+> > > >    	bool need_restart_ckpt = false, need_stop_ckpt = false;
+> > > >    	bool need_restart_flush = false, need_stop_flush = false;
+> > > >    	bool need_restart_discard = false, need_stop_discard = false;
+> > > > -	bool no_extent_cache = !test_opt(sbi, EXTENT_CACHE);
+> > > > +	bool no_read_extent_cache = !test_opt(sbi, READ_EXTENT_CACHE);
+> > > >    	bool enable_checkpoint = !test_opt(sbi, DISABLE_CHECKPOINT);
+> > > >    	bool no_io_align = !F2FS_IO_ALIGNED(sbi);
+> > > >    	bool no_atgc = !test_opt(sbi, ATGC);
+> > > > @@ -2308,7 +2308,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+> > > >    	}
+> > > >    	/* disallow enable/disable extent_cache dynamically */
+> > > > -	if (no_extent_cache == !!test_opt(sbi, EXTENT_CACHE)) {
+> > > > +	if (no_read_extent_cache == !!test_opt(sbi, READ_EXTENT_CACHE)) {
+> > > >    		err = -EINVAL;
+> > > >    		f2fs_warn(sbi, "switch extent_cache option is not allowed");
+> > > >    		goto restore_opts;
