@@ -2,179 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400FE64862D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A709C648631
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiLIQFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S229892AbiLIQH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiLIQFY (ORCPT
+        with ESMTP id S229675AbiLIQHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:05:24 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A59359FDD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:05:06 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id s196so3827191pgs.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dO2vEZu0Db7wP8hwByIkT/4WBK5RsSRu/0g8CrsVk0Q=;
-        b=Nz9hhcL5VUT1DNeWW7Mvl2m+8tMK4KUW9ZM63sJBU7BZC5BXcP0QrGhhfixxQYFJr6
-         jaW0mxnuLY9YKm9/eIJoGL3j7a2Nnz/LO5wqZBulnXeLBCJR0YvayQPJuPVgnkWRqUzs
-         VIPCWg63G260HdzCt34cupUwQj6+eayz1j76w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dO2vEZu0Db7wP8hwByIkT/4WBK5RsSRu/0g8CrsVk0Q=;
-        b=o/YGGuR0Rzoid6Z6/N+Sy6HFPP/LsWmjH3NFFSJGjJfD5hPziGtx08BYrSUZcAr8mk
-         fLRd7gcPTdE5D+iN1/kgmVvS2ta96XIVm82mrqrrnhPbj9TMv4Tnkues7X5CrlGaY8wq
-         hv2TITF2PVfTDm9CHV+JRRgS+UZmk3G5a9Lzx9igihIVY6rLvSiUb2fDX81rCuT3YWSp
-         otcoa05Znli1QOGws/XNnnwBAUgLrYZJnqJ2cWvJXp0iTam39BrP5a6+oO2XY0qxH83Z
-         Xa8ClSpyIMgdIHb3K4836RpwnGlIpWdObKwlbXiAnJAyOIGZTL5HF5+Vv6um/mR3pqM3
-         vgnQ==
-X-Gm-Message-State: ANoB5pl4/ydI/e9g8Yi0lEVK5xdqJEj36MJEmcZx/txK8r3bT5UIqaGu
-        fxLfh1xsQ71rfcpKXuviYSkncA==
-X-Google-Smtp-Source: AA0mqf4lfbpdBsIBddA74mG397/PLLPHeHkEdS4bVrJWMAdItf41izLMuA+5lLn6aq2S10oXpsQr3A==
-X-Received: by 2002:aa7:858a:0:b0:575:de28:b1f4 with SMTP id w10-20020aa7858a000000b00575de28b1f4mr5165976pfn.16.1670601905655;
-        Fri, 09 Dec 2022 08:05:05 -0800 (PST)
-Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm1460504pfk.93.2022.12.09.08.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 08:05:05 -0800 (PST)
-From:   jeffxu@chromium.org
-To:     skhan@linuxfoundation.org, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
-Date:   Fri,  9 Dec 2022 16:04:53 +0000
-Message-Id: <20221209160453.3246150-7-jeffxu@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-In-Reply-To: <20221209160453.3246150-1-jeffxu@google.com>
-References: <20221209160453.3246150-1-jeffxu@google.com>
+        Fri, 9 Dec 2022 11:07:04 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F45A384A;
+        Fri,  9 Dec 2022 08:05:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670601959; x=1702137959;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=XWRLIvNaPSbx3qgHOle8bZTzrcu0wd+pVGPi5uuTaLg=;
+  b=Dx9A1LP4Rj3v31a86MkFcPaEXndEZ3bJeuWd/xZMw8foA+g2pK5lyz5p
+   3b3qtM5ZMPz8j4I4cqo5O2xKt4cQclKM8vcfnFgvr9xwM3Ak3OrBbbtD/
+   fBJpLEFmWsQ1YqrQ5B6AzrS6ekOI1XPU8/X+7bQ8qTYQxLIjnh+Y31502
+   RGIqHNxUFjDmndfbdOn58pD8ZpjR064rV3nVNYb/bucsLE3YpBvMJWhwx
+   KV9F5aBPxE1RSh4o4S6Py4ZBqhuzo37dJmtkmbJ+MnpqY30aE9/Roz0Zq
+   6Xf58jz4dLmH5QQGrZW1lSj1vzgCdkvSt0p78jxwQqeMPNeEiQWknyxdu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="316194344"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="316194344"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:05:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="976319943"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="976319943"
+Received: from pphiri-mobl1.amr.corp.intel.com (HELO [10.212.198.173]) ([10.212.198.173])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:05:57 -0800
+Message-ID: <cb5abce531c1b14118de419ba68c2a501b016873.camel@linux.intel.com>
+Subject: Re: [PATCH v2 14/18] x86/sgx: Add EPC OOM path to forcefully
+ reclaim EPC
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Date:   Fri, 09 Dec 2022 08:05:56 -0800
+In-Reply-To: <Y5IBCOuF8X7jEK3+@kernel.org>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+         <20221202183655.3767674-15-kristen@linux.intel.com>
+         <Y5IBCOuF8X7jEK3+@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xu <jeffxu@google.com>
+On Thu, 2022-12-08 at 15:21 +0000, Jarkko Sakkinen wrote:
+> On Fri, Dec 02, 2022 at 10:36:50AM -0800, Kristen Carlson Accardi
+> wrote:
+> > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> >=20
+> > Introduce the OOM path for killing an enclave with the reclaimer
+> > is no longer able to reclaim enough EPC pages. Find a victim
+> > enclave,
+> > which will be an enclave with EPC pages remaining that are not
+> > accessible to the reclaimer ("unreclaimable"). Once a victim is
+> > identified, mark the enclave as OOM and zap the enclaves entire
+> > page range. Release all the enclaves resources except for the
+> > struct sgx_encl memory itself.
+> >=20
+> > Signed-off-by: Sean Christopherson
+> > <sean.j.christopherson@intel.com>
+> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > Cc: Sean Christopherson <seanjc@google.com>
+>=20
+> Why this patch is dependent of all 13 patches before it?
+>=20
+> Looks like something that is orthogonal to cgroups and could be
+> live by its own. At least it probably does not require all of
+> those patches, or does it?
+>=20
+> Even without cgroups it would make sense to killing enclaves if
+> reclaimer gets stuck.
+>=20
+> BR, Jarkko
 
-The new security_memfd_create allows lsm to check flags of
-memfd_create.
+It is dependent first of all of having the LRU struct with the
+unreclaimable/reclaimable lists. Which means it requires storing the
+enclave pointer in the page as well. It's dependent on knowing how many
+pages are available, being able to ignore the age of a page etc. Right
+now, without cgroups, sgx will be unable to allocate memory when an
+enclave is created if it cannot reclaim enough memory from the existing
+in use enclaves.
 
-The security by default system (such as chromeos) can use this
-to implement system wide lsm to allow only non-executable memfd
-being created.
-
-Signed-off-by: Jeff Xu <jeffxu@google.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- include/linux/lsm_hook_defs.h | 1 +
- include/linux/lsm_hooks.h     | 4 ++++
- include/linux/security.h      | 6 ++++++
- mm/memfd.c                    | 5 +++++
- security/security.c           | 5 +++++
- 5 files changed, 21 insertions(+)
-
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index ec119da1d89b..fd40840927c8 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
- LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
- LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
- 	 unsigned long arg)
-+LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
- LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
- LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
- 	 unsigned long prot, unsigned long flags)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 4ec80b96c22e..5a18a6552278 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -543,6 +543,10 @@
-  *	simple integer value.  When @arg represents a user space pointer, it
-  *	should never be used by the security module.
-  *	Return 0 if permission is granted.
-+ * @memfd_create:
-+ *	@name is the name of memfd file.
-+ *	@flags is the flags used in memfd_create.
-+ *	Return 0 if permission is granted.
-  * @mmap_addr :
-  *	Check permissions for a mmap operation at @addr.
-  *	@addr contains virtual address that will be used for the operation.
-diff --git a/include/linux/security.h b/include/linux/security.h
-index ca1b7109c0db..5b87a780822a 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
- int security_file_alloc(struct file *file);
- void security_file_free(struct file *file);
- int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-+int security_memfd_create(char *name, unsigned int flags);
- int security_mmap_file(struct file *file, unsigned long prot,
- 			unsigned long flags);
- int security_mmap_addr(unsigned long addr);
-@@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
- 	return 0;
- }
- 
-+static inline int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return 0;
-+}
-+
- static inline int security_mmap_file(struct file *file, unsigned long prot,
- 				     unsigned long flags)
- {
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 92f0a5765f7c..f04ed5f0474f 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
- 		goto err_name;
- 	}
- 
-+	/* security hook for memfd_create */
-+	error = security_memfd_create(name, flags);
-+	if (error)
-+		return error;
-+
- 	if (flags & MFD_HUGETLB) {
- 		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
- 					HUGETLB_ANONHUGE_INODE,
-diff --git a/security/security.c b/security/security.c
-index 79d82cb6e469..57788cf94075 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1010,6 +1010,11 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
- }
- EXPORT_SYMBOL(security_sb_clone_mnt_opts);
- 
-+int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return call_int_hook(memfd_create, 0, name, flags);
-+}
-+
- int security_move_mount(const struct path *from_path, const struct path *to_path)
- {
- 	return call_int_hook(move_mount, 0, from_path, to_path);
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
+Aside from that though, I don't think that killing enclaves makes sense
+outside the context of cgroup limits. Without cgroup limits, you have a
+max number of EPC pages that you can have active at any one time. If an
+enclave attempts to allocate a new page and the reclaimer can't free up
+any, how would you decide whether it's ok to kill an entire enclave in
+order to grant this other enclave the higher priority for getting a
+page? With a cgroup limit, the system owner explicitly can decide what
+the limits on usage will be, but without that, you'd have a situation
+where one new enclave could kill others I would think. Better to just
+have it the way it is - new page allocations fail if there are not free
+pages, but you don't kill enclaves that already exist.
 
