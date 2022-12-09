@@ -2,565 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFA16488F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE526488FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLIT02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S229805AbiLITcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIT0Z (ORCPT
+        with ESMTP id S229538AbiLITcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:26:25 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F4FA1995;
-        Fri,  9 Dec 2022 11:26:23 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1F4455C004A;
-        Fri,  9 Dec 2022 14:26:21 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 09 Dec 2022 14:26:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670613981; x=1670700381; bh=nQ
-        d2rxX92Z496VFYXmRTYHuMzUOKtggtx5EpHFAxONQ=; b=utc5B0rRcA+M/q1SYL
-        nX6f3lq4Q5iuzCn8M+18hDa8JyK3YZOvzm81QeapTzgSucQHwYUz2FUZgA8ycOk7
-        8S97CF41YVvzliZBWkMdE0gYMUpsSfjPLGyHwLSKqrt25sLrMH4rwQDRYBl3c40L
-        Oxvn38uBD9783XXYANEB/ssp/qiIZdb/JGNig7vfUI1ah2oolwO8WWdj21yEj+kw
-        blSVmKHsIhT63xsUcuk/2syKJ8OsMoEGSxdWntV6Up0uiEbibEnG01gByRifptOG
-        QC7honiXt74Zq8BzeWCXDeengkHyRcUxmsdCMKsnJnAah7KBnXYKyw1FI5amqbm2
-        lZ1w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670613981; x=1670700381; bh=nQd2rxX92Z496VFYXmRTYHuMzUOK
-        tggtx5EpHFAxONQ=; b=nstVt/UjijqOS2YjjJ8cixSSC3TlPqtmCpn32RbW1r23
-        RDvT48qFEE8G+YggFC88k4p/HiSvgb15MYBEh1LLRG22T5fYD/9zYWwfdnKLQO4x
-        YrFlRySzupWa+nwFdCaVAO8y24y6HXBbDjwrOUDRCUh5PWSXG2u+lMPAGa59o3je
-        6IMUAGQor4fRfYOwM2y+AmB0Bs6seO7XHt5eDscQXZTPM2HeHuFuycVASosZlMDP
-        H3hwfNsU0pQThfz3Wl8lBgPPqZe/QPK/8xbyLPr3WzY+MItEnwtAr6jTIZIjuCU4
-        LDtRodREJKXlHRJLPqz7WBufw7x5OCTjGDJ5qfoPTw==
-X-ME-Sender: <xms:24uTY6zi5iuLfQqz97maJwUeFx4VOnuO5QHk-GmEdg1jvgpmYm_dRg>
-    <xme:24uTY2Qne4djmFVqedwTo---Q8meZ_qdOH_E8LndPpfgOiunC8sdNnzitVB8aCvYH
-    wanP39YgZYbfil6j_Q>
-X-ME-Received: <xmr:24uTY8X1Y1ScsfyychY_72m5TjzYHqhPYyxhJG7kBndrDgAueqDfvhRVZaGa4QX6BR4kaQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdduvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:24uTYwgP3mn4ZIuySKmEz6EPFJnBJ5fgXsQDbnZtqutcONZCAmF5Iw>
-    <xmx:24uTY8BasZy8srVy69FDl-DxzDQRz02eBkfDJkeiOhFa77VkgwOuKQ>
-    <xmx:24uTYxLA8rgvKWLeUr7_JOEYLyrkbvRZD2ft6naIG-nzSg9lXqO-nw>
-    <xmx:3YuTY8uiM3t7vMhNYcbAi0lQa6C3713xnjase6rNTVyd0LNKVoqfGg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Dec 2022 14:26:19 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 33A5A109CE2; Fri,  9 Dec 2022 22:26:16 +0300 (+03)
-Date:   Fri, 9 Dec 2022 22:26:16 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv8 02/14] mm: Add support for unaccepted memory
-Message-ID: <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
-References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
- <20221207014933.8435-3-kirill.shutemov@linux.intel.com>
- <f944459f-76a6-60c3-7dae-0918d9ef0c5d@suse.cz>
+        Fri, 9 Dec 2022 14:32:52 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332A2228B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:32:51 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9IxCqU013382;
+        Fri, 9 Dec 2022 19:32:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ to : cc : references : from : subject : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=PNzzHDIsSR6h5f631wSYuH8ciJzhQz+XG+bm67WnCgU=;
+ b=v30WtkNFYHireXut8ToTJQVNR7FZwlJJDpBSNSfwA5hr2wDwplHjpmEjBRsxMqt+Gj39
+ /O31oO0B8UdIQPT12se3eiyKhhy3yQMevB1f/bPZmvYdXnVJDBbWDH2dM4WnLOnBR2wG
+ xgNVimeG8akblHtDCeJnqaLADuRbdPJr7UaRD62TamExo6R6O47Dnu1ZbHURNegivlO9
+ cT8EY0DEOaJJwJ7RCu6kYMg86bgYglN3gFEw+ZOPCOViOYpWIey1FZ28muQY/5cUgoKp
+ +WYxPb9gtebF6DxYeRv2x6TN/FBxCh+cB8d6yAhYcNJ3cbbALNe769gInxphBHI0apeT +g== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maud760ga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 09 Dec 2022 19:32:20 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B9ILgXG032133;
+        Fri, 9 Dec 2022 19:32:20 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa7ggev4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 09 Dec 2022 19:32:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TnRqRMVkWUkyrb/8L/F0gGr+vlyNssM3pSzeLCXl1yo3NWiHxySTrCYP1fEeqvORQrfFjdtIxGm3mpPHLFmkQ7/5yQeXZ5EoNlhUxXrXeg+aZb+PbKkhpXuakqoz/6AXAXU92b5DsAfWz/npvCw0265f6BqMWTogOOAXeVkHIiVpb/S5vg8lEuLBiR/HAyNRmdNrRXlxgh5levDICylb/y2IAngtJZf0rEHcxPgTLxmO77RYUM371fxFrzjuncR+T+6CDrpUH0xdj0erKBG1dVDx4Rdnru1eYPVZYXqumY4t/tLpHC9wQCvm/YckRnNAYjBORmSKGzcQvxzRpFazdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PNzzHDIsSR6h5f631wSYuH8ciJzhQz+XG+bm67WnCgU=;
+ b=EVsj7Zscvd+qUJfkqduCVJ91lIV9w5cok47NVdi5KQj/7eqLqFEUXasRk2M71Dl+G5N8ZIal0tmwNJRqARmFkRjvClPmaK/BJj9bz9wusIaw/6IEtg+/XTGM+ETlOeIV2Qr8ra7cEvGA0FpiJ7Ug4e1xNfJhjEmR+BAKcaKtkcT8rx79s6dTceD0moQT4S2AWK1wOTNzXbRiyzNBuwteFS2p04FS8D+e3+zJl0TGtLSX3viCahaBmoc4VJp3eAKsb6JFDg4cvP08NDz+5g6OB4e6LxtsfWY4L6QamzBgVpD3M5KqryzSF8lP+ZRtWpn1zCbcphZWtUO9O4qQak9bZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PNzzHDIsSR6h5f631wSYuH8ciJzhQz+XG+bm67WnCgU=;
+ b=jd+wfwozpxGKQF6GgI0CF3S3pfG7hKMw5sVsVMv1kME1hrOGLE+uICnouxm6vHnyxLImpwIzp+L81KSymB7RlBlfcG1eXIluikj2CV8yqbKGqYJgp520TZ1UX4GOAcjiH6ln2J9cDmss/AHdevWYOAZ+pfBLhetHW0Aej8V44Pg=
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
+ by DM4PR10MB6767.namprd10.prod.outlook.com (2603:10b6:8:10d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18; Fri, 9 Dec
+ 2022 19:32:17 +0000
+Received: from BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::909f:fa34:2dac:11c5]) by BLAPR10MB5009.namprd10.prod.outlook.com
+ ([fe80::909f:fa34:2dac:11c5%8]) with mapi id 15.20.5880.018; Fri, 9 Dec 2022
+ 19:32:17 +0000
+Message-ID: <1e6c1b08-d573-fba9-61fd-d40a74427d46@oracle.com>
+Date:   Fri, 9 Dec 2022 14:32:15 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Content-Language: en-US
+To:     Krister Johansen <kjlx@templeofstupid.com>,
+        Juergen Gross <jgross@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>
+References: <20221208163650.GA3225@templeofstupid.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: Re: [PATCH linux-next] x86/xen/time: prefer tsc as clocksource when
+ it is invariant
+In-Reply-To: <20221208163650.GA3225@templeofstupid.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR02CA0090.namprd02.prod.outlook.com
+ (2603:10b6:208:51::31) To BLAPR10MB5009.namprd10.prod.outlook.com
+ (2603:10b6:208:321::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f944459f-76a6-60c3-7dae-0918d9ef0c5d@suse.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5009:EE_|DM4PR10MB6767:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a077cf2-ffb3-4107-7257-08dada1c1543
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tXndInz/C86evfUAbeL2Eprq0Nrfg7kRu/bcBWm+2rzv4sIkkeYVgvUXfE6Yt/KaynuDnwJkj9L/C7TrWsFc3+0nbGD6WV6xyL/1HldoICAp1yBqAUgqB16fjTZnNy3KQr0LokjRIi2r0uRiFvJGjqWkfidz5I4eTYMmVLwUs9h2kScncO3AD52aFTK6Qp6uzAUL831Dqepsjz2TzcrVvdfIM7e16iCilGGnYysY0tQIX0X2tCEv22DY/jcrUnAXqBmaHGFv1uBycRjSg8yMV7Teydsbs4X8T7cPq8ZF6+aAjfks73HzCV9SLln+DuF2tuTaaLB6vsKKT3mLMo1i/6ipAK9Cl03PCU1Jhu+x8KZCRU+kkbtvDcO2rO7hsrdIrAX+lev46MhqZsKazLo41Ha3jrh6Q7yROxMCVWiWe43zsi52C+mNFterg6EyCamavgEUGzzkg5UN2jzPjJ+k9hZw7FVns0FQt5MCkPAKxvFSVtQTwObOhrMHm1X/nqEVsLI0cEpjgkA9LoUBqF6fV15GNgiY/9hVhZbfsss2E8IJm+h2UKKidb3W9VvUQIE8Kh4NIpdgla9ELGw6+e2VNtXs2voDzXdHBiHsEuwr3dn9hc40Ea3ZvlKSL5L3uILLP1u6fDhtG25h0FK6qIFvgNVGaaTEVZyW5zBqMZ41lymGmPrY4Q4psv0WijATlFUSWl7wdC8MUOlQ5sqPc3lV9/+pG3qiIih7Cd8sFV385K8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(376002)(346002)(366004)(451199015)(5660300002)(4744005)(7416002)(2906002)(44832011)(478600001)(86362001)(31696002)(316002)(8676002)(4326008)(53546011)(6506007)(36756003)(41300700001)(6486002)(110136005)(54906003)(66946007)(8936002)(66556008)(66476007)(31686004)(83380400001)(38100700002)(186003)(2616005)(26005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MlQrU0hEdDhmaW5RNmdubndUTFpFSHBFRTZYSHljMytncGVkVkhxZXgrZFRi?=
+ =?utf-8?B?c3Y0WUVBQlZ4V0QyS05SV2JxUlNkUWFhNUU0OWRkTW1vSHlDSDY5KzhER05P?=
+ =?utf-8?B?WWtRdzBnOW43SSswL3ZTSDlVbnJtTzNKVUZINXVaaW95b0t6aU85Z1BrVkFY?=
+ =?utf-8?B?dHIwdEdSbklyWHlmRkNsZkVSeWdKc2RNM2IxZmdMVk91eWx2YmJpTXBaTzhO?=
+ =?utf-8?B?dVhZcmlBR1lnbnRWbTZ1RDJXb3dvR2hWeURSdW0yanMzclJaWkprRFMzS241?=
+ =?utf-8?B?ZHRuOFFmV1pJeVhNTXN3VVJWRnpjRXdYVTBaaGhqbFJHeDdTamRGcWpxdmdt?=
+ =?utf-8?B?OHd4MzZHSEJVTWxnUWVZdDFNdHdKYjJBMURQUDVLVTE2L2ticC9oZ0NzMWZQ?=
+ =?utf-8?B?eE9IRFQ3czlkaXdRaVNJd1c1UnZUajBjdGtrMkYvNEdGa3VDVGdobFdiWW9a?=
+ =?utf-8?B?VXl1UnVaMnRISXNGM01WMHBPT2NzdktzV1NhaHIzcmlabTRvb1VDbHdTdFBV?=
+ =?utf-8?B?T2tGeTd6ekRtMGVmbFpRYzdQbVk1VndvbHEvbERJaU1taW1RU3o2bDZCT1Bz?=
+ =?utf-8?B?ODZRZElDdk5pS2N1a3QybnF2NDJFa25sR3kwQm5nMWQyeWs2NkJiVFpFRE1G?=
+ =?utf-8?B?NDYwS2RsNkZQMllOMHcyYUYyYUJZYTU2NjRVMm83QXV4cVI0WFZMalF6RXd4?=
+ =?utf-8?B?WEFSOFo3UEtNSXdabVJFZnpCSytrbnNEdDJtNzVtSHJ2Y0piZUVORUJZMU1q?=
+ =?utf-8?B?NjV1dTRtL3RTRnlnSHgvRUJxeGlGcGNoNGV4dFlEeFhzYXJBTHdIS2x5dVIy?=
+ =?utf-8?B?RncxVkM0dUY1UUlNOTdVcjljQWxZYXRkQUU4RnVyVWI1K3Q1TE9KejFKaDYv?=
+ =?utf-8?B?SmpHSWdFZ3QxNWNFV2UzM1FWTWFhT1dZZTlzYXNoQy9PWjVQMERnU1pGNUJO?=
+ =?utf-8?B?c2xzcktKc2JDUi9NdmxWbkpxUUx4MjF2dmw5b3pndkF0dW8wL1VZODY4KzVX?=
+ =?utf-8?B?L0h1YVRoVWRqUGpwSGxaMndhWGtiV2habTlvSHhaR3JXclVEdEcxblZKSHJU?=
+ =?utf-8?B?NkJQeWZuUlMzeUNjK3VMekV3dkFXYlRQK2xpQ3ZiaDVlVTF4QlI0MkJQanpH?=
+ =?utf-8?B?SmdBQmxxMmxzRUk4ZGtWWmVhSmdRZmpOQmFZS2pXeFNOR2wrWDZPb2o0SkFE?=
+ =?utf-8?B?SGdwWkhhNmlXL3hNaFB3WnFQU0Raamh6cE5ndlFpbTJDbXg5aUR5YUhsbEoz?=
+ =?utf-8?B?cXBReWk3YWRHU0ZhTXpmQzRsNS9rSXY3bnJxbG1MUEFYK2pHMXVMeDJBUGdI?=
+ =?utf-8?B?cFZMdnBUNlZ5ZlBRRXNTdG9NVE1kenVCcmhiN2F4TjhsQlk0VXRuYzVwcVRS?=
+ =?utf-8?B?SlEwVnpRWit6VHJoeVEwa3l4Z3FiVkdkZ1o1TEt3VmRyejZqUFp5amtmMFkw?=
+ =?utf-8?B?Z1Q2dVdBTlBDVDVpYTFVWGs2Z016bUltRjlkUDRlK2VYZk93bm1kZ0Ztb0RF?=
+ =?utf-8?B?bGhNL24xWE5JY2hNUzNjVkh6aWUyT2NXV2YxR2pZYmxYQy9Jd0xJSC8vMDZt?=
+ =?utf-8?B?eklaK1lOVlRHcy9SZkVsZVMzMXA5UHZMT05maXhncnd5VTZxbUtYcVc4WFBY?=
+ =?utf-8?B?MWlIdzcycVBycXRpT2dxY0hzNWhUZHUzMVBVcXZlV0VzSUkyWXJPUnQyNXVI?=
+ =?utf-8?B?VzlBbnJSR294TTRneHF3OEYyNm5wZEZwcDlGcU9qRFcxV0ZjVlVOdzV6QTRS?=
+ =?utf-8?B?U1d0dmEreWJQNjFUQklray9OZ0NOWTFnOVBudGQ1WWVlTzhiSVhkZFM1Vk9C?=
+ =?utf-8?B?R2NvaHhNZ2lFRUphOWI2UHBQYlA4MU9iMTJqOXhQdVQ5RmhzekFFMzAxQWNT?=
+ =?utf-8?B?ZjVOamRUU3pudC9HakE0ajRGUG5qZXNGc3p5RmtZUy9IZ3hmYWV0Vno1eEp5?=
+ =?utf-8?B?OFdWKzQrQ3R2aTlFT3U1b0U2TGh1WXkwaHhYU1RXOGYyZHdvc0lQNmRGK1VI?=
+ =?utf-8?B?WmlMa3Z6VTliZUVnUlAraUhEckNUaCs2QzV4QUhGaHVJa3l0NkhmVXNvWTB4?=
+ =?utf-8?B?TFBhUXlxYVd3cmwyTUxodFdmSlFzZm54WitLd0FFZDAwYmFuT09jSVFYdjMz?=
+ =?utf-8?B?T09zNytQaE15WDNsdSt0T0RmRVhncWc3NWNEaFRvRlJrUkF3UXVPcEVjZ1l0?=
+ =?utf-8?B?cWc9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a077cf2-ffb3-4107-7257-08dada1c1543
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 19:32:17.8745
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ylHzhhGLQOHmonejiFmfZxbxFdyrys2oqvB13FuKPXu6iERaq/QPQftxKzGVPcsAApwMaR6/yRF0LLfxtz/EISUrI0EECyXDfiYrNqdyjc4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6767
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_11,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212090159
+X-Proofpoint-GUID: Eo5tef11Xf8C4zmn2Kel3JNOB6d805WQ
+X-Proofpoint-ORIG-GUID: Eo5tef11Xf8C4zmn2Kel3JNOB6d805WQ
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 07:10:25PM +0100, Vlastimil Babka wrote:
-> On 12/7/22 02:49, Kirill A. Shutemov wrote:
-> > UEFI Specification version 2.9 introduces the concept of memory
-> > acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
-> > SEV-SNP, require memory to be accepted before it can be used by the
-> > guest. Accepting happens via a protocol specific to the Virtual Machine
-> > platform.
-> > 
-> > There are several ways kernel can deal with unaccepted memory:
-> > 
-> >  1. Accept all the memory during the boot. It is easy to implement and
-> >     it doesn't have runtime cost once the system is booted. The downside
-> >     is very long boot time.
-> > 
-> >     Accept can be parallelized to multiple CPUs to keep it manageable
-> >     (i.e. via DEFERRED_STRUCT_PAGE_INIT), but it tends to saturate
-> >     memory bandwidth and does not scale beyond the point.
-> > 
-> >  2. Accept a block of memory on the first use. It requires more
-> >     infrastructure and changes in page allocator to make it work, but
-> >     it provides good boot time.
-> > 
-> >     On-demand memory accept means latency spikes every time kernel steps
-> >     onto a new memory block. The spikes will go away once workload data
-> >     set size gets stabilized or all memory gets accepted.
-> > 
-> >  3. Accept all memory in background. Introduce a thread (or multiple)
-> >     that gets memory accepted proactively. It will minimize time the
-> >     system experience latency spikes on memory allocation while keeping
-> >     low boot time.
-> > 
-> >     This approach cannot function on its own. It is an extension of #2:
-> >     background memory acceptance requires functional scheduler, but the
-> >     page allocator may need to tap into unaccepted memory before that.
-> > 
-> >     The downside of the approach is that these threads also steal CPU
-> >     cycles and memory bandwidth from the user's workload and may hurt
-> >     user experience.
-> > 
-> > Implement #2 for now. It is a reasonable default. Some workloads may
-> > want to use #1 or #3 and they can be implemented later based on user's
-> > demands.
-> > 
-> > Support of unaccepted memory requires a few changes in core-mm code:
-> > 
-> >   - memblock has to accept memory on allocation;
-> > 
-> >   - page allocator has to accept memory on the first allocation of the
-> >     page;
-> > 
-> > Memblock change is trivial.
-> > 
-> > The page allocator is modified to accept pages. New memory gets accepted
-> > before putting pages on free lists. It is done lazily: only accept new
-> > pages when we run out of already accepted memory.
-> > 
-> > Architecture has to provide two helpers if it wants to support
-> > unaccepted memory:
-> > 
-> >  - accept_memory() makes a range of physical addresses accepted.
-> > 
-> >  - range_contains_unaccepted_memory() checks anything within the range
-> >    of physical addresses requires acceptance.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
-> 
-> Hi,
-> 
-> the intrusiveness to page allocator seems to be much better in this version
-> than in the older ones, thanks!
-> 
-> > ---
-> >  include/linux/mmzone.h     |   5 ++
-> >  include/linux/page-flags.h |  24 ++++++++
-> >  mm/internal.h              |  12 ++++
-> >  mm/memblock.c              |   9 +++
-> >  mm/page_alloc.c            | 119 +++++++++++++++++++++++++++++++++++++
-> >  5 files changed, 169 insertions(+)
-> > 
-> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > index 5f74891556f3..da335381e63f 100644
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -822,6 +822,11 @@ struct zone {
-> >  	/* free areas of different sizes */
-> >  	struct free_area	free_area[MAX_ORDER];
-> >  
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +	/* pages to be accepted */
-> > +	struct list_head	unaccepted_pages;
-> > +#endif
-> > +
-> >  	/* zone flags, see below */
-> >  	unsigned long		flags;
-> >  
-> > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> > index 0b0ae5084e60..ce953be8fe10 100644
-> > --- a/include/linux/page-flags.h
-> > +++ b/include/linux/page-flags.h
-> > @@ -941,6 +941,7 @@ static inline bool is_page_hwpoison(struct page *page)
-> >  #define PG_offline	0x00000100
-> >  #define PG_table	0x00000200
-> >  #define PG_guard	0x00000400
-> > +#define PG_unaccepted	0x00000800
-> >  
-> >  #define PageType(page, flag)						\
-> >  	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
-> > @@ -966,6 +967,18 @@ static __always_inline void __ClearPage##uname(struct page *page)	\
-> >  	page->page_type |= PG_##lname;					\
-> >  }
-> >  
-> > +#define PAGE_TYPE_OPS_FALSE(uname)					\
-> > +static __always_inline int Page##uname(struct page *page)		\
-> > +{									\
-> > +	return false;							\
-> > +}									\
-> > +static __always_inline void __SetPage##uname(struct page *page)		\
-> > +{									\
-> > +}									\
-> > +static __always_inline void __ClearPage##uname(struct page *page)	\
-> > +{									\
-> > +}
-> 
-> Wonder if we need this. The page type is defined regardless of
-> CONFIG_UNACCEPTED_MEMORY and with CONFIG_UNACCEPTED_MEMORY=n nobody will be
-> actually be setting or checking the type, so we can simply just keep the
-> "real" implementations?
 
-Okay. Makes sense.
+On 12/8/22 11:36 AM, Krister Johansen wrote:
+> +	/*
+> +	 * As Dom0 is never moved, no penalty on using TSC there.
+> +	 *
+> +	 * If the guest has invariant tsc, then set xen_clocksource rating
+> +	 * below that of the tsc so that the system prefers tsc instead.  This
+> +	 * check excludes PV domains, because PV is unable to guarantee that the
+> +	 * guest's cpuid call has been intercepted by the hypervisor.
+> +	 */
+> +	if (xen_initial_domain()) {
+>   		xen_clocksource.rating = 275;
+> +	} else if ((xen_hvm_domain() || xen_pvh_domain()) &&
+> +	    boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+> +	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+> +	    !check_tsc_unstable()) {
+> +		xen_clocksource.rating = 299;
+> +	}
 
-> > +
-> >  /*
-> >   * PageBuddy() indicates that the page is free and in the buddy system
-> >   * (see mm/page_alloc.c).
-> > @@ -996,6 +1009,17 @@ PAGE_TYPE_OPS(Buddy, buddy)
-> >   */
-> >  PAGE_TYPE_OPS(Offline, offline)
-> >  
-> > +/*
-> > + * PageUnaccepted() indicates that the page has to be "accepted" before it can
-> > + * be read or written. The page allocator must call accept_page() before
-> > + * touching the page or returning it to the caller.
-> > + */
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +PAGE_TYPE_OPS(Unaccepted, unaccepted)
-> > +#else
-> > +PAGE_TYPE_OPS_FALSE(Unaccepted)
-> > +#endif
-> > +
-> >  extern void page_offline_freeze(void);
-> >  extern void page_offline_thaw(void);
-> >  extern void page_offline_begin(void);
-> > diff --git a/mm/internal.h b/mm/internal.h
-> > index 6b7ef495b56d..8ef4f88608ad 100644
-> > --- a/mm/internal.h
-> > +++ b/mm/internal.h
-> > @@ -856,4 +856,16 @@ static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
-> >  	return !(vma->vm_flags & VM_SOFTDIRTY);
-> >  }
-> >  
-> > +#ifndef CONFIG_UNACCEPTED_MEMORY
-> > +static inline bool range_contains_unaccepted_memory(phys_addr_t start,
-> > +						    phys_addr_t end)
-> > +{
-> > +	return false;
-> > +}
-> > +
-> > +static inline void accept_memory(phys_addr_t start, phys_addr_t end)
-> > +{
-> > +}
-> > +#endif
-> > +
-> >  #endif	/* __MM_INTERNAL_H */
-> > diff --git a/mm/memblock.c b/mm/memblock.c
-> > index 511d4783dcf1..3bc404a5352a 100644
-> > --- a/mm/memblock.c
-> > +++ b/mm/memblock.c
-> > @@ -1423,6 +1423,15 @@ phys_addr_t __init memblock_alloc_range_nid(phys_addr_t size,
-> >  		 */
-> >  		kmemleak_alloc_phys(found, size, 0);
-> >  
-> > +	/*
-> > +	 * Some Virtual Machine platforms, such as Intel TDX or AMD SEV-SNP,
-> > +	 * require memory to be accepted before it can be used by the
-> > +	 * guest.
-> > +	 *
-> > +	 * Accept the memory of the allocated buffer.
-> > +	 */
-> > +	accept_memory(found, found + size);
-> > +
-> >  	return found;
-> >  }
-> >  
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 6e60657875d3..6d597e833a73 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -450,6 +450,11 @@ EXPORT_SYMBOL(nr_online_nodes);
-> >  
-> >  int page_group_by_mobility_disabled __read_mostly;
-> >  
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +/* Counts number of zones with unaccepted pages. */
-> > +static DEFINE_STATIC_KEY_FALSE(unaccepted_pages);
-> > +#endif
-> > +
-> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> >  /*
-> >   * During boot we initialize deferred pages on-demand, as needed, but once
-> > @@ -1043,12 +1048,15 @@ static inline void move_to_free_list(struct page *page, struct zone *zone,
-> >  {
-> >  	struct free_area *area = &zone->free_area[order];
-> >  
-> > +	VM_BUG_ON_PAGE(PageUnevictable(page), page);
-> 
-> Hm I think we're not allowed to do VM_BUG_ON anymore per some semi-recent
-> thread with Linus, as new BUG_ONs are forbidden in general, and Fedora
-> builds with DEBUG_VM. So probably use VM_WARN_ON everywhere and bail out
-> where feasible (i.e. probably not here).
 
-Okay, I can downgrade it to VM_WARN_ON_PAGE(), but it will crash soon
-after anyway. On the first access to the supposedly free page that
-unaccepted.
+What if RDTSC is intercepted?
 
-> >  	list_move_tail(&page->buddy_list, &area->free_list[migratetype]);
-> >  }
-> >  
-> >  static inline void del_page_from_free_list(struct page *page, struct zone *zone,
-> >  					   unsigned int order)
-> >  {
-> > +	VM_BUG_ON_PAGE(PageUnevictable(page), page);
-> > +
-> >  	/* clear reported state and update reported page count */
-> >  	if (page_reported(page))
-> >  		__ClearPageReported(page);
-> > @@ -1728,6 +1736,97 @@ static void __free_pages_ok(struct page *page, unsigned int order,
-> >  	__count_vm_events(PGFREE, 1 << order);
-> >  }
-> >  
-> > +static bool page_contains_unaccepted(struct page *page, unsigned int order)
-> > +{
-> > +	phys_addr_t start = page_to_phys(page);
-> > +	phys_addr_t end = start + (PAGE_SIZE << order);
-> > +
-> > +	return range_contains_unaccepted_memory(start, end);
-> > +}
-> > +
-> > +static void accept_page(struct page *page, unsigned int order)
-> > +{
-> > +	phys_addr_t start = page_to_phys(page);
-> > +
-> > +	accept_memory(start, start + (PAGE_SIZE << order));
-> > +}
-> > +
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +
-> > +static bool try_to_accept_memory(struct zone *zone)
-> > +{
-> > +	unsigned long flags, order;
-> > +	struct page *page;
-> > +	bool last = false;
-> > +	int migratetype;
-> > +
-> > +	if (!static_branch_unlikely(&unaccepted_pages))
-> > +		return false;
-> > +
-> > +	spin_lock_irqsave(&zone->lock, flags);
-> > +	page = list_first_entry_or_null(&zone->unaccepted_pages,
-> > +					struct page, lru);
-> > +	if (!page) {
-> > +		spin_unlock_irqrestore(&zone->lock, flags);
-> > +		return false;
-> > +	}
-> > +
-> > +	list_del(&page->lru);
-> > +	last = list_empty(&zone->unaccepted_pages);
-> > +
-> > +	order = page->private;
-> > +	VM_BUG_ON(order > MAX_ORDER || order < pageblock_order);
-> > +
-> > +	migratetype = get_pfnblock_migratetype(page, page_to_pfn(page));
-> > +	__mod_zone_freepage_state(zone, -1 << order, migratetype);
-> > +	spin_unlock_irqrestore(&zone->lock, flags);
-> > +
-> > +	if (last)
-> > +		static_branch_dec(&unaccepted_pages);
-> > +
-> > +	accept_page(page, order);
-> > +	__ClearPageUnaccepted(page);
-> > +	__free_pages_ok(page, order, FPI_TO_TAIL | FPI_SKIP_KASAN_POISON);
-> > +
-> > +	return true;
-> > +}
-> > +
-> > +static void __free_unaccepted(struct page *page, unsigned int order)
-> > +{
-> > +	struct zone *zone = page_zone(page);
-> > +	unsigned long flags;
-> > +	int migratetype;
-> > +	bool first = false;
-> > +
-> > +	VM_BUG_ON(order > MAX_ORDER || order < pageblock_order);
-> > +	__SetPageUnaccepted(page);
-> > +	page->private = order;
-> > +
-> > +	spin_lock_irqsave(&zone->lock, flags);
-> > +	first = list_empty(&zone->unaccepted_pages);
-> > +	migratetype = get_pfnblock_migratetype(page, page_to_pfn(page));
-> > +	list_add_tail(&page->lru, &zone->unaccepted_pages);
-> > +	__mod_zone_freepage_state(zone, 1 << order, migratetype);
-> > +	spin_unlock_irqrestore(&zone->lock, flags);
-> > +
-> > +	if (first)
-> > +		static_branch_inc(&unaccepted_pages);
-> > +}
-> > +
-> > +#else
-> > +
-> > +static bool try_to_accept_memory(struct zone *zone)
-> > +{
-> > +	return false;
-> > +}
-> > +
-> > +static void __free_unaccepted(struct page *page, unsigned int order)
-> > +{
-> > +	BUILD_BUG();
-> > +}
-> > +
-> > +#endif /* CONFIG_UNACCEPTED_MEMORY */
-> > +
-> >  void __free_pages_core(struct page *page, unsigned int order)
-> >  {
-> >  	unsigned int nr_pages = 1 << order;
-> > @@ -1750,6 +1849,13 @@ void __free_pages_core(struct page *page, unsigned int order)
-> >  
-> >  	atomic_long_add(nr_pages, &page_zone(page)->managed_pages);
-> >  
-> > +	if (page_contains_unaccepted(page, order)) {
-> > +		if (order >= pageblock_order)
-> > +			return __free_unaccepted(page, order);
-> 
-> Would it be better to only do this when all pages are unaccepted, and accept
-> all of them as long as at least one in there is already accepted? Or not
-> worth the trouble of making page_contains_unaccepted() actually count all of
-> them, which would be necessary.
 
-I don't think it worth the change.
+-boris
 
-This is going to be corner case that affect few pages that happened to be
-on the border between unaccepted and accepted memory. It makes no
-difference in practice.
-
-> > +		else
-> > +			accept_page(page, order);
-> > +	}
-> > +
-> >  	/*
-> >  	 * Bypass PCP and place fresh pages right to the tail, primarily
-> >  	 * relevant for memory onlining.
-> > @@ -1910,6 +2016,9 @@ static void __init deferred_free_range(unsigned long pfn,
-> >  		return;
-> >  	}
-> >  
-> > +	/* Accept chunks smaller than page-block upfront */
-> > +	accept_memory(PFN_PHYS(pfn), PFN_PHYS(pfn + nr_pages));
-> > +
-> >  	for (i = 0; i < nr_pages; i++, page++, pfn++) {
-> >  		if (pageblock_aligned(pfn))
-> >  			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-> > @@ -4247,6 +4356,9 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
-> >  				       gfp_mask)) {
-> >  			int ret;
-> >  
-> > +			if (try_to_accept_memory(zone))
-> > +				goto try_this_zone;
-> 
-> 
-> This is under !zone_watermark_fast(), but as unaccepted pages are counted as
-> free pages, then I think this is unlikely to trigger in practice AFAIU as we
-> should therefore be passing the watermarks even if pages are unaccepted.
-> 
-> That's (intentionally IIRC) different from deferred init which doesn't count
-> the pages as free until they are initialized.
-
-It is intentional in sense that we don't want to accept pages proactively.
-Deferred init need to be finished before userspace starts.
-
-> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> >  			/*
-> >  			 * Watermark failed for this zone, but see if we can
-> > @@ -4299,6 +4411,9 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
-> >  
-> >  			return page;
-> >  		} else {
-> > +			if (try_to_accept_memory(zone))
-> > +				goto try_this_zone;
-> 
-> On the other hand, here we failed the full rmqueue(), including the
-> potentially fragmenting fallbacks, so I'm worried that before we finally
-> fail all of that and resort to accepting more memory, we already fragmented
-> the already accepted memory, more than necessary.
-
-I'm not sure I follow. We accept memory in pageblock chunks. Do we want to
-allocate from a free pageblock if we have other memory to tap from? It
-doesn't make sense to me.
-
-> So one way to prevent would be to move the acceptance into rmqueue() to
-> happen before __rmqueue_fallback(), which I originally had in mind and maybe
-> suggested that previously.
-
-I guess it should be pretty straight forward to fail __rmqueue_fallback()
-if there's non-empty unaccepted_pages list and steer to
-try_to_accept_memory() this way.
-
-But I still don't understand why.
-
-> But maybe less intrusive and more robust way would be to track how much
-> memory is unaccepted, and actually decrement that amount  from free memory
-> in zone_watermark_fast() in order to force earlier failure of that check and
-> thus to accept more memory and give us a buffer of truly accepted and
-> available memory up to high watermark, which should hopefully prevent most
-> of the fallbacks. Then the code I flagged above as currently unecessary
-> would make perfect sense.
-
-The next patch adds per-node unaccepted memory accounting. We can move it
-per-zone if it would help.
-
-> And maybe Mel will have some ideas as well.
-
-I don't have much expertise in page allocator. Any input is valuable.
-
-> > +
-> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> >  			/* Try again if zone has deferred pages */
-> >  			if (static_branch_unlikely(&deferred_pages)) {
-> > @@ -6935,6 +7050,10 @@ static void __meminit zone_init_free_lists(struct zone *zone)
-> >  		INIT_LIST_HEAD(&zone->free_area[order].free_list[t]);
-> >  		zone->free_area[order].nr_free = 0;
-> >  	}
-> > +
-> > +#ifdef CONFIG_UNACCEPTED_MEMORY
-> > +	INIT_LIST_HEAD(&zone->unaccepted_pages);
-> > +#endif
-> >  }
-> >  
-> >  /*
-> 
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
