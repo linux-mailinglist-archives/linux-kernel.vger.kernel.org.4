@@ -2,170 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3BC648396
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C46D64839B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLIORY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:17:24 -0500
+        id S229634AbiLIOSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:18:33 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLIORD (ORCPT
+        with ESMTP id S229971AbiLIOSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:17:03 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD734263
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:16:48 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id b16so5710271yba.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:16:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q7LlfAQWpPNLuhOgcUZ4tUXnEA1fFuup+0DIajKdSqk=;
-        b=fGQBPTJJzLXlXiBSV/dp2MY0Y7S9JALxm7neMKI6NAPPeM6sjCXwJ97CJkvftDVqQV
-         j+pwbzD7mmLknkWlCNQWgJZWPtwuGSynrExWnipZNN4LoqH+/6cLgBTbdR4Sgzs9ih9N
-         t0gCEBt2YbnKHbwmYcMjgg8eiaqEn80lNuxOplx8uaDb1+5Cl1p+mrjbWOpHo31LlJxP
-         dRojfE15wK7U3RFp21T7t8aOOGRWQrARkBHNukcMpjxcNonLxmx4ycHxEI3PeXV+mhFH
-         /rGYeLD+SbM2OdTR7UcFAGJLChheMYK0iuNnrWipVZFEE7QssIW1TweRD6nHyB1QjtRK
-         uiWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q7LlfAQWpPNLuhOgcUZ4tUXnEA1fFuup+0DIajKdSqk=;
-        b=l8DX9sCmjb+Oh4kUwZlgr9bOCw7x3jHao/nMGJEOMUV9YSOJrpA6GitksxwXkUpaKU
-         fSQUcnATA2oiQi8Gcw0SzZutWKVXLbg1DJX9rqfI6lzcQme6JBLdJ46F7KtH7dU41GRB
-         0qt7bprzS6kS8TDE6SoCOd3P+m8I5mQam/EABiSQnnEpWzYhr84HkVjpnZsGvvjIzj66
-         yArE0tG9HID6Rzw1Gd1CN+pQsJjzECvOT38Tfhh4QAtS5kN9TF6SNl1c8oNqeO9fS5hu
-         DIpH7vWu3/B6wQD1CDNvwGGUO0Bj9DeK+9Mfh8hsTmf7yP6tl29mM0HV4gZr23d6eqq+
-         TGqg==
-X-Gm-Message-State: ANoB5pmpI/TG+sZMbBHyKaZ6LZ0V2OWpqR6eaVQQzX7tADxzeJ6fVWUx
-        KCq/rCr55K++cVtknQPxMy4S2HcZVCM8OrqXo1E2zg==
-X-Google-Smtp-Source: AA0mqf6tHhXvuN6Qou0YdVkyqknrQqaBGj9FXVdmscxICIC5lyIJ3FMEDDhoEvcVbc2GOYJsZULXeCdD53vc/PC4oB4=
-X-Received: by 2002:a25:445:0:b0:703:657f:9c91 with SMTP id
- 66-20020a250445000000b00703657f9c91mr9904740ybe.387.1670595407569; Fri, 09
- Dec 2022 06:16:47 -0800 (PST)
+        Fri, 9 Dec 2022 09:18:01 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EE861903E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:17:43 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB18C23A;
+        Fri,  9 Dec 2022 06:17:49 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.41.252])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5D453F73D;
+        Fri,  9 Dec 2022 06:17:41 -0800 (PST)
+Date:   Fri, 9 Dec 2022 14:17:34 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Xander <xandermoerkerken@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xander Moerkerken <xander.moerkerken@omron.com>
+Subject: Re: [PATCH] Added ability to vmalloc executable memory
+Message-ID: <Y5NDfq+ktpKIZXE1@FVFF77S0Q05N>
+References: <20221209131052.64235-1-xander.moerkerken@omron.com>
+ <Y5M1UowMyucPOqAl@FVFF77S0Q05N>
+ <CAGkG8RF0QNrC=UQ3uwurYQRS-kajYr3=g1qa6d7x=RC55z7ymg@mail.gmail.com>
+ <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
 MIME-Version: 1.0
-References: <cover.1669036433.git.bcodding@redhat.com> <d9041e542ade6af472c7be14b5a28856692815cf.1669036433.git.bcodding@redhat.com>
- <dd5260c621d3cf8733fab6287a8182b821c937c5.camel@redhat.com>
-In-Reply-To: <dd5260c621d3cf8733fab6287a8182b821c937c5.camel@redhat.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 9 Dec 2022 15:16:36 +0100
-Message-ID: <CANn89iKx041Sdfk2q5GHW6FBsj17zzmqPBZVFJchziNyzc0XSQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] net: Introduce sk_use_task_frag in struct sock.
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Benjamin Coddington <bcodding@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Alexander Duyck <alexanderduyck@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 1:09 PM Paolo Abeni <pabeni@redhat.com> wrote:
->
-> On Mon, 2022-11-21 at 08:35 -0500, Benjamin Coddington wrote:
-> > From: Guillaume Nault <gnault@redhat.com>
-> >
-> > Sockets that can be used while recursing into memory reclaim, like
-> > those used by network block devices and file systems, mustn't use
-> > current->task_frag: if the current process is already using it, then
-> > the inner memory reclaim call would corrupt the task_frag structure.
-> >
-> > To avoid this, sk_page_frag() uses ->sk_allocation to detect sockets
-> > that mustn't use current->task_frag, assuming that those used during
-> > memory reclaim had their allocation constraints reflected in
-> > ->sk_allocation.
-> >
-> > This unfortunately doesn't cover all cases: in an attempt to remove all
-> > usage of GFP_NOFS and GFP_NOIO, sunrpc stopped setting these flags in
-> > ->sk_allocation, and used memalloc_nofs critical sections instead.
-> > This breaks the sk_page_frag() heuristic since the allocation
-> > constraints are now stored in current->flags, which sk_page_frag()
-> > can't read without risking triggering a cache miss and slowing down
-> > TCP's fast path.
-> >
-> > This patch creates a new field in struct sock, named sk_use_task_frag,
-> > which sockets with memory reclaim constraints can set to false if they
-> > can't safely use current->task_frag. In such cases, sk_page_frag() now
-> > always returns the socket's page_frag (->sk_frag). The first user is
-> > sunrpc, which needs to avoid using current->task_frag but can keep
-> > ->sk_allocation set to GFP_KERNEL otherwise.
-> >
-> > Eventually, it might be possible to simplify sk_page_frag() by only
-> > testing ->sk_use_task_frag and avoid relying on the ->sk_allocation
-> > heuristic entirely (assuming other sockets will set ->sk_use_task_frag
-> > according to their constraints in the future).
-> >
-> > The new ->sk_use_task_frag field is placed in a hole in struct sock and
-> > belongs to a cache line shared with ->sk_shutdown. Therefore it should
-> > be hot and shouldn't have negative performance impacts on TCP's fast
-> > path (sk_shutdown is tested just before the while() loop in
-> > tcp_sendmsg_locked()).
-> >
-> > Link: https://lore.kernel.org/netdev/b4d8cb09c913d3e34f853736f3f5628abfd7f4b6.1656699567.git.gnault@redhat.com/
-> > Signed-off-by: Guillaume Nault <gnault@redhat.com>
-> > ---
-> >  include/net/sock.h | 11 +++++++++--
-> >  net/core/sock.c    |  1 +
-> >  2 files changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index d08cfe190a78..ffba9e95470d 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -318,6 +318,9 @@ struct sk_filter;
-> >    *  @sk_stamp: time stamp of last packet received
-> >    *  @sk_stamp_seq: lock for accessing sk_stamp on 32 bit architectures only
-> >    *  @sk_tsflags: SO_TIMESTAMPING flags
-> > +  *  @sk_use_task_frag: allow sk_page_frag() to use current->task_frag.
-> > +                        Sockets that can be used under memory reclaim should
-> > +                        set this to false.
-> >    *  @sk_bind_phc: SO_TIMESTAMPING bind PHC index of PTP virtual clock
-> >    *                for timestamping
-> >    *  @sk_tskey: counter to disambiguate concurrent tstamp requests
-> > @@ -504,6 +507,7 @@ struct sock {
-> >  #endif
-> >       u16                     sk_tsflags;
-> >       u8                      sk_shutdown;
-> > +     bool                    sk_use_task_frag;
-> >       atomic_t                sk_tskey;
-> >       atomic_t                sk_zckey;
->
-> I think the above should be fine from a data locality PoV, as the used
-> cacheline should be hot at sk_page_frag_refill() usage time, as
-> sk_tsflags has been accessed just before.
->
-> @Eric, does the above fit with the planned sock fields reordering?
+On Fri, Dec 09, 2022 at 01:46:05PM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 09/12/2022 à 14:38, Xander a écrit :
+> > 	
+> > The pgprot parameter got removed because, according to the commit log, 
+> > for no other apparent reason than it being called with 'PAGE_KERNEL' as 
+> > an argument in the whole kernel. Therefore it got removed.
+> > This removed the ability to allocate virtual memory with executing rights.
+> > My use case comes from ioremap().
+> > I think this is useful for others too.
+> > 
+> > I don't see why this pgprot parameter got removed but this is the 
+> > alternative to reverting it to the older 5.7 function.
+> 
+> Please avoid top-posting, and use only plain text.
+> 
+> I think you don't answer to Mark's question.
+> 
+> You are adding a new function that no driver uses apparently. If you are 
+> working on some piece of code that needs this new fonction, you can send 
+> this patch as part of a patch series including that code.
 
-Do not worry about that, this can be handled later if needed.
+Yup, that was what I was getting at. Thanks for stating that much more clearly
+than I did. :)
 
->
-> Jakub noted we could use a bitfield here to be future proof for
-> additional flags addition. I think in this specific case a bool is
-> preferable, because we actually wont to discourage people to add more
-> of such flags, and the search for holes (or the bool -> bitflag
-> conversion) should give to such eventual future changes some additional
-> thoughts.
->
-> Thanks!
->
-> Paolo
->
+> By the way, when you need executable memory, the fonction to use is 
+> module_alloc(), that's the only function that garanties real executable 
+> memory on all platforms. For instance, on some powerpc, setting the X 
+> bit is not enough to get executable memory in vmalloc space.
+
+Yup, and likewise on arm64 there are other constraints to consider, e.g. branch
+ranges, whether or not to set PROT_BTI and/or other prot bits in future.
+
+Further, I'm very wary of exporting a generic interface to make some code
+executable without an understanding and documenting the precise constraints on
+its use, and I'm generally wary of doing that for some arbitrary code given
+that could violate other expectations that affect the kernel generally (e.g.
+gadgets for ROP/JOP/speculation, RELIABLE_STACKTRACE expectations, and general
+things like whether the code will play with CPU control bits or flags in an
+unexpected way).
+
+Mark.
+
+> Christophe
+> 
+> > 
+> > On Fri, 9 Dec 2022 at 14:17, Mark Rutland <mark.rutland@arm.com 
+> > <mailto:mark.rutland@arm.com>> wrote:
+> > 
+> >     On Fri, Dec 09, 2022 at 02:10:52PM +0100, Xander Moerkerken wrote:
+> >      > From: Xander Moerkerken <xander.moerkerken@gmail.com
+> >     <mailto:xander.moerkerken@gmail.com>>
+> >      >
+> >      > Since release 5.8-rc1 the pgprot got removed from __vmalloc
+> >      > because the only usage was PAGE_KERNEL as argument.
+> >      > However, this removes the ability to input other arguments
+> >      > such as 'PAGE_KERNEL_EXEC', which can be used to allocate
+> >      > memory in which you can execute. For this reason a new
+> >      > function is introduced called '__vmalloc_exec'.
+> >      >
+> >      > Signed-off-by: Xander Moerkerken <xander.moerkerken@omron.com
+> >     <mailto:xander.moerkerken@omron.com>>
+> > 
+> >     What is this going to be used for? There's no user from this patch
+> >     alone, as a
+> >     module or otherwise.
+> > 
+> >     Mark.
+> > 
+> >      > ---
+> >      >  include/linux/vmalloc.h | 1 +
+> >      >  mm/vmalloc.c            | 8 ++++++++
+> >      >  2 files changed, 9 insertions(+)
+> >      >
+> >      > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> >      > index 096d48aa3437..10c46513b6b2 100644
+> >      > --- a/include/linux/vmalloc.h
+> >      > +++ b/include/linux/vmalloc.h
+> >      > @@ -147,6 +147,7 @@ extern void *vzalloc_node(unsigned long size,
+> >     int node) __alloc_size(1);
+> >      >  extern void *vmalloc_32(unsigned long size) __alloc_size(1);
+> >      >  extern void *vmalloc_32_user(unsigned long size) __alloc_size(1);
+> >      >  extern void *__vmalloc(unsigned long size, gfp_t gfp_mask)
+> >     __alloc_size(1);
+> >      > +extern void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
+> >     __alloc_size(1);
+> >      >  extern void *__vmalloc_node_range(unsigned long size, unsigned
+> >     long align,
+> >      >                       unsigned long start, unsigned long end,
+> >     gfp_t gfp_mask,
+> >      >                       pgprot_t prot, unsigned long vm_flags, int
+> >     node,
+> >      > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> >      > index ccaa461998f3..8fd01ed7082b 100644
+> >      > --- a/mm/vmalloc.c
+> >      > +++ b/mm/vmalloc.c
+> >      > @@ -3294,6 +3294,14 @@ void *__vmalloc(unsigned long size, gfp_t
+> >     gfp_mask)
+> >      >  }
+> >      >  EXPORT_SYMBOL(__vmalloc);
+> >      >
+> >      > +
+> >      > +void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
+> >      > +{
+> >      > +     return __vmalloc_node_prot(size, 1, gfp_mask, PAGE_KERNEL_EXEC,
+> >      > +                               NUMA_NO_NODE,
+> >     __builtin_return_address(0));
+> >      > +}
+> >      > +EXPORT_SYMBOL(__vmalloc_exec);
+> >      > +
+> >      >  /**
+> >      >   * vmalloc - allocate virtually contiguous memory
+> >      >   * @size:    allocation size
+> >      > --
+> >      > 2.37.2
+> >      >
+> > 
