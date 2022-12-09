@@ -2,470 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CD96489A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3026489AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiLIUqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 15:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S229656AbiLIUvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 15:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIUqs (ORCPT
+        with ESMTP id S229512AbiLIUvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 15:46:48 -0500
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372F0ABA29
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:46:46 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 432FF3F25A;
-        Fri,  9 Dec 2022 21:46:44 +0100 (CET)
-Date:   Fri, 9 Dec 2022 21:46:43 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        jamipkettunen@somainline.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-Message-ID: <20221209204643.wvlq7t2w4sa4a3i7@SoMainline.org>
-References: <20220930180812.32210-1-konrad.dybcio@somainline.org>
- <20220930180812.32210-2-konrad.dybcio@somainline.org>
+        Fri, 9 Dec 2022 15:51:10 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CB983EB6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:51:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670619068; x=1702155068;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jyCv6ICFGp0/+vO//DD/UH9+cwvN/sDl/2WmOP10UeM=;
+  b=D1KRin7uTHnDzgH21NH149MNwDCkYSQ4sqoHmn4VW8WnAbzD3jQytnpB
+   XbvStp2a5VtgeVQjMRhuHoMTp39lzsrdtCG/R8Bb0ymYYMpHvSyHGEZGO
+   NCtmSjHEHeAdT3rUSUsIplyCZ5+wzWmoxK9yGpLiuD1woRScJLiMThB+W
+   9lhsIdlLPo1aO8ctC+ciMui4RcuR9MPJ9zqZrQ0/WiqLjENuB1EinaXNX
+   ur1bmVI3p70LJRbB7YLguyoRk/V63bsRQNGdWdyQw1dJMv+QGxL3UvQ5L
+   +0SsKvXMlIoQ4tbGQSqIgID9YbhTx+994zrEcvubGwrTIpSwxRpHYL9Qx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="344590295"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="344590295"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 12:51:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="821841732"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="821841732"
+Received: from rrode-mobl1.amr.corp.intel.com (HELO [10.251.24.37]) ([10.251.24.37])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 12:51:08 -0800
+Message-ID: <2e305bb5-9595-3531-6134-24344ff5c797@linux.intel.com>
+Date:   Fri, 9 Dec 2022 12:51:07 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930180812.32210-2-konrad.dybcio@somainline.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
+ SEPT_VE_DISABLE
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+ <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
+ <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
+ <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-30 20:08:11, Konrad Dybcio wrote:
-> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
 
-This is a vertical panel of 1080x2160 right?
 
-> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
-> of smartphone manufacturing, it is impossible to retrieve a better name
-> for this panel.
+On 12/9/22 9:06 AM, Kirill A. Shutemov wrote:
+> On Fri, Dec 09, 2022 at 07:42:56AM -0800, Sathyanarayanan Kuppuswamy wrote:
+>>
+>>
+>> On 12/9/22 5:25 AM, Kirill A. Shutemov wrote:
+>>> The check for SEPT_VE_DISABLE happens early in the kernel boot where
+>>> earlyprintk is not yet functional. Kernel successfully detect broken
+>>> TD configuration and stops the kernel with panic(), but it cannot
+>>> communicate the reason to the user.
+>>>
+>>> Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
+>>> can encode message up to 64 bytes in eight registers.
+>>>
+>>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>>> ---
+>>>  arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
+>>>  1 file changed, 37 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+>>> index cfd4c95b9f04..8ad04d101270 100644
+>>> --- a/arch/x86/coco/tdx/tdx.c
+>>> +++ b/arch/x86/coco/tdx/tdx.c
+>>> @@ -22,6 +22,7 @@
+>>>  
+>>>  /* TDX hypercall Leaf IDs */
+>>>  #define TDVMCALL_MAP_GPA		0x10001
+>>> +#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
+>>>  
+>>>  /* MMIO direction */
+>>>  #define EPT_READ	0
+>>> @@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
+>>>  
+>>> +static void __noreturn tdx_panic(const char *msg)
+>>> +{
+>>> +	struct tdx_hypercall_args args = {
+>>> +		.r10 = TDX_HYPERCALL_STANDARD,
+>>> +		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
+>>> +		.r12 = 0, /* Error code: 0 is Panic */
+>>> +	};
+>>> +	union {
+>>> +		/* Define register order according to the GHCI */
+>>> +		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
+>>> +
+>>> +		char str[64];
+>>> +	} message;
+>>> +
+>>> +	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
+>>> +	strncpy(message.str, msg, 64);
+>>> +
+>>> +	args.r8  = message.r8;
+>>> +	args.r9  = message.r9;
+>>> +	args.r14 = message.r14;
+>>> +	args.r15 = message.r15;
+>>> +	args.rdi = message.rdi;
+>>> +	args.rsi = message.rsi;
+>>> +	args.rbx = message.rbx;
+>>> +	args.rdx = message.rdx;
+>>> +
+>>> +	/*
+>>> +	 * Keep calling the hypercall in case VMM did not terminated
+>>> +	 * the TD as it must.
+>>> +	 */
+>>> +	while (1) {
+>>> +		__tdx_hypercall(&args, 0);
+>>> +	}
+>>
+>> Instead of an infinite loop, I'm wondering if the guest should panic after
+>> retrying for few times.
 > 
-> This revision adds support for the default 60 Hz configuration, however
-> there could possibly be some room for expansion, as the display panels
-> used on Sony devices have historically been capable of >2x refresh rate
-> overclocking.
+> Hm. What difference would it make?
+
+IIUC, the goal of this patch is to report the fatal error to VMM and panic.
+But, if VMM does not terminate the guest as we expect, rather than trying 
+continuously, isn't it better to panic ourselves? That way the behavior
+will be similar to what we have currently.
+
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-Apart from some minor nits about how we can change seemingly magical hex
-constants to a decimal represntation, which makes it more obvious (to
-the reader) that these are just width-1 and height-1.
-
-> ---
-> Changes since v2:
-> - "GPL v2" -> "GPL"
-> - add missing S-o-b (how embarassing)
-> - move { after sony_td4353_assert_reset_gpios() to a new line 
-> 
->  drivers/gpu/drm/panel/Kconfig                 |  10 +
->  drivers/gpu/drm/panel/Makefile                |   1 +
->  drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
->  3 files changed, 340 insertions(+)
->  create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> 
-> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> index a582ddd583c2..6ef1b48169b5 100644
-> --- a/drivers/gpu/drm/panel/Kconfig
-> +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -637,6 +637,16 @@ config DRM_PANEL_SONY_ACX565AKM
->  	  Say Y here if you want to enable support for the Sony ACX565AKM
->  	  800x600 3.5" panel (found on the Nokia N900).
->  
-> +config DRM_PANEL_SONY_TD4353_JDI
-> +	tristate "Sony TD4353 JDI panel"
-> +	depends on GPIOLIB && OF
-> +	depends on DRM_MIPI_DSI
-> +	depends on BACKLIGHT_CLASS_DEVICE
-> +	help
-> +	  Say Y here if you want to enable support for the Sony Tama
-> +	  TD4353 JDI command mode panel as found on some Sony Xperia
-> +	  XZ2 and XZ2 Compact smartphones.
-> +
->  config DRM_PANEL_SONY_TULIP_TRULY_NT35521
->  	tristate "Sony Tulip Truly NT35521 panel"
->  	depends on GPIOLIB && OF
-> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> index 8e71aa7581b8..8ef27bc86f94 100644
-> --- a/drivers/gpu/drm/panel/Makefile
-> +++ b/drivers/gpu/drm/panel/Makefile
-> @@ -64,6 +64,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->  obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->  obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-> +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->  obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->  obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
->  obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
-> diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> new file mode 100644
-> index 000000000000..11db62992b8b
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
-> @@ -0,0 +1,329 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
-> + *
-> + * Generated with linux-mdss-dsi-panel-driver-generator with a
-> + * substantial amount of manual adjustments.
-> + *
-> + * SONY Downstream kernel calls this one:
-> + * - "JDI ID3" for Akari  (XZ2)
-> + * - "JDI ID4" for Apollo (XZ2 Compact)
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +#include <video/mipi_display.h>
-> +
-> +#include <drm/drm_mipi_dsi.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_panel.h>
-> +
-> +enum {
-> +	TYPE_TAMA_60HZ,
-> +	/*
-> +	 * Leaving room for expansion - SONY very often uses
-> +	 * *truly reliably* overclockable panels on their flagships!
-> +	 */
-> +};
-> +
-> +struct sony_td4353_jdi {
-> +	struct drm_panel panel;
-> +	struct mipi_dsi_device *dsi;
-> +	struct regulator_bulk_data supplies[3];
-> +	struct gpio_desc *panel_reset_gpio;
-> +	struct gpio_desc *touch_reset_gpio;
-> +	bool prepared;
-> +	int type;
-> +};
-> +
-> +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
-> +{
-> +	return container_of(panel, struct sony_td4353_jdi, panel);
-> +}
-> +
-> +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-> +
-> +	ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 0x0437);
-
-As discussed offline, can we just use 0, 1079 here?  That way it's a bit
-more clear that our column address is just width-1.
-
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set column address: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 0x086f);
-
-And 2159 here.
-
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set page address: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x0000);
-
-Just 0?
-
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear scanline: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear on: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
-> +
-> +	ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set pixel format: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
-> +			  0x00, 0x00, 0x08, 0x6f);
-
-Unfortunate that 0x86f is again 2159 here, but we cannot easily
-represent it.
-
-- Marijn
-
-> +
-> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(70);
-> +
-> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
-> +
-> +	ret = mipi_dsi_dcs_set_display_on(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to turn display on: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
-> +{
-> +	struct mipi_dsi_device *dsi = ctx->dsi;
-> +	struct device *dev = &dsi->dev;
-> +	int ret;
-> +
-> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-> +
-> +	ret = mipi_dsi_dcs_set_display_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set display off: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(22);
-> +
-> +	ret = mipi_dsi_dcs_set_tear_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear off: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
-> +		return ret;
-> +	}
-> +	msleep(80);
-> +
-> +	return 0;
-> +}
-> +
-> +static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
-> +{
-> +	gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
-> +	gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
-> +	usleep_range(5000, 5100);
-> +}
-> +
-> +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (ctx->prepared)
-> +		return 0;
-> +
-> +	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to enable regulators: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	msleep(100);
-> +
-> +	sony_td4353_assert_reset_gpios(ctx, 1);
-> +
-> +	ret = sony_td4353_jdi_on(ctx);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to power on panel: %d\n", ret);
-> +		sony_td4353_assert_reset_gpios(ctx, 0);
-> +		regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +		return ret;
-> +	}
-> +
-> +	ctx->prepared = true;
-> +	return 0;
-> +}
-> +
-> +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct device *dev = &ctx->dsi->dev;
-> +	int ret;
-> +
-> +	if (!ctx->prepared)
-> +		return 0;
-> +
-> +	ret = sony_td4353_jdi_off(ctx);
-> +	if (ret < 0)
-> +		dev_err(dev, "Failed to power off panel: %d\n", ret);
-> +
-> +	sony_td4353_assert_reset_gpios(ctx, 0);
-> +	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
-> +
-> +	ctx->prepared = false;
-> +	return 0;
-> +}
-> +
-> +static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
-> +	.clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
-> +	.hdisplay = 1080,
-> +	.hsync_start = 1080 + 4,
-> +	.hsync_end = 1080 + 4 + 8,
-> +	.htotal = 1080 + 4 + 8 + 8,
-> +	.vdisplay = 2160,
-> +	.vsync_start = 2160 + 259,
-> +	.vsync_end = 2160 + 259 + 8,
-> +	.vtotal = 2160 + 259 + 8 + 8,
-> +	.width_mm = 64,
-> +	.height_mm = 128,
-> +};
-> +
-> +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
-> +				   struct drm_connector *connector)
-> +{
-> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
-> +	struct drm_display_mode *mode = NULL;
-> +
-> +	if (ctx->type == TYPE_TAMA_60HZ)
-> +		mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
-> +	else
-> +		return -EINVAL;
-> +
-> +	if (!mode)
-> +		return -ENOMEM;
-> +
-> +	drm_mode_set_name(mode);
-> +
-> +	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
-> +	connector->display_info.width_mm = mode->width_mm;
-> +	connector->display_info.height_mm = mode->height_mm;
-> +	drm_mode_probed_add(connector, mode);
-> +
-> +	return 1;
-> +}
-> +
-> +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
-> +	.prepare = sony_td4353_jdi_prepare,
-> +	.unprepare = sony_td4353_jdi_unprepare,
-> +	.get_modes = sony_td4353_jdi_get_modes,
-> +};
-> +
-> +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	struct sony_td4353_jdi *ctx;
-> +	int ret;
-> +
-> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ctx->type = (uintptr_t)of_device_get_match_data(dev);
-> +
-> +	ctx->supplies[0].supply = "vddio";
-> +	ctx->supplies[1].supply = "vsp";
-> +	ctx->supplies[2].supply = "vsn";
-> +	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
-> +				      ctx->supplies);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-> +
-> +	ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
-> +	if (IS_ERR(ctx->panel_reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
-> +				     "Failed to get panel-reset-gpios\n");
-> +
-> +	ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
-> +	if (IS_ERR(ctx->touch_reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
-> +				     "Failed to get touch-reset-gpios\n");
-> +
-> +	ctx->dsi = dsi;
-> +	mipi_dsi_set_drvdata(dsi, ctx);
-> +
-> +	dsi->lanes = 4;
-> +	dsi->format = MIPI_DSI_FMT_RGB888;
-> +	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
-> +
-> +	drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
-> +		       DRM_MODE_CONNECTOR_DSI);
-> +
-> +	ret = drm_panel_of_backlight(&ctx->panel);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to get backlight\n");
-> +
-> +	drm_panel_add(&ctx->panel);
-> +
-> +	ret = mipi_dsi_attach(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
-> +		drm_panel_remove(&ctx->panel);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
-> +{
-> +	struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
-> +	int ret;
-> +
-> +	ret = mipi_dsi_detach(dsi);
-> +	if (ret < 0)
-> +		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
-> +
-> +	drm_panel_remove(&ctx->panel);
-> +}
-> +
-> +static const struct of_device_id sony_td4353_jdi_of_match[] = {
-> +	{ .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
-> +
-> +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
-> +	.probe = sony_td4353_jdi_probe,
-> +	.remove = sony_td4353_jdi_remove,
-> +	.driver = {
-> +		.name = "panel-sony-td4353-jdi",
-> +		.of_match_table = sony_td4353_jdi_of_match,
-> +	},
-> +};
-> +module_mipi_dsi_driver(sony_td4353_jdi_driver);
-> +
-> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
-> +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.37.3
-> 
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
