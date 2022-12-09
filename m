@@ -2,171 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A1648AB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DB4648AB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLIWTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S229498AbiLIWWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIWSy (ORCPT
+        with ESMTP id S229468AbiLIWWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:18:54 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9249766D;
-        Fri,  9 Dec 2022 14:18:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670624330; x=1702160330;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=2ILPPonIBBw9KOlLLt3Z1aTanIR+9GJf5CvH5wbtIrw=;
-  b=CauYBTDPTiMMoYm2iUHvsgybg64p14Tv+O8mdKWWrKK9YHAO/Z/pAv+M
-   /bJYcWThNDwQ9rxdWGumnOmIwj+qYaTDoABmZ+eVjaH1ZVNhM3FAdbpoQ
-   NhxUddp+ub/+cQJuQC3B6ST862phPVfdkGRV5nm/Wvzbd0A+LoSHsblef
-   kJ+/NTPT9WeLHKW5mOUIUXqiGUM1d2tYNq5ViPNXAbNz3G3Jol3aW5wP4
-   PQgObQlyCxKkiS47KqkUVDITOWSKphHhzg+gGgXb3zNXI83dGjMT5V7/V
-   hDeCHc6bjOlmaLt+uFnfMaVDxttIi0FFFp1JXZe4jzHevjnM5xmgn6Hhc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="379773351"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="379773351"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 14:18:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="647539607"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="647539607"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2022 14:18:49 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 9 Dec 2022 14:18:49 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 9 Dec 2022 14:18:49 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 9 Dec 2022 14:18:49 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 9 Dec 2022 14:18:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NhtqcaEktdBBYLxcWnIA2/YEGMigfGb7z8flbTdnOXrudABNz+v6q5igktT7MIk9/ZNMbMkQSttmnxsL+Rgmk2Cdz05eQb0CKPbbtSX1vSU/lwqIIAdqoOhy7WuQPwLit4oyJti8sCEctQhyRiDJ3bYBvqsx+O6PHhmOhDhEPOYyXM/uv7Yz+ljjtquMcnl7ZCTlF3wlG3yVBachr55MmckcmLAZp/8SdkTRY3i3DUPBQliw835vp9ozmh5a2ZlDJwmIukYGUaCvCDaoH8u29zEE6TSSU6zGebh4XzZ56vuOpAy1hHrcl6D9dD69az8DuWak88SWXu7lNbbLvGVKwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1/OIqFOgJxP5kgFmNo1seekGTIgu8DZ1ati9sBssy70=;
- b=YruKvwt4VVt8z5j/SQju6nTa8pfmXb7ezXeAmQXkrvipdLireC5z1x+spskQaTQwqtLJa0hdsnrME3sejGWnbxGP7BHP3eeOC3+ZpQfRCuf72Ea7VooFth1RWMThhC+NiW5qVxns8QBjlYgb8VKYpZYvkGboT/3jcUIR1D83WFA1JHUkF4ku0Rq0ej3Gs1AcvmADLrjF0uaJlgaE5uWzi4qR6kjuvBOq3cU63f21rSUE0QlSomVO7Ti01fLjh5XDBMJIpW0Gi7B8DN50jy5cLLWKPENegAoPOGe9w3s3XrOkefrSKz2Z+ja++Ly+RaBYV/jNm26g6lj8x5d48Nvs9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by MN2PR11MB4551.namprd11.prod.outlook.com
- (2603:10b6:208:269::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 22:18:37 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.019; Fri, 9 Dec 2022
- 22:18:36 +0000
-Date:   Fri, 9 Dec 2022 14:18:29 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: RE: [PATCH V3 5/8] cxl/mem: Trace Memory Module Event Record
-Message-ID: <6393b43552fcf_579c1294d5@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221208052115.800170-1-ira.weiny@intel.com>
- <20221208052115.800170-6-ira.weiny@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221208052115.800170-6-ira.weiny@intel.com>
-X-ClientProxiedBy: SJ0PR03CA0048.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::23) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Fri, 9 Dec 2022 17:22:44 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429212D0B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:22:42 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so9605256pjr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 14:22:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ReHKPYHQZTteLwT0As2JQVVBmkWDUyL/DLK/qSWjsM0=;
+        b=NL0NAV0RdzuWBOp2ztZtcwpxd0baUkzJPflsSIUOYyOJkDtDNQw7zaldPmUIqfROgG
+         eqjdZ61AFx+xo4O1hoZGcm9VBA5buBbjkDYHw0gfVD9ImWiW5y6JE8LYfwUhobHia7pF
+         3FgMiIeLemdaXd9YSjsmWT+hdsdDWNhUh68NHnXGGq3j0zzNCvNRMmtC1265TxMIo0BY
+         R/ICPspwjQszq6cZAkmmnE6QJtOuG+bkJH8B8TAPNRtU3DjktIFydHTdtDZZ7VwQvgjW
+         FR+BRD7LBKzXIN3yNsqbc4ObOnyRObK314QuOr5U/sIxypKLAgijROJ+sC6/dNZn2oVx
+         QwAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ReHKPYHQZTteLwT0As2JQVVBmkWDUyL/DLK/qSWjsM0=;
+        b=TEDZHKF/YEmjtRl9HSr+63n9wmGCIgFCcpXQ0XO68EHSnkLS1sizGD187u3zz1Ogiq
+         GW88r4qtmPweJvOsE4AoPj1lMyoIJV9EigFqPC6TKybze2DYCwtT2PMuFluruJ80y3Nx
+         M63lFlx2rDVtXu62CsrshTsroghMoyCv/pAUEYb9ON64pmi43AmvhHw/IBInxdCFs8cm
+         CGqEY0UhSG0/UK7AZRKB70413muWLTVddlOjBN+K4eIoT2wQAFfjRJWj2iouqRsV1L3a
+         5EXakWpsAwxkWGqKf6E1lmDdHcJajuRSTyep/j8LcdoEKFvV59oPqTKpMrwI/WGUiX3k
+         M8kA==
+X-Gm-Message-State: ANoB5pk6Or5BXLbaK7eib7HCKLlQiSDFddJnKH82/GBarpgqQ28OVzLt
+        hXikRs4gm3p0mSJUS2JjUp5oGA==
+X-Google-Smtp-Source: AA0mqf6aScZwgCPYfMRSa5E8XNfnCmiGLZwxfPrkfh+4XDjSInpYt0kGjwi4Vh98kjkFu/B0H6f59Q==
+X-Received: by 2002:a17:902:b087:b0:189:e81b:d25f with SMTP id p7-20020a170902b08700b00189e81bd25fmr7356933plr.56.1670624562233;
+        Fri, 09 Dec 2022 14:22:42 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170902d0d400b00189348ab156sm1754985pln.283.2022.12.09.14.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 14:22:41 -0800 (PST)
+Date:   Fri, 9 Dec 2022 14:22:37 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 1/7] KVM: x86/MMU: Move pte_list operations to rmap.c
+Message-ID: <Y5O1LbbeI7XXeaT2@google.com>
+References: <20221206173601.549281-1-bgardon@google.com>
+ <20221206173601.549281-2-bgardon@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|MN2PR11MB4551:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ed484e3-33b5-4fea-98cf-08dada33512c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SIfEvKFWKa+H/O7YUBw64eiXBB3C/az/FpmT9+GKgexXMTpbGSCRlNElC+c1/F2O0G39rA5tqWSZ5IjDDfshc7Pqb1/TlHRZrx/eercSy8OKgHcZZWS9UGiyDRiFY/K4ZvT66x7fkwbDIF2z5l3AL2i/nk9xbyKhvL//IaMbnbF8UEemvTTO/t34uI6uJBVwt4XhbbmW5OONfxYiJC8GF2/r68AXnlxapu6UAUIfhTmF7rIqegV7Z/pC6hBKtGhrfydp04zDahdBEEI+MlqFMXxbZAf7mPoXMMA27FFST8MhRlVX3yTxYJXS5JK3VT7tMxJvNVrBobbYjE10WSHMqQ3BlVguDAy4dcAlnTdfp3eJmPlFNmJ2xEi3AG2f30F9YTXjrHcJFHVBuwZHmQ8M6/uHy9HFuzQhskcRks8t3pvfR5LgnRdOA1pRX1pFpn7c+zk+Ae4Lg+tpDKHESngXGLN0NhV1VFnv/tcGx/WX5YQGIY8ppI/RK5GdOTIPkUT2+uoZpBLdW+q2atCHHSmkidG4ZkpWFIWl5475sWWQIsaEIT1Ek4ehllXAUt3chMbzLPQF2G61w1f1BHgqGEkspa5I2mUh2xOswvjHLBxxlJFyMQ4elD9xG1rnLaCsZtB503GVk2XTuULeoScMg02+9w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199015)(2906002)(6200100001)(4744005)(6862004)(8936002)(316002)(54906003)(66476007)(8676002)(5660300002)(4326008)(41300700001)(66556008)(66946007)(6512007)(186003)(478600001)(26005)(9686003)(6486002)(86362001)(38100700002)(82960400001)(6666004)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9ZVRM4+X3Zjr+OjvXr5JLUQfLVZ12s5Dg3aRQh2MWyQLj7J72vE2nyBfZd2X?=
- =?us-ascii?Q?d03+QoWVv5/DrjktRnBbsWVRMTK2N8fHNwqNHhCa9YU0eJqUTsaLY9bbaKXH?=
- =?us-ascii?Q?XRB8V9WhX4yFdkUiXVc0p6Gs01yz5TwCsA94HD0R33Q+80Wdpu3fxTTdjf9D?=
- =?us-ascii?Q?y3MZWUXphT7OlynTnoN7crk00I+1ors37yMYDubVDvQDcwLwRbIhhCYfyGZx?=
- =?us-ascii?Q?mGwYaaj1r3ADxVYuPNNhvvLEskg355K1nZZySgODxD54WYXAeKtXmRj6BAd0?=
- =?us-ascii?Q?Tx8Zb0XsPx2w/vy5sz8eNq562oOU/vBgvPoXt5eadveIvq2gsXgpz8hurMit?=
- =?us-ascii?Q?cBZxRDlMmS2fyOwTzw7iS7Wr//nlIRzCXvZ/ebBQwyvgKr9WhKJLgEGJfHcZ?=
- =?us-ascii?Q?q7ptmOGOwAg3Wdaf92Lgnec1oJT2F8pJNu3MAYo5BqkCRVgP0lNQ/yRFy63h?=
- =?us-ascii?Q?7aQzkbcBFjx9WOveA3OI+aGL1cx+DMve99ko8d56c9grE50MaxNMceXsjaEX?=
- =?us-ascii?Q?4IikRDFVDnsdGHhbRUDV2btGZuR9bTQFJnvDp194k1CZsTACqz5/ienlYBAD?=
- =?us-ascii?Q?+RwmSh2RLo+Kdzfoz8JP4EWoL7sXI5LekdgookThaEIVzvq1J5bJLUMEjTFm?=
- =?us-ascii?Q?AxzVi/aPFtMnAgM4+mmIOaCrW7o5nTtMm95s0IhKRzqndTpPcBQ3qrfbQirb?=
- =?us-ascii?Q?2pXO1J7zuqs/t8jvN7/QN7/dMEwkJ/CSDRKNu5tPBWALPte0YOpkK9VPPRAg?=
- =?us-ascii?Q?VEJ/qKoU4FH3X+UqtDs9k/At2nRiAupUlWQY967p1N6W6CHjmyM2mW7PKrZk?=
- =?us-ascii?Q?HT+cOnsyma3z9izzR3npf1GBghacXWlGSQJ8eKE8QqbUvVZi49eTjFwO0d4C?=
- =?us-ascii?Q?P7Qb8J50TtT9IycDwqRzGGmi5BLn9hflRM8WDMKJqDWAZXOAD/oMiI2iYHkl?=
- =?us-ascii?Q?ec+fc2wcpL9xQ61/bs9stz/k9m/Ec7diqdChXoap5LvttNprtBWht++m9Sax?=
- =?us-ascii?Q?7TojOyJQVzE9tUdTwsC/i1E38Q050RjNjs6G25WgMh5TlQujdwj8//YEKKIr?=
- =?us-ascii?Q?VXtYPKzjx7FQeQXWxqx4IsviepxRn1w0JUrDPo8WhFL7i8LWpl09fuuu/01d?=
- =?us-ascii?Q?jz2alKrIqxRNfavy3hU+PBhKZVxmHE0JQtaJTpPIjTIglmn/HHW2W/+F0en9?=
- =?us-ascii?Q?B/pwGrKXPXMzBRVMS+/tN53nomtApu18Zza+ERY5rjgarNl1dEtDjQwQJEUn?=
- =?us-ascii?Q?Zpxw2JHoAysmSq5fOmQrEKPO2bSVnwZEgKt+yZH07DxBoxU9qOEoudyfWRXU?=
- =?us-ascii?Q?eE7VlAk2z0Dm9TNsRHikVXNQZb8tsWfOtlfAo+PaHRNsrMNtyAQaBZUxdv7O?=
- =?us-ascii?Q?nV6AIpR85x6AIg8wjWe06GwIbobtHzvt6z63GP0DRhWs1QaC7Y3glLor+a5n?=
- =?us-ascii?Q?9TatSVIyVsz2bXxUCO17+O5TXny/3qcW3h6VBpqsblfjeyoHHMwBx9/r3oyl?=
- =?us-ascii?Q?dAKHAXE1QdmNIiEvkfZVWXB0/qQ+QngyugmUaQRY12fu5OHGmlrejSivr5MJ?=
- =?us-ascii?Q?ByhCcwZJ9lpOcWo4skI3dQRTOswlHEHGYZHxXf3cK4vierWC/JqG3xWLvaAD?=
- =?us-ascii?Q?pg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ed484e3-33b5-4fea-98cf-08dada33512c
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 22:18:36.8129
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +sOCd80htMPuMyXpq+v3ZJxOs0K4zyhAyuLC7zpQOW5acnjqZeE+lPBAmmPvDRetkzpUlDycU0VonRNoZ94IUj2bxcR/Q3FGGtMVj9CzW6M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4551
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206173601.549281-2-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ira.weiny@ wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Tue, Dec 06, 2022 at 05:35:55PM +0000, Ben Gardon wrote:
+> In the interest of eventually splitting the Shadow MMU out of mmu.c,
+> start by moving some of the operations for manipulating pte_lists out of
+> mmu.c and into a new pair of files: rmap.c and rmap.h.
 > 
-> CXL rev 3.0 section 8.2.9.2.1.3 defines the Memory Module Event Record.
+> No functional change intended.
 > 
-> Determine if the event read is memory module record and if so trace the
-> record.
-> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+[...]
+> diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
+> new file mode 100644
+> index 000000000000..059765b6e066
+> --- /dev/null
+> +++ b/arch/x86/kvm/mmu/rmap.h
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#ifndef __KVM_X86_MMU_RMAP_H
+> +#define __KVM_X86_MMU_RMAP_H
+> +
+> +#include <linux/kvm_host.h>
+> +
+> +/* make pte_list_desc fit well in cache lines */
+> +#define PTE_LIST_EXT 14
+> +
+> +/*
+> + * Slight optimization of cacheline layout, by putting `more' and `spte_count'
+> + * at the start; then accessing it will only use one single cacheline for
+> + * either full (entries==PTE_LIST_EXT) case or entries<=6.
+> + */
+> +struct pte_list_desc {
+> +	struct pte_list_desc *more;
+> +	/*
+> +	 * Stores number of entries stored in the pte_list_desc.  No need to be
+> +	 * u64 but just for easier alignment.  When PTE_LIST_EXT, means full.
+> +	 */
+> +	u64 spte_count;
+> +	u64 *sptes[PTE_LIST_EXT];
+> +};
+> +
+> +static struct kmem_cache *pte_list_desc_cache;
 
-Modulo carrying forward the review comments from previous patches, feel
-free to add:
+The definition of pte_list_desc_cache needs to go in a C file since it's
+a global variable. Since it now needs to be accessed by more than once C
+file, drop the static. Then it can be accessed with extern.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Since most of the code that sets up and deals with pte_list_desc_cache
+is still in mmu.c, my vote is to keep the definition there.
+
+i.e.
+
+mmu.c:
+
+  struct kmem_cache *pte_list_desc_cache;
+
+rmap.c
+
+  extern struct kmem_cache *pte_list_desc_cache;
+
+And no need for anything in rmap.h.
