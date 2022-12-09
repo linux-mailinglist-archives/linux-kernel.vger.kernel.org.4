@@ -2,121 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6326480E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4E66480ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiLIKZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 05:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S229876AbiLIKZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 05:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLIKZI (ORCPT
+        with ESMTP id S229828AbiLIKZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:25:08 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8066ACC3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 02:25:07 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id l8so4437882ljh.13
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 02:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yOtIGgZTz5rbWK4rKV6rRYl3mDfMnPMz6gg/QMTk5+s=;
-        b=fpqPNTBFrz3Kr6CGm/v4qrfW0ytpkSBQnJoYu/xu94TX+HKWocL6JG8Bv9J55AlL0Y
-         sVCUCM46l4bmxNGYjXL4jmFElfXPJBeGQ4FnrkZpZNNcuE2NGPrMvZV2izXLPNxB5PjD
-         I8OceDB5hNBHXAs9uoIZ/bZTe7iMxufAyv8d1tqPHQPvN9n8VQ3sRjxG0A2LwBv0znCq
-         Xc8q4gvTglbhMR78591Oij9Y+Xe88fVEoWf/6Dq5c6NYIbtX7KsPx3N7U8RMFzzZdqYE
-         zJWqVSA4jFVGla+lfMEcwkbOUngMGMDSRKDG+nenEjmIgRky6y2CrXsekH8hsCfQGNhF
-         +LNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yOtIGgZTz5rbWK4rKV6rRYl3mDfMnPMz6gg/QMTk5+s=;
-        b=N4Hzt8R6II7MNBgUSaKe4UdvR1ZwEC44PWT8em0YdnLU0sA/D93I8Y3oXjaQ2oIedO
-         OaXHA5MxmWbezticz8cvx5Lsa7m2+XtCzGQxX1WLuYaNF4HQDSQ5qdo6GBhgpGiNmVft
-         rSritx25zA4Ll1FdQhV+S3UStY53Yk1CJiRYh4KGuH/rxse4sc0q1pFCo8h2mSA4BNoj
-         dIU5o6pH86PdyOtt8Ro0pOVqnT3eDyFKT8lbR7tZQVk02bHjI9Y6jVBuCQOHlc7EbF6B
-         +bWFHvYEclHOWldFeUEfcAfdUb15DkLMhTHegT9UURAp1BhqRb6Po1S8OINMywayWF00
-         VXyA==
-X-Gm-Message-State: ANoB5pmImiX5/YtLqvl0kEWNk5ELDaEqTvuMaGn66TVtkEvBf+vg1qGa
-        U/Ay2ahKNOq7CC9Hr08PBom3fQ==
-X-Google-Smtp-Source: AA0mqf4+jUvlgJI+n9wtlOuqyiLa1j1wItLezrUSNRCfZRwesZZuIJ1dWG5Dq1rYhfTM13TUIXf3cA==
-X-Received: by 2002:a2e:868e:0:b0:279:8056:8b07 with SMTP id l14-20020a2e868e000000b0027980568b07mr1126121lji.20.1670581505222;
-        Fri, 09 Dec 2022 02:25:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t2-20020a2e7802000000b0027741daec09sm158243ljc.107.2022.12.09.02.25.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 02:25:04 -0800 (PST)
-Message-ID: <c0b660bf-93c2-89b6-e704-17489efe6840@linaro.org>
-Date:   Fri, 9 Dec 2022 11:25:02 +0100
+        Fri, 9 Dec 2022 05:25:47 -0500
+Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599D96ACD5;
+        Fri,  9 Dec 2022 02:25:45 -0800 (PST)
+Received: from amadeus-VLT-WX0.lan (unknown [218.85.118.194])
+        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 33A1F80009D;
+        Fri,  9 Dec 2022 18:25:35 +0800 (CST)
+From:   Chukun Pan <amadeus@jmu.edu.cn>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     FUKAUMI Naoki <naoki@radxa.com>, Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chukun Pan <amadeus@jmu.edu.cn>
+Subject: [PATCH v2 0/2] arm64: dts: rockchip: add Radxa CM3I E25
+Date:   Fri,  9 Dec 2022 18:25:22 +0800
+Message-Id: <20221209102524.129367-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sdm845: align TLMM pin
- configuration with DT schema
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
- <20221202155738.383301-2-krzysztof.kozlowski@linaro.org>
- <CAD=FV=UPLssDromnt89RYbSEU9qq_t+CSyd5VhmD7b-9JkcMFA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=UPLssDromnt89RYbSEU9qq_t+CSyd5VhmD7b-9JkcMFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaS04YVk8dQxoYSUhNSENNGlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlKQ1VDTlVKSkNVSkJPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Oj46Ngw6OD0fGksrH0IDIzpP
+        NAgKFAhVSlVKTUxLTkNKTkhOQ0tDVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlK
+        Q1VDTlVKSkNVSkJPWVdZCAFZQUpDQ0w3Bg++
+X-HM-Tid: 0a84f66b42a3b03akuuu33a1f80009d
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 17:53, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> DT schema expects TLMM pin configuration nodes to be named with
->> '-state' suffix and their optional children with '-pins' suffix.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Cc: Doug Anderson <dianders@chromium.org>
->>
->> Tested on Qualcomm RB3. Please kndly test a bit more on other devices.
->> This should not have an functional impact.
->>
->> Changes since v2:
->> 1. Bring back UART6 4-pin bias/drive strength to DTSI.
-> 
-> Just to be clear, it doesn't actually belong in the DTSI, but it was
-> there before your patch and it's fine if your patch series doesn't fix
-> the whole world. I'm OK with this one staying in the DTSI for now just
-> to keep things simpler.
-> 
-> One change missing in v3 that I would have expected based on our
-> discussion in the previous version would be to "Add UART3 4-pin mux
-> settings for use in db845c." I think you said you would do this, but I
-> don't see it done.
+Changes from v2:
+* Correct the board name for CM3I/E25.
+* Split the device tree into CM3I/E25.
+* Adjusted some regulator names according to the schematic.
+* Reduce the serial port rate to 115200bps as suggested by FUKAUMI.
 
-Hm, I don't recall that. Changing db845c to usage of RTS/CTS is
-independent problem, not related to fixes or aligning with DT schema.
+Chukun Pan (2):
+  dt-bindings: arm: rockchip: Add Radxa CM3I E25
+  arm64: dts: rockchip: Add Radxa CM3I E25
 
-Best regards,
-Krzysztof
+ .../devicetree/bindings/arm/rockchip.yaml     |   7 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../boot/dts/rockchip/rk3568-radxa-cm3i.dtsi  | 416 ++++++++++++++++++
+ .../boot/dts/rockchip/rk3568-radxa-e25.dts    | 229 ++++++++++
+ 4 files changed, 653 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-radxa-cm3i.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-radxa-e25.dts
+
+-- 
+2.25.1
 
