@@ -2,85 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACEB648AD1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D025B648AD4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLIWmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S229876AbiLIWo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLIWmq (ORCPT
+        with ESMTP id S229626AbiLIWow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:42:46 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E7BD165B1;
-        Fri,  9 Dec 2022 14:42:44 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1p3m4f-0005PX-00; Fri, 09 Dec 2022 23:42:33 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 56DCFC248E; Fri,  9 Dec 2022 23:41:40 +0100 (CET)
-Date:   Fri, 9 Dec 2022 23:41:40 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Anastasia Belova <abelova@astralinux.ru>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Maxime Bizon <mbizon@freebox.fr>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v3] MIPS: BCM63xx: Add check for NULL for clk in
- clk_enable
-Message-ID: <20221209224140.GA4928@alpha.franken.de>
-References: <20221209100550.30470-1-abelova@astralinux.ru>
+        Fri, 9 Dec 2022 17:44:52 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89291C12A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:44:51 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id js9so5249989pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 14:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X60ise7QEnBOLcc3D/dBQfic8PhzrSOslDuErC7Ni10=;
+        b=pHUdoOKYb0ikWsUFyedzTVRqWFVg+GHcvD2Qt3tMkYnRgphgWNKSWcAqSb1lJUGYV3
+         2In6LQHTmk+M/woccvtGcbol+tHuihY0FVIDF2Z4kIsolqvzKaINNw+vqEAgWAFvqT3e
+         SBqsToY0x6VAUpiv7c3CoqyhOzssWXjkXdqbdXdotU02cHCxLcCpXYCL19pqFE1kK7Dk
+         ixODee2lydPhJ+A9DZ458RZ0X9UpXWkPEiwQTP+5HexIHqUS5/vkKTGRPoxNwSi9JlPk
+         99NqBP9UYRQiH5YX47o/EMMJabhk6ghiMSkm4nNj7uUXklplo0CopLcnv7/A5zDLfW7Q
+         Ctkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X60ise7QEnBOLcc3D/dBQfic8PhzrSOslDuErC7Ni10=;
+        b=31xgcB+wojH+8JYnbN4SPJ9irEc4A1KWGo6mUeT8YMtSDzHP+Cjw9kHYhDneS0Nef0
+         2uaw3DLyC4N2C3sm0OUVDfqJTIvvHiNUehK04a6rJoNQ9ncz6DR9bgz5r3h76kz58AgF
+         r5eQyVtfvdbOpfsfq2n0vOL7GGiQ7cyDvlCbthG5OvkLVs2D30sJJ06NcpefM0A7Zk0y
+         jTb4jCmF4eNiHGbaywhi07ovQxX+jctR0iLsM99Y1X+n95nQT9FTcZAhe/By4lcnc4uB
+         crKoeTMiUX+atZLeseciSzuqdc6vtmE77mFRCqEFBO3/MbTO1VPT67WN4dgRsm4JuIp0
+         gU3w==
+X-Gm-Message-State: ANoB5pk8ZGC/BjwI5BTygAVZT6Izbni+MfuFNK5JqTuxclgptnQoWB4X
+        oIZD0RFIo/0tpF5Sh/XzZHIK1Q==
+X-Google-Smtp-Source: AA0mqf6kfZWSPqHNCi32c0RbsdLJDYiO+lxQPBmPCC1xUSm/BB/fFxSx+3nTSHZ4LGgFZvPhGyTGBw==
+X-Received: by 2002:a17:90a:1b0b:b0:219:396c:9e32 with SMTP id q11-20020a17090a1b0b00b00219396c9e32mr7524057pjq.16.1670625891035;
+        Fri, 09 Dec 2022 14:44:51 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id d12-20020a17090a3b0c00b00219f8eb271fsm1670901pjc.5.2022.12.09.14.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 14:44:50 -0800 (PST)
+Date:   Fri, 9 Dec 2022 14:44:46 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 6/7] KVM: x86/MMU: Move rmap zap operations to rmap.c
+Message-ID: <Y5O6XiJSjGmpMl3R@google.com>
+References: <20221206173601.549281-1-bgardon@google.com>
+ <20221206173601.549281-7-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209100550.30470-1-abelova@astralinux.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221206173601.549281-7-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:05:50PM +0300, Anastasia Belova wrote:
-> Check clk for NULL before calling clk_enable_unlocked where clk
-> is dereferenced. There is such check in other implementations
-> of clk_enable.
+On Tue, Dec 06, 2022 at 05:36:00PM +0000, Ben Gardon wrote:
+> Move the various rmap zap functions to rmap.c. These functions are less
+> "pure" rmap operations in that they also contain some SPTE manipulation,
+> however they're mostly about rmap / pte list manipulation.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> No functional change intended.
 > 
-> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
 > ---
-> v2: Fix errors reported by kernel test robot <lkp@intel.com>.
-> v3: Merge several patches into single one.
->  arch/mips/bcm63xx/clk.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-> index 6e6756e8fa0a..86a6e2590866 100644
-> --- a/arch/mips/bcm63xx/clk.c
-> +++ b/arch/mips/bcm63xx/clk.c
-> @@ -361,6 +361,8 @@ static struct clk clk_periph = {
->   */
->  int clk_enable(struct clk *clk)
->  {
-> +	if (!clk)
-> +		return 0;
->  	mutex_lock(&clocks_mutex);
->  	clk_enable_unlocked(clk);
->  	mutex_unlock(&clocks_mutex);
-> -- 
-> 2.30.2
+[...]
+> -static void kvm_zap_one_rmap_spte(struct kvm *kvm,
+> -				  struct kvm_rmap_head *rmap_head, u64 *sptep)
+> -{
+> -	mmu_spte_clear_track_bits(kvm, sptep);
+> -	pte_list_remove(sptep, rmap_head);
+> -}
+> -
+> -/* Return true if at least one SPTE was zapped, false otherwise */
+> -static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
+> -				   struct kvm_rmap_head *rmap_head)
+> -{
+> -	struct pte_list_desc *desc, *next;
+> -	int i;
+> -
+> -	if (!rmap_head->val)
+> -		return false;
+> -
+> -	if (!(rmap_head->val & 1)) {
+> -		mmu_spte_clear_track_bits(kvm, (u64 *)rmap_head->val);
+> -		goto out;
+> -	}
+> -
+> -	desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
+> -
+> -	for (; desc; desc = next) {
+> -		for (i = 0; i < desc->spte_count; i++)
+> -			mmu_spte_clear_track_bits(kvm, desc->sptes[i]);
+> -		next = desc->more;
+> -		free_pte_list_desc(desc);
+> -	}
+> -out:
+> -	/* rmap_head is meaningless now, remember to reset it */
+> -	rmap_head->val = 0;
+> -	return true;
+> -}
 
-applied to mips-next.
+I don't like moving the rmap zap functions into rmap.c, because they are
+more mmu.c functions, as you note in the commit description. e.g. It's
+odd to have kvm_zap_all_rmap_sptes() in rmap.c but not, say
+__rmap_clear_dirty().
 
-Thomas.
+I get your point though that kvm_zap_all_rmap_sptes() has to know
+intimate details of the pte_list_desc structure. It would be nice to
+keep those details isolated to rmap.c.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+What about keeping the zap functions mmu.c and just provide a better API
+for kvm_zap_all_rmap_sptes() to process the rmap entries?
+
+e.g.
+
+mmu.c:
+
+static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
+				   struct kvm_rmap_head *rmap_head)
+{
+	struct rmap_iterator iter;
+	bool flush = false;
+	u64 *sptep;
+
+	for_each_rmap_spte(rmap_head, &iter, sptep) {
+		mmu_spte_clear_track_bits(kvm, sptep);
+		flush = true;
+	}
+
+	pte_list_free_all(rmap_head);  // <-- implemented in rmap.c
+	return flush;
+}
+
+This should be about as efficient as the current approach (same big-O
+notation at least) and maintain the separation of pte_list_desc
+internals in rmap.c.
