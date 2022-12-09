@@ -2,462 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEA3648140
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA26648145
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLILBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
+        id S229680AbiLILFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiLILBY (ORCPT
+        with ESMTP id S229470AbiLILFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:01:24 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939F94B779
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:01:21 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl [83.9.1.44])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 500033F27A;
-        Fri,  9 Dec 2022 12:01:12 +0100 (CET)
-Message-ID: <c81c3fdb-7af7-c9f8-f354-78b2d6ce0d20@somainline.org>
-Date:   Fri, 9 Dec 2022 12:01:11 +0100
+        Fri, 9 Dec 2022 06:05:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832E72981F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:04:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670583897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=30T7QhM08K4gjwiweJHt8pVLSWuAKQjH4tR5LjWex3Q=;
+        b=S5x5mOHDkmGFbuBEJeyzKoyOOHndJElFyiLeBqHuaOSTyjt+1P4f7jghCiZC7hGBWwAxsU
+        ISTftAzP8twEa1ePL7GH9KwnO9QUnDAUzDfWiJQcRTJaLGM2lSEBTNyvnEHti6cVK6Oksu
+        +KYTx6EhEtKC/0/OKg63vKvJcL1VGXU=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-227-9w6XQwYDNfiF2tsJ2NEPzw-1; Fri, 09 Dec 2022 06:04:56 -0500
+X-MC-Unique: 9w6XQwYDNfiF2tsJ2NEPzw-1
+Received: by mail-ej1-f72.google.com with SMTP id jg25-20020a170907971900b007c0e98ad898so2893808ejc.15
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 03:04:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=30T7QhM08K4gjwiweJHt8pVLSWuAKQjH4tR5LjWex3Q=;
+        b=0l+5o2r0TLMu/JikFFsvGxZh2WtLE8NcMGuDx7lHNZh5nhHzdOTWMWpmaZczqq8y8o
+         XQMqKXSAFSYFPhjuBjUqdb0tg+HCGiGZqWwmj9KVaNDSCgEU3ovy43Bn0IbtMYMktJRq
+         wV+5ZslLrJzFngh/V4KmcxLO0aamsA9enc0HdfzRRTIJchfvveah9hqVN131811D/D3J
+         DXy49iOtN/QxeKpEcDOzaNgWWjZdj2KkKviZh8Dt0sU1qnILK4idYxdPjUUyvdXThbE/
+         T9+H+HhaqXC9cOiE+W6YlLqyUe+lYNT3tGa4gV+BFhiXpsaToibmmJJHEaJkoaSZgps/
+         N3uA==
+X-Gm-Message-State: ANoB5pk2Yp5Cltja1ql6JtVyxKHFYY1ffMcoDl6p707NGSXPYWVnmnDZ
+        Vk77cacFFjqpOeMIlhkO21P97cb03oP9fbEuU4aoyHWgKsbCqer7eV8yqSg7WAvIsX3hf5+Wh5m
+        etuHDQK2roZTZoJQ1cvv++hje
+X-Received: by 2002:a17:906:2806:b0:7c1:29ef:790b with SMTP id r6-20020a170906280600b007c129ef790bmr3005070ejc.69.1670583895236;
+        Fri, 09 Dec 2022 03:04:55 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf50RWJVTwQHYigVCfTjQcbIRn/1tJTNunep4Ib8pen2Jlc5mxHQ3JeahdxVAsrbFXdXpP0Ocg==
+X-Received: by 2002:a17:906:2806:b0:7c1:29ef:790b with SMTP id r6-20020a170906280600b007c129ef790bmr3005051ejc.69.1670583894944;
+        Fri, 09 Dec 2022 03:04:54 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906300400b00734bfab4d59sm427036ejz.170.2022.12.09.03.04.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 03:04:54 -0800 (PST)
+Message-ID: <c7418ea8-6b1a-f648-da5f-bf6ae412e359@redhat.com>
+Date:   Fri, 9 Dec 2022 12:04:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v3 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220930180812.32210-1-konrad.dybcio@somainline.org>
- <20220930180812.32210-2-konrad.dybcio@somainline.org>
- <8a78ab73-443f-a18d-b8ef-4a2d507aa1fb@somainline.org>
- <5dea6c72-1323-f052-a386-887c20e9f8c3@somainline.org>
-Content-Language: en-US
-In-Reply-To: <5dea6c72-1323-f052-a386-887c20e9f8c3@somainline.org>
+Subject: Re: [PATCH v2 1/4] efi/x86: Remove EfiMemoryMappedIO from E820 map
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20221208190341.1560157-1-helgaas@kernel.org>
+ <20221208190341.1560157-2-helgaas@kernel.org>
+ <805ea628-77a2-a1c1-10fe-edf2203e9c86@redhat.com>
+In-Reply-To: <805ea628-77a2-a1c1-10fe-edf2203e9c86@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On 12/9/22 09:06, Hans de Goede wrote:
+> Hi,
+> 
+> One comment (logging bug in patch) below:
+> 
+> On 12/8/22 20:03, Bjorn Helgaas wrote:
+>> From: Bjorn Helgaas <bhelgaas@google.com>
+>>
+>> Firmware can use EfiMemoryMappedIO to request that MMIO regions be mapped
+>> by the OS so they can be accessed by EFI runtime services, but should have
+>> no other significance to the OS (UEFI r2.10, sec 7.2).  However, most
+>> bootloaders and EFI stubs convert EfiMemoryMappedIO regions to
+>> E820_TYPE_RESERVED entries, which prevent Linux from allocating space from
+>> them (see remove_e820_regions()).
+>>
+>> Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and PCI
+>> host bridge windows, which means Linux can't allocate BAR space for
+>> hot-added devices.
+>>
+>> Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
+>> problem.
+>>
+>> Leave small (< 256KB) EfiMemoryMappedIO regions alone because on some
+>> platforms, these describe non-window space that's included in host bridge
+>> _CRS.  If we assign that space to PCI devices, they don't work.  On the
+>> Lenovo X1 Carbon, this leads to suspend/resume failures.
+>>
+>> The previous solution to the problem of allocating BARs in these regions
+>> was to add pci_crs_quirks[] entries to disable E820 checking for these
+>> machines (see d341838d776a ("x86/PCI: Disable E820 reserved region clipping
+>> via quirks")):
+>>
+>>   Acer   DMI_PRODUCT_NAME    Spin SP513-54N
+>>   Clevo  DMI_BOARD_NAME      X170KM-G
+>>   Lenovo DMI_PRODUCT_VERSION *IIL*
+>>
+>> Florent reported the BAR allocation issue on the Clevo NL4XLU.  We could
+>> add another quirk for the NL4XLU, but I hope this generic change can solve
+>> it for many machines without having to add quirks.
+>>
+>> This change has been tested on Clevo X170KM-G (Konrad) and Lenovo Ideapad
+>> Slim 3 (Matt) and solves the problem even when overriding the existing
+>> quirks by booting with "pci=use_e820".
+>>
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216565     Clevo NL4XLU
+>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206459#c78 Clevo X170KM-G
+>> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1868899    Ideapad Slim 3
+>> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2029207    X1 Carbon
+>> Reported-by: Florent DELAHAYE <kernelorg@undead.fr>
+>> Tested-by: Konrad J Hambrick <kjhambrick@gmail.com>
+>> Tested-by: Matt Hansen <2lprbe78@duck.com>
+>> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>  arch/x86/platform/efi/efi.c | 46 +++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 46 insertions(+)
+>>
+>> diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+>> index ebc98a68c400..dee1852e95cd 100644
+>> --- a/arch/x86/platform/efi/efi.c
+>> +++ b/arch/x86/platform/efi/efi.c
+>> @@ -303,6 +303,50 @@ static void __init efi_clean_memmap(void)
+>>  	}
+>>  }
+>>  
+>> +/*
+>> + * Firmware can use EfiMemoryMappedIO to request that MMIO regions be
+>> + * mapped by the OS so they can be accessed by EFI runtime services, but
+>> + * should have no other significance to the OS (UEFI r2.10, sec 7.2).
+>> + * However, most bootloaders and EFI stubs convert EfiMemoryMappedIO
+>> + * regions to E820_TYPE_RESERVED entries, which prevent Linux from
+>> + * allocating space from them (see remove_e820_regions()).
+>> + *
+>> + * Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and
+>> + * PCI host bridge windows, which means Linux can't allocate BAR space for
+>> + * hot-added devices.
+>> + *
+>> + * Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
+>> + * problem.
+>> + *
+>> + * Retain small EfiMemoryMappedIO regions because on some platforms, these
+>> + * describe non-window space that's included in host bridge _CRS.  If we
+>> + * assign that space to PCI devices, they don't work.
+>> + */
+>> +static void __init efi_remove_e820_mmio(void)
+>> +{
+>> +	efi_memory_desc_t *md;
+>> +	u64 size, start, end;
+>> +	int i = 0;
+>> +
+>> +	for_each_efi_memory_desc(md) {
+>> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
+>> +			size = md->num_pages << EFI_PAGE_SHIFT;
+>> +			if (size >= 256*1024) {
+>> +				start = md->phys_addr;
+>> +				end = start + size - 1;
+>> +				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
+>> +					i, start, end, size >> 20);
+>> +				e820__range_remove(start, size,
+>> +						   E820_TYPE_RESERVED, 1);
+>> +			} else {
+>> +				pr_info("Not removing mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluKB) from e820 map\n",
+>> +					i, start, end, size >> 10);
+> 
+> The logging in this else is re-using the start and end from the previous section which was actually removed.
+> 
+> E.g. Matt's latest log from:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+> has:
+> 
+> [    0.000000] e820: remove [mem 0xfc800000-0xfe7fffff] reserved
+> [    0.000000] efi: Not removing mem46: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
+> [    0.000000] efi: Not removing mem47: MMIO range=[0xfc800000-0xfe7fffff] (32KB) from e820 map
+> [    0.000000] efi: Not removing mem49: MMIO range=[0xfc800000-0xfe7fffff] (8KB) from e820 map
+> [    0.000000] efi: Not removing mem50: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
+> 
+> Notice how all the "Not removing ..." lines log the same range as
+> the actually removed map entry above them.
+
+I realize the fix is very obvious, but since I just fixed this in my
+local tree anyways, here is my fix for this:
+
+--- a/arch/x86/platform/efi/efi.c
++++ b/arch/x86/platform/efi/efi.c
+@@ -331,9 +331,9 @@ static void __init efi_remove_e820_mmio(void)
+ 	for_each_efi_memory_desc(md) {
+ 		if (md->type == EFI_MEMORY_MAPPED_IO) {
+ 			size = md->num_pages << EFI_PAGE_SHIFT;
++			start = md->phys_addr;
++			end = start + size - 1;
+ 			if (size >= 256*1024) {
+-				start = md->phys_addr;
+-				end = start + size - 1;
+ 				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
+ 					i, start, end, size >> 20);
+ 				e820__range_remove(start, size,
+
+Regards,
+
+Hans
 
 
-On 14.11.2022 15:55, Konrad Dybcio wrote:
-> 
-> 
-> On 14/10/2022 18:36, Konrad Dybcio wrote:
->>
->>
->> On 30.09.2022 20:08, Konrad Dybcio wrote:
->>> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
->>> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
->>> of smartphone manufacturing, it is impossible to retrieve a better name
->>> for this panel.
->>>
->>> This revision adds support for the default 60 Hz configuration, however
->>> there could possibly be some room for expansion, as the display panels
->>> used on Sony devices have historically been capable of >2x refresh rate
->>> overclocking.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>> ---
->> Gentle bump
->>
->> Konrad
-> Yet another one.
-> 
-> Konrad
-Hello? Anybody there? It's been quite a while..
 
-Konrad
->>> Changes since v2:
->>> - "GPL v2" -> "GPL"
->>> - add missing S-o-b (how embarassing)
->>> - move { after sony_td4353_assert_reset_gpios() to a new line
->>>
->>>   drivers/gpu/drm/panel/Kconfig                 |  10 +
->>>   drivers/gpu/drm/panel/Makefile                |   1 +
->>>   drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
->>>   3 files changed, 340 insertions(+)
->>>   create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->>>
->>> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
->>> index a582ddd583c2..6ef1b48169b5 100644
->>> --- a/drivers/gpu/drm/panel/Kconfig
->>> +++ b/drivers/gpu/drm/panel/Kconfig
->>> @@ -637,6 +637,16 @@ config DRM_PANEL_SONY_ACX565AKM
->>>         Say Y here if you want to enable support for the Sony ACX565AKM
->>>         800x600 3.5" panel (found on the Nokia N900).
->>>   +config DRM_PANEL_SONY_TD4353_JDI
->>> +    tristate "Sony TD4353 JDI panel"
->>> +    depends on GPIOLIB && OF
->>> +    depends on DRM_MIPI_DSI
->>> +    depends on BACKLIGHT_CLASS_DEVICE
->>> +    help
->>> +      Say Y here if you want to enable support for the Sony Tama
->>> +      TD4353 JDI command mode panel as found on some Sony Xperia
->>> +      XZ2 and XZ2 Compact smartphones.
->>> +
->>>   config DRM_PANEL_SONY_TULIP_TRULY_NT35521
->>>       tristate "Sony Tulip Truly NT35521 panel"
->>>       depends on GPIOLIB && OF
->>> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
->>> index 8e71aa7581b8..8ef27bc86f94 100644
->>> --- a/drivers/gpu/drm/panel/Makefile
->>> +++ b/drivers/gpu/drm/panel/Makefile
->>> @@ -64,6 +64,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->>>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->>>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->>>   obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
->>> +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->>>   obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->>>   obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
->>>   obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
->>> diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->>> new file mode 100644
->>> index 000000000000..11db62992b8b
->>> --- /dev/null
->>> +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->>> @@ -0,0 +1,329 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
->>> + *
->>> + * Generated with linux-mdss-dsi-panel-driver-generator with a
->>> + * substantial amount of manual adjustments.
->>> + *
->>> + * SONY Downstream kernel calls this one:
->>> + * - "JDI ID3" for Akari  (XZ2)
->>> + * - "JDI ID4" for Apollo (XZ2 Compact)
->>> + */
->>> +
->>> +#include <linux/delay.h>
->>> +#include <linux/gpio/consumer.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/regulator/consumer.h>
->>> +
->>> +#include <video/mipi_display.h>
->>> +
->>> +#include <drm/drm_mipi_dsi.h>
->>> +#include <drm/drm_modes.h>
->>> +#include <drm/drm_panel.h>
->>> +
->>> +enum {
->>> +    TYPE_TAMA_60HZ,
->>> +    /*
->>> +     * Leaving room for expansion - SONY very often uses
->>> +     * *truly reliably* overclockable panels on their flagships!
->>> +     */
->>> +};
->>> +
->>> +struct sony_td4353_jdi {
->>> +    struct drm_panel panel;
->>> +    struct mipi_dsi_device *dsi;
->>> +    struct regulator_bulk_data supplies[3];
->>> +    struct gpio_desc *panel_reset_gpio;
->>> +    struct gpio_desc *touch_reset_gpio;
->>> +    bool prepared;
->>> +    int type;
->>> +};
->>> +
->>> +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
->>> +{
->>> +    return container_of(panel, struct sony_td4353_jdi, panel);
->>> +}
->>> +
->>> +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
->>> +{
->>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>> +    struct device *dev = &dsi->dev;
->>> +    int ret;
->>> +
->>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->>> +
->>> +    ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 0x0437);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set column address: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 0x086f);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set page address: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x0000);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set tear scanline: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set tear on: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
->>> +
->>> +    ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set pixel format: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
->>> +              0x00, 0x00, 0x08, 0x6f);
->>> +
->>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +    msleep(70);
->>> +
->>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
->>> +
->>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
->>> +{
->>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>> +    struct device *dev = &dsi->dev;
->>> +    int ret;
->>> +
->>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>> +
->>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set display off: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +    msleep(22);
->>> +
->>> +    ret = mipi_dsi_dcs_set_tear_off(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to set tear off: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +    msleep(80);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
->>> +{
->>> +    gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
->>> +    gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
->>> +    usleep_range(5000, 5100);
->>> +}
->>> +
->>> +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
->>> +{
->>> +    struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->>> +    struct device *dev = &ctx->dsi->dev;
->>> +    int ret;
->>> +
->>> +    if (ctx->prepared)
->>> +        return 0;
->>> +
->>> +    ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to enable regulators: %d\n", ret);
->>> +        return ret;
->>> +    }
->>> +
->>> +    msleep(100);
->>> +
->>> +    sony_td4353_assert_reset_gpios(ctx, 1);
->>> +
->>> +    ret = sony_td4353_jdi_on(ctx);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to power on panel: %d\n", ret);
->>> +        sony_td4353_assert_reset_gpios(ctx, 0);
->>> +        regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>> +        return ret;
->>> +    }
->>> +
->>> +    ctx->prepared = true;
->>> +    return 0;
->>> +}
->>> +
->>> +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
->>> +{
->>> +    struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->>> +    struct device *dev = &ctx->dsi->dev;
->>> +    int ret;
->>> +
->>> +    if (!ctx->prepared)
->>> +        return 0;
->>> +
->>> +    ret = sony_td4353_jdi_off(ctx);
->>> +    if (ret < 0)
->>> +        dev_err(dev, "Failed to power off panel: %d\n", ret);
->>> +
->>> +    sony_td4353_assert_reset_gpios(ctx, 0);
->>> +    regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>> +
->>> +    ctx->prepared = false;
->>> +    return 0;
->>> +}
->>> +
->>> +static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
->>> +    .clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
->>> +    .hdisplay = 1080,
->>> +    .hsync_start = 1080 + 4,
->>> +    .hsync_end = 1080 + 4 + 8,
->>> +    .htotal = 1080 + 4 + 8 + 8,
->>> +    .vdisplay = 2160,
->>> +    .vsync_start = 2160 + 259,
->>> +    .vsync_end = 2160 + 259 + 8,
->>> +    .vtotal = 2160 + 259 + 8 + 8,
->>> +    .width_mm = 64,
->>> +    .height_mm = 128,
->>> +};
->>> +
->>> +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
->>> +                   struct drm_connector *connector)
->>> +{
->>> +    struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->>> +    struct drm_display_mode *mode = NULL;
->>> +
->>> +    if (ctx->type == TYPE_TAMA_60HZ)
->>> +        mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
->>> +    else
->>> +        return -EINVAL;
->>> +
->>> +    if (!mode)
->>> +        return -ENOMEM;
->>> +
->>> +    drm_mode_set_name(mode);
->>> +
->>> +    mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->>> +    connector->display_info.width_mm = mode->width_mm;
->>> +    connector->display_info.height_mm = mode->height_mm;
->>> +    drm_mode_probed_add(connector, mode);
->>> +
->>> +    return 1;
->>> +}
->>> +
->>> +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
->>> +    .prepare = sony_td4353_jdi_prepare,
->>> +    .unprepare = sony_td4353_jdi_unprepare,
->>> +    .get_modes = sony_td4353_jdi_get_modes,
->>> +};
->>> +
->>> +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
->>> +{
->>> +    struct device *dev = &dsi->dev;
->>> +    struct sony_td4353_jdi *ctx;
->>> +    int ret;
->>> +
->>> +    ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->>> +    if (!ctx)
->>> +        return -ENOMEM;
->>> +
->>> +    ctx->type = (uintptr_t)of_device_get_match_data(dev);
->>> +
->>> +    ctx->supplies[0].supply = "vddio";
->>> +    ctx->supplies[1].supply = "vsp";
->>> +    ctx->supplies[2].supply = "vsn";
->>> +    ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
->>> +                      ctx->supplies);
->>> +    if (ret < 0)
->>> +        return dev_err_probe(dev, ret, "Failed to get regulators\n");
->>> +
->>> +    ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
->>> +    if (IS_ERR(ctx->panel_reset_gpio))
->>> +        return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
->>> +                     "Failed to get panel-reset-gpios\n");
->>> +
->>> +    ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
->>> +    if (IS_ERR(ctx->touch_reset_gpio))
->>> +        return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
->>> +                     "Failed to get touch-reset-gpios\n");
->>> +
->>> +    ctx->dsi = dsi;
->>> +    mipi_dsi_set_drvdata(dsi, ctx);
->>> +
->>> +    dsi->lanes = 4;
->>> +    dsi->format = MIPI_DSI_FMT_RGB888;
->>> +    dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
->>> +
->>> +    drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
->>> +               DRM_MODE_CONNECTOR_DSI);
->>> +
->>> +    ret = drm_panel_of_backlight(&ctx->panel);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "Failed to get backlight\n");
->>> +
->>> +    drm_panel_add(&ctx->panel);
->>> +
->>> +    ret = mipi_dsi_attach(dsi);
->>> +    if (ret < 0) {
->>> +        dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
->>> +        drm_panel_remove(&ctx->panel);
->>> +        return ret;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
->>> +{
->>> +    struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
->>> +    int ret;
->>> +
->>> +    ret = mipi_dsi_detach(dsi);
->>> +    if (ret < 0)
->>> +        dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
->>> +
->>> +    drm_panel_remove(&ctx->panel);
->>> +}
->>> +
->>> +static const struct of_device_id sony_td4353_jdi_of_match[] = {
->>> +    { .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
->>> +    { /* sentinel */ }
->>> +};
->>> +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
->>> +
->>> +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
->>> +    .probe = sony_td4353_jdi_probe,
->>> +    .remove = sony_td4353_jdi_remove,
->>> +    .driver = {
->>> +        .name = "panel-sony-td4353-jdi",
->>> +        .of_match_table = sony_td4353_jdi_of_match,
->>> +    },
->>> +};
->>> +module_mipi_dsi_driver(sony_td4353_jdi_driver);
->>> +
->>> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
->>> +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
->>> +MODULE_LICENSE("GPL");
+
+
+
+>> +			}
+>> +		}
+>> +		i++;
+>> +	}
+>> +}
+>> +
+>>  void __init efi_print_memmap(void)
+>>  {
+>>  	efi_memory_desc_t *md;
+>> @@ -474,6 +518,8 @@ void __init efi_init(void)
+>>  	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+>>  	efi_clean_memmap();
+>>  
+>> +	efi_remove_e820_mmio();
+>> +
+>>  	if (efi_enabled(EFI_DBG))
+>>  		efi_print_memmap();
+>>  }
+> 
+
