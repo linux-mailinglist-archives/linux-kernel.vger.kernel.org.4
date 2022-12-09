@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9685F647F65
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF96A647F67
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLIIjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
+        id S229804AbiLIIjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLIIjS (ORCPT
+        with ESMTP id S229795AbiLIIjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:39:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E84AD4D5C6;
-        Fri,  9 Dec 2022 00:39:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1409323A;
-        Fri,  9 Dec 2022 00:39:23 -0800 (PST)
-Received: from [10.57.9.37] (unknown [10.57.9.37])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D92A3F73B;
-        Fri,  9 Dec 2022 00:39:13 -0800 (PST)
-Message-ID: <e8f4f0d0-d071-e169-48c2-02081c840583@arm.com>
-Date:   Fri, 9 Dec 2022 08:39:10 +0000
+        Fri, 9 Dec 2022 03:39:32 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29A65E3CA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:39:26 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id d131so4709773ybh.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 00:39:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0GUGGQj15T3qQbeVLgcJB6xrxEome6rwG6hErs3Zjdo=;
+        b=gPKoRHvGy0jNW39RFKcBp3/yl4sbAEA5JVQ34R7dkBBH4C298sE+yDKuwDMlxibY/c
+         w344BunK6p0wUSdW2cjsybO9SiTE8QjHv8Q64Eo4C7LL+EZTmTZDnyOJYfS4UEfnNrUw
+         PaCdW5X/0UmlKP5aiu72NpuSFB0bwAxdWBleJFbbGZz8jkXSqDXpMKXl81qfy7ASP/1F
+         ik/l+kAJSpzjqVlH22DpJGE5UIL/GV6WjuOKs08i3crS2Bz+X20oOlKhJO9PSJ0HnRY4
+         zG3JNXqRRXteVsMJv3NPZ2H4INGOpsjDXzHqVD0SKeQKzryL6MiSIhVp+c14yEr6+1ln
+         9IJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0GUGGQj15T3qQbeVLgcJB6xrxEome6rwG6hErs3Zjdo=;
+        b=GWnENE7v6kUFV90H4XtuDoL/jtyXT6HVzbSJylqvEOWm7ZmQf97ORIOS3ddnfy6r7T
+         e476nGaZgguKriiaAkyfEmWk6Gk8wgBZm6UtH+O6Iww9ehneZE4kGWcoTwop/LJCZEF6
+         QTLV7gY5Z4B9p5vGBTxShphtG9IIZFaZbfdaryKoXJk4vkneYYA5VKeZU0avi8gxd3VO
+         q0fc/uJyFKBhhvUU1DDUEtrC8wMBIWa/Rcbkk5phYqVIUHqfQH9e8BiwNr9X245LbaEY
+         K5BRvhRPxPX6jHQRvkAmU48u8qYTsbA6cwujegNUrKWnwp4v+ShoiZo6D1HJdSD2xOCd
+         v4sQ==
+X-Gm-Message-State: ANoB5pmglT81bkjaZB1DvxANVW377fiZIjAsjZkvNyBlWpWCWZkdwq3O
+        yIG9dKWsJzAY3zdzx4RcZu4wyikbuFZqxzjrcJ43/A==
+X-Google-Smtp-Source: AA0mqf7ZACKRjj1D0rcTNVVA25tu2DwTXeoSYJ3oO9D76DQARIgzERW6rrlYRiXtf/QusZjCu2X2dO1d9FIDFhTgAEs=
+X-Received: by 2002:a25:941:0:b0:706:bafd:6f95 with SMTP id
+ u1-20020a250941000000b00706bafd6f95mr9109558ybm.55.1670575165654; Fri, 09 Dec
+ 2022 00:39:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/1] cpufreq: schedutil: Optimize operations with
- single CPU capacity lookup
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de
-References: <20221208160256.859-1-lukasz.luba@arm.com>
- <20221208160256.859-2-lukasz.luba@arm.com>
- <20221208233801.s26awslkx6aloxyd@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221208233801.s26awslkx6aloxyd@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220831133758.3741187-1-leitao@debian.org> <CANn89iLe9spogp7eaXPziA0L-FqJ0w=6VxdWDL6NKGobTyuQRw@mail.gmail.com>
+ <Y5DPU3p+N7rBW+QY@gmail.com> <CANn89iKia8PVz8QrtukzA-9wUiJHiOB1r6d04xuL_YHqHaBULw@mail.gmail.com>
+ <Y5IGa0pauk+YkSSv@gmail.com>
+In-Reply-To: <Y5IGa0pauk+YkSSv@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 9 Dec 2022 09:39:14 +0100
+Message-ID: <CANn89iK8BtCDXsH=fwnUg8fzP_tDB-=wmezkc-dCCVpp-FqzxA@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next] tcp: socket-specific version of WARN_ON_ONCE()
+To:     Breno Leitao <leitao@debian.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>, leit@fb.com,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,42 +77,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 8, 2022 at 4:44 PM Breno Leitao <leitao@debian.org> wrote:
+>
+> On Wed, Dec 07, 2022 at 06:59:38PM +0100, Eric Dumazet wrote:
 
+> > Try to give us symbols with scripts/decode_stacktrace.sh , thanks.
+>
+> Sorry, here it is:
+>
+>  [749619.538804] WARNING: CPU: 19 PID: 0 at net/ipv4/tcp.c:4552 tcp_sock_=
+warn+0x6/0x20
+>  [749619.553969] Modules linked in: sch_fq sunrpc bpf_preload tls act_gac=
+t cls_bpf tcp_diag inet_diag skx_edac nfit libnvdimm x86_pkg_temp_thermal i=
+ntel_powerclamp coretemp kvm_intel iTCO_wdt iTCO_vendor_support kvm evdev s=
+es irqbypass enclosure i2c_i801 i2c_smbus ipmi_si ipmi_devintf ipmi_msghand=
+ler acpi_cpufreq button tpm_crb sch_fq_codel vhost_net tun tap vhost vhost_=
+iotlb virtio_net net_failover failover mpls_gso mpls_iptunnel mpls_router i=
+p_tunnel fou ip6_udp_tunnel udp_tunnel fuse sg nvme mpi3mr scsi_transport_s=
+as nvme_core xhci_pci xhci_hcd loop efivarfs autofs4
+>  [749619.678066] Hardware name: XXXXX
+>  [749619.695308] RIP: tcp_sock_warn+0x6/0x20
+>  [749619.704034] Code: 4d 01 3e 85 c0 0f 84 57 ff ff ff 48 8b 0c 24 44 8b=
+ 01 eb 82 e8 eb b7 14 00 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 53=
+ <0f> 0b 48 85 ff 0f 85 77 70 14 00 5b c3 66 66 2e 0f 1f 84 00 00 00
+>  All code
+>  =3D=3D=3D=3D=3D=3D=3D=3D
+>     0:  4d 01 3e                add    %r15,(%r14)
+>     3:  85 c0                   test   %eax,%eax
+>     5:  0f 84 57 ff ff ff       je     0xffffffffffffff62
+>     b:  48 8b 0c 24             mov    (%rsp),%rcx
+>     f:  44 8b 01                mov    (%rcx),%r8d
+>    12:  eb 82                   jmp    0xffffffffffffff96
+>    14:  e8 eb b7 14 00          callq  0x14b804
+>    19:  66 66 2e 0f 1f 84 00    data16 nopw %cs:0x0(%rax,%rax,1)
+>    20:  00 00 00 00
+>    24:  0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+>    29:  53                      push   %rbx
+>    2a:* 0f 0b                   ud2             <-- trapping instruction
+>    2c:  48 85 ff                test   %rdi,%rdi
+>    2f:  0f 85 77 70 14 00       jne    0x1470ac
+>    35:  5b                      pop    %rbx
+>    36:  c3                      retq
+>    37:  66                      data16
+>    38:  66                      data16
+>    39:  2e                      cs
+>    3a:  0f                      .byte 0xf
+>    3b:  1f                      (bad)
+>    3c:  84 00                   test   %al,(%rax)
+>         ...
+>
+>  Code starting with the faulting instruction
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>     0:  0f 0b                   ud2
+>     2:  48 85 ff                test   %rdi,%rdi
+>     5:  0f 85 77 70 14 00       jne    0x147082
+>     b:  5b                      pop    %rbx
+>     c:  c3                      retq
+>     d:  66                      data16
+>     e:  66                      data16
+>     f:  2e                      cs
+>    10:  0f                      .byte 0xf
+>    11:  1f                      (bad)
+>    12:  84 00                   test   %al,(%rax)
+>         ...
+>  [749619.741779] RSP: 0018:ffffc90000d08988 EFLAGS: 00010246
+>  [749619.752436] RAX: ffff88814b57f5c0 RBX: ffff8881bd2540c0 RCX: ffffc90=
+000d08a34
+>  [749619.766900] RDX: 0000000000000000 RSI: 00000000cda8f4af RDI: ffff888=
+1bd2540c0
+>  [749619.781364] RBP: 0000000000000000 R08: ffffc90000d08a38 R09: 0000000=
+0cda8f44f
+>  [749619.795831] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000=
+000000000
+>  [749619.810300] R13: ffffc90000d08a34 R14: 0000000000011406 R15: 0000000=
+000000000
+>  [749619.824788] FS:  0000000000000000(0000) GS:ffff88903f8c0000(0000) kn=
+lGS:0000000000000000
+>  [749619.841168] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  [749619.852857] CR2: 000000000007c2e9 CR3: 0000000b82412002 CR4: 0000000=
+0007706e0
+>  [749619.867331] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
+000000000
+>  [749619.881800] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
+000000400
+>  [749619.896260] PKRU: 55555554
+>  [749619.901859] Call Trace:
+>  [749619.906927]  <IRQ>
+>  [749619.911129] tcp_fastretrans_alert+0x988/0x9e0
+>  [749619.920222] ? kmem_cache_free+0x33c/0x3d0
+>  [749619.928606] tcp_ack+0x8b4/0x1360
+>  [749619.935425] ? __cgroup_bpf_run_filter_skb+0x185/0x440
+>  [749619.945910] tcp_rcv_established+0x2f3/0x660
+>  [749619.954639] ? sk_filter_trim_cap+0xbc/0x220
+>  [749619.963358] tcp_v6_do_rcv+0xbe/0x3e0
+>  [749619.970863] tcp_v6_rcv+0xc01/0xc90
 
-On 12/8/22 23:38, Viresh Kumar wrote:
-> On 08-12-22, 16:02, Lukasz Luba wrote:
->> @@ -332,12 +333,15 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
->>   	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
->>   	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
->>   	unsigned int cached_freq = sg_policy->cached_raw_freq;
->> +	unsigned long max_cap;
->>   	unsigned int next_f;
->>   
->> -	if (!sugov_update_single_common(sg_cpu, time, flags))
->> +	max_cap = arch_scale_cpu_capacity(sg_cpu->cpu);
-> 
-> I will rather do this at all three locations:
-> 
-> 	unsigned long max_cap = arch_scale_cpu_capacity(sg_cpu->cpu);
-> 
+Still no symbols (file name : line number).
 
-In the 2nd location it is called after the check:
-
-if (!arch_scale_freq_invariant())
-
-which can return.
-
-IMO this is more visible and exposed.
-The way it's implemented now stresses the fact that
-we read this value at runtime (unfortunately). Maybe in the
-future someone would find it and simplify.
-
-I sometimes found difficult to spot those important calls in
-the variable header section, e.g. how many times are called
-or with what kind of arguments. In this case the sg_cpu->cpu
-should be clearly visible and effectively matched as the same as
-smp_procesor_id() for that running CPU, thus fetching the
-same capacity variable from local per-cpu (not remote).
-IMO the way how the code is structured could help (or not)
-to spot those details. That's why I prefer to keep it as is
-in this implementation.
+>  [749619.978029] ip6_protocol_deliver_rcu+0xbd/0x450
+>  [749619.987453] ip6_input_finish+0x3d/0x60
+>  [749619.995313] ip6_input+0xb5/0xc0
+>  [749620.001958] ip6_sublist_rcv_finish+0x37/0x50
+>  [749620.010851] ip6_sublist_rcv+0x1dd/0x270
+>  [749620.018877] ipv6_list_rcv+0x113/0x140
+>  [749620.026552] __netif_receive_skb_list_core+0x1a0/0x210
+>  [749620.037025] netif_receive_skb_list_internal+0x186/0x2a0
+>  [749620.047838] ? napi_gro_complete+0x6c/0xd0
+>  [749620.056215] gro_normal_list.part.171+0x19/0x40
+>  [749620.065471] napi_complete_done+0x65/0x150
+>  [749620.073856] bnxt_poll_p5+0x25b/0x2b0
+>  [749620.081369] __napi_poll+0x25/0x120
+>  [749620.088537] net_rx_action+0x189/0x300
+>  [749620.096224] __do_softirq+0xbb/0x271
+>  [749620.103571] irq_exit_rcu+0x97/0xa0
+>  [749620.110732] common_interrupt+0x7f/0xa0
+>  [749620.118595]  </IRQ>
+>  [749620.122964] asm_common_interrupt+0x1e/0x40
+>  [749620.131511] RIP: cpuidle_enter_state+0xc2/0x340
+>  [749620.141621] Code: 48 89 c5 0f 1f 44 00 00 31 ff e8 f9 8d 73 ff 45 84=
+ ff 74 12 9c 58 f6 c4 02 0f 85 38 02 00 00 31 ff e8 b2 36 79 ff fb 45 85 f6=
+ <0f> 88 e8 00 00 00 49 63 d6 48 2b 2c 24 48 6b ca 68 48 8d 04 52 48
