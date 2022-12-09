@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D584647CCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C27647CBA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiLIDuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S229928AbiLIDgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiLIDuG (ORCPT
+        with ESMTP id S229517AbiLIDf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:50:06 -0500
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B7B2EEE;
-        Thu,  8 Dec 2022 19:50:01 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6A3F510098B;
-        Fri,  9 Dec 2022 03:50:00 +0000 (UTC)
-Received: from pdx1-sub0-mail-a263.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D72EB100BF8;
-        Fri,  9 Dec 2022 03:49:59 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1670557799; a=rsa-sha256;
-        cv=none;
-        b=Mb2OI5TVpI7DEpWH65YWvc37jO47RfLUOUkUSBnpAreSRf1jU8VBXGGAnzFTiISbZD2C45
-        ZbeMbB4LuDaDXRF9OwialdTYbcqttP9/56O2vW7aslT1vmarQTWPfZsckZc7uHrLt6b4PC
-        cTiHfXU6/zbQIfC83c/1yk4jTS+UGR+sLvFBs3czhLQmYV7GQjJKZSWXP0fCYBdSHcyNuq
-        AtgVMEIrY80BtzNwPFbMjPDEiasqKxaBadzuqzq4+AZzw42xLVzC/ezEsbbsoUscGIBrf6
-        zoJ2W7OkjXWYMlgM5rU+TVnk24Xinq7lmxbUHWYpXHDrSAM8x84vlv9chm0klA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1670557799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=cbxtvkRhRL+tnV05JpD/zco8wP6mLe11Sn32Cdb8ZVU=;
-        b=Rv3EoD80Vn5KXdm7d44p43iipwk0lIz/klsi+SaG8mlhkCOCex8cXcvjUpen8DOaiox/UN
-        BKOGxfmHdTbokNXhn5jek6SD6Vk01kX1gCpGaSVi2qJtRGp6olArx0hKPRiJSQSnv/r7RS
-        OfMKC/IoNWPABmQ6KrM56UHYY/t/FnxY2c3QLXMV7GHTtvPDSbp5dSZn4casrl1Kfzd+LL
-        zLjQLEzHi2yurZS0or2M5hEYDa3UX/uwby1vOMqLUq5tbzlwL2jTDwJR3/2+1Qlyod/Cgg
-        eDsf29GwFJ2VkwaAS3a/i53WSWYeI9b60VEdQ495CSICBGYmS9k6C+MqrvsndA==
-ARC-Authentication-Results: i=1;
-        rspamd-d48c5ddb-hdvm5;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shelf-Arithmetic: 454c2ce13f103b60_1670557800156_2839342034
-X-MC-Loop-Signature: 1670557800156:299660159
-X-MC-Ingress-Time: 1670557800155
-Received: from pdx1-sub0-mail-a263.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.24.106 (trex/6.7.1);
-        Fri, 09 Dec 2022 03:50:00 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a263.dreamhost.com (Postfix) with ESMTPSA id 4NSxqW1chrzHF;
-        Thu,  8 Dec 2022 19:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1670557799;
-        bh=cbxtvkRhRL+tnV05JpD/zco8wP6mLe11Sn32Cdb8ZVU=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=HB2X6gxfOPJsQfZlIxlp1gJZbBKdLCHJINv05QwGmzgYbKyhgirnvPkMUE8P8C64M
-         ScwWRjekpkywV6FsOFjwnH7T2Cd7riP/Yr04fT8TGY2K4mToRVXJWWVOfFLy/WC6X7
-         v+UEXKe1VQExN2FDNti9B1AvlMGuhG89spNbkKRt0rRv0DwPdUmFmDcOP3Cte+Eq5U
-         /fuVa1irEiGna//TGNbKyHr+YV4dkm+8kcptfbqYmBhcIjcyFBW7r+0SPtEuiZvg9T
-         ahk0FRbjKRU9gQeg9Gbn96kEvG5VAWVXz2QV5014x4pndWSBqmyh+7yjj+X/EOE6eS
-         vohzBXzCQ8jNA==
-Date:   Thu, 8 Dec 2022 19:25:50 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        connoro@google.com
-Subject: Re: [PATCH v2 1/2] locktorture: Allow non-rtmutex lock types to be
- boosted
-Message-ID: <20221209032550.p4tcyypgkuspp2ur@offworld>
-References: <20221209022305.321149-1-joel@joelfernandes.org>
+        Thu, 8 Dec 2022 22:35:58 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2402CA432F;
+        Thu,  8 Dec 2022 19:35:50 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3704852322fso37290057b3.8;
+        Thu, 08 Dec 2022 19:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JoAXY4oz3//YssskB6bdc2J+HywWJ8gfQL6OHbwqXnQ=;
+        b=qPn/IdpAvQN0x1RC9GZAUdQ3nX8aRjRiJGGxyRZTTQHtzAxnkku+L2enxOQsRz6mYN
+         xM1s6Yz+kYWZnXV//Bt6nVgS8dU1Av3lbElqBhOYzIsntAYAIDPgY5Tpy/NpAxPMcb9r
+         IygSDTTz4x1zKlkhbRoQFppo0Md6r7wdPAk7qk78XbM1GMYvUuV6+SDUNa11OjOvjGyx
+         psmVEICiz6O8Pg6/uHd2ZV1h4c2hQ9Cg8cqVlYHQBsXd6+9iSKzcAGCO4otG64Z0ZflB
+         TMTFJBz4XmVu5kTwPP1kMn6+aFPV0BSpo+zmm7qMowcyuVpqkhJgex8cKdU7Hk+Wdi4g
+         DVNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JoAXY4oz3//YssskB6bdc2J+HywWJ8gfQL6OHbwqXnQ=;
+        b=B00M59bGEdz3E/s1LASR9chlZoBgbAT54hZGvxfHB+ZaSs6/9DeojH+1j0dKslJdU6
+         2nT1cuzbhnNzqZ7ERL5hR7FsIhSFcWz1FvLLLuVGioakZvV5+a1UnkpszaKuYkBetW5/
+         Ccek/6vrDqsOa+7/IJNnUv32/6TwL2idxeNHuZOsEKzmDAcdujUczpVpMwjB21X/Ef2m
+         lOg07rR4Krz8D5chJJVod1/PFbctm3oXWwwFOALP//zy6l/NXUKL1cOywOAntzjM5AA1
+         QH5neHkwUiLBbbmS/3+BSfYTFb9L09AhO7X6S007zdjhPUdhkw3w5UPgZrXOtPdMHdmS
+         xcig==
+X-Gm-Message-State: ANoB5plghXZpbyzKA+1A/WU7ECgoVCuj9BO9qrm2ASa1kb+NMNE+zT/p
+        N/gDWLMIMJrL5GqW3tlDFciupXgjN0U=
+X-Google-Smtp-Source: AA0mqf7SL0bj3yP2oDTllApvM/dkL5rh5Zlw++oHpdvVmI0Xkrz3dAETMZMSzTjg8ShPpvSf9ECX/A==
+X-Received: by 2002:a05:6a21:78a1:b0:a4:829e:de65 with SMTP id bf33-20020a056a2178a100b000a4829ede65mr7391414pzc.9.1670556420116;
+        Thu, 08 Dec 2022 19:27:00 -0800 (PST)
+Received: from [192.168.43.80] (subs32-116-206-28-21.three.co.id. [116.206.28.21])
+        by smtp.gmail.com with ESMTPSA id w206-20020a627bd7000000b005748aca80fesm230979pfc.32.2022.12.08.19.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 19:26:59 -0800 (PST)
+Message-ID: <a755a60a-7ab7-0d7d-5817-c4c88b7781c6@gmail.com>
+Date:   Fri, 9 Dec 2022 10:26:54 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221209022305.321149-1-joel@joelfernandes.org>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] mm/highmem: Add notes about conversions from
+ kmap{,_atomic}()
+Content-Language: en-US
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20221207225308.8290-1-fmdefrancesco@gmail.com>
+ <Y5FmjdBNEO8aP/Ls@debian.me> <21697972.EfDdHjke4D@suse>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <21697972.EfDdHjke4D@suse>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Dec 2022, Joel Fernandes (Google) wrote:
+On 12/9/22 03:05, Fabio M. De Francesco wrote:
+> You provided valid suggestions, thanks!
+> However, immediately after submitting this v2 patch, Andrew added it to the -
+> mm mm-unstable branch.
+> I'll do the changes that you suggested in a subsequent patch which will build 
+> on this.
+> 
 
->Currently RT boosting is only done for rtmutex_lock, however with proxy
->execution, we also have the mutex_lock participating in priorities. To
->exercise the testing better, add RT boosting to other lock testing types
->as well, using a new knob (rt_boost).
+OK, thanks!
 
-No particular objection to the patches, but shouldn't these go as part
-of the next iteration of the PE series?
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Thanks,
-Davidlohr
