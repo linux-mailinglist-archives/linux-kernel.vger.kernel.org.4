@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8588E647D9F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4370E647DA2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiLIGOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 01:14:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S229571AbiLIGP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 01:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiLIGOU (ORCPT
+        with ESMTP id S229850AbiLIGPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 01:14:20 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DDE86F71;
-        Thu,  8 Dec 2022 22:14:03 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NT0xc0HGBzJpD8;
-        Fri,  9 Dec 2022 14:10:28 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+        Fri, 9 Dec 2022 01:15:10 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C894904;
+        Thu,  8 Dec 2022 22:15:09 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NT11y64WxzRp9s;
+        Fri,  9 Dec 2022 14:14:14 +0800 (CST)
+Received: from [10.67.103.212] (10.67.103.212) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 9 Dec 2022 14:14:00 +0800
-Subject: Re: [PATCH] xhci: print warning when HCE was set
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yisen.zhuang@huawei.com>
-References: <20220915011134.58400-1-liulongfang@huawei.com>
- <6b5a45f1-caf3-4259-77da-e36788f5b8a9@linux.intel.com>
- <2648444c-2f2a-4d9b-8545-6677663adcf0@huawei.com>
- <8271d551-4034-71fe-5be4-e08e28b6dd6b@linux.intel.com>
- <19ab61d6-c2a2-42be-2bb6-500636868703@huawei.com>
- <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <28c934fa-ed31-ab50-9edc-60e03f42c2dd@huawei.com>
-Date:   Fri, 9 Dec 2022 14:13:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ 15.1.2375.31; Fri, 9 Dec 2022 14:15:08 +0800
+Subject: Re: [PATCH v10 0/3] crypto: hisilicon - supports device isolation
+ feature
+To:     <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
+References: <20221119074817.12063-1-yekai13@huawei.com>
+ <9b934709-2f74-7392-aab6-eb506ddcf708@huawei.com>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
+From:   "yekai (A)" <yekai13@huawei.com>
+Message-ID: <75ca78c7-1ca3-3e62-1175-5207ed9f5cf8@huawei.com>
+Date:   Fri, 9 Dec 2022 14:15:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-In-Reply-To: <7163ea05-7ea5-998b-932a-25ffd36ed296@intel.com>
+In-Reply-To: <9b934709-2f74-7392-aab6-eb506ddcf708@huawei.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.158]
+X-Originating-IP: [10.67.103.212]
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
+ dggpeml100012.china.huawei.com (7.185.36.121)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -56,80 +51,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/14 15:56, Mathias Nyman Wrote:
-> On 14.10.2022 6.12, liulongfang wrote:
->> On 2022/9/26 15:58, Mathias Nyman wrote:
->>> On 24.9.2022 5.35, liulongfang wrote:
->>>> On 2022/9/22 21:01, Mathias Nyman Wrote:
->>>>> Hi
->>>>>
->>>>> On 15.9.2022 4.11, Longfang Liu wrote:
->>>>>> When HCE(Host Controller Error) is set, it means that the xhci hardware
->>>>>> controller has an error at this time, but the current xhci driver
->>>>>> software does not log this event.
->>>>>>
->>>>>> By adding an HCE event detection in the xhci interrupt processing
->>>>>> interface, a warning log is output to the system, which is convenient
->>>>>> for system device status tracking.
->>>>>>
->>>>>
->>>>> xHC should cease all activity when it sets HCE, and is probably not
->>>>> generating interrupts anymore.
->>>>>
->>>>> Would probably be more useful to check for HCE at timeouts than in the
->>>>> interrupt handler.
->>>>>
->>>>
->>>> Which function of the driver code is this timeout in?
->>>
->>> xhci_handle_command_timeout() will usually trigger at some point,
->>>
+
+
+On 2022/11/25 16:49, yekai (A) wrote:
+>
+> On 2022/11/19 15:48, Kai Ye wrote:
+>> 1、Add the uacce hardware error isolation interface. Hardware error 
+>>    thresholds can be configured by sysfs node. User can get the hardware
+>>    isolated state by sysfs node.
+>> 2、Defining the isolation strategy for uacce device by uacce sysfs node. 
+>>    If the number of hardware errors exceeds the configured value, the 
+>>    uacce device will not be available in user space.
+>> 3、The ACC VF device use the PF device isolation strategy.
+>>    
+>> changes v1->v2:
+>> 	- deleted dev_to_uacce api.
+>> 	- add vfs node doc. 
+>> 	- move uacce->ref to driver.
+>> changes v2->v3:
+>> 	- deleted some redundant code.
+>> 	- use qm state instead of reference count.
+>> 	- add null pointer check.
+>> 	- isolate_strategy_read() instead of a copy.
+>> changes v3->v4:
+>> 	- modify a comment
+>> changes v4->v5:
+>> 	- use bool instead of atomic.
+>> 	- isolation frequency instead of isolation command.
+>> changes v5->v6:
+>> 	- add is_visible in uacce.
+>> 	- add the description of the isolation strategy file node.
+>> changes v6->v7
+>> 	- add an example for isolate_strategy in Documentation.
+>> changes v7->v8
+>> 	- update the correct date.
+>> changes v8->v9
+>>     - move isolation strategy from qm to uacce.
+>> changes v9->v10
+>> 	- Go back to the v8 version of the solution.
+>> 	- Modify some code according to suggestions.
 >>
->> Because this HCE error is reported in the form of an interrupt signal, it is more
->> concise to put it in xhci_irq() than in xhci_handle_command_timeout().
+>> Kai Ye (3):
+>>   uacce: supports device isolation feature
+>>   Documentation: add the device isolation feature sysfs nodes for uacce
+>>   crypto: hisilicon/qm - define the device isolation strategy
 >>
-> 
-> Patch was added to queue after you reported your xHC hardware triggers interrupts when HCE is set.
-> I'll send it forward after 6.1-rc1
-> 
-
-In our test version, a test log is added to xhci_irq(). In the test case that triggers HCE,
-the HCE interrupt is reported and recorded through the log:
-
-{53}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
-{53}[Hardware Error]: event severity: recoverable
-{53}[Hardware Error]:  Error 0, type: recoverable
-{53}[Hardware Error]:   section type: unknown, c8b328a8-9917-4af6-9a13-2e08ab2e7586
-{53}[Hardware Error]:   section length: 0x48
-{53}[Hardware Error]:   00000000: 0000186b 00000201 001a0001 00000000  k...............
-{53}[Hardware Error]:   00000010: 00000000 00000000 00000000 00000028  ............(...
-{53}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
-{53}[Hardware Error]:   00000030: 00000000 00000000 00000000 00000000  ................
-{53}[Hardware Error]:   00000040: 00000001 00000000                    ........
- xhci_hcd 0000:30:01.0: xHCI host not responding to stop endpoint command.
- xhci_hcd 0000:30:01.0: USBSTS: PCD HCE
- xhci_hcd 0000:30:01.0: xHCI host controller not responding, assume dead
- xhci_hcd 0000:30:01.0: HC died; cleaning up
- usb usb1-port1: couldn't allocate usb_device
-rmmod xhci-pci
- xhci_hcd 0000:30:01.0: remove, state 4
- usb usb2: USB disconnect, device number 1
- xhci_hcd 0000:30:01.0: USB bus 2 deregistered
- xhci_hcd 0000:30:01.0: remove, state 1
- usb usb1: USB disconnect, device number 1
- xhci_hcd 0000:30:01.0: USB bus 1 deregistered
-
-Thanks,
-Longfang.
-
-> xHCI specification still indicate HCE might not trigger interrupts:
->  
-> Section 4.24.1 -Internal Errors
-> ...
-> "Software should implement an algorithm for checking the HCE flag if the xHC is
-> not responding."
-> 
+>>  Documentation/ABI/testing/sysfs-driver-uacce |  18 ++
+>>  drivers/crypto/hisilicon/qm.c                | 169 +++++++++++++++++--
+>>  drivers/misc/uacce/uacce.c                   |  50 ++++++
+>>  include/linux/hisi_acc_qm.h                  |  15 ++
+>>  include/linux/uacce.h                        |  12 ++
+>>  5 files changed, 249 insertions(+), 15 deletions(-)
+>>
+> Hi Grek
+>
+> Just a friendly ping.
+>
 > Thanks
-> -Mathias
-> .
-> 
+> Kai
+
+Hi Greg KH
+
+Could you help me to apply this patchset v10?
+
+thanks
+Kai
+
