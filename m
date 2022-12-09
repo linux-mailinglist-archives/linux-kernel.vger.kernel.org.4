@@ -2,94 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A909648269
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E72648270
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLIMgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S229517AbiLIMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLIMgX (ORCPT
+        with ESMTP id S229604AbiLIMiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:36:23 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D4663F6;
-        Fri,  9 Dec 2022 04:36:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3304B1FDD3;
-        Fri,  9 Dec 2022 12:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670589381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 9 Dec 2022 07:38:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012A967222
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670589435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XhaJ4AMLCZEgETruIyMo/c72wUMpujHKYsj5J9PetEI=;
-        b=lj1aIbaOrUSW/4IH3P9xvkmt4sS+Vua3KVOSLWW/4ZaVjpZXUf9PCF+2AwJBYEoH8Ueq+T
-        l1+VZhtJg3kaqSfdImLzMaVFZi0C0SAPfITWqkfevOBbkkFhYn9WKW6g/6rao/X8/xjDI9
-        bRjyq6IBZlNlaPWlMUzXxToftLaK8Og=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0EA7A2C141;
-        Fri,  9 Dec 2022 12:36:21 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 13:36:17 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: x86 part: was: Re: [PATCH v6] livepatch: Clear relocation targets on
- a module removal
-Message-ID: <Y5MrwePZoa5tYlQP@alley>
-References: <20220901171252.2148348-1-song@kernel.org>
- <Y3expGRt4cPoZgHL@alley>
- <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+        bh=kKcc7XQPg0UZn1AHNfQ4N2d5zF9JzBW3g3hPGFAB4Kc=;
+        b=ZG3qqAatQhAgpOboJAhhAnXOsAls6GT3djKhXpAx8qhAmpWP+j5Ewoo4/diUxYxZxAhmAx
+        IsB4N7gRUZDNj5yOs+yBwaGHPcGpIAQwcjkCOeZuP6frx+KIOVT+ppWBotynfu9bGbnIWY
+        PFnFWXmmPhUxIB2B9Yq/ZGaPsueGibY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-437-Eti5MHjXNvWsgfOCWQrvSg-1; Fri, 09 Dec 2022 07:37:14 -0500
+X-MC-Unique: Eti5MHjXNvWsgfOCWQrvSg-1
+Received: by mail-wm1-f69.google.com with SMTP id h81-20020a1c2154000000b003d1c8e519fbso3894892wmh.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:37:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kKcc7XQPg0UZn1AHNfQ4N2d5zF9JzBW3g3hPGFAB4Kc=;
+        b=wDEnOIGWxovSQzuO9LIzWFejKKmfN2Bl/3+3i1W2dW6XYKGWhPwzTb4DP3E9HSk+EF
+         KeGB372eBMB0ArEzqjgdPhgRTUqlHNsCTHTqnERLKxR2ncVO357mH3PxWbopSNI71Twm
+         PttVTQW0HFl3VGmckYm6TVAjsG+mmestoj+7J9LYL2nhNARJ1HVWCI+S/JvCrNZTtOyj
+         +g98S3atFv4tTFla+lNrZ1v+UVUJc5EmGSicbitYauXC0JNzoYrSjgL5u+t9IfKyDxj5
+         4m4ZjGCfHHg8rO7uqCdcMFrccF+4F8PISCDi2FG/G8+aR6RsDYETxbzn4bpulLSwgHIH
+         8Rbw==
+X-Gm-Message-State: ANoB5pmR/UWlM2JA2eVkzXNR293+ml7p8L1Ga4fUQZLbZ4Rk3EOgXK1/
+        7l109pff89aOFXtLlZUbTYy1DWn2LNjDGHsoo0Ofry90VyO6rEXXlBevbdG6iLcvnZ6d+QKuyUO
+        acPCvdlATARgRwb6iYbsx3XrD
+X-Received: by 2002:a05:600c:4fd0:b0:3d1:c0a1:4804 with SMTP id o16-20020a05600c4fd000b003d1c0a14804mr4752746wmq.17.1670589432840;
+        Fri, 09 Dec 2022 04:37:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5DyMiYpWNcqaQueb0cVh7tJ5lH4JY75MZjLcmrbwYgfM+x/au0sr5C4m2hvq8cZrZMVyWo5g==
+X-Received: by 2002:a05:600c:4fd0:b0:3d1:c0a1:4804 with SMTP id o16-20020a05600c4fd000b003d1c0a14804mr4752714wmq.17.1670589432518;
+        Fri, 09 Dec 2022 04:37:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-106-22.dyn.eolo.it. [146.241.106.22])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm9284355wms.15.2022.12.09.04.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 04:37:11 -0800 (PST)
+Message-ID: <d220402a232e204676d9100d6fe4c2ae08f753ee.camel@redhat.com>
+Subject: Re: [PATCH v1 2/3] Treewide: Stop corrupting socket's task_frag
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Benjamin Coddington <bcodding@redhat.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Christoph =?ISO-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Steve French <sfrench@samba.org>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, drbd-dev@lists.linbit.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-nvme@lists.infradead.org, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        ocfs2-devel@oss.oracle.com, v9fs-developer@lists.sourceforge.net,
+        ceph-devel@vger.kernel.org, linux-nfs@vger.kernel.org
+Date:   Fri, 09 Dec 2022 13:37:08 +0100
+In-Reply-To: <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+References: <cover.1669036433.git.bcodding@redhat.com>
+         <c2ec184226acd21a191ccc1aa46a1d7e43ca7104.1669036433.git.bcodding@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-28 17:57:06, Song Liu wrote:
-> On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
-> --- a/arch/x86/kernel/module.c
-> +++ b/arch/x86/kernel/module.c
-> > This duplicates a lot of code. Please, rename apply_relocate_add() the
-> > same way as __apply_clear_relocate_add() and add the "apply" parameter.
-> > Then add the wrappers for this:
-> >
-> > int write_relocate_add(Elf64_Shdr *sechdrs,
-> >                        const char *strtab,
-> >                        unsigned int symindex,
-> >                        unsigned int relsec,
-> >                        struct module *me,
-> >                        bool apply)
-> > {
-> >         int ret;
-> >         bool early = me->state == MODULE_STATE_UNFORMED;
-> >         void *(*write)(void *, const void *, size_t) = memcpy;
-> >
-> >         if (!early) {
-> >                 write = text_poke;
-> >                 mutex_lock(&text_mutex);
-> >         }
+On Mon, 2022-11-21 at 08:35 -0500, Benjamin Coddington wrote:
+> Since moving to memalloc_nofs_save/restore, SUNRPC has stopped setting the
+> GFP_NOIO flag on sk_allocation which the networking system uses to decide
+> when it is safe to use current->task_frag.  The results of this are
+> unexpected corruption in task_frag when SUNRPC is involved in memory
+> reclaim.
 > 
-> How about we move the "early" logic into __write_relocate_add()?
+> The corruption can be seen in crashes, but the root cause is often
+> difficult to ascertain as a crashing machine's stack trace will have no
+> evidence of being near NFS or SUNRPC code.  I believe this problem to
+> be much more pervasive than reports to the community may indicate.
+> 
+> Fix this by having kernel users of sockets that may corrupt task_frag due
+> to reclaim set sk_use_task_frag = false.  Preemptively correcting this
+> situation for users that still set sk_allocation allows them to convert to
+> memalloc_nofs_save/restore without the same unexpected corruptions that are
+> sure to follow, unlikely to show up in testing, and difficult to bisect.
+> 
+> CC: Philipp Reisner <philipp.reisner@linbit.com>
+> CC: Lars Ellenberg <lars.ellenberg@linbit.com>
+> CC: "Christoph Böhmwalder" <christoph.boehmwalder@linbit.com>
+> CC: Jens Axboe <axboe@kernel.dk>
+> CC: Josef Bacik <josef@toxicpanda.com>
+> CC: Keith Busch <kbusch@kernel.org>
+> CC: Christoph Hellwig <hch@lst.de>
+> CC: Sagi Grimberg <sagi@grimberg.me>
+> CC: Lee Duncan <lduncan@suse.com>
+> CC: Chris Leech <cleech@redhat.com>
+> CC: Mike Christie <michael.christie@oracle.com>
+> CC: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> CC: "Martin K. Petersen" <martin.petersen@oracle.com>
+> CC: Valentina Manea <valentina.manea.m@gmail.com>
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> CC: David Howells <dhowells@redhat.com>
+> CC: Marc Dionne <marc.dionne@auristor.com>
+> CC: Steve French <sfrench@samba.org>
+> CC: Christine Caulfield <ccaulfie@redhat.com>
+> CC: David Teigland <teigland@redhat.com>
+> CC: Mark Fasheh <mark@fasheh.com>
+> CC: Joel Becker <jlbec@evilplan.org>
+> CC: Joseph Qi <joseph.qi@linux.alibaba.com>
+> CC: Eric Van Hensbergen <ericvh@gmail.com>
+> CC: Latchesar Ionkov <lucho@ionkov.net>
+> CC: Dominique Martinet <asmadeus@codewreck.org>
+> CC: "David S. Miller" <davem@davemloft.net>
+> CC: Eric Dumazet <edumazet@google.com>
+> CC: Jakub Kicinski <kuba@kernel.org>
+> CC: Paolo Abeni <pabeni@redhat.com>
+> CC: Ilya Dryomov <idryomov@gmail.com>
+> CC: Xiubo Li <xiubli@redhat.com>
+> CC: Chuck Lever <chuck.lever@oracle.com>
+> CC: Jeff Layton <jlayton@kernel.org>
+> CC: Trond Myklebust <trond.myklebust@hammerspace.com>
+> CC: Anna Schumaker <anna@kernel.org>
+> CC: drbd-dev@lists.linbit.com
+> CC: linux-block@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> CC: nbd@other.debian.org
+> CC: linux-nvme@lists.infradead.org
+> CC: open-iscsi@googlegroups.com
+> CC: linux-scsi@vger.kernel.org
+> CC: linux-usb@vger.kernel.org
+> CC: linux-afs@lists.infradead.org
+> CC: linux-cifs@vger.kernel.org
+> CC: samba-technical@lists.samba.org
+> CC: cluster-devel@redhat.com
+> CC: ocfs2-devel@oss.oracle.com
+> CC: v9fs-developer@lists.sourceforge.net
+> CC: netdev@vger.kernel.org
+> CC: ceph-devel@vger.kernel.org
+> CC: linux-nfs@vger.kernel.org
+> 
+> Suggested-by: Guillaume Nault <gnault@redhat.com>
+> Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
 
-If I get it correctly then __write_relocate_add() has three different
-return paths. I am not sure if this could be moved there a reasonable
-way.
+I think this is the most feasible way out of the existing issue, and I
+think this patchset should go via the networking tree, targeting the
+Linux 6.2.
 
-Anyway, I do not resist on the above proposal. Feel free to find
-another solution that reduces the duplicated code and looks
-reasonable. I am sure that there are more possibilities.
+If someone has disagreement with the above, please speak! 
 
-Best Regards,
-Petr
+Thanks,
+
+Paolo
+
