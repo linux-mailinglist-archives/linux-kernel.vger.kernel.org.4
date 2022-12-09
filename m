@@ -2,155 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A47648B3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6CA648B51
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiLIXEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 18:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S229745AbiLIXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 18:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiLIXEg (ORCPT
+        with ESMTP id S229482AbiLIXZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 18:04:36 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAA69655F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 15:04:36 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 4so6450249pli.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 15:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7y0Fsj0V7Jx8UlnHY/tsP4KmC6NWQ+6Fi1dd0y8otA=;
-        b=IWkguZSoL2fItk5S/5KatAx6Ma+mRNW1A7ymBYMHQkfco+SqKmg/BgwhmwAmtDFREa
-         HXqfbd6u8/EfvxH+tCFcjQUntlUR+GJ27QyHmmVB8qPnfhav4uVut7+5jPAnaAhkYQIn
-         tp2ueDwS3HqPgLOU2XAuEXNf2oO6b+3qhX25ywi+jcEhAbAgD3y/9Xn8EHLUELCHZeWU
-         Yo5msYHNeK50cvQk6ZPc3Ug1Yhe/yLwar58UrXx9BO+9eHKIFgsyEMkmPZHHsHyHyx2N
-         YSt+qWJxXpCP0tgJtl1cJDdZGRte0ul2Ue89e3VlQDkZW3BuHbZH0eKaba8TUCJgj797
-         7hRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N7y0Fsj0V7Jx8UlnHY/tsP4KmC6NWQ+6Fi1dd0y8otA=;
-        b=pyLm6+aOay3+BlWDUiYE29NPFAaJ1Da79U2HZLi/xPpzfVhzJF+x5VinwjWZhiZrGe
-         lbzSrXP+NuWMdFoPBHJmdUGHLC1k2mzm7z7VO+zvGKPKOVwnfc3ROD2Rt4PNj80uSJSm
-         AGDSkaNYxMfdbJwUosxv9Qkw8gzSaO/BGcTVpCskTuxPUKsFsidF1N+WBZJ14Gbd78Sw
-         cc2S+vIK4FYdSyDcpgcY1TXQqpdo9hZ0SXd2mo2QbTD/hH1bE/ih267V7w2LolB+B/3A
-         KW0ABZ/8usmmsdSHJMTFpw5ONR7aRH7/2PxL7tVn/e49AhaTFPsmZcA0jG+T0zYQx2rv
-         3xgw==
-X-Gm-Message-State: ANoB5pnzwrfiD6lCkhp7IwMjMt4AH/GFH13/QcE7WPaKHE9l878b+qqI
-        hne5buw9ZbZiSu02v+OO7mnuFuG6xYcKdTI9wn0=
-X-Google-Smtp-Source: AA0mqf5cA/qtvZTwZolemydZkhpOj8uJXz4RnA1VFMUXuJifwyTUlibOOKUTF/7F0Zjy6vs7xTwZsQ==
-X-Received: by 2002:a17:90b:310f:b0:219:d84:4446 with SMTP id gc15-20020a17090b310f00b002190d844446mr7457385pjb.26.1670627075598;
-        Fri, 09 Dec 2022 15:04:35 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id gl7-20020a17090b120700b00218f9bd50c7sm1543637pjb.50.2022.12.09.15.04.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 15:04:35 -0800 (PST)
-Date:   Fri, 9 Dec 2022 15:04:31 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH 2/7] KVM: x86/MMU: Move rmap_iterator to rmap.h
-Message-ID: <Y5O+/1CYivRishFE@google.com>
-References: <20221206173601.549281-1-bgardon@google.com>
- <20221206173601.549281-3-bgardon@google.com>
+        Fri, 9 Dec 2022 18:25:18 -0500
+X-Greylist: delayed 1136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Dec 2022 15:25:17 PST
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CB236D71;
+        Fri,  9 Dec 2022 15:25:17 -0800 (PST)
+Received: from 213.219.160.184.adsl.dyn.edpnet.net ([213.219.160.184] helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1p3mRe-0003If-BR; Sat, 10 Dec 2022 00:06:18 +0100
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1p3mRd-00152y-20;
+        Sat, 10 Dec 2022 00:06:17 +0100
+Date:   Sat, 10 Dec 2022 00:06:17 +0100
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Daniel Wagner <wagi@monom.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: [PATCH 4.19-rt] Revert "percpu: include irqflags.h for
+ raw_local_irq_save()"
+Message-ID: <Y5O/aVw/zHKqmpu7@decadent.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Uuwevuhf7j7y0M7M"
 Content-Disposition: inline
-In-Reply-To: <20221206173601.549281-3-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 213.219.160.184
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:35:56PM +0000, Ben Gardon wrote:
-> In continuing to factor the rmap out of mmu.c, move the rmap_iterator
-> and associated functions and macros into rmap.(c|h).
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c  | 76 -----------------------------------------
->  arch/x86/kvm/mmu/rmap.c | 61 +++++++++++++++++++++++++++++++++
->  arch/x86/kvm/mmu/rmap.h | 18 ++++++++++
->  3 files changed, 79 insertions(+), 76 deletions(-)
-> 
-[...]
-> diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-> index 059765b6e066..13b265f3a95e 100644
-> --- a/arch/x86/kvm/mmu/rmap.h
-> +++ b/arch/x86/kvm/mmu/rmap.h
-> @@ -31,4 +31,22 @@ void free_pte_list_desc(struct pte_list_desc *pte_list_desc);
->  void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head);
->  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->  
-> +/*
-> + * Used by the following functions to iterate through the sptes linked by a
-> + * rmap.  All fields are private and not assumed to be used outside.
-> + */
-> +struct rmap_iterator {
-> +	/* private fields */
-> +	struct pte_list_desc *desc;	/* holds the sptep if not NULL */
-> +	int pos;			/* index of the sptep */
-> +};
-> +
-> +u64 *rmap_get_first(struct kvm_rmap_head *rmap_head,
-> +		    struct rmap_iterator *iter);
-> +u64 *rmap_get_next(struct rmap_iterator *iter);
-> +
-> +#define for_each_rmap_spte(_rmap_head_, _iter_, _spte_)			\
-> +	for (_spte_ = rmap_get_first(_rmap_head_, _iter_);		\
-> +	     _spte_; _spte_ = rmap_get_next(_iter_))
-> +
 
-I always found these function names and kvm_rmap_head confusing since
-they are about iterating through the pte_list_desc data structure. The
-rmap (gfn -> list of sptes) is a specific application of the
-pte_list_desc structure, but not the only application. There's also
-parent_ptes in struct kvm_mmu_page, which is not an rmap, just a plain
-old list of ptes.
+--Uuwevuhf7j7y0M7M
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-While you are refactoring this code, what do you think about doing the
-following renames?
+This reverts commit 0d796a9e6a93608b4dd84fbd09f01e912ae34bdc.
 
-  struct kvm_rmap_head	-> struct pte_list_head
-  struct rmap_iterator	-> struct pte_list_iterator
-  rmap_get_first()	-> pte_list_get_first()
-  rmap_get_next()	-> pte_list_get_next()
-  for_each_rmap_spte()	-> for_each_pte_list_entry()
+After merging stable release 4.19.266 into the -rt branch, an x86
+build will fail with the following error:
 
-Then we can reserve the term "rmap" just for the actual rmap
-(slot->arch.rmap), and code that deals with sp->parent_ptes will become
-a lot more clear IMO (because it will not longer mention rmap).
+    .../include/linux/percpu-defs.h:49:34: error: 'PER_CPU_BASE_SECTION' un=
+declared here (not in a function); did you mean 'PER_CPU_FIRST_SECTION'?
 
-e.g. We go from this:
+This is due to an #include loop:
 
-  struct rmap_iterator iter;
-  u64 *sptep;
+    <asm/percpu.h>
+     -> <linux/irqflags.h>
+         -> <asm/irqflags.h>
+             -> <asm/nospec-branch.h>
+                 -> <asm/percpu.h>
 
-  for_each_rmap_spte(&sp->parent_ptes, &iter, sptep) {
-     ...
-  }
+which appears after the merge because:
 
-To this:
+- The reverted commit added <asm/percpu.h> -> <linux/irqflags.h>
+- 4.19.266 added <asm/nospec-branch.h> -> <asm/percpu.h>
 
-  struct pte_list_iterator iter;
-  u64 *sptep;
+Neither upstream nor any other maintained stable-rt branch has this
+include, and my build succeeded without it.  Revert it here as well.
 
-  for_each_pte_list_entry(&sp->parent_ptes, &iter, sptep) {
-     ...
-  }
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+---
+ include/asm-generic/percpu.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
+index 942d64c0476e..1817a8415a5e 100644
+--- a/include/asm-generic/percpu.h
++++ b/include/asm-generic/percpu.h
+@@ -5,7 +5,6 @@
+ #include <linux/compiler.h>
+ #include <linux/threads.h>
+ #include <linux/percpu-defs.h>
+-#include <linux/irqflags.h>
+=20
+ #ifdef CONFIG_SMP
+=20
+
+--Uuwevuhf7j7y0M7M
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmOTv2UACgkQ57/I7JWG
+EQm8cxAAjgtgenRHvJGVsZhKsRxMqfv6YxDmRz3vbTNy+Stvwjb3GqJMqmFK6QMT
+atMwt6p25lzTvBKnyaZ2z1st1t/33iXBWzklXAAuX3RKmcR2MJcvg06Rp8VQPHP+
+4q6fVrXiwhz+6IqBcfJ87co+3jtAwofG00GRn1y5/Vva6Dsf4nVLFflneY+YsTBW
+tWz5G5V7ZduSUdr7EsYiUZB11CFjs/FKnE6DJ5+OGce7blbSoFDEGW+B0VXZ7NJO
+fItRT5BhW0j6uxZp1n1rTeai5nhDa6Z1o4xSWTKFcS0CkWBmxk3Fr30PgMZBcVRx
+BRwJT7pVWbR5U4hFVAdqxEEfEi03W4t7Ny0OHFkIVyPPxl40bu8+/6Lav4nTyuQh
+M6baQ8oikJHdNLFoY4oFGbt8Xu2f7LdPFFx6+awcKP3MLOhOCgQf9G19dmnysc59
+PPwzziobGTS4ePiInddpvGTiZi+Q9c/JFJyWYwVDuLJ9/GX4DSO5u7iwfYL681in
+6s9isg0xQVY7O2aEXXK27p4D+ejx9iVXuy4cqYNIj1ZolnSlf/2uaMH1s6p8h+Rj
+Yui3j+PkqbGISWxD7kq7L4MkENhegMawM0DuZIcn5P4xvRJc59yqSF2XbnO/W1p6
+RjrxviiedM55Tu49+Nnh/TyVGH16faOvWdFXhvcKK6kctBX7Tfo=
+=g2T+
+-----END PGP SIGNATURE-----
+
+--Uuwevuhf7j7y0M7M--
