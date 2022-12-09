@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711EC647BB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470A6647BB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiLIBxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S230111AbiLIBx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:53:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiLIBxm (ORCPT
+        with ESMTP id S230022AbiLIBxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 20:53:42 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4E5A0FB4
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE3A98961
         for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:53:40 -0800 (PST)
 Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NSv8Q6DYWzqSyF;
-        Fri,  9 Dec 2022 09:49:26 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSvDF6rh9zRpnP;
+        Fri,  9 Dec 2022 09:52:45 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -28,9 +28,11 @@ To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
 CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
 Subject: [PATCH] mm: hwposion: support recovery from ksm_might_need_to_copy()
-Date:   Fri, 9 Dec 2022 10:10:40 +0800
-Message-ID: <20221209021041.192835-1-wangkefeng.wang@huawei.com>
+Date:   Fri, 9 Dec 2022 10:10:41 +0800
+Message-ID: <20221209021041.192835-2-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20221209021041.192835-1-wangkefeng.wang@huawei.com>
+References: <20221209021041.192835-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
