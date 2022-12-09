@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83476487A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A426D6487A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiLIRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S230101AbiLIRVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiLIRU1 (ORCPT
+        with ESMTP id S229942AbiLIRV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:20:27 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DFE2EA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:20:27 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5C093320090C;
-        Fri,  9 Dec 2022 12:20:26 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 09 Dec 2022 12:20:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670606425; x=1670692825; bh=S6n3+92phS
-        riW5IJgU6qkLeUckJ6rE5IY/sxC2TcWdw=; b=SaMMIDY+Kqqf4UEGxr2vHWonpE
-        Cpm9Qr9SoGVplbduanDI00Eom4zkyZWEU/T0vOJjDz57nqKDmanZHKMthDPEjrIf
-        ralOvaBvvpxLwmLCrxZb/Ondd++afU8Jprrj/T02qMGO1EwcWINfhHg6Cq1hBmff
-        QIv+5H+b2tnyfQWQmo8Cb5SJonEKGgEGTxQGt9IlrI+NJ9/sgjBTERB7U35nSMIz
-        1Qbnh44F1R/ZADAq/6w7hfaLoJKIP7Oe15sgO7WhlZUJtuxQydOyRMthKSTVlagn
-        gBPzFpPlvW/GrJ2qiDp+afsGqXyB1rGbvHYEuC7m6VZQJOpKPOnGrI6/VHuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670606425; x=1670692825; bh=S6n3+92phSriW5IJgU6qkLeUckJ6
-        rE5IY/sxC2TcWdw=; b=u5aGvc8pfx7KCZ3lvbn8/LWvpUU4kodUdfLbVv4JZltg
-        Q5L4PS7KFpMRjh6mqq+3L74kgfXCepgrByPAqcL/Os6Sy5iFzH9GppTLApPv9u0i
-        exbohzFam1d8dq7bkwfeh8VZ4RHE6U0HR0aQPsN6OuvYWsXktjAUGuX4iqeijhsx
-        jBq85NXOJWTUCgslrRGuc4qLYIj5I0XNk4kLe4k/65/d5x9zGucB3OV7HnXaDTbg
-        96f6CnqsnGKhncqhcxs61i5xspmxCZ8kCKSGvhWPDBxtFGnZR7FuoRByZvgowlyx
-        lDOuAE7PIndc/Ohgw6NiEk85hR4KuAYIaazITr871w==
-X-ME-Sender: <xms:WW6TYzHuOi3jsUff-LpN-W2kCc-uGui5PtGww7dXONJ9fGW_2JMpIQ>
-    <xme:WW6TYwWNOY9qoUYL8w68JS-IfnHyh4r-dW0fawtzvc_skKmj4Ld_b1RfNLmDcTsbV
-    amW4AkUYcKD40hIZ3g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdeljecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:WW6TY1LhL_7eUWCWd52dpLG-oX0FPcEQyWIvMz7kMCcyZR4PnJiR9w>
-    <xmx:WW6TYxEITleL3aCHuaQFzK_c4_dYmzMbpR6bYVNCTxFa6DYOo8G9bA>
-    <xmx:WW6TY5V5aLHqIbOps8THZuMUKX1j5ODVA7_V7qyT7uy-njWXIS9-hg>
-    <xmx:WW6TY4ek3YyJObHplFuNXg7JWbqPOu25dqyMlyON4D2fpqeTHXBs_Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C293DB60086; Fri,  9 Dec 2022 12:20:25 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <4f256035-0959-4c00-a263-6720139c6a7d@app.fastmail.com>
-In-Reply-To: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com>
-References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com>
-Date:   Fri, 09 Dec 2022 18:20:05 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL 2/4] SoC code updates for 6.2
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Fri, 9 Dec 2022 12:21:27 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913772EA;
+        Fri,  9 Dec 2022 09:21:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670606486; x=1702142486;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=es03jUb21Au7MMVmLApxqNfNUzozxZZoj1pIAiN6hPI=;
+  b=IqkSGD6Vi5Dr4f8VnRyHWkdgoEHLoSOEoICeCGQmbLOnzSr++BV4iNOr
+   sx+rreDl3xQbgmdd8STYJnizekGi0Xvc6Grx0mLZZwdsHgsozcgpcu6gl
+   YaMuivqWboWViC82Xkf3ld4UmA2O9IqBWS/JZ4x6J/Rxz7VQZj4wTudua
+   09L6WIbV+z7L0WyNoOJVmo+thwHd5ELtCb3gjg+eSEaswve4L4JWgHR0B
+   jbwHJcVS7esXeYAtMTYbvE0XhNNR4Jwp5hiPf1ZtXNqkTeo5lONma69GB
+   1HYfVrZ7WquyCYUCPnvu4nTYDwN/hIvSBEA7JdpiuY3kNnKbremqhseTy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="381810991"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="381810991"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:21:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="710955973"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="710955973"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.95.157]) ([10.212.95.157])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:21:12 -0800
+Message-ID: <725e2e66-36ec-3cb5-48c8-b16b5afaaf52@intel.com>
+Date:   Fri, 9 Dec 2022 10:21:10 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH] cxl/acpi: fix null dereference on probe for missing
+ ACPI_COMPANION()
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, alison.schofield@intel.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com
+Cc:     dave@stgolabs.net, a.manzanares@samsung.com,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209062919.1096779-1-mcgrof@kernel.org>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221209062919.1096779-1-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,85 +66,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
-  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
 
-are available in the Git repository at:
+On 12/8/2022 11:29 PM, Luis Chamberlain wrote:
+> Simply loading cxl_test ends up triggering a null pointer dereference
+> on next-20221207, and it happens because the fetched ACPI_COMPANION() can
+> end up not correct / missing. As with other code which uses ACPI_COMPANION()
+> (drivers/acpi/device_pm.c comes to mind) be defensive over the assumption
+> the companion is always present and bail right away.
+> 
+> This can be easily reproduced with kdevops [0] with linux next-20221207 [1]
+> and cxl enabled workflows:
+> 
+> make menuconfig      # enable cxl and linux-next
+> make                 # sets up variables, builds qemu from source
+> make linux           # builds and install next-20221207
+> make cxl             # installs cxl tool
+> make cxl-test-probe  # loads cxl_test
+> 
+> The oops:
+> 
+>   # modprobe cxl_test
+> No TPM handle discovered.
+> failed to open file /etc/ndctl/keys/nvdimm-master.blob: No such file or directory
+> 
+> [0] https://github.com/linux-kdevops/kdevops
+> [1] https://github.com/linux-kdevops/kdevops/blob/master/playbooks/roles/bootlinux/templates/config-next-20221207
+> 
+> cxl_mock: loading out-of-tree module taints kernel.
+> cxl_mock: loading test module taints kernel.
+> cxl_mem mem0: at cxl_root_port.0 no parent for dport: platform
+> cxl_mem mem1: at cxl_root_port.1 no parent for dport: platform
+> cxl_mem mem2: at cxl_root_port.2 no parent for dport: platform
+> cxl_mem mem3: at cxl_root_port.3 no parent for dport: platform
+> cxl_mem mem4: at cxl_root_port.0 no parent for dport: platform
+> cxl_mem mem5: at cxl_root_port.1 no parent for dport: platform
+> cxl_mem mem6: at cxl_root_port.2 no parent for dport: platform
+> cxl_mem mem7: at cxl_root_port.3 no parent for dport: platform
+> cxl_mem mem8: at cxl_root_port.4 no parent for dport: platform
+> cxl_mem mem9: at cxl_root_port.4 no parent for dport: platform
+> cxl_mem mem10: CXL port topology not found
+> BUG: kernel NULL pointer dereference, address: 00000000000002c0
+>   #PF: supervisor read access in kernel mode
+>   #PF: error_code(0x0000) - not-present page
+> PGD 0 P4D 0
+> Oops: 0000 [#1] PREEMPT SMP PTI
+> CPU: 4 PID: 1644 Comm: systemd-udevd Kdump: loaded Tainted: G           O     N 6.1.0-rc8-next-20221207 #5
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.1-0-g3208b098f51a-prebuilt.qemu.org 04/01/2014
+> RIP: 0010:cxl_acpi_probe+0xeb/0x2f0 [cxl_acpi]
+> Code: ff ff ff 48 c7 40 08 ff ff ff ff 48 c7 40 18 00 02 00 00 e8 57 29 fd ff 49 89 c7 41 89 c4 48 3d 00 f0 ff ff 0f 87 73 ff ff ff <49> 8b bd c0 02 00 00 48 c7 c1 c0 64 e4 c0 48 89 c2 31 f6 e8 bd f1
+> RSP: 0018:ffffbe6d008b7c30 EFLAGS: 00010287
+> RAX: ffff97a7c6e01000 RBX: ffff97a7c51fd810 RCX: 0000000000000000
+> RDX: 0000000000000001 RSI: 0000000000000282 RDI: 00000000ffffffff
+> RBP: 0000000000000000 R08: ffff97a7c51fdaa8 R09: 0000000000000010
+> R10: 0000000000000002 R11: 00000000000013c7 R12: 00000000c6e01000
+> R13: 0000000000000000 R14: ffff97a7d9c653a8 R15: ffff97a7c6e01000
+> FS:  00007f34b038ed00(0000) GS:ffff97a83bd00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00000000000002c0 CR3: 0000000102f7e005 CR4: 0000000000770ee0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> PKRU: 55555554
+> Call Trace:
+>   <TASK>
+>   ? kernfs_create_link+0x5d/0xa0
+>   platform_probe+0x41/0x90
+>   really_probe+0xdb/0x380
+>   ? pm_runtime_barrier+0x50/0x90
+>   __driver_probe_device+0x78/0x170
+>   driver_probe_device+0x1f/0x90
+>   __driver_attach+0xce/0x1c0
+>   ? __pfx___driver_attach+0x10/0x10
+>   bus_for_each_dev+0x73/0xc0
+>   bus_add_driver+0x1ae/0x200
+>   driver_register+0x89/0xe0
+>   ? __pfx_init_module+0x10/0x10 [cxl_acpi]
+>   do_one_initcall+0x43/0x220
+>   ? kmalloc_trace+0x26/0x90
+>   do_init_module+0x4a/0x1f0
+>   __do_sys_init_module+0x17f/0x1b0
+>   do_syscall_64+0x37/0x90
+>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> RIP: 0033:0x7f34b061baaa
+> Code: 48 8b 0d 59 83 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 af 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 26 83 0c 00 f7 d8 64 89 01 48
+> RSP: 002b:00007fff6a198408 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
+> RAX: ffffffffffffffda RBX: 00005635afc7e5e0 RCX: 00007f34b061baaa
+> RDX: 00007f34b07a5efd RSI: 0000000000060a29 RDI: 00005635afdd6510
+> RBP: 00007f34b07a5efd R08: 000000000001f5b3 R09: 0000000000000000
+> R10: 000000000000eb81 R11: 0000000000000246 R12: 00005635afdd6510
+> R13: 0000000000000000 R14: 00005635afca6f40 R15: 00005635af874e50
+>   </TASK>
+> Modules linked in: cxl_acpi(+) cxl_pmem cxl_mem cxl_port cxl_mock_mem(ON) cxl_test(ON) cxl_mock(ON) cxl_core libnvdimm cbc encrypted_keys kvm_intel kvm 9p netfs irqbypass crct10dif_pclmul ghash_clmulni_intel sha512_ssse3 sha512_generic aesni_intel crypto_simd cryptd cirrus drm_shmem_helper 9pnet_virtio virtio_balloon i6300esb drm_kms_helper joydev evdev button serio_raw drm configfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 btrfs blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c crc32c_generic raid1 raid0 md_mod virtio_net net_failover virtio_blk failover psmouse virtio_pci virtio_pci_legacy_dev nvme virtio_pci_modern_dev crc32_pclmul nvme_core virtio crc32c_intel t10_pi virtio_ring crc64_rocksoft crc64
+> 
+> And gdb:
+> 
+> (gdb) l *(cxl_acpi_probe+0xeb)
+> 0xa8b is in cxl_acpi_probe (tools/testing/cxl/../../../drivers/cxl/acpi.c:648).
+> 643
+> 644             root_port = devm_cxl_add_port(host, host, CXL_RESOURCE_NONE, NULL);
+> 645             if (IS_ERR(root_port))
+> 646                     return PTR_ERR(root_port);
+> 647
+> 648             rc = bus_for_each_dev(adev->dev.bus, NULL, root_port,
+> 649                                   add_host_bridge_dport);
+> 650             if (rc < 0)
+> 651                     return rc;
+> 652
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-6.2
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 
-for you to fetch changes up to 8b7f4dd73879598ac6876753732e158055d8b671:
-
-  Merge tag 'ti-keystone-soc-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/soc (2022-11-23 13:05:06 +0100)
-
-----------------------------------------------------------------
-SoC code updates for 6.2
-
-This time there are only fairly minor cleanups across the i.MX, ixp4xx,
-ux500 and renesas platforms. The only notable update is a change to
-the keystone2 platform to switch switch it over to standard PSCI SMP
-bringup, which apparently was present in the shipped firmware almost
-from the start.
-
-----------------------------------------------------------------
-Andrew Davis (1):
-      ARM: keystone: Replace platform SMP with PSCI
-
-Arnd Bergmann (6):
-      Merge tag 'ux500-soc-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik into arm/soc
-      Merge tag 'renesas-arm-soc-for-v6.2-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/soc
-      Merge tag 'ixp4xx-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik into arm/soc
-      Merge tag 'imx-soc-6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/soc
-      Merge tag 'renesas-riscv-soc-for-v6.2-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/soc
-      Merge tag 'ti-keystone-soc-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/soc
-
-Christoph Niedermaier (1):
-      MAINTAINERS: Add DHCOR to the DH electronic i.MX6 board support
-
-Geert Uytterhoeven (2):
-      ARM: mxs: Remove unneeded #include <linux/pinctrl/consumer.h>
-      ARM: imx3: Remove unneeded #include <linux/pinctrl/machine.h>
-
-Jason A. Donenfeld (1):
-      ARM: ux500: do not directly dereference __iomem
-
-Lad Prabhakar (4):
-      soc: renesas: Kconfig: Explicitly select GPIOLIB and PINCTRL config under SOC_RENESAS
-      ARM: shmobile: Drop selecting GPIOLIB and PINCTRL
-      arm64: renesas: Drop selecting GPIOLIB and PINCTRL
-      riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
-
-Linus Walleij (3):
-      ARM: ux500: Drop unused register file
-      ARM: ixp4xx: Remove unused static map
-      ARM: ixp4xx: Remove unused debug iomap
-
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to ixp4xx clean-up
-
-wangjianli (1):
-      arm/mach-ux500: fix repeated words in comments
-
- MAINTAINERS                       |   5 +-
- arch/arm/mach-imx/mm-imx3.c       |   1 -
- arch/arm/mach-ixp4xx/ixp4xx-of.c  |  42 --------
- arch/arm/mach-keystone/Makefile   |   4 +-
- arch/arm/mach-keystone/keystone.c |   2 -
- arch/arm/mach-keystone/keystone.h |   5 -
- arch/arm/mach-keystone/platsmp.c  |  41 --------
- arch/arm/mach-keystone/smc.S      |  26 -----
- arch/arm/mach-mxs/mach-mxs.c      |   1 -
- arch/arm/mach-shmobile/Kconfig    |   2 -
- arch/arm/mach-ux500/cpu-db8500.c  |   1 -
- arch/arm/mach-ux500/db8500-regs.h | 195 --------------------------------------
- arch/arm/mach-ux500/platsmp.c     |   2 -
- arch/arm/mach-ux500/pm.c          |   4 +-
- arch/arm64/Kconfig.platforms      |   2 -
- arch/riscv/Kconfig.socs           |   5 +
- drivers/soc/renesas/Kconfig       |   2 +
- drivers/soc/ux500/ux500-soc-id.c  |  10 +-
- 18 files changed, 15 insertions(+), 335 deletions(-)
- delete mode 100644 arch/arm/mach-keystone/platsmp.c
- delete mode 100644 arch/arm/mach-keystone/smc.S
- delete mode 100644 arch/arm/mach-ux500/db8500-regs.h
+> ---
+> 
+> Note: kdevops also suports now the target:
+> 
+>    make cxl-test-meson
+> 
+> But that does not *at least* crash the kernel although the tests fail too...
+> This is likely a misconfiguration of some sort, but the same kernel
+> works fine when I enable a Type 3 memory device (also supported on
+> kdevops via CONFIG_QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1). This test was run
+> without that enabled, so a naked cxl system.
+> 
+> Even if it *was* a mis-configuration, such things should not crash the kernel.
+> 
+>   drivers/cxl/acpi.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index ad0849af42d7..cf5d1a455efc 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -633,6 +633,9 @@ static int cxl_acpi_probe(struct platform_device *pdev)
+>   	struct acpi_device *adev = ACPI_COMPANION(host);
+>   	struct cxl_cfmws_context ctx;
+>   
+> +	if (!adev)
+> +		return -ENODEV;
+> +
+>   	device_lock_set_class(&pdev->dev, &cxl_root_key);
+>   	rc = devm_add_action_or_reset(&pdev->dev, cxl_acpi_lock_reset_class,
+>   				      &pdev->dev);
