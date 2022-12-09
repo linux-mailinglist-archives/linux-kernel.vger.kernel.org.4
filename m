@@ -2,117 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7087664899C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8AB6489A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLIUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 15:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S229571AbiLIUpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 15:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiLIUi6 (ORCPT
+        with ESMTP id S229538AbiLIUpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 15:38:58 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ADDA4314;
-        Fri,  9 Dec 2022 12:38:56 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 349A63F1EB;
-        Fri,  9 Dec 2022 21:38:54 +0100 (CET)
-Date:   Fri, 9 Dec 2022 21:38:51 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
- peripheral
-Message-ID: <20221209203851.sy37qqzczoaruuyb@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
- <36eb03e8-aace-f7ce-edc8-53715021c0ea@linaro.org>
- <20221208112055.m7sqg3ysxzskqjp4@SoMainline.org>
- <5740737.DvuYhMxLoT@g550jk>
+        Fri, 9 Dec 2022 15:45:12 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975D1ABA29
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:45:05 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p24so6114314plw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 12:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vrO0N2BhoytOAhhhHfUhdN91u6TruVaipT5ISV1vaYc=;
+        b=f95FMmTEKSCikEYcOfIHQeZ11wft/M7xtxOLWqo9ddBFll+PEIhNuP8Altnit2pg7l
+         zyRhiE+JRDfj5dB8/WxDXf1drX13fZ1eOh7rba0AIhbehJO0Y9D2Isb+V0FtO1vE8xtB
+         hYMCbXb+6k8JyDHQhnThQvX/+T5zbEXkZxYWQBSqRWCBdOVJmssGwx1Y5IXZJw/6XRzs
+         S3ZdcDYHIQuWdKlJwLHVsg5FbzwD0u0eYrShli67IQw7Q2mlLjgxmxsG0ncnWSJMMZVg
+         KepJ3JyFSc3873pExBYAY27kO9Gx8PluA0Mbdjh+rOeLvfI90C98illSL1VVYvLRtJsW
+         Xzfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vrO0N2BhoytOAhhhHfUhdN91u6TruVaipT5ISV1vaYc=;
+        b=0cFf9XQLM16h4hdsboGK++aLn+EYiYpjPe1oCNI+qwmmM3pqCdQDLBo0VzRuIUizYA
+         Z5x1d0vs4yY++U32y0EZsu4shdnZKsBUjKwFk74czv/lhGCHcgJVeOFKrEX28/wh+4ci
+         IrmcVrvGNPHQRToCndYXA94TB6TOLErUPAdCTBX1T5qVORdJZua4zdor/nCSUu06BVsA
+         hEXF0d6dTBOqUKa8r/Fzu+6J3DKhTr/mreUX7lhYs3J0lGMeZYByuc+JnRcWs2azg6Ir
+         m5R2hoyh+U45chDWTz4jR3M4uQ/GwraNhjPRjkqEyMTcarA4N1M+hpZPrDPZkyrOx2E3
+         5epw==
+X-Gm-Message-State: ANoB5pkMCC3ieGxTf2GPGKefN+8zlv6fWKnV1wYuE+QWs++d8galLWIZ
+        1QsmL68IKL3YN5ZLfViTZbhKfQ==
+X-Google-Smtp-Source: AA0mqf5qINBTPYAP4qeg1UzaZ6wwLAd0BwvCi3JbF60z/oyrT5V6BtufJ7TAxCe0PKR19lvup9WOtA==
+X-Received: by 2002:a05:6a20:baa3:b0:9d:c38f:9bdd with SMTP id fb35-20020a056a20baa300b0009dc38f9bddmr20370pzb.2.1670618705014;
+        Fri, 09 Dec 2022 12:45:05 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id y10-20020aa793ca000000b0057555d35f79sm1614631pff.101.2022.12.09.12.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 12:45:04 -0800 (PST)
+Date:   Fri, 9 Dec 2022 20:45:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] KVM: selftests: Correctly initialize the VA space
+ for TTBR0_EL1
+Message-ID: <Y5OeTeq55OgBJbjT@google.com>
+References: <20221209015307.1781352-1-oliver.upton@linux.dev>
+ <20221209015307.1781352-5-oliver.upton@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5740737.DvuYhMxLoT@g550jk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221209015307.1781352-5-oliver.upton@linux.dev>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-09 17:54:50, Luca Weiss wrote:
-> On Donnerstag, 8. Dezember 2022 12:20:55 CET Marijn Suijten wrote:
-> > On 2022-12-08 11:23:17, Krzysztof Kozlowski wrote:
-> > > On 08/12/2022 11:12, Marijn Suijten wrote:
-> > > > On 2022-12-04 17:19:05, Luca Weiss wrote:
-> > > >> On Freitag, 2. Dezember 2022 10:36:58 CET Marijn Suijten wrote:
-> > > >> [..]
-> > > >> 
-> > > >> So the way this patch does it is good or does it need changes?
-> > > > 
-> > > > Except the typo(s?) pointed out in my first reply, this is good to go.
-> > > > 
-> > > > If we stick with generic adc-chan node names that should be documented
-> > > > in the bindings IMO, as it is currently only captured implicitly in the
-> > > > examples.  Krzysztof, what is your thought on this?
-> > > 
-> > > If I understand correctly, the outcome of other discussion [1] was to
-> > > use labels and generic node names.
-> > 
-> > The outcome was to use labels in the driver and disregard node names as
-> > the new fwnode API clobbers those names by including the @xx register
-> > bit.
-> > 
-> > (I'll follow up with Jonathan whether or not to remove the current
-> > fallback to node names, as [1] ended up discussing many different issues
-> > and nits)
-> > 
-> > > In such case the patch was correct
-> > > (except other comments).
-> > 
-> > As a consequence it _doesn't matter_ how nodes are named, and we _can_
-> > use generic node names.  My question for you is whether we should, and
-> > if we should lock that in via dt-bindings to guide everyone towards
-> > using labels (which i did _not_ do in the recently-landed PM8950 and
-> > PM6125, but will send followup for).
+On Fri, Dec 09, 2022, Oliver Upton wrote:
+> An interesting feature of the Arm architecture is that the stage-1 MMU
+> supports two distinct VA regions, controlled by TTBR{0,1}_EL1. As KVM
+> selftests on arm64 only uses TTBR0_EL1, the VA space is constrained to
+> [0, 2^(va_bits)). This is different from other architectures that
+> allow for addressing low and high regions of the VA space from a single
+> page table.
 > 
-> FYI the patch has been merged already and is now in linux-next
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm64/boot/dts/qcom/pmi8950.dtsi?id=0d97fdf380b478c358c94f50f1b942e87f407b9b
+> KVM selftests' VA space allocator presumes the valid address range is
+> split between low and high memory based the MSB, which of course is a
+> poor match for arm64's TTBR0 region.
 > 
-> If you have any changes that need to be done please send a follow-up patch.
+> Add a helper that correctly handles both addressing schemes with a
+> comment describing each.
+> 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
 
-Unfortunately saw that today as well, well after sending this reply.  I
-would've loved to correct the pmi8950_gpio label _gpios before someone
-starts relying on it in followup patches.
+Thanks much!  Looks awesome, especially the comment!
 
-Fixing the v -> mv typo isn't hard though, I'll send a followup patch
-regardless.
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-- Marijn
+>  .../selftests/kvm/include/kvm_util_base.h     |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 49 ++++++++++++++++---
+>  2 files changed, 44 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 6cd86da698b3..b193863d754f 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -103,6 +103,7 @@ struct kvm_vm {
+>  	struct sparsebit *vpages_mapped;
+>  	bool has_irqchip;
+>  	bool pgd_created;
+> +	bool has_split_va_space;
+>  	vm_paddr_t ucall_mmio_addr;
+>  	vm_paddr_t pgd;
+>  	vm_vaddr_t gdt;
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index a256ec67aff6..53d15f32f220 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -186,6 +186,43 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+>  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+>  	       "Missing new mode params?");
+>  
+> +/*
+> + * Initializes vm->vpages_valid to match the canonical VA space of the
+> + * architecture.
+> + *
+> + * Most architectures split the range addressed by a single page table into a
+> + * low and high region based on the MSB of the VA. On architectures with this
+> + * behavior the VA region spans [0, 2^(va_bits - 1)), [-(2^(va_bits - 1), -1].
+> + *
+> + * arm64 is a bit different from the rest of the crowd, as the low and high
+> + * regions of the VA space are addressed by distinct paging structures
+> + * (TTBR{0,1}_EL1).
+
+Oooh, they're different CR3s in x86 terminology?
