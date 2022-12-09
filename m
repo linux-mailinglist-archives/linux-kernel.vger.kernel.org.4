@@ -2,194 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8335647E6C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36163647E6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLIHXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S229988AbiLIHZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiLIHXO (ORCPT
+        with ESMTP id S229721AbiLIHZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:23:14 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0A5B1F4;
-        Thu,  8 Dec 2022 23:23:13 -0800 (PST)
+        Fri, 9 Dec 2022 02:25:17 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BDA31369;
+        Thu,  8 Dec 2022 23:25:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670570593; x=1702106593;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XPPDfsuC7Y1m/jmxmWIq0LVJoHQFxJM6TafM/RGZGhM=;
-  b=WRi5c4+wWVgB/hjIRBONBAEQ1Wn6VwQG89J5DN7wPKQk5RZof0rH5VlX
-   KUz+IkbYh/UAVF3u0aTpQwz15vyio5TyfbdLfZDwJT3A+C2DUGkZoQGIe
-   +4/smAzJdhWzR2L0aJaAPx1H1zATdU4ROqLiHn70fgyE90h9FsVTwB27w
-   MgJ7B+aX/19F4Pd7hMcS01vEGUVR7rILDCYMNJH2Qh/to0gh/nExoD1Jx
-   6wpQ0KZ6ZodmjV41PWFz9eSHx8fkBm5+pqb9fqfe0BBYN7b951kmZXpIB
-   eH29hAj+FYLgvXlMCk8NbzkH1OiNq0M3be0CXu+TGNqVij1Fu7vRIVF7u
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670570715; x=1702106715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ykkM8NLWw+5nNSbAY0ln8lVzQVMy9Bxnqgv/9AbJTco=;
+  b=m9CyN3S3cZIrTLm6S8VDGGDwd+AUXRcJqJSmR0sj/6HGPVL/yljePfEI
+   vOoeCAP6QUrV4bi0DCh65jLgZMO/V34QJgwfRgfqPeimvhPBB8s14IQ9G
+   xj/2wFtuhwc0mF4HB2xC/N439BSYQL74dV7ByahBKLyjwrADWMM2T00ml
+   03onGUavIi6uKVoI/K9/6Es2CG3gYnO2ZPKtFKM0GCdzX6spBf+DtsmLF
+   xc/xrlFHMVt70Re+1lU7gYVCNLF3p/8ztcMf2Pci0dz33FL/N8Cv6mGVu
+   EvlK1LGIetlNPgTbzewpC+mJ6Lmk39TsEsB+idTITQEm2a7SsajcClMoA
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="381707921"
 X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="381707921"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 23:23:11 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="715935677"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="715935677"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.86])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 23:23:08 -0800
-Message-ID: <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
-Date:   Fri, 9 Dec 2022 09:23:05 +0200
+   d="scan'208";a="127292528"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 00:25:14 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 00:25:12 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 9 Dec 2022 00:25:07 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <richardcochran@gmail.com>, <ceggers@arri.de>
+Subject: [Patch net-next v3 00/13] net: dsa: microchip: add PTP support for KSZ9563/KSZ8563 and LAN937x
+Date:   Fri, 9 Dec 2022 12:54:24 +0530
+Message-ID: <20221209072437.18373-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
-Content-Language: en-US
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
- <20221205105931.410686-4-vadym.kochan@plvision.eu>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221205105931.410686-4-vadym.kochan@plvision.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 12:59, Vadym Kochan wrote:
-> There is a limitation on AC5 SoC that mmc controller
-> can't have DMA access over 2G memory, so use SDMA with
-> a bounce buffer. Swiotlb can't help because on arm64 arch
-> it reserves memblock's at the end of the memory.
-> 
-> Additionally set mask to 34 bit since on AC5 SoC RAM starts
-> at 0x2_00000000.
+KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
+protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
+implementation has been made common for the KSZ switches.  KSZ9563 does not
+support two step timestamping but LAN937x supports both.  Tested the 1step &
+2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
 
-Can you explain more about how a 34-bit DMA mask works when
-SDMA only supports 32-bit addresses?
+This patch series is based on the Christian Eggers PTP support for KSZ9563.
+Applied the Christian patch and updated as per the latest refactoring of KSZ
+series code. The features added on top are PTP packet Interrupt
+implementation based on nested handler, LAN937x two step timestamping and
+programmable per_out pins.
 
-> 
-> Co-developed-by: Elad Nachman <enachman@marvell.com>
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
->  drivers/mmc/host/sdhci-xenon.h |  3 ++-
->  2 files changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-> index 08e838400b52..5f3db0425674 100644
-> --- a/drivers/mmc/host/sdhci-xenon.c
-> +++ b/drivers/mmc/host/sdhci-xenon.c
-> @@ -13,7 +13,9 @@
->  
->  #include <linux/acpi.h>
->  #include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
->  #include <linux/ktime.h>
-> +#include <linux/mm.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/pm.h>
-> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
->  		return pltfm_host->clock;
->  }
->  
-> +static int xenon_set_dma_mask(struct sdhci_host *host)
-> +{
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
-> +	struct mmc_host *mmc = host->mmc;
-> +	struct device *dev = mmc_dev(mmc);
-> +
-> +	if (priv->hw_version == XENON_AC5) {
-> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-> +
-> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
-> +	}
-> +
-> +	return sdhci_set_dma_mask(host);
-> +}
-> +
->  static const struct sdhci_ops sdhci_xenon_ops = {
->  	.voltage_switch		= xenon_voltage_switch,
->  	.set_clock		= sdhci_set_clock,
-> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
->  	.reset			= xenon_reset,
->  	.set_uhs_signaling	= xenon_set_uhs_signaling,
->  	.get_max_clock		= xenon_get_max_clock,
-> +	.set_dma_mask		= xenon_set_dma_mask,
->  };
->  
->  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
-> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
->  	xenon_disable_sdhc(host, sdhc_id);
->  }
->  
-> +static int xenon_ac5_probe(struct sdhci_host *host)
-> +{
-> +	struct sysinfo si;
-> +
-> +	si_meminfo(&si);
-> +
-> +	if ((si.totalram * si.mem_unit) > SZ_2G)
-> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
-> +
-> +	return 0;
-> +}
-> +
->  static int xenon_probe(struct platform_device *pdev)
->  {
->  	struct sdhci_pltfm_host *pltfm_host;
-> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	if (priv->hw_version == XENON_AC5) {
-> +		err = xenon_ac5_probe(host);
-> +		if (err)
-> +			goto err_clk_axi;
-> +	}
-> +
->  	err = mmc_of_parse(host->mmc);
->  	if (err)
->  		goto err_clk_axi;
-> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
->  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
->  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
->  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
-> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
-> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
-> index 3e9c6c908a79..0460d97aad26 100644
-> --- a/drivers/mmc/host/sdhci-xenon.h
-> +++ b/drivers/mmc/host/sdhci-xenon.h
-> @@ -57,7 +57,8 @@ enum xenon_variant {
->  	XENON_A3700,
->  	XENON_AP806,
->  	XENON_AP807,
-> -	XENON_CP110
-> +	XENON_CP110,
-> +	XENON_AC5
->  };
->  
->  struct xenon_priv {
+Link: https://www.spinics.net/lists/netdev/msg705531.html
+
+Patch v2-> v3
+- used port_rxtstamp for reconstructing the absolute timestamp instead of
+tagger function pointer.
+- Reverted to setting of 802.1As bit.
+
+Patch v1 -> v2
+- GPIO perout enable bit is different for LAN937x and KSZ9x. Added new patch
+for configuring LAN937x programmable pins.
+- PTP enabled in hardware based on both tx and rx timestamping of all the user
+ports.
+- Replaced setting of 802.1AS bit with P2P bit in PTP_MSG_CONF1 register.
+
+RFC v2 -> Patch v1
+- Changed the patch author based on past patch submission
+- Changed the commit message prefix as net: dsa: microchip: ptp
+Individual patch changes are listed in correspondig commits.
+
+RFC v1 -> v2
+- Added the p2p1step timestamping and conditional execution of 2 step for
+  LAN937x only.
+- Added the periodic output support
+
+Arun Ramadoss (5):
+  net: dsa: microchip: ptp: add 4 bytes in tail tag when ptp enabled
+  net: dsa: microchip: ptp: enable interrupt for timestamping
+  net: dsa: microchip: ptp: add support for perout programmable pins
+  net: dsa: microchip: ptp: lan937x: add 2 step timestamping
+  net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
+
+Christian Eggers (8):
+  net: dsa: microchip: ptp: add the posix clock support
+  net: dsa: microchip: ptp: Initial hardware time stamping support
+  net: dsa: microchip: ptp: manipulating absolute time using ptp hw
+    clock
+  net: ptp: add helper for one-step P2P clocks
+  net: dsa: microchip: ptp: add packet reception timestamping
+  net: dsa: microchip: ptp: add packet transmission timestamping
+  net: dsa: microchip: ptp: move pdelay_rsp correction field to tail tag
+  net: dsa: microchip: ptp: add periodic output signal
+
+ MAINTAINERS                             |    1 +
+ drivers/net/dsa/microchip/Kconfig       |   11 +
+ drivers/net/dsa/microchip/Makefile      |    5 +
+ drivers/net/dsa/microchip/ksz_common.c  |   44 +-
+ drivers/net/dsa/microchip/ksz_common.h  |   48 +
+ drivers/net/dsa/microchip/ksz_ptp.c     | 1183 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_ptp.h     |   86 ++
+ drivers/net/dsa/microchip/ksz_ptp_reg.h |  142 +++
+ include/linux/dsa/ksz_common.h          |   53 +
+ include/linux/ptp_classify.h            |   71 ++
+ net/dsa/tag_ksz.c                       |  213 +++-
+ 11 files changed, 1839 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.c
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.h
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp_reg.h
+ create mode 100644 include/linux/dsa/ksz_common.h
+
+
+base-commit: 0bdff1152c2496acf29930ec9b3c3cd7790b3f68
+-- 
+2.36.1
 
