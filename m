@@ -2,145 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210F8647C80
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203CB647C82
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiLIDF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S229838AbiLIDLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLIDFY (ORCPT
+        with ESMTP id S229553AbiLIDLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:05:24 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2111.outbound.protection.outlook.com [40.107.93.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E02880C5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:05:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TevqWHsU1BTKZCeAyNMej23PfrfhPNnRku4nx8BaqNA+IRgSbGlrj4NMpgVLt3vKqrH4jmPZF9d84nDP3smwsIq9rUD9n5jjNaP68TX390nSprLIfOmDTlon/4sVEAMNHVzPI2wWdYpbaHuHP18QzlaWNFmwaIyYbp3skozt+cXEdAa2aCAsRK3xSY2/a/AVg7zwLU2Ua1hDqYFXqCRZY049x5h+AzJFLoDqTFfEizjAvC9CT/fJulGZxqJUC2AlUY4qvYlSqMkaBNaDTHwxGrzPZu6FxDtLxozJ5VoLCJbhBlwycJuf2OtPxmE1FKOk15pquz/uFvADTCVgMAZVEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqGyDSwzXRyLq7yK+EB7/leGdo8XpIQvgV5S3ZrWPHk=;
- b=i+CgOvvxsO48z9fZXPUb1q6SPaqvK3Uq6lGlUygrcr0tyc3RroKWW2Epjuu5xttBzMua10NkReHV9nLEWHKTAEcPcQsKDPwRqgkXQcPaa89uKbuKfaQIEeB9lPk19s0uz3HAzyy/CktMXTvfmUfr86sXq55j9I1HGKRH8uTbPrhUkxBVb3FkDXvj+glDW6Uewk8kQIx1qCOV+rX2pt02XKgcKI1i2uS3uB4ATWG+t9Y9GvzsWJzCvmQVBveT9Rz4vZiD+9X/Ln+ZNxXF3LdE62roUwJkp4+5pc8XN5/9sNK78gWxiCTAk1QFJsQlte/Y7BgsDbKTjjbd9+rKhLYeIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqGyDSwzXRyLq7yK+EB7/leGdo8XpIQvgV5S3ZrWPHk=;
- b=Q1+Iwttfwo43IzudD314zgZxCuSqq4eGAgQn2vUHrJpen+zKrO55RU8f9oVulBKZZkVnm21P6eXe79M9xd4Q3cKObv3lXMLQkvcw+xur9dZxV+iBcq+2R6ZjIYXIfIuHK1JZTKRvK7etYxbXhqJiEhRsDX3tIhKVLNetnDvgS6c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by MWHPR0401MB3626.namprd04.prod.outlook.com (2603:10b6:301:79::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Fri, 9 Dec
- 2022 03:05:16 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::5ace:ac19:7a6a:1477]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::5ace:ac19:7a6a:1477%3]) with mapi id 15.20.5880.016; Fri, 9 Dec 2022
- 03:05:16 +0000
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     bliang@analogixsemi.com, hsinyi@chromium.org,
-        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/bridge: anx7625: keep last configure timing
-Date:   Fri,  9 Dec 2022 11:04:18 +0800
-Message-Id: <20221209030418.713935-1-xji@analogixsemi.com>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0094.apcprd02.prod.outlook.com
- (2603:1096:4:90::34) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        Thu, 8 Dec 2022 22:11:14 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2E18D188
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:11:05 -0800 (PST)
+X-UUID: 477afe1c999b4addaeae07fecc270c2f-20221209
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0IUYP1FMYMYrYJClJDGBDoSMePz+IPYu2tTV/hqTIg4=;
+        b=jEcYxOzAoNoSBkLUSERUCtUaMruZag/aG/ZvjITUyuxv6zTVXPoQdFbgwrKyKgZVovE0EW69zY38t+HGVGM1dy70mIvt6RfmJ0xKco38ujCG66VTtvor29grs/RZtFiRZgZnQAE9k8F9T/hlpbdYdUVBEwmBoenK1X8J7lYNXLM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:b2a5f13b-35ac-4432-a0ce-cf9ad2ad1484,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.14,REQID:b2a5f13b-35ac-4432-a0ce-cf9ad2ad1484,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:dcaaed0,CLOUDID:2d1615d2-652d-43fd-a13a-a5dd3c69a43d,B
+        ulkID:221209111100ORC5MHTL,BulkQuantity:1,Recheck:0,SF:40|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
+X-UUID: 477afe1c999b4addaeae07fecc270c2f-20221209
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yc.hung@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 354103708; Fri, 09 Dec 2022 11:10:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 9 Dec 2022 11:10:58 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 9 Dec 2022 11:10:58 +0800
+From:   YC Hung <yc.hung@mediatek.com>
+CC:     <yc.hung@mediatek.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        "Nicolas F . R . A . Prado" <nfraprado@collabora.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Curtis Malainey" <cujomalainey@chromium.org>,
+        <whalechang@google.com>
+Subject: [PATCH] ASoC: mediatek: mt8195: add sof be ops to check audio active
+Date:   Fri, 9 Dec 2022 11:10:53 +0800
+Message-ID: <20221209031053.8444-1-yc.hung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR04MB6739:EE_|MWHPR0401MB3626:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8003dbc1-03d6-4cb6-3023-08dad9923246
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sqRZ9SuXsOT7cfWUQYpqD1ykoPgf1nBCM6EAVDWanbMA1dBNwu0HdLFnHdSD20uLSYuX1DbaDr3J0KfiKkDtBxXNIsbmdbhvTlTwvdc8yXVgKdZYGlOmd8gN0yFdUF4zlwgYpGHTE5ZUtaWj8pRYZbk4PRDi4O2doCmkVRjMRxFaG1Ck7sYHC6WujzgSVfh7GS/Gv5YVIeFfiBVIGeTL0PvZb3jSA5y9yVf3IK3iXwvhF0pP8s4c+q8Uq1D0abePjbvjFD6TxthTICTImJil7P1w+XxqxYfDZBGFfxmrg2WRKo3gG78Y2XaSmwzwZOT8eTbawAKaYXy8NvbC1MgYPlxlIP//f/TvePE+PHXN1MdC6Xq0rfT33ur13GBUjQxQdsTNrykoyNIlx8mPjuQgaaMP2b9CH4BxhGTEUJ4nkTlbgTjzQoaX+zoxuawIGH5f8ooiIQVAExIL94XIq4nao/6Pu39ke42WjNJyIOs9jP2tJH8T67VL3h/+zlta7v4u/MzjysXDFMmV9t2mPFDDlQAe+6DZr9dBhqeA7mKyjWu5yEZ5TCecd6oM58ZHZ7/xMHfIPIcs+hWDhwIun5pOvOQLt9Ng2y62FlddxPTa85MmppiJSwj9FSu4yO8fAr2QmyisLH7vOulzc5zea3IbV4xuAEY4Jey79pCnQZv/ZC7wTpR1qg2QRLZg5y3+5Rk6kHEQDPJanv1z9eo1C8VeEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(39840400004)(366004)(376002)(451199015)(83380400001)(6506007)(41300700001)(26005)(2906002)(86362001)(6512007)(110136005)(186003)(7416002)(2616005)(316002)(1076003)(4744005)(52116002)(8936002)(5660300002)(36756003)(66946007)(66556008)(478600001)(66476007)(8676002)(38350700002)(6486002)(4326008)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FBAzVNP2d2tI87A6vnGCfxjNSFNcB/Am9GiLcPvkTm+QmhJ1YX9aIUJoBTpZ?=
- =?us-ascii?Q?4VDkfEAr4b+SA5Sl7sQtKG6YA+xjcATWJOkg0VDTjo3I5tY+vc2QjiBNDbiZ?=
- =?us-ascii?Q?2zASWpv60cHflqBlVTs5+4rf8UKPX/n2Eh+I9MeBGP/7tiuluikjPZIr1IvZ?=
- =?us-ascii?Q?Wt6juYlHYYalzAjGTWutY/0qQncFxGoUIEBnshJOWKjCgnq/mlPIegksL9FV?=
- =?us-ascii?Q?v9SWZIunlblvUFIkGm1TNFqZ/eKXo8nV+UcGqcU8NpfpSTAbr/23y9MGeoVK?=
- =?us-ascii?Q?pMWQZPdhbbWjyEzII3wbQ+a+H0L9AWc1XofpVM5OM/IsMpW1KohPxd4OmHkT?=
- =?us-ascii?Q?7XdcXDyRHhHfvpx6qMndYrpnJEz5ti977IMvZWhk5eK9RUQdeLyCT00KFgUP?=
- =?us-ascii?Q?ZxrodeiS960uyVDIXeDOV3G0EC+dqfIyyCdzN3tMjHbPonUlekL1nyrhxAl9?=
- =?us-ascii?Q?Tc4R9KPScCtOpcHPJoGLsC11QoDT2KiUUcuVCft5SvBVDap9hZvtVBrMFqLI?=
- =?us-ascii?Q?Pc+ztIWsgKf0jobKSxa+KmrWwGVT7+qvX+fCxGA7UjqIs7VFkdxieVGKMDdq?=
- =?us-ascii?Q?5pI1SFriItNdDxdH4ChdfCuSCIKIMbqX6G5XkGiFbQTWR5dKxNtgnos5qx5b?=
- =?us-ascii?Q?BXaNjB1RMvZMpK290qY9aBqDXhSuOEbsGPAthki6+ZEJzQ/mIUXHGNxPtBZk?=
- =?us-ascii?Q?fIoI8cGcCFRrc/1M1KjfkfkA0Yd9XkTgpnj5f/OSkiA9LHU2GePFIfarREQy?=
- =?us-ascii?Q?gFExeHDOOH1Ei5HEPXufgt3Y1C/JP5sivmSNDQG2bY3j3xidFr4YApK3sZEy?=
- =?us-ascii?Q?TshPg8OUxd5qQqvNg6+LkJhNfgJJH6yNtuPeb0MeyMXTyKgo6XBFU1jk2HfX?=
- =?us-ascii?Q?rP+tXa7+AST+dbkHsqg02blaX79l1SUjQGjcx8vcVIwCvXO6EcXwMlAZOyIt?=
- =?us-ascii?Q?Eujof0GFT7txD0s+NKhvKjnG8pMFA+Kt6YS1XgNt7sAHoJrHZxwcq9HYmxie?=
- =?us-ascii?Q?xZKIRlpABjJii0LkXdSuMMC3k4V8YPwZHsyUzxPR8wVeqSyGlOKuaf2CAcBN?=
- =?us-ascii?Q?XBr1Ic3Fh9ELn8hpIet83tkSNEZlWxeZcboDzBuMazhegu4Jvno3xNVNZj/N?=
- =?us-ascii?Q?W9Xdz8wjFrI+wHvX78HjpN4VgckGhQttSUIfLGNZ9SR5asBMiB384WcjwG6m?=
- =?us-ascii?Q?VdwIv2kLn5/dcB6txudFTP8f7jv3D2SaYP3u+BjVQBuM3202v0Y72UhEn2de?=
- =?us-ascii?Q?pQZMCiiY2BTo5lqmEJrE8o3o/03VAPt6W0T5U+a4MpB3kRqGvRiVChjdkz4M?=
- =?us-ascii?Q?cl5K3fYmsjN2IoI1UlRr4ddgce0I9nIBg3fivuoNmcFfmHRjyenO2KVp56Gt?=
- =?us-ascii?Q?SNlUgGWNvbj8CCbTVPQVVC2LSv6cQUXnnklc5XI75hY4Bezb+jeIi2a8BT0R?=
- =?us-ascii?Q?mid4pN5ac+pha11kynQ2lFLkIHBLXXRW6LskJBw9JsRq1kJ55zHzyu2jbxYc?=
- =?us-ascii?Q?zfkpddilfnGYvwXX/hseUHr4U2Tp6voGJrZM0ukY8YGgIlXORo9JnEYiL5Am?=
- =?us-ascii?Q?WfwFYU4lYMfiMBU4q/eZs7H1KmFXWX36PASzrNxD?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8003dbc1-03d6-4cb6-3023-08dad9923246
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 03:05:15.9822
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /3VDOa/7Lzo54/aP1Veg28GqiPaPA2lQ+5gKBr3ZSNNI1OFYrZJPu6SrBdprRjTK5sMLhBThXvoT2YWOV4VZ2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0401MB3626
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sometimes kernel may resume back quickly after suspend,
-and DRM not call .mode_set() to re-config
-display timing before calling .atomic_enable(), bridge
-driver with this patch to keep last configure timing.
+In MT8195 SOF design, both DSP and audio driver would access audio
+registers. Before DSP accesses audio registers, audio power and clock
+should be enabled. DSP will hang up if DSP access audio register but
+audio power and clock are disabled. Therefore, we add audio pm runtime
+active checking before accessing audio registers in SOF BE's callback
+hw_params function to avoid this situation.
 
-Signed-off-by: Xin Ji <xji@analogixsemi.com>
+Signed-off-by: YC Hung <yc.hung@mediatek.com>
 ---
- drivers/gpu/drm/bridge/analogix/anx7625.c | 1 -
- 1 file changed, 1 deletion(-)
+ sound/soc/mediatek/mt8195/mt8195-mt6359.c | 30 +++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index b0ff1ecb80a5..eb9116503b63 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1403,7 +1403,6 @@ static void anx7625_stop_dp_work(struct anx7625_data *ctx)
- {
- 	ctx->hpd_status = 0;
- 	ctx->hpd_high_cnt = 0;
--	ctx->display_timing_valid = 0;
- }
+diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359.c b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
+index 61be66f47723..4682748d82be 100644
+--- a/sound/soc/mediatek/mt8195/mt8195-mt6359.c
++++ b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
+@@ -633,6 +633,32 @@ static const struct snd_soc_ops mt8195_rt1011_etdm_ops = {
+ 	.hw_params = mt8195_rt1011_etdm_hw_params,
+ };
  
- static void anx7625_start_dp_work(struct anx7625_data *ctx)
++static int mt8195_sof_be_hw_params(struct snd_pcm_substream *substream,
++				   struct snd_pcm_hw_params *params)
++{
++	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
++	struct snd_soc_component *cmpnt_afe = NULL;
++	struct snd_soc_pcm_runtime *runtime;
++
++	/* find afe component */
++	for_each_card_rtds(rtd->card, runtime) {
++		cmpnt_afe = snd_soc_rtdcom_lookup(runtime, AFE_PCM_NAME);
++		if (cmpnt_afe)
++			break;
++	}
++
++	if (cmpnt_afe && !pm_runtime_active(cmpnt_afe->dev)) {
++		dev_err(rtd->dev, "afe pm runtime is not active!!\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static const struct snd_soc_ops mt8195_sof_be_ops = {
++	.hw_params = mt8195_sof_be_hw_params,
++};
++
+ static int mt8195_rt1011_init(struct snd_soc_pcm_runtime *rtd)
+ {
+ 	struct snd_soc_card *card = rtd->card;
+@@ -1272,24 +1298,28 @@ static struct snd_soc_dai_link mt8195_mt6359_dai_links[] = {
+ 		.name = "AFE_SOF_DL2",
+ 		.no_pcm = 1,
+ 		.dpcm_playback = 1,
++		.ops = &mt8195_sof_be_ops,
+ 		SND_SOC_DAILINK_REG(AFE_SOF_DL2),
+ 	},
+ 	[DAI_LINK_SOF_DL3_BE] = {
+ 		.name = "AFE_SOF_DL3",
+ 		.no_pcm = 1,
+ 		.dpcm_playback = 1,
++		.ops = &mt8195_sof_be_ops,
+ 		SND_SOC_DAILINK_REG(AFE_SOF_DL3),
+ 	},
+ 	[DAI_LINK_SOF_UL4_BE] = {
+ 		.name = "AFE_SOF_UL4",
+ 		.no_pcm = 1,
+ 		.dpcm_capture = 1,
++		.ops = &mt8195_sof_be_ops,
+ 		SND_SOC_DAILINK_REG(AFE_SOF_UL4),
+ 	},
+ 	[DAI_LINK_SOF_UL5_BE] = {
+ 		.name = "AFE_SOF_UL5",
+ 		.no_pcm = 1,
+ 		.dpcm_capture = 1,
++		.ops = &mt8195_sof_be_ops,
+ 		SND_SOC_DAILINK_REG(AFE_SOF_UL5),
+ 	},
+ };
 -- 
-2.25.1
+2.18.0
 
