@@ -2,721 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA39647FD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E982D647FDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiLIJFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        id S229930AbiLIJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiLIJFf (ORCPT
+        with ESMTP id S229488AbiLIJIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:05:35 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149FF1114A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:05:33 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id n1so4278543ljg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:05:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GwKYNzfl5yFLwm9nwpZvx4YULd6KDhGtfJ+NUxuhGMU=;
-        b=nBhdKrIfDXakNZMaJHCzZdl/Ow221uRkAKiaSI6z8L4GCBhhNKVqFgXB49oiKOPAZ8
-         Hlx1jkYkKwdAjasbcErEEtg/3aIUET+KS7vMq8frb2GOAhgIyvrsDZGMJXqcbe0615yh
-         6E0XWDy2//xYf62N9iMDtv4cI/L7GJczaAspMm+ITOfpXguTt8Kp+l5phWGAwecD+dmY
-         gbh4MNaT8alRCx/fZRWhpM3hHHO5s4DoNkaJbsJCiOUWXHz/8S4BvnWv98H7LAKLViIp
-         koG1hdu/4UXMDJbytVFSf4UTbaXs9udUakHVhFioJBIlWdBKUPicFZ5xdtX+dcPchl15
-         p0+Q==
+        Fri, 9 Dec 2022 04:08:40 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9BC54767
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:08:39 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id z200-20020a6bc9d1000000b006e003aecf04so1787683iof.16
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:08:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GwKYNzfl5yFLwm9nwpZvx4YULd6KDhGtfJ+NUxuhGMU=;
-        b=SsWdn8Suu7sl2x7+k2gnJgV3qws4BJSQi4E2YadTcH8m1SRs5zGXJLg25jyKQg4TH+
-         DcVc7vvrjKaW6JVFPbbYhH33JR9Y5bJyZL78wIadn+Lf9xX4G2bvQNEcaykvyDnr8uKz
-         GJQAraGPDXSxUttTNHOsXtBlmHxvBn4UNFwSD9D3uhLToa1mfcI+wKyVUn0TRML4FPI3
-         47PbtX/XNUYhO8Vl2Yqp6egpzovNoHeVzsJUtf560BD8ybu5HJ/djgSMPOZEPKQs0a1A
-         LYqw+317pfdGmBLczCoxIKeOKRnzrI11dmfaM/Hw8nTUGrvLwmpZ+pBoizEfJWvzniWL
-         k0Rw==
-X-Gm-Message-State: ANoB5pmAZhx7g7VR4d4nm6qDzoz8u6F2lAL+Xh62S+uTeqOT98kakjBW
-        EITmuyVZPpDJW2bMOq7ZRvRnXr/I+MOoqqL0xR8=
-X-Google-Smtp-Source: AA0mqf5toIzHjXXoeCB9lUjXIf4MZ++61zq8TBuCjidiw/YP/i/RKQ5iKYll95gaRKMaPMClLfSgxQ==
-X-Received: by 2002:a05:651c:1944:b0:26f:db34:a161 with SMTP id bs4-20020a05651c194400b0026fdb34a161mr1641848ljb.36.1670576731328;
-        Fri, 09 Dec 2022 01:05:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bg37-20020a05651c0ba500b00279c85d4400sm137018ljb.60.2022.12.09.01.05.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 01:05:30 -0800 (PST)
-Message-ID: <12c375c4-d7d0-7a7b-5688-2210491df8e6@linaro.org>
-Date:   Fri, 9 Dec 2022 10:05:29 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ijsm07zxCBrVTgqLExNAgXLfYVJ4tHyHwAv61EC2Joc=;
+        b=jyr0QXjMJdIutKZDYyvovyRiNMz3gWJxFQyOzmQACHNuzqeP36dIgUjm25ps46mcju
+         EwdWgAffAuXUYPwHRfu1CzsTpoFZMLQe9c9z7W9XvK9ZaFjBYzcyUSCunkh31C8EE4Op
+         uhr89NEXdSrUO7oQQSqKvbPTEIAC/4juEzTvLPdRLsr3IFG09Xo8TSWQpCJci0p27fND
+         j8Z/SKGHp5l8gaGkuy1dQXJEGnD/nmIMidTcJQVp4TGHCF0ZT/OCB9xUzWmQ+IO6zJwf
+         MFiJbuKGjXG3zPB8zgTQKLRO7BPIRqeiM5bCOX59/8e6X3mLuqsWvIogHkMMOTBZd/aV
+         6Gxg==
+X-Gm-Message-State: ANoB5pnHN5++wj6Cwdpb2Ibqy3L4t0w3n22aCVTtN23AapVMePIFx+AS
+        xQ05v9EF2STZY17hjvNaOJIqPmZZ9ScLYihZr1PeBMKQNsVH
+X-Google-Smtp-Source: AA0mqf60VSWSPW5mFCxe8omoF9Anxi4OSnGlKYiePOP8wWu0US2fLoCsDtd1tHbg8cx/3tNcLpwm9Aui48vNM0qBKSbwWho2H0OY
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3] dt-bindings: Convert active-semi PMIC docs to YAML
- schemas
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221207201341.191682-1-paul@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207201341.191682-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:2206:b0:302:d141:bf84 with SMTP id
+ j6-20020a056e02220600b00302d141bf84mr35387770ilf.287.1670576918582; Fri, 09
+ Dec 2022 01:08:38 -0800 (PST)
+Date:   Fri, 09 Dec 2022 01:08:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cd5fe305ef617fe2@google.com>
+Subject: [syzbot] possible deadlock in __f2fs_ioctl
+From:   syzbot <syzbot+4793f6096d174c90b4f7@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 21:13, Paul Cercueil wrote:
-> Create YAML bindings for the Active-semi PMICs and remove the old text
-> files.
+Hello,
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...),
-so: regulator: dt-bindings: Convert active-semi PMIC to DT schema
+syzbot found the following issue on:
 
-> 
-> The bindings aren't perfect, for instance I couldn't find good
-> descriptions for the vendor properties in the "charger" node of the
-> ACT8945A because I am not familiar with the hardware and these
-> properties were not documented anywhere.
-> 
-> The YAML schemas are a bit different than what is described in the old
-> text files, because these were sometimes wrong or had missing
-> information. This is the case for the ACT8600 documentation, which
-> specified the valid node names for the regulators, while the driver was
-> expecting different names. This led to the current situation where we
-> have two different boards using different names for the regulators:
-> - arch/mips/boot/dts/ingenic/ci20.dts uses the names documented in the
->   text file,
-> - arch/mips/boot/dts/ingenic/gcw0.dts uses the names that the driver
->   expects.
-> In theory, the driver should be fixed to follow the documentation, and
-> accept both naming schemes. In practice though, when the PMIC node was
-> added to the ci20.dts board file, the names were already wrong in
-> regards to what the driver expected, so it never really worked
-> correctly and wasn't tested properly. Furthermore, in that board the
-> consumers of the regulators aren't working for various other reasons
-> (invalid GPIOs, etc.).
-> 
-> For that reason, for the ACT8600 bindings I decided to only use the node
-> names that the driver expects (and that gcw0.dts uses), instead of
-> accepting both old and new names. A follow-up patch will update the CI20
-> board to use the new regulator names.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> ---
-> v2:
-> - Avoid | character in descriptions that can be single-line
-> - Remove unevaluatedProperties when additionalProperties is also present
-> - Remove useless inner parentheses in regular expressions
-> - Rename I2C nodes to just... i2c
-> - Remove node handles
-> 
-> v3:
-> - Fix alignment in examples
-> - Drop useless status = "okay"; in examples
-> - I set myself as the maintainer, which I only did because nobody else
->   seems to care.
-> 
-> Cheers,
-> -Paul
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a6e7cb880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=4793f6096d174c90b4f7
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-(...)
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4793f6096d174c90b4f7@syzkaller.appspotmail.com
+
+F2FS-fs (loop2): invalid crc value
+F2FS-fs (loop2): Found nat_bits in checkpoint
+F2FS-fs (loop2): Mounted with checkpoint version = 48b305e4
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
+------------------------------------------------------
+syz-executor.2/32123 is trying to acquire lock:
+ffff0000c0e1a608 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0x54/0xb4 mm/memory.c:5644
+
+but task is already holding lock:
+ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2334 [inline]
+ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: __f2fs_ioctl+0x1370/0x3318 fs/f2fs/file.c:4151
+
+which lock already depends on the new lock.
 
 
-> diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml
-> new file mode 100644
-> index 000000000000..d8cc9cd527ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml
-> @@ -0,0 +1,140 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/active-semi,act8600.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Active-semi ACT8600 regulator
-> +
-> +maintainers:
-> +  - Paul Cercueil <paul@crapouillou.net>
-> +
-> +properties:
-> +  compatible:
-> +    const: active-semi,act8600
-> +
-> +  reg:
-> +    description: I2C address
+the existing dependency chain (in reverse order) is:
 
-This is a friendly reminder during the review process.
+-> #3 (&sbi->sb_lock){++++}-{3:3}:
+       down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
+       f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+       f2fs_handle_error+0x9c/0x17c fs/f2fs/super.c:3898
+       f2fs_check_nid_range fs/f2fs/node.c:39 [inline]
+       add_free_nid+0x4d8/0x50c fs/f2fs/node.c:2282
+       scan_nat_page fs/f2fs/node.c:2384 [inline]
+       __f2fs_build_free_nids fs/f2fs/node.c:2490 [inline]
+       f2fs_build_free_nids+0x680/0x8f4 fs/f2fs/node.c:2528
+       f2fs_build_node_manager+0x624/0x64c fs/f2fs/node.c:3313
+       f2fs_fill_super+0x1470/0x1e90 fs/f2fs/super.c:4306
+       mount_bdev+0x1b8/0x210 fs/super.c:1401
+       f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
+       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+       vfs_get_tree+0x40/0x140 fs/super.c:1531
+       do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+       path_mount+0x358/0x890 fs/namespace.c:3370
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount fs/namespace.c:3568 [inline]
+       __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+-> #2 (&nm_i->nat_tree_lock){++++}-{3:3}:
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
+       f2fs_get_node_info+0x74/0x458 fs/f2fs/node.c:560
+       read_node_page+0x100/0x7a4 fs/f2fs/node.c:1358
+       __get_node_page+0x1b4/0xa3c fs/f2fs/node.c:1419
+       f2fs_get_node_page fs/f2fs/node.c:1468 [inline]
+       f2fs_get_dnode_of_data+0xc8/0xad0 fs/f2fs/node.c:776
+       f2fs_remove_inode_page+0x50/0x288 fs/f2fs/node.c:1225
+       f2fs_evict_inode+0x348/0x978 fs/f2fs/inode.c:813
+       evict+0xec/0x334 fs/inode.c:664
+       iput_final fs/inode.c:1747 [inline]
+       iput+0x2c4/0x324 fs/inode.c:1773
+       f2fs_new_inode+0x284/0x7bc fs/f2fs/namei.c:152
+       f2fs_create+0xa4/0x4b0 fs/f2fs/namei.c:355
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x804/0x11c4 fs/namei.c:3711
+       do_filp_open+0xdc/0x1b8 fs/namei.c:3741
+       do_sys_openat2+0xb8/0x22c fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_openat fs/open.c:1342 [inline]
+       __se_sys_openat fs/open.c:1337 [inline]
+       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
-Thank you.
+-> #1 (&sbi->cp_rwsem){++++}-{3:3}:
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
+       f2fs_lock_op fs/f2fs/f2fs.h:2223 [inline]
+       f2fs_convert_inline_inode+0x1e8/0x2e4 fs/f2fs/inline.c:219
+       f2fs_vm_page_mkwrite+0xb4/0x9a4 fs/f2fs/file.c:79
+       do_page_mkwrite+0x74/0x288 mm/memory.c:2977
+       wp_page_shared+0x8c/0x364 mm/memory.c:3323
+       do_wp_page+0x794/0xd10 mm/memory.c:3473
+       handle_pte_fault mm/memory.c:4972 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x880/0xa48 mm/memory.c:5217
+       __do_page_fault arch/arm64/mm/fault.c:508 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:608
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
+       el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
+       el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
-> +    maxItems: 1
-> +
-> +  system-power-controller:
-> +    description:
-> +      Indicates that the ACT8600 is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
-> +  active-semi,vsel-high:
-> +    description:
-> +      Indicates the VSEL pin is high. If this property is missing,
-> +      the VSEL pin is assumed to be low.
-> +    type: boolean
-> +
-> +  regulators:
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      DCDC1:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp1-supply:
-> +            description: Handle to the VP1 input supply
-> +
-> +      DCDC2:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp2-supply:
-> +            description: Handle to the VP2 input supply
-> +
-> +      DCDC3:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp3-supply:
-> +            description: Handle to the VP3 input supply
-> +
-> +    patternProperties:
-> +      "^(SUDCDC_REG4|LDO_REG9|LDO_REG10)$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +      "^LDO[5-8]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl-supply:
-> +            description: Handle to the INL input supply
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - reg
-> +  - compatible
-> +  - regulators
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      pmic@5a {
-> +        compatible = "active-semi,act8600";
-> +        reg = <0x5a>;
-> +
-> +        regulators {
-> +          SUDCDC_REG4 {
-> +            regulator-min-microvolt = <5300000>;
-> +            regulator-max-microvolt = <5300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO5 {
-> +            regulator-min-microvolt = <2500000>;
-> +            regulator-max-microvolt = <2500000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO6 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO7 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO8 {
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-always-on;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO_REG9 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO_REG10 {
-> +            inl-supply = <&vcc>;
-> +          };
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8846.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8846.yaml
-> new file mode 100644
-> index 000000000000..f276dec59b3d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/active-semi,act8846.yaml
-> @@ -0,0 +1,206 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/active-semi,act8846.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Active-semi ACT8846 regulator
-> +
-> +maintainers:
-> +  - Paul Cercueil <paul@crapouillou.net>
-> +
-> +properties:
-> +  compatible:
-> +    const: active-semi,act8846
-> +
-> +  reg:
-> +    description: I2C address
+-> #0 (&mm->mmap_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       __might_fault+0x7c/0xb4 mm/memory.c:5645
+       _copy_to_user include/linux/uaccess.h:143 [inline]
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2349 [inline]
+       __f2fs_ioctl+0x3204/0x3318 fs/f2fs/file.c:4151
+       f2fs_ioctl+0x74/0xbc fs/f2fs/file.c:4224
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
-Ditto
+other info that might help us debug this:
 
-> +    maxItems: 1
-> +
-> +  system-power-controller:
-> +    description:
-> +      Indicates that the ACT8846 is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
-> +  active-semi,vsel-high:
-> +    description:
-> +      Indicates the VSEL pin is high. If this property is missing,
-> +      the VSEL pin is assumed to be low.
-> +    type: boolean
-> +
-> +  regulators:
-> +    type: object
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      REG1:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp1-supply:
-> +            description: Handle to the VP1 input supply
-> +
-> +      REG2:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp2-supply:
-> +            description: Handle to the VP2 input supply
-> +
-> +      REG3:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp3-supply:
-> +            description: Handle to the VP3 input supply
-> +
-> +      REG4:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp4-supply:
-> +            description: Handle to the VP4 input supply
-> +
-> +    patternProperties:
-> +      "^REG[5-7]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl1-supply:
-> +            description: Handle to the INL1 input supply
-> +
-> +      "^REG[8-9]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl2-supply:
-> +            description: Handle to the INL2 input supply
-> +
-> +      "^REG1[0-2]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl3-supply:
-> +            description: Handle to the INL3 input supply
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - reg
-> +  - compatible
-> +  - regulators
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      pmic@5a {
-> +        compatible = "active-semi,act8846";
-> +        reg = <0x5a>;
-> +
-> +        system-power-controller;
-> +
-> +        regulators {
-> +          REG1 {
-> +            regulator-name = "VCC_DDR";
-> +            regulator-min-microvolt = <1200000>;
-> +            regulator-max-microvolt = <1200000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG2 {
-> +            regulator-name = "VCC_IO";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG3 {
-> +            regulator-name = "VDD_LOG";
-> +            regulator-min-microvolt = <1000000>;
-> +            regulator-max-microvolt = <1000000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG4 {
-> +            regulator-name = "VCC_20";
-> +            regulator-min-microvolt = <2000000>;
-> +            regulator-max-microvolt = <2000000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG5 {
-> +            regulator-name = "VCCIO_SD";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG6 {
-> +            regulator-name = "VDD10_LCD";
-> +            regulator-min-microvolt = <1000000>;
-> +            regulator-max-microvolt = <1000000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG7 {
-> +            regulator-name = "VCC_WL";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG8 {
-> +            regulator-name = "VCCA_33";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG9 {
-> +            regulator-name = "VCC_LAN";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG10 {
-> +            regulator-name = "VDD_10";
-> +            regulator-min-microvolt = <1000000>;
-> +            regulator-max-microvolt = <1000000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG11 {
-> +            regulator-name = "VCC_18";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          REG12 {
-> +            regulator-name = "VCC18_LCD";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-always-on;
-> +          };
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8865.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8865.yaml
-> new file mode 100644
-> index 000000000000..cf36ab7c82c4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/active-semi,act8865.yaml
-> @@ -0,0 +1,162 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/active-semi,act8865.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Active-semi ACT8865 regulator
-> +
-> +maintainers:
-> +  - Liam Girdwood <lgirdwood@gmail.com>
-> +  - Mark Brown <broonie@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: active-semi,act8865
-> +
-> +  reg:
-> +    description: I2C address
+Chain exists of:
+  &mm->mmap_lock --> &nm_i->nat_tree_lock --> &sbi->sb_lock
 
-ditto
+ Possible unsafe locking scenario:
 
-> +    maxItems: 1
-> +
-> +  system-power-controller:
-> +    description: |
-> +      Indicates that the ACT8865 is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
-> +  active-semi,vsel-high:
-> +    description: |
-> +      Indicates the VSEL pin is high. If this property is missing,
-> +      the VSEL pin is assumed to be low.
-> +    type: boolean
-> +
-> +  regulators:
-> +    type: object
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      DCDC_REG1:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp1-supply:
-> +            description: Handle to the VP1 input supply
-> +
-> +      DCDC_REG2:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp2-supply:
-> +            description: Handle to the VP2 input supply
-> +
-> +      DCDC_REG3:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp3-supply:
-> +            description: Handle to the VP3 input supply
-> +
-> +    patternProperties:
-> +      "^LDO_REG[1-2]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl45-supply:
-> +            description: Handle to the INL45 input supply
-> +
-> +      "^LDO_REG[3-4]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl67-supply:
-> +            description: Handle to the INL67 input supply
-> +
-> +    additionalProperties: false
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - reg
-> +  - compatible
-> +  - regulators
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/regulator/active-semi,8865-regulator.h>
-> +
-> +    i2c1 {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      pmic: act8865@5b {
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sbi->sb_lock);
+                               lock(&nm_i->nat_tree_lock);
+                               lock(&sbi->sb_lock);
+  lock(&mm->mmap_lock);
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+ *** DEADLOCK ***
 
-> +        compatible = "active-semi,act8865";
-> +        reg = <0x5b>;
-> +        active-semi,vsel-high;
-> +
-> +        regulators {
-> +          vcc_1v8_reg: DCDC_REG1 {
-> +            regulator-name = "VCC_1V8";
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          vcc_1v2_reg: DCDC_REG2 {
-> +            regulator-name = "VCC_1V2";
-> +            regulator-min-microvolt = <1100000>;
-> +            regulator-max-microvolt = <1300000>;
-> +            regulator-always-on;
-> +
-> +            regulator-allowed-modes = <ACT8865_REGULATOR_MODE_FIXED>,
-> +                                      <ACT8865_REGULATOR_MODE_LOWPOWER>;
-> +            regulator-initial-mode = <ACT8865_REGULATOR_MODE_FIXED>;
-> +
-> +            regulator-state-mem {
-> +              regulator-on-in-suspend;
-> +              regulator-suspend-min-microvolt = <1150000>;
-> +              regulator-suspend-max-microvolt = <1150000>;
-> +              regulator-changeable-in-suspend;
-> +              regulator-mode = <ACT8865_REGULATOR_MODE_LOWPOWER>;
-> +            };
-> +          };
-> +
-> +          vcc_3v3_reg: DCDC_REG3 {
-> +            regulator-name = "VCC_3V3";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +          };
-> +
-> +          vddana_reg: LDO_REG1 {
-> +            regulator-name = "VDDANA";
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +
-> +            regulator-allowed-modes = <ACT8865_REGULATOR_MODE_NORMAL>,
-> +            <ACT8865_REGULATOR_MODE_LOWPOWER>;
-> +            regulator-initial-mode = <ACT8865_REGULATOR_MODE_NORMAL>;
-> +
-> +            regulator-state-mem {
-> +              regulator-off-in-suspend;
-> +            };
-> +          };
-> +
-> +          vddfuse_reg: LDO_REG2 {
-> +            regulator-name = "FUSE_2V5";
-> +            regulator-min-microvolt = <2500000>;
-> +            regulator-max-microvolt = <2500000>;
-> +          };
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
-> new file mode 100644
-> index 000000000000..b8c0ba8247ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
-> @@ -0,0 +1,259 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/active-semi,act8945a.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Active-semi ACT8945a regulator
-> +
-> +maintainers:
-> +  - Paul Cercueil <paul@crapouillou.net>
-> +
-> +properties:
-> +  compatible:
-> +    const: active-semi,act8945a
-> +
-> +  reg:
-> +    description: I2C address
+2 locks held by syz-executor.2/32123:
+ #0: ffff000112968460 (sb_writers#13){.+.+}-{0:0}, at: mnt_want_write_file+0x28/0xd8 fs/namespace.c:437
+ #1: ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+ #1: ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2334 [inline]
+ #1: ffff0001317c6088 (&sbi->sb_lock){++++}-{3:3}, at: __f2fs_ioctl+0x1370/0x3318 fs/f2fs/file.c:4151
 
-ditto
+stack backtrace:
+CPU: 1 PID: 32123 Comm: syz-executor.2 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __might_fault+0x7c/0xb4 mm/memory.c:5645
+ _copy_to_user include/linux/uaccess.h:143 [inline]
+ copy_to_user include/linux/uaccess.h:169 [inline]
+ f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2349 [inline]
+ __f2fs_ioctl+0x3204/0x3318 fs/f2fs/file.c:4151
+ f2fs_ioctl+0x74/0xbc fs/f2fs/file.c:4224
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
-> +    maxItems: 1
-> +
-> +  system-power-controller:
-> +    description:
-> +      Indicates that the ACT8945a is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
