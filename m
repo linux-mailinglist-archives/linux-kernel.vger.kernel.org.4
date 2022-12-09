@@ -2,131 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD816647ACE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555E7647AD3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLIAdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 19:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S229732AbiLIAfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 19:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLIAdV (ORCPT
+        with ESMTP id S229593AbiLIAft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 19:33:21 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463716389
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:33:20 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id p6so1257193iod.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:33:20 -0800 (PST)
+        Thu, 8 Dec 2022 19:35:49 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE6279C1C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:35:48 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id x28so4616015lfn.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LiyNuJAHf+GBcXEoDhMMGdej4ZIve975Owt12C1xWOY=;
-        b=QIJA/IvdxNtD2ifQjZjh1vWT8lgLixpDa6sH3oAOZ9zVR2ZMUFQ+mWHrF3Ja3Q2TxA
-         ETo0epCN7yLRHcEZMMDhF72fqdZ8+qujQ+vUCJl7MhNWYLyJg+Anm4VUQm8+krvTosq2
-         1QG38jXV2jfCPIhKIEhZ4ufzypsRQeh9yOgf8=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9i6tSwEYMMAQhxXNd22Ibb8itC1fP4PyffqUvO3Sp0=;
+        b=w0dCi8LMFFLIwv9l8ZHEkvSMj0cu9rLyqukdYLaOGOhZdP5ShfHSzL1DFsug8nOW2U
+         7Hv32ruiYInr8Zz72srEFfkLY522kax3mnidwyoSp59oBxJcCrOrtmtZ10RKx1pxkGs7
+         /mZK2JvRnhX8tNPCCPKno/nePmAcuMD3rUzYkNPn/SUdBQoj5cioWtcaXJmAJEqDxlsO
+         kXUx/kJGdyo7Iddd+BIiswkWaaKvYo+KiWhm56KBO+n0ZcLHApOD6JoXz+3ZcfceBZcZ
+         IhKDod81lUt8DaXm57bK0lWbAULZACw42SZ9hZJuCwSVjUkOVFh3YVxZ1QWIgFy5lqyu
+         +tGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LiyNuJAHf+GBcXEoDhMMGdej4ZIve975Owt12C1xWOY=;
-        b=WrMpgZCDcqavWX70mWFOAVCyi/DdHqOT6YVaVu8/DGtoicPqd02qwUohCfcoIlLviS
-         TlcdkgrJ5NWVCQ3McEGtZWLZ9i7vA6wHGK0RNKo+7dPoLazy/rsWvvofVXlRQUbmPlsD
-         WWzzwYK7d0ts0HzgSnFDopkYdeqhJhoLaIvAnLq2W3UHEXBihThtSbNVoYGJ2FkD36Pv
-         CitFjjzOWzaxVdo1i/E1ylE+zm/lSUKg97uwh8lCEBGrpWOHQL39j6OicNBi1K7AnYgk
-         NXe/Uhu91JpeX7O8NsbGL8cjyYhnCmgjcqFTtc7/VaDIsQZgD9TWfvT51AUq0DOxBtv3
-         PJRw==
-X-Gm-Message-State: ANoB5plzG8viATAX0JWhw9sB+jn7GNh2rG2jeywnM+GVpssYqlBej/AR
-        yVSentjEtQBternKwdVinXmemA==
-X-Google-Smtp-Source: AA0mqf73/8GxoZddYwcBQNMBP6mhHQfzLjRxCtz/zeqIJzngff5NphS920nOyg5kynYHkj4f1l7yFw==
-X-Received: by 2002:a6b:b741:0:b0:6e0:353d:8c1c with SMTP id h62-20020a6bb741000000b006e0353d8c1cmr2171484iof.13.1670545999667;
-        Thu, 08 Dec 2022 16:33:19 -0800 (PST)
-Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:4662:6e7c:28a0:dd77])
-        by smtp.gmail.com with ESMTPSA id f27-20020a056602071b00b0067b75781af9sm56969iox.37.2022.12.08.16.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 16:33:19 -0800 (PST)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ross Zwisler <zwisler@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        paulmck@kernel.org, Joel Fernandes <joel@joelfernandes.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH] tracing: remove unnecessary trace_trigger ifdef
-Date:   Thu,  8 Dec 2022 17:33:10 -0700
-Message-Id: <20221209003310.1737039-1-zwisler@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-In-Reply-To: <20221208183945.1de18843@gandalf.local.home>
-References: 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9i6tSwEYMMAQhxXNd22Ibb8itC1fP4PyffqUvO3Sp0=;
+        b=hx6nAfxBJb2wg63vOkYIpd6hcsAjov6bitEzSljWRzCbfmEuSl1n1GFWbiLrDIKhmG
+         Dlav0WIUYitpXU8TBkfIhBD1JR7RfseINP2nn3ttlUgSxEMYrBGVE8u8jXKpQ3N+/bZH
+         YfGbpKLhDVVzqSEE0uxperfUFvOjAvwnX/5CP6BqJE85w9GwcH3V5RR0Zd00G/qGemWU
+         Hs/37Mj7MsUSiYC8k5HZSGkFIsFaWD5BXBfpFY5ctUqv6+WY5oWdbuOjIVRD6byoL5d2
+         dFs71hBZyx35pu7EoCS/DhPwiM+IlP47c9md/GWaIuFBtPA44GH2UBgeB0Y6Ql7FR6Ac
+         Cuyg==
+X-Gm-Message-State: ANoB5pnVzGTcy7SWxcRnUH+gMA0wXcTX7OMXZJYbHZaSvtmVQCOFcM5f
+        ERdSXY1N6cTwPhG4aKB09nQevw==
+X-Google-Smtp-Source: AA0mqf7I3ZRSP2xjQAxL8LPJRhqpQO/Grjq0p57nj0CmHvYCy7hYf+K/liWo0VkYQwpbumlYCYOjmg==
+X-Received: by 2002:a05:6512:1394:b0:4b5:de9:a12f with SMTP id p20-20020a056512139400b004b50de9a12fmr1417991lfa.12.1670546146352;
+        Thu, 08 Dec 2022 16:35:46 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id bt14-20020a056512260e00b004a44ffb1023sm19597lfb.57.2022.12.08.16.35.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 16:35:45 -0800 (PST)
+Message-ID: <e53844b7-601b-f355-302b-cc871962a446@linaro.org>
+Date:   Fri, 9 Dec 2022 02:35:44 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        airlied@gmail.com
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+ <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
+ <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
+ <be1411e8-1d07-7643-977c-a306016fd660@linaro.org>
+ <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The trace_trigger command line option introduced by
-commit a01fdc897fa5 ("tracing: Add trace_trigger kernel command line option")
-doesn't need to depend on the CONFIG_HIST_TRIGGERS kernel config option.
+On 09/12/2022 02:22, Kuogee Hsieh wrote:
+> 
+> On 12/8/2022 4:11 PM, Dmitry Baryshkov wrote:
+>> On 09/12/2022 01:38, Kuogee Hsieh wrote:
+>>>
+>>> On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
+>>>> On 09/12/2022 00:36, Kuogee Hsieh wrote:
+>>>>> Add both data-lanes and link-frequencies property into endpoint
+>>>>>
+>>>>> Changes in v7:
+>>>>> -- split yaml out of dtsi patch
+>>>>> -- link-frequencies from link rate to symbol rate
+>>>>> -- deprecation of old data-lanes property
+>>>>>
+>>>>> Changes in v8:
+>>>>> -- correct Bjorn mail address to kernel.org
+>>>>>
+>>>>> Changes in v10:
+>>>>> -- add menu item to data-lanes and link-frequecnis
+>>>>>
+>>>>> Changes in v11:
+>>>>> -- add endpoint property at port@1
+>>>>>
+>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+>>>>
+>>>> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencies 
+>>>> property
+>>>> .git/rebase-apply/patch:47: trailing whitespace.
+>>>>
+>>>> .git/rebase-apply/patch:51: trailing whitespace.
+>>>>
+>>>>
+>>>> Also the dt_binding_check fails with an error for this schema. And 
+>>>> after fixing the error in the schema I faced an example validation 
+>>>> error. Did you check that the schema is correct and that the example 
+>>>> validates against the schema?
+>>>
+>>> yes, but i run "make dt_binding_check 
+>>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml" at mu v5.15 branch since
+>>
+>> I wouldn't ask you to post the log here. But I don't think that either 
+>> of the errors that I see here is related to 5.15 vs 6.1-rc.
+>>
+>> In fact after applying this patch against 5.15 I saw the expected 
+>> failure:
+>>
+>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>> properties:required: ['port@0', 'port@1'] is not of type 'object', 
+>> 'boolean'
+>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>> properties: 'required' should not be valid under {'$ref': 
+>> '#/definitions/json-schema-prop-names'}
+>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>> ignoring, error in schema: properties: required
+>>
+>>>
+>>> "make dt_binding_check" does not work at msm-next branch.
+>>
+>> I went ahead and just checked.
+>>
+>> `make dt_binding_check DT_SCHEMA_FILES=display/msm`  works cleanly in 
+>> msm-next and reports a single example-related warning in 
+>> msm-next-lumag. I pushed a patch to fix that warning (wich can 
+>> hopefully be picked up by Abhinav into msm-fixes). So you can assume 
+>> that both these branches have consistent error-free display/msm schemas.
+>>
+> I have clean msm-next branch (without my data-lines yaml patch applied) 
+> and run "make dt_binding_check 
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml", then I saw below error messages.
+> 
+> Have you run into this problem?
 
-This code doesn't depend on the histogram code, and the run-time
-selection of triggers is usable without CONFIG_HIST_TRIGGERS.
+No.
 
-Fixes: a01fdc897fa5 ("tracing: Add trace_trigger kernel command line option")
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- kernel/trace/trace_events.c | 6 ------
- 1 file changed, 6 deletions(-)
+> 
+>    HOSTCC  scripts/basic/fixdep
+>    HOSTCC  scripts/dtc/dtc.o
+>    HOSTCC  scripts/dtc/flattree.o
+>    HOSTCC  scripts/dtc/fstree.o
+>    HOSTCC  scripts/dtc/data.o
+>    HOSTCC  scripts/dtc/livetree.o
+>    HOSTCC  scripts/dtc/treesource.o
+>    HOSTCC  scripts/dtc/srcpos.o
+>    HOSTCC  scripts/dtc/checks.o
+>    HOSTCC  scripts/dtc/util.o
+>    LEX     scripts/dtc/dtc-lexer.lex.c
+>    HOSTCC  scripts/dtc/dtc-lexer.lex.o
+>    HOSTCC  scripts/dtc/dtc-parser.tab.o
+>    HOSTLD  scripts/dtc/dtc
+> sort: -:2: disorder: 2022.1
+> ERROR: dtschema minimum version is v2022.3
+> make[2]: *** [check_dtschema_version] Error 1
+> make[1]: *** [dt_binding_check] Error 2
+> make: *** [__sub-make] Error 2
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 3bfaf560ecc4..33e0b4f8ebe6 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2796,7 +2796,6 @@ trace_create_new_event(struct trace_event_call *call,
- 	return file;
- }
- 
--#ifdef CONFIG_HIST_TRIGGERS
- #define MAX_BOOT_TRIGGERS 32
- 
- static struct boot_triggers {
-@@ -2832,7 +2831,6 @@ static __init int setup_trace_triggers(char *str)
- 	return 1;
- }
- __setup("trace_trigger=", setup_trace_triggers);
--#endif
- 
- /* Add an event to a trace directory */
- static int
-@@ -2850,7 +2848,6 @@ __trace_add_new_event(struct trace_event_call *call, struct trace_array *tr)
- 		return event_define_fields(call);
- }
- 
--#ifdef CONFIG_HIST_TRIGGERS
- static void trace_early_triggers(struct trace_event_file *file, const char *name)
- {
- 	int ret;
-@@ -2868,9 +2865,6 @@ static void trace_early_triggers(struct trace_event_file *file, const char *name
- 			       bootup_triggers[i].event);
- 	}
- }
--#else
--static inline void trace_early_triggers(struct trace_event_file *file, const char *name) { }
--#endif
- 
- /*
-  * Just create a descriptor for early init. A descriptor is required
+This means that somewhere in your path you have an older dtschema instance.
+
+When you sent me a question regarding this error, I asked for the 
+additional info. You provided none. Instead you went on sending the 
+untested patch that doesn't work.
+
+> 
+>>>
+>>> But I did not check trainiling whitespace this time.
+>>>
+>>>>
+>>>>> ---
+>>>>>   .../bindings/display/msm/dp-controller.yaml        | 27 
+>>>>> ++++++++++++++++++++++
+>>>>>   1 file changed, 27 insertions(+)
+>>>>>
+>>>>> diff --git 
+>>>>> a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml 
+>>>>> b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>> index f2515af..2a7fdef8 100644
+>>>>> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>> @@ -81,6 +81,7 @@ properties:
+>>>>>       data-lanes:
+>>>>>       $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>>> +    deprecated: true
+>>>>>       minItems: 1
+>>>>>       maxItems: 4
+>>>>>       items:
+>>>>> @@ -96,6 +97,7 @@ properties:
+>>>>>       ports:
+>>>>>       $ref: /schemas/graph.yaml#/properties/ports
+>>>>> +
+>>>>>       properties:
+>>>>>         port@0:
+>>>>>           $ref: /schemas/graph.yaml#/properties/port
+>>>>> @@ -105,6 +107,29 @@ properties:
+>>>>>           $ref: /schemas/graph.yaml#/properties/port
+>>>>>           description: Output endpoint of the controller
+>>>>>   +        properties:
+>>>>> +          endpoint:
+>>>>> +            $ref: /schemas/media/video-interfaces.yaml#
+>>>>> +
+>>>>> +            properties:
+>>>>> +              remote-endpoint: true
+>>>>
+>>>> PLease add empty lines between the property definitions
+>>>>
+>>>>> +              data-lanes:
+>>>>> +                $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>>
+>>>> This is already a part of video-interfaces, so you don't need $ref
+>>>>
+>>>>> +                minItems: 1
+>>>>> +                maxItems: 4
+>>>>> +                items:
+>>>>> +                  maximum: 3
+>>>>
+>>>> enum: [0, 1, 2, 3]
+>>>>
+>>>>> +              link-frequencies:
+>>>>> +                $ref: /schemas/types.yaml#/definitions/uint64-array
+>>>>> +                minItems: 1
+>>>>> +                maxItems: 4
+>>>>> +                items:
+>>>>> +                  maximum: 8100000000
+>>>>
+>>>> I think we can have enum here too.
+>>>>
+>>>>> +
+>>>>> +  required:
+>>>>> +    - port@0
+>>>>> +    - port@1
+>>>>> +
+>>>>>   required:
+>>>>>     - compatible
+>>>>>     - reg
+>>>>> @@ -193,6 +218,8 @@ examples:
+>>>>>                   reg = <1>;
+>>>>>                   endpoint {
+>>>>>                       remote-endpoint = <&typec>;
+>>>>> +                    data-lanes = <0 1>;
+>>>>> +                    link-frequencies = /bits/ 64 <1620000000 
+>>>>> 2700000000 5400000000 8100000000>;
+>>>>>                   };
+>>>>>               };
+>>>>>           };
+>>>>
+>>
+
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog
+With best wishes
+Dmitry
 
