@@ -2,174 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7486483C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516FB6483C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiLIO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S229478AbiLIO22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLIO2I (ORCPT
+        with ESMTP id S229888AbiLIO2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:28:08 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B821DF1C;
-        Fri,  9 Dec 2022 06:28:02 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NTCqM4hgPz9v7Gn;
-        Fri,  9 Dec 2022 22:20:47 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD343DORZNjNjDSAA--.62266S2;
-        Fri, 09 Dec 2022 15:27:36 +0100 (CET)
-Message-ID: <8ec1fb8eddf209a4f6b10bb3575334510f100c41.camel@huaweicloud.com>
-Subject: Re: [PATCH] KEYS: asymmetric: Make a copy of sig and digest in
- vmalloced stack
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Fri, 09 Dec 2022 15:27:23 +0100
-In-Reply-To: <3f1c74f320a288b6581241fc3039103cbcee7b27.camel@huaweicloud.com>
-References: <20221208164610.867747-1-roberto.sassu@huaweicloud.com>
-         <Y5JwpdGF50oFKw0z@sol.localdomain>
-         <3f1c74f320a288b6581241fc3039103cbcee7b27.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwD343DORZNjNjDSAA--.62266S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr1xAr1UZF4UKFy5JF15twb_yoW5uF48pa
-        95WF4DtFWUKr1UCr12v3WxKw1jyw1jkF129w4rAw15Crn0vryxC3y0kr45WF93Jr4kXFyx
-        trW8WwsxZFn8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj4Z3zQAAsJ
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Dec 2022 09:28:19 -0500
+Received: from out-143.mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3A23BD4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:28:17 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670596095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L5PBJXFzAfljLL5GpFuCZtP5a/X5elUo4Ca2Dzwt22Y=;
+        b=mnihHuRTQhvfXW58YLWebiCzuZVttBgCe0CuYAQ4KmPqSErVy/jvpK2M6SeT+oXEFJX2EW
+        mbOTmMwzSNghV5XF4WLLO/vNPbZXBlsMlDHPzCh5Dun9J9GqOQCFbbiP9wRUHhn1yHV19v
+        BegeO8C3lX7mUD+A7xTP1A7YTstX6rI=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero
+ support
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <7d72778e-7305-18e9-edf4-ed55a98aa7e2@nvidia.com>
+Date:   Fri, 9 Dec 2022 22:27:38 +0800
+Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>, tsahu@linux.ibm.com,
+        David Hildenbrand <david@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <00222280-DBDD-49A3-92A5-05112359AE30@linux.dev>
+References: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
+ <92965844-c430-8b8e-d9f1-705d7578bceb@nvidia.com>
+ <ec8f46ca-9ea6-4567-2038-22f6d3000ed5@oracle.com>
+ <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
+ <0187f9c2-e80a-9cde-68bc-c9bdbd96b6fe@oracle.com>
+ <Y5I78soNmAFv7pi8@casper.infradead.org> <Y5JCi3h8bUzLf3cu@monkey>
+ <2723541a-79aa-c6b5-d82c-53db76b78145@oracle.com>
+ <e86ca90f-e59e-3851-7225-b5f596ad04b9@nvidia.com>
+ <36ddac45-ecd0-e2d2-e974-8c85ca503053@oracle.com>
+ <20cc2088-b66e-28d1-a529-414e82146336@nvidia.com>
+ <434a111c-7f1a-0018-6bd2-561cb382deea@oracle.com>
+ <7d72778e-7305-18e9-edf4-ed55a98aa7e2@nvidia.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-09 at 15:15 +0100, Roberto Sassu wrote:
-> On Thu, 2022-12-08 at 15:17 -0800, Eric Biggers wrote:
-> > On Thu, Dec 08, 2022 at 05:46:10PM +0100, Roberto Sassu wrote:
-> > > diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> > > index 2f8352e88860..307799ffbc3e 100644
-> > > --- a/crypto/asymmetric_keys/public_key.c
-> > > +++ b/crypto/asymmetric_keys/public_key.c
-> > > @@ -363,7 +363,8 @@ int public_key_verify_signature(const struct public_key *pkey,
-> > >  	struct scatterlist src_sg[2];
-> > >  	char alg_name[CRYPTO_MAX_ALG_NAME];
-> > >  	char *key, *ptr;
-> > > -	int ret;
-> > > +	char *sig_s, *digest;
-> > > +	int ret, verif_bundle_len;
-> > >  
-> > >  	pr_devel("==>%s()\n", __func__);
-> > >  
-> > > @@ -400,8 +401,21 @@ int public_key_verify_signature(const struct public_key *pkey,
-> > >  	if (!req)
-> > >  		goto error_free_tfm;
-> > >  
-> > > -	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> > > -		      GFP_KERNEL);
-> > > +	verif_bundle_len = pkey->keylen + sizeof(u32) * 2 + pkey->paramlen;
-> > > +
-> > > +	sig_s = sig->s;
-> > > +	digest = sig->digest;
-> > > +
-> > > +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > +		if (!virt_addr_valid(sig_s))
-> > > +			verif_bundle_len += sig->s_size;
-> > > +
-> > > +		if (!virt_addr_valid(digest))
-> > > +			verif_bundle_len += sig->digest_size;
-> > > +	}
-> > > +
-> > > +	/* key points to a buffer which could contain the sig and digest too. */
-> > > +	key = kmalloc(verif_bundle_len, GFP_KERNEL);
-> > >  	if (!key)
-> > >  		goto error_free_req;
-> > >  
-> > > @@ -424,9 +438,24 @@ int public_key_verify_signature(const struct public_key *pkey,
-> > >  			goto error_free_key;
-> > >  	}
-> > >  
-> > > +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > +		ptr += pkey->paramlen;
-> > > +
-> > > +		if (!virt_addr_valid(sig_s)) {
-> > > +			sig_s = ptr;
-> > > +			memcpy(sig_s, sig->s, sig->s_size);
-> > > +			ptr += sig->s_size;
-> > > +		}
-> > > +
-> > > +		if (!virt_addr_valid(digest)) {
-> > > +			digest = ptr;
-> > > +			memcpy(digest, sig->digest, sig->digest_size);
-> > > +		}
-> > > +	}
-> > > +
-> > >  	sg_init_table(src_sg, 2);
-> > > -	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
-> > > -	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-> > > +	sg_set_buf(&src_sg[0], sig_s, sig->s_size);
-> > > +	sg_set_buf(&src_sg[1], digest, sig->digest_size);
-> > >  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
-> > >  				   sig->digest_size);
-> > >  	crypto_init_wait(&cwait);
-> > 
-> > We should try to avoid adding error-prone special cases.  How about just doing
-> > the copy of the signature and digest unconditionally?  That would be much
-> > simpler.  It would even mean that the scatterlist would only need one element.
-> 
-> Took some time to figure out why Redzone was overwritten.
-> 
-> There must be two separate scatterlists. If you set the first only with
-> the sum of the key length and digest length, mpi_read_raw_from_sgl()
 
-Of signature length and digest length.
 
-Roberto
+> On Dec 9, 2022, at 06:39, John Hubbard <jhubbard@nvidia.com> wrote:
+>=20
+> On 12/8/22 14:33, Sidhartha Kumar wrote:
+>> On 12/8/22 2:14 PM, John Hubbard wrote:
+>>> On 12/8/22 14:12, Sidhartha Kumar wrote:
+>>>> On 12/8/22 2:01 PM, John Hubbard wrote:
+>>>>> On 12/8/22 13:58, Sidhartha Kumar wrote:
+>>>>>> Thanks John, Mike, Matthew, and Muchun for the feedback.
+>>>>>>=20
+>>>>>> To summarize this discussion and outline the next version of this =
+patch, the changes I'll make include:
+>>>>>>=20
+>>>>>> 1) change the name of folio_set_compound_order() to =
+folio_set_order()
+>>>>>> 2) change the placement of this function from mm.h to =
+mm/internal.h
+>>>>>> 3) folio_set_order() will set both _folio_order and =
+_folio_nr_pages and handle the zero order case correctly.
+>>>>>> 4) remove the comment about hugetlb's specific use for zero =
+orders
+>>>>>> 5) improve the style of folio_set_order() by removing ifdefs from =
+inside the function to doing
+>>>>>>=20
+>>>>>> #ifdef CONFIG_64BIT
+>>>>>>   static inline void folio_set_order(struct folio *folio,
+>>>>>>                   unsigned int order)
+>>>>>>   {
+>>>>>>       VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>>>>>=20
+>>>>> Sounds good, except for this part: why is a function named
+>>>>> folio_set_order() BUG-ing on a non-large folio? The naming
+>>>>> is still wrong, perhaps?
+>>>>>=20
+>>>>=20
+>>>> This is because the _folio_nr_pages and _folio_order fields are =
+part of the first tail page in the folio. folio_test_large returns if =
+the folio is larger than one page which would be required for setting =
+the fields.
+>>>=20
+>>> OK, but then as I said, the name is wrong. One can either:
+>>>=20
+>>> a) handle the non-large case, or
+>>>=20
+>>> b) rename the function to indicate that it only works on large =
+folios.
+>>>=20
+>> Discussed here[1], the BUG_ON line seemed more appropriate over
+>> if (!folio_test_large(folio))
+>>     return;
+>> as the misuse would not be silent. I think I would be against =
+renaming the function as I don't see any large folio specific function =
+names for other accessors of tail page fields. Would both the BUG_ON and =
+return on non-large folio be included then?
+>=20
+> Actually, if you want the "misuse to not be silent", today's =
+guidelines
+> would point more toward WARN and return, instead of BUG, btw.
 
-> called by rsa_enc() is going to write before the d pointer in MPI.
-> 
-> 		for (x = 0; x < len; x++) {
-> 			a <<= 8;
-> 			a |= *buff++;
-> 			if (((z + x + 1) % BYTES_PER_MPI_LIMB) == 0) {
-> 				val->d[j--] = a;
-> 				a = 0;
-> 			}
-> 		}
-> 
-> Roberto
-> 
-> > Also, the size of buffer needed is only
-> > 
-> > 	max(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> > 	    sig->s_size + sig->digest_size)
-> > 
-> > ... since the signature and digest aren't needed until the key was already used.
-> > 
-> > - Eric
+=46rom you advise, I think we can remove VM_BUG_ON and handle non-zero
+order page, something like:
+
+static inline void folio_set_order(struct folio *folio,
+		                   unsigned int order)
+{
+	if (!folio_test_large(folio)) {
+		WARN_ON(order);
+		return;
+	}
+
+	folio->_folio_order =3D order;
+#ifdef CONFIG_64BIT
+	folio->_folio_nr_pages =3D order ? 1U << order : 0;
+#endif
+}
+
+In this case,
+
+  1) we can handle both non-zero and zero (folio_order() works as well
+     for this case) order page.
+  2) it can prevent OOB for non-large folio and warn unexpected users.
+  3) Do not BUG.
+  4) No need to rename folio_set_order.
+
+What do you think?
+
+Thanks.
+
+>=20
+> I don't think that a survey of existing names is really the final word =
+on what
+> to name this. Names should be accurate, even if other names are less =
+so. How
+> about something like:
+>=20
+>    large_folio_set_order()
+>=20
+> ?
+>=20
+>> [1]: =
+https://lore.kernel.org/linux-mm/20221129225039.82257-1-sidhartha.kumar@or=
+acle.com/T/#m98cf80bb21ae533b7385f2e363c602e2c9e2802d
+>>>=20
+>>> thanks,
+>=20
+> thanks,
+> --=20
+> John Hubbard
+> NVIDIA
+
 
