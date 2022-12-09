@@ -2,77 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9965A647D8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA69647D90
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiLIGF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 01:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
+        id S229732AbiLIGIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 01:08:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiLIGFY (ORCPT
+        with ESMTP id S229478AbiLIGIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 01:05:24 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39BD4E6AB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 22:05:23 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2B964uKq001168
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Dec 2022 01:04:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1670565898; bh=eB3l1ZPS+3z8Gov8819OEgKyJzNPoD2Z+tSNfsm5SEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=WazQQWWuAwZXsPrJBbhxRuabsvOTxvfTPzzCsp5BWLyumSnMKMQkpMRgAA8CLFrHB
-         MwJiArrx49RCnwh0dk+qR7Bc8FAr3SKL4ceVGGSB1diGV2n2F2nwvl3c0J5acRlb3B
-         T4Xw9GCpgIfUONS6Ca9hs7334R4VxKF4WYE27ZcYOngvZpIJhrXvGhVFyMBprkegr9
-         sJlXHf1tZkJE4gbMsoM0OxEr65bDxljCxIQ23yTkiNVQtooC2tDFrsjiMgrUyMvfwd
-         XAexs/Mr8y7UO5U4/RLDVPPic7a9q7OqbBYVC7TcS18Vwu15WsFJ0+kTQRMB6TNDwG
-         /+563E+yqO98Q==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 63F8E15C3AE9; Fri,  9 Dec 2022 01:04:56 -0500 (EST)
-Date:   Fri, 9 Dec 2022 01:04:56 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 3/3] ext4: add check pending tree when evict inode
-Message-ID: <Y5LQCPyJyg/pY2PJ@mit.edu>
-References: <20221208033426.1832460-1-yebin@huaweicloud.com>
- <20221208033426.1832460-4-yebin@huaweicloud.com>
+        Fri, 9 Dec 2022 01:08:21 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D00801DC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 22:08:17 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B94mJ1H026310;
+        Fri, 9 Dec 2022 06:07:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=n26JXWuIL0Cc2+Ws1zdvTJ3r1ZE7iGezxFyFGf7Pb/Q=;
+ b=BprFmqpA6OiCf892PzVBl2Ysz0GiKuo0cvyLPh2Dj8hhbl+I3tJA5D+eUjB940V16anS
+ gRiTEF143StHE7H77fVrFNMsfCmuxdg2NyQLtve3B9ykgi8ruldqKuGuRD/rzFNI08ds
+ 5bp04vrWeVcf6FKlNNwpqWMHPyJPQ6dmfgU92LyDqrXpQKadWOJdTi9wqw1B/ON0vSBK
+ UZtZynu8lrbnJvkZ1sRoU+pspIKG0Up9cXp3HNIpp31JxwKR+4AwGugXC7RIg/vfaJML
+ EIs06ooDXtuwJG18WmNmCli7VK00hU6fbpQGcqwoJhcDnpVRhT61AFOPNVDQi7hzEJEx 2w== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mbxak9fgr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 06:07:46 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8DGqBa002539;
+        Fri, 9 Dec 2022 06:07:44 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3m9mb242de-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 06:07:44 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B967eQm45810096
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Dec 2022 06:07:40 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E9582004B;
+        Fri,  9 Dec 2022 06:07:40 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6DA9320043;
+        Fri,  9 Dec 2022 06:07:40 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  9 Dec 2022 06:07:40 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55669)
+        id 2F8C4E027E; Fri,  9 Dec 2022 07:07:40 +0100 (CET)
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] jump_label: explicitly annotate inittext labels as init
+Date:   Fri,  9 Dec 2022 07:07:40 +0100
+Message-Id: <20221209060740.2785164-1-agordeev@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208033426.1832460-4-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9b4LnyhgRxdOnNjqVQ84JJrDLYgQsTZ2
+X-Proofpoint-ORIG-GUID: 9b4LnyhgRxdOnNjqVQ84JJrDLYgQsTZ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_02,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ mlxlogscore=879 impostorscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212090052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:34:26AM +0800, Ye Bin wrote:
-> 
-> Above issue fixed by
-> commit 1b8f787ef547 ("ext4: fix warning in 'ext4_da_release_space'")
-> in this scene. To make things better add check pending tree when evict
-> inode.
-> According to Eric Whitney's suggestion, bigalloc + inline is still in
-> development so we just add test for this situation, there isn't need to
-> add code to free pending tree entry.
+inittext code may be out of [__init_begin, __init_end]
+range on some architectures. Yet, the jump_label_init()
+only calls init_section_contains() function to check if
+a label needs to be annotated as init and inittext code
+is left behind.
 
-The i_pending_tree is an in-memory data structure, and so it's not
-appropriate to call ext4_error(), because there will be nothing for
-fsck to fix.
+Fixes: 19483677684b ("jump_label: Annotate entries that operate on __init code earlier")
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+---
+ kernel/jump_label.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-If you really want to a bug to be noticed, you could use a ext4_msg
-plus a WARN_ON(); but an ext4_error() is really not appropriate.
+diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+index 714ac4c3b556..77680665d374 100644
+--- a/kernel/jump_label.c
++++ b/kernel/jump_label.c
+@@ -481,13 +481,16 @@ void __init jump_label_init(void)
+ 
+ 	for (iter = iter_start; iter < iter_stop; iter++) {
+ 		struct static_key *iterk;
++		unsigned long addr;
+ 		bool in_init;
+ 
+ 		/* rewrite NOPs */
+ 		if (jump_label_type(iter) == JUMP_LABEL_NOP)
+ 			arch_jump_label_transform_static(iter, JUMP_LABEL_NOP);
+ 
+-		in_init = init_section_contains((void *)jump_entry_code(iter), 1);
++		addr = jump_entry_code(iter);
++		in_init = init_section_contains((void *)addr, 1) ||
++			  is_kernel_inittext(addr);
+ 		jump_entry_set_init(iter, in_init);
+ 
+ 		iterk = jump_entry_key(iter);
+-- 
+2.34.1
 
-Cheers,
-
-					- Ted
