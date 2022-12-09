@@ -2,159 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA49A6482AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F63E6482AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiLINBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 08:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S229954AbiLINFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiLINBS (ORCPT
+        with ESMTP id S229561AbiLINFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:01:18 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E2112E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:01:16 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id g7so3478233qts.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:01:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4EcL+sW0FV5i/8KEtc5L3BEzEEl7w8LGf0ZWhes5j0=;
-        b=BhUBUyobMY3/J3NKbsPc7mae2/8L+gdmNwVvJHjVhitpebjE5zgYDWeCyRCaRCZFS7
-         XOhKUiEPyaDQZthQoDJ6DRj3zCVS1RhAVt6A4Nc8TiV3qxTzUl/+BZWpbGDg8Kbuebf2
-         mxhDDpgDYT959EIxxkslYzbpqT6d1c6PlEZYND2OyZThNW56hTV4nD9nnq62gRuEWLGS
-         W9+rry1ECrxYZ9ohfMEWFi9uc4bk9mgT8EwezfBqcg5gg8PH/aFfqJ5Z3Id9xRRvgVGL
-         nj08NsOz9kZkp0w0dErGbJgLfnzitzfDSaD45rjcfBrXVQeHNxviNZctWpR8y7aHax67
-         fycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4EcL+sW0FV5i/8KEtc5L3BEzEEl7w8LGf0ZWhes5j0=;
-        b=ULb/6iE1dDKYCSYzbrbD4+hcOHWZ10SJ4ZetsP47CN9fhQYLayzZzyB9axXNB01o5A
-         p+S/+WhFPDkNZciZis3kLuy950cOOyylKibc8SGs50F1dRv97LTLOXHzLMLcOGsD0nCn
-         ug/BtLTKJgwzzsQjvIq9pRFhqEbBaFeCMvyKC0CuYKQLGkid/ZBv8SHVUJTXNjgdsAXq
-         ZNG3n7oNn3wC4iUKAahzFOSq5ybvJEmGJtOxHVs/EVh/pAJx0sFvHIZkQJWh1RC+pskJ
-         Llq1JwfpwEE/WCYR1bFWCsU7/mIlyHw1SR3yRKotM4TTEYpOkzLzXy8ryo2fGj+bgEkp
-         Lu0g==
-X-Gm-Message-State: ANoB5pkuTn1j8DKyWoWulrrODKSVYf6koaf96Sic9WLutnt5e9C3DNnC
-        pEub+5chyTeOZCThTrwnlMFw4Q==
-X-Google-Smtp-Source: AA0mqf5EpHbdu8Wqt4QHu1tqwR5mTZ2Xu5LKK8x1qa/bTGmpQKeoHqDcOCL3qazQWroE8uWe6nCvOA==
-X-Received: by 2002:ac8:4f49:0:b0:3a5:4168:9534 with SMTP id i9-20020ac84f49000000b003a541689534mr8293322qtw.54.1670590875950;
-        Fri, 09 Dec 2022 05:01:15 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac87590000000b003a6934255dasm841325qtq.46.2022.12.09.05.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 05:01:15 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p3d06-006ygm-FL;
-        Fri, 09 Dec 2022 09:01:14 -0400
-Date:   Fri, 9 Dec 2022 09:01:14 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        markzhang@nvidia.com, ohartoov@nvidia.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: refcount bug in nldev_newlink
-Message-ID: <Y5MxmrLlXPMZ+WS2@ziepe.ca>
-References: <0000000000004fe6c005ef43161d@google.com>
- <Y5Gq/zVi/fR85OJK@unreal>
+        Fri, 9 Dec 2022 08:05:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289DC1F2DE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:04:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670591075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u/BEyjC9xsEH5NMQX3QDWEaGFLUECMG5L/7NnRTgxTM=;
+        b=XVERZTPzvL9cjt3FNCozsrx79Wq59GEI0OMLJ0X8E9M1Hn1lp9IxIk9VsWh0crCD8vnwM3
+        SbS9Rmqo59r1QSZMixXcl2zwW+ThyGK/FoqX2X1x3AopmL3iA5L9A7EnP7XMr59dxc8uBS
+        0iPJTrzx8qgrcyrGeCEqW2lBCqZc3Gc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-284-2lafMJoeOx-4oHYu3gC_QQ-1; Fri, 09 Dec 2022 08:04:33 -0500
+X-MC-Unique: 2lafMJoeOx-4oHYu3gC_QQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BCE41C087AA;
+        Fri,  9 Dec 2022 13:04:31 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0D689C15BA5;
+        Fri,  9 Dec 2022 13:04:26 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andrew Waterman <andrew@sifive.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Vineet Gupta <vineetg@rivosinc.com>, stillson@rivosinc.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        atishp@atishpatra.org, guoren@kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        greentime.hu@sifive.com, vincent.chen@sifive.com,
+        andy.chiu@sifive.com, arnd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bjorn@kernel.org, libc-alpha@sourceware.org,
+        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
+        linux@rivosinc.com
+Subject: Re: RISCV Vector unit disabled by default for new task (was Re:
+ [PATCH v12 17/17] riscv: prctl to enable vector commands)
+References: <b1dae947-d52a-d28e-5ddc-c1ad6d29828c@rivosinc.com>
+        <mhng-84ad9495-ef4b-4343-89ee-dfe45ab69ff7@palmer-ri-x1c9>
+        <CA++6G0D8RdjgvzQf-gMdakcF-Jj_PMjP=MBtAbSC0Qcu_WrTTQ@mail.gmail.com>
+        <877cz0nbce.fsf@oldenburg.str.redhat.com>
+        <Y5MoPdYimQtqQvkM@bruce.bluespec.com>
+        <874ju4lpum.fsf@oldenburg.str.redhat.com>
+        <Y5MtTLtrDnCW6Dik@bruce.bluespec.com>
+Date:   Fri, 09 Dec 2022 14:04:23 +0100
+In-Reply-To: <Y5MtTLtrDnCW6Dik@bruce.bluespec.com> (Darius Rad's message of
+        "Fri, 9 Dec 2022 07:42:52 -0500")
+Message-ID: <87zgbwk9t4.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5Gq/zVi/fR85OJK@unreal>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:14:39AM +0200, Leon Romanovsky wrote:
+* Darius Rad:
 
-> >  __refcount_dec include/linux/refcount.h:344 [inline]
-> >  refcount_dec include/linux/refcount.h:359 [inline]
-> >  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
-> >  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
-> >  netdev_put include/linux/netdevice.h:4056 [inline]
-> >  dev_put include/linux/netdevice.h:4082 [inline]
-> >  nldev_newlink+0x360/0x5d0 drivers/infiniband/core/nldev.c:1733
-> >  rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
-> >  rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
-> >  netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
-> >  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
-> >  netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
-> >  sock_sendmsg_nosec net/socket.c:714 [inline]
-> >  sock_sendmsg+0xd3/0x120 net/socket.c:734
-> >  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
-> >  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
-> >  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7fd5bc473699
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007ffed185aff8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5bc473699
-> > RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000003
-> > RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
-> > R10: 00007ffed185aa70 R11: 0000000000000246 R12: 00007ffed185b010
-> > R13: 00000000000f4240 R14: 0000000000011fc1 R15: 00007ffed185b004
-> >  </TASK>
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this issue, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
-> 
-> Jason, what do you think?
+> On Fri, Dec 09, 2022 at 01:32:33PM +0100, Florian Weimer via Libc-alpha wrote:
+>> * Darius Rad:
+>> 
+>> > On Fri, Dec 09, 2022 at 11:02:57AM +0100, Florian Weimer wrote:
+>> >> * Andrew Waterman:
+>> >> 
+>> >> > This suggests that ld.so, early-stage libc, or possibly both will need
+>> >> > to make this prctl() call, perhaps by parsing the ELF headers of the
+>> >> > binary and each library to determine if the V extension is used.
+>> >> 
+>> >> If the string functions use the V extension, it will be enabled
+>> >> unconditionally.  So I don't see why it's okay for libc to trigger this
+>> >> alleged UAPI change, when the kernel can't do it by default.
+>> >> 
+>> >
+>> > Because the call to enable can fail and userspace needs to deal with that.
+>> 
+>> Failure is usually indicated by an AT_HWCAP or AT_HWCAP2 bit remaining
+>> zero, or perhaps a special CPU register (although that is more unusual).
+>
+> That would indicate that the extension is not present, which is one of, but
+> not the only way it can fail.
 
-No, the key to this report is that the refcount dec is inside the tracker:
+I think you should bring down the number of failure modes.  HWCAP has
+the advantage that it communicates kernel/hypervisor/firmware/CPU
+support in a single bit, which simplifies the programming model and
+avoids hard-to-detect bugs.  It's not clear why it would be beneficial
+to continue on ENOMEM failures here because the system must clearly be
+in bad shape at this point, and launching a new process is very unlikely
+to improve matters.  So I think the simpler programming model is the way
+to go here.
 
-> >  __refcount_dec include/linux/refcount.h:344 [inline]
-> >  refcount_dec include/linux/refcount.h:359 [inline]
-> >  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
-> >  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
+> The vector extension relies on dynamically allocated memory in the kernel,
+> which can fail.
 
-Which is not underflowing the refcount on the dev, it is actually
-trying to say the tracker has become unbalanced.
+But this failure can be reported as part of execve and clone.
 
-Eg this put is not matched with a hold that specified the tracker.
+> It also provides the opportunity for the kernel to deny access to the
+> vector extension, perhaps due to administrative policy or other future
+> mechanism.
 
-Probably this:
+HWCAP can do this, too.
 
-diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index ff35cebb25e265..115b77c5e9a146 100644
---- a/drivers/infiniband/core/device.c
-+++ b/drivers/infiniband/core/device.c
-@@ -2192,6 +2192,7 @@ static void free_netdevs(struct ib_device *ib_dev)
-                if (ndev) {
-                        spin_lock(&ndev_hash_lock);
-                        hash_del_rcu(&pdata->ndev_hash_link);
-+                       netdev_tracker_free(ndev, &pdata->netdev_tracker);
-                        spin_unlock(&ndev_hash_lock);
- 
-                        /*
-@@ -2201,7 +2202,7 @@ static void free_netdevs(struct ib_device *ib_dev)
-                         * comparisons after the put
-                         */
-                        rcu_assign_pointer(pdata->netdev, NULL);
--                       dev_put(ndev);
-+                       __dev_put(ndev);
-                }
-                spin_unlock_irqrestore(&pdata->netdev_lock, flags);
-        }
+Thanks,
+Florian
 
