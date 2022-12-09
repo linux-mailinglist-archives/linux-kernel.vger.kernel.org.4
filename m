@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6363D647DD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D62D647DDE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLIGhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 01:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S229867AbiLIGoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 01:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLIGhs (ORCPT
+        with ESMTP id S229760AbiLIGoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 01:37:48 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B90178BB;
-        Thu,  8 Dec 2022 22:37:46 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o12so3869117pjo.4;
-        Thu, 08 Dec 2022 22:37:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KbT7dCn+oPpeQf3mxkQY3Cx4LnSVac2KcmZMWqK+/Z0=;
-        b=SEp88cn0A7yJd/b0yAZVoc41REVHpeMxfVD4h6gzakrclrB0G6fger+wSWw2XE8zw2
-         V9nAlG6STKg70BefPJujtx9d+PBV72Q8nu6qoi8KwXruuDX7Yl1XI21TAPkoh2TNDsGM
-         rVSRN8xj4m6hBNq9dmIoXK6uoz7gFOmdXPCrGNygr277f7Y7ulETAd/Po9Vbbn8lKo4v
-         a3/BVn0oGfYBiKhKiIby6ABgNN+7uv/v8xA+14BHPnKa1umfiP0iPS1WHKo3/AvBdA8g
-         ofasaUUpc7NJRxdoOoEkjxT7hALqYJ4z1c0DttdpJRwJfYKe7yRDdWnEVFgR2FbbyOb3
-         WgGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KbT7dCn+oPpeQf3mxkQY3Cx4LnSVac2KcmZMWqK+/Z0=;
-        b=DnYL4fgnxF8EfnIeOZ+LGl6Y4F96dYS1m8cM+l9V8Q4EcwAI7Auknvsv08TUfYo6gO
-         jypnR7oSX0Z57y8lY36HYZb74+tJ69a9u/VEzsvd/MtyPdk2o+INsPOK2w+4lZUpd8NU
-         fjnDgoPkvaQf4YuqBkKjypXBtrkA7s4i1e7SleozcXGBDCCB5o93dvbghGs2NpdGh89m
-         pBse4dDu5XGkK6gkR30USW6d6gT8qDtysDWuyo+yAf+joynUTY+cYaGWmvwKLoqyl/lw
-         8p/964kqRTJmaib5hh8jysCB1i7kber/wNfy7LJ8v20tExO8jXumXNNNP0Q4cuJG/J6x
-         iTuA==
-X-Gm-Message-State: ANoB5plpd+qf8BOGWR6nSnxDvQFY5oL/VZR66Fqh4zmHFFSF1/7HSaf9
-        Bdu7ZvbjoElW/UWc/E1oI8Jf/YhMddnj/In4ey0=
-X-Google-Smtp-Source: AA0mqf7+2U3JG0PhM3d0nN81ovNmFUx+1vJ0BRSaZoqYGqKFVR+6IfFWU4ao49PAcOsbJoGQ9f9cctQXBvTOVTEJAzs=
-X-Received: by 2002:a17:90a:5d08:b0:218:770c:9a40 with SMTP id
- s8-20020a17090a5d0800b00218770c9a40mr87239958pji.158.1670567865615; Thu, 08
- Dec 2022 22:37:45 -0800 (PST)
+        Fri, 9 Dec 2022 01:44:05 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5074A468;
+        Thu,  8 Dec 2022 22:43:57 -0800 (PST)
+X-UUID: 209537185f1a42768ca3c573c232f059-20221209
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XfkmgaoPa7gPC1ZTFTs+Ib5gI1ywkha25Ly8O/K7+8c=;
+        b=nl5Oo+fHbinveA9Yklu/jsfW0y30NfwtaoGoqS03pXM6cl9yJ3N/MQiYZoGkaH/eHIe90Yf8W2UFJUDA7iPTVNAH09yFMZFE4UGc71Pj6mSAxn/yG5An95UNL75vyq5Q5nCcIYVnPovKfy2sZdhKZScZBungk5w15GFB+tFIKu4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:5cc93ce5-764d-4399-a0ed-c074687a78df,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.14,REQID:5cc93ce5-764d-4399-a0ed-c074687a78df,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:dcaaed0,CLOUDID:fa181bd2-652d-43fd-a13a-a5dd3c69a43d,B
+        ulkID:2212091443511Y6EMJCM,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 209537185f1a42768ca3c573c232f059-20221209
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <xiangsheng.hou@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1918272497; Fri, 09 Dec 2022 14:43:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 9 Dec 2022 14:43:47 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 9 Dec 2022 14:43:46 +0800
+From:   Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+CC:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <benliang.zhao@mediatek.com>, <bin.zhang@mediatek.com>
+Subject: [PATCH v4 0/9] Add MediaTek MT7986 SPI NAND and ECC support
+Date:   Fri, 9 Dec 2022 14:43:08 +0800
+Message-ID: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221201091150.3474-1-wenchao.chen@unisoc.com>
- <CAPDyKFoBf25CDAgg5R0MSp53iC277FzGO9DUDf3LPU+_wuxCsA@mail.gmail.com>
- <CA+Da2qwjY=ebOmwsauPS5r8ig7wbH0JwjhDPmi1+eaT09tKxGQ@mail.gmail.com> <CAPDyKFrLVhBs2-b6WP-UQbaS03hBRKRUa08fYU+EWLA1kgPXYQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFrLVhBs2-b6WP-UQbaS03hBRKRUa08fYU+EWLA1kgPXYQ@mail.gmail.com>
-From:   Wenchao Chen <wenchao.chen666@gmail.com>
-Date:   Fri, 9 Dec 2022 14:37:33 +0800
-Message-ID: <CA+Da2qwDnNbinH3CHXHXHDHwB5PUaGMryQOeqoHnE=tcJ6QFqQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-sprd: remove prefer asynchronous probe
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Wenchao Chen <wenchao.chen@unisoc.com>, adrian.hunter@intel.com,
-        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhenxiong.lai@unisoc.com,
-        yuelin.tang@unisoc.com, gengcixi@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,85 +74,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 8:50 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Fri, 2 Dec 2022 at 03:41, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
-> >
-> > On Thu, Dec 1, 2022 at 6:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Thu, 1 Dec 2022 at 10:12, Wenchao Chen <wenchao.chen@unisoc.com> wrote:
-> > > >
-> > > > The prefer asynchronous probe affects the order of device probes.
-> > >
-> > > Is there a problem with this? If so, can you elaborate on what kind of problems?
-> > >
-> >
-> > Hi Uffe
-> > dts:
-> > sdio0: sdio@71100000 {
-> > ...
-> > bus-width = <4>;
-> > no-sdio;
-> > no-mmc;
-> > ...
-> > }; // SD Host(Device: SD CARD)
-> >
-> > sdio3: sdio@71400000 {
-> > ...
-> > bus-width = <8>;
-> > non-removable;
-> > no-sdio;
-> > no-sd;
-> > ...
-> > }; // eMMC Host(Device: eMMC)
-> >
-> > According to the order of DTS: sdio0: sdio@71100000 is MMC0, sdio3:
-> > sdio@71400000 is MMC1.
-> > Log:
-> > [    1.714617][   T11] mmc1: SDHCI controller on 71400000.sdio
-> > [71400000.sdio] using ADMA 64-bit
-> > [    1.715276][    T9] mmc0: SDHCI controller on 71100000.sdio
-> > [71100000.sdio] using ADMA 64-bit
-> > [    1.884525][   T75] mmc1: Host Software Queue enabled
-> > [    1.890965][   T75] mmc1: new HS400 Enhanced strobe MMC card at address 0001
-> >
-> > But set prefer_asynchronous_probe, sometimes there will be sdio0:
-> > sdio@71100000 is MMC1, sdio3: sdio@71400000 is MMC0.
-> > Log:
-> > [    1.619888][   T68] mmc0: SDHCI controller on 71400000.sdio
-> > [71400000.sdio] using ADMA 64-bit
-> > [    1.620534][    T9] mmc1: SDHCI controller on 71100000.sdio
-> > [71100000.sdio] using ADMA 64-bit
-> > [    1.792570][   T77] mmc0: Host Software Queue enabled
-> > [    1.799532][   T77] mmc0: new HS400 Enhanced strobe MMC card at address 0001
->
-> Neither the order of the nodes in DT or dropping
-> PROBE_PREFER_ASYNCHRONOUS provides the guarantees that you suggest
-> above. In fact, that has never been the case for eMMC/SD cards.
->
-> >
-> > We use emmc as rootfs (without ramfs or initfs), but with SD card
-> > inserted and not inserted, the partition name of emmc is different, we
-> > need to fix this partition name.
->
-> If you can't use PARTUUID/UUID, which is certainly the preferred
-> solution - you may also assign a fixed index mmcN to an MMC host
-> controller and its corresponding mmcblk[n] devices, by defining an
-> alias in the /aliases device tree node.
->
+This patch series add MediaTek MT7986 SPI NAND and ECC controller
+support, split ECC engine with rawnand controller in bindings and
+change to YAML schema.
 
-You're right.
+Changes since V3:
+ - Correct mediatek,mtk-nfc.yaml dt-bindings.
 
-        aliases {
-...
-               mmc0 = &sdio3;
-               mmc1 = &sdio0;
-...
-        };
+Changes since V2:
+ - Change ECC err_mask value with GENMASK macro.
+ - Change snfi mediatek,rx-latch-latency to mediatek,rx-latch-latency-ns.
+ - Add a separate patch for DTS change.
+ - Move common description to top-level pattern properties.
+ - Drop redundant parts in dt-bindings.
 
-Thank you very much.
+Changes since V1:
+ - Use existing sample delay property.
+ - Add restricting for optional nfi_hclk.
+ - Improve and perfect dt-bindings documentation.
+ - Change existing node name to match NAND controller DT bingings.
+ - Fix issues reported by dt_binding_check.
+ - Fix issues reported by dtbs_check.
 
-> [...]
->
-> Kind regards
-> Uffe
+Xiangsheng Hou (9):
+  spi: mtk-snfi: Change default page format to setup default setting
+  spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
+  mtd: nand: ecc-mtk: Add ECC support fot MT7986 IC
+  dt-bindings: spi: mtk-snfi: Add compatible for MT7986
+  spi: mtk-snfi: Add snfi sample delay and read latency adjustment
+  dt-bindings: spi: mtk-snfi: Add read latch latency property
+  dt-bindings: mtd: Split ECC engine with rawnand controller
+  arm/arm64: dts: mediatek: Fix existing NAND controller node name
+  dt-bindings: mtd: mediatek,nand-ecc-engine: Add compatible for MT7986
+
+ .../bindings/mtd/mediatek,mtk-nfc.yaml        | 155 +++++++++++++++
+ .../mtd/mediatek,nand-ecc-engine.yaml         |  63 +++++++
+ .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+ .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |  54 +++++-
+ arch/arm/boot/dts/mt2701.dtsi                 |   2 +-
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   2 +-
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   2 +-
+ drivers/mtd/nand/ecc-mtk.c                    |  28 ++-
+ drivers/spi/spi-mtk-snfi.c                    |  41 +++-
+ 9 files changed, 330 insertions(+), 193 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+
+-- 
+2.25.1
+
