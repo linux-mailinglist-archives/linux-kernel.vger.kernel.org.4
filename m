@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D4C64843F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C332648422
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiLIOyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S229680AbiLIOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiLIOxp (ORCPT
+        with ESMTP id S229934AbiLIOtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:53:45 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66B961533
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:53:39 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f7so3391091edc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w8l6YI6ll5WTtemsFOxZHnG0tRV3sgRpFSwrNSjhQUI=;
-        b=QFl7VoOtaGk5JJJiTD/4KIC5FLgDPhNuBOMrb3WnSAoODL2ltc52rELA5f6yl7Bn7j
-         mYbNUsXfDCJ75uQrG1lZrpy8vrWDSlLuNc+DwsQQohwm/k745BMOpiYBdnk8YyDlL9Fq
-         7eDn+Dtw+CSLH6wmrmqvtN68OZ461bwi3ogQi4pmiDXFrr15Amw9K+7sAjoYiCPtv/mc
-         PMf+aDonj+6iew+Dh+5hsyQ1LSgQ6rvpmF51QrTg0U24d6fmLo6yxPrsR37jHc1CbRMJ
-         tBqK9JcG0+r3Xk6QRttN7gv2gLonVRU/cK8VMDIfHh+fZ3qa8enXQbuW2vEfMals9jM0
-         IO5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w8l6YI6ll5WTtemsFOxZHnG0tRV3sgRpFSwrNSjhQUI=;
-        b=xdkgeFbxGJZsx5APOJbiRzN3HV3uTepvAYmp1Ymp+blzgyiJqgWbzjpb/OU7OaFltN
-         oJMid/bkZETcgbfUzUwyLmsCroKdsxAB98PwEZEqVH8/T2C94ST3mlQwikdF1vvqoh8Y
-         Nd8I6iBvcj2SKxhFdN6aiAHfR4MubpZoY6YUEEJghTDpUv3vOl78Y/Maw3Rs52jtoZaF
-         kgZS06egSUNaOaN9VVfHjg444+GKmptuX+Sz0lu3sDWPulbQOR3/RamnLo3Hd+u3nyZ8
-         +kR/jDkANsmeM4Iw8ooBiJ/8LxcH4E9R1ht+LfM95+Z3TEs+hKuTFbu3pc17btXC1vd7
-         Uprg==
-X-Gm-Message-State: ANoB5plmMTEJRLJBUjBCh4dyhICCChghrv3BzQCOlPi7qyLZp6ZZ+knJ
-        uR3NVfGy+DqEA9EBUGV0XIohcg==
-X-Google-Smtp-Source: AA0mqf7iTbuKTrRATtfWNUUyFaIEQ2x3dRPnmp/q01kefuttCVcLa6LUxjn6tqOZ2JV/H/DHj4tTxw==
-X-Received: by 2002:aa7:cd46:0:b0:46d:e3f8:4ed4 with SMTP id v6-20020aa7cd46000000b0046de3f84ed4mr2215720edw.21.1670597618194;
-        Fri, 09 Dec 2022 06:53:38 -0800 (PST)
-Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id bd21-20020a056402207500b0046bb7503d9asm728424edb.24.2022.12.09.06.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:53:37 -0800 (PST)
-From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org,
-        Andreas Gruenbacher <agruen@linbit.com>,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-Subject: [PATCH 8/8] drbd: drbd_insert_interval(): Clarify comment
-Date:   Fri,  9 Dec 2022 15:53:27 +0100
-Message-Id: <20221209145327.2272271-9-christoph.boehmwalder@linbit.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221209145327.2272271-1-christoph.boehmwalder@linbit.com>
-References: <20221209145327.2272271-1-christoph.boehmwalder@linbit.com>
+        Fri, 9 Dec 2022 09:49:51 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2430B801CE;
+        Fri,  9 Dec 2022 06:49:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670597376; x=1702133376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YUXAzZaiIHP+TeJDcIUQIh8idIpiiNMmvl01maD+8eY=;
+  b=Cse/+WQqoA+jUhE37jUbCo/YvADagjzV3GEDovT3Dlchhl9lFlbOfABz
+   drwMaebL6D8U3veR7yz7pcC9oXGQCtwXupZR6nXxb/V26OXrQr7zxw8Yy
+   r0b9w3tAjPNM3tqIhAoLiQYUWH3C+QQWMX7UBeSl8EvpDOdgJ4MEDmyuw
+   r2K8naCBihZbIsVOpyVga7OQynHuT460WiqNPM/+OOa5R99ODPP0WulaP
+   oVezIPir8pMWZyo7L+7qF0pW0Iw3fb7aDTYjMz3+c30Tzr8iqcACyQ0pF
+   dubsc/rhOageeMARL5ApnoA3tYlhE0CuC8EHsJ8iZ19pk65pv7aoGfDg6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="187394902"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 07:49:35 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 07:49:29 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 9 Dec 2022 07:49:29 -0700
+Date:   Fri, 9 Dec 2022 15:54:36 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Vladimir Oltean <olteanv@gmail.com>,
+        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <daniel.machon@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <lars.povlsen@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Message-ID: <20221209145436.o5nclzrtu2eztvzs@soft-dev3-1>
+References: <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+ <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
+ <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+ <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+ <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
+ <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
+ <20221209125611.m5cp3depjigs7452@skbuf>
+ <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
+ <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
+ <287d650a96aaac34ac2f31c6735a9ecc@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <287d650a96aaac34ac2f31c6735a9ecc@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruen@linbit.com>
+The 12/09/2022 15:23, Michael Walle wrote:
+> 
+> Am 2022-12-09 15:20, schrieb Horatiu Vultur:
+> > The 12/09/2022 15:05, Michael Walle wrote:
+> > > 
+> > > Am 2022-12-09 13:56, schrieb Vladimir Oltean:
+> > > > On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
+> > > > > > Does it also work out of the box with the following patch if
+> > > > > > the interface is part of a bridge or do you still have to do
+> > > > > > the tc magic from above?
+> > > > >
+> > > > > You will still need to enable the TCAM using the tc command to have it
+> > > > > working when the interface is part of the bridge.
+> > > >
+> > > > FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
+> > > > no need to use tc. Same goes for ocelot-8021q, which also uses the
+> > > > VCAP.
+> > > > I wouldn't consider forcing the user to add any tc command in order for
+> > > > packet timestamping to work properly.
+> > 
+> > On ocelot, the vcap is enabled at port initialization, while on other
+> > platforms(lan966x and sparx5) you have the option to enable or disable.
+> > 
+> > > 
+> > > +1
+> > > Esp. because there is no warning. I.e. I tried this patch while
+> > > the interface was added on a bridge and there was no error
+> > > whatsoever.
+> > 
+> > What error/warning were you expecting to see here?
+> 
+> Scrap that. ptp4l is reporting an error in case the device is part
+> of a bridge:
+> Jan  1 02:33:04 buildroot user.info syslog: [9184.261] driver rejected
+> most general HWTSTAMP filter
+> 
+> Nevertheless, from a users POV I'd just expect it to work. How
+> would I know what I need to do here?
 
-Signed-off-by: Andreas Gruenbacher <agruen@linbit.com>
-Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
----
- drivers/block/drbd/drbd_interval.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What about a warning in the driver? Say that the vcap needs to be
+enabled.
 
-diff --git a/drivers/block/drbd/drbd_interval.c b/drivers/block/drbd/drbd_interval.c
-index b6aaf0d4d85b..873beda6de24 100644
---- a/drivers/block/drbd/drbd_interval.c
-+++ b/drivers/block/drbd/drbd_interval.c
-@@ -58,7 +58,7 @@ drbd_insert_interval(struct rb_root *root, struct drbd_interval *this)
-  * drbd_contains_interval  -  check if a tree contains a given interval
-  * @root:	red black tree root
-  * @sector:	start sector of @interval
-- * @interval:	may not be a valid pointer
-+ * @interval:	may be an invalid pointer
-  *
-  * Returns if the tree contains the node @interval with start sector @start.
-  * Does not dereference @interval until @interval is known to be a valid object
+> 
+> -michael
+
 -- 
-2.38.1
-
+/Horatiu
