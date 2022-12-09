@@ -2,113 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39CF648235
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E54648239
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiLIML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S229735AbiLIMNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiLIMLl (ORCPT
+        with ESMTP id S229468AbiLIMNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:11:41 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72653D93D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:11:23 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id f23-20020a5d8157000000b006dfb209094fso1979057ioo.18
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:11:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=27pxGUhnzYicBxjH03IaVIFoOWTqXBEXA2qSGC27VXw=;
-        b=PgVp0cYUxQpBgoRm6LgIfaYpi2s1DXjaeOv45OEMLSOx+b9UTeniEvZP85637XNQUE
-         7eoDtcDvBlkiV/VKO9BdPhluHCxmPWpTQ54n2OCq/WOM/GyYSPHlSEUBoQ8r6wmJpe3D
-         X/aB4MfB9fW4eacGMgGuO/GaGBU1jgQBrlaygpYYUz5fQuhojyX7LfIoUkJCMxwhaOWu
-         LFRIT98fXBTUryClCcPfo0QlM9QowaAWdgaRKIeTa1RVfk/Yl2Dv38GGjF0owadrR8lO
-         eT2oP8+Nw0jh0UWpramO+9T5mNMX7b9xrsE7ha8e/MDFWuxAr4h9LjBzidMdr5Qrm3/Z
-         DChg==
-X-Gm-Message-State: ANoB5pkg3Y3Jc3cCmcM8xDR9Kvsjyook0SIEsFMBldwFPFqLdE4yzbTh
-        gG+5RX59HkqOKGnHoR3XlAGNfy4TY4nsey7Kd+/DaVOYb072
-X-Google-Smtp-Source: AA0mqf5p/icoGOhwns+OGvGmDW9LW4/7fO7ruCrhnKtuNfURdT8SNEJXbdlgdaM56uFIXwe2iHIfN8BtSiCG1hLCy8wvL6j3ZAjM
+        Fri, 9 Dec 2022 07:13:14 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF8D429B8;
+        Fri,  9 Dec 2022 04:13:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670587993; x=1702123993;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=e8BT/cDBFBQUQOIwZICPu/t7dhHgmsgsTGSNOL/gEao=;
+  b=lx2pmjjxgLkPlO0+LQQRO04ftZpCLGR6/mWyf9Jd8gcBgeUSOyZb1Lpk
+   PXhCWnldamrYEvzsIJJeHB2/VBbK6URgmQGtci4I0C0UFvdliY4LwP6MS
+   HUuups6XTP8N14Y6YO9TZJ4u/BADPne4a/jP9Cdq+fveuF/dALciVgSTJ
+   jKqR+rv9KuA0tHgvvVzJjRiB1zn8Ic/syy4bGXvx8hgfDQMW9FLLy0rXp
+   nLhn7sJPFHo3heSBvLFRTPBgx758Eun+APjRR++R+7GRB5sKlkGXn7llQ
+   nksjaF4Ex8V4aJjKUpOb1eeOg4Pzj0Tn0Dgqg5AE+7ZtrekXohnwVtuTj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="305089198"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="305089198"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 04:13:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="789703025"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="789703025"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.86])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 04:13:09 -0800
+Message-ID: <69dd8714-4be1-6b1b-fa07-04c790a6c6fc@intel.com>
+Date:   Fri, 9 Dec 2022 14:13:06 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a92:c98e:0:b0:303:5425:fc00 with SMTP id
- y14-20020a92c98e000000b003035425fc00mr10012564iln.76.1670587883145; Fri, 09
- Dec 2022 04:11:23 -0800 (PST)
-Date:   Fri, 09 Dec 2022 04:11:23 -0800
-In-Reply-To: <524d919d-0197-2a81-9165-d0d6feb607fe@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005752c105ef640d84@google.com>
-Subject: Re: [syzbot] WARNING in drm_wait_one_vblank
-From:   syzbot <syzbot+6f7fe2dbc479dca0ed17@syzkaller.appspotmail.com>
-To:     code@siddh.me, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
+Content-Language: en-US
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
+ <20221205105931.410686-4-vadym.kochan@plvision.eu>
+ <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
+ <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
+ <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 9/12/22 14:10, Vadym Kochan wrote:
+> Hi Adrian,
+> 
+> On Fri, 9 Dec 2022 13:53:58 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>> On 9/12/22 13:39, Vadym Kochan wrote:
+>>> Hi Adrian,
+>>>
+>>> On Fri, 9 Dec 2022 09:23:05 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>> On 5/12/22 12:59, Vadym Kochan wrote:
+>>>>> There is a limitation on AC5 SoC that mmc controller
+>>>>> can't have DMA access over 2G memory, so use SDMA with
+>>>>> a bounce buffer. Swiotlb can't help because on arm64 arch
+>>>>> it reserves memblock's at the end of the memory.
+>>>>>
+>>>>> Additionally set mask to 34 bit since on AC5 SoC RAM starts
+>>>>> at 0x2_00000000.
+>>>>
+>>>> Can you explain more about how a 34-bit DMA mask works when
+>>>> SDMA only supports 32-bit addresses?
+>>>>
+>>>
+>>> So, after I set
+>>>
+>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
+>>>
+>>> then sdhc core sets mask to 32 bit, but then dma_map fails to map
+>>> bounce buffer because the base address is higher than 32bit - 0x2_00000000,
+>>> and 34bit mask fixed it.
+>>
+>> What happens if the bounce buffer gets mapped in the range
+>> 0x1_00000000 to 0x1_ffffffff ?
+>>
+> 
+> From my understanding, on the AC5 SoC RAM starts at 0x2_00000000 so the bounce
+> buffer can be mapped in the range 0x2_00000000..0x2_ffffffff
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in drm_wait_one_vblank
+Right but I guess I meant what about 0x3_00000000..0x3_ffffffff ?
+Isn't that also in DMA_BIT_MASK(34)
 
-platform vkms: vblank wait timed out on crtc 0
-WARNING: CPU: 1 PID: 4329 at drivers/gpu/drm/drm_vblank.c:1269 drm_wait_one_vblank+0x2bc/0x500 drivers/gpu/drm/drm_vblank.c:1269
-Modules linked in:
+> 
+>>>
+>>>>>
+>>>>> Co-developed-by: Elad Nachman <enachman@marvell.com>
+>>>>> Signed-off-by: Elad Nachman <enachman@marvell.com>
+>>>>> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+>>>>> ---
+>>>>>  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
+>>>>>  drivers/mmc/host/sdhci-xenon.h |  3 ++-
+>>>>>  2 files changed, 40 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
+>>>>> index 08e838400b52..5f3db0425674 100644
+>>>>> --- a/drivers/mmc/host/sdhci-xenon.c
+>>>>> +++ b/drivers/mmc/host/sdhci-xenon.c
+>>>>> @@ -13,7 +13,9 @@
+>>>>>  
+>>>>>  #include <linux/acpi.h>
+>>>>>  #include <linux/delay.h>
+>>>>> +#include <linux/dma-mapping.h>
+>>>>>  #include <linux/ktime.h>
+>>>>> +#include <linux/mm.h>
+>>>>>  #include <linux/module.h>
+>>>>>  #include <linux/of.h>
+>>>>>  #include <linux/pm.h>
+>>>>> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
+>>>>>  		return pltfm_host->clock;
+>>>>>  }
+>>>>>  
+>>>>> +static int xenon_set_dma_mask(struct sdhci_host *host)
+>>>>> +{
+>>>>> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>>>>> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
+>>>>> +	struct mmc_host *mmc = host->mmc;
+>>>>> +	struct device *dev = mmc_dev(mmc);
+>>>>> +
+>>>>> +	if (priv->hw_version == XENON_AC5) {
+>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
+>>>>> +
+>>>>> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
+>>>>> +	}
+>>>>> +
+>>>>> +	return sdhci_set_dma_mask(host);
+>>>>> +}
+>>>>> +
+>>>>>  static const struct sdhci_ops sdhci_xenon_ops = {
+>>>>>  	.voltage_switch		= xenon_voltage_switch,
+>>>>>  	.set_clock		= sdhci_set_clock,
+>>>>> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
+>>>>>  	.reset			= xenon_reset,
+>>>>>  	.set_uhs_signaling	= xenon_set_uhs_signaling,
+>>>>>  	.get_max_clock		= xenon_get_max_clock,
+>>>>> +	.set_dma_mask		= xenon_set_dma_mask,
+>>>>>  };
+>>>>>  
+>>>>>  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
+>>>>> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
+>>>>>  	xenon_disable_sdhc(host, sdhc_id);
+>>>>>  }
+>>>>>  
+>>>>> +static int xenon_ac5_probe(struct sdhci_host *host)
+>>>>> +{
+>>>>> +	struct sysinfo si;
+>>>>> +
+>>>>> +	si_meminfo(&si);
+>>>>> +
+>>>>> +	if ((si.totalram * si.mem_unit) > SZ_2G)
+>>>>> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
+>>>>> +
+>>>>> +	return 0;
+>>>>> +}
+>>>>> +
+>>>>>  static int xenon_probe(struct platform_device *pdev)
+>>>>>  {
+>>>>>  	struct sdhci_pltfm_host *pltfm_host;
+>>>>> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
+>>>>>  		}
+>>>>>  	}
+>>>>>  
+>>>>> +	if (priv->hw_version == XENON_AC5) {
+>>>>> +		err = xenon_ac5_probe(host);
+>>>>> +		if (err)
+>>>>> +			goto err_clk_axi;
+>>>>> +	}
+>>>>> +
+>>>>>  	err = mmc_of_parse(host->mmc);
+>>>>>  	if (err)
+>>>>>  		goto err_clk_axi;
+>>>>> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
+>>>>>  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
+>>>>>  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
+>>>>>  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
+>>>>> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
+>>>>>  	{}
+>>>>>  };
+>>>>>  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
+>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
+>>>>> index 3e9c6c908a79..0460d97aad26 100644
+>>>>> --- a/drivers/mmc/host/sdhci-xenon.h
+>>>>> +++ b/drivers/mmc/host/sdhci-xenon.h
+>>>>> @@ -57,7 +57,8 @@ enum xenon_variant {
+>>>>>  	XENON_A3700,
+>>>>>  	XENON_AP806,
+>>>>>  	XENON_AP807,
+>>>>> -	XENON_CP110
+>>>>> +	XENON_CP110,
+>>>>> +	XENON_AC5
+>>>>>  };
+>>>>>  
+>>>>>  struct xenon_priv {
+>>>>
+>>>
+>>> Regards,
+>>
 
-CPU: 1 PID: 4329 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-00148-g0d1409e4ff08 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:drm_wait_one_vblank+0x2bc/0x500 drivers/gpu/drm/drm_vblank.c:1269
-Code: 85 f6 0f 84 a3 01 00 00 e8 a1 82 03 fd 4c 89 ef e8 19 34 1b 00 44 89 e1 4c 89 f2 48 c7 c7 80 67 5d 8a 48 89 c6 e8 1b 54 d1 04 <0f> 0b e9 87 fe ff ff e8 78 82 03 fd 31 ff 4c 89 ee e8 5e 7f 03 fd
-RSP: 0018:ffffc90003887b40 EFLAGS: 00010282
-
-RAX: 0000000000000000 RBX: 000000000000187a RCX: 0000000000000000
-RDX: ffff888077e56080 RSI: ffffffff81615618 RDI: fffff52000710f5a
-RBP: ffff888146b6c000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff88801e146010 R14: ffff888146fb2dc0 R15: ffff888146ffe030
-FS:  00007fd446839700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d58fce0300 CR3: 0000000066c1d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- drm_fb_helper_ioctl+0x159/0x1a0 drivers/gpu/drm/drm_fb_helper.c:1259
- do_fb_ioctl+0x1d5/0x6e0 drivers/video/fbdev/core/fbmem.c:1188
- fb_ioctl+0xe7/0x150 drivers/video/fbdev/core/fbmem.c:1202
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fd445689409
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fd446839168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fd44579bf80 RCX: 00007fd445689409
-RDX: 0000000000000000 RSI: 0000000040044620 RDI: 0000000000000003
-RBP: 00007fd4468391d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffff493021f R14: 00007fd446839300 R15: 0000000000022000
- </TASK>
-
-
-Tested on:
-
-commit:         0d1409e4 Merge tag 'drm-fixes-2022-12-09' of git://ano..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bf8cb7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f99d4932d068617a
-dashboard link: https://syzkaller.appspot.com/bug?extid=6f7fe2dbc479dca0ed17
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
