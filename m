@@ -2,135 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDDF6481FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0116481FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLILyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S230011AbiLILyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLILyC (ORCPT
+        with ESMTP id S229470AbiLILyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:54:02 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4510A2F644;
-        Fri,  9 Dec 2022 03:54:00 -0800 (PST)
+        Fri, 9 Dec 2022 06:54:06 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21FD2F66D;
+        Fri,  9 Dec 2022 03:54:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670586840; x=1702122840;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=i6l99AsOk7Ek/fC/JJlzKRTZl8kQmivMJCaJu9pD6WY=;
-  b=g70OOyfpq57JmzL5fNoWYyVwu5sApRbF+H0X/Ja0tg51Gqeitl7PkDK+
-   dPsM1QjjjEuUlOzBjtpONK4QD4hcPZ+7kjVu3X84kpkXbQJNXSpEXPzGg
-   9Q+KrqrDZjZRR0gxgaUhVa+zcyJ4RLhNLD/m1K+9RzxoZvhzgBtw7zZDV
-   f58WPBIFy1KzO0bnf7YrZqlfpRSbezkRCAKcSHtGizkYo7j7i8rZuuhfM
-   CteNhoMvf5Is2mjhWkT6NXmoA0Cmk5+lsUyLwmAX88bTkNQ42B6NEBkCQ
-   oP6Mbg34Q4Vbn+jocPCpol7WK+fKDW4Y9Xuek6DIPJjddXOPYYyjPOLUT
+  t=1670586845; x=1702122845;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4SHazouiElxUjOC4Flye5c70aBAsz/8pI1HA43DONeM=;
+  b=UNCLoAoDFOXtEUZMBYivQ5W66vUGbMhwr5PmKi35Ii1lhhzUcHmmrbJC
+   b704oZvlxmFhk8faNrHy8+heRas+GN4l0EDJdNVdiqpYucO3C40zQZn8H
+   qQFKClfUeFMMryg933wetTTwoPnZXwViKH2qPsvHZr8yFHwrdv4IxQ7zZ
+   SGJ2crzON9NRdz5S77xSnXhQKaVo5jWw+9ov5HW4deOvpImDPkvjooB1G
+   VqwvuTGNETJEaOBm7Q6TYOMOaV8CN/ZtTDRZHthEow31SddBoJKgOSf6Q
+   htu1E0L/+27waXmuSo9XGJUtP9bwaPNe+0eRi5cEA4QCIh80ES7RgIcwB
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="305085941"
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="315078915"
 X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="305085941"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 03:53:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="736191278"
+   d="scan'208";a="315078915"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 03:54:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="892649410"
 X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="736191278"
-Received: from eliteleevi.tm.intel.com ([10.237.54.20])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 03:53:50 -0800
-Date:   Fri, 9 Dec 2022 13:53:31 +0200 (EET)
-From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
-X-X-Sender: kvehmane@eliteleevi.tm.intel.com
-To:     Ricardo Ribalda <ribalda@chromium.org>
-cc:     Oliver Neukum <oneukum@suse.com>, Juergen Gross <jgross@suse.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        kexec@lists.infradead.org,
-        Alsa-devel <alsa-devel@alsa-project.org>, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen
- userspace
-In-Reply-To: <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2212091349310.3532114@eliteleevi.tm.intel.com>
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org> <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org> <716e5175-7a44-7ae8-b6bb-10d9807552e6@suse.com> <CANiDSCtwSb50sjn5tM7jJ6W2UpeKzpuzng+RdJuywiC3-j2zdg@mail.gmail.com>
- <d3730d1d-6f92-700a-06c4-0e0a35e270b0@suse.com> <CANiDSCtm7dCst_atiWk=ZcK_D3=VzvD0+kWXVQr4gEn--JjGkw@mail.gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
+   d="scan'208";a="892649410"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.86])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 03:54:02 -0800
+Message-ID: <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
+Date:   Fri, 9 Dec 2022 13:53:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
+Content-Language: en-US
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
+ <20221205105931.410686-4-vadym.kochan@plvision.eu>
+ <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
+ <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, 1 Dec 2022, Ricardo Ribalda wrote:
-
-> On Thu, 1 Dec 2022 at 14:22, 'Oliver Neukum' via Chromeos Kdump <chromeos-kdump@google.com> wrote:
-> >
-> > On 01.12.22 14:03, Ricardo Ribalda wrote:
-> > > This patchset does not modify this behaviour. It simply fixes the
-> > > stall for kexec().
-> > >
-> > > The  patch that introduced the stall:
-> > > 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers
-> > > in .shutdown")
-> >
-> > That patch is problematic. I would go as far as saying that
-> > it needs to be reverted.
+On 9/12/22 13:39, Vadym Kochan wrote:
+> Hi Adrian,
 > 
-> It fixes a real issue. We have not had any complaints until we tried
-> to kexec in the platform.
-> I wont recommend reverting it until we have an alternative implementation.
+> On Fri, 9 Dec 2022 09:23:05 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>> On 5/12/22 12:59, Vadym Kochan wrote:
+>>> There is a limitation on AC5 SoC that mmc controller
+>>> can't have DMA access over 2G memory, so use SDMA with
+>>> a bounce buffer. Swiotlb can't help because on arm64 arch
+>>> it reserves memblock's at the end of the memory.
+>>>
+>>> Additionally set mask to 34 bit since on AC5 SoC RAM starts
+>>> at 0x2_00000000.
+>>
+>> Can you explain more about how a 34-bit DMA mask works when
+>> SDMA only supports 32-bit addresses?
+>>
 > 
-> kexec is far less common than suspend/reboot.
+> So, after I set
+> 
+>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
+> 
+> then sdhc core sets mask to 32 bit, but then dma_map fails to map
+> bounce buffer because the base address is higher than 32bit - 0x2_00000000,
+> and 34bit mask fixed it.
 
-I've posted an alternative to ALSA list that reverts the problematic
-patch and fixes the problem (the patch was originally addressing)
-in a different way:
+What happens if the bounce buffer gets mapped in the range
+0x1_00000000 to 0x1_ffffffff ?
 
-https://mailman.alsa-project.org/pipermail/alsa-devel/2022-December/209776.html
+> 
+>>>
+>>> Co-developed-by: Elad Nachman <enachman@marvell.com>
+>>> Signed-off-by: Elad Nachman <enachman@marvell.com>
+>>> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+>>> ---
+>>>  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
+>>>  drivers/mmc/host/sdhci-xenon.h |  3 ++-
+>>>  2 files changed, 40 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
+>>> index 08e838400b52..5f3db0425674 100644
+>>> --- a/drivers/mmc/host/sdhci-xenon.c
+>>> +++ b/drivers/mmc/host/sdhci-xenon.c
+>>> @@ -13,7 +13,9 @@
+>>>  
+>>>  #include <linux/acpi.h>
+>>>  #include <linux/delay.h>
+>>> +#include <linux/dma-mapping.h>
+>>>  #include <linux/ktime.h>
+>>> +#include <linux/mm.h>
+>>>  #include <linux/module.h>
+>>>  #include <linux/of.h>
+>>>  #include <linux/pm.h>
+>>> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
+>>>  		return pltfm_host->clock;
+>>>  }
+>>>  
+>>> +static int xenon_set_dma_mask(struct sdhci_host *host)
+>>> +{
+>>> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+>>> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
+>>> +	struct mmc_host *mmc = host->mmc;
+>>> +	struct device *dev = mmc_dev(mmc);
+>>> +
+>>> +	if (priv->hw_version == XENON_AC5) {
+>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
+>>> +
+>>> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
+>>> +	}
+>>> +
+>>> +	return sdhci_set_dma_mask(host);
+>>> +}
+>>> +
+>>>  static const struct sdhci_ops sdhci_xenon_ops = {
+>>>  	.voltage_switch		= xenon_voltage_switch,
+>>>  	.set_clock		= sdhci_set_clock,
+>>> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
+>>>  	.reset			= xenon_reset,
+>>>  	.set_uhs_signaling	= xenon_set_uhs_signaling,
+>>>  	.get_max_clock		= xenon_get_max_clock,
+>>> +	.set_dma_mask		= xenon_set_dma_mask,
+>>>  };
+>>>  
+>>>  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
+>>> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
+>>>  	xenon_disable_sdhc(host, sdhc_id);
+>>>  }
+>>>  
+>>> +static int xenon_ac5_probe(struct sdhci_host *host)
+>>> +{
+>>> +	struct sysinfo si;
+>>> +
+>>> +	si_meminfo(&si);
+>>> +
+>>> +	if ((si.totalram * si.mem_unit) > SZ_2G)
+>>> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>>  static int xenon_probe(struct platform_device *pdev)
+>>>  {
+>>>  	struct sdhci_pltfm_host *pltfm_host;
+>>> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
+>>>  		}
+>>>  	}
+>>>  
+>>> +	if (priv->hw_version == XENON_AC5) {
+>>> +		err = xenon_ac5_probe(host);
+>>> +		if (err)
+>>> +			goto err_clk_axi;
+>>> +	}
+>>> +
+>>>  	err = mmc_of_parse(host->mmc);
+>>>  	if (err)
+>>>  		goto err_clk_axi;
+>>> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
+>>>  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
+>>>  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
+>>>  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
+>>> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
+>>>  	{}
+>>>  };
+>>>  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
+>>> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
+>>> index 3e9c6c908a79..0460d97aad26 100644
+>>> --- a/drivers/mmc/host/sdhci-xenon.h
+>>> +++ b/drivers/mmc/host/sdhci-xenon.h
+>>> @@ -57,7 +57,8 @@ enum xenon_variant {
+>>>  	XENON_A3700,
+>>>  	XENON_AP806,
+>>>  	XENON_AP807,
+>>> -	XENON_CP110
+>>> +	XENON_CP110,
+>>> +	XENON_AC5
+>>>  };
+>>>  
+>>>  struct xenon_priv {
+>>
+> 
+> Regards,
 
-No changes outside sound/soc/ are needed with this approach.
-
-Br, Kai
