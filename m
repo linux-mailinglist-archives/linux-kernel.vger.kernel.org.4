@@ -2,110 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032EC6483B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92586483B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLIOX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S229640AbiLIO0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLIOXz (ORCPT
+        with ESMTP id S229478AbiLIO0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:23:55 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FBEB4F;
-        Fri,  9 Dec 2022 06:23:53 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 9C679AF;
-        Fri,  9 Dec 2022 15:23:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1670595831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NifOSNWB92nr9zdJqZWuAae4bxP0JcnlApZOWYNFsvk=;
-        b=CSfA2QIN5g1v+j62kncWBfSYn6+ojnC6DlB1u4BE0c9FrTDrrVwdTuN6tLzzovd0nDgmrf
-        4px28kLYMCoi6O4h/CSOqjCf807+n5F3HWPXmn4Sa/EyvtfGcnY6vYwXcoCqNd2314dl8F
-        Hv+llZo6ZCwrghRjLrQ9XkcrNeIMia8dGtcRrOqacVjQcLWBjhpzfDm6DCgaQG3WoJnXAe
-        bayGOBjuD3/9RKtMv7ugrn10nrxqKk6j0rt2l1aJKwsQcfTdLw1bjueWitgg8n0ajNJZuk
-        u/tQwGRkHKamcwIznnneV3rXxXac3GHMjt0T65yewZU4mEAcUEa5yQ3oEGXtiw==
+        Fri, 9 Dec 2022 09:26:39 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0112018E3B;
+        Fri,  9 Dec 2022 06:26:39 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id z12so684301qtv.5;
+        Fri, 09 Dec 2022 06:26:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z26CJkV4bYBR7Igz8UtlKjC+5Be28A36hbOcGnHeAHA=;
+        b=lOXPlqVDsCU/iT7WgJtYT6+UXxMsr9qT3EOt0VEoisMXgRg2R6Cue68/yFc610oSNh
+         QnEoyGDMtbIXZ0bcGN7E9cL+XqHtaulIlfCJ0SrkEn1pk0KCvOb68uQDaVEEyvCs58xN
+         iP0YGW9B+VQG0wWOE4wnxp/GFMyOLOlHRRYGrOvkYDAvxI6ra/Ckgj1Po8LdgacBnJ/q
+         5/XMqgDXCxsb8uI9/IVSBogDGas/MITu53Pz8u8YEn0nyhweWfxfITv4XODmPn/pzoS7
+         ql5V6+gmKsRgqwaGRdIxKnH/74vE3hD8AEUEPiqyCMnv3Du3zlp6FVPDvVf7G09I8/0e
+         hK3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z26CJkV4bYBR7Igz8UtlKjC+5Be28A36hbOcGnHeAHA=;
+        b=A5wludngEY7viUz7Jp2QoISKmlLsW8oVlhCnRmJCACmi1McKgFME6XxbKsonqLm2Gt
+         llvnjNHI9UTNPmZ0tvxFOWlKRqtpCMIlRrmyL+h70hD10iW9YKYXKbRvAFyoX+qBwgL6
+         GFxan6hSDMZkyfmzqI5EX1tFBR2kZ91QTdB5vVB9ITzIBd+uJznmKXKK0S5RSqNBw8Ml
+         IXnzIakmv6JsCJp5abQVpkeWY1+v/xXaQmuGBYI7RBvlh34xe8aYohV0vMBClND3a03F
+         yQrAHWqvUe9qiAAetMpp0yBh9AnkCs6ZKTRpkDQsXWofCPhhLyT4wQzXqYG3mFBustHK
+         Mslw==
+X-Gm-Message-State: ANoB5pk09SHftm0er3iUtSKpYW9N9BJ6jPeYJKKwQnptRGMZ7Vl7iK1F
+        VLupZvmIznLbvONYMDF3wJMdx7b2JrI=
+X-Google-Smtp-Source: AA0mqf7cBf3HtEfnMTHbn2B9g1hb6GZYhiARbmje9pr3rZIgEL0K9R+JMsEs+TSJ3w/N9SLufELTUQ==
+X-Received: by 2002:a05:622a:1e11:b0:3a5:fa33:917f with SMTP id br17-20020a05622a1e1100b003a5fa33917fmr8841541qtb.37.1670595997584;
+        Fri, 09 Dec 2022 06:26:37 -0800 (PST)
+Received: from pm2-ws13.praxislan02.com (207-172-141-204.s8906.c3-0.slvr-cbr1.lnh-slvr.md.cable.rcncustomer.com. [207.172.141.204])
+        by smtp.gmail.com with ESMTPSA id bb12-20020a05622a1b0c00b003a530a32f67sm944094qtb.65.2022.12.09.06.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 06:26:36 -0800 (PST)
+From:   Jason Andryuk <jandryuk@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     xen-devel@lists.xenproject.org, Jason Andryuk <jandryuk@gmail.com>,
+        Phillip Susi <phill@thesusis.net>, stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Subject: [PATCH v2] Input: xen-kbdfront - drop keys to shrink modalias
+Date:   Fri,  9 Dec 2022 09:26:14 -0500
+Message-Id: <20221209142615.33574-1-jandryuk@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Date:   Fri, 09 Dec 2022 15:23:51 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Steen.Hegelund@microchip.com,
-        UNGLinuxDriver@microchip.com, daniel.machon@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        lars.povlsen@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-In-Reply-To: <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
-References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
- <20221208092511.4122746-1-michael@walle.cc>
- <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
- <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
- <adb8e2312b169d13e756ff23c45872c3@walle.cc>
- <20221209092904.asgka7zttvdtijub@soft-dev3-1>
- <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
- <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
- <20221209125611.m5cp3depjigs7452@skbuf>
- <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
- <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <287d650a96aaac34ac2f31c6735a9ecc@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-09 15:20, schrieb Horatiu Vultur:
-> The 12/09/2022 15:05, Michael Walle wrote:
->> 
->> Am 2022-12-09 13:56, schrieb Vladimir Oltean:
->> > On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
->> > > > Does it also work out of the box with the following patch if
->> > > > the interface is part of a bridge or do you still have to do
->> > > > the tc magic from above?
->> > >
->> > > You will still need to enable the TCAM using the tc command to have it
->> > > working when the interface is part of the bridge.
->> >
->> > FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
->> > no need to use tc. Same goes for ocelot-8021q, which also uses the
->> > VCAP.
->> > I wouldn't consider forcing the user to add any tc command in order for
->> > packet timestamping to work properly.
-> 
-> On ocelot, the vcap is enabled at port initialization, while on other
-> platforms(lan966x and sparx5) you have the option to enable or disable.
-> 
->> 
->> +1
->> Esp. because there is no warning. I.e. I tried this patch while
->> the interface was added on a bridge and there was no error
->> whatsoever.
-> 
-> What error/warning were you expecting to see here?
+xen kbdfront registers itself as being able to deliver *any* key since
+it doesn't know what keys the backend may produce.
 
-Scrap that. ptp4l is reporting an error in case the device is part
-of a bridge:
-Jan  1 02:33:04 buildroot user.info syslog: [9184.261] driver rejected 
-most general HWTSTAMP filter
+Unfortunately, the generated modalias gets too large and uevent creation
+fails with -ENOMEM.
 
-Nevertheless, from a users POV I'd just expect it to work. How
-would I know what I need to do here?
+This can lead to gdm not using the keyboard since there is no seat
+associated [1] and the debian installer crashing [2].
 
--michael
+Trim the ranges of key capabilities by removing some BTN_* ranges.
+While doing this, some neighboring undefined ranges are removed to trim
+it further.
+
+An upper limit of KEY_KBD_LCD_MENU5 is still too large.  Use an upper
+limit of KEY_BRIGHTNESS_MENU.
+
+This removes:
+BTN_DPAD_UP(0x220)..BTN_DPAD_RIGHT(0x223)
+Empty space 0x224..0x229
+
+Empty space 0x28a..0x28f
+KEY_MACRO1(0x290)..KEY_MACRO30(0x2ad)
+KEY_MACRO_RECORD_START          0x2b0
+KEY_MACRO_RECORD_STOP           0x2b1
+KEY_MACRO_PRESET_CYCLE          0x2b2
+KEY_MACRO_PRESET1(0x2b3)..KEY_MACRO_PRESET3(0xb5)
+Empty space 0x2b6..0x2b7
+KEY_KBD_LCD_MENU1(0x2b8)..KEY_KBD_LCD_MENU5(0x2bc)
+Empty space 0x2bd..0x2bf
+BTN_TRIGGER_HAPPY(0x2c0)..BTN_TRIGGER_HAPPY40(0x2e7)
+Empty space 0x2e8..0x2ff
+
+The modalias shrinks from 2082 to 1550 bytes.
+
+A chunk of keys need to be removed to allow the keyboard to be used.
+This may break some functionality, but the hope is these macro keys are
+uncommon and don't affect any users.
+
+[1] https://github.com/systemd/systemd/issues/22944
+[2] https://lore.kernel.org/xen-devel/87o8dw52jc.fsf@vps.thesusis.net/T/
+
+Cc: Phillip Susi <phill@thesusis.net>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+---
+ drivers/input/misc/xen-kbdfront.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+v2:
+Remove more keys: v1 didn't remove enough and modalias was still broken.
+
+diff --git a/drivers/input/misc/xen-kbdfront.c b/drivers/input/misc/xen-kbdfront.c
+index 8d8ebdc2039b..4ecb579df748 100644
+--- a/drivers/input/misc/xen-kbdfront.c
++++ b/drivers/input/misc/xen-kbdfront.c
+@@ -256,7 +256,14 @@ static int xenkbd_probe(struct xenbus_device *dev,
+ 		__set_bit(EV_KEY, kbd->evbit);
+ 		for (i = KEY_ESC; i < KEY_UNKNOWN; i++)
+ 			__set_bit(i, kbd->keybit);
+-		for (i = KEY_OK; i < KEY_MAX; i++)
++		/* In theory we want to go KEY_OK..KEY_MAX, but that grows the
++		 * modalias line too long.  There is a gap of buttons from
++		 * BTN_DPAD_UP..BTN_DPAD_RIGHT and KEY_ALS_TOGGLE is the next
++		 * defined. Then continue up to KEY_BRIGHTNESS_MENU as an upper
++		 * limit. */
++		for (i = KEY_OK; i < BTN_DPAD_UP; i++)
++			__set_bit(i, kbd->keybit);
++		for (i = KEY_ALS_TOGGLE; i <= KEY_BRIGHTNESS_MENU; i++)
+ 			__set_bit(i, kbd->keybit);
+ 
+ 		ret = input_register_device(kbd);
+-- 
+2.38.1
+
