@@ -2,141 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D93B6481E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9E86481E6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLILkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
+        id S229573AbiLILlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLILko (ORCPT
+        with ESMTP id S229530AbiLILl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:40:44 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8337B5CD1F;
-        Fri,  9 Dec 2022 03:40:43 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9BVM5s003250;
-        Fri, 9 Dec 2022 05:40:38 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=OutUFtWHRVDbHzYVTgNI3mlFIOs7N4z1+/v8FMaHDh8=;
- b=l/RYnu51udB1TrSu2pAUhTydk9eP8sRLGug+GE9iy8TasVy7RrCDPGRB6dEGK2Z22qtl
- 8hqyynL0hCzlMqx0WxPBOIYsDCSIW38z5i+8RJwV6gmem9BcRu3s8Uve6PbEdqsiXZx5
- e7lzUwDMHKK3HfDhOYzkv7jPpSZtCKGrt6KaOLagB/oKANLFroWzEuWBZfsQZo1PhvXZ
- hPV+VpCFzMzGR9tIIINUZURdgajwg3kVCbH+jULtgQuSl8Tvjn/Vrny4jKMYKa8PXRys
- BLL+osdzyrrTlj/Ac7XtwqhaqVJO5o0l0y1SCwzrm/j1sti8ryDa945W3qHjisn2vYsr Kg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3m84r6pwm9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Dec 2022 05:40:38 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 9 Dec
- 2022 05:40:36 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 9 Dec 2022 05:40:36 -0600
-Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.44])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A155BB2F;
-        Fri,  9 Dec 2022 11:40:35 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
-CC:     <hdegoede@redhat.com>, <linux-i2c@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH] i2c: designware: Fix unbalanced suspended flag
-Date:   Fri, 9 Dec 2022 11:40:34 +0000
-Message-ID: <20221209114034.18025-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 9 Dec 2022 06:41:29 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AAE5C0FD;
+        Fri,  9 Dec 2022 03:41:28 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B335B2012E;
+        Fri,  9 Dec 2022 11:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670586086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q/V5k+xtXXGmytm1ASxvItnbc20EM4KwcKJPRFAp5ZE=;
+        b=V1GJBCPD24UtbXPCbQiXwNWkX6ps3vdquy6d5xd5X/us2FZv9LwQ9A7/4ScePImGH0Cu1g
+        COpnjxaJ/ombeA/OX9GE2qpcx5+bgMHfxZPUhClbZwaJyayqjm/+Gj5h0SaNz9Uq1quPNk
+        v8FjQnANAiCzJ9G5pbefY26p7iVjoIo=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0127E2C141;
+        Fri,  9 Dec 2022 11:41:25 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 12:41:25 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: powerpc-part: was: Re: [PATCH v6] livepatch: Clear relocation
+ targets on a module removal
+Message-ID: <Y5Me5dTGv+GznvtO@alley>
+References: <20220901171252.2148348-1-song@kernel.org>
+ <Y3expGRt4cPoZgHL@alley>
+ <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Mmw74t7pBqmkJ-KdyHG0oqveaNXoCUjT
-X-Proofpoint-GUID: Mmw74t7pBqmkJ-KdyHG0oqveaNXoCUjT
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
-i2c_mark_adapter_resumed().
+Hi,
 
-Don't set DPM_FLAG_MAY_SKIP_RESUME to skip system early_resume stage if the
-driver was runtime-suspended. Instead, always call dw_i2c_plat_resume() and
-use pm_runtime_suspended() to determine whether we need to power up the
-hardware.
+this reply is only about the powerpc-specific part.
 
-The unbalanced suspended flag was introduced by
-commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
-suspended flag")
+Also adding Kamalesh and Michael into Cc who worked on the related
+commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24 relocation
+support of livepatch symbols").
 
-Before that commit, the system and runtime PM used the same functions. The
-DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
-had been in runtime-suspend. If system resume was skipped, the suspended
-flag would be cleared by the next runtime resume. The check of the
-suspended flag was _after_ the call to pm_runtime_get_sync() in
-i2c_dw_xfer(). So either a system resume or a runtime resume would clear
-the flag before it was checked.
 
-Having introduced the unbalanced suspended flag with that commit, a further
-commit 80704a84a9f8
-("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
+On Mon 2022-11-28 17:57:06, Song Liu wrote:
+> On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > > --- a/arch/powerpc/kernel/module_64.c
+> > > +++ b/arch/powerpc/kernel/module_64.c
 
-changed from using a local suspended flag to using the
-i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
-checked by I2C core code before issuing the transfer to the bus driver, so
-there was no opportunity for the bus driver to runtime resume itself before
-the flag check.
+I put back the name of the modified file so that it is easier
+to know what changes we are talking about.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
----
-Apologies if you get this message multiple times. I'm having trouble
-with my SMTP server.
----
- drivers/i2c/busses/i2c-designware-platdrv.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+[...]
+> > > +#ifdef CONFIG_LIVEPATCH
+> > > +void clear_relocate_add(Elf64_Shdr *sechdrs,
+> > > +                    const char *strtab,
+> > > +                    unsigned int symindex,
+> > > +                    unsigned int relsec,
+> > > +                    struct module *me)
+> > > +{
+> > > +     unsigned int i;
+> > > +     Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+> > > +     Elf64_Sym *sym;
+> > > +     unsigned long *location;
+> > > +     const char *symname;
+> > > +     u32 *instruction;
+> > > +
+> > > +     pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
+> > > +              sechdrs[relsec].sh_info);
+> > > +
+> > > +     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> > > +             location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+> > > +                     + rela[i].r_offset;
+> > > +             sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+> > > +                     + ELF64_R_SYM(rela[i].r_info);
+> > > +             symname = me->core_kallsyms.strtab
+> > > +                     + sym->st_name;
 
-diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
-index ba043b547393..d805b8c7e797 100644
---- a/drivers/i2c/busses/i2c-designware-platdrv.c
-+++ b/drivers/i2c/busses/i2c-designware-platdrv.c
-@@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
- 
- 	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
- 		dev_pm_set_driver_flags(&pdev->dev,
--					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_PREPARE);
- 	} else {
- 		dev_pm_set_driver_flags(&pdev->dev,
- 					DPM_FLAG_SMART_PREPARE |
--					DPM_FLAG_SMART_SUSPEND |
--					DPM_FLAG_MAY_SKIP_RESUME);
-+					DPM_FLAG_SMART_SUSPEND);
- 	}
- 
- 	device_enable_async_suspend(&pdev->dev);
-@@ -475,7 +473,9 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
- {
- 	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
- 
--	dw_i2c_plat_runtime_resume(dev);
-+	if (!pm_runtime_suspended(dev))
-+		dw_i2c_plat_runtime_resume(dev);
-+
- 	i2c_mark_adapter_resumed(&i_dev->adapter);
- 
- 	return 0;
--- 
-2.30.2
+The above calculation is quite complex. It seems to be copied from
+apply_relocate_add(). If I maintained this code I would want to avoid
+the duplication. definitely.
 
+
+> > > +
+> > > +             if (ELF64_R_TYPE(rela[i].r_info) != R_PPC_REL24)
+> > > +                     continue;
+
+Why are we interested only into R_PPC_REL24 relocation types, please?
+
+The code for generating the special SHN_LIVEPATCH section is not in
+the mainline so it is not well defined.
+
+I guess that R_PPC_REL24 relocation type is used by kPatch. Are we
+sure that other relocation types wont be needed?
+
+Anyway, we must warn when an unsupported type is used in SHN_LIVEPATCH
+section here.
+
+
+> > > +             /*
+> > > +              * reverse the operations in apply_relocate_add() for case
+> > > +              * R_PPC_REL24.
+> > > +              */
+> > > +             if (sym->st_shndx != SHN_UNDEF &&
+
+Do we want to handle SHN_UNDEF symbols here?
+
+The commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24
+relocation support of livepatch symbols") explains that
+R_PPC_REL24 relocations in SHN_LIVEPATCH section are handled
+__like__ relocations in SHN_UNDEF sections.
+
+My understanding is that R_PPC_REL24 reallocation type has
+two variants. Where the variant used in SHN_UNDEF and
+SHN_LIVEPATCH sections need some preprocessing.
+
+Anyway, if this function is livepatch-specific that we should
+clear only symbols from SHN_LIVEPATCH sections. I mean that
+we should probably ignore SHN_UNDEF here.
+
+> > > +                 sym->st_shndx != SHN_LIVEPATCH)
+> > > +                     continue;
+> > > +
+> > > +
+> > > +             instruction = (u32 *)location;
+> > > +             if (is_mprofile_ftrace_call(symname))
+> > > +                     continue;
+
+Why do we ignore these symbols?
+
+I can't find any counter-part in apply_relocate_add(). It looks super
+tricky. It would deserve a comment.
+
+And I have no idea how we could maintain these exceptions.
+
+> > > +             if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
+> > > +                     continue;
+
+Same here. It looks super tricky and there is no explanation.
+
+> > > +             instruction += 1;
+> > > +             patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
+> > > +     }
+> > > +
+> > > +}
+> >
+> > This looks like a lot of duplicated code. Isn't it?
+> 
+> TBH, I think the duplicated code is not really bad.
+
+How exactly do you mean it, please?
+
+Do you think that the amount of duplicated code is small enough?
+Or that the new function looks better that updating the existing one?
+
+> apply_relocate_add() is a much more complicated function, I would
+> rather not mess it up to make this function a little simpler.
+
+IMHO, the duplicated code is quite tricky. And if we really do
+not need to clear all relocation types then we could avoid
+the duplication another way, for example:
+
+int update_relocate_add(Elf64_Shdr *sechdrs,
+		       const char *strtab,
+		       unsigned int symindex,
+		       unsigned int relsec,
+		       struct module *me,
+		       bool apply)
+{
+	unsigned int i;
+	Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+	Elf64_Sym *sym;
+	Elf64_Xword r_type;
+	unsigned long *location;
+
+	if (apply) {
+		pr_debug("Applying ADD relocate section %u to %u\n", relsec,
+		       sechdrs[relsec].sh_info);
+	} else {
+		pr_debug("Clearing ADD relocate section %u\n", relsec");
+	}
+
+	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+		/* This is where to make the change */
+		location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+			+ rela[i].r_offset;
+		/* This is the symbol it is referring to */
+		sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+			+ ELF64_R_SYM(rela[i].r_info);
+
+		r_type = ELF64_R_TYPE(rela[i].r_info);
+
+		if (apply) {
+			apply_relocate_location(sym, location, r_type, rela[i].r_addend);
+		} else {
+			clear_relocate_location(sym, location, r_type);
+		}
+	}
+}
+
+where the two functions would implement the r_type-specific stuff.
+It would remove a lot of duplicated code. Wouldn't?
+
+My main concern is how to maintain this code. I am afraid that
+if it is in #ifdef CONFIG_LIVEPATCH section than nobody would
+update it when doing some changes in apply_relocate_add().
+
+In this case, the livepatch-specific code has to be minimal,
+warn about unsupported scenarios, and livepatch maintainers
+should understand what is going on there.
+
+Best Regards,
+Petr
