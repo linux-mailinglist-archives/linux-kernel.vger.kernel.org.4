@@ -2,128 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E95C648241
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A03E648245
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLIMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S229850AbiLIMQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiLIMOx (ORCPT
+        with ESMTP id S229735AbiLIMQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:14:53 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1BC1743C;
-        Fri,  9 Dec 2022 04:14:52 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id e205so4303365oif.11;
-        Fri, 09 Dec 2022 04:14:52 -0800 (PST)
+        Fri, 9 Dec 2022 07:16:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7777B43848
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670588125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BtgQ7WbWz1/dygP/4Q3Y766uFdX//7j3uN4Cs1hiL7M=;
+        b=hySjvmUmNVWCIKWCNnf2xb5EVURxGjRIs5yl2QFpPLI0yo2PJhW21N98p9BF31s89/ZnX/
+        8pOxoTQXsKyKKTMw9dsgKjzdTrnB0CUr5OPnZpAvXJ8CkMfTX4TbexyGnXNSJHWRHbVlM+
+        i4mGjTqfAEFrSEQvgbEC7ZrI4Sm6bfM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-269-i2bRlJjhON-7Q2XXk6YqnA-1; Fri, 09 Dec 2022 07:15:24 -0500
+X-MC-Unique: i2bRlJjhON-7Q2XXk6YqnA-1
+Received: by mail-ed1-f71.google.com with SMTP id j6-20020a05640211c600b0046d6960b266so1265281edw.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:15:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kI7BbdyAUV/eNarvTgWcZoX1xauTnHS7x8JJjE7aAYY=;
-        b=H22f2eUpGiDd7CwkA7y2/NdOiC8kNvSs78eGvAb5QoEBJpG/ckz6TnBBPcIm2ZF9TZ
-         ghfn7Cs9kJu2zDZYNJXStZqos6Bilgb/Nl/HGcpLHAPJMd5FJS41RadYWpxYd3hW6itx
-         da2Gt2aGy+Is/vJKUsH22uH2IVJJo93Ho/rawg8coQI+i+1xtk0glz+L6VbVL3PA+JZs
-         B64ixJIuFJoGyuSLU9squll6+r7uqDBWDrjHdMeDtC7M+9XHVV6PyLMPg76cyVM2sKp4
-         85jC0TBZWhkgqvbS0oDkUBe5sW1jY0XjYni2lCAEp+FWxevdRPtQTcyQsBx4n8Y8zJwQ
-         sPew==
-X-Gm-Message-State: ANoB5pnda16u1FgDR0e8NnjABxhbmoHwmUDovaa7v8RGCU+BTELxmjzg
-        ZFT9Ebwf0XbrKD2fKWiOxA==
-X-Google-Smtp-Source: AA0mqf4FRI86zMRlAtzC+h2pF/uE9HwQGgMNCY3G4dmWrGrHC4nf3HUzituKruhqW4XxFd90+aIcLQ==
-X-Received: by 2002:aca:3dd5:0:b0:35a:3c3d:34d5 with SMTP id k204-20020aca3dd5000000b0035a3c3d34d5mr2111798oia.14.1670588091153;
-        Fri, 09 Dec 2022 04:14:51 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b23-20020aca2217000000b0035b99bbe30bsm447422oic.54.2022.12.09.04.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:14:50 -0800 (PST)
-Received: (nullmailer pid 2822350 invoked by uid 1000);
-        Fri, 09 Dec 2022 12:14:49 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtgQ7WbWz1/dygP/4Q3Y766uFdX//7j3uN4Cs1hiL7M=;
+        b=Eu0cbE1CXlgy5voVSK23sopqFGjzxtITc0i798y8+J/PHIHaCEILamkIIJiRRLVNzO
+         CWlofz+//0tRG7CgZmwCziKwD28gMKlnL5/BU4/XxEEYxnIrPbL3VM4CjSZ/wxXsFk+w
+         S3yduZ7dsycwfIeROL41od97qvh+EG3CDg8pNUEo3HMJZzmNMUWSKo9EBujRS6cPOpNA
+         DQZGlspKX1H1bKRZyPOqblGuxGDPOhMMX98l7vN8WjK8phM160Mn2RFtC4A9+v8GQ3pJ
+         OdnJACKd+YYfPuqnySABnSe1gLysI5iK3z/1mP8WvvTrIDBqdcmSJpwfj5EnZ7qEpNoH
+         qjqg==
+X-Gm-Message-State: ANoB5plkoBQVHy+A22V/OE9Vb3uWwdxLF4s49QvYhC43W7LOc/D0WDBz
+        VbFNq7sZ8F4w3y3dznR0oNYNtWQgB6SvwCfjYuy0Or6vA36r0WRRIMec/ltCeHJjdvcwgzknF7h
+        10aa7bfxJcmbK/bYiaTrYu16+
+X-Received: by 2002:a05:6402:1002:b0:467:9384:a7aa with SMTP id c2-20020a056402100200b004679384a7aamr5155783edu.15.1670588123401;
+        Fri, 09 Dec 2022 04:15:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4RRYy2HgbHVKh12Vfe0a9mMIpHtpM3J9HE/UTuFWgQs5mNOeVUx5s++T0sq0ZD4BHoDdHokw==
+X-Received: by 2002:a05:6402:1002:b0:467:9384:a7aa with SMTP id c2-20020a056402100200b004679384a7aamr5155766edu.15.1670588123176;
+        Fri, 09 Dec 2022 04:15:23 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id ky2-20020a170907778200b0073d796a1043sm482155ejc.123.2022.12.09.04.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 04:15:22 -0800 (PST)
+Message-ID: <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
+Date:   Fri, 9 Dec 2022 13:15:21 +0100
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     vkoul@kernel.org, daniel@ffwll.ch, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, dmitry.baryshkov@linaro.org,
-        freedreno@lists.freedesktop.org, agross@kernel.org,
-        dianders@chromium.org, dri-devel@lists.freedesktop.org,
-        swboyd@chromium.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com, devicetree@vger.kernel.org,
-        quic_sbillaka@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, airlied@linux.ie,
-        quic_abhinavk@quicinc.com, andersson@kernel.org, airlied@gmail.com,
-        sean@poorly.run
-In-Reply-To: <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
-References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
- <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
-Message-Id: <167058798233.2819544.12292613321491007286.robh@kernel.org>
-Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-Date:   Fri, 09 Dec 2022 06:14:49 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
+Content-Language: en-US, nl
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, wsa@kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221209114034.18025-1-rf@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221209114034.18025-1-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Richard,
 
-On Thu, 08 Dec 2022 14:36:52 -0800, Kuogee Hsieh wrote:
-> Add both data-lanes and link-frequencies property into endpoint
+On 12/9/22 12:40, Richard Fitzgerald wrote:
+> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+> i2c_mark_adapter_resumed().
 > 
-> Changes in v7:
-> -- split yaml out of dtsi patch
-> -- link-frequencies from link rate to symbol rate
-> -- deprecation of old data-lanes property
+> Don't set DPM_FLAG_MAY_SKIP_RESUME to skip system early_resume stage if the
+> driver was runtime-suspended. Instead, always call dw_i2c_plat_resume() and
+> use pm_runtime_suspended() to determine whether we need to power up the
+> hardware.
 > 
-> Changes in v8:
-> -- correct Bjorn mail address to kernel.org
+> The unbalanced suspended flag was introduced by
+> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
+> suspended flag")
 > 
-> Changes in v10:
-> -- add menu item to data-lanes and link-frequecnis
+> Before that commit, the system and runtime PM used the same functions. The
+> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
+> had been in runtime-suspend. If system resume was skipped, the suspended
+> flag would be cleared by the next runtime resume. The check of the
+> suspended flag was _after_ the call to pm_runtime_get_sync() in
+> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
+> the flag before it was checked.
 > 
-> Changes in v11:
-> -- add endpoint property at port@1
+> Having introduced the unbalanced suspended flag with that commit, a further
+> commit 80704a84a9f8
+> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
 > 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+> changed from using a local suspended flag to using the
+> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
+> checked by I2C core code before issuing the transfer to the bus driver, so
+> there was no opportunity for the bus driver to runtime resume itself before
+> the flag check.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
+
+It is not entirely clear to me where the unbalance you claim to see comes
+from? When runtime-suspended SMART_SUSPEND should keep it suspended at which point
+the system suspend callback will never run ?
+
+Are you sure that you are not maybe seeing a suspend/resume ordering issue?
+
+Did you add printk messages to the suspend/resume callbacks of
+i2c-designware-platdrv.c which show the system suspend callback
+being called but not the system resume one ?
+
+I guess that is possible with DPM_FLAG_MAY_SKIP_RESUME, but
+since we also use SMART_SUSPEND I would expect the system-suspend
+callback to also always be skipped for runtime-suspended controllers.
+
+
+
+
+
+
+
 > ---
->  .../bindings/display/msm/dp-controller.yaml        | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
+> Apologies if you get this message multiple times. I'm having trouble
+> with my SMTP server.
+> ---
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index ba043b547393..d805b8c7e797 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+>  
+>  	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
+>  		dev_pm_set_driver_flags(&pdev->dev,
+> -					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> +					DPM_FLAG_SMART_PREPARE);
+>  	} else {
+>  		dev_pm_set_driver_flags(&pdev->dev,
+>  					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_SMART_SUSPEND |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> +					DPM_FLAG_SMART_SUSPEND);
+>  	}
+>  
+>  	device_enable_async_suspend(&pdev->dev);
+> @@ -475,7 +473,9 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
+>  {
+>  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+>  
+> -	dw_i2c_plat_runtime_resume(dev);
+> +	if (!pm_runtime_suspended(dev))
+> +		dw_i2c_plat_runtime_resume(dev);
+> +
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I'm afraid that this is always going to run now, before this callback gets
+called drivers/base/power/main.c: device_resume_noirq() does:
 
-yamllint warnings/errors:
+        skip_resume = dev_pm_skip_resume(dev);
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: properties:required: ['port@0', 'port@1'] is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: properties: 'required' should not be valid under {'$ref': '#/definitions/json-schema-prop-names'}
-	hint: A json-schema keyword was found instead of a DT property name.
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: ignoring, error in schema: properties: required
-Documentation/devicetree/bindings/display/msm/dp-controller.example.dtb:0:0: /example-0/displayport-controller@ae90000: failed to match any schema with compatible: ['qcom,sc7180-dp']
+        if (skip_resume)
+                pm_runtime_set_suspended(dev);
+        else if (dev_pm_skip_suspend(dev))
+                pm_runtime_set_active(dev);
 
-doc reference errors (make refcheckdocs):
+Where skip_resume now is false since you dropped the
+DPM_FLAG_MAY_SKIP_RESUME flag and dev_pm_skip_suspend(dev)
+will return true (see below) for runtime-suspended controllers,
+so they will be marked active here. and then your
+!pm_runtime_suspended(dev) will always be false.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com
+Did you add a printk to both the if + else paths
+and have you ever seen the controller not get
+resumed with this test added ?
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Regards,
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Hans
 
-pip3 install dtschema --upgrade
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+
+
+bool dev_pm_skip_suspend(struct device *dev)
+{
+        return dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
+                pm_runtime_status_suspended(dev);
+}
+
+
+
+
+>  	i2c_mark_adapter_resumed(&i_dev->adapter);
+>  
+>  	return 0;
 
