@@ -2,157 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F191764844D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76569648453
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiLIO4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S229886AbiLIO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLIOzs (ORCPT
+        with ESMTP id S230116AbiLIO4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:55:48 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B1C80A3F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:55:10 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s5so3377885edc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:55:10 -0800 (PST)
+        Fri, 9 Dec 2022 09:56:48 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D9584268
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:56:27 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so7421526lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:56:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nr0DjBH1YEnasxrYesj7cvRVZfRH4rPEDs0TxXAHiSg=;
-        b=6BR4ftmEi4cwaY0Zq2EMADfCq7D3R7dRhGj565BcwcOdftO7DpLqU7m1Uq+/yJ+AGZ
-         jh/kM4TgyggxJ+OTIBjhyKG6SAj9vKbh98eNvUeU43HoQPObiR6Pz9b5QNHJ3vavH2k1
-         ZtqdFgFQq6/oMk76hY+leei80rWiI5ExUI3F5vd83sJCp4F/ZTicV1hH7KE6ocr2Kxbc
-         vIl+6NtxjPHuGXJE2mutZpRE0s5Mz54VT5WHCKvnLwDfs5udM6eQpLVXxJ2N+nbLSW9f
-         wqeE2ymttBeIpxn5/ahdOSnUceCLnfxZJcAzEMCvBIYv079KyzKGFg/I7JNLpD/SZZ9L
-         d6Cg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zn39Cq6H46SfgCPMDp1Yyg4Hy1ifOLwJBJ6L3zqm8MM=;
+        b=oK6qJslOKT34uL/1v4g3iVT1myebBNEM4jqIgvwqM03/FD9DabncthU7iZSDV0Dw6V
+         XsercsMR7iFL4hosx9kgIZ9YzmeCwbSXsSX4/PK42T64csirCJrUZDGR63AA3gzG1g41
+         zlLghgCExlKP16+a3f94HqnFX/ZzAhWZHtnZtcyd5lQqtnZGVR+xrZz6v60MtrThIAwE
+         XQEk16WFuKtIqjvbXFNEA7UN1gFNRMxtw2StjPUdNgiBZiUp23HOjBaOGribElE0U6rD
+         481bOTOymtR3SVQCOPXoy+Dnb7PRwjW6PGEXoMZeDb2M9MiCGeBIBtnUuFWXLdoTE2dW
+         +kEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nr0DjBH1YEnasxrYesj7cvRVZfRH4rPEDs0TxXAHiSg=;
-        b=fRySLWAL19mVCtX6jY9hGAgciUZ0LPcBb76UJ56u11IZIMA95Y3LqQhUgAHEeG57XB
-         b3Tm45hKRP2+3+3YS5RkQailiwwLkTu8XS2yNGtzY8fPa7lDvTP5jDZoOEXCbQKd7y9P
-         oQ6JRmvnzrNU0cpneM/lPeuZhKqB2lKnCcZdQIQG/hkAqFieEhJ//yfddLlNXzZxQA+u
-         NoKm+uTAT6XI6Jetfllqm4SvQO09f19NRMEEGv4RT9H5+bka1GrkxpFZCnhVood8gYrT
-         5cOe8tAvE5GmvfCLjIxMXC3N2p+YX4rhjLKk0rnRHdn5AaxC5uAWXIFDIbzzEr6kxURa
-         5epw==
-X-Gm-Message-State: ANoB5pnoPp4Egse5MR+W5LKNI+FVz94DuoxMSIYWNpadfpO/7PjKY6L8
-        vOaZzHsZ9jPmJl0xhOOlfhnHcg==
-X-Google-Smtp-Source: AA0mqf4Yb/BOvMLtH6r67H46I1phEPMg/pmN85YtjlgWU29uNdJPkmrZ6mICq1Tm5TiV5cKxNxgBlA==
-X-Received: by 2002:a05:6402:1004:b0:46b:c156:9965 with SMTP id c4-20020a056402100400b0046bc1569965mr5266982edu.38.1670597708861;
-        Fri, 09 Dec 2022 06:55:08 -0800 (PST)
-Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
-        by smtp.gmail.com with ESMTPSA id l4-20020aa7c304000000b0046b1d63cfc1sm716856edq.88.2022.12.09.06.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:55:08 -0800 (PST)
-From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org,
-        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>,
-        Joel Colledge <joel.colledge@linbit.com>
-Subject: [PATCH 3/3] drbd: split off drbd_config into separate file
-Date:   Fri,  9 Dec 2022 15:55:04 +0100
-Message-Id: <20221209145504.2273072-4-christoph.boehmwalder@linbit.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221209145504.2273072-1-christoph.boehmwalder@linbit.com>
-References: <20221209145504.2273072-1-christoph.boehmwalder@linbit.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zn39Cq6H46SfgCPMDp1Yyg4Hy1ifOLwJBJ6L3zqm8MM=;
+        b=yAPLol/IgIdMKehjtDQkh1PNrVTzSjVXlaZXF8RYk6YeNox/sOd7lOAAAqAhwZw+RE
+         5i2aC6n+MqX7c+0Mj4rJExLFjuzxN/ZuUW91H97pFoq73Pc4sQ+8l/NcsrjfQKkjUPXP
+         GLgit78DXrN7SfkRmOAdOBbxsq+tPR3PBicocS6dEe5oYrCHNjSijk/RsJsw6Dht8SDV
+         KfEz6MdkvfwlzogV/sWDyFWQD7JPWdJf65NP2YtWB9KCnDUGeuAnm9fenOUKmicYQBkF
+         WdimF1bOglPbkwWqXXsflbfMB3eR7nwxUiEbWhJWNBijvGqwVnu7SnkAtWYgRobT0h0p
+         9MDA==
+X-Gm-Message-State: ANoB5pnIwNjnaD840DvuxYjh5dwYrDaR8dmXyZzBJHwYe/3wpac0Axa8
+        tkmdPLOWa+ZX5MAwfLT2OYXZrA==
+X-Google-Smtp-Source: AA0mqf6+eQqJYIlJ4RBGy5DkLM0OPyqhKXbsUkA+Jn4oqxjdS9sXP0vfO1VIWussQDLHIAES8/dMgw==
+X-Received: by 2002:a05:6512:13a2:b0:4a4:68b7:d61d with SMTP id p34-20020a05651213a200b004a468b7d61dmr2041235lfa.4.1670597785748;
+        Fri, 09 Dec 2022 06:56:25 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h9-20020ac24d29000000b004b50b4f63b7sm287771lfk.170.2022.12.09.06.56.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 06:56:25 -0800 (PST)
+Message-ID: <fb34e446-2904-a357-e54b-3e82a2b0745c@linaro.org>
+Date:   Fri, 9 Dec 2022 15:56:24 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 10/12] dt-bindings: mediatek: mt8188: add audio afe
+ document
+Content-Language: en-US
+To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20221208033148.21866-1-trevor.wu@mediatek.com>
+ <20221208033148.21866-11-trevor.wu@mediatek.com>
+ <d7d9f3c7-b3e3-1e13-a80f-c7bf7b38a5b1@linaro.org>
+ <45b4b287dfd57b99e0ba5675bf99194f6d84d9da.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <45b4b287dfd57b99e0ba5675bf99194f6d84d9da.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To be more similar to what we do in the out-of-tree module and ease the
-upstreaming process.
+On 09/12/2022 11:56, Trevor Wu (吳文良) wrote:
+>>> +
+>>> +patternProperties:
+>>> +  "^mediatek,etdm-in[1-2]-chn-disabled$":
+>>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+>>> +    minItems: 1
+>>> +    maxItems: 16
+>>> +    description:
+>>> +      By default, all data received from ETDM pins will be
+>>> outputed to
+>>> +      memory. etdm in supports disable_out in direct mode(w/o
+>>> interconn).
+>>> +      User can specify the channel ID which they hope dropping and
+>>> then
+>>> +      the specified channel won't be seen on memory.
+>>
+>> So we know what are the IDs but it's a mystery what are the values.
+>> Especially with unique values - how any of these should case that
+>> channel "won't be seen in memory"?
+>>
+> For example,
+> FE can support 14ch, but BE(etdm) can't support 14ch(it can support
+> 16ch).
+> In the case, we can configure 16ch to etdm and make use of the property
+> to disable the last two channels.
+> 
+> mediatek,etdm-in1-chn-disabled = /bits/ 8 <0xE 0xF>;
 
-Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
-Reviewed-by: Joel Colledge <joel.colledge@linbit.com>
----
- drivers/block/drbd/drbd_buildtag.c |  2 +-
- drivers/block/drbd/drbd_int.h      |  1 +
- include/linux/drbd.h               |  6 ------
- include/linux/drbd_config.h        | 16 ++++++++++++++++
- 4 files changed, 18 insertions(+), 7 deletions(-)
- create mode 100644 include/linux/drbd_config.h
+Your description should explain that this is a list of channel IDs which
+should be disabled.
 
-diff --git a/drivers/block/drbd/drbd_buildtag.c b/drivers/block/drbd/drbd_buildtag.c
-index 956a4d5c339b..cb1aa66d7d5d 100644
---- a/drivers/block/drbd/drbd_buildtag.c
-+++ b/drivers/block/drbd/drbd_buildtag.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <linux/drbd.h>
-+#include <linux/drbd_config.h>
- #include <linux/module.h>
- 
- const char *drbd_buildtag(void)
-diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
-index edce1f7ac2da..d89b7d03d4c8 100644
---- a/drivers/block/drbd/drbd_int.h
-+++ b/drivers/block/drbd/drbd_int.h
-@@ -34,6 +34,7 @@
- #include <linux/prefetch.h>
- #include <linux/drbd_genl_api.h>
- #include <linux/drbd.h>
-+#include <linux/drbd_config.h>
- #include "drbd_strings.h"
- #include "drbd_state.h"
- #include "drbd_protocol.h"
-diff --git a/include/linux/drbd.h b/include/linux/drbd.h
-index df65a8f5228a..5468a2399d48 100644
---- a/include/linux/drbd.h
-+++ b/include/linux/drbd.h
-@@ -38,12 +38,6 @@
- 
- #endif
- 
--extern const char *drbd_buildtag(void);
--#define REL_VERSION "8.4.11"
--#define PRO_VERSION_MIN 86
--#define PRO_VERSION_MAX 101
--
--
- enum drbd_io_error_p {
- 	EP_PASS_ON, /* FIXME should the better be named "Ignore"? */
- 	EP_CALL_HELPER,
-diff --git a/include/linux/drbd_config.h b/include/linux/drbd_config.h
-new file mode 100644
-index 000000000000..d215365c6bb1
---- /dev/null
-+++ b/include/linux/drbd_config.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * drbd_config.h
-+ * DRBD's compile time configuration.
-+ */
-+
-+#ifndef DRBD_CONFIG_H
-+#define DRBD_CONFIG_H
-+
-+extern const char *drbd_buildtag(void);
-+
-+#define REL_VERSION "8.4.11"
-+#define PRO_VERSION_MIN 86
-+#define PRO_VERSION_MAX 101
-+
-+#endif
--- 
-2.38.1
+> 
+> 
+>>> +    uniqueItems: true
+>>> +    items:
+>>> +      minimum: 0
+>>> +      maximum: 15
+>>> +
+>>> +  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
+>>> +    description: Specify etdm in mclk output rate for always on
+>>> case.
+>>
+>> How is it different than assigned-clock-rates?
+>>
+> This includes clock enabling at init stage.
+
+assigned-clock-rates are also at init stage. I asked what is different.
+
+> 
+>>> +
+>>> +  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
+>>> +    description: Specify etdm out mclk output rate for always on
+>>> case.
+>>> +
+>>> +  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
+>>> +    type: boolean
+>>> +    description: if present, the etdm data mode is I2S.
+>>> +
+>>> +  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
+>>> +    type: boolean
+>>> +    description: if present, the etdm data mode is I2S.
+>>> +
+>>> +  "^mediatek,etdm-in[1-2]-cowork-source$":
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description:
+>>> +      etdm modules can share the same external clock pin. Specify
+>>> +      which etdm clock source is required by this etdm in moudule.
+>>
+>> typo: module
+>>
+
+Best regards,
+Krzysztof
 
