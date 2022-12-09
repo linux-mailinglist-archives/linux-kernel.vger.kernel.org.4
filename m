@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DE0647ADC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A433647AE8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiLIAlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 19:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S229773AbiLIAoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 19:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLIAlA (ORCPT
+        with ESMTP id S229752AbiLIAol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 19:41:00 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711897E817
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:40:57 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id m4so3225136pls.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:40:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ts8VuH29eJs0lRoNKSbLyJ+3BhxqS01nZUvAotdimj8=;
-        b=puLym57KgZSHA6OLMzxQdEiLCorOlK5qeq6JNO/dlUOPemCt31YG5It3xWuyjajzeE
-         skQZbJvGqufccY/6LQsUcD1h08as6WW8NUv9AcgbdANxa0MRoIePF8pJLf5x9x4zSnG4
-         fSj83bMCzHp1CVyhwrLfPuYW1gEZz/GLb2TFAt9/jYnVHtQW22XVoMJ3Qpld2+JfRwtj
-         3U6ZW9evQ7eDPkM8Yxq4AOH5rZKZn1vSR/wHYuPbfFe+B5Y0q0IbdawX2lX7yjBL0EB2
-         z+nlImr8AssZ2IQv9rR2VxRoMOn/bunwy+X93JZF+p+sMNLJdGmZG4KWfUmWq0uDHyOy
-         eWRA==
+        Thu, 8 Dec 2022 19:44:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29272A0FA5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:43:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670546625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QOQAgPN2OM3Qoh4w5J3XT6I3W+H9FIcVJ7CHfGCLLVU=;
+        b=BxwXqgjXFJITcqnEkGwbKkWeZ/qtIUKXmC7L1B6C6S+6NtaAiZJc8jOD6TbBslqSrnTh7s
+        Cs6SqengrXFeuoTA0pL4vm6knGDVwG7uVHW37mcYoPFJEyUW/99uHAiOjZVoBYEguNEW4+
+        e1z3Lmf5QuCPnRsIF+WBLnfE1yE8BU4=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-497-daLczFXfPUqjkuxuWPdrAg-1; Thu, 08 Dec 2022 19:43:42 -0500
+X-MC-Unique: daLczFXfPUqjkuxuWPdrAg-1
+Received: by mail-qk1-f199.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso3415178qkp.21
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:43:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ts8VuH29eJs0lRoNKSbLyJ+3BhxqS01nZUvAotdimj8=;
-        b=N5cevh1wT+UqO0yBjK0w/yMwpsR7DViLHrJYYu0Sba8NuCBL67QoOxNQtxbjwBzGYt
-         NPSZav8r1/raznCuT3Frf5mmgxvkv9+KujueFVjv0SApMTl1D6QkKUDuflsCx+DimwKz
-         f261LWBKplMojhl1fWKsDvNond1ZfksmEgTchSjdeOwzp/NFiOMqkCrUmge6Gwr9JjNU
-         0izC1EN57uvMaYIXLIy6G2jMyw43C4xtJWquDhWX/buVf8oZ97VB31LNpOIaqr+tmDUI
-         S+7wuQQ0mty12s7eoyAmocHcxIEXGIsyVi6rlxAnjYQ1sfuEhX8g6+k/g3xrsXTUneQT
-         w8Sw==
-X-Gm-Message-State: ANoB5plgyH3Useuqd17WrkaK8TflxnWL8iOe2vO0SlVONYdVvYHniNnC
-        aKJEAiY7FR8QWa7zICXOPAOj2g==
-X-Google-Smtp-Source: AA0mqf60ZYGsjIPoGKd7H1LF264DseAYN1CQIVB5EPBFnwar2u2F8zq/m4VWj8XYnzH4abdHKGly0w==
-X-Received: by 2002:a17:902:be01:b0:189:6624:58c0 with SMTP id r1-20020a170902be0100b00189662458c0mr1615935pls.3.1670546456839;
-        Thu, 08 Dec 2022 16:40:56 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902a3cf00b0016d9b101413sm28385plb.200.2022.12.08.16.40.56
+        bh=QOQAgPN2OM3Qoh4w5J3XT6I3W+H9FIcVJ7CHfGCLLVU=;
+        b=DKsYACV0+88kW6wTTJAhRsk9stAMh0ksiuVKZ8JWawpGpqA1ur5k7Y3dFVb/oWPg5v
+         2Bik5VZF5xr9Zcu+HDfbv+FhRXTj8vhTShQtOb+OlLmAhWR+IITWFtJqVDJoKNdOYRGo
+         Zzn4Qd1faarkQ73FqZaZwlwNyKbt4hoDd1crCkEUXYJ+VtHLFYSWuAGh4IFeTFoW1usI
+         9lhnoxyofclCbJSy+3L9wRrb6mkXi2BZ7OlK/4AkdUpipDxM7ZS2txG+pwTBuqmIkrnl
+         22a8MOi5SURnqEx6jkoffh0+D5gHqhe+bFc1VA3fR+5KyCdtBan94i4KrPY1jqP3HB9F
+         l6Fw==
+X-Gm-Message-State: ANoB5plBeHQJ9L/+V487u5lQgJOpyYmnqqiiLimNVhu/ZY8tNBoOaXJC
+        oA1TYPpuFUs9zalW5SodAvTF8oMPtDSvdm2Z+qNC1OBp1gjjiR74bntSNoAYWWt+WcqUdFYPQVZ
+        fAzWnUQwtvorSa22zpNe2Vecj
+X-Received: by 2002:a05:6214:4283:b0:4c6:99cb:347 with SMTP id og3-20020a056214428300b004c699cb0347mr6739383qvb.38.1670546621697;
+        Thu, 08 Dec 2022 16:43:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6vNPXFnBfP41Kw3F4yG2Y/tCEvs98o4Mwa9bR+8CQc/ImHAQskUQTptwE7im0S7QmgyTtJ4A==
+X-Received: by 2002:a05:6214:4283:b0:4c6:99cb:347 with SMTP id og3-20020a056214428300b004c699cb0347mr6739369qvb.38.1670546621489;
+        Thu, 08 Dec 2022 16:43:41 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id q23-20020a05620a2a5700b006fcc6d9a626sm13577487qkp.78.2022.12.08.16.43.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 16:40:56 -0800 (PST)
-Date:   Fri, 9 Dec 2022 00:40:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH v4 03/32] KVM: SVM: Flush the "current" TLB when
- activating AVIC
-Message-ID: <Y5KEFdCfdFTplNZ5@google.com>
-References: <20221001005915.2041642-1-seanjc@google.com>
- <20221001005915.2041642-4-seanjc@google.com>
- <b9f336f17eec6bfbb8429700e0f135d19813c576.camel@redhat.com>
- <7930223f7593c67962e5bd67d7d334d87fbc2d3a.camel@redhat.com>
+        Thu, 08 Dec 2022 16:43:40 -0800 (PST)
+Date:   Thu, 8 Dec 2022 19:43:38 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jann Horn <jannh@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v2 10/10] mm/hugetlb: Document why page_vma_mapped_walk()
+ is safe to walk
+Message-ID: <Y5KEukhLUgskntDE@x1n>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203158.651092-1-peterx@redhat.com>
+ <6a970de6-e3da-f57d-14fd-55f65ddcb27d@nvidia.com>
+ <Y5JRhU+9QqoUuSdR@x1n>
+ <61751d01-2ba4-efc0-9cb8-eeeb3d70908d@nvidia.com>
+ <Y5JjTPTxCWSklCan@x1n>
+ <7f3096c5-c3cc-4ead-7c5e-8bade6c930da@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <7930223f7593c67962e5bd67d7d334d87fbc2d3a.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <7f3096c5-c3cc-4ead-7c5e-8bade6c930da@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,76 +93,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-12-07 at 18:02 +0200, Maxim Levitsky wrote:
-> On Sat, 2022-10-01 at 00:58 +0000, Sean Christopherson wrote:
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -86,6 +86,12 @@ static void avic_activate_vmcb(struct vcpu_svm *svm)
-> >                 /* Disabling MSR intercept for x2APIC registers */
-> >                 svm_set_x2apic_msr_interception(svm, false);
-> >         } else {
-> > +               /*
-> > +                * Flush the TLB, the guest may have inserted a non-APIC
-> > +                * mapping into the TLB while AVIC was disabled.
-> > +                */
-> > +               kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, &svm->vcpu);
-> > +
-> >                 /* For xAVIC and hybrid-xAVIC modes */
-> >                 vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
-> >                 /* Enabling MSR intercept for x2APIC registers */
+On Thu, Dec 08, 2022 at 04:24:19PM -0800, John Hubbard wrote:
+> It does! And now for the comment, I'll think you'll find that this suffices:
 > 
+> 		/*
+> 		 * All callers that get here will already hold the i_mmap_rwsem.
+> 		 * Therefore, no additional locks need to be taken before
+> 		 * calling hugetlb_walk().
+> 		 */
 > 
-> I agree, that if guest disables APIC on a vCPU, this will lead to call to
-> kvm_apic_update_apicv which will disable AVIC, but if other vCPUs don't
-> disable it, the AVIC's private memslot will still be mapped and guest could
-> read/write it from this vCPU, and its TLB mapping needs to be invalidated
-> if/when APIC is re-enabled.
->  
-> However I think that this adds an unnecessarily (at least in the future)
-> performance penalty to AVIC nesting coexistence:
->  
-> L1's AVIC is inhibited on each nested VM entry, and uninhibited on each
-> nested VM exit, but while nested the guest can't really access it as it has
-> its own NPT.
->  
-> With this patch KVM will invalidate L1's TLB on each nested VM exit. KVM
-> sadly already does this but this can be fixed (its another thing on my TODO
-> list)
->  
-> Note that APICv doesn't have this issue, it is not inhibited on nested VM
-> entry/exit, thus this code is not performance sensitive for APICv.
->  
->  
-> I somewhat vote again, as I said before to disable the APICv/AVIC memslot, if
-> any of vCPUs have APICv/AVIC hardware disabled, because it is also more
-> correct from an x86 perspective. I do wonder how often is the usage of having
-> "extra" cpus but not using them, and thus having their APIC in disabled
-> state.
+> ...which, considering all the data above, is probably the mother of
+> all summaries. :)  But really, it's all that people need to know here, and
+> it's readily understandable without wondering what KSM has to do with this,
+> for example.
 
-There are legimate scenarios where a kernel might want to disable the APIC on
-select CPUs, e.g. to offline SMT siblings in BIOS.  Whether or not doing that in
-a VM makes sense is debatable, but we really have no way of knowing if there are
-existing guests that selectively disable APICs.
+I'm okay with the change. :)
 
-> KVM does support adding new vCPUs on the fly, so this shouldn't be needed,
-> and APICv inhibit in this case is just a perf regression.
+I think what I'll do is I'll move part of the original one into commit
+message, and take the new version in the code.
 
-Heh, "just" a perf regression.  Inhibiting APICv would definitely be a perf regression
-that people care about, e.g. see the very recent bug fixes:
+Thanks,
 
-https://lore.kernel.org/all/20221116205123.18737-1-gedwards@ddn.com
-https://lore.kernel.org/all/1669984574-32692-1-git-send-email-yuanzhaoxiong@baidu.com
+-- 
+Peter Xu
 
-Conceptually, I like the idea of inhibiting the APICv memslot if a vCPU has its
-APIC hardware disabled.  But practically speaking, because KVM has allowed that
-scenario for years, I don't think we should introduce such an inhibit and risk
-regressing guests.
-
-> Or at least do this only when APIC does back from hardware disabled state to
-> enabled.
-
-I have no objection to fine tuning this in follow-up, but for this bug fix I'd
-much prefer to go with this minimal change.  The nested SVM TLB flushing issue
-extends far beyond this one case, i.e. needs a non-trivial overhaul and an audit
-of pretty every piece of SVM code that can interact with TLBs.
