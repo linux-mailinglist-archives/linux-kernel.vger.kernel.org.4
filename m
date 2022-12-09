@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9A5648B47
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A223648B4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiLIXOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 18:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S229745AbiLIXQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 18:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiLIXOh (ORCPT
+        with ESMTP id S229545AbiLIXQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 18:14:37 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF15896572
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 15:14:36 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id f9so4519160pgf.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 15:14:36 -0800 (PST)
+        Fri, 9 Dec 2022 18:16:48 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544C152146;
+        Fri,  9 Dec 2022 15:16:47 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1322d768ba7so1555172fac.5;
+        Fri, 09 Dec 2022 15:16:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KjWt06caLftDUr8Va4Y4h1LGtA5Zj5segiez9gIs88A=;
-        b=bcr8Dicuab3vxBke8uhwSm18glsWJM52rBtl5b/OwBK5UhIhIVhQE7EOE5fdMUJ7qn
-         VS1IiKlq3CLUle6UoWj/9xH4ktiZf1L0TscM3UC9P7bpx+96orNymQcPTReEoKBsE78e
-         fZ5E1qZYzF8lxrl9eFlvkTyAZvu9c9bTGoKaypaMnO0/LwIxjoudocaHHLHmr+kh3GDc
-         iwqF7ubbZUx9Ky/7ndRnsThl+mFWIKLOEPb8XpuPzKquPQ07P95bscsf8mu3DJcFepqt
-         NsvUeyw1+LM5Sto3PxUUMwVMlhUx8IW2K+5cGRd+ro1bHzBCZznSDrN7sPQgCkkbdIGT
-         0K5g==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PkLQpu5eL9OZHKRdAfTyoXfk6Fj63Rxr9laOGfg5xGc=;
+        b=IRlMxe/QOBYNsZOuFX2veFnSjEcbVyUfnIFUjzu7cAUBoFvhBrAaqJDzWWdVJMjMTg
+         lO7d4nhXBvVfUdinsnNcocldGhGe5YBDB4BzQy54ZcIzuUscMEXv0JNrVKpZi2ppZ9bC
+         /9pp1sp7Q4FiNKbgnacrziuWpvY8GNsBoRRcHcB+2DIwO1mdrAR9ECLBPG8dUAv3ciXJ
+         i2fBuNWyfruZxToVdAlV23G/60j4Bbl4D52ZBnVcMfSheftPK859x3Gd/kHNw+Pbkuyn
+         Iv0Ejc29hRhdSTUbIq8qtlKxf4dumHmin/ghLjPGURAMBnceWh2GMwFHjsHgjolu6e0v
+         nYTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KjWt06caLftDUr8Va4Y4h1LGtA5Zj5segiez9gIs88A=;
-        b=oWC1vlO/ClmLDIDSZ2RYqau/Y3ZJloISXR/vmgdspcy/eJpeTNPgyeuKpDKE7wWcNN
-         joUO5iBYEGJTmGqV8k15DDXvWj3W1dPyvdAkqaK3kq5nZtVuy2iNRUEk31ZbNwVP9P+5
-         cMty2FmoOgZqg0qXdcBhZDkiOf1m5iz8wSm+7+ZsJmivORMvBfSDkeD+U67RORvH5VzX
-         Ygf9bK3r/L7a+YqUP9mh/MpFFKIJ+mVhgOG9zk9MUGRhYgPErQknKKXowqPnwt8Lggyc
-         qgQr84ZNcf+tRVR3I9ZsAC5iQz9PGqhSddUCi4zb35xVJHKTzMH6sXHPLQIq5ELmPMJu
-         5Erw==
-X-Gm-Message-State: ANoB5pldoIgUDCoJBIaArtlIA8m5oiKO/baYIF8LnMq6/iDSlrbztN8f
-        nY4htMdGb7E9xZaDo9N3AhTVLA==
-X-Google-Smtp-Source: AA0mqf4cAU4Kq051W70vDTA8y5JZAh5cKZn3X8Qf77p+gIcGqCOA43zYNY39mMeJxo8y9WtqjJ+vpA==
-X-Received: by 2002:aa7:87ca:0:b0:56c:5e2:3064 with SMTP id i10-20020aa787ca000000b0056c05e23064mr5663001pfo.0.1670627676131;
-        Fri, 09 Dec 2022 15:14:36 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b005771d583893sm1748579pfc.96.2022.12.09.15.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 15:14:35 -0800 (PST)
-Date:   Fri, 9 Dec 2022 15:14:32 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH 0/7] KVM: x86/MMU: Factor rmap operations out of mmu.c
-Message-ID: <Y5PBWLEXXMjcyKTS@google.com>
-References: <20221206173601.549281-1-bgardon@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PkLQpu5eL9OZHKRdAfTyoXfk6Fj63Rxr9laOGfg5xGc=;
+        b=csENKk6cvSa0oC5DCyA9Xa5ilvPPRZArTDjApVy5hkZZYEIzuZOFaKUCb21HLQmuQN
+         Ty1TuL1zz7HgV9HL0pikLu8vLGf0NLuVn2krF2tRHvXitMWPHHGb9PTIc+/CqXRvz6Cy
+         WuON1whyCCCS35R5TyhHL/ZKjbCub6WdQh9Vpsmahnu7CSVK2Vtf3u3ga7FEwZFcXv8x
+         jNT7FPzGSkSxxyvHOhVJMsOgUXNAg2OETuoYE3KIuL35VSYw5RodRb88/n3Dg4KYCPBE
+         ULX/0q6smAr6u8yqf2pXqmCWvPzKOt1y5WY4B/rDg/o0vPQdFLcqHIKG7vouQBmsechM
+         Avlw==
+X-Gm-Message-State: ANoB5plMQXZVzTZjcD8cntPQ7A+aKJS3vkp+50jFxkUzujl/eiIM+I7z
+        ojFbZS7TVtmFnCYSVVpZ5ZwCgPnhyxc9X1JyQZE=
+X-Google-Smtp-Source: AA0mqf6MtRxq7OjbEiJtrmZnXTvTYRNWU2BbVAy8sQApGfyusInceJkgyzbXJEi2tUHTr2CeLSl9o+U+ljlumUDckC0=
+X-Received: by 2002:a05:6870:2b05:b0:12d:58c1:33f9 with SMTP id
+ ld5-20020a0568702b0500b0012d58c133f9mr44331937oab.46.1670627806672; Fri, 09
+ Dec 2022 15:16:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206173601.549281-1-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+References: <Y5LwqRCPcYLizJFt@mail.google.com>
+In-Reply-To: <Y5LwqRCPcYLizJFt@mail.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 9 Dec 2022 18:16:34 -0500
+Message-ID: <CADnq5_NOyyLetx+wUtYL4f7ETHzVFAw_JnbGXGh5G1KYbUH3Zg@mail.gmail.com>
+Subject: Re: [PATCH] [next] drm/radeon: Replace 1-element arrays with
+ flexible-array members
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,54 +73,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:35:54PM +0000, Ben Gardon wrote:
-> Move the basic operations for manipulating an rmap out of mmu.c, into
-> their own files.
+Applied.  Thanks!
 
-memslot_rmap_alloc() and memslot_rmap_free() from x86.c look like good
-candidates to move to rmap.c as well as they are pure setup/teardown.
+Alex
 
-> 
-> This is the first step in a series of series to split the Shadow MMU out of
-> mmu.c. Splitting the shadow MMU out results in about a 50% reduction in line
-> count of mmu.c, from ~7K to ~3.5K. The rmap operations only represent about
-> 10% of the Shadow MMU but are split out first becase the are relatively
-> self-contained.
-> 
-> This split may also help facilitate the addition of kUnit tests for rmap
-> manipulation, especially the fiddly bit flag which diferentiates a direct
-> pointer from a pte_list_desc.
-> 
-> This effort is complimentary to David Matlack's proposal to refactor
-> the TDP MMU into an arch-neutral implementation because it further
-> clarifies the distinction between the Shadow MMU and TDP MMU within x86.
-> 
-> This series contains no functional changes. It's just a direct movement
-> of code from one file to another.
-> 
-> Whether this rmap code should stay in its own file or get merged with
-> the rest of the shadow MMU code as it is factored out is open for
-> debate.
-> 
-> Ben Gardon (7):
->   KVM: x86/MMU: Move pte_list operations to rmap.c
->   KVM: x86/MMU: Move rmap_iterator to rmap.h
->   KVM: x86/MMU: Move gfn_to_rmap() to rmap.c
->   KVM: x86/MMU: Move rmap_can_add() and rmap_remove() to rmap.c
->   KVM: x86/MMU: Move the rmap walk iterator out of mmu.c
->   KVM: x86/MMU: Move rmap zap operations to rmap.c
->   KVM: x86/MMU: Move rmap_add() to rmap.c
-> 
->  arch/x86/kvm/Makefile           |   2 +-
->  arch/x86/kvm/debugfs.c          |   1 +
->  arch/x86/kvm/mmu/mmu.c          | 438 +-------------------------------
->  arch/x86/kvm/mmu/mmu_internal.h |   9 +-
->  arch/x86/kvm/mmu/rmap.c         | 368 +++++++++++++++++++++++++++
->  arch/x86/kvm/mmu/rmap.h         | 106 ++++++++
->  6 files changed, 492 insertions(+), 432 deletions(-)
->  create mode 100644 arch/x86/kvm/mmu/rmap.c
->  create mode 100644 arch/x86/kvm/mmu/rmap.h
-> 
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
+On Fri, Dec 9, 2022 at 3:24 AM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
+>
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in structs _ATOM_DISPLAY_OBJECT_PATH,
+> _ATOM_DISPLAY_OBJECT_PATH_TABLE, _ATOM_OBJECT_TABLE, GOP_VBIOS_CONTENT
+> _ATOM_GPIO_VOLTAGE_OBJECT_V3 and refactor the rest of the code accordingly.
+>
+> It's worth mentioning that doing a build before/after this patch
+> results in no binary output differences.
+>
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+>
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/239
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> Notes for the maintainer:
+>
+> - These are all fake-flexible arrays with references in source code for
+>   the radeon driver. Given the way they are used, no change to *.c files
+>   were required.
+> ---
+>  drivers/gpu/drm/radeon/atombios.h | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/atombios.h b/drivers/gpu/drm/radeon/atombios.h
+> index 235e59b547a1..8a6621f1e82c 100644
+> --- a/drivers/gpu/drm/radeon/atombios.h
+> +++ b/drivers/gpu/drm/radeon/atombios.h
+> @@ -4020,7 +4020,7 @@ typedef struct  _ATOM_DISPLAY_OBJECT_PATH
+>    USHORT    usSize;                                        //the size of ATOM_DISPLAY_OBJECT_PATH
+>    USHORT    usConnObjectId;                                //Connector Object ID
+>    USHORT    usGPUObjectId;                                 //GPU ID
+> -  USHORT    usGraphicObjIds[1];                             //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
+> +  USHORT    usGraphicObjIds[];                             //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
+>  }ATOM_DISPLAY_OBJECT_PATH;
+>
+>  typedef struct  _ATOM_DISPLAY_EXTERNAL_OBJECT_PATH
+> @@ -4037,7 +4037,7 @@ typedef struct _ATOM_DISPLAY_OBJECT_PATH_TABLE
+>    UCHAR                           ucNumOfDispPath;
+>    UCHAR                           ucVersion;
+>    UCHAR                           ucPadding[2];
+> -  ATOM_DISPLAY_OBJECT_PATH        asDispPath[1];
+> +  ATOM_DISPLAY_OBJECT_PATH        asDispPath[];
+>  }ATOM_DISPLAY_OBJECT_PATH_TABLE;
+>
+>
+> @@ -4053,7 +4053,7 @@ typedef struct _ATOM_OBJECT_TABLE                         //Above 4 object table
+>  {
+>    UCHAR               ucNumberOfObjects;
+>    UCHAR               ucPadding[3];
+> -  ATOM_OBJECT         asObjects[1];
+> +  ATOM_OBJECT         asObjects[];
+>  }ATOM_OBJECT_TABLE;
+>
+>  typedef struct _ATOM_SRC_DST_TABLE_FOR_ONE_OBJECT         //usSrcDstTableOffset pointing to this structure
+> @@ -4615,7 +4615,7 @@ typedef struct  _ATOM_GPIO_VOLTAGE_OBJECT_V3
+>     UCHAR    ucPhaseDelay;                // phase delay in unit of micro second
+>     UCHAR    ucReserved;
+>     ULONG    ulGpioMaskVal;               // GPIO Mask value
+> -   VOLTAGE_LUT_ENTRY_V2 asVolGpioLut[1];
+> +   VOLTAGE_LUT_ENTRY_V2 asVolGpioLut[];
+>  }ATOM_GPIO_VOLTAGE_OBJECT_V3;
+>
+>  typedef struct  _ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
+> @@ -7964,7 +7964,7 @@ typedef struct {
+>
+>  typedef struct {
+>    VFCT_IMAGE_HEADER    VbiosHeader;
+> -  UCHAR        VbiosContent[1];
+> +  UCHAR        VbiosContent[];
+>  }GOP_VBIOS_CONTENT;
+>
+>  typedef struct {
+> --
+> 2.38.1
+>
