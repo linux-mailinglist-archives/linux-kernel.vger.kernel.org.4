@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F73647BC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBE5647BC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiLICAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S229796AbiLICBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiLICAQ (ORCPT
+        with ESMTP id S229538AbiLICBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:00:16 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B727D063
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:00:16 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so6573316pjr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E+MDk20pNjNOTwRWwrQTCQOLe1CumfU1Adn6VxC+as0=;
-        b=BzslQxGVzxXy/aPFzhxWGpXiNlSPY/Lv9nV/fQlD26dRU7Sgf2DZNfRJpckwFp6xXg
-         PGeriX/ghvqGkP8Sct/fH9M0zj99MVD6PrTXcu2sTLtWRnwlUsnwFSwDly/cVk2Ikj6x
-         hB+bHmTpQABHhg/S1MdBRr7R6/RhCWSInpu02IzNS2vCVTIYaq0V6GGHomgig0Wnu9eX
-         eIO0ONE8OIIkYUJyWPPI0esJScQvflb9r35XYkLDdk4ofAhIBHsBQvkBzIWp9yzuCoby
-         fCN79mT4E0YoaKHwYSVmVVp1GZOm6UHi7wuyf6UzjmG6SZNqk3JHu90bJ9hcWzteNPh+
-         jKvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E+MDk20pNjNOTwRWwrQTCQOLe1CumfU1Adn6VxC+as0=;
-        b=IdFSUeCA1gEP1a/1O7ptVsXZ1dHvnkjmfhDcORRUJzj6/BnqRvuCDOBIsrG75dXYNJ
-         Q4Qsqi4QYPZ01JO07T+DXkdJk3cpEEWAiy0Wj/0qTI6pWDitHFNEgkRWqVkdzcZSXgZF
-         o2XB+RUah9mdS1X6FH5TxQ3JJ1O2yrDvSQFB9CLf3edYg3OzZvEqtZVb5YnT7E9pwN9z
-         Inr1pcCZF+XQ3E6hNDNays6543A2YEPFY3lpMRNVQxlgeSRzC+R0WnAgLAfVRbt4xMZI
-         91PhW+3ADWvrD+tf3Xrd54tfDLoRtHR5zN3kLrMzKi8NTrsDWol4xsBmPHoJeh2cj0Kt
-         uYcQ==
-X-Gm-Message-State: ANoB5pkFCXeyVa0GBg1d4qHBY3qDwlp6q63dtlaIq6Jbc1hqg9FKm3DG
-        UJCEos146mhvgYigRg5KO+UxydeNOgW2xSnHFbg=
-X-Google-Smtp-Source: AA0mqf7NK83iZvBvzZ1jzKTh+sSUtdbYdDycl7fTBUeWcCjGlGBqi8ivE1nf0u/ugEUtjuuZeLCKlh/faAWEZLE5Lqs=
-X-Received: by 2002:a17:902:e8c3:b0:186:5de2:e17e with SMTP id
- v3-20020a170902e8c300b001865de2e17emr81874555plg.35.1670551215498; Thu, 08
- Dec 2022 18:00:15 -0800 (PST)
+        Thu, 8 Dec 2022 21:01:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7678D23151;
+        Thu,  8 Dec 2022 18:01:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E882B82706;
+        Fri,  9 Dec 2022 02:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C269C433A0;
+        Fri,  9 Dec 2022 02:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670551295;
+        bh=SkG0VIqWAQWylgRHfoMeG8lBjjuRZ9GmA+y0TH1J3fc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OxMFuJAK3rAc1PnY53u3QDUfFVttYZYZfiGw5pEgn96yEXMo5CdKl/qc9/Z9zNAky
+         6LzbsRUJUFl4GYnKPVebOode5qURJq0CSVwyXn2fzTE4Mx9k0GSkYLNEgUR/VrKJyv
+         tY6fWQcabY2yJne/YtnclSXOvvSEjAOMHMlSPqu/OS25aqQzoh12B9H3MXOj41noHN
+         DeMX43aEcG5OTZfQ8BR3aVvhMJ2AuiaGp1XXNST6RFRLjxyEboOTW67+afB3ccvwUz
+         9ItzqMp00KcoZRr5vm2icwLDoq6QroF5C26+Cvi2qR7GffV150QmVfRH8MkiiqqbvN
+         zqIFww+131gmg==
+Received: by mail-ed1-f49.google.com with SMTP id i15so1325300edf.2;
+        Thu, 08 Dec 2022 18:01:34 -0800 (PST)
+X-Gm-Message-State: ANoB5pkFEzt78cfKEg2Hmt220NG4xB1bjbgoSj4wRuLkEdFVA6xsj4KH
+        zKrw6lGvBhMQetxTFvtPJwVqZdqzRfrW3glpkGU=
+X-Google-Smtp-Source: AA0mqf5C/3tfEMZ0PsbumjXajBPqoEmuMmeihHRWIZKLRicqq0E/oDxh0zU8cL/o0mSjqj7e5LlTwvlQ3cMBhv+JcfE=
+X-Received: by 2002:a05:6402:538a:b0:458:fbd9:e3b1 with SMTP id
+ ew10-20020a056402538a00b00458fbd9e3b1mr28452851edb.6.1670551292956; Thu, 08
+ Dec 2022 18:01:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20221208180209.50845-1-ryncsn@gmail.com> <20221208180209.50845-4-ryncsn@gmail.com>
- <Y5I2RiQzH/kFD6zX@casper.infradead.org>
-In-Reply-To: <Y5I2RiQzH/kFD6zX@casper.infradead.org>
-From:   Kairui Song <ryncsn@gmail.com>
-Date:   Fri, 9 Dec 2022 10:00:02 +0800
-Message-ID: <CAMgjq7DXqrcMvfFt6Ue_gXharkdjL01GGy8zaVrXDM5Uj4j6Jg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] swap: fold swap_ra_clamp_pfn into swap_ra_info
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>
+References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-6-guoren@kernel.org>
+ <87sfhqw6ge.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87sfhqw6ge.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 9 Dec 2022 10:01:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR3Eebw7juPiW4zA122qQKJjw4+7eC54vHgTDpctqJopA@mail.gmail.com>
+Message-ID: <CAJF2gTR3Eebw7juPiW4zA122qQKJjw4+7eC54vHgTDpctqJopA@mail.gmail.com>
+Subject: Re: [PATCH -next V10 05/10] riscv: entry: Remove extra level wrappers
+ of trace_hardirqs_{on,off}
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=889=E6=
-=97=A5=E5=91=A8=E4=BA=94 03:09=E5=86=99=E9=81=93=EF=BC=9A
+On Thu, Dec 8, 2022 at 6:11 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
+te:
 >
-> On Fri, Dec 09, 2022 at 02:02:07AM +0800, Kairui Song wrote:
-> > From: Kairui Song <kasong@tencent.com>
-> >
-> > This make the code cleaner. This helper is made of only two line of
-> > self explanational code and not reused anywhere else.
-> >
-> > And this actually make the compiled object smaller by a bit:
-> >
-> >           text    data     bss     dec     hex filename
-> > Before:   9502     976      12   10490    28fa mm/swap_state.o
-> > After:    9470     976      12   10458    28da mm/swap_state.o
+> guoren@kernel.org writes:
 >
-> FYI, you can use scripts/bloat-o-meter to get a slightly more
-> useful analysis of object code changes.
+> > From: Jisheng Zhang <jszhang@kernel.org>
+> >
+> > Since riscv is converted to generic entry, there's no need for the
+> > extra wrappers of trace_hardirqs_{on,off}.
+> >
+> > Tested with llvm + irqsoff.
 >
+> What does this mean?
+It's just a tested environment description. This is covered by the
+generic entry. This patch removes unused code.
 
-Thanks! That's very helpful info, I got following output from bloat-o-meter=
-:
+I would remove the "Tested with llvm + irqsoff." sentence; it's unnecessary=
+.
 
-./scripts/bloat-o-meter mm/swap_state.o.old mm/swap_state.o
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-35 (-35)
-Function                                     old     new   delta
-swap_ra_info.constprop                       512     477     -35
-Total: Before=3D8388, After=3D8353, chg -0.42%
+>
+>
+> Bj=C3=B6rn
 
-I'll attach this info in commit message from now on.
+
+
+--=20
+Best Regards
+ Guo Ren
