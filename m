@@ -2,158 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D025B648AD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86C2648AD7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiLIWo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S229888AbiLIWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLIWow (ORCPT
+        with ESMTP id S229478AbiLIWrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:44:52 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89291C12A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:44:51 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id js9so5249989pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 14:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X60ise7QEnBOLcc3D/dBQfic8PhzrSOslDuErC7Ni10=;
-        b=pHUdoOKYb0ikWsUFyedzTVRqWFVg+GHcvD2Qt3tMkYnRgphgWNKSWcAqSb1lJUGYV3
-         2In6LQHTmk+M/woccvtGcbol+tHuihY0FVIDF2Z4kIsolqvzKaINNw+vqEAgWAFvqT3e
-         SBqsToY0x6VAUpiv7c3CoqyhOzssWXjkXdqbdXdotU02cHCxLcCpXYCL19pqFE1kK7Dk
-         ixODee2lydPhJ+A9DZ458RZ0X9UpXWkPEiwQTP+5HexIHqUS5/vkKTGRPoxNwSi9JlPk
-         99NqBP9UYRQiH5YX47o/EMMJabhk6ghiMSkm4nNj7uUXklplo0CopLcnv7/A5zDLfW7Q
-         Ctkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X60ise7QEnBOLcc3D/dBQfic8PhzrSOslDuErC7Ni10=;
-        b=31xgcB+wojH+8JYnbN4SPJ9irEc4A1KWGo6mUeT8YMtSDzHP+Cjw9kHYhDneS0Nef0
-         2uaw3DLyC4N2C3sm0OUVDfqJTIvvHiNUehK04a6rJoNQ9ncz6DR9bgz5r3h76kz58AgF
-         r5eQyVtfvdbOpfsfq2n0vOL7GGiQ7cyDvlCbthG5OvkLVs2D30sJJ06NcpefM0A7Zk0y
-         jTb4jCmF4eNiHGbaywhi07ovQxX+jctR0iLsM99Y1X+n95nQT9FTcZAhe/By4lcnc4uB
-         crKoeTMiUX+atZLeseciSzuqdc6vtmE77mFRCqEFBO3/MbTO1VPT67WN4dgRsm4JuIp0
-         gU3w==
-X-Gm-Message-State: ANoB5pk8ZGC/BjwI5BTygAVZT6Izbni+MfuFNK5JqTuxclgptnQoWB4X
-        oIZD0RFIo/0tpF5Sh/XzZHIK1Q==
-X-Google-Smtp-Source: AA0mqf6kfZWSPqHNCi32c0RbsdLJDYiO+lxQPBmPCC1xUSm/BB/fFxSx+3nTSHZ4LGgFZvPhGyTGBw==
-X-Received: by 2002:a17:90a:1b0b:b0:219:396c:9e32 with SMTP id q11-20020a17090a1b0b00b00219396c9e32mr7524057pjq.16.1670625891035;
-        Fri, 09 Dec 2022 14:44:51 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id d12-20020a17090a3b0c00b00219f8eb271fsm1670901pjc.5.2022.12.09.14.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 14:44:50 -0800 (PST)
-Date:   Fri, 9 Dec 2022 14:44:46 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH 6/7] KVM: x86/MMU: Move rmap zap operations to rmap.c
-Message-ID: <Y5O6XiJSjGmpMl3R@google.com>
-References: <20221206173601.549281-1-bgardon@google.com>
- <20221206173601.549281-7-bgardon@google.com>
+        Fri, 9 Dec 2022 17:47:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0591C12A;
+        Fri,  9 Dec 2022 14:47:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670626037; x=1702162037;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=QscC73kq0p64g37vmGx5wDJw00wcjEIWLqcqcPelmAI=;
+  b=PQeCh/l7Xk0z+FA7CM+MyDird7H1tbJM3Maz+AZoMP4M9TmvdY4YcdGf
+   /wBo/wa1946sAGF5PwmPH0mUN2Vy7Qjo8xCoITyKAc6FZh81O77honc8j
+   +tyP+EUZHFWrfqT+EUgeTV2spF8kZS4wLEMnvoQp5FIkInC8Bsg5uZzOj
+   h4zc/0hXP0H+sBs5Sad6MoG6+xEmIlTc8KtAUrKQtQiS17mBwdqrJd6rf
+   EVKkx9JD1wmXyq5ziE4tXFOG3/h1m3niiL3ecQYOrg1QRiCwJtGvDEuLo
+   9TNERoqEooKuZiPvrOeRg6wOaCJdiT4R5uFBaHYJ/hofyQgWeZBn3LxyL
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="187455845"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 15:47:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 15:47:15 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 9 Dec 2022 15:47:14 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, <jbe@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@armlinux.org.uk>, Jerry Ray <jerry.ray@microchip.com>
+Subject: [PATCH net-next v5 0/6] dsa: lan9303: Move to PHYLINK
+Date:   Fri, 9 Dec 2022 16:47:07 -0600
+Message-ID: <20221209224713.19980-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206173601.549281-7-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:36:00PM +0000, Ben Gardon wrote:
-> Move the various rmap zap functions to rmap.c. These functions are less
-> "pure" rmap operations in that they also contain some SPTE manipulation,
-> however they're mostly about rmap / pte list manipulation.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
-[...]
-> -static void kvm_zap_one_rmap_spte(struct kvm *kvm,
-> -				  struct kvm_rmap_head *rmap_head, u64 *sptep)
-> -{
-> -	mmu_spte_clear_track_bits(kvm, sptep);
-> -	pte_list_remove(sptep, rmap_head);
-> -}
-> -
-> -/* Return true if at least one SPTE was zapped, false otherwise */
-> -static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
-> -				   struct kvm_rmap_head *rmap_head)
-> -{
-> -	struct pte_list_desc *desc, *next;
-> -	int i;
-> -
-> -	if (!rmap_head->val)
-> -		return false;
-> -
-> -	if (!(rmap_head->val & 1)) {
-> -		mmu_spte_clear_track_bits(kvm, (u64 *)rmap_head->val);
-> -		goto out;
-> -	}
-> -
-> -	desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
-> -
-> -	for (; desc; desc = next) {
-> -		for (i = 0; i < desc->spte_count; i++)
-> -			mmu_spte_clear_track_bits(kvm, desc->sptes[i]);
-> -		next = desc->more;
-> -		free_pte_list_desc(desc);
-> -	}
-> -out:
-> -	/* rmap_head is meaningless now, remember to reset it */
-> -	rmap_head->val = 0;
-> -	return true;
-> -}
+This patch series moves the lan9303 driver to use the phylink
+api away from phylib.
 
-I don't like moving the rmap zap functions into rmap.c, because they are
-more mmu.c functions, as you note in the commit description. e.g. It's
-odd to have kvm_zap_all_rmap_sptes() in rmap.c but not, say
-__rmap_clear_dirty().
+Migrating to phylink means removing the .adjust_link api. The
+functionality from the adjust_link is moved to the phylink_mac_link_up
+api.  The code being removed only affected the cpu port.  The other
+ports on the LAN9303 do not need anything from the phylink_mac_link_up api.
 
-I get your point though that kvm_zap_all_rmap_sptes() has to know
-intimate details of the pte_list_desc structure. It would be nice to
-keep those details isolated to rmap.c.
+Patches:
+ 0001 - Whitespace only change aligning the dsa_switch_ops members.
+	No code changes.
+ 0002 - Moves the Turbo bit initialization out of the adjust_link api and
+	places it in a driver initialization execution path. It only needs
+	to be initialized once, it is never changed, and it is not a
+	per-port flag.
+ 0003 - Adds exception handling logic in the extremely unlikely event that
+	the read of the device fails.
+ 0004 - Performance optimization that skips a slow register write if there is
+	no need to perform it.
+ 0005 - Change the macro used to identify the cpu port as phydev will be NULL
+	when this logic is moved into phylink_mac_link_up.
+ 0006 - Removes adjust_link and begins using the phylink dsa_switch_ops apis.
 
-What about keeping the zap functions mmu.c and just provide a better API
-for kvm_zap_all_rmap_sptes() to process the rmap entries?
+---
+v3->v5:
+  - Created prep patches to better show how things migrate.
+  - cleaned up comments.
+v3->v4:
+  - Addressed whitespace issues as a separate patch.
+  - Removed port_max_mtu api patch as it is unrelated to phylink migration.
+  - Reworked the implementation to preserve the adjust_link functionality
+    by including it in the phylink_mac_link_up api.
+v2->v3:
+  Added back in disabling Turbo Mode on the CPU MII interface.
+  Removed the unnecessary clearing of the phyvsupported interfaces.
+v1->v2:
+  corrected the reported mtu size, removing ETH_HLEN and ETH_FCS_LEN
 
-e.g.
+ drivers/net/dsa/lan9303-core.c | xx ++++++++++++--------
+ 1 file changed
 
-mmu.c:
-
-static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
-				   struct kvm_rmap_head *rmap_head)
-{
-	struct rmap_iterator iter;
-	bool flush = false;
-	u64 *sptep;
-
-	for_each_rmap_spte(rmap_head, &iter, sptep) {
-		mmu_spte_clear_track_bits(kvm, sptep);
-		flush = true;
-	}
-
-	pte_list_free_all(rmap_head);  // <-- implemented in rmap.c
-	return flush;
-}
-
-This should be about as efficient as the current approach (same big-O
-notation at least) and maintain the separation of pte_list_desc
-internals in rmap.c.
