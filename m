@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50078647F7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A413647F44
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiLIIpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S229692AbiLIIdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLIIpS (ORCPT
+        with ESMTP id S229460AbiLIIdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:45:18 -0500
-X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Dec 2022 00:45:17 PST
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F494FF83;
-        Fri,  9 Dec 2022 00:45:16 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NT3v26L37z9v7bc;
-        Fri,  9 Dec 2022 16:23:26 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBnUG318ZJjXxnRAA--.238S3;
-        Fri, 09 Dec 2022 09:29:55 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     corbet@lwn.net, paul@paul-moore.com, casey@schaufler-ca.com,
-        omosnace@redhat.com, john.johansen@canonical.com,
-        kpsingh@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH 2/2] doc: Fix fs_context_parse_param description in mount_api.rst
-Date:   Fri,  9 Dec 2022 09:29:36 +0100
-Message-Id: <20221209082936.892416-2-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221209082936.892416-1-roberto.sassu@huaweicloud.com>
-References: <20221209082936.892416-1-roberto.sassu@huaweicloud.com>
+        Fri, 9 Dec 2022 03:33:08 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA5C22290
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:33:07 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p3Yob-0002cH-Dr; Fri, 09 Dec 2022 09:33:05 +0100
+Message-ID: <2b801c41-b244-b5ee-ec7b-2ad19c9b08ea@leemhuis.info>
+Date:   Fri, 9 Dec 2022 09:33:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US, de-DE
+To:     Joe Perches <joe@perches.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1670152844.git.kai@dev.carbon-project.org>
+ <4af6cd7f0833f18e9eee8caba1913e682c5ec071.1670527774.git.kai@dev.carbon-project.org>
+ <3953eb4913bf9b5610854624c4c632e710cd1ec9.camel@perches.com>
+ <a834b2a3-273a-f40a-57c4-ae1e89aa67c4@leemhuis.info>
+ <af55807391b7cd119c02a0a4f5c88bcda89b243a.camel@perches.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH 2/2] checkpatch: warn when Reported-by: is not followed by
+ Link:
+In-Reply-To: <af55807391b7cd119c02a0a4f5c88bcda89b243a.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBnUG318ZJjXxnRAA--.238S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4ruw48Xw1xGw4kCrW3ZFb_yoW8XFW5pa
-        yF9r18K3s7Jr10kr98Ca1rXFWfCrs2yF4jgFWvvw18ZwsIqr1F9rnxKF1Y9r18Ga48uFWY
-        qr4S9Fyj9F9rA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-        0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-        67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-        IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-        14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0An
-        Y5UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4J1LgABsu
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1670574787;aa1cb252;
+X-HE-SMSGID: 1p3Yob-0002cH-Dr
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 08.12.22 22:34, Joe Perches wrote:
+> On Thu, 2022-12-08 at 22:11 +0100, Thorsten Leemhuis wrote:
+>> Joe, many thx for your time and your valuable feedback. I agree with
+>> most of it and will look into addressing it tomorrow, but there is one
+>> area where I have a different option:
+>>
+>> On 08.12.22 21:21, Joe Perches wrote:
+>>> On Thu, 2022-12-08 at 20:32 +0100, Kai Wasserbäch wrote:
+>>>> +
+>>>> +			# check if Reported-by: is followed by a Link:
+>>>> +			if ($sign_off =~ /^reported-by:$/i) {
+>>>> +				if (!defined $lines[$linenr]) {
+>>>> +					WARN("BAD_REPORTED_BY_LINK",
+>>>> +					     "Reported-by: should be immediately followed by Link: to the report\n" . "$here\n" . $rawline);
+>>>> +				} elsif ($rawlines[$linenr] !~ /^\s*link:\s*(.*)/i) {
+>>>> +					WARN("BAD_REPORTED_BY_LINK",
+>>>> +					     "Reported-by: should be immediately followed by Link: to the report\n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
+>>>> +				} elsif ($lines[$linenr] !~ /https?:\/\//i) {
+>>>> +					WARN("BAD_REPORTED_BY_LINK",
+>>>> +					     "Link: following Reported-by: should contain an URL\n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
+>>>
+>>> [...]
+>>>
+>>> Also the actual link line should likely be from lore
+>>>
+>>> So maybe: 
+>>> 				} elsif ($lines[$linenr] !~ m{https?://lore.kernel.org/.+}i) {
+>>> 					WARN("BAD_REPORTED_BY_LINK",
+>>> 					     "Link: following Reported-by: should use a lore.kernel.org URL\n" . $herecurr . $rawlines[$linenr]);
+>>
+>> I'm pretty sure that's not want we want, as from regression tracking I
+>> known that we have other links that should continue to work here. Links
+>> to bugzilla.kernel.org immediately come to my mind, for example. Then
+>> there are some subsystems that use issue trackers on github or in gitlab
+>> instances (DRM for example), which must work here, too; and we
+>> occasionally even have links to bugs in bugzilla instances from RH or
+>> SUSE there, as sometimes valuable details for code archeologists can be
+>> found there.
+> 
+> Outside the fact there are relatively few existing uses of Link: after
+> Reported-by:,
 
-Align with the description of fs_context_parse_param in lsm_hooks.h, which
-seems the right one according to the code.
+Well, sure, because many people forgot to place them -- and this patch
+is trying to change that for reasons outlined in the commit description.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- Documentation/filesystems/mount_api.rst | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> it appears that "Fixes:" should also be allowed.
 
-diff --git a/Documentation/filesystems/mount_api.rst b/Documentation/filesystems/mount_api.rst
-index eb358a00be27..fc3b12cb39d1 100644
---- a/Documentation/filesystems/mount_api.rst
-+++ b/Documentation/filesystems/mount_api.rst
-@@ -349,13 +349,12 @@ number of operations used by the new mount code for this purpose:
- 					    struct fs_parameter *param);
- 
-      Called for each mount parameter, including the source.  The arguments are
--     as for the ->parse_param() method.  It should return 0 to indicate that
--     the parameter should be passed on to the filesystem, 1 to indicate that
--     the parameter should be discarded or an error to indicate that the
--     parameter should be rejected.
-+     as for the ->parse_param() method.  It might reject the mount parameter
-+     with an error and might return 0, if the mount parameter is used by an LSM;
-+     otherwise returns -ENOPARAM to pass it on to the filesystem.
- 
-      The value pointed to by param may be modified (if a string) or stolen
--     (provided the value pointer is NULL'd out).  If it is stolen, 1 must be
-+     (provided the value pointer is NULL'd out).  If it is stolen, 0 must be
-      returned to prevent it being passed to the filesystem.
- 
-    * ::
--- 
-2.25.1
+Well, that would defeat the purpose of this patch -- and there is no
+need to, as developers can still put Fixes: tag above or below the combo
+of Reported-by: and Link:.
 
+> and lore definitely dominates the Link: uses.
+> 
+> And IMO: the lkml.kernel.org entries should instead use lore.
+
+Well, that might be something nice to have (if Konstantin thinks it's
+worth the trouble, as lkml.kernel.org likely needs to stick around
+anyway to not break existing links). But that IMHO is something
+independent of this patch-set, because the proper solution afaics then
+would be to check all Link: tags in the commit message, not only those
+next to a Reported-by.
+
+Ciao, Thorsten
