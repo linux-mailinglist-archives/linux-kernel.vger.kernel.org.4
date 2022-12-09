@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD0764823D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E95C648241
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiLIMOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:14:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S229863AbiLIMO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLIMOC (ORCPT
+        with ESMTP id S229554AbiLIMOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:14:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744F51743C;
-        Fri,  9 Dec 2022 04:14:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F272962245;
-        Fri,  9 Dec 2022 12:14:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF02C433EF;
-        Fri,  9 Dec 2022 12:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670588040;
-        bh=qzpMtoWZNpsZQI9YGO/jGLlQ5OXpCbZNeUK0GWywa5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2pob/fUs86fazeBu6/pQnGCZkTQHedRqlm4MFJqhrvLuKUQHRxBlxjZaXJ0z7fIBm
-         2z9ZPQDYzSoU+qKyKgXWPdvtKhELbnCjNuZM9d3ynI72MV/980V4y68c7OHbs6J4LV
-         yX6P+XfBVFv76qXblKMCMYeD5JzaC2fsJIH1eU3I=
-Date:   Fri, 9 Dec 2022 13:13:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc:     Quentin Schulz <foss+kernel@0leil.net>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        William Wu <william.wu@rock-chips.com>,
-        Bin Yang <yangbin@rock-chips.com>,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: Re: [PATCH 3/3] usb: dwc2: prevent core phy initialisation
-Message-ID: <Y5MmhEMMx2sy91LS@kroah.com>
-References: <20221206-dwc2-gadget-dual-role-v1-0-36515e1092cd@theobroma-systems.com>
- <20221206-dwc2-gadget-dual-role-v1-3-36515e1092cd@theobroma-systems.com>
- <Y5IIaeip81DIvEZ6@kroah.com>
- <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
+        Fri, 9 Dec 2022 07:14:53 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1BC1743C;
+        Fri,  9 Dec 2022 04:14:52 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id e205so4303365oif.11;
+        Fri, 09 Dec 2022 04:14:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kI7BbdyAUV/eNarvTgWcZoX1xauTnHS7x8JJjE7aAYY=;
+        b=H22f2eUpGiDd7CwkA7y2/NdOiC8kNvSs78eGvAb5QoEBJpG/ckz6TnBBPcIm2ZF9TZ
+         ghfn7Cs9kJu2zDZYNJXStZqos6Bilgb/Nl/HGcpLHAPJMd5FJS41RadYWpxYd3hW6itx
+         da2Gt2aGy+Is/vJKUsH22uH2IVJJo93Ho/rawg8coQI+i+1xtk0glz+L6VbVL3PA+JZs
+         B64ixJIuFJoGyuSLU9squll6+r7uqDBWDrjHdMeDtC7M+9XHVV6PyLMPg76cyVM2sKp4
+         85jC0TBZWhkgqvbS0oDkUBe5sW1jY0XjYni2lCAEp+FWxevdRPtQTcyQsBx4n8Y8zJwQ
+         sPew==
+X-Gm-Message-State: ANoB5pnda16u1FgDR0e8NnjABxhbmoHwmUDovaa7v8RGCU+BTELxmjzg
+        ZFT9Ebwf0XbrKD2fKWiOxA==
+X-Google-Smtp-Source: AA0mqf4FRI86zMRlAtzC+h2pF/uE9HwQGgMNCY3G4dmWrGrHC4nf3HUzituKruhqW4XxFd90+aIcLQ==
+X-Received: by 2002:aca:3dd5:0:b0:35a:3c3d:34d5 with SMTP id k204-20020aca3dd5000000b0035a3c3d34d5mr2111798oia.14.1670588091153;
+        Fri, 09 Dec 2022 04:14:51 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b23-20020aca2217000000b0035b99bbe30bsm447422oic.54.2022.12.09.04.14.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 04:14:50 -0800 (PST)
+Received: (nullmailer pid 2822350 invoked by uid 1000);
+        Fri, 09 Dec 2022 12:14:49 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69c0f9c0-5c89-e99e-c807-9963ca377093@theobroma-systems.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     vkoul@kernel.org, daniel@ffwll.ch, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, dmitry.baryshkov@linaro.org,
+        freedreno@lists.freedesktop.org, agross@kernel.org,
+        dianders@chromium.org, dri-devel@lists.freedesktop.org,
+        swboyd@chromium.org, linux-kernel@vger.kernel.org,
+        robdclark@gmail.com, devicetree@vger.kernel.org,
+        quic_sbillaka@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, airlied@linux.ie,
+        quic_abhinavk@quicinc.com, andersson@kernel.org, airlied@gmail.com,
+        sean@poorly.run
+In-Reply-To: <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+Message-Id: <167058798233.2819544.12292613321491007286.robh@kernel.org>
+Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+Date:   Fri, 09 Dec 2022 06:14:49 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:15:34PM +0100, Quentin Schulz wrote:
-> Hi Greg,
+
+On Thu, 08 Dec 2022 14:36:52 -0800, Kuogee Hsieh wrote:
+> Add both data-lanes and link-frequencies property into endpoint
 > 
-> On 12/8/22 16:53, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 07, 2022 at 02:19:18PM +0100, Quentin Schulz wrote:
-> > > From: Bin Yang <yangbin@rock-chips.com>
-> > > 
-> > > The usb phys need to be controlled dynamically on some Rockchip SoCs.
-> > > So set the new HCD flag which prevents USB core from trying to manage
-> > > our phys.
-> > > 
-> > > Signed-off-by: Bin Yang <yangbin@rock-chips.com>
-> > > Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> > > Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> > > ---
-> > >   drivers/usb/dwc2/hcd.c | 7 +++++++
-> > >   1 file changed, 7 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> > > index 657f1f659ffaf..757a66fa32fa8 100644
-> > > --- a/drivers/usb/dwc2/hcd.c
-> > > +++ b/drivers/usb/dwc2/hcd.c
-> > > @@ -5315,6 +5315,13 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
-> > >   	if (!IS_ERR_OR_NULL(hsotg->uphy))
-> > >   		otg_set_host(hsotg->uphy->otg, &hcd->self);
-> > > +	/*
-> > > +	 * do not manage the PHY state in the HCD core, instead let the driver
-> > > +	 * handle this (for example if the PHY can only be turned on after a
-> > > +	 * specific event)
-> > > +	 */
-> > > +	hcd->skip_phy_initialization = 1;
-> > 
-> > Wait, doesn't this mess with the phy logic for all other chips that use
-> > this IP block?  Have you tested this on other systems?
-> > 
+> Changes in v7:
+> -- split yaml out of dtsi patch
+> -- link-frequencies from link rate to symbol rate
+> -- deprecation of old data-lanes property
 > 
-> I have not. I asked this in the cover-letter but I guess I should have made
-> the patch series an RFC for this reason?
-
-Ah, should I drop the first 2 in this series that I already applied?
-
-> > I'd like some verification first before taking this change as it seems
-> > very specific-platform.
-> > 
+> Changes in v8:
+> -- correct Bjorn mail address to kernel.org
 > 
-> There's already some platform-specific callbacks for the driver (see
-> dwc2_set_rk_params in drivers/usb/dwc2/params.c) but this gets called too
-> early, before hcd structure is actually allocated. So we either need to use
-> some "proxy"/shadow variable in dwc2_core_params and then update it right
-> after hcd gets allocated or have another platform-specific callback only for
-> hcd (post-)initialization.
+> Changes in v10:
+> -- add menu item to data-lanes and link-frequecnis
 > 
-> Nothing too fancy so shouldn't take too long to implement. Any preference?
-> Something else?
+> Changes in v11:
+> -- add endpoint property at port@1
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+> ---
+>  .../bindings/display/msm/dp-controller.yaml        | 27 ++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
 
-Which ever you think would be simplest.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-thanks,
+yamllint warnings/errors:
 
-greg k-h
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: properties:required: ['port@0', 'port@1'] is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: properties: 'required' should not be valid under {'$ref': '#/definitions/json-schema-prop-names'}
+	hint: A json-schema keyword was found instead of a DT property name.
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: ignoring, error in schema: properties: required
+Documentation/devicetree/bindings/display/msm/dp-controller.example.dtb:0:0: /example-0/displayport-controller@ae90000: failed to match any schema with compatible: ['qcom,sc7180-dp']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
