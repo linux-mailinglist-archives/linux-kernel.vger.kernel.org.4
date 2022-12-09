@@ -2,83 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0E7648A33
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC61648A37
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiLIVpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 16:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S230098AbiLIVpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 16:45:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLIVow (ORCPT
+        with ESMTP id S230016AbiLIVpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:44:52 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3AB6DA7;
-        Fri,  9 Dec 2022 13:44:52 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id m204so5736441oib.6;
-        Fri, 09 Dec 2022 13:44:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nd9e73YWcyDbpy8iNaJn59EprL8nmhryJLwX1qEN9Eo=;
-        b=CXCKb7c6n07d3BD1L0eaueFcqK7GSrJCrcxUfquT5+CB2NVXW/EZ01CHgkb+qipqFv
-         xVk0kINV+ElLCAVXNXb7AWbvBOKOmiUUa5eEe4OYmA4cdSneUfF1ZjSR5xaW6Evstxvk
-         rC2cu4n7INjFOEXQj0tonEcO+pCqVhYOiyhtIacQ2kvxUH++29mHFUcJSY5qlWlYzEVf
-         vZbI3Bkd+t6FdCtEaOzbq0A69t/l93Us+6nFqnjpvj2gchyvkb7+TSl+3UcEbJtkfLRF
-         tu4QwWOOrtBkuEsH9hba5z1TrKqfWbhExcxQlDv5pdCfDQHXdc/8lNc3zuvG257NuXNb
-         i0pw==
-X-Gm-Message-State: ANoB5pmdwDQP2OUFKstRnaVsYIVFc6RTU30lfVcRf7skpQZGmaLPoz4a
-        itXBZk9rzbwe21WpiUp2jw==
-X-Google-Smtp-Source: AA0mqf4zxCpKeyR01HFGIasFt7sfhYOSMetLDwOipuBLFYhevP/VhTMYOe44Q7JQXfvLVLr+yQUR+A==
-X-Received: by 2002:a54:438d:0:b0:35e:1ca6:ff6d with SMTP id u13-20020a54438d000000b0035e1ca6ff6dmr3103306oiv.5.1670622291324;
-        Fri, 09 Dec 2022 13:44:51 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b25-20020aca1b19000000b00342eade43d4sm923502oib.13.2022.12.09.13.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 13:44:50 -0800 (PST)
-Received: (nullmailer pid 3899706 invoked by uid 1000);
-        Fri, 09 Dec 2022 21:44:50 -0000
-Date:   Fri, 9 Dec 2022 15:44:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: adi,adau7002: Convert to DT schema
-Message-ID: <167062228971.3899662.7192332013668197294.robh@kernel.org>
-References: <20221209175947.335319-1-krzysztof.kozlowski@linaro.org>
+        Fri, 9 Dec 2022 16:45:02 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE913D386;
+        Fri,  9 Dec 2022 13:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670622302; x=1702158302;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TuSrvu1jx9I5ZHmEkMMea0Y8tKsaVWKLe+FE0ZgyQOc=;
+  b=nGZSv+gwEgjeIptDiFQSHELWkNfMGmfN6+8A6AgGTKPfJR9cjixaVTum
+   Urmz88gqvg6PC/TZtSIlVzoLQw1sPZGVIYmn6lsxpghQfFQAG+bKwgATw
+   abGUF2M2aRloOkwrO1gmciyWOmzTdtNcDWOF5OPbkO22Ps90svZHl79cw
+   baY6oifccWHo4MnD3vNG3ZIycj/N0bIMNTRZpiFr1iqoeSv7yuKvdXtmR
+   yHb1WWt9FIRVa7+xgil5F5j9CvL/O0Exg7RUcg0weOxIUhXViyOQJer4U
+   uL9iZwAw+xZ4Cgrm9K1h8OsvtISweNNvDKe0qMuczeyxnIu2568k+u513
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300975520"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="300975520"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:45:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="711031664"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="711031664"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:44:59 -0800
+From:   matthew.gerlach@linux.intel.com
+To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v6 0/4] Enhance definition of DFH and use enhancements for UART driver
+Date:   Fri,  9 Dec 2022 13:45:19 -0800
+Message-Id: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209175947.335319-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-On Fri, 09 Dec 2022 18:59:46 +0100, Krzysztof Kozlowski wrote:
-> Convert the Analog Devices ADAU7002 Stereo PDM-to-I2S/TDM Converter
-> bindings to DT schema.  During the conversion, add properties already
-> used by DTS (sc7180-trogdor-coachz.dts) and Linux driver:
-> 1. wakeup-delay-ms,
-> 2. sound-dai-cells (via referencing dai-common.yaml).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/sound/adi,adau7002.txt           | 19 ---------
->  .../bindings/sound/adi,adau7002.yaml          | 40 +++++++++++++++++++
->  2 files changed, 40 insertions(+), 19 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/sound/adi,adau7002.txt
->  create mode 100644 Documentation/devicetree/bindings/sound/adi,adau7002.yaml
-> 
+This patchset enhances the definition of the Device Feature Header (DFH) used by
+the Device Feature List (DFL) bus and then uses the new enhancements in a UART
+driver.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The enhancements to the DFH includes the introduction of parameter blocks.
+Like PCI capabilities, the DFH parameter blocks further describe
+the hardware to software. In the case of the UART, the parameter blocks
+provide information for the interrupt, clock frequency, and register layout.
+
+Duplication of code parsing of the parameter blocks in multiple DFL drivers
+is a concern. Using swnodes was considered to help minimize parsing code 
+duplication, but their use did not help the problem. Furthermore the highly
+changeable nature of FPGAs employing the DFL bus makes the use of swnodes
+inappropriate. 
+
+Patch 1 updates the DFL documentation to describe the added functionality to DFH.
+
+Patch 2 adds the definitions for DFHv1.
+
+Patch 3 adds basic support for DFHv1. It adds functionality to parse parameter blocks
+and adds the functionality to parse the explicit location of a feature's register set.
+
+Patch 4 adds a DFL UART driver that makes use of the new features of DFHv1.
+
+Basheer Ahmed Muddebihal (1):
+  fpga: dfl: Add DFHv1 Register Definitions
+
+Matthew Gerlach (3):
+  Documentation: fpga: dfl: Add documentation for DFHv1
+  fpga: dfl: add basic support for DFHv1
+  tty: serial: 8250: add DFL bus driver for Altera 16550.
+
+ Documentation/fpga/dfl.rst         | 103 +++++++++++++
+ drivers/fpga/dfl.c                 | 234 ++++++++++++++++++++++-------
+ drivers/fpga/dfl.h                 |  41 +++++
+ drivers/tty/serial/8250/8250_dfl.c | 154 +++++++++++++++++++
+ drivers/tty/serial/8250/Kconfig    |  12 ++
+ drivers/tty/serial/8250/Makefile   |   1 +
+ include/linux/dfl.h                |   4 +
+ 7 files changed, 498 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+
+-- 
+2.25.1
+
