@@ -2,302 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E281647B59
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD96647B6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiLIBXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:23:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S229662AbiLIBZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiLIBXc (ORCPT
+        with ESMTP id S229993AbiLIBY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:23:32 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0CF82FB4;
-        Thu,  8 Dec 2022 17:23:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670549011; x=1702085011;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ka1cSePtifjHK4uLChKdCNuYKgE+Jy1p2zWMS3zdk+4=;
-  b=SzEJbi/bhp3a1rpX34MS0S47opFIyIpp7Q9uRO+r/4Iv6UF1RYO7GaFT
-   I+uhSj6/NyuNQoNN5rhFHMY9yKlPIZc+bcSprVeRw3vNHokMs+Mcm4fOx
-   FiFojMhA3jiQor7owYNI8GIt0NxiOzbKWlj4dqyhf1U58v6T2FCF5B9hd
-   rXFF6NIWuhgQ4isnb00S376uUEmZ13SnD7+eBN/FwCWQrU5PgX4L9TgXx
-   mR93XkbIZcZGFl2U9kO1S5M14uvpd5Nw2gi5TKtJHlnK8So/y9Y0Il9Wb
-   n+1gh7lHWuamjxnW02/JrAGLLFvLd+7+7aDJYrqch0BlZiROI8oFXv/HR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="318504871"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="318504871"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 17:23:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="715852802"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="715852802"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 17:23:29 -0800
-From:   matthew.gerlach@linux.intel.com
-To:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Subject: [PATCH v5 4/4] tty: serial: 8250: add DFL bus driver for Altera 16550.
-Date:   Thu,  8 Dec 2022 17:23:48 -0800
-Message-Id: <20221209012348.2883424-5-matthew.gerlach@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221209012348.2883424-1-matthew.gerlach@linux.intel.com>
-References: <20221209012348.2883424-1-matthew.gerlach@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 8 Dec 2022 20:24:26 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350E086F7C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:24:08 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so3353686pjd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 17:24:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QcLY3kF7o4hp9Qm1EsWYqsV0AQOWk7tTMzl2ItbJXk4=;
+        b=5HX7yT/A0U+g8ikCK14qiGBl1bzNva9kVvv9IxG6fTvmOv9zZ6GlISswYgT0w0lJlz
+         j4aBo0N2ADp5CM97l/xCjYVkAEDAVjh5yP4+ggYNhIdS6avNhA6IOIx5L2+cMho6bOp0
+         1dCn9kroPQAaWjZK+QvxD6zWKGwidxpEf8nP7lXNPZ1VJs+6/FglepJLUXy33oZYU9Kd
+         PDPaktK8epSW7AbnSOxBqat09ogNg/gApB+KAQspGmThHIxWPwnSAVekv8K1wfQRQSlw
+         qlS6nfK8TK+r/fYjwYxrdyD9WNxuMIhknrf+34QxGGHUQnBHwMtVVEY1AdHbVST4ygFs
+         fEbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QcLY3kF7o4hp9Qm1EsWYqsV0AQOWk7tTMzl2ItbJXk4=;
+        b=HZMNWx+uWl3Cjnop1du8D3qF51NPoZ1+I9+QxSIA3+0kyRUSGm9FGxmluCbgO8U8Wa
+         r5y2y32/PYznf3IfecedkDh5QLgmIbZK6cw8Gd0RnHZCXPb6el/oAlBX44KVlSXatF3Z
+         FUG4aCr7jfWk6y/1sTeusNIby5sfmaPcpDNLiOT8UO/81kev+SKhjhZ9Djjj6z3q2RWY
+         XfO31apb+GEc7AxftEcjcmOv9FDewci5kpA2sr0n6ICXBSmHxGaMu2zeBWuribUtLpkM
+         wq2sy0Xl6ZcKG2RI4p64tjogUJ/qvY183qVKp7X9vrPyD7gaS7EuwZcC4fp9VdKvconW
+         voPw==
+X-Gm-Message-State: ANoB5pkUCeWz00ax7GkQgMWJCYpmPuLDEXnicok8MIhGeOABNKwe9tWV
+        Zp5TSkdwCUvIdHUg3KLt+tsiMA==
+X-Google-Smtp-Source: AA0mqf42jnsETLESWtq3xZbsIv62t0abUoTLyjT2n+G+ZH+A3DcMQB11MhsEMWwuOMNZZFTvlI4K/w==
+X-Received: by 2002:a17:902:db01:b0:188:77a7:ea9 with SMTP id m1-20020a170902db0100b0018877a70ea9mr5977202plx.55.1670549047399;
+        Thu, 08 Dec 2022 17:24:07 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902dac600b00189a50d2a3esm53782plx.241.2022.12.08.17.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 17:24:06 -0800 (PST)
+Date:   Thu, 08 Dec 2022 17:24:06 -0800 (PST)
+X-Google-Original-Date: Thu, 08 Dec 2022 15:51:11 PST (-0800)
+Subject:     Re: [PATCH v5] scripts/gdb: add lx_current support for riscv
+In-Reply-To: <20221115221051.1871569-1-debug@rivosinc.com>
+CC:     Conor Dooley <conor.dooley@microchip.com>, ajones@ventanamicro.com,
+        aou@eecs.berkeley.edu, debug@rivosinc.com, jan.kiszka@siemens.com,
+        kbingham@kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     debug@rivosinc.com
+Message-ID: <mhng-bdcd75a5-e6d6-4090-8292-a32eb46e4464@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+On Tue, 15 Nov 2022 14:10:51 PST (-0800), debug@rivosinc.com wrote:
+> csr_sscratch CSR holds current task_struct address when hart is in
+> user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
+> register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
+> "tp" with expected user mode value and place current task_struct address
+> again in csr_sscratch CSR.
+>
+> This patch assumes "tp" is pointing to task_struct. If value in
+> csr_sscratch is numerically greater than "tp" then it assumes csr_sscratch
+> is correct address of current task_struct. This logic holds when
+>    - hart is in user space, "tp" will be less than csr_sscratch.
+>    - hart is in kernel space but not in trap handler, "tp" will be more
+>      than csr_sscratch (csr_sscratch being equal to 0).
+>    - hart is executing trap handler
+>        - "tp" is still pointing to user mode but csr_sscratch contains
+>           ptr to task_struct. Thus numerically higher.
+>        - "tp" is  pointing to task_struct but csr_sscratch now contains
+>           either 0 or numerically smaller value (transiently holds
+>           user mode tp)
+>
+> Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
+>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+>
+> ---
+> Since patch has changed a little bit from v1 and I didn't include
+> changelog earlier, here it is.
+>
+> v1 --> v2:
+>  - added logic to locate task_struct irrespective of priv
+>  - made locating task_struct agnostic to bitness(32 vs 64).
+>  - added caching of ulong type in scripts/gdb/linux/utils.py
+>  - added more descriptive commit message
+>
+> v2 --> v3:
+>  - amended commit message and source line to fit column width
+>
+> v3 --> v4:
+>  - amended commit message and remove whitespace in source
+>  - added Reviewed-by for reviewers
+>
+> v4 --> v5:
+>  - changing the order of changelog and sign off/review tags in commit
+> ---
+> ---
+>  scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
+>  scripts/gdb/linux/utils.py |  5 +++++
+>  2 files changed, 20 insertions(+)
+>
+> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+> index 15fc4626d236..14c22f82449b 100644
+> --- a/scripts/gdb/linux/cpus.py
+> +++ b/scripts/gdb/linux/cpus.py
+> @@ -173,6 +173,21 @@ def get_current_task(cpu):
+>           else:
+>               raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+>                                  "while running in userspace(EL0)")
+> +    elif utils.is_target_arch("riscv"):
+> +         current_tp = gdb.parse_and_eval("$tp")
+> +         scratch_reg = gdb.parse_and_eval("$sscratch")
+> +
+> +         # by default tp points to current task
+> +         current_task = current_tp.cast(task_ptr_type)
+> +
+> +         # scratch register is set 0 in trap handler after entering kernel.
+> +         # When hart is in user mode, scratch register is pointing to task_struct.
+> +         # and tp is used by user mode. So when scratch register holds larger value
+> +         # (negative address as ulong is larger value) than tp, then use scratch register.
+> +         if (scratch_reg.cast(utils.get_ulong_type()) > current_tp.cast(utils.get_ulong_type())):
+> +             current_task = scratch_reg.cast(task_ptr_type)
+> +
+> +         return current_task.dereference()
+>      else:
+>          raise gdb.GdbError("Sorry, obtaining the current task is not yet "
+>                             "supported with this arch")
+> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
+> index 1553f68716cc..ddaf3089170d 100644
+> --- a/scripts/gdb/linux/utils.py
+> +++ b/scripts/gdb/linux/utils.py
+> @@ -35,12 +35,17 @@ class CachedType:
+>
+>
+>  long_type = CachedType("long")
+> +ulong_type = CachedType("ulong")
+>  atomic_long_type = CachedType("atomic_long_t")
+>
+>  def get_long_type():
+>      global long_type
+>      return long_type.get_type()
+>
+> +def get_ulong_type():
+> +    global ulong_type
+> +    return ulong_type.get_type()
+> +
+>  def offset_of(typeobj, field):
+>      element = gdb.Value(0).cast(typeobj)
+>      return int(str(element[field].address).split()[0], 16)
 
-Add a Device Feature List (DFL) bus driver for the Altera
-16550 implementation of UART.
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
-v5: removed unneeded blank line
-    removed unneeded includes
-    included device.h and types.h
-    removed unneeded local variable
-    remove calls to dev_dbg
-    memset -> { }
-    remove space after period
-    explicitly include used headers
-    remove redundant Inc from Copyright
-    fix format specifier
-
-v4: use dev_err_probe() everywhere that is appropriate
-    clean up noise
-    change error messages to use the word, unsupported
-    tried again to sort Makefile and KConfig better
-    reorder probe function for easier error handling
-    use new dfh_find_param API
-
-v3: use passed in location of registers
-    use cleaned up functions for parsing parameters
-
-v2: clean up error messages
-    alphabetize header files
-    fix 'missing prototype' error by making function static
-    tried to sort Makefile and Kconfig better
----
- drivers/tty/serial/8250/8250_dfl.c | 147 +++++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig    |  12 +++
- drivers/tty/serial/8250/Makefile   |   1 +
- 3 files changed, 160 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-
-diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
-new file mode 100644
-index 000000000000..68b3c00d3fe9
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_dfl.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for FPGA UART
-+ *
-+ * Copyright (C) 2022 Intel Corporation.
-+ *
-+ * Authors:
-+ *   Ananda Ravuri <ananda.ravuri@intel.com>
-+ *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/device.h>
-+#include <linux/dfl.h>
-+#include <linux/errno.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/types.h>
-+
-+#include <linux/serial.h>
-+#include <linux/serial_8250.h>
-+
-+struct dfl_uart {
-+	int line;
-+};
-+
-+static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	u32 reg_width;
-+	u64 fifo_len;
-+	u64 *p;
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
-+
-+	p++;
-+	uart->port.uartclk = *p;
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
-+
-+	p++;
-+	fifo_len = *p;
-+	switch (fifo_len) {
-+	case 32:
-+		uart->port.type = PORT_ALTR_16550_F32;
-+		break;
-+
-+	case 64:
-+		uart->port.type = PORT_ALTR_16550_F64;
-+		break;
-+
-+	case 128:
-+		uart->port.type = PORT_ALTR_16550_F128;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported FIFO_LEN %llu\n", fifo_len);
-+	}
-+
-+	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
-+	if (!p)
-+		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
-+
-+	p++;
-+	uart->port.regshift = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_SHIFT, *p);
-+	reg_width = FIELD_GET(DFHv1_PARAM_REG_LAYOUT_WIDTH, *p);
-+	switch (reg_width) {
-+	case 4:
-+		uart->port.iotype = UPIO_MEM32;
-+		break;
-+
-+	case 2:
-+		uart->port.iotype = UPIO_MEM16;
-+		break;
-+
-+	default:
-+		return dev_err_probe(dev, -EINVAL, "unsupported reg-width %u\n", reg_width);
-+
-+	}
-+
-+	return 0;
-+}
-+
-+static int dfl_uart_probe(struct dfl_device *dfl_dev)
-+{
-+	struct device *dev = &dfl_dev->dev;
-+	struct uart_8250_port uart = { };
-+	struct dfl_uart *dfluart;
-+	int ret;
-+
-+	uart.port.flags = UPF_IOREMAP;
-+	uart.port.mapbase = dfl_dev->mmio_res.start;
-+	uart.port.mapsize = resource_size(&dfl_dev->mmio_res);
-+
-+	ret = dfl_uart_get_params(dfl_dev, &uart);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed uart feature walk\n");
-+
-+	if (dfl_dev->num_irqs == 1)
-+		uart.port.irq = dfl_dev->irqs[0];
-+
-+	dfluart = devm_kzalloc(dev, sizeof(*dfluart), GFP_KERNEL);
-+	if (!dfluart)
-+		return -ENOMEM;
-+
-+	dfluart->line = serial8250_register_8250_port(&uart);
-+	if (dfluart->line < 0)
-+		return dev_err_probe(dev, dfluart->line, "unable to register 8250 port.\n");
-+
-+	dev_set_drvdata(dev, dfluart);
-+
-+	return 0;
-+}
-+
-+static void dfl_uart_remove(struct dfl_device *dfl_dev)
-+{
-+	struct dfl_uart *dfluart = dev_get_drvdata(&dfl_dev->dev);
-+
-+	serial8250_unregister_port(dfluart->line);
-+}
-+
-+#define FME_FEATURE_ID_UART 0x24
-+
-+static const struct dfl_device_id dfl_uart_ids[] = {
-+	{ FME_ID, FME_FEATURE_ID_UART },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(dfl, dfl_uart_ids);
-+
-+static struct dfl_driver dfl_uart_driver = {
-+	.drv = {
-+		.name = "dfl-uart",
-+	},
-+	.id_table = dfl_uart_ids,
-+	.probe = dfl_uart_probe,
-+	.remove = dfl_uart_remove,
-+};
-+module_dfl_driver(dfl_uart_driver);
-+
-+MODULE_DESCRIPTION("DFL Intel UART driver");
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index b0f62345bc84..08af2acd4645 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -370,6 +370,18 @@ config SERIAL_8250_FSL
- 	  erratum for Freescale 16550 UARTs in the 8250 driver. It also
- 	  enables support for ACPI enumeration.
- 
-+config SERIAL_8250_DFL
-+	tristate "DFL bus driver for Altera 16550 UART"
-+	depends on SERIAL_8250 && FPGA_DFL
-+	help
-+	  This option enables support for a Device Feature List (DFL) bus
-+	  driver for the Altera 16650 UART. One or more Altera 16650 UARTs
-+	  can be instantiated in a FPGA and then be discovered during
-+	  enumeration of the DFL bus.
-+
-+	  To compile this driver as a module, chose M here: the
-+	  module will be called 8250_dfl.
-+
- config SERIAL_8250_DW
- 	tristate "Support for Synopsys DesignWare 8250 quirks"
- 	depends on SERIAL_8250
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index 1615bfdde2a0..4e1a32812683 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -28,6 +28,7 @@ obj-$(CONFIG_SERIAL_8250_EXAR_ST16C554)	+= 8250_exar_st16c554.o
- obj-$(CONFIG_SERIAL_8250_HUB6)		+= 8250_hub6.o
- obj-$(CONFIG_SERIAL_8250_FSL)		+= 8250_fsl.o
- obj-$(CONFIG_SERIAL_8250_MEN_MCB)	+= 8250_men_mcb.o
-+obj-$(CONFIG_SERIAL_8250_DFL)		+= 8250_dfl.o
- obj-$(CONFIG_SERIAL_8250_DW)		+= 8250_dw.o
- obj-$(CONFIG_SERIAL_8250_EM)		+= 8250_em.o
- obj-$(CONFIG_SERIAL_8250_IOC3)		+= 8250_ioc3.o
--- 
-2.25.1
-
+Thanks!
