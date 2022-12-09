@@ -2,159 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3026489AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B961D6489B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiLIUvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 15:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S229683AbiLIUvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 15:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLIUvK (ORCPT
+        with ESMTP id S229678AbiLIUvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 15:51:10 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CB983EB6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670619068; x=1702155068;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jyCv6ICFGp0/+vO//DD/UH9+cwvN/sDl/2WmOP10UeM=;
-  b=D1KRin7uTHnDzgH21NH149MNwDCkYSQ4sqoHmn4VW8WnAbzD3jQytnpB
-   XbvStp2a5VtgeVQjMRhuHoMTp39lzsrdtCG/R8Bb0ymYYMpHvSyHGEZGO
-   NCtmSjHEHeAdT3rUSUsIplyCZ5+wzWmoxK9yGpLiuD1woRScJLiMThB+W
-   9lhsIdlLPo1aO8ctC+ciMui4RcuR9MPJ9zqZrQ0/WiqLjENuB1EinaXNX
-   ur1bmVI3p70LJRbB7YLguyoRk/V63bsRQNGdWdyQw1dJMv+QGxL3UvQ5L
-   +0SsKvXMlIoQ4tbGQSqIgID9YbhTx+994zrEcvubGwrTIpSwxRpHYL9Qx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="344590295"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="344590295"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 12:51:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="821841732"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="821841732"
-Received: from rrode-mobl1.amr.corp.intel.com (HELO [10.251.24.37]) ([10.251.24.37])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 12:51:08 -0800
-Message-ID: <2e305bb5-9595-3531-6134-24344ff5c797@linux.intel.com>
-Date:   Fri, 9 Dec 2022 12:51:07 -0800
+        Fri, 9 Dec 2022 15:51:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E127A386E;
+        Fri,  9 Dec 2022 12:51:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE2D6226D;
+        Fri,  9 Dec 2022 20:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29CCC433D2;
+        Fri,  9 Dec 2022 20:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670619094;
+        bh=4XvJxrqF3sAgvuSNY4QXlfijdGTscOOPGfOGyD+HURM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DbckalQQrOfTLzdikfJ9WRywkgDNsJXUmtHQ+laCVoXa5lfPSxVI5o0suyNauwR+u
+         S3cjQkkNBTFUuYUKczm/hWi3LlNd9rn0KzklJL0CsaGb/L3HvW12Ua4U5xj5Y9PNRs
+         a3jghRl/CziOfLMP+9ZSKqDpL5eQPiGjV7cO6BedcIAfehDoGrcl+QLJKytxESigiM
+         LXuadSQY3dD7WBJnCS+ZmHsxp3XhfeC4JxXbLKWAxzJwQln1sAICHCuGhqhwEUUq9V
+         Uljdf2rm/fchdjKJa3hNvdbAT88IiwWSDv+60YDm589LYkNr0FKRKr8ODjiNShwm2R
+         sAhTlCvJ3wr6w==
+Date:   Fri, 9 Dec 2022 14:51:31 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 4/4] x86/PCI: Fix log message typo
+Message-ID: <20221209205131.GA1726524@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
- SEPT_VE_DISABLE
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
- <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
- <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
- <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5OBupWBghHfvG/h@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/9/22 9:06 AM, Kirill A. Shutemov wrote:
-> On Fri, Dec 09, 2022 at 07:42:56AM -0800, Sathyanarayanan Kuppuswamy wrote:
->>
->>
->> On 12/9/22 5:25 AM, Kirill A. Shutemov wrote:
->>> The check for SEPT_VE_DISABLE happens early in the kernel boot where
->>> earlyprintk is not yet functional. Kernel successfully detect broken
->>> TD configuration and stops the kernel with panic(), but it cannot
->>> communicate the reason to the user.
->>>
->>> Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
->>> can encode message up to 64 bytes in eight registers.
->>>
->>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->>> ---
->>>  arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
->>>  1 file changed, 37 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
->>> index cfd4c95b9f04..8ad04d101270 100644
->>> --- a/arch/x86/coco/tdx/tdx.c
->>> +++ b/arch/x86/coco/tdx/tdx.c
->>> @@ -22,6 +22,7 @@
->>>  
->>>  /* TDX hypercall Leaf IDs */
->>>  #define TDVMCALL_MAP_GPA		0x10001
->>> +#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->>>  
->>>  /* MMIO direction */
->>>  #define EPT_READ	0
->>> @@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
->>>  }
->>>  EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
->>>  
->>> +static void __noreturn tdx_panic(const char *msg)
->>> +{
->>> +	struct tdx_hypercall_args args = {
->>> +		.r10 = TDX_HYPERCALL_STANDARD,
->>> +		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
->>> +		.r12 = 0, /* Error code: 0 is Panic */
->>> +	};
->>> +	union {
->>> +		/* Define register order according to the GHCI */
->>> +		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
->>> +
->>> +		char str[64];
->>> +	} message;
->>> +
->>> +	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
->>> +	strncpy(message.str, msg, 64);
->>> +
->>> +	args.r8  = message.r8;
->>> +	args.r9  = message.r9;
->>> +	args.r14 = message.r14;
->>> +	args.r15 = message.r15;
->>> +	args.rdi = message.rdi;
->>> +	args.rsi = message.rsi;
->>> +	args.rbx = message.rbx;
->>> +	args.rdx = message.rdx;
->>> +
->>> +	/*
->>> +	 * Keep calling the hypercall in case VMM did not terminated
->>> +	 * the TD as it must.
->>> +	 */
->>> +	while (1) {
->>> +		__tdx_hypercall(&args, 0);
->>> +	}
->>
->> Instead of an infinite loop, I'm wondering if the guest should panic after
->> retrying for few times.
+On Fri, Dec 09, 2022 at 08:43:06PM +0200, Andy Shevchenko wrote:
+> On Thu, Dec 08, 2022 at 01:03:41PM -0600, Bjorn Helgaas wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> > 
+> > Add missing word in the log message:
+> > 
+> >   - ... so future kernels can this automatically
+> >   + ... so future kernels can do this automatically
 > 
-> Hm. What difference would it make?
-
-IIUC, the goal of this patch is to report the fatal error to VMM and panic.
-But, if VMM does not terminate the guest as we expect, rather than trying 
-continuously, isn't it better to panic ourselves? That way the behavior
-will be similar to what we have currently.
-
+> ...
 > 
+> >  	printk(KERN_INFO "PCI: %s E820 reservations for host bridge windows\n",
+> >  	       pci_use_e820 ? "Using" : "Ignoring");
+> >  	if (pci_probe & (PCI_NO_E820 | PCI_USE_E820))
+> > -		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can this automatically\n");
+> > +		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
+> 
+> Wondering if we can change printk(KERN_LVL) to pr_lvl() in this file.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Sure!  How about this?
+
+
+commit 7058cdb558d5 ("x86/PCI: Use pr_info() when possible")
+Author: Bjorn Helgaas <bhelgaas@google.com>
+Date:   Fri Dec 9 14:41:27 2022 -0600
+
+    x86/PCI: Use pr_info() when possible
+    
+    Use pr_info() and similar when possible.  No functional change intended.
+    
+    Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+index 83dfea9e9894..ea2eb2ec90e2 100644
+--- a/arch/x86/pci/acpi.c
++++ b/arch/x86/pci/acpi.c
+@@ -1,4 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
++
++#define pr_fmt(fmt) "PCI: " fmt
++
+ #include <linux/pci.h>
+ #include <linux/acpi.h>
+ #include <linux/init.h>
+@@ -37,15 +40,15 @@ static int __init set_nouse_crs(const struct dmi_system_id *id)
+ 
+ static int __init set_ignore_seg(const struct dmi_system_id *id)
+ {
+-	printk(KERN_INFO "PCI: %s detected: ignoring ACPI _SEG\n", id->ident);
++	pr_info("%s detected: ignoring ACPI _SEG\n", id->ident);
+ 	pci_ignore_seg = true;
+ 	return 0;
+ }
+ 
+ static int __init set_no_e820(const struct dmi_system_id *id)
+ {
+-	printk(KERN_INFO "PCI: %s detected: not clipping E820 regions from _CRS\n",
+-	       id->ident);
++	pr_info("%s detected: not clipping E820 regions from _CRS\n",
++	        id->ident);
+ 	pci_use_e820 = false;
+ 	return 0;
+ }
+@@ -231,10 +234,9 @@ void __init pci_acpi_crs_quirks(void)
+ 	else if (pci_probe & PCI_USE__CRS)
+ 		pci_use_crs = true;
+ 
+-	printk(KERN_INFO "PCI: %s host bridge windows from ACPI; "
+-	       "if necessary, use \"pci=%s\" and report a bug\n",
+-	       pci_use_crs ? "Using" : "Ignoring",
+-	       pci_use_crs ? "nocrs" : "use_crs");
++	pr_info("%s host bridge windows from ACPI; if necessary, use \"pci=%s\" and report a bug\n",
++	        pci_use_crs ? "Using" : "Ignoring",
++	        pci_use_crs ? "nocrs" : "use_crs");
+ 
+ 	/* "pci=use_e820"/"pci=no_e820" on the kernel cmdline takes precedence */
+ 	if (pci_probe & PCI_NO_E820)
+@@ -242,19 +244,17 @@ void __init pci_acpi_crs_quirks(void)
+ 	else if (pci_probe & PCI_USE_E820)
+ 		pci_use_e820 = true;
+ 
+-	printk(KERN_INFO "PCI: %s E820 reservations for host bridge windows\n",
+-	       pci_use_e820 ? "Using" : "Ignoring");
++	pr_info("%s E820 reservations for host bridge windows\n",
++	        pci_use_e820 ? "Using" : "Ignoring");
+ 	if (pci_probe & (PCI_NO_E820 | PCI_USE_E820))
+-		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
++		pr_info("Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
+ }
+ 
+ #ifdef	CONFIG_PCI_MMCONFIG
+ static int check_segment(u16 seg, struct device *dev, char *estr)
+ {
+ 	if (seg) {
+-		dev_err(dev,
+-			"%s can't access PCI configuration "
+-			"space under this host bridge.\n",
++		dev_err(dev, "%s can't access configuration space under this host bridge\n",
+ 			estr);
+ 		return -EIO;
+ 	}
+@@ -264,9 +264,7 @@ static int check_segment(u16 seg, struct device *dev, char *estr)
+ 	 * just can't access extended configuration space of
+ 	 * devices under this host bridge.
+ 	 */
+-	dev_warn(dev,
+-		 "%s can't access extended PCI configuration "
+-		 "space under this bridge.\n",
++	dev_warn(dev, "%s can't access extended configuration space under this bridge\n",
+ 		 estr);
+ 
+ 	return 0;
+@@ -421,9 +419,8 @@ struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
+ 		root->segment = domain = 0;
+ 
+ 	if (domain && !pci_domains_supported) {
+-		printk(KERN_WARNING "pci_bus %04x:%02x: "
+-		       "ignored (multiple domains not supported)\n",
+-		       domain, busnum);
++		pr_warn("pci_bus %04x:%02x: ignored (multiple domains not supported)\n",
++		        domain, busnum);
+ 		return NULL;
+ 	}
+ 
+@@ -491,7 +488,7 @@ int __init pci_acpi_init(void)
+ 	if (acpi_noirq)
+ 		return -ENODEV;
+ 
+-	printk(KERN_INFO "PCI: Using ACPI for IRQ routing\n");
++	pr_info("Using ACPI for IRQ routing\n");
+ 	acpi_irq_penalty_init();
+ 	pcibios_enable_irq = acpi_pci_irq_enable;
+ 	pcibios_disable_irq = acpi_pci_irq_disable;
+@@ -503,7 +500,7 @@ int __init pci_acpi_init(void)
+ 		 * also do it here in case there are still broken drivers that
+ 		 * don't use pci_enable_device().
+ 		 */
+-		printk(KERN_INFO "PCI: Routing PCI interrupts for all devices because \"pci=routeirq\" specified\n");
++		pr_info("Routing PCI interrupts for all devices because \"pci=routeirq\" specified\n");
+ 		for_each_pci_dev(dev)
+ 			acpi_pci_irq_enable(dev);
+ 	}
