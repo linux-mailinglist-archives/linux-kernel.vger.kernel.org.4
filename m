@@ -2,97 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33C4647FFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402B5647FFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiLIJPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S229731AbiLIJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiLIJPG (ORCPT
+        with ESMTP id S229470AbiLIJOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:15:06 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662FB63BB7;
-        Fri,  9 Dec 2022 01:15:05 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id m5so2029567qkg.0;
-        Fri, 09 Dec 2022 01:15:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vkNH16lJK5cpr24W+e3TLKkQ6NF2d3FSfHC2JAxh0HQ=;
-        b=Vf7EfaprR2FWXYZoEFr4nULXvhAg4vH8fh190XoleOgARKjNI6S/4gBKL+lr7kpPCA
-         k6ZYcRYGca2Z6aEQJ9BhJQAMSgRCP1hNO0/u1IjGXeeWEJUsvesHDOhZmqQpw/dMT0uo
-         MEINBE9gU5aypPv0dsAuRSUYpvIE3JvRWFB6EgV2OP3v7WTwfKAustfbnW+N/7k5n3ME
-         Xg02XDDsh3RMWW97xp0dawrQ3l2kWh2uZ0GXkGJgLEjmgTszL0jHokHt8AzUDv72f1uC
-         yqu1Y61pSnjVgMioJt7GPK9R5EyAtAVEt6hrHvurPpxPg3dYqKZhkGLwX51CtPNYOW42
-         jz0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vkNH16lJK5cpr24W+e3TLKkQ6NF2d3FSfHC2JAxh0HQ=;
-        b=WJzca9eR2aYdL+6IkcrpZhSbvcWy9Sa974Tjx4l01Cqg64TQZ1DhI2QJgW/BM5Jnc0
-         +bvfFfTskM3rCOPgpeXNszYmU+oZZ7ph4VUB5KiVNPMjkwH6kqC+C/BuGUuKbUGJZ3Iz
-         gktRrAP34C7D500MnGIBl7bW3jDcIVLkm6luIGuP26zYz2kzOP5FA1bGaf8W0Eyda7/8
-         XtZvKeRT2zinrEyPLKienjXAohdeuVpQTni95e4lRsXA46n1NaPuvdPzbrH1tcEwEpBz
-         wylssH+1YaTrryfq6LSF1UNbVrLtgBwST4xQ/TrXKF8Sm4Ol7OsYUCIfGmmaUSvYRa1h
-         KKIA==
-X-Gm-Message-State: ANoB5plcDx6LDAZlWM/grpyfQIZ772dlT6R4Buy2sunXiXQcPoaEFd1T
-        G0p2cK2TduKQ/3jQpeEaDYPp5oM0fMYh37mZGe0=
-X-Google-Smtp-Source: AA0mqf76KaU82jdzpPytS9dB0ixtuhTvtbM0RObogfcPc99c9cNqkOE5Bgt9rgcbICQRaUjO5wAFpKRZTLcL+7HlVlM=
-X-Received: by 2002:a05:620a:1aa3:b0:6fa:b56f:7ede with SMTP id
- bl35-20020a05620a1aa300b006fab56f7edemr83702189qkb.383.1670577304190; Fri, 09
- Dec 2022 01:15:04 -0800 (PST)
+        Fri, 9 Dec 2022 04:14:51 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FB71B9C2;
+        Fri,  9 Dec 2022 01:14:49 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A05ECC000A;
+        Fri,  9 Dec 2022 09:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670577288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V8RnLDoy8tp25SHwTkiovb8GWGbv3/sxicauJU19K4U=;
+        b=cYgNkYDoYt41DwhflXDt+gjhOooE64yqVPoCzTiMgMvWATWeW5f8DqUfY9O+zg65GnJTg0
+        kiRvk5BIsHBLHDoVaH9iZm1nGSbiyGiCQapvdwb7kQUJpB46yNb6CiOI/6c3eR64OBfGgX
+        HdXZZ5dOg2htbmcdAg5Tsh3oeA8wSdiXe1fk5rb1nWSEi46x8amCxtEUTObXHJn2Sv7yDl
+        sgZRfzeg8/69B4/zGUo31ma2KUaftT0//Ncm9AENpQ8CsMApR8fUOW68Xxa2bJ+b575oM7
+        iP+cLlJh4g+1kMoFuXGhUH4yXngrD+1Vinb5WGM4Y6Xhbtah1gpnmsQxSSROSQ==
+Date:   Fri, 9 Dec 2022 10:14:43 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
+Message-ID: <20221209101443.77fbbe49@xps-13>
+In-Reply-To: <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
+References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+        <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
+        <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
+        <20221208110035.5649a051@xps-13>
+        <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <202212091545310085328@zte.com.cn>
-In-Reply-To: <202212091545310085328@zte.com.cn>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 9 Dec 2022 11:14:27 +0200
-Message-ID: <CAHp75Vcp_RmibkkSW1dCcypKU3okyRXbj8JrbRVFtErhuuAWJg@mail.gmail.com>
-Subject: Re: [PATCH linux-next v3] x86/platform/uv: use strscpy to instead of strncpy()
-To:     yang.yang29@zte.com.cn
-Cc:     steve.wahl@hpe.com, mike.travis@hpe.com, dimitri.sivanich@hpe.com,
-        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 9:45 AM <yang.yang29@zte.com.cn> wrote:
->
-> From: Xu Panda <xu.panda@zte.com.cn>
->
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL terminated strings.
+Hi Krzysztof,
 
-...
+krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 11:27:27 +0100:
 
-> +       strscpy(arg, val, strnchrnul(val, ACTION_LEN - 1, '\n') - val + 1);
+> On 08/12/2022 11:00, Miquel Raynal wrote:
+> > Hi Krzysztof,
+> >=20
+> > krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
+> >  =20
+> >> On 08/12/2022 07:29, Xiangsheng Hou wrote: =20
+> >>> Split MediaTek ECC engine with rawnand controller and convert to
+> >>> YAML schema.
+> >>>
+> >>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> >>> ---
+> >>>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
+> >>>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+> >>>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ----------------=
+--
+> >>>  3 files changed, 216 insertions(+), 176 deletions(-)
+> >>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mt=
+k-nfc.yaml
+> >>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,na=
+nd-ecc-engine.yaml
+> >>>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.y=
+aml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..eb1a44c7ae4e
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> >>> @@ -0,0 +1,154 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+> >>> +
+> >>> +maintainers:
+> >>> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - mediatek,mt2701-nfc
+> >>> +      - mediatek,mt2712-nfc
+> >>> +      - mediatek,mt7622-nfc
+> >>> +
+> >>> +  reg:
+> >>> +    items:
+> >>> +      - description: Base physical address and size of NFI.
+> >>> +
+> >>> +  interrupts:
+> >>> +    items:
+> >>> +      - description: NFI interrupt
+> >>> +
+> >>> +  clocks:
+> >>> +    items:
+> >>> +      - description: clock used for the controller
+> >>> +      - description: clock used for the pad
+> >>> +
+> >>> +  clock-names:
+> >>> +    items:
+> >>> +      - const: nfi_clk
+> >>> +      - const: pad_clk
+> >>> +
+> >>> +  ecc-engine:
+> >>> +    description: device-tree node of the required ECC engine.
+> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
+> >>> +
+> >>> +patternProperties:
+> >>> +  "^nand@[a-f0-9]$":
+> >>> +    type: object   =20
+> >>
+> >> This should be instead:
+> >>     $ref: nand-chip.yaml#
+> >>     unevaluatedProperties: false
+> >>
+> >> and then properties below (due to current dtschema limitations) should
+> >> list properties from nand-controller.yaml:
+> >>
+> >>       nand-on-flash-bbt: true
+> >>
+> >> Optionally, we could create additional schema - nand-controller-chip,
+> >> which would be referenced directly by nand-controller and itself would
+> >> ref nand-chip. =20
+> >=20
+> > Isn't this enough? (in linux-next)
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Docu=
+mentation/devicetree/bindings/mtd/nand-controller.yaml?h=3Dmtd/next#n54 =20
+>=20
+> No, I tested it and it does not work as intended. In this particular
+> case. I think this is a limitation of dtschema, because binding itself
+> looks fine. The problem is that you have:
+> 1. mtk-nfc having nand@ children. mtk-nfc references nand-controller
+> which brings these children.
+> 2. However nand-controller while bringing these children does two things:
+> a. ref: nand-chip
+> b. add more propeties
+>=20
+> 3. The mtk-nfc must further extend the nand@ child.
+> 4. If you add "unevaluatedProperties: false" you notice warnings of
+> unevaluated propertie from nand-controller children.
 
-Instead of  -1 +1 you should simply use the sizeof(arg) as I mentioned.
+Thanks for the details. Any chances this can eventually be fixed at
+dt-schema level?
 
-       strscpy(arg, val, strnchrnul(val, sizeof(arg), '\n') - val);
-
-The returned pointer by strnchrnul() either points to the '\n' or to
-'\0' and when we subtract pointer to the start we will get the exact
-length of the string. In case it equals ACTION_LEN the last character
-will be replaced by '\0'.
-
-Where am I mistaken?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Miqu=C3=A8l
