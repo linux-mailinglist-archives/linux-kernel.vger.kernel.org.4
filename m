@@ -2,362 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85206648759
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0D264875A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiLIRJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
+        id S230085AbiLIRJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIRJE (ORCPT
+        with ESMTP id S230074AbiLIRJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:09:04 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802A15FCE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:08:36 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id u12so5819453wrr.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RheTipnQ3FDrtTGK6Np18Wan6gzAfSArggbEI3Dq53k=;
-        b=zWgsiFzMpcRPWGKoDVH3cYFEzNOv4VAygMAq5QC4IbDeO+baY+9Dsp7GIqah0AHUQX
-         iHSIBEdiAAB3WE+M7F8+RiCgiCP2hlWHXsG4fJPGfS9maavMvsg1c3xQmv9z6sQvvHmO
-         eXhtnyyW3iVQp8DQbJM+xF2RQ17Xt7aaSheTwuexnLgcWYiE3gY3515r7YAVeq2DxSRr
-         kL9vX0Z6CRPrlnlDo2gg4U3gVZohtDb+oAm53mUfHmWgId7P61AmBMcLyQZnjCcmg0NS
-         3oYqtQMsEbZr6e54vpmLVy5Aop5Vw/cMTj6zzF04tGaqQfeMRR2C/r+VclBJ9cXnCI1y
-         9npA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RheTipnQ3FDrtTGK6Np18Wan6gzAfSArggbEI3Dq53k=;
-        b=IGwvtcO9ck/H/YER5ve4QbQvBxZglsQzzatMzPD3gEuigF049X9V88tERFYntEB5VS
-         Jo1gyLf8Ub7gYiaq+6gQz4RgirL0D/sfYKBpQ2VCb0Zqd5Cj8UFrpnUuhw2KuBMDLJ+H
-         pWAKG01ZP6imrUivKTuVSngk5y36/aXcRQCZDrl8RB8n9ACxFCMrI8vJJiAi+u0YXTgQ
-         m82DZyrFsBstQVmn5vveB95E1zmzm3WoGZOKDYKntNH9WHQF0q8JT5mu/g3TE8LEctAo
-         u0A3au8UyfKiVsITHzApFmPyC+RN/mFVd+vuyYJDceB+ruqfBUkO97Y/DpPZYwotg+ih
-         scRQ==
-X-Gm-Message-State: ANoB5pnaDm0Q0WHeEUDAZHI2cC0damDwn1LGHNjWo6s7Lyvzyt77CYSq
-        oI4nRSvRs2cXgsIUFo1STvvjjQ==
-X-Google-Smtp-Source: AA0mqf43vIOxMkbH0YO61S1oWFrFyWdHAJCsHFjp1CaTcvxmKq8ulp9v0lTjzb60sYAOgcIOYp/yPw==
-X-Received: by 2002:a5d:5c11:0:b0:242:704e:c3f8 with SMTP id cc17-20020a5d5c11000000b00242704ec3f8mr5616472wrb.46.1670605714940;
-        Fri, 09 Dec 2022 09:08:34 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a5d5954000000b0023657e1b980sm1814180wri.53.2022.12.09.09.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 09:08:34 -0800 (PST)
-Message-ID: <3ccca41f-0899-b205-903b-ec8c742f3e91@linaro.org>
-Date:   Fri, 9 Dec 2022 18:08:33 +0100
+        Fri, 9 Dec 2022 12:09:05 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8763C6C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:08:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id DB2475C011D;
+        Fri,  9 Dec 2022 12:08:39 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Fri, 09 Dec 2022 12:08:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670605719; x=1670692119; bh=ie
+        Kba2wRqpTtar0M8Punm8EsvypR1DWul//ocfevcKY=; b=B7In/EVG85GZYWHzeE
+        qEc30OzgneO/S2JaOCrCl1drNK7+IbJMpXUY8YSz5RzR50ZBDQIKF9pv8dbhGBmK
+        60HwH+xSzKhyvg5iTvZjdB/8UWVpI+2dcaQS/HUrpL33Ymh6uRVN1fTxSo4iFB4z
+        D4tzpzwUW+x39JVs8XzPLbTGE/yh8ywOLh4XsN5zCFJsfE7KsKIcaMUHGs6e7s7H
+        uyJVsTFDYSsYZjrbYXVJreoICWEsv9NmZIGgsatv5IVLYBTIbbWtF2uITjFyZdqe
+        3OORA/JFishaiEq99hd3wDoVFrQK5Sl+fW1GfxLlIHOT20nAcntwAEpbetR3wJUj
+        fOcg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670605719; x=1670692119; bh=ieKba2wRqpTtar0M8Punm8EsvypR
+        1DWul//ocfevcKY=; b=nhl3g4T20adgQx0zJ7e4ECXvKFX1PFT1ruH2ckjXUCHG
+        QzNzF/zUN483Yr45NiioUYa/KRQWS4ReQTaJI3INL9en1HU+unjoRSvFLveTl2Ou
+        7Zz6X9YLm5kzNRIV2mNDuSAvcokzq82hUqd6eqNosp9eNfocy40RaVhy7UUViD2k
+        KzgI3Ztqju7n/j8CU5MhTF3nMKN7F6iv3kMh+NwQ/mGMOShZcj9yE3LqurJLyiMd
+        dk7y4Av1m9ExWh81j6AY8SJXSfJ0sC2NLcFr76FiqNXS0YIzItdLsO9sZQUenOoP
+        f4d4BxAllNcfSUv++iQE7dGffAHD0F2Iv4tjHd9Sww==
+X-ME-Sender: <xms:l2uTYyGzEGWXMi_MBOeWu12A-RE3evqus97vVWBtnSQYKmnLsF5g8A>
+    <xme:l2uTYzUHbhGYropqWZ0qFeL-Kxge0gqQymo8K39l5tQzTyRoGObjyFeHzJkobsDiY
+    lMJ--VEIptG10Kt2UY>
+X-ME-Received: <xmr:l2uTY8IHj9hn3niLMHLV2aFYlyd2VA_9Z55G4Iu6E6V9ryZMeJ_vISHALGHMBS3w-CpOCw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:l2uTY8EFml1vDh8uBIB3M1OnAreI9d6_nqSPmcrloyqFxB9kgDuPxQ>
+    <xmx:l2uTY4Wd7yMpIqCVH94wtRLgKL3V2uB7qR1mla7R1C5TlIVf0agQaA>
+    <xmx:l2uTY_MrDqLC30KI5XblOKAnYL7MhdsOCbqFCNlmdkKIJhbdj8kPlQ>
+    <xmx:l2uTY8pk95Wesr25V-KoMHco2Py84qFQ29epPTt7r6GZWQiHM6wJHQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Dec 2022 12:08:39 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 61493109CE2; Fri,  9 Dec 2022 20:08:37 +0300 (+03)
+Date:   Fri, 9 Dec 2022 20:08:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
+Message-ID: <20221209170837.xb5z4zoirx6iwhnc@box.shutemov.name>
+References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+ <20221209132524.20200-4-kirill.shutemov@linux.intel.com>
+ <acef3c81-635e-6753-577e-3905117823b9@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal drivers for v6.2-rc1
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Robert Marko <robimarko@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acef3c81-635e-6753-577e-3905117823b9@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 7d4b19ab6b89903fde8ad02f28a8943a4734e7b0:
+On Fri, Dec 09, 2022 at 07:45:34AM -0800, Sathyanarayanan Kuppuswamy wrote:
+> 
+> 
+> On 12/9/22 5:25 AM, Kirill A. Shutemov wrote:
+> > SEPT_VE_DISABLE check is required to keep the TD protected from VMM
+> > attacks, but it makes harder to debug guest kernel bugs. If guest
+> > touches unaccepted memory the TD will get terminated without any
+> > traces on what has happened.
+> > 
+> > Relax the SEPT_VE_DISABLE check to warning on debug TD and panic() in
+> > the #VE handler on EPT-violation on private memory. It will produce
+> > useful backtrace.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/coco/tdx/tdx.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> > index 8ad04d101270..0e47846ff8ff 100644
+> > --- a/arch/x86/coco/tdx/tdx.c
+> > +++ b/arch/x86/coco/tdx/tdx.c
+> > @@ -38,6 +38,7 @@
+> >  #define VE_GET_PORT_NUM(e)	((e) >> 16)
+> >  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+> >  
+> > +#define ATTR_DEBUG		BIT(0)
+> >  #define ATTR_SEPT_VE_DISABLE	BIT(28)
+> >  
+> >  /* TDX Module call error codes */
+> > @@ -207,8 +208,15 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
+> >  	 * TD-private memory.  Only VMM-shared memory (MMIO) will #VE.
+> >  	 */
+> >  	td_attr = out.rdx;
+> > -	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
+> > -		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
+> > +	if (!(td_attr & ATTR_SEPT_VE_DISABLE)) {
+> > +		const char *msg = "TD misconfiguration: SEPT_VE_DISABLE attribute must be set.";
+> > +
+> > +		/* Relax SEPT_VE_DISABLE check for debug TD. */
+> > +		if (td_attr & ATTR_DEBUG)
+> > +			pr_warn("%s\n", msg);
+> > +		else
+> > +			tdx_panic(msg);
+> > +	}
+> >  }
+> >  
+> >  /*
+> > @@ -682,6 +690,8 @@ static int virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+> >  	case EXIT_REASON_CPUID:
+> >  		return handle_cpuid(regs, ve);
+> >  	case EXIT_REASON_EPT_VIOLATION:
+> > +		if (ve->gpa != cc_mkdec(ve->gpa))
+> > +			panic("Unexpected EPT-violation on private memory.");
+> 
+> Why add this change part of TD debug check? Should this be a separate patch?
 
-   Merge Intel thermal control drivers changes for v6.2 (2022-12-02 
-19:39:07 +0100)
+This code is never reachable if ATTR_SEPT_VE_DISABLE is set. And the panic
+provides backtrace useful for debug.
 
-are available in the Git repository at:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.2-rc1
-
-for you to fetch changes up to f3ce48d06440a712de3c5ef1d26003c1e77afd74:
-
-   Revert "thermal/sysfs: Remove unnecessary check in 
-trip_point_hyst_show()" (2022-12-09 16:23:16 +0100)
-
-----------------------------------------------------------------
-- Rework a large bunch of drivers to use the generic thermal trip
-   structure and the opportunity to do more cleanups by removing unused
-   functions in the OF code (Daniel Lezcano)
-
-- Add the sm8450 QCom compatible string in the DT bindings (Luca
-   Weiss)
-
-- Use devm_platform_get_and_ioremap_resource on the ST platform to
-   group two calls into a single one (Minghao Chi)
-
-- Add the sm8550 QCom compatible string in the DT bindings (Neil
-   Armstrong)
-
-- Use GENMASK instead of bitmaps and validate the temperature after
-   reading it (Marcus Folkesson)
-
-- Convert generic-adc-thermal to DT schema (Rob Herring)
-
-- Fix the debug print message where the logic is inverted (Keerthy)
-
-- Fix NULL pointer dereference when getting the critical temp (Daniel
-   Lezcano)
-
-- Fix memory leak on thermal_of_zone_register() failure (Ido Schimmel)
-
-- Add support for IPQ8074 in the tsens driver along with the DT
-   bindings (Robert Marko)
-
-- Fix and rework the debugfs code in the tsens driver (Christian
-   Marangi)
-
-- Add calibration and DT documentation for the imx8mm driver (Marek
-   Vasut)
-
-- Add DT bindings and compatible for the Mediatek SoCs mt7981 and
-   mt7983 (Daniel Golle)
-
-- Don't show an error message if it happens at probe time while it
-   will be deferred on the QCom SPMI ADC driver (Johan Hovold)
-
-- Add the HWMon support on the imx8mm board (Alexander Stein)
-
-- Remove a pointless include in the power allocator governor
-   (Christophe JAILLET)
-
-- Add interrupt DT bindings for QCom SoCs SC8280XP, SM6350 and SM8450
-   (Krzysztof Kozlowski)
-
-- Fix inaccurate warning message for the QCom tsens gen2 (Luca Weiss)
-
-- Demote error log of thermal zone register to debug on the tsens QCom
-   driver (Manivannan Sadhasivam)
-
-- Consolidate the TI Bandgap driver regarding how is handled the efuse
-   values and the errata handling (Bryan Brattlof)
-
-- Document the Renesas RZ/Five as compatible with RZ/G2UL in the DT
-   bindings (Lad Prabhakar)
-
-- Fix the irq handler return value in the LMh driver (Bjorn Andersson)
-
-----------------------------------------------------------------
-Alexander Stein (1):
-       thermal/drivers/imx8mm: Add hwmon support
-
-Bjorn Andersson (1):
-       thermal/drivers/qcom/lmh: Fix irq handler return value
-
-Bryan Brattlof (6):
-       thermal/drivers/k3_j72xx_bandgap: Simplify k3_thermal_get_temp() 
-function
-       thermal/drivers/k3_j72xx_bandgap: Use bool for i2128 erratum flag
-       thermal/drivers/k3_j72xx_bandgap: Remove fuse_base from structure
-       thermal/drivers/k3_j72xx_bandgap: Map fuse_base only for erratum 
-workaround
-       dt-bindings: thermal: k3-j72xx: elaborate on binding description
-       dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
-
-Christian Marangi (3):
-       thermal/drivers/qcom/tsens: Init debugfs only with successful probe
-       thermal/drivers/qcom/tsens: Fix wrong version id dbg_version_show
-       thermal/drivers/qcom/tsens: Rework debugfs file structure
-
-Christophe JAILLET (1):
-       thermal/core/power allocator: Remove a useless include
-
-Dan Carpenter (1):
-       thermal/sysfs: remove unnecessary check in trip_point_hyst_show()
-
-Daniel Golle (1):
-       dt-bindings: thermal: mediatek: add compatible string for MT7986 
-and MT7981 SoC
-
-Daniel Lezcano (33):
-       thermal/core: Add a generic thermal_zone_get_trip() function
-       thermal/sysfs: Always expose hysteresis attributes
-       thermal/core: Add a generic thermal_zone_set_trip() function
-       thermal/core/governors: Use thermal_zone_get_trip() instead of 
-ops functions
-       thermal/of: Use generic thermal_zone_get_trip() function
-       thermal/of: Remove unused functions
-       thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: of_thermal_get_ntrips()
-       thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
-thermal_zone_get_trip()
-       thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-       thermal/drivers/uniphier: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-       thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar_gen3: Use the generic function to get the 
-number of trips
-       thermal/of: Remove of_thermal_get_ntrips()
-       thermal/of: Remove of_thermal_is_trip_valid()
-       thermal/of: Remove of_thermal_set_trip_hyst()
-       thermal/of: Remove of_thermal_get_crit_temp()
-       thermal/drivers/st: Use generic trip points
-       thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-       thermal/drivers/broadcom: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-       thermal/drivers/ti: Remove unused macros 
-ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
-       thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-       thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-       thermal/intel/int340x: Replace parameter to simplify
-       thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: Fix NULL pointer dereference when getting 
-the critical temp
-       wifi: iwlwifi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/mellanox: Use generic thermal_zone_get_trip() 
-function
-       Revert "thermal/sysfs: Remove unnecessary check in 
-trip_point_hyst_show()"
-
-Geert Uytterhoeven (1):
-       thermal: ti-soc-thermal: Drop comma after SoC match table sentinel
-
-Ido Schimmel (1):
-       thermal/of: Fix memory leak on thermal_of_zone_register() failure
-
-Johan Hovold (1):
-       thermal: qcom-spmi-adc-tm5: suppress probe-deferral error message
-
-Jon Hunter (1):
-       thermal/drivers/tegra: Fix crash when getting critical temp
-
-Keerthy (1):
-       thermal/drivers/k3_j72xx_bandgap: Fix the debug print message
-
-Krzysztof Kozlowski (1):
-       dt-bindings: thermal: qcom-tsens: narrow interrupts for SC8280XP, 
-SM6350 and SM8450
-
-Lad Prabhakar (1):
-       dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
-
-Luca Weiss (2):
-       dt-bindings: thermal: tsens: Add sm8450 compatible
-       thermal/drivers/qcom/temp-alarm: Fix inaccurate warning for gen2
-
-Manivannan Sadhasivam (1):
-       thermal/drivers/qcom: Demote error log of thermal zone register 
-to debug
-
-Marcus Folkesson (2):
-       thermal/drivers/imx8mm_thermal: Use GENMASK() when appropriate
-       thermal/drivers/imx8mm_thermal: Validate temperature range
-
-Marek Vasut (2):
-       dt-bindings: thermal: imx8mm-thermal: Document optional nvmem-cells
-       thermal/drivers/imx: Add support for loading calibration data 
-from OCOTP
-
-Minghao Chi (1):
-       thermal/drivers/st: Use devm_platform_get_and_ioremap_resource()
-
-Neil Armstrong (1):
-       dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
-
-Rob Herring (1):
-       dt-bindings: thermal: Convert generic-adc-thermal to DT schema
-
-Robert Marko (4):
-       dt-bindings: thermal: tsens: Add ipq8074 compatible
-       thermal/drivers/tsens: Add support for combined interrupt
-       thermal/drivers/tsens: Allow configuring min and max trips
-       thermal/drivers/tsens: Add IPQ8074 support
-
-  .../bindings/thermal/generic-adc-thermal.yaml      |  84 +++++++++
-  .../bindings/thermal/imx8mm-thermal.yaml           |   7 +
-  .../bindings/thermal/mediatek-thermal.txt          |   2 +
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  81 ++++++--
-  .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +-
-  .../bindings/thermal/thermal-generic-adc.txt       |  95 ----------
-  .../bindings/thermal/ti,j72xx-thermal.yaml         |  35 +++-
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
-  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 
-+++++----------------
-  drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
-  drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
-  drivers/platform/x86/acerhdf.c                     |  73 +++----
-  drivers/thermal/armada_thermal.c                   |  37 ++--
-  drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
-  drivers/thermal/da9062-thermal.c                   |  52 +----
-  drivers/thermal/gov_bang_bang.c                    |  37 ++--
-  drivers/thermal/gov_fair_share.c                   |  18 +-
-  drivers/thermal/gov_power_allocator.c              |  52 +++--
-  drivers/thermal/gov_step_wise.c                    |  22 +--
-  drivers/thermal/hisi_thermal.c                     |  11 +-
-  drivers/thermal/imx8mm_thermal.c                   | 180 
-+++++++++++++++++-
-  drivers/thermal/imx_thermal.c                      |  72 +++----
-  .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
-  .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
-  .../int340x_thermal/processor_thermal_device.c     |  10 +-
-  drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
-  drivers/thermal/k3_j72xx_bandgap.c                 |  67 +++----
-  drivers/thermal/qcom/lmh.c                         |   2 +-
-  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   8 +-
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  42 ++---
-  drivers/thermal/qcom/tsens-8960.c                  |   3 +
-  drivers/thermal/qcom/tsens-v0_1.c                  |   3 +
-  drivers/thermal/qcom/tsens-v1.c                    |   3 +
-  drivers/thermal/qcom/tsens-v2.c                    |  20 ++
-  drivers/thermal/qcom/tsens.c                       |  68 ++++---
-  drivers/thermal/qcom/tsens.h                       |   8 +-
-  drivers/thermal/rcar_gen3_thermal.c                |   2 +-
-  drivers/thermal/rcar_thermal.c                     |  53 +-----
-  drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
-  drivers/thermal/st/st_thermal.c                    |  47 +----
-  drivers/thermal/st/stm_thermal.c                   |   4 +-
-  drivers/thermal/tegra/soctherm.c                   |  35 ++--
-  drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
-  drivers/thermal/thermal_core.c                     | 153 ++++++++++++---
-  drivers/thermal/thermal_core.h                     |  24 +--
-  drivers/thermal/thermal_helpers.c                  |  28 +--
-  drivers/thermal/thermal_netlink.c                  |  19 +-
-  drivers/thermal/thermal_of.c                       | 124 +-----------
-  drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
-  drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
-  drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
-  drivers/thermal/uniphier_thermal.c                 |  27 ++-
-  include/linux/thermal.h                            |  10 +
-  54 files changed, 1115 insertions(+), 1224 deletions(-)
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-  delete mode 100644 
-Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
+> 
+> >  		return handle_mmio(regs, ve);
+> >  	case EXIT_REASON_IO_INSTRUCTION:
+> >  		return handle_io(regs, ve);
+> 
+> -- 
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Kiryl Shutsemau / Kirill A. Shutemov
