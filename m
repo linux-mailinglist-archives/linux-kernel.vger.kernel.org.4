@@ -2,89 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EB8648B3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A47648B3E
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 00:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLIXDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 18:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S229885AbiLIXEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 18:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiLIXDf (ORCPT
+        with ESMTP id S229722AbiLIXEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 18:03:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02FA9655E;
-        Fri,  9 Dec 2022 15:03:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C8286236E;
-        Fri,  9 Dec 2022 23:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CFD4C433D2;
-        Fri,  9 Dec 2022 23:03:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670627014;
-        bh=X20+rEzXX4vJaITSaB0VZ8/lv7GD334QlS1f0YhMrgQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aV3gyebBifBlO+/ivgJmIeWcGoyged7eKgF2sgv/BMsJk3fFYL6aIInfw1YHYnN1x
-         V/P0zb+mUJ2CXAc1f8FZtvdiLdHd8FnXx0l1hjJDPCLbB5qGBRq1Lesa3YjWeTMbl7
-         BxzEVq36MKPG1VBI2cBSx0TPDKl1tmq/oFbvQaAb+fiw312zPZdF94J0+VjD6ctWhg
-         VcobJUa/yv81KP2kHadlzhArWLb7dTI0wVuDcbLcrvEQawvcDy1XTtw4pLxIO9BwjF
-         YGHE5AnRLKRhZu8mNM3vucXpxLqmG/mYp2B3QLlGXzE4gy5vc+TasPPQgl1OB1LWzJ
-         UAkfnhg6KTooA==
-Date:   Fri, 9 Dec 2022 15:03:32 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Michael Walle <michael@walle.cc>, Steen.Hegelund@microchip.com,
-        UNGLinuxDriver@microchip.com, daniel.machon@microchip.com,
-        davem@davemloft.net, edumazet@google.com,
-        lars.povlsen@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221209150332.79a921fd@kernel.org>
-In-Reply-To: <20221209152713.qmbnovdookrmzvkx@skbuf>
-References: <20221209092904.asgka7zttvdtijub@soft-dev3-1>
-        <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
-        <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
-        <20221209125611.m5cp3depjigs7452@skbuf>
-        <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
-        <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
-        <20221209144328.m54ksmoeitmcjo5f@skbuf>
-        <20221209145720.ahjmercylzqo5tla@soft-dev3-1>
-        <20221209145637.nr6favnsofmwo45s@skbuf>
-        <20221209153010.f4r577ilnlein77e@soft-dev3-1>
-        <20221209152713.qmbnovdookrmzvkx@skbuf>
+        Fri, 9 Dec 2022 18:04:36 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAA69655F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 15:04:36 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id 4so6450249pli.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 15:04:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N7y0Fsj0V7Jx8UlnHY/tsP4KmC6NWQ+6Fi1dd0y8otA=;
+        b=IWkguZSoL2fItk5S/5KatAx6Ma+mRNW1A7ymBYMHQkfco+SqKmg/BgwhmwAmtDFREa
+         HXqfbd6u8/EfvxH+tCFcjQUntlUR+GJ27QyHmmVB8qPnfhav4uVut7+5jPAnaAhkYQIn
+         tp2ueDwS3HqPgLOU2XAuEXNf2oO6b+3qhX25ywi+jcEhAbAgD3y/9Xn8EHLUELCHZeWU
+         Yo5msYHNeK50cvQk6ZPc3Ug1Yhe/yLwar58UrXx9BO+9eHKIFgsyEMkmPZHHsHyHyx2N
+         YSt+qWJxXpCP0tgJtl1cJDdZGRte0ul2Ue89e3VlQDkZW3BuHbZH0eKaba8TUCJgj797
+         7hRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N7y0Fsj0V7Jx8UlnHY/tsP4KmC6NWQ+6Fi1dd0y8otA=;
+        b=pyLm6+aOay3+BlWDUiYE29NPFAaJ1Da79U2HZLi/xPpzfVhzJF+x5VinwjWZhiZrGe
+         lbzSrXP+NuWMdFoPBHJmdUGHLC1k2mzm7z7VO+zvGKPKOVwnfc3ROD2Rt4PNj80uSJSm
+         AGDSkaNYxMfdbJwUosxv9Qkw8gzSaO/BGcTVpCskTuxPUKsFsidF1N+WBZJ14Gbd78Sw
+         cc2S+vIK4FYdSyDcpgcY1TXQqpdo9hZ0SXd2mo2QbTD/hH1bE/ih267V7w2LolB+B/3A
+         KW0ABZ/8usmmsdSHJMTFpw5ONR7aRH7/2PxL7tVn/e49AhaTFPsmZcA0jG+T0zYQx2rv
+         3xgw==
+X-Gm-Message-State: ANoB5pnzwrfiD6lCkhp7IwMjMt4AH/GFH13/QcE7WPaKHE9l878b+qqI
+        hne5buw9ZbZiSu02v+OO7mnuFuG6xYcKdTI9wn0=
+X-Google-Smtp-Source: AA0mqf5cA/qtvZTwZolemydZkhpOj8uJXz4RnA1VFMUXuJifwyTUlibOOKUTF/7F0Zjy6vs7xTwZsQ==
+X-Received: by 2002:a17:90b:310f:b0:219:d84:4446 with SMTP id gc15-20020a17090b310f00b002190d844446mr7457385pjb.26.1670627075598;
+        Fri, 09 Dec 2022 15:04:35 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id gl7-20020a17090b120700b00218f9bd50c7sm1543637pjb.50.2022.12.09.15.04.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 15:04:35 -0800 (PST)
+Date:   Fri, 9 Dec 2022 15:04:31 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH 2/7] KVM: x86/MMU: Move rmap_iterator to rmap.h
+Message-ID: <Y5O+/1CYivRishFE@google.com>
+References: <20221206173601.549281-1-bgardon@google.com>
+ <20221206173601.549281-3-bgardon@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206173601.549281-3-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Dec 2022 17:27:13 +0200 Vladimir Oltean wrote:
-> > So for example, on a fresh started lan966x the user will add the following
-> > rule:
-> > tc filter add dev eth0 ingress chain 8000000 prio 1 handle 1 protocol
-> > all flower skip_sw dst_mac 00:11:22:33:44:55/ff:ff:ff:ff:ff:ff action
-> > trap action goto chain 8100000
-> > 
-> > He expects this rule not to be hit as there is no rule in chain 0. Now if
-> > PTP is started and it would enable vcap, then suddenly this rule may be
-> > hit.  
+On Tue, Dec 06, 2022 at 05:35:56PM +0000, Ben Gardon wrote:
+> In continuing to factor the rmap out of mmu.c, move the rmap_iterator
+> and associated functions and macros into rmap.(c|h).
 > 
-> Is it too restrictive to only allow adding offloaded filters to a chain
-> that has a valid goto towards it, coming (perhaps indirectly) from chain 0?
+> No functional change intended.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c  | 76 -----------------------------------------
+>  arch/x86/kvm/mmu/rmap.c | 61 +++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/mmu/rmap.h | 18 ++++++++++
+>  3 files changed, 79 insertions(+), 76 deletions(-)
+> 
+[...]
+> diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
+> index 059765b6e066..13b265f3a95e 100644
+> --- a/arch/x86/kvm/mmu/rmap.h
+> +++ b/arch/x86/kvm/mmu/rmap.h
+> @@ -31,4 +31,22 @@ void free_pte_list_desc(struct pte_list_desc *pte_list_desc);
+>  void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head);
+>  unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
+>  
+> +/*
+> + * Used by the following functions to iterate through the sptes linked by a
+> + * rmap.  All fields are private and not assumed to be used outside.
+> + */
+> +struct rmap_iterator {
+> +	/* private fields */
+> +	struct pte_list_desc *desc;	/* holds the sptep if not NULL */
+> +	int pos;			/* index of the sptep */
+> +};
+> +
+> +u64 *rmap_get_first(struct kvm_rmap_head *rmap_head,
+> +		    struct rmap_iterator *iter);
+> +u64 *rmap_get_next(struct rmap_iterator *iter);
+> +
+> +#define for_each_rmap_spte(_rmap_head_, _iter_, _spte_)			\
+> +	for (_spte_ = rmap_get_first(_rmap_head_, _iter_);		\
+> +	     _spte_; _spte_ = rmap_get_next(_iter_))
+> +
 
-Right, we fumbled the review and let the chain oddness in. 
-Until recently the driver worked without any rules in chain 0 :(
+I always found these function names and kvm_rmap_head confusing since
+they are about iterating through the pte_list_desc data structure. The
+rmap (gfn -> list of sptes) is a specific application of the
+pte_list_desc structure, but not the only application. There's also
+parent_ptes in struct kvm_mmu_page, which is not an rmap, just a plain
+old list of ptes.
 
-Maybe adding and offload of the rules can be separated?
-Only actually add the rules to the HW once the goto chain rule 
-has been added? 
+While you are refactoring this code, what do you think about doing the
+following renames?
+
+  struct kvm_rmap_head	-> struct pte_list_head
+  struct rmap_iterator	-> struct pte_list_iterator
+  rmap_get_first()	-> pte_list_get_first()
+  rmap_get_next()	-> pte_list_get_next()
+  for_each_rmap_spte()	-> for_each_pte_list_entry()
+
+Then we can reserve the term "rmap" just for the actual rmap
+(slot->arch.rmap), and code that deals with sp->parent_ptes will become
+a lot more clear IMO (because it will not longer mention rmap).
+
+e.g. We go from this:
+
+  struct rmap_iterator iter;
+  u64 *sptep;
+
+  for_each_rmap_spte(&sp->parent_ptes, &iter, sptep) {
+     ...
+  }
+
+To this:
+
+  struct pte_list_iterator iter;
+  u64 *sptep;
+
+  for_each_pte_list_entry(&sp->parent_ptes, &iter, sptep) {
+     ...
+  }
