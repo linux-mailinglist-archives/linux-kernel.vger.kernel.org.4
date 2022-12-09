@@ -2,166 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3396864829C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA49A6482AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiLIMx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S229951AbiLINBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiLIMxy (ORCPT
+        with ESMTP id S229580AbiLINBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:53:54 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADD36D7DE;
-        Fri,  9 Dec 2022 04:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670590431; x=1702126431;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pQLpFDzbw7TKoL4vHHookBKgAqmAD1Lnc7h67IPEi3Y=;
-  b=1yc/9slXGdXDiemczVxPDxaCT5teN7urZqENV00hY5m6V09gYdmXJynD
-   u9bBcH8pxok34viUnJngu9KMghltJAnajfo/kHr8qnzy63KBF3xD639rP
-   E/0f4sxc1LWFVpe9DaKdm7Uup8O97ZUkrW7AR1c3ayFPB/4WoFiZi/qmK
-   xBl80LzdWdN2nVaU3im2okx2a5ZGfMxDXr5VSiIGZORV8E3/Qztw7Q4L3
-   exElJG1j1/dKYMT2m36XwIaOa+Z2rdtevHebe2BW+QxqgW9Hux5y0EDS/
-   HiZqUYELe7Fvpb97ZeoZ83p/CO4gct+Y2Ab/CN5a0HFKNqlnsKsFjV3b2
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="203303507"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 05:53:50 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 9 Dec 2022 05:53:50 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 9 Dec 2022 05:53:50 -0700
-Date:   Fri, 9 Dec 2022 13:58:57 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <daniel.machon@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <lars.povlsen@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <olteanv@gmail.com>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
-References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
- <20221208092511.4122746-1-michael@walle.cc>
- <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
- <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
- <adb8e2312b169d13e756ff23c45872c3@walle.cc>
- <20221209092904.asgka7zttvdtijub@soft-dev3-1>
- <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
+        Fri, 9 Dec 2022 08:01:18 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E2112E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:01:16 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id g7so3478233qts.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:01:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t4EcL+sW0FV5i/8KEtc5L3BEzEEl7w8LGf0ZWhes5j0=;
+        b=BhUBUyobMY3/J3NKbsPc7mae2/8L+gdmNwVvJHjVhitpebjE5zgYDWeCyRCaRCZFS7
+         XOhKUiEPyaDQZthQoDJ6DRj3zCVS1RhAVt6A4Nc8TiV3qxTzUl/+BZWpbGDg8Kbuebf2
+         mxhDDpgDYT959EIxxkslYzbpqT6d1c6PlEZYND2OyZThNW56hTV4nD9nnq62gRuEWLGS
+         W9+rry1ECrxYZ9ohfMEWFi9uc4bk9mgT8EwezfBqcg5gg8PH/aFfqJ5Z3Id9xRRvgVGL
+         nj08NsOz9kZkp0w0dErGbJgLfnzitzfDSaD45rjcfBrXVQeHNxviNZctWpR8y7aHax67
+         fycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t4EcL+sW0FV5i/8KEtc5L3BEzEEl7w8LGf0ZWhes5j0=;
+        b=ULb/6iE1dDKYCSYzbrbD4+hcOHWZ10SJ4ZetsP47CN9fhQYLayzZzyB9axXNB01o5A
+         p+S/+WhFPDkNZciZis3kLuy950cOOyylKibc8SGs50F1dRv97LTLOXHzLMLcOGsD0nCn
+         ug/BtLTKJgwzzsQjvIq9pRFhqEbBaFeCMvyKC0CuYKQLGkid/ZBv8SHVUJTXNjgdsAXq
+         ZNG3n7oNn3wC4iUKAahzFOSq5ybvJEmGJtOxHVs/EVh/pAJx0sFvHIZkQJWh1RC+pskJ
+         Llq1JwfpwEE/WCYR1bFWCsU7/mIlyHw1SR3yRKotM4TTEYpOkzLzXy8ryo2fGj+bgEkp
+         Lu0g==
+X-Gm-Message-State: ANoB5pkuTn1j8DKyWoWulrrODKSVYf6koaf96Sic9WLutnt5e9C3DNnC
+        pEub+5chyTeOZCThTrwnlMFw4Q==
+X-Google-Smtp-Source: AA0mqf5EpHbdu8Wqt4QHu1tqwR5mTZ2Xu5LKK8x1qa/bTGmpQKeoHqDcOCL3qazQWroE8uWe6nCvOA==
+X-Received: by 2002:ac8:4f49:0:b0:3a5:4168:9534 with SMTP id i9-20020ac84f49000000b003a541689534mr8293322qtw.54.1670590875950;
+        Fri, 09 Dec 2022 05:01:15 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac87590000000b003a6934255dasm841325qtq.46.2022.12.09.05.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 05:01:15 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p3d06-006ygm-FL;
+        Fri, 09 Dec 2022 09:01:14 -0400
+Date:   Fri, 9 Dec 2022 09:01:14 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        markzhang@nvidia.com, ohartoov@nvidia.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING: refcount bug in nldev_newlink
+Message-ID: <Y5MxmrLlXPMZ+WS2@ziepe.ca>
+References: <0000000000004fe6c005ef43161d@google.com>
+ <Y5Gq/zVi/fR85OJK@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5Gq/zVi/fR85OJK@unreal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/09/2022 13:10, Michael Walle wrote:
-> 
-> Hi,
+On Thu, Dec 08, 2022 at 11:14:39AM +0200, Leon Romanovsky wrote:
 
-Hi Michael,
-
-> 
-> > > > The issue is because you have not enabled the TCAM lookups per
-> > > > port. They can be enabled using this commands:
-> > > >
-> > > > tc qdisc add dev eth0 clsact
-> > > 
-> > > This gives me the following error, might be a missing kconfig option:
-> > > 
-> > > # tc qdisc add dev eth0 clsact
-> > > RTNETLINK answers: Operation not supported
+> >  __refcount_dec include/linux/refcount.h:344 [inline]
+> >  refcount_dec include/linux/refcount.h:359 [inline]
+> >  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
+> >  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
+> >  netdev_put include/linux/netdevice.h:4056 [inline]
+> >  dev_put include/linux/netdevice.h:4082 [inline]
+> >  nldev_newlink+0x360/0x5d0 drivers/infiniband/core/nldev.c:1733
+> >  rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
+> >  rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
+> >  netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+> >  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+> >  netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+> >  sock_sendmsg_nosec net/socket.c:714 [inline]
+> >  sock_sendmsg+0xd3/0x120 net/socket.c:734
+> >  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
+> >  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
+> >  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7fd5bc473699
+> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffed185aff8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5bc473699
+> > RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000003
+> > RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
+> > R10: 00007ffed185aa70 R11: 0000000000000246 R12: 00007ffed185b010
+> > R13: 00000000000f4240 R14: 0000000000011fc1 R15: 00007ffed185b004
+> >  </TASK>
 > > 
-> > Yes that should be the case, I think you are missing:
-> > CONFIG_NET_SCHED
-> > But may be others when you try to add the next rule.
-> 
-> I guess I'd need to update my kernel config sometime. At the
-> moment I just have a basic one, as there is still so much stuff
-> missing for the lan9668. So I haven't come around testing anything
-> else. As I said, I just noticed because my rootfs happens to have
-> linuxptp started by default.
-
-I understand.
-
-> 
-> > > > tc filter add dev eth0 ingress prio 5 handle 5 matchall skip_sw action
-> > > > goto chain 8000000
-> > > >
-> > > > This will enable the lookup and then you should be able to start again
-> > > > the ptp4l. Sorry for not mention this, at least I should have written
-> > > > it
-> > > > somewhere that this is required.
-> > > >
-> > > > I was not sure if lan966x should or not enable tcam lookups
-> > > > automatically when a ptp trap action is added. I am open to suggestion
-> > > > here.
-> > > 
-> > > IMHO, from a user point of view this should just work. For a user
-> > > there is no connection between running linuxptp and some filtering
-> > > stuff with 'tc'.
-> > > 
-> > > Also, if the answer to my question above is yes, and ptp should
-> > > have worked on eth0 before, this is a regression then.
 > > 
-> > OK, I can see your point.
-> > With the following diff, you should see the same behaviour as before:
-> 
-> Ok, I can say, I don't see the error message anymore. Haven't tested
-> PTP though. I'd need to setup it up first.
-
-Good, at least no more warnings and should not be any regression there.
-
-> 
-> Does it also work out of the box with the following patch if
-> the interface is part of a bridge or do you still have to do
-> the tc magic from above?
-
-You will still need to enable the TCAM using the tc command to have it
-working when the interface is part of the bridge.
-
-> 
-> -michael
-> 
 > > ---
-> > diff --git
-> > a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-> > b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-> > index 904f5a3f636d3..538f4b76cf97a 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
-> > @@ -91,8 +91,6 @@ lan966x_vcap_is2_get_port_keysets(struct net_device
-> > *dev, int lookup,
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
 > > 
-> >         /* Check if the port keyset selection is enabled */
-> >         val = lan_rd(lan966x, ANA_VCAP_S2_CFG(port->chip_port));
-> > -       if (!ANA_VCAP_S2_CFG_ENA_GET(val))
-> > -               return -ENOENT;
-> > 
-> >         /* Collect all keysets for the port in a list */
-> >         if (l3_proto == ETH_P_ALL)
-> > ---
-> > 
-> > > 
-> > > -michael
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this issue, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+> 
+> Jason, what do you think?
 
--- 
-/Horatiu
+No, the key to this report is that the refcount dec is inside the tracker:
+
+> >  __refcount_dec include/linux/refcount.h:344 [inline]
+> >  refcount_dec include/linux/refcount.h:359 [inline]
+> >  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
+> >  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
+
+Which is not underflowing the refcount on the dev, it is actually
+trying to say the tracker has become unbalanced.
+
+Eg this put is not matched with a hold that specified the tracker.
+
+Probably this:
+
+diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
+index ff35cebb25e265..115b77c5e9a146 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -2192,6 +2192,7 @@ static void free_netdevs(struct ib_device *ib_dev)
+                if (ndev) {
+                        spin_lock(&ndev_hash_lock);
+                        hash_del_rcu(&pdata->ndev_hash_link);
++                       netdev_tracker_free(ndev, &pdata->netdev_tracker);
+                        spin_unlock(&ndev_hash_lock);
+ 
+                        /*
+@@ -2201,7 +2202,7 @@ static void free_netdevs(struct ib_device *ib_dev)
+                         * comparisons after the put
+                         */
+                        rcu_assign_pointer(pdata->netdev, NULL);
+-                       dev_put(ndev);
++                       __dev_put(ndev);
+                }
+                spin_unlock_irqrestore(&pdata->netdev_lock, flags);
+        }
+
