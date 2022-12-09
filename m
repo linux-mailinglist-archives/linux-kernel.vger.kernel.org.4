@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C343A648668
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD4D648674
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLIQQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S229555AbiLIQWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiLIQQ0 (ORCPT
+        with ESMTP id S229498AbiLIQWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:16:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A380A2A;
-        Fri,  9 Dec 2022 08:16:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEEA8B828AE;
-        Fri,  9 Dec 2022 16:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD30C433D2;
-        Fri,  9 Dec 2022 16:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670602583;
-        bh=js1PfDhOGMctIh6NeImGt0mdI3KhpNxYU6DFWhYEELY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q1Uamg1eXeQiknxY8yvLQM8IemgzDAluL8Xe6EQp9mId5ZgVqEKicouOj9+r69Uk3
-         sbamGL1FXTkFWlONu9CEc5Dknyi/K5hSAcTgWtEEfI+S2sDvDY3wH+ihJs8X5p71cn
-         5TOrwZzTTluW2MFi/Snpf30TdbwqR+2g2knChQLf4GG+HhPx5CCNrcmk7UaY5QUbLT
-         CC2045Gw0aejJN5o++KGkcCm3CEoh+ScYHs70ToRUsn1+dtnQXNeOBxMs7++cFjiEJ
-         UNina70DtzuQo+MA5JbEvbvKLaUWMeepNmEpDlgaCkORZVI3Rh/M4u/j9FTUI2rrHl
-         0IUANkdRGIx6A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p3g3D-0002Gf-Re; Fri, 09 Dec 2022 17:16:40 +0100
-Date:   Fri, 9 Dec 2022 17:16:39 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/19] irqdomain: fix mapping race and clean up locking
-Message-ID: <Y5NfZ3bKTA15MWpu@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <87o7scd197.ffs@tglx>
+        Fri, 9 Dec 2022 11:22:37 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF41C0;
+        Fri,  9 Dec 2022 08:22:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670602952; x=1702138952;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iQwVqHB9rC9aTwo4Z445IcUifA5rNpwqLqEuyYsANns=;
+  b=MfIU6d/730wqghMxeJTBwiLhdIjCe5UmOtnoB/UBGfO495Qhq43G57BE
+   sys8Se8M3EZhhpM2tFvIh8rQrp0pqqNDl7tVM+zZM4BoUFSpuFG/Tp2qW
+   FV9jRZz6RPphCtmmAs0ElwXm8Mvz2XppoWQAhsTSeS48z+LRmYMgNqGwI
+   w6QuBTbswIoKRaA0hI8g7je/ahzE5s/YENCu+gInTBxOUjrZUjIolzHwv
+   ygt18rXP/zSFAQM3M9PlNWhOYIbI8/unPJfwl3MjMq1djjaYpHQhbdTPl
+   C73oMeJ40V6NAJ1EmSh7cebeU87cTnuYk/brfHsMFucHGwt5f9eotfGUn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="315129265"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="315129265"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:22:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="754083892"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="754083892"
+Received: from hoonpark-desk15.amr.corp.intel.com (HELO [10.209.54.118]) ([10.209.54.118])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:22:27 -0800
+Message-ID: <e5aff02b-713c-ccd8-7211-d07ff6d7adb2@intel.com>
+Date:   Fri, 9 Dec 2022 08:22:26 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7scd197.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 14/18] x86/sgx: Add EPC OOM path to forcefully reclaim
+ EPC
+Content-Language: en-US
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-15-kristen@linux.intel.com>
+ <Y5IBCOuF8X7jEK3+@kernel.org>
+ <cb5abce531c1b14118de419ba68c2a501b016873.camel@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <cb5abce531c1b14118de419ba68c2a501b016873.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On 12/9/22 08:05, Kristen Carlson Accardi wrote:
+> Aside from that though, I don't think that killing enclaves makes sense
+> outside the context of cgroup limits. 
 
-On Fri, Dec 09, 2022 at 04:51:00PM +0100, Thomas Gleixner wrote:
-> Johan!
-> 
-> On Fri, Dec 09 2022 at 15:01, Johan Hovold wrote:
-> > Parallel probing (e.g. due to asynchronous probing) of devices that
-> > share interrupts can currently result in two mappings for the same
-> > hardware interrupt to be created.
-> >
-> > This series fixes this mapping race and clean up the irqdomain locking
-> > so that in the end the global irq_domain_mutex is only used for managing
-> > the likewise global irq_domain_list, while domain operations (e.g.
-> > IRQ allocations) use per-domain (hierarchy) locking.
-> 
-> Can you please rebase that on top of:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+I think it makes a lot of sense in theory.  Whatever situation we get
+into with a cgroup's EPC we can also get into with the whole system's EPC.
 
-The series is based on next-20221208 which should contain that branch in
-its current state if I'm not mistaken.
+*But*, it's orders of magnitude harder to hit on the whole system.
+Basically, it has to be at a point where all of the EPC is consumed in
+non-SGX-swappable page types like SECS or VEPC pages.  That's
+_possible_, of course, but it's really hard to create because one VEPC
+page can hold the info of several (32??) swapped-out EPC pages.
 
-I just tried applying it on top of irq/core and did not notice any
-problems.
+So, you'd need roughly 4GB of swapped-out normal enclave memory to
+exhaust a system with 128MB of total enclave memory.
 
-Johan
+OOM handling *much* necessary in practice if you have a cgroup with some
+modestly sized enclaves and a very tiny EPC limit.  If someone wants to
+extend this OOM support to system-wide EPC later, then go ahead.  But, I
+don't think it makes a lot of sense to invert this series for it.
