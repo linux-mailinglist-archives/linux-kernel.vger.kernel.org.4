@@ -2,124 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2314F6487C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321696487D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiLIRba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        id S229965AbiLIRfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLIRb2 (ORCPT
+        with ESMTP id S229498AbiLIRfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:31:28 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5A115709
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:31:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670607087; x=1702143087;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6gaByd85Ir5jpC5TjpFdxoKpv9W8N2P7lwLZnGk0xEw=;
-  b=aK4aLT8f04EgmqTPTsh1o2xVK8uuJ7rVcR4uBe8P+ful5SbfV6yyc2cS
-   X3k2Jk0af1hrCzODoWfcgTXzM8rbuiZ795uKt3oY4rzzCC/GtsYDB1CS9
-   46jh5e8FBIx23iQP5lMvi1dfDL1GQbB0tba22bqIRXKb+BwYUtBhmaWUC
-   536AAnj/JYmMQhh2NAT9aRAE4rtjrBp/fkiMqmGKzoqt7Hj1qqVJbY8CR
-   LOfRUZhyUbjNA5scZkfqArXUJCdVvaPX4185iAxm8Roga6Gy+lMVSG3zw
-   sX33TyyFyGTgycRMsdraZmJhMja+Ue94vF2BqOS1iLEbg373QNCx6MFx8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="316213601"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="316213601"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:31:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="625180439"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="625180439"
-Received: from bdmeredi-mobl2.amr.corp.intel.com (HELO [10.212.15.195]) ([10.212.15.195])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:31:25 -0800
-Message-ID: <22043956-e18c-9ed6-5091-188ae40f3cd9@linux.intel.com>
-Date:   Fri, 9 Dec 2022 11:31:24 -0600
+        Fri, 9 Dec 2022 12:35:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7D446BC83;
+        Fri,  9 Dec 2022 09:35:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1B1623A;
+        Fri,  9 Dec 2022 09:35:07 -0800 (PST)
+Received: from [10.57.7.11] (unknown [10.57.7.11])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C25993F73D;
+        Fri,  9 Dec 2022 09:34:59 -0800 (PST)
+Message-ID: <ba52dac5-2ce7-a567-41af-841b857abbed@arm.com>
+Date:   Fri, 9 Dec 2022 17:34:41 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with
- amp nau8318
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     Libin Yang <libin.yang@intel.com>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>
-References: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com>
- <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
- <CALprXBayJtWRe9J+q7EahgpXrRy_B-tMAf0KXbDtWa+=4RKyHA@mail.gmail.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
 Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CALprXBayJtWRe9J+q7EahgpXrRy_B-tMAf0KXbDtWa+=4RKyHA@mail.gmail.com>
+To:     Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+Cc:     Dan Li <ashimida@linux.alibaba.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220416001103.1524653-1-keescook@chromium.org>
+ <CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com>
+ <202212072221.A9FCC905CF@keescook>
+From:   Kristina Martsenko <kristina.martsenko@arm.com>
+In-Reply-To: <202212072221.A9FCC905CF@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-
->> This looks inconsistent with the commit message. There are separate
->> Kconfigs for different codecs.
+On 08/12/2022 06:22, Kees Cook wrote:
+> On Tue, Dec 06, 2022 at 06:28:53PM -0600, Daniel Dï¿½az wrote:
+>> Hello!
 >>
->> SND_SOC_NAU8315
->> SND_SOC_NAU8825
+>> On Sat, 16 Apr 2022 at 00:30, Kees Cook <keescook@chromium.org> wrote:
+>>> In order to test various backward-edge control flow integrity methods,
+>>> add a test that manipulates the return address on the stack. Currently
+>>> only arm64 Pointer Authentication and Shadow Call Stack is supported.
+>>>
+>>>  $ echo CFI_BACKWARD | cat >/sys/kernel/debug/provoke-crash/DIRECT
+>>>
+>>> Under SCS, successful test of the mitigation is reported as:
+>>>
+>>>  lkdtm: Performing direct entry CFI_BACKWARD
+>>>  lkdtm: Attempting unchecked stack return address redirection ...
+>>>  lkdtm: ok: redirected stack return address.
+>>>  lkdtm: Attempting checked stack return address redirection ...
+>>>  lkdtm: ok: control flow unchanged.
+>>>
+>>> Under PAC, successful test of the mitigation is reported by the PAC
+>>> exception handler:
+>>>
+>>>  lkdtm: Performing direct entry CFI_BACKWARD
+>>>  lkdtm: Attempting unchecked stack return address redirection ...
+>>>  lkdtm: ok: redirected stack return address.
+>>>  lkdtm: Attempting checked stack return address redirection ...
+>>>  Unable to handle kernel paging request at virtual address bfffffc0088d0514
+>>>  Mem abort info:
+>>>    ESR = 0x86000004
+>>>    EC = 0x21: IABT (current EL), IL = 32 bits
+>>>    SET = 0, FnV = 0
+>>>    EA = 0, S1PTW = 0
+>>>    FSC = 0x04: level 0 translation fault
+>>>  [bfffffc0088d0514] address between user and kernel address ranges
+>>>  ...
+>>>
+>>> If the CONFIGs are missing (or the mitigation isn't working), failure
+>>> is reported as:
+>>>
+>>>  lkdtm: Performing direct entry CFI_BACKWARD
+>>>  lkdtm: Attempting unchecked stack return address redirection ...
+>>>  lkdtm: ok: redirected stack return address.
+>>>  lkdtm: Attempting checked stack return address redirection ...
+>>>  lkdtm: FAIL: stack return address was redirected!
+>>>  lkdtm: This is probably expected, since this kernel was built *without* CONFIG_ARM64_PTR_AUTH_KERNEL=y nor CONFIG_SHADOW_CALL_STACK=y
+>>>
+>>> Co-developed-by: Dan Li <ashimida@linux.alibaba.com>
+>>> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
+>>> ---
+>>> v1: https://lore.kernel.org/lkml/20220413213917.711770-1-keescook@chromium.org
+>>> v2:
+>>>  - add PAGE_OFFSET setting for PAC bits (Dan Li)
+>>> ---
+>>>  drivers/misc/lkdtm/cfi.c                | 134 ++++++++++++++++++++++++
+>>>  tools/testing/selftests/lkdtm/tests.txt |   1 +
+>>>  2 files changed, 135 insertions(+)
+>>>
+>>> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+>>> index e88f778be0d5..804965a480b7 100644
+>>> --- a/drivers/misc/lkdtm/cfi.c
+>>> +++ b/drivers/misc/lkdtm/cfi.c
+>>> @@ -3,6 +3,7 @@
+>>>   * This is for all the tests relating directly to Control Flow Integrity.
+>>>   */
+>>>  #include "lkdtm.h"
+>>> +#include <asm/page.h>
+>>>
+>>>  static int called_count;
+>>>
+>>> @@ -42,8 +43,141 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+>>>         pr_expected_config(CONFIG_CFI_CLANG);
+>>>  }
+>>>
+>>> +/*
+>>> + * This can stay local to LKDTM, as there should not be a production reason
+>>> + * to disable PAC && SCS.
+>>> + */
+>>> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+>>> +# ifdef CONFIG_ARM64_BTI_KERNEL
+>>> +#  define __no_pac             "branch-protection=bti"
+>>> +# else
+>>> +#  define __no_pac             "branch-protection=none"
+>>> +# endif
+>>> +# define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
+>>> +#else
+>>> +# define __no_ret_protection   __noscs
+>>> +#endif
 >>
->> Which is it?
+>> We're seeing this problem with allmodconfig on arm64 and GCC 8 (this
+>> one observed on 6.0.12-rc3):
 >>
+>> -----8<----------8<----------8<-----
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/2/build
+>> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
+>> CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+>> 'HOSTCC=sccache gcc'
+>> /builds/linux/drivers/misc/lkdtm/cfi.c:67:1: error: pragma or
+>> attribute 'target("branch-protection=none")' is not valid
+>>  {
+>>  ^
 > 
-> Sorry about confusing you, I think it is better to change the title as
-> ASoC: Intel: sof_nau8825: add combination of nau8825 headset codec
-> with nau8318 Amp.
-
-Suggested edit:
-
-ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
-
+> Uuuh... how is CONFIG_ARM64_PTR_AUTH_KERNEL getting set if the compiler
+> can't support the 'target("branch-protection=none")' attribute?
 > 
-> And add some information about Nuvoton chips in the comment message.
-> ***
-> The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
-> Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
-> for nau8318 is "NVTN2012".
 
-That should be added in the commit message please.
+Older GCC versions supported the (now deprecated) -msign-return-address option 
+instead of the newer -mbranch-protection option, and the kernel checks for that
+too when setting CONFIG_ARM64_PTR_AUTH_KERNEL. I guess the test has never
+compiled with older GCC versions. The following patch should fix it.
 
->> NAK for this v1. Please clarify which codec you are using and make sure
->> all references are consistent.
->>
->>
-> 
-> I apologize for the unclear comment message, please give me any
-> suggestions if needed, and I will send v2 for review.
-> thanks.
+-- 8< --
 
-Ok, makes sense now. Please do include the explanations on 8315/8318
-variants, I couldn't figure out what chips were used.
+Subject: [PATCH] lkdtm: cfi: Make PAC test work with GCC 7 and 8
 
-I would also not use the same topology name as a different platform with
-another amplifier. I appreciate you trying to reuse when possible, but
-it's just better to create a new topology file. That way if you want any
-update down the road you can do so, it's more maintainable and risk-free.
+The CFI test uses the branch-protection=none compiler attribute to
+disable PAC return address protection on a function. While newer GCC
+versions support this attribute, older versions (GCC 7 and 8) instead
+supported the sign-return-address=none attribute, leading to a build
+failure when the test is built with older compilers. Fix it by checking
+which attribute is supported and using the correct one.
+
+Fixes: 2e53b877dc12 ("lkdtm: Add CFI_BACKWARD to test ROP mitigations")
+Reported-by: Daniel Díaz <daniel.diaz@linaro.org>
+Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
+Link: https://lore.kernel.org/all/CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com/
+---
+ drivers/misc/lkdtm/cfi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+index 5245cf6013c9..d4bb8e31a2fe 100644
+--- a/drivers/misc/lkdtm/cfi.c
++++ b/drivers/misc/lkdtm/cfi.c
+@@ -54,7 +54,11 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+ # ifdef CONFIG_ARM64_BTI_KERNEL
+ #  define __no_pac             "branch-protection=bti"
+ # else
+-#  define __no_pac             "branch-protection=none"
++#  ifdef CONFIG_CC_HAS_BRANCH_PROT_PAC_RET
++#   define __no_pac             "branch-protection=none"
++#  else
++#   define __no_pac             "sign-return-address=none"
++#  endif
+ # endif
+ # define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
+ #else
+
