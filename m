@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4E6647AB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8E0647AB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiLIAUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 19:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S229469AbiLIAVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 19:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLIAUf (ORCPT
+        with ESMTP id S229632AbiLIAVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 19:20:35 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1544792333;
-        Thu,  8 Dec 2022 16:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670545235; x=1702081235;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=dHem1ATkLRYFiJxaz4bVCi5xygpgc/hx55Rdz+UP1DU=;
-  b=H721B5y02yrbRqBJGCo+h1hZ+wRB7WarWTNx7Vws7B9mvK28Qj9xym2W
-   Q0MzRYRU1ZkjZivxpzyeFm02x6BaCm5hvJOJq3l6fGe8pHX0JteBmN4pl
-   GzTiPBkjhVUwOLSBs0jK+JOGWr/YTUZd1hiyq0EVvAfcVsthihoROq8Cv
-   s3mGGJDGnSgWZyCLTkMurn+0xCP7lGY2HNiXns2RjhN/BdlMVYGcikT5J
-   qYb1lEIb/9MTkWhe8ZvVu8a91udj6zNKFW8SgUFxuUM675eYM1kVQ2JcC
-   zqbA4J+aMjkFlsa2/D+LUAwDC+KkdNxOn+ljSfnkPgk0EewrQvmE0nRJu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="304983424"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="304983424"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 16:20:34 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="710696748"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="710696748"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.107.194]) ([10.212.107.194])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 16:20:33 -0800
-Message-ID: <b3bb2916-0b08-e7a7-f744-21469e32e080@intel.com>
-Date:   Thu, 8 Dec 2022 17:20:32 -0700
+        Thu, 8 Dec 2022 19:21:22 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E51092305
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:21:21 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id s196so2482655pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:21:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fxo/Qa2g2l5VwByXQSAcUiX+7JZ8E7yRjzkXLItllwk=;
+        b=qKjtkIGolnxH4WQLk5BeM6RGyuoRDEz1A5QgTyVPsR8QSZFl27gYnjBlvXDkAHSyOW
+         MZx2qfFtLT5e6aTghd4D4gmW9bu4t6a+LFmw9TFol6K3x7RNjy7Aji2UTGul7jwIHz3n
+         +PaZjIntMEGywi09J51pTA3N8FuaiT9KVh3L3OBRvMDNSq2q7Y7k7I6GiCH8A/CcG4ta
+         /GonOItmYjyNbpzRPeCl3MwDufk9IkaDhFJ+QF+3AWT11lhtinv4uJGpMSLiZQiYMwUU
+         0uO3LXJpHil3u2bxOmoTR7zLRqlVddn9Mh2Ja6hMiMwpxu9SWFKem7EsuywtvfIOEmGA
+         05Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fxo/Qa2g2l5VwByXQSAcUiX+7JZ8E7yRjzkXLItllwk=;
+        b=i05n0zlI5zQ0un55G/K9NzBolOKzsrargv6Lkvi875USoWzLeWI4etlN8faM/g3KNF
+         eSgXOviVzSUCDIeOvZ3RFPFZjCwEk+JFcMU5rtlPwNC00nfGyFk+cwMm8eh5+nTRHIXy
+         UvMZK7lTB+Jj7ufchnXBAI4C1jnj65aaVoc+2pNcU8ekBPL+uvVuQ3O5AFUKh60hbMIQ
+         570NPE/BNhWtxyNp6+/WD9tNkBkj676QYEakFiB50O+7bNIfKdZNPsufIgek0JACBUbT
+         1cIDqVkyZbDCVe0I665HQSKWxfW0ebnz2xMOlFraobl2cICMF3mVfhmdveUDczFD/K24
+         HNjw==
+X-Gm-Message-State: ANoB5pnzuMuLxTb7e1yJriBWMbVuPs7PjsW/J4iwfA6enD/jHCHOV/A3
+        Q/SXqzL+a8/PzXQ3Ff1vPjwzkA==
+X-Google-Smtp-Source: AA0mqf7mO+Pqe5sMrWcrMy/uCytpp9lly4bvTEHXUxvTzALgNLSCAtBdL2QdSU48rL75mdDMtEsszg==
+X-Received: by 2002:aa7:8656:0:b0:577:509d:df80 with SMTP id a22-20020aa78656000000b00577509ddf80mr4159355pfo.24.1670545280691;
+        Thu, 08 Dec 2022 16:21:20 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id h12-20020a056a00000c00b00575ecd1d301sm68162pfk.177.2022.12.08.16.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 16:21:20 -0800 (PST)
+Date:   Thu, 8 Dec 2022 16:21:15 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     bgardon@google.com, seanjc@google.com, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 0/2] NUMA aware page table allocation
+Message-ID: <Y5J/ewEmqaTef/EU@google.com>
+References: <20221201195718.1409782-1-vipinsh@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v2] ntb_netdev: Use dev_kfree_skb_any() in interrupt
- context
-Content-Language: en-US
-To:     epilmore@gigaio.com, netdev@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntb@lists.linux.dev, allenbh@gmail.com, jdmason@kudzu.us
-References: <20221209000659.8318-1-epilmore@gigaio.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221209000659.8318-1-epilmore@gigaio.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221201195718.1409782-1-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/8/2022 5:06 PM, epilmore@gigaio.com wrote:
-> From: Eric Pilmore <epilmore@gigaio.com>
+On Thu, Dec 01, 2022 at 11:57:16AM -0800, Vipin Sharma wrote:
+> Hi,
 > 
-> TX/RX callback handlers (ntb_netdev_tx_handler(),
-> ntb_netdev_rx_handler()) can be called in interrupt
-> context via the DMA framework when the respective
-> DMA operations have completed. As such, any calls
-> by these routines to free skb's, should use the
-> interrupt context safe dev_kfree_skb_any() function.
+> This series improves page table accesses by allocating page tables on
+> the same NUMA node where underlying physical page is present.
 > 
-> Previously, these callback handlers would call the
-> interrupt unsafe version of dev_kfree_skb(). This has
-> not presented an issue on Intel IOAT DMA engines as
-> that driver utilizes tasklets rather than a hard
-> interrupt handler, like the AMD PTDMA DMA driver.
-> On AMD systems, a kernel WARNING message is
-> encountered, which is being issued from
-> skb_release_head_state() due to in_hardirq()
-> being true.
+> Currently page tables are allocated during page faults and page splits.
+> In both instances page table location will depend on the current thread
+> mempolicy. This can create suboptimal placement of page tables on NUMA
+> node, for example, thread doing eager page split is on different NUMA
+> node compared to page it is splitting.
 > 
-> Besides the user visible WARNING from the kernel,
-> the other symptom of this bug was that TCP/IP performance
-> across the ntb_netdev interface was very poor, i.e.
-> approximately an order of magnitude below what was
-> expected. With the repair to use dev_kfree_skb_any(),
-> kernel WARNINGs from skb_release_head_state() ceased
-> and TCP/IP performance, as measured by iperf, was on
-> par with expected results, approximately 20 Gb/s on
-> AMD Milan based server. Note that this performance
-> is comparable with Intel based servers.
+> Reviewers please provide suggestion to the following:
 > 
-> Fixes: 765ccc7bc3d91 ("ntb_netdev: correct skb leak")
-> Fixes: 548c237c0a997 ("net: Add support for NTB virtual ethernet device")
-> Signed-off-by: Eric Pilmore <epilmore@gigaio.com>
-
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-As an FYI for future. Typically you would add the patch revision change 
-log under the "---" line just as an FYI for reviewers on what you've 
-changed and who suggested the change.
-
-> ---
-
-i.e.
-
-v2:
-- Use dev_kfree_skb_any() instead of dev_kfree_skb_irq(). (DaveJ)
-
-
->   drivers/net/ntb_netdev.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> 1. Module parameter is true by default, which means this feature will
+>    be enabled by default. Is this okay or should I set it to false?
 > 
-> diff --git a/drivers/net/ntb_netdev.c b/drivers/net/ntb_netdev.c
-> index 80bdc07f2cd3..59250b7accfb 100644
-> --- a/drivers/net/ntb_netdev.c
-> +++ b/drivers/net/ntb_netdev.c
-> @@ -137,7 +137,7 @@ static void ntb_netdev_rx_handler(struct ntb_transport_qp *qp, void *qp_data,
->   enqueue_again:
->   	rc = ntb_transport_rx_enqueue(qp, skb, skb->data, ndev->mtu + ETH_HLEN);
->   	if (rc) {
-> -		dev_kfree_skb(skb);
-> +		dev_kfree_skb_any(skb);
->   		ndev->stats.rx_errors++;
->   		ndev->stats.rx_fifo_errors++;
->   	}
-> @@ -192,7 +192,7 @@ static void ntb_netdev_tx_handler(struct ntb_transport_qp *qp, void *qp_data,
->   		ndev->stats.tx_aborted_errors++;
->   	}
->   
-> -	dev_kfree_skb(skb);
-> +	dev_kfree_skb_any(skb);
->   
->   	if (ntb_transport_tx_free_entry(dev->qp) >= tx_start) {
->   		/* Make sure anybody stopping the queue after this sees the new
+> 2. I haven't reduced KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE considering that
+>    it might not be too much of an impact as only online nodes are filled
+>    during topup phase and in many cases some of these nodes will never
+>    be refilled again.  Please let me know if you want this to be
+>    reduced.
+> 
+> 3. I have tried to keep everything in x86/mmu except for some changes in
+>    virt/kvm/kvm_main.c. I used __weak function so that only x86/mmu will
+>    see the change, other arch nothing will change. I hope this is the
+>    right approach.
+> 
+> 4. I am not sure what is the right way to split patch 2. If you think
+>    this is too big for a patch please let me know what would you prefer.
+
+I agree it's too big. The split_shadow_page_cache changes can easily be
+split into a separate commit.
