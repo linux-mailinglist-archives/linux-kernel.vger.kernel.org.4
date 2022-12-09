@@ -2,158 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66363647C92
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D584647CCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiLIDYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S229757AbiLIDuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLIDYd (ORCPT
+        with ESMTP id S229943AbiLIDuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:24:33 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D35A1C930
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670556272; x=1702092272;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=vp6xMOdRn/5zWi/yiPp1W1YaQj05xOxBN9Fzkz5Mw+I=;
-  b=QPlCk6OG9sotxfVN/U1jX+qm5CBDZR7GumKgKJmGvSjUaRQLvHkA8JBW
-   IwgXFOQkrNSAILQLdD2BzoeRETY/xqfFweXmG2bbT7qSkZ+68oYzS+DKa
-   HNnfYhk2kYdpOHXeMlyaZFUk46mRf75QYrLLbWDT3zowEVxyNLsglNIcu
-   a6WWvFU5ykTccuLD9uxPt1I8utbymLpXeB7sH8oAY3xb7nHb3kktP/T2z
-   oOr/8SsOTF6ERZNF9CbIQs0biDDb1F8ALnw38qA4diRD0URcgWrBHAwZZ
-   taIr5kWOCeDPEHj4PN+AXyGB5fPXNMB6l2DfEjFLj2uYyivAHXG1841SC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="344402948"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="344402948"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 19:24:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="821590312"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="821590312"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 19:24:28 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Kairui Song <ryncsn@gmail.com>
-Cc:     linux-mm@kvack.org, Kairui Song <kasong@tencent.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 3/5] swap: fold swap_ra_clamp_pfn into swap_ra_info
-References: <20221208180209.50845-1-ryncsn@gmail.com>
-        <20221208180209.50845-4-ryncsn@gmail.com>
-Date:   Fri, 09 Dec 2022 11:23:39 +0800
-In-Reply-To: <20221208180209.50845-4-ryncsn@gmail.com> (Kairui Song's message
-        of "Fri, 9 Dec 2022 02:02:07 +0800")
-Message-ID: <87r0x9qmys.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 8 Dec 2022 22:50:06 -0500
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B7B2EEE;
+        Thu,  8 Dec 2022 19:50:01 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 6A3F510098B;
+        Fri,  9 Dec 2022 03:50:00 +0000 (UTC)
+Received: from pdx1-sub0-mail-a263.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id D72EB100BF8;
+        Fri,  9 Dec 2022 03:49:59 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1670557799; a=rsa-sha256;
+        cv=none;
+        b=Mb2OI5TVpI7DEpWH65YWvc37jO47RfLUOUkUSBnpAreSRf1jU8VBXGGAnzFTiISbZD2C45
+        ZbeMbB4LuDaDXRF9OwialdTYbcqttP9/56O2vW7aslT1vmarQTWPfZsckZc7uHrLt6b4PC
+        cTiHfXU6/zbQIfC83c/1yk4jTS+UGR+sLvFBs3czhLQmYV7GQjJKZSWXP0fCYBdSHcyNuq
+        AtgVMEIrY80BtzNwPFbMjPDEiasqKxaBadzuqzq4+AZzw42xLVzC/ezEsbbsoUscGIBrf6
+        zoJ2W7OkjXWYMlgM5rU+TVnk24Xinq7lmxbUHWYpXHDrSAM8x84vlv9chm0klA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1670557799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=cbxtvkRhRL+tnV05JpD/zco8wP6mLe11Sn32Cdb8ZVU=;
+        b=Rv3EoD80Vn5KXdm7d44p43iipwk0lIz/klsi+SaG8mlhkCOCex8cXcvjUpen8DOaiox/UN
+        BKOGxfmHdTbokNXhn5jek6SD6Vk01kX1gCpGaSVi2qJtRGp6olArx0hKPRiJSQSnv/r7RS
+        OfMKC/IoNWPABmQ6KrM56UHYY/t/FnxY2c3QLXMV7GHTtvPDSbp5dSZn4casrl1Kfzd+LL
+        zLjQLEzHi2yurZS0or2M5hEYDa3UX/uwby1vOMqLUq5tbzlwL2jTDwJR3/2+1Qlyod/Cgg
+        eDsf29GwFJ2VkwaAS3a/i53WSWYeI9b60VEdQ495CSICBGYmS9k6C+MqrvsndA==
+ARC-Authentication-Results: i=1;
+        rspamd-d48c5ddb-hdvm5;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Shelf-Arithmetic: 454c2ce13f103b60_1670557800156_2839342034
+X-MC-Loop-Signature: 1670557800156:299660159
+X-MC-Ingress-Time: 1670557800155
+Received: from pdx1-sub0-mail-a263.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.106 (trex/6.7.1);
+        Fri, 09 Dec 2022 03:50:00 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a263.dreamhost.com (Postfix) with ESMTPSA id 4NSxqW1chrzHF;
+        Thu,  8 Dec 2022 19:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1670557799;
+        bh=cbxtvkRhRL+tnV05JpD/zco8wP6mLe11Sn32Cdb8ZVU=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=HB2X6gxfOPJsQfZlIxlp1gJZbBKdLCHJINv05QwGmzgYbKyhgirnvPkMUE8P8C64M
+         ScwWRjekpkywV6FsOFjwnH7T2Cd7riP/Yr04fT8TGY2K4mToRVXJWWVOfFLy/WC6X7
+         v+UEXKe1VQExN2FDNti9B1AvlMGuhG89spNbkKRt0rRv0DwPdUmFmDcOP3Cte+Eq5U
+         /fuVa1irEiGna//TGNbKyHr+YV4dkm+8kcptfbqYmBhcIjcyFBW7r+0SPtEuiZvg9T
+         ahk0FRbjKRU9gQeg9Gbn96kEvG5VAWVXz2QV5014x4pndWSBqmyh+7yjj+X/EOE6eS
+         vohzBXzCQ8jNA==
+Date:   Thu, 8 Dec 2022 19:25:50 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        connoro@google.com
+Subject: Re: [PATCH v2 1/2] locktorture: Allow non-rtmutex lock types to be
+ boosted
+Message-ID: <20221209032550.p4tcyypgkuspp2ur@offworld>
+References: <20221209022305.321149-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221209022305.321149-1-joel@joelfernandes.org>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kairui Song <ryncsn@gmail.com> writes:
+On Fri, 09 Dec 2022, Joel Fernandes (Google) wrote:
 
-> From: Kairui Song <kasong@tencent.com>
->
-> This make the code cleaner. This helper is made of only two line of
-> self explanational code and not reused anywhere else.
->
-> And this actually make the compiled object smaller by a bit:
->
->           text    data     bss     dec     hex filename
-> Before:   9502     976      12   10490    28fa mm/swap_state.o
-> After:    9470     976      12   10458    28da mm/swap_state.o
->
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-> ---
->  mm/swap_state.c | 44 +++++++++++++++++++-------------------------
->  1 file changed, 19 insertions(+), 25 deletions(-)
+>Currently RT boosting is only done for rtmutex_lock, however with proxy
+>execution, we also have the mutex_lock participating in priorities. To
+>exercise the testing better, add RT boosting to other lock testing types
+>as well, using a new knob (rt_boost).
 
-LGTM, Thanks!
+No particular objection to the patches, but shouldn't these go as part
+of the next iteration of the PE series?
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-
-> diff --git a/mm/swap_state.c b/mm/swap_state.c
-> index 60136bda78e3..19089417abd1 100644
-> --- a/mm/swap_state.c
-> +++ b/mm/swap_state.c
-> @@ -696,28 +696,15 @@ void exit_swap_address_space(unsigned int type)
->  	swapper_spaces[type] = NULL;
->  }
->  
-> -static inline void swap_ra_clamp_pfn(struct vm_area_struct *vma,
-> -				     unsigned long faddr,
-> -				     unsigned long lpfn,
-> -				     unsigned long rpfn,
-> -				     unsigned long *start,
-> -				     unsigned long *end)
-> -{
-> -	*start = max3(lpfn, PFN_DOWN(vma->vm_start),
-> -		      PFN_DOWN(faddr & PMD_MASK));
-> -	*end = min3(rpfn, PFN_DOWN(vma->vm_end),
-> -		    PFN_DOWN((faddr & PMD_MASK) + PMD_SIZE));
-> -}
-> -
->  static void swap_ra_info(struct vm_fault *vmf,
-> -			struct vma_swap_readahead *ra_info)
-> +			 struct vma_swap_readahead *ra_info)
->  {
->  	struct vm_area_struct *vma = vmf->vma;
->  	unsigned long ra_val;
-> -	unsigned long faddr, pfn, fpfn;
-> +	unsigned long faddr, pfn, fpfn, lpfn, rpfn;
->  	unsigned long start, end;
->  	pte_t *pte, *orig_pte;
-> -	unsigned int max_win, hits, prev_win, win, left;
-> +	unsigned int max_win, hits, prev_win, win;
->  #ifndef CONFIG_64BIT
->  	pte_t *tpte;
->  #endif
-> @@ -745,16 +732,23 @@ static void swap_ra_info(struct vm_fault *vmf,
->  
->  	/* Copy the PTEs because the page table may be unmapped */
->  	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
-> -	if (fpfn == pfn + 1)
-> -		swap_ra_clamp_pfn(vma, faddr, fpfn, fpfn + win, &start, &end);
-> -	else if (pfn == fpfn + 1)
-> -		swap_ra_clamp_pfn(vma, faddr, fpfn - win + 1, fpfn + 1,
-> -				  &start, &end);
-> -	else {
-> -		left = (win - 1) / 2;
-> -		swap_ra_clamp_pfn(vma, faddr, fpfn - left, fpfn + win - left,
-> -				  &start, &end);
-> +	if (fpfn == pfn + 1) {
-> +		lpfn = fpfn;
-> +		rpfn = fpfn + win;
-> +	} else if (pfn == fpfn + 1) {
-> +		lpfn = fpfn - win + 1;
-> +		rpfn = fpfn + 1;
-> +	} else {
-> +		unsigned int left = (win - 1) / 2;
-> +
-> +		lpfn = fpfn - left;
-> +		rpfn = fpfn + win - left;
->  	}
-> +	start = max3(lpfn, PFN_DOWN(vma->vm_start),
-> +		     PFN_DOWN(faddr & PMD_MASK));
-> +	end = min3(rpfn, PFN_DOWN(vma->vm_end),
-> +		   PFN_DOWN((faddr & PMD_MASK) + PMD_SIZE));
-> +
->  	ra_info->nr_pte = end - start;
->  	ra_info->offset = fpfn - start;
->  	pte -= ra_info->offset;
+Thanks,
+Davidlohr
