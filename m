@@ -2,69 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71D7647C0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B78647BC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLICMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S229709AbiLIB7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiLICML (ORCPT
+        with ESMTP id S230098AbiLIB6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:12:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466551F63B;
-        Thu,  8 Dec 2022 18:12:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9FEA62119;
-        Fri,  9 Dec 2022 02:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46481C4339C;
-        Fri,  9 Dec 2022 02:12:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670551930;
-        bh=rVgKlffiEF2OtdlS00jROW43FCHOBRtxFF76SiaLxlA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g9JvhGCrD0QapB7/ih8KC+9k5a69NF+gOr+Se463cyRY4QYyHoyPgaRv8aYKN0IMO
-         z3aiHQzln/a3AheZHGQMewXtpYtA82iDMnMmrmNyrn3GIkfxPAW//jB+pK1/ywgCZR
-         SHuFZywKDCWGMUxEItiKGzzpore1Ijf3Nsq2rC8dRXjA9F1BKaUAkzJ56lq9FrPuAe
-         rBfwhNjBmAOWxUCL/G5qwimFUaS8OKJZK1092uYej+zzVEmGeQDjrgkDDsBhvbWuQy
-         JDsJkohC2NOQX5nmwGxBkJp3ljlhZWOLbByYSPp4Eo8GWWlKPbFcJAeyrLQXguBro9
-         zRSgmmV+KMl+A==
-Received: by mail-ej1-f51.google.com with SMTP id n21so8292270ejb.9;
-        Thu, 08 Dec 2022 18:12:10 -0800 (PST)
-X-Gm-Message-State: ANoB5pklWSONcYwSOl3hc8XULtfxZytqEvOzJOOJmlaGycaxPrIE5n9L
-        0eAkildMdjRF6xwMAsw0kFqQ76JPo1n9Y4agoDY=
-X-Google-Smtp-Source: AA0mqf6qZESy7WGR2SxFc18ZJVgTfGA4tBgU5tArg1J1Ui4W5i5IwgHDF/9ZnULCqfySS6hAFP7XNiojuRKfKUdCQUc=
-X-Received: by 2002:a17:906:b213:b0:7c0:f7af:7c5e with SMTP id
- p19-20020a170906b21300b007c0f7af7c5emr13505347ejz.406.1670551928446; Thu, 08
- Dec 2022 18:12:08 -0800 (PST)
+        Thu, 8 Dec 2022 20:58:44 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AED826ABE
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:58:38 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSvL2591vzJqNd;
+        Fri,  9 Dec 2022 09:57:46 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 9 Dec 2022 09:58:36 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>
+CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next resend] mm: hwposion: support recovery from ksm_might_need_to_copy()
+Date:   Fri, 9 Dec 2022 10:15:25 +0800
+Message-ID: <20221209021525.196276-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-11-guoren@kernel.org>
- <87mt7yw6eh.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87mt7yw6eh.fsf@all.your.base.are.belong.to.us>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 9 Dec 2022 10:11:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR+zbuJDQuW+=wEmQjF7xEsMokBW+yvTxXff38VYwSSKA@mail.gmail.com>
-Message-ID: <CAJF2gTR+zbuJDQuW+=wEmQjF7xEsMokBW+yvTxXff38VYwSSKA@mail.gmail.com>
-Subject: Re: [PATCH -next V10 10/10] riscv: stack: Add config of thread stack size
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,33 +46,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 6:12 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
-te:
->
-> guoren@kernel.org writes:
->
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > 0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
->
-> checkpatch complains here: Use "commit SHA...".
-Okay, I would check that.
+When the kernel copy a page from ksm_might_need_to_copy(), but runs
+into an uncorrectable error, it will crash since poisoned page is
+consumed by kernel, this is similar to Copy-on-write poison recovery,
+When an error is detected during the page copy, return VM_FAULT_HWPOISON,
+which help us to avoid system crash. Note, memory failure on a KSM
+page will be skipped, but still call memory_failure_queue() to be
+consistent with general memory failure process.
 
->
-> > thread size mandatory, but some scenarios, such as D1 with a small
-> > memory footprint, would suffer from that. After independent irq stack
-> > support, let's give users a choice to determine their custom stack size=
-.
->
-> ...and again, my "why is this in the generic entry" series rant. :-)
-I would remove it from the generic entry series.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/ksm.c      | 8 ++++++--
+ mm/memory.c   | 3 +++
+ mm/swapfile.c | 2 +-
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
->
->
-> Bj=C3=B6rn
+diff --git a/mm/ksm.c b/mm/ksm.c
+index dd02780c387f..83e2f74ae7da 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
+ 		new_page = NULL;
+ 	}
+ 	if (new_page) {
+-		copy_user_highpage(new_page, page, address, vma);
+-
++		if (copy_mc_user_highpage(new_page, page, address, vma)) {
++			put_page(new_page);
++			new_page = ERR_PTR(-EHWPOISON);
++			memory_failure_queue(page_to_pfn(page), 0);
++			return new_page;
++		}
+ 		SetPageDirty(new_page);
+ 		__SetPageUptodate(new_page);
+ 		__SetPageLocked(new_page);
+diff --git a/mm/memory.c b/mm/memory.c
+index aad226daf41b..8711488f5305 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		if (unlikely(!page)) {
+ 			ret = VM_FAULT_OOM;
+ 			goto out_page;
++		} els if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
++			ret = VM_FAULT_HWPOISON;
++			goto out_page;
+ 		}
+ 		folio = page_folio(page);
+ 
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 908a529bca12..d479811bc311 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1767,7 +1767,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 
+ 	swapcache = page;
+ 	page = ksm_might_need_to_copy(page, vma, addr);
+-	if (unlikely(!page))
++	if (IS_ERR_OR_NULL(page))
+ 		return -ENOMEM;
+ 
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+-- 
+2.35.3
 
-
-
---=20
-Best Regards
- Guo Ren
