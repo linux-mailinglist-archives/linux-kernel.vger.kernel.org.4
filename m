@@ -2,72 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD57F6484EA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD9E6484EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiLIPVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S230383AbiLIPVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiLIPVb (ORCPT
+        with ESMTP id S230350AbiLIPVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:21:31 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288218B383
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:21:28 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id l16-20020a056e02067000b0030325bbd570so85297ilt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:21:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9pSyhnAA/+sF+8/dS4NvF8BdyEwfdVTfddEx2JWC8Ts=;
-        b=z31XRU5OifrFkqp9uPKhSM2FlSeWtxig6NYckVRo6jw+agMmYS85QPoJJk4K1KWuJo
-         DTInCul8S9rYW+Eoz+rSf6g4T7Pd9oMTPR5X9FPxR+OM+t4K1HKzYteAr01Jaka71F74
-         OTBadkqeNb850Y6bqIugccDK0bfzZ+4mzF14ORsmooV5j23zmOlQDipk2HmlUDjUdMGk
-         j/AJagtlrkZOPlMjaOLWzj00FnyUk2H+nmirq/89kqVWquqCjkRKsb7Xiua8MMThCziy
-         53hcwraGltsTS3fLU9mHEwU3Wifh2IDUVDHq4+vpPiXCM0xMS6tb9d/5aeg1u8Fh0ONk
-         yBig==
-X-Gm-Message-State: ANoB5pm2p8cPiXYW9h8JUn/MUIcF23fD6Y0IFAsUOX2egZOIWhLbWQL+
-        9CG8/lE/Cp8Tr3CV+OqrbWs+kSKQK0gEi9zdY6VyWzu/x4Jf
-X-Google-Smtp-Source: AA0mqf5Hy0RDGd/9jAqVuH4xFL9kwpdHK9cN19m0z8Gr/snizWkn2LrDDhNJFWHZdUAnIpsFWP8ZUqAOLXewhBy0mQhPOgkihnNM
+        Fri, 9 Dec 2022 10:21:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A07A89AE8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:21:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30478B82880
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 15:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6003AC433D2;
+        Fri,  9 Dec 2022 15:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670599292;
+        bh=t0lVAw719wJMGoW0vLiX6pAY3HGPB2w5ghH0QudCZrY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eXLMahT19SRzq5SXeqdOrCTLPVTCwVLYVO6bMvb5Mv723d57w3y3ktcTjhmObfktj
+         yNlpFacLpzJve4Wu9akHnfQ/gl9P1bRd+tcfGLSxEZSaX9Vfh62UbZWK2rouiyaYNG
+         Rajq2toj5NXdt9fWjBX5+72du79Vu26prbNJiaNY=
+Date:   Fri, 9 Dec 2022 16:21:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] platform: Provide a remove callback that returns no value
+Message-ID: <Y5NSevR9kb1UPvtQ@kroah.com>
+References: <20221209150914.3557650-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:38a0:b0:38a:518e:d230 with SMTP id
- b32-20020a05663838a000b0038a518ed230mr7617894jav.255.1670599287495; Fri, 09
- Dec 2022 07:21:27 -0800 (PST)
-Date:   Fri, 09 Dec 2022 07:21:27 -0800
-In-Reply-To: <20221209073632.1861-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000017e09605ef66b518@google.com>
-Subject: Re: [syzbot] possible deadlock in ntfs_fiemap
-From:   syzbot <syzbot+96cee7d33ca3f87eee86@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221209150914.3557650-1-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Dec 09, 2022 at 04:09:14PM +0100, Uwe Kleine-König wrote:
+> struct platform_driver::remove returning an integer made driver authors
+> expect that returning an error code was proper error handling. However
+> the driver core ignores the error and continues to remove the device
+> because there is nothing the core could do anyhow and reentering the
+> remove callback again is only calling for trouble.
+> 
+> So this is an source for errors typically yielding resource leaks in the
+> error path.
+> 
+> As there are too many platform drivers to neatly convert them all to
+> return void in a single go, do it in several steps after this patch:
+> 
+>  a) Convert all drivers to implement .remove_new() returning void instead
+>     of .remove() returning int;
+>  b) Change struct platform_driver::remove() to return void and so make
+>     it identical to .remove_new();
+>  c) Change all drivers back to .remove() now with the better prototype;
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Change c) seems like it will be just as much work as a), right?
 
-Reported-and-tested-by: syzbot+96cee7d33ca3f87eee86@syzkaller.appspotmail.com
+>  d) drop struct platform_driver::remove_new().
 
-Tested on:
 
-commit:         0d1409e4 Merge tag 'drm-fixes-2022-12-09' of git://ano..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=12726a43880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=96cee7d33ca3f87eee86
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14dba623880000
 
-Note: testing is done by a robot and is best-effort only.
+
+> 
+> While this touches all drivers eventually twice, steps a) and c) can be
+> done one driver after another and so reduces coordination efforts
+> immensely and simplifies review.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/base/platform.c         |  4 +++-
+>  include/linux/platform_device.h | 11 +++++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index 968f3d71eeab..a4938d1c8fe1 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -1416,7 +1416,9 @@ static void platform_remove(struct device *_dev)
+>  	struct platform_driver *drv = to_platform_driver(_dev->driver);
+>  	struct platform_device *dev = to_platform_device(_dev);
+>  
+> -	if (drv->remove) {
+> +	if (drv->remove_new) {
+> +		drv->remove_new(dev);
+> +	} else if (drv->remove) {
+>  		int ret = drv->remove(dev);
+>  
+>  		if (ret)
+> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+> index b0d5a253156e..b845fd83f429 100644
+> --- a/include/linux/platform_device.h
+> +++ b/include/linux/platform_device.h
+> @@ -207,7 +207,18 @@ extern void platform_device_put(struct platform_device *pdev);
+>  
+>  struct platform_driver {
+>  	int (*probe)(struct platform_device *);
+> +
+> +	/*
+> +	 * Traditionally the remove callback returned an int which however is
+> +	 * ignored by the driver core. This led to wrong expectations by driver
+> +	 * authors who thought returning an error code was a valid error
+> +	 * handling strategy. To convert to a callback returning void, new
+> +	 * drivers should implement .remove_new() until the conversion it done
+> +	 * that eventually makes .remove() return void.
+> +	 */
+>  	int (*remove)(struct platform_device *);
+> +	void (*remove_new)(struct platform_device *);
+> +
+
+Who is going to do the work of the conversion to this new prototype?
+I'll be glad to take this, but I don't want to see a half-finished
+conversion happen and us stuck with a "new" and "old" call, as that
+would just be a mess.
+
+thanks,
+
+greg k-h
