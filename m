@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144DB64888C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BC364888D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiLISlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S229996AbiLISlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLISlf (ORCPT
+        with ESMTP id S230023AbiLISlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:41:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7E59FFB;
-        Fri,  9 Dec 2022 10:41:35 -0800 (PST)
+        Fri, 9 Dec 2022 13:41:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE98663CA;
+        Fri,  9 Dec 2022 10:41:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95ABB622FB;
-        Fri,  9 Dec 2022 18:41:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A663BC433D2;
-        Fri,  9 Dec 2022 18:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670611294;
-        bh=HLCdf8lbrHwu/F+e8HIf65ZhPNgQNds3cOGyMfVwQPk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=I9aZVSS/VKQ1Xy4vYME7UQLO2LIA5iYVtBgW4KmYXZNmyYM5XIdeVuccv5sx+vcGG
-         01he4ygi8EPnt9wsUbZ6qafFdgQ3ZmBZ4I0pIab+3FbGsWGPVkAPflFRk5y9R+ejtY
-         Gc5G32aywSJjLishtIWlp6UftbZQjBbe/6UOxX4WsOALIXYuWA0tqeNASxy0ElUZAP
-         +YtCO19hY45gPmvdL1YhAY4GhYuYhkoJ834P1I4vPcpIhx6SldQChkie1P/kKhoUQ1
-         GsXgySt+u3R173MFUagSXzxtSlGuw+s+ITSJnEWvufUne8dw/wb05HCMjtC3gbCNTZ
-         GMOQ6L4jZUhHw==
-Date:   Fri, 9 Dec 2022 18:41:29 +0000
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3233062300;
+        Fri,  9 Dec 2022 18:41:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFE7C433D2;
+        Fri,  9 Dec 2022 18:41:46 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 13:41:44 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL for v6.1] media fixes
-Message-ID: <20221209184129.1fdf3973@sal.lan>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH v2] x86/mm/kmmio: Use rcu_read_lock_sched_notrace()
+Message-ID: <20221209134144.04f33626@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Please pull from:
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-4
+The mmiotrace tracer is "special". The purpose is to help reverse engineer
+binary drivers by removing the memory allocated by the driver and when the
+driver goes to access it, a fault occurs, the mmiotracer will record what
+the driver was doing and then do the work on its behalf by single stepping
+through the process.
 
-For a v4l-core fix related to validating DV timings related to video
-blanking values.
+But to achieve this ability, it must do some special things. One is to
+take the rcu_read_lock() when the fault occurs, and then release it in the
+breakpoint that is single stepping. This makes lockdep unhappy, as it
+changes the state of RCU from within an exception that is not contained in
+that exception, and we get a nasty splat from lockdep.
 
-Thanks!
-Mauro
+Instead, switch to rcu_read_lock_sched_notrace() as the RCU sched variant
+has the same grace period as normal RCU. This is basically the same as
+rcu_read_lock() but does not make lockdep complain about it.
 
+Note, the preempt_disable() is still needed as it uses preempt_enable_no_resched().
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
+Changes since v1: https://lore.kernel.org/linux-trace-kernel/20221206191229.813199661@goodmis.org
+  (also called [PATCH 2/2] x86/mm/kmmio: Remove rcu_read_lock())
 
-The following changes since commit de547896aac606a00435a219757a940ece142bf0:
+  - Instead of simply removing rcu_read_lock() call rcu_read_lock_sched_notrace()
 
-  media: vivid.rst: loop_video is set on the capture devnode (2022-10-25 16:43:54 +0100)
+ arch/x86/mm/kmmio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-4
-
-for you to fetch changes up to 5eef2141776da02772c44ec406d6871a790761ee:
-
-  media: v4l2-dv-timings.c: fix too strict blanking sanity checks (2022-11-23 12:02:30 +0000)
-
-----------------------------------------------------------------
-media fixes for v6.1-rc9
-
-----------------------------------------------------------------
-Hans Verkuil (1):
-      media: v4l2-dv-timings.c: fix too strict blanking sanity checks
-
- drivers/media/v4l2-core/v4l2-dv-timings.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
+index edb486450158..853c49877c16 100644
+--- a/arch/x86/mm/kmmio.c
++++ b/arch/x86/mm/kmmio.c
+@@ -254,7 +254,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+ 	 * again.
+ 	 */
+ 	preempt_disable();
+-	rcu_read_lock();
++	rcu_read_lock_sched_notrace();
+ 
+ 	faultpage = get_kmmio_fault_page(page_base);
+ 	if (!faultpage) {
+@@ -323,7 +323,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+ 	return 1; /* fault handled */
+ 
+ no_kmmio:
+-	rcu_read_unlock();
++	rcu_read_unlock_sched_notrace();
+ 	preempt_enable_no_resched();
+ 	return ret;
+ }
+@@ -363,7 +363,7 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
+ 	/* These were acquired in kmmio_handler(). */
+ 	ctx->active--;
+ 	BUG_ON(ctx->active);
+-	rcu_read_unlock();
++	rcu_read_unlock_sched_notrace();
+ 	preempt_enable_no_resched();
+ 
+ 	/*
+-- 
+2.35.1
 
