@@ -2,413 +2,739 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009F9648A77
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF128648A7B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiLIWEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:04:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S229983AbiLIWFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLIWEc (ORCPT
+        with ESMTP id S229891AbiLIWFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:04:32 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0988EA3854;
-        Fri,  9 Dec 2022 14:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670623471; x=1702159471;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=C/V7FpOekR7RB0etTZgZAaCB1C693pycMGUAGZRs9og=;
-  b=U3FVG025OLJE3jsjP4ctZgTG29s9xxclqPtzUXNU+kTzPdMsw1mjT9Nb
-   Jxy7ztQoJt6jVSxVN82znyaIKBd1luwEztnhNYRbj1b3M1zMJRkdPrgwn
-   PYehlhtCD0R2IBbVcwQCN5/DY/IsvQlMkbVpI/lc6u0E/ybMejKUX0u2Y
-   +QAlYAmqtIWkdG25H+Qn2eRGGOSlFbsQvJpKYWPOohiAhmUZgaRW549Rj
-   bnpAoIBfrr7ugiZB1cbosnO9jB7TasPn4trnzEBHrNCWEjrSmcm8PqIiA
-   EnrKGGiFdl+1g8HNUZdv4L9zq1ynjZjcF4ikL2jwsyo3ZhAIdWSma/cs9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="305199063"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="305199063"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 14:04:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="736347567"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="736347567"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Dec 2022 14:04:30 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 9 Dec 2022 14:04:29 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 9 Dec 2022 14:04:29 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 9 Dec 2022 14:04:29 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EDsOqUpErLRco+cQU4xYI2I9yq+Wv5BaqQEdOjpHYun/Vq0xpN9Bp91YSOwJPD2JxLFNV7NqCbNY1skKA/sRJMQp5n8pOpVbrbBAk7XttEqGFnFC2tRm5jiAFUELhIj5+qBoWBAIGDCGR70WIPFrsyeeVRjIiDryuYcpRro49pCo++4nsmkcviJPENtGVDm6RcdMkDiuQMPPfzL0Caso+wU6G+KXZsmYCYo0apEEP3BRvnQl98GfaOJoq793yhopHleTrnbst5qb1mRxPvJfk1dJt0RE8930KJFTHLhk+/0E5s5PTLF1vX1ZT20OFAcKjJBl9t5dQS+0X5KsnLromA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ita+hmoH47LlLtHcyH9HpfdWqO76C9wlHHfCqNyRbqU=;
- b=juK+ymBdEUELRymHlLbPvVLQqxJJssZjIujOMxB/NSpUxmRL3ilkdgaLpq28qdaLP54a6RFDB4I+s3JJfsfp/4+MVK0OhxOklOlJx/aRC82b0fyie5HV77AVX7CgeEZL25LhW2J9F7csZzvlXavbo7fQr8zeW+cYNyjBnSRSAxGzz4x2uNB9DdDuwhiVQM8yD1s3YW8PjXys55biESvQhALNbMOwI2Z9iNUvRcyi7Ui/gQsTVXzF6rynJzQp9dA8AUcWk8GNPiiK55uaZ4qdhTY4U5SvHkPIeH74rZgWJ4vHBQu3GpXuqzyNid7uw5OmJLPT+MMs4vqxaLgDCYcWYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by SJ2PR11MB7520.namprd11.prod.outlook.com
- (2603:10b6:a03:4c2::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 22:04:26 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.019; Fri, 9 Dec 2022
- 22:04:26 +0000
-Date:   Fri, 9 Dec 2022 14:04:23 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: RE: [PATCH V3 3/8] cxl/mem: Trace General Media Event Record
-Message-ID: <6393b0e7971ba_579c129446@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221208052115.800170-1-ira.weiny@intel.com>
- <20221208052115.800170-4-ira.weiny@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221208052115.800170-4-ira.weiny@intel.com>
-X-ClientProxiedBy: BY5PR03CA0008.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::18) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Fri, 9 Dec 2022 17:05:13 -0500
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4D4A430E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:05:06 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A29092008F;
+        Fri,  9 Dec 2022 23:05:03 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] arm64: dts: qcom: Use plural _gpios node label for PMIC gpios
+Date:   Fri,  9 Dec 2022 23:04:49 +0100
+Message-Id: <20221209220450.1793421-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|SJ2PR11MB7520:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03e3714a-192d-4359-4ffe-08dada315676
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QP/Po20U9joWuOQf7o0A98R6HBSOkkzZiQ7ysPaoDE0mWriFXNCp1cFqFoVYn2wWzPa2/SP204ta0htH/oq6tmXpAVR753NeJ5RRvIum5fYL4P4zQZ3vYirQsCqJ90Rfpi+XP1PScsC7JWro7XguGAQ4jMam66vjclfom6eDZO0GHVBdt5oYb/1+Vnd6traVe2+wpFPS410XhlXdA/cvSNNVsicEAwbOfhGTPIuv0Sqv3eadb5AwxMeXRglnaOvFfpdh4SOKFWCh0jWVVu+PK+TZR6vYvG2Xopmkboa10HRkp+NroicgdBeS+0wWqviVgXDBDmyWR1UBwYRmBgY78wNpHwUxggQpYDIZ1hfxT288wZUzrx6KIh8UO+I4SULVU8Bpg8e7Zk/1jNaSU6xAzTCwlpR4HWubB/xgFar3tqWzcmmV5Z7uf/sohDXcPg+CnZ37uTHJkix8822onaqtQ6pORZjyCnbI98+Zyu6VehdsvzeSjTF1sO8JTTad1nG/R65HSGDkEChN71o0ecXqutMvtr1Oas2zrL47NASuarBBLCxZnJQjHwx/u/SiaITa/nyXRRuVQDPEOu11fNfVrlpXWz5LDsT5b9hdCcnCTUPp4umVHh6hM3pwv87jzul1gwCXH1ZsP+PmdZUWx6/LQA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(38100700002)(2906002)(82960400001)(6862004)(6200100001)(8936002)(5660300002)(83380400001)(86362001)(54906003)(316002)(6512007)(478600001)(186003)(6486002)(6666004)(9686003)(41300700001)(4326008)(8676002)(26005)(6506007)(66556008)(66946007)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GnUFxriAKmaFW5rs+QJWmhaNUJMWkqwbFAr7yJPJ8Ahg2KlrOvoUfE03nvms?=
- =?us-ascii?Q?ix84a/Brypa9Qk5dPNopVXpt5JV6F6mvFilzP9lWaIMH498mnAKwPLoTISC+?=
- =?us-ascii?Q?AM3QybWcCMHc/dR5cwZRDuKxLqKcyDS3bPCfKpqSTBnKqwNPUVaiUwVTFHJI?=
- =?us-ascii?Q?OlAraR1TowgmrO+IW1ujqtXv5gMyoLuUGAzoTEsqt3RSEi3zn3AAzNSPxCQp?=
- =?us-ascii?Q?/pk5QrGnFHUF2YQf6qug2AfGGq2eJyiiIDRvuj6hZ/QNfzH1ALPtOWz/GE5+?=
- =?us-ascii?Q?2fCpgHBdRfxgyvHWpGl5WQYSVRi/YpLa/QEeXAtkm9yO1LmS7Xwm+fRzL5vl?=
- =?us-ascii?Q?iNZUego4C60IqmlQFhMTZYMagZ5rhrQOkc1MTqhEc/WWaheCsPY4wItoKUH0?=
- =?us-ascii?Q?lTKdvQUXwMc0C+UkI6dso3foje9Bv8wmEm2Roy3c8bqG1mKFqZuan4na5xUq?=
- =?us-ascii?Q?ABWTiHHU+7vHsFA/mb6xsQsKAz+jObkVErjV/ygksbu2DjgK7Y9sNPjotpWd?=
- =?us-ascii?Q?O++x+BQeUAPbJmrvVdPRCOszGcM3Ql7RTm3AyQTj50XZlpZsl9sZwVswz2xT?=
- =?us-ascii?Q?zJmmq5yJ7vPG9jflVUWPX81SkI2rCNjI0k9oqEz8jBPchL0eXCMnRKm0XTFQ?=
- =?us-ascii?Q?xMRjKPBXEZelVWRPw73EUShfaF+IU9K2txnQZbxStMjagI1Apqq0rACr759d?=
- =?us-ascii?Q?DKlvSBatznwAyVvZK9M1MTpp/zUDUJXBgyQ+PSzp1/dueh3ESCOGcdVc0zeG?=
- =?us-ascii?Q?IXu/pxPMl9170cYvULkGlKarY/t60gBZhEEdQkH+JsU3NECNKcxVEKpw0w1I?=
- =?us-ascii?Q?ck2SZFluXTFbkoP+Z8adWKvfVK85orqjo/bqGCD0aKzuM9rTLCBrf/fNrxHG?=
- =?us-ascii?Q?CXU0XtvtvW7qMGZdhmxxuEKhc9MSxreEGLJ83DrywRYXXf64tGzFg9tBEdpp?=
- =?us-ascii?Q?kqIw5qepIU7XiWSprUMqaSm5l9azBep5FQXV4YCNHFs+1bP0KzODRowx22Pg?=
- =?us-ascii?Q?DYOOuGIyro2VCsxgBM5/V9HNoRNJ0ntJX9xCsp/AReHcvTXBnRDNru/wrlOP?=
- =?us-ascii?Q?x27CyblsWifjQV+4zc8onFHvhVR8FRLQdCSPkE++RRAAKH/fxaQ4QJXHyyi3?=
- =?us-ascii?Q?Yjxe8mQJw4N+jorSzB0rliHOclLHDzkdknJTW9/iLdnjou77L8tGFndCUBaN?=
- =?us-ascii?Q?Qpqy/Z+1py8yprG1q6XTHiqp3Un4PhZtBZEQ88Cmk5HSNnGyuRx5n7VbcQiv?=
- =?us-ascii?Q?RoSu5U7aEwaCnLYaZQYz5x3Dnzab1T2xa8y2AufJ4fEF+dJXZjkR/6yBGMie?=
- =?us-ascii?Q?6g0pfZnErijT/y7UynJbbXvYOK0MyWqsEvZNzcWaeFTt2vVKK9ar9wnGqrZb?=
- =?us-ascii?Q?wf+Ux7DK3tTZMrldS69RiXWO8wHw4v8antCh82UdOkTmiWNfb4U9V2+sjhvj?=
- =?us-ascii?Q?VKdIWf6UuxqW1AWITam1+vcbbKXh9uFOgTcTWwwdZgXlInBWaZwkNY08ykTH?=
- =?us-ascii?Q?/sfYa94YUWbu/e8Zyml7hG6xKJEd6lmGIhRvZe/TmwM3q+aB7+a1Vjv1k8Yu?=
- =?us-ascii?Q?CMDnkxxpmAULEt+Gs49/5zR6jk3asS8nvUYMueH/c4nvO+X0md4NZ6uupiO+?=
- =?us-ascii?Q?0Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03e3714a-192d-4359-4ffe-08dada315676
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 22:04:26.7536
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: REShB3PFs2xK6OjN5a8Ap6DQls15Hw6NxfFUMdnzxP8hsuMtm5HGpB7Uoi326KWHgJ2yNU6f+Pvf8OItw3uRs7ix1UK5UU4cn6nHstazsTQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7520
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ira.weiny@ wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL rev 3.0 section 8.2.9.2.1.1 defines the General Media Event Record.
-> 
-> Determine if the event read is a general media record and if so trace
-> the record as a General Media Event Record.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from V2:
-> 	Dan
-> 		Remove trace_*_enabled() calls
-> 		Pass struct device to trace points
-> 
-> Changes from V1:
-> 	Jonathan
-> 		fix spec references for CXL rev 3.0
-> 		Make flags all caps
-> 
-> Changes from RFC v2:
-> 	Output DPA flags as a single field
-> 	Ensure names of fields match what TP_print outputs
-> 	Steven
-> 		prefix TRACE_EVENT with 'cxl_'
-> 	Jonathan
-> 		Remove Reserved field
-> 
-> Changes from RFC:
-> 	Add reserved byte array
-> 	Use common CXL event header record macros
-> 	Jonathan
-> 		Use unaligned_le{24,16} for unaligned fields
-> 		Don't use the inverse of phy addr mask
-> 	Dave Jiang
-> 		s/cxl_gen_media_event/general_media
-> 		s/cxl_evt_gen_media/cxl_event_gen_media
-> ---
->  drivers/cxl/core/mbox.c  |  30 +++++++++-
->  drivers/cxl/core/trace.h | 124 +++++++++++++++++++++++++++++++++++++++
->  drivers/cxl/cxlmem.h     |  19 ++++++
->  3 files changed, 171 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 2b25691a9b09..0d8c66f1cdc5 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -718,6 +718,32 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
->  
-> +/*
-> + * General Media Event Record
-> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> + */
-> +static const uuid_t gen_media_event_uuid =
-> +	UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
-> +		  0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6);
-> +
-> +static void cxl_trace_event_record(const struct device *dev,
-> +				   enum cxl_event_log_type type,
-> +				   struct cxl_event_record_raw *record)
-> +{
-> +	uuid_t *id = &record->hdr.id;
-> +
-> +	if (uuid_equal(id, &gen_media_event_uuid)) {
-> +		struct cxl_event_gen_media *rec =
-> +				(struct cxl_event_gen_media *)record;
-> +
-> +		trace_cxl_general_media(dev, type, rec);
-> +		return;
-> +	}
-> +
-> +	/* For unknown record types print just the header */
-> +	trace_cxl_generic_event(dev, type, record);
-> +}
-> +
->  static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
->  				  enum cxl_event_log_type log,
->  				  struct cxl_get_event_payload *get_pl)
-> @@ -810,8 +836,8 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
->  			int i;
->  
->  			for (i = 0; i < nr_rec; i++)
-> -				trace_cxl_generic_event(cxlds->dev, type,
-> -							&payload->records[i]);
-> +				cxl_trace_event_record(cxlds->dev, type,
-> +						       &payload->records[i]);
->  
->  			rc = cxl_clear_event_record(cxlds, type, payload);
->  			if (rc) {
-> diff --git a/drivers/cxl/core/trace.h b/drivers/cxl/core/trace.h
-> index 24eef6909f13..82462942590b 100644
-> --- a/drivers/cxl/core/trace.h
-> +++ b/drivers/cxl/core/trace.h
-> @@ -223,6 +223,130 @@ TRACE_EVENT(cxl_generic_event,
->  		__print_hex(__entry->data, CXL_EVENT_RECORD_DATA_LENGTH))
->  );
->  
-> +/*
-> + * Physical Address field masks
-> + *
-> + * General Media Event Record
-> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> + *
-> + * DRAM Event Record
-> + * CXL rev 3.0 section 8.2.9.2.1.2; Table 8-44
-> + */
-> +#define CXL_DPA_FLAGS_MASK			0x3F
-> +#define CXL_DPA_MASK				(~CXL_DPA_FLAGS_MASK)
-> +
-> +#define CXL_DPA_VOLATILE			BIT(0)
-> +#define CXL_DPA_NOT_REPAIRABLE			BIT(1)
-> +#define show_dpa_flags(flags)	__print_flags(flags, "|",		   \
-> +	{ CXL_DPA_VOLATILE,			"VOLATILE"		}, \
-> +	{ CXL_DPA_NOT_REPAIRABLE,		"NOT_REPAIRABLE"	}  \
-> +)
-> +
-> +/*
-> + * General Media Event Record - GMER
-> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> + */
-> +#define CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT		BIT(0)
-> +#define CXL_GMER_EVT_DESC_THRESHOLD_EVENT		BIT(1)
-> +#define CXL_GMER_EVT_DESC_POISON_LIST_OVERFLOW		BIT(2)
-> +#define show_event_desc_flags(flags)	__print_flags(flags, "|",		   \
-> +	{ CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,		"UNCORRECTABLE_EVENT"	}, \
-> +	{ CXL_GMER_EVT_DESC_THRESHOLD_EVENT,		"THRESHOLD_EVENT"	}, \
-> +	{ CXL_GMER_EVT_DESC_POISON_LIST_OVERFLOW,	"POISON_LIST_OVERFLOW"	}  \
-> +)
-> +
-> +#define CXL_GMER_MEM_EVT_TYPE_ECC_ERROR			0x00
-> +#define CXL_GMER_MEM_EVT_TYPE_INV_ADDR			0x01
-> +#define CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR		0x02
-> +#define show_mem_event_type(type)	__print_symbolic(type,			\
-> +	{ CXL_GMER_MEM_EVT_TYPE_ECC_ERROR,		"ECC Error" },		\
-> +	{ CXL_GMER_MEM_EVT_TYPE_INV_ADDR,		"Invalid Address" },	\
-> +	{ CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR,	"Data Path Error" }	\
-> +)
-> +
-> +#define CXL_GMER_TRANS_UNKNOWN				0x00
-> +#define CXL_GMER_TRANS_HOST_READ			0x01
-> +#define CXL_GMER_TRANS_HOST_WRITE			0x02
-> +#define CXL_GMER_TRANS_HOST_SCAN_MEDIA			0x03
-> +#define CXL_GMER_TRANS_HOST_INJECT_POISON		0x04
-> +#define CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB		0x05
-> +#define CXL_GMER_TRANS_INTERNAL_MEDIA_MANAGEMENT	0x06
-> +#define show_trans_type(type)	__print_symbolic(type,					\
-> +	{ CXL_GMER_TRANS_UNKNOWN,			"Unknown" },			\
-> +	{ CXL_GMER_TRANS_HOST_READ,			"Host Read" },			\
-> +	{ CXL_GMER_TRANS_HOST_WRITE,			"Host Write" },			\
-> +	{ CXL_GMER_TRANS_HOST_SCAN_MEDIA,		"Host Scan Media" },		\
-> +	{ CXL_GMER_TRANS_HOST_INJECT_POISON,		"Host Inject Poison" },		\
-> +	{ CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB,		"Internal Media Scrub" },	\
-> +	{ CXL_GMER_TRANS_INTERNAL_MEDIA_MANAGEMENT,	"Internal Media Management" }	\
-> +)
-> +
-> +#define CXL_GMER_VALID_CHANNEL				BIT(0)
-> +#define CXL_GMER_VALID_RANK				BIT(1)
-> +#define CXL_GMER_VALID_DEVICE				BIT(2)
-> +#define CXL_GMER_VALID_COMPONENT			BIT(3)
-> +#define show_valid_flags(flags)	__print_flags(flags, "|",		   \
-> +	{ CXL_GMER_VALID_CHANNEL,			"CHANNEL"	}, \
-> +	{ CXL_GMER_VALID_RANK,				"RANK"		}, \
-> +	{ CXL_GMER_VALID_DEVICE,			"DEVICE"	}, \
-> +	{ CXL_GMER_VALID_COMPONENT,			"COMPONENT"	}  \
-> +)
-> +
-> +TRACE_EVENT(cxl_general_media,
-> +
-> +	TP_PROTO(const struct device *dev, enum cxl_event_log_type log,
-> +		 struct cxl_event_gen_media *rec),
-> +
-> +	TP_ARGS(dev, log, rec),
-> +
-> +	TP_STRUCT__entry(
-> +		CXL_EVT_TP_entry
-> +		/* General Media */
-> +		__field(u64, dpa)
-> +		__field(u8, descriptor)
-> +		__field(u8, type)
-> +		__field(u8, transaction_type)
-> +		__field(u8, channel)
-> +		__field(u32, device)
-> +		__array(u8, comp_id, CXL_EVENT_GEN_MED_COMP_ID_SIZE)
-> +		__field(u16, validity_flags)
-> +		/* Following are out of order to pack trace record */
-> +		__field(u8, rank)
-> +		__field(u8, dpa_flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		CXL_EVT_TP_fast_assign(dev, log, rec->hdr);
-> +
-> +		/* General Media */
-> +		__entry->dpa = le64_to_cpu(rec->phys_addr);
-> +		__entry->dpa_flags = __entry->dpa & CXL_DPA_FLAGS_MASK;
-> +		/* Mask after flags have been parsed */
-> +		__entry->dpa &= CXL_DPA_MASK;
-> +		__entry->descriptor = rec->descriptor;
-> +		__entry->type = rec->type;
-> +		__entry->transaction_type = rec->transaction_type;
-> +		__entry->channel = rec->channel;
-> +		__entry->rank = rec->rank;
-> +		__entry->device = get_unaligned_le24(rec->device);
-> +		memcpy(__entry->comp_id, &rec->component_id,
-> +			CXL_EVENT_GEN_MED_COMP_ID_SIZE);
-> +		__entry->validity_flags = get_unaligned_le16(&rec->validity_flags);
-> +	),
-> +
-> +	CXL_EVT_TP_printk("dpa=%llx dpa_flags='%s' " \
-> +		"descriptor='%s' type='%s' transaction_type='%s' channel=%u rank=%u " \
-> +		"device=%x comp_id=%s validity_flags='%s'",
-> +		__entry->dpa, show_dpa_flags(__entry->dpa_flags),
-> +		show_event_desc_flags(__entry->descriptor),
-> +		show_mem_event_type(__entry->type),
-> +		show_trans_type(__entry->transaction_type),
-> +		__entry->channel, __entry->rank, __entry->device,
-> +		__print_hex(__entry->comp_id, CXL_EVENT_GEN_MED_COMP_ID_SIZE),
-> +		show_valid_flags(__entry->validity_flags)
-> +	)
-> +);
-> +
->  #endif /* _CXL_EVENTS_H */
->  
->  #define TRACE_INCLUDE_FILE trace
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 350cb460e7fc..a5f5d4a380af 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -456,6 +456,25 @@ struct cxl_mbox_clear_event_payload {
->  		 (sizeof(__le16) * CXL_CLEAR_EVENT_MAX_HANDLES))) /	\
->  		sizeof(__le16))
->  
-> +/*
-> + * General Media Event Record
-> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
-> + */
-> +#define CXL_EVENT_GEN_MED_COMP_ID_SIZE	0x10
-> +struct cxl_event_gen_media {
-> +	struct cxl_event_record_hdr hdr;
-> +	__le64 phys_addr;
-> +	u8 descriptor;
-> +	u8 type;
-> +	u8 transaction_type;
-> +	u8 validity_flags[2];
-> +	u8 channel;
-> +	u8 rank;
-> +	u8 device[3];
-> +	u8 component_id[CXL_EVENT_GEN_MED_COMP_ID_SIZE];
-> +	u8 reserved[0x2e];
+The gpio node in PMIC dts'es define access to multiple GPIOs.  Most Qcom
+PMICs were already using the plural _gpios label to point to this node,
+but a few PMICs were left behind including the recently-pulled
+pm(i)8950.
 
-If you reflow this one again to make capitalization of symbols
-consistent in the trace prints perhaps change that to decimal, but
-that's not a blocker.
+Rename it from *_gpio to *_gpios for pm6125, pm6150(l), pm8005,
+pm(i)8950, and pm(i)8998.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+---
+
+This was brought up for discussion in [1] but hasn't seen any relevant
+reply, unfortunately.
+
+[1]: https://lore.kernel.org/linux-arm-msm/20221104234435.xwjpwfxs73puvfca@SoMainline.org/
+---
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts  |  8 ++++----
+ .../dts/qcom/msm8998-oneplus-cheeseburger.dts    |  4 ++--
+ .../boot/dts/qcom/msm8998-oneplus-common.dtsi    |  6 +++---
+ .../qcom/msm8998-sony-xperia-yoshino-maple.dts   |  4 ++--
+ .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi    | 16 ++++++++--------
+ .../arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts |  4 ++--
+ arch/arm64/boot/dts/qcom/pm6125.dtsi             |  4 ++--
+ arch/arm64/boot/dts/qcom/pm6150.dtsi             |  4 ++--
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi            |  4 ++--
+ arch/arm64/boot/dts/qcom/pm8005.dtsi             |  4 ++--
+ arch/arm64/boot/dts/qcom/pm8950.dtsi             |  4 ++--
+ arch/arm64/boot/dts/qcom/pm8998.dtsi             |  4 ++--
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi            |  4 ++--
+ arch/arm64/boot/dts/qcom/pmi8998.dtsi            |  4 ++--
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts          |  4 ++--
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi     |  4 ++--
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi       |  4 ++--
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts       | 16 ++++++++--------
+ arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi   |  4 ++--
+ .../boot/dts/qcom/sdm845-oneplus-common.dtsi     |  6 +++---
+ .../arm64/boot/dts/qcom/sdm845-shift-axolotl.dts |  4 ++--
+ .../boot/dts/qcom/sdm845-sony-xperia-tama.dtsi   |  2 +-
+ .../dts/qcom/sdm845-xiaomi-beryllium-common.dtsi |  4 ++--
+ .../boot/dts/qcom/sdm845-xiaomi-polaris.dts      |  4 ++--
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts |  2 +-
+ 25 files changed, 64 insertions(+), 64 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+index 310f7a2df1e8..0e273938b59d 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+@@ -113,7 +113,7 @@ gpio-keys {
+ 			    <&cam_snapshot_pin_a>;
+ 		button-vol-up {
+ 			label = "Volume Up";
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_VOLUMEUP>;
+ 			gpio-key,wakeup;
+@@ -122,7 +122,7 @@ button-vol-up {
+ 
+ 		button-camera-snapshot {
+ 			label = "Camera Snapshot";
+-			gpios = <&pm8998_gpio 7 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 7 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_CAMERA>;
+ 			debounce-interval = <15>;
+@@ -130,7 +130,7 @@ button-camera-snapshot {
+ 
+ 		button-camera-focus {
+ 			label = "Camera Focus";
+-			gpios = <&pm8998_gpio 8 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 8 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_CAMERA_FOCUS>;
+ 			debounce-interval = <15>;
+@@ -338,7 +338,7 @@ pm8005_s1: s1 { /* VDD_GFX supply */
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_up_pin_a: vol-up-active-state {
+ 		pins = "gpio6";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts b/arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts
+index 9fb1fb9b8529..d36b36af49d0 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dts
+@@ -23,7 +23,7 @@ leds {
+ 		pinctrl-0 = <&button_backlight_default>;
+ 
+ 		led-keypad-backlight {
+-			gpios = <&pmi8998_gpio 5 GPIO_ACTIVE_HIGH>;
++			gpios = <&pmi8998_gpios 5 GPIO_ACTIVE_HIGH>;
+ 			color = <LED_COLOR_ID_WHITE>;
+ 			function = LED_FUNCTION_KBD_BACKLIGHT;
+ 			default-state = "off";
+@@ -31,7 +31,7 @@ led-keypad-backlight {
+ 	};
+ };
+ 
+-&pmi8998_gpio {
++&pmi8998_gpios {
+ 	button_backlight_default: button-backlight-state {
+ 		pins = "gpio5";
+ 		function = "gpio";
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
+index 7d4a67d07501..ce03c7c239e5 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
+@@ -92,7 +92,7 @@ gpio-keys {
+ 
+ 		button-vol-down {
+ 			label = "Volume down";
+-			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 			debounce-interval = <15>;
+ 			wakeup-source;
+@@ -100,7 +100,7 @@ button-vol-down {
+ 
+ 		button-vol-up {
+ 			label = "Volume up";
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEUP>;
+ 			debounce-interval = <15>;
+ 			wakeup-source;
+@@ -269,7 +269,7 @@ pm8005_s1: s1 {
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_keys_default: vol-keys-state {
+ 		pins = "gpio5", "gpio6";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
+index 20fe0394a3c1..1868ad649415 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
+@@ -20,7 +20,7 @@ disp_dvdd_vreg: disp-dvdd-vreg {
+ 		regulator-max-microvolt = <1350000>;
+ 		startup-delay-us = <0>;
+ 		enable-active-high;
+-		gpio = <&pmi8998_gpio 10 GPIO_ACTIVE_HIGH>;
++		gpio = <&pmi8998_gpios 10 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&disp_dvdd_en>;
+ 	};
+@@ -37,7 +37,7 @@ &lab {
+ 	qcom,soft-start-us = <200>;
+ };
+ 
+-&pmi8998_gpio {
++&pmi8998_gpios {
+ 	disp_dvdd_en: disp-dvdd-en-active-state {
+ 		pins = "gpio10";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
+index 5da87baa2b23..1f64b70260fe 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
+@@ -25,7 +25,7 @@ div1_mclk: divclk1 {
+ 			pinctrl-names = "default";
+ 			clocks = <&rpmcc RPM_SMD_DIV_CLK1>;
+ 			#clock-cells = <0>;
+-			enable-gpios = <&pm8998_gpio 13 GPIO_ACTIVE_HIGH>;
++			enable-gpios = <&pm8998_gpios 13 GPIO_ACTIVE_HIGH>;
+ 		};
+ 	};
+ 
+@@ -65,7 +65,7 @@ cam_vio_vreg: cam-vio-vreg {
+ 		regulator-name = "cam_vio_vreg";
+ 		startup-delay-us = <0>;
+ 		enable-active-high;
+-		gpio = <&pmi8998_gpio 1 GPIO_ACTIVE_HIGH>;
++		gpio = <&pmi8998_gpios 1 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&cam_vio_default>;
+ 		vin-supply = <&vreg_lvs1a_1p8>;
+@@ -103,7 +103,7 @@ gpio-keys {
+ 			    <&cam_snapshot_pin_a>;
+ 		button-vol-down {
+ 			label = "Volume Down";
+-			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 			gpio-key,wakeup;
+@@ -112,7 +112,7 @@ button-vol-down {
+ 
+ 		button-camera-snapshot {
+ 			label = "Camera Snapshot";
+-			gpios = <&pm8998_gpio 7 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 7 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_CAMERA>;
+ 			debounce-interval = <15>;
+@@ -120,7 +120,7 @@ button-camera-snapshot {
+ 
+ 		button-camera-focus {
+ 			label = "Camera Focus";
+-			gpios = <&pm8998_gpio 8 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 8 GPIO_ACTIVE_LOW>;
+ 			linux,input-type = <EV_KEY>;
+ 			linux,code = <KEY_CAMERA_FOCUS>;
+ 			debounce-interval = <15>;
+@@ -187,7 +187,7 @@ ramoops@ffc00000 {
+ 
+ 	vibrator {
+ 		compatible = "gpio-vibrator";
+-		enable-gpios = <&pmi8998_gpio 5 GPIO_ACTIVE_HIGH>;
++		enable-gpios = <&pmi8998_gpios 5 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&vib_default>;
+ 	};
+@@ -303,7 +303,7 @@ pm8005_s1: s1 {
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_down_pin_a: vol-down-active-state {
+ 		pins = "gpio5";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+@@ -335,7 +335,7 @@ audio_mclk_pin: audio-mclk-pin-active-state {
+ 	};
+ };
+ 
+-&pmi8998_gpio {
++&pmi8998_gpios {
+ 	cam_vio_default: cam-vio-active-state {
+ 		pins = "gpio1";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
+index b1aac7311ef9..7956b151c7a4 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts
+@@ -133,7 +133,7 @@ gpio-keys {
+ 
+ 		key-vol-up {
+ 			label = "Volume up";
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEUP>;
+ 			debounce-interval = <15>;
+ 			wakeup-source;
+@@ -278,7 +278,7 @@ pm8005_s1: s1 { /* VDD_GFX supply */
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_up_key_default: vol-up-key-default-state {
+ 		pins = "gpio6";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/pm6125.dtsi b/arch/arm64/boot/dts/qcom/pm6125.dtsi
+index 1c8ccda26ffb..59092a551a16 100644
+--- a/arch/arm64/boot/dts/qcom/pm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm6125.dtsi
+@@ -136,11 +136,11 @@ pm6125_rtc: rtc@6000 {
+ 			status = "disabled";
+ 		};
+ 
+-		pm6125_gpio: gpio@c000 {
++		pm6125_gpios: gpio@c000 {
+ 			compatible = "qcom,pm6125-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm6125_gpio 0 0 9>;
++			gpio-ranges = <&pm6125_gpios 0 0 9>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pm6150.dtsi b/arch/arm64/boot/dts/qcom/pm6150.dtsi
+index 3d91fb405ca2..2e6afa296141 100644
+--- a/arch/arm64/boot/dts/qcom/pm6150.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm6150.dtsi
+@@ -88,11 +88,11 @@ pm6150_adc_tm: adc-tm@3500 {
+ 			status = "disabled";
+ 		};
+ 
+-		pm6150_gpio: gpio@c000 {
++		pm6150_gpios: gpio@c000 {
+ 			compatible = "qcom,pm6150-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm6150_gpio 0 0 10>;
++			gpio-ranges = <&pm6150_gpios 0 0 10>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pm6150l.dtsi b/arch/arm64/boot/dts/qcom/pm6150l.dtsi
+index 90aac61ad264..2479625ed08a 100644
+--- a/arch/arm64/boot/dts/qcom/pm6150l.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm6150l.dtsi
+@@ -95,11 +95,11 @@ pm6150l_adc_tm: adc-tm@3500 {
+ 			status = "disabled";
+ 		};
+ 
+-		pm6150l_gpio: gpio@c000 {
++		pm6150l_gpios: gpio@c000 {
+ 			compatible = "qcom,pm6150l-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm6150l_gpio 0 0 12>;
++			gpio-ranges = <&pm6150l_gpios 0 0 12>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pm8005.dtsi b/arch/arm64/boot/dts/qcom/pm8005.dtsi
+index 8d4b081b4e9d..0f0ab2da8305 100644
+--- a/arch/arm64/boot/dts/qcom/pm8005.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8005.dtsi
+@@ -11,11 +11,11 @@ pm8005_lsid0: pmic@4 {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		pm8005_gpio: gpio@c000 {
++		pm8005_gpios: gpio@c000 {
+ 			compatible = "qcom,pm8005-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm8005_gpio 0 0 4>;
++			gpio-ranges = <&pm8005_gpios 0 0 4>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pm8950.dtsi b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+index 07c3896bd36f..631761f98999 100644
+--- a/arch/arm64/boot/dts/qcom/pm8950.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+@@ -141,11 +141,11 @@ pm8950_mpps: mpps@a000 {
+ 			#interrupt-cells = <2>;
+ 		};
+ 
+-		pm8950_gpio: gpio@c000 {
++		pm8950_gpios: gpio@c000 {
+ 			compatible = "qcom,pm8950-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm8950_gpio 0 0 8>;
++			gpio-ranges = <&pm8950_gpios 0 0 8>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi b/arch/arm64/boot/dts/qcom/pm8998.dtsi
+index 6a5854333b2b..adbba9f4089a 100644
+--- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
+@@ -109,11 +109,11 @@ rtc@6000 {
+ 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+ 		};
+ 
+-		pm8998_gpio: gpio@c000 {
++		pm8998_gpios: gpio@c000 {
+ 			compatible = "qcom,pm8998-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pm8998_gpio 0 0 26>;
++			gpio-ranges = <&pm8998_gpios 0 0 26>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+index 8008f02434a9..4891be3cd68a 100644
+--- a/arch/arm64/boot/dts/qcom/pmi8950.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+@@ -67,11 +67,11 @@ pmi8950_mpps: mpps@a000 {
+ 			#interrupt-cells = <2>;
+ 		};
+ 
+-		pmi8950_gpio: gpio@c000 {
++		pmi8950_gpios: gpio@c000 {
+ 			compatible = "qcom,pmi8950-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pmi8950_gpio 0 0 2>;
++			gpio-ranges = <&pmi8950_gpios 0 0 2>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+index cd1caeae8281..ffe587f281d8 100644
+--- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+@@ -9,11 +9,11 @@ pmi8998_lsid0: pmic@2 {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		pmi8998_gpio: gpio@c000 {
++		pmi8998_gpios: gpio@c000 {
+ 			compatible = "qcom,pmi8998-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+-			gpio-ranges = <&pmi8998_gpio 0 0 14>;
++			gpio-ranges = <&pmi8998_gpios 0 0 14>;
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-idp.dts b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
+index 70fd9ff8dfa2..7c2ff02eb869 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
+@@ -304,7 +304,7 @@ panel@0 {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&disp_pins>;
+ 
+-		reset-gpios = <&pm6150l_gpio 3 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&pm6150l_gpios 3 GPIO_ACTIVE_HIGH>;
+ 
+ 		ports {
+ 			#address-cells = <1>;
+@@ -467,7 +467,7 @@ wifi-firmware {
+ 
+ /* PINCTRL - additions to nodes defined in sc7180.dtsi */
+ 
+-&pm6150l_gpio {
++&pm6150l_gpios {
+ 	disp_pins: disp-state {
+ 		pinconf {
+ 			pins = "gpio3";
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index f1defb94d670..b82956f8f1cf 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -1141,11 +1141,11 @@ &sec_mi2s_active {
+ 
+ /* PINCTRL - board-specific pinctrl */
+ 
+-&pm6150_gpio {
++&pm6150_gpios {
+ 	status = "disabled"; /* No GPIOs are connected */
+ };
+ 
+-&pm6150l_gpio {
++&pm6150l_gpios {
+ 	gpio-line-names = "AP_SUSPEND",
+ 			  "",
+ 			  "",
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
+index ca676e04687b..ab9bf5282910 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
+@@ -1096,7 +1096,7 @@ pinconf-rx {
+ };
+ 
+ /* PINCTRL - board-specific pinctrl */
+-&pm8005_gpio {
++&pm8005_gpios {
+ 	gpio-line-names = "",
+ 			  "",
+ 			  "SLB",
+@@ -1130,7 +1130,7 @@ adc-chan@51 {
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	gpio-line-names = "",
+ 			  "",
+ 			  "SW_CTRL",
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index f41c6d600ea8..7c3efe3cbf5b 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -54,7 +54,7 @@ gpio-keys {
+ 		key-vol-up {
+ 			label = "Volume Up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 		};
+ 	};
+ 
+@@ -65,7 +65,7 @@ led-0 {
+ 			label = "green:user4";
+ 			function = LED_FUNCTION_INDICATOR;
+ 			color = <LED_COLOR_ID_GREEN>;
+-			gpios = <&pm8998_gpio 13 GPIO_ACTIVE_HIGH>;
++			gpios = <&pm8998_gpios 13 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "panic-indicator";
+ 			default-state = "off";
+ 		};
+@@ -74,7 +74,7 @@ led-1 {
+ 			label = "yellow:wlan";
+ 			function = LED_FUNCTION_WLAN;
+ 			color = <LED_COLOR_ID_YELLOW>;
+-			gpios = <&pm8998_gpio 9 GPIO_ACTIVE_HIGH>;
++			gpios = <&pm8998_gpios 9 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "phy0tx";
+ 			default-state = "off";
+ 		};
+@@ -83,7 +83,7 @@ led-2 {
+ 			label = "blue:bt";
+ 			function = LED_FUNCTION_BLUETOOTH;
+ 			color = <LED_COLOR_ID_BLUE>;
+-			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_HIGH>;
++			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "bluetooth-power";
+ 			default-state = "off";
+ 		};
+@@ -148,7 +148,7 @@ cam0_dvdd_1v2: reg_cam0_dvdd_1v2 {
+ 		regulator-min-microvolt = <1200000>;
+ 		regulator-max-microvolt = <1200000>;
+ 		enable-active-high;
+-		gpio = <&pm8998_gpio 12 GPIO_ACTIVE_HIGH>;
++		gpio = <&pm8998_gpios 12 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&cam0_dvdd_1v2_en_default>;
+ 		vin-supply = <&vbat>;
+@@ -160,7 +160,7 @@ cam0_avdd_2v8: reg_cam0_avdd_2v8 {
+ 		regulator-min-microvolt = <2800000>;
+ 		regulator-max-microvolt = <2800000>;
+ 		enable-active-high;
+-		gpio = <&pm8998_gpio 10 GPIO_ACTIVE_HIGH>;
++		gpio = <&pm8998_gpios 10 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&cam0_avdd_2v8_en_default>;
+ 		vin-supply = <&vbat>;
+@@ -559,7 +559,7 @@ &pcie1_phy {
+ 	vdda-pll-supply = <&vreg_l26a_1p2>;
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	gpio-line-names =
+ 		"NC",
+ 		"NC",
+@@ -1170,7 +1170,7 @@ pinconf-rx {
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
+index 1eb423e4be24..f54d3302fb8a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
+@@ -132,7 +132,7 @@ gpio-keys {
+ 		key-vol-up {
+ 			label = "Volume up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 		};
+ 	};
+ 
+@@ -603,7 +603,7 @@ pinconf {
+ 	};
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_up_pin_a: vol-up-active-state {
+ 		pins = "gpio6";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+index 42cf4dd5ea28..f5751f3244cb 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+@@ -37,14 +37,14 @@ gpio-keys {
+ 		key-vol-down {
+ 			label = "Volume down";
+ 			linux,code = <KEY_VOLUMEDOWN>;
+-			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_LOW>;
+ 			debounce-interval = <15>;
+ 		};
+ 
+ 		key-vol-up {
+ 			label = "Volume up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			debounce-interval = <15>;
+ 		};
+ 	};
+@@ -440,7 +440,7 @@ &mss_pil {
+ 	firmware-name = "qcom/sdm845/oneplus6/mba.mbn", "qcom/sdm845/oneplus6/modem.mbn";
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	volume_down_gpio: pm8998-gpio5-state {
+ 		pinconf {
+ 			pins = "gpio5";
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+index bb77ccfdc68c..1934662c2bde 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+@@ -54,7 +54,7 @@ gpio-keys {
+ 		key-vol-up {
+ 			label = "volume_up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			debounce-interval = <15>;
+ 		};
+ 	};
+@@ -510,7 +510,7 @@ &mss_pil {
+ 	firmware-name = "qcom/sdm845/axolotl/mba.mbn", "qcom/sdm845/axolotl/modem.mbn";
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	volume_up_gpio: pm8998-gpio6-state {
+ 		pinconf {
+ 			pins = "gpio6";
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+index 87dd0fc36747..df92e8d7bf30 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+@@ -21,7 +21,7 @@ gpio-keys {
+ 
+ 		key-vol-down {
+ 			label = "volume_down";
+-			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_LOW>;
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 			debounce-interval = <15>;
+ 			gpio-key,wakeup;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+index eb6b2b676eca..ba5a37cb3c9e 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+@@ -46,7 +46,7 @@ gpio-keys {
+ 		key-vol-up {
+ 			label = "Volume Up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 		};
+ 	};
+ 
+@@ -304,7 +304,7 @@ &ipa {
+ 	firmware-name = "qcom/sdm845/beryllium/ipa_fws.mbn";
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	vol_up_pin_a: vol-up-active-state {
+ 		pins = "gpio6";
+ 		function = "normal";
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+index 38ba809a95cd..46346f7146ed 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+@@ -55,7 +55,7 @@ gpio-keys {
+ 		key-vol-up {
+ 			label = "Volume Up";
+ 			linux,code = <KEY_VOLUMEUP>;
+-			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
++			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+ 			debounce-interval = <15>;
+ 		};
+ 	};
+@@ -518,7 +518,7 @@ &pmi8998_wled {
+ 	status = "okay";
+ };
+ 
+-&pm8998_gpio {
++&pm8998_gpios {
+ 	volume_up_gpio: pm8998-gpio6-state {
+ 		pinconf {
+ 			qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
+diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+index 0de6c5b7f742..650819c028b6 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
++++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+@@ -217,7 +217,7 @@ rf-pa1-therm@3 {
+ 	};
+ };
+ 
+-&pm6125_gpio {
++&pm6125_gpios {
+ 	camera_flash_therm: camera-flash-therm-state {
+ 		pins = "gpio3";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+-- 
+2.38.1
+
