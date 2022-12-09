@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F79C648882
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144DB64888C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiLISdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S229957AbiLISlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiLISc6 (ORCPT
+        with ESMTP id S229568AbiLISlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:32:58 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3D3F07A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:32:57 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id q190so2488631iod.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIG9ipb7HtnriQ+TcgmMj4D0kC7XhqX3aqXqdd/X99g=;
-        b=auKVOem6aBdFc8RxIknWHg7aSAN8Bdc+VKexH0OEhPdLbC0w0mOnTFh19z+COMvFWr
-         0BkCpoSVCK8ogW+FLkzJ2RT3Z97nuHU+du/GU1zRd1SgyuZfLXlGq+EKG3dcnFEMOaNx
-         0dZHFJrOct60WGR/16g24H54uXRD8uJK7PSCfTbbDZ0zLxl8ozfdQ0lZgp/k/pBxf2RP
-         tr1oKN63Sg4suroJrOnH/kCxcTQOiaHEjSwEUzNYNazUhJICtgvknWA/DWD/gmJnzn2W
-         fXVacleBeX956BJw8XlOyk0QckyfQ6DW0GeBHyIVX1kuR3HSrLnGQMyFQqbTt/9kpkod
-         nS3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EIG9ipb7HtnriQ+TcgmMj4D0kC7XhqX3aqXqdd/X99g=;
-        b=h3JUHGyOeozSZNfJNgJkJgJL/YrL5aIKxka7cZIDBrvFHc9My+bBlKBW9JKJkX91Z5
-         POkrMkqdSkB/5svg9+rq8e3Sqd5HV7mZdgH663YkU+EOYdERG7paFl80MO6vl6D+Tt2h
-         kOVe12WLrCwNCdtLEPm1CLIyMWbKtENGitaWEUKhHhBaj+r0SrzaC4RMRBzoUyb5g4q5
-         McYpopnoOd5lfpGzOtOQx/NlcKwmU+g0r1+PZhVrjAOrHlPvaHitzJq9ZLGCk12n3Ckh
-         RuFDwablBO545p3ebPhCW7iSYIIie3S7NxyWvznGaiNYYv0FG55u8m5G9osBUWRyyd3J
-         qJ1g==
-X-Gm-Message-State: ANoB5pn+w7Jf0lACWliQpJrCxzAWfjLI12rPIDvtUvS7wJistw1nUW5L
-        TrfUWidNGZlDKkxPaXoIhfurJQ==
-X-Google-Smtp-Source: AA0mqf6dakxIHk+c37zOgvZFcUw775ncTPf0XKVyMmF8m8aWyN/T9I6SmrdFBa/1ST/MvNP6fJzrTA==
-X-Received: by 2002:a5d:96c3:0:b0:6df:3e46:ab2b with SMTP id r3-20020a5d96c3000000b006df3e46ab2bmr3974784iol.6.1670610776568;
-        Fri, 09 Dec 2022 10:32:56 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:a53b:fb2d:b8a1:f544])
-        by smtp.gmail.com with ESMTPSA id o134-20020a02228c000000b0038a6b67befbsm662169jao.178.2022.12.09.10.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 10:32:56 -0800 (PST)
-Date:   Fri, 9 Dec 2022 11:32:52 -0700
-From:   Ross Zwisler <zwisler@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] ring-buffer: Handle resize in early boot up
-Message-ID: <Y5N/VM1u+Funtm0M@google.com>
-References: <20221209101151.1fec1167@gandalf.local.home>
- <Y5NpDF0AnY9ibwEl@google.com>
- <20221209131357.5e4f6d01@gandalf.local.home>
+        Fri, 9 Dec 2022 13:41:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B7E59FFB;
+        Fri,  9 Dec 2022 10:41:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95ABB622FB;
+        Fri,  9 Dec 2022 18:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A663BC433D2;
+        Fri,  9 Dec 2022 18:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670611294;
+        bh=HLCdf8lbrHwu/F+e8HIf65ZhPNgQNds3cOGyMfVwQPk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I9aZVSS/VKQ1Xy4vYME7UQLO2LIA5iYVtBgW4KmYXZNmyYM5XIdeVuccv5sx+vcGG
+         01he4ygi8EPnt9wsUbZ6qafFdgQ3ZmBZ4I0pIab+3FbGsWGPVkAPflFRk5y9R+ejtY
+         Gc5G32aywSJjLishtIWlp6UftbZQjBbe/6UOxX4WsOALIXYuWA0tqeNASxy0ElUZAP
+         +YtCO19hY45gPmvdL1YhAY4GhYuYhkoJ834P1I4vPcpIhx6SldQChkie1P/kKhoUQ1
+         GsXgySt+u3R173MFUagSXzxtSlGuw+s+ITSJnEWvufUne8dw/wb05HCMjtC3gbCNTZ
+         GMOQ6L4jZUhHw==
+Date:   Fri, 9 Dec 2022 18:41:29 +0000
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v6.1] media fixes
+Message-ID: <20221209184129.1fdf3973@sal.lan>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209131357.5e4f6d01@gandalf.local.home>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:13:57PM -0500, Steven Rostedt wrote:
-> On Fri, 9 Dec 2022 09:57:48 -0700
-> Ross Zwisler <zwisler@google.com> wrote:
-> 
-> > > +			if (cpu_id == smp_processor_id()) {
-> > > +				rb_update_pages(cpu_buffer);
-> > > +				migrate_enable();
-> > > +			} else {
-> > > +				migrate_enable();
-> > > +				schedule_work_on(cpu_id,
-> > > +						 &cpu_buffer->update_pages_work);
-> > > +				wait_for_completion(&cpu_buffer->update_done);  
-> > 
-> > I ran with this patch on my test VM and hit the same Oops from the original
-> > report.
-> > 
-> > I think the problem is that we're still trying to enable interrupts via
-> > wait_for_completion():
-> > 
-> > wait_for_completion()
-> >   wait_for_common()
-> >     __wait_for_common()
-> >       raw_spin_unlock_irq()
-> >         _raw_spin_unlock_irq()
-> >           __raw_spin_unlock_irq()
-> >             local_irq_enable()
-> > 
-> > I'm testing on a QEMU VM with 4 virtual CPUs, if that helps WRT where work is
-> > being scheduled (cpu_id == smp_processor_id).
-> 
-> Can you show the backtrace with that. Because when I triggered it, the
-> other CPUs were not up and running. I'm testing this on a VM with 8 CPUs.
+Hi Linus,
 
-Ah, apologies, I think I got confused in my testing.  It is indeed working for
-me now.
+Please pull from:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-4
 
-Thank you for the fix!
+For a v4l-core fix related to validating DV timings related to video
+blanking values.
 
-Tested-by: Ross Zwisler <zwisler@google.com>
+Thanks!
+Mauro
+
+---
+
+The following changes since commit de547896aac606a00435a219757a940ece142bf0:
+
+  media: vivid.rst: loop_video is set on the capture devnode (2022-10-25 16:43:54 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.1-4
+
+for you to fetch changes up to 5eef2141776da02772c44ec406d6871a790761ee:
+
+  media: v4l2-dv-timings.c: fix too strict blanking sanity checks (2022-11-23 12:02:30 +0000)
+
+----------------------------------------------------------------
+media fixes for v6.1-rc9
+
+----------------------------------------------------------------
+Hans Verkuil (1):
+      media: v4l2-dv-timings.c: fix too strict blanking sanity checks
+
+ drivers/media/v4l2-core/v4l2-dv-timings.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
