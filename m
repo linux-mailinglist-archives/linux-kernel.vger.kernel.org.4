@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22932647F95
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EB7647F97
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiLIIxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S229836AbiLIIxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLIIxK (ORCPT
+        with ESMTP id S229879AbiLIIxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:53:10 -0500
+        Fri, 9 Dec 2022 03:53:12 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0086C36C54
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:53:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39C6E17044
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:53:10 -0800 (PST)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxSuly95JjE2AEAA--.7015S3;
-        Fri, 09 Dec 2022 16:53:06 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8Dxfet095JjF2AEAA--.10264S3;
+        Fri, 09 Dec 2022 16:53:08 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1dt95Jj7xUpAA--.16661S3;
-        Fri, 09 Dec 2022 16:53:04 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1dt95Jj7xUpAA--.16661S4;
+        Fri, 09 Dec 2022 16:53:07 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
         Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 1/4] LoongArch: Simulate branch and PC instructions
-Date:   Fri,  9 Dec 2022 16:52:58 +0800
-Message-Id: <1670575981-14389-2-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v10 2/4] LoongArch: Add kprobe support
+Date:   Fri,  9 Dec 2022 16:52:59 +0800
+Message-Id: <1670575981-14389-3-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8BxV1dt95Jj7xUpAA--.16661S3
+X-CM-TRANSID: AQAAf8BxV1dt95Jj7xUpAA--.16661S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3WrWkAF4kWFyxWF1kXF1UWrg_yoW7tw4kpr
-        W7ur4kGr4DWryfCrWjqw1vvr15tr4fur43u3ZxC34fCF17XFy5GrykGr4jvFyYkw4Utry0
-        gayaqw429FsayaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJbIYCTnIWIevJa73UjIFyTuYvjxUcsjjDUUUU
+X-Coremail-Antispam: 1Uk129KBjvAXoW3Kr4DuFy3KryUKFy7KrWUCFg_yoW8XF1fCo
+        WSvF4DWw48KrW7uF45Ar1kXFWUu3W8KFZ5Aryayanxur1DAr18Xr1UCrWrJ3W2qrsYg3yf
+        u345ua4fGFW3Crnxn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU84xRDUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,194 +58,553 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to LoongArch Reference Manual, simulate branch and
-PC instructions, this is preparation for later patch.
+Kprobes allows you to trap at almost any kernel address and
+execute a callback function, this commit adds kprobe support
+for LoongArch.
 
-Link: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#branch-instructions
-Link: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#_pcaddi_pcaddu121_pcaddu18l_pcalau12i
-
-Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/include/asm/inst.h   |   5 ++
- arch/loongarch/include/asm/ptrace.h |   1 +
- arch/loongarch/kernel/inst.c        | 123 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 129 insertions(+)
+ arch/loongarch/Kconfig               |   1 +
+ arch/loongarch/include/asm/inst.h    |  15 ++
+ arch/loongarch/include/asm/kprobes.h |  59 ++++++
+ arch/loongarch/kernel/Makefile       |   2 +
+ arch/loongarch/kernel/kprobes.c      | 340 +++++++++++++++++++++++++++++++++++
+ arch/loongarch/kernel/traps.c        |  13 +-
+ arch/loongarch/mm/fault.c            |   3 +
+ 7 files changed, 429 insertions(+), 4 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kprobes.h
+ create mode 100644 arch/loongarch/kernel/kprobes.c
 
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 16bf1b6..f6fc156 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -102,6 +102,7 @@ config LOONGARCH
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
+ 	select HAVE_IRQ_TIME_ACCOUNTING
++	select HAVE_KPROBES
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
+ 	select HAVE_PCI
 diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index c00e151..e25fd54 100644
+index e25fd54..a7c85df 100644
 --- a/arch/loongarch/include/asm/inst.h
 +++ b/arch/loongarch/include/asm/inst.h
-@@ -7,6 +7,7 @@
+@@ -24,6 +24,10 @@
  
- #include <linux/types.h>
- #include <asm/asm.h>
-+#include <asm/ptrace.h>
+ #define ADDR_IMM(addr, INSN)	((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
  
- #define INSN_NOP		0x03400000
- #define INSN_BREAK		0x002a0000
-@@ -32,6 +33,7 @@ enum reg1i20_op {
- 	lu12iw_op	= 0x0a,
- 	lu32id_op	= 0x0b,
- 	pcaddi_op	= 0x0c,
-+	pcalau12i_op	= 0x0d,
- 	pcaddu12i_op	= 0x0e,
- 	pcaddu18i_op	= 0x0f,
++enum reg0i15_op {
++	break_op	= 0x54,
++};
++
+ enum reg0i26_op {
+ 	b_op		= 0x14,
+ 	bl_op		= 0x15,
+@@ -180,6 +184,11 @@ enum reg3sa2_op {
+ 	alsld_op	= 0x16,
  };
-@@ -367,6 +369,9 @@ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm);
- u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
- u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned long pc, unsigned long dest);
  
-+void simu_branch(struct pt_regs *regs, union loongarch_instruction insn);
-+void simu_pc(struct pt_regs *regs, union loongarch_instruction insn);
++struct reg0i15_format {
++	unsigned int immediate : 15;
++	unsigned int opcode : 17;
++};
 +
- static inline bool signed_imm_check(long val, unsigned int bit)
- {
- 	return -(1L << (bit - 1)) <= val && val < (1L << (bit - 1));
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 59c4608..58596c4 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -6,6 +6,7 @@
- #define _ASM_PTRACE_H
+ struct reg0i26_format {
+ 	unsigned int immediate_h : 10;
+ 	unsigned int immediate_l : 16;
+@@ -265,6 +274,7 @@ struct reg3sa2_format {
  
- #include <asm/page.h>
-+#include <asm/irqflags.h>
- #include <asm/thread_info.h>
- #include <uapi/asm/ptrace.h>
- 
-diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
-index 512579d..af48faf 100644
---- a/arch/loongarch/kernel/inst.c
-+++ b/arch/loongarch/kernel/inst.c
-@@ -165,3 +165,126 @@ u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj, unsigned l
- 
- 	return insn.word;
+ union loongarch_instruction {
+ 	unsigned int word;
++	struct reg0i15_format	reg0i15_format;
+ 	struct reg0i26_format	reg0i26_format;
+ 	struct reg1i20_format	reg1i20_format;
+ 	struct reg1i21_format	reg1i21_format;
+@@ -335,6 +345,11 @@ static inline bool is_branch_ins(union loongarch_instruction *ip)
+ 		ip->reg1i21_format.opcode <= bgeu_op;
  }
-+
-+void simu_branch(struct pt_regs *regs, union loongarch_instruction insn)
+ 
++static inline bool is_break_ins(union loongarch_instruction *ip)
 +{
-+	unsigned int imm, imm_l, imm_h, rd, rj;
-+	unsigned long pc = regs->csr_era;
++	return ip->reg0i15_format.opcode == break_op;
++}
 +
-+	if (pc & 3) {
-+		pr_warn("%s: invalid pc 0x%lx\n", __func__, pc);
-+		return;
+ static inline bool is_ra_save_ins(union loongarch_instruction *ip)
+ {
+ 	/* st.d $ra, $sp, offset */
+diff --git a/arch/loongarch/include/asm/kprobes.h b/arch/loongarch/include/asm/kprobes.h
+new file mode 100644
+index 0000000..d3903f3
+--- /dev/null
++++ b/arch/loongarch/include/asm/kprobes.h
+@@ -0,0 +1,59 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_LOONGARCH_KPROBES_H
++#define __ASM_LOONGARCH_KPROBES_H
++
++#include <asm-generic/kprobes.h>
++#include <asm/cacheflush.h>
++
++#ifdef CONFIG_KPROBES
++
++#include <asm/inst.h>
++
++#define __ARCH_WANT_KPROBES_INSN_SLOT
++#define MAX_INSN_SIZE			2
++
++#define flush_insn_slot(p)						\
++do {									\
++	if (p->addr)							\
++		flush_icache_range((unsigned long)p->addr,		\
++			   (unsigned long)p->addr +			\
++			   (MAX_INSN_SIZE * sizeof(kprobe_opcode_t)));	\
++} while (0)
++
++#define kretprobe_blacklist_size	0
++
++typedef union loongarch_instruction kprobe_opcode_t;
++
++/* Architecture specific copy of original instruction */
++struct arch_specific_insn {
++	/* copy of the original instruction */
++	kprobe_opcode_t *insn;
++};
++
++struct prev_kprobe {
++	struct kprobe *kp;
++	unsigned long status;
++	unsigned long saved_irq;
++	unsigned long saved_era;
++};
++
++/* per-cpu kprobe control block */
++struct kprobe_ctlblk {
++	unsigned long kprobe_status;
++	unsigned long kprobe_saved_irq;
++	unsigned long kprobe_saved_era;
++	struct prev_kprobe prev_kprobe;
++};
++
++void arch_remove_kprobe(struct kprobe *p);
++bool kprobe_fault_handler(struct pt_regs *regs, int trapnr);
++bool kprobe_breakpoint_handler(struct pt_regs *regs);
++bool kprobe_singlestep_handler(struct pt_regs *regs);
++
++#else /* !CONFIG_KPROBES */
++
++static inline bool kprobe_breakpoint_handler(struct pt_regs *regs) { return 0; }
++static inline bool kprobe_singlestep_handler(struct pt_regs *regs) { return 0; }
++
++#endif /* CONFIG_KPROBES */
++#endif /* __ASM_LOONGARCH_KPROBES_H */
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index fcaa024..6fe4a4e 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -47,4 +47,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+ 
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o perf_regs.o
+ 
++obj-$(CONFIG_KPROBES)		+= kprobes.o
++
+ CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
+diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
+new file mode 100644
+index 0000000..546a3c3
+--- /dev/null
++++ b/arch/loongarch/kernel/kprobes.c
+@@ -0,0 +1,340 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/kprobes.h>
++#include <linux/kdebug.h>
++#include <linux/preempt.h>
++#include <asm/break.h>
++
++static const union loongarch_instruction breakpoint_insn = {
++	.reg0i15_format = {
++		.opcode = break_op,
++		.immediate = BRK_KPROBE_BP,
++	}
++};
++
++static const union loongarch_instruction singlestep_insn = {
++	.reg0i15_format = {
++		.opcode = break_op,
++		.immediate = BRK_KPROBE_SSTEPBP,
++	}
++};
++
++DEFINE_PER_CPU(struct kprobe *, current_kprobe);
++DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
++
++static bool insns_not_supported(union loongarch_instruction insn)
++{
++	switch (insn.reg2i14_format.opcode) {
++	case llw_op:
++	case lld_op:
++	case scw_op:
++	case scd_op:
++		pr_notice("kprobe: ll and sc instructions are not supported\n");
++		return true;
 +	}
 +
-+	imm_l = insn.reg0i26_format.immediate_l;
-+	imm_h = insn.reg0i26_format.immediate_h;
-+	switch (insn.reg0i26_format.opcode) {
-+	case b_op:
-+		regs->csr_era = pc + sign_extend((imm_h << 16 | imm_l) << 2, 27);
-+		return;
-+	case bl_op:
-+		regs->csr_era = pc + sign_extend((imm_h << 16 | imm_l) << 2, 27);
-+		regs->regs[1] = pc + LOONGARCH_INSN_SIZE;
-+		return;
-+	}
-+
-+	imm_l = insn.reg1i21_format.immediate_l;
-+	imm_h = insn.reg1i21_format.immediate_h;
-+	rj = insn.reg1i21_format.rj;
 +	switch (insn.reg1i21_format.opcode) {
-+	case beqz_op:
-+		if (regs->regs[rj] == 0)
-+			regs->csr_era = pc + sign_extend((imm_h << 16 | imm_l) << 2, 22);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		return;
-+	case bnez_op:
-+		if (regs->regs[rj] != 0)
-+			regs->csr_era = pc + sign_extend((imm_h << 16 | imm_l) << 2, 22);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		return;
++	case bceqz_op:
++		pr_notice("kprobe: bceqz and bcnez instructions are not supported\n");
++		return true;
 +	}
 +
-+	imm = insn.reg2i16_format.immediate;
-+	rj = insn.reg2i16_format.rj;
-+	rd = insn.reg2i16_format.rd;
-+	switch (insn.reg2i16_format.opcode) {
-+	case beq_op:
-+		if (regs->regs[rj] == regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bne_op:
-+		if (regs->regs[rj] != regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case blt_op:
-+		if ((long)regs->regs[rj] < (long)regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bge_op:
-+		if ((long)regs->regs[rj] >= (long)regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bltu_op:
-+		if (regs->regs[rj] < regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case bgeu_op:
-+		if (regs->regs[rj] >= regs->regs[rd])
-+			regs->csr_era = pc + sign_extend(imm << 2, 17);
-+		else
-+			regs->csr_era = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	case jirl_op:
-+		regs->csr_era = regs->regs[rj] + sign_extend(imm << 2, 17);
-+		regs->regs[rd] = pc + LOONGARCH_INSN_SIZE;
-+		break;
-+	default:
-+		pr_info("%s: unknown opcode\n", __func__);
-+		return;
-+	}
++	return false;
 +}
++NOKPROBE_SYMBOL(insns_not_supported);
 +
-+void simu_pc(struct pt_regs *regs, union loongarch_instruction insn)
++int arch_prepare_kprobe(struct kprobe *p)
 +{
-+	unsigned long pc = regs->csr_era;
-+	unsigned int rd = insn.reg1i20_format.rd;
-+	unsigned int imm = insn.reg1i20_format.immediate;
++	union loongarch_instruction insn;
 +
-+	if (pc & 3) {
-+		pr_warn("%s: invalid pc 0x%lx\n", __func__, pc);
++	insn = p->addr[0];
++	if (insns_not_supported(insn))
++		return -EINVAL;
++
++	p->ainsn.insn = get_insn_slot();
++	if (!p->ainsn.insn)
++		return -ENOMEM;
++
++	p->ainsn.insn[0] = *p->addr;
++	p->ainsn.insn[1] = singlestep_insn;
++
++	p->opcode = *p->addr;
++
++	return 0;
++}
++NOKPROBE_SYMBOL(arch_prepare_kprobe);
++
++/* Install breakpoint in text */
++void arch_arm_kprobe(struct kprobe *p)
++{
++	*p->addr = breakpoint_insn;
++	flush_insn_slot(p);
++}
++NOKPROBE_SYMBOL(arch_arm_kprobe);
++
++/* Remove breakpoint from text */
++void arch_disarm_kprobe(struct kprobe *p)
++{
++	*p->addr = p->opcode;
++	flush_insn_slot(p);
++}
++NOKPROBE_SYMBOL(arch_disarm_kprobe);
++
++void arch_remove_kprobe(struct kprobe *p)
++{
++	if (p->ainsn.insn) {
++		free_insn_slot(p->ainsn.insn, 0);
++		p->ainsn.insn = NULL;
++	}
++}
++NOKPROBE_SYMBOL(arch_remove_kprobe);
++
++static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
++{
++	kcb->prev_kprobe.kp = kprobe_running();
++	kcb->prev_kprobe.status = kcb->kprobe_status;
++	kcb->prev_kprobe.saved_irq = kcb->kprobe_saved_irq;
++	kcb->prev_kprobe.saved_era = kcb->kprobe_saved_era;
++}
++NOKPROBE_SYMBOL(save_previous_kprobe);
++
++static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
++{
++	__this_cpu_write(current_kprobe, kcb->prev_kprobe.kp);
++	kcb->kprobe_status = kcb->prev_kprobe.status;
++	kcb->kprobe_saved_irq = kcb->prev_kprobe.saved_irq;
++	kcb->kprobe_saved_era = kcb->prev_kprobe.saved_era;
++}
++NOKPROBE_SYMBOL(restore_previous_kprobe);
++
++static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
++			       struct kprobe_ctlblk *kcb)
++{
++	__this_cpu_write(current_kprobe, p);
++	kcb->kprobe_saved_irq = regs->csr_prmd & CSR_PRMD_PIE;
++	kcb->kprobe_saved_era = regs->csr_era;
++}
++NOKPROBE_SYMBOL(set_current_kprobe);
++
++static bool insns_not_simulated(struct kprobe *p, struct pt_regs *regs)
++{
++	if (is_branch_ins(&p->opcode)) {
++		simu_branch(regs, p->opcode);
++		return false;
++	} else if (is_pc_ins(&p->opcode)) {
++		simu_pc(regs, p->opcode);
++		return false;
++	} else {
++		return true;
++	}
++}
++NOKPROBE_SYMBOL(insns_not_simulated);
++
++static void setup_singlestep(struct kprobe *p, struct pt_regs *regs,
++			     struct kprobe_ctlblk *kcb, int reenter)
++{
++	if (reenter) {
++		save_previous_kprobe(kcb);
++		set_current_kprobe(p, regs, kcb);
++		kcb->kprobe_status = KPROBE_REENTER;
++	} else {
++		kcb->kprobe_status = KPROBE_HIT_SS;
++	}
++
++	regs->csr_prmd &= ~CSR_PRMD_PIE;
++
++	if (p->ainsn.insn->word == breakpoint_insn.word) {
++		regs->csr_prmd |= kcb->kprobe_saved_irq;
++		preempt_enable_no_resched();
 +		return;
 +	}
 +
-+	switch (insn.reg1i20_format.opcode) {
-+	case pcaddi_op:
-+		regs->regs[rd] = pc + sign_extend(imm << 2, 21);
++	if (insns_not_simulated(p, regs)) {
++		kcb->kprobe_status = KPROBE_HIT_SS;
++		regs->csr_era = (unsigned long)&p->ainsn.insn[0];
++	} else {
++		kcb->kprobe_status = KPROBE_HIT_SSDONE;
++		if (p->post_handler)
++			p->post_handler(p, regs, 0);
++		reset_current_kprobe();
++		preempt_enable_no_resched();
++	}
++}
++NOKPROBE_SYMBOL(setup_singlestep);
++
++static bool reenter_kprobe(struct kprobe *p, struct pt_regs *regs,
++			  struct kprobe_ctlblk *kcb)
++{
++	switch (kcb->kprobe_status) {
++	case KPROBE_HIT_SSDONE:
++	case KPROBE_HIT_ACTIVE:
++		kprobes_inc_nmissed_count(p);
++		setup_singlestep(p, regs, kcb, 1);
 +		break;
-+	case pcaddu12i_op:
-+		regs->regs[rd] = pc + sign_extend(imm << 12, 31);
-+		break;
-+	case pcaddu18i_op:
-+		regs->regs[rd] = pc + sign_extend(imm << 18, 37);
-+		break;
-+	case pcalau12i_op:
-+		regs->regs[rd] = pc + sign_extend(imm << 12, 31);
-+		regs->regs[rd] &= ~((1 << 12) - 1);
++	case KPROBE_HIT_SS:
++	case KPROBE_REENTER:
++		pr_warn("Failed to recover from reentered kprobes.\n");
++		dump_kprobe(p);
++		BUG();
 +		break;
 +	default:
-+		pr_info("%s: unknown opcode\n", __func__);
-+		return;
++		WARN_ON(1);
++		return false;
 +	}
 +
-+	regs->csr_era += LOONGARCH_INSN_SIZE;
++	return true;
 +}
++NOKPROBE_SYMBOL(reenter_kprobe);
++
++bool kprobe_breakpoint_handler(struct pt_regs *regs)
++{
++	struct kprobe_ctlblk *kcb;
++	struct kprobe *p, *cur_kprobe;
++	kprobe_opcode_t *addr = (kprobe_opcode_t *)regs->csr_era;
++
++	/*
++	 * We don't want to be preempted for the entire
++	 * duration of kprobe processing.
++	 */
++	preempt_disable();
++	kcb = get_kprobe_ctlblk();
++	cur_kprobe = kprobe_running();
++
++	p = get_kprobe(addr);
++	if (p) {
++		if (cur_kprobe) {
++			if (reenter_kprobe(p, regs, kcb))
++				return true;
++		} else {
++			/* Probe hit */
++			set_current_kprobe(p, regs, kcb);
++			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
++
++			/*
++			 * If we have no pre-handler or it returned 0, we
++			 * continue with normal processing.  If we have a
++			 * pre-handler and it returned non-zero, it will
++			 * modify the execution path and no need to single
++			 * stepping. Let's just reset current kprobe and exit.
++			 *
++			 * pre_handler can hit a breakpoint and can step thru
++			 * before return.
++			 */
++			if (!p->pre_handler || !p->pre_handler(p, regs)) {
++				setup_singlestep(p, regs, kcb, 0);
++			} else {
++				reset_current_kprobe();
++				preempt_enable_no_resched();
++			}
++		}
++		return true;
++	}
++
++	if (!is_break_ins(addr)) {
++		/*
++		 * The breakpoint instruction was removed right
++		 * after we hit it.  Another cpu has removed
++		 * either a probepoint or a debugger breakpoint
++		 * at this address.  In either case, no further
++		 * handling of this interrupt is appropriate.
++		 * Return back to original instruction, and continue.
++		 */
++		preempt_enable_no_resched();
++		return true;
++	}
++
++	preempt_enable_no_resched();
++	return false;
++}
++NOKPROBE_SYMBOL(kprobe_breakpoint_handler);
++
++bool kprobe_singlestep_handler(struct pt_regs *regs)
++{
++	struct kprobe *cur = kprobe_running();
++	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
++
++	if (!cur)
++		return false;
++
++	/* Restore back the original saved kprobes variables and continue */
++	if (kcb->kprobe_status == KPROBE_REENTER) {
++		restore_previous_kprobe(kcb);
++		goto out;
++	}
++
++	/* Call post handler */
++	if (cur->post_handler) {
++		kcb->kprobe_status = KPROBE_HIT_SSDONE;
++		cur->post_handler(cur, regs, 0);
++	}
++
++	regs->csr_era = kcb->kprobe_saved_era + LOONGARCH_INSN_SIZE;
++	regs->csr_prmd |= kcb->kprobe_saved_irq;
++
++	reset_current_kprobe();
++out:
++	preempt_enable_no_resched();
++	return true;
++}
++NOKPROBE_SYMBOL(kprobe_singlestep_handler);
++
++bool kprobe_fault_handler(struct pt_regs *regs, int trapnr)
++{
++	struct kprobe *cur = kprobe_running();
++	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
++
++	switch (kcb->kprobe_status) {
++	case KPROBE_HIT_SS:
++	case KPROBE_REENTER:
++		/*
++		 * We are here because the instruction being single
++		 * stepped caused a page fault. We reset the current
++		 * kprobe and the ip points back to the probe address
++		 * and allow the page fault handler to continue as a
++		 * normal page fault.
++		 */
++		regs->csr_era = (unsigned long) cur->addr;
++		BUG_ON(!instruction_pointer(regs));
++
++		if (kcb->kprobe_status == KPROBE_REENTER) {
++			restore_previous_kprobe(kcb);
++		} else {
++			regs->csr_prmd |= kcb->kprobe_saved_irq;
++			reset_current_kprobe();
++		}
++		preempt_enable_no_resched();
++		break;
++	case KPROBE_HIT_ACTIVE:
++	case KPROBE_HIT_SSDONE:
++		/*
++		 * In case the user-specified fault handler returned
++		 * zero, try to fix up.
++		 */
++		if (fixup_exception(regs))
++			return true;
++
++		/*
++		 * If fixup_exception() could not handle it,
++		 * let do_page_fault() fix it.
++		 */
++		break;
++	default:
++		break;
++	}
++	return false;
++}
++NOKPROBE_SYMBOL(kprobe_fault_handler);
++
++/*
++ * Provide a blacklist of symbols identifying ranges which cannot be kprobed.
++ * This blacklist is exposed to userspace via debugfs (kprobes/blacklist).
++ */
++int __init arch_populate_kprobe_blacklist(void)
++{
++	return kprobe_add_area_blacklist((unsigned long)__irqentry_text_start,
++					 (unsigned long)__irqentry_text_end);
++}
++
++int __init arch_init_kprobes(void)
++{
++	return 0;
++}
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index a19bb32..4d9f775 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -448,14 +448,12 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
+ 	 */
+ 	switch (bcode) {
+ 	case BRK_KPROBE_BP:
+-		if (notify_die(DIE_BREAK, "Kprobe", regs, bcode,
+-			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++		if (kprobe_breakpoint_handler(regs))
+ 			goto out;
+ 		else
+ 			break;
+ 	case BRK_KPROBE_SSTEPBP:
+-		if (notify_die(DIE_SSTEPBP, "Kprobe_SingleStep", regs, bcode,
+-			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++		if (kprobe_singlestep_handler(regs))
+ 			goto out;
+ 		else
+ 			break;
+@@ -479,6 +477,13 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
+ 			break;
+ 	}
+ 
++	if (bcode == BRK_KPROBE_BP) {
++		if (__get_inst(&opcode, (u32 *)era, user))
++			goto out_sigsegv;
++
++		bcode = (opcode & 0x7fff);
++	}
++
+ 	switch (bcode) {
+ 	case BRK_BUG:
+ 		bug_handler(regs);
+diff --git a/arch/loongarch/mm/fault.c b/arch/loongarch/mm/fault.c
+index 1ccd536..449087b 100644
+--- a/arch/loongarch/mm/fault.c
++++ b/arch/loongarch/mm/fault.c
+@@ -135,6 +135,9 @@ static void __kprobes __do_page_fault(struct pt_regs *regs,
+ 	struct vm_area_struct *vma = NULL;
+ 	vm_fault_t fault;
+ 
++	if (kprobe_page_fault(regs, current->thread.trap_nr))
++		return;
++
+ 	/*
+ 	 * We fault-in kernel-space virtual memory on-demand. The
+ 	 * 'reference' page table is init_mm.pgd.
 -- 
 2.1.0
 
