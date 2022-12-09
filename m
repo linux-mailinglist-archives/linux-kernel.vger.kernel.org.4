@@ -2,156 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E9D647B43
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 159F6647B46
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiLIBUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S229680AbiLIBVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiLIBUK (ORCPT
+        with ESMTP id S229479AbiLIBVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:20:10 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2C9941AD;
-        Thu,  8 Dec 2022 17:20:06 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DB57824E041;
-        Fri,  9 Dec 2022 09:19:53 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
- 2022 09:19:51 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
- (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
- 2022 09:19:49 +0800
-Message-ID: <ed2f5df6-66c4-26b4-b650-48a128760965@starfivetech.com>
-Date:   Fri, 9 Dec 2022 09:19:48 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy
- delay_chain configuration
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-8-yanhong.wang@starfivetech.com> <Y4jpDvXo/uj9ygLR@spud>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <Y4jpDvXo/uj9ygLR@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 20:21:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056FEA84BF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:21:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD70EB82666
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7094CC433EF;
+        Fri,  9 Dec 2022 01:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670548897;
+        bh=hvvz030LUj8lnPdEvrt0f17NiCOxoToxxAv2Fj/QkNs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=DSAybl0z7NAMf1IXKy8nTSKcxXGMYu5/G0OTiaFA0EiVFyIO41e1kq2ncwN1zjlKq
+         meXCbOquarGHwJSSz3MEasofu3eIFfXTzPaZlOI7nZ0koRTimsJMxaxsJsf3RWtJUv
+         Nufsq394K/5TFkVnllW3n5ew14B3K0XzwedEXAH85WN2LfvuxehH+oAFLL3tgdnRbC
+         7qwNTXYeDrPeGSIZ4ArLq66TZ11umPRlNn0Ey5Nls4y5M5ri551P7Gf4g/kSbLEvzz
+         o8SsMVpr5gp1XjBt4g6hiGyrMsffq/Hqu6RT4wxnyky8ToraBq1UOaB8fo4FrIwTeH
+         12cRztA1UgqiQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5D5D9C433D7;
+        Fri,  9 Dec 2022 01:21:37 +0000 (UTC)
+Subject: Re: [git pull] drm fixes for 6.1 final
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9tztpF=EZ04jLii6DFiLQdm6s0QhXvosFyggDHikfLLteg@mail.gmail.com>
+References: <CAPM=9tztpF=EZ04jLii6DFiLQdm6s0QhXvosFyggDHikfLLteg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAPM=9tztpF=EZ04jLii6DFiLQdm6s0QhXvosFyggDHikfLLteg@mail.gmail.com>
+X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-12-09
+X-PR-Tracked-Commit-Id: c4252650a8c4770b669398fe7270ed8c94fc0eba
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0d1409e4ff08aa4a9a254d3f723410db32aa7552
+Message-Id: <167054889737.30977.17442092268066095579.pr-tracker-bot@kernel.org>
+Date:   Fri, 09 Dec 2022 01:21:37 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Fri, 9 Dec 2022 10:51:00 +1000:
 
+> git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-12-09
 
-On 2022/12/2 1:49, Conor Dooley wrote:
-> On Thu, Dec 01, 2022 at 05:02:42PM +0800, Yanhong Wang wrote:
->> Add phy delay_chain configuration to support motorcomm phy driver for
->> StarFive VisionFive 2 board.
->> 
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
->>  1 file changed, 46 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> index c8946cf3a268..2868ef4c74ef 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> @@ -15,6 +15,8 @@
->>  
->>  	aliases {
->>  		serial0 = &uart0;
->> +		ethernet0=&gmac0;
->> +		ethernet1=&gmac1;
-> 
-> Please match the whitespace usage of the existing entry.
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0d1409e4ff08aa4a9a254d3f723410db32aa7552
 
-Will fix in the next version.
+Thank you!
 
->>  	};
->>  
->>  	chosen {
->> @@ -114,3 +116,47 @@
->>  	pinctrl-0 = <&uart0_pins>;
->>  	status = "okay";
->>  };
->> +
->> +&gmac0 {
->> +	status = "okay";
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	phy-handle = <&phy0>;
->> +	status = "okay";
->> +	mdio0 {
-> 
-> A line of whitespace before the child nodes too please :)
-> 
-
-Will fix.
-
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		compatible = "snps,dwmac-mdio";
->> +		phy0: ethernet-phy@0 {
->> +			reg = <0>;
->> +			rxc_dly_en = <1>;
->> +			tx_delay_sel_fe = <5>;
->> +			tx_delay_sel = <0xa>;
->> +			tx_inverted_10 = <0x1>;
->> +			tx_inverted_100 = <0x1>;
->> +			tx_inverted_1000 = <0x1>;
->> +		};
->> +	};
->> +};
->> +
->> +&gmac1 {
->> +	status = "okay";
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	phy-handle = <&phy1>;
->> +	status = "okay";
->> +	mdio1 {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		compatible = "snps,dwmac-mdio";
->> +		phy1: ethernet-phy@1 {
->> +			reg = <1>;
->> +			tx_delay_sel_fe = <5>;
->> +			tx_delay_sel = <0>;
->> +			rxc_dly_en = <0>;
->> +			tx_inverted_10 = <0x1>;
->> +			tx_inverted_100 = <0x1>;
->> +			tx_inverted_1000 = <0x0>;
->> +		};
->> +	};
->> +};
->> -- 
->> 2.17.1
->> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
