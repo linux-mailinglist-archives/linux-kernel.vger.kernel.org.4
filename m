@@ -2,115 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C45647E63
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7F8647E65
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLIHRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
+        id S229930AbiLIHR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiLIHRJ (ORCPT
+        with ESMTP id S229628AbiLIHRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:17:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D83A31DD7;
-        Thu,  8 Dec 2022 23:17:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so2741290wmi.3;
-        Thu, 08 Dec 2022 23:17:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/LCy/d/7cFCAy3kAThheVqXGRbKxH6e9mviumbYm7c=;
-        b=Ep5jefDyiLAXJnhqR+U2NKELAg+lA97eqqHMhvkVV+aRjYE4InGCkBCOle7ysDnbTO
-         PKaVDBdtcp1EJkvwwrSCcY2AtQ8tI6w95+Xk4YBQbgQ+cwPBl7rwCAEI8P6hN+ofp7M7
-         XlL0rLPuFw5YiPjyKeuDl21SWZfgwuIKSFQuOe6NFhEyUIILCCNwUaiw8PxUeDLQV3xt
-         GNAeDtGIJu9z2sqZ/Z33nJc+IiW5WvysqNV3g4psYxP2rqJ3rCtZFpXss8JYqkanavfV
-         1vaOFJElsrkSL8x2TLqq+mb1OW2wYptbCsS1uI+Sqjw7P3GHodmlu2NUDsTXQiXVKmSy
-         aMOQ==
+        Fri, 9 Dec 2022 02:17:53 -0500
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8971AA11;
+        Thu,  8 Dec 2022 23:17:50 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id bx10so4317784wrb.0;
+        Thu, 08 Dec 2022 23:17:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8/LCy/d/7cFCAy3kAThheVqXGRbKxH6e9mviumbYm7c=;
-        b=lhTFyMvN6jHI4dAJ2X0yvFAzW6P9WaMLDxoJVuyV4FfnOOreX0HHXQHYHc7EYmIcrd
-         6q1d+YWFdpqz5EaBCSpUhw/Z7I3qtFNN1R7ObfIXmxbD9KHtDmn9gw1nCS9p5RwxZA3B
-         i/MeQrqusR15IcM27uhwSku9lF/jDyXI1C/vZoHhmAVGWQ/Y/M5HYgjQIHRq1ZCZbqGF
-         ygcdYjUHNuYL/aNp9iTtEMKnzYKYNeFpQgz924htw040WXbQnQwYyq8HglrugV6vapcZ
-         7VjlEZjQUfh1Qg7fJ3VZEQT7/06o2jVzOYeOJ35sS4U4gOQ0v/CRXfmrbuQ0ZbbCA1Dz
-         zzPg==
-X-Gm-Message-State: ANoB5pnG8utuda3PiINGHkmlVvGbnTwh1QqiQCW5RblCjrJkpNNOBCLk
-        CIMEY4ho5r3ffVX3gR5iZo3yglghY/8=
-X-Google-Smtp-Source: AA0mqf5yU2g+sGKdKn91qa1TmxluiqjdrDClfICOFqEJUtyO738YTISN0kqyFNWFPXVxdyE4s+4AJA==
-X-Received: by 2002:a05:600c:4fd1:b0:3d0:6c60:b4d1 with SMTP id o17-20020a05600c4fd100b003d06c60b4d1mr4820311wmq.6.1670570226308;
-        Thu, 08 Dec 2022 23:17:06 -0800 (PST)
-Received: from localhost.localdomain (188.red-88-10-59.dynamicip.rima-tde.net. [88.10.59.188])
-        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm8249488wms.15.2022.12.08.23.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 23:17:05 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-pci@vger.kernel.org
-Cc:     bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, matthias.bgg@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: mt7621: Sleep a bit after power on the PCIs phy ports
-Date:   Fri,  9 Dec 2022 08:17:03 +0100
-Message-Id: <20221209071703.2891714-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+yITXud0X/ZAcTv3o4ks1/uA+y77wuhRyG/xgZE2LM=;
+        b=ztZK5WJ4fFy9wb0115QUvY9u51YgPPp4QrC1Xj+InENdHtda5WpUBYHnWCs6RF35vm
+         WwL7P0znonO9525UUJ/DtwN6A8634q97mXiQl/XtyEaN+MfpGR73bUW8Yh2tAwa+j5jm
+         /ReCa7oJnKBQLrl90/Y8W3k4+57m9VfwsFZpNpMGXPmDYC1BiMuJbwAGrwIYyOCWuTD4
+         GT67Nyxhr3HH79pC5lt5F8V+Tro3l7Cx0qXld/nD+RpjS62Zr6gkCyoxDwbE81dlI61p
+         VB7oyDoKNbzSNnbtJrDIwUT0PzBHguGuJ6kqOq+zaCaldzTlaTqfz3pfVw8WP5LDCEFu
+         xlEw==
+X-Gm-Message-State: ANoB5pnCjXugRC+TKSbwgfCyD5xt7EU70Eul9aVghThIYSHe/TDftwnf
+        p5fXH0bFvaVTBuZYZffj6mQ=
+X-Google-Smtp-Source: AA0mqf7KNUQWA1LeH8AdJxZntwBQ9+UtMRooxbZdwDVjn6ZA9ejUX6pZ6aMDIfnKejffcCVHUgsWxg==
+X-Received: by 2002:a5d:6f15:0:b0:242:bef:80a1 with SMTP id ay21-20020a5d6f15000000b002420bef80a1mr4943379wrb.2.1670570268813;
+        Thu, 08 Dec 2022 23:17:48 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b0023657e1b980sm615350wri.53.2022.12.08.23.17.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 23:17:48 -0800 (PST)
+Message-ID: <6614f5d2-d99b-ea8a-f660-7a3433499a9f@kernel.org>
+Date:   Fri, 9 Dec 2022 08:17:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/1] tty: fix out-of-bounds access in
+ tty_driver_lookup_tty()
+Content-Language: en-US
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20221207075236.23171-1-svens@linux.ibm.com>
+ <20221207075236.23171-2-svens@linux.ibm.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221207075236.23171-2-svens@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices like ZBT WE1326 and ZBT WF3526-P need to sleep a bit after call
-to mt7621_pcie_init_port() driver function to get into reliable boots for
-both warn and hard resets. The needed time for these devices to always detect
-the ports seems to be from 75 to 100 milliseconds. Hence, properly add an
-extra 100 milliseconds msleep() call to make also these devices work.
+On 07. 12. 22, 8:52, Sven Schnelle wrote:
+> When specifying an invalid console= device like console=tty3270,
+> tty_driver_lookup_tty() returns the tty struct without checking
+> whether index is a valid number.
+> 
+> To reproduce:
+> 
+> qemu-system-x86_64 -enable-kvm -nographic -serial mon:stdio \
+> -kernel ../linux-build-x86/arch/x86/boot/bzImage \
+> -append "console=ttyS0 console=tty3270"
+> 
+> This crashes with:
+> 
+> [    0.748921]   No soundcards found.
+> [    0.749293] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+> [    0.750125] cfg80211: failed to load regulatory.db
+> [    0.750611] ------------[ cut here ]------------
+> [    0.751100] refcount_t: saturated; leaking memory.
+> [    0.751603] WARNING: CPU: 0 PID: 1 at lib/refcount.c:22 refcount_warn_saturate+0x51/0x110
+> [    0.752438] Modules linked in:
+> [    0.752772] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc7-00194-gc911e8eba40a-dirty #15
+> [    0.753609] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
+> [..]
+> [    0.763352] Call Trace:
+> [    0.763648]  <TASK>
+> [    0.763907]  tty_open+0x5be/0x6f0
+> [    0.764304]  chrdev_open+0xbd/0x230
+> [    0.764694]  ? cdev_device_add+0x80/0x80
+> [    0.765217]  do_dentry_open+0x1e0/0x410
+> [    0.765719]  path_openat+0xca9/0x1050
+> [    0.766224]  do_filp_open+0xaa/0x150
+> [    0.766694]  file_open_name+0x133/0x1b0
+> [    0.767260]  filp_open+0x27/0x50
+> [    0.767674]  console_on_rootfs+0x14/0x4d
+> [    0.768189]  kernel_init_freeable+0x1e4/0x20d
+> [    0.768726]  ? rest_init+0xc0/0xc0
+> [    0.769108]  kernel_init+0x11/0x120
+> [    0.769480]  ret_from_fork+0x22/0x30
+> [    0.769863]  </TASK>
+> [    0.770128] ---[ end trace 0000000000000000 ]---
+> [    0.770599] BUG: kernel NULL pointer dereference, address: 00000000000000ef
+> [    0.771265] #PF: supervisor read access in kernel mode
+> [    0.771773] #PF: error_code(0x0000) - not-present page
+> [    0.772311] PGD 0 P4D 0·
+> [    0.772609] Oops: 0000 [#1] PREEMPT SMP PTI
+> [    0.773066] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rc7-00194-gc911e8eba40a-dirty #15
+> [    0.774027] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
+> [    0.774878] RIP: 0010:tty_open+0x268/0x6f0
+> [..]
+> [    0.783386] Call Trace:
+> [    0.783715]  <TASK>
+> [    0.784013]  chrdev_open+0xbd/0x230
+> [    0.784444]  ? cdev_device_add+0x80/0x80
+> [    0.784920]  do_dentry_open+0x1e0/0x410
+> [    0.785389]  path_openat+0xca9/0x1050
+> [    0.785813]  do_filp_open+0xaa/0x150
+> [    0.786240]  file_open_name+0x133/0x1b0
+> [    0.786746]  filp_open+0x27/0x50
+> [    0.787244]  console_on_rootfs+0x14/0x4d
+> [    0.787800]  kernel_init_freeable+0x1e4/0x20d
+> [    0.788383]  ? rest_init+0xc0/0xc0
+> [    0.788881]  kernel_init+0x11/0x120
+> [    0.789356]  ret_from_fork+0x22/0x30
+> [    0.789842]  </TASK>
+> [    0.790163] Modules linked in:
+> [    0.790502] CR2: 00000000000000ef
+> [    0.790861] ---[ end trace 0000000000000000 ]---
+> [    0.791332] RIP: 0010:tty_open+0x268/0x6f0
+> [..]
+> [    0.799648] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009
+> [    0.800479] Kernel Offset: 0x10400000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [    0.801534] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009 ]---
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
-Hi Bjorn / Lorenzo,
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-I send previous patch here [0] related with this issue. Since after a bit
-of testing with these devices by openwrt community [1] we end up that there is
-no need of increasing PERST_DELAY_MS definition. This is also the reason
-of not sending a v2 for this but a new patch with the proper solution.
-I preferred to just use the same PERST_DELAY_MS define also for this to
-not perform extra changes but the needed to the driver. If you prefer
-me to write new definitions for all the sleep paths you pointed out in
-[0], just let me know and I will send them also.
+Yes, this makes sense as a sanity check for all drivers. But I would 
+_also_ disallow registering such a console in vt:
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -3075,6 +3075,11 @@ int vt_kmsg_redirect(int new)
+   * The console must be locked when we get here.
+   */
 
-Thanks in advance for your time.
++static int vt_console_setup(struct console *co, char *options)
++{
++       return co->index >= MAX_NR_CONSOLES ? -EINVAL : 0;
++}
++
+  static void vt_console_print(struct console *co, const char *b, 
+unsigned count)
+  {
+         struct vc_data *vc = vc_cons[fg_console].d;
+@@ -3158,6 +3163,7 @@ static struct tty_driver *vt_console_device(struct 
+console *c, int *index)
 
-Best regards,
-    Sergio Paracuellos
+  static struct console vt_console_driver = {
+         .name           = "tty",
++       .setup          = vt_console_setup,
+         .write          = vt_console_print,
+         .device         = vt_console_device,
+         .unblank        = unblank_screen,
 
-[0]: https://lore.kernel.org/linux-pci/20221119110837.2419466-1-sergio.paracuellos@gmail.com/T/#u
-[1]: https://github.com/openwrt/openwrt/pull/11220
+That means dmesg would say:
+   Console: colour dummy device 80x25
+   printk: console [ttyS0] enabled
 
- drivers/pci/controller/pcie-mt7621.c | 1 +
- 1 file changed, 1 insertion(+)
+And not:
+   Console: colour dummy device 80x25
+   printk: console [tty3270] enabled
+   printk: console [ttyS0] enabled
 
-diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-index 4bd1abf26008..3311ca64b315 100644
---- a/drivers/pci/controller/pcie-mt7621.c
-+++ b/drivers/pci/controller/pcie-mt7621.c
-@@ -369,6 +369,7 @@ static int mt7621_pcie_init_ports(struct mt7621_pcie *pcie)
- 		}
- 	}
- 
-+	msleep(PERST_DELAY_MS);
- 	mt7621_pcie_reset_ep_deassert(pcie);
- 
- 	tmp = NULL;
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> ---
+>   drivers/tty/tty_io.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+> index de06c3c2ff70..1ac6784ea1f9 100644
+> --- a/drivers/tty/tty_io.c
+> +++ b/drivers/tty/tty_io.c
+> @@ -1224,14 +1224,16 @@ static struct tty_struct *tty_driver_lookup_tty(struct tty_driver *driver,
+>   {
+>   	struct tty_struct *tty;
+>   
+> -	if (driver->ops->lookup)
+> +	if (driver->ops->lookup) {
+>   		if (!file)
+>   			tty = ERR_PTR(-EIO);
+>   		else
+>   			tty = driver->ops->lookup(driver, file, idx);
+> -	else
+> +	} else {
+> +		if (idx >= driver->num)
+> +			return ERR_PTR(-EINVAL);
+>   		tty = driver->ttys[idx];
+> -
+> +	}
+>   	if (!IS_ERR(tty))
+>   		tty_kref_get(tty);
+>   	return tty;
+
+thanks,
 -- 
-2.25.1
+js
+suse labs
 
