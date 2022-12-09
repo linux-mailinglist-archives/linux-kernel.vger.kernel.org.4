@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A17648299
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A180664829E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiLIMvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S229972AbiLIMza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiLIMvh (ORCPT
+        with ESMTP id S229724AbiLIMz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:51:37 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281015C0F7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:51:32 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id m14so5091595wrh.7
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtnZ1kdjAPZRqPqQ9rwdeEDxyI3IJgipy4lZ3Z6DHOU=;
-        b=mzhiuYzLh5MXO4d2/CaGSLQRvmAHHQmyihleIadBSeVx0urmsuaZmDMUhlN6s6G8Up
-         KGqJ2YNpR9+iZiOaO1gzAodX6jigmaayrqo/LY5geqBf0KGwQiN28ak0hr+qKVhp41/h
-         lwiBFZuTLTdW/6SDBpJfuU28ZTjfX0BYytaoyOD4VdJvI5R6qLbslN8pJoYKU/RUfBxc
-         yqvA/kxuhhz9o5Y6B2qx95QtRTxAjXm4uEfj31X4efvNKWuxnGeFyjDP1kIh0Lgasnb7
-         uO+8X9prY1dZNpqTfVJp2HvUy4jyN7/6zqEDrct7rMKKm1K8MijdUSHqH3O6ArIOH3Pl
-         9/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OtnZ1kdjAPZRqPqQ9rwdeEDxyI3IJgipy4lZ3Z6DHOU=;
-        b=LGM5wusoeTMvzdU5SH5xlXOdRkW8V659licL6kdLDxI2j8UlDFvqWq04KGn2dK5ZJt
-         fsRhXiJ+AcpzT4zdOXd64ug3sAV9yf+e6mzUEdEnn75q1wgsJgtULbStiE0Z/SW5DL6r
-         kzqGOWhWmnvgsXJgxbNofQhbyDs67SoIfpth84WTIrktb6Z26cxvHS1oeKLdgtk3I3bn
-         TuP+V6QO6LHVgVWjFgGF8weTDPDEEMIOSWGX93Gsm11x6MyWwyQJ10sj/HQpnUwq+fak
-         YlH2++7xYcDn8rFZdstzl1ojdpcUkhlFkBsE9AtaWVtzcaIGK1MY+2ttqsUqyPyc7Oir
-         od1A==
-X-Gm-Message-State: ANoB5pkL9S1u+cjAlhFRgvGbBlYt8LImR7ttm7QDvJKQFj2Hhp/qR11i
-        6sIf9aGh0Hyhll54oqHUg4lVlg==
-X-Google-Smtp-Source: AA0mqf44qDADYcbcErOKO4f1THlbbJ0Qbkf2oOidypUvsQ4ltBNeY7SL3mw7aTGkms7BkKrITifFxA==
-X-Received: by 2002:a5d:5111:0:b0:232:be5b:44db with SMTP id s17-20020a5d5111000000b00232be5b44dbmr3931759wrt.67.1670590290559;
-        Fri, 09 Dec 2022 04:51:30 -0800 (PST)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id e4-20020a5d5004000000b0022e57e66824sm1538868wrt.99.2022.12.09.04.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:51:30 -0800 (PST)
-Date:   Fri, 9 Dec 2022 12:51:28 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     lee@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] backlight: use sysfs_emit() to instead of
- scnprintf()
-Message-ID: <Y5MvULWEnqp7pzft@aspen.lan>
-References: <202212051556478226726@zte.com.cn>
+        Fri, 9 Dec 2022 07:55:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143C6BC81;
+        Fri,  9 Dec 2022 04:55:27 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1FAE51FDD8;
+        Fri,  9 Dec 2022 12:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670590526; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Mpi4kBflHyGnl2RYaOzIsTMrflHCQdsxBAJVfeYlOE=;
+        b=I8sTQjXmWsNBWqXVIJsQ9SEgYBSgsuxLEI1rsa4kaBi4yWEGORroOqUtwCSj+pGxNiZP5o
+        78r15DO2cmQJF1ENzkpRIIzzTutseiaIwwkSw5UY7YoDSYEPJPg8pCmDPYerPCDUap0MSv
+        tXcPR5NBpKiRRLY7/FC+8zDogwUmiJc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670590526;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Mpi4kBflHyGnl2RYaOzIsTMrflHCQdsxBAJVfeYlOE=;
+        b=rF95JOp4MpBM+t0tqqyK4lWJ8XLCYkCMrEMPhfFSsx7ap4MkID2vBHuK/q9WmpevUExUkm
+        jqp/AtY7E0m+oFCQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E3F5B2C141;
+        Fri,  9 Dec 2022 12:55:25 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 13:55:29 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Song Liu <song@kernel.org>
+cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module
+ removal
+In-Reply-To: <20220901171252.2148348-1-song@kernel.org>
+Message-ID: <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz>
+References: <20220901171252.2148348-1-song@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212051556478226726@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 03:56:47PM +0800, ye.xingchen@zte.com.cn wrote:
-> Subject: [PATCH linux-next] backlight: use sysfs_emit() to instead of
-> scnprintf()
+Hi,
 
-Isn't this a v2?
+first thank you for taking over and I also appologize for not replying 
+much sooner.
 
-(this isn't just a "nice to have"... I ended up delaying review for
-several days until I had time to look up where I had seen these changes
-before)
+On Thu, 1 Sep 2022, Song Liu wrote:
 
+> From: Miroslav Benes <mbenes@suse.cz>
+> 
+> Josh reported a bug:
+> 
+>   When the object to be patched is a module, and that module is
+>   rmmod'ed and reloaded, it fails to load with:
+> 
+>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> 
+>   The livepatch module has a relocation which references a symbol
+>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>   tries to replace the old relocation with a new one, it sees that
+>   the previous one is nonzero and it errors out.
+> 
+>   On ppc64le, we have a similar issue:
+> 
+>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> 
+> He also proposed three different solutions. We could remove the error
+> check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> ("x86/module: Detect and skip invalid relocations"). However the check
+> is useful for detecting corrupted modules.
+> 
+> We could also deny the patched modules to be removed. If it proved to be
+> a major drawback for users, we could still implement a different
+> approach. The solution would also complicate the existing code a lot.
+> 
+> We thus decided to reverse the relocation patching (clear all relocation
+> targets on x86_64). The solution is not
+> universal and is too much arch-specific, but it may prove to be simpler
+> in the end.
+> 
+> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Song Liu <song@kernel.org>
 
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
->
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Petr has commented on the code aspects. I will just add that s390x was not 
+dealt with at the time because there was no live patching support for 
+s390x back then if I remember correctly and my notes do not lie. The same 
+applies to powerpc32. I think that both should be fixed as well with this 
+patch. It might also help to clean up the ifdeffery in the patch a bit.
 
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-
-
-Daniel.
+Miroslav
