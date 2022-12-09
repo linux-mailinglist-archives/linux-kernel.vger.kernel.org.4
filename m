@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9166483E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C8C6483E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiLIOiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:38:08 -0500
+        id S229962AbiLIOiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:38:11 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiLIOiE (ORCPT
+        with ESMTP id S229910AbiLIOiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:38:04 -0500
+        Fri, 9 Dec 2022 09:38:05 -0500
 Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D8B23E96;
-        Fri,  9 Dec 2022 06:38:02 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so4886wmh.0;
-        Fri, 09 Dec 2022 06:38:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2910522536;
+        Fri,  9 Dec 2022 06:38:04 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m4-20020a05600c3b0400b003d1cb516ce0so5900476wms.4;
+        Fri, 09 Dec 2022 06:38:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cvV3cPG3K4cvqvxBtqhjbOYVyBlWZ69Pt9FKlRh4MCo=;
-        b=kywWHMjsf352aulDMz8ameENfk8HAdU0LBgrbSYTRbEy9OePwULQYuig1MGCQUdQoY
-         kM4F//k/FLWqG7h1CPgbVcsLIzPPq5OyTfj1QfIJ8vSJ6rFQrFgIPMh7SQsBmKYQQP54
-         vIVxpIQNZvMEIlifFb5GKvEG+f4rLH4GO04ta6hj16oudphHh/RhAFzl7xrybBEelQih
-         KAOd6DpzckpBQYS7D1+EtUF9L23eqZmxMGTZSlL+k2qGuhXSVa/8/OKTEh5X9m/qUNmh
-         N+3tgTN8sP7v7JCWc6bqzstGrU/HaHUXvOfSh9qaCVyl7bQHes95qTE1kKUBhOIAkXB0
-         Qz3A==
+        bh=A09qABb0ead7LLA+4pGxEwf93dXTPbgLlbgE44UEqoI=;
+        b=hcoeDm5BMAsucMZXIIyUFZqQpMkQdA6hKitiSo57m/EPBWs/+EItLpiWeMyx9PkNuc
+         4nadDV9bSHfJEhfg50MKuBCg5Q7eshOB8+/esaH3uMZlhU6/ZVjidsYdSd0k1UnDGMwH
+         hM5jZ7AxG6HcFZZsCmiMLqocLhV5kjvMyzc9EvvU9dv//i6XUZnBR5OfbWyzjHYMuI9T
+         W2qYS7vRsA4VXM2MfoFpeKbUoWuEjBcZVZuKYrUyQsK762Z9HX1UU1VFRfil5H2JilFL
+         ef8A/0vdVUEXMbXoPh+I3KCTXl5/XVSFt7+qNgNyLh8Wm3N0P1ZqaXzLnA0Tv98Nx1m+
+         OLVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cvV3cPG3K4cvqvxBtqhjbOYVyBlWZ69Pt9FKlRh4MCo=;
-        b=W3dEujUxUZm4Ar0km9po9+mMUZXwwZZTEIBxUFzNDXvwYMI4QM4Nkz8+/00q0oAQU3
-         ITjs2V8deBaUzHqmIufwzw/pfLIdRIHhifzqw08hpRWnkZ6OBvIRClpardb50lKOCEU9
-         XS1Naax0445dgDdYzkrPlj3q0jMk3v9u/aUXftbu+6zi7DEW/xM99HZNlVPkpqyKDVC0
-         2qmQPhTrKG43h2qFrjodXoAyRSEXH0i5a6iSx6RqSqnISDzxlMwhHW4LkQsSCPc+TDUP
-         VhUBZONCbztJ9yNhFd2bjVa+Xm6C5TlTRdCJBbjRXh0h8Ne/ELA1cWlNl6iAmAmBxZfP
-         Pwpg==
-X-Gm-Message-State: ANoB5pnfH5caLSqOE4J0X4ItPR6jKgm6vX3U2li1Ky1Z6OPdV92upGl/
-        CbvuMJz3gZ0Llcxrb5BLB7Y=
-X-Google-Smtp-Source: AA0mqf49j8Q7ZiY1pgY8rxBItA9I0v9X3cjt3il4DRy65yTQdOP/Jil0t02r2c0IS8PRrOnkF7inPQ==
-X-Received: by 2002:a05:600c:654e:b0:3d0:6a57:66a5 with SMTP id dn14-20020a05600c654e00b003d06a5766a5mr5345486wmb.0.1670596680751;
-        Fri, 09 Dec 2022 06:38:00 -0800 (PST)
+        bh=A09qABb0ead7LLA+4pGxEwf93dXTPbgLlbgE44UEqoI=;
+        b=eSaahT4iYawMIYSdN+wxRMF5z2w2e2opq9NRCSsnv78W6+0rMI+8axdPxydj4XLADg
+         V72DsctftnEfe7u4EUMvyKlmHi7IqEnshDQijE7gmMK4TLU9RUdExqtHmrV5cfts6ysw
+         NBdZxrAcdH5aIUsYE1wT9TUBwMJjvq8RLE9brsz+RdBJkBnKr+a/7aA1HTGFtARHtgzR
+         til3r/rBvistoZmAmwQ0ne5Ki048rq8ADKhXJagOj4wHEUhpPt6zgwgyUYoJV/bFRItt
+         tWu3wU0eLgBDV7McX5qjTtDdtwn6XbWFXZX09qIksAbzMjTHw78pa/F/Wtgfx6SNVjyy
+         imKA==
+X-Gm-Message-State: ANoB5pnh6rXFIDeGqpnlP861qmNGsyTu5DVVTBmDSIlw0UeJQjirmVfp
+        atV04ZkcT5g1rGLbbUv84v8=
+X-Google-Smtp-Source: AA0mqf4BP+j3eYb6lYBG3Vq+E0x6EYeaDNVZccp1XNdhMHTnCXJCvO9OcTHBgCBzX0KlkkkAKCwdKg==
+X-Received: by 2002:a7b:c417:0:b0:3c6:e63e:8155 with SMTP id k23-20020a7bc417000000b003c6e63e8155mr5100647wmi.12.1670596682659;
+        Fri, 09 Dec 2022 06:38:02 -0800 (PST)
 Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id m31-20020a05600c3b1f00b003d1e3b1624dsm9645517wms.2.2022.12.09.06.37.59
+        by smtp.gmail.com with ESMTPSA id m31-20020a05600c3b1f00b003d1e3b1624dsm9645517wms.2.2022.12.09.06.38.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:38:00 -0800 (PST)
+        Fri, 09 Dec 2022 06:38:02 -0800 (PST)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -64,11 +64,10 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Umang Jain <umang.jain@ideasonboard.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/3] media: dt-bindings: ak7375: Add supplies
-Date:   Fri,  9 Dec 2022 17:37:40 +0300
-Message-Id: <20221209143741.214242-3-y.oudjana@protonmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/3] media: i2c: ak7375: Add regulator management
+Date:   Fri,  9 Dec 2022 17:37:41 +0300
+Message-Id: <20221209143741.214242-4-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221209143741.214242-1-y.oudjana@protonmail.com>
 References: <20221209143741.214242-1-y.oudjana@protonmail.com>
@@ -86,48 +85,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Add supply properties to describe regulators needed to power
-the AK7375 VCM.
+Make the driver get needed regulators on probe and enable/disable
+them on runtime PM callbacks.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Tested-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- .../bindings/media/i2c/asahi-kasei,ak7375.yaml        | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/i2c/ak7375.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/asahi-kasei,ak7375.yaml b/Documentation/devicetree/bindings/media/i2c/asahi-kasei,ak7375.yaml
-index 22b1251b16ee..22a810fc7222 100644
---- a/Documentation/devicetree/bindings/media/i2c/asahi-kasei,ak7375.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/asahi-kasei,ak7375.yaml
-@@ -20,9 +20,17 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
+index 1af9f698eecf..e7cec45bc271 100644
+--- a/drivers/media/i2c/ak7375.c
++++ b/drivers/media/i2c/ak7375.c
+@@ -6,6 +6,7 @@
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/pm_runtime.h>
++#include <linux/regulator/consumer.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
  
-+  vdd-supply:
-+    description: VDD supply
+@@ -23,17 +24,29 @@
+  */
+ #define AK7375_CTRL_STEPS	64
+ #define AK7375_CTRL_DELAY_US	1000
++/*
++ * The vcm may take up 10 ms (tDELAY) to power on and start taking
++ * I2C messages. Based on AK7371 datasheet.
++ */
++#define AK7375_POWER_DELAY_US	10000
+ 
+ #define AK7375_REG_POSITION	0x0
+ #define AK7375_REG_CONT		0x2
+ #define AK7375_MODE_ACTIVE	0x0
+ #define AK7375_MODE_STANDBY	0x40
+ 
++static const char * const ak7375_supply_names[] = {
++	"vdd",
++	"vio",
++};
 +
-+  vio-supply:
-+    description: I/O pull-up supply
+ /* ak7375 device structure */
+ struct ak7375_device {
+ 	struct v4l2_ctrl_handler ctrls_vcm;
+ 	struct v4l2_subdev sd;
+ 	struct v4l2_ctrl *focus;
++	struct regulator_bulk_data supplies[ARRAY_SIZE(ak7375_supply_names)];
 +
- required:
-   - compatible
-   - reg
-+  - vdd-supply
-+  - vio-supply
+ 	/* active or standby mode */
+ 	bool active;
+ };
+@@ -133,12 +146,24 @@ static int ak7375_probe(struct i2c_client *client)
+ {
+ 	struct ak7375_device *ak7375_dev;
+ 	int ret;
++	unsigned int i;
  
- additionalProperties: false
+ 	ak7375_dev = devm_kzalloc(&client->dev, sizeof(*ak7375_dev),
+ 				  GFP_KERNEL);
+ 	if (!ak7375_dev)
+ 		return -ENOMEM;
  
-@@ -35,6 +43,9 @@ examples:
-         ak7375: camera-lens@c {
-             compatible = "asahi-kasei,ak7375";
-             reg = <0x0c>;
++	for (i = 0; i < ARRAY_SIZE(ak7375_supply_names); i++)
++		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
 +
-+            vdd-supply = <&vreg_l23a_2p8>;
-+            vio-supply = <&vreg_lvs1a_1p8>;
-         };
-     };
++	ret = devm_regulator_bulk_get(&client->dev,
++				      ARRAY_SIZE(ak7375_supply_names),
++				      ak7375_dev->supplies);
++	if (ret) {
++		dev_err_probe(&client->dev, ret, "Failed to get regulators\n");
++		return ret;
++	}
++
+ 	v4l2_i2c_subdev_init(&ak7375_dev->sd, client, &ak7375_ops);
+ 	ak7375_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	ak7375_dev->sd.internal_ops = &ak7375_int_ops;
+@@ -208,6 +233,11 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
+ 	if (ret)
+ 		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
  
++	ret = regulator_bulk_disable(ARRAY_SIZE(ak7375_supply_names),
++				     ak7375_dev->supplies);
++	if (ret)
++		return ret;
++
+ 	ak7375_dev->active = false;
+ 
+ 	return 0;
+@@ -228,6 +258,14 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
+ 	if (ak7375_dev->active)
+ 		return 0;
+ 
++	ret = regulator_bulk_enable(ARRAY_SIZE(ak7375_supply_names),
++				    ak7375_dev->supplies);
++	if (ret)
++		return ret;
++
++	/* Wait for vcm to become ready */
++	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 500);
++
+ 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
+ 		AK7375_MODE_ACTIVE, 1);
+ 	if (ret) {
 -- 
 2.38.1
 
