@@ -2,100 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2294648190
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10D464819B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiLILZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S229517AbiLIL0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiLILZW (ORCPT
+        with ESMTP id S229790AbiLIL0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:25:22 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D79D6B9A6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:25:21 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so6580787lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 03:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0K7eVJj4k3cMvSUFweS+f/J9GwqB4FTC28EsgFNd3e4=;
-        b=v8O3IindDPA/6bCVNb+vJbPGFFquksYTufkIL+Vc7fLkAd/9VzB6hOH2SxGv89qjVJ
-         cNK9uYg8Oy/rJtYZ/8G8LMuzRhp3Gid70zHybmHW1tZxmRozMR0cJNglctyaw17vBDgZ
-         +fzwQWVeI/oQsKm7SMm1faRESIHEDNiLz86aDkwC53wksXi4ccm+VpJJsbzCNj1fZ4iD
-         tjwfA1zH3m3vTQH0URH6ln7ISWtYQR2uIGmDXytFFNw0KOwKuHfI45v68zdyc4VpD9jB
-         2pNx580WFgQsamVQLtnQA3INsyxfKp5Es7Yezkp5xBefQc8FjwI9VJhqJWhzi5YXrMY2
-         hBKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0K7eVJj4k3cMvSUFweS+f/J9GwqB4FTC28EsgFNd3e4=;
-        b=QJt6CR2sJQzxEQZQq3FIwHVRUJm0xTYGFjwAHCSfVHykTzuzwvBbavfxQcbXzNz76D
-         G8ljpVBFl4Vw+yaoIsvfIdo4pm92kzNRFB702xmKOmouPIhqNDbUT186Wj2M027mYBZ7
-         uphMlJ1w1eW9F6s0otUwFMG3qUWidUVJTtSvgu7xqvZhg+5n3EgtYEOHsZSyeCFTBEmX
-         via3PrA/DTxI/Jd1ncvcW5S0KOuaTqZxdXSpARPmsHoCnSOTTUnIycpns7dlqyyVOPET
-         dfMmoFhqoe9y+IDU9G6M+BTBRhUzu/U8DqG7EdPlt3l6qLJrp1r+YSbwU/BtGoEcZT4U
-         VUxw==
-X-Gm-Message-State: ANoB5pnXywzVkR5bOogOeuzFfiwWVY6dOpBIl5Hnx3bh0Tx0yo01qxuh
-        GhskloWhcn1kJ2uP85M2ls4m+A==
-X-Google-Smtp-Source: AA0mqf6LfW07j/W9B4V1vwkpcNXcjozq6HyoRYstlaUqh4lqn4eUXH8+9Cn1fFTwacZZFVk5UNKMVQ==
-X-Received: by 2002:a05:6512:150:b0:4b4:f212:617c with SMTP id m16-20020a056512015000b004b4f212617cmr1274955lfo.1.1670585119603;
-        Fri, 09 Dec 2022 03:25:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e12-20020ac2546c000000b00497a0ea92desm218963lfn.135.2022.12.09.03.25.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 03:25:19 -0800 (PST)
-Message-ID: <79d72425-2188-0a87-4ad3-a334df081005@linaro.org>
-Date:   Fri, 9 Dec 2022 12:25:18 +0100
+        Fri, 9 Dec 2022 06:26:41 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BCA6FF38;
+        Fri,  9 Dec 2022 03:26:37 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 534C724E30E;
+        Fri,  9 Dec 2022 19:26:35 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
+ 2022 19:26:35 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
+ 2022 19:26:33 +0800
+Message-ID: <358b7965-7713-8d61-4bf2-d782d88556ec@starfivetech.com>
+Date:   Fri, 9 Dec 2022 19:26:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 2/2] dt-bindings: sound: rt5640: Allow to describe how
- LOUT is wired
+Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
 Content-Language: en-US
-To:     Jarrah Gosbell <kernel@undef.tools>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>
-References: <20221209105621.39237-1-kernel@undef.tools>
- <20221209105621.39237-2-kernel@undef.tools>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221209105621.39237-2-kernel@undef.tools>
-Content-Type: text/plain; charset=UTF-8
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-3-william.qiu@starfivetech.com>
+ <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <CACRpkdYP7MokLdRtxX9w7p80c=wHDHsoTYWrU53CnpsZ7o6aGg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2022 11:56, Jarrah Gosbell wrote:
-> From: Ondrej Jirman <megi@xff.cz>
+
+
+On 2022/12/9 5:09, Linus Walleij wrote:
+> Hi William,
 > 
-> Depending on HW design, som boards may expect mono differential output
-> on LOUT. Describe a property that enables it.
+> thanks for your patch!
 > 
-> Signed-off-by: Ondrej Jirman <megi@xff.cz>
-> Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
-> ---
->  Documentation/devicetree/bindings/sound/rt5640.txt | 3 +++
->  1 file changed, 3 insertions(+)
+> On Wed, Dec 7, 2022 at 2:17 PM William Qiu <william.qiu@starfivetech.com> wrote:
+> 
+>> Add sdio/emmc driver support for StarFive JH7110 soc.
+>>
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> 
+> (...)
+>> +#include <linux/gpio.h>
+> 
+> Never include this legacy header in new code. Also: you don't use it.
+> 
 
+Will fix.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/mmc/host.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_address.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/pm_runtime.h>
+> 
+> You're not using this include either.
+> 
 
-Best regards,
-Krzysztof
+Will fix.
 
+>> +#include <linux/regmap.h>
+>> +#include <linux/regulator/consumer.h>
+> 
+> Or this.
+> 
+
+Will fix.
+
+>> +#define ALL_INT_CLR            0x1ffff
+>> +#define MAX_DELAY_CHAIN                32
+>> +
+>> +struct starfive_priv {
+>> +       struct device *dev;
+>> +       struct regmap *reg_syscon;
+>> +       u32 syscon_offset;
+>> +       u32 syscon_shift;
+>> +       u32 syscon_mask;
+>> +};
+>> +
+>> +static unsigned long dw_mci_starfive_caps[] = {
+>> +       MMC_CAP_CMD23,
+>> +       MMC_CAP_CMD23,
+>> +       MMC_CAP_CMD23
+>> +};
+>> +
+>> +static void dw_mci_starfive_set_ios(struct dw_mci *host, struct mmc_ios *ios)
+>> +{
+>> +       int ret;
+>> +       unsigned int clock;
+>> +
+>> +       if (ios->timing == MMC_TIMING_MMC_DDR52 || ios->timing == MMC_TIMING_UHS_DDR50) {
+>> +               clock = (ios->clock > 50000000 && ios->clock <= 52000000) ? 100000000 : ios->clock;
+>> +               ret = clk_set_rate(host->ciu_clk, clock);
+>> +               if (ret)
+>> +                       dev_dbg(host->dev, "Use an external frequency divider %uHz\n", ios->clock);
+>> +               host->bus_hz = clk_get_rate(host->ciu_clk);
+>> +       } else {
+>> +               dev_dbg(host->dev, "Using the internal divider\n");
+>> +       }
+>> +}
+>> +
+>> +static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
+>> +                                            u32 opcode)
+>> +{
+>> +       static const int grade  = MAX_DELAY_CHAIN;
+>> +       struct dw_mci *host = slot->host;
+>> +       struct starfive_priv *priv = host->priv;
+>> +       int raise_point = -1, fall_point = -1;
+>> +       int err, prev_err = -1;
+> 
+> I don't like these default-init to -1. Can you just skip it and assign it
+> where it makes most sense instead?
+> 
+
+Will fix.
+
+>> +       int found = 0;
+> 
+> This looks like a bool.
+> 
+
+Will update.
+
+>> +       int i;
+>> +       u32 regval;
+>> +
+>> +       for (i = 0; i < grade; i++) {
+>> +               regval = i << priv->syscon_shift;
+>> +               err = regmap_update_bits(priv->reg_syscon, priv->syscon_offset,
+>> +                                               priv->syscon_mask, regval);
+>> +               if (err)
+>> +                       return err;
+>> +               mci_writel(host, RINTSTS, ALL_INT_CLR);
+>> +
+>> +               err = mmc_send_tuning(slot->mmc, opcode, NULL);
+>> +               if (!err)
+>> +                       found = 1;
+>> +
+>> +               if (i > 0) {
+>> +                       if (err && !prev_err)
+>> +                               fall_point = i - 1;
+>> +                       if (!err && prev_err)
+>> +                               raise_point = i;
+>> +               }
+>> +
+>> +               if (raise_point != -1 && fall_point != -1)
+>> +                       goto tuning_out;
+> 
+> There are just these raise point (shouldn't this be "rise_point" in proper
+> english?) and fall point, this misses some comments explaining what is
+> going on, the code is not intuitively eviden. Rise and fall of *what* for
+> example.
+> 
+
+I'll update it in next version.
+
+>> +
+>> +               prev_err = err;
+>> +               err = 0;
+>> +       }
+>> +
+>> +tuning_out:
+>> +       if (found) {
+>> +               if (raise_point == -1)
+>> +                       raise_point = 0;
+>> +               if (fall_point == -1)
+>> +                       fall_point = grade - 1;
+>> +               if (fall_point < raise_point) {
+>> +                       if ((raise_point + fall_point) >
+>> +                           (grade - 1))
+>> +                               i = fall_point / 2;
+>> +                       else
+>> +                               i = (raise_point + grade - 1) / 2;
+>> +               } else {
+>> +                       i = (raise_point + fall_point) / 2;
+>> +               }
+> 
+> Likewise here, explain what grade is, refer to the eMMC spec if necessary.
+> 
+
+Will update.
+
+> (...)
+>> +       ret = of_parse_phandle_with_fixed_args(host->dev->of_node,
+>> +                                               "starfive,sys-syscon", 3, 0, &args);
+>> +       if (ret) {
+>> +               dev_err(host->dev, "Failed to parse starfive,sys-syscon\n");
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       priv->reg_syscon = syscon_node_to_regmap(args.np);
+>> +       of_node_put(args.np);
+>> +       if (IS_ERR(priv->reg_syscon))
+>> +               return PTR_ERR(priv->reg_syscon);
+>> +
+>> +       priv->syscon_offset = args.args[0];
+>> +       priv->syscon_shift  = args.args[1];
+>> +       priv->syscon_mask   = args.args[2];
+> 
+> Why should these three things be in the device tree instead of being derived
+> from the compatible-string or just plain hard-coded as #defines?
+> I don't get it.
+> 
+
+Will update.
+
+>> +static int dw_mci_starfive_probe(struct platform_device *pdev)
+>> +{
+>> +       return dw_mci_pltfm_register(pdev, &starfive_data);
+>> +}
+>> +
+>> +static int dw_mci_starfive_remove(struct platform_device *pdev)
+>> +{
+>> +       return dw_mci_pltfm_remove(pdev);
+>> +}
+> 
+> Can't you just assign dw_mci_pltfm_remove() to .remove?
+> 
+
+Will fix.
+
+> Other than these things, the driver looks good!
+> 
+
+Hi Linus,
+
+Thank you for taking time to review and provide helpful comments for this patch.
+I will take all of your suggestions and update this driver in next version.
+
+Best Regards
+William Qiu
+> Yours,
+> Linus Walleij
