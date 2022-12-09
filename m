@@ -2,50 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A3B6484B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAA86484BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLIPLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S230209AbiLIPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiLIPLQ (ORCPT
+        with ESMTP id S230207AbiLIPLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:11:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D9284276
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:10:54 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3f1X-0006eE-So; Fri, 09 Dec 2022 16:10:51 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3f1W-003OFO-7C; Fri, 09 Dec 2022 16:10:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3f1W-003nXP-7L; Fri, 09 Dec 2022 16:10:50 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] platform: Provide a remove callback that returns no value
-Date:   Fri,  9 Dec 2022 16:09:14 +0100
-Message-Id: <20221209150914.3557650-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
+        Fri, 9 Dec 2022 10:11:51 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6041F84255
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:11:48 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b13so7498715lfo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:11:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7cuUWzalGLeE3U/K66CMEQVIJgCrRwDmBLE6q4R3bQQ=;
+        b=O50DfcpCmh/95hsBmIq4ezUYhOmXILd+8P/BZDcOZHpbQa+wNnV1R5daYSfIMEKqEl
+         qBli7kSxAExZi5vJg4or3a7jDyHQAXTz2EPAjRQRLGzTgfDoykJ3063Mwoa4i4R2ju2S
+         OMBp3EKAEh4l2n6pBIkCCobTu8qFRrRrtNUtKfHP44I3ar6RHWBW/iQRymjpYNj2uvfz
+         AohNzZWIywFGMCBkHAhWZGCgCtb5PhsN8x7BsjBs/erDxKKicTmbzN9tdiovn1/aaImb
+         E2naBnMqxuDwFGpK2ZpkJg6iamp4fPmAP9KTkuNryTouapq/ON8RQmHH1ld2n9xhoOVB
+         QRNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7cuUWzalGLeE3U/K66CMEQVIJgCrRwDmBLE6q4R3bQQ=;
+        b=lrqUOH1khVvnNQBADd2EXZtzCC+WqUeBuqTh16D0MBV2MTIrto5KK7NJAmnYOgY+0Y
+         GOsxPP0Al8wOqDwQwpx+tWifFXqnb6hYWRLyzpKejYJQ7Mn0seZqoRzd2RV0FNA7pwu1
+         DOGCgAUyJNqyQBotOtdbBL/lkyk5vS80x2gPYTsezT7wRCuKBx1rQl5+12+t6UsXl0zx
+         gNUe7CJ76ANbGIEd2MlJGhX94TfTPQx1HuOp8lNYMJDVaMWQBya4iZf3lfUh0+Q09RqP
+         NDQ8wQvafWTgD69t6Bo6n9wH94q20GOk2+PrPzsHOFHFRtBxWfQQsAqpe0GzpMCHfLEc
+         To/w==
+X-Gm-Message-State: ANoB5pna5xzsucfcXKhQlS3j14zxPV27NuwDoQCqmMNr9MwcyG+sKF3L
+        21ZYxvHQE7Dp5pL1zgvE0i4c3g==
+X-Google-Smtp-Source: AA0mqf58IgWVzN5mqZ7Bf20XMCGVYjy5o/MHY56iAFYEDVMalm0AKxvwtUjT5a3UKzEG221l1DLUYg==
+X-Received: by 2002:a05:6512:1318:b0:4a5:3735:9cc5 with SMTP id x24-20020a056512131800b004a537359cc5mr1937755lfu.33.1670598706741;
+        Fri, 09 Dec 2022 07:11:46 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y3-20020a199143000000b004b4bb6286d8sm297232lfj.84.2022.12.09.07.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 07:11:46 -0800 (PST)
+Message-ID: <ff731bed-1df5-aafd-d490-7bdf9382ff38@linaro.org>
+Date:   Fri, 9 Dec 2022 16:11:44 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] arm64: dts: zynqmp: Add xlnx prefix to GEM compatible
+ string
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc:     Harini Katakam <harini.katakam@amd.com>,
+        David Heidelberg <david@ixit.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <718283a9f5493ab63b4aaa12337dd5cab6538ff5.1670594172.git.michal.simek@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <718283a9f5493ab63b4aaa12337dd5cab6538ff5.1670594172.git.michal.simek@amd.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2873; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=k+rvkADnYOwKQ7El/a33BqcdznBVWIc0DqXYegQmmWQ=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjk0+Wuq2PYktrKBTsM3nQ4g88CeTllkY0xtJ4Qh1F cFRkvKKJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5NPlgAKCRDB/BR4rcrsCdy/B/ wMUoS3LhfBI5ozyRul0EPX3aOo2vkd4pRgK96PHcGndZPOqusehQRJs5CjwBuGdpKTv/yce600tfyH uJOnCSzyuE3OzkEsy2KML2nxkMDePh1AO5sQIvuHRsyqNcpfjdi68CKSlCQho1ebj5ROufZpOt/lV4 YSkMknTlPmpXqhlXAnLfykezXL4V7zGQZDJxVjZqdZ4VEgZB3FuSsFL4MmTGsxMUAqzsQWOZOZBOuT MG3LOxIwN4P/Khl2Auv1oDCRkQ9oIJmcBpQ2JUXM5fx6YO2z+Xi6YaUy1CU2f2IlaE3kXa2J4hQ/TU /GcElRdg5Ilxq9WcvcXsGOjDtfw/kQ
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,73 +84,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct platform_driver::remove returning an integer made driver authors
-expect that returning an error code was proper error handling. However
-the driver core ignores the error and continues to remove the device
-because there is nothing the core could do anyhow and reentering the
-remove callback again is only calling for trouble.
+On 09/12/2022 14:56, Michal Simek wrote:
+> From: Harini Katakam <harini.katakam@amd.com>
+> 
+> cdns,zynq/zynqmp/versal-gem was recently deprecated in Linux in
+> favour of xlnx prefix. Add this new compatible string and retain
+> the existing string for compatibility with uboot drivers.
+> 
+> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 8553299f12eb..233127d94204 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -507,7 +507,7 @@ nand0: nand-controller@ff100000 {
+>  		};
+>  
+>  		gem0: ethernet@ff0b0000 {
+> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
+> +			compatible = "xlnx,zynqmp-gem", "cdns,zynqmp-gem", "cdns,gem";
 
-So this is an source for errors typically yielding resource leaks in the
-error path.
+That's not what the bindings are saying. If this was the intention of
+AMD, you should have replied to my patch that you need prolonged
+backwards compatibility.
 
-As there are too many platform drivers to neatly convert them all to
-return void in a single go, do it in several steps after this patch:
-
- a) Convert all drivers to implement .remove_new() returning void instead
-    of .remove() returning int;
- b) Change struct platform_driver::remove() to return void and so make
-    it identical to .remove_new();
- c) Change all drivers back to .remove() now with the better prototype;
- d) drop struct platform_driver::remove_new().
-
-While this touches all drivers eventually twice, steps a) and c) can be
-done one driver after another and so reduces coordination efforts
-immensely and simplifies review.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/base/platform.c         |  4 +++-
- include/linux/platform_device.h | 11 +++++++++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 968f3d71eeab..a4938d1c8fe1 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1416,7 +1416,9 @@ static void platform_remove(struct device *_dev)
- 	struct platform_driver *drv = to_platform_driver(_dev->driver);
- 	struct platform_device *dev = to_platform_device(_dev);
- 
--	if (drv->remove) {
-+	if (drv->remove_new) {
-+		drv->remove_new(dev);
-+	} else if (drv->remove) {
- 		int ret = drv->remove(dev);
- 
- 		if (ret)
-diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-index b0d5a253156e..b845fd83f429 100644
---- a/include/linux/platform_device.h
-+++ b/include/linux/platform_device.h
-@@ -207,7 +207,18 @@ extern void platform_device_put(struct platform_device *pdev);
- 
- struct platform_driver {
- 	int (*probe)(struct platform_device *);
-+
-+	/*
-+	 * Traditionally the remove callback returned an int which however is
-+	 * ignored by the driver core. This led to wrong expectations by driver
-+	 * authors who thought returning an error code was a valid error
-+	 * handling strategy. To convert to a callback returning void, new
-+	 * drivers should implement .remove_new() until the conversion it done
-+	 * that eventually makes .remove() return void.
-+	 */
- 	int (*remove)(struct platform_device *);
-+	void (*remove_new)(struct platform_device *);
-+
- 	void (*shutdown)(struct platform_device *);
- 	int (*suspend)(struct platform_device *, pm_message_t state);
- 	int (*resume)(struct platform_device *);
--- 
-2.38.1
+Best regards,
+Krzysztof
 
