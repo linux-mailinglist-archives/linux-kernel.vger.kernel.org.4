@@ -2,51 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446526485F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7981B6485F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLIPwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:52:39 -0500
+        id S229981AbiLIPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:52:42 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbiLIPwQ (ORCPT
+        with ESMTP id S229749AbiLIPwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:52:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1773882
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:52:11 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3ffV-0005Gx-SP; Fri, 09 Dec 2022 16:52:09 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3ffT-003ONv-W5; Fri, 09 Dec 2022 16:52:08 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3ffT-003o2v-He; Fri, 09 Dec 2022 16:52:07 +0100
-Date:   Fri, 9 Dec 2022 16:52:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] platform: Provide a remove callback that returns no value
-Message-ID: <20221209155207.pyugk2dhpyht5gph@pengutronix.de>
-References: <20221209150914.3557650-1-u.kleine-koenig@pengutronix.de>
- <Y5NSevR9kb1UPvtQ@kroah.com>
+        Fri, 9 Dec 2022 10:52:36 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2FCF2E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:52:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670601154; x=1702137154;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LaYjN6d7ULt99N+hp7NlDcDCUD1oPX2+XJgA2FoWXVc=;
+  b=aTTqj+r/LlNJCafAN2sZunpxRq6nQBvzD3SxiU4eSRgvPFm4XqYyxPSu
+   Zxn7cJNBrh6bN96pGXwKx/cMylMRNP0e+PjXBiy/E3ps8M1SLle0FoN9z
+   AcrYbVMdedjW3KYdGRjFy5aDFy+SshJAylvI3EoJE9EflaSQCMOsuqLao
+   JchaBMGsXY0mbTMdVBoXVyTK57Vixwx+hFF20WGl6ISZV7ufBGR42+dK+
+   VJZz5o36ngCk+B80bM915HcJoN3u+694Qg1MPzhuFoGIu6eb/RLvpOOtD
+   hry1Zw/pfYaATa7AssNHOuqVD6edR7EWmKrggKNRHh9hLI+TqK9wL6pNs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="297837821"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="297837821"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:52:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="754072080"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="754072080"
+Received: from bdmeredi-mobl2.amr.corp.intel.com (HELO [10.212.15.195]) ([10.212.15.195])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:52:32 -0800
+Message-ID: <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
+Date:   Fri, 9 Dec 2022 09:52:32 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g6vfgruhanaz7egz"
-Content-Disposition: inline
-In-Reply-To: <Y5NSevR9kb1UPvtQ@kroah.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with
+ amp nau8318
+Content-Language: en-US
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        alsa-devel@alsa-project.org
+References: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,72 +80,151 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---g6vfgruhanaz7egz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Greg,
+On 12/9/22 09:05, Ajye Huang wrote:
+> This patch adds the driver data for two nau8318 speaker amplifiers on
+> SSP1 and nau8825 on SSP0 for ADL platform.
+> And reusing max98360's topology since DAI setting could be leveraged.
+> 
+> Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+> ---
+>  sound/soc/intel/boards/Kconfig                |  1 +
+>  sound/soc/intel/boards/sof_nau8825.c          | 23 +++++++++++++++++++
+>  .../intel/common/soc-acpi-intel-adl-match.c   | 12 ++++++++++
+>  3 files changed, 36 insertions(+)
+> 
+> diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
+> index a472de1909f4..3f68e9edd853 100644
+> --- a/sound/soc/intel/boards/Kconfig
+> +++ b/sound/soc/intel/boards/Kconfig
+> @@ -554,6 +554,7 @@ config SND_SOC_INTEL_SOF_NAU8825_MACH
+>  	select SND_SOC_RT1015P
+>  	select SND_SOC_MAX98373_I2C
+>  	select SND_SOC_MAX98357A
+> +	select SND_SOC_NAU8315
 
-On Fri, Dec 09, 2022 at 04:21:30PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Dec 09, 2022 at 04:09:14PM +0100, Uwe Kleine-K=F6nig wrote:
-> > struct platform_driver::remove returning an integer made driver authors
-> > expect that returning an error code was proper error handling. However
-> > the driver core ignores the error and continues to remove the device
-> > because there is nothing the core could do anyhow and reentering the
-> > remove callback again is only calling for trouble.
-> >=20
-> > So this is an source for errors typically yielding resource leaks in the
-> > error path.
-> >=20
-> > As there are too many platform drivers to neatly convert them all to
-> > return void in a single go, do it in several steps after this patch:
-> >=20
-> >  a) Convert all drivers to implement .remove_new() returning void inste=
-ad
-> >     of .remove() returning int;
-> >  b) Change struct platform_driver::remove() to return void and so make
-> >     it identical to .remove_new();
-> >  c) Change all drivers back to .remove() now with the better prototype;
->=20
-> Change c) seems like it will be just as much work as a), right?
+This looks inconsistent with the commit message. There are separate
+Kconfigs for different codecs.
 
-Yeah, but c) should be trivially doable per subsystem using coccinelle.
-So my plan is to do a) per subsystem with one patch per driver and c)
-with one patch per subsystem.
+SND_SOC_NAU8315
+SND_SOC_NAU8825
 
-> Who is going to do the work of the conversion to this new prototype?
-> I'll be glad to take this, but I don't want to see a half-finished
-> conversion happen and us stuck with a "new" and "old" call, as that
-> would just be a mess.
+Which is it?
 
-The idea is that this becomes my new pet project once=20
-https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.org
-is complete. :-)
+>  	select SND_SOC_DMIC
+>  	select SND_SOC_HDAC_HDMI
+>  	select SND_SOC_INTEL_HDA_DSP_COMMON
+> diff --git a/sound/soc/intel/boards/sof_nau8825.c b/sound/soc/intel/boards/sof_nau8825.c
+> index 27880224359d..0936450be153 100644
+> --- a/sound/soc/intel/boards/sof_nau8825.c
+> +++ b/sound/soc/intel/boards/sof_nau8825.c
+> @@ -48,6 +48,7 @@
+>  #define SOF_MAX98373_SPEAKER_AMP_PRESENT	BIT(15)
+>  #define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(16)
+>  #define SOF_RT1015P_SPEAKER_AMP_PRESENT	BIT(17)
+> +#define SOF_NAU8318_SPEAKER_AMP_PRESENT	BIT(18)
+>  
+>  static unsigned long sof_nau8825_quirk = SOF_NAU8825_SSP_CODEC(0);
+>  
+> @@ -338,6 +339,13 @@ static struct snd_soc_dai_link_component rt1019p_component[] = {
+>  	}
+>  };
+>  
+> +static struct snd_soc_dai_link_component nau8318_components[] = {
+> +	{
+> +		.name = "NVTN2012:00",
 
-I intend to work on that once the patch under discussion is included in
-an -rc1.
+Deep sigh...
 
-Best regards
-Uwe
+This ACPI HID is already used to match with the 8815, so this is not
+going to work if we confuse two independent drivers...
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+sound/soc/codecs/nau8315.c:
 
---g6vfgruhanaz7egz
-Content-Type: application/pgp-signature; name="signature.asc"
+#ifdef CONFIG_ACPI
+static const struct acpi_device_id nau8315_acpi_match[] = {
+	{ "NVTN2010", 0 },
+	{ "NVTN2012", 0},
+	{},
+};
+MODULE_DEVICE_TABLE(acpi, nau8315_acpi_match);
+#endif
 
------BEGIN PGP SIGNATURE-----
+How does this identify a NAU8825?
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOTWaQACgkQwfwUeK3K
-7AmSVwf/ejJOQweFdqwYLKLY4leXQrQQzVFBOFvfv4KBpW65Mz2VJA23j0yQfClt
-GvWpDD24ECKBFlPfliFc2vR/1IkkPb7XFsE6pRhlwUD+dIIfpq8qufdYqT0bWM6j
-bEgnZbLrbCnv9eqch/jUde4nAB9gzgDEe7DuZYl/SI1GqVeqRnz3xhHqDV/qRX0u
-1s04+PwstJfOqZ/ViVPxRXZ2U2AgSl334mDy63CdqHmF3AyuGL6CnZQMN3VV5oT/
-yRBXWpHyVE/81Y7MrS/R2VrO9PIC8HyVX6+tGiKPXqx4y/XpRYDf9FUoqog9QMVm
-dE3kOnEoiIRSvMX+Rxq2k6pnuMCGVA==
-=q3FO
------END PGP SIGNATURE-----
 
---g6vfgruhanaz7egz--
+> +		.dai_name = "nau8315-hifi",
+
+and again this makes a reference to 8815.
+
+I will stop the review here.
+
+NAK for this v1. Please clarify which codec you are using and make sure
+all references are consistent.
+
+
+> +	}
+> +};
+> +
+>  static struct snd_soc_dai_link_component dummy_component[] = {
+>  	{
+>  		.name = "snd-soc-dummy",
+> @@ -486,6 +494,11 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+>  			max_98360a_dai_link(&links[id]);
+>  		} else if (sof_nau8825_quirk & SOF_RT1015P_SPEAKER_AMP_PRESENT) {
+>  			sof_rt1015p_dai_link(&links[id]);
+> +		} else if (sof_nau8825_quirk &
+> +				SOF_NAU8318_SPEAKER_AMP_PRESENT) {
+> +			links[id].codecs = nau8318_components;
+> +			links[id].num_codecs = ARRAY_SIZE(nau8318_components);
+> +			links[id].init = speaker_codec_init;
+>  		} else {
+>  			goto devm_err;
+>  		}
+> @@ -657,6 +670,16 @@ static const struct platform_device_id board_ids[] = {
+>  					SOF_BT_OFFLOAD_SSP(2) |
+>  					SOF_SSP_BT_OFFLOAD_PRESENT),
+>  	},
+> +	{
+> +		.name = "adl_nau8318_nau8825",
+> +		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
+> +					SOF_SPEAKER_AMP_PRESENT |
+> +					SOF_NAU8318_SPEAKER_AMP_PRESENT |
+> +					SOF_NAU8825_SSP_AMP(1) |
+> +					SOF_NAU8825_NUM_HDMIDEV(4) |
+> +					SOF_BT_OFFLOAD_SSP(2) |
+> +					SOF_SSP_BT_OFFLOAD_PRESENT),
+> +	},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(platform, board_ids);
+> diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+> index 60aee56f94bd..282b9c966ce6 100644
+> --- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+> +++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+> @@ -450,6 +450,11 @@ static const struct snd_soc_acpi_codecs adl_lt6911_hdmi = {
+>  	.codecs = {"INTC10B0"}
+>  };
+>  
+> +static const struct snd_soc_acpi_codecs adl_nau8318_amp = {
+> +	.num_codecs = 1,
+> +	.codecs = {"NVTN2012"}
+> +};
+> +
+>  struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+>  	{
+>  		.comp_ids = &adl_rt5682_rt5682s_hp,
+> @@ -507,6 +512,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+>  		.quirk_data = &adl_rt1015p_amp,
+>  		.sof_tplg_filename = "sof-adl-rt1015-nau8825.tplg",
+>  	},
+> +	{
+> +		.id = "10508825",
+> +		.drv_name = "adl_nau8318_nau8825",
+> +		.machine_quirk = snd_soc_acpi_codec_list,
+> +		.quirk_data = &adl_nau8318_amp,
+> +		.sof_tplg_filename = "sof-adl-max98360a-nau8825.tplg",
+> +	},
+>  	{
+>  		.id = "10508825",
+>  		.drv_name = "sof_nau8825",
