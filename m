@@ -2,208 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDCF648864
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EF9648868
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLISWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S229723AbiLISZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLISWB (ORCPT
+        with ESMTP id S229482AbiLISZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:22:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A37E09A;
-        Fri,  9 Dec 2022 10:22:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8C1262300;
-        Fri,  9 Dec 2022 18:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 104CCC43392;
-        Fri,  9 Dec 2022 18:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670610119;
-        bh=oRuHbrET4tyPKkEdzgT2+8zaXtSoNF/Y59VTItF6/tY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bJOM/CemrNI3QfkHchz3Hn0e+8N7Va6vCCPmM8XhBVtH+RUsm4TSnX1p5Yv7HqrkI
-         /gXOJwc1aWoaGAt6L3kldJKGVQbHhfTCqAwG9nmFkojlFGVeZ/Dg3PXPGf6nodIrVc
-         7YG0hKkZy1L9SKesNhBT5UhnhTKSnyD8EVKF5br+7+84jrG/1WunNONg/L2HbAnoR8
-         CGAq66p/4gBEJ8oqGZLWTeyxvtXVIRVHOCxAZf6BcMNU1fC/G9tZnvZaVivk0pzByG
-         MYIgli0F5oQ5My1jIzkwmOTwc6y1D+MduSZ2Aald5X3fyNmCmV7DNTSS1z7S3mbmI/
-         9p70pcfPtEa/Q==
-Received: by mail-ej1-f49.google.com with SMTP id x22so13372302ejs.11;
-        Fri, 09 Dec 2022 10:21:58 -0800 (PST)
-X-Gm-Message-State: ANoB5pmeJbSsQBhoxh9dlsAyQCW/+5XewY3sbU+a9Syx2ECwC2mAUghP
-        IAuWCmy4jMy+CrtynZF+16tUytsKzuK/qTCIawg=
-X-Google-Smtp-Source: AA0mqf63HKo2ld9Tzy3TiCXZp5HMXIOF6Ow8FZgiGs0uO/US4vcgX4pFPBfkBqnHxf+N1/NJZwAsyttE0d3IzIjOh/E=
-X-Received: by 2002:a17:906:9f09:b0:7bc:db1b:206f with SMTP id
- fy9-20020a1709069f0900b007bcdb1b206fmr16313254ejc.719.1670610117154; Fri, 09
- Dec 2022 10:21:57 -0800 (PST)
+        Fri, 9 Dec 2022 13:25:28 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBA4379E9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:25:27 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id x28so4193745qtv.13
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2tFGeL4IKHMOLG8K5mBjsPyTa/gwxZuO/Te7d5SkhM=;
+        b=R1vwKVYxDcZhuATY+em4HS+UfJ6NrYR93eYQSQkP/OWCN4igMlPzqxVqlrHNSJdMuk
+         /E0ywCJEKO+mIaZDAXA6HXw/X1TV964NRZrcyezSbFFg4WgU4w2lnAS1BSNf5QmFx0kz
+         1WkDjTNi3H5RBcykqyMCXLYk65nnMVhnooMyU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p2tFGeL4IKHMOLG8K5mBjsPyTa/gwxZuO/Te7d5SkhM=;
+        b=Sdk7gTZu0YV8xXaPq2++LcJ8OkNOVqPmvXBV3I4cRCM/7Lns+RFoMc0UptPMUCKGf4
+         Ksg+xE6WAdIgfw8z5ks1PdT8xCa2X52hz8IZKaIaa/KRGiKLTEPYmRzDcx70kHmvj9L+
+         hwcxmxMPLHYO1jsnmShnRU10aUshv7P4AmduYRBpVlhHuBKMMmJVF+4w42A/e7RIDzWY
+         RJrkWJi35YodAHPg1uE4piF5rkih+PGkqr674tZMIcToMTE1vqvKHtmjh9Jezl6OIvZd
+         GpRQvfa9a0v11dZBzxG8y+FVVdQ/ht8yh3IJZ6AN0Kvh78bnNGGjTXeS7gSPho1Pzn0c
+         4BFw==
+X-Gm-Message-State: ANoB5pnVyp8/HlVo1guKStB+P/mvxTJfIxLO0oZ0qNkS/RXruSXL3Zif
+        ubx9+g//fp/kUweuyKvwo4r3+H5oa+ez8pgJ
+X-Google-Smtp-Source: AA0mqf65GqGX0e59qksmzXzBwYcs3sLKQc7tW0et2bRGF9f94vQmh+80Mbx5nBWiuNwReXw0KpUGrA==
+X-Received: by 2002:a05:622a:2514:b0:39c:da20:f7d2 with SMTP id cm20-20020a05622a251400b0039cda20f7d2mr9395889qtb.47.1670610326650;
+        Fri, 09 Dec 2022 10:25:26 -0800 (PST)
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
+        by smtp.gmail.com with ESMTPSA id bl14-20020a05620a1a8e00b006faa2c0100bsm341445qkb.110.2022.12.09.10.25.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 10:25:25 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id s14so3579537qvo.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:25:25 -0800 (PST)
+X-Received: by 2002:ad4:4101:0:b0:4b1:856b:4277 with SMTP id
+ i1-20020ad44101000000b004b1856b4277mr69642655qvp.129.1670610325096; Fri, 09
+ Dec 2022 10:25:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220901171252.2148348-1-song@kernel.org> <Y3expGRt4cPoZgHL@alley>
- <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com> <Y5M+AoKHDK4rn6/i@alley>
-In-Reply-To: <Y5M+AoKHDK4rn6/i@alley>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 9 Dec 2022 10:21:45 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6nsh4AZNhsE_r91rnHEgeRtuhjSa=5OpWvd5Po1dV9BA@mail.gmail.com>
-Message-ID: <CAPhsuW6nsh4AZNhsE_r91rnHEgeRtuhjSa=5OpWvd5Po1dV9BA@mail.gmail.com>
-Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module removal
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+References: <20221208205639.1799257-1-kuba@kernel.org> <20221208210009.1799399-1-kuba@kernel.org>
+In-Reply-To: <20221208210009.1799399-1-kuba@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 9 Dec 2022 10:25:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wji_NB6hO+35Ruty3DjQkZ+0MkAG9RZpfXNTiWv4NZH3w@mail.gmail.com>
+Message-ID: <CAHk-=wji_NB6hO+35Ruty3DjQkZ+0MkAG9RZpfXNTiWv4NZH3w@mail.gmail.com>
+Subject: Re: [PULL] Networking for v6.1 final / v6.1-rc9 (with the diff stat :S)
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 5:54 AM Petr Mladek <pmladek@suse.com> wrote:
+On Thu, Dec 8, 2022 at 1:00 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> On Mon 2022-11-28 17:57:06, Song Liu wrote:
-> > On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
-> > > > --- a/kernel/livepatch/core.c
-> > > > +++ b/kernel/livepatch/core.c
-> > > > @@ -316,6 +316,45 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-> > > >       return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
-> > > >  }
-> > > >
-> > > > +static void klp_clear_object_relocations(struct module *pmod,
-> > > > +                                     struct klp_object *obj)
-> > > > +{
-> > > > +     int i, cnt;
-> > > > +     const char *objname, *secname;
-> > > > +     char sec_objname[MODULE_NAME_LEN];
-> > > > +     Elf_Shdr *sec;
-> > > > +
-> > > > +     objname = klp_is_module(obj) ? obj->name : "vmlinux";
-> > > > +
-> > > > +     /* For each klp relocation section */
-> > > > +     for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
-> > > > +             sec = pmod->klp_info->sechdrs + i;
-> > > > +             secname = pmod->klp_info->secstrings + sec->sh_name;
->
-> secname = ...
->
-> > > > +             if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
-> > > > +                     continue;
-> > > > +
-> > > > +             /*
-> > > > +              * Format: .klp.rela.sec_objname.section_name
-> > > > +              * See comment in klp_resolve_symbols() for an explanation
-> > > > +              * of the selected field width value.
-> > > > +              */
-> > > > +             secname = pmod->klp_info->secstrings + sec->sh_name;
->
-> secname = ...    same a above.
->
-> > > > +             cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
-> > > > +             if (cnt != 1) {
-> > > > +                     pr_err("section %s has an incorrectly formatted name\n",
-> > > > +                            secname);
-> > > > +                     continue;
-> > > > +             }
-> >
-> > Actually, I think we don't need the cnt check here. Once it is removed,
-> > there isn't much duplicated logic.
->
-> Seriously?
->
-> A section with this error was skipped in klp_apply_section_relocs().
-> I did not cause rejecting the module! Why is it suddenly safe to
-> process it, please?
+> There is an outstanding regression in BPF / Peter's static calls stuff,
 
-Hmm.. I think you are right, we still need the check.
+Looks like it's not related to the static calls. Jiri says that
+reverting that static call change makes no difference, and currently
+suspects a RCU race instead:
 
->
->
-> I see that you removed also:
->
->         if (strcmp(objname ? objname : "vmlinux", sec_objname))
->                 return 0;
->
-> This is another bug in your "simplification".
->
->
-> > > > +
-> > > > +             if (strcmp(objname, sec_objname))
-> > > > +                     continue;
-> > > > +
-> > > > +             clear_relocate_add(pmod->klp_info->sechdrs,
-> > > > +                                pmod->core_kallsyms.strtab,
-> > > > +                                pmod->klp_info->symndx, i, pmod);
-> > > > +     }
-> > > > +}
-> > >
-> > > Huh, this duplicates a lot of tricky code.
-> > >
-> > > It is even worse because this squashed code from two functions
-> > > klp_apply_section_relocs() and klp_apply_object_relocs()
-> > > into a single function. As a result, the code duplication is not
-> > > even obvious.
-> > >
-> > > Also the suffix "_reloacations() does not match the suffix of
-> > > the related funciton:
-> > >
-> > >         + klp_apply_object_relocs()             (existing)
-> > >         + klp_clear_object_relocations()        (new)
-> > >
-> > > This all would complicate maintenance of the code.
-> > >
-> > > Please, implement a common:
-> > >
-> > > int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
-> > >                              const char *shstrtab, const char *strtab,
-> > >                              unsigned int symndx, unsigned int secndx,
-> > >                              const char *objname, bool apply);
-> > >
-> > > and
-> > >
-> > > int klp_write_object_relocs(struct klp_patch *patch,
-> > >                             struct klp_object *obj,
-> > >                             bool apply);
-> > >
-> > > and add the respective wrappers:
-> > >
-> > > int klp_apply_section_relocs();   /* also needed in module/main.c */
-> > > int klp_apply_object_relocs();
-> > > void klp_clear_object_relocs();
-> >
-> > With the above simplification (removing cnt check), do we still need
-> > all these wrappers? Personally, I think they will make the code more
-> > difficult to follow..
->
-> Sigh.
->
-> klp_apply_section_relocs() has 25 lines of code.
-> klp_apply_object_relocs() has 18 lines of code.
->
-> The only difference should be that klp_clear_object_relocs():
->
->    + does not need to call klp_resolve_symbols()
->    + need to call clear_relocate_add() instead of apply_relocate_add()
->
-> It is 7 different lines from in the existing 25 + 18 = 43 lines.
-> The duplication does not look like a good deal even from this POV.
->
-> If we introduce update_relocate_add(..., bool apply) parameter
-> then we could call update_relocate_add() in both situations.
->
-> Let me repeat from the last mail. klp_clear_object_relocs() even
-> reshuffled the duplicated code. It was even harder to find differences.
->
-> Do I still need to explain how bad idea was the code duplication,
-> please?
+  https://lore.kernel.org/bpf/Y5M9P95l85oMHki9@krava/T/#t
 
-No objections that code duplication is not ideal. It is just that sometimes
-it is hard to follow the difference between functions with similar names.
-Well, it is probably my own problem.
+Hmm?
 
-Thanks,
-Song
+                  Linus
