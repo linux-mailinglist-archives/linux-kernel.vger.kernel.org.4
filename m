@@ -2,71 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A1164812B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83685648136
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLIKxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 05:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S229864AbiLIK7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 05:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLIKxL (ORCPT
+        with ESMTP id S229696AbiLIK7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:53:11 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49DEE19
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 02:53:11 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id f139so4797160yba.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 02:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=RQAPHFcgVL9l9cHsfz6VGkw7gyneIBMYACTzm9Pp2YatqtLZFuyBUzbM1bnPUfkSCS
-         kfDy18gmDS/qQigwfwf0iQdUo/ozDOIdPOhhDZKwB5NMTHjlkPKZ1kX4AzH1QNIMd1gp
-         ux6fUntohdN6Nds6BaecZQdrBgW8LFa9cgtiTiiNlg3MhCJCoZvoky9V66SAUp3x8Lqj
-         mrXRxkBWW5f0W9e44SpJQqyq1BltSmK7B6DxMNjUerOe9itT/8wWExOejcmKILIwKXwp
-         GMiUvOOB/IsPNZcS8r4ay31PUN4HHiMvFEY2dkPbps3D7RGDEaVUz18lF+nVDzEvtnhO
-         Pwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=CwGULRm8e/1wdRSHQdvKmZfhwgCWdLDOIQlnMXZFeDkwz4QJfK0IZ6bSRu9HDJKKEY
-         1+Z0xbFWt9ltTQCXQ6p8UryD3B68LylHwczw91rBkiftvWIgDNpDp2MoAtAW2u46MRGk
-         xJJvk3QKQmDfbmvew37QV44TV2DpiSbzmV00H+6rXXedAoRXdG9ZTI2OnZm0b5U0whzH
-         Rl1TJPOwR/mNcMh8gRHzFV+Cfq67hVpwjDpLMgehYC2N4Wi+M6PrjqqbHfyU4/7dz/1g
-         NbgO0xmnRSZRl5plf+5GyZDCsS1D9vL2XpasnqRFZAqjBjad3RVweKqztB1ugyWsLA6o
-         INyw==
-X-Gm-Message-State: ANoB5plzdWYWRAAsO+B0KFNgneIinJH7OcV/WQIRkNXAcUZwePyDzTBd
-        bBOrPqHaR2UZZrObxUwWmIand+gHyS6NHzDoA28=
-X-Google-Smtp-Source: AA0mqf7fh1oUEW2FZx+yzF6V7bVbF6skFryhrTwgOcaJ7UHhabIKRbldhZwY6zycymfowCDEDUyKnSejBFLty6/bvFo=
-X-Received: by 2002:a25:ad21:0:b0:6f0:1111:53c4 with SMTP id
- y33-20020a25ad21000000b006f0111153c4mr66925967ybi.121.1670583189966; Fri, 09
- Dec 2022 02:53:09 -0800 (PST)
+        Fri, 9 Dec 2022 05:59:24 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E611D5447B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 02:59:22 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NT7Kz0RGQzJqMN;
+        Fri,  9 Dec 2022 18:58:31 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 9 Dec
+ 2022 18:59:20 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <haibinzhang@tencent.com>, <hewenliang4@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH] arm64: fix a concurrency issue in emulation_proc_handler()
+Date:   Fri, 9 Dec 2022 18:55:56 +0800
+Message-ID: <20221209105556.47621-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: mayi.francois1@gmail.com
-Received: by 2002:a05:7110:11cc:b0:1a2:b42c:9226 with HTTP; Fri, 9 Dec 2022
- 02:53:09 -0800 (PST)
-From:   Elena Tudorie <elenatudorie987@gmail.com>
-Date:   Fri, 9 Dec 2022 16:23:09 +0530
-X-Google-Sender-Auth: 75eAqwTMwgXZZOa1VbNvVxPtTE4
-Message-ID: <CAFkR3GrmnF1Z-NSnd3_vvAEB_4YGkLZxfEyqobo47=__n-bsQg@mail.gmail.com>
-Subject: Hello I Wish to seek your conscience about something urgently, Please
- reply this message, once you get it. Yours sister, Mrs.Elena Tudorie Email: tudorie_elena@outlook.com
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In emulation_proc_handler(), read and write operations are performed on
+insn->current_mode. In the concurrency scenario, mutex only protects
+writing insn->current_mode, and not protects the read. Suppose there are
+two concurrent tasks, task1 updates insn->current_mode to INSN_EMULATE
+in the critical section, the prev_mode of task2 is still the old data
+INSN_UNDEF of insn->current_mode. As a result, two tasks call
+update_insn_emulation_mode twice with prev_mode = INSN_UNDEF and
+current_mode = INSN_EMULATE, then call register_emulation_hooks twice,
+resulting in a list_add double problem.
+
+Call trace:
+ __list_add_valid+0xd8/0xe4
+ register_undef_hook+0x94/0x13c
+ update_insn_emulation_mode+0xd0/0x12c
+ emulation_proc_handler+0xd8/0xf4
+ proc_sys_call_handler+0x140/0x250
+ proc_sys_write+0x1c/0x2c
+ new_sync_write+0xec/0x18c
+ vfs_write+0x214/0x2ac
+ ksys_write+0x70/0xfc
+ __arm64_sys_write+0x24/0x30
+ el0_svc_common.constprop.0+0x7c/0x1bc
+ do_el0_svc+0x2c/0x94
+ el0_svc+0x20/0x30
+ el0_sync_handler+0xb0/0xb4
+ el0_sync+0x160/0x180
+
+Fixes: af483947d472 ("arm64: fix oops in concurrently setting insn_emulation sysctls")
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+---
+ arch/arm64/kernel/armv8_deprecated.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index fb0e7c7b2e20..d33e5d9e6990 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -208,10 +208,12 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
+ 				  loff_t *ppos)
+ {
+ 	int ret = 0;
+-	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
+-	enum insn_emulation_mode prev_mode = insn->current_mode;
++	struct insn_emulation *insn;
++	enum insn_emulation_mode prev_mode;
+ 
+ 	mutex_lock(&insn_emulation_mutex);
++	insn = container_of(table->data, struct insn_emulation, current_mode);
++	prev_mode = insn->current_mode;
+ 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+ 
+ 	if (ret || !write || prev_mode == insn->current_mode)
+-- 
+2.25.1
 
