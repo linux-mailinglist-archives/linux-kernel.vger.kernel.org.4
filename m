@@ -2,167 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C46D64839B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CFF64839C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiLIOSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S229674AbiLIOSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiLIOSB (ORCPT
+        with ESMTP id S229604AbiLIOSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:18:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EE861903E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:17:43 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB18C23A;
-        Fri,  9 Dec 2022 06:17:49 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.41.252])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5D453F73D;
-        Fri,  9 Dec 2022 06:17:41 -0800 (PST)
-Date:   Fri, 9 Dec 2022 14:17:34 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Xander <xandermoerkerken@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xander Moerkerken <xander.moerkerken@omron.com>
-Subject: Re: [PATCH] Added ability to vmalloc executable memory
-Message-ID: <Y5NDfq+ktpKIZXE1@FVFF77S0Q05N>
-References: <20221209131052.64235-1-xander.moerkerken@omron.com>
- <Y5M1UowMyucPOqAl@FVFF77S0Q05N>
- <CAGkG8RF0QNrC=UQ3uwurYQRS-kajYr3=g1qa6d7x=RC55z7ymg@mail.gmail.com>
- <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
+        Fri, 9 Dec 2022 09:18:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB00CB28
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:18:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6737D62267
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE01BC433EF;
+        Fri,  9 Dec 2022 14:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670595496;
+        bh=k3lReZsB9ujrUbztvY5qcuTZbP31euMRI/x+bqTAoo4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iSO53tSWdADEz5EAUd/an2dSBqGUFwXffbLVUPBh3fcgpsD3JgiS/RNHDs6mKd6jZ
+         wNJz8pcougnyVeNgLQ4uUKLU27/4d8WtrfWgW1F+strtXqp7GL4+p2U0kL3d+JSLPU
+         yIxBJDhGVC6+wG/Tn6YP/vdQ6t7DbwxnqmVAaOSSOAwmvOMgMGDCZ/hDRSjSaOW0Rr
+         CFP/RbkdnHWptrKJTmM8KEYDMv0+/L0OxG8RU8+6SwGaAoSIjPmpNd6kPUBXRNAZd4
+         vjWy62LbhHqYn5PMQf9L+sOGQyV2wl/wI2r74IC0dYAGEa42NXbB3AWUWSLpvvZAQG
+         Lz8WHwrXiVmsw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p3eCv-0000dl-Gt; Fri, 09 Dec 2022 15:18:33 +0100
+Date:   Fri, 9 Dec 2022 15:18:33 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v2 2/4] irqdomain: Fix mapping-creation race
+Message-ID: <Y5NDuV+xb3FZRHAr@hovoldconsulting.com>
+References: <20220901142816.13731-1-johan+linaro@kernel.org>
+ <20220901142816.13731-3-johan+linaro@kernel.org>
+ <87v8ppkofy.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87v8ppkofy.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:46:05PM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 09/12/2022 à 14:38, Xander a écrit :
-> > 	
-> > The pgprot parameter got removed because, according to the commit log, 
-> > for no other apparent reason than it being called with 'PAGE_KERNEL' as 
-> > an argument in the whole kernel. Therefore it got removed.
-> > This removed the ability to allocate virtual memory with executing rights.
-> > My use case comes from ioremap().
-> > I think this is useful for others too.
-> > 
-> > I don't see why this pgprot parameter got removed but this is the 
-> > alternative to reverting it to the older 5.7 function.
-> 
-> Please avoid top-posting, and use only plain text.
-> 
-> I think you don't answer to Mark's question.
-> 
-> You are adding a new function that no driver uses apparently. If you are 
-> working on some piece of code that needs this new fonction, you can send 
-> this patch as part of a patch series including that code.
+Hi Marc,
 
-Yup, that was what I was getting at. Thanks for stating that much more clearly
-than I did. :)
-
-> By the way, when you need executable memory, the fonction to use is 
-> module_alloc(), that's the only function that garanties real executable 
-> memory on all platforms. For instance, on some powerpc, setting the X 
-> bit is not enough to get executable memory in vmalloc space.
-
-Yup, and likewise on arm64 there are other constraints to consider, e.g. branch
-ranges, whether or not to set PROT_BTI and/or other prot bits in future.
-
-Further, I'm very wary of exporting a generic interface to make some code
-executable without an understanding and documenting the precise constraints on
-its use, and I'm generally wary of doing that for some arbitrary code given
-that could violate other expectations that affect the kernel generally (e.g.
-gadgets for ROP/JOP/speculation, RELIABLE_STACKTRACE expectations, and general
-things like whether the code will play with CPU control bits or flags in an
-unexpected way).
-
-Mark.
-
-> Christophe
+On Thu, Sep 15, 2022 at 09:54:25AM +0100, Marc Zyngier wrote:
+> Johan,
 > 
+> On Thu, 01 Sep 2022 15:28:14 +0100,
+> Johan Hovold <johan+linaro@kernel.org> wrote:
 > > 
-> > On Fri, 9 Dec 2022 at 14:17, Mark Rutland <mark.rutland@arm.com 
-> > <mailto:mark.rutland@arm.com>> wrote:
+> > Parallel probing (e.g. due to asynchronous probing) of devices that share
+> > interrupts can currently result in two mappings for the same hardware
+> > interrupt to be created.
 > > 
-> >     On Fri, Dec 09, 2022 at 02:10:52PM +0100, Xander Moerkerken wrote:
-> >      > From: Xander Moerkerken <xander.moerkerken@gmail.com
-> >     <mailto:xander.moerkerken@gmail.com>>
-> >      >
-> >      > Since release 5.8-rc1 the pgprot got removed from __vmalloc
-> >      > because the only usage was PAGE_KERNEL as argument.
-> >      > However, this removes the ability to input other arguments
-> >      > such as 'PAGE_KERNEL_EXEC', which can be used to allocate
-> >      > memory in which you can execute. For this reason a new
-> >      > function is introduced called '__vmalloc_exec'.
-> >      >
-> >      > Signed-off-by: Xander Moerkerken <xander.moerkerken@omron.com
-> >     <mailto:xander.moerkerken@omron.com>>
+> > Add a serialising mapping mutex so that looking for an existing mapping
+> > before creating a new one is done atomically.
 > > 
-> >     What is this going to be used for? There's no user from this patch
-> >     alone, as a
-> >     module or otherwise.
-> > 
-> >     Mark.
-> > 
-> >      > ---
-> >      >  include/linux/vmalloc.h | 1 +
-> >      >  mm/vmalloc.c            | 8 ++++++++
-> >      >  2 files changed, 9 insertions(+)
-> >      >
-> >      > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> >      > index 096d48aa3437..10c46513b6b2 100644
-> >      > --- a/include/linux/vmalloc.h
-> >      > +++ b/include/linux/vmalloc.h
-> >      > @@ -147,6 +147,7 @@ extern void *vzalloc_node(unsigned long size,
-> >     int node) __alloc_size(1);
-> >      >  extern void *vmalloc_32(unsigned long size) __alloc_size(1);
-> >      >  extern void *vmalloc_32_user(unsigned long size) __alloc_size(1);
-> >      >  extern void *__vmalloc(unsigned long size, gfp_t gfp_mask)
-> >     __alloc_size(1);
-> >      > +extern void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> >     __alloc_size(1);
-> >      >  extern void *__vmalloc_node_range(unsigned long size, unsigned
-> >     long align,
-> >      >                       unsigned long start, unsigned long end,
-> >     gfp_t gfp_mask,
-> >      >                       pgprot_t prot, unsigned long vm_flags, int
-> >     node,
-> >      > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> >      > index ccaa461998f3..8fd01ed7082b 100644
-> >      > --- a/mm/vmalloc.c
-> >      > +++ b/mm/vmalloc.c
-> >      > @@ -3294,6 +3294,14 @@ void *__vmalloc(unsigned long size, gfp_t
-> >     gfp_mask)
-> >      >  }
-> >      >  EXPORT_SYMBOL(__vmalloc);
-> >      >
-> >      > +
-> >      > +void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> >      > +{
-> >      > +     return __vmalloc_node_prot(size, 1, gfp_mask, PAGE_KERNEL_EXEC,
-> >      > +                               NUMA_NO_NODE,
-> >     __builtin_return_address(0));
-> >      > +}
-> >      > +EXPORT_SYMBOL(__vmalloc_exec);
-> >      > +
-> >      >  /**
-> >      >   * vmalloc - allocate virtually contiguous memory
-> >      >   * @size:    allocation size
-> >      > --
-> >      > 2.37.2
-> >      >
-> > 
+> > Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> > Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> > Cc: Dmitry Torokhov <dtor@chromium.org>
+> > Cc: Jon Hunter <jonathanh@nvidia.com>
+> > Link: https://lore.kernel.org/r/YuJXMHoT4ijUxnRb@hovoldconsulting.com
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+> I must confess I have a hard time figuring out the semantic difference
+> between map_mutex and revmap_mutex. or rather, what is the use of
+> revmap_mutex once map_mutex is taken. They fundamentally overlap, and
+> I have the feeling one should eventually replace the other.
+> 
+> If anything, you should absolutely define/document how these two locks
+> interact.
+
+Sorry about the late follow-up on this. I meant to revisit this much
+sooner, but couldn't seem to find the time until this week.
+
+I just sent you a v3 which reworks the irqdomain locking and fixes the
+race in the process. In the end the irq_domain_mutex is only used for
+managing the irq_domain_list, while domain operations use per-domain
+(hierarchy) locking.
+
+Johan
