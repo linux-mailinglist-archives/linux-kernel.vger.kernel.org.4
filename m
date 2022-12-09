@@ -2,69 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAAB648589
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E68648588
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiLIP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S229824AbiLIP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiLIP3F (ORCPT
+        with ESMTP id S229631AbiLIP2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:29:05 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80159D4A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:29:04 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 2B9FSZaj020387;
-        Fri, 9 Dec 2022 16:28:35 +0100
-Date:   Fri, 9 Dec 2022 16:28:35 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Fri, 9 Dec 2022 10:28:53 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC330CE7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:28:50 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id x22so12285712ejs.11
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:28:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CBIx7WhayGl8L5UnKkWTZlh8ccP3yQ9V2VOk1LDfuU=;
+        b=g3vLufSXkk6Bd3BbnBSvYEhasj4ZRFzeqITPpY1spDMrZTTsgQWtZjx0r+YQmw17sX
+         ZMkDKy6mms6/tQjTrYstAp0/HovfK/Wdhi7W+nl3VNNxpyBkOEG+0tB0gUOQ2tzglGPc
+         dYprSHDOKFiY7kDDop4pYjHpFp/ylftdANH3w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/CBIx7WhayGl8L5UnKkWTZlh8ccP3yQ9V2VOk1LDfuU=;
+        b=vSRwGYr8X/SAVWIs5LI7FalU7yicsGn5JcQtskEvkbmgU4wdPF1A5a2IGBC8a+BVmr
+         QDeGdm//IP6tvjdAmebz/2cmqtXwzJHHe+T37mkate7fXTH7vUi5bmCuG3BuUJksKbO+
+         CEJ5UMXSQkhUVzRW7tdXu/irwsZoPmHttRXGVSxXRqnSSCaJbLmlYu2uTE6C15xaV1l8
+         BR2TABIpH0CSDuLkh1B3XRJsgjuSTbdZcDr+r8Du5CQpTLcIuSXtHzUBDQ/jwTHlHCtD
+         TcKRe9APPVfQEOarj1TJN+ehL9xKZxEgGFhi5twjzOPt9JIgDssxTlZT1QsXLeLtHMU0
+         +u7w==
+X-Gm-Message-State: ANoB5pmaYchoqg11U/CtYP1Kd1PjjuZQZdea9PG5THF+1W1VF9bGfu+j
+        UxbghtFu0jKOmFCcX/XEVZyM6g==
+X-Google-Smtp-Source: AA0mqf5/vEoKDQ/I1fRr88dwfhK6CwIW9Llpcvbo3r/hM0pGFZJgqq3o3VphKB2jSTzL6JamOXrW0A==
+X-Received: by 2002:a17:906:2881:b0:7ad:d835:e822 with SMTP id o1-20020a170906288100b007add835e822mr4899301ejd.42.1670599729472;
+        Fri, 09 Dec 2022 07:28:49 -0800 (PST)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id o20-20020a170906769400b0077a11b79b9bsm24901ejm.133.2022.12.09.07.28.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 07:28:49 -0800 (PST)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] add s390 support to nolibc and rcutorture
-Message-ID: <20221209152835.GC19965@1wt.eu>
-References: <20221209141939.3634586-1-svens@linux.ibm.com>
- <20221209150325.GX4001@paulmck-ThinkPad-P17-Gen-1>
+Subject: [PATCH next] wifi: nl80211: emit CMD_START_AP on multicast group when an AP is started
+Date:   Fri,  9 Dec 2022 16:28:36 +0100
+Message-Id: <20221209152836.1667196-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209150325.GX4001@paulmck-ThinkPad-P17-Gen-1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 07:03:25AM -0800, Paul E. McKenney wrote:
-> On Fri, Dec 09, 2022 at 03:19:34PM +0100, Sven Schnelle wrote:
-> > Hi,
-> > 
-> > these patches add support for the s390 architecture both to nolibc
-> > and rcutorture. Note that this only adds support for the 64 bit
-> > version, no support for 31 bit (compat) is added. For nolibc it
-> > includes one bugfix to make the fd_set datatype match the kernel
-> > type.
-> 
-> Nice!!!
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-indeed :-)
+Userspace processes such as network daemons may wish to be informed when
+any AP interface is brought up on the system, for example to initiate a
+(re)configuration of IP settings or to start a DHCP server.
 
-> The rcutorture patches look plausible to me, but I must defer to Willy
-> Tarreau on the nolibc changes.
+Currently nl80211 does not broadcast any such event on its multicast
+groups, leaving userspace only two options:
 
-I had a very quick glance over them and nothing shocked me. I just want
-to double-check the u32->long conversion with a careful eye but I'm happy
-to see that your rcutorture binary continues its diet on more and more
-architectures ;-)
+1. the process must be the one that actually issued the
+   NL80211_CMD_START_AP request, so that it can react on the response to
+   that request;
 
-Cheers,
-Willy
+2. the process must react to RTM_NEWLINK events indicating a change in
+   carrier state, and may query for further information about the AP and
+   react accordingly.
+
+Option (1) is robust, but it does not cover all scenarios. It is easy to
+imagine a situation where this is not the case (e.g. hostapd +
+systemd-networkd).
+
+Option (2) is not robust, because RTM_NEWLINK events may be silently
+discarded by the linkwatch logic (cf. linkwatch_fire_event()).
+Concretely, consider a scenario in which the carrier state flip-flops in
+the following way:
+
+ ^ carrier state (high/low = carrier/no carrier)
+ |
+ |        _______      _______ ...
+ |       |       |    |
+ | ______| "foo" |____| "bar"             (SSID in "quotes")
+ |
+ +-------A-------B----C---------> time
+
+If the time interval between (A) and (C) is less than 1 second, then
+linkwatch may emit only a single RTM_NEWLINK event indicating carrier
+gain.
+
+This is problematic because it is possible that the network
+configuration that should be applied is a function of the AP's
+properties such as SSID (cf. SSID= in systemd.network(5)). As
+illustrated in the above diagram, it may be that the AP with SSID "bar"
+ends up being configured as though it had SSID "foo".
+
+Address the above issue by having nl80211 emit an NL80211_CMD_START_AP
+message on the MLME nl80211 multicast group. This allows for arbitrary
+processes to be reliably informed.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+ net/wireless/nl80211.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 33a82ecab9d5..323b7e40d855 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -5770,6 +5770,39 @@ static bool nl80211_valid_auth_type(struct cfg80211_registered_device *rdev,
+ 	}
+ }
+ 
++static void nl80211_send_ap_started(struct wireless_dev *wdev)
++{
++	struct wiphy *wiphy = wdev->wiphy;
++	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wiphy);
++	struct sk_buff *msg;
++	void *hdr;
++
++	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	if (!msg)
++		return;
++
++	hdr = nl80211hdr_put(msg, 0, 0, 0, NL80211_CMD_START_AP);
++	if (!hdr)
++		goto out;
++
++	if (nla_put_u32(msg, NL80211_ATTR_WIPHY, rdev->wiphy_idx) ||
++	    nla_put_u32(msg, NL80211_ATTR_IFINDEX, wdev->netdev->ifindex) ||
++	    nla_put_u64_64bit(msg, NL80211_ATTR_WDEV, wdev_id(wdev),
++			      NL80211_ATTR_PAD) ||
++	    (wdev->u.ap.ssid_len &&
++	     nla_put(msg, NL80211_ATTR_SSID, wdev->u.ap.ssid_len,
++		     wdev->u.ap.ssid)))
++		goto out;
++
++	genlmsg_end(msg, hdr);
++
++	genlmsg_multicast_netns(&nl80211_fam, wiphy_net(wiphy), msg, 0,
++				NL80211_MCGRP_MLME, GFP_KERNEL);
++	return;
++out:
++	nlmsg_free(msg);
++}
++
+ static int nl80211_start_ap(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct cfg80211_registered_device *rdev = info->user_ptr[0];
+@@ -6050,6 +6083,8 @@ static int nl80211_start_ap(struct sk_buff *skb, struct genl_info *info)
+ 
+ 		if (info->attrs[NL80211_ATTR_SOCKET_OWNER])
+ 			wdev->conn_owner_nlportid = info->snd_portid;
++
++		nl80211_send_ap_started(wdev);
+ 	}
+ out_unlock:
+ 	wdev_unlock(wdev);
+-- 
+2.37.3
+
