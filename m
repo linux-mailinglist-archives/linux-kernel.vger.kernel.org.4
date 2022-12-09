@@ -2,184 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A509B6484E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5F66484E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiLIPUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S230245AbiLIPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLIPUr (ORCPT
+        with ESMTP id S229968AbiLIPVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:20:47 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286D86F69;
-        Fri,  9 Dec 2022 07:20:46 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id n21so12224466ejb.9;
-        Fri, 09 Dec 2022 07:20:46 -0800 (PST)
+        Fri, 9 Dec 2022 10:21:18 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F24A86F6E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:21:15 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m4-20020a05600c3b0400b003d1cb516ce0so54129wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:21:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aKeZ4tYHRTY5Y692xNjYg1a08hzNMUIopr7AUdLi5M4=;
-        b=PNBXApaESWpfGef9izBo29+Y5AnTu56H5yKCAcWs6WDFoLy3/XYpV+ELlq+HI4oEP7
-         czoq8uAjUybzA9JXkXLm3a2UozAKaYC4Bg6hzErN/yJEPG/ptNyaDIHDNp4lsFId7lCq
-         QKfAQNaE2XdK5bhUK0AgLoqC39AFlC1v4qHjX+nxljxPb1Y8D1Q8GgSfZMsSfurFrS+j
-         30QhV30swD4ZvyBhGdsGcY6/DIFez54YwBx379kmn4vXTGntK/ztnfDh0cxVD35lhNAe
-         gh+KHrNmTqrkFuCZS/wnsPfYGW8XuMfrlsxZTdJLQYWQMHFWueC21UG5ZtCNZ+8hYfTW
-         S9ZQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rvIg7h2BvXioV8AhHgWPqOCsPqInD17Pn5nCSXdP9EM=;
+        b=D8EyDLBtFb08otkSEL+mEnrCHj1fetzhsYTpuNxKO9nbSrb1+w3OqIY5Py3m4AzkPx
+         JeTuKU4KKocIAQoDGYF6RqA4exYQj2UQ6t7rjrV2OEsLo7rCTKT88XgNgKSPV6GuHntR
+         tFfscv8+br/bFJT4tKoAwdmEWXasbAWBr7wxuxSSQnX6/bAGiubWsAXUO+aDsraeel1/
+         Jo/T/c3BcVOl1V49av5ZMJCVqMMv4nGeI94infmr45vDOyKERvQT+F5EvlR1Y9+uBBy3
+         95JprFNXmG3xy+X9VaTug3GOqYzZ7VZ9BNE080Wf13TjJIkHZtbQAtnY8tU3xv1Y1Kzp
+         y3Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aKeZ4tYHRTY5Y692xNjYg1a08hzNMUIopr7AUdLi5M4=;
-        b=iPiXBstnmFqcmHvuYfDiOl0XkzzOp+XRUlheC2Jb6dlzLPkZe+DYAGr4c/NCsi2PmC
-         zKe2gGS0BBm5GweCDcRBgXK8Xw2NtSmS5A23tGhvR2onDysAs36ELf2CT3gj/dN5lPky
-         oD5D7vGatzoZC3omI3HuIiTt8TW6h8WgYNzX3h5grLOKNormfBWHM0TSl3nCh2NkXG8C
-         KKvQP/fQMI+9ruKNQFOSqqcwHgivvIy/QTBL/fpql55WQ7OE7PbORtVTRLLsgdp1fyTL
-         0eNO7BzI84WvNuYFax96YFKmHHRkxTc5Dv8zmVQS3i67+WAhR9EXYd4CeMG9xdqr0vPQ
-         OSLw==
-X-Gm-Message-State: ANoB5pnrqeifzojA0MkkCib9dETmYm08aWM2BfaoprQGwOSk9JVcp0H0
-        OHAtQjFRWW7usyARdYZbjG0=
-X-Google-Smtp-Source: AA0mqf5pkWVFeQAqJ3SqwghDSS6FDSl+wzcpBiWvaMsTrudXR7RjxnRvElvwQmTw4QRXtDddlbdZ3Q==
-X-Received: by 2002:a17:906:6ad7:b0:78d:f455:3105 with SMTP id q23-20020a1709066ad700b0078df4553105mr4410582ejs.45.1670599245111;
-        Fri, 09 Dec 2022 07:20:45 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170906055100b007806c1474e1sm16983eja.127.2022.12.09.07.20.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 07:20:44 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Dec 2022 16:20:42 +0100
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Song Liu <song@kernel.org>, Hao Sun <sunhao.th@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-Message-ID: <Y5NSStSi7h9Vdo/j@krava>
-References: <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
- <Y49dMUsX2YgHK0J+@krava>
- <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
- <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
- <Y5Inw4HtkA2ql8GF@krava>
- <Y5JkomOZaCETLDaZ@krava>
- <Y5JtACA8ay5QNEi7@krava>
- <Y5LfMGbOHpaBfuw4@krava>
- <Y5MaffJOe1QtumSN@krava>
- <Y5M9P95l85oMHki9@krava>
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rvIg7h2BvXioV8AhHgWPqOCsPqInD17Pn5nCSXdP9EM=;
+        b=QAqxPBCqMi5gnDtlhyCotHv1LWDg+YLr1iuX4NW66S/ARrMIKC0u1qcRPfUnkVcfMO
+         Ma0/O61wYp9B1kx1o545bMEFEFsxW9w+gHAJrpQrDquRXjzRftuDe2qPEUrz0ABq6q72
+         C/7q06mSOjOBbXNVkbVfOd/Y8y2egGVBsirrVYDhGmrdl9I3o5E9fVAVr0tTzMsT4Cww
+         Y1KNwmaCG/tifjG5nZqKVkQ3luenJQ+fhfZLAIkSbZzwfphA35Lu65dc02paRjlFItcQ
+         q7DUxnN/klWR3lMmmeSc9pE/dwidAxRfLqOPpIfsOngRdlvnrl0Oy8AgP7zPgh14nZ9c
+         VvBw==
+X-Gm-Message-State: ANoB5pkzH6zk+ipT+VWC3MUHAwWejV34D+cdvkMxrqbSY4+YIJhS5YdQ
+        iU5IHNeTnFDWMYZLDzpfNBYUrNd5hQSeT0yZ
+X-Google-Smtp-Source: AA0mqf7K2H/0dhlg3XkLsX0/tBlV8TabcQ9qix1g1SVXgDwhcCXpqtanJ0U95p2etGuYo91wPiDB2Q==
+X-Received: by 2002:a05:600c:4f05:b0:3cf:674a:aefe with SMTP id l5-20020a05600c4f0500b003cf674aaefemr5627790wmq.22.1670599273726;
+        Fri, 09 Dec 2022 07:21:13 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id r5-20020a05600c35c500b003a2f2bb72d5sm2214wmq.45.2022.12.09.07.21.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 07:21:13 -0800 (PST)
+Message-ID: <3c4c3bb2-b849-0c87-0948-8a36984bdde4@linaro.org>
+Date:   Fri, 9 Dec 2022 16:21:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5M9P95l85oMHki9@krava>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Joe Korty <joe.korty@concurrent-rt.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIt PULL] timer drivers for v6.2-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 02:50:55PM +0100, Jiri Olsa wrote:
-> On Fri, Dec 09, 2022 at 12:22:37PM +0100, Jiri Olsa wrote:
-> 
-> SBIP
-> 
-> > > > > > > >
-> > > > > > > > I'm trying to understand the severity of the issues and
-> > > > > > > > whether we need to revert that commit asap since the merge window
-> > > > > > > > is about to start.
-> > > > > > > 
-> > > > > > > Jiri, Peter,
-> > > > > > > 
-> > > > > > > ping.
-> > > > > > > 
-> > > > > > > cc-ing Thorsten, since he's tracking it now.
-> > > > > > > 
-> > > > > > > The config has CONFIG_X86_KERNEL_IBT=y.
-> > > > > > > Is it related?
-> > > > > > 
-> > > > > > sorry for late reply.. I still did not find the reason,
-> > > > > > but I did not try with IBT yet, will test now
-> > > > > 
-> > > > > no difference with IBT enabled, can't reproduce the issue
-> > > > > 
-> > > > 
-> > > > ok, scratch that.. the reproducer got stuck on wifi init :-\
-> > > > 
-> > > > after I fix that I can now reproduce on my local config with
-> > > > IBT enabled or disabled.. it's something else
-> > > 
-> > > I'm getting the error also when reverting the static call change,
-> > > looking for good commit, bisecting
-> > > 
-> > > I'm getting fail with:
-> > >    f0c4d9fc9cc9 (tag: v6.1-rc4) Linux 6.1-rc4
-> > > 
-> > > v6.1-rc1 is ok
-> > 
-> > so far I narrowed it down between rc1 and rc3.. bisect got me nowhere so far
-> > 
-> > attaching some more logs
-> 
-> looking at the code.. how do we ensure that code running through
-> bpf_prog_run_xdp will not get dispatcher image changed while
-> it's being exetuted
-> 
-> we use 'the other half' of the image when we add/remove programs,
-> but could bpf_dispatcher_update race with bpf_prog_run_xdp like:
-> 
-> 
-> cpu 0:                                  cpu 1:
-> 
-> bpf_prog_run_xdp
->    ...
->    bpf_dispatcher_xdp_func
->       start exec image at offset 0x0
-> 
->                                         bpf_dispatcher_update
->                                                 update image at offset 0x800
->                                         bpf_dispatcher_update
->                                                 update image at offset 0x0
-> 
->       still in image at offset 0x0
-> 
-> 
-> that might explain why I wasn't able to trigger that on
-> bare metal just in qemu
 
-I tried patch below and it fixes the issue for me and seems
-to confirm the race above.. but not sure it's the best fix
+Hi Thomas,
 
-jirka
+here is the PR for v6.2-rc1.
+
+After a long leave, I hope I did not miss some patches :/
+
+Have a nice day
+
+   -- Daniel
+
+The following changes since commit ebe11732838f39bd10bddafd4dfe2f97010fde62:
+
+   clockevents: Repair kernel-doc for clockevent_delta2ns() (2022-12-01 
+13:35:41 +0100)
+
+are available in the Git repository at:
+
+   https://git.linaro.org/people/daniel.lezcano/linux.git 
+tags/timers-v6.2-rc1
+
+for you to fetch changes up to 83571a4389039b1be2d77655b2ce47543d407e41:
+
+   dt-bindings: timer: renesas,cmt: Add r8a779g0 CMT support (2022-12-02 
+13:42:32 +0100)
+
+----------------------------------------------------------------
+- Add DT bindings for the Rockchip rk3128 timer (Johan Jonker)
+
+- Change the DT bindings for the npcm7xx timer in order to specify
+   multiple clocks and enable the clock for the timer1 on WPCM450
+   (Jonathan Neuschäfer)
+
+- Fix the timer duration being too long the ARM architected timer in
+   order to prevent an integer overflow leading to a negative value and
+   an immediate interruption (Joe Korty)
+
+- Fix an unused pointer warning reported by lkp and some cleanups in
+   the timer TI dm (Tony Lindgren)
+
+- Fix a missing call to clk_disable_unprepare() in the error path at
+   init time on the timer TI dm (Yang Yingliang)
+
+- Use kstrtobool() instead of strtobool() in the ARM architected timer
+   (Christophe JAILLET)
+
+- Add DT bindings for r8a779g0 on Renesas platform (Wolfram Sang)
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+       clocksource/drivers/arm_arch_timer: Use kstrtobool() instead of 
+strtobool()
+
+Joe Korty (1):
+       clocksource/drivers/arm_arch_timer: Fix XGene-1 TVAL register 
+math error
+
+Johan Jonker (1):
+       dt-bindings: timer: rockchip: Add rockchip,rk3128-timer
+
+Jonathan Neuschäfer (2):
+       dt-bindings: timer: nuvoton,npcm7xx-timer: Allow specifying all 
+clocks
+       clocksource/drivers/timer-npcm7xx: Enable timer 1 clock before use
+
+Tony Lindgren (3):
+       clocksource/drivers/timer-ti-dm: Fix warning for omap_timer_match
+       clocksource/drivers/timer-ti-dm: Make timer_get_irq static
+       clocksource/drivers/timer-ti-dm: Clear settings on probe and free
+
+Wolfram Sang (2):
+       dt-bindings: timer: renesas,tmu: Add r8a779g0 support
+       dt-bindings: timer: renesas,cmt: Add r8a779g0 CMT support
+
+Yang Yingliang (1):
+       clocksource/drivers/timer-ti-dm: Fix missing 
+clk_disable_unprepare in dmtimer_systimer_init_clock()
+
+  .../bindings/timer/nuvoton,npcm7xx-timer.yaml       |  8 +++++++-
+  .../devicetree/bindings/timer/renesas,cmt.yaml      |  2 ++
+  .../devicetree/bindings/timer/renesas,tmu.yaml      |  1 +
+  .../bindings/timer/rockchip,rk-timer.yaml           |  1 +
+  drivers/clocksource/arm_arch_timer.c                | 10 +++++++---
+  drivers/clocksource/timer-npcm7xx.c                 | 10 ++++++++++
+  drivers/clocksource/timer-ti-dm-systimer.c          |  4 +++-
+  drivers/clocksource/timer-ti-dm.c                   | 21 
++++++++++++++++++++--
+  include/clocksource/timer-ti-dm.h                   |  2 --
+  9 files changed, 50 insertions(+), 9 deletions(-)
 
 
----
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index c19719f48ce0..6a2ced102fc7 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -124,6 +124,7 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- 	}
- 
- 	__BPF_DISPATCHER_UPDATE(d, new ?: (void *)&bpf_dispatcher_nop_func);
-+	synchronize_rcu_tasks();
- 
- 	if (new)
- 		d->image_off = noff;
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
