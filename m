@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5158D64803F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9E164804B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiLIJkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S229875AbiLIJmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLIJkm (ORCPT
+        with ESMTP id S229756AbiLIJmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:40:42 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA373537CE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:40:39 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gh17so10199438ejb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:40:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jKKLCBzLV8/46B+QgkzgYyULA0ZCO/PFX9LWayGP/FA=;
-        b=c+lvXxGrRJc2H+S2Lis4tyDqevkpQZr6osuTT7i245BKBT0JQjdgy+Byy2obnWWZpM
-         ricTRLwZV71ZTgwA0ZXZ1pZnHRrtgA+uruncx4YyMYOKHEX8Fg3HGsXczNUKvanbP37G
-         Grb3acFtI/+A8M6SzlNqASbrIXQ/QuyxS9rc9KeWPODETABVJP+VFG1NdBkbhnV650v2
-         MVI5Q81oHaUDi8hqcyuh+2gNjys9A1u219rzbGEkmHgDg9gzbaSp4v4U5Z5yaspTWM4E
-         UeFZ8Z3r7V9ytr6vhnxqdJRfaXEyLKqnGbH2kBCWZBx+oMbxUUY5ZpiOnpX711Xq7BBf
-         Cxpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jKKLCBzLV8/46B+QgkzgYyULA0ZCO/PFX9LWayGP/FA=;
-        b=cLbQN17bEF31znL6hVMe8sZ+rw7hra/YkyNCNXiJxFSCTJ88f2s/zsWFwd+GV7OQcI
-         fb4w1VjMi+YdZZ2p45cX7ZPAmiZdzV1QPnxY/WM7enNmP4QD67dUi6lMxV3DgJF4R7+A
-         d6YObCB4P9P5sGnHrmxP0wp+MfODB0Wkx/E+IZYWJRGkerl5EH0bb4M4xaRIpyfyPOee
-         TXl8yCCvdxXW/LecfwUeKGaApqAMwzzJCGU04A0YjbIUQdXQhH7c4SZIAJuFBdcGfpkL
-         FRX5bkK0p3vVrYx/0J+4a58/VmU8393xy2MBZN8phTopssYm+6AmR53Vfy3290CaqBOg
-         Xbtw==
-X-Gm-Message-State: ANoB5plVRV8C3nW23MV6ocB3oY3Tu6qG2yFmqhxE54ETN8GJQ3wsH57F
-        sF6tNgsPyUVcE3iB5AkUmkt/jg==
-X-Google-Smtp-Source: AA0mqf6EI9XikAHq5TezGX9KT5vIUxGEjx/Gk21eI7m7wrsKkUCQnOpiXSVZaDM27TMo0cJLNd9GaA==
-X-Received: by 2002:a17:906:79d8:b0:7bd:6372:fdb4 with SMTP id m24-20020a17090679d800b007bd6372fdb4mr6764320ejo.41.1670578838442;
-        Fri, 09 Dec 2022 01:40:38 -0800 (PST)
-Received: from mbp-di-paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056402168f00b004642b35f89esm192957edv.9.2022.12.09.01.40.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Dec 2022 01:40:37 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH V9 7/8] block, bfq: inject I/O to underutilized actuators
-From:   Paolo Valente <paolo.valente@linaro.org>
-In-Reply-To: <2678a347-188a-1f2a-27ec-67e7caa38175@opensource.wdc.com>
-Date:   Fri, 9 Dec 2022 10:40:36 +0100
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
-        Rory Chen <rory.c.chen@seagate.com>,
-        Glen Valante <glen.valante@linaro.org>,
-        Davide Zini <davidezini2@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <DC3919CC-437C-46E9-A399-C4C2B5C16792@linaro.org>
-References: <20221208104351.35038-1-paolo.valente@linaro.org>
- <20221208104351.35038-8-paolo.valente@linaro.org>
- <2678a347-188a-1f2a-27ec-67e7caa38175@opensource.wdc.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Fri, 9 Dec 2022 04:42:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A663AC32
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:42:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EC53621E4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09CF8C433F2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670578929;
+        bh=Tbo2+FhoQ4maReKSfP3f06RUQ2E3eBLQFr4VEsoX8+U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IpdMUZsomFZpvDXfSExNxKaFi3PliedjvAdgdx0xHDUii1cVQTS4RNX3CQz+QNLxR
+         S+qaC3jQ3XAImoE7wbaEsliCTO+T1/nU5N9YBTDfort07HEgv9el/zWqEWKgK5/CW7
+         nzZI3SAC2HbUHgCoKs0Yp4EJ4OZ8e49R7lUaSRWKOe+NWwUPK9kKPDQMkyu78DSjhE
+         mtGSxRt4cknPTrJ/9S32s1CIrsbtqyKb2mMd84oDTXytSj12eClk2sL2TYcAKe1E6b
+         7paAcQpPqPxfrwXwSwHmQn8Z8NGLwuPbE8c97QU3OJ4gW0GJVF4uxHAyQpRWFyhkyy
+         QQkRbrjzpudlA==
+Received: by mail-lj1-f173.google.com with SMTP id a19so4398498ljk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:42:08 -0800 (PST)
+X-Gm-Message-State: ANoB5plshiiK0mB8tc9dLGNQBsFIHodKAcyQJDmVqZvUT8KReyRnRftn
+        Pn5hiQNP8kZOSy17oXKhXlLI64QcCXBJDfhyqQk=
+X-Google-Smtp-Source: AA0mqf5M0GCSKWI7xqGnVJkB1vH9Q7C9RUCYQJKJi/3S+teCDp0IEOH/yR+g/iCluajWBerql34fPO3atuJp0+8H+0s=
+X-Received: by 2002:a05:651c:220a:b0:277:2428:3682 with SMTP id
+ y10-20020a05651c220a00b0027724283682mr32034797ljq.291.1670578926991; Fri, 09
+ Dec 2022 01:42:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20221209060740.2785164-1-agordeev@linux.ibm.com>
+In-Reply-To: <20221209060740.2785164-1-agordeev@linux.ibm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 9 Dec 2022 10:41:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF5OR6TGhCrxYCmrnA=CTAfkGcga8BDE2Vj3rixgi7U3w@mail.gmail.com>
+Message-ID: <CAMj1kXF5OR6TGhCrxYCmrnA=CTAfkGcga8BDE2Vj3rixgi7U3w@mail.gmail.com>
+Subject: Re: [PATCH] jump_label: explicitly annotate inittext labels as init
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,120 +62,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 9 Dec 2022 at 07:08, Alexander Gordeev <agordeev@linux.ibm.com> wrote:
+>
+> inittext code may be out of [__init_begin, __init_end]
+> range on some architectures. Yet, the jump_label_init()
+> only calls init_section_contains() function to check if
+> a label needs to be annotated as init and inittext code
+> is left behind.
+>
+> Fixes: 19483677684b ("jump_label: Annotate entries that operate on __init code earlier")
+> Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+> ---
+>  kernel/jump_label.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+> index 714ac4c3b556..77680665d374 100644
+> --- a/kernel/jump_label.c
+> +++ b/kernel/jump_label.c
+> @@ -481,13 +481,16 @@ void __init jump_label_init(void)
+>
+>         for (iter = iter_start; iter < iter_stop; iter++) {
+>                 struct static_key *iterk;
+> +               unsigned long addr;
+>                 bool in_init;
+>
+>                 /* rewrite NOPs */
+>                 if (jump_label_type(iter) == JUMP_LABEL_NOP)
+>                         arch_jump_label_transform_static(iter, JUMP_LABEL_NOP);
+>
+> -               in_init = init_section_contains((void *)jump_entry_code(iter), 1);
+> +               addr = jump_entry_code(iter);
+> +               in_init = init_section_contains((void *)addr, 1) ||
+> +                         is_kernel_inittext(addr);
 
+Isn't it sufficient to only call is_kenel_inittext here?
 
-> Il giorno 9 dic 2022, alle ore 02:46, Damien Le Moal =
-<damien.lemoal@opensource.wdc.com> ha scritto:
->=20
-> On 12/8/22 19:43, Paolo Valente wrote:
->> From: Davide Zini <davidezini2@gmail.com>
->>=20
->> The main service scheme of BFQ for sync I/O is serving one sync
->> bfq_queue at a time, for a while. In particular, BFQ enforces this
->> scheme when it deems the latter necessary to boost throughput or
->> to preserve service guarantees. Unfortunately, when BFQ enforces
->> this policy, only one actuator at a time gets served for a while,
->> because each bfq_queue contains I/O only for one actuator. The
->> other actuators may remain underutilized.
->>=20
->> Actually, BFQ may serve (inject) extra I/O, taken from other
->> bfq_queues, in parallel with that of the in-service queue. This
->> injection mechanism may provide the ground for dealing also with
->> the above actuator-underutilization problem. Yet BFQ does not take
->> the actuator load into account when choosing which queue to pick
->> extra I/O from. In addition, BFQ may happen to inject extra I/O
->> only when the in-service queue is temporarily empty.
->>=20
->> In view of these facts, this commit extends the
->> injection mechanism in such a way that the latter:
->> (1) takes into account also the actuator load;
->> (2) checks such a load on each dispatch, and injects I/O for an
->>    underutilized actuator, if there is one and there is I/O for it.
->>=20
->> To perform the check in (2), this commit introduces a load
->> threshold, currently set to 4.  A linear scan of each actuator is
->> performed, until an actuator is found for which the following two
->> conditions hold: the load of the actuator is below the threshold,
->> and there is at least one non-in-service queue that contains I/O
->> for that actuator. If such a pair (actuator, queue) is found, then
->> the head request of that queue is returned for dispatch, instead
->> of the head request of the in-service queue.
->>=20
->> We have set the threshold, empirically, to the minimum possible
->> value for which an actuator is fully utilized, or close to be
->> fully utilized. By doing so, injected I/O 'steals' as few
->> drive-queue slots as possibile to the in-service queue. This
->> reduces as much as possible the probability that the service of
->> I/O from the in-service bfq_queue gets delayed because of slot
->> exhaustion, i.e., because all the slots of the drive queue are
->> filled with I/O injected from other queues (NCQ provides for 32
->> slots).
->>=20
->> This new mechanism also counters actuator underutilization in the
->> case of asymmetric configurations of bfq_queues. Namely if there
->> are few bfq_queues containing I/O for some actuators and many
->> bfq_queues containing I/O for other actuators. Or if the
->> bfq_queues containing I/O for some actuators have lower weights
->> than the other bfq_queues.
->>=20
->> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
->> Signed-off-by: Davide Zini <davidezini2@gmail.com>
->=20
-> [...]
->=20
->> @@ -4792,22 +4799,69 @@ bfq_choose_bfqq_for_injection(struct bfq_data =
-*bfqd)
->> 			else
->> 				limit =3D in_serv_bfqq->inject_limit;
->>=20
->> -			if (bfqd->rq_in_driver < limit) {
->> +			if (bfqd->tot_rq_in_driver < limit) {
->> 				bfqd->rqs_injected =3D true;
->> 				return bfqq;
->> 			}
->> 		}
->> +	}
->> +
->> +	return NULL;
->> +}
->> +
->> +static struct bfq_queue *
->> +bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd, int idx)
->> +{
->> +	struct bfq_queue *bfqq =3D NULL;
->=20
-> I do not think that you need the NULL initialization here.
->=20
->> +
->> +	if (bfqd->in_service_queue &&
->> +	    bfqd->in_service_queue->actuator_idx =3D=3D idx)
->> +		return bfqd->in_service_queue;
->> +
->> +	list_for_each_entry(bfqq, &bfqd->active_list[idx], bfqq_list) {
->> +		if (!RB_EMPTY_ROOT(&bfqq->sort_list) &&
->> +			bfq_serv_to_charge(bfqq->next_rq, bfqq) <=3D
->> +				bfq_bfqq_budget_left(bfqq)) {
->> +			return bfqq;
->> +		}
->> +	}
->>=20
->> 	return NULL;
->> }
->=20
-> Otherwise looks OK.
->=20
-> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-Hi Damien,
-I've applied your recommendations in this and the other replies of
-yours.  I'm about to send a V10.
-
-Thank you very much for checking this code and helping me improve it,
-Paolo
-
->=20
-> --=20
-> Damien Le Moal
-> Western Digital Research
-
+>                 jump_entry_set_init(iter, in_init);
+>
+>                 iterk = jump_entry_key(iter);
+> --
+> 2.34.1
+>
