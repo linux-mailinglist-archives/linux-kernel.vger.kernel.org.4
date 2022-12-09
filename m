@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BC364888D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E63964888F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiLISlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S229691AbiLISme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiLISlv (ORCPT
+        with ESMTP id S229762AbiLISmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:41:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE98663CA;
-        Fri,  9 Dec 2022 10:41:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3233062300;
-        Fri,  9 Dec 2022 18:41:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFE7C433D2;
-        Fri,  9 Dec 2022 18:41:46 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 13:41:44 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2] x86/mm/kmmio: Use rcu_read_lock_sched_notrace()
-Message-ID: <20221209134144.04f33626@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Dec 2022 13:42:31 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F035B59C;
+        Fri,  9 Dec 2022 10:42:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670611351; x=1702147351;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n0tWGGZDbd5iBdvKg5QC1cQ6LSUj5SaZ5KFci2+KPTE=;
+  b=Z9cOOdps1fvgaAwdT+4OrAqcSqf/OD4M6ih2CDAkXuR7TGDXm/x9OY6Q
+   iAunoxPoK9B+EFGCp5J6Q22q4ecKXnk5LMXKWjZH5jLfS1LhtELZIqgXL
+   mOwsw1yL696INgrZ+zb0xkEf6iaZwoBw2T9sBkuZOqE2exi1a2nH8wjhP
+   GjqnV8c3x5dpZHVqy7kqVuAZbtCS4YY4d/BF8wvEWqoEaQiFNUEPpyq9j
+   T3grapRFgDY1xB8XbVDvczr7TwHyfNRvQCP+s7EFd3lWM27vAg5/FOvvS
+   Rynk7GlI+OY51uyrmgahfP1Zc27Vigi8MTNdhsxGScWr5mcrEiG6i5+GK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="403779567"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="403779567"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 10:42:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="647488707"
+X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
+   d="scan'208";a="647488707"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2022 10:42:09 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1p3iJz-0077mF-0r;
+        Fri, 09 Dec 2022 20:42:07 +0200
+Date:   Fri, 9 Dec 2022 20:42:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 3/4] x86/PCI: Tidy E820 removal messages
+Message-ID: <Y5OBfjKXFc5d88i1@smile.fi.intel.com>
+References: <20221208190341.1560157-1-helgaas@kernel.org>
+ <20221208190341.1560157-4-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208190341.1560157-4-helgaas@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Thu, Dec 08, 2022 at 01:03:40PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> These messages:
+> 
+>   clipped [mem size 0x00000000 64bit] to [mem size 0xfffffffffffa0000 64bit] for e820 entry [mem 0x0009f000-0x000fffff]
+> 
+> aren't as useful as they could be because (a) the resource is often
+> IORESOURCE_UNSET, so we print the size instead of the start/end and (b) we
+> print the available resource even if it is empty after removing the E820
+> entry.
+> 
+> Print the available space by hand to avoid the IORESOURCE_UNSET problem and
+> only if it's non-empty.  No functional change intended.
 
-The mmiotrace tracer is "special". The purpose is to help reverse engineer
-binary drivers by removing the memory allocated by the driver and when the
-driver goes to access it, a fault occurs, the mmiotracer will record what
-the driver was doing and then do the work on its behalf by single stepping
-through the process.
+...
 
-But to achieve this ability, it must do some special things. One is to
-take the rcu_read_lock() when the fault occurs, and then release it in the
-breakpoint that is single stepping. This makes lockdep unhappy, as it
-changes the state of RCU from within an exception that is not contained in
-that exception, and we get a nasty splat from lockdep.
+> +			if (avail->end > avail->start)
+> +				pr_info("resource: remaining [mem %#010llx-%#010llx] available\n",
+> +					(unsigned long long) avail->start,
+> +					(unsigned long long) avail->end);
 
-Instead, switch to rcu_read_lock_sched_notrace() as the RCU sched variant
-has the same grace period as normal RCU. This is basically the same as
-rcu_read_lock() but does not make lockdep complain about it.
+Is there any point why we do not use %pa for resource_size_t parameters?
 
-Note, the preempt_disable() is still needed as it uses preempt_enable_no_resched().
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v1: https://lore.kernel.org/linux-trace-kernel/20221206191229.813199661@goodmis.org
-  (also called [PATCH 2/2] x86/mm/kmmio: Remove rcu_read_lock())
-
-  - Instead of simply removing rcu_read_lock() call rcu_read_lock_sched_notrace()
-
- arch/x86/mm/kmmio.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
-index edb486450158..853c49877c16 100644
---- a/arch/x86/mm/kmmio.c
-+++ b/arch/x86/mm/kmmio.c
-@@ -254,7 +254,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
- 	 * again.
- 	 */
- 	preempt_disable();
--	rcu_read_lock();
-+	rcu_read_lock_sched_notrace();
- 
- 	faultpage = get_kmmio_fault_page(page_base);
- 	if (!faultpage) {
-@@ -323,7 +323,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
- 	return 1; /* fault handled */
- 
- no_kmmio:
--	rcu_read_unlock();
-+	rcu_read_unlock_sched_notrace();
- 	preempt_enable_no_resched();
- 	return ret;
- }
-@@ -363,7 +363,7 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
- 	/* These were acquired in kmmio_handler(). */
- 	ctx->active--;
- 	BUG_ON(ctx->active);
--	rcu_read_unlock();
-+	rcu_read_unlock_sched_notrace();
- 	preempt_enable_no_resched();
- 
- 	/*
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
