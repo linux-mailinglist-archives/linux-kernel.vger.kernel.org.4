@@ -2,131 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8098464830E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C2E64830D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLINyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 08:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S229910AbiLINyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLINyM (ORCPT
+        with ESMTP id S229865AbiLINyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:54:12 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868CD750B2
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:54:11 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f7so3161557edc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jfZOlKGR+/P2su4394g9InmLBjuJ6p9eVWFIlDxziAA=;
-        b=RNV2L/Sop5/PdTIx3qI63Fj5ZMWwkTZqMD0vIIGi2IKFImQX4QRFRgqentkk0GXEVp
-         v+iCJXqEkCzdgVBpvEdMimpvrep2rdG5Se1dZ4uXrvxWMuuXrLnDEsyV/n3697O/JzhS
-         /RQKR1ZOXxOk1ueUykpfMnYpGRDQp7TFZz9KkULrHMGk4tCUxqm9C9N8nQ4anfXPEjz/
-         LdpLF62dfOMJiQ+ndxoLMzvAs5FAF5vkdMrFSsSCzTy5g9bL1glKTaO0Do+RKwe1ngk9
-         04uB8a60Ipp9chgbWawpL7IkCRLY8D7T3FjmjOvHCt0ZEf0gO76hu745oEF6vKKPPzet
-         7fkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jfZOlKGR+/P2su4394g9InmLBjuJ6p9eVWFIlDxziAA=;
-        b=36JFokhmvYN852VD5S8ACT6DTrIsod1FzgCKsrTnunMyaY4R3xcNpnMuXIf4gx/vax
-         EAQjY/PS93QNBRpoSHoDgGmXU43L0gE5C0w9njJfVjJhLRQ3oJKbKrKc1FgzJbYztMRy
-         vvah6Yd1gXr6wGK751YBEIRZ7vaePjzIiWgVcPbKJ9ywSK+ZGjAeOSx2ttbDbQGRksSP
-         qwBBVcTCnKj4KoCPYwW2InTAgq6F2/8i3xx+PmJwSP8awDI18V2x5Kr/aScdW2abxj0O
-         coDt8dGkG5KuBkIa5n8KcHqRVoaYdl/pp4tEucNgYnFORx6OSXMRr5ghvt5Crj8aV/FT
-         KMmA==
-X-Gm-Message-State: ANoB5plIqbFVmV+93VnlFFeVz1wafLbEKQpa4lTfxNBZ0a2o7L6gG1ak
-        +HVFH+DNQwiFAfWyS8Tuxb7vqA==
-X-Google-Smtp-Source: AA0mqf7bfnAbNrpTqzZUS+sekqhXfLPux6Cr11cOwIbyl2ZNYjOyapiWmfPgwaAP/qK0+K/Ir7hzhQ==
-X-Received: by 2002:a05:6402:3897:b0:468:a5fc:8e36 with SMTP id fd23-20020a056402389700b00468a5fc8e36mr5172683edb.20.1670594050043;
-        Fri, 09 Dec 2022 05:54:10 -0800 (PST)
-Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id k19-20020aa7c393000000b0045b4b67156fsm656371edq.45.2022.12.09.05.54.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 05:54:09 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Fri, 09 Dec 2022 14:54:08 +0100
-Subject: [PATCH 3/3] arm64: dts: qcom: sm7225-fairphone-fp4: configure flash LED
+        Fri, 9 Dec 2022 08:54:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962B873F63;
+        Fri,  9 Dec 2022 05:54:12 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0319B22B95;
+        Fri,  9 Dec 2022 13:54:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670594051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0FFQYaabEfRDr7LqeZLH4qKryO6ltYLrRQvYtgv9m2k=;
+        b=G93rCs6MRiMRau87yY0IGLli1eoqzwPsVg8tzsuIT8GLinhpeGj2oYzJ5FDA8BCu7P5Ka4
+        rozEJ8Gsgl3mnas0RgPNik+MYxVBHjafxE/sB4OWIP3+eR2pCzOucRdPt43ua9xovaD/Vs
+        O8vgwtVyGyK+UVghOOV46O0nDeTOArU=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 957102C141;
+        Fri,  9 Dec 2022 13:54:10 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 14:54:10 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <Y5M+AoKHDK4rn6/i@alley>
+References: <20220901171252.2148348-1-song@kernel.org>
+ <Y3expGRt4cPoZgHL@alley>
+ <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221209-fp4-pm6150l-flash-v1-3-531521eb2a72@fairphone.com>
-References: <20221209-fp4-pm6150l-flash-v1-0-531521eb2a72@fairphone.com>
-In-Reply-To: <20221209-fp4-pm6150l-flash-v1-0-531521eb2a72@fairphone.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fenglin Wu <quic_fenglinw@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.11.0-dev-64ef0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the pm6150l flash node for the dual flash LEDs found on FP4.
+On Mon 2022-11-28 17:57:06, Song Liu wrote:
+> On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
+> > > --- a/kernel/livepatch/core.c
+> > > +++ b/kernel/livepatch/core.c
+> > > @@ -316,6 +316,45 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+> > >       return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
+> > >  }
+> > >
+> > > +static void klp_clear_object_relocations(struct module *pmod,
+> > > +                                     struct klp_object *obj)
+> > > +{
+> > > +     int i, cnt;
+> > > +     const char *objname, *secname;
+> > > +     char sec_objname[MODULE_NAME_LEN];
+> > > +     Elf_Shdr *sec;
+> > > +
+> > > +     objname = klp_is_module(obj) ? obj->name : "vmlinux";
+> > > +
+> > > +     /* For each klp relocation section */
+> > > +     for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
+> > > +             sec = pmod->klp_info->sechdrs + i;
+> > > +             secname = pmod->klp_info->secstrings + sec->sh_name;
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+secname = ...
 
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index c456e9594ea5..fef7d1d02925 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "sm7225.dtsi"
-@@ -367,6 +368,28 @@ &mpss {
- 	firmware-name = "qcom/sm7225/fairphone4/modem.mdt";
- };
- 
-+&pm6150l_flash {
-+	status = "okay";
-+
-+	led-0 {
-+		function = LED_FUNCTION_FLASH;
-+		color = <LED_COLOR_ID_YELLOW>;
-+		led-sources = <1>;
-+		led-max-microamp = <180000>;
-+		flash-max-microamp = <1000000>;
-+		flash-max-timeout-us = <1280000>;
-+	};
-+
-+	led-1 {
-+		function = LED_FUNCTION_FLASH;
-+		color = <LED_COLOR_ID_WHITE>;
-+		led-sources = <2>;
-+		led-max-microamp = <180000>;
-+		flash-max-microamp = <1000000>;
-+		flash-max-timeout-us = <1280000>;
-+	};
-+};
-+
- &pm6150l_wled {
- 	status = "okay";
- 
+> > > +             if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
+> > > +                     continue;
+> > > +
+> > > +             /*
+> > > +              * Format: .klp.rela.sec_objname.section_name
+> > > +              * See comment in klp_resolve_symbols() for an explanation
+> > > +              * of the selected field width value.
+> > > +              */
+> > > +             secname = pmod->klp_info->secstrings + sec->sh_name;
 
--- 
-2.38.1
+secname = ...    same a above.
+
+> > > +             cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
+> > > +             if (cnt != 1) {
+> > > +                     pr_err("section %s has an incorrectly formatted name\n",
+> > > +                            secname);
+> > > +                     continue;
+> > > +             }
+> 
+> Actually, I think we don't need the cnt check here. Once it is removed,
+> there isn't much duplicated logic.
+
+Seriously?
+
+A section with this error was skipped in klp_apply_section_relocs().
+I did not cause rejecting the module! Why is it suddenly safe to
+process it, please?
+
+
+I see that you removed also:
+
+	if (strcmp(objname ? objname : "vmlinux", sec_objname))
+		return 0;
+
+This is another bug in your "simplification".
+
+
+> > > +
+> > > +             if (strcmp(objname, sec_objname))
+> > > +                     continue;
+> > > +
+> > > +             clear_relocate_add(pmod->klp_info->sechdrs,
+> > > +                                pmod->core_kallsyms.strtab,
+> > > +                                pmod->klp_info->symndx, i, pmod);
+> > > +     }
+> > > +}
+> >
+> > Huh, this duplicates a lot of tricky code.
+> >
+> > It is even worse because this squashed code from two functions
+> > klp_apply_section_relocs() and klp_apply_object_relocs()
+> > into a single function. As a result, the code duplication is not
+> > even obvious.
+> >
+> > Also the suffix "_reloacations() does not match the suffix of
+> > the related funciton:
+> >
+> >         + klp_apply_object_relocs()             (existing)
+> >         + klp_clear_object_relocations()        (new)
+> >
+> > This all would complicate maintenance of the code.
+> >
+> > Please, implement a common:
+> >
+> > int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+> >                              const char *shstrtab, const char *strtab,
+> >                              unsigned int symndx, unsigned int secndx,
+> >                              const char *objname, bool apply);
+> >
+> > and
+> >
+> > int klp_write_object_relocs(struct klp_patch *patch,
+> >                             struct klp_object *obj,
+> >                             bool apply);
+> >
+> > and add the respective wrappers:
+> >
+> > int klp_apply_section_relocs();   /* also needed in module/main.c */
+> > int klp_apply_object_relocs();
+> > void klp_clear_object_relocs();
+> 
+> With the above simplification (removing cnt check), do we still need
+> all these wrappers? Personally, I think they will make the code more
+> difficult to follow..
+
+Sigh.
+
+klp_apply_section_relocs() has 25 lines of code.
+klp_apply_object_relocs() has 18 lines of code.
+
+The only difference should be that klp_clear_object_relocs():
+
+   + does not need to call klp_resolve_symbols()
+   + need to call clear_relocate_add() instead of apply_relocate_add()
+
+It is 7 different lines from in the existing 25 + 18 = 43 lines.
+The duplication does not look like a good deal even from this POV.
+
+If we introduce update_relocate_add(..., bool apply) parameter
+then we could call update_relocate_add() in both situations.
+
+Let me repeat from the last mail. klp_clear_object_relocs() even
+reshuffled the duplicated code. It was even harder to find differences.
+
+Do I still need to explain how bad idea was the code duplication,
+please?
+
+Best Regards,
+Petr
