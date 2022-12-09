@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C4F64843A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5B264843B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiLIOx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S230039AbiLIOyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiLIOxh (ORCPT
+        with ESMTP id S229940AbiLIOxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:53:37 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2145FBB0
+        Fri, 9 Dec 2022 09:53:39 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66AE5F6DE
         for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:53:37 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id t17so12111545eju.1
+Received: by mail-ed1-x534.google.com with SMTP id f7so3390987edc.6
         for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:53:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linbit-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ROtOQl0iT4Ua6doSdkwJJ3Gv1mhqQe8GXYrZrg3slxM=;
-        b=ApPRBy01ChJFifDOnwbdnwBSBF0lcYWMqjlMTXz2jhF6/5ANYo14gJvPrTt/ll13S4
-         K3w8+TcexOTVeUactHN1bzHljJf8MB3pj+7s2l9W2X2B/rqVw7CJc40bdYAb3MWRWG0C
-         rHtrkO46Y6Pi3pN+lpiC3pLYeKw3zGiL8SXaOISfar5nXi0rY5xvNycjwkcZdn40uzix
-         IWIZ3TI8SQjhDOrLC2SXzRmEbOO9d2OljNpN/2gfa7/RfgkeBfgclr9buadIgB1EH0TY
-         RXQT5ehbonldUCPsY7sbejkfcY2jU8HE86oKqZI8WC68NKs999tNSNRAWzzFHs0YHQPn
-         Tv6Q==
+        bh=N1ZPBPraqcCSXLcbBqEiTH4593Z8hkjnTNKrVJO6nsc=;
+        b=cA94dZQenZJSd/HPwubzdsAVWL9KdO9O1Qo/Eakd4+PcL0EYhUnFp6LZ4Z5Yiq44Ts
+         kIk20jFQg1VRnEblzwpnQ/d32eC6W3vdeer4rSpJfq4M8GRXwKq4ssx4ghVd8jx1YD+p
+         C2x0fausQ5gxBdut+a+0XS5oiYYSgwNQilm+V2mMDhAxtTVEpGII1j3yeVyZWE2S/hfd
+         9d1sYMc0pkCNaXhyjxT3SUsMh3h6dSyi/LLn0XlkNvj+AimVyhLXmFud1jJf1IiPG5Iz
+         JjBCanRTRC+nb7XDkV4V07MrkTMCVY8OCJHJ9Iwhaaw4/MGx4OQwAE8eci9EwJC9SN9D
+         7raA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ROtOQl0iT4Ua6doSdkwJJ3Gv1mhqQe8GXYrZrg3slxM=;
-        b=soW/KtkIo23Ih2QYvCk7gmBsbAGEh1yZ6JmUzYvzUCHh0YPErfjyk3Y+TRr9omSsFO
-         RIlHvKKLm0OxcqbDZ3MUz5Dybg3lTYeqtZuLwnRXncmr/pBl7b5nuYH9WN2Iz6Sv1R2f
-         8KfNIAviJhS2oyXYPW9d7lV9kUaMAUwcT3zd/9C23l7f7rmn3xuz6rO4Jo0IJxDHSjLQ
-         5m3ii7lmlUXHQ6yOGvTMMvLQON02RpMtdhgBJOVmnRRTxXcIy7vT/DNOZRx7UxOe6UkW
-         7GvjyJclItZUWMJtXXvkpPCRzchl08ef0ssKuj9tBD3QkGXjTWH1DHQK3z2L14o+TGas
-         ItSw==
-X-Gm-Message-State: ANoB5pmcSc4GBSiN2VuXyNUZ5j0RufdtXP6YnX7vMAuk7/Qo/RHlbBmC
-        glTBypChSQLzxotutlpgfyuQVw==
-X-Google-Smtp-Source: AA0mqf4FR3/rLj1r8DduSRH9Ahrzdkej5gCrltixWaV5Ldqq3If0NcyorWhWwageABZaLWMi1ZsSug==
-X-Received: by 2002:a17:906:1115:b0:7c1:1fcf:266c with SMTP id h21-20020a170906111500b007c11fcf266cmr5039561eja.14.1670597615707;
-        Fri, 09 Dec 2022 06:53:35 -0800 (PST)
+        bh=N1ZPBPraqcCSXLcbBqEiTH4593Z8hkjnTNKrVJO6nsc=;
+        b=p2hz6oxPoo1Xfy6ywvORUz4FL1ElyWWoBsKDS0yoXpmzPJVAcl+xIlrO9Ey043B7dM
+         mU0ysJLqdEIytzUt4KNEoNSlgjEZsmbCX6um9OqZ+AUwIqRUUW2rmk3xZcab/FHNL4yA
+         Q3pUwr+J86D673DOac3nltMhzlVQSnRWeNpsKI4stXPDl2h7eUuCzQvITuhwCPOerRSy
+         DSEEu+SMJKNr5/wHdjgpBokDv0SHmZNt3NHgK1xHPRDDMhCBzqgWC/49VLegMWOu9nvw
+         gpqbU3DrqkPtvOHCGWmtsviICYJRwe++tsfizdtNPuuHsAmbf5k+9TUfW+gsDHaWweyf
+         iWmg==
+X-Gm-Message-State: ANoB5pnQmlGOJrC4dzxZe+atTj12xr7twx21D0elaCyQdy60sGHLuuug
+        3rQiYD4X0Swd+90VUEGp0yUyqQ==
+X-Google-Smtp-Source: AA0mqf4grDFciVpw7S/dEZoa128AlSgEFPzlvhzLMA1gxp2edL4O/WpNrnUJ3+plM+y7TPO8OeT56g==
+X-Received: by 2002:aa7:c9d0:0:b0:467:559e:5301 with SMTP id i16-20020aa7c9d0000000b00467559e5301mr5158338edt.7.1670597616464;
+        Fri, 09 Dec 2022 06:53:36 -0800 (PST)
 Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
         by smtp.gmail.com with ESMTPSA id bd21-20020a056402207500b0046bb7503d9asm728424edb.24.2022.12.09.06.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:53:35 -0800 (PST)
+        Fri, 09 Dec 2022 06:53:36 -0800 (PST)
 From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>
 To:     Jens Axboe <axboe@kernel.dk>
@@ -60,9 +60,9 @@ Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
         <christoph.boehmwalder@linbit.com>,
         Joel Colledge <joel.colledge@linbit.com>
-Subject: [PATCH 5/8] drbd: remove macros using require_context
-Date:   Fri,  9 Dec 2022 15:53:24 +0100
-Message-Id: <20221209145327.2272271-6-christoph.boehmwalder@linbit.com>
+Subject: [PATCH 6/8] MAINTAINERS: add drbd headers
+Date:   Fri,  9 Dec 2022 15:53:25 +0100
+Message-Id: <20221209145327.2272271-7-christoph.boehmwalder@linbit.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221209145327.2272271-1-christoph.boehmwalder@linbit.com>
 References: <20221209145327.2272271-1-christoph.boehmwalder@linbit.com>
@@ -78,55 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This require_context attribute originated in a proposed sparse patch by
-Philipp Reisner back in 2008. Johannes Berg had a different solution to
-a similar problem, and that patch "won" in the end; so the require_context
-thing never got merged. The whole history can be read at [0].
-
-DRBD kept using these annotations anyway for a while. Nowadays, on a
-modern unmodified sparse, they obviously do nothing, and they are hardly
-used anymore anyway.
-
-So, just remove the definitions of these macros.
-
-[0] https://www.spinics.net/lists/linux-sparse/msg01150.html
-
 Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
 Reviewed-by: Joel Colledge <joel.colledge@linbit.com>
 ---
- drivers/block/drbd/drbd_int.h | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
-index ae713338aa46..edce1f7ac2da 100644
---- a/drivers/block/drbd/drbd_int.h
-+++ b/drivers/block/drbd/drbd_int.h
-@@ -39,16 +39,6 @@
- #include "drbd_protocol.h"
- #include "drbd_polymorph_printk.h"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 595d59eec7ea..83b6f3a97cf6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6349,6 +6349,7 @@ T:	git git://git.linbit.com/linux-drbd.git
+ T:	git git://git.linbit.com/drbd-8.4.git
+ F:	Documentation/admin-guide/blockdev/
+ F:	drivers/block/drbd/
++F:	include/linux/drbd*
+ F:	lib/lru_cache.c
  
--#ifdef __CHECKER__
--# define __protected_by(x)       __attribute__((require_context(x,1,999,"rdwr")))
--# define __protected_read_by(x)  __attribute__((require_context(x,1,999,"read")))
--# define __protected_write_by(x) __attribute__((require_context(x,1,999,"write")))
--#else
--# define __protected_by(x)
--# define __protected_read_by(x)
--# define __protected_write_by(x)
--#endif
--
- /* shared module parameters, defined in drbd_main.c */
- #ifdef CONFIG_DRBD_FAULT_INJECTION
- extern int drbd_enable_faults;
-@@ -774,7 +764,7 @@ struct drbd_device {
- 	unsigned long flags;
- 
- 	/* configured by drbdsetup */
--	struct drbd_backing_dev *ldev __protected_by(local);
-+	struct drbd_backing_dev *ldev;
- 
- 	sector_t p_size;     /* partner's disk size */
- 	struct request_queue *rq_queue;
+ DRIVER COMPONENT FRAMEWORK
 -- 
 2.38.1
 
