@@ -2,257 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC2E647F02
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF80647F04
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiLIIK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S229996AbiLIIKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLIIKZ (ORCPT
+        with ESMTP id S229661AbiLIIKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:10:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2043F5C76E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670573362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=k4UNKfEhTnu+LbQ6VIjhg95oRagAyICGG1jNQ/9Pdfg=;
-        b=UX5zeOAsFV36V+9p0vVwievrPBB1xx5NLCOjXryP3XHE8Nu4UwQIP5wc3Ppjp0jAqwtWzi
-        y6Qojkbx9NfZ0elQl+QMZPZDMjWkmHi/Cr3Y7fPBEnCyiXG5NvwdCD7H0p2M5R1ZJhPC/e
-        6yjSxwCPBE9I4GtdrF0OZVEMwWSnFVc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-U39pA7SGPwOs9Vr-80medg-1; Fri, 09 Dec 2022 03:09:18 -0500
-X-MC-Unique: U39pA7SGPwOs9Vr-80medg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C05CA380673F;
-        Fri,  9 Dec 2022 08:09:17 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.100])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 98148492B04;
-        Fri,  9 Dec 2022 08:09:15 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v2] mm/userfaultfd: enable writenotify while userfaultfd-wp is enabled for a VMA
-Date:   Fri,  9 Dec 2022 09:09:12 +0100
-Message-Id: <20221209080912.7968-1-david@redhat.com>
+        Fri, 9 Dec 2022 03:10:42 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14635E9C9;
+        Fri,  9 Dec 2022 00:10:39 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B97qMti015249;
+        Fri, 9 Dec 2022 08:10:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=N3CyM7RoWAs+iQLaB4/0UEohYfeWGrXHD9ljZuxHYf4=;
+ b=DC/o3DTkrz+zQQIJzVbo6k9N3IrxPe3BxbjFTyhKm5lFAXmMDTOxpyhDeDkSxsIyw9zu
+ eqpbY2jm3XjYNDtT6dVdllkFv2qrSb2Z/Da3WblaSwpH9xukF2gi9xA3Eir3puo9JJin
+ EgKxTffweWIlYVChP/MpO7MTiQebMlz7Pf5QoFCRWztsjjYjIQXT2timJHQt94YmP/0D
+ iemsMIwjLyMX20+ZxQjJx+Lr0ZLSXVo+ym3FpdeaFWscLCWjqJBu4au0M4kDe5QV6gRo
+ /0gqLtcBH99P8rH2rTtSQ7x3hKajOMjIy7Q+3gTltX+Gk/qFhdAzK4L5zDNjoDVmbbD1 Sw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mc10qgcpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 08:10:36 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8LRswX016423;
+        Fri, 9 Dec 2022 08:10:33 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3m9m5y5n55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 08:10:33 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B98AVoM35455478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Dec 2022 08:10:31 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C26B2004F;
+        Fri,  9 Dec 2022 08:10:31 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 357652004D;
+        Fri,  9 Dec 2022 08:10:31 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  9 Dec 2022 08:10:31 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 1/1] tty: fix out-of-bounds access in
+ tty_driver_lookup_tty()
+References: <20221207075236.23171-1-svens@linux.ibm.com>
+        <20221207075236.23171-2-svens@linux.ibm.com>
+        <6614f5d2-d99b-ea8a-f660-7a3433499a9f@kernel.org>
+Date:   Fri, 09 Dec 2022 09:10:30 +0100
+In-Reply-To: <6614f5d2-d99b-ea8a-f660-7a3433499a9f@kernel.org> (Jiri Slaby's
+        message of "Fri, 9 Dec 2022 08:17:47 +0100")
+Message-ID: <yt9dtu25vvyh.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: z4lDIhrSBh9TrSKJr_LbNcLTt7nao_jO
+X-Proofpoint-ORIG-GUID: z4lDIhrSBh9TrSKJr_LbNcLTt7nao_jO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_04,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=841 spamscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ impostorscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212090066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we don't enable writenotify when enabling userfaultfd-wp on
-a shared writable mapping (for now only shmem and hugetlb). The consequence
-is that vma->vm_page_prot will still include write permissions, to be set
-as default for all PTEs that get remapped (e.g., mprotect(), NUMA hinting,
-page migration, ...).
+Jiri Slaby <jirislaby@kernel.org> writes:
 
-So far, vma->vm_page_prot is assumed to be a safe default, meaning that
-we only add permissions (e.g., mkwrite) but not remove permissions (e.g.,
-wrprotect). For example, when enabling softdirty tracking, we enable
-writenotify. With uffd-wp on shared mappings, that changed. More details
-on vma->vm_page_prot semantics were summarized in [1].
+> On 07. 12. 22, 8:52, Sven Schnelle wrote:
+>> When specifying an invalid console= device like console=tty3270,
+>> tty_driver_lookup_tty() returns the tty struct without checking
+>> whether index is a valid number.
+>> [..]
+>
+> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+>
+> Yes, this makes sense as a sanity check for all drivers. But I would
+> _also_ disallow registering such a console in vt:
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -3075,6 +3075,11 @@ int vt_kmsg_redirect(int new)
+>   * The console must be locked when we get here.
+>   */
+>
+> +static int vt_console_setup(struct console *co, char *options)
+> +{
+> +       return co->index >= MAX_NR_CONSOLES ? -EINVAL : 0;
+> +}
+> +
+>  static void vt_console_print(struct console *co, const char *b,
+>  unsigned count)
+>  {
+>         struct vc_data *vc = vc_cons[fg_console].d;
+> @@ -3158,6 +3163,7 @@ static struct tty_driver
+> *vt_console_device(struct console *c, int *index)
+>
+>  static struct console vt_console_driver = {
+>         .name           = "tty",
+> +       .setup          = vt_console_setup,
+>         .write          = vt_console_print,
+>         .device         = vt_console_device,
+>         .unblank        = unblank_screen,
+>
+> That means dmesg would say:
+>   Console: colour dummy device 80x25
+>   printk: console [ttyS0] enabled
+>
+> And not:
+>   Console: colour dummy device 80x25
+>   printk: console [tty3270] enabled
+>   printk: console [ttyS0] enabled
 
-This is problematic for uffd-wp: we'd have to manually check for
-a uffd-wp PTEs/PMDs and manually write-protect PTEs/PMDs, which is error
-prone. Prone to such issues is any code that uses vma->vm_page_prot to set
-PTE permissions: primarily pte_modify() and mk_pte().
+Makes sense. Should i add that to my patch, add a second patch, or
+will you submit that?
 
-Instead, let's enable writenotify such that PTEs/PMDs/... will be mapped
-write-protected as default and we will only allow selected PTEs that are
-definitely safe to be mapped without write-protection (see
-can_change_pte_writable()) to be writable. In the future, we might want
-to enable write-bit recovery -- e.g., can_change_pte_writable() -- at
-more locations, for example, also when removing uffd-wp protection.
-
-This fixes two known cases:
-
-(a) remove_migration_pte() mapping uffd-wp'ed PTEs writable, resulting
-    in uffd-wp not triggering on write access.
-(b) do_numa_page() / do_huge_pmd_numa_page() mapping uffd-wp'ed PTEs/PMDs
-    writable, resulting in uffd-wp not triggering on write access.
-
-Note that do_numa_page() / do_huge_pmd_numa_page() can be reached even
-without NUMA hinting (which currently doesn't seem to be applicable to
-shmem), for example, by using uffd-wp with a PROT_WRITE shmem VMA.
-On such a VMA, userfaultfd-wp is currently non-functional.
-
-Note that when enabling userfaultfd-wp, there is no need to walk page
-tables to enforce the new default protection for the PTEs: we know that
-they cannot be uffd-wp'ed yet, because that can only happen after
-enabling uffd-wp for the VMA in general.
-
-Also note that this makes mprotect() on ranges with uffd-wp'ed PTEs not
-accidentally set the write bit -- which would result in uffd-wp not
-triggering on later write access. This commit makes uffd-wp on shmem behave
-just like uffd-wp on anonymous memory in that regard, even though, mixing
-mprotect with uffd-wp is controversial.
-
-[1] https://lkml.kernel.org/r/92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com
-
-Reported-by: Ives van Hoorne <ives@codesandbox.io>
-Debugged-by: Peter Xu <peterx@redhat.com>
-Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: stable@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-As discussed in [2], this is supposed to replace the fix by Peter:
-  [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when recover
-  pte
-
-v1 -> v2:
-* Slightly optimize uffd-wp logic in userfaultfd_set_vm_flags()
-
-This survives vm/selftests and my reproducers:
-* migrating pages that are uffd-wp'ed using mbind() on a machine with 2
-  NUMA nodes
-* Using a PROT_WRITE mapping with uffd-wp
-* Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
-  mprotect()'ing it PROT_WRITE
-* Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
-  temporarily mprotect()'ing it PROT_READ
-
-uffd-wp properly triggers in all cases. On v8.1-rc8, all mre reproducers
-fail.
-
-It would be good to get some more testing feedback and review.
-
-[2] https://lkml.kernel.org/r/20221202122748.113774-1-david@redhat.com
-
----
- fs/userfaultfd.c | 28 ++++++++++++++++++++++------
- mm/mmap.c        |  4 ++++
- 2 files changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 98ac37e34e3d..cc694846617a 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -108,6 +108,21 @@ static bool userfaultfd_is_initialized(struct userfaultfd_ctx *ctx)
- 	return ctx->features & UFFD_FEATURE_INITIALIZED;
- }
- 
-+static void userfaultfd_set_vm_flags(struct vm_area_struct *vma,
-+				     vm_flags_t flags)
-+{
-+	const bool uffd_wp_changed = (vma->vm_flags ^ flags) & VM_UFFD_WP;
-+
-+	vma->vm_flags = flags;
-+	/*
-+	 * For shared mappings, we want to enable writenotify while
-+	 * userfaultfd-wp is enabled (see vma_wants_writenotify()). We'll simply
-+	 * recalculate vma->vm_page_prot whenever userfaultfd-wp changes.
-+	 */
-+	if ((vma->vm_flags & VM_SHARED) && uffd_wp_changed)
-+		vma_set_page_prot(vma);
-+}
-+
- static int userfaultfd_wake_function(wait_queue_entry_t *wq, unsigned mode,
- 				     int wake_flags, void *key)
- {
-@@ -618,7 +633,8 @@ static void userfaultfd_event_wait_completion(struct userfaultfd_ctx *ctx,
- 		for_each_vma(vmi, vma) {
- 			if (vma->vm_userfaultfd_ctx.ctx == release_new_ctx) {
- 				vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--				vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+				userfaultfd_set_vm_flags(vma,
-+							 vma->vm_flags & ~__VM_UFFD_FLAGS);
- 			}
- 		}
- 		mmap_write_unlock(mm);
-@@ -652,7 +668,7 @@ int dup_userfaultfd(struct vm_area_struct *vma, struct list_head *fcs)
- 	octx = vma->vm_userfaultfd_ctx.ctx;
- 	if (!octx || !(octx->features & UFFD_FEATURE_EVENT_FORK)) {
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--		vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+		userfaultfd_set_vm_flags(vma, vma->vm_flags & ~__VM_UFFD_FLAGS);
- 		return 0;
- 	}
- 
-@@ -733,7 +749,7 @@ void mremap_userfaultfd_prep(struct vm_area_struct *vma,
- 	} else {
- 		/* Drop uffd context if remap feature not enabled */
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--		vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+		userfaultfd_set_vm_flags(vma, vma->vm_flags & ~__VM_UFFD_FLAGS);
- 	}
- }
- 
-@@ -895,7 +911,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
- 			prev = vma;
- 		}
- 
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
- 	}
- 	mmap_write_unlock(mm);
-@@ -1463,7 +1479,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		 * the next vma was merged into the current one and
- 		 * the current one has not been updated yet.
- 		 */
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx.ctx = ctx;
- 
- 		if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
-@@ -1651,7 +1667,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 		 * the next vma was merged into the current one and
- 		 * the current one has not been updated yet.
- 		 */
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
- 
- 	skip:
-diff --git a/mm/mmap.c b/mm/mmap.c
-index a5eb2f175da0..6033d20198b0 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1525,6 +1525,10 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
- 	if (vma_soft_dirty_enabled(vma) && !is_vm_hugetlb_page(vma))
- 		return 1;
- 
-+	/* Do we need write faults for uffd-wp tracking? */
-+	if (userfaultfd_wp(vma))
-+		return 1;
-+
- 	/* Specialty mapping? */
- 	if (vm_flags & VM_PFNMAP)
- 		return 0;
-
-base-commit: 479174d402bcf60789106eedc4def3957c060bad
--- 
-2.38.1
-
+Thanks
+Sven
