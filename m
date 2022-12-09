@@ -2,108 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5D064838C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5E8648394
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiLIOQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S229897AbiLIOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiLIOPg (ORCPT
+        with ESMTP id S230014AbiLIOQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:15:36 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0C079CA3;
-        Fri,  9 Dec 2022 06:14:30 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v8so3265564edi.3;
-        Fri, 09 Dec 2022 06:14:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=njNEdeCX3LeD6obQtBUMLdU2E9++XdRLWPu7vVBlAeA=;
-        b=YouCT/pV13R+oR5x7eur72V4wd1rmyWDhlKQfyLGGDS3c4Cf0TSVuD9xca7Wa2PPb2
-         HUMcChLk/zXhSMtJBX+zKmWkqmwr+tMk3XVyZGurCeFTiaJCeGl57Ld39VA49CJX319M
-         9lNg27jgnRdqMUI3Y9HyUbQMFBXvFzAK6+WY82IcpoFfARy/rgNvbIFEawMuk6vZNW5Y
-         PWWHvD1btsgooE5/guwvMvUz/jUKsqneZlFyqkopb8lvsao3QCII7sTJjSOPobwdyVuE
-         ZKqSst7UpN9fLacvWpf8KSSIzWxIkR8uGYsubxOy812bGPqezyFsCWNFXyA87ahkrd2e
-         +iHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=njNEdeCX3LeD6obQtBUMLdU2E9++XdRLWPu7vVBlAeA=;
-        b=vK74/d1kl1vQrCiTPBeQvAVovTSZCHET1OtIGYdBYjO0iFATXHCfCGusSYbvcCC5d7
-         sDHEJbZilLhPeh+0YzYTUtW+EqgiNSyKErkAXheHtXmhukyFcg4gQN0cp6/OWE2nWEgq
-         A1yWqwZDPPiW+CM4Cqae1RahETRQZQFlwGpFKoROynsxtU0nfCv6OZXcaf0Jv7MCXujr
-         aeOVAqePs7bm4rcH09Tf24b945QO3Q6Tu4ffr5CYsV0q1eewPYKTMGO8vtbpIfNYQL8W
-         95E0Z75flxMRBtvvkqG5AQlCdDG+ZA+Io3NJ3CBdYxbXH42alvfz7uH6bKoDYAlklVd2
-         bM4g==
-X-Gm-Message-State: ANoB5pm7kwn8DN/UjsEawcUqyXGYRXQMgJ/5/Hntb1ILgoD5rgyKYfeY
-        rlco5HvCA7tIA29/ApxGEKyKfyJJsWGiSg==
-X-Google-Smtp-Source: AA0mqf78N0gl+Qh1C/I/Y/HMJqIzV06ohrt6b/FTqmbTW1L9ki0TvhzOALuzHFJFNF/7ZeoFIwYBZg==
-X-Received: by 2002:a05:6402:e06:b0:46c:2c94:d30a with SMTP id h6-20020a0564020e0600b0046c2c94d30amr5836585edh.31.1670595269014;
-        Fri, 09 Dec 2022 06:14:29 -0800 (PST)
-Received: from skbuf ([188.27.185.190])
-        by smtp.gmail.com with ESMTPSA id a35-20020a509ea6000000b0046a0096bfdfsm688698edf.52.2022.12.09.06.14.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:14:28 -0800 (PST)
-Date:   Fri, 9 Dec 2022 16:14:26 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        daniel.machon@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, lars.povlsen@microchip.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, richardcochran@gmail.com
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221209141426.2b7psesiu6txd6ue@skbuf>
-References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
- <20221208092511.4122746-1-michael@walle.cc>
- <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
- <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
- <adb8e2312b169d13e756ff23c45872c3@walle.cc>
- <20221209092904.asgka7zttvdtijub@soft-dev3-1>
- <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
- <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
- <20221209125611.m5cp3depjigs7452@skbuf>
- <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
+        Fri, 9 Dec 2022 09:16:16 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69916DF9;
+        Fri,  9 Dec 2022 06:15:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NTCYF4PwGz9v7Gd;
+        Fri,  9 Dec 2022 22:08:33 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHpXHuQpNjVynSAA--.22221S2;
+        Fri, 09 Dec 2022 15:15:20 +0100 (CET)
+Message-ID: <3f1c74f320a288b6581241fc3039103cbcee7b27.camel@huaweicloud.com>
+Subject: Re: [PATCH] KEYS: asymmetric: Make a copy of sig and digest in
+ vmalloced stack
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Fri, 09 Dec 2022 15:15:06 +0100
+In-Reply-To: <Y5JwpdGF50oFKw0z@sol.localdomain>
+References: <20221208164610.867747-1-roberto.sassu@huaweicloud.com>
+         <Y5JwpdGF50oFKw0z@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwAHpXHuQpNjVynSAA--.22221S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF43AFyDtr4rJrWfur1Dtrb_yoW5CFyfpa
+        95Wr4DtFWUGr1UCr17C3W8Kw47Aw10kF129w4Fyw15Crn8ZryxC3y0kr45WFyfJrWkXFyI
+        yrW8XwsxZFn8XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4J5TAABsA
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 03:05:01PM +0100, Michael Walle wrote:
-> Am 2022-12-09 13:56, schrieb Vladimir Oltean:
-> > On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
-> > > > Does it also work out of the box with the following patch if
-> > > > the interface is part of a bridge or do you still have to do
-> > > > the tc magic from above?
-> > > 
-> > > You will still need to enable the TCAM using the tc command to have it
-> > > working when the interface is part of the bridge.
-> > 
-> > FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
-> > no need to use tc. Same goes for ocelot-8021q, which also uses the VCAP.
-> > I wouldn't consider forcing the user to add any tc command in order for
-> > packet timestamping to work properly.
+On Thu, 2022-12-08 at 15:17 -0800, Eric Biggers wrote:
+> On Thu, Dec 08, 2022 at 05:46:10PM +0100, Roberto Sassu wrote:
+> > diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+> > index 2f8352e88860..307799ffbc3e 100644
+> > --- a/crypto/asymmetric_keys/public_key.c
+> > +++ b/crypto/asymmetric_keys/public_key.c
+> > @@ -363,7 +363,8 @@ int public_key_verify_signature(const struct public_key *pkey,
+> >  	struct scatterlist src_sg[2];
+> >  	char alg_name[CRYPTO_MAX_ALG_NAME];
+> >  	char *key, *ptr;
+> > -	int ret;
+> > +	char *sig_s, *digest;
+> > +	int ret, verif_bundle_len;
+> >  
+> >  	pr_devel("==>%s()\n", __func__);
+> >  
+> > @@ -400,8 +401,21 @@ int public_key_verify_signature(const struct public_key *pkey,
+> >  	if (!req)
+> >  		goto error_free_tfm;
+> >  
+> > -	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
+> > -		      GFP_KERNEL);
+> > +	verif_bundle_len = pkey->keylen + sizeof(u32) * 2 + pkey->paramlen;
+> > +
+> > +	sig_s = sig->s;
+> > +	digest = sig->digest;
+> > +
+> > +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> > +		if (!virt_addr_valid(sig_s))
+> > +			verif_bundle_len += sig->s_size;
+> > +
+> > +		if (!virt_addr_valid(digest))
+> > +			verif_bundle_len += sig->digest_size;
+> > +	}
+> > +
+> > +	/* key points to a buffer which could contain the sig and digest too. */
+> > +	key = kmalloc(verif_bundle_len, GFP_KERNEL);
+> >  	if (!key)
+> >  		goto error_free_req;
+> >  
+> > @@ -424,9 +438,24 @@ int public_key_verify_signature(const struct public_key *pkey,
+> >  			goto error_free_key;
+> >  	}
+> >  
+> > +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> > +		ptr += pkey->paramlen;
+> > +
+> > +		if (!virt_addr_valid(sig_s)) {
+> > +			sig_s = ptr;
+> > +			memcpy(sig_s, sig->s, sig->s_size);
+> > +			ptr += sig->s_size;
+> > +		}
+> > +
+> > +		if (!virt_addr_valid(digest)) {
+> > +			digest = ptr;
+> > +			memcpy(digest, sig->digest, sig->digest_size);
+> > +		}
+> > +	}
+> > +
+> >  	sg_init_table(src_sg, 2);
+> > -	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
+> > -	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
+> > +	sg_set_buf(&src_sg[0], sig_s, sig->s_size);
+> > +	sg_set_buf(&src_sg[1], digest, sig->digest_size);
+> >  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
+> >  				   sig->digest_size);
+> >  	crypto_init_wait(&cwait);
 > 
-> +1
-> Esp. because there is no warning. I.e. I tried this patch while
-> the interface was added on a bridge and there was no error
-> whatsoever. Also, you'd force the user to have that Kconfig option
-> set.
+> We should try to avoid adding error-prone special cases.  How about just doing
+> the copy of the signature and digest unconditionally?  That would be much
+> simpler.  It would even mean that the scatterlist would only need one element.
 
-Yup. What I said about Ocelot is also applicable to MRP traps, which
-Horatiu added. No tc necessary there, either.
+Took some time to figure out why Redzone was overwritten.
+
+There must be two separate scatterlists. If you set the first only with
+the sum of the key length and digest length, mpi_read_raw_from_sgl()
+called by rsa_enc() is going to write before the d pointer in MPI.
+
+		for (x = 0; x < len; x++) {
+			a <<= 8;
+			a |= *buff++;
+			if (((z + x + 1) % BYTES_PER_MPI_LIMB) == 0) {
+				val->d[j--] = a;
+				a = 0;
+			}
+		}
+
+Roberto
+
+> Also, the size of buffer needed is only
+> 
+> 	max(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
+> 	    sig->s_size + sig->digest_size)
+> 
+> ... since the signature and digest aren't needed until the key was already used.
+> 
+> - Eric
+
