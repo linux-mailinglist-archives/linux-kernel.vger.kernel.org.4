@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E026485AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B590D6485B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiLIPhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S230110AbiLIPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiLIPhl (ORCPT
+        with ESMTP id S230240AbiLIPhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Dec 2022 10:37:41 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0694C31B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062902B2
         for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:37:38 -0800 (PST)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9EwtfM029265;
-        Fri, 9 Dec 2022 15:37:18 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9EwsGj021213;
+        Fri, 9 Dec 2022 15:37:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=3JgPCddJz4urtq6IAdyWD4LfDdxFMwmd1JJplr/8yZE=;
- b=UXngDCPhCr9uSk9hnyorewFpmXuqHkNUIiJd3oMSiqrhYGP8nDAaqrrHZ50OFoSKgz6r
- DpV4h8T6VKSccVD2OFt+Xz+IeQ8V4LcknoSAVVkvti5NayNpC30qF1YQF8E8z5Cau2AG
- KEElju8lAls67EkghArZpsM9qyEhM1zoyTAWXYN6cMvcn9gOSEvnyrqL4BKG9Ef7MyDD
- XWAFc7HMZlvv5oTpF+fVf0q6vXGAEa08pWJblZdFPCEryR3/mFc8S2yzG9ws1mQG6cpF
- CyXRWsJxHCvId3YelqgCKsswdfIrVC+W7mRdeBRJlbNsK3efpyhi3qoqJcSUNWvTiZzC xA== 
+ bh=mijXuv7oHiRF5lvBg0NKfhfXlOiOtyS505PIT5Fw+o8=;
+ b=o//vHPUn3mrCPRTMr3yZ7c5MYohNrjJ8sb4toV3vAApe8Z+nryeOTTpprIpitS+SQ8Qs
+ 8yb2ijZiiGuJIIyy9YY2KYBbqOYldRk+aIHrsWO6/ep6NyLwHx5mC2m2fXSg+LjRIYLp
+ L/IutmOW8V4OyPDVXZsSpxZ9bFZxrbZrizbJthzhGZqmgTZCsJRYtCmuGS+YsHidXBgj
+ h7Yfu8o7zz87jZWcg4+D8CpBa+0t/9BVEj2h8k77B7xX+wqQshTZNensrkUGicQab1bD
+ 4RluYhWsqWTQyVXsAMYvYMOkGGjos0akuUaSmWde/a9Cj42zlXTglb+MCGsU5llgSTw+ RQ== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mawj6vgfk-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maujkn92x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 09 Dec 2022 15:37:17 +0000
+        Fri, 09 Dec 2022 15:37:18 +0000
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B9ECi3k019003;
-        Fri, 9 Dec 2022 15:37:17 GMT
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B9ECi3m019003;
+        Fri, 9 Dec 2022 15:37:18 GMT
 Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2049.outbound.protection.outlook.com [104.47.57.49])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3maa62ppc0-1
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3maa62ppc0-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 09 Dec 2022 15:37:17 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JTd/arZupn0ZUWvh/jDA/PUzkyfl7p26d7ile+fNG/apJ/dsZ6nySSE9CNl31DNhmcMNYm6abtfUnIC1SeaeYS53LICSJ6K3LcwoA7b8EWdBt9rapxnavdYDD5W/3OL2oIodw4joLWAHdRYMa2MNcJ/WoB8dHFcCh+XiSe696vBfbP24NH+MAho8OaMb/YWUA4vSPwC5LMjSnbx5fDlUicDfUDaFVbnVHPLtm2ST90Faj3j3FeHRKjpJ7cHIcUhySjryrQ/ZTk1O7kWF0cbamkm2dZZbDNKLWxzdRhcpe4BHBX8lHEXjGwTMxmopXZLF+bXUkG0ZgrT9ieKrEcfhtw==
+ b=YzrDhB0m5k+amv5ZfFeBm6EfjJU7FmNns9IO9sWPBMYjDlxGdDFjCREfvxiAcL4b4ibzw3yOifxXdzYbXWuf3DZNnC5xM7wvI4TykaLJOeOVgI+B64L/yDVecrkdDlLNP9gs7CekOqLV97+EPNN9ozMi2VNwuM63D0r8QAQfsike+PGGH2ZfsLgfuVNbzyYl7yjYIZ4fCAuz7iSCICjmCT8nuV97nKWF71sE3BM+XeMlwt5uYJvofLKerlgA9rlvFx03PCoA84ImvKj0I1dyhXT8iEAJKvqvlxFdyDV9z0PWi9usyNd53JPzc9va4fw3iPJ5LEH3kVhIgXFGSdYTDQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3JgPCddJz4urtq6IAdyWD4LfDdxFMwmd1JJplr/8yZE=;
- b=Zdh5O042lXApvD4kt7nYk5vpwXOt7bUwSVynPbDKMz0TbIxyreejclTijHKnWkvq1MXqPF/1scPYiwy7jiWO1oc4uGvsEPy6P+g6tUmWGYQt9X7yfzTaQYka2jVK187WcPJeoLpmy85S5YYcUPC+CE5O9ln1BEkR9PTBdKbAR+J5yLn8H+bBYlOSgY3Vw8FauS5WCjLwcNBW5D8FXXolOS/tot0GPiG6bMo0hvFJLroZJ+yoXyV4qrm78VyvKEvbxEjd6nIR19rotvAt9UyPJiR8tp0aBwXuMjfNRrFsOYR0+2DjsdfUGqRFoHNPzRuVCzreYHF+TgCPiHzjexBu6Q==
+ bh=mijXuv7oHiRF5lvBg0NKfhfXlOiOtyS505PIT5Fw+o8=;
+ b=DG7riG47lxS3KR61qQ5p/H0AoSG5uqUtsPycjehiCGvJCrEePg4dzpqjLaRsGoCce+IiKyTLBr5SicOvvzn20ak/g+6wa7vWQnC6wyq8IYOBcJR86RG1JQy4kYLeWklKc3laRYCpttrznOCv002ftaj0S3mrPUpYgOurT2Tzvcpr6x0HhojmfYaiGptl846bVw5Q2Uf5yVPZXABr+X6NoeMrHqWtr3IRt+WpZHefb7lEX9W3Zo5FP3H+0ugWte6aSe/yzJSqisKVc3aNVKwtZ2jYkQzeSR11tDsN9/RMuoGIeANv3KU/QU9H7RtWU9EypXNBHYenxuj2ZmhVdQwYzA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JgPCddJz4urtq6IAdyWD4LfDdxFMwmd1JJplr/8yZE=;
- b=ZQFnyqvZANkkN5xU11s1qc+p8GLuJlc5xGB3qFKzI/ToRdfmreCDm1ZKK+l3D1RXx48IH91Eigzanmnu1COykM+QWz7RmPKtot68rqTXUJ2/UL820Ya8/PqHSwBTlJVc30TPeD+Joq8TCPm7PsMTFy3ynMLc2gH8kVPFT7wuuAA=
+ bh=mijXuv7oHiRF5lvBg0NKfhfXlOiOtyS505PIT5Fw+o8=;
+ b=AElywR1oNGTIkU1gayHOkUUooatTZWRak17f8v+6FLm7+Pr4yw5vhaDoDlgUsCitBwc2yyAvtuWiQQUcgQUXQvEjzefLacZ90E6mpkmKsf5NuejJ8x2PvbReTwUUD9ZViByW0NF2v6h1yAglEsQNzS5wLtaJ07cXbMXBS1h9HIA=
 Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
  by SA2PR10MB4666.namprd10.prod.outlook.com (2603:10b6:806:112::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Fri, 9 Dec
- 2022 15:37:13 +0000
+ 2022 15:37:16 +0000
 Received: from CO1PR10MB4531.namprd10.prod.outlook.com
  ([fe80::e301:fde6:85e5:b45a]) by CO1PR10MB4531.namprd10.prod.outlook.com
  ([fe80::e301:fde6:85e5:b45a%9]) with mapi id 15.20.5880.018; Fri, 9 Dec 2022
- 15:37:13 +0000
+ 15:37:16 +0000
 From:   Eric DeVolder <eric.devolder@oracle.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         kexec@lists.infradead.org, ebiederm@xmission.com,
@@ -72,65 +72,65 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
         sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
         boris.ostrovsky@oracle.com, eric.devolder@oracle.com
-Subject: [PATCH v15 3/7] crash: add generic infrastructure for crash hotplug support
-Date:   Fri,  9 Dec 2022 10:36:52 -0500
-Message-Id: <20221209153656.3284-4-eric.devolder@oracle.com>
+Subject: [PATCH v15 4/7] kexec: exclude elfcorehdr from the segment digest
+Date:   Fri,  9 Dec 2022 10:36:53 -0500
+Message-Id: <20221209153656.3284-5-eric.devolder@oracle.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221209153656.3284-1-eric.devolder@oracle.com>
 References: <20221209153656.3284-1-eric.devolder@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SA0PR13CA0008.namprd13.prod.outlook.com
- (2603:10b6:806:130::13) To CO1PR10MB4531.namprd10.prod.outlook.com
+X-ClientProxiedBy: SA0PR11CA0157.namprd11.prod.outlook.com
+ (2603:10b6:806:1bb::12) To CO1PR10MB4531.namprd10.prod.outlook.com
  (2603:10b6:303:6c::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|SA2PR10MB4666:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9b047b1-930b-46bd-57b4-08dad9fb3e2c
+X-MS-Office365-Filtering-Correlation-Id: c5b6ab53-4a0c-4a01-ac05-08dad9fb3ffa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ihu2KzhK9I0MP+CHxGs6vOkRaMuiFI//8K8KXSv6IjUJJI9RaUHCZCF5fhaaBP2EAjcR6UOPvBXUBGgrJgyVNloMtFNYUXoaXAV918h2V8U4V1+bGrpUpa7eCzrpcsZOBdhgYwchvRM4mFssKuyXGMzcoe82JeTVPACV8I7KkIa+W27YNmvVnM1eMgzMGIaUp3MeXjeP1+D/4OIRRLmlGxeiTs1WW96pqELVARGXoBMrtxYWTxqvcgQOM/vp11YLrzr2zo9EfwlbWhwcP9CNDJwXPrMgH8bQVntlpzydFSfimDf3hjGgJTTqbM0NOjiy05QnNoYwx4RdDYB0n1yITGbShJ10tAlzhVcgNW/JJEUGOcshOzMgjzRvX9fG2U6hpdJ3kdg2DiqVp5CEvyEqxw/pzByk80kDmwysghIOR68+lICFXuR+Fa0yhj8L++K6Fgs1sAFrinymKFAtGw8m/CsPlmXVkgVnl47Atnihe1gGIK/ugonSjsaSLDYg+cT/YCuCNiTNzdCJcDW08UfHLh8tLSe4gtOhAfGkywWkEYBEeAqucq6IOAFKEG+BjSIsmj5a7k0Df7Cedb2eZJu3R15ITpBGsXxz+Nqb/i7eYjJApScORNbgUoXTuV7lnFwr0mXBI/yaoW2Cz+mRCUjUBD66kyGUyVJesm+FKRokRqFvgWATV6inhzKOgj66hJBD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199015)(107886003)(6486002)(66556008)(6512007)(6666004)(86362001)(66946007)(8676002)(478600001)(4326008)(26005)(316002)(66476007)(6506007)(2906002)(1076003)(2616005)(41300700001)(186003)(38100700002)(7416002)(8936002)(83380400001)(5660300002)(36756003)(41533002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0Q6U+VjyG2Q3ZbOCbploOKGXqlIlii1QtEkLvVSyPdBToDo163LpsiZP6eYn+FIlxY3Vai/c49VJO4CPfI3BR7fIp92dxR/TS9P02sgEcpKSsRyt/SNjEm5Fgty5qaS/rRiNmyRH96kQdPhCeLUqMVqo7QB0ono6lmYnkpJaHsT5YsZEzk5hM4pqcK/jkARdVVmR0WV/0bpNLxgp+KtRFzkoKj/bA5wpHQnEmfId/7NKRKWYfRlLA3Ou5wl9XAsdTtr2gCWwkgmMw8H3LE1PK0JJPPp4AkfaJ+w9Qtu9dfHao1ztek/ElH/C2KuysllIkIox/cNYs3v/A0iB5juEm+eld1b64wzlIcKz/x91UvHWoKZTXMZMCYHD18fWmvFUcwBLXlDLht8wbkbYjrYnzniTTKFbNe/8uHbhUROnDnkpHffbdgKYxn642I0fn701alolGj7DftPcBcCXYwf3IUWJe5VGUJ6R+qwoHyHI5MAg/2BcwsETiKC2csb1AbO8XWM3p2wy/d9EggCyhWjoem0GMtwerzq3sbC8lkYVZ0lOVhlQ93KBJ7cFWJBqaWd3KV/52vOGPh8KSolaUpIeRwf6h3S+JB/UNjoXjVrWD5LYGzQZO8V3GiinUY/Mz1PdUEIKagyRojGYhudS5dgezA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199015)(107886003)(6486002)(66556008)(6512007)(6666004)(86362001)(66946007)(8676002)(478600001)(4326008)(26005)(316002)(66476007)(6506007)(2906002)(1076003)(2616005)(41300700001)(186003)(38100700002)(7416002)(8936002)(5660300002)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/NHpNqZQJTYIoDPYzJ6f8Im8+ddEsa8/N9HCT3lZc3bS05D1jhCweS+7EONP?=
- =?us-ascii?Q?3BBYvi0XTHX9f9yurNTNWUEyX9V50XGIF+gwzc0UjrspDe8pxOTvlQMpd8Oz?=
- =?us-ascii?Q?6lQ9jK9jyZPbnEx4PZBwKo5mH5IDQQeqZpDHD4WpVi/NIJ22vwHE0KstkSsM?=
- =?us-ascii?Q?1ODlauI3LyxO5kCHyagTqrat0Rf6lO2J2bvCPhMWleHtjimXp3XjGhS/Gcb3?=
- =?us-ascii?Q?tsWqf97Q43nG2/CgZo6yzDAEm8Ej4e1wH/Zm6RxQw+ou4hT1qMoHQLqppg4p?=
- =?us-ascii?Q?Iy64FdSE3koI1Xdo5Z8x3XZLrjBISRwBRWvTAeZUbQ1R58nXKtMPb4jVD70z?=
- =?us-ascii?Q?6ye5gxt5RR9fxdDDJ6C/V5DehVP9/dKYPdWYO4zJTKbxr/q54pjKyJKyjxgw?=
- =?us-ascii?Q?lluJZYB10JufTJW3X8roUJ0uowEd5qEBISTwh16NtwMJ857o3/8Z2DNEIhUW?=
- =?us-ascii?Q?10Wtk1UZ8qWMQIux1ETjad700GX8NviXHAfvDBLimvbpUPJen7gumuN+r4N9?=
- =?us-ascii?Q?gE/3UmqQ94M+RuqVHqY9Dd2CUioDtdjyUQaEVkSGRkIdnDWvzQg79v0oR+Ec?=
- =?us-ascii?Q?aPuJYIZjznC08MS90Hrv5x5xBirn1v9HMAG3935z5TMNRDUobg99Ep5fzjKX?=
- =?us-ascii?Q?WddKQwfU6EhgST7WSryc3VxpDDCAf7LVJVJVgH7v0wKujsg7S9Ke0q0pLeUr?=
- =?us-ascii?Q?RWO4/P4Wqn7yFoWun5UUnDXinzpNzEULgp08zQ1QM2mH9n2+HkfwNy+ISKYO?=
- =?us-ascii?Q?TP/oEYmVBBT1iX0a1gEkZonNx4FdseRRxNgknmwrXTaP4A3HTD5BAN8M9m7e?=
- =?us-ascii?Q?wzcKxyBgEP8XP8d/sORIA3dYJucYn1JTIU21wulVeBnXTVf8rHUq28tqtaQh?=
- =?us-ascii?Q?dIY7dOJnd65tCh3PFnMcG2ID4jPMfPpFlxzPE55AB2ekX0LGxun7rbPkPqJE?=
- =?us-ascii?Q?OuLrOL1eJGP81CKRgZXTPu8PuCVJOkXTX7S6eJ9wBqyZycESD0jjscgYHY8k?=
- =?us-ascii?Q?wj1oUbHc7Xb2S+F7Qdp2JrbfNyzCeEMGwvVXWG6nGYjARCY9Ke68hgtjJKjF?=
- =?us-ascii?Q?KGM4ShsxkrXydvl6EoUvNyUuXRxyiRW9mBOyRE+TMlzv8sA7jZpqCqTpOeY7?=
- =?us-ascii?Q?PzI+1gZg3yKn6ppLDCZ7YpdKlcN8GuGqOB7PiIRQZw/a57fgcLjdGaOc0s4X?=
- =?us-ascii?Q?tB+XoPkCimaZfB2zEtsobp7p04rEe6zkv0FIHONS8jrj84OPA7GJfECBZ8cn?=
- =?us-ascii?Q?wQZZ/zarbhTY08LHHAVTIwl5XQKL85adQxbKb6XhdVp3SmiFcNVF4r5yAVuu?=
- =?us-ascii?Q?bKK2GDHT34sFxoPC8fYcCIoi8rMRvcTw6eMIhR5rOHbeC8aPT6rGHFLW7X0A?=
- =?us-ascii?Q?BEzbJUHL7YJdQeD4rlz5HZ7QGlgipmpLZBgUD3DMPAQw1x0y8y5zbqAQ8UVM?=
- =?us-ascii?Q?qOqTNGkRwr1fcCxtw4jgMw8u+W08/vLw4D4Ubz7iksSf3kynGwIQlwtPUQ9x?=
- =?us-ascii?Q?fPvb7jvFp7xafUp77UciLfHWMw8uxqUtIezLgUvZzZZwssoKLFiTaDat0paH?=
- =?us-ascii?Q?PhA/yADQFz2kfT9TxTf1KLF2Axkj9XdULNTNc8zGhswk2faJAcd5XpY1qi78?=
- =?us-ascii?Q?Yw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eZUCWSpHr0c7a33YTrdZeK6/dUpmdFCL5+wrnTJQMMmdzJUfYHcrOABD/zwt?=
+ =?us-ascii?Q?AM8DKO69WpgiEc/YpPycKI7QXHGec0WRP5lBCmX90mAStHQz7Lr+/e244xTF?=
+ =?us-ascii?Q?cpHC8dNewKAnEt3yqA7nW/1ocm9u/scCpVhz4HHUCOAz1MF0BS5nOf3Fxpx3?=
+ =?us-ascii?Q?Dr2YCz/3kwO/RoxR6XiIks9gMdgpWre4H55zILhBqD6F21VMoPQAp19Avz2c?=
+ =?us-ascii?Q?Vg1UZNxtDVlFduaqqGU/5TyyA3QvMJA90EkEPmCIJfrRxlLdWWz3+RuFW18C?=
+ =?us-ascii?Q?JVuFH8XTT1p0p7SENhFd1YzROX6isk7XiTTGXdJ71BPkIvFGeednLMt925kP?=
+ =?us-ascii?Q?bORy6pHBQYCJJ93k/6OUFaeiG+FMEZYJNEUFJkeAPVOff1mPl5D0Z7lCen5s?=
+ =?us-ascii?Q?DeDPzudQEm58tlAZQkOKGqjkTW2N4WHBoAkODmkGdEWAXlytsbxkAsGp8VZl?=
+ =?us-ascii?Q?jekMvGuD/DHCEiAyX5iz4ORfxMn2OQLHpGzR+kkuwYXA7fB/+AM+1yP+21hN?=
+ =?us-ascii?Q?GTILbK17GK2t0kTXmrutRw+WbNdt8wmkw0tpOUhAn8lZJGTals8PP/AOo+bc?=
+ =?us-ascii?Q?v8WoWHbcT2iNw8wkbFefugjXN2m7MDd9JApV/K8QBuIaTlPbVIVqjKFB3iXc?=
+ =?us-ascii?Q?lzhPm/HZwHU/QM7jezyC88gEKi3f5LSgk4gt/bnOXraYoSKI+OedmuWVottw?=
+ =?us-ascii?Q?ujcbjj1Oxwo//TbbusSS2gzhrpvfCmFSYfFi6YJdRhF6j9/nbnA2eaQX9HCw?=
+ =?us-ascii?Q?rdlrlhIlsXT7O8CTlF92HcrajxpmgOEwrRVb5PRw1SFPTgAzYvoAzoQZoYKc?=
+ =?us-ascii?Q?DmLxehCWGclrsTQv2i5Lpn/9idZq+oO5Dpun6a+pFKd/VSNGP1qihg2nHu6R?=
+ =?us-ascii?Q?Ca4M/CyeHIWhRMmluCsHMszRKEV0jaiUXS9tSFnQs/dpk0QT7N6H6lEO1M/c?=
+ =?us-ascii?Q?tYhuF8CDwVEXqCUi1BQQ9/IDHNNHnI7s7jtDAhWWIUQYSM/CqWLQI2d4fFaH?=
+ =?us-ascii?Q?Z6p6SWJLvSI1pPr9ROO3AIjN4lKLPu/DFSFs/X0z4bFxb+zVe7zev53faTxk?=
+ =?us-ascii?Q?hVhwiNuL+u9NQCLmdwmzRjKhUPSnxGsfpz7u/5UOLGy0k3GLIKN5LDtq4Kxr?=
+ =?us-ascii?Q?5pALyvqe33Q9uDxOJ+tg9sYupfxlJIzckZ8aJ9rJBRF017PVfeSPP9L/pcvi?=
+ =?us-ascii?Q?ycmUIEn+xY3woZlYVbju1YA7iQo4elqoW79jsmXapcT0eQvYGyFzJsEJHokQ?=
+ =?us-ascii?Q?sLzos+tBlCcMMYgyMteV/6BsAaCxsp2cHIOA833E4pgcWbCIvZ/b2dFUBN/c?=
+ =?us-ascii?Q?WDz6KJDiOvHSyAxUg/96D7iaW5QaJAVPP9NdlUqV2+yEZb6yuikMISz+JzL9?=
+ =?us-ascii?Q?00YuhVKYbokXOwMKdBBKpV2ri0XU/oU+n5r9GJVGBEc3E8lDz1g+931/OFwH?=
+ =?us-ascii?Q?Oi+2V5YkSE0V00Xa/20tGUF89y68vdB1ElP6mi/SXOkS1hkv1PFDqyAdhLcq?=
+ =?us-ascii?Q?1eA0YBaPeLMnhiyS44Tvw/Sr+gLxwSHuthkOjdwUXl+SEI/qTNSj+OR0Yoq2?=
+ =?us-ascii?Q?55hWyuPYFViTezXblI1LSis3n3Ela02Eg6iLKZNU/6iiznqfTfzAvEb8w1je?=
+ =?us-ascii?Q?SQ=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9b047b1-930b-46bd-57b4-08dad9fb3e2c
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5b6ab53-4a0c-4a01-ac05-08dad9fb3ffa
 X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 15:37:13.1801
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 15:37:16.2101
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m6BNFVbP0wSf/5UIyfN5KaB9yCcWIynUOp5ZVFqw5CbMTBGz4krDvNKwmtFGrLlPPkgaK80Qn8cu5rqDdzmFV+imlyl6IPPKp+7+4SgUuf8=
+X-MS-Exchange-CrossTenant-UserPrincipalName: IaqkL3a5e0Zktv1OHZQ8vC/bHKhebFXwRklKv2IX0F922WSu0afCtmWhxM9BsFKIDGdkfyb16tQjwd03VfPSmpbX4VkDZmeA1GKHZo5rPIg=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4666
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
@@ -139,8 +139,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 a
  phishscore=0 spamscore=0 bulkscore=0 mlxscore=0 suspectscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2212090066
-X-Proofpoint-GUID: 5EvUNP9hguAtvESuQkQ78JxuUl2fHbII
-X-Proofpoint-ORIG-GUID: 5EvUNP9hguAtvESuQkQ78JxuUl2fHbII
+X-Proofpoint-ORIG-GUID: uWy7Z9OpER-vsgfarcWdUE9bOtkQZJXQ
+X-Proofpoint-GUID: uWy7Z9OpER-vsgfarcWdUE9bOtkQZJXQ
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -151,242 +151,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPU and memory change notifications are received in order to
-regenerate the elfcorehdr.
+When a crash kernel is loaded via the kexec_file_load() syscall, the
+kernel places the various segments (ie crash kernel, crash initrd,
+boot_params, elfcorehdr, purgatory, etc) in memory. For those
+architectures that utilize purgatory, a hash digest of the segments
+is calculated for integrity checking. This digest is embedded into
+the purgatory image prior to placing purgatory in memory.
 
-To support cpu hotplug, a callback is registered to capture the
-CPUHP_AP_ONLINE_DYN online and offline events via
-cpuhp_setup_state_nocalls().
-
-To support memory hotplug, a notifier is registered to capture the
-MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
-
-The cpu callback and memory notifiers call handle_hotplug_event()
-which performs needed tasks and then dispatches the event to the
-architecture specific arch_crash_handle_hotplug_event(). During the
-process, the kexec_lock is held.
+Since hotplug events cause changes to the elfcorehdr, purgatory
+integrity checking fails (at crash time, and no kdump created).
+As a result, this change explicitly excludes the elfcorehdr segment
+from the list of segments used to create the digest. By doing so,
+this permits changes to the elfcorehdr in response to hotplug events,
+without having to also reload purgatory due to the change to the
+digest.
 
 Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+Acked-by: Baoquan He <bhe@redhat.com>
 ---
- include/linux/crash_core.h |   8 +++
- include/linux/kexec.h      |  12 ++++
- kernel/crash_core.c        | 138 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 158 insertions(+)
+ kernel/kexec_file.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
-index de62a722431e..a270f8660538 100644
---- a/include/linux/crash_core.h
-+++ b/include/linux/crash_core.h
-@@ -84,4 +84,12 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
- int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
- 		unsigned long long *crash_size, unsigned long long *crash_base);
- 
-+#define KEXEC_CRASH_HP_REMOVE_CPU		0
-+#define KEXEC_CRASH_HP_ADD_CPU			1
-+#define KEXEC_CRASH_HP_REMOVE_MEMORY		2
-+#define KEXEC_CRASH_HP_ADD_MEMORY		3
-+#define KEXEC_CRASH_HP_INVALID_CPU		-1U
-+
-+struct kimage;
-+
- #endif /* LINUX_CRASH_CORE_H */
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index ebf46c3b8f8b..389444cb03cc 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -32,6 +32,7 @@ extern note_buf_t __percpu *crash_notes;
- #include <linux/compat.h>
- #include <linux/ioport.h>
- #include <linux/module.h>
-+#include <linux/highmem.h>
- #include <asm/kexec.h>
- 
- /* Verify architecture specific macros are defined */
-@@ -374,6 +375,13 @@ struct kimage {
- 	struct purgatory_info purgatory_info;
- #endif
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index f98d1742872b..cc976948f17e 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -723,6 +723,12 @@ static int kexec_calculate_store_digests(struct kimage *image)
+ 	for (j = i = 0; i < image->nr_segments; i++) {
+ 		struct kexec_segment *ksegment;
  
 +#ifdef CONFIG_CRASH_HOTPLUG
-+	bool hotplug_event;
-+	unsigned int offlinecpu;
-+	bool elfcorehdr_index_valid;
-+	int elfcorehdr_index;
++		/* Exclude elfcorehdr segment to allow future changes via hotplug */
++		if (image->elfcorehdr_index_valid && (j == image->elfcorehdr_index))
++			continue;
 +#endif
 +
- #ifdef CONFIG_IMA_KEXEC
- 	/* Virtual address of IMA measurement buffer for kexec syscall */
- 	void *ima_buffer;
-@@ -503,6 +511,10 @@ static inline int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
- static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) { }
- #endif
- 
-+#ifndef arch_crash_handle_hotplug_event
-+static inline void arch_crash_handle_hotplug_event(struct kimage *image) { }
-+#endif
-+
- #else /* !CONFIG_KEXEC_CORE */
- struct pt_regs;
- struct task_struct;
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 8c648fd5897a..fcb642a03d7b 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -11,6 +11,8 @@
- #include <linux/vmalloc.h>
- #include <linux/sizes.h>
- #include <linux/kexec.h>
-+#include <linux/memory.h>
-+#include <linux/cpuhotplug.h>
- 
- #include <asm/page.h>
- #include <asm/sections.h>
-@@ -18,6 +20,7 @@
- #include <crypto/sha1.h>
- 
- #include "kallsyms_internal.h"
-+#include "kexec_internal.h"
- 
- /* vmcoreinfo stuff */
- unsigned char *vmcoreinfo_data;
-@@ -612,3 +615,138 @@ static int __init crash_save_vmcoreinfo_init(void)
- }
- 
- subsys_initcall(crash_save_vmcoreinfo_init);
-+
-+#ifdef CONFIG_CRASH_HOTPLUG
-+#undef pr_fmt
-+#define pr_fmt(fmt) "crash hp: " fmt
-+/*
-+ * To accurately reflect hot un/plug changes, the elfcorehdr (which
-+ * is passed to the crash kernel via the elfcorehdr= parameter)
-+ * must be updated with the new list of CPUs and memories.
-+ *
-+ * In order to make changes to elfcorehdr, two conditions are needed:
-+ * First, the segment containing the elfcorehdr must be large enough
-+ * to permit a growing number of resources; the elfcorehdr memory size
-+ * is based on NR_CPUS_DEFAULT and CRASH_MAX_MEMORY_RANGES.
-+ * Second, purgatory must explicitly exclude the elfcorehdr from the
-+ * list of segments it checks (since the elfcorehdr changes and thus
-+ * would require an update to purgatory itself to update the digest).
-+ */
-+static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
-+{
-+	/* Obtain lock while changing crash information */
-+	if (kexec_trylock()) {
-+
-+		/* Check kdump is loaded */
-+		if (kexec_crash_image) {
-+			struct kimage *image = kexec_crash_image;
-+
-+			if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
-+				hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
-+				pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
-+			else
-+				pr_debug("hp_action %u\n", hp_action);
-+
-+			/*
-+			 * When the struct kimage is allocated, it is wiped to zero, so
-+			 * the elfcorehdr_index_valid defaults to false. Find the
-+			 * segment containing the elfcorehdr, if not already found.
-+			 * This works for both the kexec_load and kexec_file_load paths.
-+			 */
-+			if (!image->elfcorehdr_index_valid) {
-+				unsigned long mem;
-+				unsigned char *ptr;
-+				unsigned int n;
-+
-+				for (n = 0; n < image->nr_segments; n++) {
-+					mem = image->segment[n].mem;
-+					ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
-+					if (ptr) {
-+						/* The segment containing elfcorehdr */
-+						if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
-+							image->elfcorehdr_index = (int)n;
-+							image->elfcorehdr_index_valid = true;
-+						}
-+						kunmap_local(ptr);
-+					}
-+				}
-+			}
-+
-+			if (!image->elfcorehdr_index_valid) {
-+				pr_err("unable to locate elfcorehdr segment");
-+				goto out;
-+			}
-+
-+			/* Needed in order for the segments to be updated */
-+			arch_kexec_unprotect_crashkres();
-+
-+			/* Flag to differentiate between normal load and hotplug */
-+			image->hotplug_event = true;
-+
-+			/* Now invoke arch-specific update handler */
-+			arch_crash_handle_hotplug_event(image);
-+
-+			/* No longer handling a hotplug event */
-+			image->hotplug_event = false;
-+
-+			/* Change back to read-only */
-+			arch_kexec_protect_crashkres();
-+		}
-+
-+out:
-+		/* Release lock now that update complete */
-+		kexec_unlock();
-+	}
-+}
-+
-+static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
-+{
-+	switch (val) {
-+	case MEM_ONLINE:
-+		handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
-+			KEXEC_CRASH_HP_INVALID_CPU);
-+		break;
-+
-+	case MEM_OFFLINE:
-+		handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
-+			KEXEC_CRASH_HP_INVALID_CPU);
-+		break;
-+	}
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block crash_memhp_nb = {
-+	.notifier_call = crash_memhp_notifier,
-+	.priority = 0
-+};
-+
-+static int crash_cpuhp_online(unsigned int cpu)
-+{
-+	handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
-+	return 0;
-+}
-+
-+static int crash_cpuhp_offline(unsigned int cpu)
-+{
-+	handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
-+	return 0;
-+}
-+
-+static int __init crash_hotplug_init(void)
-+{
-+	int result = 0;
-+
-+	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
-+		register_memory_notifier(&crash_memhp_nb);
-+
-+	if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
-+		result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+						   "crash/cpuhp",
-+						   crash_cpuhp_online,
-+						   crash_cpuhp_offline);
-+
-+	return result;
-+}
-+
-+subsys_initcall(crash_hotplug_init);
-+#endif
+ 		ksegment = &image->segment[i];
+ 		/*
+ 		 * Skip purgatory as it will be modified once we put digest
 -- 
 2.31.1
 
