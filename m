@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D758E648261
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C99C648265
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiLIMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S229814AbiLIMdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiLIMcG (ORCPT
+        with ESMTP id S229517AbiLIMdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:32:06 -0500
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2072.outbound.protection.outlook.com [40.107.103.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3862EBF;
-        Fri,  9 Dec 2022 04:32:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUEJAQZRult6eslWWuoZk6NwLoL1yE/CCkq8s2OfIPO8I8Dd+Tkg2wpiemPysEHZDR7dzgaFpnhgvz2hyUpPIBYwQ0T+aLAYmHiRINzNuWJ9ODn8wli6luG70Z1XF43GA+/jX+ri9AVZ9FEiEkzU5t2gLhA1JOljg5mNMlYrAkeJ0RbADOkXZ0VUC4w5uN1XTSh0XS9t1aqdpOrZ5CRZEIxqTmA4wKQtnP/W/1i2uG2dYh6NZdbpp3XCToaq/f1ZlMEEFK57OTR/HaMR40VKnJpqwXfxbtAKnyJVDtw9LNAJvfZq6ODnJSRC7VP91bagSqimv/LBRr3qBV60yDwy7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
- b=NWoVnVSsJQeW73vXMZu9vuAKZCL/0jr1QJs2QtHt7JpFQqRxo6lcD9jqKpb58+r+D3d0KbyY6E8T7Lvqq9NqrkTIOp/zCO17DQ/fHj/ha6HJWWBwbflMCT9w3IKOxCJGlNvZxSMLgF4nhHl7nszO4mO5tH8wK4ACD1L4guVCaEctoRIr+eLLjg/Mf2UUCKEtGsPPusUN5FvS0dMhT6DQLH2jBMwOMv8lO5sGwiEWcs/t8vy8l0vLvT6cQW7QEgvxBmQs7Yfn4T3FcEAl/TjNVHG5xkNckCKgHUWMRJRh/Q1mMiMWj7V6eCX0UqXEQ48I+O5TbGnV79v0rWSAqEwsWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.75) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
- b=l2ymjfCfSOpkJF/88S6JqAzHfmzS+bECM28bYd/XSnp+k9xx6OFZRC6Tt0YAifAgCzl044Rxf2sYLrIwC6YoY2yAKOCDk7+p8sbN8+3iFAAVV8cJo4b1wx08IsxUoBz4I219D47eQlKG0IeSgxSmo/OLzM4Ib2eUo4uEb6/sUy+yGT7ZxU1CjPxklH4+vbvc6QxbZXnKLHNV3sES62BTS72tRV4B1JZJMFsNiauOvWhSTBL+kTCR7tpjhd6FOIf7eLCWaxlJldwQ81qvXS3qORtya4E++5KMfbieb3Ie01JZSLiF8N6WFJxbnhom3mdnESD+jcx5BDYhnDoynWiZ3Q==
-Received: from AM8P189CA0030.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:218::35)
- by PAVPR10MB7402.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:31e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 12:32:03 +0000
-Received: from VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:20b:218:cafe::e6) by AM8P189CA0030.outlook.office365.com
- (2603:10a6:20b:218::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18 via Frontend
- Transport; Fri, 9 Dec 2022 12:32:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.75) by
- VE1EUR01FT101.mail.protection.outlook.com (10.152.3.40) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.14 via Frontend Transport; Fri, 9 Dec 2022 12:32:02 +0000
-Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
- DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Fri, 9 Dec 2022 13:32:02 +0100
-Received: from bennie-lenovo.fritz.box (144.145.220.67) by
- DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Fri, 9 Dec 2022 13:32:01 +0100
-From:   "B. Niedermayr" <benedikt.niedermayr@siemens.com>
-To:     <linux-next@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
-        "Tony Lindgren" <tony@atomide.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        "open list:OMAP GENERAL PURPOSE MEMORY CONTROLLER SUPPORT" 
-        <linux-omap@vger.kernel.org>,
-        "open list:MEMORY CONTROLLER DRIVERS" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] memory: omap-gpmc: fix wait pin validation
-Date:   Fri, 9 Dec 2022 13:31:47 +0100
-Message-ID: <20221209123147.591982-1-benedikt.niedermayr@siemens.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 9 Dec 2022 07:33:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B581FCD4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:32:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670589168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wx12DY/bW1ohcBhXEaD09HWTnTluJbFDvZtWQ3v9FbY=;
+        b=J8Dfr/QstbfN9dwSVnBrGYb2OgAMAIRVdi7GF/o0YbUiJXPgDOPVM72gsApH0/cYSaB3cT
+        geOVl/Z5x8gwKGHBL66dcmHVTAB+27bvQYT90pAm6O0JXT6gjdO28QABE90fHTLY0Xw1iZ
+        +bsyuPcW7cz5bHudtMrU0YyEL8W8QoI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-Kmc4sVb0NpKV4nAASgSwwA-1; Fri, 09 Dec 2022 07:32:42 -0500
+X-MC-Unique: Kmc4sVb0NpKV4nAASgSwwA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0F95185A79C;
+        Fri,  9 Dec 2022 12:32:41 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9385C2166B2B;
+        Fri,  9 Dec 2022 12:32:37 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andrew Waterman <andrew@sifive.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Vineet Gupta <vineetg@rivosinc.com>, stillson@rivosinc.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        atishp@atishpatra.org, guoren@kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        greentime.hu@sifive.com, vincent.chen@sifive.com,
+        andy.chiu@sifive.com, arnd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bjorn@kernel.org, libc-alpha@sourceware.org,
+        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
+        linux@rivosinc.com
+Subject: Re: RISCV Vector unit disabled by default for new task (was Re:
+ [PATCH v12 17/17] riscv: prctl to enable vector commands)
+References: <b1dae947-d52a-d28e-5ddc-c1ad6d29828c@rivosinc.com>
+        <mhng-84ad9495-ef4b-4343-89ee-dfe45ab69ff7@palmer-ri-x1c9>
+        <CA++6G0D8RdjgvzQf-gMdakcF-Jj_PMjP=MBtAbSC0Qcu_WrTTQ@mail.gmail.com>
+        <877cz0nbce.fsf@oldenburg.str.redhat.com>
+        <Y5MoPdYimQtqQvkM@bruce.bluespec.com>
+Date:   Fri, 09 Dec 2022 13:32:33 +0100
+In-Reply-To: <Y5MoPdYimQtqQvkM@bruce.bluespec.com> (Darius Rad's message of
+        "Fri, 9 Dec 2022 07:21:17 -0500")
+Message-ID: <874ju4lpum.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [144.145.220.67]
-X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1EUR01FT101:EE_|PAVPR10MB7402:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc180bc7-9037-4280-4bab-08dad9e16011
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5dcvK6uV7ZFnPcKuHfEiZPS+LUi1NPTqV1+sp2sLcLj+DxD/6Iehws5+2T7oD2NpEhtIpBXpEgo+LSiM7AAMbGoQrRs/MpBdNiFQW0aVB6eBDPlWUzOV0nFfoK0zpKV8lMW1lVKgb7x6AmSEymM/ZHL7XoK2LNVk6sUtWUBBz1wH6OVwcRCaPGz1GESWdSj/OajeGkSUSEPDj2bdPutc1uzZH3e0R9lrYhHwLU1lnIYdQoT8XaS0XZGwOIHwKEp0AaGcDCSSn7biQZRpBzmaRr/u7zzU+Gfd+f9lB1R+8G6ae/zjgA/qNxMEJyqNt9bum7PjXvvlYrFCNK+CbEq0dAAmfPNoQPtK+pxp5IjTSJ1RCI8A7ODVmkPRy1LS4MoJHU8RiZPyW0FBpKtVi7qstlwLB+KBEMEXaVV+xjDb9gqEmhB7yULzbx/sJuUBcX921XzuMF/jzBLwXqr0d52QfcQdFYUJQVBG3BrFEA/TVKrg8o66C8eWgE2hqrmbr4V3XYMXMARdLq7nzxZOcNMG7RTJyep0aKi6tU9G1KjTaaP69svycAYWlC41c0T+YH1D9tNYBWE53KpRQMDzRBNSvOHn92kYVD04hF3d6lpSW7mvooe6QGRR8cAtF+NE/4h2v/zk8z50hx6IvmGXe3OIxQAThjdTYEmwmeUezZltfmbkrDhSUiFRenh6jGKDjwjh2V+SkHltqkV6mFQN70EQbBYPLmXU1oKXZeQxOUFAPNM=
-X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(2616005)(186003)(86362001)(16526019)(956004)(1076003)(336012)(83380400001)(356005)(81166007)(47076005)(82740400003)(82960400001)(36860700001)(2906002)(5660300002)(40480700001)(82310400005)(8936002)(40460700003)(478600001)(70586007)(4326008)(26005)(70206006)(6666004)(8676002)(41300700001)(110136005)(54906003)(316002)(36756003)(7049001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 12:32:02.8492
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc180bc7-9037-4280-4bab-08dad9e16011
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7402
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+* Darius Rad:
 
-This bug has been introduced after switching from -1 to UINT_MAX
-for GPMC_WAITPIN_INVALID.
+> On Fri, Dec 09, 2022 at 11:02:57AM +0100, Florian Weimer wrote:
+>> * Andrew Waterman:
+>> 
+>> > This suggests that ld.so, early-stage libc, or possibly both will need
+>> > to make this prctl() call, perhaps by parsing the ELF headers of the
+>> > binary and each library to determine if the V extension is used.
+>> 
+>> If the string functions use the V extension, it will be enabled
+>> unconditionally.  So I don't see why it's okay for libc to trigger this
+>> alleged UAPI change, when the kernel can't do it by default.
+>> 
+>
+> Because the call to enable can fail and userspace needs to deal with that.
 
-The bug leads to an error when the optional gpmc,wait-pin
-dt-property is not used:
+Failure is usually indicated by an AT_HWCAP or AT_HWCAP2 bit remaining
+zero, or perhaps a special CPU register (although that is more unusual).
+It's possible to do this differently, but every mid-level startup code
+will have to replicate it (the libcs, other run-time environments like
+Go, and so on).
 
-...
-gpmc_cs_program_settings: invalid wait-pin (-1)
-...
+Still it's much better than executing the instruction to see if it
+traps, so I won't complain too much.
 
-Signed-off-by: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
-Fixes: 8dd7e4af5853 ("memory: omap-gpmc: fix coverity issue "Control flow issues"")
-Cc: Rob Herring <robh+dt@kernel.org>
----
- drivers/memory/omap-gpmc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
-index 57d9f91fe89b..d78f73db37c8 100644
---- a/drivers/memory/omap-gpmc.c
-+++ b/drivers/memory/omap-gpmc.c
-@@ -1918,7 +1918,8 @@ int gpmc_cs_program_settings(int cs, struct gpmc_settings *p)
- 		}
- 	}
- 
--	if (p->wait_pin > gpmc_nr_waitpins) {
-+	if (p->wait_pin != GPMC_WAITPIN_INVALID &&
-+	    p->wait_pin > gpmc_nr_waitpins) {
- 		pr_err("%s: invalid wait-pin (%d)\n", __func__, p->wait_pin);
- 		return -EINVAL;
- 	}
--- 
-2.25.1
+Thanks,
+Florian
 
