@@ -2,109 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4275C648714
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D50B648718
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLIQzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S229809AbiLIQ5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIQzX (ORCPT
+        with ESMTP id S229482AbiLIQ5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:55:23 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23C4941AB;
-        Fri,  9 Dec 2022 08:55:22 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BA1C9CA44B;
-        Fri,  9 Dec 2022 16:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1670604890; bh=JPxISEVGZ3issJ6dY6iVzvmxKxEEeRMzlzxN/ukUT/Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Z70cN0BCSwfeW8Vsj/KfBq/QdTsGv9w/ZxNzZNuZK7BQVU4SGMbcosSXRPNiGLGtN
-         9PbrJVLFHS3iUh/C+2nxTB3/VU0Rybvn5pHYtfyoR9nhpF9Y441j8NvqUEvxKwye5r
-         CvDfv5l+Vfy806NOaQ5bS9qhLovI5HMF0kHMrKa8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950 peripheral
-Date:   Fri, 09 Dec 2022 17:54:50 +0100
-Message-ID: <5740737.DvuYhMxLoT@g550jk>
-In-Reply-To: <20221208112055.m7sqg3ysxzskqjp4@SoMainline.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz> <36eb03e8-aace-f7ce-edc8-53715021c0ea@linaro.org> <20221208112055.m7sqg3ysxzskqjp4@SoMainline.org>
+        Fri, 9 Dec 2022 11:57:14 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EB4944D4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:57:13 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso8432711pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:57:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uNvvdxQwbO3jIj6Fg1xjmn4oL9jbZQfyPZoUc3RJBGU=;
+        b=KsOUbuwBjenmhrBjEfJ7A4HZlKJZw5MZFSlVqjf6xE+HCgdnPbxQgl8mTgk8SLO2gS
+         QVUq/5XOhi7XpCwfnqqOuPD24zb5clK9Sy8FaXvuNrfQZ/vBuIbrohv/Y84SDUcrSKz/
+         RNAWnK4+9i/TWmPUaZWo842VI+GuwPHuV8sMwlurSgumz1TgQWeThhCh6Nm5IvqKS0O3
+         v7rvZZ3EUiOC/rxWcNgS9XWVy2407p0vYSF3+Dt+ouW/snWnTbi0mWHKvSadQDiJIrvD
+         hJQYrCE1yzlhk8cPF9XLemsn6/EZTSgnHcIn6NY5bt47Dl/54RmPij5i++nnZuwJyxRR
+         5R4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uNvvdxQwbO3jIj6Fg1xjmn4oL9jbZQfyPZoUc3RJBGU=;
+        b=ChpOlkniaqwDAsTwW4gwia7WhTc2Fpq4Hgm/bRbFrJA8vfZ/b1OAOjQHsEPVCMomPC
+         /lhyqbcj9g0jRHEzWdixzxrxSpn4l61DJ1QzKMUBi2FMvZEdR28dox5EWCIc9ZimdSjz
+         IHZ9fEaOrcxr4YMubBKgELP7cJRf+XGw1uhCiuWPUZ7JqiP/x5TO9wQussyEhWdwB69m
+         ZbFb6deWdMjtkOrMKys1H/SdncELno9fOOz/sk8x+ySKnzi9xHrOok1HKAYNnXr71h53
+         jo+kkZSd1hbGaNgXUPyC22Dq5WmoYScPed5S2EHoXrqEBkwjEoswq1vdXP6sS3s5EWbg
+         pjWg==
+X-Gm-Message-State: ANoB5pmax+vAg4wiiL0mUqVYev/ghFIRysdddWdcOmthE9k+2ej7+wPH
+        UUVnWMgGYXc8N/ycJRDpWlM=
+X-Google-Smtp-Source: AA0mqf6KRXeEQvuo+ItW5Qm9zsllcUNoz0xVPtJP7GlFHzM5Zuj+dfouMJY2mjPAVl9vK12plUTRew==
+X-Received: by 2002:a17:902:9044:b0:186:daeb:bc0a with SMTP id w4-20020a170902904400b00186daebbc0amr6187873plz.67.1670605032789;
+        Fri, 09 Dec 2022 08:57:12 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:83dd])
+        by smtp.gmail.com with ESMTPSA id ju2-20020a170903428200b00186ae20e8dcsm1541270plb.271.2022.12.09.08.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 08:57:12 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 9 Dec 2022 06:57:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Li Lingfeng <lilingfeng3@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz, bingjingc@synology.com,
+        ebiggers@google.com, james.smart@broadcom.com, houtao1@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH-next] lib: parser: optimize match_NUMER apis to use local
+ array
+Message-ID: <Y5No5kMNGGJkmcPn@slm.duckdns.org>
+References: <20221209063434.1566682-1-lilingfeng3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209063434.1566682-1-lilingfeng3@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 8. Dezember 2022 12:20:55 CET Marijn Suijten wrote:
-> On 2022-12-08 11:23:17, Krzysztof Kozlowski wrote:
-> > On 08/12/2022 11:12, Marijn Suijten wrote:
-> > > On 2022-12-04 17:19:05, Luca Weiss wrote:
-> > >> On Freitag, 2. Dezember 2022 10:36:58 CET Marijn Suijten wrote:
-> > >> [..]
-> > >> 
-> > >> So the way this patch does it is good or does it need changes?
-> > > 
-> > > Except the typo(s?) pointed out in my first reply, this is good to go.
-> > > 
-> > > If we stick with generic adc-chan node names that should be documented
-> > > in the bindings IMO, as it is currently only captured implicitly in the
-> > > examples.  Krzysztof, what is your thought on this?
-> > 
-> > If I understand correctly, the outcome of other discussion [1] was to
-> > use labels and generic node names.
-> 
-> The outcome was to use labels in the driver and disregard node names as
-> the new fwnode API clobbers those names by including the @xx register
-> bit.
-> 
-> (I'll follow up with Jonathan whether or not to remove the current
-> fallback to node names, as [1] ended up discussing many different issues
-> and nits)
-> 
-> > In such case the patch was correct
-> > (except other comments).
-> 
-> As a consequence it _doesn't matter_ how nodes are named, and we _can_
-> use generic node names.  My question for you is whether we should, and
-> if we should lock that in via dt-bindings to guide everyone towards
-> using labels (which i did _not_ do in the recently-landed PM8950 and
-> PM6125, but will send followup for).
+Hello,
 
-FYI the patch has been merged already and is now in linux-next
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm64/boot/dts/qcom/pmi8950.dtsi?id=0d97fdf380b478c358c94f50f1b942e87f407b9b
+In general, I think this is a great idea. Some nits below:
 
-If you have any changes that need to be done please send a follow-up patch.
+On Fri, Dec 09, 2022 at 02:34:34PM +0800, Li Lingfeng wrote:
+> +/*
+> + * max size needed by diffrent bases to express U64
+> + * HEX: "0xFFFFFFFFFFFFFFFF" --> 18
+> + * DEC: "18446744073709551615" --> 20
+> + * OCT: "01777777777777777777777" --> 23
+> + * pick the max one to define U64_MAX_SIZE
+> + */
+> +#define U64_MAX_SIZE 23
 
-Regards
-Luca
+Bikeshedding but how about naming it like NUMBER_BUF_LEN and including the
+space for '\0'? Or just give it some extra space and make it 32 bytes.
 
-> 
-> > [1]
-> > https://lore.kernel.org/linux-arm-msm/20221112162719.0ac87998@jic23-huawei
-> > /
-> 
-> - Marijn
+> +static int match_strdup_local(const substring_t *s, char *buf)
 
+I find it weird to name this as generic as match_strdup_local() and make it
+assume that the buffer length is U64_MAX_SIZE + 1. Maybe just let the caller
+pass in the buffer length as a parameter? Then, it's just strcpy and there
+already is match_strlcpy() so we don't need this at all.
 
+> +{
+> +	size_t len = s->to - s->from;
+> +
+> +	if (!s->from)
+> +		return -EINVAL;
 
+If we use match_strlcpy() we lose the above null check but given that other
+match_*() functions aren't doing it, this likely shouldn't matter.
 
+Thanks.
+
+-- 
+tejun
