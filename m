@@ -2,60 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECF2647E42
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BFE647E4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiLIHFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S229776AbiLIHJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiLIHEt (ORCPT
+        with ESMTP id S229512AbiLIHJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:04:49 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5B1C405;
-        Thu,  8 Dec 2022 23:04:48 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CA85542546;
-        Fri,  9 Dec 2022 07:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670569486;
-        bh=Rw1LgZrAHKmOPFMlSc8m5mrXgg+i195LB/soUVfMO7k=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=eydc90K9HuIjQkBqAUlYJQp7LGFNmC1aNsirsLOaDf5E7KLee6uWYR5ckh8ZoWeyd
-         t706NyaJjw1c1R7pmNJfZRab/gcaBPTdJ15FAnol2SiJ4/cknZJznk79ZhAHrbYBaZ
-         oSQHraCbffz+QER9UpKaYFDssMwG3kYrxkVJtk8piZ3FtWaOi32aWcizaSDCFbEuBw
-         YagtGmtx4RUf91Ww6QK23XLYjWWRm+LypLvi6CKtmOZO2L+0fbJAUPpTVubWp5IY5c
-         7Km1L+tu6xQ8Lv/Qg1DaIalqpCNNjnNo5UFTkfZGw5fYiQvW+TLjAP7WeQExZ0BYzh
-         PZXwRlVtx2VuA==
-Message-ID: <9d9564a4-cf78-4eee-465b-90f0e7b2fdff@canonical.com>
-Date:   Thu, 8 Dec 2022 23:04:42 -0800
+        Fri, 9 Dec 2022 02:09:44 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042BB25C49;
+        Thu,  8 Dec 2022 23:09:42 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id v7so2904210wmn.0;
+        Thu, 08 Dec 2022 23:09:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=l5+rNzDfs1zsypdoRqJxdk+waRpxcBnDQcEOJe8SCHM=;
+        b=n11oX8Rz9D6UWbDalnNpX6HxE7SvzadtkFPJa5QD8b90Eee3KsWJD1CSqAnNkV00mD
+         h4euS6LoKlURhSoMTCdev/5GEIvQnZCvvCzGWTnGHRzBiOHzAtCXQwAy/hWp6aYKMO1r
+         Hy33EvzZe/w7SR+no0EpmkyckFFGdsUXx6aKCqm1U+4ms/W57RhhGgYUf2Ddd+IJ+Azv
+         kHopm2CnKlCw+/QArRxbcEN8wPjS0SdMf6exxTkeUzW2AUuK2YVbYClyqeUQJDw579Gh
+         nmSn7XPGnywricthZv+HmOC7uiqP38RMdnsIA3BHd7eSA1sL3xOHl3RuApopLwaAyOus
+         /Idg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l5+rNzDfs1zsypdoRqJxdk+waRpxcBnDQcEOJe8SCHM=;
+        b=4bclhTZF3IHYHPKwt03ndobZlfw4havKIHTEtMNxB7w8lKzwBiKYWpnr6pdoKKwBNf
+         HhCx8sD5M9KIjAXyNWsm+kUYMkI/EZx7CZa6AcWVnMP11/AhnOetb49oUdWx83fn/uSR
+         MrwCdZ+LTDTDJUbZTycK7OO/e75IGz0en3rd0Vuiww61qJX8YM+fo5m4SzdGAxqaKX0j
+         aXWtPXqws8YCMLL0iu/agZIu2WXFUYKAHFX5MHt39wcPQqz/o2e4U69njMsCyBGSzFT5
+         xV01DbFPMGxy8tc8YqbZfwXHlXYOqKxxQ4lJVkPa0Vm4TuFU9yWlja2CknEKJjKWDZZy
+         xITw==
+X-Gm-Message-State: ANoB5pntDHGuhO4OOnH1SATRxRirwRwkt4E77FyL8u0CWV6GfNcDW9Ly
+        UGCFdBaF5WH3uEX2M83Lgj8HicUU2yMeLw==
+X-Google-Smtp-Source: AA0mqf7dUf3bFAaGY+YH7LRyCcxgc0zIdK9DsxDMlqPObxjk1ppqZYu3vJAVd9UA6boOjtOMxI0+DA==
+X-Received: by 2002:a05:600c:6899:b0:3d1:cf66:3afa with SMTP id fn25-20020a05600c689900b003d1cf663afamr3748540wmb.19.1670569780354;
+        Thu, 08 Dec 2022 23:09:40 -0800 (PST)
+Received: from krava ([83.240.62.58])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c41c600b003b4935f04a4sm1094320wmh.5.2022.12.08.23.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 23:09:39 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 9 Dec 2022 08:09:36 +0100
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Hao Sun <sunhao.th@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
+Message-ID: <Y5LfMGbOHpaBfuw4@krava>
+References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
+ <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
+ <Y49dMUsX2YgHK0J+@krava>
+ <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
+ <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
+ <Y5Inw4HtkA2ql8GF@krava>
+ <Y5JkomOZaCETLDaZ@krava>
+ <Y5JtACA8ay5QNEi7@krava>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: security: policy_unpack.c:325:10: error: use of undeclared
- identifier 'TRI_TRUE'
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, apparmor@lists.ubuntu.com,
-        Nick Terrell <terrelln@fb.com>, Rae Moar <rmoar@google.com>
-References: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
- <CABVgOSms-8vXDVX68JX-4UEnaGyCgVyNWH37W8qGz7eVtFcWag@mail.gmail.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <CABVgOSms-8vXDVX68JX-4UEnaGyCgVyNWH37W8qGz7eVtFcWag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5JtACA8ay5QNEi7@krava>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,96 +97,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 22:57, David Gow wrote:
-> On Thu, 8 Dec 2022 at 15:36, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>
->> Following build regresion found on Linux next-20221208 tag.
->>
->> Regressions found on riscv:
->>    - build/clang-nightly-defconfig
->>    - build/gcc-8-defconfig
->>    - build/gcc-11-defconfig
->>    - build/clang-15-defconfig
->>
->> make --silent --keep-going --jobs=8
->> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
->> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
->> 'CC=sccache clang' defconfig
->> make --silent --keep-going --jobs=8
->> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
->> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
->> 'CC=sccache clang'
->> security/apparmor/policy_unpack.c:316:18: error: unknown type name 'tri'
->> VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char
->> *name, u16 *size)
->>                   ^
->> security/apparmor/policy_unpack.c:325:10: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  return TRI_TRUE;
->>                         ^
->> security/apparmor/policy_unpack.c:328:9: error: use of undeclared
->> identifier 'TRI_NONE'
->>          return TRI_NONE;
->>                 ^
->> security/apparmor/policy_unpack.c:331:9: error: use of undeclared
->> identifier 'TRI_FALSE'
->>          return TRI_FALSE;
->>                 ^
->> security/apparmor/policy_unpack.c:455:42: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
->>                                                         ^
->> security/apparmor/policy_unpack.c:529:42: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
->>                                                         ^
->> security/apparmor/policy_unpack.c:559:42: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
->>                                                         ^
->> security/apparmor/policy_unpack.c:611:42: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
->>                                                         ^
->> security/apparmor/policy_unpack.c:674:42: error: use of undeclared
->> identifier 'TRI_TRUE'
->>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
->>                                                         ^
->> 9 errors generated.
->> make[4]: *** [scripts/Makefile.build:252:
->> security/apparmor/policy_unpack.o] Error 1
->> make[4]: Target 'security/apparmor/' not remade because of errors.
->> make[3]: *** [scripts/Makefile.build:504: security/apparmor] Error 2
->>
->> Build link,
->>    - https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/
->>    - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/details/
->>
->> Build results comparison:
->>    - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/history/
->>
->>
->> steps to reproduce:
->> # To install tuxmake on your system globally:
->> # sudo pip3 install -U tuxmake
->> #
->> # See https://docs.tuxmake.org/ for complete documentation.
->> # Original tuxmake command with fragments listed below.
->> # tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
->> --kconfig defconfig
->>
->>
->> tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
->> --kconfig https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/config
->>
->> --
->> Linaro LKFT
->> https://lkft.linaro.org
+On Fri, Dec 09, 2022 at 12:02:24AM +0100, Jiri Olsa wrote:
+> On Thu, Dec 08, 2022 at 11:26:45PM +0100, Jiri Olsa wrote:
+> > On Thu, Dec 08, 2022 at 07:06:59PM +0100, Jiri Olsa wrote:
+> > > On Thu, Dec 08, 2022 at 09:48:52AM -0800, Alexei Starovoitov wrote:
+> > > > On Wed, Dec 7, 2022 at 11:57 AM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Dec 6, 2022 at 7:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > > >
+> > > > > > On Tue, Dec 06, 2022 at 02:46:43PM +0800, Hao Sun wrote:
+> > > > > > > Hao Sun <sunhao.th@gmail.com> 于2022年12月6日周二 11:28写道：
+> > > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > The following crash can be triggered with the BPF prog provided.
+> > > > > > > > It seems the verifier passed some invalid progs. I will try to simplify
+> > > > > > > > the C reproducer, for now, the following can reproduce this:
+> > > > > > > >
+> > > > > > > > HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
+> > > > > > > > functions in bpf_iter_ksym
+> > > > > > > > git tree: bpf-next
+> > > > > > > > console log: https://pastebin.com/raw/87RCSnCs
+> > > > > > > > kernel config: https://pastebin.com/raw/rZdWLcgK
+> > > > > > > > Syz reproducer: https://pastebin.com/raw/4kbwhdEv
+> > > > > > > > C reproducer: https://pastebin.com/raw/GFfDn2Gk
+> > > > > > > >
+> > > > > > >
+> > > > > > > Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
+> > > > > > >
+> > > > > > > Only two syscalls are required to reproduce this, seems it's an issue
+> > > > > > > in XDP test run. Essentially, the reproducer just loads a very simple
+> > > > > > > prog and tests run repeatedly and concurrently:
+> > > > > > >
+> > > > > > > r0 = bpf$PROG_LOAD(0x5, &(0x7f0000000640)=@base={0x6, 0xb,
+> > > > > > > &(0x7f0000000500)}, 0x80)
+> > > > > > > bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)={r0, 0x0, 0x0, 0x0, 0x0,
+> > > > > > > 0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
+> > > > > > >
+> > > > > > > Loaded prog:
+> > > > > > >    0: (18) r0 = 0x0
+> > > > > > >    2: (18) r6 = 0x0
+> > > > > > >    4: (18) r7 = 0x0
+> > > > > > >    6: (18) r8 = 0x0
+> > > > > > >    8: (18) r9 = 0x0
+> > > > > > >   10: (95) exit
+> > > > > >
+> > > > > > hi,
+> > > > > > I can reproduce with your config.. it seems related to the
+> > > > > > recent static call change:
+> > > > > >   c86df29d11df bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+> > > > > >
+> > > > > > I can't reproduce when I revert that commit.. Peter, any idea?
+> > > > >
+> > > > > Jiri,
+> > > > >
+> > > > > I see your tested-by tag on Peter's commit c86df29d11df.
+> > > > > I assume you're actually tested it, but
+> > > > > this syzbot oops shows that even empty bpf prog crashes,
+> > > > > so there is something wrong with that commit.
+> > > > >
+> > > > > What is the difference between this new kconfig and old one that
+> > > > > you've tested?
+> > 
+> > I attached the diff, 'config-issue' is the one that reproduces the issue
+> > 
+> > > > >
+> > > > > I'm trying to understand the severity of the issues and
+> > > > > whether we need to revert that commit asap since the merge window
+> > > > > is about to start.
+> > > > 
+> > > > Jiri, Peter,
+> > > > 
+> > > > ping.
+> > > > 
+> > > > cc-ing Thorsten, since he's tracking it now.
+> > > > 
+> > > > The config has CONFIG_X86_KERNEL_IBT=y.
+> > > > Is it related?
+> > > 
+> > > sorry for late reply.. I still did not find the reason,
+> > > but I did not try with IBT yet, will test now
+> > 
+> > no difference with IBT enabled, can't reproduce the issue
+> > 
 > 
-> I suspect this is in need of the fix here:
-> https://lore.kernel.org/all/bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com/
+> ok, scratch that.. the reproducer got stuck on wifi init :-\
 > 
+> after I fix that I can now reproduce on my local config with
+> IBT enabled or disabled.. it's something else
 
-yes, that is what is needed to fix this
+I'm getting the error also when reverting the static call change,
+looking for good commit, bisecting
 
+I'm getting fail with:
+   f0c4d9fc9cc9 (tag: v6.1-rc4) Linux 6.1-rc4
 
+v6.1-rc1 is ok
+
+jirka
