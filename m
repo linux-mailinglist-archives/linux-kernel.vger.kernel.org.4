@@ -2,173 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F761648217
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5646A64821B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLIMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S229865AbiLIMCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiLIMAr (ORCPT
+        with ESMTP id S230057AbiLIMBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:00:47 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B40130F4B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:00:38 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id fc4so10910657ejc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
-         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
-         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
-         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
-         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
-         GpZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=FTNERjttdrX58k5dyYWtfIOfIDgN5C2WHc5LqH/7nL9Lc/JCt97aveWu9u0RVV7Io7
-         OIKJ0DOVE4OnJEz7ShPknTfHVNmjrqWVXmpvs2Mn+8feTAeRs+uxMClg++w9w1ZI+wJ1
-         OJCjYS/odtS8MZ5z0JqgeNEq0kownnNE5P4/P27X8hJSI9eOqOxp2ICoOzbwl9AOdMOj
-         4QegrVuRVf0ceFOisNx+glq6PSXk6tcSbIbNwApaQ3sYxhKtoVc4jR1Hd27dJ2X+iXv3
-         dGa1OeJDvNN4HhtrwO6bb7nc7paRaaXdiCeUNmOa+bC/NiP7QTBueVwsnP6f1n/RFG18
-         nUkA==
-X-Gm-Message-State: ANoB5pnLkWBrvQSZcKhMu7gxJleibehA84D8xwfsJ8CaJ9Ln5Va4HDKV
-        +ufur2oypy6B1RvVt1lQvKFR2Q==
-X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
-X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
-        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        Purism Kernel Team <kernel@puri.sm>,
-        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Date:   Fri,  9 Dec 2022 13:00:14 +0100
-Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 9 Dec 2022 07:01:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5136F6ACD6;
+        Fri,  9 Dec 2022 04:01:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A5B85CE2969;
+        Fri,  9 Dec 2022 12:01:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C602C433D2;
+        Fri,  9 Dec 2022 12:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670587284;
+        bh=VO1jn+Chl+xyrflXzrrO7caYAzOuX+cY2t9eRqjN5PM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=P6bvHrBh70ZZ8nZBuZs/yt+uDSQokcyK+zE2Txngfcuzobdrka6BLdoHI+V9AyL+0
+         jSNbqFg8o3Mrza1I/hWMGbEUPpRp4TRTuRXhQkhI9JQN4omF0I2mn2LG7p0B8fK2Ec
+         OdN558i7eUDxEEunzTacG+Z/ykbzqhrq36jgg3MnnwH5UqqLqG6KFHhgdg9NQMpsgu
+         PcBmCxLe4VMocyLI6vfRSjEoHela7dxY0JOBITItpXL2EiqirP5u/BSAbwEWXRwpTd
+         yn1p3MW//Oo6E35jECYxEP256TUdcs+N0Vn+Sh3h2JETsTN1bzgM7WmD5oh9F3q42W
+         DZzHm2uPIxHEg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p3c4A-00BaAw-52;
+        Fri, 09 Dec 2022 12:01:22 +0000
+Date:   Fri, 09 Dec 2022 12:01:21 +0000
+Message-ID: <86cz8srdke.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Kever Yang <kever.yang@rock-chips.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Sugar Zhang <sugar.zhang@rock-chips.com>
+Subject: Re: [PATCHv5 3/7] arm64: dts: rockchip: Add base DT for rk3588 SoC
+In-Reply-To: <20221205172350.75234-4-sebastian.reichel@collabora.com>
+References: <20221205172350.75234-1-sebastian.reichel@collabora.com>
+        <20221205172350.75234-4-sebastian.reichel@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sebastian.reichel@collabora.com, kever.yang@rock-chips.com, heiko@sntech.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, chris.obbard@collabora.com, benjamin.gaignard@collabora.com, linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com, yifeng.zhao@rock-chips.com, zhangqing@rock-chips.com, sugar.zhang@rock-chips.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+On Mon, 05 Dec 2022 17:23:46 +0000,
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 > 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
+> From: Kever Yang <kever.yang@rock-chips.com>
 > 
-> [...]
+> This initial version supports (single core) CPU, dma, interrupts, timers,
+> UART and SDHCI. In short - everything necessary to boot Linux on this
+> system on chip.
+> 
+> The DT is split into rk3588 and rk3588s, which is a reduced version
+> (i.e. with less peripherals) of the former.
+> 
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> [rebase, squash and reword commit message]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/rk3588.dtsi  |   58 +
+>  arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 1672 +++++++++++++++++++++
+>  2 files changed, 1730 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588.dtsi
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> new file mode 100644
+> index 000000000000..ecdd2294cd42
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+> @@ -0,0 +1,1672 @@
 
-Applied all patches that build.
+[...]
 
-Patches excluded:
- - ps8622
- - ti-sn65dsi83
- - adv7511
+> +	pmu-a55 {
+> +		compatible = "arm,cortex-a55-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +	};
+> +
+> +	pmu-a76 {
+> +		compatible = "arm,cortex-a76-pmu";
+> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +	};
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+Two PMUs with the same PPI and no partition? This is totally
+wrong. Please see how RK3399 does it, with each PMU having a PPI
+partition allocated.
 
+See the PMU binding for the details.
 
-[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
-          (no commit info)
-[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
-          (no commit info)
-[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
-          (no commit info)
-[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
-          (no commit info)
-[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
-          (no commit info)
-[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
-          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
-[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
-          (no commit info)
-[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
-          (no commit info)
-[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
-          (no commit info)
-[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
-          (no commit info)
-[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
-          (no commit info)
-[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
-          (no commit info)
-[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
-          (no commit info)
-[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
-          (no commit info)
-[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
-          (no commit info)
-[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
-          (no commit info)
-[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
-          (no commit info)
-[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
-          (no commit info)
-[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
-          (no commit info)
-[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
-          (no commit info)
-[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
-          (no commit info)
-[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
-          (no commit info)
-[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
-          (no commit info)
+> +
+> +	psci {
+> +		compatible = "arm,psci-1.0";
+> +		method = "smc";
+> +	};
+> +
+> +	spll: clock-0 {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <702000000>;
+> +		clock-output-names = "spll";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
 
+You have a set of ARMv8.2 cores, which do have an interrupt for the
+EL2 virtual timer. Please add this interrupt and while you're at it,
+add the interrupt-names properties that are associated with them.
 
+See the binding for the details.
 
-rob
+[...]
 
+> +	gic: interrupt-controller@fe600000 {
+> +		compatible = "arm,gic-v3";
+> +		reg = <0x0 0xfe600000 0 0x10000>, /* GICD */
+> +		      <0x0 0xfe680000 0 0x100000>; /* GICR */
+> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-controller;
+> +		mbi-alias = <0x0 0xfe610000>;
+> +		mbi-ranges = <424 56>;
+> +		msi-controller;
+> +		#interrupt-cells = <3>;
+> +
+> +		ppi-partitions {
+> +			interrupt-partition-0 {
+> +				affinity = <
+> +					&cpu_l0 &cpu_l1 &cpu_l2 &cpu_l3
+> +					&cpu_b0 &cpu_b1 &cpu_b2 &cpu_b3
+> +				>;
+> +			};
+> +		};
+
+What is the purpose of having an interrupt partition that covers *all*
+the CPUs? This makes zero sense. You need to:
+
+- Bump #interrupt-cells to 4, as per the GIC binding
+
+- Create PPI partitions to segregate the two CPU types
+
+- Make the PMU devices use the corresponding PPI partition as per the binding
+
+- Fix all the interrupt specifiers to use 4 cells instead of 3
+
+Again, RK3399 got it right, and for once I'm advocating some sort of
+copy/paste...
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
