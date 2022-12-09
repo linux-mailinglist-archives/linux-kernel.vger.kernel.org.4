@@ -2,105 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAB164885A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8606364885F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLISTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S229517AbiLISUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLISTn (ORCPT
+        with ESMTP id S229910AbiLISUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:19:43 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6B6BE3C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:19:42 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id jl24so5717545plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:19:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jJC0werUyNhAsXSVGaSByQ+qaL+qg21eS8qrY583cU0=;
-        b=VfDzog69pafNSi9HXPraqhYDJDxJO07kAUltK/JGGq4/H67YJhcdJPGYkJyM5SN5Ty
-         oUTOpF1um2Ressl58IolXuMADr34fgz4S7xoMxcBJrM3UjpixFYR8RzfWJU5UzW4WJY6
-         OlvTpxPmGPCOO8e8EKJrcXEvHD5HCBxKXL+0WrxxaIu6MivanoOZ/IRprL7bJEImMlOV
-         rwOUjh+d3TNWgB872Bv8jw0GJmp5uNCUtt/zheafTcYISrYfb0t7ZBoWrt3R3US10KMe
-         MPoOJGsMbCmueo3AL5avbyrICJvdGsY1Guh11L0fVla6GVU/IYdEYniS13bBQH/dJlKo
-         6eXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jJC0werUyNhAsXSVGaSByQ+qaL+qg21eS8qrY583cU0=;
-        b=aeG1y0yMIoHaFuKg0isiqUbIkGczGXFPF527Q1H2gPwnpjbFzOCtm5Dzmr79rFYavb
-         5gVkchFMTDLEQGP1IQ3KETRwYwrEt0qOhePbOhjyAbMEVtIErAYuWxsOfhu7jcXEzUMZ
-         IBZX8Fm4kkvM79dRKq1kfddPr4/eEoL2XPX5O0oYaIuBg+GJRJ65W60qfqXNnF8t0XLs
-         eK2lwWUCNv34oJAQA1V4jw6MlCTXRCWnRYfpzmxX8Lac4Qic+Cdt3NAInVkKUlBdJ8V5
-         int53lEAG5DagCf8jq0KuDvGchEt19zK75OHbx0iR+yQoqGdCtmyWKKIM/SmttpSjtuV
-         CYBw==
-X-Gm-Message-State: ANoB5pnADex3a62p48Us+bhTWSXgLn0G7FIDQ+nj0LeUvsHqDiZxFxbl
-        v6d7ZN4plbceM3yWKGijLeAroOn8GA5QEOJfMGL4+Q==
-X-Google-Smtp-Source: AA0mqf74rzyA/1a76a1lmHt2M7jttY7ci9jChhcQS5FHi1zSnHU5FptiMukscyl5HpepsVgoGxhe3nzHtLlXA/pvthY=
-X-Received: by 2002:a17:90a:ab84:b0:213:343:9873 with SMTP id
- n4-20020a17090aab8400b0021303439873mr109317887pjq.102.1670609981609; Fri, 09
- Dec 2022 10:19:41 -0800 (PST)
+        Fri, 9 Dec 2022 13:20:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7531F9EF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:20:33 -0800 (PST)
+Received: from jupiter.universe (dyndsl-091-096-062-166.ewe-ip-backbone.de [91.96.62.166])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C87716602C09;
+        Fri,  9 Dec 2022 18:20:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670610031;
+        bh=dUh/Ph4fvUhmzsNP/St5yPq0TjbFbpyNp2w94uqPWdk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i3trOqmhJEtirX/bwAaFKM1+5BzRDoER59nrYIU/ihIvVpzE5hZ6gag1eapcVNy3P
+         hrVr9PoKNOYUF8POuElFPqtHVF8t+xDgnfcSE2cbAfmapBBe/jsYWLX80nUvvKKTsq
+         x34w7oUBKHUHscNOlE/2ecvzzeciW4/cqMhDIGFwYVKf0214zClY4s2x6+HrWWJOHO
+         7OF4TelMOKzjEWeq+fWLgVDPGGx3yLeEeOLc0gT5sVcelmZcJQYh98OTPhAhBFBm6a
+         QR740xzBO6+WFUkazE27cVeJydd1wNu5sHfUm3I2DsFNWqG2jGyL1S4tPVplBlnYyJ
+         LiLHpp+fO9vEQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 09EB44829FD; Fri,  9 Dec 2022 19:20:30 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [RFC 1/1] ARM: Drop !ARCH_MULTIPLATFORM dependency from Cortex A8/9 erratas
+Date:   Fri,  9 Dec 2022 19:20:00 +0100
+Message-Id: <20221209182000.549179-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221122001125.765003-1-irogers@google.com> <20221122001125.765003-3-irogers@google.com>
-In-Reply-To: <20221122001125.765003-3-irogers@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 9 Dec 2022 10:19:30 -0800
-Message-ID: <CAKwvOdm3hTJWKequrVXgOouA8a6wNQLaz9WHcFitOUi4HjZ51A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] objtool: Install libsubcmd in build
-To:     Ian Rogers <irogers@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 4:11 PM Ian Rogers <irogers@google.com> wrote:
->
-> +ifneq ($(OUTPUT),)
-> +  LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-> +else
-> +  LIBSUBCMD_OUTPUT = $(CURDIR)/libsubcmd
-> +endif
+All the erratas for more recent CPUs (Cortex A15/A12/A17) do not
+require !ARCH_MULTIPLATFORM, since there is runtime detection of
+effected CPUs in arch/arm/mm/proc-v7.S.
 
-Seeing an else clause when the predicate is negated makes this read as:
+Errata config options for the older Cortex A8/A9 CPUs have the
+!ARCH_MULTIPLATFORM dependency, but the CPUs are also runtime
+detected. Since there is runtime detection, it should be fine
+to enable the erratas for a multi platform kernel.
 
-if !foo:
-  baz()
-else:
-  bar()
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+For me the most likely explanation that this has not yet happened is
+me missing an important detail, so I sent it as RFC. If you point it
+out I will try to document the reason.
+---
+ arch/arm/Kconfig | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Consider using:
-
-if foo:
-  bar()
-else
-  baz()
-
-in the future.
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index a08c9d092a33..fafb02e38507 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -647,7 +647,6 @@ config ARM_ERRATA_430973
+ config ARM_ERRATA_458693
+ 	bool "ARM errata: Processor deadlock when a false hazard is created"
+ 	depends on CPU_V7
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 458693 Cortex-A8 (r2p0)
+ 	  erratum. For very specific sequences of memory operations, it is
+@@ -661,7 +660,6 @@ config ARM_ERRATA_458693
+ config ARM_ERRATA_460075
+ 	bool "ARM errata: Data written to the L2 cache can be overwritten with stale data"
+ 	depends on CPU_V7
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 460075 Cortex-A8 (r2p0)
+ 	  erratum. Any asynchronous access to the L2 cache may encounter a
+@@ -674,7 +672,6 @@ config ARM_ERRATA_460075
+ config ARM_ERRATA_742230
+ 	bool "ARM errata: DMB operation may be faulty"
+ 	depends on CPU_V7 && SMP
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 742230 Cortex-A9
+ 	  (r1p0..r2p2) erratum. Under rare circumstances, a DMB instruction
+@@ -687,7 +684,6 @@ config ARM_ERRATA_742230
+ config ARM_ERRATA_742231
+ 	bool "ARM errata: Incorrect hazard handling in the SCU may lead to data corruption"
+ 	depends on CPU_V7 && SMP
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 742231 Cortex-A9
+ 	  (r2p0..r2p2) erratum. Under certain conditions, specific to the
+@@ -725,7 +721,6 @@ config ARM_ERRATA_720789
+ config ARM_ERRATA_743622
+ 	bool "ARM errata: Faulty hazard checking in the Store Buffer may lead to data corruption"
+ 	depends on CPU_V7
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 743622 Cortex-A9
+ 	  (r2p*) erratum. Under very rare conditions, a faulty
+@@ -739,7 +734,6 @@ config ARM_ERRATA_743622
+ config ARM_ERRATA_751472
+ 	bool "ARM errata: Interrupted ICIALLUIS may prevent completion of broadcasted operation"
+ 	depends on CPU_V7
+-	depends on !ARCH_MULTIPLATFORM
+ 	help
+ 	  This option enables the workaround for the 751472 Cortex-A9 (prior
+ 	  to r3p0) erratum. An interrupted ICIALLUIS operation may prevent the
 -- 
-Thanks,
-~Nick Desaulniers
+2.38.1
+
