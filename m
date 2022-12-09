@@ -2,199 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF96A647F67
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828F6647F6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiLIIjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S229785AbiLIIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiLIIjc (ORCPT
+        with ESMTP id S229692AbiLIIl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:39:32 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29A65E3CA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:39:26 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id d131so4709773ybh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 00:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0GUGGQj15T3qQbeVLgcJB6xrxEome6rwG6hErs3Zjdo=;
-        b=gPKoRHvGy0jNW39RFKcBp3/yl4sbAEA5JVQ34R7dkBBH4C298sE+yDKuwDMlxibY/c
-         w344BunK6p0wUSdW2cjsybO9SiTE8QjHv8Q64Eo4C7LL+EZTmTZDnyOJYfS4UEfnNrUw
-         PaCdW5X/0UmlKP5aiu72NpuSFB0bwAxdWBleJFbbGZz8jkXSqDXpMKXl81qfy7ASP/1F
-         ik/l+kAJSpzjqVlH22DpJGE5UIL/GV6WjuOKs08i3crS2Bz+X20oOlKhJO9PSJ0HnRY4
-         zG3JNXqRRXteVsMJv3NPZ2H4INGOpsjDXzHqVD0SKeQKzryL6MiSIhVp+c14yEr6+1ln
-         9IJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0GUGGQj15T3qQbeVLgcJB6xrxEome6rwG6hErs3Zjdo=;
-        b=GWnENE7v6kUFV90H4XtuDoL/jtyXT6HVzbSJylqvEOWm7ZmQf97ORIOS3ddnfy6r7T
-         e476nGaZgguKriiaAkyfEmWk6Gk8wgBZm6UtH+O6Iww9ehneZE4kGWcoTwop/LJCZEF6
-         QTLV7gY5Z4B9p5vGBTxShphtG9IIZFaZbfdaryKoXJk4vkneYYA5VKeZU0avi8gxd3VO
-         q0fc/uJyFKBhhvUU1DDUEtrC8wMBIWa/Rcbkk5phYqVIUHqfQH9e8BiwNr9X245LbaEY
-         K5BRvhRPxPX6jHQRvkAmU48u8qYTsbA6cwujegNUrKWnwp4v+ShoiZo6D1HJdSD2xOCd
-         v4sQ==
-X-Gm-Message-State: ANoB5pmglT81bkjaZB1DvxANVW377fiZIjAsjZkvNyBlWpWCWZkdwq3O
-        yIG9dKWsJzAY3zdzx4RcZu4wyikbuFZqxzjrcJ43/A==
-X-Google-Smtp-Source: AA0mqf7ZACKRjj1D0rcTNVVA25tu2DwTXeoSYJ3oO9D76DQARIgzERW6rrlYRiXtf/QusZjCu2X2dO1d9FIDFhTgAEs=
-X-Received: by 2002:a25:941:0:b0:706:bafd:6f95 with SMTP id
- u1-20020a250941000000b00706bafd6f95mr9109558ybm.55.1670575165654; Fri, 09 Dec
- 2022 00:39:25 -0800 (PST)
+        Fri, 9 Dec 2022 03:41:28 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26274D5FA;
+        Fri,  9 Dec 2022 00:41:26 -0800 (PST)
+Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NT4Ch072kzJp7F;
+        Fri,  9 Dec 2022 16:37:52 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 9 Dec
+ 2022 16:40:50 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <andrii.nakryiko@gmail.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <haoluo@google.com>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kongweibin2@huawei.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <liuxin350@huawei.com>,
+        <martin.lau@linux.dev>, <sdf@google.com>, <song@kernel.org>,
+        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
+        <yanan@huawei.com>, <yhs@fb.com>, <zhangmingyi5@huawei.com>
+Subject: Re: [PATCH bpf-next] libbpf: Optimized return value in libbpf_strerror when errno is libbpf errno
+Date:   Fri, 9 Dec 2022 16:40:47 +0800
+Message-ID: <20221209084047.229525-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <CAEf4BzYV=tCDMOO8xYwNgpogyEo6dbfnAHyYKnf59rUeG5TNSw@mail.gmail.com>
+References: <CAEf4BzYV=tCDMOO8xYwNgpogyEo6dbfnAHyYKnf59rUeG5TNSw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220831133758.3741187-1-leitao@debian.org> <CANn89iLe9spogp7eaXPziA0L-FqJ0w=6VxdWDL6NKGobTyuQRw@mail.gmail.com>
- <Y5DPU3p+N7rBW+QY@gmail.com> <CANn89iKia8PVz8QrtukzA-9wUiJHiOB1r6d04xuL_YHqHaBULw@mail.gmail.com>
- <Y5IGa0pauk+YkSSv@gmail.com>
-In-Reply-To: <Y5IGa0pauk+YkSSv@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 9 Dec 2022 09:39:14 +0100
-Message-ID: <CANn89iK8BtCDXsH=fwnUg8fzP_tDB-=wmezkc-dCCVpp-FqzxA@mail.gmail.com>
-Subject: Re: [PATCH RESEND net-next] tcp: socket-specific version of WARN_ON_ONCE()
-To:     Breno Leitao <leitao@debian.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>, leit@fb.com,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 4:44 PM Breno Leitao <leitao@debian.org> wrote:
->
-> On Wed, Dec 07, 2022 at 06:59:38PM +0100, Eric Dumazet wrote:
+On Wed,  7 Dec 2022 6:31:34 PM Andrii Nakryiko wrote:
+> On Wed, Dec 7, 2022 at 1:09 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >
+> > On 12/7/22 1:00 AM, Andrii Nakryiko wrote:
+> > > On Mon, Dec 5, 2022 at 1:11 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> > >>
+> > >> On 12/3/22 10:37 AM, Xin Liu wrote:
+> > >>> This is a small improvement in libbpf_strerror. When libbpf_strerror
+> > >>> is used to obtain the system error description, if the length of the
+> > >>> buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
+> > >>> ERANGE.
+> > >>>
+> > >>> However, this processing is not performed when the error code
+> > >>> customized by libbpf is obtained. Make some minor improvements here,
+> > >>> return -ERANGE and set errno to ERANGE when buf is not enough for
+> > >>> custom description.
+> > >>>
+> > >>> Signed-off-by: Xin Liu <liuxin350@huawei.com>
+> > >>> ---
+> > >>>    tools/lib/bpf/libbpf_errno.c | 6 ++++++
+> > >>>    1 file changed, 6 insertions(+)
+> > >>>
+> > >>> diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
+> > >>> index 96f67a772a1b..48ce7d5b5bf9 100644
+> > >>> --- a/tools/lib/bpf/libbpf_errno.c
+> > >>> +++ b/tools/lib/bpf/libbpf_errno.c
+> > >>> @@ -54,10 +54,16 @@ int libbpf_strerror(int err, char *buf, size_t size)
+> > >>>
+> > >>>        if (err < __LIBBPF_ERRNO__END) {
+> > >>>                const char *msg;
+> > >>> +             size_t msg_size;
+> > >>>
+> > >>>                msg = libbpf_strerror_table[ERRNO_OFFSET(err)];
+> > >>>                snprintf(buf, size, "%s", msg);
+> > >>>                buf[size - 1] = '\0';
+> > >>> +
+> > >>> +             msg_size = strlen(msg);
+> > >>> +             if (msg_size >= size)
+> > >>> +                     return libbpf_err(-ERANGE);
+> > >>
+> > >> Given this is related to libbpf_strerror_table[] where the error strings are known
+> > >> lets do compile-time error instead. All callers should pass in a buffer of STRERR_BUFSIZE
+> > >> size in libbpf.
+> > >
+> > > That sounds a bit too pessimistic?.. If the actual error message fits
+> > > in the buffer, why return -ERANGE just because theoretically some
+> > > error descriptions might fit?
+> > >
+> > > But I don't think we need to calculate strlen(). snprintf above
+> > > returns the number of bytes required to print a full string, even if
+> > > it was truncated. So just comparing snprintf's result to size should
+> > > be enough.
+> >
+> > I meant sth like below. For example if we were to shrink STRERR_BUFSIZE down
+> > to 32 for testing, you'd then get:
+> 
+> Sure, but I'm not sure why do we need to do this? Array of pointers to
+> string will overall use less memory, as each string will take as much
+> space as needed and no more.
+> 
+> I guess I'm missing which problem you are trying to solve. I believe
+> Xin was addressing a concern of extern (to libbpf) callers not getting
+> -ERANGE in cases when they provide too small a buffer, which is just a
+> simple snprintf() use adjustment to be a proper fix.
+> 
+> >
+> > # make libbpf_errno.o
+> > gcc -g -O2 -std=gnu89 -Wbad-function-cast -Wdeclaration-after-statement -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -Wpacked -Wredundant-decls -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat -Wno-type-limits -Wstrict-aliasing=3 -Wshadow -Wno-switch-enum -Werror -Wall -I. -I/home/darkstar/trees/bpf-next/tools/include -I/home/darkstar/trees/bpf-next/tools/include/uapi -fvisibility=hidden -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64    -c -o libbpf_errno.o libbpf_errno.c
+> > libbpf_errno.c:27:31: error: initializer-string for array of chars is too long [-Werror]
+> >     27 |  [ERRCODE_OFFSET(KVERSION)] = "'version' section incorrect or lost",
+> >        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > libbpf_errno.c:27:31: note: (near initialization for ‘libbpf_strerror_table[2]’)
+> > libbpf_errno.c:31:29: error: initializer-string for array of chars is too long [-Werror]
+> >     31 |  [ERRCODE_OFFSET(VERIFY)] = "Kernel verifier blocks program loading",
+> >        |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > libbpf_errno.c:31:29: note: (near initialization for ‘libbpf_strerror_table[7]’)
+> > libbpf_errno.c:34:31: error: initializer-string for array of chars is too long [-Werror]
+> >     34 |  [ERRCODE_OFFSET(PROGTYPE)] = "Kernel doesn't support this program type",
+> >        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > libbpf_errno.c:34:31: note: (near initialization for ‘libbpf_strerror_table[10]’)
+> > libbpf_errno.c:37:30: error: initializer-string for array of chars is too long [-Werror]
+> >     37 |  [ERRCODE_OFFSET(NLPARSE)] = "Incorrect netlink message parsing",
+> >        |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > libbpf_errno.c:37:30: note: (near initialization for ‘libbpf_strerror_table[13]’)
+> > cc1: all warnings being treated as errors
+> > make: *** [<builtin>: libbpf_errno.o] Error 1
+> >
+> >
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 2a82f49ce16f..2e5df1624f79 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -265,8 +265,6 @@ static void pr_perm_msg(int err)
+> >                 buf);
+> >   }
+> >
+> > -#define STRERR_BUFSIZE  128
+> > -
+> >   /* Copied from tools/perf/util/util.h */
+> >   #ifndef zfree
+> >   # define zfree(ptr) ({ free(*ptr); *ptr = NULL; })
+> > diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
+> > index 96f67a772a1b..2f03f861b8b6 100644
+> > --- a/tools/lib/bpf/libbpf_errno.c
+> > +++ b/tools/lib/bpf/libbpf_errno.c
+> > @@ -21,7 +21,7 @@
+> >   #define ERRCODE_OFFSET(c)     ERRNO_OFFSET(LIBBPF_ERRNO__##c)
+> >   #define NR_ERRNO      (__LIBBPF_ERRNO__END - __LIBBPF_ERRNO__START)
+> >
+> > -static const char *libbpf_strerror_table[NR_ERRNO] = {
+> > +static const char libbpf_strerror_table[NR_ERRNO][STRERR_BUFSIZE] = {
+> >         [ERRCODE_OFFSET(LIBELF)]        = "Something wrong in libelf",
+> >         [ERRCODE_OFFSET(FORMAT)]        = "BPF object format invalid",
+> >         [ERRCODE_OFFSET(KVERSION)]      = "'version' section incorrect or lost",
+> > diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+> > index 377642ff51fc..d4dc4fe945a6 100644
+> > --- a/tools/lib/bpf/libbpf_internal.h
+> > +++ b/tools/lib/bpf/libbpf_internal.h
+> > @@ -57,6 +57,8 @@
+> >   #define ELF64_ST_VISIBILITY(o) ((o) & 0x03)
+> >   #endif
+> >
+> > +#define STRERR_BUFSIZE 128
+> > +
+> >   #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+> >         ((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+> >   #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
 
-> > Try to give us symbols with scripts/decode_stacktrace.sh , thanks.
->
-> Sorry, here it is:
->
->  [749619.538804] WARNING: CPU: 19 PID: 0 at net/ipv4/tcp.c:4552 tcp_sock_=
-warn+0x6/0x20
->  [749619.553969] Modules linked in: sch_fq sunrpc bpf_preload tls act_gac=
-t cls_bpf tcp_diag inet_diag skx_edac nfit libnvdimm x86_pkg_temp_thermal i=
-ntel_powerclamp coretemp kvm_intel iTCO_wdt iTCO_vendor_support kvm evdev s=
-es irqbypass enclosure i2c_i801 i2c_smbus ipmi_si ipmi_devintf ipmi_msghand=
-ler acpi_cpufreq button tpm_crb sch_fq_codel vhost_net tun tap vhost vhost_=
-iotlb virtio_net net_failover failover mpls_gso mpls_iptunnel mpls_router i=
-p_tunnel fou ip6_udp_tunnel udp_tunnel fuse sg nvme mpi3mr scsi_transport_s=
-as nvme_core xhci_pci xhci_hcd loop efivarfs autofs4
->  [749619.678066] Hardware name: XXXXX
->  [749619.695308] RIP: tcp_sock_warn+0x6/0x20
->  [749619.704034] Code: 4d 01 3e 85 c0 0f 84 57 ff ff ff 48 8b 0c 24 44 8b=
- 01 eb 82 e8 eb b7 14 00 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 53=
- <0f> 0b 48 85 ff 0f 85 77 70 14 00 5b c3 66 66 2e 0f 1f 84 00 00 00
->  All code
->  =3D=3D=3D=3D=3D=3D=3D=3D
->     0:  4d 01 3e                add    %r15,(%r14)
->     3:  85 c0                   test   %eax,%eax
->     5:  0f 84 57 ff ff ff       je     0xffffffffffffff62
->     b:  48 8b 0c 24             mov    (%rsp),%rcx
->     f:  44 8b 01                mov    (%rcx),%r8d
->    12:  eb 82                   jmp    0xffffffffffffff96
->    14:  e8 eb b7 14 00          callq  0x14b804
->    19:  66 66 2e 0f 1f 84 00    data16 nopw %cs:0x0(%rax,%rax,1)
->    20:  00 00 00 00
->    24:  0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
->    29:  53                      push   %rbx
->    2a:* 0f 0b                   ud2             <-- trapping instruction
->    2c:  48 85 ff                test   %rdi,%rdi
->    2f:  0f 85 77 70 14 00       jne    0x1470ac
->    35:  5b                      pop    %rbx
->    36:  c3                      retq
->    37:  66                      data16
->    38:  66                      data16
->    39:  2e                      cs
->    3a:  0f                      .byte 0xf
->    3b:  1f                      (bad)
->    3c:  84 00                   test   %al,(%rax)
->         ...
->
->  Code starting with the faulting instruction
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->     0:  0f 0b                   ud2
->     2:  48 85 ff                test   %rdi,%rdi
->     5:  0f 85 77 70 14 00       jne    0x147082
->     b:  5b                      pop    %rbx
->     c:  c3                      retq
->     d:  66                      data16
->     e:  66                      data16
->     f:  2e                      cs
->    10:  0f                      .byte 0xf
->    11:  1f                      (bad)
->    12:  84 00                   test   %al,(%rax)
->         ...
->  [749619.741779] RSP: 0018:ffffc90000d08988 EFLAGS: 00010246
->  [749619.752436] RAX: ffff88814b57f5c0 RBX: ffff8881bd2540c0 RCX: ffffc90=
-000d08a34
->  [749619.766900] RDX: 0000000000000000 RSI: 00000000cda8f4af RDI: ffff888=
-1bd2540c0
->  [749619.781364] RBP: 0000000000000000 R08: ffffc90000d08a38 R09: 0000000=
-0cda8f44f
->  [749619.795831] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000=
-000000000
->  [749619.810300] R13: ffffc90000d08a34 R14: 0000000000011406 R15: 0000000=
-000000000
->  [749619.824788] FS:  0000000000000000(0000) GS:ffff88903f8c0000(0000) kn=
-lGS:0000000000000000
->  [749619.841168] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  [749619.852857] CR2: 000000000007c2e9 CR3: 0000000b82412002 CR4: 0000000=
-0007706e0
->  [749619.867331] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
->  [749619.881800] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
-000000400
->  [749619.896260] PKRU: 55555554
->  [749619.901859] Call Trace:
->  [749619.906927]  <IRQ>
->  [749619.911129] tcp_fastretrans_alert+0x988/0x9e0
->  [749619.920222] ? kmem_cache_free+0x33c/0x3d0
->  [749619.928606] tcp_ack+0x8b4/0x1360
->  [749619.935425] ? __cgroup_bpf_run_filter_skb+0x185/0x440
->  [749619.945910] tcp_rcv_established+0x2f3/0x660
->  [749619.954639] ? sk_filter_trim_cap+0xbc/0x220
->  [749619.963358] tcp_v6_do_rcv+0xbe/0x3e0
->  [749619.970863] tcp_v6_rcv+0xc01/0xc90
-
-Still no symbols (file name : line number).
-
->  [749619.978029] ip6_protocol_deliver_rcu+0xbd/0x450
->  [749619.987453] ip6_input_finish+0x3d/0x60
->  [749619.995313] ip6_input+0xb5/0xc0
->  [749620.001958] ip6_sublist_rcv_finish+0x37/0x50
->  [749620.010851] ip6_sublist_rcv+0x1dd/0x270
->  [749620.018877] ipv6_list_rcv+0x113/0x140
->  [749620.026552] __netif_receive_skb_list_core+0x1a0/0x210
->  [749620.037025] netif_receive_skb_list_internal+0x186/0x2a0
->  [749620.047838] ? napi_gro_complete+0x6c/0xd0
->  [749620.056215] gro_normal_list.part.171+0x19/0x40
->  [749620.065471] napi_complete_done+0x65/0x150
->  [749620.073856] bnxt_poll_p5+0x25b/0x2b0
->  [749620.081369] __napi_poll+0x25/0x120
->  [749620.088537] net_rx_action+0x189/0x300
->  [749620.096224] __do_softirq+0xbb/0x271
->  [749620.103571] irq_exit_rcu+0x97/0xa0
->  [749620.110732] common_interrupt+0x7f/0xa0
->  [749620.118595]  </IRQ>
->  [749620.122964] asm_common_interrupt+0x1e/0x40
->  [749620.131511] RIP: cpuidle_enter_state+0xc2/0x340
->  [749620.141621] Code: 48 89 c5 0f 1f 44 00 00 31 ff e8 f9 8d 73 ff 45 84=
- ff 74 12 9c 58 f6 c4 02 0f 85 38 02 00 00 31 ff e8 b2 36 79 ff fb 45 85 f6=
- <0f> 88 e8 00 00 00 49 63 d6 48 2b 2c 24 48 6b ca 68 48 8d 04 52 48
+I also think it would be more appropriate to modify snprintf slightly
+here to keep memory usage as low as possible, and I will submit an
+optimized version of v2, thanks to Daniel and Andrii for their
+suggestions.
