@@ -2,271 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDC76480C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBD46480CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiLIKPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 05:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S229756AbiLIKSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 05:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLIKPn (ORCPT
+        with ESMTP id S229538AbiLIKSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:15:43 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4841631F85
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 02:15:42 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id p8so6268904lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 02:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BlvfkF2ZFYuFQpxBnIpN0aFK4kWr5DwTIlUFg1Sxm10=;
-        b=iB4EZnlRNYR9XsnIqBEIPTBPZ2s9ORP0ZU5q5t8qP0qfsE1V1SD5UJIlwcXU5e4BFm
-         hjg7dt4F/HGMUh1zYORVDvLvPrIp/6gj8VRMgbyztp9Az9iX1Ai5mGFp2w0jGh3YGAJO
-         F8Pxd+pYMnHp6HwgbBk50hJtPrL0eMR6xW9Sz3tun7+qq7RXyM5F3z1Py3XYMwUC/s+F
-         cSn2n099UHSkGl9tfbf81M/Kde3wmliN5v1T8ZtIhVfoYl5Zmu0VZmd7tI5vllaz/xPF
-         AcF4lNgNIeUKyfuNLO8SiBLRDSFz0bjaGezpNvxlk0M8xzw2u4pp012hc0iPN/6r5bi3
-         rPbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlvfkF2ZFYuFQpxBnIpN0aFK4kWr5DwTIlUFg1Sxm10=;
-        b=a8gj+kW5lDy6O1UiZqLdMFKE/i3GJHbHUgtP9vxmG8XHqHkcWCOOxyJPqc6ptRszD8
-         B8im4ewQuPA5KS1qUddGNSCRi1qGaVj3K3QvY8SXOKwHS1x0R/weoi4BPdhzNdIWApCW
-         dMWsR0AHXeiuw4js2u16gjwV/Amxuh8XLJGG0/fLZ6RTyHkyW/0PjMoS496NTG1ibdf4
-         Crcndm3Q6399DuO+zn3joPgdLF794xUn4f3Rems6gZ4QkFfCNyxg7Wp3hIjEwKhKYq7B
-         uWKZcOo62BGQjkN5UfNFQ+NX+mvyktMoZdb5njYumQxhyXIZb76Yyx2HFLCfgFrLvuGf
-         1SMw==
-X-Gm-Message-State: ANoB5pnC5oerubGbiIv10NwXB1OnCeTKyUwIr0k03K+EV7OUO2eax9E4
-        uGs5uUqwXEwuT4gYecUCl9QMtg==
-X-Google-Smtp-Source: AA0mqf4PV54SFqHCdc0zs8HGqB2QDXjAeslsLxGBJT/SW25dK9NlvFl04szs2leJ2cSdPYldgZKSqg==
-X-Received: by 2002:a05:6512:10c3:b0:4b5:34c4:78a4 with SMTP id k3-20020a05651210c300b004b534c478a4mr1695393lfg.30.1670580939515;
-        Fri, 09 Dec 2022 02:15:39 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a19-20020ac25053000000b004b5789ecdd7sm191371lfm.274.2022.12.09.02.15.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 02:15:39 -0800 (PST)
-Message-ID: <d7d9f3c7-b3e3-1e13-a80f-c7bf7b38a5b1@linaro.org>
-Date:   Fri, 9 Dec 2022 11:15:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 10/12] dt-bindings: mediatek: mt8188: add audio afe
- document
+        Fri, 9 Dec 2022 05:18:45 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2042.outbound.protection.outlook.com [40.107.220.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FAF396C4;
+        Fri,  9 Dec 2022 02:18:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AJ5lZmxqtrH5fvOk3GauwEbdgb71ZawXFrxscb1wO4UdoGnNJi1STJCig0p5//9JZYN8wIUUGXQ5zZHJqLDxA2yI0ktiNIIZjGabyT925bcbTjo0+UCW7bvSSvB1WHhgQcLu7TMkgVEXECjrdx2FQfQcD22n/IHBwnr6yWE21y72ez86hUVDgrKr9lxzxFwrMUtT8VW9rNaZzMMYq/P0S/ZPPmFP1tilNbZiCg+XNifCecFtWBdceto1wExBRG8dWtvaw9qZDc405hvLsuy4IhrTdJy2XqP1nhfiKiPGzm2l1IeHm4vWDM5UTAaSZANguIo5RLiqPcsygkPW+O6Psg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d4lOvDmh1oAEUgdDdYjRDVaOwcEEgWhVUwhP6vr3HMc=;
+ b=FtSJOv0ssTOkxrD6NF3kyFvO+wFazBRIeMsfs/GNuzJJfog6uaoS3YgwtDK19LnBjCnkM+ba3Dm7Hzj5SH6hqPdcoRs+/RMMwpdUKH39rjR0/2prFytZIS4Us2R8RIczEEsoc44ssG0GxG9Y2eEnGoqq3NB0TspXx9m46Ns7ABxef+Kd534sqea0t+xOJAafRF45mhQ8ptf6EZwtGCZCFV5QS5CI3lwaVw7VgZDybPJ/X9a8ZLoe/xGB3EqgNWbrZDuzqQgCclKI9q3IwnszQR2aCf7ii5Pd2aKi4nM/bDVFrf7kAiMNLabTQbIplnQKYWSSG5LbSUH2MYM1HwUk5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d4lOvDmh1oAEUgdDdYjRDVaOwcEEgWhVUwhP6vr3HMc=;
+ b=IHV2nQ7/vPo0Ub0kqz5mfQkD6G511rLN9te8GN0rfdIXxlcvGlC/0uC4YBqda7LHXHgb7rDy+uAfIWzdROqN0TfyN0hTKF1iWHGiQ7FiMS7/jvRtW0nzfjiLndLuqkFIsmwHc4yQnBSfWdGRC4w8NLjA97ZOjhf5fLnJoiV2bigOlHX0qqBvV+1wWM8RTQgRPGJ1zDIjQjSAx00ZtUM6EfaHPuwOY+37WJtQoVi6e6B+WhBAp8UVh8342O9AJDp2VsvPIabsvxXvMrI1RcDvrGz9Q4WaKS7oVmTRTpLM7tbN5f4c2YKBLiTyMCmycdoLi1JsZdcXC5BGVi3yGBXs+g==
+Received: from IA1PR12MB6353.namprd12.prod.outlook.com (2603:10b6:208:3e3::9)
+ by PH8PR12MB6699.namprd12.prod.outlook.com (2603:10b6:510:1ce::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18; Fri, 9 Dec
+ 2022 10:18:40 +0000
+Received: from IA1PR12MB6353.namprd12.prod.outlook.com
+ ([fe80::349c:7f4b:b5a3:fc19]) by IA1PR12MB6353.namprd12.prod.outlook.com
+ ([fe80::349c:7f4b:b5a3:fc19%8]) with mapi id 15.20.5880.014; Fri, 9 Dec 2022
+ 10:18:39 +0000
+From:   Emeel Hakim <ehakim@nvidia.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Raed Salem <raeds@nvidia.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sd@queasysnail.net" <sd@queasysnail.net>,
+        "atenart@kernel.org" <atenart@kernel.org>,
+        "jiri@resnulli.us" <jiri@resnulli.us>
+Subject: RE: [PATCH net-next v4 1/2] macsec: add support for
+ IFLA_MACSEC_OFFLOAD in macsec_changelink
+Thread-Topic: [PATCH net-next v4 1/2] macsec: add support for
+ IFLA_MACSEC_OFFLOAD in macsec_changelink
+Thread-Index: AQHZCvv/CYvpmkSg7ESdruoP4MuPZa5k1xAAgAAAMYCAAH2hEA==
+Date:   Fri, 9 Dec 2022 10:18:39 +0000
+Message-ID: <IA1PR12MB635381D5C6C3ACE64763C8D6AB1C9@IA1PR12MB6353.namprd12.prod.outlook.com>
+References: <20221208115517.14951-1-ehakim@nvidia.com>
+        <20221208183244.0365f63b@kernel.org> <20221208183325.3abe9104@kernel.org>
+In-Reply-To: <20221208183325.3abe9104@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, p.zabel@pengutronix.de
-Cc:     angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221208033148.21866-1-trevor.wu@mediatek.com>
- <20221208033148.21866-11-trevor.wu@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221208033148.21866-11-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR12MB6353:EE_|PH8PR12MB6699:EE_
+x-ms-office365-filtering-correlation-id: d8b73427-e1a5-48b8-bb57-08dad9cebde5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LWp/9zZjdLO8Pc3+E5Zzv6epxoWgDGxkm5CJWpczDrhmaelYUxXD3NC3VI4du27yCNuq0ca9jBSDbdOeEkcj5F8hVZyD7Sv/mkUJqkMnQPbxP/aO9UMgMJx9B5nmJ5teOpptLNPYc74iQr7qgxOfZsbIUYucZCJDB0XyXzayuh50aDNxYG1N+bd0DoP6btry0ei/N/Hi7DSQ1titrgANpR69Opc0O3e+/7kVFsdsiJiEnwxSxnVsUxR2+6VAbQdeKRKapeQDXduACf8XeDbcvL/4ELouQ0bnSuZRIUZ3YBq9OSPx4nBKfUoF1eKhKtj1DJ86jDrwFm0GnQ3ER+OZW8Lh/v33V+LjC3YjLPJA0sgB+j+rkPIn8jgLN424fOHj+TwYOHIJDXsTvubrpYaHJ69/ShzbOEx+Yv5pFdUlJ72pAWRAvk5+3NRKsBkTQxKdL74SDg9CkL1FgoN7x0p4DGjhQ7VjQJLNhVAYPl8zPNlpTCTcJanz+WNg0UXclR6i7DesB/OpA+775XYpMdghtfro3BEzC3wCGj388GMsgzeLulygly/C71bTqLHqvL8Sly22U4Mdil6ODZ5rpnUiLCved8OIpxu7k3SKoKeEjfFysV3NbF2tJNh5H8jeasQRjDVGp0ZwVjMO06A6qwktuTGd4aUarYy6Kup0pyMYtKu0YeQ7TytlZ5m00Qo3iKO2flGbQnrowhI622BNePUbfQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6353.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199015)(76116006)(66476007)(52536014)(66946007)(4326008)(66556008)(64756008)(8676002)(66446008)(5660300002)(4744005)(8936002)(9686003)(41300700001)(26005)(71200400001)(33656002)(478600001)(2906002)(316002)(54906003)(6916009)(7696005)(53546011)(6506007)(186003)(38070700005)(55016003)(83380400001)(122000001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TElZTmZGRzJQanQ1QkNmeWFTWmxkRjFvNlc0aGdZRkxiU0RFQzFkMlZPTnQ5?=
+ =?utf-8?B?RmZTcVNZRkRqQkhmL1AzQ2l2dk9ZK1NOSnJUSHQyMWJkdVQ5ZmZ3K0VteDlt?=
+ =?utf-8?B?eWcxNEhVa21BdzdmWDBpcDd5N2pOUVlTbVFUdzcybkdpdEdGQVFPR2trRWRP?=
+ =?utf-8?B?aGZQemVZbFFRdDZteDNiY2o0aTNwZlgwaXFBd2tZYU93VHVQUlNaWHJDYzVV?=
+ =?utf-8?B?LzlDUVN5T3lHSnd2WURTQWlXdlhRVTFqOGxpM0Q2N1gwRjBWWHlLYXlFUU82?=
+ =?utf-8?B?NVdoS0l0OWZlTDJDNDlYWEhtTy92aTVRM1BiUVRDT0dnangxNHJiRVBZVlk2?=
+ =?utf-8?B?MS9hZndPa2lTOXRrMjFYSkVzbTZaT0lkdXpteVJlYlhJcDlTTWJkSFJCbk1w?=
+ =?utf-8?B?OFoxakV0VWgvaFpTdHJlY1ZNNUJybzhxcmNxTmlMNnZOb1ZSSEFEY3JibDBl?=
+ =?utf-8?B?V0RESE9Tdlc1RWRKc0NqK3UvRnovclJEaDV3TVJZcXVkK2JrS1pkdU0zL2NG?=
+ =?utf-8?B?TDBJYjlORjQ0Z3VBaGtBSVQ2eFI4RmhkMDRNTzhOVEkyRlJ3TUZFR0NGOTJK?=
+ =?utf-8?B?R0xWMGdZMXFqcWN0YmQ4TjQyM3RWTHBjNVlQUEVwQWxLLzdhMHh1emtuVUVi?=
+ =?utf-8?B?U0MwdDRRSjB1MFU5SjNKelYwUEhNNWxoYTZDbElsQ0pmTFBGZ1VXR1puMmRO?=
+ =?utf-8?B?QkdVTWtWUVk5QjczV0ZyZ09WOWhBK044anpGZHh0UE1udDY5dXdvYSt3bzFa?=
+ =?utf-8?B?UElsT3ZmTlNNNFZjcUpaaEVqMXh5TnNhMjdwaW56ajR3QXU4MVNBVFkxQnNC?=
+ =?utf-8?B?bGg0aU9PaWtHVWM4ZFZla3VRV3J4NFBLYUFTSThTZHY2ZUV6Wk9IMzI4aEg0?=
+ =?utf-8?B?dFNRYXM3RkZRd2hhZzJuRURtYytjQ2laNkxsT2p3MFUwdFFqeUNJQ0dONlFu?=
+ =?utf-8?B?ZGFUMHdnak1UR3liSTBZQWpyRG9Mb3NEeDB0bUtwek1lYm9oZjBqTnhaU2Vl?=
+ =?utf-8?B?YWorSVA5b0YycmNSZTZrRFNyUmFDejRiNUgxcHhFaGVjeXN0eGtFUzh0MlhW?=
+ =?utf-8?B?L2Y0am9XenpXZk9IVjFGVlNRU041MVhKd1BvUmVWR3ljWG9Wc0tNRUkrRnZr?=
+ =?utf-8?B?K0syaWk2T0p1alNxdGtrTUludjM2L3poNEhvTFhlMEE0TXFoZGJmSGQ5SjhT?=
+ =?utf-8?B?WHNFcTl4WGJqLzhvUUJkdXZvbWdmeGkvZDJVMlhYcHJZWlgrVWRYaFFZRWth?=
+ =?utf-8?B?UEMvREovUE9kZExGVU1zRHdqYUdzSnFCaTQ4VmNKUDQ4ZWJEcDFDUEdoaWZy?=
+ =?utf-8?B?UHRYYUR0V2dlV0xrYmhGYU9LQ1Z3M042WmhQK2o3ZFY4MFBLV0FNZkExSUJ1?=
+ =?utf-8?B?Y2FXb2orOVVJOS9nKzVQNE82OENLdkNzY3dnR2U3TEh0VXBTandZbkt3cmlh?=
+ =?utf-8?B?VVQwMTlpMVhsZFFGdHowNTdiRWsvZ1FUNWNrdXMySWhtODVLSmoyZE80WC9R?=
+ =?utf-8?B?WGo2cEhHLyt2TnNOSmFPTkFxOUx5MW01ZTQ3U0E1bFVqYlZ4b3FlbkJoRVpm?=
+ =?utf-8?B?R2VlMUpmNVFlQUdpRDBQeWw3dU0vMGZkMnJ5UDVKQnRRd2tJa2dmQ3BpSVpC?=
+ =?utf-8?B?aXB1a09FSHgwYmF2Vk9uWWpac2FqNC9ETG8wbTRVbW8zMkZINFpzSWgydUYw?=
+ =?utf-8?B?UHgrdmdzbHFTbkFhME9sa0lmWEdYclhqVnd0dnVFS1dGZllhZzU3WmlGcHR1?=
+ =?utf-8?B?NXBGeFNtOHZCb3F1Y3hzRjFaZ3NMYWtiVFdvN1VHWUkxVWtIeW5BSmVwa0FD?=
+ =?utf-8?B?a3hWTUF3bVZvLzB4S05laE9ienlJbmJTWFBVVUJjbWtEa3dCaXV3MWQ5OU5T?=
+ =?utf-8?B?WHIzVXB1SlFtczAvVTlsSkcvZHkvVnkzQmpEbGFzMnVFRnluZnN3aWNZT3ZN?=
+ =?utf-8?B?ekl3RW1Yb205WXBHQkJtM0lNbW53ZDdMRTNKbGVsajNFcGN4N3FQMnYzSXZZ?=
+ =?utf-8?B?Nm9TS1pzblF6TGI3aFhGV2xtZnRtUnNOVi91eWVNL1ljbGVvSzJKcWpidGFy?=
+ =?utf-8?B?MmpZWkQ2S1pYamQ2NnVmWHl3ZWlMWnVxY3pHUVVGRU1YOTFMODc3cHZTOTNz?=
+ =?utf-8?Q?6LgQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6353.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8b73427-e1a5-48b8-bb57-08dad9cebde5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 10:18:39.8317
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LaNIa3hWH8/17h/+QC6544yG1jYwlf4C5l/aiRoxOiG5i8MBny++zgKyfJikr8806IZOiu1E/3R1IcTYnZfDsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6699
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 04:31, Trevor Wu wrote:
-> Add mt8188 audio afe document.
-
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../devicetree/bindings/sound/mt8188-afe.yaml | 196 ++++++++++++++++++
->  1 file changed, 196 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8188-afe.yaml b/Documentation/devicetree/bindings/sound/mt8188-afe.yaml
-> new file mode 100644
-> index 000000000000..6ab26494d924
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mt8188-afe.yaml
-
-
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Comment was about filename matching compatible, so with vendor prefix.
-
-> @@ -0,0 +1,196 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mt8188-afe.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek AFE PCM controller for mt8188
-> +
-> +maintainers:
-> +  - Trevor Wu <trevor.wu@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-afe
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: audiosys
-> +
-> +  mediatek,topckgen:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of the mediatek topckgen controller
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: 26M clock
-> +      - description: audio pll1 clock
-> +      - description: audio pll2 clock
-> +      - description: clock divider for i2si1_mck
-> +      - description: clock divider for i2si2_mck
-> +      - description: clock divider for i2so1_mck
-> +      - description: clock divider for i2so2_mck
-> +      - description: clock divider for dptx_mck
-> +      - description: a1sys hoping clock
-> +      - description: audio intbus clock
-> +      - description: audio hires clock
-> +      - description: audio local bus clock
-> +      - description: mux for dptx_mck
-> +      - description: mux for i2so1_mck
-> +      - description: mux for i2so2_mck
-> +      - description: mux for i2si1_mck
-> +      - description: mux for i2si2_mck
-> +      - description: audio 26m clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: clk26m
-> +      - const: apll1_ck
-> +      - const: apll2_ck
-> +      - const: apll12_div0
-> +      - const: apll12_div1
-> +      - const: apll12_div2
-> +      - const: apll12_div3
-> +      - const: apll12_div9
-> +      - const: a1sys_hp_sel
-> +      - const: aud_intbus_sel
-> +      - const: audio_h_sel
-> +      - const: audio_local_bus_sel
-> +      - const: dptx_m_sel
-> +      - const: i2so1_m_sel
-> +      - const: i2so2_m_sel
-> +      - const: i2si1_m_sel
-> +      - const: i2si2_m_sel
-> +      - const: adsp_audio_26m
-> +
-> +patternProperties:
-> +  "^mediatek,etdm-in[1-2]-chn-disabled$":
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 1
-> +    maxItems: 16
-> +    description:
-> +      By default, all data received from ETDM pins will be outputed to
-> +      memory. etdm in supports disable_out in direct mode(w/o interconn).
-> +      User can specify the channel ID which they hope dropping and then
-> +      the specified channel won't be seen on memory.
-
-So we know what are the IDs but it's a mystery what are the values.
-Especially with unique values - how any of these should case that
-channel "won't be seen in memory"?
-
-> +    uniqueItems: true
-> +    items:
-> +      minimum: 0
-> +      maximum: 15
-> +
-> +  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm in mclk output rate for always on case.
-
-How is it different than assigned-clock-rates?
-
-> +
-> +  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm out mclk output rate for always on case.
-> +
-> +  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-in[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm in moudule.
-
-typo: module
-
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-
-I don't get. This suggests that etdm1_out can be clock source of
-etdm-in1. Or etdm1_in can be clock source of etdm-in1... It does not
-make sense...
-
-> +      - 3 # etdm2_out
-> +
-> +  "^mediatek,etdm-out[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm out moudule.
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-> +      - 3 # etdm2_out
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - resets
-> +  - reset-names
-> +  - mediatek,topckgen
-> +  - power-domains
-> +  - clocks
-> +  - clock-names
-> +
-Best regards,
-Krzysztof
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSmFrdWIgS2ljaW5za2kg
+PGt1YmFAa2VybmVsLm9yZz4NCj4gU2VudDogRnJpZGF5LCA5IERlY2VtYmVyIDIwMjIgNDozMw0K
+PiBUbzogRW1lZWwgSGFraW0gPGVoYWtpbUBudmlkaWEuY29tPg0KPiBDYzogbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZzsgUmFlZCBTYWxlbSA8cmFlZHNAbnZpZGlhLmNvbT47DQo+IGRhdmVt
+QGRhdmVtbG9mdC5uZXQ7IGVkdW1hemV0QGdvb2dsZS5jb207IHBhYmVuaUByZWRoYXQuY29tOw0K
+PiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBzZEBxdWVhc3lzbmFpbC5uZXQ7IGF0ZW5hcnRAa2Vy
+bmVsLm9yZzsgamlyaUByZXNudWxsaS51cw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIG5ldC1uZXh0
+IHY0IDEvMl0gbWFjc2VjOiBhZGQgc3VwcG9ydCBmb3INCj4gSUZMQV9NQUNTRUNfT0ZGTE9BRCBp
+biBtYWNzZWNfY2hhbmdlbGluaw0KPiANCj4gRXh0ZXJuYWwgZW1haWw6IFVzZSBjYXV0aW9uIG9w
+ZW5pbmcgbGlua3Mgb3IgYXR0YWNobWVudHMNCj4gDQo+IA0KPiBPbiBUaHUsIDggRGVjIDIwMjIg
+MTg6MzI6NDQgLTA4MDAgSmFrdWIgS2ljaW5za2kgd3JvdGU6DQo+ID4gSSB0aGluayB5b3UncmUg
+anVzdCBtb3ZpbmcgdGhpcyBjb2RlLCBidXQgc3RpbGwuDQo+IA0KPiBBbmQgYnkgImJ5IHN0aWxs
+IiBJIG1lYW4gLSBpdCdzIHN0aWxsIGEgYnVnLCBzbyBpdCBuZWVkcyB0byBiZSBmaXhlZCBmaXJz
+dC4NCg0KVGhlIGNvZGUgYWRkZWQgYnkgdGhvc2UgcGF0Y2hlcyBkb2VzIG5vdCB1c2UgdGhlIHJ0
+bmxfbG9jaywgdGhlIGxvY2sgaXMganVzdCBnZXR0aW5nIG1vdmVkIGFzIHBhcnQgb2Ygc2hhcmlu
+ZyBzaW1pbGFyIGNvZGUsDQpidXQgdGhlIG5ldyBjb2RlIGlzIHN0aWxsIG5vdCB1c2luZyBpdCwg
+SSBkb27igJl0IHRoaW5rIHRob3NlICBwYXRjaGVzIG5lZWQgdG8gd2FpdCB1bnRpbCBhIGZpeCBv
+ZiBhbiBleGlzdGluZyBsb2NraW5nIGlzc3VlIGFzIGxvbmcNCmFzIHRoZSBuZXcgY29kZSBpcyBu
+b3QgaW5zZXJ0aW5nIGFueSBidWdzLg0K
