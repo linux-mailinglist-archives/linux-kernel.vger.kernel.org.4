@@ -2,193 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B3E64889D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B05E64889F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLISsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S229807AbiLISsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiLISr6 (ORCPT
+        with ESMTP id S229691AbiLISsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:47:58 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93621800
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:47:56 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so495203wmh.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:47:56 -0800 (PST)
+        Fri, 9 Dec 2022 13:48:31 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A097E13DDC
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:48:30 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id z18so342876ils.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:48:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/OvMNsAzsgvJI+DZSdj+rRXl8KhhsBZiWxKq1VinuU=;
-        b=jKuZ2r1dZ9JWyv8xEkfsg1ahawfcwPcqDQoraXkbZWZ4QIJ++dVVmyX5gAU4P8Io6r
-         9coPM6MsAWm4lQxNiw38VgBJZcwIGJAWBUMlk1+7gXNnM7m96lun8idFeh5suqj+uhoc
-         HjRULtC/TJ+I5PchhXGQJaeoZh1cEqMvLO7Q6pBzsZYhJZ0FhRlQ/OSU8F+42Sw3VJuR
-         zvVmQSr/ljRQc5kf6d8XW9XseoXr8QlHkBNxMrXDD9+5XYT2j9NWcIjGCu+qon4a82Yh
-         zuq7K6JFlP3qcL9NJivzznEpiEd7O4J4D03rZ+AwNgKi+nTBbUVgg0sy0CmhmwJuD9B/
-         BBJg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gaCkzOJ3JcEKzXNq8HvAtVCsHZl4FsYrpyHDMrGZRq0=;
+        b=DMc3Xh9+cHhAWtN5Nh/3gk4FqGEaN/ZkjSd1lVDsz5idjNhS+Y6Zd7S5bnqOTwuumQ
+         cYWXNQ8wBNYsx37bvuTGY8aIFn0PzuHbdpbIrO9x8HTHTW5oL7CxWgiLAD3nnFgYZ3sM
+         Hqxg2XFZVDTAUr5dkJGnVZXoBPharBXdDWb6e9j4L54EXZwzEEYs6lnDkC76Hvv0czG8
+         UHv0jU14OMQwWFkKaTEnsrH0F/vaRAMf7KP9cFkm/9K0Vf407IX2G4Xk6sTyZiq8KoNN
+         3KE3JqY3SrKqzoyNO0TbmuS27qPvw+JqqFcZkF5mVLSityyfMZTDGU2bJJ8emd9FP086
+         HlBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a/OvMNsAzsgvJI+DZSdj+rRXl8KhhsBZiWxKq1VinuU=;
-        b=zeFgL69caF/PlbPHp/h8H9VFcWv9M35sJh1+SAjN5AKx5L5aNDuInaLpOASMg/Vhn5
-         k6LMVYi4z10pU6ZnjDutUPYiyMFBc2E2MBrGo3rkKTqrqnCX+AZpoUdVFK7Sdqzk8npb
-         Eh3qoeGgnLPP3joyt0PCtQ+Jhd4zJKQisnM3/xqeZUOGRu0VgTLBrqFFUIDmgu7EYzgO
-         wJQpCB5NIQE9uQodO9RiY9F6xejfvxETTVpiFio/TL9NMIJgL/P/+JPHGQ7IwEgC2MM7
-         sODjIrsZwrBV8GF6Tgx06NSK9aBCt5nqJ7bNqV2Knd3+hy/c0SWxEnDyFYh+PYoDmtTf
-         lGnA==
-X-Gm-Message-State: ANoB5pmTPpw21y0GrvDiIf1er/VWO0q5YCuvsC855QcZUMOxRON+2NT4
-        mdruFvwjqEiSk5Z3TmVLSe97jw==
-X-Google-Smtp-Source: AA0mqf4UtXIeSfB9Qa5J05ZKIxiW/RlaRPZKaGNAZ49pGJH6Vt8aX5PWE/7qp5pgk18fXnOeuSAkrg==
-X-Received: by 2002:a05:600c:5012:b0:3cf:6c16:2622 with SMTP id n18-20020a05600c501200b003cf6c162622mr5684378wmr.33.1670611675506;
-        Fri, 09 Dec 2022 10:47:55 -0800 (PST)
-Received: from ?IPV6:2003:d9:9703:3100:a3be:b12f:5235:421? (p200300d997033100a3beb12f52350421.dip0.t-ipconnect.de. [2003:d9:9703:3100:a3be:b12f:5235:421])
-        by smtp.googlemail.com with ESMTPSA id bu26-20020a056000079a00b0024207ed4ce0sm2057346wrb.58.2022.12.09.10.47.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 10:47:55 -0800 (PST)
-Message-ID: <be5a4c10-3b69-1c2d-d413-62f79ccc178b@colorfullife.com>
-Date:   Fri, 9 Dec 2022 19:47:52 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gaCkzOJ3JcEKzXNq8HvAtVCsHZl4FsYrpyHDMrGZRq0=;
+        b=pd2V9mII458/13vjZwnUUt7qNO6PHIKGHH4UNIIJ8NfcB7DhjhjTdNv+/CmVLR3sqy
+         hF6MHwwU3x4xGEo1x5Mqp998h+H78G6fD7nZaEVjQqeqlVHVG8rLBr7A/URC90I7gM/1
+         PcoTClcyhpxpkb2LQ28qXU2+SBUk3tjosVBixBaXc2H/rbAvgRIiCdS2pF5LR6wv0xMo
+         /34mIrt1xXJ63ukW6a/Z4WzSaku2t3rUL9D2pU5TaR5zlxTZ12qCgF7MLFBG93Iry3uv
+         4uF4teBOmcFB2J3ptdBcjPfHNbfMWJ6IqgOQ9vs0FydkuQpkNf0GG7XAEVgVQ7iVo6YB
+         4g3w==
+X-Gm-Message-State: ANoB5pljCIQjfde4j2ydwoN3NYsZejM5eGILcm39bvzPsc1A+FoMlRss
+        u1Cqyb8Y1C+xOCbJxDFXKvCaVOLkDRuExonk/qE8Qw==
+X-Google-Smtp-Source: AA0mqf6co6Vm3Gzd75j8kOBjlZE3Jxhs9jwtmjErxqfhPHm3vYC4r/AWTIoQS9fbyLdLBbRqlkJRjel9rANL1yL7Ykk=
+X-Received: by 2002:a92:6e12:0:b0:302:abfb:51d5 with SMTP id
+ j18-20020a926e12000000b00302abfb51d5mr37028304ilc.196.1670611709743; Fri, 09
+ Dec 2022 10:48:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: Invalid locking pattern in
- Documentation/kernel-hacking/locking.rst?
-To:     "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        1vier1@web.de
-References: <442ecdf402f8e726f2be4ab19c7299d272e27c0b.camel@siemens.com>
-Content-Language: en-US
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <442ecdf402f8e726f2be4ab19c7299d272e27c0b.camel@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201195718.1409782-1-vipinsh@google.com> <20221201195718.1409782-3-vipinsh@google.com>
+ <CANgfPd9Khg2tMAfpj18R39cqzerFE6pu+4YUSrYr3KD5FG9zRA@mail.gmail.com>
+ <CAHVum0cf_AeJ8rZGcWdne=QV6f_+09b=7kJb3xd-9eNiZr75Qg@mail.gmail.com>
+ <CANgfPd9tBncLoVM4BnD5yq2O+=pXBN5_axBOh=bx=zjG7u8T7Q@mail.gmail.com>
+ <CAHVum0f_6UQvcqWAJxDJyL_LN-6ryAXNuh9xY6nFtLxCOMtoXA@mail.gmail.com>
+ <CANgfPd-XkHPZyFsPe75WbUrufLpKtdr1Neri1JrrApQrjRLRJw@mail.gmail.com>
+ <CAHVum0dkKSY9e90xgfBVBHUqntwJOmONK+TYBXFEwg6acvUrAw@mail.gmail.com>
+ <CAHVum0dPRqOmoMQsjV5M0kcaccqTpfwou0zrMj1R1RUYMFBjEg@mail.gmail.com> <Y5J8ArpcVVyBm3CY@google.com>
+In-Reply-To: <Y5J8ArpcVVyBm3CY@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 9 Dec 2022 10:47:53 -0800
+Message-ID: <CAHVum0ezqOaaCzZfcRpSE=pznVx2zQUaqiz34RmAB5s+U=rLFg@mail.gmail.com>
+Subject: Re: [Patch v2 2/2] KVM: x86/mmu: Allocate page table pages on NUMA
+ node of underlying pages
+To:     David Matlack <dmatlack@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
-
-On 12/9/22 13:23, Sverdlin, Alexander wrote:
-> Dear documentation maintainers,
+On Thu, Dec 8, 2022 at 4:06 PM David Matlack <dmatlack@google.com> wrote:
 >
-> the latest version of locking.rst contains the following (since 2005):
+> On Wed, Dec 07, 2022 at 11:05:09AM -0800, Vipin Sharma wrote:
+> > By mistake I started replying to just Ben and realized it after few
+> > exchanges. Adding others. Sorry about that.
+> >
+> > On Wed, Dec 7, 2022 at 10:58 AM Vipin Sharma <vipinsh@google.com> wrote:
+> > >
+> > > On Tue, Dec 6, 2022 at 11:57 AM Ben Gardon <bgardon@google.com> wrote:
+> > > >
+> > > > On Tue, Dec 6, 2022 at 11:18 AM Vipin Sharma <vipinsh@google.com> wrote:
+> > > > >
+> > > > > On Tue, Dec 6, 2022 at 10:17 AM Ben Gardon <bgardon@google.com> wrote:
+> > > > > >
+> > > > > > On Mon, Dec 5, 2022 at 3:40 PM Vipin Sharma <vipinsh@google.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Dec 5, 2022 at 10:17 AM Ben Gardon <bgardon@google.com> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, Dec 1, 2022 at 11:57 AM Vipin Sharma <vipinsh@google.com> wrote:
+> > > > > > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > > > > > > > index 1782c4555d94..4d59c9d48277 100644
+> > > > > > > > > --- a/virt/kvm/kvm_main.c
+> > > > > > > > > +++ b/virt/kvm/kvm_main.c
+> > > > > > > > > @@ -384,6 +384,11 @@ static void kvm_flush_shadow_all(struct kvm *kvm)
+> > > > > > > > >         kvm_arch_guest_memory_reclaimed(kvm);
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > +void * __weak kvm_arch_mmu_get_free_page(int nid, gfp_t gfp_flags)
+> > > > > > > > > +{
+> > > > > > > > > +               return (void *)__get_free_page(gfp_flags);
+> > > > > > > > > +}
+> > > > > > > > > +
+> > > > > > > >
+> > > > > > > > Rather than making this __weak, you could use #ifdef CONFIG_NUMA to
+> > > > > > > > just put all the code in the arch-neutral function.
+> > > > > > > >
+> > > > > > >
+> > > > > > > I am not sure how it will work. Here, I am trying to keep this feature
+> > > > > > > only for x86. This function will be used for all architecture except
+> > > > > > > in x86 where we have different implementation in arch/x86/mmu/mmu.c
+> > > > > > > So, even if CONFIG_NUMA is defined, we want to keep the same
+> > > > > > > definition on other architectures.
+> > > > > > >
+> > > > > > >
+> > > > > >
+> > > > > > Something like:
+> > > > > >
+> > > > > > +void * kvm_arch_mmu_get_free_page(int nid, gfp_t gfp_flags)
+> > > > > > +{
+> > > > > > +       struct page *spt_page;
+> > > > > > +       void *address = NULL;
+> > > > > > +
+> > > > > > +       #ifdef CONFIG_NUMA
+> > > > > > +       if (nid != NUMA_NO_NODE) {
+> > > > > > +               spt_page = alloc_pages_node(nid, gfp, 0);
+> > > > > > +               if (spt_page) {
+> > > > > > +                       address = page_address(spt_page);
+> > > > > > +                       return address;
+> > > > > > +               }
+> > > > > > +       }
+> > > > > > +       #endif // CONFIG_NUMA
+> > > > > > +       return (void *)__get_free_page(gfp);
+> > > > > > +}
+> > > > > >
+> > > > >
+> > > > > 'nid' will be 0 not NUMA_NO_NODE for other architectures. In x86, I am
+> > > > > explicitly setting kvm_mmu_memory_cache->node to NUMA_NO_NODE or
+> > > > > specific desired nodes. In others architectures it will be 0 as struct
+> > > > > will be 0 initialized. __weak avoids initializing nid to NUM_NO_NODE
+> > > > > in other architectures.
+> > > >
+> > > > ooh, I see. It might be worth setting it to NUMA_NO_NODE on other
+> > > > archs as 0 could be kind of misleading.
+> > >
+> > > Discussed offline with Ben.
+> > > Initialization code for cache is in the respective architectures.
+> > > Using "__weak" avoids touching code in other architectures.
 >
-> "Manfred Spraul points out that you can still do this, even if the data
-> is very occasionally accessed in user context or softirqs/tasklets. The
-> irq handler doesn't use a lock, and all other accesses are done as so::
+> But it's still a bit gross to have node=0 in struct
+> kvm_mmu_memory_cache for other architectures, even if it doesn't happen
+> to be misused in this series.
 >
->          spin_lock(&lock);
->          disable_irq(irq);
-> "
+> I would just bite the bullet and modify the other architectures. Do it
+> in a precusor patch where you just add node to struct
+> kvm_mmu_memory_cache and initialize it to NUMA_NO_NODE across all
+> architectures, probably with a common macro e.g.
 >
-> Isn't it "sleeping in atomic" actually because of the sleeping
-> disable_irq()?
-
-Good catch!
-
-The documentation of disable_irq() claims that the function is safe to 
-be called from IRQ context (for careful callers)
-
-But it calls synchronize_irq(). And synchronize_irq() claims that the 
-function can be called only from preemptible code.
-
-The change was in 2009:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.1-rc8&id=3aa551c9b4c40018f0e261a178e3d25478dc04a9 
-
-
-@Thomas/@Ingo: What do we want?
-
-Declare disable_irq()&synchronize_irq() as safe from irq context only if 
-no threaded irq handlers are used?
-
-Or declare both function as preemptible context only?
-
-
-The update for locking.rst would be to switch from spin_lock() to 
-mutex_lock().
-
-
-https://elixir.bootlin.com/linux/latest/source/kernel/irq/manage.c#L126
-
-> /**
-> * synchronize_irq - wait for pending IRQ handlers (on other CPUs)
-> * @irq: interrupt number to wait for
-> *
-> * This function waits for any pending IRQ handlers for this interrupt
-> * to complete before returning. If you use this function while
-> * holding a resource the IRQ handler may need you will deadlock.
-> *
-> * Can only be called from preemptible code as it might sleep when
-> * an interrupt thread is associated to @irq.
-> *
-> * It optionally makes sure (when the irq chip supports that method)
-> * that the interrupt is not pending in any CPU and waiting for
-> * service.
-> */
-> void  synchronize_irq 
-> <https://elixir.bootlin.com/linux/latest/C/ident/synchronize_irq>(unsigned  int  irq)
-> {
-> 	struct  irq_desc <https://elixir.bootlin.com/linux/latest/C/ident/irq_desc>  *desc  =  irq_to_desc 
-> <https://elixir.bootlin.com/linux/latest/C/ident/irq_to_desc>(irq);
+> #define INIT_KVM_MMU_MEMORY_CACHE(_cache) do { \
+>         (_cache)->node = NUMA_NO_NODE; \
+> } while (0)
 >
-> 	if  (desc)  {
-> 		__synchronize_hardirq 
-> <https://elixir.bootlin.com/linux/latest/C/ident/__synchronize_hardirq>(desc,  true <https://elixir.bootlin.com/linux/latest/C/ident/true>);
-> 		/*
-> * We made sure that no hardirq handler is
-> * running. Now verify that no threaded handlers are
-> * active.
-> */
-> 		wait_event 
-> <https://elixir.bootlin.com/linux/latest/C/ident/wait_event>(desc->wait_for_threads 
-> <https://elixir.bootlin.com/linux/latest/C/ident/wait_for_threads>,
-> 			!atomic_read 
-> <https://elixir.bootlin.com/linux/latest/C/ident/atomic_read>(&desc->threads_active 
-> <https://elixir.bootlin.com/linux/latest/C/ident/threads_active>));
-> 	}
-> }
-> EXPORT_SYMBOL 
-> <https://elixir.bootlin.com/linux/latest/C/ident/EXPORT_SYMBOL>(synchronize_irq 
-> <https://elixir.bootlin.com/linux/latest/C/ident/synchronize_irq>);
+> Then, you can follow Ben's approach and avoid the __weak function.
 
-https://elixir.bootlin.com/linux/latest/source/kernel/irq/manage.c#L716
-
-> /**
-> * disable_irq - disable an irq and wait for completion
-> * @irq: Interrupt to disable
-> *
-> * Disable the selected interrupt line. Enables and Disables are
-> * nested.
-> * This function waits for any pending IRQ handlers for this interrupt
-> * to complete before returning. If you use this function while
-> * holding a resource the IRQ handler may need you will deadlock.
-> *
-> * This function may be called - with care - from IRQ context.
-> */
-> void  disable_irq 
-> <https://elixir.bootlin.com/linux/latest/C/ident/disable_irq>(unsigned  int  irq)
-> {
-> 	if  (!__disable_irq_nosync 
-> <https://elixir.bootlin.com/linux/latest/C/ident/__disable_irq_nosync>(irq))
-> 		synchronize_irq 
-> <https://elixir.bootlin.com/linux/latest/C/ident/synchronize_irq>(irq);
-> }
->
---
-
-     Manfred
-
+Okay, 2 votes for NUMA_NO_NODE and 1 for __weak. I will remove the
+__weak and modify other architecture code.
