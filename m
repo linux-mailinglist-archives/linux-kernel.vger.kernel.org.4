@@ -2,78 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333A2647FF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33C4647FFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiLIJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S230022AbiLIJPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiLIJM1 (ORCPT
+        with ESMTP id S229915AbiLIJPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:12:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0326A743;
-        Fri,  9 Dec 2022 01:12:09 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CE83C1FDB3;
-        Fri,  9 Dec 2022 09:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670577127; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TBaG2t6y9Vvz1zj0bl0wpZaZRcvZHGDd3YjfoNFrqRg=;
-        b=doMnr8Wtu4dbzgG730w/sKnsA3p2EwEclybKIQGl1IxXhx9ifEhx6w8CVUFnJdUfVybIKE
-        Q+6HaBmf8K5hCUXk3xRtgsPtr32wpSdPlTDCy4OKx/CG9tNTj2Xv/eC5nGQZZ1D5OGkHaj
-        1kRalG2xC6VMHcM19rAFblF+Tj0tUVg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A73412C14F;
-        Fri,  9 Dec 2022 09:12:07 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 10:12:07 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH] livepatch: Call klp_match_callback() in
- klp_find_callback() to avoid code duplication
-Message-ID: <Y5L75x+W1NrWCOcm@alley>
-References: <20221207032304.2017-1-thunder.leizhen@huawei.com>
+        Fri, 9 Dec 2022 04:15:06 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662FB63BB7;
+        Fri,  9 Dec 2022 01:15:05 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id m5so2029567qkg.0;
+        Fri, 09 Dec 2022 01:15:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkNH16lJK5cpr24W+e3TLKkQ6NF2d3FSfHC2JAxh0HQ=;
+        b=Vf7EfaprR2FWXYZoEFr4nULXvhAg4vH8fh190XoleOgARKjNI6S/4gBKL+lr7kpPCA
+         k6ZYcRYGca2Z6aEQJ9BhJQAMSgRCP1hNO0/u1IjGXeeWEJUsvesHDOhZmqQpw/dMT0uo
+         MEINBE9gU5aypPv0dsAuRSUYpvIE3JvRWFB6EgV2OP3v7WTwfKAustfbnW+N/7k5n3ME
+         Xg02XDDsh3RMWW97xp0dawrQ3l2kWh2uZ0GXkGJgLEjmgTszL0jHokHt8AzUDv72f1uC
+         yqu1Y61pSnjVgMioJt7GPK9R5EyAtAVEt6hrHvurPpxPg3dYqKZhkGLwX51CtPNYOW42
+         jz0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vkNH16lJK5cpr24W+e3TLKkQ6NF2d3FSfHC2JAxh0HQ=;
+        b=WJzca9eR2aYdL+6IkcrpZhSbvcWy9Sa974Tjx4l01Cqg64TQZ1DhI2QJgW/BM5Jnc0
+         +bvfFfTskM3rCOPgpeXNszYmU+oZZ7ph4VUB5KiVNPMjkwH6kqC+C/BuGUuKbUGJZ3Iz
+         gktRrAP34C7D500MnGIBl7bW3jDcIVLkm6luIGuP26zYz2kzOP5FA1bGaf8W0Eyda7/8
+         XtZvKeRT2zinrEyPLKienjXAohdeuVpQTni95e4lRsXA46n1NaPuvdPzbrH1tcEwEpBz
+         wylssH+1YaTrryfq6LSF1UNbVrLtgBwST4xQ/TrXKF8Sm4Ol7OsYUCIfGmmaUSvYRa1h
+         KKIA==
+X-Gm-Message-State: ANoB5plcDx6LDAZlWM/grpyfQIZ772dlT6R4Buy2sunXiXQcPoaEFd1T
+        G0p2cK2TduKQ/3jQpeEaDYPp5oM0fMYh37mZGe0=
+X-Google-Smtp-Source: AA0mqf76KaU82jdzpPytS9dB0ixtuhTvtbM0RObogfcPc99c9cNqkOE5Bgt9rgcbICQRaUjO5wAFpKRZTLcL+7HlVlM=
+X-Received: by 2002:a05:620a:1aa3:b0:6fa:b56f:7ede with SMTP id
+ bl35-20020a05620a1aa300b006fab56f7edemr83702189qkb.383.1670577304190; Fri, 09
+ Dec 2022 01:15:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207032304.2017-1-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <202212091545310085328@zte.com.cn>
+In-Reply-To: <202212091545310085328@zte.com.cn>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 9 Dec 2022 11:14:27 +0200
+Message-ID: <CAHp75Vcp_RmibkkSW1dCcypKU3okyRXbj8JrbRVFtErhuuAWJg@mail.gmail.com>
+Subject: Re: [PATCH linux-next v3] x86/platform/uv: use strscpy to instead of strncpy()
+To:     yang.yang29@zte.com.cn
+Cc:     steve.wahl@hpe.com, mike.travis@hpe.com, dimitri.sivanich@hpe.com,
+        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu.panda@zte.com.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-12-07 11:23:04, Zhen Lei wrote:
-> The implementation of function klp_match_callback() is identical to the
-> partial implementation of function klp_find_callback(). So call function
-> klp_match_callback() in function klp_find_callback() instead of the
-> duplicated code.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+On Fri, Dec 9, 2022 at 9:45 AM <yang.yang29@zte.com.cn> wrote:
+>
+> From: Xu Panda <xu.panda@zte.com.cn>
+>
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL terminated strings.
 
-Thanks for cleaning this.
+...
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+> +       strscpy(arg, val, strnchrnul(val, ACTION_LEN - 1, '\n') - val + 1);
 
-Best Regards,
-Petr
+Instead of  -1 +1 you should simply use the sizeof(arg) as I mentioned.
+
+       strscpy(arg, val, strnchrnul(val, sizeof(arg), '\n') - val);
+
+The returned pointer by strnchrnul() either points to the '\n' or to
+'\0' and when we subtract pointer to the start we will get the exact
+length of the string. In case it equals ACTION_LEN the last character
+will be replaced by '\0'.
+
+Where am I mistaken?
+
+-- 
+With Best Regards,
+Andy Shevchenko
