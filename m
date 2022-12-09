@@ -2,180 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516FB6483C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51D66483CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiLIO22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S229853AbiLIOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiLIO2T (ORCPT
+        with ESMTP id S229724AbiLIOaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:28:19 -0500
-Received: from out-143.mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C3A23BD4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:28:17 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670596095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L5PBJXFzAfljLL5GpFuCZtP5a/X5elUo4Ca2Dzwt22Y=;
-        b=mnihHuRTQhvfXW58YLWebiCzuZVttBgCe0CuYAQ4KmPqSErVy/jvpK2M6SeT+oXEFJX2EW
-        mbOTmMwzSNghV5XF4WLLO/vNPbZXBlsMlDHPzCh5Dun9J9GqOQCFbbiP9wRUHhn1yHV19v
-        BegeO8C3lX7mUD+A7xTP1A7YTstX6rI=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero
- support
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <7d72778e-7305-18e9-edf4-ed55a98aa7e2@nvidia.com>
-Date:   Fri, 9 Dec 2022 22:27:38 +0800
-Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>, tsahu@linux.ibm.com,
-        David Hildenbrand <david@redhat.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <00222280-DBDD-49A3-92A5-05112359AE30@linux.dev>
-References: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
- <92965844-c430-8b8e-d9f1-705d7578bceb@nvidia.com>
- <ec8f46ca-9ea6-4567-2038-22f6d3000ed5@oracle.com>
- <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
- <0187f9c2-e80a-9cde-68bc-c9bdbd96b6fe@oracle.com>
- <Y5I78soNmAFv7pi8@casper.infradead.org> <Y5JCi3h8bUzLf3cu@monkey>
- <2723541a-79aa-c6b5-d82c-53db76b78145@oracle.com>
- <e86ca90f-e59e-3851-7225-b5f596ad04b9@nvidia.com>
- <36ddac45-ecd0-e2d2-e974-8c85ca503053@oracle.com>
- <20cc2088-b66e-28d1-a529-414e82146336@nvidia.com>
- <434a111c-7f1a-0018-6bd2-561cb382deea@oracle.com>
- <7d72778e-7305-18e9-edf4-ed55a98aa7e2@nvidia.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-X-Migadu-Flow: FLOW_OUT
+        Fri, 9 Dec 2022 09:30:20 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D5426AE9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:30:18 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vp12so11886269ejc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=message-id:cc:to:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ahhIweHST2fVWw+QNEKcMc3YDUt5JUbQsb01fgMnKM=;
+        b=MKpLKku0oJT9B2Npz5IZA6cYSnr4/ZP33ndTpDqKEYHYny24sutnHlzL4pWa59heWc
+         QvaDZhuvjK+lzaMUw2yiCf2pSApJoGZlNyJTYZ89f+IXOsVH09yJmhzNuz32sJLY7hWZ
+         pwE2GI2KSgZ5hCKPQHmXxX7iVUJpibjfs5OdSfQzL8Kp4aUu2MmAu4FHuibFtoZQN39Z
+         /O1Yh5kCLlF1C04pyQK8eCKmrKAtHWMzIxPMFUADPduIXN0C4s6VHy566FxiFoWWEBAc
+         hYhMhO4qLjr1XJJMxzNnEm/ofqFEimHMmY6Wv1d1bAeR4N1wkKgxu68dG5ysOcgwu7mq
+         1rZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:cc:to:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ahhIweHST2fVWw+QNEKcMc3YDUt5JUbQsb01fgMnKM=;
+        b=PBdLrcOPmd2RaJVwFXHW8daO8XMSBmMXH1NYJVCS4aEs6OFJ8mvOCHrgx//e2RiAp0
+         9LcFcw2+gpWpjQ3ugeGj1RspLe4iTQUrEE8X9kKPqlP4nrYAo8F2z5CCPlZ5SnxtTkG/
+         ZrfzjaAjlCFff/jOz2/Nd2Rvjaed38MG5zCe69SXcu1mp3n5zv4szOkeupwkNXIqAJjd
+         cygBnIgHGrMj0lWwmlkHv44ZOPdKWgll2uv/k4QXVsAzjr88uVxFunMFOx+055jes78D
+         kKTRI//47T7g+twdfQvS9iPnCchWMZM670z9Dmtw6mzFvXeGikI2snopQp5fW7M8uOnZ
+         n7Rg==
+X-Gm-Message-State: ANoB5pnL7jY5dxKzw2wi92ti0Hn6P4Zbm69dwF83+g/lOiwDoVHazPzv
+        vEU4mZrjedGmkYHNTNe5X9J7dA==
+X-Google-Smtp-Source: AA0mqf7k6k5YG+Dp6ty81YR5OtHUag6/ksIZw1U6zjW68jA+uY5YSPGhIBQk2kcKxxdeh48jIBvYkQ==
+X-Received: by 2002:a17:906:fcd8:b0:7c0:b66b:9ec0 with SMTP id qx24-20020a170906fcd800b007c0b66b9ec0mr4884778ejb.16.1670596217069;
+        Fri, 09 Dec 2022 06:30:17 -0800 (PST)
+Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id kx17-20020a170907775100b007c0d6b34d54sm610520ejc.129.2022.12.09.06.30.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 06:30:16 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Date:   Fri, 09 Dec 2022 15:29:47 +0100
+Subject: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Message-Id: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+X-Mailer: b4 0.11.0-dev-64ef0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+in the bindings so the existing dts can validate successfully.
 
+Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+sm8450: add Inline Crypto Engine registers and clock") so move the
+compatible to the correct if.
 
-> On Dec 9, 2022, at 06:39, John Hubbard <jhubbard@nvidia.com> wrote:
->=20
-> On 12/8/22 14:33, Sidhartha Kumar wrote:
->> On 12/8/22 2:14 PM, John Hubbard wrote:
->>> On 12/8/22 14:12, Sidhartha Kumar wrote:
->>>> On 12/8/22 2:01 PM, John Hubbard wrote:
->>>>> On 12/8/22 13:58, Sidhartha Kumar wrote:
->>>>>> Thanks John, Mike, Matthew, and Muchun for the feedback.
->>>>>>=20
->>>>>> To summarize this discussion and outline the next version of this =
-patch, the changes I'll make include:
->>>>>>=20
->>>>>> 1) change the name of folio_set_compound_order() to =
-folio_set_order()
->>>>>> 2) change the placement of this function from mm.h to =
-mm/internal.h
->>>>>> 3) folio_set_order() will set both _folio_order and =
-_folio_nr_pages and handle the zero order case correctly.
->>>>>> 4) remove the comment about hugetlb's specific use for zero =
-orders
->>>>>> 5) improve the style of folio_set_order() by removing ifdefs from =
-inside the function to doing
->>>>>>=20
->>>>>> #ifdef CONFIG_64BIT
->>>>>>   static inline void folio_set_order(struct folio *folio,
->>>>>>                   unsigned int order)
->>>>>>   {
->>>>>>       VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
->>>>>=20
->>>>> Sounds good, except for this part: why is a function named
->>>>> folio_set_order() BUG-ing on a non-large folio? The naming
->>>>> is still wrong, perhaps?
->>>>>=20
->>>>=20
->>>> This is because the _folio_nr_pages and _folio_order fields are =
-part of the first tail page in the folio. folio_test_large returns if =
-the folio is larger than one page which would be required for setting =
-the fields.
->>>=20
->>> OK, but then as I said, the name is wrong. One can either:
->>>=20
->>> a) handle the non-large case, or
->>>=20
->>> b) rename the function to indicate that it only works on large =
-folios.
->>>=20
->> Discussed here[1], the BUG_ON line seemed more appropriate over
->> if (!folio_test_large(folio))
->>     return;
->> as the misuse would not be silent. I think I would be against =
-renaming the function as I don't see any large folio specific function =
-names for other accessors of tail page fields. Would both the BUG_ON and =
-return on non-large folio be included then?
->=20
-> Actually, if you want the "misuse to not be silent", today's =
-guidelines
-> would point more toward WARN and return, instead of BUG, btw.
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+(no cover subject)
 
-=46rom you advise, I think we can remove VM_BUG_ON and handle non-zero
-order page, something like:
+The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+and sa8540p-ride.dtb:
 
-static inline void folio_set_order(struct folio *folio,
-		                   unsigned int order)
-{
-	if (!folio_test_large(folio)) {
-		WARN_ON(order);
-		return;
-	}
+  Unevaluated properties are not allowed ('required-opps', 'dma-coherent' were unexpected)
 
-	folio->_folio_order =3D order;
-#ifdef CONFIG_64BIT
-	folio->_folio_nr_pages =3D order ? 1U << order : 0;
-#endif
-}
+Maybe someone who knows something about this can handle this?
 
-In this case,
+And the patch adding qcom,sm6115-ufshc hasn't been applied yet.
+---
+ Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-  1) we can handle both non-zero and zero (folio_order() works as well
-     for this case) order page.
-  2) it can prevent OOB for non-large folio and warn unexpected users.
-  3) Do not BUG.
-  4) No need to rename folio_set_order.
+diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+index f2d6298d926c..58a2fb2c83c3 100644
+--- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+@@ -102,7 +102,6 @@ allOf:
+               - qcom,sc8280xp-ufshc
+               - qcom,sm8250-ufshc
+               - qcom,sm8350-ufshc
+-              - qcom,sm8450-ufshc
+     then:
+       properties:
+         clocks:
+@@ -130,6 +129,7 @@ allOf:
+               - qcom,sdm845-ufshc
+               - qcom,sm6350-ufshc
+               - qcom,sm8150-ufshc
++              - qcom,sm8450-ufshc
+     then:
+       properties:
+         clocks:
+@@ -149,6 +149,12 @@ allOf:
+         reg:
+           minItems: 2
+           maxItems: 2
++        reg-names:
++          items:
++            - const: std
++            - const: ice
++      required:
++        - reg-names
+ 
+   - if:
+       properties:
 
-What do you think?
+---
+base-commit: f925116b24c0c42dc6d5ab5111c55fd7f74e8dc7
+change-id: 20221209-dt-binding-ufs-2d7f64797ff2
 
-Thanks.
-
->=20
-> I don't think that a survey of existing names is really the final word =
-on what
-> to name this. Names should be accurate, even if other names are less =
-so. How
-> about something like:
->=20
->    large_folio_set_order()
->=20
-> ?
->=20
->> [1]: =
-https://lore.kernel.org/linux-mm/20221129225039.82257-1-sidhartha.kumar@or=
-acle.com/T/#m98cf80bb21ae533b7385f2e363c602e2c9e2802d
->>>=20
->>> thanks,
->=20
-> thanks,
-> --=20
-> John Hubbard
-> NVIDIA
-
-
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
