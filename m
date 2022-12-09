@@ -2,140 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD83647B25
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC44647B2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiLIBJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
+        id S229646AbiLIBMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLIBI7 (ORCPT
+        with ESMTP id S229462AbiLIBMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:08:59 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA8A7E818
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:08:58 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so3330001pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 17:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R0W5fcABi4X+T/jYwfg3acG+mAXpKXLqoOLMcVDvb94=;
-        b=YriPTaeIiA+dLmTSSSXERGxZoMyfxJhoF2Q8RM1j7icfTqEwdCfNmwHRywZVksID9N
-         yt3L9g633vwLWxIZEY1PievSOwRoolVjFuC2ekFqhXWDrbAgmSyOG8E61xcBei/0WmkD
-         n3zTXHfaLve5+vNvZO0l7Nq5ja3MPhbw/Zy0/wgqCgHFNdKS3cxS/4qNYhNLqDue4ooc
-         J5EXd9M3CGckvr5AeCg01H05bHqrWl9oIldXxZyKGqNhqjj4kHaNhCQp1c7egMM531/g
-         0N6aof8FoDZ0/n1nLpXmasPJ3LYaX/UAhpwEXGBjpWrXiOyYtqQVHTcsdM7gm/cVbdTY
-         W13w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R0W5fcABi4X+T/jYwfg3acG+mAXpKXLqoOLMcVDvb94=;
-        b=F452eYe6awcdXdPu/jqUEk4TqVLrlrxVEp25k6uzg1AKBey5x2kGtJ7QkFjo72AC1a
-         bmK0MGs1GhrkO/xxMxFAHUiXs1YEu25FS3wrKyr9o6j/NAqrytRjf9tUo49w7UTnF9xs
-         39vkfJHBTHkCA586wFP4cQ8W5nIwwWzv8PQfl/2c1f4SAxCE1LtaTc+hxfHZOkZ09vPS
-         KTGlG0R+7X1jAd6sM9fa3uI+lfsvlXHzIyLtRATayEeKP5cHyecOm7vp85/RAEVQgxpG
-         hT7/Xw66dYn0JfiAh8bjkytBMjmXRzx+yZd9bJrGueBkTKwv0NAnOUSdj1YYdQYN3dVv
-         VCug==
-X-Gm-Message-State: ANoB5pnJmg5wR6C/kQRlNM/JYE++lHa0OZSjKj0BdAoAe4mMWQ4ro6pO
-        hKUTRmF7ueBfN/NL6RaK8uRVGA==
-X-Google-Smtp-Source: AA0mqf7592VdpFGEsXHXafhoIIzr0OlDlMvX/sxUwlVGqoBDiQgVEZPiR3YzSXTZCX1tcoMfJ2vdoQ==
-X-Received: by 2002:a17:902:d491:b0:189:858f:b5c0 with SMTP id c17-20020a170902d49100b00189858fb5c0mr1689887plg.0.1670548137442;
-        Thu, 08 Dec 2022 17:08:57 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902d2c600b00189e1522982sm51067plc.168.2022.12.08.17.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 17:08:57 -0800 (PST)
-Date:   Fri, 9 Dec 2022 01:08:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ricardo Koller <ricarkol@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
- into guest memory
-Message-ID: <Y5KKpQSd8H88vDoH@google.com>
-References: <20221207214809.489070-1-oliver.upton@linux.dev>
- <20221207214809.489070-3-oliver.upton@linux.dev>
- <Y5EoZ5uwrTF3eSKw@google.com>
- <Y5EtMWuTaJk9I3Bd@google.com>
- <Y5EutGSjkRmdItQb@google.com>
- <Y5Exwzr6Ibmmthl0@google.com>
- <Y5IxNTKRnacfSsLt@google.com>
- <Y5I0paok+dvTtrkt@google.com>
- <Y5I/xiFMLVbpAZj+@google.com>
+        Thu, 8 Dec 2022 20:12:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A9B80A0E;
+        Thu,  8 Dec 2022 17:12:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8D406203F;
+        Fri,  9 Dec 2022 01:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F9FC433F2;
+        Fri,  9 Dec 2022 01:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670548342;
+        bh=Q37W1vLJUGba/GKJcAqRPtnLC0ooux4QhJ6D99IJvhs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ZI661ixsVRMEo2OEh2JptvfA43/sySTL9PIV5OGjqqz8AXWluQyKtbzcL7VzvqpA6
+         tDzRF+77RWwnHY1u2wgaGEAze1zzKKeVs/I+dPCp6t8UU/uEUnkuCMVEE6aRwU6YnQ
+         mLnNQxauxZhpj817bP0+qn9KlAzxQRNWqW95ZkGuKPiUVpuqoE0jxJqsz7hxxDxKFg
+         DhGyx1E5dviHdq1EW9Ct5XCg/6U0sHJ5sOQhksFy9Y98gAa0m1/QhibqTW5q6E5oGG
+         YwgUuAMVlJ171/Y8Bf925ON8M1wRd3QC/eyUBtWXiXdgMIzisI8pIR04JBNF8Ho0xP
+         gQgjYVhBy15tQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5I/xiFMLVbpAZj+@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221123161921.81195-1-conor@kernel.org>
+References: <20221123161921.81195-1-conor@kernel.org>
+Subject: Re: [PATCH] clk: microchip: enable the MPFS clk driver by default if SOC_MICROCHIP_POLARFIRE
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Conor Dooley <conor@kernel.org>
+Date:   Thu, 08 Dec 2022 17:12:19 -0800
+User-Agent: alot/0.10
+Message-Id: <20221209011222.04F9FC433F2@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022, Ricardo Koller wrote:
-> On Thu, Dec 08, 2022 at 07:01:57PM +0000, Sean Christopherson wrote:
-> > On Thu, Dec 08, 2022, Ricardo Koller wrote:
-> > > On Thu, Dec 08, 2022 at 12:37:23AM +0000, Oliver Upton wrote:
-> > > > On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
-> > > > > > Even still, that's just a kludge to make ucalls work. We have other
-> > > > > > MMIO devices (GIC distributor, for example) that work by chance since
-> > > > > > nothing conflicts with the constant GPAs we've selected in the tests.
-> > > > > > 
-> > > > > > I'd rather we go down the route of having an address allocator for the
-> > > > > > for both the VA and PA spaces to provide carveouts at runtime.
-> > > > > 
-> > > > > Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
-> > > > > by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
-> > > > > will yield very explicit asserts, which IMO is better than whatever might go wrong
-> > > > > with a carve out.
-> > > > 
-> > > > Perhaps the use of the term 'carveout' wasn't right here.
-> > > > 
-> > > > What I'm suggesting is we cannot rely on KVM memslots alone to act as an
-> > > > allocator for the PA space. KVM can provide devices to the guest that
-> > > > aren't represented as memslots. If we're trying to fix PA allocations
-> > > > anyway, why not make it generic enough to suit the needs of things
-> > > > beyond ucalls?
-> > > 
-> > > One extra bit of information: in arm, IO is any access to an address (within
-> > > bounds) not backed by a memslot. Not the same as x86 where MMIO are writes to
-> > > read-only memslots.  No idea what other arches do.
-> > 
-> > I don't think that's correct, doesn't this code turn write abort on a RO memslot
-> > into an io_mem_abort()?  Specifically, the "(write_fault && !writable)" check will
-> > match, and assuming none the the edge cases in the if-statement fire, KVM will
-> > send the write down io_mem_abort().
-> 
-> You are right. In fact, page_fault_test checks precisely that: writes on
-> RO memslots are sent to userspace as an mmio exit. I was just referring
-> to the MMIO done for ucall.
+Quoting Conor Dooley (2022-11-23 08:19:22)
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> With the intent of removing driver selects from Kconfig.socs in
+> arch/riscv, essential drivers that were being selected there could
+> instead by enabled by defaulting them to the value of the SoC's Kconfig
+> symbol.
+>=20
+> Do so here & drop the depend on RISC-V - the SOC_ symbols are only
+> defined there anyway.
+>=20
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
 
-To clarify for others, Ricardo thought that x86 selftests were already using a
-read-only memslot for ucalls, hence the confusion.
-
-> Having said that, we could use ucall as writes on read-only memslots
-> like what x86 does.
-
-+1.  x86 currently uses I/O with a hardcoded port, but theoretically that's just
-as error prone as hardcoding a GPA, it just works because x86 doesn't have any
-port I/O tests.
-
-Ugh, and that made me look at sync_regs_test.c, which does its own open coded
-ucall.  That thing is probably working by dumb luck at this point.
+Applied to clk-next
