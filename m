@@ -2,117 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FAA86484BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779976484C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiLIPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S230217AbiLIPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiLIPLv (ORCPT
+        with ESMTP id S230246AbiLIPL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:11:51 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6041F84255
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:11:48 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b13so7498715lfo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:11:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7cuUWzalGLeE3U/K66CMEQVIJgCrRwDmBLE6q4R3bQQ=;
-        b=O50DfcpCmh/95hsBmIq4ezUYhOmXILd+8P/BZDcOZHpbQa+wNnV1R5daYSfIMEKqEl
-         qBli7kSxAExZi5vJg4or3a7jDyHQAXTz2EPAjRQRLGzTgfDoykJ3063Mwoa4i4R2ju2S
-         OMBp3EKAEh4l2n6pBIkCCobTu8qFRrRrtNUtKfHP44I3ar6RHWBW/iQRymjpYNj2uvfz
-         AohNzZWIywFGMCBkHAhWZGCgCtb5PhsN8x7BsjBs/erDxKKicTmbzN9tdiovn1/aaImb
-         E2naBnMqxuDwFGpK2ZpkJg6iamp4fPmAP9KTkuNryTouapq/ON8RQmHH1ld2n9xhoOVB
-         QRNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7cuUWzalGLeE3U/K66CMEQVIJgCrRwDmBLE6q4R3bQQ=;
-        b=lrqUOH1khVvnNQBADd2EXZtzCC+WqUeBuqTh16D0MBV2MTIrto5KK7NJAmnYOgY+0Y
-         GOsxPP0Al8wOqDwQwpx+tWifFXqnb6hYWRLyzpKejYJQ7Mn0seZqoRzd2RV0FNA7pwu1
-         DOGCgAUyJNqyQBotOtdbBL/lkyk5vS80x2gPYTsezT7wRCuKBx1rQl5+12+t6UsXl0zx
-         gNUe7CJ76ANbGIEd2MlJGhX94TfTPQx1HuOp8lNYMJDVaMWQBya4iZf3lfUh0+Q09RqP
-         NDQ8wQvafWTgD69t6Bo6n9wH94q20GOk2+PrPzsHOFHFRtBxWfQQsAqpe0GzpMCHfLEc
-         To/w==
-X-Gm-Message-State: ANoB5pna5xzsucfcXKhQlS3j14zxPV27NuwDoQCqmMNr9MwcyG+sKF3L
-        21ZYxvHQE7Dp5pL1zgvE0i4c3g==
-X-Google-Smtp-Source: AA0mqf58IgWVzN5mqZ7Bf20XMCGVYjy5o/MHY56iAFYEDVMalm0AKxvwtUjT5a3UKzEG221l1DLUYg==
-X-Received: by 2002:a05:6512:1318:b0:4a5:3735:9cc5 with SMTP id x24-20020a056512131800b004a537359cc5mr1937755lfu.33.1670598706741;
-        Fri, 09 Dec 2022 07:11:46 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y3-20020a199143000000b004b4bb6286d8sm297232lfj.84.2022.12.09.07.11.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 07:11:46 -0800 (PST)
-Message-ID: <ff731bed-1df5-aafd-d490-7bdf9382ff38@linaro.org>
-Date:   Fri, 9 Dec 2022 16:11:44 +0100
+        Fri, 9 Dec 2022 10:11:58 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4146084B5E;
+        Fri,  9 Dec 2022 07:11:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8C3D0CE28AF;
+        Fri,  9 Dec 2022 15:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9C8C433F1;
+        Fri,  9 Dec 2022 15:11:52 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 10:11:51 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH] ring-buffer: Handle resize in early boot up
+Message-ID: <20221209101151.1fec1167@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] arm64: dts: zynqmp: Add xlnx prefix to GEM compatible
- string
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Harini Katakam <harini.katakam@amd.com>,
-        David Heidelberg <david@ixit.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <718283a9f5493ab63b4aaa12337dd5cab6538ff5.1670594172.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <718283a9f5493ab63b4aaa12337dd5cab6538ff5.1670594172.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2022 14:56, Michal Simek wrote:
-> From: Harini Katakam <harini.katakam@amd.com>
-> 
-> cdns,zynq/zynqmp/versal-gem was recently deprecated in Linux in
-> favour of xlnx prefix. Add this new compatible string and retain
-> the existing string for compatibility with uboot drivers.
-> 
-> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 8553299f12eb..233127d94204 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -507,7 +507,7 @@ nand0: nand-controller@ff100000 {
->  		};
->  
->  		gem0: ethernet@ff0b0000 {
-> -			compatible = "cdns,zynqmp-gem", "cdns,gem";
-> +			compatible = "xlnx,zynqmp-gem", "cdns,zynqmp-gem", "cdns,gem";
+From: Steven Rostedt <rostedt@goodmis.org>
 
-That's not what the bindings are saying. If this was the intention of
-AMD, you should have replied to my patch that you need prolonged
-backwards compatibility.
+With the new command line option that allows trace event triggers to be
+added at boot, the "snapshot" trigger will allocate the snapshot buffer
+very early, when interrupts can not be enabled. Allocating the ring buffer
+is not the problem, but it also resizes it, which is, as the resize code
+does synchronization that can not be preformed at early boot.
 
-Best regards,
-Krzysztof
+To handle this, first change the raw_spin_lock_irq() in rb_insert_pages()
+to raw_spin_lock_irqsave(), such that the unlocking of that spin lock will
+not enable interrupts.
+
+Next, where it calls schedule_work_on(), disable migration and check if
+the CPU to update is the current CPU, and if so, perform the work
+directly, otherwise re-enable migration and call the schedule_work_on() to
+the CPU that is being updated. The rb_insert_pages() just needs to be run
+on the CPU that it is updating, and does not need preemption nor
+interrupts disabled when calling it.
+
+Link: https://lore.kernel.org/lkml/Y5J%2FCajlNh1gexvo@google.com/
+
+Fixes: a01fdc897fa5 ("tracing: Add trace_trigger kernel command line option")
+Reported-by: Ross Zwisler <zwisler@google.com>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ kernel/trace/ring_buffer.c | 32 +++++++++++++++++++++++++-------
+ 1 file changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 843818ee4814..c366a0a9ddba 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -2062,8 +2062,10 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ {
+ 	struct list_head *pages = &cpu_buffer->new_pages;
+ 	int retries, success;
++	unsigned long flags;
+ 
+-	raw_spin_lock_irq(&cpu_buffer->reader_lock);
++	/* Can be called at early boot up, where interrupts must not been enabled */
++	raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
+ 	/*
+ 	 * We are holding the reader lock, so the reader page won't be swapped
+ 	 * in the ring buffer. Now we are racing with the writer trying to
+@@ -2120,7 +2122,7 @@ rb_insert_pages(struct ring_buffer_per_cpu *cpu_buffer)
+ 	 * tracing
+ 	 */
+ 	RB_WARN_ON(cpu_buffer, !success);
+-	raw_spin_unlock_irq(&cpu_buffer->reader_lock);
++	raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
+ 
+ 	/* free pages if they weren't inserted */
+ 	if (!success) {
+@@ -2248,8 +2250,16 @@ int ring_buffer_resize(struct trace_buffer *buffer, unsigned long size,
+ 				rb_update_pages(cpu_buffer);
+ 				cpu_buffer->nr_pages_to_update = 0;
+ 			} else {
+-				schedule_work_on(cpu,
+-						&cpu_buffer->update_pages_work);
++				/* Run directly if possible. */
++				migrate_disable();
++				if (cpu != smp_processor_id()) {
++					migrate_enable();
++					schedule_work_on(cpu,
++							 &cpu_buffer->update_pages_work);
++				} else {
++					update_pages_handler(&cpu_buffer->update_pages_work);
++					migrate_enable();
++				}
+ 			}
+ 		}
+ 
+@@ -2298,9 +2308,17 @@ int ring_buffer_resize(struct trace_buffer *buffer, unsigned long size,
+ 		if (!cpu_online(cpu_id))
+ 			rb_update_pages(cpu_buffer);
+ 		else {
+-			schedule_work_on(cpu_id,
+-					 &cpu_buffer->update_pages_work);
+-			wait_for_completion(&cpu_buffer->update_done);
++			/* Run directly if possible. */
++			migrate_disable();
++			if (cpu_id == smp_processor_id()) {
++				rb_update_pages(cpu_buffer);
++				migrate_enable();
++			} else {
++				migrate_enable();
++				schedule_work_on(cpu_id,
++						 &cpu_buffer->update_pages_work);
++				wait_for_completion(&cpu_buffer->update_done);
++			}
+ 		}
+ 
+ 		cpu_buffer->nr_pages_to_update = 0;
+-- 
+2.35.1
 
