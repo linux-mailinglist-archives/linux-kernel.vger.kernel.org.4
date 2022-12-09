@@ -2,97 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B0C647E3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECF2647E42
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLIHEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S229936AbiLIHFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiLIHEN (ORCPT
+        with ESMTP id S229988AbiLIHEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:04:13 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFACA2C13A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 23:02:21 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx7+t73ZJjxloEAA--.10242S3;
-        Fri, 09 Dec 2022 15:02:19 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+B43ZJjXAUpAA--.35622S3;
-        Fri, 09 Dec 2022 15:02:16 +0800 (CST)
-Subject: Re: [PATCH v9 2/4] LoongArch: Add kprobe support
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1670506868-15771-1-git-send-email-yangtiezhu@loongson.cn>
- <1670506868-15771-3-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H54yruHAe7ey8L9hHPonryEWEd8nt-iS6s7-odrDdrutw@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <37bc5ab5-ced8-cae9-9025-180154af0b11@loongson.cn>
-Date:   Fri, 9 Dec 2022 15:02:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 9 Dec 2022 02:04:49 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5B1C405;
+        Thu,  8 Dec 2022 23:04:48 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CA85542546;
+        Fri,  9 Dec 2022 07:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1670569486;
+        bh=Rw1LgZrAHKmOPFMlSc8m5mrXgg+i195LB/soUVfMO7k=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=eydc90K9HuIjQkBqAUlYJQp7LGFNmC1aNsirsLOaDf5E7KLee6uWYR5ckh8ZoWeyd
+         t706NyaJjw1c1R7pmNJfZRab/gcaBPTdJ15FAnol2SiJ4/cknZJznk79ZhAHrbYBaZ
+         oSQHraCbffz+QER9UpKaYFDssMwG3kYrxkVJtk8piZ3FtWaOi32aWcizaSDCFbEuBw
+         YagtGmtx4RUf91Ww6QK23XLYjWWRm+LypLvi6CKtmOZO2L+0fbJAUPpTVubWp5IY5c
+         7Km1L+tu6xQ8Lv/Qg1DaIalqpCNNjnNo5UFTkfZGw5fYiQvW+TLjAP7WeQExZ0BYzh
+         PZXwRlVtx2VuA==
+Message-ID: <9d9564a4-cf78-4eee-465b-90f0e7b2fdff@canonical.com>
+Date:   Thu, 8 Dec 2022 23:04:42 -0800
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H54yruHAe7ey8L9hHPonryEWEd8nt-iS6s7-odrDdrutw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: security: policy_unpack.c:325:10: error: use of undeclared
+ identifier 'TRI_TRUE'
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, apparmor@lists.ubuntu.com,
+        Nick Terrell <terrelln@fb.com>, Rae Moar <rmoar@google.com>
+References: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
+ <CABVgOSms-8vXDVX68JX-4UEnaGyCgVyNWH37W8qGz7eVtFcWag@mail.gmail.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <CABVgOSms-8vXDVX68JX-4UEnaGyCgVyNWH37W8qGz7eVtFcWag@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dxr+B43ZJjXAUpAA--.35622S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7GFWxAF15JrWrCrykGr1Utrb_yoWxKFcEgr
-        18Wr4kC34q9ry3Ka1UKa1rXFWUWryUWrWUKw1kCry3Aa4fK3s7XF4rK3sYyF4rJry0krsx
-        AFW2grsayFyjqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        k7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuY
-        vjxU2DUUUUUUU
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/09/2022 10:22 AM, Huacai Chen wrote:
->   cas
->
-> On Thu, Dec 8, 2022 at 9:41 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On 12/8/22 22:57, David Gow wrote:
+> On Thu, 8 Dec 2022 at 15:36, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 >>
->> Kprobes allows you to trap at almost any kernel address and
->> execute a callback function, this commit adds kprobe support
->> for LoongArch.
+>> Following build regresion found on Linux next-20221208 tag.
+>>
+>> Regressions found on riscv:
+>>    - build/clang-nightly-defconfig
+>>    - build/gcc-8-defconfig
+>>    - build/gcc-11-defconfig
+>>    - build/clang-15-defconfig
+>>
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+>> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+>> 'CC=sccache clang' defconfig
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+>> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+>> 'CC=sccache clang'
+>> security/apparmor/policy_unpack.c:316:18: error: unknown type name 'tri'
+>> VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char
+>> *name, u16 *size)
+>>                   ^
+>> security/apparmor/policy_unpack.c:325:10: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  return TRI_TRUE;
+>>                         ^
+>> security/apparmor/policy_unpack.c:328:9: error: use of undeclared
+>> identifier 'TRI_NONE'
+>>          return TRI_NONE;
+>>                 ^
+>> security/apparmor/policy_unpack.c:331:9: error: use of undeclared
+>> identifier 'TRI_FALSE'
+>>          return TRI_FALSE;
+>>                 ^
+>> security/apparmor/policy_unpack.c:455:42: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>                                                         ^
+>> security/apparmor/policy_unpack.c:529:42: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>                                                         ^
+>> security/apparmor/policy_unpack.c:559:42: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>                                                         ^
+>> security/apparmor/policy_unpack.c:611:42: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
+>>                                                         ^
+>> security/apparmor/policy_unpack.c:674:42: error: use of undeclared
+>> identifier 'TRI_TRUE'
+>>                  if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+>>                                                         ^
+>> 9 errors generated.
+>> make[4]: *** [scripts/Makefile.build:252:
+>> security/apparmor/policy_unpack.o] Error 1
+>> make[4]: Target 'security/apparmor/' not remade because of errors.
+>> make[3]: *** [scripts/Makefile.build:504: security/apparmor] Error 2
+>>
+>> Build link,
+>>    - https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/
+>>    - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/details/
+>>
+>> Build results comparison:
+>>    - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/history/
+>>
+>>
+>> steps to reproduce:
+>> # To install tuxmake on your system globally:
+>> # sudo pip3 install -U tuxmake
+>> #
+>> # See https://docs.tuxmake.org/ for complete documentation.
+>> # Original tuxmake command with fragments listed below.
+>> # tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+>> --kconfig defconfig
+>>
+>>
+>> tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+>> --kconfig https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/config
+>>
+>> --
+>> Linaro LKFT
+>> https://lkft.linaro.org
+> 
+> I suspect this is in need of the fix here:
+> https://lore.kernel.org/all/bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com/
+> 
 
-...
+yes, that is what is needed to fix this
 
->> +       case KPROBE_HIT_ACTIVE:
->> +       case KPROBE_HIT_SSDONE:
->> +               /*
->> +                * In case the user-specified fault handler returned
->> +                * zero, try to fix up.
->> +                */
->> +               if (fixup_exception(regs))
->> +                       return true;
-> Does here need to enable preemption too?
->
-
-No need, because in this two case, after call fixup_exception() or
-do_page_fault(), the original process will continue, preemption will
-be enabled in the original process.
-
-Thanks,
-Tiezhu
 
