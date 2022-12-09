@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7C864802D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5158D64803F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLIJe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S229750AbiLIJkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLIJe1 (ORCPT
+        with ESMTP id S229680AbiLIJkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:34:27 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799DE1F637
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:34:26 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso4409652pjh.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:34:26 -0800 (PST)
+        Fri, 9 Dec 2022 04:40:42 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA373537CE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:40:39 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id gh17so10199438ejb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:40:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DcS3x5UmVaSMKFt9E6LpEtAhtfgHDBTbU6XLvPXAh/M=;
-        b=RMV7LNGN99Ydci6QdHnV35yYk3uHMw09LYh44w6Q5gMtVmSrwcJaXacXkVcQfujsx6
-         CfvOAHDYsaS2D1kfaE3IPVDEkldu8MPpmH5+bUNYcSCI9cCuU8rNPbSPoo/uCS75DZbJ
-         v3/VFWrwCSgcDmjCy6PKUeqgIFSHYRMu2Pfgq1nrHG0EOXFuwQD+AmYs9uS1Fp2o1JLK
-         WqB19hRISni/U/ZDdnSuFAIRHOAg3AnMds/uT8KRrSPQMe6XP1GwT5yC03UxdXM94bbZ
-         KGMt7xqxiLLxE9gpV4p20YO6RVbOPZ2KygJAv809Eq6Y8pM874j/DYtC7ORgVPXyltRP
-         2/DQ==
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jKKLCBzLV8/46B+QgkzgYyULA0ZCO/PFX9LWayGP/FA=;
+        b=c+lvXxGrRJc2H+S2Lis4tyDqevkpQZr6osuTT7i245BKBT0JQjdgy+Byy2obnWWZpM
+         ricTRLwZV71ZTgwA0ZXZ1pZnHRrtgA+uruncx4YyMYOKHEX8Fg3HGsXczNUKvanbP37G
+         Grb3acFtI/+A8M6SzlNqASbrIXQ/QuyxS9rc9KeWPODETABVJP+VFG1NdBkbhnV650v2
+         MVI5Q81oHaUDi8hqcyuh+2gNjys9A1u219rzbGEkmHgDg9gzbaSp4v4U5Z5yaspTWM4E
+         UeFZ8Z3r7V9ytr6vhnxqdJRfaXEyLKqnGbH2kBCWZBx+oMbxUUY5ZpiOnpX711Xq7BBf
+         Cxpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DcS3x5UmVaSMKFt9E6LpEtAhtfgHDBTbU6XLvPXAh/M=;
-        b=2C8JxI4j/nOOw9Q4t/v7Ykl1GcF/xLG+Rj86XvtP2ZIQiS066H+ui7/+hrVVnD/x6x
-         WHzQMXZAieg9iXoT/RxUDi2jP0Tw6eKPaTdUanYqv+H3hIusDKEChwYufSeOqG0a6rdc
-         pJGd1X0BQtJaEGbSQUQaJ7pkRdm9Vki5MaR7R/EK+uTQGzsBpfqMQNv3uhA73AVsCjcQ
-         zh/hVdfbe+OXIAOpq7BEz2nUBmjcQ77gSxC2RTzXyDl5niwvYK2kKk+rbHDxornvY5kj
-         0Yrf01vepvCSUna2wgAncWY3ou5Vqd2PexRhdUQoylVIDR4KhacHtCX0dpXGmQyw9Vbx
-         JHvQ==
-X-Gm-Message-State: ANoB5plj2YRzgjoeo0uxgHK4/5evl9jHn8E06lHoFK+ZOzfgxSeg+/Mq
-        2m+ayugcQFDdBKwujgsFtHd+Gr2w/D5OQfyeIlhUnw==
-X-Google-Smtp-Source: AA0mqf7xEOD5xk6AN0Rb6Uf5Ay0jGqKE0ipuZM1ILbs3FzQGg82UmqA9bAPNDg7B9W4YFZC3PfeD6V1Ynwm8nM8iPtU=
-X-Received: by 2002:a17:90b:268b:b0:219:ff4d:b64b with SMTP id
- pl11-20020a17090b268b00b00219ff4db64bmr12012847pjb.164.1670578466038; Fri, 09
- Dec 2022 01:34:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20221207051909.32126-1-wenchao.chen@unisoc.com>
-In-Reply-To: <20221207051909.32126-1-wenchao.chen@unisoc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Dec 2022 10:33:49 +0100
-Message-ID: <CAPDyKFr=GYHAtt6EitO=o_Z+w0+6b_TWmLWLT_55Qn=5kX7DyQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-sprd: Disable CLK_AUTO when the clock is less
- than 400K
-To:     Wenchao Chen <wenchao.chen@unisoc.com>
-Cc:     adrian.hunter@intel.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhenxiong.lai@unisoc.com, yuelin.tang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jKKLCBzLV8/46B+QgkzgYyULA0ZCO/PFX9LWayGP/FA=;
+        b=cLbQN17bEF31znL6hVMe8sZ+rw7hra/YkyNCNXiJxFSCTJ88f2s/zsWFwd+GV7OQcI
+         fb4w1VjMi+YdZZ2p45cX7ZPAmiZdzV1QPnxY/WM7enNmP4QD67dUi6lMxV3DgJF4R7+A
+         d6YObCB4P9P5sGnHrmxP0wp+MfODB0Wkx/E+IZYWJRGkerl5EH0bb4M4xaRIpyfyPOee
+         TXl8yCCvdxXW/LecfwUeKGaApqAMwzzJCGU04A0YjbIUQdXQhH7c4SZIAJuFBdcGfpkL
+         FRX5bkK0p3vVrYx/0J+4a58/VmU8393xy2MBZN8phTopssYm+6AmR53Vfy3290CaqBOg
+         Xbtw==
+X-Gm-Message-State: ANoB5plVRV8C3nW23MV6ocB3oY3Tu6qG2yFmqhxE54ETN8GJQ3wsH57F
+        sF6tNgsPyUVcE3iB5AkUmkt/jg==
+X-Google-Smtp-Source: AA0mqf6EI9XikAHq5TezGX9KT5vIUxGEjx/Gk21eI7m7wrsKkUCQnOpiXSVZaDM27TMo0cJLNd9GaA==
+X-Received: by 2002:a17:906:79d8:b0:7bd:6372:fdb4 with SMTP id m24-20020a17090679d800b007bd6372fdb4mr6764320ejo.41.1670578838442;
+        Fri, 09 Dec 2022 01:40:38 -0800 (PST)
+Received: from mbp-di-paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056402168f00b004642b35f89esm192957edv.9.2022.12.09.01.40.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Dec 2022 01:40:37 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH V9 7/8] block, bfq: inject I/O to underutilized actuators
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <2678a347-188a-1f2a-27ec-67e7caa38175@opensource.wdc.com>
+Date:   Fri, 9 Dec 2022 10:40:36 +0100
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
+        Rory Chen <rory.c.chen@seagate.com>,
+        Glen Valante <glen.valante@linaro.org>,
+        Davide Zini <davidezini2@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DC3919CC-437C-46E9-A399-C4C2B5C16792@linaro.org>
+References: <20221208104351.35038-1-paolo.valente@linaro.org>
+ <20221208104351.35038-8-paolo.valente@linaro.org>
+ <2678a347-188a-1f2a-27ec-67e7caa38175@opensource.wdc.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,50 +80,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 at 06:20, Wenchao Chen <wenchao.chen@unisoc.com> wrote:
->
-> When the clock is less than 400K, some SD cards fail to initialize
-> because CLK_AUTO is enabled.
->
-> Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host controller")
-> Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
 
-Applied for next, and by adding a stable tag, thanks!
 
-Kind regards
-Uffe
+> Il giorno 9 dic 2022, alle ore 02:46, Damien Le Moal =
+<damien.lemoal@opensource.wdc.com> ha scritto:
+>=20
+> On 12/8/22 19:43, Paolo Valente wrote:
+>> From: Davide Zini <davidezini2@gmail.com>
+>>=20
+>> The main service scheme of BFQ for sync I/O is serving one sync
+>> bfq_queue at a time, for a while. In particular, BFQ enforces this
+>> scheme when it deems the latter necessary to boost throughput or
+>> to preserve service guarantees. Unfortunately, when BFQ enforces
+>> this policy, only one actuator at a time gets served for a while,
+>> because each bfq_queue contains I/O only for one actuator. The
+>> other actuators may remain underutilized.
+>>=20
+>> Actually, BFQ may serve (inject) extra I/O, taken from other
+>> bfq_queues, in parallel with that of the in-service queue. This
+>> injection mechanism may provide the ground for dealing also with
+>> the above actuator-underutilization problem. Yet BFQ does not take
+>> the actuator load into account when choosing which queue to pick
+>> extra I/O from. In addition, BFQ may happen to inject extra I/O
+>> only when the in-service queue is temporarily empty.
+>>=20
+>> In view of these facts, this commit extends the
+>> injection mechanism in such a way that the latter:
+>> (1) takes into account also the actuator load;
+>> (2) checks such a load on each dispatch, and injects I/O for an
+>>    underutilized actuator, if there is one and there is I/O for it.
+>>=20
+>> To perform the check in (2), this commit introduces a load
+>> threshold, currently set to 4.  A linear scan of each actuator is
+>> performed, until an actuator is found for which the following two
+>> conditions hold: the load of the actuator is below the threshold,
+>> and there is at least one non-in-service queue that contains I/O
+>> for that actuator. If such a pair (actuator, queue) is found, then
+>> the head request of that queue is returned for dispatch, instead
+>> of the head request of the in-service queue.
+>>=20
+>> We have set the threshold, empirically, to the minimum possible
+>> value for which an actuator is fully utilized, or close to be
+>> fully utilized. By doing so, injected I/O 'steals' as few
+>> drive-queue slots as possibile to the in-service queue. This
+>> reduces as much as possible the probability that the service of
+>> I/O from the in-service bfq_queue gets delayed because of slot
+>> exhaustion, i.e., because all the slots of the drive queue are
+>> filled with I/O injected from other queues (NCQ provides for 32
+>> slots).
+>>=20
+>> This new mechanism also counters actuator underutilization in the
+>> case of asymmetric configurations of bfq_queues. Namely if there
+>> are few bfq_queues containing I/O for some actuators and many
+>> bfq_queues containing I/O for other actuators. Or if the
+>> bfq_queues containing I/O for some actuators have lower weights
+>> than the other bfq_queues.
+>>=20
+>> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+>> Signed-off-by: Davide Zini <davidezini2@gmail.com>
+>=20
+> [...]
+>=20
+>> @@ -4792,22 +4799,69 @@ bfq_choose_bfqq_for_injection(struct bfq_data =
+*bfqd)
+>> 			else
+>> 				limit =3D in_serv_bfqq->inject_limit;
+>>=20
+>> -			if (bfqd->rq_in_driver < limit) {
+>> +			if (bfqd->tot_rq_in_driver < limit) {
+>> 				bfqd->rqs_injected =3D true;
+>> 				return bfqq;
+>> 			}
+>> 		}
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>> +static struct bfq_queue *
+>> +bfq_find_active_bfqq_for_actuator(struct bfq_data *bfqd, int idx)
+>> +{
+>> +	struct bfq_queue *bfqq =3D NULL;
+>=20
+> I do not think that you need the NULL initialization here.
+>=20
+>> +
+>> +	if (bfqd->in_service_queue &&
+>> +	    bfqd->in_service_queue->actuator_idx =3D=3D idx)
+>> +		return bfqd->in_service_queue;
+>> +
+>> +	list_for_each_entry(bfqq, &bfqd->active_list[idx], bfqq_list) {
+>> +		if (!RB_EMPTY_ROOT(&bfqq->sort_list) &&
+>> +			bfq_serv_to_charge(bfqq->next_rq, bfqq) <=3D
+>> +				bfq_bfqq_budget_left(bfqq)) {
+>> +			return bfqq;
+>> +		}
+>> +	}
+>>=20
+>> 	return NULL;
+>> }
+>=20
+> Otherwise looks OK.
+>=20
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-> ---
->  drivers/mmc/host/sdhci-sprd.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
-> index bec3f9e3cd3f..525f979e2a97 100644
-> --- a/drivers/mmc/host/sdhci-sprd.c
-> +++ b/drivers/mmc/host/sdhci-sprd.c
-> @@ -228,13 +228,15 @@ static inline void _sdhci_sprd_set_clock(struct sdhci_host *host,
->         div = ((div & 0x300) >> 2) | ((div & 0xFF) << 8);
->         sdhci_enable_clk(host, div);
->
-> -       /* enable auto gate sdhc_enable_auto_gate */
-> -       val = sdhci_readl(host, SDHCI_SPRD_REG_32_BUSY_POSI);
-> -       mask = SDHCI_SPRD_BIT_OUTR_CLK_AUTO_EN |
-> -              SDHCI_SPRD_BIT_INNR_CLK_AUTO_EN;
-> -       if (mask != (val & mask)) {
-> -               val |= mask;
-> -               sdhci_writel(host, val, SDHCI_SPRD_REG_32_BUSY_POSI);
-> +       /* Enable CLK_AUTO when the clock is greater than 400K. */
-> +       if (clk > 400000) {
-> +               val = sdhci_readl(host, SDHCI_SPRD_REG_32_BUSY_POSI);
-> +               mask = SDHCI_SPRD_BIT_OUTR_CLK_AUTO_EN |
-> +                       SDHCI_SPRD_BIT_INNR_CLK_AUTO_EN;
-> +               if (mask != (val & mask)) {
-> +                       val |= mask;
-> +                       sdhci_writel(host, val, SDHCI_SPRD_REG_32_BUSY_POSI);
-> +               }
->         }
->  }
->
-> --
-> 2.17.1
->
+Hi Damien,
+I've applied your recommendations in this and the other replies of
+yours.  I'm about to send a V10.
+
+Thank you very much for checking this code and helping me improve it,
+Paolo
+
+>=20
+> --=20
+> Damien Le Moal
+> Western Digital Research
+
