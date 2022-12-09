@@ -2,154 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12AE648749
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD64364874C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiLIRIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:08:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S229888AbiLIRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiLIRHe (ORCPT
+        with ESMTP id S229674AbiLIRHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Dec 2022 12:07:34 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1401C6E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:06:49 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id s11so6250986ybe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7v0Z5SII5lc88SchWlGOU2fHuY/bVMdgG+8xYXDaM4=;
-        b=tEWPBuWaeaRHXKVLQf119O3ROzEzV0m0qCU63eeky+tEo5IBLDxDS/wUyD206U4tTe
-         dd/CIyzh8kyfWI0AM42MKxiJvHcTAFJmWZ4pneTy8J1hEaGg5LgBUusYPSxEb9L6RadW
-         JiX2SzDkItJYEP753ClmfmlXmNXQFnbdylwJIy1qjretyuofSHzjp1eQLbq2maepHf0r
-         pJSsAKvXwBiIE54GFeXtZ5PRNjHINCPMqrjAfQQtcYloRR/Fz7jXi4vQRLr7AT28e9IC
-         YeJ94a2T37qITRiKlWUFwlPQ6R6wlnPELx+QeCRT8QkqqY2LnTvwS9s9aUa5HJBgVBcn
-         W0Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P7v0Z5SII5lc88SchWlGOU2fHuY/bVMdgG+8xYXDaM4=;
-        b=kEhm++GiNCGt28CODGzDT89b89nixQgEwVSgV4kJAgd4KEkuNj0LvfHVPIL4TuEiQ1
-         49YxoYy5K7bMra7ME+6MEuViPgqKln9r+JCQlGd43fy22yUmbxdCzrsi8uDADMFW99Un
-         tZY01+Xkbs/kItYO4B+V81n0Vh0gxhySds3u54OVdikMRuknsCVx2kFJ9PkpNq832PBZ
-         +ap/uXJipFJg5ol9nbGFU/zQN8fdkSNKpQILc0dg3WzoG3FtKhUAaNIN1wzufi4vidCP
-         4/R3BlNZSI35QPch2XHUzw5gzEzFS3z1ILeNGfdaBgMXT13qX3QS9yadNCYdYg4ZEUkr
-         oRZg==
-X-Gm-Message-State: ANoB5pna+bpod4vQG994LNLKft010Nzkb3iGL0jnI8dtcBK+vy1Xccyr
-        trcQkyWyhrLvO55KOlwsVxKHjwyoZ8ViJtj3ps0wYha9yQE8qoVwqn0=
-X-Google-Smtp-Source: AA0mqf5T5MUF/zloobEh7ghw97shyQNQuYyAKTvXIS+ST8HKOfx+pYSxCC4f3/aht2O5lJ5Icoy5jntmn49DjBzF7ng=
-X-Received: by 2002:a25:d313:0:b0:716:9baa:18cf with SMTP id
- e19-20020a25d313000000b007169baa18cfmr1009394ybf.453.1670605609116; Fri, 09
- Dec 2022 09:06:49 -0800 (PST)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635C10F5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:06:55 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4B03B5C011D;
+        Fri,  9 Dec 2022 12:06:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 09 Dec 2022 12:06:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670605613; x=1670692013; bh=LN
+        L5gN6Nhu/7R1gBHXr8q/FbZLzZods29bpt1zTp30c=; b=KLd4y28Gp0Dds4/C5O
+        bR976JCAVjX0ktO98UMzkZXPEg/L6ye8XWlM26X2mEU15FMAgqKsxyMACrbxsW3A
+        tZRhOL0ZRTLCLVhHVhJBXP8VtVaN8CDDj9KDAih6QOU9pz1mWv0US6hPB6fbqeGA
+        ZgQtsLbmHDwCgG00raS5cqh4VJabzFA/+/QI9n4q/Me8hqrrYKOJgS19tFMnmYOQ
+        mSPgZqbqeKQ8+6HT50F5SEsFCMptb7Z8esr8A2fGpdrEkg4QXwoILEzViSldOmMy
+        Jr7j5reYQ8m6PK+5YqwN2mOJIZMPUccOsHMG7cz/JChjI+RcZDAHSoW9WMbPlChS
+        aKBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670605613; x=1670692013; bh=LNL5gN6Nhu/7R1gBHXr8q/FbZLzZ
+        ods29bpt1zTp30c=; b=mKIej8kFLSHEeMnS4Vkz5siXb/MDdtfF8F7c1IDoEOSy
+        ZEjdTmxLCd191f/AEC+InG+w2UjK3yLHfQv2uTEVYOu+iIBMlDoD0JZDBkeKOmg0
+        wZVLrng9tT5hjfzRHs1QOFuZ55q/jTgLCMlnwWFAuTICysMMQkRVzch4l4P+5HI0
+        HqQM9ayLgxfoKHphLvR5Hvmwh0xqNs/TXhL2eSCrg82bGn2H9nxSTooL+wxEuezC
+        ImXfkZdRxpk0QGoTN3JSY5oNsQ6qNd2fwNxiBwvsmQHpJNiUo3eHPe20l5CDdsEE
+        CGQi9EttISe+KaMa4kwEgFVLXM6X+nbtA0BfE73iSQ==
+X-ME-Sender: <xms:K2uTYxwJ826xFo2Huxm9_9lnc7_SSdDJwS5V0SmAbLEOg4Jg3degRQ>
+    <xme:K2uTYxQlcI0cW71rVnGcwfJiuVmipvsJ98GxRwO01I76xyPonxQGmFeTgSAjQx6Ce
+    z6g9WFkyuMYrz5MH98>
+X-ME-Received: <xmr:K2uTY7UZ4HcaW9wGobxIurt64NRmNfJUAJgosQkoync9kBNKDAKzzxpk4IRZH5ZNQQQvCA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdelhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:K2uTYzj8Qk9I9EBn2cDSFkzs97iN6kI0sfJ7JQZW3DiMYIgj3aCvJg>
+    <xmx:K2uTYzB4Az5hvKM5KT8tp9c00JP2dy6DRHg3kVrN_PtbJVJE1XdCrA>
+    <xmx:K2uTY8Lom3K9gLcS4P3PQEZqh1RmN5Alk-PByui2gN4rDFS2ID1olg>
+    <xmx:LWuTY33ZzO30VwHYPD3cLKR50Mcv5sGqvu_PDiRtUVfMXRWn3ikokg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Dec 2022 12:06:51 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id ADDF0109CE2; Fri,  9 Dec 2022 20:06:47 +0300 (+03)
+Date:   Fri, 9 Dec 2022 20:06:47 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
+ SEPT_VE_DISABLE
+Message-ID: <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
+References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+ <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
+ <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
 MIME-Version: 1.0
-References: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com> <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
-In-Reply-To: <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Date:   Sat, 10 Dec 2022 01:06:38 +0800
-Message-ID: <CALprXBayJtWRe9J+q7EahgpXrRy_B-tMAf0KXbDtWa+=4RKyHA@mail.gmail.com>
-Subject: Re: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with
- amp nau8318
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre
+On Fri, Dec 09, 2022 at 07:42:56AM -0800, Sathyanarayanan Kuppuswamy wrote:
+> 
+> 
+> On 12/9/22 5:25 AM, Kirill A. Shutemov wrote:
+> > The check for SEPT_VE_DISABLE happens early in the kernel boot where
+> > earlyprintk is not yet functional. Kernel successfully detect broken
+> > TD configuration and stops the kernel with panic(), but it cannot
+> > communicate the reason to the user.
+> > 
+> > Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
+> > can encode message up to 64 bytes in eight registers.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > ---
+> >  arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 37 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> > index cfd4c95b9f04..8ad04d101270 100644
+> > --- a/arch/x86/coco/tdx/tdx.c
+> > +++ b/arch/x86/coco/tdx/tdx.c
+> > @@ -22,6 +22,7 @@
+> >  
+> >  /* TDX hypercall Leaf IDs */
+> >  #define TDVMCALL_MAP_GPA		0x10001
+> > +#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
+> >  
+> >  /* MMIO direction */
+> >  #define EPT_READ	0
+> > @@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
+> >  }
+> >  EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
+> >  
+> > +static void __noreturn tdx_panic(const char *msg)
+> > +{
+> > +	struct tdx_hypercall_args args = {
+> > +		.r10 = TDX_HYPERCALL_STANDARD,
+> > +		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
+> > +		.r12 = 0, /* Error code: 0 is Panic */
+> > +	};
+> > +	union {
+> > +		/* Define register order according to the GHCI */
+> > +		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
+> > +
+> > +		char str[64];
+> > +	} message;
+> > +
+> > +	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
+> > +	strncpy(message.str, msg, 64);
+> > +
+> > +	args.r8  = message.r8;
+> > +	args.r9  = message.r9;
+> > +	args.r14 = message.r14;
+> > +	args.r15 = message.r15;
+> > +	args.rdi = message.rdi;
+> > +	args.rsi = message.rsi;
+> > +	args.rbx = message.rbx;
+> > +	args.rdx = message.rdx;
+> > +
+> > +	/*
+> > +	 * Keep calling the hypercall in case VMM did not terminated
+> > +	 * the TD as it must.
+> > +	 */
+> > +	while (1) {
+> > +		__tdx_hypercall(&args, 0);
+> > +	}
+> 
+> Instead of an infinite loop, I'm wondering if the guest should panic after
+> retrying for few times.
 
-On Fri, Dec 9, 2022 at 11:52 PM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
+Hm. What difference would it make?
 
-> This looks inconsistent with the commit message. There are separate
-> Kconfigs for different codecs.
->
-> SND_SOC_NAU8315
-> SND_SOC_NAU8825
->
-> Which is it?
->
-
-Sorry about confusing you, I think it is better to change the title as
-ASoC: Intel: sof_nau8825: add combination of nau8825 headset codec
-with nau8318 Amp.
-
-And add some information about Nuvoton chips in the comment message.
-***
-The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
-Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
-for nau8318 is "NVTN2012".
-The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
-"10508825".
-***
-
->
-> Deep sigh...
->
-> This ACPI HID is already used to match with the 8815, so this is not
-> going to work if we confuse two independent drivers...
->
-> sound/soc/codecs/nau8315.c:
->
-> #ifdef CONFIG_ACPI
-> static const struct acpi_device_id nau8315_acpi_match[] = {
->         { "NVTN2010", 0 },
->         { "NVTN2012", 0},
->         {},
-> };
-> MODULE_DEVICE_TABLE(acpi, nau8315_acpi_match);
-> #endif
->
-> How does this identify a NAU8825?
->
-
-The NAU8825 Is headset codec, we added a new combination of nau8825
-headset codec + nau8318 amp in the machine driver.
-
-
->
-> > +             .dai_name = "nau8315-hifi",
->
-> and again this makes a reference to 8815.
->
-
-Because the Amp driver is the same file nau8315.c , so nau8318 use the
-same dai_name "nau8315-hifi"
-
-
-> I will stop the review here.
->
-> NAK for this v1. Please clarify which codec you are using and make sure
-> all references are consistent.
->
->
-
-I apologize for the unclear comment message, please give me any
-suggestions if needed, and I will send v2 for review.
-thanks.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
