@@ -2,131 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB3A647C50
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21C0647C58
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLIChv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S229877AbiLICjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLICht (ORCPT
+        with ESMTP id S229561AbiLICjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:37:49 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2075.outbound.protection.outlook.com [40.107.8.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E43F1AF19;
-        Thu,  8 Dec 2022 18:37:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GXjfTSpAZU9DfMygeMPVrlVttyt/5FRXpCvpXrVqEv/Aw5ap2tWIs0RByZd/nJqPbA+XKsLFJsLgNkjHGzOXY96wYgB4vylT4Szug0uro/kltAHfmiY8AzaVzvhDWHqvxlkicemLWsjI0D59va/5NJS0keO/AgLcu0AwZR6Bmwrha4a5IykdHIUVKi9EGybOb827OEVzIgU/g4lac/ezeVtEIxMCg20l4zgVyZwmiCqmddQjRcgZSTpjobfVG+hdkOjgw+ArbgvkPxqC2f9acBu0Sr9bHt+BLQ3SDjp5KHeASJYAOmxPLumGVXAtZ5Qh6mjbf1fcrrG2OLjmldkjwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zV+eEuf7PsOzJpN43sCsMzzqPf9PjJSCgLrvt2GYzdY=;
- b=ite9rKFi3/K6YboRRrJXJ7ebQkFnxJMDuqICopz97e5yyom9xf+yk47le2JsuqvMOHtN4pblhCMqh+VU4AAHHPuYLpd8uzU4+ptjFfT+c9kW7L5Ao8B69Z7jIQyYxXO1HpLQEWT12zdemm9I1+Dlv+Q9bekmEI6avIIWFu7Wv4hr4dJdO3SJSyXX6KvKNFLt4oqjjgKaldZ/QHlrVaFX12vTFzzOrM9xf0Fpjsc/1DQMlY91tnHmlNU8fc80Mx6bQXUAXWrFxeLW+IIpvsl8P7HNwqfT5+8QeK8eNuJLCDT3qjMqoInig9IYp+YYWBgsQyyIafw81m4pYWBruO57PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zV+eEuf7PsOzJpN43sCsMzzqPf9PjJSCgLrvt2GYzdY=;
- b=bKvQvCgruResuAjxeKj8PGbnTdjmw1F0vK62znPYRFuf2kkg+YGGptaYJ1FwwvQUax4VIn1QlPPbbrMsEIc0GiPTmRAyqInH+GsfHF3+Td1i+ocoU3m3eyEFMJPys2VFmxCWAKDyUkOTJFQmkZwEwvaxQuW/BI9TqoidkF3/H30=
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com (2603:10a6:3:db::18)
- by AS8PR04MB7752.eurprd04.prod.outlook.com (2603:10a6:20b:288::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Fri, 9 Dec
- 2022 02:37:45 +0000
-Received: from HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::7682:a2e6:b891:2f4d]) by HE1PR0402MB2939.eurprd04.prod.outlook.com
- ([fe80::7682:a2e6:b891:2f4d%10]) with mapi id 15.20.5880.016; Fri, 9 Dec 2022
- 02:37:44 +0000
-From:   Clark Wang <xiaoning.wang@nxp.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-CC:     "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] i2c: imx: add irqf_no_suspend flag
-Thread-Topic: [PATCH] i2c: imx: add irqf_no_suspend flag
-Thread-Index: AQHY+Y9Fbo+WAuifTEe0ozFpp45sr65BQUiAgBiAB4CACAuLoA==
-Date:   Fri, 9 Dec 2022 02:37:44 +0000
-Message-ID: <HE1PR0402MB2939E0B858A15275CC3C42B7F31C9@HE1PR0402MB2939.eurprd04.prod.outlook.com>
-References: <20221116074431.513214-1-xiaoning.wang@nxp.com>
- <20221116090249.GB12278@pengutronix.de> <Y4k0lVMueLEic75K@shikoro>
-In-Reply-To: <Y4k0lVMueLEic75K@shikoro>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0402MB2939:EE_|AS8PR04MB7752:EE_
-x-ms-office365-filtering-correlation-id: 5d21853f-a05a-4310-bc00-08dad98e5a36
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HgcZlVkeY1RQFCIX0uRtSm7DR/RTEFmazI4KLXcm+H/9OAxtCxERDZkiaWwPxSc3A985gLwwo5NCnrTgrjoUnHVd7DNzK+8716Xw4G67d1dZ0bAPW5c14eRNZNZFR/6NLaqytMHwY9gU71W4QxNnhWCfgjecYUxg0M7y5OtPFyU9pAWR1L7nSpbsgzmHhLJAibAEsRofeYs/+Q3UveXw0t42eetfm1JtfcrvbXIEtWwa5QJHOQCl/XYCRpKCrZWWze498LBxO3/iT3eZXPx1b+evjaejYwJjntLytTTgRBT2eQxrj1low3JH3DiDAfra8uzUqrq2TF4vTcvz/cV55U93uCrkbWmj+vUnhmGvXe7AfvqWspFMUwhype1LMDW8buD8YpnYw+UBsw++F3ewz9hQd9kO4rPnS/QqLWzudKqmUSmF4fZEtWuYedFE9IoJyy4A/BP00wTsB91pbER0mkmlGrtV2Jii2AekSWo2CG1pPIghe8XijRwssT2mDST+NSEYarNdYwxqymNIn6zVCgkOSIs9eshuMWRkVezvgJNYO+vdRJ0OyHH6KRnMxib+DAGkwVQWU8wIkQFg8tuQx6IXC9hiL7ur4BI+uN/0j+/OJLa8+s+T+TR51+ycr9vc+0dyMkjHSO+OW6zOIcaQsXn9H3/aVvrI9mOu5DH1ile1lAdgoIn+y1YQ0Jz5+8Wm9YpR07Qge4kvwe2AZWCF7g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB2939.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(186003)(83380400001)(38100700002)(38070700005)(86362001)(122000001)(2906002)(8936002)(52536014)(5660300002)(7416002)(55016003)(26005)(41300700001)(478600001)(71200400001)(9686003)(7696005)(6506007)(76116006)(53546011)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(110136005)(316002)(54906003)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?cHlaejlHRithVFV5T3grNmhTVFd2R3hiNHJYL2tNczdXNTlpWmRqem13TDl2?=
- =?gb2312?B?YlF3QWxkeFJEeGNLekhFRWFLTFBpL0p1MFZ2LzJ1bXpvdVJ4cXFqWW1ZWkZp?=
- =?gb2312?B?c2JTaWRzSG5CM2Q4bjBaaGtxcFNnUllYRC9QNXRDQ0ZDWjdLTi9aZGNTMElq?=
- =?gb2312?B?d0xrdy9JdUJmL2MzWVoxaWsvYkZOcHNrY0ZZSHlDRWw4bldMdXhoKzI4L0I5?=
- =?gb2312?B?RVRIQWIyUEVNU29RUVorYUg2cWZQcFl0bDBBcS9iVzIzYUloWFJKdWw5M1Vq?=
- =?gb2312?B?aTI4cUp6WWZXVUQxQWpIYmZMRkg3aUZmMkVHK3MwVVowcVFPU0ViRERWODNJ?=
- =?gb2312?B?YlM1OElndUlrUW1rTVo4MWtLd3lvaVYzb2RnLzZTTXRtM01XRitJZXM1NlRX?=
- =?gb2312?B?T2lieUI0d21teTB2WnRUQVhCTXBCaldQZkw2aVhWaTV0eGxHVEd0QkhTS0pl?=
- =?gb2312?B?S0xlUHBJNG52VnBFcjRWcTRHLzZEaXMwWVFrdnBWdEFTQjlicmIvU1R5NkVy?=
- =?gb2312?B?L21JNmVZMHl3cGZrVXpoeDZwQ1FIa1NreWU5RFI4UmQwMUo1VEphU3NMV0tX?=
- =?gb2312?B?WDRIcm5mRHVGRkZ6VTlvOXVScFc0eUhCRjJFR1pKSVlBOEtPYmRqbVZkZmQv?=
- =?gb2312?B?M05VYi9ESndORXF6bmxLb3ZvOVl5bTRsY1ZUekNzNlBTczIyRERMMmppeERv?=
- =?gb2312?B?R0cwTVFJQ1I0ZVJ2b21TUncxdUQrMFcxeUlnYWg5WjJIOU1BQS9YUldwdkcv?=
- =?gb2312?B?Z1FPNmZMcmpyZlFaNUh0VmxvOXVTdTR1NXFkWXNteVkvTVVteWtSdlJxU2ox?=
- =?gb2312?B?bW8vNFJGZWpsUjJ6dytiTkFhUmUzeGg1K29lVm1PeEZZOEM1WjNEQ3VJeWMv?=
- =?gb2312?B?a0xRbi8zME5rZGxPS0hYTmJrMURzY1RuZ1RVY2pPbWFyL0Qxc1k3eFQrUVha?=
- =?gb2312?B?SGdLbDMzV21GS2txbzFEYklXdGREdG15UHdoVkxzck02TU4vR0dQcDN4WVo0?=
- =?gb2312?B?dyt3TWVwaVpnZGY5NTZkRUdiUWZPMDJhVXRCMUQ4aDlOUFc5Mm9KcHg5QmRW?=
- =?gb2312?B?OTlIYjU3TlNiNm92UWI3SXdycXRkVHl6VzA2NG9SV0IveFB0R2VEdDhMOWJm?=
- =?gb2312?B?UkJlcVk1Ym50dG1FWmJOVktua05yNXh4d1E0QkRHYytqWUx4OGJ2MjdJZVFo?=
- =?gb2312?B?c2w0TTlzOXpSQXduZS90d2YrVzhnTWEzc240R0d3S0R1ZExkeGVNYzQvbWpH?=
- =?gb2312?B?dGVFaExtSU5FRGRnb2x0c3NtUEYzTFpnRkpIcG95STBqUTI2UU1LOS9MbFhw?=
- =?gb2312?B?YUprUkRySXMwK1JyNlF2dmV2Y3psQk5xOGYyRTJoczJleHlGVWdDWHNSRWs4?=
- =?gb2312?B?RG1tdnFKQ0tvS0VHdEdHWFFENEV4NTF0NWg4bUl5ZU81bzN2eVBTOVZZdnZ5?=
- =?gb2312?B?OXdmN1hqS3daZE9hVWxPa3BwNE04RFNVck1LK2ZjUTZZK2ZBV1RNdVdMNC83?=
- =?gb2312?B?YnE2SEdyVkh1U3dGekxYR1AxVHFiV1NteDFjV0xzQkQzTXV2QTFheVJWTEg3?=
- =?gb2312?B?RjB1dldkS3BSM3dETFMyM0oyZVlaZFhvZXRYOVRWQWdwUVU4S1RVaEpyUi8r?=
- =?gb2312?B?ZDN3VW5uWU9iY1VPem9xSjN5RGZhM29TQXRRQ1l2TzlNU0lxTlJHcE1OZHVk?=
- =?gb2312?B?eTNhRFVyZmU3YlJsVkprcXd3OG5lenVsOFFmWnBwY2FoLzAzdWZqVTdRUDdT?=
- =?gb2312?B?V0pCcnhxNHgwZ3N2Snk1SXRFZ3ZQZmZsN3lqSUh0TkVKVEJ3dkV0RkRFNnIw?=
- =?gb2312?B?Wlp3TlhiQWtVZ0tEUWdzbW13MjAwVEpZeWUrWjRpUE1mT1JBNmxsUEs4N2Mv?=
- =?gb2312?B?R3IxSEorS0x1MDZyd2lRZW9qVkhkSElrTXk3NC9RSGE1VHgwZHVPSW9jTFVV?=
- =?gb2312?B?N3lKajloUFJyNmlvdytiTWQ3MXkrZWlENk1MY1l5RzRpZHlDQUJRRTN2TlVr?=
- =?gb2312?B?ZDBBWkczVkZ3NHRhY2lrYTgyTndPOTNKWTZaUjVrMXpPNXRiUkJUcjhwT1FQ?=
- =?gb2312?B?TUY0Z3VYQ2xUYkhHVTdKUDRhcTR6eHMvQUI4YUxDK3YzNUZqeDR5cUJJSUo5?=
- =?gb2312?Q?C7yIkEuTPuCzce/bbmkn3Z1Aa?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 8 Dec 2022 21:39:52 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DD6801E2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:39:51 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id fy4so3128323pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TZnMaFtY4qZJ883tzktwfY/yctr7oDbV+V4Ixf7o0A=;
+        b=M005OyyY5cLmyHLABPS62iVNTDIOLBZhnnJmaG7C5uan/jka5fCsa14aM2Fc+5OFCA
+         ckpBBfY78j16Lznt5PEGI35woyaES6hC9LIYdfLUfGo8T6BOK2olk43hLefYRikPj0Iz
+         f4+SjQ5feOVhLlC1+YgjGN+MSlBMuQG4KmMbFaSeURn8L4VakGAy7D5kVWuBZ28v5pE8
+         XSyG73+OZNlNpjKATjSKInxv5cUFhAcWNlMW/6U5Deqdzm9GojvnKdafrLS9i3+fN7Jh
+         myc9I/a9teCumHbK3Ir6cH1JZ7ZJCnt0Kq1RNOhYlRHTDP5GPV34Bo3v2/Ko8te6C01C
+         NNwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4TZnMaFtY4qZJ883tzktwfY/yctr7oDbV+V4Ixf7o0A=;
+        b=OBrkB4Ae6vpk1bLMQFbOszDQGOysytBvzDRVdVpzHpTW777AC6K3Xy8g3BoNrzqpUD
+         x1l4iRUHT30ylYRPtmH0wJn/PVnzJdbcCPSXqo3P1jhgmOqTvhoEkttkZYiUf/dXuh5H
+         GR6Cp9X4QHijKn+IvbTyHuwHKtXUTWKLeUjRcYMvCPCe1N3726dcYKMdS7amN2iSF/+J
+         nq9il6KfIRhbsI7c+xdZLg5ixOo0LUcDWLUpc2BViVxOyikqIY1I6h3gD/QTy5ZhwS+u
+         KrPOf9V9IlUu6p525sICkV+p2GCgkYAnvUDMpSPnfskICHE7CaYndARDClkxTua2Z845
+         C3HQ==
+X-Gm-Message-State: ANoB5pklEniYZBFa5I09tOgltPNYEew0z4g7GmcUxefjQ4YMo6+jW/4P
+        o7m7asIgQ3uAk1+5GlFWfkqBcESrK6wH/AoyHiCpzUD0KwoVcw==
+X-Google-Smtp-Source: AA0mqf67dUvXmucO0tJpFBBxdeEKDXgqDoQeEpTHqegxw0SnGGS3L+3GweN1DxUUJSezlvnecszrxUukPDbqWd4UbYc=
+X-Received: by 2002:a17:90a:4d48:b0:219:4487:f763 with SMTP id
+ l8-20020a17090a4d4800b002194487f763mr49438963pjh.201.1670553590089; Thu, 08
+ Dec 2022 18:39:50 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB2939.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d21853f-a05a-4310-bc00-08dad98e5a36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 02:37:44.8310
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: borDQgr6DgujsqO8qITO3DN3s8E2A5UlNOOBk9M/jUvQhCVb4MylkYOg/m72SWMlh+usTv/1nPW4Jdu2Er/lyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7752
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221208150456.473056-1-badhri@google.com> <819cb665-ec2f-5542-8ecf-e8ff7ca29908@roeck-us.net>
+In-Reply-To: <819cb665-ec2f-5542-8ecf-e8ff7ca29908@roeck-us.net>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 8 Dec 2022 18:39:12 -0800
+Message-ID: <CAPTae5J-YOuifSRNJfsESs9YVJXt56BFMrx0f0GeEnK-zsotyQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] usb: typec: tcpm: Add callbacks to mitigate
+ wakeups due to contaminant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,44 +71,503 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgV29sZnJhbSwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBXb2xm
-cmFtIFNhbmcgPHdzYUBrZXJuZWwub3JnPg0KPiBTZW50OiAyMDIyxOoxMtTCMsjVIDc6MTENCj4g
-VG86IE9sZWtzaWogUmVtcGVsIDxvLnJlbXBlbEBwZW5ndXRyb25peC5kZT4NCj4gQ2M6IENsYXJr
-IFdhbmcgPHhpYW9uaW5nLndhbmdAbnhwLmNvbT47IGxpbnV4QHJlbXBlbC1wcml2YXQuZGU7DQo+
-IGtlcm5lbEBwZW5ndXRyb25peC5kZTsgc2hhd25ndW9Aa2VybmVsLm9yZzsgcy5oYXVlckBwZW5n
-dXRyb25peC5kZTsNCj4gZmVzdGV2YW1AZ21haWwuY29tOyBkbC1saW51eC1pbXggPGxpbnV4LWlt
-eEBueHAuY29tPjsNCj4gbGludXgtaTJjQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5l
-bEBsaXN0cy5pbmZyYWRlYWQub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+
-IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGkyYzogaW14OiBhZGQgaXJxZl9ub19zdXNwZW5kIGZsYWcN
-Cj4gDQo+IE9uIFdlZCwgTm92IDE2LCAyMDIyIGF0IDEwOjAyOjQ5QU0gKzAxMDAsIE9sZWtzaWog
-UmVtcGVsIHdyb3RlOg0KPiA+IE9uIFdlZCwgTm92IDE2LCAyMDIyIGF0IDAzOjQ0OjMxUE0gKzA4
-MDAsIENsYXJrIFdhbmcgd3JvdGU6DQo+ID4gPiBUaGUgaTJjIGlycSBpcyBtYXNrZWQgd2hlbiB1
-c2VyIHN0YXJ0cyBhbiBpMmMgdHJhbnNmZXIgcHJvY2Vzcw0KPiA+ID4gZHVyaW5nIG5vaXJxIHN1
-c3BlbmQgc3RhZ2UuIEFzIGEgcmVzdWx0LCBpMmMgdHJhbnNmZXIgZmFpbHMuDQo+ID4gPiBUbyBz
-b2x2ZSB0aGUgcHJvYmxlbSwgSVJRRl9OT19TVVNQRU5EIGlzIGFkZGVkIHRvIGkyYyBidXMuDQo+
-ID4gPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTogQ2xhcmsgV2FuZyA8eGlhb25pbmcud2FuZ0BueHAu
-Y29tPg0KPiA+DQo+ID4gQWNrZWQtYnk6IE9sZWtzaWogUmVtcGVsIDxvLnJlbXBlbEBwZW5ndXRy
-b25peC5kZT4NCj4gDQo+IElzIHRoaXMgcmVhbGx5IGhhcHBlbmluZz8gVGhlIGRyaXZlciBhbHJl
-YWR5IGltcGxlbWVudHMgbWFzdGVyX3hmZXJfYXRvbWljLA0KPiBzbyBJJ2Qgc3VzcGVjdCBpdCBn
-ZXRzIGNhbGxlZCBpbnN0ZWFkPw0KDQpZZXMsIHlvdSBhcmUgcmlnaHQhDQoNCkZvciB0aGUgYXRv
-bWljIEFQSSwgSSBoYXZlIGEgcXVlc3Rpb24uIFdpbGwgdGhpcyBhcGkgYmUgdXNlZCBvbmx5IGlu
-IHRoZSBub2lycSBwaGFzZT8gV2UgaGF2ZSBhIGNhc2UgdGhhdCBpcyBjdXJyZW50bHkgYm90aGVy
-aW5nIHVzLg0KDQpDYXNlIGRlc2NyaXB0aW9uOiBVc2UgdGhlIHR5cGVjIGRldmljZSBpbnRlcnJ1
-cHQgcGluIHRvIHdha2UgdXAgdGhlIHN1c3BlbmQgc3lzdGVtLiBXZSB1c2VkIHB0bjUxMTAgZm9y
-IHR5cGVjIGRldmljZS4gSXQncyBhbiBpMmMgZGV2aWNlLCBjb25maWd1cmUgaXQgdmlhIGkyYyBi
-dXMuDQoNCldlIGZvdW5kIHRoYXQgd2hlbiB0aGUgc3lzdGVtIGlzIGluIHRoZSByZXN1bWUgcHJv
-Y2VzcyBvZiB3YWtldXAsIGJlY2F1c2UgdGhlIHR5cGVjIGludGVycnVwdCBpcyBub3QgZGlzYWJs
-ZWQgZHVyaW5nIHN1c3BlbmQsIG9uY2UgdGhlIG5vaXJxIHBoYXNlIGlzIG92ZXIsIGl0IHdpbGwg
-aW1tZWRpYXRlbHkgY2FsbCBpMmMgeGZlciB0byByZWFkIGFuZCB3cml0ZSBwdG41MTEwIHRvIGhh
-bmRsZSB0aGF0IGludGVycnVwdC4gQXQgdGhpcyB0aW1lLCBldmVuIHJlc3VtZV9lYXJseSBoYXMg
-bm90IGJlZW4gY2FsbGVkLCB0aGF0IGlzLCB0aGUgcnVudGltZSBwbSBvZiB0aGUgaTJjIGNvbnRy
-b2xsZXIgaGFzIG5vdCBiZWVuIGVuYWJsZWQuDQpXZSBtYWRlIGEgd29ya2Fyb3VuZCB0byBjaGVj
-ayB3aGV0aGVyIHRoZSBydW50aW1lIHBtIGlzIGVuYWJsZWQgaW4gaTJjIHhmZXIuIElmIGl0IGlz
-IG5vdCBlbmFibGVkLCB0ZW1wb3JhcmlseSBlbmFibGUgaXQsIGFuZCBjYWxsIHBtX3J1bnRpbWVf
-ZGlzYWJsZSBhdCB0aGUgZW5kIG9mIGkyYyB4ZmVyLiBIb3dldmVyLCBzb21ldGltZXMgdGhlIHJl
-c3VtZV9lYXJseSB3aWxsIGJlIGNhbGxlZCB3aGVuIHRoZSBydW50aW1lIHBtIGlzIHRlbXBvcmFy
-aWx5IGVuYWJsZWQgaW4gdGhpcyB3b3JrYXJvdW5kLCByZXN1bHRpbmcgaW4gYW4gdW5iYWxhbmNl
-ZCBlbmFibGluZyBvZiB0aGUgcnVudGltZSBwbSBvZiBpMmMgY29udHJvbGxlci4NCg0KRG8geW91
-IHRoaW5rIHRoaXMgaXMgYSBwcm9ibGVtPyBJcyB0aGUgSTJDIGF0b21pYyBBUEkgaGVscGZ1bCBm
-b3IgdGhpcyBjYXNlPw0KDQpUaGFuayB5b3UgdmVyeSBtdWNoIQ0KDQpCZXN0IFJlZ2FyZHMsDQpD
-bGFyayBXYW5nDQo=
+On Thu, Dec 8, 2022 at 3:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 12/8/22 07:04, Badhri Jagan Sridharan wrote:
+> > On some of the TCPC implementations, when the Type-C port is exposed
+> > to contaminants, such as water, TCPC stops toggling while reporting OPEN
+> > either by the time TCPM reads CC pin status or during CC debounce
+> > window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
+> > to restart toggling, the behavior recurs causing redundant CPU wakeups
+> > till the USB-C port is free of contaminant.
+> >
+> > [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> > ...
+> >
+> > TCPM invokes is_potential_contaminant callback to allow low level chip
+> > drivers to monitor TCPM state machine transitions and notify TCPM when
+> > the Type-C port needs to be checked for potential contaminant presence.
+> > TCPCs which do have the needed hardware can implement the check_contaminant
+> > callback which is invoked by TCPM to evaluate for presence of contaminant.
+> > Lower level TCPC driver can restart toggling through TCPM_PORT_CLEAN event
+> > when the driver detects that USB-C port is free of contaminant.
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> > Changes since v5:
+> > * Updated commit message. Removed change id.
+> > Changes since v4:
+> > * None
+> > Changes since v3:
+> > * None
+> > Changes since V2:
+> > * Offloaded tcpm from maintaining disconnect_while_debouncing logic
+> > * to lower level maxim tcpc driver based on feedback.
+> > ---
+> >   drivers/usb/typec/tcpm/tcpm.c | 162 +++++++++-------------------------
+> >   include/linux/usb/tcpm.h      | 133 ++++++++++++++++++++++++++++
+> >   2 files changed, 177 insertions(+), 118 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 904c7b4ce2f0..a138cea49612 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -33,119 +33,6 @@
+> >
+> >   #include <uapi/linux/sched/types.h>
+> >
+> > -#define FOREACH_STATE(S)                     \
+> > -     S(INVALID_STATE),                       \
+> > -     S(TOGGLING),                    \
+> > -     S(SRC_UNATTACHED),                      \
+> > -     S(SRC_ATTACH_WAIT),                     \
+> > -     S(SRC_ATTACHED),                        \
+> > -     S(SRC_STARTUP),                         \
+> > -     S(SRC_SEND_CAPABILITIES),               \
+> > -     S(SRC_SEND_CAPABILITIES_TIMEOUT),       \
+> > -     S(SRC_NEGOTIATE_CAPABILITIES),          \
+> > -     S(SRC_TRANSITION_SUPPLY),               \
+> > -     S(SRC_READY),                           \
+> > -     S(SRC_WAIT_NEW_CAPABILITIES),           \
+> > -                                             \
+> > -     S(SNK_UNATTACHED),                      \
+> > -     S(SNK_ATTACH_WAIT),                     \
+> > -     S(SNK_DEBOUNCED),                       \
+> > -     S(SNK_ATTACHED),                        \
+> > -     S(SNK_STARTUP),                         \
+> > -     S(SNK_DISCOVERY),                       \
+> > -     S(SNK_DISCOVERY_DEBOUNCE),              \
+> > -     S(SNK_DISCOVERY_DEBOUNCE_DONE),         \
+> > -     S(SNK_WAIT_CAPABILITIES),               \
+> > -     S(SNK_NEGOTIATE_CAPABILITIES),          \
+> > -     S(SNK_NEGOTIATE_PPS_CAPABILITIES),      \
+> > -     S(SNK_TRANSITION_SINK),                 \
+> > -     S(SNK_TRANSITION_SINK_VBUS),            \
+> > -     S(SNK_READY),                           \
+> > -                                             \
+> > -     S(ACC_UNATTACHED),                      \
+> > -     S(DEBUG_ACC_ATTACHED),                  \
+> > -     S(AUDIO_ACC_ATTACHED),                  \
+> > -     S(AUDIO_ACC_DEBOUNCE),                  \
+> > -                                             \
+> > -     S(HARD_RESET_SEND),                     \
+> > -     S(HARD_RESET_START),                    \
+> > -     S(SRC_HARD_RESET_VBUS_OFF),             \
+> > -     S(SRC_HARD_RESET_VBUS_ON),              \
+> > -     S(SNK_HARD_RESET_SINK_OFF),             \
+> > -     S(SNK_HARD_RESET_WAIT_VBUS),            \
+> > -     S(SNK_HARD_RESET_SINK_ON),              \
+> > -                                             \
+> > -     S(SOFT_RESET),                          \
+> > -     S(SRC_SOFT_RESET_WAIT_SNK_TX),          \
+> > -     S(SNK_SOFT_RESET),                      \
+> > -     S(SOFT_RESET_SEND),                     \
+> > -                                             \
+> > -     S(DR_SWAP_ACCEPT),                      \
+> > -     S(DR_SWAP_SEND),                        \
+> > -     S(DR_SWAP_SEND_TIMEOUT),                \
+> > -     S(DR_SWAP_CANCEL),                      \
+> > -     S(DR_SWAP_CHANGE_DR),                   \
+> > -                                             \
+> > -     S(PR_SWAP_ACCEPT),                      \
+> > -     S(PR_SWAP_SEND),                        \
+> > -     S(PR_SWAP_SEND_TIMEOUT),                \
+> > -     S(PR_SWAP_CANCEL),                      \
+> > -     S(PR_SWAP_START),                       \
+> > -     S(PR_SWAP_SRC_SNK_TRANSITION_OFF),      \
+> > -     S(PR_SWAP_SRC_SNK_SOURCE_OFF),          \
+> > -     S(PR_SWAP_SRC_SNK_SOURCE_OFF_CC_DEBOUNCED), \
+> > -     S(PR_SWAP_SRC_SNK_SINK_ON),             \
+> > -     S(PR_SWAP_SNK_SRC_SINK_OFF),            \
+> > -     S(PR_SWAP_SNK_SRC_SOURCE_ON),           \
+> > -     S(PR_SWAP_SNK_SRC_SOURCE_ON_VBUS_RAMPED_UP),    \
+> > -                                             \
+> > -     S(VCONN_SWAP_ACCEPT),                   \
+> > -     S(VCONN_SWAP_SEND),                     \
+> > -     S(VCONN_SWAP_SEND_TIMEOUT),             \
+> > -     S(VCONN_SWAP_CANCEL),                   \
+> > -     S(VCONN_SWAP_START),                    \
+> > -     S(VCONN_SWAP_WAIT_FOR_VCONN),           \
+> > -     S(VCONN_SWAP_TURN_ON_VCONN),            \
+> > -     S(VCONN_SWAP_TURN_OFF_VCONN),           \
+> > -                                             \
+> > -     S(FR_SWAP_SEND),                        \
+> > -     S(FR_SWAP_SEND_TIMEOUT),                \
+> > -     S(FR_SWAP_SNK_SRC_TRANSITION_TO_OFF),                   \
+> > -     S(FR_SWAP_SNK_SRC_NEW_SINK_READY),              \
+> > -     S(FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED), \
+> > -     S(FR_SWAP_CANCEL),                      \
+> > -                                             \
+> > -     S(SNK_TRY),                             \
+> > -     S(SNK_TRY_WAIT),                        \
+> > -     S(SNK_TRY_WAIT_DEBOUNCE),               \
+> > -     S(SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS),    \
+> > -     S(SRC_TRYWAIT),                         \
+> > -     S(SRC_TRYWAIT_DEBOUNCE),                \
+> > -     S(SRC_TRYWAIT_UNATTACHED),              \
+> > -                                             \
+> > -     S(SRC_TRY),                             \
+> > -     S(SRC_TRY_WAIT),                        \
+> > -     S(SRC_TRY_DEBOUNCE),                    \
+> > -     S(SNK_TRYWAIT),                         \
+> > -     S(SNK_TRYWAIT_DEBOUNCE),                \
+> > -     S(SNK_TRYWAIT_VBUS),                    \
+> > -     S(BIST_RX),                             \
+> > -                                             \
+> > -     S(GET_STATUS_SEND),                     \
+> > -     S(GET_STATUS_SEND_TIMEOUT),             \
+> > -     S(GET_PPS_STATUS_SEND),                 \
+> > -     S(GET_PPS_STATUS_SEND_TIMEOUT),         \
+> > -                                             \
+> > -     S(GET_SINK_CAP),                        \
+> > -     S(GET_SINK_CAP_TIMEOUT),                \
+> > -                                             \
+> > -     S(ERROR_RECOVERY),                      \
+> > -     S(PORT_RESET),                          \
+> > -     S(PORT_RESET_WAIT_OFF),                 \
+> > -                                             \
+> > -     S(AMS_START),                           \
+> > -     S(CHUNK_NOT_SUPP)
+> > -
+> >   #define FOREACH_AMS(S)                              \
+> >       S(NONE_AMS),                            \
+> >       S(POWER_NEGOTIATION),                   \
+> > @@ -182,13 +69,8 @@
+> >       S(COUNTRY_INFO),                        \
+> >       S(COUNTRY_CODES)
+> >
+> > -#define GENERATE_ENUM(e)     e
+> >   #define GENERATE_STRING(s)  #s
+> >
+> > -enum tcpm_state {
+> > -     FOREACH_STATE(GENERATE_ENUM)
+> > -};
+> > -
+> >   static const char * const tcpm_states[] = {
+> >       FOREACH_STATE(GENERATE_STRING)
+> >   };
+> > @@ -249,6 +131,7 @@ enum frs_typec_current {
+> >   #define TCPM_RESET_EVENT    BIT(2)
+> >   #define TCPM_FRS_EVENT              BIT(3)
+> >   #define TCPM_SOURCING_VBUS  BIT(4)
+> > +#define TCPM_PORT_CLEAN              BIT(5)
+> >
+> >   #define LOG_BUFFER_ENTRIES  1024
+> >   #define LOG_BUFFER_ENTRY_SIZE       128
+> > @@ -483,6 +366,14 @@ struct tcpm_port {
+> >        * SNK_READY for non-pd link.
+> >        */
+> >       bool slow_charger_loop;
+> > +
+> > +     /*
+> > +      * When true indicates that the lower level drivers indicate potential presence
+> > +      * of contaminant in the connector pins based on the tcpm state machine
+> > +      * transitions.
+> > +      */
+> > +     bool potential_contaminant;
+> > +
+> >   #ifdef CONFIG_DEBUG_FS
+> >       struct dentry *dentry;
+> >       struct mutex logbuffer_lock;    /* log buffer access lock */
+> > @@ -3904,15 +3795,26 @@ static void run_state_machine(struct tcpm_port *port)
+> >       unsigned int msecs;
+> >       enum tcpm_state upcoming_state;
+> >
+> > +     if (port->tcpc->is_potential_contaminant)
+> > +             port->potential_contaminant =
+> > +                     port->tcpc->is_potential_contaminant(port->tcpc, port->state);
+> > +
+> >       port->enter_state = port->state;
+> >       switch (port->state) {
+> >       case TOGGLING:
+> >               break;
+> > +     case CHECK_CONTAMINANT:
+> > +             port->tcpc->check_contaminant(port->tcpc);
+> > +             break;
+> >       /* SRC states */
+> >       case SRC_UNATTACHED:
+> >               if (!port->non_pd_role_swap)
+> >                       tcpm_swap_complete(port, -ENOTCONN);
+> >               tcpm_src_detach(port);
+> > +             if (port->potential_contaminant && port->tcpc->check_contaminant) {
+> > +                     tcpm_set_state(port, CHECK_CONTAMINANT, 0);
+> > +                     break;
+> > +             }
+> >               if (tcpm_start_toggling(port, tcpm_rp_cc(port))) {
+> >                       tcpm_set_state(port, TOGGLING, 0);
+> >                       break;
+> > @@ -4150,6 +4052,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >                       tcpm_swap_complete(port, -ENOTCONN);
+> >               tcpm_pps_complete(port, -ENOTCONN);
+> >               tcpm_snk_detach(port);
+> > +             if (port->potential_contaminant && port->tcpc->check_contaminant) {
+> > +                     tcpm_set_state(port, CHECK_CONTAMINANT, 0);
+> > +                     break;
+> > +             }
+> >               if (tcpm_start_toggling(port, TYPEC_CC_RD)) {
+> >                       tcpm_set_state(port, TOGGLING, 0);
+> >                       break;
+> > @@ -4926,6 +4832,9 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+> >               else if (tcpm_port_is_sink(port))
+> >                       tcpm_set_state(port, SNK_ATTACH_WAIT, 0);
+> >               break;
+> > +     case CHECK_CONTAMINANT:
+> > +             /* Wait for Toggling to be resumed */
+> > +             break;
+> >       case SRC_UNATTACHED:
+> >       case ACC_UNATTACHED:
+> >               if (tcpm_port_is_debug(port) || tcpm_port_is_audio(port) ||
+> > @@ -5425,6 +5334,10 @@ static void tcpm_pd_event_handler(struct kthread_work *work)
+> >                       port->vbus_source = true;
+> >                       _tcpm_pd_vbus_on(port);
+> >               }
+> > +             if (events & TCPM_PORT_CLEAN) {
+> > +                     tcpm_log(port, "port clean");
+> > +                     tcpm_set_state(port, TOGGLING, 0);
+> > +             }
+>
+> That sets the state to TOGGLING unconditionally, even if it not currently
+> CHECK_CONTAMINANT. Is that a potential problem ?
+
+Good catch ! Would make sense to check whether tcpm is in
+CHECK_CONTAMINANT state before setting the TOGGLING state.
+>
+> >
+> >               spin_lock(&port->pd_event_lock);
+> >       }
+> > @@ -5477,6 +5390,19 @@ void tcpm_sourcing_vbus(struct tcpm_port *port)
+> >   }
+> >   EXPORT_SYMBOL_GPL(tcpm_sourcing_vbus);
+> >
+> > +/*
+> > + * Low level tcpc drivers invoke this once the port is deemed clean to return
+> > + * the port to TOGGLING state.
+> > + */
+> > +void tcpm_port_clean(struct tcpm_port *port)
+> > +{
+> > +     spin_lock(&port->pd_event_lock);
+> > +     port->pd_events |= TCPM_PORT_CLEAN;
+> > +     spin_unlock(&port->pd_event_lock);
+> > +     kthread_queue_work(port->wq, &port->event_work);
+> > +}
+> > +EXPORT_SYMBOL_GPL(tcpm_port_clean);
+> > +
+> >   static void tcpm_enable_frs_work(struct kthread_work *work)
+> >   {
+> >       struct tcpm_port *port = container_of(work, struct tcpm_port, enable_frs);
+> > diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> > index bffc8d3e14ad..9cf16372a6e4 100644
+> > --- a/include/linux/usb/tcpm.h
+> > +++ b/include/linux/usb/tcpm.h
+> > @@ -10,6 +10,126 @@
+> >   #include <linux/usb/typec.h>
+> >   #include "pd.h"
+> >
+> > +#define FOREACH_STATE(S)                     \
+> > +     S(INVALID_STATE),                       \
+> > +     S(TOGGLING),                    \
+> > +     S(CHECK_CONTAMINANT),                   \
+> > +     S(SRC_UNATTACHED),                      \
+> > +     S(SRC_ATTACH_WAIT),                     \
+> > +     S(SRC_ATTACHED),                        \
+> > +     S(SRC_STARTUP),                         \
+> > +     S(SRC_SEND_CAPABILITIES),               \
+> > +     S(SRC_SEND_CAPABILITIES_TIMEOUT),       \
+> > +     S(SRC_NEGOTIATE_CAPABILITIES),          \
+> > +     S(SRC_TRANSITION_SUPPLY),               \
+> > +     S(SRC_READY),                           \
+> > +     S(SRC_WAIT_NEW_CAPABILITIES),           \
+> > +                                             \
+> > +     S(SNK_UNATTACHED),                      \
+> > +     S(SNK_ATTACH_WAIT),                     \
+> > +     S(SNK_DEBOUNCED),                       \
+> > +     S(SNK_ATTACHED),                        \
+> > +     S(SNK_STARTUP),                         \
+> > +     S(SNK_DISCOVERY),                       \
+> > +     S(SNK_DISCOVERY_DEBOUNCE),              \
+> > +     S(SNK_DISCOVERY_DEBOUNCE_DONE),         \
+> > +     S(SNK_WAIT_CAPABILITIES),               \
+> > +     S(SNK_NEGOTIATE_CAPABILITIES),          \
+> > +     S(SNK_NEGOTIATE_PPS_CAPABILITIES),      \
+> > +     S(SNK_TRANSITION_SINK),                 \
+> > +     S(SNK_TRANSITION_SINK_VBUS),            \
+> > +     S(SNK_READY),                           \
+> > +                                             \
+> > +     S(ACC_UNATTACHED),                      \
+> > +     S(DEBUG_ACC_ATTACHED),                  \
+> > +     S(AUDIO_ACC_ATTACHED),                  \
+> > +     S(AUDIO_ACC_DEBOUNCE),                  \
+> > +                                             \
+> > +     S(HARD_RESET_SEND),                     \
+> > +     S(HARD_RESET_START),                    \
+> > +     S(SRC_HARD_RESET_VBUS_OFF),             \
+> > +     S(SRC_HARD_RESET_VBUS_ON),              \
+> > +     S(SNK_HARD_RESET_SINK_OFF),             \
+> > +     S(SNK_HARD_RESET_WAIT_VBUS),            \
+> > +     S(SNK_HARD_RESET_SINK_ON),              \
+> > +                                             \
+> > +     S(SOFT_RESET),                          \
+> > +     S(SRC_SOFT_RESET_WAIT_SNK_TX),          \
+> > +     S(SNK_SOFT_RESET),                      \
+> > +     S(SOFT_RESET_SEND),                     \
+> > +                                             \
+> > +     S(DR_SWAP_ACCEPT),                      \
+> > +     S(DR_SWAP_SEND),                        \
+> > +     S(DR_SWAP_SEND_TIMEOUT),                \
+> > +     S(DR_SWAP_CANCEL),                      \
+> > +     S(DR_SWAP_CHANGE_DR),                   \
+> > +                                             \
+> > +     S(PR_SWAP_ACCEPT),                      \
+> > +     S(PR_SWAP_SEND),                        \
+> > +     S(PR_SWAP_SEND_TIMEOUT),                \
+> > +     S(PR_SWAP_CANCEL),                      \
+> > +     S(PR_SWAP_START),                       \
+> > +     S(PR_SWAP_SRC_SNK_TRANSITION_OFF),      \
+> > +     S(PR_SWAP_SRC_SNK_SOURCE_OFF),          \
+> > +     S(PR_SWAP_SRC_SNK_SOURCE_OFF_CC_DEBOUNCED), \
+> > +     S(PR_SWAP_SRC_SNK_SINK_ON),             \
+> > +     S(PR_SWAP_SNK_SRC_SINK_OFF),            \
+> > +     S(PR_SWAP_SNK_SRC_SOURCE_ON),           \
+> > +     S(PR_SWAP_SNK_SRC_SOURCE_ON_VBUS_RAMPED_UP),    \
+> > +                                             \
+> > +     S(VCONN_SWAP_ACCEPT),                   \
+> > +     S(VCONN_SWAP_SEND),                     \
+> > +     S(VCONN_SWAP_SEND_TIMEOUT),             \
+> > +     S(VCONN_SWAP_CANCEL),                   \
+> > +     S(VCONN_SWAP_START),                    \
+> > +     S(VCONN_SWAP_WAIT_FOR_VCONN),           \
+> > +     S(VCONN_SWAP_TURN_ON_VCONN),            \
+> > +     S(VCONN_SWAP_TURN_OFF_VCONN),           \
+> > +                                             \
+> > +     S(FR_SWAP_SEND),                        \
+> > +     S(FR_SWAP_SEND_TIMEOUT),                \
+> > +     S(FR_SWAP_SNK_SRC_TRANSITION_TO_OFF),                   \
+> > +     S(FR_SWAP_SNK_SRC_NEW_SINK_READY),              \
+> > +     S(FR_SWAP_SNK_SRC_SOURCE_VBUS_APPLIED), \
+> > +     S(FR_SWAP_CANCEL),                      \
+> > +                                             \
+> > +     S(SNK_TRY),                             \
+> > +     S(SNK_TRY_WAIT),                        \
+> > +     S(SNK_TRY_WAIT_DEBOUNCE),               \
+> > +     S(SNK_TRY_WAIT_DEBOUNCE_CHECK_VBUS),    \
+> > +     S(SRC_TRYWAIT),                         \
+> > +     S(SRC_TRYWAIT_DEBOUNCE),                \
+> > +     S(SRC_TRYWAIT_UNATTACHED),              \
+> > +                                             \
+> > +     S(SRC_TRY),                             \
+> > +     S(SRC_TRY_WAIT),                        \
+> > +     S(SRC_TRY_DEBOUNCE),                    \
+> > +     S(SNK_TRYWAIT),                         \
+> > +     S(SNK_TRYWAIT_DEBOUNCE),                \
+> > +     S(SNK_TRYWAIT_VBUS),                    \
+> > +     S(BIST_RX),                             \
+> > +                                             \
+> > +     S(GET_STATUS_SEND),                     \
+> > +     S(GET_STATUS_SEND_TIMEOUT),             \
+> > +     S(GET_PPS_STATUS_SEND),                 \
+> > +     S(GET_PPS_STATUS_SEND_TIMEOUT),         \
+> > +                                             \
+> > +     S(GET_SINK_CAP),                        \
+> > +     S(GET_SINK_CAP_TIMEOUT),                \
+> > +                                             \
+> > +     S(ERROR_RECOVERY),                      \
+> > +     S(PORT_RESET),                          \
+> > +     S(PORT_RESET_WAIT_OFF),                 \
+> > +                                             \
+> > +     S(AMS_START),                           \
+> > +     S(CHUNK_NOT_SUPP)
+> > +
+> > +#define GENERATE_ENUM(e)     e
+> > +
+> > +enum tcpm_state {
+> > +     FOREACH_STATE(GENERATE_ENUM)
+> > +};
+> > +
+>
+> Sorry for not bringing it up earlier; I have been struggling with it all along,
+> and I could not decide if I should bring it up or not.
+>
+> I really don't feel comfortable with exporting states outside tcpm.
+> Is this really necessary ? The only use seems to be
+>
+> +       if ((tcpm_prev_state == SRC_ATTACH_WAIT && current_state == SRC_UNATTACHED) ||
+> +           (tcpm_prev_state == SNK_ATTACH_WAIT && current_state == SNK_UNATTACHED))
+>
+> Plus, of course, the CHECK_CONTAMINANT state.
+>
+> Is there reason to believe that the relevant state transitions would be different
+> for other chips ? If not, would it possibly make sense to move this check
+> into the state machine ?
+
+In my understanding, this is definitely one of the transitions that I
+think will happen when the port has contaminant. It's quite possible
+that there are transitions that I am not aware of yet.
+I am OK moving it back to the tcpm state machine, however, then tcpm
+would have to keep track of the tcpm state machine transitions and
+that would look like V2 version of the patch
+(https://lore.kernel.org/lkml/20220831001555.285081-1-badhri@google.com/)
+where disconnect_while_debouncing is used to track this. Would that be
+OK ?
+
+>
+> >   enum typec_cc_status {
+> >       TYPEC_CC_OPEN,
+> >       TYPEC_CC_RA,
+> > @@ -114,6 +234,16 @@ enum tcpm_transmit_type {
+> >    *              Optional; The USB Communications Capable bit indicates if port
+> >    *              partner is capable of communication over the USB data lines
+> >    *              (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
+> > + * @check_contaminant:
+> > + *           Optional; The callback is invoked when chiplevel drivers indicated
+> > + *           that the USB port needs to be checked for contaminant presence.
+> > + *           Chip level drivers are expected to check for contaminant and call
+> > + *           tcpm_clean_port when the port is clean to put the port back into
+> > + *           toggling state.
+> > + * @is_potential_contaminant:
+> > + *           Optional; TCPM invokes the callback for every TCPM state machine
+> > + *           transition. Chiplevel drivers can monitor the state machine
+> > + *           transitions to flag for potential contaminant presence.
+>
+> I kind of dislike the repeated checks for those callbacks in the state machine.
+> Does it make any sense to have one of those callbacks but not the other ?
+>
+> Because if not it might make sense to check in the registration function
+> if either both are NULL or both are set, and then drop most of the checks
+> in the state machine handler.
+
+I can definitely check for the registration of the callbacks but cant
+drop one of them unless we are OK to make tcpm transitions and invoke
+the check_contaminant callback directly.
+
+Thanks,
+Badhri
+
+
+>
+> Thanks,
+> Guenter
+>
+> >    */
+> >   struct tcpc_dev {
+> >       struct fwnode_handle *fwnode;
+> > @@ -148,6 +278,8 @@ struct tcpc_dev {
+> >                                                bool pps_active, u32 requested_vbus_voltage);
+> >       bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+> >       void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
+> > +     void (*check_contaminant)(struct tcpc_dev *dev);
+> > +     bool (*is_potential_contaminant)(struct tcpc_dev *dev, enum tcpm_state current_state);
+> >   };
+> >
+> >   struct tcpm_port;
+> > @@ -165,5 +297,6 @@ void tcpm_pd_transmit_complete(struct tcpm_port *port,
+> >                              enum tcpm_transmit_status status);
+> >   void tcpm_pd_hard_reset(struct tcpm_port *port);
+> >   void tcpm_tcpc_reset(struct tcpm_port *port);
+> > +void tcpm_port_clean(struct tcpm_port *port);
+> >
+> >   #endif /* __LINUX_USB_TCPM_H */
+> >
+> > base-commit: 1524ceb14dd5ebd6f724d993c5ec1a9a8d445d8e
+>
