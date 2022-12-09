@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFD3648356
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CC564833D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiLIOFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S229983AbiLIOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiLIOFT (ORCPT
+        with ESMTP id S229902AbiLIOFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:05:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487287723F;
-        Fri,  9 Dec 2022 06:05:15 -0800 (PST)
+        Fri, 9 Dec 2022 09:05:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A229975BC2;
+        Fri,  9 Dec 2022 06:05:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E71BB821FB;
-        Fri,  9 Dec 2022 14:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493D5C433EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F408562253;
+        Fri,  9 Dec 2022 14:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC5AC433D2;
         Fri,  9 Dec 2022 14:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1670594713;
-        bh=6uHKC/rYNMZbGqgdzTkCFSACHYrX65u6glI/1+02iB0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=B1fmxikqb8Fw67G0tC7YA9Efg+IL/HqcUBdjDdfPrsQhNY/mQBKRtz5YnrDnnVhUc
-         BEJezUadtkdrQD5ixCWcX/j4cRItCf0riR0INKkRNXKwmhg3/nfM6Qu8jyrkUJ3xcV
-         c9QE3PZlgs9qCvOHj8wjdpVddifI2S0oeA4j6MZJfgFKtTxnSbd0cPCq9K6djnrJy1
-         rYznRVt4XbTP0sQVPKxMOkfq//4yg+66BT0EwB6v7pi8nz7vaCpAR7sBClK2YPq6pn
-         zOB/CxyUVyyrJ+V4scR2b8ucmxivPTUb5ESteT8w/ypt1NER1wSEyW1Gbgf6bkYT6i
-         m6ZuhT2qjK++g==
+        bh=SjCpvljZm9XNVxL3XT6AlbBdKw5R8JeaSMnpPTwki1E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nSaWAlAUrqEG5ELDFmUcCWJPu5CdS+h5m0QCJd8D1jkUxpD1G0JIVdf98aHAE5jSS
+         4xcm5Y55UxqCaqkWKa1VD8XoV6lT4PICg4nL75h4zYyjRuBV3z5evo0gXQVbGBJXvv
+         IMAY1rMNgetBFtaxQohto8eRNKsqc6HobhtXWDqlCt4LhgTEPJTca+UtoTlfljiOGo
+         nTHEV39C9ACQWgg2XCivAoqu+6UpJoOaWSUJBZ97VfV9EGjbNLCq/2xcUhykx8IzWW
+         v7w2vmkA1YIoyDL7cnJtXGQCxvX3CvqiKbNiJms4JkSfhsI9P56O9wb6GHW4vdhN6G
+         2qND3lMvL9kpQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1p3e0I-0000RN-3S; Fri, 09 Dec 2022 15:05:30 +0100
+        id 1p3e0I-0000RP-6n; Fri, 09 Dec 2022 15:05:30 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
@@ -42,10 +42,12 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 00/19] irqdomain: fix mapping race and clean up locking
-Date:   Fri,  9 Dec 2022 15:01:31 +0100
-Message-Id: <20221209140150.1453-1-johan+linaro@kernel.org>
+Subject: [PATCH v3 01/19] irqdomain: Drop bogus fwspec-mapping error handling
+Date:   Fri,  9 Dec 2022 15:01:32 +0100
+Message-Id: <20221209140150.1453-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221209140150.1453-1-johan+linaro@kernel.org>
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -57,69 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parallel probing (e.g. due to asynchronous probing) of devices that
-share interrupts can currently result in two mappings for the same
-hardware interrupt to be created.
+In case a newly allocated IRQ ever ends up not having any associated
+struct irq_data it would not even be possible to dispose the mapping.
 
-This series fixes this mapping race and clean up the irqdomain locking
-so that in the end the global irq_domain_mutex is only used for managing
-the likewise global irq_domain_list, while domain operations (e.g.
-IRQ allocations) use per-domain (hierarchy) locking.
+Replace the bogus disposal with a WARN_ON().
 
-Johan
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ kernel/irq/irqdomain.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-
-Changes in v2
- - split out redundant-lookup cleanup (1/4)
- - use a per-domain mutex to address mapping race (2/4)
- - move kernel-doc to exported function (2/4)
- - fix association race (3/4, new)
- - use per-domain mutex for associations (4/4, new)
-
-Changes in v3
- - drop dead and bogus code (1--3/19, new)
- - fix racy mapcount accesses (5/19, new)
- - drop revmap mutex (6/19, new)
- - use irq_domain_mutex to address mapping race (9/19)
- - clean up irq_domain_push/pop_irq() (10/19, new)
- - use irq_domain_create_hierarchy() to construct hierarchies
-   (11--18/19, new)
- - switch to per-domain locking (19/19, new)
-
-
-Johan Hovold (19):
-  irqdomain: Drop bogus fwspec-mapping error handling
-  irqdomain: Drop dead domain-name assignment
-  irqdomain: Drop leftover brackets
-  irqdomain: Fix association race
-  irqdomain: Fix disassociation race
-  irqdomain: Drop revmap mutex
-  irqdomain: Look for existing mapping only once
-  irqdomain: Refactor __irq_domain_alloc_irqs()
-  irqdomain: Fix mapping-creation race
-  irqdomain: Clean up irq_domain_push/pop_irq()
-  x86/ioapic: Use irq_domain_create_hierarchy()
-  x86/apic: Use irq_domain_create_hierarchy()
-  irqchip/alpine-msi: Use irq_domain_add_hierarchy()
-  irqchip/gic-v2m: Use irq_domain_create_hierarchy()
-  irqchip/gic-v3-its: Use irq_domain_create_hierarchy()
-  irqchip/gic-v3-mbi: Use irq_domain_create_hierarchy()
-  irqchip/loongson-pch-msi: Use irq_domain_create_hierarchy()
-  irqchip/mvebu-odmi: Use irq_domain_create_hierarchy()
-  irqdomain: Switch to per-domain locking
-
- arch/x86/kernel/apic/io_apic.c         |   8 +-
- arch/x86/platform/uv/uv_irq.c          |   7 +-
- drivers/irqchip/irq-alpine-msi.c       |   8 +-
- drivers/irqchip/irq-gic-v2m.c          |   5 +-
- drivers/irqchip/irq-gic-v3-its.c       |  13 +-
- drivers/irqchip/irq-gic-v3-mbi.c       |   5 +-
- drivers/irqchip/irq-loongson-pch-msi.c |   9 +-
- drivers/irqchip/irq-mvebu-odmi.c       |  13 +-
- include/linux/irqdomain.h              |   6 +-
- kernel/irq/irqdomain.c                 | 328 ++++++++++++++-----------
- 10 files changed, 220 insertions(+), 182 deletions(-)
-
+diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+index 8fe1da9614ee..bf67de1733ee 100644
+--- a/kernel/irq/irqdomain.c
++++ b/kernel/irq/irqdomain.c
+@@ -833,13 +833,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+ 	}
+ 
+ 	irq_data = irq_get_irq_data(virq);
+-	if (!irq_data) {
+-		if (irq_domain_is_hierarchy(domain))
+-			irq_domain_free_irqs(virq, 1);
+-		else
+-			irq_dispose_mapping(virq);
++	if (WARN_ON(!irq_data))
+ 		return 0;
+-	}
+ 
+ 	/* Store trigger type */
+ 	irqd_set_trigger_type(irq_data, type);
 -- 
 2.37.4
 
