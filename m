@@ -2,103 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5FF6487F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44BE6487F8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiLIRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S229830AbiLIRv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLIRtU (ORCPT
+        with ESMTP id S229722AbiLIRvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:49:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D8769332;
-        Fri,  9 Dec 2022 09:49:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7286622CF;
-        Fri,  9 Dec 2022 17:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04487C433D2;
-        Fri,  9 Dec 2022 17:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670608158;
-        bh=m6SS2DDS4p6GsaniGyVCYqB96onm+knvX+hrwb8N7qQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V318J8bcBcsnu5gXOqhsDTBA5VnGd3PSACWx7cXJQ6kbjFJkAIf9exb2gnOo+67Q+
-         TF+/KjiPIi9WlGS/g0BktJ01BKw3xh6ZqYBzByNEGN/iWotYyezAD6PI2o7lTDKNX9
-         amoXxi/jStPoAP3bH/6Ik/HrRyCumdbtZydlKy3e3EmdFnvd3xI2NE+OSWk8HYdLZu
-         u6PU7fyZv2d1q8kfhZ7jHTmsHtyTckuVtP8agKTisMHTC2QcZwmIFSgHbKewDT+nrK
-         8Jy3PcS82IsJ7qKt7XW78lODIupW4OveP7h7ZiP3045nYBq9Xafukukxho6VE/Lq/I
-         A8zypi22RgixQ==
-Date:   Fri, 9 Dec 2022 10:49:16 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH 2/2] kbuild: add -Wundef to KBUILD_CPPFLAGS for W=1 builds
-Message-ID: <Y5N1HGYyJGgm3qVH@dev-arch.thelio-3990X>
-References: <20221206040731.442499-1-masahiroy@kernel.org>
- <20221206040731.442499-2-masahiroy@kernel.org>
+        Fri, 9 Dec 2022 12:51:23 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8713C7A192
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:51:22 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id v71so6376522ybv.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:51:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fB/VNCYffmzHZxGdo7js0W5KTDDb84plw+kdg5svHiI=;
+        b=Dvxrl5ZOSl8QHV19bowOaitVtpvtOZG3MCaawkrqS6zON7VEX2ibTONalB1BaXJDs7
+         IOkOt/d1o+1vvxqrF/Is9DyNixKtprb3PVn6zFfdwkiAb75Sxx+sbDFeA3Yw2ad4518S
+         7GX+eXTUIhi4LEQPDLBpr0b8AG09KQglK3hQHUmMtcMqDXE3pv3Z9sKkkYH5O+dqGQrW
+         x97n73QVDO3VI89KR2fKQ9BIYtlzf/RIs6ziUTYWS0eT5KX45Wj4CKWXjXs7SbyWWUDg
+         SxeUuXL4QZGWs5PKKdjB4AC/7ccpXRs5Iq8BcQx5Z5o0pxKXpeWkDYaH0KgL1HfzDs+d
+         aNbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fB/VNCYffmzHZxGdo7js0W5KTDDb84plw+kdg5svHiI=;
+        b=PTo6Tbqo491x0Q9GQ06I6lDvW5VWV+ImwTXH3v3T3mjzACHPx76Vxd10z9z1Xm+2TD
+         GXiMg9nL/u42c/oO7Gwn4I2aKcFVPQE+naitGFG3B9HO2Vor7oppkLs0WlFk0YXrse2v
+         sHeG7r3Gas9E0vsNvtZ4RLoHBkHgsX3wWZfBX56y4PSq/7Foio3rMKIJNSEv7GzmWKuw
+         9bUltv5ZP0Xja2HIe84GOR95oav6m4g46Sj5jvjGl/ov4pqJ4C0tRWkgQN50cQ2CsT43
+         jLUFHH6ioFnuNecVbPgqzAWWZ7BZdZEIANyYThYPuUqP4JkqmiERI3Blu2DAbkyd15+d
+         E/5g==
+X-Gm-Message-State: ANoB5pl1z4XpCebuP4Pt5ef2GzpXfr2LXrNccMf0d2cBZ45SW/C7Jdcj
+        cKyWv9FwHF0q0FfUb70HSQ3KerIUThba59R8AvbIAQ==
+X-Google-Smtp-Source: AA0mqf5GiGSEzfbvXCkKj2ph10ZyVtLGYlWo2eaF6hnhYo7Gi6YWnfbQ4IDbJRw9BDaw6i3LiBQQXUTtRjhvNVqkYDE=
+X-Received: by 2002:a25:d4d5:0:b0:70d:f50c:29ad with SMTP id
+ m204-20020a25d4d5000000b0070df50c29admr2866471ybf.265.1670608281652; Fri, 09
+ Dec 2022 09:51:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206040731.442499-2-masahiroy@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com>
+ <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com> <CALprXBayJtWRe9J+q7EahgpXrRy_B-tMAf0KXbDtWa+=4RKyHA@mail.gmail.com>
+ <22043956-e18c-9ed6-5091-188ae40f3cd9@linux.intel.com>
+In-Reply-To: <22043956-e18c-9ed6-5091-188ae40f3cd9@linux.intel.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Sat, 10 Dec 2022 01:51:10 +0800
+Message-ID: <CALprXBbxb_m_ieAi9VohZE+yUpyJ51rGE2VuskJpgNabB-gRCQ@mail.gmail.com>
+Subject: Re: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with
+ amp nau8318
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Libin Yang <libin.yang@intel.com>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:07:31PM +0900, Masahiro Yamada wrote:
-> The use of an undefined macro in an #if directive is warned, but only
-> in *.c files. No warning from other files such as *.S, *.lds.S.
-> 
-> Since -Wundef is a preprocessor-related warning, it should be added to
-> KBUILD_CPPFLAGS instead of KBUILD_CFLAGS.
-> 
-> My previous attempt [1] uncovered several warnings, and could not finish
-> fixing them all.
-> 
-> This commit adds -Wundef to KBUILD_CPPFLAGS for W=1 builds in order to
-> block new breakages. (The kbuild test robot tests with W=1)
-> 
-> We can fix the warnings one by one. After we fix all of them, we can
-> make this default in the top Makefile, and remove -Wundef from
-> KBUILD_CFLAGS.
-> 
-> [1]: https://lore.kernel.org/all/20221012180118.331005-2-masahiroy@kernel.org/
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+HI Pierre,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+On Sat, Dec 10, 2022 at 1:31 AM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
 
-Looks like the robot already found a few so this clearly works as
-intended.
+> Suggested edit:
+>
+> ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+>
 
-> ---
-> 
->  scripts/Makefile.extrawarn | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 6bbba36c5969..40cd13eca82e 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -38,6 +38,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
->  KBUILD_CFLAGS += -Wno-type-limits
->  KBUILD_CFLAGS += -Wno-shift-negative-value
->  
-> +KBUILD_CPPFLAGS += -Wundef
->  KBUILD_CPPFLAGS += -DKBUILD_EXTRA_WARN1
->  
->  else
-> -- 
-> 2.34.1
-> 
-> 
+> That should be added in the commit message please.
+>
+
+Thank you for the suggestion title and I will add those explanations
+in the comment message.
+
+> Ok, makes sense now. Please do include the explanations on 8315/8318
+> variants, I couldn't figure out what chips were used.
+>
+> I would also not use the same topology name as a different platform with
+> another amplifier. I appreciate you trying to reuse when possible, but
+> it's just better to create a new topology file. That way if you want any
+> update down the road you can do so, it's more maintainable and risk-free.
+
+OK, The v2 patch will be sent after the new topology file is created. Thank you.
