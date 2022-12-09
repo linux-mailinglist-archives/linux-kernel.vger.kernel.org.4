@@ -2,197 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7864849A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E8364849F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiLIPFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S230143AbiLIPHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiLIPFP (ORCPT
+        with ESMTP id S230180AbiLIPGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:05:15 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40119C23
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:05:14 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id t2so2159697ply.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:05:14 -0800 (PST)
+        Fri, 9 Dec 2022 10:06:31 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543F089338
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:05:53 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id f20so5204791lja.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:05:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bYXaODBVhflASZ7OxFAgzxq0Ral2A1PhxDvbahBGsvE=;
-        b=r82KimHTdYUJfTD2kSEU0d5/sHOgGIZebkfojO+q3neNyh7NCtKuRC6Zz3c9PE3ibd
-         iKKAoa23sJV2mQfhfpvTYF3KNMr3Tv9e8rwlZLDU7HfYjbDzTMIfDebIPNcK3i4X+wfS
-         eN+dv2k74QzCjEokGJya1Z8SrZVl9L0uF5jLW1C7VoJ4neLWAZrfU6vwk9G2Xu5C7fr6
-         LWx82xaeXPrR0v1L5jZt4pzQm2pV7naPBPxkZlBlgy0LIMq0u9Yom3PNl8Bs+6DgjcfR
-         pBvnf7m0h2TLoQ6wOjt4xRmbJaWUaH0+Y4jobjQRErSRIaKteuBhv4RA+MsUyKLoi3cm
-         jnTw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Eb+dzXKfFxLhKYjaGwUiIKvSA18uKRx27pJ/FmHwtEU=;
+        b=UaqEE2V7XWYGetw5n3TULGb3MoulZySHOYQ45kKm+9Eji+t1wo6MYUsW1LCCKdPiPY
+         Vu266DfbJXMo4NoR0PIPAf0q2mOUQQ0RzXKII/DP5rY/X7uagyLXuOCAZ/LIRCbMWkVD
+         KHE0DkBTFDkR9uIFeVYbEl7pJzQazF6EKMmuQyiP9Ktjxd+KxzAKbUj3M8Ha/IIGvVP/
+         UqHY/ruIR5qS9yi2gb/bpnCK86jZmpJhHENjwoSGG+GYN4OVQB8kPmFdHoLVIk5xwRNB
+         YH1m3qyByyMey0nxj7P+MukceClfttKeE3lSNC9BfGc+JFoXsYmUIrS4/89ZAatwcjmY
+         3CMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bYXaODBVhflASZ7OxFAgzxq0Ral2A1PhxDvbahBGsvE=;
-        b=NybbFae50IVDB8i7Az9PN2q2Cc6nGuI+B4PRuxj/sqW1r7u/zH3OvkiqzIeAwQadly
-         mT2xR7yNOr+2dSHj18E4d98SXbe53vrQaXSulsgZHEY2VuWXOkDkE2uQAwBwLlJjCxlt
-         uEoUrpnu9E7WANMdl6LOKnUAqVzsjU2Eb2Uwcn9kPU1WwqANR2CJQWu9zubEATwSJVtu
-         0R7xmHeVCL1FWW+5kEjrnukYKSqKzroaF0xjchcdv1sM3QYjjRtFp2w9lRsOgKlbngfZ
-         3UAbpto/tatZVjTFDyr/IxJpkSTs5XpImi6UfFt3E6t38ZloRV0a7/9ngijBmFbhT5V5
-         E6PA==
-X-Gm-Message-State: ANoB5pkkXoqnQYEUEKfyrvLZH/CLZVckEaJnR5saGl5KBnX86MY9FX6F
-        2OzP3TO+s2jfdaB3GbSdmkiDuYE3XR8SksA0O/g=
-X-Google-Smtp-Source: AA0mqf7P2PScex89JkMHbkg7PXQ7ZPThb0uB4RrC4jJtpuZmE2zqb70l8OWHL1W52fylS8loKkwsEg==
-X-Received: by 2002:a17:90a:ba01:b0:218:8263:4aac with SMTP id s1-20020a17090aba0100b0021882634aacmr6258953pjr.17.1670598313688;
-        Fri, 09 Dec 2022 07:05:13 -0800 (PST)
-Received: from ajye-OMEN-by-HP-Laptop-S.hitronhub.home (123-195-117-216.dynamic.kbronet.com.tw. [123.195.117.216])
-        by smtp.gmail.com with ESMTPSA id u2-20020a17090a410200b002187a4dd830sm1267137pjf.46.2022.12.09.07.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 07:05:13 -0800 (PST)
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with amp nau8318
-Date:   Fri,  9 Dec 2022 23:05:03 +0800
-Message-Id: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eb+dzXKfFxLhKYjaGwUiIKvSA18uKRx27pJ/FmHwtEU=;
+        b=Ndq9IGxWfkMU5+EunfVpJPdfX9dbYXZDFV9pLEbHx2PN8Q0pKv8j+vb74Jta/UsdEW
+         ZgEY7Og88tjgoIXGT3S6gY4AmjlcSfX3v8EAbB6SnBTZFwbUlMastMSNYJzCJVchV1p0
+         81OmJmLI3ymUg9v+QkTdG2KYXAcyNKo0bsQDWdir7FXfnMwbX2k9IzpriDkdHlKAZ7oe
+         MEmhgvECuhtwxUkV3ijW2UmrVrBJ1t4pct4h7hnHiCFbbzLJxkeEJGqlIed5/FQYVK14
+         CGMVrMA16AdYwclxV3g9XZus8wIPQm5218XBeenD76iI39VXg0XVPCqV5AzfzgRq4BIp
+         h+XQ==
+X-Gm-Message-State: ANoB5pl169RAMVyUhpA1q3rVj7bELH5xdjF2PQVug9Q++3pSJh34p6aI
+        Ju9Ma/w5J9vkCnwsg6E2TmknLg==
+X-Google-Smtp-Source: AA0mqf7t6HyCvjQbRm6lmUFP6R5mKqPRb4U9dlf9l9mifKdgF30nTCo9XZGo4dm2k9UFBPiA/WTurQ==
+X-Received: by 2002:a05:651c:94:b0:27a:7a8:c54b with SMTP id 20-20020a05651c009400b0027a07a8c54bmr1902929ljq.45.1670598351535;
+        Fri, 09 Dec 2022 07:05:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id r23-20020a2eb617000000b00279cbcfd7dbsm245033ljn.30.2022.12.09.07.05.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 07:05:50 -0800 (PST)
+Message-ID: <24fa41d2-87d1-be19-af44-337784b0f0a4@linaro.org>
+Date:   Fri, 9 Dec 2022 16:05:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the driver data for two nau8318 speaker amplifiers on
-SSP1 and nau8825 on SSP0 for ADL platform.
-And reusing max98360's topology since DAI setting could be leveraged.
+On 09/12/2022 15:29, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
+> 
+> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+> sm8450: add Inline Crypto Engine registers and clock") so move the
+> compatible to the correct if.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> (no cover subject)
+> 
+> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+> and sa8540p-ride.dtb:
+> 
+>   Unevaluated properties are not allowed ('required-opps', 'dma-coherent' were unexpected)
+> 
+> Maybe someone who knows something about this can handle this?
+> 
+> And the patch adding qcom,sm6115-ufshc hasn't been applied yet.
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index f2d6298d926c..58a2fb2c83c3 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -102,7 +102,6 @@ allOf:
+>                - qcom,sc8280xp-ufshc
+>                - qcom,sm8250-ufshc
+>                - qcom,sm8350-ufshc
+> -              - qcom,sm8450-ufshc
+>      then:
+>        properties:
+>          clocks:
+> @@ -130,6 +129,7 @@ allOf:
+>                - qcom,sdm845-ufshc
+>                - qcom,sm6350-ufshc
+>                - qcom,sm8150-ufshc
+> +              - qcom,sm8450-ufshc
+>      then:
+>        properties:
+>          clocks:
+> @@ -149,6 +149,12 @@ allOf:
+>          reg:
+>            minItems: 2
+>            maxItems: 2
+> +        reg-names:
 
-Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
----
- sound/soc/intel/boards/Kconfig                |  1 +
- sound/soc/intel/boards/sof_nau8825.c          | 23 +++++++++++++++++++
- .../intel/common/soc-acpi-intel-adl-match.c   | 12 ++++++++++
- 3 files changed, 36 insertions(+)
+There are no reg-names in top-level, so it's surprising to see its
+customized here. It seems no one ever documented that usage...
 
-diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
-index a472de1909f4..3f68e9edd853 100644
---- a/sound/soc/intel/boards/Kconfig
-+++ b/sound/soc/intel/boards/Kconfig
-@@ -554,6 +554,7 @@ config SND_SOC_INTEL_SOF_NAU8825_MACH
- 	select SND_SOC_RT1015P
- 	select SND_SOC_MAX98373_I2C
- 	select SND_SOC_MAX98357A
-+	select SND_SOC_NAU8315
- 	select SND_SOC_DMIC
- 	select SND_SOC_HDAC_HDMI
- 	select SND_SOC_INTEL_HDA_DSP_COMMON
-diff --git a/sound/soc/intel/boards/sof_nau8825.c b/sound/soc/intel/boards/sof_nau8825.c
-index 27880224359d..0936450be153 100644
---- a/sound/soc/intel/boards/sof_nau8825.c
-+++ b/sound/soc/intel/boards/sof_nau8825.c
-@@ -48,6 +48,7 @@
- #define SOF_MAX98373_SPEAKER_AMP_PRESENT	BIT(15)
- #define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(16)
- #define SOF_RT1015P_SPEAKER_AMP_PRESENT	BIT(17)
-+#define SOF_NAU8318_SPEAKER_AMP_PRESENT	BIT(18)
- 
- static unsigned long sof_nau8825_quirk = SOF_NAU8825_SSP_CODEC(0);
- 
-@@ -338,6 +339,13 @@ static struct snd_soc_dai_link_component rt1019p_component[] = {
- 	}
- };
- 
-+static struct snd_soc_dai_link_component nau8318_components[] = {
-+	{
-+		.name = "NVTN2012:00",
-+		.dai_name = "nau8315-hifi",
-+	}
-+};
-+
- static struct snd_soc_dai_link_component dummy_component[] = {
- 	{
- 		.name = "snd-soc-dummy",
-@@ -486,6 +494,11 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
- 			max_98360a_dai_link(&links[id]);
- 		} else if (sof_nau8825_quirk & SOF_RT1015P_SPEAKER_AMP_PRESENT) {
- 			sof_rt1015p_dai_link(&links[id]);
-+		} else if (sof_nau8825_quirk &
-+				SOF_NAU8318_SPEAKER_AMP_PRESENT) {
-+			links[id].codecs = nau8318_components;
-+			links[id].num_codecs = ARRAY_SIZE(nau8318_components);
-+			links[id].init = speaker_codec_init;
- 		} else {
- 			goto devm_err;
- 		}
-@@ -657,6 +670,16 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_BT_OFFLOAD_SSP(2) |
- 					SOF_SSP_BT_OFFLOAD_PRESENT),
- 	},
-+	{
-+		.name = "adl_nau8318_nau8825",
-+		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
-+					SOF_SPEAKER_AMP_PRESENT |
-+					SOF_NAU8318_SPEAKER_AMP_PRESENT |
-+					SOF_NAU8825_SSP_AMP(1) |
-+					SOF_NAU8825_NUM_HDMIDEV(4) |
-+					SOF_BT_OFFLOAD_SSP(2) |
-+					SOF_SSP_BT_OFFLOAD_PRESENT),
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, board_ids);
-diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-index 60aee56f94bd..282b9c966ce6 100644
---- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-@@ -450,6 +450,11 @@ static const struct snd_soc_acpi_codecs adl_lt6911_hdmi = {
- 	.codecs = {"INTC10B0"}
- };
- 
-+static const struct snd_soc_acpi_codecs adl_nau8318_amp = {
-+	.num_codecs = 1,
-+	.codecs = {"NVTN2012"}
-+};
-+
- struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 	{
- 		.comp_ids = &adl_rt5682_rt5682s_hp,
-@@ -507,6 +512,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 		.quirk_data = &adl_rt1015p_amp,
- 		.sof_tplg_filename = "sof-adl-rt1015-nau8825.tplg",
- 	},
-+	{
-+		.id = "10508825",
-+		.drv_name = "adl_nau8318_nau8825",
-+		.machine_quirk = snd_soc_acpi_codec_list,
-+		.quirk_data = &adl_nau8318_amp,
-+		.sof_tplg_filename = "sof-adl-max98360a-nau8825.tplg",
-+	},
- 	{
- 		.id = "10508825",
- 		.drv_name = "sof_nau8825",
--- 
-2.25.1
+> +          items:
+> +            - const: std
+> +            - const: ice
+> +      required:
+> +        - reg-names
+>  
+>    - if:
+>        properties:
+> 
+> ---
+> base-commit: f925116b24c0c42dc6d5ab5111c55fd7f74e8dc7
+> change-id: 20221209-dt-binding-ufs-2d7f64797ff2
+> 
+> Best regards,
+
+Best regards,
+Krzysztof
 
