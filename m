@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623DB64827D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B7564827F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiLIMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        id S229897AbiLIMlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiLIMkg (ORCPT
+        with ESMTP id S229498AbiLIMlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:40:36 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C7E71257
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:40:33 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id g14so815584ljh.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:40:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0lXiAj3rzLz3gmBjsIDq3bXSlHIvyIVLqSnh/2V9Ecw=;
-        b=HJRurJGfi0QdLm21nvGmmiQ7/NUFhHdTBFsIbSNPkKSm0JAW9IsPajc0vdBvEgj/Te
-         8dOvggpPkwEfc4/1SIoCHqes+zSVNNAGf9WlmwXBR6VcX7C9yoOhLmQwoINzzo+U6SqT
-         HmeOfD12A2NtflGGRarRYtHDuyJ87sP3u5Gw30rgIvN8+EgUyddNOyET6RLZey6GeOLx
-         lihIOY6Ykx1lFQNClojI99+UsT4uTqa26/EuZW3UPOorTa8HkKM2Nfod9uFpEXf5N8ZW
-         qur6x/TN8Wjo9ODVFju466b3HWqGO64T0/Lc38DMdOloByEu6L/67kwW4wRE0NJsBHpR
-         nJ/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0lXiAj3rzLz3gmBjsIDq3bXSlHIvyIVLqSnh/2V9Ecw=;
-        b=OPKfSvOKG2uzrMXNKmxgF9Q6f3iiW/JFB0aY8Y7iNquPnkt8m9+q8o00p3M+e2U4O1
-         NsQ685CwDzbi9c5jGKNzQi2vFEDDkpuVu3NvKahIn2se50E9kbox+g5IBfE9i43vVFHw
-         Kj4WDo5wj7yJDPF0jT+OHTS1pYi3ckG9d6AFKcDHNbrZ3yMn4NoDfaa24RTXHfgi5Nwa
-         m2G0ZKBL4gK96wTXlk/GuNjL/6oZ3PvpgHUGqGxEobyIRBEEnVocmRYBWs9dffCsii17
-         UJFzPFlT0p0iyT8cT0JP3Q89JyppIDOaoaEkrLzEb5Ui2DFDN564tS/ogMsibkQDiVyP
-         jWVQ==
-X-Gm-Message-State: ANoB5pk4d/17XL1fL9fbfxsB9QDQjvdTG68y7O9eo4Jk3AyhYrpvIBuO
-        3DC3R3FUgM3wrJLVo9uWjMiczw==
-X-Google-Smtp-Source: AA0mqf7Xvklym2102Rz+/mU+VCWRfEQnUyjStcyCGkWf+VP//RUKes5I3Y4rubgJfbMqEVcZ1J4hgA==
-X-Received: by 2002:a2e:9d8b:0:b0:279:f30f:78db with SMTP id c11-20020a2e9d8b000000b00279f30f78dbmr1380251ljj.44.1670589631582;
-        Fri, 09 Dec 2022 04:40:31 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id s25-20020a05651c049900b0026dcb07122csm203693ljc.117.2022.12.09.04.40.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:40:31 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm6115: Add thermal zones
-Date:   Fri,  9 Dec 2022 13:40:26 +0100
-Message-Id: <20221209124026.178764-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Fri, 9 Dec 2022 07:41:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA16066CBF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:41:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3cgW-0003Sv-Hx; Fri, 09 Dec 2022 13:41:00 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3cgU-003Mfi-7i; Fri, 09 Dec 2022 13:40:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3cgU-003lnM-7P; Fri, 09 Dec 2022 13:40:58 +0100
+Date:   Fri, 9 Dec 2022 13:40:58 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Qingtao Cao <qingtao.cao.au@gmail.com>
+Cc:     Qingtao Cao <qingtao.cao@digi.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] leds: ledtrig-tty.c: call led_set_brightness() when
+ the blocking callback is not available
+Message-ID: <20221209124058.dwez7wohs7dfeiik@pengutronix.de>
+References: <20221209001039.7287-1-qingtao.cao@digi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="565mh7mmkut75gk2"
+Content-Disposition: inline
+In-Reply-To: <20221209001039.7287-1-qingtao.cao@digi.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,388 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add thermal zones associated with the on-SoC temperature sensors.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 364 +++++++++++++++++++++++++++
- 1 file changed, 364 insertions(+)
+--565mh7mmkut75gk2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 1d227b9b331c..25928fae1bb9 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -1420,6 +1420,370 @@ cpufreq_hw: cpufreq@f521000 {
- 		};
- 	};
- 
-+	thermal-zones {
-+		mapss-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 0>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cdsp-hvx-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 1>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		wlan-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 2>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		camera-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 3>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		video-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 4>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		modem1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 5>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu4-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 6>;
-+
-+			trips {
-+				cpu4_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu4_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu4_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu5-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 7>;
-+
-+			trips {
-+				cpu5_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu5_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu5_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu6-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 8>;
-+
-+			trips {
-+				cpu6_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu6_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu6_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu7-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 9>;
-+
-+			trips {
-+				cpu7_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu7_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu7_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu45-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 10>;
-+
-+			trips {
-+				cpu45_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu45_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu45_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu67-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 11>;
-+
-+			trips {
-+				cpu67_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu67_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu67_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu0123-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 12>;
-+
-+			trips {
-+				cpu0123_alert0: trip-point0 {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu0123_alert1: trip-point1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu0123_crit: cpu_crit {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		modem0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 13>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		display-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 14>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		gpu-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens0 15>;
-+
-+			trips {
-+				trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
-+				trip-point1 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.38.1
+On Fri, Dec 09, 2022 at 10:10:38AM +1000, Qingtao Cao wrote:
+> The Marvell GPIO controller's driver will setup its struct gpio_chip's ca=
+n_sleep
+> false, making create_gpio_led() setting up the brightness_set function po=
+inter
+> instead of the brightness_set_blocking function pointer. In this case the
+> nonblocking version led_set_brightness() should be fallen back on by ledt=
+rig_tty_work()
+>=20
+> Signed-off-by: Qingtao Cao <qingtao.cao@digi.com>
+> ---
+>  drivers/leds/trigger/ledtrig-tty.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
+dtrig-tty.c
+> index f62db7e520b5..e43d285b5d06 100644
+> --- a/drivers/leds/trigger/ledtrig-tty.c
+> +++ b/drivers/leds/trigger/ledtrig-tty.c
+> @@ -122,12 +122,18 @@ static void ledtrig_tty_work(struct work_struct *wo=
+rk)
+> =20
+>  	if (icount.rx !=3D trigger_data->rx ||
+>  	    icount.tx !=3D trigger_data->tx) {
+> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +		if (trigger_data->led_cdev->brightness_set_blocking)
+> +			led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +		else if (trigger_data->led_cdev->brightness_set)
+> +			led_set_brightness(trigger_data->led_cdev, LED_ON);
 
+I had similar issues in the past where a function call worked for
+sleeping LEDs but not atomic ones (or the other way around? Don't
+remember the details.)
+
+I wonder if there isn't a function that does the right thing no matter
+what type the LED is. The other triggers should have the same issue, and
+doing the above check in all of them just looks wrong.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--565mh7mmkut75gk2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOTLNcACgkQwfwUeK3K
+7AncHgf+MX7UU32R1xOxDn2kHRK45G5QRz1Iog0wvmFwNW3dXft+e8rrIm66X897
+xAc6AleuqAM2Hos8NGFAsehr3StUD1yXSvtR3wAxKCJ3USmF26DOMAXsCZe6UoPb
+Shu1sFSeZApZQRdvWHJxI1OXanh1CjfEbar4i6YLsqa4saGlQ+3tbVVqX75Z8F1O
+J0fWjZk0LO4a0rsaThYj7qPymqm7VsDDuEVfIMiatH3tIOL5PxfUqm/SRenpPDlF
+jJw49kf6xiw6GAJCWdHh3ke3Fo8L0tte+iUpYDLOyW/QOpyxr0akm81Ylc/1Wpnp
+4QGxcs+BQiVBFxIV27xyy+8h8+N0Pw==
+=2hSk
+-----END PGP SIGNATURE-----
+
+--565mh7mmkut75gk2--
