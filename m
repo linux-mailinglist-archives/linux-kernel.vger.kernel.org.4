@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4383F648502
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0456485A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiLIPZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S229957AbiLIPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLIPZI (ORCPT
+        with ESMTP id S231158AbiLIPcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:25:08 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B188B1A6;
-        Fri,  9 Dec 2022 07:25:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670599504; x=1702135504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WmwpTYyxcVQtiW1tL9fJMr4BDXHV7YEW8emRKA6pCLM=;
-  b=FHKGNhcF5a/VoIsDn+xf7QSag4dlUuYqcc9B7X8JHvKzBa+4FQRqWd2D
-   ZPQJluuiEAJc2e5HOwuqIp1N6giVYbSTxv+TWQDknKimEXPf92piFEAck
-   5zVUUC4U8zPyJ/lp2Y5ZbFgjg6U2/qtVRXdzOZc+gs06kqvxtIdLk6jnU
-   vJSaLF7GPQr/TYxvpCuc3oe5Ug0KVhVK2N+766+zz7HFLhoqu/Ei9OqtM
-   tnpn6Fq6I3tiOHmEbnZjvO3YycLEF9nj9PCP4AFObm6d4M6LUYG60A+Y/
-   cpb13kEvfWeHtK6fGKBwMy/uX4Tb8SptGTW4BmMMpe+jb56fn3msW+C/z
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="190905714"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 08:25:03 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 9 Dec 2022 08:25:02 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 9 Dec 2022 08:25:02 -0700
-Date:   Fri, 9 Dec 2022 16:30:10 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-CC:     Michael Walle <michael@walle.cc>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <daniel.machon@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <lars.povlsen@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221209153010.f4r577ilnlein77e@soft-dev3-1>
-References: <adb8e2312b169d13e756ff23c45872c3@walle.cc>
- <20221209092904.asgka7zttvdtijub@soft-dev3-1>
- <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
- <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
- <20221209125611.m5cp3depjigs7452@skbuf>
- <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
- <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
- <20221209144328.m54ksmoeitmcjo5f@skbuf>
- <20221209145720.ahjmercylzqo5tla@soft-dev3-1>
- <20221209145637.nr6favnsofmwo45s@skbuf>
+        Fri, 9 Dec 2022 10:32:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773DA20F56;
+        Fri,  9 Dec 2022 07:32:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8DEAB82884;
+        Fri,  9 Dec 2022 15:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C5AC433F1;
+        Fri,  9 Dec 2022 15:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670599928;
+        bh=qGtcBXEEZBuPDSehAEqy32jhuEWo98NeXnITy4+odyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tNm/pSZ2rMybzF5yBMMvfhkmc2oHVEIxLi0pfYkF5htPVnGNiFxUQtRTVL26XP4sM
+         s5GrP+Aa4XXRYHe6xQQ1F9Ux3Ez0CgON0N9QZkQfnOPJzd0ngo7o2+LgBjf5pPwQPR
+         A0gGUgJDF+BYVKIT1cjuggNix4evuNRckz/cSEnA=
+Date:   Fri, 9 Dec 2022 16:32:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "yekai (A)" <yekai13@huawei.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangzhou1@hisilicon.com,
+        liulongfang@huawei.com
+Subject: Re: [PATCH v10 0/3] crypto: hisilicon - supports device isolation
+ feature
+Message-ID: <Y5NU9vLyEjekoWfj@kroah.com>
+References: <20221119074817.12063-1-yekai13@huawei.com>
+ <9b934709-2f74-7392-aab6-eb506ddcf708@huawei.com>
+ <75ca78c7-1ca3-3e62-1175-5207ed9f5cf8@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221209145637.nr6favnsofmwo45s@skbuf>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <75ca78c7-1ca3-3e62-1175-5207ed9f5cf8@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/09/2022 16:56, Vladimir Oltean wrote:
+On Fri, Dec 09, 2022 at 02:15:07PM +0800, yekai (A) wrote:
 > 
-> On Fri, Dec 09, 2022 at 03:57:20PM +0100, Horatiu Vultur wrote:
-> > The 12/09/2022 16:43, Vladimir Oltean wrote:
-> > >
-> > > On Fri, Dec 09, 2022 at 03:20:58PM +0100, Horatiu Vultur wrote:
-> > > > On ocelot, the vcap is enabled at port initialization, while on other
-> > > > platforms(lan966x and sparx5) you have the option to enable or disable.
-> > >
-> > > Even if that wasn't the case, I'd still consider enabling/disabling VCAP
-> > > lookups privately in the ocelot driver when there are non-tc users of
-> > > traps, instead of requiring users to do anything with tc.
+> 
+> On 2022/11/25 16:49, yekai (A) wrote:
 > >
-> > I was thinking also about this, such the ptp to enable the VCAP
-> > privately. But then the issue would be if a user adds entries using tc
-> > and then start ptp, then suddently the rules that were added using tc
-> > could be hit. That is the reason why expected the user to enable the
-> > tcam manually.
+> > On 2022/11/19 15:48, Kai Ye wrote:
+> >> 1、Add the uacce hardware error isolation interface. Hardware error 
+> >>    thresholds can be configured by sysfs node. User can get the hardware
+> >>    isolated state by sysfs node.
+> >> 2、Defining the isolation strategy for uacce device by uacce sysfs node. 
+> >>    If the number of hardware errors exceeds the configured value, the 
+> >>    uacce device will not be available in user space.
+> >> 3、The ACC VF device use the PF device isolation strategy.
+> >>    
+> >> changes v1->v2:
+> >> 	- deleted dev_to_uacce api.
+> >> 	- add vfs node doc. 
+> >> 	- move uacce->ref to driver.
+> >> changes v2->v3:
+> >> 	- deleted some redundant code.
+> >> 	- use qm state instead of reference count.
+> >> 	- add null pointer check.
+> >> 	- isolate_strategy_read() instead of a copy.
+> >> changes v3->v4:
+> >> 	- modify a comment
+> >> changes v4->v5:
+> >> 	- use bool instead of atomic.
+> >> 	- isolation frequency instead of isolation command.
+> >> changes v5->v6:
+> >> 	- add is_visible in uacce.
+> >> 	- add the description of the isolation strategy file node.
+> >> changes v6->v7
+> >> 	- add an example for isolate_strategy in Documentation.
+> >> changes v7->v8
+> >> 	- update the correct date.
+> >> changes v8->v9
+> >>     - move isolation strategy from qm to uacce.
+> >> changes v9->v10
+> >> 	- Go back to the v8 version of the solution.
+> >> 	- Modify some code according to suggestions.
+> >>
+> >> Kai Ye (3):
+> >>   uacce: supports device isolation feature
+> >>   Documentation: add the device isolation feature sysfs nodes for uacce
+> >>   crypto: hisilicon/qm - define the device isolation strategy
+> >>
+> >>  Documentation/ABI/testing/sysfs-driver-uacce |  18 ++
+> >>  drivers/crypto/hisilicon/qm.c                | 169 +++++++++++++++++--
+> >>  drivers/misc/uacce/uacce.c                   |  50 ++++++
+> >>  include/linux/hisi_acc_qm.h                  |  15 ++
+> >>  include/linux/uacce.h                        |  12 ++
+> >>  5 files changed, 249 insertions(+), 15 deletions(-)
+> >>
+> > Hi Grek
+> >
+> > Just a friendly ping.
+> >
+> > Thanks
+> > Kai
 > 
-> I don't understand, tc rules which do what? Why would those rules only
-> be hit after PTP is enabled and not before?
+> Hi Greg KH
+> 
+> Could you help me to apply this patchset v10?
 
-Because you have not enabled the vcap.
+Sorry, it needs review from the crypto maintainers before I can take it.
 
-For example this rule:
-tc filter add dev eth0 ingress chain 8000000 prio 1 handle 1 protocol all
-flower skip_sw dst_mac 00:11:22:33:44:55/ff:ff:ff:ff:ff:ff action trap
-action goto chain 8100000
+Also, it looks to be too late for 6.2-rc1 at this point in time.
 
-This will not be hit until you add this rule:
-tc filter add dev eth0 ingress prio 1 handle 2 matchall skip_sw action goto chain 8000000
+thanks,
 
-Because this rule will enable the HW. Just to aligned to a SW
-implementation of the tc, we don't enable the vcap until there is a rule
-in chain 0 that has an action to go to chain 8000000 were it resides
-IS2 rules.
-
-So for example, on a fresh started lan966x the user will add the following
-rule:
-tc filter add dev eth0 ingress chain 8000000 prio 1 handle 1 protocol
-all flower skip_sw dst_mac 00:11:22:33:44:55/ff:ff:ff:ff:ff:ff action
-trap action goto chain 8100000
-
-He expects this rule not to be hit as there is no rule in chain 0. Now if
-PTP is started and it would enable vcap, then suddenly this rule may be
-hit.
-
-I hope this helps a little bit.
-
--- 
-/Horatiu
+greg k-h
