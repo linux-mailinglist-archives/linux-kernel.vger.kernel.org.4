@@ -2,185 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06251648AB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F8C648AC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiLIWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S229793AbiLIW13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIWXx (ORCPT
+        with ESMTP id S229478AbiLIW1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:23:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7803413F60;
-        Fri,  9 Dec 2022 14:23:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DD4FE1FD74;
-        Fri,  9 Dec 2022 22:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670624630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yazt+l+wO+0PmZJrbTp0vGTCDSc87Dt5hYFTptn2yHM=;
-        b=z+Jq+hOaStbFPtaNKlg3FRxlSBaJXPh+oQnblB5JeLK9QCSD5hkCKokZJHkzC4ZBGcEoS8
-        vLH8TNiP0LfBe/WMywCdbj5Tvhbr7KprdSH0e6iBWZPfpgudPSkMaotO3kiXvRyWmVlLrC
-        l+y1sHZ68X32TZgeSWYxn6wkOV3kK4I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670624630;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yazt+l+wO+0PmZJrbTp0vGTCDSc87Dt5hYFTptn2yHM=;
-        b=3bULmWys6kgqDJazRM50lrTiCrUAe0nUMdboobiW6WAV1/JQD9e6r6NUpUFhCOxFGJf6gX
-        6LWv0XsEnE0/tOAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7889F13597;
-        Fri,  9 Dec 2022 22:23:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UJS+HHa1k2NPUQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 09 Dec 2022 22:23:50 +0000
-Message-ID: <3ab6ea38-5a9b-af4f-3c94-b75dce682bc1@suse.cz>
-Date:   Fri, 9 Dec 2022 23:23:50 +0100
+        Fri, 9 Dec 2022 17:27:23 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CA2935B;
+        Fri,  9 Dec 2022 14:27:22 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id A0B5ACA534;
+        Fri,  9 Dec 2022 22:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1670624840; bh=wLfywnxmIafoKhNvlsidC0GQdw63kk9snyKcibJe0eQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=t0s3JI/5UovWp4wn/nB2fBIgsPyAE15q1Sdc4UdV3Kivu/onrmIMkiDkIQcSxVeZx
+         NSJKAul/dDfqMRaAEPa7UoOJqW5eQUXhFeTHWkWVbIl0lMjow5Dk2Uzw1u/4i7769a
+         VT9zwEbDjxN2O/+VYmCDC0+l+nSsu44eZIHv5zb4=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     phone-devel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: pmi8950: Correct rev_1250v channel label to mv
+Date:   Fri, 09 Dec 2022 23:27:19 +0100
+Message-ID: <4558956.LvFx2qVVIh@g550jk>
+In-Reply-To: <20221209215437.1783067-1-marijn.suijten@somainline.org>
+References: <20221209215437.1783067-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCHv8 02/14] mm: Add support for unaccepted memory
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
- <20221207014933.8435-3-kirill.shutemov@linux.intel.com>
- <f944459f-76a6-60c3-7dae-0918d9ef0c5d@suse.cz>
- <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/22 20:26, Kirill A. Shutemov wrote:
->> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
->> >  			/*
->> >  			 * Watermark failed for this zone, but see if we can
->> > @@ -4299,6 +4411,9 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
->> >  
->> >  			return page;
->> >  		} else {
->> > +			if (try_to_accept_memory(zone))
->> > +				goto try_this_zone;
->> 
->> On the other hand, here we failed the full rmqueue(), including the
->> potentially fragmenting fallbacks, so I'm worried that before we finally
->> fail all of that and resort to accepting more memory, we already fragmented
->> the already accepted memory, more than necessary.
+On Freitag, 9. Dezember 2022 22:54:37 CET Marijn Suijten wrote:
+> This was pointed out in review but never followed up on thanks to
+> sidetracked discussions about labels vs node names.
 > 
-> I'm not sure I follow. We accept memory in pageblock chunks. Do we want to
-> allocate from a free pageblock if we have other memory to tap from? It
-> doesn't make sense to me.
-
-The fragmentation avoidance based on migratetype does work with pageblock
-granularity, so yeah, if you accept a single pageblock worth of memory and
-then (through __rmqueue_fallback()) end up serving both movable and
-unmovable allocations from it, the whole fragmentation avoidance mechanism
-is defeated and you end up with unmovable allocations (e.g. page tables)
-scattered over many pageblocks and inability to allocate any huge pages.
-
->> So one way to prevent would be to move the acceptance into rmqueue() to
->> happen before __rmqueue_fallback(), which I originally had in mind and maybe
->> suggested that previously.
+> Fixes: 0d97fdf380b4 ("arm64: dts: qcom: Add configuration for PMI8950
+> peripheral") Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  arch/arm64/boot/dts/qcom/pmi8950.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> I guess it should be pretty straight forward to fail __rmqueue_fallback()
-> if there's non-empty unaccepted_pages list and steer to
-> try_to_accept_memory() this way.
+> diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> b/arch/arm64/boot/dts/qcom/pmi8950.dtsi index 32d27e2187e3..8008f02434a9
+> 100644
+> --- a/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
+> @@ -47,7 +47,7 @@ adc-chan@9 {
+>  			adc-chan@a {
+>  				reg = <VADC_REF_1250MV>;
+>  				qcom,pre-scaling = <1 1>;
+> -				label = "ref_1250v";
+> +				label = "ref_1250mv";
 
-That could be a way indeed. We do have ALLOC_NOFRAGMENT which could be
-possible to employ here.
-But maybe the zone_watermark_fast() modification would be simpler yet
-sufficient. It makes sense to me that we'd try to keep a high watermark
-worth of pre-accepted memory. zone_watermark_fast() would fail at low
-watermark, so we could try accepting (high-low) at a time instead of single
-pageblock.
+Indeed 1250V are maybe a bit much ;) Thanks!
 
-> But I still don't understand why.
+Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
 
-To avoid what I described above.
-
->> But maybe less intrusive and more robust way would be to track how much
->> memory is unaccepted, and actually decrement that amount  from free memory
->> in zone_watermark_fast() in order to force earlier failure of that check and
->> thus to accept more memory and give us a buffer of truly accepted and
->> available memory up to high watermark, which should hopefully prevent most
->> of the fallbacks. Then the code I flagged above as currently unecessary
->> would make perfect sense.
+>  			};
 > 
-> The next patch adds per-node unaccepted memory accounting. We can move it
-> per-zone if it would help.
+>  			adc-chan@d {
 
-Right.
 
->> And maybe Mel will have some ideas as well.
-> 
-> I don't have much expertise in page allocator. Any input is valuable.
-> 
->> > +
->> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
->> >  			/* Try again if zone has deferred pages */
->> >  			if (static_branch_unlikely(&deferred_pages)) {
->> > @@ -6935,6 +7050,10 @@ static void __meminit zone_init_free_lists(struct zone *zone)
->> >  		INIT_LIST_HEAD(&zone->free_area[order].free_list[t]);
->> >  		zone->free_area[order].nr_free = 0;
->> >  	}
->> > +
->> > +#ifdef CONFIG_UNACCEPTED_MEMORY
->> > +	INIT_LIST_HEAD(&zone->unaccepted_pages);
->> > +#endif
->> >  }
->> >  
->> >  /*
->> 
-> 
+
 
