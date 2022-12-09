@@ -2,67 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DCC648012
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626B4648014
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 10:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiLIJXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 04:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S230036AbiLIJYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 04:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiLIJXi (ORCPT
+        with ESMTP id S229810AbiLIJYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 04:23:38 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466993C6C7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:23:37 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3b5d9050e48so44933467b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 01:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w90NWJhw4FQfn+8z7KfpbjxiRrip6Hjp/8w4XPYddxs=;
-        b=iqh92EkCQeenTIY7b3yJxBYXAFRNpBrF7i6bNR31xHnoMbk/jWuDRv9Y2YkkZgqj0t
-         x6XlECzWaSMmBk4psVHoHIthPuDyMuFMOPC/F0NRPpUfnDfxzKmb73Bq3cy5MwlDVJ0P
-         ryh/3jM56b8gyfb1cWoW/cShrWFfrSeNjtpUqrZQn3NzzpNZONpIGcuIgifKIiUtPK3M
-         4KcjJ0hWx/ijRV2Wwg6e6LUI+SD9TeMeUVFRXfEYXqYQtYiNIeRkt4/TCyNM/6HVHLIo
-         ioGYPTrktRsQl+WEmB7jAo9UrmsnJXHcZceHso7tAbUdqdRV+1Fj5h4qOwyO3cljJ1m2
-         rs8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w90NWJhw4FQfn+8z7KfpbjxiRrip6Hjp/8w4XPYddxs=;
-        b=rqhWTDqAtyH5ckGCdscS6SA3OMT2WSaBZVvy08d4OPcSgxPhjjoeIVUOLLtgpKHInV
-         v/wV3Tjrjdm6LyqUwdSeABQ7JFB2xWt8ky46C1tgAEnsRxExDKid9XkHimDgaLt1H9uV
-         M7wsRmQnap1UfGCjtm88QncsqJyibZ6bACMzALQkh2NMwcwn4hnOL6xyIQkSw/mXk1gl
-         fUMWIsBs7Z6OrkNTjgML4Dh2OSZARWQ/gojqF4oRGeA4eQxbtyUg/EfUHUmMek+VfhTJ
-         KNWXJhgwvvdIwzDLY50YVgZGJy1GUXN0eDP3jpg1aYG1hCxRhwMMeH/HYj3QUgUhcCNL
-         F9pw==
-X-Gm-Message-State: ANoB5plfgN/NjNI1FpT67mcaiNdeVXqs2lFiuWQV4Z6W3aWkL5DzMKcj
-        r/IFpH98MEhQCjVqXa66qpSiKnUnscqK4cX42bk=
-X-Google-Smtp-Source: AA0mqf6nhFuCsu2bMXIrstTcyTXI2XxP1q4+InUZJUv5tIef8SOyrVsP+9mLR7XX/D88SdOA/HPUiRmJtGlvJFrL0io=
-X-Received: by 2002:a0d:eb56:0:b0:35f:dedf:fe5 with SMTP id
- u83-20020a0deb56000000b0035fdedf0fe5mr25692400ywe.408.1670577816418; Fri, 09
- Dec 2022 01:23:36 -0800 (PST)
+        Fri, 9 Dec 2022 04:24:02 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D49C36C42;
+        Fri,  9 Dec 2022 01:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670577840; x=1702113840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XK/r9Yv+fEFNTG77MFjQPZxHHD70wakKqSR1wYV+Yy0=;
+  b=SwBVdW1532kgKr53qhx4jyxwUAqv1U0P+76XuN/LsQZdK4MS4LFluve2
+   2pxSjiqGf26i+IATwYN7FDgf/y3B1vH6Y4BKh9QNdt5i8kJaEfxNni3Yb
+   tb/inzHClKB6f0h2bYXn0PgvzEJ8isnRxEQ+nEfF12vUk4K7q+bIQJF4N
+   WQoRmebgOcPd6nMX9FRSJ+nnTRgxRBDs60ZJYSexs9qp/09O6dmNxDzOd
+   CBKm7aSoevzEp/BDpc6Mg6eSQFQ5YnOa6TaXB5/azF+PB68R4F44LVYUA
+   gvh63Gvm+rZWWmTbwWXSPSai5g4mD6A0lB+TkPedWf19ZaRkgW49zJW7B
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="187348703"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 02:23:58 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 02:23:57 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 9 Dec 2022 02:23:57 -0700
+Date:   Fri, 9 Dec 2022 10:29:04 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <daniel.machon@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <lars.povlsen@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <olteanv@gmail.com>, <pabeni@redhat.com>,
+        <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Message-ID: <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+ <20221208092511.4122746-1-michael@walle.cc>
+ <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+ <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
+ <adb8e2312b169d13e756ff23c45872c3@walle.cc>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a3a4:b0:319:90e1:bd03 with HTTP; Fri, 9 Dec 2022
- 01:23:35 -0800 (PST)
-From:   Bethany Logan <bethanylogan44@gmail.com>
-Date:   Fri, 9 Dec 2022 03:23:35 -0600
-Message-ID: <CAHobhXNRp9zqWPxYpKmWkrj65TDBB2VA+HC2jxVYoVOhjEyU4g@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear, I have a good proposal
-for you.
+The 12/08/2022 14:18, Michael Walle wrote:
+> 
+> Hi Horatiu,
+
+Hi Michael,
+
+> 
+> Am 2022-12-08 14:04, schrieb Horatiu Vultur:
+> > > > > Currently lan966x, doesn't allow to run PTP over interfaces that are
+> > > > > part of the bridge. The reason is when the lan966x was receiving a
+> > > > > PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
+> > > > > frame.
+> > > > > Now that it is possible to add VCAP rules to the HW, such to trap
+> > > > > these
+> > > > > frames to the CPU, it is possible to run PTP also over interfaces that
+> > > > > are part of the bridge.
+> > > >
+> > > > This gives me:
+> > > >
+> > > > # /etc/init.d/S65ptp4l start
+> > > > Starting linuxptp daemon: OK
+> > > > [   44.136870] vcap_val_rule:1678: keyset was not updated: -22
+> > > > [   44.140196] vcap_val_rule:1678: keyset was not updated: -22
+> > > > #
+> > > >
+> > > > # ptp4l -v
+> > > > 3.1.1
+> > > > # uname -a
+> > > > Linux buildroot 6.1.0-rc8-next-20221208+ #924 SMP Thu Dec  8 10:08:58
+> > > > CET 2022 armv7l GNU/Linux
+> > > >
+> > > > I don't know whats going on, but I'm happy to help with debugging with
+> > > > some
+> > > > guidance.
+> > > 
+> > > Oh, and linuxptp is running on eth0, no bridges are set up. linuxptp
+> > > is started with "/usr/sbin/ptp4l -f /etc/linuxptp.cfg"
+> > > 
+> > > # cat /etc/linuxptp.cfg
+> > > # LinuxPTP configuration file for synchronizing the system clock to
+> > > # a remote PTP master in slave-only mode.
+> > > #
+> > > # By default synchronize time in slave-only mode using UDP and
+> > > hardware
+> > > time
+> > > # stamps on eth0. If the difference to master is >1.0 second correct
+> > > by
+> > > # stepping the clock instead of adjusting the frequency.
+> > > #
+> > > # If you change the configuration don't forget to update the phc2sys
+> > > # parameters accordingly in linuxptp-system-clock.service (systemd)
+> > > # or the linuxptp SysV init script.
+> > > 
+> > > [global]
+> > > slaveOnly               1
+> > > delay_mechanism         Auto
+> > > network_transport       UDPv4
+> > > time_stamping           hardware
+> > > step_threshold          1.0
+> > > 
+> > > [eth0]
+> > 
+> > Thanks for trying this!
+> 
+> Actually I was just booting my board which happens to have linuxptp
+> started by default. And the error messages were new. But I'm not so
+> sure anymore if PTP was really working. I'm still puzzled by reading
+> your commit message. Was it already working for interfaces which aren't
+> part of a bridge and this commit will make it work even for interfaces
+> which are part of a bridge?
+
+Exactly!
+This worked on interfaces that were not part of the bridge. And with
+this commit will make it work even on interfaces that are part of the
+bridge.
+
+> 
+> > The issue is because you have not enabled the TCAM lookups per
+> > port. They can be enabled using this commands:
+> > 
+> > tc qdisc add dev eth0 clsact
+> 
+> This gives me the following error, might be a missing kconfig option:
+> 
+> # tc qdisc add dev eth0 clsact
+> RTNETLINK answers: Operation not supported
+
+Yes that should be the case, I think you are missing:
+CONFIG_NET_SCHED
+But may be others when you try to add the next rule.
+
+> 
+> > tc filter add dev eth0 ingress prio 5 handle 5 matchall skip_sw action
+> > goto chain 8000000
+> > 
+> > This will enable the lookup and then you should be able to start again
+> > the ptp4l. Sorry for not mention this, at least I should have written
+> > it
+> > somewhere that this is required.
+> > 
+> > I was not sure if lan966x should or not enable tcam lookups
+> > automatically when a ptp trap action is added. I am open to suggestion
+> > here.
+> 
+> IMHO, from a user point of view this should just work. For a user
+> there is no connection between running linuxptp and some filtering
+> stuff with 'tc'.
+> 
+> Also, if the answer to my question above is yes, and ptp should
+> have worked on eth0 before, this is a regression then.
+
+OK, I can see your point.
+With the following diff, you should see the same behaviour as before:
+---
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+index 904f5a3f636d3..538f4b76cf97a 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_vcap_impl.c
+@@ -91,8 +91,6 @@ lan966x_vcap_is2_get_port_keysets(struct net_device *dev, int lookup,
+
+        /* Check if the port keyset selection is enabled */
+        val = lan_rd(lan966x, ANA_VCAP_S2_CFG(port->chip_port));
+-       if (!ANA_VCAP_S2_CFG_ENA_GET(val))
+-               return -ENOENT;
+
+        /* Collect all keysets for the port in a list */
+        if (l3_proto == ETH_P_ALL)
+---
+
+> 
+> -michael
+
+-- 
+/Horatiu
