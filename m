@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D665364872F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4B8648730
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLIRC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S229785AbiLIRDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiLIRCY (ORCPT
+        with ESMTP id S229917AbiLIRC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:02:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D8A14D13
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:01:26 -0800 (PST)
+        Fri, 9 Dec 2022 12:02:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0DD7DA55
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:01:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670605285;
+        s=mimecast20190719; t=1670605289;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QzeyNG+xisx8vPYcMzT01YLXY3V0nLFHTQTVfPkpFHw=;
-        b=egPMxOEL9VEKTZCHwGQlHUDVy1Qj4DNJlAz6zvnBvfNqmv0fU4nUSA7iVaxqxZka0v5AJ+
-        AfN1256Jb70mOjXsRX9X8bYTaRwr1cU/61/wSgo6pE5iGnvknIJ5GE28e1yA+ioEFxRITp
-        bOi5JxY0p+Sb8rBg1+9IcXZbkuZZgc8=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BJ1c+DnQwwOjSKsDq4iN/7ttySyX/vWFxv5LWeLTqBE=;
+        b=SJrjuxu3NMB3kEkq8Qw3lRHS2W5ZxqyMZaaTxZ/nNmF4dXHjD8l5PEskCALrr3oNaMfmqR
+        hqUfiH7/KYwnRlX3/zjjSDUdR9DaUIbPw4lYYM7D7V/2iPSiwkeRhPtEf43cuBicYV9tcl
+        0REDPNoemPNiL1aK5UqL8apMhQL8CB4=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-672-SWK1_QJZMOyDYZOZg4M2QQ-1; Fri, 09 Dec 2022 12:01:24 -0500
-X-MC-Unique: SWK1_QJZMOyDYZOZg4M2QQ-1
-Received: by mail-ua1-f72.google.com with SMTP id z44-20020a9f372f000000b00390af225beaso2088206uad.12
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:01:24 -0800 (PST)
+ us-mta-335-66wvnKmrNUyjYvEJ3uhGTA-1; Fri, 09 Dec 2022 12:01:26 -0500
+X-MC-Unique: 66wvnKmrNUyjYvEJ3uhGTA-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1441866fa6cso117101fac.22
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:01:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QzeyNG+xisx8vPYcMzT01YLXY3V0nLFHTQTVfPkpFHw=;
-        b=FLdwDIQvnhZWV2UuoIYMU83iH0Qoo16E80/mF2zaZ+i0wAIeG73odeMFU09nIBg/q6
-         QHbFtEBl/IOHkPoEqaGatWIxXRNtVUvZWsDN9g2Yz1kPfBEW3nWHNmWq/OSvSjLvODlb
-         JekakgLLUA3wLZEhcq0BbShEtjMI7pi4IKja8A66PqXfHoQ5w7aCXBjp4jKFPhzdy52Q
-         RvYdVwwJG40MbV1d1YN0p4yOaBxgRg7j64SbP02+fLf0VsPQwCodR6ZKVRKIEo9dstm6
-         z8E0UhQF2sxKlavuSg/DdOtSLhsNOLuCBd28X2rFG8v7t+Ota59KYMZerhtgIvnDA8zF
-         7DOA==
-X-Gm-Message-State: ANoB5plNsYQcjtbTZyXNpvm5yapsnS/9e/1YfWN/vjt70PuR7wS/B7Ov
-        v/xQFya8u7wWst7OEIRZwRJYCvNu4RbuswG3CvePoTkQKMhGAxaY+2OR6ftYluBR3YX1kjgGTyT
-        pmebaBVjEG8YeoMyz515Ms8x3
-X-Received: by 2002:a1f:ee4e:0:b0:3bd:f324:5500 with SMTP id m75-20020a1fee4e000000b003bdf3245500mr3198331vkh.2.1670605283871;
-        Fri, 09 Dec 2022 09:01:23 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5nmOoaLlqHDusb7JXaz8VNhkWlW4brwxUYuPvukkJNtkEIbapa5We/uBYiNWEM3SCaE8rMvQ==
-X-Received: by 2002:a1f:ee4e:0:b0:3bd:f324:5500 with SMTP id m75-20020a1fee4e000000b003bdf3245500mr3198279vkh.2.1670605283615;
-        Fri, 09 Dec 2022 09:01:23 -0800 (PST)
+        bh=BJ1c+DnQwwOjSKsDq4iN/7ttySyX/vWFxv5LWeLTqBE=;
+        b=QL2wApHU6vwvO6lRJuJxFlOOfOAYP6yaSGV7ywQ7rnT8gAUhOc1iJs0+PDYzT5wBgv
+         SXFlTPqTtqVKe6KWZGOEdF1LbPb7pdgkbMAoYZ2MR+Kuh/1q+UdbN+JymqdvZVsvn0BY
+         raU7yscUfY7hBRL1YOVmkipx9xM3nEYtOHxjrTGShgNXHmVO7X7NkPOCrAbY/ceVyKWl
+         6td/E/6OrgXcPcTf3XY765lU/21ubrQsD/ZOGyzfAKHaioZfps2nSXLsxDb5gXGLm55m
+         YMrnqJdGwIk7ggl7i02n+V49MWG7F3LYbnnLXIyUfrM9Km/xrFgehkQx+Pkf4FevkeJ1
+         rpIg==
+X-Gm-Message-State: ANoB5pkljGASLu669wKNCML9a6vatzxSS+mUlx7E+yyR3aYsUvSadGNq
+        bS9KEOcKL2ChBI9CUDJbabgDBkOtiDdwZ9daCphk0BHXRi2jqNEqUyOX6u0jqGSBIajSCzdl+dz
+        LcTea5ngOVZ23y7T6+o/ydyep
+X-Received: by 2002:a05:6870:2f0a:b0:141:fe19:d4d0 with SMTP id qj10-20020a0568702f0a00b00141fe19d4d0mr2655998oab.50.1670605285751;
+        Fri, 09 Dec 2022 09:01:25 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf67Y/YxUkSaXiObMUPvZ9/FDlwGcy+0g+8APbf7404nsBoydGf3R0e/VdazPQe3Ssti4e+l/Q==
+X-Received: by 2002:a05:6870:2f0a:b0:141:fe19:d4d0 with SMTP id qj10-20020a0568702f0a00b00141fe19d4d0mr2655965oab.50.1670605285082;
+        Fri, 09 Dec 2022 09:01:25 -0800 (PST)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006cf38fd659asm178907qkl.103.2022.12.09.09.01.20
+        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006cf38fd659asm178907qkl.103.2022.12.09.09.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 09:01:22 -0800 (PST)
+        Fri, 09 Dec 2022 09:01:24 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -69,9 +69,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         James Houghton <jthoughton@google.com>,
         Rik van Riel <riel@surriel.com>,
         Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v3 6/9] mm/hugetlb: Make hugetlb_follow_page_mask() safe to pmd unshare
-Date:   Fri,  9 Dec 2022 12:00:57 -0500
-Message-Id: <20221209170100.973970-7-peterx@redhat.com>
+Subject: [PATCH v3 7/9] mm/hugetlb: Make follow_hugetlb_page() safe to pmd unshare
+Date:   Fri,  9 Dec 2022 12:00:58 -0500
+Message-Id: <20221209170100.973970-8-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221209170100.973970-1-peterx@redhat.com>
 References: <20221209170100.973970-1-peterx@redhat.com>
@@ -88,7 +88,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since hugetlb_follow_page_mask() walks the pgtable, it needs the vma lock
+Since follow_hugetlb_page() walks the pgtable, it needs the vma lock
 to make sure the pgtable page will not be freed concurrently.
 
 Acked-by: David Hildenbrand <david@redhat.com>
@@ -96,34 +96,62 @@ Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/hugetlb.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ mm/hugetlb.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 247702eb9f88..e3af347470ac 100644
+index e3af347470ac..9d8bb6508288 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -6227,9 +6227,10 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 	if (WARN_ON_ONCE(flags & FOLL_PIN))
- 		return NULL;
+@@ -6285,6 +6285,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			break;
+ 		}
  
-+	hugetlb_vma_lock_read(vma);
- 	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
- 	if (!pte)
--		return NULL;
-+		goto out_unlock;
++		hugetlb_vma_lock_read(vma);
+ 		/*
+ 		 * Some archs (sparc64, sh*) have multiple pte_ts to
+ 		 * each hugepage.  We have to make sure we get the
+@@ -6309,6 +6310,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		    !hugetlbfs_pagecache_present(h, vma, vaddr)) {
+ 			if (pte)
+ 				spin_unlock(ptl);
++			hugetlb_vma_unlock_read(vma);
+ 			remainder = 0;
+ 			break;
+ 		}
+@@ -6330,6 +6332,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
  
- 	ptl = huge_pte_lock(h, mm, pte);
- 	entry = huge_ptep_get(pte);
-@@ -6252,6 +6253,8 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+ 			if (pte)
+ 				spin_unlock(ptl);
++			hugetlb_vma_unlock_read(vma);
++
+ 			if (flags & FOLL_WRITE)
+ 				fault_flags |= FAULT_FLAG_WRITE;
+ 			else if (unshare)
+@@ -6389,6 +6393,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			remainder -= pages_per_huge_page(h);
+ 			i += pages_per_huge_page(h);
+ 			spin_unlock(ptl);
++			hugetlb_vma_unlock_read(vma);
+ 			continue;
+ 		}
+ 
+@@ -6416,6 +6421,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			if (WARN_ON_ONCE(!try_grab_folio(pages[i], refs,
+ 							 flags))) {
+ 				spin_unlock(ptl);
++				hugetlb_vma_unlock_read(vma);
+ 				remainder = 0;
+ 				err = -ENOMEM;
+ 				break;
+@@ -6427,6 +6433,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		i += refs;
+ 
+ 		spin_unlock(ptl);
++		hugetlb_vma_unlock_read(vma);
  	}
- out:
- 	spin_unlock(ptl);
-+out_unlock:
-+	hugetlb_vma_unlock_read(vma);
- 	return page;
- }
- 
+ 	*nr_pages = remainder;
+ 	/*
 -- 
 2.37.3
 
