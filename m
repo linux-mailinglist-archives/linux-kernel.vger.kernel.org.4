@@ -2,259 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA26648145
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4E1648143
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLILFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S229784AbiLILFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLILFx (ORCPT
+        with ESMTP id S229573AbiLILFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:05:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832E72981F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:04:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670583897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=30T7QhM08K4gjwiweJHt8pVLSWuAKQjH4tR5LjWex3Q=;
-        b=S5x5mOHDkmGFbuBEJeyzKoyOOHndJElFyiLeBqHuaOSTyjt+1P4f7jghCiZC7hGBWwAxsU
-        ISTftAzP8twEa1ePL7GH9KwnO9QUnDAUzDfWiJQcRTJaLGM2lSEBTNyvnEHti6cVK6Oksu
-        +KYTx6EhEtKC/0/OKg63vKvJcL1VGXU=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-227-9w6XQwYDNfiF2tsJ2NEPzw-1; Fri, 09 Dec 2022 06:04:56 -0500
-X-MC-Unique: 9w6XQwYDNfiF2tsJ2NEPzw-1
-Received: by mail-ej1-f72.google.com with SMTP id jg25-20020a170907971900b007c0e98ad898so2893808ejc.15
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 03:04:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=30T7QhM08K4gjwiweJHt8pVLSWuAKQjH4tR5LjWex3Q=;
-        b=0l+5o2r0TLMu/JikFFsvGxZh2WtLE8NcMGuDx7lHNZh5nhHzdOTWMWpmaZczqq8y8o
-         XQMqKXSAFSYFPhjuBjUqdb0tg+HCGiGZqWwmj9KVaNDSCgEU3ovy43Bn0IbtMYMktJRq
-         wV+5ZslLrJzFngh/V4KmcxLO0aamsA9enc0HdfzRRTIJchfvveah9hqVN131811D/D3J
-         DXy49iOtN/QxeKpEcDOzaNgWWjZdj2KkKviZh8Dt0sU1qnILK4idYxdPjUUyvdXThbE/
-         T9+H+HhaqXC9cOiE+W6YlLqyUe+lYNT3tGa4gV+BFhiXpsaToibmmJJHEaJkoaSZgps/
-         N3uA==
-X-Gm-Message-State: ANoB5pk2Yp5Cltja1ql6JtVyxKHFYY1ffMcoDl6p707NGSXPYWVnmnDZ
-        Vk77cacFFjqpOeMIlhkO21P97cb03oP9fbEuU4aoyHWgKsbCqer7eV8yqSg7WAvIsX3hf5+Wh5m
-        etuHDQK2roZTZoJQ1cvv++hje
-X-Received: by 2002:a17:906:2806:b0:7c1:29ef:790b with SMTP id r6-20020a170906280600b007c129ef790bmr3005070ejc.69.1670583895236;
-        Fri, 09 Dec 2022 03:04:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf50RWJVTwQHYigVCfTjQcbIRn/1tJTNunep4Ib8pen2Jlc5mxHQ3JeahdxVAsrbFXdXpP0Ocg==
-X-Received: by 2002:a17:906:2806:b0:7c1:29ef:790b with SMTP id r6-20020a170906280600b007c129ef790bmr3005051ejc.69.1670583894944;
-        Fri, 09 Dec 2022 03:04:54 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906300400b00734bfab4d59sm427036ejz.170.2022.12.09.03.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 03:04:54 -0800 (PST)
-Message-ID: <c7418ea8-6b1a-f648-da5f-bf6ae412e359@redhat.com>
-Date:   Fri, 9 Dec 2022 12:04:53 +0100
+        Fri, 9 Dec 2022 06:05:07 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA89430F5E;
+        Fri,  9 Dec 2022 03:05:06 -0800 (PST)
+Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NT7SZ3xJyzJqRD;
+        Fri,  9 Dec 2022 19:04:14 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 9 Dec
+ 2022 19:05:04 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yanan@huawei.com>, <wuchangye@huawei.com>,
+        <xiesongyang@huawei.com>, <kongweibin2@huawei.com>,
+        <liuxin350@huawei.com>, <zhangmingyi5@huawei.com>
+Subject: [PATCH bpf-next v2] libbpf: Optimized return value in libbpf_strerror when errno is libbpf errno Xin Liu
+Date:   Fri, 9 Dec 2022 19:05:02 +0800
+Message-ID: <20221209110502.231677-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/4] efi/x86: Remove EfiMemoryMappedIO from E820 map
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc:     Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221208190341.1560157-1-helgaas@kernel.org>
- <20221208190341.1560157-2-helgaas@kernel.org>
- <805ea628-77a2-a1c1-10fe-edf2203e9c86@redhat.com>
-In-Reply-To: <805ea628-77a2-a1c1-10fe-edf2203e9c86@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is a small improvement in libbpf_strerror. When libbpf_strerror
+is used to obtain the system error description, if the length of the
+buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
+ERANGE.
 
-On 12/9/22 09:06, Hans de Goede wrote:
-> Hi,
-> 
-> One comment (logging bug in patch) below:
-> 
-> On 12/8/22 20:03, Bjorn Helgaas wrote:
->> From: Bjorn Helgaas <bhelgaas@google.com>
->>
->> Firmware can use EfiMemoryMappedIO to request that MMIO regions be mapped
->> by the OS so they can be accessed by EFI runtime services, but should have
->> no other significance to the OS (UEFI r2.10, sec 7.2).  However, most
->> bootloaders and EFI stubs convert EfiMemoryMappedIO regions to
->> E820_TYPE_RESERVED entries, which prevent Linux from allocating space from
->> them (see remove_e820_regions()).
->>
->> Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and PCI
->> host bridge windows, which means Linux can't allocate BAR space for
->> hot-added devices.
->>
->> Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
->> problem.
->>
->> Leave small (< 256KB) EfiMemoryMappedIO regions alone because on some
->> platforms, these describe non-window space that's included in host bridge
->> _CRS.  If we assign that space to PCI devices, they don't work.  On the
->> Lenovo X1 Carbon, this leads to suspend/resume failures.
->>
->> The previous solution to the problem of allocating BARs in these regions
->> was to add pci_crs_quirks[] entries to disable E820 checking for these
->> machines (see d341838d776a ("x86/PCI: Disable E820 reserved region clipping
->> via quirks")):
->>
->>   Acer   DMI_PRODUCT_NAME    Spin SP513-54N
->>   Clevo  DMI_BOARD_NAME      X170KM-G
->>   Lenovo DMI_PRODUCT_VERSION *IIL*
->>
->> Florent reported the BAR allocation issue on the Clevo NL4XLU.  We could
->> add another quirk for the NL4XLU, but I hope this generic change can solve
->> it for many machines without having to add quirks.
->>
->> This change has been tested on Clevo X170KM-G (Konrad) and Lenovo Ideapad
->> Slim 3 (Matt) and solves the problem even when overriding the existing
->> quirks by booting with "pci=use_e820".
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216565     Clevo NL4XLU
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206459#c78 Clevo X170KM-G
->> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1868899    Ideapad Slim 3
->> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2029207    X1 Carbon
->> Reported-by: Florent DELAHAYE <kernelorg@undead.fr>
->> Tested-by: Konrad J Hambrick <kjhambrick@gmail.com>
->> Tested-by: Matt Hansen <2lprbe78@duck.com>
->> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  arch/x86/platform/efi/efi.c | 46 +++++++++++++++++++++++++++++++++++++
->>  1 file changed, 46 insertions(+)
->>
->> diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
->> index ebc98a68c400..dee1852e95cd 100644
->> --- a/arch/x86/platform/efi/efi.c
->> +++ b/arch/x86/platform/efi/efi.c
->> @@ -303,6 +303,50 @@ static void __init efi_clean_memmap(void)
->>  	}
->>  }
->>  
->> +/*
->> + * Firmware can use EfiMemoryMappedIO to request that MMIO regions be
->> + * mapped by the OS so they can be accessed by EFI runtime services, but
->> + * should have no other significance to the OS (UEFI r2.10, sec 7.2).
->> + * However, most bootloaders and EFI stubs convert EfiMemoryMappedIO
->> + * regions to E820_TYPE_RESERVED entries, which prevent Linux from
->> + * allocating space from them (see remove_e820_regions()).
->> + *
->> + * Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and
->> + * PCI host bridge windows, which means Linux can't allocate BAR space for
->> + * hot-added devices.
->> + *
->> + * Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
->> + * problem.
->> + *
->> + * Retain small EfiMemoryMappedIO regions because on some platforms, these
->> + * describe non-window space that's included in host bridge _CRS.  If we
->> + * assign that space to PCI devices, they don't work.
->> + */
->> +static void __init efi_remove_e820_mmio(void)
->> +{
->> +	efi_memory_desc_t *md;
->> +	u64 size, start, end;
->> +	int i = 0;
->> +
->> +	for_each_efi_memory_desc(md) {
->> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
->> +			size = md->num_pages << EFI_PAGE_SHIFT;
->> +			if (size >= 256*1024) {
->> +				start = md->phys_addr;
->> +				end = start + size - 1;
->> +				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
->> +					i, start, end, size >> 20);
->> +				e820__range_remove(start, size,
->> +						   E820_TYPE_RESERVED, 1);
->> +			} else {
->> +				pr_info("Not removing mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluKB) from e820 map\n",
->> +					i, start, end, size >> 10);
-> 
-> The logging in this else is re-using the start and end from the previous section which was actually removed.
-> 
-> E.g. Matt's latest log from:
-> https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> has:
-> 
-> [    0.000000] e820: remove [mem 0xfc800000-0xfe7fffff] reserved
-> [    0.000000] efi: Not removing mem46: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
-> [    0.000000] efi: Not removing mem47: MMIO range=[0xfc800000-0xfe7fffff] (32KB) from e820 map
-> [    0.000000] efi: Not removing mem49: MMIO range=[0xfc800000-0xfe7fffff] (8KB) from e820 map
-> [    0.000000] efi: Not removing mem50: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
-> 
-> Notice how all the "Not removing ..." lines log the same range as
-> the actually removed map entry above them.
+However, this processing is not performed when the error code
+customized by libbpf is obtained. Make some minor improvements here,
+return -ERANGE and set errno to ERANGE when buf is not enough for
+custom description.
 
-I realize the fix is very obvious, but since I just fixed this in my
-local tree anyways, here is my fix for this:
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+---
 
---- a/arch/x86/platform/efi/efi.c
-+++ b/arch/x86/platform/efi/efi.c
-@@ -331,9 +331,9 @@ static void __init efi_remove_e820_mmio(void)
- 	for_each_efi_memory_desc(md) {
- 		if (md->type == EFI_MEMORY_MAPPED_IO) {
- 			size = md->num_pages << EFI_PAGE_SHIFT;
-+			start = md->phys_addr;
-+			end = start + size - 1;
- 			if (size >= 256*1024) {
--				start = md->phys_addr;
--				end = start + size - 1;
- 				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
- 					i, start, end, size >> 20);
- 				e820__range_remove(start, size,
+v2:
+Check the return value of snprintf to determine whether the buffer is
+too small.
 
-Regards,
+v1:
+https://lore.kernel.org/bpf/20221209084047.229525-1-liuxin350@huawei.com/T/#t
 
-Hans
+ tools/lib/bpf/libbpf_errno.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-
-
-
-
-
->> +			}
->> +		}
->> +		i++;
->> +	}
->> +}
->> +
->>  void __init efi_print_memmap(void)
->>  {
->>  	efi_memory_desc_t *md;
->> @@ -474,6 +518,8 @@ void __init efi_init(void)
->>  	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
->>  	efi_clean_memmap();
->>  
->> +	efi_remove_e820_mmio();
->> +
->>  	if (efi_enabled(EFI_DBG))
->>  		efi_print_memmap();
->>  }
-> 
+diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
+index 96f67a772a1b..6240c7cb7472 100644
+--- a/tools/lib/bpf/libbpf_errno.c
++++ b/tools/lib/bpf/libbpf_errno.c
+@@ -39,14 +39,13 @@ static const char *libbpf_strerror_table[NR_ERRNO] = {
+ 
+ int libbpf_strerror(int err, char *buf, size_t size)
+ {
++	int ret;
+ 	if (!buf || !size)
+ 		return libbpf_err(-EINVAL);
+ 
+ 	err = err > 0 ? err : -err;
+ 
+ 	if (err < __LIBBPF_ERRNO__START) {
+-		int ret;
+-
+ 		ret = strerror_r(err, buf, size);
+ 		buf[size - 1] = '\0';
+ 		return libbpf_err_errno(ret);
+@@ -56,12 +55,20 @@ int libbpf_strerror(int err, char *buf, size_t size)
+ 		const char *msg;
+ 
+ 		msg = libbpf_strerror_table[ERRNO_OFFSET(err)];
+-		snprintf(buf, size, "%s", msg);
++		ret = snprintf(buf, size, "%s", msg);
+ 		buf[size - 1] = '\0';
++		if (ret < 0)
++			return libbpf_err_errno(ret);
++		if (ret >= size)
++			return libbpf_err(-ERANGE);
+ 		return 0;
+ 	}
+ 
+-	snprintf(buf, size, "Unknown libbpf error %d", err);
++	ret = snprintf(buf, size, "Unknown libbpf error %d", err);
+ 	buf[size - 1] = '\0';
++	if (ret < 0)
++		return libbpf_err_errno(ret);
++	if (ret >= size)
++		return libbpf_err(-ERANGE);
+ 	return libbpf_err(-ENOENT);
+ }
+-- 
+2.33.0
 
