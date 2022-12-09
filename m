@@ -2,183 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD30647ED5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3220647ED7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiLIH4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S229982AbiLIH5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbiLIH4P (ORCPT
+        with ESMTP id S229898AbiLIH5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:56:15 -0500
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF3852146;
-        Thu,  8 Dec 2022 23:56:09 -0800 (PST)
+        Fri, 9 Dec 2022 02:57:08 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBA5216C;
+        Thu,  8 Dec 2022 23:57:05 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 130so3116498pfu.8;
+        Thu, 08 Dec 2022 23:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1670572569; x=1702108569;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CaMoi5NrXcmji+IIbLWKccOOUw+50Cx6EGVCxdT/MAQ=;
-  b=WKfZmXjcforYu+6MVH+QnAYlzB+rikDhUHAvayssFTqrgLRB5CpYlZ8d
-   rk83VfJKTxgHVlteFnO4uH57SWZJ3wzV933D4C+7+IFy2U8ARoTZlSLxo
-   tpNgImYkaR2yxtxPf04bEiUC1SP/AYs2XlG3VCAHS6ZvF2aC300RqI86C
-   A=;
-X-IronPort-AV: E=Sophos;i="5.96,230,1665446400"; 
-   d="scan'208";a="288754438"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-fa5fe5fb.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:56:03 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-fa5fe5fb.us-west-2.amazon.com (Postfix) with ESMTPS id 7514941999;
-        Fri,  9 Dec 2022 07:56:01 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Fri, 9 Dec 2022 07:55:59 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.83) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Fri, 9 Dec 2022 07:55:55 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <leitao@debian.org>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <kuniyu@amazon.com>, <leit@fb.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <yoshfuji@linux-ipv6.org>
-Subject: Re: [PATCH v2 net-next] tcp: socket-specific version of WARN_ON_ONCE()
-Date:   Fri, 9 Dec 2022 16:55:44 +0900
-Message-ID: <20221209075544.34778-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221208154656.60623-1-leitao@debian.org>
-References: <20221208154656.60623-1-leitao@debian.org>
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Cll4/Q/Z5rgIqA+AwInzEmI1wMkzOscWcMV2zekRaiU=;
+        b=WmvtCHw6fDBo4bavZjlcyAHlrnpLq1Rvh30I3/To5QGQnOa8fGX4lI3KK5aH5PUl9D
+         g3IgnZ6hrafbpuKyKunSPirzvcTsW9llOREBEd9NCB9CmSz+Y3UR4rE05qHZ31NTOa7f
+         oTo69U9aNlA9j7kYjCVmBGSveYOtPgF+0x82swSQIGUBYtDr1Rea+xa9vgYfVFApBBg3
+         4PGhdHvtd4jDp/ZGpVQfs0VQeYSkDP8cY797c+V6ttQCP4Xer3H6Z7NOZNn6wWqL9Uam
+         C/iRpB7GTWwmdFHmFa9P6q+x8gcWhpoBV6xj5n9d4P1GPWlVdxjPUcQLnzhImOg6L0db
+         xzEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cll4/Q/Z5rgIqA+AwInzEmI1wMkzOscWcMV2zekRaiU=;
+        b=EUhEGAmCu9ZJ7zgf2n9Z9mLf25rj735hc+t7UIwP2nHoB7Q+Q4cWI1a+ZFZsv2N9ZL
+         2Bz5U3mGu7Y0HakkJ6iMSmi0OUwHnBKlcocISDdbMqFbzcCUum75Scd+ezEpMV8PyFyn
+         eTIpKQJl+U30CNOhXmk95DEIjW9j57i9/mqBvAjT2UMTwokTT6KZsjVDxrobTIFBXDxF
+         zppEq3iQiddFR0H360b2Oulqi/RLYLtFTvjuyR935K6dsPQ4WllqqKI1zvTkm5nmC3l1
+         fSlIYivQ0xvsUx3EBnhfGNT/1O2/usLV1TjiTf6i+YxR0jJc7wQ1a3RhX7g3lH4yPQs7
+         MMUg==
+X-Gm-Message-State: ANoB5plcYYdduzMj/7vrvGeYM9/SObO2G9qSFCs5NlrFBC8tGcJy+pmD
+        E1AcbHnqLIURWQ1aJmLMwWFHkQc/CAuwbRPgCA+0AxZGbg==
+X-Google-Smtp-Source: AA0mqf5V50POnlK7RVnvpT90m0T4wUMGKE71kUHbMZxvr97uT/tF5euu0N6LZW45+0qRylN6Hts/CHou470bc/R8gVA=
+X-Received: by 2002:a63:6ce:0:b0:478:99ce:9f2b with SMTP id
+ 197-20020a6306ce000000b0047899ce9f2bmr21704638pgg.203.1670572624113; Thu, 08
+ Dec 2022 23:57:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.83]
-X-ClientProxiedBy: EX13D44UWC003.ant.amazon.com (10.43.162.138) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Fri, 9 Dec 2022 15:56:53 +0800
+Message-ID: <CACkBjsaFJwjC5oiw-1KXvcazywodwXo4zGYsRHwbr2gSG9WcSw@mail.gmail.com>
+Subject: BUG: missing null marking in PTR_TO_BTF_ID leads to null-ptr-deref in
+ BPF prog
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Breno Leitao <leitao@debian.org>
-Date:   Thu,  8 Dec 2022 07:46:56 -0800
-> There are cases where we need relevant information about the socket
-> during a warning, so, it could help us to find bugs that happens and do
-> not have an easy repro.
-> 
-> This patch creates a TCP-socket specific version of WARN_ON_ONCE(), which
-> dumps revelant information about the TCP socket when it hits rare
-> warnings, which is super useful for debugging purposes.
-> 
-> Hooking this warning tcp_snd_cwnd_set() for now, but, the intent is to
-> convert more TCP warnings to this helper later.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+Hi,
 
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+I constructed a BPF prog that can pass the verifier but contains null-ptr-deref.
+This is achieved by exploiting the following behavior in the verifier:
+1. verifier allows direct struct bpf_map access but does not mark the
+pointer (PTR_TO_BTF_ID) as maybe_null
+2. verifier allows pointer CMP in JMP, and marks reg as non-null
+if one of the pointers is not null in the corresponding path.
 
-Looks good to me, thank you.
+The following crash can be reproduced on:
 
-A minor comment below.
+HEAD commit: 2d14123617f9 Merge branch 'Document some recent core
+kfunc additions'
+git tree: bpf-next
+console log: https://pastebin.com/raw/UkZXqdqs
+kernel config: https://pastebin.com/raw/BbzHXhkV
+POC: https://pastebin.com/raw/XFHVa3xV
 
+Essentially, the program in POC creates a MAP_HASH, then loads and run
+the following BPF prog:
 
-> ---
->  include/net/tcp.h       |  3 ++-
->  include/net/tcp_debug.h | 10 ++++++++++
->  net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+), 1 deletion(-)
->  create mode 100644 include/net/tcp_debug.h
-> 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 14d45661a84d..e490af8e6fdc 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -40,6 +40,7 @@
->  #include <net/inet_ecn.h>
->  #include <net/dst.h>
->  #include <net/mptcp.h>
-> +#include <net/tcp_debug.h>
->  
->  #include <linux/seq_file.h>
->  #include <linux/memcontrol.h>
-> @@ -1229,7 +1230,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
->  
->  static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
->  {
-> -	WARN_ON_ONCE((int)val <= 0);
-> +	TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
->  	tp->snd_cwnd = val;
->  }
->  
-> diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
-> new file mode 100644
-> index 000000000000..50e96d87d335
-> --- /dev/null
-> +++ b/include/net/tcp_debug.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_TCP_DEBUG_H
-> +#define _LINUX_TCP_DEBUG_H
-> +
-> +void tcp_sock_warn(const struct tcp_sock *tp);
-> +
-> +#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
-> +		DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
-> +
-> +#endif  /* _LINUX_TCP_DEBUG_H */
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 54836a6b81d6..5985ba9c4231 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -4705,6 +4705,36 @@ int tcp_abort(struct sock *sk, int err)
->  }
->  EXPORT_SYMBOL_GPL(tcp_abort);
->  
-> +void tcp_sock_warn(const struct tcp_sock *tp)
-> +{
-> +	const struct sock *sk = (const struct sock *)tp;
-> +	struct inet_sock *inet = inet_sk(sk);
-> +	struct inet_connection_sock *icsk = inet_csk(sk);
+BPF_LD_MAP_FD(BPF_REG_1, map_fd),
+// verifier believe R6 is ptr_to_btf_id, after this ldx
+// but R6 = bpf_map->inner_map_meta, which is NULL,
+// because we don't have inner map
+BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
+BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
+BPF_ST_MEM(BPF_W, BPF_REG_2, 0, 0),
+BPF_CALL_FUNC(BPF_FUNC_map_lookup_elem),
+// verifier think R0 is map_value_or_null, R6 is ptr_btf_id
+// at runtime, they all equal to NULL
+BPF_JMP_REG(BPF_JEQ, BPF_REG_6, BPF_REG_0, 1),
+BPF_EXIT_INSN(),
+// here, verifier think R0 this map_value, but it is NULL
+BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
+BPF_EXIT_INSN(),
 
-Let's keep the reverse christmas tree order.
+After loading and running prog, the following is reported:
 
-$ cat -n Documentation/process/maintainer-netdev.rst | grep xmas -C 30
-
-
-> +
-> +	WARN_ON(1);
-> +
-> +	pr_warn("Socket Info: family=%u state=%d ccname=%s cwnd=%u",
-> +		sk->sk_family, sk->sk_state, icsk->icsk_ca_ops->name,
-> +		tcp_snd_cwnd(tp));
-> +
-> +	switch (sk->sk_family) {
-> +	case AF_INET:
-> +		pr_warn("saddr=%pI4:%u daddr=%pI4:%u", &inet->inet_saddr,
-> +			ntohs(inet->inet_sport), &inet->inet_daddr,
-> +			ntohs(inet->inet_dport));
-> +
-> +		break;
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +	case AF_INET6:
-> +		pr_warn("saddr=[%pI6]:%u daddr=[%pI6]:%u", &sk->sk_v6_rcv_saddr,
-> +			ntohs(inet->inet_sport), &sk->sk_v6_daddr,
-> +			ntohs(inet->inet_dport));
-> +		break;
-> +#endif
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(tcp_sock_warn);
-> +
->  extern struct tcp_congestion_ops tcp_reno;
->  
->  static __initdata unsigned long thash_entries;
-> -- 
-> 2.30.2
+general protection fault, probably for non-canonical address
+0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 7 PID: 6781 Comm: a.out Not tainted 6.1.0-rc7-01517-g2d14123617f9 #125
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux
+1.16.1-1-1 04/01/2014
+RIP: 0010:___bpf_prog_run+0x66d/0x8fd0 kernel/bpf/core.c:1937
+Code: e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 e6 78 00 00 48 b8 00 00
+00 00 00 fc ff df 4d 0f bf 66 02 4d 01 ec 4c 89 e2 48 c1 ea 03 <0f> b6
+14 02 4c 89 e0 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 a7
+RSP: 0018:ffffc900043377e8 EFLAGS: 00010256
+RAX: dffffc0000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff818efa7c RDI: ffffc90001146092
+RBP: ffffc900043378a0 R08: 0000000000000006 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffffc90001146090 R15: 0000000000000000
+FS:  00007f68c01f6440(0000) GS:ffff88823bd80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000563424ffa008 CR3: 000000001fd2a000 CR4: 0000000000750ee0
+PKRU: 55555554
+Call Trace:
+<TASK>
+__bpf_prog_run32+0x9d/0xe0 kernel/bpf/core.c:2045
+bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+__bpf_prog_run include/linux/filter.h:600 [inline]
+bpf_prog_run include/linux/filter.h:607 [inline]
+bpf_test_run+0x38e/0x980 net/bpf/test_run.c:402
+bpf_prog_test_run_skb+0xb69/0x1dd0 net/bpf/test_run.c:1187
+bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
+__sys_bpf+0x1293/0x5840 kernel/bpf/syscall.c:4997
+__do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
+__se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
+__x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5081
+do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f68bfae4469
+Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8 64 89 01 48
+RSP: 002b:00007fff992ab838 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f68bfae4469
+RDX: 0000000000000090 RSI: 00007fff992ac940 RDI: 000000000000000a
+RBP: 00007fff992ac9e0 R08: 000000000000000a R09: 0000000300001118
+R10: 0000000000000001 R11: 0000000000000246 R12: 00005634238006f0
+R13: 00007fff992acac0 R14: 0000000000000000 R15: 0000000000000000
+</TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:___bpf_prog_run+0x66d/0x8fd0 kernel/bpf/core.c:1937
+Code: e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 e6 78 00 00 48 b8 00 00
+00 00 00 fc ff df 4d 0f bf 66 02 4d 01 ec 4c 89 e2 48 c1 ea 03 <0f> b6
+14 02 4c 89 e0 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 a7
+RSP: 0018:ffffc900043377e8 EFLAGS: 00010256
+RAX: dffffc0000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff818efa7c RDI: ffffc90001146092
+RBP: ffffc900043378a0 R08: 0000000000000006 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffffc90001146090 R15: 0000000000000000
+FS:  00007f68c01f6440(0000) GS:ffff88823bd80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000563424ffa008 CR3: 000000001fd2a000 CR4: 0000000000750ee0
+PKRU: 55555554
+----------------
+Code disassembly (best guess):
+  0: e0 07                loopne 0x9
+  2: 83 c0 01              add    $0x1,%eax
+  5: 38 d0                cmp    %dl,%al
+  7: 7c 08                jl     0x11
+  9: 84 d2                test   %dl,%dl
+  b: 0f 85 e6 78 00 00    jne    0x78f7
+  11: 48 b8 00 00 00 00 00 movabs $0xdffffc0000000000,%rax
+  18: fc ff df
+  1b: 4d 0f bf 66 02        movswq 0x2(%r14),%r12
+  20: 4d 01 ec              add    %r13,%r12
+  23: 4c 89 e2              mov    %r12,%rdx
+  26: 48 c1 ea 03          shr    $0x3,%rdx
+* 2a: 0f b6 14 02          movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e: 4c 89 e0              mov    %r12,%rax
+  31: 83 e0 07              and    $0x7,%eax
+  34: 83 c0 03              add    $0x3,%eax
+  37: 38 d0                cmp    %dl,%al
+  39: 7c 08                jl     0x43
+  3b: 84 d2                test   %dl,%dl
+  3d: 0f                    .byte 0xf
+  3e: 85                    .byte 0x85
+  3f: a7                    cmpsl  %es:(%rdi),%ds:(%rsi)
