@@ -2,226 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C385164825C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D758E648261
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiLIM3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S229628AbiLIMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIM3V (ORCPT
+        with ESMTP id S229712AbiLIMcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:29:21 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CB063B81;
-        Fri,  9 Dec 2022 04:29:19 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B97omfg026821;
-        Fri, 9 Dec 2022 06:29:06 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=bXBIFc2KBz1UGHSeQtliNK6GduA3gerKItLdDIfuIYM=;
- b=GIIzC8yOy8k4IvDH2BiWTX5id9N5elFI42pmgc4FVXb3pQgixYJZPsbAUM65pH+XDLHS
- rW/5di8b9UygsTU9NU98mDA3Dyy7LZ7lDEKmqK7CtfQW96+7p9WfO1QXmgoP4eBpISqH
- IxIqmqxvezdWtIUpgfOIjc5gjBBm02+pFMde2w5yybeUbXDvgl2NnW0mYgujSeI9rFBN
- WMuOIOXnpppiX+SPi4BWk118l541D6q5P3caLMFg+VkMR66uyKa6ry7NEbWlPJt8V09z
- eOayZ8uCSHPe/NatouEAqMcIbiqQkhH2uitB1Ma+BWgJHSfitQfgBh1LUBwTAxffumNR zA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3matyutgsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Dec 2022 06:29:06 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 9 Dec
- 2022 06:29:05 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Fri, 9 Dec 2022 06:29:05 -0600
-Received: from [198.61.65.44] (EDIN4L06LR3.ad.cirrus.com [198.61.65.44])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B0A47B0E;
-        Fri,  9 Dec 2022 12:29:04 +0000 (UTC)
-Message-ID: <81575055-ebf2-ea05-67fc-5b294423532d@opensource.cirrus.com>
-Date:   Fri, 9 Dec 2022 12:29:04 +0000
+        Fri, 9 Dec 2022 07:32:06 -0500
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2072.outbound.protection.outlook.com [40.107.103.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3862EBF;
+        Fri,  9 Dec 2022 04:32:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZUEJAQZRult6eslWWuoZk6NwLoL1yE/CCkq8s2OfIPO8I8Dd+Tkg2wpiemPysEHZDR7dzgaFpnhgvz2hyUpPIBYwQ0T+aLAYmHiRINzNuWJ9ODn8wli6luG70Z1XF43GA+/jX+ri9AVZ9FEiEkzU5t2gLhA1JOljg5mNMlYrAkeJ0RbADOkXZ0VUC4w5uN1XTSh0XS9t1aqdpOrZ5CRZEIxqTmA4wKQtnP/W/1i2uG2dYh6NZdbpp3XCToaq/f1ZlMEEFK57OTR/HaMR40VKnJpqwXfxbtAKnyJVDtw9LNAJvfZq6ODnJSRC7VP91bagSqimv/LBRr3qBV60yDwy7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
+ b=NWoVnVSsJQeW73vXMZu9vuAKZCL/0jr1QJs2QtHt7JpFQqRxo6lcD9jqKpb58+r+D3d0KbyY6E8T7Lvqq9NqrkTIOp/zCO17DQ/fHj/ha6HJWWBwbflMCT9w3IKOxCJGlNvZxSMLgF4nhHl7nszO4mO5tH8wK4ACD1L4guVCaEctoRIr+eLLjg/Mf2UUCKEtGsPPusUN5FvS0dMhT6DQLH2jBMwOMv8lO5sGwiEWcs/t8vy8l0vLvT6cQW7QEgvxBmQs7Yfn4T3FcEAl/TjNVHG5xkNckCKgHUWMRJRh/Q1mMiMWj7V6eCX0UqXEQ48I+O5TbGnV79v0rWSAqEwsWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.75) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g7jaFHi0m/L+U7D7vTpKFCe0BHGggnUYstSiKm6UX8E=;
+ b=l2ymjfCfSOpkJF/88S6JqAzHfmzS+bECM28bYd/XSnp+k9xx6OFZRC6Tt0YAifAgCzl044Rxf2sYLrIwC6YoY2yAKOCDk7+p8sbN8+3iFAAVV8cJo4b1wx08IsxUoBz4I219D47eQlKG0IeSgxSmo/OLzM4Ib2eUo4uEb6/sUy+yGT7ZxU1CjPxklH4+vbvc6QxbZXnKLHNV3sES62BTS72tRV4B1JZJMFsNiauOvWhSTBL+kTCR7tpjhd6FOIf7eLCWaxlJldwQ81qvXS3qORtya4E++5KMfbieb3Ie01JZSLiF8N6WFJxbnhom3mdnESD+jcx5BDYhnDoynWiZ3Q==
+Received: from AM8P189CA0030.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:218::35)
+ by PAVPR10MB7402.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:31e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
+ 2022 12:32:03 +0000
+Received: from VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:20b:218:cafe::e6) by AM8P189CA0030.outlook.office365.com
+ (2603:10a6:20b:218::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.18 via Frontend
+ Transport; Fri, 9 Dec 2022 12:32:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.75) by
+ VE1EUR01FT101.mail.protection.outlook.com (10.152.3.40) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5901.14 via Frontend Transport; Fri, 9 Dec 2022 12:32:02 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Fri, 9 Dec 2022 13:32:02 +0100
+Received: from bennie-lenovo.fritz.box (144.145.220.67) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Fri, 9 Dec 2022 13:32:01 +0100
+From:   "B. Niedermayr" <benedikt.niedermayr@siemens.com>
+To:     <linux-next@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
+        "Tony Lindgren" <tony@atomide.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        "open list:OMAP GENERAL PURPOSE MEMORY CONTROLLER SUPPORT" 
+        <linux-omap@vger.kernel.org>,
+        "open list:MEMORY CONTROLLER DRIVERS" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] memory: omap-gpmc: fix wait pin validation
+Date:   Fri, 9 Dec 2022 13:31:47 +0100
+Message-ID: <20221209123147.591982-1-benedikt.niedermayr@siemens.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, <wsa@kernel.org>,
-        <jarkko.nikula@linux.intel.com>,
-        <andriy.shevchenko@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20221209114034.18025-1-rf@opensource.cirrus.com>
- <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: gCcespAIHO90OGQqQmaLriuYIvTBHkD5
-X-Proofpoint-GUID: gCcespAIHO90OGQqQmaLriuYIvTBHkD5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [144.145.220.67]
+X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1EUR01FT101:EE_|PAVPR10MB7402:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc180bc7-9037-4280-4bab-08dad9e16011
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5dcvK6uV7ZFnPcKuHfEiZPS+LUi1NPTqV1+sp2sLcLj+DxD/6Iehws5+2T7oD2NpEhtIpBXpEgo+LSiM7AAMbGoQrRs/MpBdNiFQW0aVB6eBDPlWUzOV0nFfoK0zpKV8lMW1lVKgb7x6AmSEymM/ZHL7XoK2LNVk6sUtWUBBz1wH6OVwcRCaPGz1GESWdSj/OajeGkSUSEPDj2bdPutc1uzZH3e0R9lrYhHwLU1lnIYdQoT8XaS0XZGwOIHwKEp0AaGcDCSSn7biQZRpBzmaRr/u7zzU+Gfd+f9lB1R+8G6ae/zjgA/qNxMEJyqNt9bum7PjXvvlYrFCNK+CbEq0dAAmfPNoQPtK+pxp5IjTSJ1RCI8A7ODVmkPRy1LS4MoJHU8RiZPyW0FBpKtVi7qstlwLB+KBEMEXaVV+xjDb9gqEmhB7yULzbx/sJuUBcX921XzuMF/jzBLwXqr0d52QfcQdFYUJQVBG3BrFEA/TVKrg8o66C8eWgE2hqrmbr4V3XYMXMARdLq7nzxZOcNMG7RTJyep0aKi6tU9G1KjTaaP69svycAYWlC41c0T+YH1D9tNYBWE53KpRQMDzRBNSvOHn92kYVD04hF3d6lpSW7mvooe6QGRR8cAtF+NE/4h2v/zk8z50hx6IvmGXe3OIxQAThjdTYEmwmeUezZltfmbkrDhSUiFRenh6jGKDjwjh2V+SkHltqkV6mFQN70EQbBYPLmXU1oKXZeQxOUFAPNM=
+X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(2616005)(186003)(86362001)(16526019)(956004)(1076003)(336012)(83380400001)(356005)(81166007)(47076005)(82740400003)(82960400001)(36860700001)(2906002)(5660300002)(40480700001)(82310400005)(8936002)(40460700003)(478600001)(70586007)(4326008)(26005)(70206006)(6666004)(8676002)(41300700001)(110136005)(54906003)(316002)(36756003)(7049001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 12:32:02.8492
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc180bc7-9037-4280-4bab-08dad9e16011
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT101.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7402
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 12:15, Hans de Goede wrote:
-> Hi Richard,
-> 
-> On 12/9/22 12:40, Richard Fitzgerald wrote:
->> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
->> i2c_mark_adapter_resumed().
->>
->> Don't set DPM_FLAG_MAY_SKIP_RESUME to skip system early_resume stage if the
->> driver was runtime-suspended. Instead, always call dw_i2c_plat_resume() and
->> use pm_runtime_suspended() to determine whether we need to power up the
->> hardware.
->>
->> The unbalanced suspended flag was introduced by
->> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
->> suspended flag")
->>
->> Before that commit, the system and runtime PM used the same functions. The
->> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
->> had been in runtime-suspend. If system resume was skipped, the suspended
->> flag would be cleared by the next runtime resume. The check of the
->> suspended flag was _after_ the call to pm_runtime_get_sync() in
->> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
->> the flag before it was checked.
->>
->> Having introduced the unbalanced suspended flag with that commit, a further
->> commit 80704a84a9f8
->> ("i2c: designware: Use the i2c_mark_adapter_suspended/resumed() helpers")
->>
->> changed from using a local suspended flag to using the
->> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
->> checked by I2C core code before issuing the transfer to the bus driver, so
->> there was no opportunity for the bus driver to runtime resume itself before
->> the flag check.
->>
->> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
->> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
-> 
-> It is not entirely clear to me where the unbalance you claim to see comes
-> from? When runtime-suspended SMART_SUSPEND should keep it suspended at which point
-> the system suspend callback will never run ?
+From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
 
-system suspend callback is called, which calls
-i2c_mark_adapter_suspended().
+This bug has been introduced after switching from -1 to UINT_MAX
+for GPMC_WAITPIN_INVALID.
 
-system resume is NOT called so i2c_mark_adapter_resumed() is NOT called.
+The bug leads to an error when the optional gpmc,wait-pin
+dt-property is not used:
 
-A subsequent audio playback using an I2C audio amp then does a
-runtime resume but the amp driver then gets a "Transfer while suspended"
-error when it tried to access the part over I2C during its own
-runtime resume.
+...
+gpmc_cs_program_settings: invalid wait-pin (-1)
+...
 
-Tested on Aaeon UpXstreme WHL (Intel Whiskylake chipset)
+Signed-off-by: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+Fixes: 8dd7e4af5853 ("memory: omap-gpmc: fix coverity issue "Control flow issues"")
+Cc: Rob Herring <robh+dt@kernel.org>
+---
+ drivers/memory/omap-gpmc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Looking in __device_suspend_late() (drivers/base/power/main.c) there
-are cases which will skip the SMART_SUSPEND check.
+diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+index 57d9f91fe89b..d78f73db37c8 100644
+--- a/drivers/memory/omap-gpmc.c
++++ b/drivers/memory/omap-gpmc.c
+@@ -1918,7 +1918,8 @@ int gpmc_cs_program_settings(int cs, struct gpmc_settings *p)
+ 		}
+ 	}
+ 
+-	if (p->wait_pin > gpmc_nr_waitpins) {
++	if (p->wait_pin != GPMC_WAITPIN_INVALID &&
++	    p->wait_pin > gpmc_nr_waitpins) {
+ 		pr_err("%s: invalid wait-pin (%d)\n", __func__, p->wait_pin);
+ 		return -EINVAL;
+ 	}
+-- 
+2.25.1
 
-> 
-> Are you sure that you are not maybe seeing a suspend/resume ordering issue?
-> 
-> Did you add printk messages to the suspend/resume callbacks of
-> i2c-designware-platdrv.c which show the system suspend callback
-> being called but not the system resume one ?
-> 
-
-Yes, that's what I did.
-system suspend callback is called. System resume callback isn't.
-
-> I guess that is possible with DPM_FLAG_MAY_SKIP_RESUME, but
-> since we also use SMART_SUSPEND I would expect the system-suspend
-> callback to also always be skipped for runtime-suspended controllers.
-> 
-> 
-> 
-> 
-> 
-> 
-> 
->> ---
->> Apologies if you get this message multiple times. I'm having trouble
->> with my SMTP server.
->> ---
->>   drivers/i2c/busses/i2c-designware-platdrv.c | 10 +++++-----
->>   1 file changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
->> index ba043b547393..d805b8c7e797 100644
->> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
->> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
->> @@ -351,13 +351,11 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
->>   
->>   	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
->>   		dev_pm_set_driver_flags(&pdev->dev,
->> -					DPM_FLAG_SMART_PREPARE |
->> -					DPM_FLAG_MAY_SKIP_RESUME);
->> +					DPM_FLAG_SMART_PREPARE);
->>   	} else {
->>   		dev_pm_set_driver_flags(&pdev->dev,
->>   					DPM_FLAG_SMART_PREPARE |
->> -					DPM_FLAG_SMART_SUSPEND |
->> -					DPM_FLAG_MAY_SKIP_RESUME);
->> +					DPM_FLAG_SMART_SUSPEND);
->>   	}
->>   
->>   	device_enable_async_suspend(&pdev->dev);
->> @@ -475,7 +473,9 @@ static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
->>   {
->>   	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
->>   
->> -	dw_i2c_plat_runtime_resume(dev);
->> +	if (!pm_runtime_suspended(dev))
->> +		dw_i2c_plat_runtime_resume(dev);
->> +
-> 
-> I'm afraid that this is always going to run now, before this callback gets
-> called drivers/base/power/main.c: device_resume_noirq() does:
-> 
->          skip_resume = dev_pm_skip_resume(dev);
-> 
->          if (skip_resume)
->                  pm_runtime_set_suspended(dev);
->          else if (dev_pm_skip_suspend(dev))
->                  pm_runtime_set_active(dev);
-> 
-> Where skip_resume now is false since you dropped the
-> DPM_FLAG_MAY_SKIP_RESUME flag and dev_pm_skip_suspend(dev)
-> will return true (see below) for runtime-suspended controllers,
-> so they will be marked active here. and then your
-> !pm_runtime_suspended(dev) will always be false.
-> 
-> Did you add a printk to both the if + else paths
-> and have you ever seen the controller not get
-> resumed with this test added ?
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
-> bool dev_pm_skip_suspend(struct device *dev)
-> {
->          return dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
->                  pm_runtime_status_suspended(dev);
-> }
-> 
-> 
-> 
-> 
->>   	i2c_mark_adapter_resumed(&i_dev->adapter);
->>   
->>   	return 0;
-> 
