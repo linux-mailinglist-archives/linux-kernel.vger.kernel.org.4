@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2721647D29
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A548647D2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiLIFOA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Dec 2022 00:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S229680AbiLIFQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 00:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLIFN5 (ORCPT
+        with ESMTP id S229460AbiLIFQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 00:13:57 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27D5B87417;
-        Thu,  8 Dec 2022 21:13:52 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2B95B1n44016358, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2B95B1n44016358
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 9 Dec 2022 13:11:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Fri, 9 Dec 2022 13:11:48 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 9 Dec 2022 13:11:48 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Fri, 9 Dec 2022 13:11:48 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Li Zetao <lizetao1@huawei.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "linville@tuxdriver.com" <linville@tuxdriver.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
-Thread-Topic: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
- _rtl8812ae_phy_set_txpower_limit()
-Thread-Index: AQHZCkbbXqqj5E4pa0em0g/eG4ORkq5lAS7w
-Date:   Fri, 9 Dec 2022 05:11:48 +0000
-Message-ID: <e985ead3ea7841b8b3a94201dfb18776@realtek.com>
-References: <20221207152319.3135500-1-lizetao1@huawei.com>
-In-Reply-To: <20221207152319.3135500-1-lizetao1@huawei.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/9_=3F=3F_02:22:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Fri, 9 Dec 2022 00:16:10 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D973F8742C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:16:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id v3so2825091pgh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 21:16:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6TNCQdSlF+qsMghK/FM4K8rIWZD0ncbkYlLlxttfovI=;
+        b=suiv9qug5Adb0eMaIprUh9NKoS/B+KQyfcJI7OYZ/zf81FqIIIL1VZU6HxxomuHzvI
+         iEIA7fjtmzYPo9EnLHZcNpHdXvvZbfEgNAJrj5D4BIW9gZ1dCYGhJO8vJzuqv1BYaoby
+         tmpLQQPeVpTK5PKU0oK6PcxSYvLNkLcVqlE5oSSAfGwLBRktfF05dhP/tOuX04b/85u0
+         hypBKWMmn0geGAsxmepvy6s7I2NgqliOO+Of3Ez995nOfGa6aRrbVyYMZ3vpEd+dDExA
+         LM79ti2lm2qshfDCsKPQba9vnvodXKkX+XzvT/pEh3OInKDhIPVhgNDhgJD2YfXLnLLu
+         mXDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TNCQdSlF+qsMghK/FM4K8rIWZD0ncbkYlLlxttfovI=;
+        b=nTTU1XzshW73VVcxFcUwRZ9/DY+pPQC84gVknB75H+qnyKcHxXNPosrEFQ53xI/MbD
+         GyjkyRlPLUERabW8hWkrMvPFelDyFVCkftPTPzUmSjMWAey8QjmD6BEFRS9byW85ia0+
+         RHTYTpEIWCr7xxyqkZZm7XKBe19sghVKc9KJ53FxdZfNE2BTu74oYAtZcgHHCCBZjHhB
+         RLqVv0gdFiMxKsTCyAWZ5WyZbxcKteRS8IWiS7fRYin2SQWaVoLN33KEcJKNq0tLSA6/
+         dsJ0KAfbJ4ogyCnJi4XzyScBfezv/aGQ8erwQp7eUPKojOG5mgWHXdHk3yM9FwKQoOzi
+         bh0A==
+X-Gm-Message-State: ANoB5pkJMFKD8k9/n8mTfW2HNAKnBaheiCf26Uv0TEBGBT/I7s4l7zHf
+        ul0fXfPRbxv9btVAWRy0nR/Cew==
+X-Google-Smtp-Source: AA0mqf7l7oU3d/2VxdeXfJvnF8MqC2v+sx+S7UVRsn3hq8tf/RxnvOplkk1cnP11s5aAbL44ozs/QA==
+X-Received: by 2002:aa7:8589:0:b0:56d:74bf:3265 with SMTP id w9-20020aa78589000000b0056d74bf3265mr3720542pfn.19.1670562969384;
+        Thu, 08 Dec 2022 21:16:09 -0800 (PST)
+Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id x11-20020a62860b000000b005623f96c24bsm368221pfd.89.2022.12.08.21.16.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 21:16:08 -0800 (PST)
+Message-ID: <b1dae947-d52a-d28e-5ddc-c1ad6d29828c@rivosinc.com>
+Date:   Thu, 8 Dec 2022 21:16:06 -0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: RISCV Vector unit disabled by default for new task (was Re: [PATCH
+ v12 17/17] riscv: prctl to enable vector commands)
+Content-Language: en-US
+To:     Chris Stillson <stillson@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Andrew Waterman <andrew@sifive.com>,
+        Darius Rad <darius@bluespec.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBl?= =?UTF-8?Q?l?= <bjorn@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        =?UTF-8?Q?Christoph_M=c3=bcllner?= <christoph.muellner@vrull.eu>,
+        Aaron Durbin <adurbin@rivosinc.com>, linux@rivosinc.com
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-17-stillson@rivosinc.com>
+From:   Vineet Gupta <vineetg@rivosinc.com>
+In-Reply-To: <20220921214439.1491510-17-stillson@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Darius, Andrew, Palmer
 
+On 9/21/22 14:43, Chris Stillson wrote:
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+>
+> @@ -134,7 +135,6 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+>   			if (WARN_ON(!vstate->datap))
+>   				return;
+>   		}
+> -		regs->status |= SR_VS_INITIAL;
+>   
 
-> -----Original Message-----
-> From: Li Zetao <lizetao1@huawei.com>
-> Sent: Wednesday, December 7, 2022 11:23 PM
-> To: Ping-Ke Shih <pkshih@realtek.com>; kvalo@kernel.org; davem@davemloft.net; edumazet@google.com;
-> kuba@kernel.org; pabeni@redhat.com
-> Cc: lizetao1@huawei.com; Larry.Finger@lwfinger.net; linville@tuxdriver.com;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
-> 
-> There is a global-out-of-bounds reported by KASAN:
-> 
->   BUG: KASAN: global-out-of-bounds in
->   _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
->   Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
-> 
->   CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
->   6.1.0-rc8+ #144 e15588508517267d37
->   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
->   Call Trace:
->    <TASK>
->    ...
->    kasan_report+0xbb/0x1c0
->    _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
->    rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
->    rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
->    ...
->    </TASK>
-> 
-> The root cause of the problem is that the comparison order of
-> "prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
-> _rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
-> strings, so this requires the length of the two strings be greater
-> than or equal to n. In the  _rtl8812ae_phy_set_txpower_limit(), it was
-> originally intended to meet this requirement by carefully designing
-> the comparison order. For example, "pregulation" and "pbandwidth" are
-> compared in order of length from small to large, first is 3 and last
-> is 4. However, the comparison order of "prate_section" dose not obey
-> such order requirement, therefore when "prate_section" is "HT", it will
-> lead to access out of bounds in _rtl8812ae_eq_n_byte().
-> 
-> Fix it by adding a length check in _rtl8812ae_eq_n_byte(). Although it
-> can be fixed by adjusting the comparison order of "prate_section", this
-> may cause the value of "rate_section" to not be from 0 to 5. In
-> addition, commit "21e4b0726dc6" not only moved driver from staging to
-> regular tree, but also added setting txpower limit function during the
-> driver config phase, so the problem was introduced by this commit.
-> 
-> Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
-> ---
->  drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-> b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-> index a29321e2fa72..720114a9ddb2 100644
-> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
-> @@ -1600,7 +1600,7 @@ static bool _rtl8812ae_get_integer_from_string(const char *str, u8 *pint)
-> 
->  static bool _rtl8812ae_eq_n_byte(const char *str1, const char *str2, u32 num)
->  {
+Perhaps not obvious from the patch, but this is a major user experience 
+change: As in V unit would be turned off for a new task and we will rely 
+on a userspace prctl (also introduced in this patch) to enable V.
 
-This can causes problem because it compares characters from tail to head, and
-we can't simply replace this by strncmp() that does similar work. But, I also
-don't like strlen() to loop 'str1' constantly.
+I know some of you had different opinion on this in the past [1], so 
+this is to make sure everyone's on same page.
+And if we agree this is the way to go, how exactly will this be done in 
+userspace.
 
-How about having a simple loop to compare characters forward:
+glibc dynamic loader will invoke the prctl() ? How will it decide 
+whether to do this (or not) - will it be unconditional or will it use 
+the hwcap - does latter plumbing exist already ? If so is it AT_HWCAP / 
+HWCAP2.
 
-for (i = 0; i < num; i++)
-    if (str1[i] != str2[i])
-         return false;
+Also for static linked executables, where will the prctl be called from ?
 
-return true;
-
-> -	if (num == 0)
-> +	if (num == 0 || strlen(str1) < num)
->  		return false;
->  	while (num > 0) {
->  		num--;
-> --
-> 2.31.1
-> 
-> 
-> ------Please consider the environment before printing this e-mail.
+[1] https://sourceware.org/pipermail/libc-alpha/2021-November/132883.html
