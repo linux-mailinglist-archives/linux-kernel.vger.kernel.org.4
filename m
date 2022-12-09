@@ -2,74 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC44647B2D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D896F647B2F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiLIBMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        id S229636AbiLIBMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLIBMY (ORCPT
+        with ESMTP id S229661AbiLIBMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:12:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A9B80A0E;
-        Thu,  8 Dec 2022 17:12:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8D406203F;
-        Fri,  9 Dec 2022 01:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F9FC433F2;
-        Fri,  9 Dec 2022 01:12:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670548342;
-        bh=Q37W1vLJUGba/GKJcAqRPtnLC0ooux4QhJ6D99IJvhs=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ZI661ixsVRMEo2OEh2JptvfA43/sySTL9PIV5OGjqqz8AXWluQyKtbzcL7VzvqpA6
-         tDzRF+77RWwnHY1u2wgaGEAze1zzKKeVs/I+dPCp6t8UU/uEUnkuCMVEE6aRwU6YnQ
-         mLnNQxauxZhpj817bP0+qn9KlAzxQRNWqW95ZkGuKPiUVpuqoE0jxJqsz7hxxDxKFg
-         DhGyx1E5dviHdq1EW9Ct5XCg/6U0sHJ5sOQhksFy9Y98gAa0m1/QhibqTW5q6E5oGG
-         YwgUuAMVlJ171/Y8Bf925ON8M1wRd3QC/eyUBtWXiXdgMIzisI8pIR04JBNF8Ho0xP
-         gQgjYVhBy15tQ==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221123161921.81195-1-conor@kernel.org>
-References: <20221123161921.81195-1-conor@kernel.org>
-Subject: Re: [PATCH] clk: microchip: enable the MPFS clk driver by default if SOC_MICROCHIP_POLARFIRE
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
+        Thu, 8 Dec 2022 20:12:40 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57B32DDF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:12:33 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id fy4so2959980pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 17:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RzaW/Dkw5D0UiQIIqbAt82QcgNFIm3xJvGehXJmo5ys=;
+        b=TocUuK0wI3vdPKDiDAaxu/PoP5sh6Xa0ifEsdIPANeYRP2eSSt0U0WQjWPaLbFpSn2
+         8NdeDHH0qz1Jvq5N4Uce1Lt8v+ydsIUDGGBujIt6sLcv9SViIBwRuCEz37bsfQEAPPDg
+         FY1RKsC9Xf+epJO3GqJiapkxZlIMyRKd8U54YFHDfO07l7EiNI0PB98gWWqXr9Y9teYg
+         ym/WKikIgLjqCblf1m+nOEqs26bFXM9XBVR5LNQG6K6RtNVyABFC440cizGpn0JySYZa
+         wdseZqXFB8rPt0xJT641DYgDSxa1GxqZQAcpGjxDq/FdtgTSSkpBJ9h14lgw2rhkhpFh
+         8Y0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RzaW/Dkw5D0UiQIIqbAt82QcgNFIm3xJvGehXJmo5ys=;
+        b=mlWgmTzG3Rmc+HbWecWCyn3Apg/6rlhXEjTw7NG+vMjuJKFQ89+aEIW3RPMSziPT0u
+         Mk9wxEI/7NYJNii++lIraCXCQWiLLuJL0u3YwnwdLMkARsEF7FhnK25Q4LHb81oNA3rL
+         VMQ23Bp/mfqfZlTbkDzFHhuiUWb39CI60hF2FURBNeHwDU1v+IzuJj8Nnid+4GVQWNf2
+         kHNxRhmjsh9oFSpD0vpBbsT3onVeLrcmRIzC6nDwOCl4PoHB1dC+FNKzjXml9cYgdcnq
+         62hz1bG0/Pn/+cYEcT+yVq/Te9XkXBWy4222zXWkl/7DSy4AjvDMwF9+uKiY3xUdDiFW
+         /Zjw==
+X-Gm-Message-State: ANoB5pkKFl4pQbDcst6dydF1hmVBq4fRgYEu5ojyN0NoSLeTJwp0MbKN
+        rt5GGJPPtpIimi3FgDWiRk8otw==
+X-Google-Smtp-Source: AA0mqf6mENkx2c5ky8U+PLx4U66zh9KqKKkcuZ6pnkCCyANNX1FXePH2/0EHP4My3/dxme+7iFPQoA==
+X-Received: by 2002:a17:902:e154:b0:189:6d32:afeb with SMTP id d20-20020a170902e15400b001896d32afebmr1628567pla.1.1670548353245;
+        Thu, 08 Dec 2022 17:12:33 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h4-20020a170902b94400b001895f7c8a71sm64632pls.97.2022.12.08.17.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 17:12:32 -0800 (PST)
+Date:   Fri, 9 Dec 2022 01:12:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        coverity-bot <keescook@chromium.org>,
         linux-kernel@vger.kernel.org
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Conor Dooley <conor@kernel.org>
-Date:   Thu, 08 Dec 2022 17:12:19 -0800
-User-Agent: alot/0.10
-Message-Id: <20221209011222.04F9FC433F2@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] KVM: x86: hyper-v: Fix 'using uninitialized value'
+ Coverity warning
+Message-ID: <Y5KLfZj5+4W5ZlcT@google.com>
+References: <20221208102700.959630-1-vkuznets@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208102700.959630-1-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Conor Dooley (2022-11-23 08:19:22)
-> From: Conor Dooley <conor.dooley@microchip.com>
->=20
-> With the intent of removing driver selects from Kconfig.socs in
-> arch/riscv, essential drivers that were being selected there could
-> instead by enabled by defaulting them to the value of the SoC's Kconfig
-> symbol.
->=20
-> Do so here & drop the depend on RISC-V - the SOC_ symbols are only
-> defined there anyway.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Dec 08, 2022, Vitaly Kuznetsov wrote:
+> In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
+> are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
+> halves' and increase 'data_offset' otherwise. Coverity discovered, that in
+> one case both variables are incremented unconditionally. This doesn't seem
+> to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
+> data is kvm_hv_get_tlb_flush_entries() -> kvm_hv_get_hc_data() which also
+> takes into account 'hc->fast' but is still worth fixing.
+> 
+> To make things explicit, put 'data_offset' and 'consumed_xmm_halves' to
+> 'struct kvm_hv_hcall' as a union and use at call sites. This allows to
+> remove explicit 'data_offset'/'consumed_xmm_halves' parameters from
+> kvm_hv_get_hc_data()/kvm_get_sparse_vp_set()/kvm_hv_get_tlb_flush_entries()
+> helpers.
+> 
+> Note: 'struct kvm_hv_hcall' is allocated on stack in kvm_hv_hypercall() and
+> is not zeroed, consumers are supposed to initialize the appropriate field
+> if needed.
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527764 ("Uninitialized variables")
+> Fixes: 260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
 
-Applied to clk-next
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> Changes since v1:
+> - Shove 'data_offset'/'consumed_xmm_halves' into a union in 'struct
+> kvm_hv_hcall' to make things more explicit. [Sean]
+> ---
+>  arch/x86/kvm/hyperv.c | 63 ++++++++++++++++++++++++-------------------
+>  1 file changed, 36 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 2c7f2a26421e..e8296942a868 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1769,6 +1769,7 @@ static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_ba
+>  }
+>  
+>  struct kvm_hv_hcall {
+> +	/* Hypercall input data */
+>  	u64 param;
+>  	u64 ingpa;
+>  	u64 outgpa;
+> @@ -1779,12 +1780,21 @@ struct kvm_hv_hcall {
+>  	bool fast;
+>  	bool rep;
+>  	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
+
+Uber nit, might want an
+
+	/* End hypercall input data */
+
+or so to cleary demarcate the input vs. the scratch area.
