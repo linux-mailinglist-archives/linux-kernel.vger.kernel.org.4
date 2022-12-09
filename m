@@ -2,149 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EEA647D57
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A48C647D59
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiLIFiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 00:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S229749AbiLIFi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 00:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiLIFiF (ORCPT
+        with ESMTP id S229649AbiLIFi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 00:38:05 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D6971248
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:38:04 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8Jjc5h002003;
-        Thu, 8 Dec 2022 21:37:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=HiIykd16Jp1D2JvnVXWWdYpYbATlNq3Q1gAU5oyHKWQ=;
- b=J0OhxL5iLRfcMtpgluG51ov6U2tSCYrdeZIZ7HRwzcIqsHGb0p8fdiPgepZTMnsCt93J
- sccMQe/SZcXix1EiNa7p3qs4gsRlkDo6brptzQZjpKlxyUCAc1NSp98HlgCHRHLBzGgP
- Y6LLl6V0VuYpXlR3EQn4QArUnzB/t5E1t1Ay1NwwUdqTTEb1CT1ofN3bLRY2oB2BkIXP
- aTEaoN5thx14WF5lWWzKEh1jWHPIYyldur0Qj+28xWfJZN3zflLUhyaFtZuvFFgjs4xf
- N3I8tnys5DHnaRJ5MuNhltU4Q/9Wef91h85yDurVOh6cZ0rDhm1vOAchmU77Zu0HZjoP 9Q== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mb22sxc5f-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 21:37:57 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 8 Dec
- 2022 21:37:55 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 8 Dec 2022 21:37:55 -0800
-Received: from IPBU-BLR-SERVER1.marvell.com (IPBU-BLR-SERVER1.marvell.com [10.28.8.41])
-        by maili.marvell.com (Postfix) with ESMTP id EB6E23F7062;
-        Thu,  8 Dec 2022 21:37:52 -0800 (PST)
-From:   Gowthami Thiagarajan <gthiagarajan@marvell.com>
-To:     <will@kernel.org>, <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <sgoutham@marvell.com>, <gcherian@marvell.com>,
-        <bbhushan2@marvell.com>,
-        Gowthami Thiagarajan <gthiagarajan@marvell.com>
-Subject: [PATCH] perf/marvell: Add ACPI support to TAD uncore driver
-Date:   Fri, 9 Dec 2022 11:07:15 +0530
-Message-ID: <20221209053715.3930071-1-gthiagarajan@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 9 Dec 2022 00:38:56 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3071248
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:38:55 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2B95cTEA023119
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Dec 2022 00:38:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1670564312; bh=QUqO5sSTLnpuFMxRHk1r5k6n02DwG6erNhvt6C50DaE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=QT7KSUSs77zBjfhrVuR5nOghMqPsyIFDaJbuD8ld+xlLHtALwvfZ8DFMz+LVM+M12
+         xDsXiNp6dpTzIZSD4DXDqhYcoZuUmuqHPFKIUdKYjGLjdPSb7AWTtIblg3zv01smX2
+         YrMQr4eaWUMDsyqBsGcNW10U14oY/836LW6LLXGuOSCt7hgXVzDx5Y3OAY4EYD5nWW
+         I7G1chVgJ3WoXsk0dQWUsOWTq0BpM17DpUs1gEGzU3LXuOxtkZlA7u7Tlq4wz7LNGx
+         4u+BvM5+JysSEMBbrpcWheQTh3QPgRpsxZmhhm4sEDMtCG4VuLWFPQcRnfHVfdNefl
+         lj9vLK4XvkqPg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id CC56615C3AE9; Fri,  9 Dec 2022 00:38:29 -0500 (EST)
+Date:   Fri, 9 Dec 2022 00:38:29 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v3 3/4] ext4: rename xattr_find_entry() and
+ __xattr_check_inode()
+Message-ID: <Y5LJ1QU1JND2fuVK@mit.edu>
+References: <20221208023233.1231330-1-yebin@huaweicloud.com>
+ <20221208023233.1231330-4-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: zbf-8vhCefATiqRtJGEfxToshKdogTBM
-X-Proofpoint-GUID: zbf-8vhCefATiqRtJGEfxToshKdogTBM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-09_02,2022-12-08_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208023233.1231330-4-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for ACPI based device registration so that the driver
-can be also enabled through ACPI table. 
-While at that change the DT specific API's to device_* API's so that 
-both DT based and ACPI based probing works.
+On Thu, Dec 08, 2022 at 10:32:32AM +0800, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> Prepend ext4 prefix to function names of xattr_find_entry() and
+> __xattr_check_inode() for consistency with other functions in ext4
+> xattr module.
 
-Signed-off-by: Gowthami Thiagarajan <gthiagarajan@marvell.com>
----
- drivers/perf/marvell_cn10k_tad_pmu.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+The reason why these function names don't have the ext4 prefix is
+because functions are static, so there is need to worry about
+namespace pollution.
 
-diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
-index 69c3050a4348..b1f5580e070a 100644
---- a/drivers/perf/marvell_cn10k_tad_pmu.c
-+++ b/drivers/perf/marvell_cn10k_tad_pmu.c
-@@ -13,6 +13,7 @@
- #include <linux/cpuhotplug.h>
- #include <linux/perf_event.h>
- #include <linux/platform_device.h>
-+#include <linux/acpi.h>
- 
- #define TAD_PFC_OFFSET		0x800
- #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
-@@ -254,7 +255,7 @@ static const struct attribute_group *tad_pmu_attr_groups[] = {
- 
- static int tad_pmu_probe(struct platform_device *pdev)
- {
--	struct device_node *node = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
- 	struct tad_region *regions;
- 	struct tad_pmu *tad_pmu;
- 	struct resource *res;
-@@ -276,21 +277,21 @@ static int tad_pmu_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	ret = of_property_read_u32(node, "marvell,tad-page-size",
--				   &tad_page_size);
-+	ret = device_property_read_u32(dev, "marvell,tad-page-size",
-+				       &tad_page_size);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't find tad-page-size property\n");
- 		return ret;
- 	}
- 
--	ret = of_property_read_u32(node, "marvell,tad-pmu-page-size",
--				   &tad_pmu_page_size);
-+	ret = device_property_read_u32(dev, "marvell,tad-pmu-page-size",
-+				       &tad_pmu_page_size);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't find tad-pmu-page-size property\n");
- 		return ret;
- 	}
- 
--	ret = of_property_read_u32(node, "marvell,tad-cnt", &tad_cnt);
-+	ret = device_property_read_u32(dev, "marvell,tad-cnt", &tad_cnt);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Can't find tad-cnt property\n");
- 		return ret;
-@@ -369,10 +370,19 @@ static const struct of_device_id tad_pmu_of_match[] = {
- };
- #endif
- 
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id tad_pmu_acpi_match[] = {
-+	{"MRVL000B", 0},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, tad_pmu_acpi_match);
-+#endif
-+
- static struct platform_driver tad_pmu_driver = {
- 	.driver         = {
- 		.name   = "cn10k_tad_pmu",
- 		.of_match_table = of_match_ptr(tad_pmu_of_match),
-+		.acpi_match_table = ACPI_PTR(tad_pmu_acpi_match),
- 		.suppress_bind_attrs = true,
- 	},
- 	.probe          = tad_pmu_probe,
--- 
-2.25.1
+For static functions, there is no real need to add the ext4 prefix, so
+why not keep the functions shorter?  Yes, there are places where
+static functions have the ext4 prefix.  The main reason why we have
+changed it is that it's not worth the code churn.  Similarly, adding
+the ext4 prefix is *definitely* not worth the code churn.
 
+Cheers,
+
+					- Ted
