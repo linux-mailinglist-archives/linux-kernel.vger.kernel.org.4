@@ -2,240 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9E86481E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB846481EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiLILlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S229479AbiLILqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLILl3 (ORCPT
+        with ESMTP id S229470AbiLILqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:41:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AAE5C0FD;
-        Fri,  9 Dec 2022 03:41:28 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B335B2012E;
-        Fri,  9 Dec 2022 11:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670586086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q/V5k+xtXXGmytm1ASxvItnbc20EM4KwcKJPRFAp5ZE=;
-        b=V1GJBCPD24UtbXPCbQiXwNWkX6ps3vdquy6d5xd5X/us2FZv9LwQ9A7/4ScePImGH0Cu1g
-        COpnjxaJ/ombeA/OX9GE2qpcx5+bgMHfxZPUhClbZwaJyayqjm/+Gj5h0SaNz9Uq1quPNk
-        v8FjQnANAiCzJ9G5pbefY26p7iVjoIo=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0127E2C141;
-        Fri,  9 Dec 2022 11:41:25 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 12:41:25 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: powerpc-part: was: Re: [PATCH v6] livepatch: Clear relocation
- targets on a module removal
-Message-ID: <Y5Me5dTGv+GznvtO@alley>
-References: <20220901171252.2148348-1-song@kernel.org>
- <Y3expGRt4cPoZgHL@alley>
- <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+        Fri, 9 Dec 2022 06:46:31 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC466B98F;
+        Fri,  9 Dec 2022 03:46:30 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id p36so6592561lfa.12;
+        Fri, 09 Dec 2022 03:46:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
+        b=CI+w2qobo9rbG0YF7JCVw1JfKqMQ15T3oW5PuUEOIbq+rK3GUyMjphlkbXAjulb60X
+         dYy8IvDvs4Bk2qqfVBxRC16+K6xlko3+8jLPX16PJ5iTUGHzbNy2SohP+7cfigiaa+m5
+         efJrAv6MtWbZFWAhSEvv1iqOc18PSUqXDRIvDE+QaY0CUDVGBKylea9AdfYCFvJQ+dSG
+         bmpcnaxm0xN6iSEX9x7xPF5Osh69Btvn16ihgPp3eWfU7/MvAURbd/o3FLerVrzJLJ6O
+         8zBJ4nfDI5/fmO98s9uD8i8lRY7jFxmBHgfa25H2cN1cHYvyJlQjgxpzMHcTOp2dPb+C
+         Fb/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BCE2CJXJ//Bhi3WHVvWunVUzVRxTKiJl8yn0gejQh+A=;
+        b=qgRHCTq98xCe+w4Vm4h+UpKustyAsKE8SXlRu4ipz0g9/XhU2pD5/Rnwzh3H9UXKMb
+         oLXvYocDGpfrjUUJ7kfu0u0PZDOQqNErn2yQJNXwHzsHeK6hK5K7ezntv6VaXQ/iow42
+         /EQ6tC7cyGteYjKTxaGbOyirU5ZCTnfhL2MNVyDl2++zJkkL80iQruQnThGgW3V58XtP
+         k+2BnPB8aMSuSOtu1PiDm944kSp+ETdn9BLx9LVJx/J/MKQEs9SZpmUTsVrhnSsIG+sW
+         g7j6iaLD1+4PriV+Ye7BM/q8HONr4CgVts6lPrCL0IM+ij3F5A6tVioOhjwi6UA9J7az
+         vCCg==
+X-Gm-Message-State: ANoB5pnXcr7hz/O+m1Sjq0HhisG8WsANjYO1qYhRIBUQfSVedi4ufDlg
+        al1CbEUQFz3l7xSFQFEoHK7KNMpNB/E=
+X-Google-Smtp-Source: AA0mqf5N3XtmU7KG34z5ptj3fbp4YOmyPSIEOK9kZQ1fnyd2n0eAlSa64Ogt/Ie4u48GYWAzQ53IAQ==
+X-Received: by 2002:a05:6512:3092:b0:4b4:e4a3:4a23 with SMTP id z18-20020a056512309200b004b4e4a34a23mr2278630lfd.20.1670586388212;
+        Fri, 09 Dec 2022 03:46:28 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id 12-20020ac25f0c000000b0049ad2619becsm226905lfq.131.2022.12.09.03.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 03:46:27 -0800 (PST)
+Date:   Fri, 9 Dec 2022 14:46:25 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
+Message-ID: <20221209114625.32ww2laxfr72uqnb@mobilestation>
+References: <20221202094859.7869-1-edmund.berenson@emlix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202094859.7869-1-edmund.berenson@emlix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Edmund
 
-this reply is only about the powerpc-specific part.
+On Fri, Dec 02, 2022 at 10:48:59AM +0100, Edmund Berenson wrote:
+> SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
+> If gpio cs are used the cs number may be >= 4. To ensure we do not write
+> outside of the valid area, we choose SS0 in case of gpio cs to start
+> spi transfer.
 
-Also adding Kamalesh and Michael into Cc who worked on the related
-commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24 relocation
-support of livepatch symbols").
+Next time please don't forget to add me to the whole series Cc-list. I
+am missing the patch #2 in my inbox.
 
-
-On Mon 2022-11-28 17:57:06, Song Liu wrote:
-> On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > > --- a/arch/powerpc/kernel/module_64.c
-> > > +++ b/arch/powerpc/kernel/module_64.c
-
-I put back the name of the modified file so that it is easier
-to know what changes we are talking about.
-
-[...]
-> > > +#ifdef CONFIG_LIVEPATCH
-> > > +void clear_relocate_add(Elf64_Shdr *sechdrs,
-> > > +                    const char *strtab,
-> > > +                    unsigned int symindex,
-> > > +                    unsigned int relsec,
-> > > +                    struct module *me)
-> > > +{
-> > > +     unsigned int i;
-> > > +     Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
-> > > +     Elf64_Sym *sym;
-> > > +     unsigned long *location;
-> > > +     const char *symname;
-> > > +     u32 *instruction;
-> > > +
-> > > +     pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
-> > > +              sechdrs[relsec].sh_info);
-> > > +
-> > > +     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
-> > > +             location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
-> > > +                     + rela[i].r_offset;
-> > > +             sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
-> > > +                     + ELF64_R_SYM(rela[i].r_info);
-> > > +             symname = me->core_kallsyms.strtab
-> > > +                     + sym->st_name;
-
-The above calculation is quite complex. It seems to be copied from
-apply_relocate_add(). If I maintained this code I would want to avoid
-the duplication. definitely.
-
-
-> > > +
-> > > +             if (ELF64_R_TYPE(rela[i].r_info) != R_PPC_REL24)
-> > > +                     continue;
-
-Why are we interested only into R_PPC_REL24 relocation types, please?
-
-The code for generating the special SHN_LIVEPATCH section is not in
-the mainline so it is not well defined.
-
-I guess that R_PPC_REL24 relocation type is used by kPatch. Are we
-sure that other relocation types wont be needed?
-
-Anyway, we must warn when an unsupported type is used in SHN_LIVEPATCH
-section here.
-
-
-> > > +             /*
-> > > +              * reverse the operations in apply_relocate_add() for case
-> > > +              * R_PPC_REL24.
-> > > +              */
-> > > +             if (sym->st_shndx != SHN_UNDEF &&
-
-Do we want to handle SHN_UNDEF symbols here?
-
-The commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24
-relocation support of livepatch symbols") explains that
-R_PPC_REL24 relocations in SHN_LIVEPATCH section are handled
-__like__ relocations in SHN_UNDEF sections.
-
-My understanding is that R_PPC_REL24 reallocation type has
-two variants. Where the variant used in SHN_UNDEF and
-SHN_LIVEPATCH sections need some preprocessing.
-
-Anyway, if this function is livepatch-specific that we should
-clear only symbols from SHN_LIVEPATCH sections. I mean that
-we should probably ignore SHN_UNDEF here.
-
-> > > +                 sym->st_shndx != SHN_LIVEPATCH)
-> > > +                     continue;
-> > > +
-> > > +
-> > > +             instruction = (u32 *)location;
-> > > +             if (is_mprofile_ftrace_call(symname))
-> > > +                     continue;
-
-Why do we ignore these symbols?
-
-I can't find any counter-part in apply_relocate_add(). It looks super
-tricky. It would deserve a comment.
-
-And I have no idea how we could maintain these exceptions.
-
-> > > +             if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
-> > > +                     continue;
-
-Same here. It looks super tricky and there is no explanation.
-
-> > > +             instruction += 1;
-> > > +             patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
-> > > +     }
-> > > +
-> > > +}
-> >
-> > This looks like a lot of duplicated code. Isn't it?
 > 
-> TBH, I think the duplicated code is not really bad.
+> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index 99edddf9958b..57c9e384d6d4 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  {
+>  	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
+>  	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
+> +	u8 enable_cs = 0;
+> +
+> +	if (!spi->cs_gpiod)
+> +		enable_cs = spi->chip_select;
+>  
+>  	/*
+>  	 * DW SPI controller demands any native CS being set in order to
+> @@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
+>  	 * support active-high or active-low CS level.
+>  	 */
+>  	if (cs_high == enable)
 
-How exactly do you mean it, please?
+> -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+> +		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
 
-Do you think that the amount of duplicated code is small enough?
-Or that the new function looks better that updating the existing one?
+No, it's not that easy. By applying this patch we'll get a regression
+for the platforms which make use of both the GPIO-based and native
+chip-selects. Consider the next platform setup:
+ +--------------+
+ | SoC X        |
+ |              |    +-------------+
+ |   DW SSI CS0-+----+ SPI-slave 0 |
+ |              |    +-------------+
+ |              |    +-------------+
+ |        GPIOn-+----+ SPI-slave 1 |
+ |              |    +-------------+
+ +--------------+
 
-> apply_relocate_add() is a much more complicated function, I would
-> rather not mess it up to make this function a little simpler.
+If we apply this patch then the communications targeted to the
+SPI-slave 1 will also reach the SPI-slave 0 device, which isn't what
+we'd want.
 
-IMHO, the duplicated code is quite tricky. And if we really do
-not need to clear all relocation types then we could avoid
-the duplication another way, for example:
+That's why currently the DW SSI driver activates the native CS line
+with the corresponding ID irrespective whether it is a GPIO-based
+CS or a native one.
 
-int update_relocate_add(Elf64_Shdr *sechdrs,
-		       const char *strtab,
-		       unsigned int symindex,
-		       unsigned int relsec,
-		       struct module *me,
-		       bool apply)
-{
-	unsigned int i;
-	Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
-	Elf64_Sym *sym;
-	Elf64_Xword r_type;
-	unsigned long *location;
+-Serge(y)
 
-	if (apply) {
-		pr_debug("Applying ADD relocate section %u to %u\n", relsec,
-		       sechdrs[relsec].sh_info);
-	} else {
-		pr_debug("Clearing ADD relocate section %u\n", relsec");
-	}
-
-	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
-		/* This is where to make the change */
-		location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
-			+ rela[i].r_offset;
-		/* This is the symbol it is referring to */
-		sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
-			+ ELF64_R_SYM(rela[i].r_info);
-
-		r_type = ELF64_R_TYPE(rela[i].r_info);
-
-		if (apply) {
-			apply_relocate_location(sym, location, r_type, rela[i].r_addend);
-		} else {
-			clear_relocate_location(sym, location, r_type);
-		}
-	}
-}
-
-where the two functions would implement the r_type-specific stuff.
-It would remove a lot of duplicated code. Wouldn't?
-
-My main concern is how to maintain this code. I am afraid that
-if it is in #ifdef CONFIG_LIVEPATCH section than nobody would
-update it when doing some changes in apply_relocate_add().
-
-In this case, the livepatch-specific code has to be minimal,
-warn about unsupported scenarios, and livepatch maintainers
-should understand what is going on there.
-
-Best Regards,
-Petr
+>  	else
+>  		dw_writel(dws, DW_SPI_SER, 0);
+>  }
+> -- 
+> 2.37.4
+> 
