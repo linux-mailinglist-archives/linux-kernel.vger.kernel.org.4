@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C8C6483E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1918A6483F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiLIOiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S229538AbiLIOkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiLIOiF (ORCPT
+        with ESMTP id S229793AbiLIOka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:38:05 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2910522536;
-        Fri,  9 Dec 2022 06:38:04 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m4-20020a05600c3b0400b003d1cb516ce0so5900476wms.4;
-        Fri, 09 Dec 2022 06:38:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A09qABb0ead7LLA+4pGxEwf93dXTPbgLlbgE44UEqoI=;
-        b=hcoeDm5BMAsucMZXIIyUFZqQpMkQdA6hKitiSo57m/EPBWs/+EItLpiWeMyx9PkNuc
-         4nadDV9bSHfJEhfg50MKuBCg5Q7eshOB8+/esaH3uMZlhU6/ZVjidsYdSd0k1UnDGMwH
-         hM5jZ7AxG6HcFZZsCmiMLqocLhV5kjvMyzc9EvvU9dv//i6XUZnBR5OfbWyzjHYMuI9T
-         W2qYS7vRsA4VXM2MfoFpeKbUoWuEjBcZVZuKYrUyQsK762Z9HX1UU1VFRfil5H2JilFL
-         ef8A/0vdVUEXMbXoPh+I3KCTXl5/XVSFt7+qNgNyLh8Wm3N0P1ZqaXzLnA0Tv98Nx1m+
-         OLVg==
+        Fri, 9 Dec 2022 09:40:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077E21B9C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670596776;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qCeskwiHpWOAgomtB/9x1S3AV/0GyFM2DFyZzy0TWI4=;
+        b=IrVqmfvAdNitqZt5h1jOSDeuJ3EQTmBd6LqCCsZDKvpZIsB/6Tn4ZJmnK8PoMrk8RqD3TB
+        zCw7FQyiwukpKWpduC/+51NVNCDVxepxFPeFVPCLUNzMUtXepYgoYM+patR93wbQgqXbtQ
+        J4WoGOOUdKE9JGRw1PHD9msM1b2nl9s=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-583-6RYmbQuEPDK3u-gNNw3p8A-1; Fri, 09 Dec 2022 09:39:35 -0500
+X-MC-Unique: 6RYmbQuEPDK3u-gNNw3p8A-1
+Received: by mail-yb1-f199.google.com with SMTP id e15-20020a5b0ccf000000b006ed1704b40cso5132612ybr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:39:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A09qABb0ead7LLA+4pGxEwf93dXTPbgLlbgE44UEqoI=;
-        b=eSaahT4iYawMIYSdN+wxRMF5z2w2e2opq9NRCSsnv78W6+0rMI+8axdPxydj4XLADg
-         V72DsctftnEfe7u4EUMvyKlmHi7IqEnshDQijE7gmMK4TLU9RUdExqtHmrV5cfts6ysw
-         NBdZxrAcdH5aIUsYE1wT9TUBwMJjvq8RLE9brsz+RdBJkBnKr+a/7aA1HTGFtARHtgzR
-         til3r/rBvistoZmAmwQ0ne5Ki048rq8ADKhXJagOj4wHEUhpPt6zgwgyUYoJV/bFRItt
-         tWu3wU0eLgBDV7McX5qjTtDdtwn6XbWFXZX09qIksAbzMjTHw78pa/F/Wtgfx6SNVjyy
-         imKA==
-X-Gm-Message-State: ANoB5pnh6rXFIDeGqpnlP861qmNGsyTu5DVVTBmDSIlw0UeJQjirmVfp
-        atV04ZkcT5g1rGLbbUv84v8=
-X-Google-Smtp-Source: AA0mqf4BP+j3eYb6lYBG3Vq+E0x6EYeaDNVZccp1XNdhMHTnCXJCvO9OcTHBgCBzX0KlkkkAKCwdKg==
-X-Received: by 2002:a7b:c417:0:b0:3c6:e63e:8155 with SMTP id k23-20020a7bc417000000b003c6e63e8155mr5100647wmi.12.1670596682659;
-        Fri, 09 Dec 2022 06:38:02 -0800 (PST)
-Received: from localhost.localdomain ([95.183.227.98])
-        by smtp.gmail.com with ESMTPSA id m31-20020a05600c3b1f00b003d1e3b1624dsm9645517wms.2.2022.12.09.06.38.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qCeskwiHpWOAgomtB/9x1S3AV/0GyFM2DFyZzy0TWI4=;
+        b=Hf0pPGfJ47oz0OqujmLB2VcsWHgjCd4GarFH6elt0P520eegYbcw0YRXdizDL8CoNQ
+         s1AZES6LdNCe5g8wbABjim/s8FoBIOgc2u6MNGYAnER2tvZw80ZuDAuH2LM8prPfnTGV
+         XWOf1DTQSeFAh5NACSzsPLbWoyyobmRMJPvF6qaJBnqGEFHmd1UDm05jZ37hzbjoUVGC
+         EGOqQhaAvjq5J6Yj9/QuAuZjjzqd2HSYERnt9SzJRPLyX9b4sN1TUscuIWv3Hhv8fh9I
+         UEucNH/i/CxJGkHwRywXPLe/uIldPwTDEiHD0zZVkvV+i8uOyB0+24EamQUXviCNT9Bt
+         ge5A==
+X-Gm-Message-State: ANoB5pmob8zvb0GvfUnOe4F/Oa5J7gvlziEqCpONye9rJXNh4TzMK5cB
+        Owmxwm+cyVfJyLc6wKuJoW3WNLP1RSZHSTwBEAHjaRaDwRBzvc3QDgBNXPjDwniZOBTGj40dx8m
+        4YACNNc+MgsBWOvDgMk07fskh
+X-Received: by 2002:a05:7500:53d1:b0:ea:ada0:1fd5 with SMTP id y17-20020a05750053d100b000eaada01fd5mr362423gab.33.1670596774526;
+        Fri, 09 Dec 2022 06:39:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6/0nCQ5bt3gKHOC8oSlO0XyXnR156+Xc0b03y9Hj9KtBO5tqL462ejhQMdh3cJRGFz31dx9w==
+X-Received: by 2002:a05:7500:53d1:b0:ea:ada0:1fd5 with SMTP id y17-20020a05750053d100b000eaada01fd5mr362409gab.33.1670596774162;
+        Fri, 09 Dec 2022 06:39:34 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id m11-20020a05620a290b00b006e702033b15sm1275350qkp.66.2022.12.09.06.39.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:38:02 -0800 (PST)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Lee Jackson <info@arducam.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] media: i2c: ak7375: Add regulator management
-Date:   Fri,  9 Dec 2022 17:37:41 +0300
-Message-Id: <20221209143741.214242-4-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221209143741.214242-1-y.oudjana@protonmail.com>
-References: <20221209143741.214242-1-y.oudjana@protonmail.com>
+        Fri, 09 Dec 2022 06:39:32 -0800 (PST)
+Date:   Fri, 9 Dec 2022 09:39:30 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH v2 08/10] mm/hugetlb: Make walk_hugetlb_range() safe to
+ pmd unshare
+Message-ID: <Y5NIoqXlAvrXkCOM@x1n>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203034.650899-9-peterx@redhat.com>
+ <a9cbfa20-b83d-203c-85ef-77ffe9445913@redhat.com>
+ <Y5JNXomE5eGo8DyF@x1n>
+ <72a62bf5-7633-f35f-75fd-0222fd0ab49f@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <72a62bf5-7633-f35f-75fd-0222fd0ab49f@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,111 +90,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Fri, Dec 09, 2022 at 11:24:55AM +0100, David Hildenbrand wrote:
+> For such cases, it would be good to have any evidence that it really helps.
 
-Make the driver get needed regulators on probe and enable/disable
-them on runtime PM callbacks.
+I don't know much on the s390 path, but if a process has a large hugetlb
+vma, even MADV_DONTNEED will be blocked for whatever long time if there's
+another process or thread scanning pagemap for this vma.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Tested-by: Umang Jain <umang.jain@ideasonboard.com>
----
- drivers/media/i2c/ak7375.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+Would this justify a bit?
 
-diff --git a/drivers/media/i2c/ak7375.c b/drivers/media/i2c/ak7375.c
-index 1af9f698eecf..e7cec45bc271 100644
---- a/drivers/media/i2c/ak7375.c
-+++ b/drivers/media/i2c/ak7375.c
-@@ -6,6 +6,7 @@
- #include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/pm_runtime.h>
-+#include <linux/regulator/consumer.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
- 
-@@ -23,17 +24,29 @@
-  */
- #define AK7375_CTRL_STEPS	64
- #define AK7375_CTRL_DELAY_US	1000
-+/*
-+ * The vcm may take up 10 ms (tDELAY) to power on and start taking
-+ * I2C messages. Based on AK7371 datasheet.
-+ */
-+#define AK7375_POWER_DELAY_US	10000
- 
- #define AK7375_REG_POSITION	0x0
- #define AK7375_REG_CONT		0x2
- #define AK7375_MODE_ACTIVE	0x0
- #define AK7375_MODE_STANDBY	0x40
- 
-+static const char * const ak7375_supply_names[] = {
-+	"vdd",
-+	"vio",
-+};
-+
- /* ak7375 device structure */
- struct ak7375_device {
- 	struct v4l2_ctrl_handler ctrls_vcm;
- 	struct v4l2_subdev sd;
- 	struct v4l2_ctrl *focus;
-+	struct regulator_bulk_data supplies[ARRAY_SIZE(ak7375_supply_names)];
-+
- 	/* active or standby mode */
- 	bool active;
- };
-@@ -133,12 +146,24 @@ static int ak7375_probe(struct i2c_client *client)
- {
- 	struct ak7375_device *ak7375_dev;
- 	int ret;
-+	unsigned int i;
- 
- 	ak7375_dev = devm_kzalloc(&client->dev, sizeof(*ak7375_dev),
- 				  GFP_KERNEL);
- 	if (!ak7375_dev)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < ARRAY_SIZE(ak7375_supply_names); i++)
-+		ak7375_dev->supplies[i].supply = ak7375_supply_names[i];
-+
-+	ret = devm_regulator_bulk_get(&client->dev,
-+				      ARRAY_SIZE(ak7375_supply_names),
-+				      ak7375_dev->supplies);
-+	if (ret) {
-+		dev_err_probe(&client->dev, ret, "Failed to get regulators\n");
-+		return ret;
-+	}
-+
- 	v4l2_i2c_subdev_init(&ak7375_dev->sd, client, &ak7375_ops);
- 	ak7375_dev->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	ak7375_dev->sd.internal_ops = &ak7375_int_ops;
-@@ -208,6 +233,11 @@ static int __maybe_unused ak7375_vcm_suspend(struct device *dev)
- 	if (ret)
- 		dev_err(dev, "%s I2C failure: %d\n", __func__, ret);
- 
-+	ret = regulator_bulk_disable(ARRAY_SIZE(ak7375_supply_names),
-+				     ak7375_dev->supplies);
-+	if (ret)
-+		return ret;
-+
- 	ak7375_dev->active = false;
- 
- 	return 0;
-@@ -228,6 +258,14 @@ static int __maybe_unused ak7375_vcm_resume(struct device *dev)
- 	if (ak7375_dev->active)
- 		return 0;
- 
-+	ret = regulator_bulk_enable(ARRAY_SIZE(ak7375_supply_names),
-+				    ak7375_dev->supplies);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for vcm to become ready */
-+	usleep_range(AK7375_POWER_DELAY_US, AK7375_POWER_DELAY_US + 500);
-+
- 	ret = ak7375_i2c_write(ak7375_dev, AK7375_REG_CONT,
- 		AK7375_MODE_ACTIVE, 1);
- 	if (ret) {
+It's just that the vma lock is taken write far more than mmap_lock taken
+write I think, meanwhile what we need here is only release the lock and
+retake, nothing else.  It didn't make things over complicated, IMO.
+
+No strong ipinion from my side, as I said to me it's really low hanging
+fruit.  If you still think that doesn't justify and if Mike doesn't have a
+preference either I can just drop it for later.
+
 -- 
-2.38.1
+Peter Xu
 
