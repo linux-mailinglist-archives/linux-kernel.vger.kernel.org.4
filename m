@@ -2,74 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1579648824
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA74264882B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiLISDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S229758AbiLISHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLISDl (ORCPT
+        with ESMTP id S229478AbiLISHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:03:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331E17F880;
-        Fri,  9 Dec 2022 10:03:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFB46B828D5;
-        Fri,  9 Dec 2022 18:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C459C433EF;
-        Fri,  9 Dec 2022 18:03:35 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 13:03:34 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Subject: Re: [PATCH 2/2] x86/mm/kmmio: Remove rcu_read_lock()
-Message-ID: <20221209130334.487b63aa@gandalf.local.home>
-In-Reply-To: <20221207173621.GF4001@paulmck-ThinkPad-P17-Gen-1>
-References: <20221206191201.217838841@goodmis.org>
-        <20221206191229.813199661@goodmis.org>
-        <20221207173621.GF4001@paulmck-ThinkPad-P17-Gen-1>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Dec 2022 13:07:34 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9DC9582;
+        Fri,  9 Dec 2022 10:07:32 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id kw15so13288131ejc.10;
+        Fri, 09 Dec 2022 10:07:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWX2o35JtDo4arDjBhAYZzskmwuvzgncFqXLd1vU4Uo=;
+        b=KdCTt9Xz3LU95bpfG3R7J8LXUipE37UBmf33MtBixuOSUpI2tpBoCyPUClpehArZy2
+         z8LE8TGkIaJrzgrBTNmaNQzscd/st6PXsdr6rbib++DSdSPxTfrEaep/gPlSf8ivTEev
+         vUqp+XeFNlDxybMLwBysmOS+jGHc1ATNkhE3NQOjKHhBPN3/wtkqztqrOaIP9y5uzycL
+         +qJlFMyqyXwGUUjRFyasxmSi2SnUYfVvaKo2CJx70iiEovhNv5SuZQfKTvq/SHaQqiit
+         tz1vImFdoSeJ7efPQ2vA8DlKksQZKGCbmS4s+QesL110hIVzZG+cZ92wadQ+935+hJLI
+         qBPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWX2o35JtDo4arDjBhAYZzskmwuvzgncFqXLd1vU4Uo=;
+        b=RQahEx6Xnr+h/YBlnIkvrndqJExPIyDjQYKtOXfwzi3KQJQAQM2ZFth+zYQuCq+LoK
+         4BILNWCBht5BUOVeZi2RzVahqo1siX6vrRdkcc7xXD8Hzj/gSXbQb785W9qrE9I4eS49
+         Hvyj3/0ODGc2cB+i++CWfuV1dodcU/ysp0M9OK+6zpjN9jWPXvPJMBlHkIQie0ShusuJ
+         KKHtH43TBr9/yTC4gY69ImP1cmkyg76GWalJz6z3Hs5csmZZ1cnp/SNooWJzz+wWXsnD
+         b7bTXOG/LYsQXYN7KULsJUG3HnaFT20R/HlBBX84QHMWe8w4vxukOXslm0IzGWE8PbQr
+         yKwQ==
+X-Gm-Message-State: ANoB5plde0NDzGNBTWTtxUqDWe5qTigt7mmgJEfRCkprzpGptYE8OrIN
+        TgR7dC5Qz4qCAXiD+YO5Bhs=
+X-Google-Smtp-Source: AA0mqf4tO7r+4sVI+K3zrC2j6HcLHblDIRjn7zLshpq8DaW3bWy9xoeW4z9HbXMtF1g03isH3M+oTQ==
+X-Received: by 2002:a17:906:b6c9:b0:7bc:9a78:bc3a with SMTP id ec9-20020a170906b6c900b007bc9a78bc3amr5339121ejb.68.1670609250496;
+        Fri, 09 Dec 2022 10:07:30 -0800 (PST)
+Received: from skbuf ([188.27.185.190])
+        by smtp.gmail.com with ESMTPSA id ku11-20020a170907788b00b007adaca75bd0sm171847ejc.179.2022.12.09.10.07.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 10:07:30 -0800 (PST)
+Date:   Fri, 9 Dec 2022 20:07:28 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jerry.Ray@microchip.com
+Cc:     andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk
+Subject: Re: [PATCH net-next v4 2/2] dsa: lan9303: Migrate to PHYLINK
+Message-ID: <20221209180728.d4ljemueqawbng4t@skbuf>
+References: <20221207232828.7367-1-jerry.ray@microchip.com>
+ <20221207232828.7367-1-jerry.ray@microchip.com>
+ <20221207232828.7367-3-jerry.ray@microchip.com>
+ <20221207232828.7367-3-jerry.ray@microchip.com>
+ <20221208172105.4736qmzfckottfvm@skbuf>
+ <MWHPR11MB169364EFBC8FE61E0772A25BEF1C9@MWHPR11MB1693.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR11MB169364EFBC8FE61E0772A25BEF1C9@MWHPR11MB1693.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 09:36:21 -0800
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
-
-> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > Signed-off-by: Steven Rostedt <rostedt@goodmis.org>  
+On Fri, Dec 09, 2022 at 06:00:47PM +0000, Jerry.Ray@microchip.com wrote:
+> > As a reader, I find my intelligence insulted by self-evident comments such as this.
+> > 
+> > Especially in contrast with the writes below to the MII_BMCR of the
+> > Virtual PHY, which would certainly deserve a bit more of an explanation,
+> > yet there is none there.
+> > 
 > 
-> Might be worth adding a comment saying that others are using this
-> preempt_disable() to block an RCU grace period, but that is up to
-> you guys.  I will let you and your future selves be the judges.
+> I struggle with the lack of comments I see in the kernel codebase. While
+> experts can look at the source code and understand it, I find I spend a
+> good deal of time chasing down macros - following data structures - and
+> reverse engineering an understanding of the purpose of something that could
+> have been explained in the maintained source.  In-line comments target the
+> unfamiliar reader as there are a lot of us out here and far too few experts.
+> But I do see your point and I'll try to do a better job on this.
 
-Good point. I'll add a comment in v2.
-
-> 
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
-
-Thanks!
-
--- Steve
+I do see that maybe my observation about the rest of this driver's code
+lacking comments might have been unfair to you since it's not you who
+added that uncommented code. But still, let's try to add comments where
+those add value, and there are plenty of other places in this driver
+which sorely need that. I still maintain that "if (!dsa_is_cpu_port()) return"
+doesn't need a repeat in words of what that set of instructions does.
+Maybe why, or something that isn't completely obvious from actually
+reading what's already in the code.
