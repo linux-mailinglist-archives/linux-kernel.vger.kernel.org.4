@@ -2,137 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15136647C3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91BF647C3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLICYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S229798AbiLICZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiLICYx (ORCPT
+        with ESMTP id S229517AbiLICZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:24:53 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9540F442FE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:24:51 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id m18so8357386eji.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:24:51 -0800 (PST)
+        Thu, 8 Dec 2022 21:25:28 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C21A4307
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:25:27 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q7so3822275wrr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4qFK1QDJPkTIwpWZG6Rx/ljfUqchSwsNBXmGwOGqlPM=;
-        b=ocYuarVxCAXTUNt6oWZOVE+6Q7OU9LrWzOKIzVDQU5Pl4NBt3Ye0/9t5n5vcaCKPcm
-         P4pXeCeaIMztFmrbnBBoP+KUegUYhdpGq/QXB3Ay6GqppsU9QboHJCeOhfoMTmofc6GR
-         JwUteNRP6zVHTP1Dz8TN03VwBrEPzfrwErXEk=
+        bh=1K/3GUYMBBM0JWTkpD5AOt6IFxw20f5QEF2hH5GOc2U=;
+        b=givek1J38a1InAvDzqJ2IJpDTNNkY/0qnKpwXJ0YWKO1lRTOvqkv2jZmvFu4JDsTl7
+         qpHxNx0IwT4Q8LLjxOpVyjcYbR7kkDpuZ4l1wxDyP94vsMGGsZO61IvUMyLbiyABPB71
+         gCzPklAqagS+oYxqhUivsCoCNLKDcDIJfypznV/ZTyVBGcLeQRBfcOz0y/aV/I+bp6Qw
+         fzK/VhjtGOoBlnj+hlHktP/j3mjhLznjPr1GcNyJ33hYSN3twXzl/JVR0d60H18ojDvz
+         Z1feJkTUGvzXEbojAqWFur4SO2msfJx1Lj0/X+xF/fCPQMTS0wmu9tNqBzmNHXVxKhL1
+         XM3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4qFK1QDJPkTIwpWZG6Rx/ljfUqchSwsNBXmGwOGqlPM=;
-        b=aBgKnwTwDN1vll7wrDT11V6l++49bISZfC36FfcGHCNrVZMDslc+9eqSyFJX9D+IHg
-         s4yTbAeVggp85Tc+HsWQu2mUlhqfXUHTBPOQsUjSLiKqQnfIVhce4JVWEqZPJk7xfKLZ
-         miTktjOWttwc6xmfBg+jusYICKsMICjjAHEIBiOU3Rth4enGVt6UOSZo0tQdleC/kyrQ
-         yQHxXKS5i4uYVk685hGP3r0V5IYF1rTdYyzwKZGtICAfOM4rvjf5r2IRNfqWv/LM1Eh8
-         aKb8Um6P01tXAR/roEKxB64ovsFiIalSSPLthy1C8sk8nDIuICjplsvTSZHE/7+gIaiC
-         gLNg==
-X-Gm-Message-State: ANoB5pmBOgbVAtuTFenVEI4j2wLmIwkws0mEMTkeqeiNjb7HkBAUexm8
-        piSAOn/zON3VJixbsZ9kaUmtIE0mikYPIzs6HE8=
-X-Google-Smtp-Source: AA0mqf6O45qlO+cdUBnjqBxyNtza9q8MXv63LTpMqinPaAMzUhUmjeUEs0AVweKYheuPc0tKZKN0OQ==
-X-Received: by 2002:a17:906:1150:b0:7c0:db53:c5ab with SMTP id i16-20020a170906115000b007c0db53c5abmr3446347eja.25.1670552690088;
-        Thu, 08 Dec 2022 18:24:50 -0800 (PST)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id o26-20020a170906769a00b007adaca75bd0sm23392ejm.179.2022.12.08.18.24.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 18:24:48 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id q7so3821326wrr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:24:48 -0800 (PST)
-X-Received: by 2002:adf:fd89:0:b0:242:1f81:7034 with SMTP id
- d9-20020adffd89000000b002421f817034mr26209589wrr.617.1670552688121; Thu, 08
- Dec 2022 18:24:48 -0800 (PST)
+        bh=1K/3GUYMBBM0JWTkpD5AOt6IFxw20f5QEF2hH5GOc2U=;
+        b=SpXwkHITaxQzYUTDUV/0sigPbRsc7dUQ0hud5/Any4tmghxkzcpmVUrazXhXsAmDL7
+         kNVlb1MkET+ml9DnlS6pbq8CMgFyprCA3QflGVlK9zm3dMo+nUDyPFAwRcNfrE6AJFOZ
+         MO6hpDQq8dRUEY+5la2N5FYbpE7tRQ6ecdbONVX+KcTit+6YllKzdQzL53uZld7pERnY
+         zog8XepWH/BsX4m2PMfBjI8s0f8EaH1a6QV0ve9HuyGUfkQRNhPeVaJ774i6pSpRZsxO
+         aAWULR1dw7IGzZNWNy1lW3edpsbVeZtFlXoC305ScTtVv+4zsWVAZmdYPVtPDAeoRY+p
+         q55Q==
+X-Gm-Message-State: ANoB5plYi8nSEKz2Cu7Xaz9vgDb0QdzszoDnIr4+KJXV9N5baGtsNkZv
+        AhCKtismqIcCLSE0Rwuf3Gp2vXmH63uiaSbfshs+sBmu
+X-Google-Smtp-Source: AA0mqf6PKBRdFHik+PWcuanXuP00guianJCZf+aYyJ7ohHmBCQtsxeTovNouCphfjnJjSSTzXT/nGuaDFFnLQvOuOq8=
+X-Received: by 2002:a5d:58e6:0:b0:242:5562:6d6 with SMTP id
+ f6-20020a5d58e6000000b00242556206d6mr12030563wrd.541.1670552725763; Thu, 08
+ Dec 2022 18:25:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221209020612.1303267-1-dianders@chromium.org>
- <20221208180603.v2.5.I6edfb3f459662c041563a54e5b7df727c27caaba@changeid> <Y5Kbiy4r1wyN5PBD@google.com>
-In-Reply-To: <Y5Kbiy4r1wyN5PBD@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Dec 2022 18:24:36 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=V-3js3TfbymYAmZ-ruubv8X74-LsJ0-p8GZp3w3_fK8A@mail.gmail.com>
-Message-ID: <CAD=FV=V-3js3TfbymYAmZ-ruubv8X74-LsJ0-p8GZp3w3_fK8A@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] Input: elants_i2c: Delay longer with reset asserted
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, mka@chromium.org,
-        Yunlong Jia <ecs.beijing2022@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-input@vger.kernel.org, swboyd@chromium.org,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        linux-kernel@vger.kernel.org
+References: <CAJNi4rOgYmmtOaXVqYB9sAxDmRhGhS_vVXmZbCbMjvFCQsdjCw@mail.gmail.com>
+ <CAJhGHyD+oR8SeYeObJ2DSKfudqBtBOiL14jCsST3L5OG8WjT_g@mail.gmail.com>
+ <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com>
+ <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
+ <CAJNi4rNU0-GVnLMqdGFvHOsTb26eDEgjZJSE6Doo8QU6MYx+JQ@mail.gmail.com>
+ <CAJhGHyC=-bD8L5KSYLp3_tN0WdoCYgtpwNaM_=oLb2c=Gsu+6A@mail.gmail.com>
+ <CAJNi4rMDOSq6-ba4CV88E7e-f8Wzq0e6M5bYV8LBS=LzLb7--Q@mail.gmail.com> <CAJhGHyAEF8Hi-f1xtWA6jRNbr+hkKv4K_LJytMGF06BD86cZyg@mail.gmail.com>
+In-Reply-To: <CAJhGHyAEF8Hi-f1xtWA6jRNbr+hkKv4K_LJytMGF06BD86cZyg@mail.gmail.com>
+From:   richard clark <richard.xnu.clark@gmail.com>
+Date:   Fri, 9 Dec 2022 10:25:14 +0800
+Message-ID: <CAJNi4rNjQdQG4MLUBQ+qEr1rHWtzzRAFTk9cvAbkdEpWz8OOhg@mail.gmail.com>
+Subject: Re: work item still be scheduled to execute after destroy_workqueue?
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Dec 8, 2022 at 6:21 PM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On Thu, Dec 8, 2022 at 3:46 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
 >
-> On Thu, Dec 08, 2022 at 06:06:12PM -0800, Douglas Anderson wrote:
-> > The elan touchscreen datasheet says that the reset GPIO only needs to
-> > be asserted for 500us in order to reset the regulator. The problem is
-> > that some boards need a level shifter between the signals on the GPIO
-> > controller and the signals on the touchscreen. All of these extra
-> > components on the line can slow the transition of the signals. On one
-> > board, we measured the reset line and saw that it took almost 1.8ms to
-> > go low. Even after we bumped up the "drive strength" of the signal
-> > from the default 2mA to 8mA we still saw it take 421us for the signal
-> > to go low.
+> On Thu, Dec 8, 2022 at 10:44 AM richard clark
+> <richard.xnu.clark@gmail.com> wrote:
 > >
-> > In order to account for this let's lengthen the amount of time that we
-> > keep the reset asserted. Let's bump it up from 500us to 5000us.
-> > That's still a relatively short amount of time and is much safer.
+> > On Wed, Dec 7, 2022 at 10:38 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+> > >
+> > > On Tue, Dec 6, 2022 at 5:20 PM richard clark
+> > > <richard.xnu.clark@gmail.com> wrote:
+> > > >
+> > > > On Tue, Dec 6, 2022 at 2:23 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Dec 6, 2022 at 12:35 PM richard clark
+> > > > > <richard.xnu.clark@gmail.com> wrote:
+> > > > >
+> > > > > > >
+> > > > > > A WARN is definitely reasonable and has its benefits. Can I try to
+> > > > > > submit the patch and you're nice to review as maintainer?
+> > > > > >
+> > > > > > Thanks,
+> > > > > > Richard
+> > > > > > >
+> > > > >
+> > > > > Sure, go ahead.
+> > > > >
+> > > > > What's in my mind is that the following code is wrapped in a new function:
+> > > > >
+> > > > >         mutex_lock(&wq->mutex);
+> > > > >         if (!wq->nr_drainers++)
+> > > > >                 wq->flags |= __WQ_DRAINING;
+> > > > >         mutex_unlock(&wq->mutex);
+> > > > >
+> > > > >
+> > > > > and the new function replaces the open code drain_workqueue() and
+> > > > > is also called in destroy_workqueue() (before calling drain_workqueue()).
+> > > > >
+> > > > Except that, do we need to defer the __WQ_DRAINING clean to the
+> > > > rcu_call, thus we still have a close-loop of the drainer's count, like
+> > > > this?
+> > >
+> > > No, I don't think we need it. The wq is totally freed in rcu_free_wq.
+> > >
+> > > Or we can just introduce __WQ_DESTROYING.
+> > >
+> > > It seems using __WQ_DESTROYING is better.
 > >
-> > It should be noted that this fixes real problems. Case in point:
-> > 1. The touchscreen power rail may be shared with another device (like
-> >    an eDP panel). That means that at probe time power might already be
-> >    on.
-> > 2. In probe we grab the reset GPIO and assert it (make it low).
-> > 3. We turn on power (a noop since it was already on).
-> > 4. We wait 500us.
-> > 5. We deassert the reset GPIO.
+> > The wq->flags will be unreliable after kfree(wq), for example, in my
+> > machine, the wq->flags can be 0x7ec1e1a3, 0x37cff1a3 or 0x7fa23da3 ...
+> > after wq be kfreed, consequently the result of queueing a new work
+> > item to a kfreed wq is undetermined, sometimes it's ok because the
+> > queue_work will return directly(e.g, the wq->flags = 0x7ec1e1a3, a
+> > fake __WQ_DRAINING state), sometimes it will trigger a kernel NULL
+> > pointer dereference BUG when the wq->flags = 0x7fa23da3(fake
+> > !__WQ_DRAINING state).
+>
+> The whole wq is unreliable after destroy_workqueue().
+>
+> All we need is just adding something to help identify any
+> wrong usage while the wq is in RCU grace period.
+>
+OK, understood!
 > >
-> > With the above case and only a 500us delay we saw only a partial reset
-> > asserted, which is bad. Giving it 5ms is overkill but feels safer in
-> > case someone else has a different level shifter setup.
+> > IMO, given the above condition,  we can handle this in 2 phases:
+> > before the rcu_call and after.
+> > a. before rcu_call. Using __WQ_DESTROYING to allow the chained work
+> > queued in or not in destroy_workqueue(...) level, __WQ_DRAINING is
+> > used to make the drain_workqueue(...) still can be standalone. The
+> > code snippet like this:
+> > destroy_workqueue(...)
+> > {
+> >         mutex_lock(&wq->mutex);
+> >         wq->flags |= __WQ_DESTROYING;
+> >         mutex_lock(&wq->mutex);
+>
+> Ok, put it before calling drain_workqueue()
+>
+> >         ...
+> > }
 > >
-> > Note that bumping up the delay to 5000 means that some configs yell
-> > about using udelay(). We'll change to using usleep_range(). We give a
-> > small range here because:
-> > - This isn't a delay that happens very often so we don't need to worry
-> >   about giving a big range to allow for power efficiency.
-> > - usleep_range() is known to almost always pick the upper bound and
-> >   delay that long and we really don't want to slow down the power on
-> >   of the touchscreen that much.
+> > __queue_work(...)
+> > {
+> >           if (unlikely((wq->flags & __WQ_DESTROYING) || (wq->flags &
+> > __WQ_DRAINING)) &&
+> >                    WARN_ON_ONCE(!is_chained_work(wq)))
+>
+> Ok, combine __WQ_DESTROYING and __WQ_DRAINING together as:
+>            if (unlikely((wq->flags & (__WQ_DESTROYING | __WQ_DRAINING)) &&
+>
+>
+> >          return;
+> > }
 > >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
+> > b. after rcu_call. What in my mind is:
+> > rcu_free_wq(struct rcu_head *rcu)
+> > {
+> >           ...
+> >           kfree(wq);
+> >           wq = NULL;
+>
+> It is useless code.
+>
+> > }
 > >
-> > Changes in v2:
-> > - Fix typo in commit message (Matthias)
-> > - udelay -> usleep_range (Patches Robot, Dmitry)
-> >
-> >  drivers/input/touchscreen/elants_i2c.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > __queue_work(...)
+> > {
+> >         if (!wq)
+> >                 return;
+>
+> It is useless code.
 
-Ah, right. I posted it against the Qualcomm tree which, of course,
-doesn't have the previous patch I posted to this driver. Thanks for
-fixing it up. :-)
+OK, will remove the above codes in the patch...
+
+>
+> >         ...
+> > }
+> >
+> > Any comments?
+> >
+> > >
+> > > >
+> > > > --- a/kernel/workqueue.c
+> > > > +++ b/kernel/workqueue.c
+> > > >
+> > > > @@ -3528,6 +3526,9 @@ static void rcu_free_wq(struct rcu_head *rcu)
+> > > >
+> > > >         else
+> > > >                 free_workqueue_attrs(wq->unbound_attrs);
+> > > >
+> > > > +       if (!--wq->nr_drainers)
+> > > > +               wq->flags &= ~__WQ_DRAINING;
+> > > > +
+> > > >         kfree(wq);
+> > > >
+> > > > >
+> > > > > __WQ_DRAINING will cause the needed WARN on illegally queuing items on
+> > > > > destroyed workqueue.
+> > > >
+> > > > I will re-test it if there are no concerns about the above fix...
+> > > >
+> > > > >
+> > > > > Thanks
+> > > > > Lai
