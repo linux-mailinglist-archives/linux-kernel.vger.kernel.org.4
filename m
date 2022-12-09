@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C506486AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34E1648716
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiLIQmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S229813AbiLIQz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiLIQmB (ORCPT
+        with ESMTP id S229783AbiLIQzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:42:01 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCC189307
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:42:00 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so5514612pjm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:42:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i9EfDV7EBqWGFnaYDO/cpEuxlHa0WTqeQPcdpc0bkis=;
-        b=kcLGQWVDzGqnXIK2OUrhHfduI4saLmxlUlFxYA9TOx0BiOqjv8QeRv2rj6gheEKZQz
-         0llTw8X/KWAcHOngmarldA48AVKQPn+z1PmtohnnYihrZ8BpShW5/47uz2yu6AO1pUZp
-         kGeZ1W0F83IyD+lEuWShFxFquSzpmZfN7w3CW7jBvVCit++L369DBisGLHumCA30U/xm
-         CbvT8HwLVYkGLM/pfSv6n83X3ffWEpHZ6ZDA28a9VBmcVaEy65LD2brgEm4bjJo16hJ6
-         felu+EU0W3Kzk7v9K0gntBqoxsRvDeglbJGTr0ta4uVF5HWzFyUPTlTLAmdrrCDgDhwN
-         S34w==
+        Fri, 9 Dec 2022 11:55:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0252790E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:54:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670604898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=58/VjDZZoily/fkCPVeQuHIo3U3CJ3NHBYhVURQ6msE=;
+        b=Yd+y+3RxOX41ySqFUi9gdtAxxGSuOWzgwo0O5sjuTSA4KciVcl7tzgMDhJYhruFN8JN4kJ
+        v013RmpxhxBOjGB90nlFQbRyj/pdQBOMtbv6ammJ7PpxZi6WuBcMWZY+7av5+Q0vw8NVUj
+        1kA2YjYajTzoGTgSdAPrZX7g6i6Xsd0=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-37-IWEFw5ANPjGz74vi1rJlOg-1; Fri, 09 Dec 2022 11:54:57 -0500
+X-MC-Unique: IWEFw5ANPjGz74vi1rJlOg-1
+Received: by mail-qt1-f199.google.com with SMTP id ay12-20020a05622a228c00b003a52bd33749so4815474qtb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:54:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i9EfDV7EBqWGFnaYDO/cpEuxlHa0WTqeQPcdpc0bkis=;
-        b=8QmQ/gL0hIVXqJR6QiXEI2WqjSwIaSmjJZvF2IKjjqA2eTBR9jqNarslUC+H+tiPmh
-         t50zxWFBLGQmbZj2syx4Km/lT/2ZCkn89N+bBS4nCE+tc3UKcQVuYsArvkPTXXoFxiEb
-         C8KM62h7Uf85hvtKvB9DohpgGB9jOtO/Wm6TEBvrIOqx/toktjGWt1eYbhhXsQylT3rS
-         kQpysyTR763JhuTRkZt/wCiy8PLzdpaTtmMJEO+7xqVd6iFbLLdkOKK8E1KQkYN6fveW
-         9CsESx+lqV3s41nmp07CzVANZccWh01Pwz2q/yNvgEcsNxbQefw2zUiCHTC+foyQz0co
-         EhnA==
-X-Gm-Message-State: ANoB5plM15Oqr9iLMxSgtBvAeZYXJ/QJ7JNAroM0PRSc+F09kBE1c/vT
-        3icXxkUqg9tboFMIsIzDLFBwHfl35lwnXcqOdUdxYw==
-X-Google-Smtp-Source: AA0mqf7ULUiN+XaofS3Qne0MnOWDIr+MNzzEs7jX1BbeeJOaJKhvLNL48/v0L4GOmW52sb8gAXURlFw8L6Zpf/LMyzA=
-X-Received: by 2002:a17:90a:5a41:b0:219:41ef:a812 with SMTP id
- m1-20020a17090a5a4100b0021941efa812mr51961934pji.153.1670604120017; Fri, 09
- Dec 2022 08:42:00 -0800 (PST)
-MIME-Version: 1.0
-References: <Y48zlaimOb/wr8qd@dhcp22.suse.cz> <CAHS8izMKz_JtN-P7BTHydE2x2rmSg5-JRoHgaDCdCHV-S0YLJw@mail.gmail.com>
- <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz> <CAHS8izOW70Eb7RRePQv6SP8hW3iUnAcPSD=aOY+aMu=6ReEtHQ@mail.gmail.com>
- <Y5B1K5zAE0PkjFZx@dhcp22.suse.cz> <CAHS8izMKK107wVFSJvg36nQ=WzXd8_cjYBtR0p47L+XLYUSsqA@mail.gmail.com>
- <Y5Gbwwp7AlFiltuu@dhcp22.suse.cz> <CAHS8izMhRXMB5QJab5AvuHiWiQUAzUf81-7Y71ueEEnz71dwiQ@mail.gmail.com>
- <Y5HQgpRvPQWteNvz@dhcp22.suse.cz> <CAAPL-u_bEhCCCnepmCuNe7q7qJY3G3wckGvG-QsF2SYpAVXhEA@mail.gmail.com>
- <Y5LtEMYOXtUxsuqs@dhcp22.suse.cz>
-In-Reply-To: <Y5LtEMYOXtUxsuqs@dhcp22.suse.cz>
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 9 Dec 2022 08:41:47 -0800
-Message-ID: <CAAPL-u8J_sgnAn1ev-cfZh428UOySxh1aYZUFKq1=dr-KrdTsw@mail.gmail.com>
-Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, fvdl@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+        h=content-transfer-encoding:user-agent:date:mime-version:references
+         :in-reply-to:cc:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=58/VjDZZoily/fkCPVeQuHIo3U3CJ3NHBYhVURQ6msE=;
+        b=jLyptIFoJoWowexOIHURV8WVjZKXTKum247RO5kqfJqNuJ7kYqNeA1qXxSp9jauvYC
+         TCAEQmtlmhYdml3xM8HRH9TUuBszT1KHhGmOMfVj0QeB9WbJFjBh7iaYNm0N6bOqAeMM
+         MVIzMAxMP4bWA7izCBoe/r986XvWG1PoD/hEY3VtKxF9I5Ls6qU5CsN1nHNaDSIzIAdw
+         giRVJE0ZOH21BX9HUEknTl5tRK4S0lv8zRbtNzJWetdpIKU/3LCEON1MisPR5W41eugx
+         UT5PF3g7k2zGouO7z9oaFiZYFjbtkeM1kF6kNC6RLv46QvBjoymIr1VzFxvswAz2Z5yL
+         kpNg==
+X-Gm-Message-State: ANoB5plXTBp/wrlqj8Cxkw6MCsWJ8K0V5YsUuzgDAiD2uCBhh1UvqNu2
+        ThLdQsIkVLsS/BDO3rJyQ5Ia1/z9U3hP6lEojBBd87EZ5dvLNSkZxFUXlyYn2z16InjyAQLV1SM
+        tV8IiO8rhXTOfeofLtiKYMKXL
+X-Received: by 2002:a05:622a:598f:b0:3a5:108b:4c0a with SMTP id gb15-20020a05622a598f00b003a5108b4c0amr8948887qtb.49.1670604896795;
+        Fri, 09 Dec 2022 08:54:56 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6OgXBm3yGAsctZK8WpJQz8t/1WUERRG3j0tTCoChZ3j4+dlJmSbvENPqDxg4y3AhOx9sGyBQ==
+X-Received: by 2002:a05:622a:598f:b0:3a5:108b:4c0a with SMTP id gb15-20020a05622a598f00b003a5108b4c0amr8948861qtb.49.1670604896470;
+        Fri, 09 Dec 2022 08:54:56 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-105-105.dyn.eolo.it. [146.241.105.105])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac85484000000b0039cc64bcb53sm1192355qtq.27.2022.12.09.08.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 08:54:56 -0800 (PST)
+Message-ID: <9bb1cb8eff7d0e41230a48e01b1190a20602eb6a.camel@redhat.com>
+Subject: Re: [PATCH v1 3/3] net: simplify sk_page_frag
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Benjamin Coddington <bcodding@redhat.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+In-Reply-To: <79b1009812b753c3a82d09271c4d655d644d37a6.1669036433.git.bcodding@redhat.com>
+References: <cover.1669036433.git.bcodding@redhat.com>
+         <79b1009812b753c3a82d09271c4d655d644d37a6.1669036433.git.bcodding@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+MIME-Version: 1.0
+Date:   Fri, 09 Dec 2022 17:42:06 +0100
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +82,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 12:08 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 08-12-22 16:59:36, Wei Xu wrote:
-> [...]
-> > > What I really mean is to add demotion nodes to the nodemask along with
-> > > the set of nodes you want to reclaim from. To me that sounds like a
-> > > more natural interface allowing for all sorts of usecases:
-> > > - free up demotion targets (only specify demotion nodes in the mask)
-> > > - control where to demote (e.g. select specific demotion target(s))
-> > > - do not demote at all (skip demotion nodes from the node mask)
-> >
-> > For clarification, do you mean to add another argument (e.g.
-> > demotion_nodes) in addition to the "nodes" argument?
->
-> No, nodes=mask argument should control the domain where the memory
-> reclaim should happen. That includes both aging and the reclaim. If the
-> mask doesn't contain any lower tier node then no demotion will happen.
-> If only a subset of lower tiers are specified then only those could be
-> used for the demotion process. Or put it otherwise, the nodemask is not
-> only used to filter out zonelists during reclaim it also restricts
-> migration targets.
->
-> Is this more clear now?
+On Mon, 2022-11-21 at 08:35 -0500, Benjamin Coddington wrote:
+> Now that in-kernel socket users that may recurse during reclaim have benn
+> converted to sk_use_task_frag = false, we can have sk_page_frag() simply
+> check that value.
+> 
+> Signed-off-by: Benjamin Coddington <bcodding@redhat.com>
+> ---
+>  include/net/sock.h | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index ffba9e95470d..fac24c6ee30d 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -2539,19 +2539,14 @@ static inline void sk_stream_moderate_sndbuf(struct sock *sk)
+>   * Both direct reclaim and page faults can nest inside other
+>   * socket operations and end up recursing into sk_page_frag()
+>   * while it's already in use: explicitly avoid task page_frag
+> - * usage if the caller is potentially doing any of them.
+> - * This assumes that page fault handlers use the GFP_NOFS flags or
+> - * explicitly disable sk_use_task_frag.
+> + * when users disable sk_use_task_frag.
+>   *
+>   * Return: a per task page_frag if context allows that,
+>   * otherwise a per socket one.
+>   */
+>  static inline struct page_frag *sk_page_frag(struct sock *sk)
+>  {
+> -	if (sk->sk_use_task_frag &&
+> -	    (sk->sk_allocation & (__GFP_DIRECT_RECLAIM | __GFP_MEMALLOC |
+> -				  __GFP_FS)) ==
+> -	    (__GFP_DIRECT_RECLAIM | __GFP_FS))
+> +	if (sk->sk_use_task_frag)
+>  		return &current->task_frag;
+>  
+>  	return &sk->sk_frag;
 
-In that case, how can we request demotion only from toptier nodes
-(without counting any reclaimed bytes from other nodes),  which is our
-memory tiering use case?
+To make the above as safe as possible I think we should double-check
+the in-kernel users explicitly setting sk_allocation to GFP_ATOMIC, as
+that has the side effect of disabling the task_frag usage, too.
 
-Besides, when both toptier and demotion nodes are specified, the
-demoted pages should only be counted as aging and not be counted
-towards the requested bytes of try_to_free_mem_cgroup_pages(), which
-is what this patch tries to address.
+Patch 2/3 already catches some of such users, and we can safely leave
+alone few others, (specifically l2tp, fou and inet_ctl_sock_create()).
 
-> --
-> Michal Hocko
-> SUSE Labs
+Even wireguard and tls looks safe IMHO.
+
+So the only left-over should be espintcp, I suggest updating patch 2/3
+clearing sk_use_task_frag even in espintcp_init_sk().
+
+Other than that LGTM.
+
+Cheers,
+
+Paolo
+
