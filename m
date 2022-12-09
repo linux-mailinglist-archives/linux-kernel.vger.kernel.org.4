@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946F0648361
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7055648368
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiLIOF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S229498AbiLIOG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbiLIOFT (ORCPT
+        with ESMTP id S229957AbiLIOFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:05:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0766D75BCA;
-        Fri,  9 Dec 2022 06:05:16 -0800 (PST)
+        Fri, 9 Dec 2022 09:05:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA967720A;
+        Fri,  9 Dec 2022 06:05:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB426226A;
-        Fri,  9 Dec 2022 14:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D964CC4332C;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7090ACE289D;
+        Fri,  9 Dec 2022 14:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025F3C43332;
         Fri,  9 Dec 2022 14:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670594713;
-        bh=WgkN5Je4cNOPVZ/hkI2lCqO1EkpEAYkIqXZpsz/aHt4=;
+        s=k20201202; t=1670594714;
+        bh=6gyDnOh8vPJma4ZvWV3odrUEiz4K7dnpkJYUU+2k8Ko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kt/0JpLZVVFNgMrMfpluMRkkS1efDFdyD9NG2ZAWI0Yy86pZT9zhcPVjSD6Q5JhQC
-         VOhYIkAxut3lwd51nXIxbqzhfnpeeOraosktgApMH6WlqmkxwkGBA45z8IlaLPjz5F
-         /7OsANSOCDKqf6/C0788t7x6G/3JNYbCsRtXsFXd3q9N6dOdlRfcOhyRCsDtpdZpRY
-         596PPCham19J1eMFCGq3Xd7G8daWN9xx9UI3vLCYwKDmnx528mpZvoGzMSgBQWhvOI
-         KQNBEB3XnMIPDhOs9rx//GTKhS8q15YLJl8NktAiHzRTPSqaJhDl0AXmIEpl/gGbDa
-         ubTCupgoJr0qg==
+        b=Ek8MZqQKLsJ2LM5eTC6LlMFwRDP9T77FoT9Unw5x0i8TZozYTJDlgE5dX9OYlJHLc
+         fBVnwf6BIAwxVgSKs3qB/zWQdbukgQ/7haodw9cswsTecqC3DzFYWhW7tLKLKmnx9X
+         eswae/iOsywzrd85JzubZr0kZ2YR0QLa86l8DW2Fgr3oKPcaT0cGd+5ySQy+4cPl8V
+         o5tUk3iMxqfJtiQRguut9wsTvQ7ELUH1Nrw57f+xm8cUaNkekwQy+iHBJ22/vGAcaX
+         +Hd1y9+od+wFDSIvXyPVRJHyaAESxqMRuf8lViOsI6sWcSWVTr/V1cqaedM+7FkvKv
+         DfQIUSAXNMN0A==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1p3e0J-0000Rs-5E; Fri, 09 Dec 2022 15:05:31 +0100
+        id 1p3e0J-0000Rv-8T; Fri, 09 Dec 2022 15:05:31 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
@@ -42,9 +42,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 11/19] x86/ioapic: Use irq_domain_create_hierarchy()
-Date:   Fri,  9 Dec 2022 15:01:42 +0100
-Message-Id: <20221209140150.1453-12-johan+linaro@kernel.org>
+Subject: [PATCH v3 12/19] x86/apic: Use irq_domain_create_hierarchy()
+Date:   Fri,  9 Dec 2022 15:01:43 +0100
+Message-Id: <20221209140150.1453-13-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221209140150.1453-1-johan+linaro@kernel.org>
 References: <20221209140150.1453-1-johan+linaro@kernel.org>
@@ -65,35 +65,27 @@ irqdomain internals.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- arch/x86/kernel/apic/io_apic.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/x86/platform/uv/uv_irq.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index a868b76cd3d4..9cc4c8e0c3c4 100644
---- a/arch/x86/kernel/apic/io_apic.c
-+++ b/arch/x86/kernel/apic/io_apic.c
-@@ -2364,9 +2364,9 @@ static int mp_irqdomain_create(int ioapic)
- 		return -ENODEV;
- 	}
+diff --git a/arch/x86/platform/uv/uv_irq.c b/arch/x86/platform/uv/uv_irq.c
+index 1a536a187d74..ee21d6a36a80 100644
+--- a/arch/x86/platform/uv/uv_irq.c
++++ b/arch/x86/platform/uv/uv_irq.c
+@@ -166,10 +166,9 @@ static struct irq_domain *uv_get_irq_domain(void)
+ 	if (!fn)
+ 		goto out;
  
--	ip->irqdomain = irq_domain_create_linear(fn, hwirqs, cfg->ops,
--						 (void *)(long)ioapic);
--
-+	ip->irqdomain = irq_domain_create_hierarchy(parent, 0, hwirqs, fn,
-+						    cfg->ops,
-+						    (void *)(long)ioapic);
- 	if (!ip->irqdomain) {
- 		/* Release fw handle if it was allocated above */
- 		if (!cfg->dev)
-@@ -2374,8 +2374,6 @@ static int mp_irqdomain_create(int ioapic)
- 		return -ENOMEM;
- 	}
- 
--	ip->irqdomain->parent = parent;
--
- 	if (cfg->type == IOAPIC_DOMAIN_LEGACY ||
- 	    cfg->type == IOAPIC_DOMAIN_STRICT)
- 		ioapic_dynirq_base = max(ioapic_dynirq_base,
+-	uv_domain = irq_domain_create_tree(fn, &uv_domain_ops, NULL);
+-	if (uv_domain)
+-		uv_domain->parent = x86_vector_domain;
+-	else
++	uv_domain = irq_domain_create_hierarchy(x86_vector_domain, 0, 0, fn,
++						&uv_domain_ops, NULL);
++	if (!uv_domain)
+ 		irq_domain_free_fwnode(fn);
+ out:
+ 	mutex_unlock(&uv_lock);
 -- 
 2.37.4
 
