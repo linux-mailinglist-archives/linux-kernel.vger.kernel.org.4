@@ -2,112 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D6C648157
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4B464815A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiLILJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S229885AbiLILKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:10:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiLILJw (ORCPT
+        with ESMTP id S229573AbiLILKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:09:52 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 579143AC0A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:09:51 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA46023A;
-        Fri,  9 Dec 2022 03:09:57 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.39.232])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E52CD3F73B;
-        Fri,  9 Dec 2022 03:09:49 -0800 (PST)
-Date:   Fri, 9 Dec 2022 11:09:47 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     ruanjinjie <ruanjinjie@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, haibinzhang@tencent.com,
-        hewenliang4@huawei.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: fix a concurrency issue in
- emulation_proc_handler()
-Message-ID: <Y5MXe89uK4ekeD+b@FVFF77S0Q05N>
-References: <20221209105556.47621-1-ruanjinjie@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209105556.47621-1-ruanjinjie@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Dec 2022 06:10:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC55CD0F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:10:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A7E5B827DF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:10:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3391C433F1;
+        Fri,  9 Dec 2022 11:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670584235;
+        bh=z1OsDMJijOCYrhgJGhu5dQBX348sBitwoOZBuhZ/5TU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VHa1/Sl8BbLlQPF2KpMrX+1NkqZHsoZMdB3zqd1+4kSnYI4dhElX+eOl5V0r4MRLN
+         v8Pax9tTIw693gXh6aPLcFaXEeNfHinGmSU7TXOl7ZKIrSxHpZ8NMpYGg276qVtRD1
+         UUuKh+kORu631xV/ap375aIbhCyCoefyozHNXG3z88RULplhEQNPtUnZU5YSWfUiGi
+         xPiDLIzKXdMUCmhefGeDt6AHemAcYvcpWeubQDt9QbVeRUkfVfmRv5kHdgt36mlkIO
+         Q1J5AJ8ky3JciRdlTaTl9rCWh7PHUb3Tss0pLY8kO0X8rIRiVgtkzuYB2BaDoxRRY7
+         LtAdY3TnJJILg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p3bGy-00BZVV-Ud;
+        Fri, 09 Dec 2022 11:10:33 +0000
+Date:   Fri, 09 Dec 2022 11:10:32 +0000
+Message-ID: <86h6y4rfx3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Harry Song <jundongsong1@gmail.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
+In-Reply-To: <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
+References: <20221207135223.3938-1-jundongsong1@gmail.com>
+        <86a63zkzru.wl-maz@kernel.org>
+        <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jundongsong1@gmail.com, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 06:55:56PM +0800, ruanjinjie wrote:
-> In emulation_proc_handler(), read and write operations are performed on
-> insn->current_mode. In the concurrency scenario, mutex only protects
-> writing insn->current_mode, and not protects the read. Suppose there are
-> two concurrent tasks, task1 updates insn->current_mode to INSN_EMULATE
-> in the critical section, the prev_mode of task2 is still the old data
-> INSN_UNDEF of insn->current_mode. As a result, two tasks call
-> update_insn_emulation_mode twice with prev_mode = INSN_UNDEF and
-> current_mode = INSN_EMULATE, then call register_emulation_hooks twice,
-> resulting in a list_add double problem.
+On Thu, 08 Dec 2022 02:28:29 +0000,
+Harry Song <jundongsong1@gmail.com> wrote:
 > 
-> Call trace:
->  __list_add_valid+0xd8/0xe4
->  register_undef_hook+0x94/0x13c
->  update_insn_emulation_mode+0xd0/0x12c
->  emulation_proc_handler+0xd8/0xf4
->  proc_sys_call_handler+0x140/0x250
->  proc_sys_write+0x1c/0x2c
->  new_sync_write+0xec/0x18c
->  vfs_write+0x214/0x2ac
->  ksys_write+0x70/0xfc
->  __arm64_sys_write+0x24/0x30
->  el0_svc_common.constprop.0+0x7c/0x1bc
->  do_el0_svc+0x2c/0x94
->  el0_svc+0x20/0x30
->  el0_sync_handler+0xb0/0xb4
->  el0_sync+0x160/0x180
-
-The version queued in the arm64 for-next/core branch no longer has the list
-manipulation, but we do need to fix this for stable, and there is a remaining
-race on reading insn->current_mode in emulation_proc_handler().
-
-> Fixes: af483947d472 ("arm64: fix oops in concurrently setting insn_emulation sysctls")
-> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
-> ---
->  arch/arm64/kernel/armv8_deprecated.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> On Wed, Dec 7, 2022 at 11:19 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Wed, 07 Dec 2022 13:52:23 +0000,
+> > Harry Song <jundongsong1@gmail.com> wrote:
+> > >
+> > > I know this is a very wrong patch, but my platform
+> > > has an abnormal ITS problem caused by data consistency:
+> > > My chip does not support Cache Coherent Interconnect (CCI).
+> >
+> > That doesn't mean much. Nothing mandates to have a CCI, and plenty of
+> > systems have other ways to maintain coherency.
+> >
+> > > By default, ITS driver is the inner memory attribute.
+> > > gits_write_cbaser() is used to write the inner memory
+> > > attribute. But hw doesn't return the hardware's non-shareable
+> > > property,so I don't think reading GITS_CBASER and GICR_PROPBASER
+> > > here will get the real property of the current hardware: inner
+> > > or outer shareable is not supported, so I would like to know
+> > > whether ITS driver cannot be used on chips without CCI, or
+> > > what method can be used to use ITS driver on chips without CCI?
+> >
+> > It's not about CCI or not CCI. It is about which shareability domain
+> > your ITS is in.
+> >
+> > And it doesn't only affect the ITS. It also affects the
+> > redistributors, and anything that accesses memory.
+> >
 > 
-> diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
-> index fb0e7c7b2e20..d33e5d9e6990 100644
-> --- a/arch/arm64/kernel/armv8_deprecated.c
-> +++ b/arch/arm64/kernel/armv8_deprecated.c
-> @@ -208,10 +208,12 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
->  				  loff_t *ppos)
->  {
->  	int ret = 0;
-> -	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
-> -	enum insn_emulation_mode prev_mode = insn->current_mode;
-> +	struct insn_emulation *insn;
-> +	enum insn_emulation_mode prev_mode;
->  
->  	mutex_lock(&insn_emulation_mutex);
-> +	insn = container_of(table->data, struct insn_emulation, current_mode);
-> +	prev_mode = insn->current_mode;
->  	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+> Yes, my current chip is Rockchip platform (rk3588), so is it because the chip
+> is not designed as a proper shared domain for ITS, so the exception of
+> ITS is caused?
 
-We don't strictly need to move the container_of(), but it makes no odds either
-way, and this looks good to me:
+This Rockchip platforms have two problems:
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+- The GIC doesn't report whether is is in a shareable domain or not
 
-Mark.
+- The GIC relies on memory allocation being under 4GB
 
->  
->  	if (ret || !write || prev_mode == insn->current_mode)
-> -- 
-> 2.25.1
+In both cases, this needs to be quirked. Last time the subject came
+up, Rockchip didn't want to do this properly, so the ITS is
+unsupported on these systems until someone writes a decent patch.
+
+> > > The current patch is designed to make ITS think that the current
+> > > chip has no inner or outer memory properties, and then use
+> > > its by flushing dcache.
+> > >
+> > > This is the log for bug reports without patches:
+> > >
+> > > [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x0000000003460000
+> > > [    0.000000] ITS [mem 0x03440000-0x0345ffff]
+> > > [    0.000000] ITS@0x0000000003440000: allocated 8192 Devices @41850000 (indirect, esz 8, psz 64K, shr 0)
+> > > [    0.000000] ITS@0x0000000003440000: allocated 32768 Interrupt Collections @41860000 (flat, esz 2, psz 64K, shr 0)
+> > > [    0.000000] GICv3: using LPI property table @0x0000000041870000
+> > > [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000041880000
+> > > [    0.000000] ITS queue timeout (64 1)
+> > > [    0.000000] ITS cmd its_build_mapc_cmd failed
+> > > [    0.000000] ITS queue timeout (128 1)
+> > > [    0.000000] ITS cmd its_build_invall_cmd failed
+> >
+> > Ah, this suspiciously looks like a Rockchip machine...
+> >
+> > >
+> > > Signed-off-by: Harry Song <jundongsong1@gmail.com>
+> > > ---
+> > >
+> > > I am very sorry to bother you. This problem has been bothering me
+> > > for several weeks.  I am looking forward to your reply.
+> >
+> > If you have such issue, this needs to be handled as per-platform
+> > quirk. I'm not putting such generic hacks in the driver.
+> >
+> >         M.
+> >
+> > --
+> > Without deviation from the norm, progress is not possible.
 > 
+> Are there currently other chip platforms that have this problem, and then ITS
+> is already compatible with the problem?
+
+No. Only the RK35xx systems are affected. Other systems with the exact
+same GIC600 are working just fine.
+
+> Please tell me how to submit hacks patch for rk3588 platform?  If
+> the hacks patch cannot be submitted, please tell me whether it
+> requires the next generation chip to have any design requirements
+> for ITS?
+
+A patch *can* be submitted. What I want to see is described as part of
+
+https://lore.kernel.org/lkml/878s5i2qyw.wl-maz@kernel.org/
+
+If you write such a patch, I'll gladly merge it.
+
+> Design ITS and CPU to be the same inner memory property?
+
+No, you need to integrate it so that the attribute are
+*discoverable*, and all the memory reachable from the GIC.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
