@@ -2,105 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F68C647D10
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683B7647D17
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiLIEvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 23:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S229640AbiLIEyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 23:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLIEvC (ORCPT
+        with ESMTP id S229479AbiLIEyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 23:51:02 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBE81B1F3;
-        Thu,  8 Dec 2022 20:50:54 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=0;PH=DS;RN=5;SR=0;TI=SMTPD_---0VWt-q52_1670561448;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VWt-q52_1670561448)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Dec 2022 12:50:51 +0800
-Date:   Fri, 9 Dec 2022 12:50:47 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Siddh Raman Pant <code@siddh.me>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        linux-erofs <linux-erofs@lists.ozlabs.org>
-Subject: Re: [RFC PATCH] erofs/zmap.c: Bail out when no further region remains
-Message-ID: <Y5K+p6td52QppRZt@B-P7TQMD6M-0146.local>
-Mail-Followup-To: Siddh Raman Pant <code@siddh.me>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        linux-erofs <linux-erofs@lists.ozlabs.org>
-References: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
- <917344b4-4256-6d77-b89b-07fa96ec4539@siddh.me>
- <Y3Nu+TNRp6Fv3L19@B-P7TQMD6M-0146.local>
+        Thu, 8 Dec 2022 23:54:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61EC7D05E;
+        Thu,  8 Dec 2022 20:54:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D70AB827A1;
+        Fri,  9 Dec 2022 04:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4DDC433D2;
+        Fri,  9 Dec 2022 04:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670561673;
+        bh=rSB5y5gfDM3Ow36b0u0/C60y2e6oDZ7NLUrrP88Fvw8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kpi3f9V9c4bdztR9nKSHWOL7zKOIZAXYwTHtMpKKT9o3KR5YV5pYfEzxZ1bRPWZiW
+         xG78z0gPVMFgG++Kxgi1Ic7IbwUHNPufvT88q+LIS/fiF4tQi+Mn3HEGsLR7XQxJj6
+         edvJXJNDzp6fmSWq3dRUk/yHn9RBvPdqO1b3V4B5E7AqN/TGfGodFWR5wnZDTkdsen
+         SXJefYARubHiyglRodLXiqJNo0MACwaBFAxYzh1oE0kCNifGP0qtNwQM9fVFFD1puR
+         3mttmyLek4N8hrvlRrgkAGDWO0EPcWZx+09tXEBNDCHEv1TO+gYCm6a5V3M6Drngir
+         EseWRJJroxj7A==
+Date:   Thu, 8 Dec 2022 20:54:32 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     wei.liu@kernel.org, paul@xen.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, xen-devel@lists.xenproject.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] xen-netback: Remove set but unused variable 'pending_idx'
+Message-ID: <Y5K/iE9oa3PIrsQx@x130>
+References: <20221209034036.37280-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Y3Nu+TNRp6Fv3L19@B-P7TQMD6M-0146.local>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221209034036.37280-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddh,
-
-On Tue, Nov 15, 2022 at 06:50:33PM +0800, Gao Xiang wrote:
-> On Tue, Nov 15, 2022 at 03:39:38PM +0530, Siddh Raman Pant via Linux-erofs wrote:
-> > On Tue, 15 Nov 2022 08:54:47 +0530, Gao Xiang wrote:
-> > > I just wonder if we should return -EINVAL for post-EOF cases or
-> > > IOMAP_HOLE with arbitrary length?
-> > 
-> > Since it has been observed that length can be zeroed, and we
-> > must stop, I think we should return an error appropriately.
-> > 
-> > For a read-only filesystem, we probably don't really need to
-> > care what's after the EOF or in unmapped regions, nothing can
-> > be changed/extended. The definition of IOMAP_HOLE in iomap.h
-> > says it stands for "no blocks allocated, need allocation".
-> 
-> For fiemap implementation, yes.  So it looks fine to me.
-> 
-> Let's see what other people think.  Anyway, I'd like to apply it later.
+On 09 Dec 11:40, Jiapeng Chong wrote:
+>Variable pending_idx is not effectively used in the function, so delete
+>it.
 >
+>drivers/net/xen-netback/netback.c:886:7: warning: variable ‘pending_idx’ set but not used.
+>
+>Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3399
+>Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Very sorry for late response.
+Reviewed-by: Saeed Mahameed <saeed@kernel.org>
 
-I've just confirmed that the reason is that
+Please mark your patch clearly with [PATCH net-next] or 
+[PATCH net] if it's a bug fix. 
 
-796                 /*
-797                  * No strict rule how to describe extents for post EOF, yet
-798                  * we need do like below. Otherwise, iomap itself will get
-799                  * into an endless loop on post EOF.
-800                  */
-801                 if (iomap->offset >= inode->i_size)
-802                         iomap->length = length + map.m_la - offset;
+Thanks for the patch.
 
-Here iomap->length should be length + offset - map.m_la here. Because
-the extent start (map.m_la) is always no more than requested `offset'.
-
-We should need this code sub-block since userspace (filefrag -v) could
-pass
-ioctl(3, FS_IOC_FIEMAP, {fm_start=0, fm_length=18446744073709551615, fm_flags=0, fm_extent_count=292} => {fm_flags=0, fm_mapped_extents=68, ...}) = 0
-
-without this sub-block, fiemap could get into a very long loop as below:
-[  574.030856][ T7030] erofs: m_la 70000000 offset 70457397 length 9223372036784318410 m_llen 457398
-[  574.031622][ T7030] erofs: m_la 70000000 offset 70457398 length 9223372036784318409 m_llen 457399
-[  574.032397][ T7030] erofs: m_la 70000000 offset 70457399 length 9223372036784318408 m_llen 457400
-
-So could you fix this as?
-	iomap->length = length + offset - map.m_la;
-
-I've already verified it can properly resolve the issue and do the
-correct thing although I'd like to submit this later since we're quite
-close to the merge window.
-
-Thanks,
-Gao Xiang
