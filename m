@@ -2,172 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB827648129
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A1164812B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLIKwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 05:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S229696AbiLIKxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 05:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLIKwi (ORCPT
+        with ESMTP id S229592AbiLIKxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 05:52:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45CF2CB;
-        Fri,  9 Dec 2022 02:52:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 631B0B82840;
-        Fri,  9 Dec 2022 10:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02C35C433D2;
-        Fri,  9 Dec 2022 10:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670583152;
-        bh=o9FfYOP4Nba34okMWYDXu//OQ/cniqD18C4Lv486QRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bOWW1rflKNE0DPBc807Nr5sPCK6BYhZ3AKzevIyF+8XjwE0cPAHgcSBAGn6/4ZAdo
-         Xh9QbOuTggQp7nEgT8sKcdJnGgfIY7bdgUe/AcjHXCHU6AWhxLNpVJrgchbG7fK/Wp
-         ubfQJK81PlZGbDwDrrL8MxYkQme5eumvZdLW3eg6cVg16SUWN1n8Q9HdK6WTpYJiqv
-         F0IMBOJm1Ev9YDO2EW955WXtztWjnJDmUCRR2t+pGUEVpWEy2YreHzscmaBzE+Gil9
-         f2RpQcrBZkbwVLGcrO4bNM/t5ik8A6ZprAw2s1I6CFxnTaaw7IEgbT9yXKCPc0c54g
-         aRD1VzcCSOtlA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p3azn-0003vN-AJ; Fri, 09 Dec 2022 11:52:48 +0100
-Date:   Fri, 9 Dec 2022 11:52:47 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 10/12] arm64: dts: qcom: sc8280xp: Define some of the
- display blocks
-Message-ID: <Y5MTfzTENln1MqFt@hovoldconsulting.com>
-References: <20221207220012.16529-1-quic_bjorande@quicinc.com>
- <20221207220012.16529-11-quic_bjorande@quicinc.com>
+        Fri, 9 Dec 2022 05:53:11 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A49DEE19
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 02:53:11 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id f139so4797160yba.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 02:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=RQAPHFcgVL9l9cHsfz6VGkw7gyneIBMYACTzm9Pp2YatqtLZFuyBUzbM1bnPUfkSCS
+         kfDy18gmDS/qQigwfwf0iQdUo/ozDOIdPOhhDZKwB5NMTHjlkPKZ1kX4AzH1QNIMd1gp
+         ux6fUntohdN6Nds6BaecZQdrBgW8LFa9cgtiTiiNlg3MhCJCoZvoky9V66SAUp3x8Lqj
+         mrXRxkBWW5f0W9e44SpJQqyq1BltSmK7B6DxMNjUerOe9itT/8wWExOejcmKILIwKXwp
+         GMiUvOOB/IsPNZcS8r4ay31PUN4HHiMvFEY2dkPbps3D7RGDEaVUz18lF+nVDzEvtnhO
+         Pwvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=CwGULRm8e/1wdRSHQdvKmZfhwgCWdLDOIQlnMXZFeDkwz4QJfK0IZ6bSRu9HDJKKEY
+         1+Z0xbFWt9ltTQCXQ6p8UryD3B68LylHwczw91rBkiftvWIgDNpDp2MoAtAW2u46MRGk
+         xJJvk3QKQmDfbmvew37QV44TV2DpiSbzmV00H+6rXXedAoRXdG9ZTI2OnZm0b5U0whzH
+         Rl1TJPOwR/mNcMh8gRHzFV+Cfq67hVpwjDpLMgehYC2N4Wi+M6PrjqqbHfyU4/7dz/1g
+         NbgO0xmnRSZRl5plf+5GyZDCsS1D9vL2XpasnqRFZAqjBjad3RVweKqztB1ugyWsLA6o
+         INyw==
+X-Gm-Message-State: ANoB5plzdWYWRAAsO+B0KFNgneIinJH7OcV/WQIRkNXAcUZwePyDzTBd
+        bBOrPqHaR2UZZrObxUwWmIand+gHyS6NHzDoA28=
+X-Google-Smtp-Source: AA0mqf7fh1oUEW2FZx+yzF6V7bVbF6skFryhrTwgOcaJ7UHhabIKRbldhZwY6zycymfowCDEDUyKnSejBFLty6/bvFo=
+X-Received: by 2002:a25:ad21:0:b0:6f0:1111:53c4 with SMTP id
+ y33-20020a25ad21000000b006f0111153c4mr66925967ybi.121.1670583189966; Fri, 09
+ Dec 2022 02:53:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207220012.16529-11-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: mayi.francois1@gmail.com
+Received: by 2002:a05:7110:11cc:b0:1a2:b42c:9226 with HTTP; Fri, 9 Dec 2022
+ 02:53:09 -0800 (PST)
+From:   Elena Tudorie <elenatudorie987@gmail.com>
+Date:   Fri, 9 Dec 2022 16:23:09 +0530
+X-Google-Sender-Auth: 75eAqwTMwgXZZOa1VbNvVxPtTE4
+Message-ID: <CAFkR3GrmnF1Z-NSnd3_vvAEB_4YGkLZxfEyqobo47=__n-bsQg@mail.gmail.com>
+Subject: Hello I Wish to seek your conscience about something urgently, Please
+ reply this message, once you get it. Yours sister, Mrs.Elena Tudorie Email: tudorie_elena@outlook.com
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 02:00:10PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Define the display clock controllers, the MDSS instances, the DP phys
-> and connect these together.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v4:
-> - None
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 838 +++++++++++++++++++++++++
->  1 file changed, 838 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 9f3132ac2857..c2f186495506 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
- 
-> +		mdss0: display-subsystem@ae00000 {
-> +			compatible = "qcom,sc8280xp-mdss";
-> +			reg = <0 0x0ae00000 0 0x1000>;
-> +			reg-names = "mdss";
-> +
-> +			power-domains = <&dispcc0 MDSS_GDSC>;
-> +
-> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +				 <&dispcc0 DISP_CC_MDSS_AHB_CLK>,
-> +				 <&dispcc0 DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface",
-> +				      "ahb",
-> +				      "core";
-> +
-> +			resets = <&dispcc0 DISP_CC_MDSS_CORE_BCR>;
-> +
-> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "mdp0-mem", "mdp1-mem";
-> +
-> +			iommus = <&apps_smmu 0x1000 0x402>;
-> +
-> +			status = "disabled";
 
-Please move status last.
-
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			mdss0_mdp: display-controller@ae01000 {
-
-[...]
-
-> +		mdss1: display-subsystem@22000000 {
-> +			compatible = "qcom,sc8280xp-mdss";
-> +			reg = <0 0x22000000 0 0x1000>;
-> +			reg-names = "mdss";
-> +
-> +			power-domains = <&dispcc1 MDSS_GDSC>;
-> +
-> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +				 <&dispcc1 DISP_CC_MDSS_AHB_CLK>,
-> +				 <&dispcc1 DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface",
-> +				      "ahb",
-> +				      "core";
-> +
-> +			resets = <&dispcc1 DISP_CC_MDSS_CORE_BCR>;
-> +
-> +			interrupts = <GIC_SPI 865 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			interconnects = <&mmss_noc MASTER_MDP_CORE1_0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&mmss_noc MASTER_MDP_CORE1_1 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "mdp0-mem", "mdp1-mem";
-> +
-> +			iommus = <&apps_smmu 0x1800 0x402>;
-> +
-> +			status = "disabled";
-
-Same here.
-
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			mdss1_mdp: display-controller@22001000 {
-
-Johan
