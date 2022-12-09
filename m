@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2278647B70
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 253C7647B74
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLIB20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S229847AbiLIBa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiLIB2Y (ORCPT
+        with ESMTP id S229479AbiLIBaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:28:24 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2959801CF;
-        Thu,  8 Dec 2022 17:28:22 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 0C79924E1FF;
-        Fri,  9 Dec 2022 09:28:13 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
- 2022 09:28:13 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
- (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
- 2022 09:28:11 +0800
-Message-ID: <a2c6ff79-2d47-d0a1-d59a-716a1d212808@starfivetech.com>
-Date:   Fri, 9 Dec 2022 09:28:06 +0800
+        Thu, 8 Dec 2022 20:30:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB86801ED
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:30:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AB42B826F9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E419CC43392;
+        Fri,  9 Dec 2022 01:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670549418;
+        bh=XjQfoNgG2GiBY7jADESEO1zAcbSoAJAF8r+mKWMXI44=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VCFTcA500RiRVb3k1OLCZE9KysbeMc0XG4FVUlDrdJdioIbiXxTFaQbtfTYj6hgcU
+         ls5dRn9ZCg3U4wkr1i4Hi87ueFnHVZcnd3WwnJtJXbyXlPknJQ3u6uvwLs62FS5isX
+         TxXxu+GBgtP6ZkDoS37IE44ANlI/f/jNgdAHO1Ti0HnnFcqbcK5N7vav+8+by3uPZG
+         X44OfIwmUgMwLsmDp772AHksWOI27iFed8b8oXCoVc1fmlIG7UzhDD1U3romgceMg+
+         0vIgf6SlgxqsC6GOV1t7s7Ak1KjKkWs9U2DkXlwlQ2e23EPcEmSG8GFLbIuQFfzqM0
+         gxSw4AF2aN7uw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC219C41606;
+        Fri,  9 Dec 2022 01:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy
- delay_chain configuration
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-8-yanhong.wang@starfivetech.com> <Y4jpDvXo/uj9ygLR@spud>
- <Y4kAyAhBseNmmDo8@spud>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <Y4kAyAhBseNmmDo8@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v6 0/3] Add PMEM support for RISC-V
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167054941883.3046.11002142340745112697.git-patchwork-notify@kernel.org>
+Date:   Fri, 09 Dec 2022 01:30:18 +0000
+References: <20221114090536.1662624-1-apatel@ventanamicro.com>
+In-Reply-To: <20221114090536.1662624-1-apatel@ventanamicro.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, atishp@atishpatra.org, heiko@sntech.de,
+        arnd@arndb.de, anup@brainfault.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,100 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On 2022/12/2 3:30, Conor Dooley wrote:
-> On Thu, Dec 01, 2022 at 05:49:08PM +0000, Conor Dooley wrote:
->> On Thu, Dec 01, 2022 at 05:02:42PM +0800, Yanhong Wang wrote:
->> > riscv: dts: starfive: visionfive-v2: Add phy delay_chain configuration
->> > 
->> > Add phy delay_chain configuration to support motorcomm phy driver for
->> > StarFive VisionFive 2 board.
+On Mon, 14 Nov 2022 14:35:33 +0530 you wrote:
+> The Linux NVDIMM PEM drivers require arch support to map and access the
+> persistent memory device. This series adds RISC-V PMEM support using
+> recently added Svpbmt and Zicbom support.
 > 
-> nit: please re-word this commit next time around to actually say what
-> you're doing here. I didn't notice it initially, but this patch is doing
-> a lot more than adding `delay_chain` configuration. To my dwmac unaware
-> brain, there's nothing hits for that term outside of the changelog :(
+> First two patches are fixes and remaining two patches add the required
+> PMEM support for Linux RISC-V.
 > 
+> [...]
 
-I will re-word the commit message and add another dt-binding to describe the details that such as "rxc_dly_en","tx_inverted_10" etc.
+Here is the summary with links:
+  - [v6,1/3] RISC-V: Fix MEMREMAP_WB for systems with Svpbmt
+    https://git.kernel.org/riscv/c/b91676fc16cd
+  - [v6,2/3] RISC-V: Implement arch specific PMEM APIs
+    https://git.kernel.org/riscv/c/a49ab905a1fc
+  - [v6,3/3] RISC-V: Enable PMEM drivers
+    https://git.kernel.org/riscv/c/497bcbe3ce04
 
-> Thanks,
-> Conor.
-> 
->> > 
->> > Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> > ---
->> >  .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
->> >  1 file changed, 46 insertions(+)
->> > 
->> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> > index c8946cf3a268..2868ef4c74ef 100644
->> > --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> > @@ -15,6 +15,8 @@
->> >  
->> >  	aliases {
->> >  		serial0 = &uart0;
->> > +		ethernet0=&gmac0;
->> > +		ethernet1=&gmac1;
->> 
->> Please match the whitespace usage of the existing entry.
->> 
->> >  	};
->> >  
->> >  	chosen {
->> > @@ -114,3 +116,47 @@
->> >  	pinctrl-0 = <&uart0_pins>;
->> >  	status = "okay";
->> >  };
->> > +
->> > +&gmac0 {
->> > +	status = "okay";
->> > +	#address-cells = <1>;
->> > +	#size-cells = <0>;
->> > +	phy-handle = <&phy0>;
->> > +	status = "okay";
->> > +	mdio0 {
->> 
->> A line of whitespace before the child nodes too please :)
->> 
->> > +		#address-cells = <1>;
->> > +		#size-cells = <0>;
->> > +		compatible = "snps,dwmac-mdio";
->> > +		phy0: ethernet-phy@0 {
->> > +			reg = <0>;
->> > +			rxc_dly_en = <1>;
->> > +			tx_delay_sel_fe = <5>;
->> > +			tx_delay_sel = <0xa>;
->> > +			tx_inverted_10 = <0x1>;
->> > +			tx_inverted_100 = <0x1>;
->> > +			tx_inverted_1000 = <0x1>;
->> > +		};
->> > +	};
->> > +};
->> > +
->> > +&gmac1 {
->> > +	status = "okay";
->> > +	#address-cells = <1>;
->> > +	#size-cells = <0>;
->> > +	phy-handle = <&phy1>;
->> > +	status = "okay";
->> > +	mdio1 {
->> > +		#address-cells = <1>;
->> > +		#size-cells = <0>;
->> > +		compatible = "snps,dwmac-mdio";
->> > +		phy1: ethernet-phy@1 {
->> > +			reg = <1>;
->> > +			tx_delay_sel_fe = <5>;
->> > +			tx_delay_sel = <0>;
->> > +			rxc_dly_en = <0>;
->> > +			tx_inverted_10 = <0x1>;
->> > +			tx_inverted_100 = <0x1>;
->> > +			tx_inverted_1000 = <0x0>;
->> > +		};
->> > +	};
->> > +};
->> > -- 
->> > 2.17.1
->> > 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
