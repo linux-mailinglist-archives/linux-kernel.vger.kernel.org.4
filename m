@@ -2,382 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F877648732
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86642648739
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiLIRDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S230018AbiLIRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiLIRCf (ORCPT
+        with ESMTP id S230019AbiLIREd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:02:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570BE83EA3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:01:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670605295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L7MEdlvbVLjBM5+9KWX/Vi/7wZkpFuDB6TgvbozGtp8=;
-        b=ALLs3XnLcXLLa8WdL4YW2EIiGGQaPCd12kHJz24J6N4jC9s0/UV9hXJKMiExIYojMxY54p
-        MJnSOoIUsS0TXf6PS5F5h+t0O732BEG3AFxnY0Dlw9IJLQOKVHhK2uqBGzrIZ+SQHkcfFw
-        AtiwEZWwCCIRSmDC9LZElbg9e/wic3M=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-VRaWzlQQNaG6vpX4V6qVAw-1; Fri, 09 Dec 2022 12:01:34 -0500
-X-MC-Unique: VRaWzlQQNaG6vpX4V6qVAw-1
-Received: by mail-pg1-f200.google.com with SMTP id p7-20020a631e47000000b0047691854a86so3393896pgm.16
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:01:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L7MEdlvbVLjBM5+9KWX/Vi/7wZkpFuDB6TgvbozGtp8=;
-        b=a2a/f1Tku/pXPNCDv7upF+fZmi/wOtZHN6c0ZHwddwESwaPc7iM/7ctxlBBAmhuGfk
-         LL9f40K7RaBe/5PUUnFH5f9rX8PJK6C/ukMhLNZSeLXevjr3Qk0EYjZCWsR1aEM1W65Q
-         C2l8122oKNUuml1BYJgJXUw4PUo3g8dErjpGRLJA0MnoJdvwisLVEl9x4xQW6dtQTJst
-         YrCee06NUCVFVT7eB+vOeAyFCDgyE95cfuVwG0J5cjVMbh+ephSWwW5t1xMJKcsNBkSn
-         BrzZSXVySUijl1PtBzqnn7B6t/G4mgWJ1MOZv9DSFRHgZErgU9btrgZrlSTMfXnV4ef0
-         gyGw==
-X-Gm-Message-State: ANoB5pmLm3PWNoPirPGlkVByzOU1peUtIrgaiA2BMpn4wrXW8ZBP/PnB
-        nh500HbL2iFBRsmYjXXT0Gm3etfkXdW2Sr97bvdVeI9CGL2p6vUYvdz9O15VimcOUjYGWh8FN3C
-        rQvqcofpMHHqgGdWNIaZOApWR
-X-Received: by 2002:a05:6a20:9f4a:b0:9d:efbf:6618 with SMTP id ml10-20020a056a209f4a00b0009defbf6618mr9037913pzb.38.1670605292396;
-        Fri, 09 Dec 2022 09:01:32 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4691rJPo5hULuegymNELlZK/OS4Isy0pkxFdZAl/xogaBGdec9hd8nNWbKv9OTMLROMYo/pQ==
-X-Received: by 2002:a05:6a20:9f4a:b0:9d:efbf:6618 with SMTP id ml10-20020a056a209f4a00b0009defbf6618mr9037889pzb.38.1670605292058;
-        Fri, 09 Dec 2022 09:01:32 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006cf38fd659asm178907qkl.103.2022.12.09.09.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 09:01:30 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>, peterx@redhat.com,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v3 9/9] mm/hugetlb: Introduce hugetlb_walk()
-Date:   Fri,  9 Dec 2022 12:01:00 -0500
-Message-Id: <20221209170100.973970-10-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221209170100.973970-1-peterx@redhat.com>
-References: <20221209170100.973970-1-peterx@redhat.com>
+        Fri, 9 Dec 2022 12:04:33 -0500
+Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9AD389F9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:02:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670605378; bh=MyMUlj5UJfAp+eU10kjTGA4h5Trvl3n2yx62dVmJUto=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=jgF8+VlCs6Y6af9d+SoUZk4sjlHmAMM9jatMFidCPMpakgmpdJAp0KaHYiuZs3gJXM6FxYRql01CnvNKogqU+yKcLWKM3kY/i68pxEGkOrz6RLm0AyDceyoBVbafyBtkum9uvB4ijj059yK5obUDr+0dASpWusgYUOZUMQaHUGDbqZycdgQKK0mnZoOP2DH/EzAgS2HAp8Ld9ehe6UmuDdnRcULifBPbiSpijski+a4GWur6VhdriBo7f1UWlPuZR2RM/GVdM1l4b1cR75CFLvO92riOHvdtJPIpoAXO4LmqIEaTrIdgnPARIDt/o4MeQW1KUjj5GsOFUNNT08fjmA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670605378; bh=GTyIwEIyFc5nHqUqmDYhYYe5Y/368xxilQ4FUXbpB89=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tgIHUMJPlmRBTH8YWeM3Zlrd4CKTireMXVbpHoq6kJfsk+u7QZUZ0RnXLrc9C0jyX0mNtqDXwNUb/xZGnB6NzD5fLdD8n2DEWA8hDloKdob+A7lgjAIt2oCMg7VW554Ud9Qs1qnqhg4c8UX/iRWm1n0obB92UXDcfUAxf0xRfKB8YEKSbFAM9zLjJ/EZlsGRx1PhZF9wwJH9/DtE0K+k6IprJI8JFAUjZ9+lWDMJ4+DLZSB68oYYCALIIB8NM+ezaOkQLgCufIBCxr/jkOdgj87CtmRBv4LLPre01/eQeoZw9+fC90t6AZ0q9PPKI1yRWgV44vOrYiC5JiP2+3pVPg==
+X-YMail-OSG: lL7Y9y8VM1l_BqUfrYBN0lBOjEdhHbVchVr58QRsi3aIdTLukr5phEZ89VFvAVB
+ CkJZVQotERsst7pKJTRrunU5CoMB9K2f2B8kCohnOkNNefFwVMUsyueCpkW9QTcdG3LU3EXbfsuU
+ TiG5g2zbDzcS2R7sWX5lpjpkX.u__XO.HzCEYKG41gfLpoenWmauCarpfnFXxgS2pQecjBwCO6PD
+ ynhjahxMhud5vJs2OoYrNufdZSvpBSzn9kqXHJJgrvDGnT7V.L9jpIZ9Xgf1uHBD9R4216xXgSIt
+ kCBougzYXFtfHMc_qRLa1E1gNJ23XDr.Lvt1hLEG2R5YSAGCdbMYipe3vhJpcXUDcm5rEby7AKm8
+ YbShrXjXEye0MRbeqdYDNfib46KRlhYnjazTZBtkfqAqQ4ykyoyT1ybMlIUuXxevMuJQsXkBIWvV
+ Mk6PGVuviyztEUOr.k1kZyAQMp3_vewfh.S2ZTk4XD0EJjWbt0GBt4BIPCRtV_Wd5d8Z3mVOvgXr
+ eE1tzxgjZRx.G0iCJ0hRVUfZ9vh2TjcdcqodgWMhH0R3JxXYBGnEEuC1PTDcgtNU_iJ6Q2IPBYht
+ LnHisQ5Yibsrrd24thyCKcTOuGM0iAe5zIYVtvL68YXzjwidxjkmvWOc4hII8xSOEeQ8oU8LXosZ
+ ZlZQzW_t_mCLx6KMVs0FDM0MTcpB_G1Ay5Ifu.vdx.hBhu8eyJ0Hrqp8NizEHkbJziYdG1TCtwF7
+ bpmVWlVHEF8JVPtgxbpJ0X.fCbenpmPwCJ9QHqM2iBGu9IftV_wAdSP5STjMP9KsH5C_cZDD5Plq
+ yqaW27p4Q.OhNDfuKZgI.k76WvS2wCCxgJvIz7O1Pl9OPhis4HuVcaJsDUCW8kxu9Vq3SFyQF2nT
+ IdQSiCKXi8Io66Yj8.AyadVeTdS.oe1A9v0RN68LldyfiU2AoI3b_yYB77R8lQzBA9hLxSHk0PkI
+ dIPCZEonwyYYaCkuS04TaOUHwluvs8oFCzR5kCEhquIQ_DBwR_LZL.SAwM6PKN_tf.Q17pd3oPQe
+ C961a.CIol4JkGkxS8FRW6SwhD7QNfjNeI50F10jBL9CopYj4Uot1t_WbeSYoS30_U6QZ3ghNvup
+ vwxqywDrpiEJWFf.vrrYy2cprtCb6D1JfqTZ53xYMz_OYC19yGe5JePPttXsii_f1FkZMLJKl2La
+ TPmnfJ_Zv41uAqKuz1EA3vm4wEB1kn_gBLFLj3WILqzY9SRW4m.R025Fwvf7CIvb3PxqfuiZ5yNG
+ tIOHctNTq3DkfltRNsbX5g6gRkk0fOANOkwKS6V.BVU8QLWVg8FSXNL.O7i91POcuF10w5ZG86Se
+ SeARFe.mzj6GxVlkOcrJZdwHgF11a853lTc_xs.zT6VbhDZ7fXBM6ftvPni6ni.9NarO2dHJHDpa
+ _PzYAZWWPVYO.Zx9mAyE_ApDkl749_1GPJlhbCNRoZ6krhuagsLyjk8DbLCIw17quxpAh_KIVjXJ
+ TEhNVWvtE7Ldkpq2FqAMV595IcJcvr9BRpdkEw251uBMRuXuJqugNK_yAqBqrohidzNDEh21WhhE
+ PuKMyC7bPiSGML__cCIStn.9nBJpnEjLhTJurMDu3T1mVjvtXf5Z.0Bufsic1393kL51QVqnkhhi
+ VebC1XJwhlNhjodPBZcdlxbAeCJT6kG3zaWdEDFccO50MHxq9mv7EPKH_hjeKSFTiL91YDpJx1CU
+ XR9zYqJ46kVPrKMQdcipTwrg7.ppIu4YuBEtzpuShZS0N_crtiZkK4K6jU.pjbP95dTrQCj_FCsu
+ 1KzvlJYgDU7UULTFo6t8dIqqGlJqIZE8zslrCCYIo2E1DABEtLhRrpehZ0pT1So5Mtj95w5oc17M
+ YZQenTO3eg7IK2mgg5Hcf0KtxbJIR.RwXSJpliWoaZc_6DHcoaXuh9ihYlxqcyIsMWYVjL24fI6q
+ izeL6Chszszn6f1M7NGQktXNGqTORYqVwhPyw5xuq5HmL9O9rbdKYan6.2KI9O8E59sxrYVFG04b
+ 3QofzocQOgp2EXkywjQDZONavNapKRXjzMvJ.ESyKsNG_971A6XeRXXwJHSOWHB6FjkYjqbgXUPz
+ Wzis6US_tXsCzRDPfjqeb7KB4r1PtTPQzbZte6fZh7OrIyZM2xCBO1SM_9vOBxyCgvKfKDc7cpgn
+ TG01NA9Az33gUBSphK7T3x2AAzl1cY60UC6km5zTNE.aZ_VVvP_z.3LCC5DyLdwR69K7QNbjhX77
+ 9n4vuK6xlnRmNR9UqVFDtyh8.NQ_3pQc7Z79bZZSJL1R4nmZzg.naOf3y8ZYnn1vWcZnOctzvkY9
+ g860vf6TkMbp4200-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 9 Dec 2022 17:02:58 +0000
+Received: by hermes--production-gq1-d898c4779-kw4j9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a6a3eaab463986d72460c801a21e852f;
+          Fri, 09 Dec 2022 17:02:52 +0000 (UTC)
+Message-ID: <27c63309-4a36-74d5-42e0-d4a2e9e02db4@schaufler-ca.com>
+Date:   Fri, 9 Dec 2022 09:02:51 -0800
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
+Content-Language: en-US
+To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        kernel test robot <lkp@intel.com>, casey@schaufler-ca.com
+References: <20221209160453.3246150-1-jeffxu@google.com>
+ <20221209160453.3246150-7-jeffxu@google.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221209160453.3246150-7-jeffxu@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20926 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-huge_pte_offset() is the main walker function for hugetlb pgtables.  The
-name is not really representing what it does, though.
+On 12/9/2022 8:04 AM, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@google.com>
+>
+> The new security_memfd_create allows lsm to check flags of
+> memfd_create.
+>
+> The security by default system (such as chromeos) can use this
+> to implement system wide lsm to allow only non-executable memfd
+> being created.
+>
+> Signed-off-by: Jeff Xu <jeffxu@google.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> ---
+>  include/linux/lsm_hook_defs.h | 1 +
+>  include/linux/lsm_hooks.h     | 4 ++++
+>  include/linux/security.h      | 6 ++++++
+>  mm/memfd.c                    | 5 +++++
+>  security/security.c           | 5 +++++
+>  5 files changed, 21 insertions(+)
+>
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index ec119da1d89b..fd40840927c8 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
+>  LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
+>  LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
+>  	 unsigned long arg)
+> +LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
+>  LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
+>  LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
+>  	 unsigned long prot, unsigned long flags)
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 4ec80b96c22e..5a18a6552278 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -543,6 +543,10 @@
+>   *	simple integer value.  When @arg represents a user space pointer, it
+>   *	should never be used by the security module.
+>   *	Return 0 if permission is granted.
+> + * @memfd_create:
+> + *	@name is the name of memfd file.
+> + *	@flags is the flags used in memfd_create.
+> + *	Return 0 if permission is granted.
+>   * @mmap_addr :
+>   *	Check permissions for a mmap operation at @addr.
+>   *	@addr contains virtual address that will be used for the operation.
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index ca1b7109c0db..5b87a780822a 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
+>  int security_file_alloc(struct file *file);
+>  void security_file_free(struct file *file);
+>  int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+> +int security_memfd_create(char *name, unsigned int flags);
+>  int security_mmap_file(struct file *file, unsigned long prot,
+>  			unsigned long flags);
+>  int security_mmap_addr(unsigned long addr);
+> @@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
+>  	return 0;
+>  }
+>  
+> +static inline int security_memfd_create(char *name, unsigned int flags)
+> +{
+> +	return 0;
+> +}
+> +
 
-Instead of renaming it, introduce a wrapper function called hugetlb_walk()
-which will use huge_pte_offset() inside.  Assert on the locks when walking
-the pgtable.
+Add a proper kernel doc comment for this function.
 
-Note, the vma lock assertion will be a no-op for private mappings.
-
-Document the last special case in the page_vma_mapped_walk() path where we
-don't need any more lock to call hugetlb_walk().
-
-Taking vma lock there is not needed because either: (1) potential callers
-of hugetlb pvmw holds i_mmap_rwsem already (from one rmap_walk()), or (2)
-the caller will not walk a hugetlb vma at all so the hugetlb code path not
-reachable (e.g. in ksm or uprobe paths).
-
-It's slightly implicit for future page_vma_mapped_walk() callers on that
-lock requirement.  But anyway, when one day this rule breaks, one will get
-a straightforward warning in hugetlb_walk() with lockdep, then there'll be
-a way out.
-
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- fs/hugetlbfs/inode.c    |  4 +---
- fs/userfaultfd.c        |  6 ++----
- include/linux/hugetlb.h | 39 +++++++++++++++++++++++++++++++++++++++
- mm/hugetlb.c            | 32 +++++++++++++-------------------
- mm/page_vma_mapped.c    |  9 ++++++---
- mm/pagewalk.c           |  4 +---
- 6 files changed, 62 insertions(+), 32 deletions(-)
-
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index fdb16246f46e..48f1a8ad2243 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -388,9 +388,7 @@ static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
- {
- 	pte_t *ptep, pte;
- 
--	ptep = huge_pte_offset(vma->vm_mm, addr,
--			huge_page_size(hstate_vma(vma)));
--
-+	ptep = hugetlb_walk(vma, addr, huge_page_size(hstate_vma(vma)));
- 	if (!ptep)
- 		return false;
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 969f4be967c6..6a278941ec84 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -237,14 +237,12 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
- 					 unsigned long flags,
- 					 unsigned long reason)
- {
--	struct mm_struct *mm = ctx->mm;
- 	pte_t *ptep, pte;
- 	bool ret = true;
- 
--	mmap_assert_locked(mm);
--
--	ptep = huge_pte_offset(mm, address, vma_mmu_pagesize(vma));
-+	mmap_assert_locked(ctx->mm);
- 
-+	ptep = hugetlb_walk(vma, address, vma_mmu_pagesize(vma));
- 	if (!ptep)
- 		goto out;
- 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index d755e2a7c0db..a5e87ec7fa6e 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -2,6 +2,7 @@
- #ifndef _LINUX_HUGETLB_H
- #define _LINUX_HUGETLB_H
- 
-+#include <linux/mm.h>
- #include <linux/mm_types.h>
- #include <linux/mmdebug.h>
- #include <linux/fs.h>
-@@ -196,6 +197,11 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
-  * huge_pte_offset(): Walk the hugetlb pgtable until the last level PTE.
-  * Returns the pte_t* if found, or NULL if the address is not mapped.
-  *
-+ * IMPORTANT: we should normally not directly call this function, instead
-+ * this is only a common interface to implement arch-specific
-+ * walker. Please use hugetlb_walk() instead, because that will attempt to
-+ * verify the locking for you.
-+ *
-  * Since this function will walk all the pgtable pages (including not only
-  * high-level pgtable page, but also PUD entry that can be unshared
-  * concurrently for VM_SHARED), the caller of this function should be
-@@ -1229,4 +1235,37 @@ bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr);
- #define flush_hugetlb_tlb_range(vma, addr, end)	flush_tlb_range(vma, addr, end)
- #endif
- 
-+static inline bool
-+__vma_shareable_flags_pmd(struct vm_area_struct *vma)
-+{
-+	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
-+		vma->vm_private_data;
-+}
-+
-+/*
-+ * Safe version of huge_pte_offset() to check the locks.  See comments
-+ * above huge_pte_offset().
-+ */
-+static inline pte_t *
-+hugetlb_walk(struct vm_area_struct *vma, unsigned long addr, unsigned long sz)
-+{
-+#if defined(CONFIG_HUGETLB_PAGE) && \
-+	defined(CONFIG_ARCH_WANT_HUGE_PMD_SHARE) && defined(CONFIG_LOCKDEP)
-+	struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
-+
-+	/*
-+	 * If pmd sharing possible, locking needed to safely walk the
-+	 * hugetlb pgtables.  More information can be found at the comment
-+	 * above huge_pte_offset() in the same file.
-+	 *
-+	 * NOTE: lockdep_is_held() is only defined with CONFIG_LOCKDEP.
-+	 */
-+	if (__vma_shareable_flags_pmd(vma))
-+		WARN_ON_ONCE(!lockdep_is_held(&vma_lock->rw_sema) &&
-+			     !lockdep_is_held(
-+				 &vma->vm_file->f_mapping->i_mmap_rwsem));
-+#endif
-+	return huge_pte_offset(vma->vm_mm, addr, sz);
-+}
-+
- #endif /* _LINUX_HUGETLB_H */
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9d8bb6508288..b20120d14a71 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4814,7 +4814,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 	} else {
- 		/*
- 		 * For shared mappings the vma lock must be held before
--		 * calling huge_pte_offset in the src vma. Otherwise, the
-+		 * calling hugetlb_walk() in the src vma. Otherwise, the
- 		 * returned ptep could go away if part of a shared pmd and
- 		 * another thread calls huge_pmd_unshare.
- 		 */
-@@ -4824,7 +4824,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 	last_addr_mask = hugetlb_mask_last_page(h);
- 	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
- 		spinlock_t *src_ptl, *dst_ptl;
--		src_pte = huge_pte_offset(src, addr, sz);
-+		src_pte = hugetlb_walk(src_vma, addr, sz);
- 		if (!src_pte) {
- 			addr |= last_addr_mask;
- 			continue;
-@@ -5028,7 +5028,7 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
- 	hugetlb_vma_lock_write(vma);
- 	i_mmap_lock_write(mapping);
- 	for (; old_addr < old_end; old_addr += sz, new_addr += sz) {
--		src_pte = huge_pte_offset(mm, old_addr, sz);
-+		src_pte = hugetlb_walk(vma, old_addr, sz);
- 		if (!src_pte) {
- 			old_addr |= last_addr_mask;
- 			new_addr |= last_addr_mask;
-@@ -5091,7 +5091,7 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
- 	last_addr_mask = hugetlb_mask_last_page(h);
- 	address = start;
- 	for (; address < end; address += sz) {
--		ptep = huge_pte_offset(mm, address, sz);
-+		ptep = hugetlb_walk(vma, address, sz);
- 		if (!ptep) {
- 			address |= last_addr_mask;
- 			continue;
-@@ -5404,7 +5404,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 			mutex_lock(&hugetlb_fault_mutex_table[hash]);
- 			hugetlb_vma_lock_read(vma);
- 			spin_lock(ptl);
--			ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
-+			ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
- 			if (likely(ptep &&
- 				   pte_same(huge_ptep_get(ptep), pte)))
- 				goto retry_avoidcopy;
-@@ -5442,7 +5442,7 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 	 * before the page tables are altered
- 	 */
- 	spin_lock(ptl);
--	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
-+	ptep = hugetlb_walk(vma, haddr, huge_page_size(h));
- 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
- 		/* Break COW or unshare */
- 		huge_ptep_clear_flush(vma, haddr, ptep);
-@@ -6228,7 +6228,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
- 		return NULL;
- 
- 	hugetlb_vma_lock_read(vma);
--	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
-+	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
- 	if (!pte)
- 		goto out_unlock;
- 
-@@ -6293,8 +6293,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 		 *
- 		 * Note that page table lock is not held when pte is null.
- 		 */
--		pte = huge_pte_offset(mm, vaddr & huge_page_mask(h),
--				      huge_page_size(h));
-+		pte = hugetlb_walk(vma, vaddr & huge_page_mask(h),
-+				   huge_page_size(h));
- 		if (pte)
- 			ptl = huge_pte_lock(h, mm, pte);
- 		absent = !pte || huge_pte_none(huge_ptep_get(pte));
-@@ -6480,7 +6480,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 	last_addr_mask = hugetlb_mask_last_page(h);
- 	for (; address < end; address += psize) {
- 		spinlock_t *ptl;
--		ptep = huge_pte_offset(mm, address, psize);
-+		ptep = hugetlb_walk(vma, address, psize);
- 		if (!ptep) {
- 			address |= last_addr_mask;
- 			continue;
-@@ -6858,12 +6858,6 @@ void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
- 		*end = ALIGN(*end, PUD_SIZE);
- }
- 
--static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
--{
--	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
--		vma->vm_private_data;
--}
--
- void hugetlb_vma_lock_read(struct vm_area_struct *vma)
- {
- 	if (__vma_shareable_flags_pmd(vma)) {
-@@ -7029,8 +7023,8 @@ pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
- 
- 		saddr = page_table_shareable(svma, vma, addr, idx);
- 		if (saddr) {
--			spte = huge_pte_offset(svma->vm_mm, saddr,
--					       vma_mmu_pagesize(svma));
-+			spte = hugetlb_walk(svma, saddr,
-+					    vma_mmu_pagesize(svma));
- 			if (spte) {
- 				get_page(virt_to_page(spte));
- 				break;
-@@ -7388,7 +7382,7 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
- 	hugetlb_vma_lock_write(vma);
- 	i_mmap_lock_write(vma->vm_file->f_mapping);
- 	for (address = start; address < end; address += PUD_SIZE) {
--		ptep = huge_pte_offset(mm, address, sz);
-+		ptep = hugetlb_walk(vma, address, sz);
- 		if (!ptep)
- 			continue;
- 		ptl = huge_pte_lock(h, mm, ptep);
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index 93e13fc17d3c..f3729b23dd0e 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -168,9 +168,12 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		/* The only possible mapping was handled on last iteration */
- 		if (pvmw->pte)
- 			return not_found(pvmw);
--
--		/* when pud is not present, pte will be NULL */
--		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
-+		/*
-+                 * All callers that get here will already hold the
-+                 * i_mmap_rwsem.  Therefore, no additional locks need to be
-+                 * taken before calling hugetlb_walk().
-+		 */
-+		pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
- 		if (!pvmw->pte)
- 			return false;
- 
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index d98564a7be57..cb23f8a15c13 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -305,13 +305,11 @@ static int walk_hugetlb_range(unsigned long addr, unsigned long end,
- 	hugetlb_vma_lock_read(vma);
- 	do {
- 		next = hugetlb_entry_end(h, addr, end);
--		pte = huge_pte_offset(walk->mm, addr & hmask, sz);
--
-+		pte = hugetlb_walk(vma, addr & hmask, sz);
- 		if (pte)
- 			err = ops->hugetlb_entry(pte, hmask, addr, next, walk);
- 		else if (ops->pte_hole)
- 			err = ops->pte_hole(addr, next, -1, walk);
--
- 		if (err)
- 			break;
- 	} while (addr = next, addr != end);
--- 
-2.37.3
-
+>  static inline int security_mmap_file(struct file *file, unsigned long prot,
+>  				     unsigned long flags)
+>  {
+> diff --git a/mm/memfd.c b/mm/memfd.c
+> index 92f0a5765f7c..f04ed5f0474f 100644
+> --- a/mm/memfd.c
+> +++ b/mm/memfd.c
+> @@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
+>  		goto err_name;
+>  	}
+>  
+> +	/* security hook for memfd_create */
+> +	error = security_memfd_create(name, flags);
+> +	if (error)
+> +		return error;
+> +
+>  	if (flags & MFD_HUGETLB) {
+>  		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
+>  					HUGETLB_ANONHUGE_INODE,
+> diff --git a/security/security.c b/security/security.c
+> index 79d82cb6e469..57788cf94075 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1010,6 +1010,11 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
+>  }
+>  EXPORT_SYMBOL(security_sb_clone_mnt_opts);
+>  
+> +int security_memfd_create(char *name, unsigned int flags)
+> +{
+> +	return call_int_hook(memfd_create, 0, name, flags);
+> +}
+> +
+>  int security_move_mount(const struct path *from_path, const struct path *to_path)
+>  {
+>  	return call_int_hook(move_mount, 0, from_path, to_path);
