@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E766487E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBDC6487F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiLIRl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S229875AbiLIRr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiLIRls (ORCPT
+        with ESMTP id S229761AbiLIRrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:41:48 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508E88D182
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:41:44 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id jn7so5595895plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFm1mHWqGIzhe+rb1eJUuw0XvgXopgBYaEtqlXPVfz0=;
-        b=hKQY4J/pRm6CWAMtVWIamF1UR1S5ytG4Q0dHLvMKrbYlyUycxPoWBv9Nvh4aE85080
-         MWzlNOjWwFO925vt2GUNcS/9BsF/orNKSvNrMiJHpxpXZP/fsRzj2P95wFaUt+bI8jC4
-         HKRo33TkZwcuRzKPFMZ/Et6g/CaKhLpD6XEakiYyIPyXFiTK9hpXRej8x43ZakzvAdnu
-         cc2uWLlT8LDekFoJ0DodzV9KIG5fEqwrWeJJE5FFSWTew4hhwEfHkkmQuMbzZJ1BkUaR
-         /AoTD8PntICNQW80RuAfzK6ZOG6OUwhJeXxnL+Z8dW9hRID7YD/0yMk+1SSU/RwDz4Iv
-         IAeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZFm1mHWqGIzhe+rb1eJUuw0XvgXopgBYaEtqlXPVfz0=;
-        b=PYo2/Ybrad/Kk+CUNznHSPuAqvUypucXniETTVBGP34hlQkqjMbXWscEhujhcVWS4l
-         jmZOEedA4nDtUnqXNSpa4atxfCCcWTytTp8UdCIf52Op5/W+9nqMxd95HKi50OwxBnR5
-         p1rmhC03M9R7ypG1raRI3qq+wFmIdDKaaU3TxM7rB0O5vMX/aCCAxGtVY6i5q4NmPD3W
-         aEBgNst93z1g/xM5kdOZOd0beJzv4Xy0I2GxgezotimIo8D7CxdzNGZvfDblXf85dpDS
-         7MsJYY1TQOPkxoWqWcRyOGzNbh8yikIoJz2WGP59BDWZftc1DUPaqxoQXvley5dcTDv7
-         wVcw==
-X-Gm-Message-State: ANoB5pnSr5s/pETTMhle5882v4yDa+E+6/3i6QYGZo/Na6RsG/psalQR
-        nkW7qgQKGy9lLJko5ZFYpyazEbY+KlgOLfoK78QZ7HOmfszr
-X-Google-Smtp-Source: AA0mqf42Th/ALMFAQak9uQXYbmo+LSPCJ2qrOZQ93/pWBADQWGsh/kyFsqjnomlO+PB/OJ41SRslxU9sOKyJx0wF70I=
-X-Received: by 2002:a17:90b:2743:b0:20d:4173:faf9 with SMTP id
- qi3-20020a17090b274300b0020d4173faf9mr108635116pjb.147.1670607703640; Fri, 09
- Dec 2022 09:41:43 -0800 (PST)
+        Fri, 9 Dec 2022 12:47:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3BB1F9DB;
+        Fri,  9 Dec 2022 09:47:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 985B4B828D2;
+        Fri,  9 Dec 2022 17:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0730C433D2;
+        Fri,  9 Dec 2022 17:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670608069;
+        bh=y8+bQeEBh4EKlM4FuSR/xglLOJLIIH/+Cc2XHBl/fgE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cYOmfKaNQQV2G9IUpO6ceVZe2H5bWOfZa51xI+25npPXn8bf00G9IQbT7a0h8XY1E
+         gwtz547yjfdpaMIY5hFjMQ98SRR17sfNPzt2nFtmdAnpPQwD/RSiOccnvUt5sM0WYC
+         P/2xWhSaOo9ck6kuAL+urgQPL6qZZ+LATTKsxYS8qbHPIHCcVsHAAa05PrJIoQ3xm6
+         HuR89UQ27UczlzgLdomnfsPmHO55mhyu6oLClvKurFAbgsNrBorxSnngGlykv5DRmw
+         0REd1p5dklVhgmrIMPadZnvWS8yjcWdmFhsrirP9akAGavZ5QkcSNoYX2+YeqEq4zP
+         X6y6PzAVZt6UQ==
+Date:   Fri, 9 Dec 2022 10:47:47 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH 1/2] kbuild: move -Werror from KBUILD_CFLAGS to
+ KBUILD_CPPFLAGS
+Message-ID: <Y5N0wwIkoHuPbcwU@dev-arch.thelio-3990X>
+References: <20221206040731.442499-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20221209082936.892416-1-roberto.sassu@huaweicloud.com> <20221209082936.892416-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221209082936.892416-2-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 9 Dec 2022 12:41:32 -0500
-Message-ID: <CAHC9VhSz6b9AcpKzAn2Lz_9SW0yNqiQ0Ub8fXytFy7sSBmXipQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] doc: Fix fs_context_parse_param description in mount_api.rst
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     corbet@lwn.net, casey@schaufler-ca.com, omosnace@redhat.com,
-        john.johansen@canonical.com, kpsingh@kernel.org,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206040731.442499-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 3:30 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Align with the description of fs_context_parse_param in lsm_hooks.h, which
-> seems the right one according to the code.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Dec 06, 2022 at 01:07:30PM +0900, Masahiro Yamada wrote:
+> CONFIG_WERROR turns warnings into errors, which happens only for *.c
+> files because -Werror is added to KBUILD_CFLAGS.
+> 
+> Adding it to KBUILD_CPPFLAGS makes more sense because preprocessors
+> understand the -Werror option.
+> 
+> For example, you can put a #warning directive in any preprocessed code.
+> 
+>     warning: #warning "this is a warning message" [-Wcpp]
+> 
+> If -Werror is added, it is promoted to an error.
+> 
+>     error: #warning "this is a warning message" [-Werror=cpp]
+> 
+> This commit moves -Werror to KBUILD_CPPFLAGS so it works in the same way
+> for *.c, *.S, *.lds.S or whatever needs preprocessing.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+This seems reasonable, as people should not really be polluting the
+build with messages through pragmas anyways, since the build should
+always be clean.
+
 > ---
->  Documentation/filesystems/mount_api.rst | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-
-I'm going to leave this patch as a "hold" for right now.  The existing
-text is arguably not great, but I'm not really in love with the
-replacement text taken from the LSM hook comments; given the merge
-window opens in a couple of days, we don't have much time to fiddle
-with the wording so let's just hold this for a little bit.
-
-These comment corrections (which are very welcome!) have also reminded
-me that we really should move the hook comment blocks out of the
-header file and into security.c like every other kernel function.
-This should help increase their discoverability while also making it
-easier to maintain the comments over time.  I'm going to post a first
-pass at this as soon as the merge window closes, and once that is done
-we can do further work to cleanup the descriptions and add more detail
-(including notes both for the other kernel subsystems that call the
-hooks and the LSM devs who provide implementations).
-
--- 
-paul-moore.com
+> 
+>  Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 53fa1a9fba8a..f84b57910667 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -869,7 +869,8 @@ stackp-flags-$(CONFIG_STACKPROTECTOR_STRONG)      := -fstack-protector-strong
+>  
+>  KBUILD_CFLAGS += $(stackp-flags-y)
+>  
+> -KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+> +KBUILD_CPPFLAGS-$(CONFIG_WERROR) += -Werror
+> +KBUILD_CPPFLAGS += $(KBUILD_CPPFLAGS-y)
+>  KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+>  
+>  KBUILD_RUSTFLAGS-$(CONFIG_WERROR) += -Dwarnings
+> -- 
+> 2.34.1
+> 
+> 
