@@ -2,123 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF695647EF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51046647EF9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLIIIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
+        id S229956AbiLIIIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLIIIn (ORCPT
+        with ESMTP id S229628AbiLIIIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:08:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868A01DF35
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:07:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670573268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 9 Dec 2022 03:08:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB741DF35
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:08:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B651C1FE95;
+        Fri,  9 Dec 2022 08:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670573329; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=g6IK0RYF1mOQiFFce0wSrPhJPVQgIzsR5SoBxpS0hXY=;
-        b=XULlyeTBke19xgHeCRXM8ZQd5lwov37fDBpj6HR5gbuhj6p768XDyBm1/MsBIUfNr5wwgr
-        uW6TJ4L1J6ihKEQp9dK99p3NPxJZGi3ZwxPd5zVaSCiIBryMfceQsmey5d3PPovv0DXeuv
-        I9DItlEV5wnxtRNbH0/+RLwDtjCaoXI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-375-qs_HBVHUN0CKIf26w2q4ag-1; Fri, 09 Dec 2022 03:07:47 -0500
-X-MC-Unique: qs_HBVHUN0CKIf26w2q4ag-1
-Received: by mail-wm1-f71.google.com with SMTP id m38-20020a05600c3b2600b003d1fc5f1f80so2980766wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 00:07:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g6IK0RYF1mOQiFFce0wSrPhJPVQgIzsR5SoBxpS0hXY=;
-        b=BO3XGa1YMm3XHzXmN5x2n3Yc6P2h3dPVg7rDKzTV/Baoo+X5FWLlEuaqr28o+Kpjpb
-         xx/79n0itWqvT3snBlqeliCMAq4KziAaP+hwy4AXteyYJa6j8BR41fMzBQVdQ0Z70ezq
-         PTKqGeW3EvUJk0roUw9B+d5g5GyES3W07xPEbH9lKvPYGR0b/zuX0BUoGHLVHtRILlSS
-         9E9nm6phadisfZ6DVpBprtMEDC53ffCxPUsMlM7U5liDiHiw0O7CFvLM7xGwSyltt9dV
-         I54a9Z9riKITRMowBpA1jxNGdLFpGbgTB3gqj9mNmSa7f/nISERJuFDsw7t0XktGzolR
-         M1eQ==
-X-Gm-Message-State: ANoB5plsRCx9Nubt/0BWE+jisNleaU4xRJ38ZP3ONe0tHBAsFkQOlr0C
-        0wyA2p5Pv2Cw5+RfU5VkRgMTAy+HARLpUfhE5nB/gPeFaxHeknCU1B8xYrpxuPZPmpBXyihOeta
-        sr0ARtKfsbF+cEBxbEEfv0FZK
-X-Received: by 2002:a05:600c:3549:b0:3c6:e61e:ae8c with SMTP id i9-20020a05600c354900b003c6e61eae8cmr5001711wmq.28.1670573266447;
-        Fri, 09 Dec 2022 00:07:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Uqk/m+cV884khbOL7tzw++hE9c8qAXEjR5hBPFxYbxE9taUU5qsEX/VMC87zkwTztnfgjew==
-X-Received: by 2002:a05:600c:3549:b0:3c6:e61e:ae8c with SMTP id i9-20020a05600c354900b003c6e61eae8cmr5001690wmq.28.1670573266112;
-        Fri, 09 Dec 2022 00:07:46 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:2e00:b9ea:114c:a3f5:327e? (p200300cbc7022e00b9ea114ca3f5327e.dip0.t-ipconnect.de. [2003:cb:c702:2e00:b9ea:114c:a3f5:327e])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003cfd4a50d5asm7387447wmq.34.2022.12.09.00.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 00:07:45 -0800 (PST)
-Message-ID: <6209d614-b1f2-4501-6b8a-6d4095c309eb@redhat.com>
-Date:   Fri, 9 Dec 2022 09:07:44 +0100
+        bh=Zk/7g2NOg2HJyBROjss9mdodMQJ6cfF7LYrKlfrzRSY=;
+        b=kt27pZWYH/kFXb3m0QK81ZdpgOZUQ5G7mlGGV9PW9fbhRUmCvwYh/S6je3mCV+Y9srLzzz
+        4l+WbhypNKZE1LpuzrMKjAzjXfcV73yP05VdCmGj/Ki0lKvyLNQBGa8ozBJMMLiE/QE8wl
+        FsnxbS7qejzA1JaFeMeuaBaeSayzlG8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 949AD138E0;
+        Fri,  9 Dec 2022 08:08:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vfT8IRHtkmP4OAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 09 Dec 2022 08:08:49 +0000
+Date:   Fri, 9 Dec 2022 09:08:48 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Wei Xu <weixugc@google.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, fvdl@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered
+ systems
+Message-ID: <Y5LtEMYOXtUxsuqs@dhcp22.suse.cz>
+References: <Y48zlaimOb/wr8qd@dhcp22.suse.cz>
+ <CAHS8izMKz_JtN-P7BTHydE2x2rmSg5-JRoHgaDCdCHV-S0YLJw@mail.gmail.com>
+ <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz>
+ <CAHS8izOW70Eb7RRePQv6SP8hW3iUnAcPSD=aOY+aMu=6ReEtHQ@mail.gmail.com>
+ <Y5B1K5zAE0PkjFZx@dhcp22.suse.cz>
+ <CAHS8izMKK107wVFSJvg36nQ=WzXd8_cjYBtR0p47L+XLYUSsqA@mail.gmail.com>
+ <Y5Gbwwp7AlFiltuu@dhcp22.suse.cz>
+ <CAHS8izMhRXMB5QJab5AvuHiWiQUAzUf81-7Y71ueEEnz71dwiQ@mail.gmail.com>
+ <Y5HQgpRvPQWteNvz@dhcp22.suse.cz>
+ <CAAPL-u_bEhCCCnepmCuNe7q7qJY3G3wckGvG-QsF2SYpAVXhEA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-References: <20221208114137.35035-1-david@redhat.com> <Y5IQzJkBSYwPOtiP@x1n>
- <b9162f04-7d8e-1ada-f428-85fd84327d1c@redhat.com> <Y5JDrkBGEyZviXz9@x1n>
- <Y5JHY2zyK4k8aBtX@x1n>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y5JHY2zyK4k8aBtX@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAPL-u_bEhCCCnepmCuNe7q7qJY3G3wckGvG-QsF2SYpAVXhEA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.12.22 21:21, Peter Xu wrote:
-> On Thu, Dec 08, 2022 at 03:06:06PM -0500, Peter Xu wrote:
->> On Thu, Dec 08, 2022 at 05:44:35PM +0100, David Hildenbrand wrote:
->>> I'll wait for some more (+retest) before I resend tomorrow.
->>
->> One more thing just to double check:
->>
->> It's 6a56ccbcf6c6 ("mm/autonuma: use can_change_(pte|pmd)_writable() to
->> replace savedwrite", 2022-11-30) that just started to break uffd-wp on
->> numa, am I right?
->>
->> With the old code, pte_modify() will persist uffd-wp bit, afaict, and we
->> used to do savedwrite for numa hints.  That all look correct to me until
->> the savedwrite removal patchset with/without vm_page_prot changes.
->>
->> If that's the case, we'd better also mention that in the commit message and
->> has another Fixes: for that one to be clear.
+On Thu 08-12-22 16:59:36, Wei Xu wrote:
+[...]
+> > What I really mean is to add demotion nodes to the nodemask along with
+> > the set of nodes you want to reclaim from. To me that sounds like a
+> > more natural interface allowing for all sorts of usecases:
+> > - free up demotion targets (only specify demotion nodes in the mask)
+> > - control where to demote (e.g. select specific demotion target(s))
+> > - do not demote at all (skip demotion nodes from the node mask)
 > 
-> Nah, never mind.  I think the savedwrite will not guarantee pte write
-> protected just like the migration path.  The commit message is correct.
+> For clarification, do you mean to add another argument (e.g.
+> demotion_nodes) in addition to the "nodes" argument?
 
-Right, the problem is not the uffd-wp bit getting lost, but the write 
-bit getting set, which is independent of 6a56ccbcf6c6. Thanks for 
-double-checking 6a56ccbcf6c6.
+No, nodes=mask argument should control the domain where the memory
+reclaim should happen. That includes both aging and the reclaim. If the
+mask doesn't contain any lower tier node then no demotion will happen.
+If only a subset of lower tiers are specified then only those could be
+used for the demotion process. Or put it otherwise, the nodemask is not
+only used to filter out zonelists during reclaim it also restricts
+migration targets.
+
+Is this more clear now?
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Michal Hocko
+SUSE Labs
