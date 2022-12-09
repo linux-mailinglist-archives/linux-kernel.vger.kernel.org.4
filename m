@@ -2,112 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F316D647B8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0BA647B8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLIBii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S229896AbiLIBjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:39:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiLIBif (ORCPT
+        with ESMTP id S229695AbiLIBju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:38:35 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139C389D8;
-        Thu,  8 Dec 2022 17:38:32 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id k79so2660437pfd.7;
-        Thu, 08 Dec 2022 17:38:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gdUrO4Vj0WpEBGdoSL51EYLyXJXFaKz3pHSmds694To=;
-        b=W4SnNW/rgY1OgOH5yjRt+PniOQ5lp33EO2mncjn9cRosI9fDluB5dyikWK/32mtxqA
-         UMkt1Q3KJtnU/5Q7sZV1/H1irJdb/wbKnkau5qyMgfsYew4z+zwfO24DJGHzbzErfqEA
-         sb17bazJvcbhjvw8rFZ2G1eauJlRkuFjf2uwLi17DKgRVNvCsTkvUuMW5un5zUQwJaSl
-         Erx8iNfoHVfeUtVTdGqApFBUwvipVbIaGEgKz6K1yV1vRi0cxcjgfsmP+BtnJ97sJPYg
-         2AwmwMJheWMvVDwySA9+THgf7FYoJ3S9ShWpay5pc3JZJMfpoQcoBhBG1ytPxEKXPe0Y
-         r7Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdUrO4Vj0WpEBGdoSL51EYLyXJXFaKz3pHSmds694To=;
-        b=Vruw5lqLM1kPxqqf/I/t8kst2FMSWqlTPPZvWkKp4NacDM8IfKlgVKkfDXa2JaAPPW
-         vRoxBpM2NWLl4ffvV2IlxXRbErg0Bjv+GASBAjVIaxUUHCVv0dbSqOPNJJhrz7uHWUDG
-         0e/1szJLqEiYIrPxMi596/Kz4EHnjeWsjmaNrssBVlC/18D+DIW31aVC0Nbzsdu+b8ri
-         D/WB57zqn01B/EB2ivRTBND+cxQPOQrKi8/VhF+Btyw+1HW+VZ/GCo9c+sLHDwKpgWtT
-         lz4oYqFV9hkzXNKmd7LteGM7+ASaBxoXeHoGes6LZpOHiG9jiFjwZKada1qcYb7GwWsi
-         lZnw==
-X-Gm-Message-State: ANoB5pl5x5CGVtUApJF4t0N9TL92nuxTbvD/9pBxGR7QFuDv9Cdhx6CA
-        /mhWirYMp5S2Eex6byNQzm4=
-X-Google-Smtp-Source: AA0mqf5RPIgDj3Hmn7YPOhgMYmk4lfHIIcDcDc7GA1P1ukud6zegHOgxJlCgw5PfFggaji5wYOxb4w==
-X-Received: by 2002:aa7:864a:0:b0:56d:1bb6:af75 with SMTP id a10-20020aa7864a000000b0056d1bb6af75mr3344659pfo.4.1670549912342;
-        Thu, 08 Dec 2022 17:38:32 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:5853:f1e8:694c:1488])
-        by smtp.gmail.com with ESMTPSA id w11-20020aa7954b000000b00528a097aeffsm132178pfq.118.2022.12.08.17.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 17:38:31 -0800 (PST)
-Date:   Thu, 8 Dec 2022 17:38:28 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>, mka@chromium.org,
-        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Yunlong Jia <ecs.beijing2022@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johnny Chuang <johnny.chuang.emc@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] Input: elants_i2c: Delay longer with reset asserted
-Message-ID: <Y5KRlNvoVo6ZWV24@google.com>
-References: <20221208192006.1070898-1-dianders@chromium.org>
- <20221208111910.5.I6edfb3f459662c041563a54e5b7df727c27caaba@changeid>
+        Thu, 8 Dec 2022 20:39:50 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4173379C95
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1670549988; x=1702085988;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M6QdSScwkgnPPa2HAQN35MPiKz4GT+GPIMIfvnunvrc=;
+  b=hzYMcOOpgW1iRFnp3Dmsy84RnKQyE/1Yn88oQ+6Uofgtzj8nX8vpC+29
+   y2u4LH8PSrzlRBy/1J/qqursAWbz2zmIUKeuZamwamBnO7eSfb92wOpId
+   Is5jAwcIlbvJjMMj89B7/Pu+aUKnwMHti7vNoa6U+5uoIUs0m/nOVJaJw
+   WW/awZOEOfUO+0WYOQuwxtWlCOI6FpcgCp4OQ59qwzWSZ+ZsdaNsBAzAh
+   LQ5afpuS+ClQ5QLolxk0eIEZKh7ZkgP/M6WP5/JjaaNJEXZUp4wTX1Wxd
+   cSJi3khupSjDlVQ3nxywGCjA/lOhgtKJCQohBUgKYpxFnPsYRRqKPp+ac
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,228,1665417600"; 
+   d="scan'208";a="216449923"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Dec 2022 09:39:47 +0800
+IronPort-SDR: xhe1Dqo+JT6Qe6w6CBQgTpbZvxrTS46x9BsbU671AHlRUhgHCfVUxH07B2cIGzVfrS5GxWs1fW
+ axpiSEMJc5fTH9yiVqaBN1uTWxbs6xZC3iWsLtm7bk6XdQfTElYapD/m6DTHsU6L/oTwxBFbyu
+ sZS8TMGwjeUsL5nuYuP2DLbGLlgAmDNxS/8eERavc12UQNHROmmMs0Du+c78mRMzhidrjWpm3H
+ 7Je3fteTtf3vKzIyeeDS5FKc8iFux+lHk1o834pJ02mLvLCYF1D3vEDqFDsuO/n15Tqim9fS3q
+ PfU=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 16:58:16 -0800
+IronPort-SDR: OPZTrf7EIc/lQOuJfjdPC+vWm/SdVj4kiyk/0QbfctfY1MPxuEGKiwGqi/aa5jiAQE3NjyZshn
+ LIe3EoI3FqziWPQiTFQLrRviRggQr0hV/FhGRujXT5tY3/P1aOUwLxQoZk+31K/vYWco5TrrGr
+ qPqZkIbbWj/vsfK4IqZzV1a3M6wSisCBNJG3YICKpFhct7NOa+XAcPPOCVQ6fUDCFoL95C0hfd
+ Nex2/cNyU+TEXDLLPyI25a09ULsIGnfGCSHPYTdn21VFp15MnVUqoho1yaaOdOIXKrd046X9RM
+ hv4=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 17:39:48 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NStxH0XZMz1Rwtl
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:39:47 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1670549986; x=1673141987; bh=M6QdSScwkgnPPa2HAQN35MPiKz4GT+GPIMI
+        fvnunvrc=; b=FEljMCNLraoa+2tLSXBDCBuxyO6Y3shBGtcnBX6B+2oe4CMKhYW
+        HrM6TALjVEY8v6VsisWHAMiPszm3v2xuiZ79Gm1gB30jyzJg5vtKCS5O+rKnp/DS
+        ImP7YOAdgG7hwp4kG74tL/EUEonpbIspqfTH1cB3JJLX2rTpbwuSAxubazldeAOO
+        NYUWp0409hT3gzicojwjebygHhdL4UnzTOeGH9OMwtrD0tt0idMWL1ybMDTqkLHn
+        TdvNuFj9o/c/MrXUacPNzO+yb8CZAduzL0thvpQoOi3GgldGrtTa/IQClIvGQ+fF
+        /NAoUTmewoPvoy7vhP06aiWRFlRzoHm9Gnw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id h2-msOz7613z for <linux-kernel@vger.kernel.org>;
+        Thu,  8 Dec 2022 17:39:46 -0800 (PST)
+Received: from [10.225.163.85] (unknown [10.225.163.85])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NStxD5RDLz1RvLy;
+        Thu,  8 Dec 2022 17:39:44 -0800 (PST)
+Message-ID: <c074f125-97d7-d3b2-2976-b69b852a0069@opensource.wdc.com>
+Date:   Fri, 9 Dec 2022 10:39:43 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208111910.5.I6edfb3f459662c041563a54e5b7df727c27caaba@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V9 6/8] block, bfq: retrieve independent access ranges
+ from request queue
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        glen.valante@linaro.org, Federico Gavioli <f.gavioli97@gmail.com>
+References: <20221208104351.35038-1-paolo.valente@linaro.org>
+ <20221208104351.35038-7-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221208104351.35038-7-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:20:06AM -0800, Douglas Anderson wrote:
-> The elan touchscreen datasheet says that the reset GPIO only needs to
-> be asserted for 500us in order to reset the regulator. The problem is
-> that some boards need a level shifter between the signals on the GPIO
-> controller and the signals on the touchscreen. All of these extra
-> components on the line can slow the transition of the signals. On one
-> board, we measured the reset line and saw that it took almost 1.8ms to
-> go low. Even after we bumped up the "drive strength" of the signal
-> from the default 2mA to 8mA we still saw it take 421us for the signal
-> to go low.
+On 12/8/22 19:43, Paolo Valente wrote:
+> From: Federico Gavioli <f.gavioli97@gmail.com>
 > 
-> In order to account for this we let's lengthen the amount of time that
-> we keep the reset asserted. Let's bump it up from 500us to 5000us.
-> That's still a relatively short amount of time and is much safer.
+> This patch implements the code to gather the content of the
+> independent_access_ranges structure from the request_queue and copy
+> it into the queue's bfq_data. This copy is done at queue initialization.
 > 
-> It should be noted that this fixes real problems. Case in point:
-> 1. The touchscreen power rail may be shared with another device (like
->    an eDP panel). That means that at probe time power might already be
->    on.
-> 2. In probe we grab the reset GPIO and assert it (make it low).
-> 3. We turn on power (a noop since it was already on).
-> 4. We wait 500us.
-> 5. We deassert the reset GPIO.
+> We copy the access ranges into the bfq_data to avoid taking the queue
+> lock each time we access the ranges.
 > 
-> With the above case and only a 500us delay we saw only a partial reset
-> asserted, which is bad. Giving it 5ms is overkill but feels safer in
-> case someone else has a different level shifter setup.
+> This implementation, however, puts a limit to the maximum independent
+> ranges supported by the scheduler. Such a limit is equal to the constant
+> BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
+> dynamic memory.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
+> Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
+> Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+> ---
+>  block/bfq-iosched.c | 60 +++++++++++++++++++++++++++++++++++++++------
+>  block/bfq-iosched.h |  8 +++++-
+>  2 files changed, 59 insertions(+), 9 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index dcecba3c6e23..957ce61faaf2 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -1839,10 +1839,25 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
+>   */
+>  static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
+>  {
+> -	/*
+> -	 * Multi-actuator support not complete yet, so always return 0
+> -	 * for the moment (to keep incomplete mechanisms off).
+> -	 */
+> +	unsigned int i;
+> +	sector_t end;
+> +
+> +	/* no search needed if one or zero ranges present */
+> +	if (bfqd->num_actuators == 1)
+> +		return 0;
+> +
+> +	/* bio_end_sector(bio) gives the sector after the last one */
+> +	end = bio_end_sector(bio) - 1;
+> +
+> +	for (i = 0; i < bfqd->num_actuators; i++) {
+> +		if (end >= bfqd->sector[i] &&
+> +		    end < bfqd->sector[i] + bfqd->nr_sectors[i])
+> +			return i;
+> +	}
+> +
+> +	WARN_ONCE(true,
+> +		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
+> +		  end);
+>  	return 0;
+>  }
+>  
+> @@ -7160,6 +7175,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  {
+>  	struct bfq_data *bfqd;
+>  	struct elevator_queue *eq;
+> +	unsigned int i;
+> +	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
+>  
+>  	eq = elevator_alloc(q, e);
+>  	if (!eq)
+> @@ -7202,12 +7219,39 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>  
+>  	bfqd->queue = q;
+>  
+> +	bfqd->num_actuators = 1;
+>  	/*
+> -	 * Multi-actuator support not complete yet, unconditionally
+> -	 * set to only one actuator for the moment (to keep incomplete
+> -	 * mechanisms off).
+> +	 * If the disk supports multiple actuators, copy independent
+> +	 * access ranges from the request queue structure.
+>  	 */
+> -	bfqd->num_actuators = 1;
+> +	spin_lock_irq(&q->queue_lock);
+> +	if (ia_ranges) {
+> +		/*
+> +		 * Check if the disk ia_ranges size exceeds the current bfq
+> +		 * actuator limit.
+> +		 */
+> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
+> +			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
+> +				ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
+> +			pr_crit("Falling back to single actuator mode.\n");
+> +		} else {
+> +			bfqd->num_actuators = ia_ranges->nr_ia_ranges;
+> +
+> +			for (i = 0; i < bfqd->num_actuators; i++) {
+> +				bfqd->sector[i] = ia_ranges->ia_range[i].sector;
+> +				bfqd->nr_sectors[i] =
+> +					ia_ranges->ia_range[i].nr_sectors;
+> +			}
+> +		}
+> +	}
+> +
+> +	/* Otherwise use single-actuator dev info */
+> +	if (bfqd->num_actuators == 1) {
+> +		bfqd->sector[0] = 0;
+> +		bfqd->nr_sectors[0] =
+> +			bdev_nr_sectors(dev_to_bdev(disk_to_dev(q->disk)));
 
-Applied, thank you.
+get_capacity(q->disk) would be simpler.
+
+> +	}
+> +	spin_unlock_irq(&q->queue_lock);
+>  
+>  	INIT_LIST_HEAD(&bfqd->dispatch);
+>  
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 1450990dba32..953980de6b4b 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -810,7 +810,13 @@ struct bfq_data {
+>  	 * case of single-actuator drives.
+>  	 */
+>  	unsigned int num_actuators;
+> -
+> +	/*
+> +	 * Disk independent access ranges for each actuator
+> +	 * in this device.
+> +	 */
+> +	sector_t sector[BFQ_MAX_ACTUATORS];
+> +	sector_t nr_sectors[BFQ_MAX_ACTUATORS];
+> +	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
+>  };
+>  
+>  enum bfqq_state_flags {
+
+With the nit above fixed,
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
 -- 
-Dmitry
+Damien Le Moal
+Western Digital Research
+
