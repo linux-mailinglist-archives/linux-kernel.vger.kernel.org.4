@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCC96488DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A5C6488E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiLITO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S229640AbiLITPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiLITOp (ORCPT
+        with ESMTP id S229646AbiLITPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:14:45 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D3126AF9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:14:41 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 82so4200220pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 11:14:41 -0800 (PST)
+        Fri, 9 Dec 2022 14:15:39 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D2B26AFD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:15:38 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id me18-20020a17090b17d200b00219f8dc7cb3so7034483pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 11:15:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ng1RhCjjgJxlAMj/eBzYgJZBujugnuk3KFNVzl7SR1k=;
-        b=kuax1zp5PPVbbsMHx2tHlga+RouRPVqfrOzC/greEof/sWS5OJk0Sv8nj7QYJ6M1gw
-         PilOoJMZHMiT3V1TlCMFSX5AqEQHr338xZVW7fusZymU0TB8wmrdz2g0B+9/zie+lK2Y
-         xZ919NLbiquoq5tkuXvkIkwTk3EmbOMd7azOUmxGo3N3UhUNImEIYvuIXM3jsLhFOKYX
-         yfXdJRomn9w8iKq1+t9WMJiOsB17O+m2k4qgHkccR701ksF+pS8cGxBlFbbK+EJZZS3H
-         /ktTiZ6TjyU1i5JEdvtS31OUpfvAr99tfChC4CGMk2wV2iTaNziUlFOhGZjZ+VsgR56G
-         xuRw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zhH0oDn03Su15RrfmiRJ6OPST52/3p/eRjSa0ENEnMA=;
+        b=jfqtSHeX0FVHW8t6gJgWpd21IAtYvgxTU3eW5MA/Co883kzdJClQoXfmdHDHc6gqi8
+         6XKbOQOKRU8YMQ0ZZSXdhirEJpP8Gh7H3anCV41rHYCPoc44GOjXIQWQSklb4JtIlBvK
+         B4hvCW6/MMcYacbylCE3wqvtbD4YYkODe0GmVDlaXRBna98bGa2xEFj+OhkvNX0WHS9K
+         OEHznBG0nBoZSZspKGQIDO9eusiDZyX5X6OYHPe48hE3DNfnQYuyIFTnWWfEFeVT7o4q
+         m6HMfpPVgmLUIvE41kbdh+N5GNZ7/TTw+lbpsHvd1yFuCC8+2kw26uGk78TR6DT+6OAM
+         TFqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ng1RhCjjgJxlAMj/eBzYgJZBujugnuk3KFNVzl7SR1k=;
-        b=whjtcIBW9ffm8Jf3uF2qcyCbZgkCBmp29syNv7mig+lENp9H7W8u+MqLvgdAp1paEP
-         P7sWGi/4rwhZoeTkOtZNI3L348HAvYm/mI+5CTuGuw0VYua4yYAJiCIvXz0S3l7WtwVJ
-         C5WHB5gC+Ki+7zxX/Q1kMq9BvrAbW9/yvAquOzJEZw5Qhy7E6fkcpyt1tPVCw3hQeOG8
-         vqrUrMIXknnPNdeQp9EO5ZyTpm9jZrAN+saC3J+P/8Pe4oG0Er3JKAfzTcfqUuVS76ea
-         jcN52RHLrvS54v09RdL6h6eq84mCvSVcM7Tea+j1Yp4P4X3bMIbeLFsldsmKfMdc5OoQ
-         kyYQ==
-X-Gm-Message-State: ANoB5pn1jeZzP/zzOHRcCTL+zIT8PK3O/lbNUvjdG5IrLpGJR0JkDBye
-        4+MgE7EfX66ltKhu+/UhI9nazg==
-X-Google-Smtp-Source: AA0mqf5xdkWcge2HsPPTKQw/T0PiZ1TlDl+mmQnZvW92kI0eqJDFGtO9cNkOhYQvH9PMI4ZRWj9HkA==
-X-Received: by 2002:aa7:8589:0:b0:56d:74bf:3265 with SMTP id w9-20020aa78589000000b0056d74bf3265mr5592710pfn.19.1670613280696;
-        Fri, 09 Dec 2022 11:14:40 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id x3-20020a626303000000b00576ce9ed31csm1556787pfb.56.2022.12.09.11.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 11:14:40 -0800 (PST)
-Date:   Fri, 09 Dec 2022 11:14:40 -0800 (PST)
-X-Google-Original-Date: Fri, 09 Dec 2022 11:13:40 PST (-0800)
-Subject:     Re: [PATCH v3 2/2] mailbox: mpfs: read the system controller's status
-In-Reply-To: <20221123175652.327859-3-conor@kernel.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        jassisinghbrar@gmail.com, daire.mcnamara@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-33aa5a63-85de-4a94-a1d5-d4507a0f55c7@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhH0oDn03Su15RrfmiRJ6OPST52/3p/eRjSa0ENEnMA=;
+        b=ZQRlz9H2nSWDGczMnyjatO76Gl3K6e8tEfgaTn0IJRgCzkxs8c4VAXgiS/4WH4mWWV
+         NZBpcvrdvuvnSu35nWURRYnPB8Ips7xDL38/FduucEQsEafWm8hbJEDy6uBZLtsZAw5y
+         Dh5bne8KPCPz9oIebD9pk4KKyrhOvGvqgiTA9BaW6Ac6lJeMTQsJfjk9WbquGkv/IRd8
+         r8ahZzX6qSrqTixVwVmFU4L4FH+zpIic+3gt3uOHRytKGbvrYbW8Tn68rbvI5VBxwK4F
+         Ur3b0IS+jqBmkFnm0aTo5unOihCggkjsLOFY5i7u4321msl8kyUoavEZ4IVaZ/5Jr/BM
+         wiZw==
+X-Gm-Message-State: ANoB5pk5gk17iBN2Q/XyrZW2sXQ3nJm14gzkZ7whJ3ESz/2jVz2ZOI0H
+        csfcIwV/qi7evmdam6+E1b/tLVZV9bLXTypmHA==
+X-Google-Smtp-Source: AA0mqf4b8sAMBJ9sciFgRUXmabqkUDyuiODuiCmUhbeC9sM3eChNaYkUckgG4FAVaPsvb2ZHBIqHnoIS3NKZBMQ28w==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a17:90a:7064:b0:220:1f03:129b with
+ SMTP id f91-20020a17090a706400b002201f03129bmr15686pjk.0.1670613337554; Fri,
+ 09 Dec 2022 11:15:37 -0800 (PST)
+Date:   Fri, 09 Dec 2022 11:15:35 -0800
+In-Reply-To: <fb337a67e17715977e46523d1344cb2a7f46a37a.1667110240.git.isaku.yamahata@intel.com>
+Mime-Version: 1.0
+Message-ID: <diqz4ju4wfqg.fsf@google.com>
+Subject: Re: [PATCH v10 016/108] KVM: TDX: create/destroy VM structure
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
+        pbonzini@redhat.com, erdemaktas@google.com, seanjc@google.com,
+        sagis@google.com, dmatlack@google.com,
+        sean.j.christopherson@intel.com, kai.huang@intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,94 +69,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 09:56:52 PST (-0800), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Some services explicitly return an error code in their response, but
-> others rely on the system controller to set a status in its status
-> register. The meaning of the bits varies based on what service is
-> requested, so pass it back up to the driver that requested the service
-> in the first place. The field in the message struct already existed, but
-> was unused until now.
->
-> If the system controller is busy, in which case we should never actually
-> be in the interrupt handler, or if the service fails the mailbox itself
-> should not be read. Callers should check the status before operating on
-> the response.
->
-> There's an existing, but unused, #define for the mailbox mask - but it
-> was incorrect. It was doing a GENMASK_ULL(32, 16) which should've just
-> been a GENMASK(31, 16), so fix that up and start using it.
->
-> Fixes: 83d7b1560810 ("mbox: add polarfire soc system controller mailbox")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/mailbox/mailbox-mpfs.c | 31 ++++++++++++++++++++++++++++---
->  1 file changed, 28 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-> index cfacb3f320a6..853901acaeec 100644
-> --- a/drivers/mailbox/mailbox-mpfs.c
-> +++ b/drivers/mailbox/mailbox-mpfs.c
-> @@ -2,7 +2,7 @@
->  /*
->   * Microchip PolarFire SoC (MPFS) system controller/mailbox controller driver
->   *
-> - * Copyright (c) 2020 Microchip Corporation. All rights reserved.
-> + * Copyright (c) 2020-2022 Microchip Corporation. All rights reserved.
->   *
->   * Author: Conor Dooley <conor.dooley@microchip.com>
->   *
-> @@ -56,7 +56,7 @@
->  #define SCB_STATUS_NOTIFY_MASK BIT(SCB_STATUS_NOTIFY)
->
->  #define SCB_STATUS_POS (16)
-> -#define SCB_STATUS_MASK GENMASK_ULL(SCB_STATUS_POS + SCB_MASK_WIDTH, SCB_STATUS_POS)
-> +#define SCB_STATUS_MASK GENMASK(SCB_STATUS_POS + SCB_MASK_WIDTH - 1, SCB_STATUS_POS)
->
->  struct mpfs_mbox {
->  	struct mbox_controller controller;
-> @@ -130,13 +130,38 @@ static void mpfs_mbox_rx_data(struct mbox_chan *chan)
->  	struct mpfs_mbox *mbox = (struct mpfs_mbox *)chan->con_priv;
->  	struct mpfs_mss_response *response = mbox->response;
->  	u16 num_words = ALIGN((response->resp_size), (4)) / 4U;
-> -	u32 i;
-> +	u32 i, status;
->
->  	if (!response->resp_msg) {
->  		dev_err(mbox->dev, "failed to assign memory for response %d\n", -ENOMEM);
->  		return;
->  	}
->
-> +	/*
-> +	 * The status is stored in bits 31:16 of the SERVICES_SR register.
-> +	 * It is only valid when BUSY == 0.
-> +	 * We should *never* get an interrupt while the controller is
-> +	 * still in the busy state. If we do, something has gone badly
-> +	 * wrong & the content of the mailbox would not be valid.
-> +	 */
-> +	if (mpfs_mbox_busy(mbox)) {
-> +		dev_err(mbox->dev, "got an interrupt but system controller is busy\n");
-> +		response->resp_status = 0xDEAD;
-> +		return;
+
+In tdx_vm_init, it is possible to have a double-reclaim, which
+eventually causes a host crash. I have a selftest that reliably
+reproduces this, and I believe the problem is that withiin
+tdx_vm_free(), we don't reset kvm->tdcs = NULL and kvm->tdr.added to
+false.
+
+> +int tdx_vm_init(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	cpumask_var_t packages;
+> +	int ret, i;
+> +	u64 err;
+> +
+> +	ret = tdx_keyid_alloc();
+> +	if (ret < 0)
+> +		return ret;
+> +	kvm_tdx->hkid = ret;
+> +
+> +	ret = tdx_alloc_td_page(&kvm_tdx->tdr);
+> +	if (ret)
+> +		goto free_hkid;
+> +
+> +	kvm_tdx->tdcs = kcalloc(tdx_caps.tdcs_nr_pages, sizeof(*kvm_tdx->tdcs),
+> +				GFP_KERNEL_ACCOUNT | __GFP_ZERO);
+> +	if (!kvm_tdx->tdcs)
+> +		goto free_tdr;
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		ret = tdx_alloc_td_page(&kvm_tdx->tdcs[i]);
+> +		if (ret)
+> +			goto free_tdcs;
 > +	}
 > +
-> +	status = readl_relaxed(mbox->ctrl_base + SERVICES_SR_OFFSET);
+> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL)) {
+> +		ret = -ENOMEM;
+> +		goto free_tdcs;
+> +	}
+> +	cpus_read_lock();
+> +	/*
+> +	 * Need at least one CPU of the package to be online in order to
+> +	 * program all packages for host key id.  Check it.
+> +	 */
+> +	for_each_present_cpu(i)
+> +		cpumask_set_cpu(topology_physical_package_id(i), packages);
+> +	for_each_online_cpu(i)
+> +		cpumask_clear_cpu(topology_physical_package_id(i), packages);
+> +	if (!cpumask_empty(packages)) {
+> +		ret = -EIO;
+> +		/*
+> +		 * Because it's hard for human operator to figure out the
+> +		 * reason, warn it.
+> +		 */
+> +		pr_warn("All packages need to have online CPU to create TD. Online CPU  
+> and retry.\n");
+> +		goto free_packages;
+> +	}
 > +
 > +	/*
-> +	 * If the status of the individual servers is non-zero, the service has
-> +	 * failed. The contents of the mailbox at this point are not be valid,
-> +	 * so don't bother reading them. Set the status so that the driver
-> +	 * implementing the service can handle the result.
+> +	 * Acquire global lock to avoid TDX_OPERAND_BUSY:
+> +	 * TDH.MNG.CREATE and other APIs try to lock the global Key Owner
+> +	 * Table (KOT) to track the assigned TDX private HKID.  It doesn't spin
+> +	 * to acquire the lock, returns TDX_OPERAND_BUSY instead, and let the
+> +	 * caller to handle the contention.  This is because of time limitation
+> +	 * usable inside the TDX module and OS/VMM knows better about process
+> +	 * scheduling.
+> +	 *
+> +	 * APIs to acquire the lock of KOT:
+> +	 * TDH.MNG.CREATE, TDH.MNG.KEY.FREEID, TDH.MNG.VPFLUSHDONE, and
+> +	 * TDH.PHYMEM.CACHE.WB.
 > +	 */
-> +	response->resp_status = (status & SCB_STATUS_MASK) >> SCB_STATUS_POS;
-> +	if (response->resp_status)
+> +	mutex_lock(&tdx_lock);
+> +	err = tdh_mng_create(kvm_tdx->tdr.pa, kvm_tdx->hkid);
+> +	mutex_unlock(&tdx_lock);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_MNG_CREATE, err, NULL);
+> +		ret = -EIO;
+> +		goto free_packages;
+> +	}
+> +	tdx_mark_td_page_added(&kvm_tdx->tdr);
+> +
+> +	for_each_online_cpu(i) {
+> +		int pkg = topology_physical_package_id(i);
+> +
+> +		if (cpumask_test_and_set_cpu(pkg, packages))
+> +			continue;
+> +
+> +		/*
+> +		 * Program the memory controller in the package with an
+> +		 * encryption key associated to a TDX private host key id
+> +		 * assigned to this TDR.  Concurrent operations on same memory
+> +		 * controller results in TDX_OPERAND_BUSY.  Avoid this race by
+> +		 * mutex.
+> +		 */
+> +		mutex_lock(&tdx_mng_key_config_lock[pkg]);
+> +		ret = smp_call_on_cpu(i, tdx_do_tdh_mng_key_config,
+> +				      &kvm_tdx->tdr.pa, true);
+> +		mutex_unlock(&tdx_mng_key_config_lock[pkg]);
+> +		if (ret)
+> +			break;
+> +	}
+> +	cpus_read_unlock();
+> +	free_cpumask_var(packages);
+> +	if (ret)
+> +		goto teardown;
+> +
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		err = tdh_mng_addcx(kvm_tdx->tdr.pa, kvm_tdx->tdcs[i].pa);
+> +		if (WARN_ON_ONCE(err)) {
+> +			pr_tdx_error(TDH_MNG_ADDCX, err, NULL);
+> +			ret = -EIO;
+> +			goto teardown;
+> +		}
+> +		tdx_mark_td_page_added(&kvm_tdx->tdcs[i]);
+> +	}
+> +
+> +	/*
+> +	 * Note, TDH_MNG_INIT cannot be invoked here.  TDH_MNG_INIT requires a  
+> dedicated
+> +	 * ioctl() to define the configure CPUID values for the TD.
+> +	 */
+> +	return 0;
+> +
+> +	/*
+> +	 * The sequence for freeing resources from a partially initialized TD
+> +	 * varies based on where in the initialization flow failure occurred.
+> +	 * Simply use the full teardown and destroy, which naturally play nice
+> +	 * with partial initialization.
+> +	 */
+> +teardown:
+> +	tdx_mmu_release_hkid(kvm);
+> +	tdx_vm_free(kvm);
+> +	return ret;
+
+If there is some error that causes an exit through teardown,
+tdx_vm_free() will be called, which causes the resources to be
+freed. However, tdx_vm_free() is called a second time when the selftest
+(or qemu) exits, which causes a second reclaim to be performed.
+
+> +
+> +free_packages:
+> +	cpus_read_unlock();
+> +	free_cpumask_var(packages);
+> +free_tdcs:
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		if (!kvm_tdx->tdcs[i].va)
+> +			continue;
+> +		free_page(kvm_tdx->tdcs[i].va);
+> +	}
+> +	kfree(kvm_tdx->tdcs);
+> +	kvm_tdx->tdcs = NULL;
+> +free_tdr:
+> +	if (kvm_tdx->tdr.va) {
+> +		free_page(kvm_tdx->tdr.va);
+> +		kvm_tdx->tdr.added = false;
+> +		kvm_tdx->tdr.va = 0;
+> +		kvm_tdx->tdr.pa = 0;
+> +	}
+> +free_hkid:
+> +	if (kvm_tdx->hkid != -1)
+> +		tdx_hkid_free(kvm_tdx);
+> +	return ret;
+> +}
+
+The second reclaim is performed because kvm_tdx->tdcs is still set, and
+kvm_tdx->tdr.added is still set, so the second two if blocks in
+tdx_vm_free() are executed.
+
+> +void tdx_vm_free(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	int i;
+> +
+> +	/* Can't reclaim or free TD pages if teardown failed. */
+> +	if (is_hkid_assigned(kvm_tdx))
 > +		return;
 > +
->  	if (!mpfs_mbox_busy(mbox)) {
->  		for (i = 0; i < num_words; i++) {
->  			response->resp_msg[i] =
+> +	if (kvm_tdx->tdcs) {
+> +		for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
+> +			tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
+> +		kfree(kvm_tdx->tdcs);
+> +	}
+> +
+> +	/*
+> +	 * TDX module maps TDR with TDX global HKID.  TDX module may access TDR
+> +	 * while operating on TD (Especially reclaiming TDCS).  Cache flush with
+> +	 * TDX global HKID is needed.
+> +	 */
+> +	if (kvm_tdx->tdr.added &&
+> +		tdx_reclaim_page(kvm_tdx->tdr.va, kvm_tdx->tdr.pa, true,
+> +				tdx_global_keyid))
+> +		return;
+> +
+> +	free_page(kvm_tdx->tdr.va);
+> +}
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Here's the fix that stopped the crash I was observing
 
-I'm assuming this is aimed at some other tree.
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index 2e7916fb72a7..41d1ff1510c3 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -405,6 +405,7 @@ void tdx_vm_free(struct kvm *kvm)
+                 for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
+                         tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
+                 kfree(kvm_tdx->tdcs);
++               kvm_tdx->tdcs = NULL;
+         }
+
+         /*
+@@ -418,6 +419,9 @@ void tdx_vm_free(struct kvm *kvm)
+                 return;
+
+         free_page(kvm_tdx->tdr.va);
++       kvm_tdx->tdr.added = false;
++       kvm_tdx->tdr.va = 0;
++       kvm_tdx->tdr.pa = 0;
+  }
+
+  static int tdx_do_tdh_mng_key_config(void *param)
