@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29392648848
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09741648858
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbiLISPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S229983AbiLISRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiLISPP (ORCPT
+        with ESMTP id S229988AbiLISRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:15:15 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B71A4338
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:15:14 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so5775478pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UGtkhaHKIrr5OpNYU4T9L+BnCs/0pP1qyXvWMaI760s=;
-        b=6iTO86Yg/c+D/tyDbB1/u7VSMypyassCrDFcKnXQLmk+pJtNANCaCBZuPVolwpgZPD
-         5nhxxtWuGJ2hOBupmq8Zp03kmnFxZTPpg4ncChc9D84/DYQEhZ6L78LuSbF4rg7/5ML+
-         PHzcnP+a9LvHU+6LbXtQRNYCgdeZZP4Rsn2bGT97VZ3TYa9w4c5m1P0JrOjGxKzzkyQx
-         zYy0WDCkxyrXBY2SRUWDt5YZ5/rAOeHt7q/EmCpBIX4Qc8ulYIKshX6FTvXnyGFniucB
-         qdAnrLLt90D1lPP44uJhr8AnfFHJDV6Hf/XTPtyy0NYDd3GXcJn9j1Z0KMbiKPaXD8y9
-         y9XA==
+        Fri, 9 Dec 2022 13:17:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96950A56C4
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670609785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=570D9M8P8VwH+5u6QVwudCE9N1qA2/b8uaboQLq/EEU=;
+        b=JkTgu47BFeWBNQhJ/1yRwmo8Cg0Kxc6zyugLtgZkvnelVy8135Ti4Jd80PYy4ivNWihH2g
+        c4o6B5OcIb5kffcUWt757PbOTBozFdgTDxt6JqxlIYoeFZAPU1+/Zh4PMJ68/1MnWEMXcS
+        Eg6o2X3EMIcLwbs/WKpBAYtQi8V/ZQ8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-205-sl44lSvqNoGna0mXL7gJDA-1; Fri, 09 Dec 2022 13:16:24 -0500
+X-MC-Unique: sl44lSvqNoGna0mXL7gJDA-1
+Received: by mail-ed1-f71.google.com with SMTP id y18-20020a056402359200b004635f8b1bfbso1830163edc.17
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:16:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UGtkhaHKIrr5OpNYU4T9L+BnCs/0pP1qyXvWMaI760s=;
-        b=qqLwPlTIJrPaq+L6xqkQLCCiGKpMuSi7J7eHCICJcblBn50GyGouaGxjG+gpbp+BDx
-         yt6/tZu3CnkmnmM3lUiqbo+WVHh8V103+DxqKI9TvEXdjbuvy3BMklhrhlNX/J27Fg/c
-         b2A62JdnEkukHgyV0bb9608g1BXcNNsPKl9mQBD2f2vxXlSfIhN63unLeLy10akL6Iu+
-         4iUKjoToXAgBWxRki+ZukeS9SJ6OThBOjEFEZ9kiOOSWeABmWfJup+wRCjbpzmv0/KgP
-         iZ+ueHU8UiSOkPxl8WU8SxBa3ETbXxBs7M07KuiprMiy6kWjd0KSRWWzgAk2lbd38GjP
-         GMvw==
-X-Gm-Message-State: ANoB5pm30kDshebyk1nsTzrjfbhJ2FAIyvJ0RdBnXuP4chteWMVdR2zO
-        HKFmeQCIQBvc/3LmBoZD/yeTTkj0rNbcKxfFm69z
-X-Google-Smtp-Source: AA0mqf4XkzUN61EgDM5th316VM+D1Q3XG+pvsxXjlS+qJMhlXby8XRLO4K+xY63ljp1PmYb4MaI6gOJ3nG0Lf1RB7sE=
-X-Received: by 2002:a17:90a:2f22:b0:219:8ee5:8dc0 with SMTP id
- s31-20020a17090a2f2200b002198ee58dc0mr31097837pjd.72.1670609714373; Fri, 09
- Dec 2022 10:15:14 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=570D9M8P8VwH+5u6QVwudCE9N1qA2/b8uaboQLq/EEU=;
+        b=THa/huuPRJhRAeXbDD+9f3f9uT/dlby6x70QG9tN7DmvTJtlYOXs4r2WJCfHNXqVQB
+         ybo9SWilvn1DUthBvXgsPyVZ9xpy4W0NxjXH9k4v8RrRvH9x4rldHYTE69YTjNL2Fhyw
+         PD9OqmMJLPpQvNV+5mmFkqnL1hISvd8YwIDmKLeM67zqMTulc5oisgBrhI9VJnSpoah+
+         sV1RcKv361C3SNfUc2KAAl+r6LMFZVTErbaow1AWTgc+XVS+l4BtvOTMW9wqoCMsciZW
+         gE2I2CUH/ui9cMaWr1dHwicuCoLot6P7nvYZN+JuB9zMQ1aNkfjx555zf5NOqSg5qy15
+         Xphw==
+X-Gm-Message-State: ANoB5pn9YtEkLlX0Yho+Tk0xpegwc0aVEzPTvKN3HWfNgA4pijgRuCJc
+        LQoR+klwvwvP7vnaZKyla9DaVdb35p0XogCKv4xCerng/BSDUjsmf1IXGU7R5YIYRO7KDYPDdfa
+        NxGE9vAIF9irN//rx3XLqzpmv
+X-Received: by 2002:a17:906:7158:b0:7c0:fa2c:fd5d with SMTP id z24-20020a170906715800b007c0fa2cfd5dmr6024811ejj.59.1670609783215;
+        Fri, 09 Dec 2022 10:16:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4EMCM7etF+2vLtimJF3+DatjzHbFJKuAQdxEaB2JdPkpzen+BxVXLTDVTlvnmJWCil/XIKXg==
+X-Received: by 2002:a17:906:7158:b0:7c0:fa2c:fd5d with SMTP id z24-20020a170906715800b007c0fa2cfd5dmr6024801ejj.59.1670609783020;
+        Fri, 09 Dec 2022 10:16:23 -0800 (PST)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id j10-20020a17090623ea00b007c081cf2d25sm175268ejg.204.2022.12.09.10.16.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 10:16:22 -0800 (PST)
+Message-ID: <6338cce6-c13d-bda3-6f0b-06767122076c@redhat.com>
+Date:   Fri, 9 Dec 2022 19:16:21 +0100
 MIME-Version: 1.0
-References: <20221209160453.3246150-1-jeffxu@google.com>
-In-Reply-To: <20221209160453.3246150-1-jeffxu@google.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 9 Dec 2022 13:15:03 -0500
-Message-ID: <CAHC9VhQ2P0rif2hiVGMGafWXQyZqPQc-yGQDEzjEehH1gzWgSA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, wsa@kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221209114034.18025-1-rf@opensource.cirrus.com>
+ <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
+ <e8b6733c-33b8-cb28-a62b-21dad9bd6466@opensource.cirrus.com>
+ <c210c1d6-7327-d377-22e7-b5a123de5cbb@opensource.cirrus.com>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <c210c1d6-7327-d377-22e7-b5a123de5cbb@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 11:05 AM <jeffxu@chromium.org> wrote:
-> From: Jeff Xu <jeffxu@google.com>
->
-> Since Linux introduced the memfd feature, memfd have always had their
-> execute bit set, and the memfd_create() syscall doesn't allow setting
-> it differently.
->
-> However, in a secure by default system, such as ChromeOS, (where all
-> executables should come from the rootfs, which is protected by Verified
-> boot), this executable nature of memfd opens a door for NoExec bypass
-> and enables =E2=80=9Cconfused deputy attack=E2=80=9D.  E.g, in VRP bug [1=
-]: cros_vm
-> process created a memfd to share the content with an external process,
-> however the memfd is overwritten and used for executing arbitrary code
-> and root escalation. [2] lists more VRP in this kind.
+Hi,
 
-...
+On 12/9/22 15:22, Richard Fitzgerald wrote:
+> On 9/12/22 13:36, Richard Fitzgerald wrote:
+>> On 9/12/22 12:15, Hans de Goede wrote:
+>>> Hi Richard,
+>>>
+>>> On 12/9/22 12:40, Richard Fitzgerald wrote:
+>>>> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+>>>> i2c_mark_adapter_resumed().
+>>
+>> <snip>
+>>
+>>>
+>>> It is not entirely clear to me where the unbalance you claim to see comes
+>>> from? When runtime-suspended SMART_SUSPEND should keep it suspended at which point
+>>> the system suspend callback will never run ?
+>>>
+>>> Are you sure that you are not maybe seeing a suspend/resume ordering issue?
+>>>
+>>> Did you add printk messages to the suspend/resume callbacks of
+>>> i2c-designware-platdrv.c which show the system suspend callback
+>>> being called but not the system resume one ?
+>>>
+>>
+>> With messages in strategic places.
+>>
+>> [  169.607358] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=0 pm_runtime_status_suspended=1
+>> [  169.607361] i2c_designware i2c_designware.2: PM: __device_suspend_late: dev_pm_skip_suspend:false
+>> [  169.607364] i2c_designware i2c_designware.2: dw_i2c_plat_suspend
+>> ...
+>> [  169.702511] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
+>> [  169.706241] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
+>> [  169.706244] i2c_designware i2c_designware.2: PM: device_resume_early: dev_pm_skip_resume:true
+>> ...
+>> [  175.254832] i2c i2c-2: Transfer while suspended
+>>
+>> (Just to prove my logging isn't lying, for i2c3 it reports
+>> SMART_SUSPEND=1)
+>>
+> 
+> Oh, that's embarrassing. After confidently telling you my logging
+> is perfect, actually there was a bug in it...
+> 
+> New log summary:
+> 
+> [  162.253431] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=1 pm_runtime_status_suspended=0
 
-> [1] https://crbug.com/1305411
+Ok, so the device's pm_runtime_get() count is 0 here (otherwise must_resume
+should be 1 later on) but the device is not run-time suspended yet. Probably
+because of some timeout; or because of runtime pm getting disabled durig suspend
+before the count dropped to 0.
 
-Can you make this accessible so those of us on the public lists can
-view this bug?  If not, please remove it from future postings and
-adjust your description accordingly.
+And this scenario will indeed cause the system-level suspend callback to
+get called, but not the resume one ...
 
---=20
-paul-moore.com
+> [  162.253438] i2c_designware i2c_designware.2: PM: __device_suspend_late: dev_pm_skip_suspend:false
+> [  162.253445] i2c_designware i2c_designware.2: dw_i2c_plat_suspend
+> [  162.273115] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=1 pm_runtime_status_suspended=0
+> [  162.362547] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
+> [  162.369216] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
+> [  162.369220] i2c_designware i2c_designware.2: PM: device_resume_early: dev_pm_skip_resume:true
+> [  167.901269] i2c i2c-2: Transfer while suspended
+> 
+> Same result that it doesn't skip suspend but does skip resume.
+
+From your other email:
+
+> Ok, what do you suggest as the fix?
+> If you post an alternate fix I can test it.
+
+I don't really see a better solution, so lets go with your solution, but then:
+
+1. Simply drop the flag but don't add the if (!pm_runtime_suspended(dev))
+check. The runtime status is always going to be set to active at this point
+so the check does not do anything.
+
+2. Drop the dw_i2c_plat_complete() callback since we now always resume the controller
+on system resume.
+
+Regards,
+
+Hans
+
+
