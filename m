@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246C5647C66
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C497647C63
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiLICt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S229745AbiLICt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLICt4 (ORCPT
+        with ESMTP id S229468AbiLICtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:49:56 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23EE79C06
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670554195; x=1702090195;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=camHpBbJjLrAb2h11w8/RSo9EU+YkLRp9/dJEdKNeDk=;
-  b=fJRKmvE2mEkWGUEM1FGHgd0G0w2phKzerzvwSudZTBqofLY5INi8YLRA
-   v1ph81s3QdZoCAjE8OaE5/Sj9iB67Qs2eP14hN4JQeCaItZDtsK7gra0K
-   AFLxgBBJPFM5j9qhHdkNrTV6fAIKfGLLxcRZX3eShPGFARE/+srW2XmI+
-   yZzb0WIRL5RLdotNu8z5BYeEUP0KPHOiRw0ZGza5aj5ncT4wqjqDvM+jq
-   9hCJekDfDkI1KCWCpsjssoOVUkTwulWSTSj5Gk24U1Qx3O7OBRqBWKc7B
-   DI0/cIUlX4C3W5lKYn4Qqn6HLKXfLrfHW0QAlHnJRUaZixrMRwkHsCHhN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="381673157"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="381673157"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 18:49:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="710736287"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="710736287"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 18:49:52 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Kairui Song <ryncsn@gmail.com>
-Cc:     linux-mm@kvack.org, Kairui Song <kasong@tencent.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 1/5] swapfile: get rid of volatile and avoid redundant read
-References: <20221208180209.50845-1-ryncsn@gmail.com>
-        <20221208180209.50845-2-ryncsn@gmail.com>
-Date:   Fri, 09 Dec 2022 10:48:41 +0800
-In-Reply-To: <20221208180209.50845-2-ryncsn@gmail.com> (Kairui Song's message
-        of "Fri, 9 Dec 2022 02:02:05 +0800")
-Message-ID: <874ju5s35i.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 8 Dec 2022 21:49:24 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9B7124A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:49:23 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id fc4so8392735ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=53YW0ORFneqyG93srJ8jF+XX7zmPAnIboOzrEPTG0Ts=;
+        b=THue66vB24/bYK1OKRCFn3bh/J/RhSIiO/22Xzu3S1OMJvLXwxUmZzaqbERTDmNPxX
+         QG0p0q4606ivku/eGXQWQOeiIDGlgB5VSdhbxtsaFHyeVmlMcQ41A6JCmWrIFMjeLbed
+         1QPWt9QMzlb32nmtD26qU5ryEWB5T3z82YP51rFbEtE90bFRGxb4WH0CwWFZ9sNZBDie
+         YpGntb2COBf6JNsjRbynRwGQ5E9OEJXMlPt6aroZeRuLOjBeyF6GVdtPNDf/rxNqW9gD
+         L5jh4FvWCbafrPqPi9eRB4EyDyH9EMgnUDC9O/kvvfbe8z/Ww1BknWX/k4YRHHKzjFg+
+         S5oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=53YW0ORFneqyG93srJ8jF+XX7zmPAnIboOzrEPTG0Ts=;
+        b=QS/gYd//BFk6rb9eP7eWCYuCVDcJQ8EEsaCIWLiPh3IpzudabPE1HT0CaA+/gzbt5W
+         WvN8Hg6k+5/SCviC7l+smmklUoRM12VrRQWZzUnIKPkK4hoNQTnBngPsj4Kjs0COw5xp
+         HAPwWgyRzWEw6Yddp2CoaYWRAysQItBBuQKRpo8i9ewMAATIZ3cfzQbZb2cmrVdk+KPP
+         qeGC06xK6CgLTZnJXg+3haBsXB9lkqpAiSqnp/dJY9L9B/K/XVQ21nHvRmDKLf8e0lYs
+         wdRfLYFUTpYOikaJe8T8DH61/l67OKzhwnNp1MkIbRMy0pAXNUEvcI7nKBdrdc8oyMAs
+         qjrA==
+X-Gm-Message-State: ANoB5pnP2qbTiPO42K4EgXk5oyCal2y5r5wYJZmyTOV3ZdCfD2H8Tzfh
+        vvf4c+y/KFpbDF2tWaMT/C/8SIpyROyAjQEbKv3RmQ==
+X-Google-Smtp-Source: AA0mqf6doDwZB2F+lKd6wShNarKCxmm1N6/epMJ03LBGs+paMSVEE2cZP89QidB84RL5HCl7NJLWWsopNGHRAj14smU=
+X-Received: by 2002:a17:906:c44a:b0:7c0:d6bb:fd7 with SMTP id
+ ck10-20020a170906c44a00b007c0d6bb0fd7mr18360425ejb.726.1670554161785; Thu, 08
+ Dec 2022 18:49:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207220012.16529-1-quic_bjorande@quicinc.com>
+In-Reply-To: <20221207220012.16529-1-quic_bjorande@quicinc.com>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Thu, 8 Dec 2022 20:49:10 -0600
+Message-ID: <CAKXuJqirYDCGfOP=YMOGdacB_v0GNty7HZ+p0U19a8DpBMDGKQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/12] drm/msm: Add SC8280XP support
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kairui Song <ryncsn@gmail.com> writes:
-
-> From: Kairui Song <kasong@tencent.com>
+On Wed, Dec 7, 2022 at 4:00 PM Bjorn Andersson
+<quic_bjorande@quicinc.com> wrote:
 >
-> Convert a volatile variable to more readable READ_ONCE. And this
-> actually avoids the code from reading the variable twice redundantly
-> when it races.
+> This introduces support for the SC8280XP platform in the MDSS, DPU and
+> DP driver. It reworks the HDP handling in the DP driver to support
+> external HPD sources - such as the dp-connector, or USB Type-C altmode.
 >
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-
-LGTM, Thanks!
-
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-
-> ---
->  mm/swapfile.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> It then introduces the display clock controllers, mdss, dpu and
+> displayport controllers and link everything together, for both the MDSS
+> instances on the platform, and lastly enables EDP on the compute
+> reference device and 6 of the MiniDP outputs on the automotive
+> development platform.
 >
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 72e481aacd5d..ff4f3cb85232 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1836,13 +1836,13 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  	pte_t *pte;
->  	struct swap_info_struct *si;
->  	int ret = 0;
-> -	volatile unsigned char *swap_map;
->  
->  	si = swap_info[type];
->  	pte = pte_offset_map(pmd, addr);
->  	do {
->  		struct folio *folio;
->  		unsigned long offset;
-> +		unsigned char swp_count;
->  
->  		if (!is_swap_pte(*pte))
->  			continue;
-> @@ -1853,7 +1853,6 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  
->  		offset = swp_offset(entry);
->  		pte_unmap(pte);
-> -		swap_map = &si->swap_map[offset];
->  		folio = swap_cache_get_folio(entry, vma, addr);
->  		if (!folio) {
->  			struct page *page;
-> @@ -1870,8 +1869,10 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  				folio = page_folio(page);
->  		}
->  		if (!folio) {
-> -			if (*swap_map == 0 || *swap_map == SWAP_MAP_BAD)
-> +			swp_count = READ_ONCE(si->swap_map[offset]);
-> +			if (swp_count == 0 || swp_count == SWAP_MAP_BAD)
->  				goto try_next;
-> +
->  			return -ENOMEM;
->  		}
+>
+> The patches was previously sent separately, but submitting them together
+> here as they (except dts addition) goes in the same tree.
+>
+> Bjorn Andersson (12):
+>   dt-bindings: display/msm: Add binding for SC8280XP MDSS
+>   drm/msm/dpu: Introduce SC8280XP
+>   drm/msm: Introduce SC8280XP MDSS
+>   dt-bindings: msm/dp: Add SDM845 and SC8280XP compatibles
+>   drm/msm/dp: Stop using DP id as index in desc
+>   drm/msm/dp: Add DP and EDP compatibles for SC8280XP
+>   drm/msm/dp: Add SDM845 DisplayPort instance
+>   drm/msm/dp: Rely on hpd_enable/disable callbacks
+>   drm/msm/dp: Implement hpd_notify()
+>   arm64: dts: qcom: sc8280xp: Define some of the display blocks
+>   arm64: dts: qcom: sc8280xp-crd: Enable EDP
+>   arm64: dts: qcom: sa8295-adp: Enable DP instances
+>
+>  .../bindings/display/msm/dp-controller.yaml   |   3 +
+>  .../display/msm/qcom,sc8280xp-dpu.yaml        | 122 +++
+>  .../display/msm/qcom,sc8280xp-mdss.yaml       | 143 +++
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 243 ++++-
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  72 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 838 ++++++++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 217 +++++
+>  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+>  .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c |  18 +
+>  .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |   3 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   |   2 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
+>  drivers/gpu/drm/msm/dp/dp_display.c           | 151 ++--
+>  drivers/gpu/drm/msm/dp/dp_display.h           |   1 +
+>  drivers/gpu/drm/msm/dp/dp_drm.c               |   3 +
+>  drivers/gpu/drm/msm/dp/dp_drm.h               |   4 +
+>  drivers/gpu/drm/msm/msm_drv.h                 |   1 +
+>  drivers/gpu/drm/msm/msm_mdss.c                |   4 +
+>  18 files changed, 1770 insertions(+), 57 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sc8280xp-dpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sc8280xp-mdss.yaml
+>
+> --
+> 2.37.3
+>
+
+Tested on Lenovo Thinkpad X13s
+Tested-by: Steev Klimaszewski <steev@kali.org>
