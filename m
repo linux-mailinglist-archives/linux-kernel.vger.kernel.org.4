@@ -2,136 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280506484A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68086484B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiLIPH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:07:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S230299AbiLIPIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiLIPHP (ORCPT
+        with ESMTP id S230179AbiLIPGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:07:15 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB94E31DC3;
-        Fri,  9 Dec 2022 07:07:13 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NTDj50wv1z9v7cV;
-        Fri,  9 Dec 2022 23:00:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwC37PgAT5NjmZfRAA--.1505S2;
-        Fri, 09 Dec 2022 16:06:48 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v2] KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
-Date:   Fri,  9 Dec 2022 16:06:33 +0100
-Message-Id: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 9 Dec 2022 10:06:54 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36445AE1A;
+        Fri,  9 Dec 2022 07:06:38 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id l11so3457721edb.4;
+        Fri, 09 Dec 2022 07:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0FxyA7dRkxBEiA6ABsejXOaJjVnfAPVgsqCFDw63Vww=;
+        b=namGDfXr4MGPMZxP3nrt9pzbvsKGF0ESYiU7Do/5RXM2jt+E+2Rq/+hYXmR3WJfctu
+         paBGsHOfW1pS2JW/Fvs+HB4ykFOJ5IWINx9CYlcbKEYD2xGy3e19FBT6XIvPJP/lqDw/
+         dp8SCQzzT4xXxZ1/O1MJZa0kzszCNjBi1zWcyUhnYS0iGPdrTIWCuXrhkKmvHO/1RE3Z
+         zOxPBZZOpRGlJfG7qEPIOweOfs/wkDthNFv6gC5zUxZg3Euf2tm1+l0udGaGphGmuoeL
+         KMahhZtgQakXwW2Heam27xdjTZ/Uxpoy5U8aPVs99uSflPfANlDYSvECAMH5XRQTnWT+
+         vgyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0FxyA7dRkxBEiA6ABsejXOaJjVnfAPVgsqCFDw63Vww=;
+        b=oIQQEG1fnJMDlLm3H8tAWo0r4k0VimFy07rVb7JKmzYWfsbsZyPET38Wfkqfm1rPs5
+         S3pIFsvAkurdDvxNZpjaJrYLKgkX80zMQ+gVKAWeVDj9GKaNKGForBSnpCEgV4IllCRH
+         3ayrDUkLZTSF6YoCWTFlnPDMl4tEtTd7Dnc3UgmsCGj5ew47TUcDnUsAOPc3vzt7odYR
+         IRZg1SZw94lOcw+YFC+Ik3ZbRqzziCGrdyOXGGNnFI71K5Rp360TfFbH3scNgXPTs1BV
+         HsY4VSconUN2C/84XGwBm3Qgg3D/hJ1r/91z5rj4KwAKcsOq57vGOHF/H2giUCnygUh6
+         NXMg==
+X-Gm-Message-State: ANoB5pl1p0hef8FXVz17WCyRP6WeuapABpTUHn8xgb7de8LltDrmcx1u
+        PA5KzrgK/oZyI31+C+LFfAw=
+X-Google-Smtp-Source: AA0mqf5PRBO/SVeCnQCwec3v9rkM7eGcNMfYFagDRFkAM0l70GiIOIg3rfAq+KWjVDvsVd8GkDWoOA==
+X-Received: by 2002:a05:6402:5508:b0:462:2e05:30ce with SMTP id fi8-20020a056402550800b004622e0530cemr5016565edb.42.1670598397120;
+        Fri, 09 Dec 2022 07:06:37 -0800 (PST)
+Received: from skbuf ([188.27.185.190])
+        by smtp.gmail.com with ESMTPSA id z2-20020aa7d402000000b0046182b3ad46sm737298edq.20.2022.12.09.07.06.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 07:06:36 -0800 (PST)
+Date:   Fri, 9 Dec 2022 17:06:34 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com,
+        ceggers@arri.de
+Subject: Re: [Patch net-next v3 07/13] net: dsa: microchip: ptp: add packet
+ reception timestamping
+Message-ID: <20221209150634.gb3mdxphq3dt3kfi@skbuf>
+References: <20221209072437.18373-1-arun.ramadoss@microchip.com>
+ <20221209072437.18373-8-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwC37PgAT5NjmZfRAA--.1505S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4xCry8tF47try5uF1UAwb_yoW5Wrykpa
-        n5WrW5tFyUGr1Skry3Aw4Ik34rAw4kJFW2gw4Iyws5uwn8XrZ3C3yIvF43WFyxJrykWryf
-        trWkWw4UuF1UXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-        n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
-        ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUxo7KDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4J50AACsf
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209072437.18373-8-arun.ramadoss@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Dec 09, 2022 at 12:54:31PM +0530, Arun Ramadoss wrote:
+> From: Christian Eggers <ceggers@arri.de>
+> 
+> Rx Timestamping is done through 4 additional bytes in tail tag.
+> Whenever the ptp packet is received, the 4 byte hardware time stamped
+> value is added before 1 byte tail tag. Also, bit 7 in tail tag indicates
+> it as PTP frame. This 4 byte value is extracted from the tail tag and
+> reconstructed to absolute time and assigned to skb hwtstamp.
+> If the packet received in PDelay_Resp, then partial ingress timestamp
+> is subtracted from the correction field. Since user space tools expects
+> to be done in hardware.
+> 
+> Signed-off-by: Christian Eggers <ceggers@arri.de>
+> Co-developed-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> 
+> ---
 
-Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-mapping") checks that both the signature and the digest reside in the
-linear mapping area.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-stack support"), made it possible to move the stack in the vmalloc area,
-which is not contiguous, and thus not suitable for sg_set_buf() which needs
-adjacent pages.
+> +bool ksz_port_rxtstamp(struct dsa_switch *ds, int port, struct sk_buff *skb,
+> +		       unsigned int type)
+> +{
+> +	struct skb_shared_hwtstamps *hwtstamps = skb_hwtstamps(skb);
+> +	struct ksz_device *dev = ds->priv;
+> +	struct ptp_header *ptp_hdr;
+> +	u8 ptp_msg_type;
+> +	ktime_t tstamp;
+> +	s64 correction;
+> +
+> +	tstamp = KSZ_SKB_CB(skb)->tstamp;
+> +	memset(hwtstamps, 0, sizeof(*hwtstamps));
+> +	hwtstamps->hwtstamp = ksz_tstamp_reconstruct(dev, tstamp);
+> +
+> +	ptp_hdr = ptp_parse_header(skb, type);
+> +	if (!ptp_hdr)
+> +		goto out;
+> +
+> +	ptp_msg_type = ptp_get_msgtype(ptp_hdr, type);
+> +	if (ptp_msg_type != PTP_MSGTYPE_PDELAY_REQ)
+> +		goto out;
+> +
+> +	/* Only subtract the partial time stamp from the correction field.  When
+> +	 * the hardware adds the egress time stamp to the correction field of
+> +	 * the PDelay_Resp message on tx, also only the partial time stamp will
+> +	 * be added.
+> +	 */
+> +	correction = (s64)get_unaligned_be64(&ptp_hdr->correction);
+> +	correction -= ktime_to_ns(tstamp) << 16;
+> +
+> +	ptp_header_update_correction(skb, type, ptp_hdr, correction);
+> +
+> +out:
+> +	return 0;
 
-Always make a copy of the signature and digest in the same buffer used to
-store the key and its parameters, and pass them to sg_set_buf(). Prefer it
-to conditionally doing the copy if necessary, to keep the code simple. The
-buffer allocated with kmalloc() is in the linear mapping area.
+Nitpick: port_rxtstamp() returns "bool" as in "should reception of this
+packet be deferred until the full RX timestamp is available?". The
+answer of 0 is coincidentally correct, but should have been "false".
 
-Cc: stable@vger.kernel.org # 4.9.x
-Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- crypto/asymmetric_keys/public_key.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 2f8352e88860..ccc091119972 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -363,6 +363,7 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	struct scatterlist src_sg[2];
- 	char alg_name[CRYPTO_MAX_ALG_NAME];
- 	char *key, *ptr;
-+	u32 key_max_len;
- 	int ret;
- 
- 	pr_devel("==>%s()\n", __func__);
-@@ -400,8 +401,12 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	if (!req)
- 		goto error_free_tfm;
- 
--	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
--		      GFP_KERNEL);
-+	key_max_len = max_t(u32,
-+			    pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-+			    sig->s_size + sig->digest_size);
-+
-+	/* key is used to store the sig and digest too. */
-+	key = kmalloc(key_max_len, GFP_KERNEL);
- 	if (!key)
- 		goto error_free_req;
- 
-@@ -424,9 +429,13 @@ int public_key_verify_signature(const struct public_key *pkey,
- 			goto error_free_key;
- 	}
- 
-+	memcpy(key, sig->s, sig->s_size);
-+	memcpy(key + sig->s_size, sig->digest, sig->digest_size);
-+
- 	sg_init_table(src_sg, 2);
--	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
--	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-+	/* Cannot use one scatterlist. The first needs to be s->s_size long. */
-+	sg_set_buf(&src_sg[0], key, sig->s_size);
-+	sg_set_buf(&src_sg[1], key + sig->s_size, sig->digest_size);
- 	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
- 				   sig->digest_size);
- 	crypto_init_wait(&cwait);
--- 
-2.25.1
-
+> +}
+> +
+>  static int _ksz_ptp_gettime(struct ksz_device *dev, struct timespec64 *ts)
+>  {
+>  	u32 nanoseconds;
