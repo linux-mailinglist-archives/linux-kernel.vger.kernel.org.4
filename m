@@ -2,118 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C075A6481A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E58B6481A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiLIL2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S229790AbiLIL1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiLIL2A (ORCPT
+        with ESMTP id S229479AbiLIL1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:28:00 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72A045A3A;
-        Fri,  9 Dec 2022 03:27:57 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9B9iT0003641;
-        Fri, 9 Dec 2022 11:27:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ZSlPhvT/Gwt3QBnevDKmiLdO/2ODroa0WQHJW/W3Nzs=;
- b=fxrW5YkcLRZnVzvUH6NfcsrYkynmfHCYiZkVsCXD9HGXtvlyjxBth+Zc4INNV40Kysht
- saP5obwcZcsh2jqduzG0rBxqm8XOzY9JmVuZ1T92+fLDLzMm9xw9LCeTwujmJMFwb+pw
- RE86tCTXEzPzFMDW8sOKYUhgFHgEMZEDUN7gSWiCUrOwLoXXacCw2cM2lj3xZUbMjFoM
- l+DV1EyGZsUU68fd28UaJDp1YeyKa9MJ0FhgC0quVfQ7oOIJw5sDQlx98CO0Uc4PqUn0
- CRIU0ywV7gqcl/p/zkqZ+kL8+sSXspr/gWQpNPmZrfXjv2WhyJRwozfU9x3u0R3XezwF ug== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mbxakfuf8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Dec 2022 11:27:53 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8Kw6Mh004817;
-        Fri, 9 Dec 2022 11:27:51 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3m9kvbdvx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Dec 2022 11:27:51 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B9BRlsV44827088
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Dec 2022 11:27:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D524620040;
-        Fri,  9 Dec 2022 11:27:47 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C43DA2004D;
-        Fri,  9 Dec 2022 11:27:47 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri,  9 Dec 2022 11:27:47 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id 8656BE027E; Fri,  9 Dec 2022 12:27:47 +0100 (CET)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH v2 2/2] tty/vt: prevent registration of console with invalid number
-Date:   Fri,  9 Dec 2022 12:27:37 +0100
-Message-Id: <20221209112737.3222509-3-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221209112737.3222509-1-svens@linux.ibm.com>
-References: <20221209112737.3222509-1-svens@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2CbJFMTMhpsNEWfV2R6OLT-wR3N1LIQk
-X-Proofpoint-ORIG-GUID: 2CbJFMTMhpsNEWfV2R6OLT-wR3N1LIQk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-09_04,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- mlxlogscore=774 impostorscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212090066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Dec 2022 06:27:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D306CD11C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:27:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F48462228
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBC95C433D2;
+        Fri,  9 Dec 2022 11:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670585263;
+        bh=R9rAfVVymVvpnxrvUlohdqpNC5TLNy/FhPqdee8K+DY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ww1N+yWQcZxpA7ENd51R3wCFQKy15TM8ZUZgqYH6PunVkpduqE4lkeq8sMom9rvZx
+         Lhh6sdgM/iETa1e2k0kZpnj6NrWeiGQwt3UtXEmY/sQ/Hcw5bPp0NY50MVKIUG6FvP
+         v6+d76yWg2NQULrKmL8lKqP82asg4WXfH2pFgDEEHIznyrOGuxF6Pk1FajYI6xToGb
+         0lUTMM26ezuj3EdDBgc5fN6k94dwwji5aYYaGhjQzsSd6rrE2l/uFfbMztELW2+RN0
+         LWEWVTR7iJWM/NIvdvYdzuVwwRucE8MsyAPMzraD0dJd6Ve4azz2xn7aoPyvYvjDAA
+         baEBXsHg5/q6Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p3bXZ-00BZkv-Sl;
+        Fri, 09 Dec 2022 11:27:41 +0000
+Date:   Fri, 09 Dec 2022 11:27:41 +0000
+Message-ID: <86edt8rf4i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Harry Song <jundongsong1@gmail.com>, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
+In-Reply-To: <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
+References: <20221207135223.3938-1-jundongsong1@gmail.com>
+        <86a63zkzru.wl-maz@kernel.org>
+        <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
+        <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sebastian.reichel@collabora.com, jundongsong1@gmail.com, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a user specifies an invalid console like 'console=tty3000',
-the vt driver should prevent setting up a vt entry for that.
+On Thu, 08 Dec 2022 16:58:20 +0000,
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+> 
+> [1  <text/plain; us-ascii (quoted-printable)>]
+> Hi,
+> 
+> On Thu, Dec 08, 2022 at 10:28:29AM +0800, Harry Song wrote:
+> > On Wed, Dec 7, 2022 at 11:19 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Wed, 07 Dec 2022 13:52:23 +0000,
+> > > Harry Song <jundongsong1@gmail.com> wrote:
+> > > >
+> > > > I know this is a very wrong patch, but my platform
+> > > > has an abnormal ITS problem caused by data consistency:
+> > > > My chip does not support Cache Coherent Interconnect (CCI).
+> > >
+> > > That doesn't mean much. Nothing mandates to have a CCI, and plenty of
+> > > systems have other ways to maintain coherency.
+> > >
+> > > > By default, ITS driver is the inner memory attribute.
+> > > > gits_write_cbaser() is used to write the inner memory
+> > > > attribute. But hw doesn't return the hardware's non-shareable
+> > > > property,so I don't think reading GITS_CBASER and GICR_PROPBASER
+> > > > here will get the real property of the current hardware: inner
+> > > > or outer shareable is not supported, so I would like to know
+> > > > whether ITS driver cannot be used on chips without CCI, or
+> > > > what method can be used to use ITS driver on chips without CCI?
+> > >
+> > > It's not about CCI or not CCI. It is about which shareability domain
+> > > your ITS is in.
+> > >
+> > > And it doesn't only affect the ITS. It also affects the
+> > > redistributors, and anything that accesses memory.
+> > >
+> > 
+> > Yes, my current chip is Rockchip platform (rk3588), so is it because the chip
+> > is not designed as a proper shared domain for ITS, so the exception of
+> > ITS is caused?
+> > 
+> > > >
+> > > > The current patch is designed to make ITS think that the current
+> > > > chip has no inner or outer memory properties, and then use
+> > > > its by flushing dcache.
+> > > >
+> > > > This is the log for bug reports without patches:
+> > > >
+> > > > [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x0000000003460000
+> > > > [    0.000000] ITS [mem 0x03440000-0x0345ffff]
+> > > > [    0.000000] ITS@0x0000000003440000: allocated 8192 Devices @41850000 (indirect, esz 8, psz 64K, shr 0)
+> > > > [    0.000000] ITS@0x0000000003440000: allocated 32768 Interrupt Collections @41860000 (flat, esz 2, psz 64K, shr 0)
+> > > > [    0.000000] GICv3: using LPI property table @0x0000000041870000
+> > > > [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000041880000
+> > > > [    0.000000] ITS queue timeout (64 1)
+> > > > [    0.000000] ITS cmd its_build_mapc_cmd failed
+> > > > [    0.000000] ITS queue timeout (128 1)
+> > > > [    0.000000] ITS cmd its_build_invall_cmd failed
+> > >
+> > > Ah, this suspiciously looks like a Rockchip machine...
+> > >
+> > > >
+> > > > Signed-off-by: Harry Song <jundongsong1@gmail.com>
+> > > > ---
+> > > >
+> > > > I am very sorry to bother you. This problem has been bothering me
+> > > > for several weeks.  I am looking forward to your reply.
+> > >
+> > > If you have such issue, this needs to be handled as per-platform
+> > > quirk. I'm not putting such generic hacks in the driver.
+> > >
+> > >         M.
+> > >
+> > > --
+> > > Without deviation from the norm, progress is not possible.
+> > 
+> > Are there currently other chip platforms that have this problem, and then ITS
+> > is already compatible with the problem? Please tell me how to submit
+> > hacks patch for rk3588 platform?
+> > 
+> > If the hacks patch cannot be submitted, please tell me whether it
+> > requires the next generation
+> > chip to have any design requirements for ITS?
+> > 
+> > Design ITS and CPU to be the same inner memory property?
+> 
+> Previous rockchip generation has the same bug and it got discussed
+> here:
+> 
+> https://lore.kernel.org/lkml/871rbdt4tu.wl-maz@kernel.org/T/#m5dbc70ff308d81e98dd0d797e23d3fbf9c353245
+> 
+> You can use this DT as base with mainline to avoid ITS:
+> 
+> https://lore.kernel.org/all/20221205172350.75234-1-sebastian.reichel@collabora.com/
 
-Suggested-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- drivers/tty/vt/vt.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Using the MBI region really isn't the same thing. You're limited to a
+handful of MSI instead of 64k, and you don't get any device isolation.
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 981d2bfcf9a5..62c8a45ad731 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -3156,8 +3156,14 @@ static struct tty_driver *vt_console_device(struct console *c, int *index)
- 	return console_driver;
- }
- 
-+static int vt_console_setup(struct console *co, char *options)
-+{
-+	return co->index >= MAX_NR_CONSOLES ? -EINVAL : 0;
-+}
-+
- static struct console vt_console_driver = {
- 	.name		= "tty",
-+	.setup		= vt_console_setup,
- 	.write		= vt_console_print,
- 	.device		= vt_console_device,
- 	.unblank	= unblank_screen,
+Also, your usage of the GIC binding is pretty broken. A single PPI
+partition covering all the CPUs, the two PMU having the same PPI and
+#interrupt-calls=3, that's all completely wrong.
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
