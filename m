@@ -2,80 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABC0648608
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3343464860C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiLIP4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
+        id S230134AbiLIP7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiLIP4q (ORCPT
+        with ESMTP id S229949AbiLIP7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:56:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D4520F41;
-        Fri,  9 Dec 2022 07:56:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Dec 2022 10:59:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E65F3B9E9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:58:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670601519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XJPm4fwaRggOYMPWB+4OQhr2AoXrB0vtei9ZF45OHV8=;
+        b=AJeyRRMDE0+GQwI7FL8lfAs9H614ONaCNxaRbiXhfjclswe2dscJ6GpgIDYNck6RkHCD+0
+        Bu3J7kV54WuhXphpptBbu/oqqF1hzy8oCWOzYTJK6aCftspsuxz0UkYr+2hGwKwGLnKbWk
+        s1PTHe7ZtdSJbxJalZfq5624wzSgjds=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-B696t4EsMfiGoAAspXHKFA-1; Fri, 09 Dec 2022 10:58:36 -0500
+X-MC-Unique: B696t4EsMfiGoAAspXHKFA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCED7B82896;
-        Fri,  9 Dec 2022 15:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9F96C433D2;
-        Fri,  9 Dec 2022 15:56:41 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 10:56:40 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] ftrace: Fix print_ip_ins() to print only two digits per
- byte
-Message-ID: <20221209105640.6d5eda0e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A33E429AA2EF;
+        Fri,  9 Dec 2022 15:58:35 +0000 (UTC)
+Received: from [10.22.9.164] (unknown [10.22.9.164])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E1AE1401C30;
+        Fri,  9 Dec 2022 15:58:34 +0000 (UTC)
+Message-ID: <8641d4a4-4d60-0f31-120c-56628f477ba2@redhat.com>
+Date:   Fri, 9 Dec 2022 10:58:32 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH-block 3/3] blk-cgroup: Flush stats at blkgs destruction
+ path
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
+References: <20221208220141.2625775-1-longman@redhat.com>
+ <20221208220141.2625775-4-longman@redhat.com>
+ <e8a09f5d-afce-608f-220b-6b32b3ae37b9@kernel.dk>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <e8a09f5d-afce-608f-220b-6b32b3ae37b9@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 12/8/22 18:00, Jens Axboe wrote:
+> On 12/8/22 3:01?PM, Waiman Long wrote:
+>> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+>> index 793ecff29038..910e633869b0 100644
+>> --- a/kernel/cgroup/rstat.c
+>> +++ b/kernel/cgroup/rstat.c
+>> @@ -281,6 +281,26 @@ void cgroup_rstat_flush_release(void)
+>>   	spin_unlock_irq(&cgroup_rstat_lock);
+>>   }
+>>   
+>> +/**
+>> + * cgroup_rstat_css_cpu_flush - flush stats for the given css and cpu
+>> + * @css: target css to be flush
+>> + * @cpu: the cpu that holds the stats to be flush
+>> + *
+>> + * A lightweight rstat flush operation for a given css and cpu.
+>> + * Only the cpu_lock is being held for mutual exclusion, the cgroup_rstat_lock
+>> + * isn't used.
+>> + */
+>> +void cgroup_rstat_css_cpu_flush(struct cgroup_subsys_state *css, int cpu)
+>> +{
+>> +	raw_spinlock_t *cpu_lock = per_cpu_ptr(&cgroup_rstat_cpu_lock, cpu);
+>> +
+>> +	raw_spin_lock_irq(cpu_lock);
+>> +	rcu_read_lock();
+>> +	css->ss->css_rstat_flush(css, cpu);
+>> +	rcu_read_unlock();
+>> +	raw_spin_unlock_irq(cpu_lock);
+>> +}
+>> +
+>>   int cgroup_rstat_init(struct cgroup *cgrp)
+>>   {
+>>   	int cpu;
+> As I mentioned last time, raw_spin_lock_irq() will be equivalent to an
+> RCU protected section anyway, so you don't need to do both. Just add a
+> comment on why rcu_read_lock()/rcu_read_unlock() isn't needed inside the
+> raw irq safe lock.
 
-Fix print_ip_ins() to use unsigned char, as:
+Yes, you are right.  We don't need rcu_read_lock() here. I put it there 
+to follow the locking pattern in cgroup_rstat_flush_locked(). I will 
+remove it in the next version.
 
-	e9:2b:b6:0d:18
-
-is easier to understand than
-
-	ffffffe9:2b:ffffffb6:0d:18
-
-Link: https://lore.kernel.org/all/CA+wXwBQ-VhK+hpBtYtyZP-NiX4g8fqRRWithFOHQW-0coQ3vLg@mail.gmail.com/
-
-Cc: stable@vger.kernel.org
-Fixes: 6c14133d2d3f7 ("ftrace: Do not blindly read the ip address in ftrace_bug()")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/ftrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index d04552c0c275..32fc1600d596 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2028,7 +2028,7 @@ static int ftrace_hash_ipmodify_update(struct ftrace_ops *ops,
- 
- static void print_ip_ins(const char *fmt, const unsigned char *p)
- {
--	char ins[MCOUNT_INSN_SIZE];
-+	unsigned char ins[MCOUNT_INSN_SIZE];
- 
- 	if (copy_from_kernel_nofault(ins, p, MCOUNT_INSN_SIZE)) {
- 		printk(KERN_CONT "%s[FAULT] %px\n", fmt, p);
--- 
-2.35.1
+Cheers,
+Longman
 
