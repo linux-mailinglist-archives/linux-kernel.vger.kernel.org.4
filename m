@@ -2,110 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF69C648A19
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9982E648A1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiLIVdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 16:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
+        id S229938AbiLIVfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 16:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLIVdM (ORCPT
+        with ESMTP id S229822AbiLIVfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:33:12 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA81572B;
-        Fri,  9 Dec 2022 13:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670621591; x=1702157591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eGoeiXR1p93X5YrzuAODssrWSeub6r/Gldo3L3agRqU=;
-  b=gdky48IUoqHkza2gs6Abjg1FCDP+TQjIj5T8QgowDL9F+upZRInPLuq5
-   Vwrn8L0QWActDffDfBl9/XprQQiFLDOm5lf7vhrTeJj0LxEycrwftASIR
-   J8H7rxuKMArwMxxnlnb/yNgEyYnXbsQBeei+jA99xdsUCv8LkYr6pUoZN
-   D/UmGLxBzRsx4dJ+LhbR23q4vYLcpoR/sehRnNFoag9eV8w4bkm2ZIV5i
-   g9/ONF0vJ49p2pWsqsbRUjObllDohzlGH4SsaZDTq/+KxxNlSrnD+N1oA
-   I9N/uaYzQJ4V6OhfYcpxwagux3VizoyWBfITH9J9NoM+kYDnAz57ln72i
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="318704344"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="318704344"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 13:33:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="892805570"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="892805570"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Dec 2022 13:33:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p3kzQ-007C8N-2r;
-        Fri, 09 Dec 2022 23:33:04 +0200
-Date:   Fri, 9 Dec 2022 23:33:04 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 3/4] x86/PCI: Tidy E820 removal messages
-Message-ID: <Y5OpkCs3HjIz1ghq@smile.fi.intel.com>
-References: <Y5OBfjKXFc5d88i1@smile.fi.intel.com>
- <20221209203428.GA1721600@bhelgaas>
+        Fri, 9 Dec 2022 16:35:34 -0500
+Received: from out-162.mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF8B9231C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:35:32 -0800 (PST)
+Date:   Fri, 9 Dec 2022 21:35:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670621730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=agoBlhJw/+KDy0+W1zZ2GK62ctFzKYI+xFVcrAtjBk8=;
+        b=NS3bk9bTW9yLMUQP30XiRdXGlm8TEp49GntXjwxUVIVsQeD+1YLPL1WSTesnsFRMj2C5eZ
+        W73BsYN6UvL8vHW74CeWdogfHe73GQIRS/cPcBODhsokqQ0TuoGYty61NU5wXaoRkdTPkn
+        xxWmMg1XF3PjR6O8sxtFMuAkKAxtZZY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Peter Gonda <pgonda@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/7] KVM: selftests: Avoid infinite loop if
+ ucall_alloc() fails
+Message-ID: <Y5OqHUxCblbiysuo@google.com>
+References: <20221209015307.1781352-1-oliver.upton@linux.dev>
+ <20221209015307.1781352-8-oliver.upton@linux.dev>
+ <Y5OisdH5ohtr6r3j@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209203428.GA1721600@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5OisdH5ohtr6r3j@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 02:34:28PM -0600, Bjorn Helgaas wrote:
-> On Fri, Dec 09, 2022 at 08:42:06PM +0200, Andy Shevchenko wrote:
-> > On Thu, Dec 08, 2022 at 01:03:40PM -0600, Bjorn Helgaas wrote:
+On Fri, Dec 09, 2022 at 09:03:45PM +0000, Sean Christopherson wrote:
 
-...
+[...]
 
-> > > +			if (avail->end > avail->start)
-> > > +				pr_info("resource: remaining [mem %#010llx-%#010llx] available\n",
-> > > +					(unsigned long long) avail->start,
-> > > +					(unsigned long long) avail->end);
-> > 
-> > Is there any point why we do not use %pa for resource_size_t parameters?
+> > -	GUEST_ASSERT(0);
+> > +out:
+> > +	/*
+> > +	 * If the guest cannot grab a ucall structure from the pool then the
+> > +	 * only option to get out to userspace is a bare ucall. This is probably
+> > +	 * a good time to mention that guest assertions depend on ucalls with
+> > +	 * arguments too.
+> > +	 */
+> > +	GUEST_UCALL_NONE();
 > 
-> Only my ignorance :)  Thanks for pointing that out; I changed it to
-> this and added a comment about why:
+> UCALL_NONE isn't much better than infinite stack recursion, e.g. a test might end
+> up passing by dumb luck, or go in the wrong direction because it sometimes handles
+> UCALL_NONE.
 
-> +			pr_info("resource: avoiding allocation from e820 entry [mem %#010Lx-%#010Lx]\n",
-> +				e820_start, e820_end);
-> +			if (avail->end > avail->start)
-> +				/*
-> +				 * Use %pa instead of %pR because "avail"
-> +				 * is typically IORESOURCE_UNSET, so %pR
-> +				 * shows the size instead of addresses.
-> +				 */
-> +				pr_info("resource: remaining [mem %pa-%pa] available\n",
-> +					&avail->start, &avail->end);
+Oh, I was just seeking an end to my misery. Yeah, we can use a magic
+value to signal this instead.
 
-LGTM, thanks!
+> How about this?
 
--- 
-With Best Regards,
-Andy Shevchenko
+LGTM.
 
+--
+Thanks,
+Oliver
 
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Fri, 9 Dec 2022 12:55:44 -0800
+> Subject: [PATCH] KVM: selftests: Use magic value to signal ucall_alloc()
+>  failure
+> 
+> Use a magic value to signal a ucall_alloc() failure instead of simply
+> doing GUEST_ASSERT().  GUEST_ASSERT() relies on ucall_alloc() and so a
+> failure puts the guest into an infinite loop.
+> 
+> Use -1 as the magic value, as a real ucall struct should never wrap.
+> 
+> Reported-by: Oliver Upton <oliver.upton@linux.dev>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/ucall_common.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> index 0cc0971ce60e..2f0e2ea941cc 100644
+> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> @@ -4,6 +4,8 @@
+>  #include "linux/bitmap.h"
+>  #include "linux/atomic.h"
+>  
+> +#define GUEST_UCALL_FAILED -1
+> +
+>  struct ucall_header {
+>  	DECLARE_BITMAP(in_use, KVM_MAX_VCPUS);
+>  	struct ucall ucalls[KVM_MAX_VCPUS];
+> @@ -41,7 +43,8 @@ static struct ucall *ucall_alloc(void)
+>  	struct ucall *uc;
+>  	int i;
+>  
+> -	GUEST_ASSERT(ucall_pool);
+> +	if (!ucall_pool)
+> +		goto ucall_failed;
+>  
+>  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+>  		if (!test_and_set_bit(i, ucall_pool->in_use)) {
+> @@ -51,7 +54,13 @@ static struct ucall *ucall_alloc(void)
+>  		}
+>  	}
+>  
+> -	GUEST_ASSERT(0);
+> +ucall_failed:
+> +	/*
+> +	 * If the vCPU cannot grab a ucall structure, make a bare ucall with a
+> +	 * magic value to signal to get_ucall() that things went sideways.
+> +	 * GUEST_ASSERT() depends on ucall_alloc() and so cannot be used here.
+> +	 */
+> +	ucall_arch_do_ucall(GUEST_UCALL_FAILED);
+>  	return NULL;
+>  }
+>  
+> @@ -93,6 +102,9 @@ uint64_t get_ucall(struct kvm_vcpu *vcpu, struct ucall *uc)
+>  
+>  	addr = ucall_arch_get_ucall(vcpu);
+>  	if (addr) {
+> +		TEST_ASSERT(addr != (void *)GUEST_UCALL_FAILED,
+> +			    "Guest failed to allocate ucall struct");
+> +
+>  		memcpy(uc, addr, sizeof(*uc));
+>  		vcpu_run_complete_io(vcpu);
+>  	} else {
+> 
+> base-commit: dc2efbe4813e0dc4368779bc36c5f0e636cb8eb2
+> -- 
+> 
