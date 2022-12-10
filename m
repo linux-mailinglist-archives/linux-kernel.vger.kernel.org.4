@@ -2,231 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E620F64902A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106AE64902B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiLJSfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 13:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229721AbiLJSg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 13:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJSfC (ORCPT
+        with ESMTP id S229475AbiLJSg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 13:35:02 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A395413DE1;
-        Sat, 10 Dec 2022 10:35:01 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so8206578pjm.2;
-        Sat, 10 Dec 2022 10:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uY04nYXLVzuNbDq8d1mF0P2iWu8Vn/aqFvQdGInkT+U=;
-        b=Q4Z+xbyvQLwy6YCSc3VKV/vv66l6CO/FJX6LLn1CZqXpM7GmPTER00jPUfsDLbpxQR
-         NXxBhcjscA5Ksyai91lI8ZTKrgvdD4uGPeLTBSHhLQ1We78ZgiDjQgYuq/K1oxPXp269
-         olUX7zXOKyl3iiosYHagArqjSc+/xUEUK+gom6eL4PLR4gKFa5127JmBOMa1iMdflG03
-         0Tvbfcs6cDJS29KnFrDlSP9Zn1qD/q95LQOOrZo3keK1uT5eJzGTigCGJc8qbsaUVan/
-         mp8hZLY/k20sWRXmcgTtBD4lnyJaKpqTJYwyimmtI8nBHV8WjiFA2HJrcS71uasFC8Yl
-         vZSg==
+        Sat, 10 Dec 2022 13:36:26 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE241743F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:36:25 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id a14-20020a921a0e000000b00302a8ffa8e5so2139566ila.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:36:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uY04nYXLVzuNbDq8d1mF0P2iWu8Vn/aqFvQdGInkT+U=;
-        b=4Hx9pFy7zsGELBg5rX62wbed3FEodupm/3g8TRiQdmtDbegSS6GisZjeJMJbRWZRrd
-         wM2Vxnav3sPCKwSoNQD+vR9nJp9p5KhLASrNjh+e+bG9dJkptBQC1xrm2xduLvpgyli4
-         QVwX8BnY0APBAD5MAwuK2UPLXukry3R7Rn/Q9Tvfx/GqxCZfWAUPQUjKL6Mxbdzt3sIu
-         lhsIm5VoGqv3nHn+tT/5QVfQqA66UnWnigWPAxNXEtLPazI3EeLCPoOM7wORTQqpaYyw
-         Pln7ZYiE7/PjTPxg5MqaQiU0LEsMOXWI6IeXJ8lYtLiI4rW9LQ0OAt11DMk5FPfAOe8z
-         2qpg==
-X-Gm-Message-State: ANoB5plo0YIUzvJuRGwW8OS6Lz5Z9huanyqbzjYPeYrS+oAakQeXmh3y
-        7Uh8IEBRgMkKc8fciMYNFa7PcZvTOKeF/Q==
-X-Google-Smtp-Source: AA0mqf76RYscAg1y9pG9/V2uIzR4qfwCHDjtAQeDrqt0Ng4Drg0kpNnJL8CGXsSELP0WzP1fPI/sCA==
-X-Received: by 2002:a05:6a20:4294:b0:a6:6d23:9fff with SMTP id o20-20020a056a20429400b000a66d239fffmr14533303pzj.14.1670697300942;
-        Sat, 10 Dec 2022 10:35:00 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u3-20020a170902e5c300b00189947bd9f7sm3305098plf.50.2022.12.10.10.35.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 10:35:00 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sat, 10 Dec 2022 08:34:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        darklight2357@icloud.com, Josef Bacik <josef@toxicpanda.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        cgroups@vger.kernel.org
-Subject: [PATCH 2/2 block/for-6.2] blk-iolatency: Make initialization lazy
-Message-ID: <Y5TRU2+s379DhUbj@slm.duckdns.org>
-References: <Y5TQ5gm3O4HXrXR3@slm.duckdns.org>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3I7M+zjFtQ50bvRzU4GXip2hYCfwlR1Hc33yDWfG0Pw=;
+        b=OqGOVk5IzBNIfenn7NI9rSEVUFlLVgE7qv5xBQOgNsjlLZGFvSaM7XD62xCYgO0xKe
+         EMUxATl78u/+K+bis0Ga28JXSyD0w8rbSIIbR4VKMGe5JmqkQlJwEtUpQoQVngasCpfR
+         l0lZpLPnJlkmcjXh3j88sNe1b01pAJb5U3SA7PqjAtfIXSnNQpbAy0WR8+id98Icvbfp
+         wS4/938eKnkisbOuXiE7t9+3g3YHtpuJ7BKmmfq/NWg5VpvH4OYiXjGAFffwcC5AMH3p
+         L8L6j4WCKKKqDIBx1EB2MYLVxRSC6Y7lQQYJt9r/MTnasqtQXqLmqK3SLn2JrHl897qx
+         XtEg==
+X-Gm-Message-State: ANoB5pm5cvRM9Xc60oD+3TLTGRQVtKA3oDLVX1klCAh6mv7GKp5//kXv
+        go9on2t4lIFiKjZLNR2+cO4xwfpvNl/cBuYfb3bem5FFrGfl
+X-Google-Smtp-Source: AA0mqf5a5F5zLjCbmzDQ7rHYGV9VaJAtM8nIMvxiosn6XlwVoQpGzogjbVheZsbfylB92foA3DwnCPCWTvEWMoNRNA8eB1Wdgxh6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5TQ5gm3O4HXrXR3@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c109:0:b0:303:93da:adeb with SMTP id
+ p9-20020a92c109000000b0030393daadebmr839024ile.46.1670697384647; Sat, 10 Dec
+ 2022 10:36:24 -0800 (PST)
+Date:   Sat, 10 Dec 2022 10:36:24 -0800
+In-Reply-To: <20221210130803.2147-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000023a37e05ef7d8c93@google.com>
+Subject: Re: [syzbot] kernel stack overflow in sock_close
+From:   syzbot <syzbot+09329bd987ebca21bced@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other rq_qos policies such as wbt and iocost are lazy-initialized when they
-are configured for the first time for the device but iolatency is
-initialized unconditionally from blkcg_init_disk() during gendisk init. Lazy
-init is beneficial because rq_qos policies add runtime overhead when
-initialized as every IO has to walk all registered rq_qos callbacks.
-
-This patch switches iolatency to lazy initialization too so that it only
-registered its rq_qos policy when it is first configured.
-
-Note that there is a known race condition between blkcg config file writes
-and del_gendisk() and this patch makes iolatency susceptible to it by
-exposing the init path to race against the deletion path. However, that
-problem already exists in iocost and is being worked on.
-
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>
----
 Hello,
 
-Tagged for-6.2 but this can easily go for the next merge window too.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+kernel stack overflow in sock_close
 
-Thanks.
+x8 : 0000000000040578 x7 : ffff80000b22f58c x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000002 x1 : ffff0000c900a478 x0 : ffff0000c9009a40
+Kernel panic - not syncing: kernel stack overflow
+CPU: 0 PID: 3647 Comm: syz-executor.0 Not tainted 6.1.0-rc7-syzkaller-00151-ge3cb714fb489-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ panic+0x218/0x508 kernel/panic.c:274
+ nmi_panic+0xbc/0xf0 kernel/panic.c:169
+ panic_bad_stack+0x134/0x154 arch/arm64/kernel/traps.c:886
+ handle_bad_stack+0x34/0x48 arch/arm64/kernel/entry-common.c:849
+ __bad_stack+0x78/0x7c arch/arm64/kernel/entry.S:552
+ mark_lock+0x4/0x1b4 kernel/locking/lockdep.c:4595
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x54/0x6c kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:355 [inline]
+ lock_sock_nested+0x88/0xd8 net/core/sock.c:3450
+ lock_sock include/net/sock.h:1721 [inline]
+ sock_map_close+0x30/0x4bc net/core/sock_map.c:1610
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ sock_map_close+0x400/0x4bc
+ inet_release+0xc8/0xe4 net/ipv4/af_inet.c:428
+ inet6_release+0x3c/0x58 net/ipv6/af_inet6.c:488
+ __sock_release net/socket.c:650 [inline]
+ sock_close+0x50/0xf0 net/socket.c:1365
+ __fput+0x198/0x3e4 fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:348
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x2dc/0xcac kernel/exit.c:820
+ do_group_exit+0x98/0xcc kernel/exit.c:950
+ get_signal+0xabc/0xb2c kernel/signal.c:2858
+ do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1076
+ do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1129
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+SMP: stopping secondary CPUs
+Kernel Offset: disabled
+CPU features: 0x00000,040e0108,4c017203
+Memory Limit: none
 
- block/blk-cgroup.c    |    8 --------
- block/blk-iolatency.c |   36 ++++++++++++++++++++++++++++++++++--
- block/blk-rq-qos.h    |    2 +-
- block/blk.h           |    6 ------
- 4 files changed, 35 insertions(+), 17 deletions(-)
 
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -33,7 +33,6 @@
- #include "blk-cgroup.h"
- #include "blk-ioprio.h"
- #include "blk-throttle.h"
--#include "blk-rq-qos.h"
- 
- /*
-  * blkcg_pol_mutex protects blkcg_policy[] and policy [de]activation.
-@@ -1300,14 +1299,8 @@ int blkcg_init_disk(struct gendisk *disk
- 	if (ret)
- 		goto err_ioprio_exit;
- 
--	ret = blk_iolatency_init(disk);
--	if (ret)
--		goto err_throtl_exit;
--
- 	return 0;
- 
--err_throtl_exit:
--	blk_throtl_exit(disk);
- err_ioprio_exit:
- 	blk_ioprio_exit(disk);
- err_destroy_all:
-@@ -1323,7 +1316,6 @@ err_unlock:
- void blkcg_exit_disk(struct gendisk *disk)
- {
- 	blkg_destroy_all(disk);
--	rq_qos_exit(disk->queue);
- 	blk_throtl_exit(disk);
- }
- 
---- a/block/blk-iolatency.c
-+++ b/block/blk-iolatency.c
-@@ -755,7 +755,7 @@ static void blkiolatency_enable_work_fn(
- 	}
- }
- 
--int blk_iolatency_init(struct gendisk *disk)
-+static int blk_iolatency_init(struct gendisk *disk)
- {
- 	struct request_queue *q = disk->queue;
- 	struct blk_iolatency *blkiolat;
-@@ -830,6 +830,31 @@ static void iolatency_clear_scaling(stru
- 	}
- }
- 
-+static int blk_iolatency_try_init(char *input)
-+{
-+	static DEFINE_MUTEX(init_mutex);
-+	struct block_device *bdev;
-+	int ret = 0;
-+
-+	bdev = blkcg_conf_open_bdev(&input);
-+	if (IS_ERR(bdev))
-+		return PTR_ERR(bdev);
-+
-+	/*
-+	 * blk_iolatency_init() may fail after rq_qos_add() succeeds which can
-+	 * confuse iolat_rq_qos() test. Make the test and init atomic.
-+	 */
-+	mutex_lock(&init_mutex);
-+
-+	if (!iolat_rq_qos(bdev->bd_queue))
-+		ret = blk_iolatency_init(bdev->bd_disk);
-+
-+	mutex_unlock(&init_mutex);
-+	blkdev_put_no_open(bdev);
-+
-+	return ret;
-+}
-+
- static ssize_t iolatency_set_limit(struct kernfs_open_file *of, char *buf,
- 			     size_t nbytes, loff_t off)
- {
-@@ -842,7 +867,14 @@ static ssize_t iolatency_set_limit(struc
- 	u64 oldval;
- 	int ret;
- 
-+retry:
- 	ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, buf, &ctx);
-+	if (ret == -EOPNOTSUPP) {
-+		ret = blk_iolatency_try_init(buf);
-+		if (ret)
-+			return ret;
-+		goto retry;
-+	}
- 	if (ret)
- 		return ret;
- 
-@@ -974,7 +1006,7 @@ static void iolatency_pd_init(struct blk
- {
- 	struct iolatency_grp *iolat = pd_to_lat(pd);
- 	struct blkcg_gq *blkg = lat_to_blkg(iolat);
--	struct rq_qos *rqos = blkcg_rq_qos(blkg->q);
-+	struct rq_qos *rqos = iolat_rq_qos(blkg->q);
- 	struct blk_iolatency *blkiolat = BLKIOLATENCY(rqos);
- 	u64 now = ktime_to_ns(ktime_get());
- 	int cpu;
---- a/block/blk-rq-qos.h
-+++ b/block/blk-rq-qos.h
-@@ -74,7 +74,7 @@ static inline struct rq_qos *wbt_rq_qos(
- 	return rq_qos_id(q, RQ_QOS_WBT);
- }
- 
--static inline struct rq_qos *blkcg_rq_qos(struct request_queue *q)
-+static inline struct rq_qos *iolat_rq_qos(struct request_queue *q)
- {
- 	return rq_qos_id(q, RQ_QOS_LATENCY);
- }
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -392,12 +392,6 @@ static inline struct bio *blk_queue_boun
- 	return bio;
- }
- 
--#ifdef CONFIG_BLK_CGROUP_IOLATENCY
--int blk_iolatency_init(struct gendisk *disk);
--#else
--static inline int blk_iolatency_init(struct gendisk *disk) { return 0; };
--#endif
--
- #ifdef CONFIG_BLK_DEV_ZONED
- void disk_free_zone_bitmaps(struct gendisk *disk);
- void disk_clear_zone_settings(struct gendisk *disk);
+Tested on:
+
+commit:         e3cb714f Merge branch 'for-next/core' into for-kernelci
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=14acf0cd880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
+dashboard link: https://syzkaller.appspot.com/bug?extid=09329bd987ebca21bced
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11916513880000
+
