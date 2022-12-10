@@ -2,175 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743FB648D9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 09:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F67E648DAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 10:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiLJIjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 03:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        id S229759AbiLJJDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 04:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLJIjN (ORCPT
+        with ESMTP id S229818AbiLJJCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 03:39:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F078A14D0D;
-        Sat, 10 Dec 2022 00:39:11 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id p8so10566200lfu.11;
-        Sat, 10 Dec 2022 00:39:11 -0800 (PST)
+        Sat, 10 Dec 2022 04:02:53 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C37ECE29;
+        Sat, 10 Dec 2022 01:02:48 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so10654533pjr.3;
+        Sat, 10 Dec 2022 01:02:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1aHH58yQuIbSHmYAQ1AHYeHZf/2Y0s0sE0Lw4IvH97U=;
-        b=M7pyqRbl5ISPaKVWwsRmXcJ0YkPlIPy1oV47etPXIwCTW+xwzVOUwervIX0yWegIkH
-         irTgs/GSKvile5dNk+KqYQ4qV+1HKL56XVegIBkkkz2sAipKpuyR92s2cqOz2Q7N8nRn
-         JlYJzoSp4tM4OFxLifPxc3SWoTjmJBAAP8s3uESq/GUjfLFhaRK/+FbPH2zge38FjAQp
-         iLq/+XyWU7FDWFqHaxwWF+j3312IQWEIQ5ghaP/7rvet/4PCGNbAObIZ81/prG/674FJ
-         xW7obF/fxGJ7Gzid7tQj3qau9AAgp5n28BPzzcF+SO7tBLFYjEb957G7XGVPSxqN0OUF
-         c6Qw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WEzFVBHjlChIyGNfSXsDMILSBlIuNZRGCEm4ACWoGj4=;
+        b=HWic7uxh/AbV8hV2WgxyQ1vvVbFk3c9MQW68etAkIrbqSURZKMpOn2qZb6dAbgoi1a
+         XMrIPccsi/7TegTSxuyL+YDmpo8mpBKQ0Y0B7t5hKwtXEv28bSNCyCIPCyzWGd47BxgK
+         ZyiOYKR3kOQsqzMMsJJ7Fp7Zj1Ff/xh+ZJ7dlXo2tcQs4jDDyeSVpbuuqxk/3AUbLEyK
+         Y+8DE/1zaN62WK9pclDyqU7X+CBtvzpXRI0sKveDovJhbtL0uyB4y4QmfIanvHfrOL2M
+         +TlK6MhMsJBlydYE+SnIXgtiHG+nmv7kthThjhnQ/p05yM5UN8s5fDtJYaZ5RVi7nHQx
+         9jQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1aHH58yQuIbSHmYAQ1AHYeHZf/2Y0s0sE0Lw4IvH97U=;
-        b=QPyLO6vE6fJVrw3Z7oaadTUle+nQ12dLj6K4kkoi4Avjg6C8Y0X//2iOuHcmB8cHjw
-         2pm+a4nrVS+eCRMZdSLUU8rVa7GNx2rk5YpdRjzo0bODYMWusyeZAZS/KCORy+4Qv8TI
-         0EjEsiVvjrmFEEVVf1LIKPdtIuH1Jrmq6pTsGlCFpNhicLyJpz0vgOiNZBCk/vSKUvml
-         7VRAVKKdtQC4AYlaxCqdITE/EGiPxilWMOEtaorASFYoPMZnK+/wF52CR6bpeAuF9f6I
-         mIMISbmGzvv63KDOuMrShweJfEWkjekWjCR/Yblp9aVEq0sgqriXEullc+qwvzb36eF4
-         jR5g==
-X-Gm-Message-State: ANoB5pmRq4sWWBj1Xn/nVllaUbERdINxDeHxtufLahYDYyb6OuUmLHCI
-        pOSN5b6wDIg9v8ALImGXNzI8BmKoxo5j9Q==
-X-Google-Smtp-Source: AA0mqf7zFIBp75PTRHHeP9PG5gyWkyZwE4eywEF6VVLvyGtixy2TAZLDH56h2buBf45VG7bloeSqRA==
-X-Received: by 2002:a05:6512:3091:b0:4b5:a65d:9b7c with SMTP id z17-20020a056512309100b004b5a65d9b7cmr2355482lfd.21.1670661550097;
-        Sat, 10 Dec 2022 00:39:10 -0800 (PST)
-Received: from [10.0.0.42] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
-        by smtp.gmail.com with ESMTPSA id u13-20020a05651220cd00b004a91d1b3070sm628423lfr.308.2022.12.10.00.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 00:39:09 -0800 (PST)
-Message-ID: <46e1321e-ff27-7b95-6f93-975d08802626@gmail.com>
-Date:   Sat, 10 Dec 2022 10:49:06 +0200
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WEzFVBHjlChIyGNfSXsDMILSBlIuNZRGCEm4ACWoGj4=;
+        b=159axLJr1Vxzh3N3duFEk8zGjibABn11CjiLwN33ALIsLxOROeIi7zl4oiEyDYUoWQ
+         k0vy7sTBXzgB/rLFiGTK8d0MlWyA6mH6hJXmmVUZTkKR7zcqrq3adNS8OFJNSSlKvq5h
+         eOdiNcdp2I/gRt++L4cuWcz5p4uozuIeb9e3M+joEuJg6rEXZz34XMBODEgbKTuf3Tj0
+         ysT4+mvuL24BsTW8X25m7jlzezIu8Am4sISQfShDaqUSGC+p3srJBwtVjbbeNnj8Ba9r
+         nsMlQWTM6keVwv9dl8NxyqtCuIJpMYLNUbLYrA82Y/iTk0Z6f8J1NhW4Ybdj03dr1Aq4
+         thCA==
+X-Gm-Message-State: ANoB5plhjlyq0LoAO6gCi9ccgz95m3/Tpc7xzn+7/ynUReoEVeivRqaD
+        tvW3z/V+gNL8pjvlcCSO5BM=
+X-Google-Smtp-Source: AA0mqf4mXeaGiyUity1h+Dz1k86o2loMg5APpySx38wtpnOdX7COCBVn29+WFsQnZjHF9BoZF2y7xw==
+X-Received: by 2002:a17:902:bf46:b0:185:441e:2212 with SMTP id u6-20020a170902bf4600b00185441e2212mr8770457pls.13.1670662967472;
+        Sat, 10 Dec 2022 01:02:47 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090282c700b00186a2444a43sm2549481plz.27.2022.12.10.01.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 01:02:46 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?q?Christoph=20M=C3=B6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?q?Remigiusz=20Ko=C5=82=C5=82=C4=85taj?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 0/9] can: usb: remove all usb_set_intfdata(intf, NULL) in drivers' disconnect()
+Date:   Sat, 10 Dec 2022 18:01:48 +0900
+Message-Id: <20221210090157.793547-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221206043554.1521522-1-vigneshr@ti.com>
- <20221206043554.1521522-6-vigneshr@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH 5/5] dmaengine: ti: k3-udma: Add support for BCDMA CSI RX
-In-Reply-To: <20221206043554.1521522-6-vigneshr@ti.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Many of the can usb drivers set their driver's priv data to NULL in
+their disconnect function using below pattern:
 
+	struct driver_priv *priv = usb_get_intfdata(intf);
 
-On 12/6/22 06:35, Vignesh Raghavendra wrote:
-> BCDMA CSI RX present on AM62Ax SoC is a dedicated DMA for servicing
-> Camera Serial Interface (CSI) IP. Add support for the same.
-> 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  drivers/dma/ti/k3-udma.c | 37 ++++++++++++++++++++++++++++++++-----
->  1 file changed, 32 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index 19fce52a9b53..a8b497ed3f30 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -135,6 +135,7 @@ struct udma_match_data {
->  	u32 flags;
->  	u32 statictr_z_mask;
->  	u8 burst_size[3];
-> +	struct udma_soc_data *soc_data;
->  };
->  
->  struct udma_soc_data {
-> @@ -4295,6 +4296,25 @@ static struct udma_match_data j721e_mcu_data = {
->  	},
->  };
->  
-> +static struct udma_soc_data am62a_dmss_csi_soc_data = {
-> +	.oes = {
-> +		.bcdma_rchan_data = 0xe00,
-> +		.bcdma_rchan_ring = 0x1000,
-> +	},
-> +};
-> +
-> +static struct udma_match_data am62a_bcdma_csirx_data = {
-> +	.type = DMA_TYPE_BCDMA,
-> +	.psil_base = 0x3100,
-> +	.enable_memcpy_support = false,
-> +	.burst_size = {
-> +		TI_SCI_RM_UDMAP_CHAN_BURST_SIZE_64_BYTES, /* Normal Channels */
-> +		0, /* No H Channels */
-> +		0, /* No UH Channels */
-> +	},
-> +	.soc_data = &am62a_dmss_csi_soc_data,
-> +};
-> +
->  static struct udma_match_data am64_bcdma_data = {
->  	.type = DMA_TYPE_BCDMA,
->  	.psil_base = 0x2000, /* for tchan and rchan, not applicable to bchan */
-> @@ -4344,6 +4364,10 @@ static const struct of_device_id udma_of_match[] = {
->  		.compatible = "ti,am64-dmss-pktdma",
->  		.data = &am64_pktdma_data,
->  	},
-> +	{
-> +		.compatible = "ti,am62a-dmss-bcdma-csirx",
-> +		.data = &am62a_bcdma_csirx_data,
-> +	},
->  	{ /* Sentinel */ },
->  };
->  
-> @@ -5272,12 +5296,15 @@ static int udma_probe(struct platform_device *pdev)
->  	}
->  	ud->match_data = match->data;
->  
-> -	soc = soc_device_match(k3_soc_devices);
-> -	if (!soc) {
-> -		dev_err(dev, "No compatible SoC found\n");
-> -		return -ENODEV;
-> +	ud->soc_data = ud->match_data->soc_data;
-> +	if (!ud->soc_data) {
-> +		soc = soc_device_match(k3_soc_devices);
-> +		if (!soc) {
-> +			dev_err(dev, "No compatible SoC found\n");
-> +			return -ENODEV;
-> +		}
-> +		ud->soc_data = soc->data;
->  	}
-> -	ud->soc_data = soc->data;
+	usb_set_intfdata(intf, NULL);
 
-Right, the original design was based on the promise that a DMSS will
-contain maximum 1 BCDMA and/or 1 PKTDMA, looks like now a DMSS have 2
-BCDMAs?
+	if (priv)
+                /* ... */
 
-The only possible issue I can see is that if in future SoCs the Output
-Event Offsets got shuffled for the BCDMAs, but then a new compatible for
-each SoC might just work.
+The pattern comes from other drivers which have a secondary interface
+and for which disconnect() may be called twice. However, usb can
+drivers do not have such secondary interface.
 
-Nice solution with minimal change! ;)
+On the contrary, if a driver set the driver's priv data to NULL before
+all actions relying on the interface-data pointer complete, there is a
+risk of NULL pointer dereference. Typically, this is the case if there
+are outstanding urbs which have not yet completed when entering
+disconnect().
 
->  
->  	ret = udma_get_mmrs(pdev, ud);
->  	if (ret)
+Finally, even if there is a valid reason to set the driver's priv
+data, it would still be useless to do it in usb_driver::disconnect()
+because the core sets the driver's data to NULL in [1] (and this
+operation is done in within locked context, so that race conditions
+should not occur).
+
+The first seven patches fix all drivers which set their usb_interface
+to NULL while outstanding URB might still exists. There is one patch
+per driver in order to add the relevant "Fixes:" tag to each of them.
+
+The eighth patch removes the check toward the driver data being
+NULL. This just reduces the kernel size so no fixes tag here and all
+changes are done in bulk in one single patch.
+
+Finally, the last patch removes in bulk the remaining benign calls to
+usb_set_intfdata(intf, NULL) in etas_es58x and peak_usb.
+
+N.B. some other usb drivers outside of the can tree also have the same
+issue, but this is out of scope of this series.
+
+[1] function usb_unbind_interface() from drivers/usb/core/driver.c
+Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
+---
+* Changelog *
+
+v1 -> v2
+
+  * add explanation in the cover letter on the origin of this pattern
+    and why it does not apply to can usb drivers.
+
+  * v1 claimed that usb_set_intfdata(intf, NULL) sets the
+    usb_interface to NULL. This is incorrect, it is the pointer to
+    driver's private data which set to NULL. Fix this point of
+    confusion in commit message.
+
+  * add a patch to clean up the useless check on the driver's private
+    data being NULL.
+
+Vincent Mailhol (9):
+  can: ems_usb: ems_usb_disconnect(): fix NULL pointer dereference
+  can: esd_usb: esd_usb_disconnect(): fix NULL pointer dereference
+  can: gs_usb: gs_usb_disconnect(): fix NULL pointer dereference
+  can: kvaser_usb: kvaser_usb_disconnect(): fix NULL pointer dereference
+  can: mcba_usb: mcba_usb_disconnect(): fix NULL pointer dereference
+  can: ucan: ucan_disconnect(): fix NULL pointer dereference
+  can: usb_8dev: usb_8dev_disconnect(): fix NULL pointer dereference
+  can: usb: remove useless check on driver data
+  can: etas_es58x and peak_usb: remove useless call to
+    usb_set_intfdata()
+
+ drivers/net/can/usb/ems_usb.c                  | 16 ++++++----------
+ drivers/net/can/usb/esd_usb.c                  | 18 +++++++-----------
+ drivers/net/can/usb/etas_es58x/es58x_core.c    |  1 -
+ drivers/net/can/usb/gs_usb.c                   |  7 -------
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c   |  9 +--------
+ drivers/net/can/usb/mcba_usb.c                 |  2 --
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c   |  2 --
+ drivers/net/can/usb/ucan.c                     |  8 ++------
+ drivers/net/can/usb/usb_8dev.c                 | 13 ++++---------
+ 9 files changed, 20 insertions(+), 56 deletions(-)
 
 -- 
-Péter
+2.37.4
+
