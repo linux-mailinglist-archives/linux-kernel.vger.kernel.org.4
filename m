@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55FF648E3E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50185648E46
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiLJK6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 05:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        id S229830AbiLJK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 05:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLJK62 (ORCPT
+        with ESMTP id S229680AbiLJK7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 05:58:28 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A73BCA4
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 02:58:27 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x28so10909929lfn.6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 02:58:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uLWU8UvLvUz+UPt+iZ/n8ZPOtKF07vffHOxQU5K8UgU=;
-        b=i2HHBJe6E7SskkvjwwGFpNZwVVx0TRnRKxu8beDwoiGPo6OJeP6gATP0/RVtcEaJQ7
-         zP8A3hYVq3BPi3KtNDi8sErXgidcrWNQkywjGheKVZdHIPVdnnpHlmx60i/xl4JwtsxZ
-         eHwm8gvOvxY01n2flE4vZA5JyLYxMpBcH7Uy3j+u0dNSkORQ586JwnB2FOIbQ7Vdqbgm
-         5g7napayHLM+VLqc5JTSI3h/8hEXGvtHZFiOdsRVrfkq3cun7nIOaPxIfSzFIHjAKdtp
-         4JvdD+0RTSHLJkbAqCmbBkjZlXBfsvUmI/0tCIzUm2YrpCXTWVNpRdtY2D0alhOOPXFE
-         4ZIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uLWU8UvLvUz+UPt+iZ/n8ZPOtKF07vffHOxQU5K8UgU=;
-        b=nNwgoptahalD9fSQ/G+XyzRT9Z/JoTbMX+bjdx2HTXiOjtSCT5G54KM+tcZVZpC67D
-         hBUsKdUimvNIFehOLxnF7OeBh8sgA3mN/0Fxb7Z0uB8mGfAH+NGaM7KbVrt4mCJ165nN
-         KZja8XE5USWT13iFz5mA6akCYUt+hHsrAiSqiwbnxouB8j4ugznPkteBVVDibY946xm4
-         qyZXh6SJC1xMVf+aaDvpTY5rJYhgmChP0m0AEGyFuxkymn4vMy1KEgK1u8+Y/qvS8Oo7
-         SjG41QenzABjacGxJA8rctUb+slubiAg49ijthSAQOoz44SRHVdpUzNHjeCpBIP6ssA7
-         JQBg==
-X-Gm-Message-State: ANoB5pll/paCfgW/16Uplu2bW6iG3nz08EEBJwI+nlGFmcI4ybu9imsI
-        udSjuQntKC4P9ByUB7yvG969yg==
-X-Google-Smtp-Source: AA0mqf4fOIbUVu1NB5M9iRbvy7IONCEf0BukLaKFdJLcqL+0Ys3M22vqZKiOwMRi0e+4M9pHxMoMnQ==
-X-Received: by 2002:a05:6512:224a:b0:4a4:68b9:19fc with SMTP id i10-20020a056512224a00b004a468b919fcmr3875677lfu.36.1670669905727;
-        Sat, 10 Dec 2022 02:58:25 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z26-20020a195e5a000000b004b55b404d36sm671211lfi.156.2022.12.10.02.58.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 02:58:25 -0800 (PST)
-Message-ID: <4846bb5f-79a9-e199-6a1c-5021e975e7ee@linaro.org>
-Date:   Sat, 10 Dec 2022 11:58:24 +0100
+        Sat, 10 Dec 2022 05:59:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B49DBCA4;
+        Sat, 10 Dec 2022 02:59:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F84460B2B;
+        Sat, 10 Dec 2022 10:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1BDC433EF;
+        Sat, 10 Dec 2022 10:59:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670669974;
+        bh=9Ba55FamUQD94n7+bqRFC7LNfipEY1H++sF1ApKOw4c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HldOCBwKAo1ZvYfSMLipFcFrb6nAK5WqavEa4FPhS3b0iQa5y3I7D0af7P5C3v3rd
+         /Zgk8XLopjlqjBaM2Dp9l84a/1a1+azpRSBry9EcMxLaKwjJSN/r4ilmjIaaxxwnVR
+         z0L0wFTLNiy8vwesv673SaCpBH6Zmc3kBVN2hx77Frw7J9lP2yXX3jbI+SSi0EM1rX
+         6CpIFoLkvRN9dQ79EEXnNjZyhR/N1HVxh7bPbwFdGdLdFEf0oq7I5cQpME+4v2042u
+         Hzxg+xNfJVc2Xss/kU6AwkvuVe0LvXW0oZ/wwhqtP/DlT+I+KKVODbszwNT3YbN60i
+         5zKJ03RmH3sdw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p3xaB-0005xq-OH; Sat, 10 Dec 2022 11:59:52 +0100
+Date:   Sat, 10 Dec 2022 11:59:51 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Christoph =?utf-8?Q?M=C3=B6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        Remigiusz =?utf-8?B?S2/FgsWCxIV0YWo=?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] can: ems_usb: ems_usb_disconnect(): fix NULL
+ pointer dereference
+Message-ID: <Y5Rmp66zvlwykRLq@hovoldconsulting.com>
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
+ <20221210090157.793547-1-mailhol.vincent@wanadoo.fr>
+ <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
- peripheral
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
- <36eb03e8-aace-f7ce-edc8-53715021c0ea@linaro.org>
- <20221208112055.m7sqg3ysxzskqjp4@SoMainline.org> <5740737.DvuYhMxLoT@g550jk>
- <20221209203851.sy37qqzczoaruuyb@SoMainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221209203851.sy37qqzczoaruuyb@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,56 +94,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2022 21:38, Marijn Suijten wrote:
-> On 2022-12-09 17:54:50, Luca Weiss wrote:
->> On Donnerstag, 8. Dezember 2022 12:20:55 CET Marijn Suijten wrote:
->>> On 2022-12-08 11:23:17, Krzysztof Kozlowski wrote:
->>>> On 08/12/2022 11:12, Marijn Suijten wrote:
->>>>> On 2022-12-04 17:19:05, Luca Weiss wrote:
->>>>>> On Freitag, 2. Dezember 2022 10:36:58 CET Marijn Suijten wrote:
->>>>>> [..]
->>>>>>
->>>>>> So the way this patch does it is good or does it need changes?
->>>>>
->>>>> Except the typo(s?) pointed out in my first reply, this is good to go.
->>>>>
->>>>> If we stick with generic adc-chan node names that should be documented
->>>>> in the bindings IMO, as it is currently only captured implicitly in the
->>>>> examples.  Krzysztof, what is your thought on this?
->>>>
->>>> If I understand correctly, the outcome of other discussion [1] was to
->>>> use labels and generic node names.
->>>
->>> The outcome was to use labels in the driver and disregard node names as
->>> the new fwnode API clobbers those names by including the @xx register
->>> bit.
->>>
->>> (I'll follow up with Jonathan whether or not to remove the current
->>> fallback to node names, as [1] ended up discussing many different issues
->>> and nits)
->>>
->>>> In such case the patch was correct
->>>> (except other comments).
->>>
->>> As a consequence it _doesn't matter_ how nodes are named, and we _can_
->>> use generic node names.  My question for you is whether we should, and
->>> if we should lock that in via dt-bindings to guide everyone towards
->>> using labels (which i did _not_ do in the recently-landed PM8950 and
->>> PM6125, but will send followup for).
->>
->> FYI the patch has been merged already and is now in linux-next
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm64/boot/dts/qcom/pmi8950.dtsi?id=0d97fdf380b478c358c94f50f1b942e87f407b9b
->>
->> If you have any changes that need to be done please send a follow-up patch.
+On Sat, Dec 10, 2022 at 06:01:49PM +0900, Vincent Mailhol wrote:
+> ems_usb sets the driver's priv data to NULL before waiting for the
+> completion of outsdanding urbs. This can results in NULL pointer
+> dereference, c.f. [1] and [2].
+
+Please stop making hand-wavy claims like this. There is no risk for a
+NULL-pointer deference here, and if you think otherwise you need to
+explain how that can happen in detail for each driver.
+
+> Remove the call to usb_set_intfdata(intf, NULL). The core will take
+> care of setting it to NULL after ems_usb_disconnect() at [3].
 > 
-> Unfortunately saw that today as well, well after sending this reply.  I
-> would've loved to correct the pmi8950_gpio label _gpios before someone
+> [1] c/27ef17849779 ("usb: add usb_set_intfdata() documentation")
+> Link: https://git.kernel.org/gregkh/usb/c/27ef17849779
 
-I don't understand what is there to correct. The "pmi8950_gpio" is a
-correct label. There is no single rule saying label should have "s" at
-the end. The only rules are: using underscores and having similar naming
-(e.g. mdss_ for all display labels).
+The claim in this commit is not correct either.
 
-Best regards,
-Krzysztof
+> [2] thread about usb_set_intfdata() on linux-usb mailing.
+> Link: https://lore.kernel.org/linux-usb/Y4OD70GD4KnoRk0k@rowland.harvard.edu/
+> 
+> [3] function usb_unbind_interface() from drivers/usb/core/driver.c
+> Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
+> 
+> Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/usb/ems_usb.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
+> index 050c0b49938a..c64cb40ac8de 100644
+> --- a/drivers/net/can/usb/ems_usb.c
+> +++ b/drivers/net/can/usb/ems_usb.c
+> @@ -1062,8 +1062,6 @@ static void ems_usb_disconnect(struct usb_interface *intf)
+>  {
+>  	struct ems_usb *dev = usb_get_intfdata(intf);
 
+The interface data pointer is only used in this function so there is no
+risk for any NULL pointer dereference here. I only checked one of the
+other drivers you patch, but I'm pretty sure all of your claims about
+fixing NULL-pointer dereferences in this series are equally bogus.
+
+>  
+> -	usb_set_intfdata(intf, NULL);
+> -
+>  	if (dev) {
+>  		unregister_netdev(dev->netdev);
+
+Johan
