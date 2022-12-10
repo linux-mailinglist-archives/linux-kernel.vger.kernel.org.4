@@ -2,132 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA28E648F93
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 16:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CFF648FB1
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLJP5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 10:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S229845AbiLJQSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 11:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiLJP5V (ORCPT
+        with ESMTP id S229529AbiLJQSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 10:57:21 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D741658B
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 07:57:20 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id c1so11663868lfi.7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 07:57:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PE0en2UU/eeKZFa7xUSQ62ylm6WHJ3y69mFi7KN0EPg=;
-        b=uADzHDM5DR03XMujeQymI1c+BzzsLzihX/0biqeI8AMQkzREic0BvffY0NsTAPS3Bq
-         zvQuVR6YaJhUbAQdCTB5MraQFRJ3sy5Zuw0IsRUgeOLu+H33msDjfaAdiWaC7Z2XTDH4
-         f2Zd10zqwcQ3plPFSAStKQqzFp0YN2hvvI4s2TbTVFHRvCJ3g1OkpTPRWUUADLiHTElQ
-         BjpyPWQ9ZmGQJEO4P/+INZHykcoy+RUH5uVnf8wCfyoHB0bpEreovFGqNO+06Gc6UdJV
-         SU27pU5iqOmX+Buk7IGl5xVcJdTKW5Ji/OlFHsXgFZkQer96i1Flm33oflLlu6J2NyQm
-         KCFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PE0en2UU/eeKZFa7xUSQ62ylm6WHJ3y69mFi7KN0EPg=;
-        b=Wjy0qwMVML6b2pNmnRAbXyhTbBx1bnmyyvEkxNZmF5nQyPN7Q2Ha9niNsSTmlJl1G8
-         ytTlTlsvaHa5c6dwb4KuFNUJ+JYrjfIrT1xKsXmVqsnJfO010KkRN9MTB/Kov9yInZuE
-         whZhjDi0Ka2e/j+899OC+1G4mQ4XhRHMT7gNM3Y7KednoGyxPyuLCD/Sv4S3nRNOE7SX
-         /mDI3zXinRrPS07Sh0j8Ebuvw1dQ+WmCQBnVytkidgnHa8DPWHmi8Zewm8hYrDVPd0K3
-         2Jymn6+hgrii6Cew3F961nTLsFYfDftdP2dyN/tt7yoc1hqa0qldPqg2yvne76Conv64
-         Cgmg==
-X-Gm-Message-State: ANoB5pmLqLdaCgPyO7XWo70fMIgZEpedVZZwxCW1Zrn0HAYdHU5sp5UM
-        DrsPsftLj/8RsbhMz4PSPasLbEuzzAIxG6PJjzBepQ==
-X-Google-Smtp-Source: AA0mqf77QesybuE18xXTPg3wskSZ2lQyQwKjS6zkTW/qBKF6LV649yNe5WB5DZIBCDzwFDDgIkrLoLS1ItFPXqyVwLg=
-X-Received: by 2002:a05:6512:693:b0:4b5:5384:aa3c with SMTP id
- t19-20020a056512069300b004b55384aa3cmr8929723lfe.150.1670687838196; Sat, 10
- Dec 2022 07:57:18 -0800 (PST)
+        Sat, 10 Dec 2022 11:18:51 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6861837A;
+        Sat, 10 Dec 2022 08:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670689130; x=1702225130;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hD60OSAbPLPeraC9NOnUQoDCC37vFgn4cF6EBQlwzlA=;
+  b=XIH8lIlg1AzqxUkthCwJDyPyhNdeG3MI2kcwK+3hKmAxASjXR8rVjVUf
+   W3qD7uLt9z9p/MjcjRPHS6Hmoxrkgulid4YAe2TuTHLurB5cwGmTPDcyI
+   +VslTN22JHWm0nmux6x1lmx1PP1DnUgBaAfxh+2Stdokh4z5mYAHX8MQ7
+   OuKy0xkRCMWYuEvUrbtcWFdS7/XDHWXfjwj9962m5DEVUr3NhzS8Hfuzj
+   uHaraZMivatNCgVBdI8Z2mxW+oO1wICMlVZQKY4h65nVTyM+HCUU/Y48X
+   DBbVLbJ2Fha3BmLtZbbaOiEnjhDQdzdnzTAb8ZsXm2W/4lIz9/PGiiwe6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="318780413"
+X-IronPort-AV: E=Sophos;i="5.96,234,1665471600"; 
+   d="scan'208";a="318780413"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 08:18:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="711208603"
+X-IronPort-AV: E=Sophos;i="5.96,234,1665471600"; 
+   d="scan'208";a="711208603"
+Received: from unknown (HELO localhost.localdomain) ([10.239.161.133])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 08:18:46 -0800
+From:   Zhang Chen <chen.zhang@intel.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Zhang Chen <chen.zhang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [RFC PATCH 0/9] Intel SPEC CTRL virtualization support
+Date:   Sun, 11 Dec 2022 00:00:37 +0800
+Message-Id: <20221210160046.2608762-1-chen.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221208201401.530555-1-konrad.dybcio@linaro.org> <20221208201401.530555-4-konrad.dybcio@linaro.org>
-In-Reply-To: <20221208201401.530555-4-konrad.dybcio@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Sat, 10 Dec 2022 21:27:06 +0530
-Message-ID: <CAH=2NtxYBbdR-rb6ZrqK+hW9gLuv_o80aOFUoEp7dqouON3x7A@mail.gmail.com>
-Subject: Re: [PATCH 4/5] dt-bindings: arm: qcom: Add SM6115(P) and Lenovo Tab P11
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        patches@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Dec 2022 at 01:44, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Document SM6115P, an APQ version of SM6115, which in turn is more or
-> less a beefier version of SM4250.
+This series introduces "virtual IA32_SPEC_CTRL" support. Here are introduction
+and use cases of this new feature.
 
-Let's drop the 2nd part of the above statement. As we discussed on
-irc, It suffices to say that SM6115P is the APQ version of SM6115.
+### Virtual IA32_SPEC_CTRL
 
-I don't think that would require a respin. Maybe the commit message
-can be fixed while applying this.
+Virtual IA32_SPEC_CTRL [1] is a new VMX feature on Intel CPUs.
+This feature allows VMM to fix some bits of IA32_SPEC_CTRL MSR even when
+the MSR is pass-thru'd to a guest.
 
-> Document Lenovo Tab P11 (J606F) as a SM6115P device.
->
-> Add SM6115 to the msm-id list of shame.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 27063a045bd0..0c7ad00586fa 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -62,6 +62,7 @@ description: |
->          sdx65
->          sm4250
->          sm6115
-> +        sm6115p
->          sm6125
->          sm6350
->          sm6375
-> @@ -790,6 +791,12 @@ properties:
->                - oneplus,billie2
->            - const: qcom,sm4250
->
-> +      - items:
-> +          - enum:
-> +              - lenovo,j606f
-> +          - const: qcom,sm6115p
-> +          - const: qcom,sm6115
-> +
->        - items:
->            - enum:
->                - sony,pdx201
-> @@ -931,6 +938,7 @@ allOf:
->                - qcom,sdm845
->                - qcom,sdx55
->                - qcom,sdx65
-> +              - qcom,sm6115
->                - qcom,sm6125
->                - qcom,sm6350
->                - qcom,sm7225
-> --
-> 2.38.1
 
-Otherwise:
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+### Use cases of virtual IA32_SPEC_CTRL
 
-Thanks.
+Software mitigations like Retpoline and software BHB-clearing sequence
+depend on CPU microarchitectures. And guest cannot know exactly
+the underlying microarchitecture. When a guest is migrated between
+processors of different microarchitectures, software mitigations which
+work perfectly on previous microachitecture may be not effective on the
+new one. To fix the problem, some hardware mitigations should be used in
+conjunction with software mitigations. Using virtual IA32_SPEC_CTRL,
+VMM can enforce hardware mitigations transparently to guests and avoid
+those hardware mitigations being accidentally disabled when guest
+changes IA32_SPEC_CTRL MSR.
+
+
+### Intention of this series
+
+This series adds the capability of enforcing hardware mitigations for
+guests transparently and efficiently (i.e., without intecepting
+IA32_SPEC_CTRL MSR accesses) to kvm. The capability can be used to solve
+the VM migration issue in a pool consisting of processors of different
+microarchitectures.
+
+Specifically, below are two target scenarios of this series:
+
+Scenario 1: If retpoline is used by a VM to mitigate IMBTI in CPL0, VMM
+            can set RRSBA_DIS_S on parts enumerates RRSBA. Note that
+            the VM is presented with a microarchitecture doesn't enumerate
+            RRSBA.
+
+Scenario 2: If a VM uses software BHB-clearing sequence on transitions
+            into CPL0 to mitigate BHI, VMM can use "virtual
+            IA32_SPEC_CTRL" to set BHI_DIS_S on newer
+            hardware which doesn't enumerate BHI_NO.
+
+Intel defines some virtual MSRs for guests to notify VMM of software
+mitigations in use. Such information allows VMM to enable hardware
+mitigations only when necessary (i.e., VMs care about the vulnerability
+and are using software mitigiation) to minimize the performance impact
+to other VMs. The support of the virtual MSRs also added in this series.
+
+### Organization of this series
+
+This series is developed based on v6.1-rc7 (commit ef4d3ea40565a781c25847e9cb96c1bd9f462bc6)
+
+1. Patch 1 introduce Intel SPEC_CTRL BHI related definition.
+2. Patch 2/3 advertises {RRSBA/BHI}_CTRL for retpoline/BHB-clearing
+sequence mitigations for KVM.
+3. Patch 4 introduce Intel virtual IA32_SPEC_CTRL
+4. Patch 5-7 virtualize a set of virtual MSRs for guests to communicate
+   software mitigations in use.
+5. Patch 8-9 enable "virtual IA32_SPEC_CTRL" VMX feature with virtual
+   MSRs support in KVM.
+
+### Documentation
+
+Refer to below link for more information:
+https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/branch-history-injection.html
+
+
+
+Pawan Gupta (1):
+  x86/bugs: Use Virtual MSRs to request hardware mitigations
+
+Zhang Chen (8):
+  x86/speculation: Introduce Intel SPEC_CTRL BHI related definition
+  KVM: x86: Add a kvm-only leaf for RRSBA_CTRL
+  KVM: x86: Add a kvm-only leaf for BHI_CTRL
+  x86/kvm/vmx: Virtualize Intel IA32_SPEC_CTRL
+  kvm/x86: Add ARCH_CAP_VIRTUAL_ENUM for guest
+    MSR_IA32_ARCH_CAPABILITIES
+  kvm/x86: Add MSR_VIRTUAL_MITIGATION_ENUM/CTRL emulation
+  x86/kvm/vmx: Initialize SPEC_CTRL MASK for RRSBA
+  x86/kvm/vmx: Initialize SPEC_CTRL MASK for BHI
+
+ arch/x86/include/asm/msr-index.h       |  29 +++++++
+ arch/x86/include/asm/vmx.h             |   5 ++
+ arch/x86/include/asm/vmxfeatures.h     |   2 +
+ arch/x86/kernel/cpu/bugs.c             |  24 ++++++
+ arch/x86/kvm/cpuid.c                   |   4 +
+ arch/x86/kvm/reverse_cpuid.h           |   9 ++
+ arch/x86/kvm/vmx/capabilities.h        |   5 ++
+ arch/x86/kvm/vmx/vmx.c                 | 109 ++++++++++++++++++++++++-
+ arch/x86/kvm/vmx/vmx.h                 |  27 +++++-
+ arch/x86/kvm/x86.c                     |  23 +++++-
+ tools/arch/x86/include/asm/msr-index.h |   6 ++
+ 11 files changed, 238 insertions(+), 5 deletions(-)
+
+-- 
+2.25.1
+
