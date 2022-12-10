@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B169B648BFA
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D38648C06
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiLJAyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 19:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S229793AbiLJA5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 19:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLJAys (ORCPT
+        with ESMTP id S229828AbiLJA5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 19:54:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8C9764F;
-        Fri,  9 Dec 2022 16:54:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F99623C2;
-        Sat, 10 Dec 2022 00:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A419C433D2;
-        Sat, 10 Dec 2022 00:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670633686;
-        bh=FP1qLoUU0jd+2nXYMOllgA1lD6uDuIS62Q6du/B++M0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XZqF4zvTXtTvVVFsAGnuBfiFvso/jnHfd/eziHuArjtHt+s5JXLUTDp5I4AkkpLHy
-         ruCo2bxFp9cqtBUwvAhdzzUCalejLFBtRcLDnhwdFo/s/DGzO1hLUSUTRdL//JtP6e
-         G2QU/HzsVH8ABQKR3KMMYYTkscuWN8sRNhEH24BLjv+mizndCQd8z21Omu9dWtWlTT
-         4eNpZCMxkxmh44Y0ksmlwe9WoWuyHOKu01jQbvNKH1MMtj1O4QK6hJOs3tITP6hTAC
-         EJcZl2Ol1qtaubE669lpzktaF/zJBb+X8j3sC9npmNMgduR0S23DEZTCz7OuGjyRk9
-         NsGmgPKX49sow==
-Date:   Fri, 9 Dec 2022 16:54:44 -0800
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
-        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-        vigneshr@ti.com, s-vadapalli@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: ethernet: ti: am65-cpsw: Fix PM runtime
- leakage in am65_cpsw_nuss_ndo_slave_open()
-Message-ID: <Y5PY1Cdp3px3vRqE@x130>
-References: <20221208105534.63709-1-rogerq@kernel.org>
+        Fri, 9 Dec 2022 19:57:38 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C63D83
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 16:57:37 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id k6-20020a92c246000000b003035797fa8cso992322ilo.8
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 16:57:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OQCSmNJ3Xc0dOvaQuhHN4Oz2uPX+uvhvUhd62uhM/9k=;
+        b=BfXDY8weXm98C5qgaRg/khs8onI/uUmHgojZUqgwCxzmglkO8lf3j1m4DYjFkneW5X
+         AG30pv/wpbHbV7glhaR07UFNL4gEqdspdYfTtZshnog2P/9UOcFJGAkfRncdbDxglxve
+         TeBFwrUMFIM+WKqFog9SrcrkcuXRAiDvXTfvVjuHJlQPnAoTN34FI2UD7Dk1EdQW/RvG
+         YQFaT6f3hzNAbFN15hFAJ6zYwuydYJexI1KUXGsD1ZWeuPpXlccn0sT6MOp/UK9Heumo
+         /flGJdfRvfiuEiAxpPdrloIX4bECkgpnDLp55z1NYxGVPiOnoH3lC7Pg1j8ClVm8E/jo
+         QYsA==
+X-Gm-Message-State: ANoB5pmFaWTRh+BI5hBKf+pKSwDtOJzWmNdZOjg98Esl2tHbZLJG82nc
+        AmVkn2eba7ShPZ4IyHo/2tN7djNUk5THGNOtaMOy5Sr4zI1z
+X-Google-Smtp-Source: AA0mqf4io54+Avwf2gqBz+hJLuZyKNGq0VSSL9wcWnqxD2PXA/Ztg2riR/hYBDvNH4AMr5u6Edgg8BgqqOLGEaoQ49mxyvg/4Qll
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221208105534.63709-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a0c3:0:b0:38a:d70:cd27 with SMTP id
+ i3-20020a02a0c3000000b0038a0d70cd27mr16150140jah.226.1670633856345; Fri, 09
+ Dec 2022 16:57:36 -0800 (PST)
+Date:   Fri, 09 Dec 2022 16:57:36 -0800
+In-Reply-To: <0000000000001a6b6705e9b3533d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008eac3f05ef6ec145@google.com>
+Subject: Re: [syzbot] WARNING in nilfs_segctor_do_construct
+From:   syzbot <syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, stable-commits@vger.kernel.org,
+        stable@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08 Dec 12:55, Roger Quadros wrote:
->Ensure pm_runtime_put() is issued in error path.
->
->Reported-by: Jakub Kicinski <kuba@kernel.org>
->Signed-off-by: Roger Quadros <rogerq@kernel.org>
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c56bdb880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=fbb3e0b24e8dae5a16ee
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14caa71d880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1032f2b7880000
 
-Reviewed-by: Saeed Mahameed <saeed@kernel.org>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0911b0ec76cf/mount_0.gz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com
 
-[...]
+NILFS (loop0): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+NILFS (loop0): nilfs_sufile_update: invalid segment number: 53
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
+WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
+WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
+Modules linked in:
+CPU: 0 PID: 3149 Comm: segctord Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
+pc : nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
+pc : nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
+lr : nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
+lr : nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
+lr : nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
+sp : ffff800012f6bc80
+x29: ffff800012f6bd00 x28: ffff800008f744fc x27: ffff0000c6cf9128
+x26: ffff0000c6cf9258 x25: ffff0000c9039138 x24: ffff0000ca797818
+x23: ffff0000c90390b8 x22: 00000000ffffffea x21: 0000000000000001
+x20: ffff0000cb9a8000 x19: ffff0000c9039000 x18: 000000000000027f
+x17: 0000000000000000 x16: ffff80000dbe6158 x15: ffff0000c6508000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6508000
+x11: ff80800008f68d3c x10: 0000000000000000 x9 : ffff800008f68d3c
+x8 : ffff0000c6508000 x7 : ffff80000816678c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefbecd0 x1 : 00000000ffffffea x0 : 0000000000000000
+Call trace:
+ nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
+ nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
+ nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
+ nilfs_segctor_construct+0xa0/0x380 fs/nilfs2/segment.c:2379
+ nilfs_segctor_thread_construct fs/nilfs2/segment.c:2487 [inline]
+ nilfs_segctor_thread+0x180/0x634 fs/nilfs2/segment.c:2570
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 8892
+hardirqs last  enabled at (8891): [<ffff80000816681c>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (8891): [<ffff80000816681c>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4968
+hardirqs last disabled at (8892): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (8698): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (8677): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
+---[ end trace 0000000000000000 ]---
 
->@@ -622,6 +623,10 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
-> error_cleanup:
-> 	am65_cpsw_nuss_ndo_slave_stop(ndev);
-
-BTW, while looking at the ndo_slave_stop() call, it seems to abort if 
-am65_cpsw_nuss_common_stop() fails, but looking deeper at that and it seems 
-am65_cpsw_nuss_common_stop() can never fail, so you might want to fix that.
-
-> 	return ret;
->+
->+runtime_put:
->+	pm_runtime_put(common->dev);
->+	return ret;
-> }
->
-> static void am65_cpsw_nuss_rx_cleanup(void *data, dma_addr_t desc_dma)
->-- 
->2.34.1
->
