@@ -2,81 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FC4648EDF
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739B2648EE3
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLJNTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S229763AbiLJNgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiLJNS7 (ORCPT
+        with ESMTP id S229568AbiLJNgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:18:59 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C459E24;
-        Sat, 10 Dec 2022 05:18:58 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r18so5303406pgr.12;
-        Sat, 10 Dec 2022 05:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrdMdr4CnXy1K7qhR03uSJz8LU6ClkU8Tex0C5hTdOM=;
-        b=SaioU0CyoqxJ7AKuY9GgXurTRmkVlyzcoj1/+kdUmiAsMcUuNjR0RNokYMn8Djz0Iu
-         4HHFEBMk0e9diHfYuk1TE/iryTn+FndDI0GF2xq2w3YdaRyGLcytlcL/KCwkjMoNpqNB
-         p9Zmepz7y5nLjqBwL0b4aKyW6QT0hWI5TiSCnTYaTKP+ygPzsu8tRvdr6D9ZG6KWQVD/
-         jvSihl2xmEYkGV3SfDbX026bwdFY8ijZVaZMLiCpJGbKJQMRGxJw7I0VyYHvUYUlnJwc
-         zpc1RKth9mXsQNTWypHY9VQ7zlcpr4huN3R7I6pGe5KArExYsdPmLORDv+hvuDLjATN7
-         artw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yrdMdr4CnXy1K7qhR03uSJz8LU6ClkU8Tex0C5hTdOM=;
-        b=h/4fLiZQCFydQsHuVsEobFIXSPPyBH3ia4OuQ5RnToo/0gpgdYcVaE5Me3T/8bWMs/
-         uKPLgLxzSXFxMgrKqFaqfoNkZwsR1yXO8ShOl3R4aaC2PjqqLtgxBjADkezsAuS6iVMu
-         B6QoW18fXjjTmwdgPEF3J5qEq67SumA2zSBG+ZAEaCmi4gVbCBqupFQiSapnwWWrQmY7
-         0AYUcZ1wTZesAhKG2kHsi7rFlngnU8qunY/cpLljhILDelK1y8guAfda0K6AktD//Ezp
-         W7C5GXcebUWlNPpwG1J9FyXesVdFBfn4f6nWVTnVlpBNCik9W5n494C7uDEy+I5vAiRJ
-         zGbw==
-X-Gm-Message-State: ANoB5pm5uOyO7WkCr4CjCKfhJJxr3zi2HR5YkWP6PHCjo+EvWNLXlymd
-        scRQCBaU0mMkHdpxUhLQbIE=
-X-Google-Smtp-Source: AA0mqf7++aspAa/c6SXxFCEULFA9mOxgqnktB7jPp5bYtZ1H+QeL9U9cnMlXKvSUdGKrFHsWzSOoHA==
-X-Received: by 2002:a05:6a00:1513:b0:576:f7bd:92d4 with SMTP id q19-20020a056a00151300b00576f7bd92d4mr12585186pfu.30.1670678337734;
-        Sat, 10 Dec 2022 05:18:57 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-73.three.co.id. [180.214.232.73])
-        by smtp.gmail.com with ESMTPSA id 81-20020a621954000000b0056b9ec7e2desm2742666pfz.125.2022.12.10.05.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 05:18:57 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 4BF0F104340; Sat, 10 Dec 2022 20:18:52 +0700 (WIB)
-Date:   Sat, 10 Dec 2022 20:18:52 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Takahashi Akari <akaritakahashioss@gmail.com>,
-        linux-kernel@vger.kernel.org, Networking <netdev@vger.kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Haoyue Xu <xuhaoyue1@hisilicon.com>,
-        Guofeng Yue <yueguofeng@hisilicon.com>,
-        Geoff Levand <geoff@infradead.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH] <driver/net/ethernet/amd/nmclan_cs.c> Remove unnecessary
- line
-Message-ID: <Y5SHPK0t821eX9Bw@debian.me>
-References: <20221210084713.51710-1-akaritakahashioss@gmail.com>
+        Sat, 10 Dec 2022 08:36:06 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677E717073;
+        Sat, 10 Dec 2022 05:36:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=0;PH=DS;RN=19;SR=0;TI=SMTPD_---0VWy3O4v_1670679359;
+Received: from 30.221.144.117(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VWy3O4v_1670679359)
+          by smtp.aliyun-inc.com;
+          Sat, 10 Dec 2022 21:36:00 +0800
+Message-ID: <81dc3225-bd4c-22d6-ba62-b12f26e655e3@linux.alibaba.com>
+Date:   Sat, 10 Dec 2022 21:35:58 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qFwguExfwSZa56k7"
-Content-Disposition: inline
-In-Reply-To: <20221210084713.51710-1-akaritakahashioss@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH v3 0/4] arm64: improve handle synchronous External Data
+ Abort
+Content-Language: en-US
+To:     Xie XiuQi <xiexiuqi@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, james.morse@arm.com, rafael@kernel.org,
+        tony.luck@intel.com, robert.moore@intel.com, bp@alien8.de,
+        devel@acpica.org, linux-arm-kernel@lists.infradead.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     tanxiaofei@huawei.com, wangxiongfeng2@huawei.com,
+        lvying6@huawei.com, naoya.horiguchi@nec.com,
+        wangkefeng.wang@huawei.com,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+References: <20221205160043.57465-1-xiexiuqi@huawei.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20221205160043.57465-1-xiexiuqi@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,99 +53,133 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---qFwguExfwSZa56k7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 10, 2022 at 05:47:13PM +0900, Takahashi Akari wrote:
-> Hello:
->=20
-> I sent a patch. Please review and merge.
->=20
-> Reason:
-> Remove unnecessaty line. (if statement is always true)
->=20
-> Git repository URL:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->=20
-> File:
-> drivers/net/ethernet/amd/nmclan_cs.c : 931
->=20
-
-Hi and welcome to LKML!
-
-Based on your patch, here are my notes:
-
-  * Write the patch description in imperative mood (e.g. it should have
-    been "Remove redundant inner tx_irq_disabled conditional in
-    mace_interrupt() since it has already been handled". Wrap it in about
-    72-75 column wide (to account indentation in git-log(1) so that the
-    total line length is at maximum 80).
-  * Write also short but concise patch subject (one-line summary), while al=
-so
-    paying attention to the subject prefix. In this
-    case, it should have been "net: amd: remove inner tx_irq_disabled
-    conditional".
-  * Your patch looks like corrupted (tabs converted to spaces, linewrapped,
-    etc.). Please configure your email-client not to do such things, or bet=
-ter
-    yet, use git-send-email(1) to send patches.
-  * You need to Cc: relevant maintainers and lists, which can be obtained
-    by `scripts/get_maintainer.pl -norolestats -separator , --=20
-    /path/to/your/patch`. Personally I put lists in To: header and individu=
-al
-    addresses in Cc:. I have added them for you.
-  * Last but not least, build the kernel with your patch applied (preferably
-    enable W=3D1 and CONFIG_WERROR and also cross-compile).
-
-See also tips from one of kernel subsystem maintainer at [1].
-
-> Signed-off-by: Takahashi Akari <akaritakahashioss@gmail.com>
+On 2022/12/6 AM12:00, Xie XiuQi wrote:
+> This series fix some issue for arm64 synchronous External Data Abort.
+> 
+> 1. fix unhandled processor error
+> According to the RAS documentation, if we cannot determine the impact
+> of the error based on the details of the error when an SEA occurs, the
+> process cannot safely continue to run. Therefore, for unhandled error,
+> we should signal the system and terminate the process immediately.
+> 
+> 2. improve for handling memory errors
+> 
+> If error happened in current execution context, we need pass
+> MF_ACTION_REQUIRED flag to memory_failure(), and if memory_failure()
+> recovery failed, we must handle this case, other than ignore it.
+> 
 > ---
->  drivers/net/ethernet/amd/nmclan_cs.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/amd/nmclan_cs.c b/drivers/net/ethernet/=
-amd/nmclan_cs.c
-> index 823a329a921f..a90e0c5b603d 100644
-> --- a/drivers/net/ethernet/amd/nmclan_cs.c
-> +++ b/drivers/net/ethernet/amd/nmclan_cs.c
-> @@ -928,10 +928,7 @@ static irqreturn_t mace_interrupt(int irq, void *dev=
-_id)
-> =20
->    if (lp->tx_irq_disabled) {
->      const char *msg;
-> -    if (lp->tx_irq_disabled)
-> -      msg =3D "Interrupt with tx_irq_disabled";
-> -    else
-> -      msg =3D "Re-entering the interrupt handler";
-> +    msg =3D "Interrupt with tx_irq_disabled";
->      netdev_notice(dev, "%s [isr=3D%02X, imr=3D%02X]\n",
->  		  msg,
->  		  inb(ioaddr + AM2150_MACE_BASE + MACE_IR),
+> v3: add improve for handing memory errors
+> v2: fix compile warning reported by kernel test robot.
+> 
+> Xie XiuQi (4):
+>   ACPI: APEI: include missing acpi/apei.h
+>   arm64: ghes: fix error unhandling in synchronous External Data Abort
+>   arm64: ghes: handle the case when memory_failure recovery failed
+>   arm64: ghes: pass MF_ACTION_REQUIRED to memory_failure when sea
+> 
+>  arch/arm64/kernel/acpi.c      |  6 ++++++
+>  drivers/acpi/apei/apei-base.c |  5 +++++
+>  drivers/acpi/apei/ghes.c      | 31 ++++++++++++++++++++++++-------
+>  include/acpi/apei.h           |  1 +
+>  include/linux/mm.h            |  2 +-
+>  mm/memory-failure.c           | 24 +++++++++++++++++-------
+>  6 files changed, 54 insertions(+), 15 deletions(-)
+> 
 
-Dunno if you need to also handle the else case (that gives "Re-entering" ms=
-g)
-in the outer conditional.
+Hi, XiuQi,
 
-Thanks.
+As we discussed, if you want to fix this problem before the new UEFI version comes out,
+you need a another patch separated synchronous error handling into task work when SEA
+notification is used. Be careful that do not break error handling of other notification
+type.
 
-[1]: https://lore.kernel.org/all/20171026223701.GA25649@bhelgaas-glaptop.ro=
-am.corp.google.com/
+A reference code is pasted bellow.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Thank you.
 
---qFwguExfwSZa56k7
-Content-Type: application/pgp-signature; name="signature.asc"
+Best Regards,
+Shuai
 
------BEGIN PGP SIGNATURE-----
+----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5SHNAAKCRD2uYlJVVFO
-o6rYAP476bzbs47u6zwAyp+FqQPFkapu4ZyUoIiEdFWZnZPbTwEAzUSKzvWAPb1N
-3/MH3mi/V/NrD9zd0tVbWfXQ4fiEug4=
-=iAOf
------END PGP SIGNATURE-----
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 57cae48ebc1f..1982a5e3fd8c 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -445,15 +445,71 @@ static void ghes_kick_task_work(struct callback_head *head)
+ 	gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
+ }
 
---qFwguExfwSZa56k7--
++/**
++ * struct mce_task_work - for synchronous RAS event
++ *
++ * @twork:                callback_head for task work
++ * @pfn:                  page frame number of corrupted page
++ * @flags:                fine tune action taken
++ *
++ * Structure to pass task work to be handled before
++ * ret_to_user via task_work_add().
++ */
++struct mce_task_work {
++	struct callback_head twork;
++	u64 pfn;
++	int flags;
++};
++
++static void memory_failure_cb(struct callback_head *twork)
++{
++	int rc;
++	struct mce_task_work *twcb =
++		container_of(twork, struct mce_task_work, twork);
++
++	rc = memory_failure(twcb->pfn, twcb->flags);
++	kfree(twcb);
++
++	if (!rc)
++		return;
++	/*
++	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
++	 * to the current process with the proper error info,
++	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
++	 *
++	 * In both cases, no further processing is required.
++	 */
++	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
++		return;
++
++	pr_err("Memory error not recovered");
++	force_sig(SIGBUS);
++}
++
+ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
+ {
+ 	unsigned long pfn;
++	struct mce_task_work *twcb;
+
+ 	if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
+ 		return false;
+
+ 	pfn = PHYS_PFN(physical_addr);
+-	memory_failure_queue(pfn, flags);
++
++	if (flags == MF_ACTION_REQUIRED && task->mm) {
++		twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
++		if (!twcb)
++			return false;
++
++		twcb->pfn = pfn;
++		twcb->flags = flags;
++		init_task_work(&twcb->twork, memory_failure_cb);
++		task_work_add(current, &twcb->twork, TWA_RESUME);
++		return false;
++	} else {
++		memory_failure_queue(pfn, flags);
++	}
++
+ 	return true;
+ }
+
+-- 
+2.20.1.12.g72788fdb
