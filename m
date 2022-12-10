@@ -2,115 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A917E648FDF
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3984D648FE6
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiLJRFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 12:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        id S229777AbiLJRM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 12:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiLJRFg (ORCPT
+        with ESMTP id S229650AbiLJRMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 12:05:36 -0500
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F7B15A1B;
-        Sat, 10 Dec 2022 09:05:34 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 10 Dec 2022 12:12:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60572BC9A;
+        Sat, 10 Dec 2022 09:12:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id DDAFD1F887;
-        Sat, 10 Dec 2022 18:05:32 +0100 (CET)
-Date:   Sat, 10 Dec 2022 18:05:31 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arm64: dts: qcom: Use plural _gpios node label for
- PMIC gpios
-Message-ID: <20221210170531.pxoux2kje4vgor5y@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209220450.1793421-1-marijn.suijten@somainline.org>
- <714ac62a-7bab-e16e-e3b6-bdd86e422699@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FCE7B8069D;
+        Sat, 10 Dec 2022 17:12:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2B3C433EF;
+        Sat, 10 Dec 2022 17:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670692340;
+        bh=JkuMnpyvpDgmLbRKf6NYs0jOELdsWfwSNqEpAY5kch0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YPsbUiWIBRJHsyrXewa5Tggk2EBv8iohwX9IizvP7bD5R5sSQrTk5dKxEhAEjXLBV
+         OiGjUfPPTKvqDjpBnCu6ou8lD83Z9s7QWT+5QO+NA2LHr4Vbc2z0xT/51wo6fivPHK
+         cwI+V16jYTZd8+9wq+C8cwBQ7PeaMbp7GgSYvDeISp7vQnHv3hKTk7d9YslCKbCE5W
+         t8VoW2biDIAzK/QZBSf7UcPa4M4SkCHKJFL9vqu+lwwrg3jilg5qmANjstiJLmF7ZQ
+         FJxrqjByWh1znSM38j9YRtyC9G5J1ReFn1WpkQnss69uSjdUktiEiqdY6h/5ns3tvf
+         EvQ1qfKKBR5TQ==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
+        bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V11 0/7] riscv: Add GENERIC_ENTRY support
+Date:   Sat, 10 Dec 2022 12:11:34 -0500
+Message-Id: <20221210171141.1120123-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <714ac62a-7bab-e16e-e3b6-bdd86e422699@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-10 11:50:51, Krzysztof Kozlowski wrote:
-> On 09/12/2022 23:04, Marijn Suijten wrote:
-> > The gpio node in PMIC dts'es define access to multiple GPIOs.  Most Qcom
-> > PMICs were already using the plural _gpios label to point to this node,
-> > but a few PMICs were left behind including the recently-pulled
-> > pm(i)8950.
-> > 
-> > Rename it from *_gpio to *_gpios for pm6125, pm6150(l), pm8005,
-> > pm(i)8950, and pm(i)8998.
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > 
-> > ---
-> > 
-> > This was brought up for discussion in [1] but hasn't seen any relevant
-> > reply, unfortunately.
-> 
-> This is just a label, it does not matter. Why changing all exisitng
-> files? I don't think it was a part of previous discussions...
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I would've let it slide if it was corrected in the patch that was
-reviewed, but since that didn't happen it wouldn't make sense to only
-correct pmi8950 (and the other bindings submitted or co-authored by
-myself, such as pm6125 and pm8950) for "consistency" - that wouldn't be
-consistent at all.
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Some optimization for entry.S with new .macro and merge
+ret_from_kernel_thread into ret_from_fork.
 
-To me (and supposedly, to other as well) it does matter.  People keep
-copy-pasting these to to add a newer PMIC and sooner rather than later
-we'll end up with both conventions.
+The 1,2 are the preparation of generic entry. 3~7 are the main part
+of generic entry.
 
-Regardless, labels are already a mess all over the place, and unless we
-can steer them with bindings or written conventions we're unlikely to
-ever clean that up.
+All tested with rv64, rv32, rv64 + 32rootfs, all are passed.
 
-> To me it is unneeded churn.
+You can directly try it with:
+[1] https://github.com/guoren83/linux/tree/generic_entry_v11
 
-Just like -state and -pins suffix, sometimes even the unnecessary
--pins-pins suffix?  To me that is the same kind of churn, and *it is
-needed* to keep the bindings somewhat clean, consistent and digestible.
-In this specific case it's not even that many changes, IMO.
+Any reviews and tests are helpful.
 
-That being said my limited hobby time is probably too valuable to be
-spent on binding cleanup rather than fixes and feature enablement
-elsewhere in the kernel.
+v11:
+ - Rebase on newest for-next-20221211
+ - Remove stack optimization patch series
+ - Optimize comments
+ - Replace ENTRY with SYM_CODE/FUNC_START in entry.S
 
-- Marijn
+v10:
+https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221208)
+ - Remove unrelated patches from the series (Suggested-by: Bjorn)
+ - Fixup Typos. 
+
+v9:
+https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
+ - Fixup NR_syscalls check (by Ben Hutchings)
+ - Add Tested-by: Jisheng Zhang
+
+v8:
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221102)
+ - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+ - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+ - Optimize __noinstr_section comment (JiangshanLai)
+
+v7:
+https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment
+
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
+
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
+
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
+
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (3):
+  riscv: ptrace: Remove duplicate operation
+  riscv: entry: Add noinstr to prevent instrumentation inserted
+  riscv: entry: Convert to generic entry
+
+Jisheng Zhang (3):
+  riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
+  riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
+  riscv: entry: Consolidate general regs saving/restoring
+
+Lai Jiangshan (1):
+  compiler_types.h: Add __noinstr_section() for noinstr
+
+ arch/riscv/Kconfig                    |   1 +
+ arch/riscv/include/asm/asm.h          |  63 +++++
+ arch/riscv/include/asm/csr.h          |   1 -
+ arch/riscv/include/asm/entry-common.h |   8 +
+ arch/riscv/include/asm/ptrace.h       |  10 +-
+ arch/riscv/include/asm/stacktrace.h   |   5 +
+ arch/riscv/include/asm/syscall.h      |   6 +
+ arch/riscv/include/asm/thread_info.h  |  13 +-
+ arch/riscv/kernel/Makefile            |   2 -
+ arch/riscv/kernel/entry.S             | 334 +++-----------------------
+ arch/riscv/kernel/irq.c               |  15 ++
+ arch/riscv/kernel/mcount-dyn.S        |  56 +----
+ arch/riscv/kernel/process.c           |   5 +-
+ arch/riscv/kernel/ptrace.c            |  44 ----
+ arch/riscv/kernel/signal.c            |  29 +--
+ arch/riscv/kernel/sys_riscv.c         |  31 +++
+ arch/riscv/kernel/trace_irq.c         |  27 ---
+ arch/riscv/kernel/trace_irq.h         |  11 -
+ arch/riscv/kernel/traps.c             |  86 +++++--
+ arch/riscv/mm/fault.c                 |  16 +-
+ include/linux/compiler_types.h        |  15 +-
+ 21 files changed, 279 insertions(+), 499 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
+
+-- 
+2.36.1
+
