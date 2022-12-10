@@ -2,87 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5A86490C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD576490BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLJUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 15:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        id S229791AbiLJUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 15:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiLJUya (ORCPT
+        with ESMTP id S229779AbiLJUyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 15:54:30 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E10017066
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:28 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id d128so9470121ybf.10
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:28 -0800 (PST)
+        Sat, 10 Dec 2022 15:54:22 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC5717403
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:22 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id d7so8290547pll.9
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q16cxr3s5Ib/3QCtLbMCElaACH8JgEzemBLFcm7MiOY=;
-        b=R7AKYZndABWJMDjQgvNBO5XgFt85b6LX7zTVDJMZsdueHvaM+Z135Q1XPrHodiM2He
-         MoisOf/uej3tuCrxds1VVXgZUfv+Zsr+8qUU5pZfgDFTzmtvyZdG0MjGg8x1PKFkAUBI
-         0MQeqI3t1694tpSlNEgAIQIRHMOhvgxLZg2pE/tDFuju9CMuV2Je18n8RJIWAJm95tUO
-         kDAZfMfk2qaV1HlMAYERx41LZ1LyDJNPAYF5tKfkzeCAFnAQLdUnq+IjXfTSYbgQufM2
-         NOptWSc+ja72x5n7+7N9AkvsNqfa5deh7gFQao7PIXNUogBqPT3+vbIVE2NYHyR8fPFh
-         UrfQ==
+        d=gmail.com; s=20210112;
+        h=to:reply-to:subject:mime-version:from:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PYwkHxpnQAf/j6hVbOuHsfpcNTzM4x9BQKZcSB0Ugdw=;
+        b=VQOVrBc3whsqzQdmIGb3w6mZn+yw8EYZ5hoDTseNRsqQk3oYPEwDgtJxdfR601CGum
+         toJevVE9PJWkWkaNhtU6z880IqQjmNHMWh8+xbuTBZOOsxbT9V1l6gvRMIjrqxqzX1Ra
+         nCIJzhXi8CtpanxDGhgYMSgjkbx/pxQ7OdbWzH2uE4BK+BXVJYRQw1eeGQ/X8jFLDecO
+         itzVH0lRFd2hY19/ySZOsz/axO2pU9cUHIDKOHN8kB8GyMB253qO9lScXfSCo/UJGMmH
+         PH41BINVbE+D5yz7fVSFXsizRPun6xuIEcKDG2uQ80qiKS0yYszi+stbWYoDUXahr0Xp
+         AOXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q16cxr3s5Ib/3QCtLbMCElaACH8JgEzemBLFcm7MiOY=;
-        b=SP9pVdLSQLUWYfY/5g6ebx47VQLlSBcYp7OqXrikaFujaAzBNkC4OyKvx9f1OTBMeW
-         MRzKuZq9FM8UMrKZKETQTKPe9WZjRpbQU60le8unBRfTmy3YcJnQa034QiQBu3znovRK
-         RZuGPN7DzISFyWrNE6fiF8cIkFIWAwe/ANXnCnVQg4nxyiQxxzFyE/6/VZAj7lznwo+W
-         jNMh8OfHmBS+T8g+0yUq7byWsbVKsd/5p0A94kxJ54njsvuLNCBZ4t0xm9XxnMNx4OK2
-         fzqCmyqmHjyVDyhD6Tc91dfYnG7qr8HMYKlv6u6Zz7Vh1lbehkkbM17At6DM9QYnFiHO
-         NJcw==
-X-Gm-Message-State: ANoB5pkiEW8lg1iZC3AbBm6PSAMGAVtplIEYIGhNejN68NxBTJwpsbg7
-        8gchtZpMKQVwv4uMQ6aFvhGhsgECC3Cs5eLifAKWuw==
-X-Google-Smtp-Source: AA0mqf44ulwHZCa6/pZ9L/2X+QF6ko7HvjIj/me7Y25mH3+MX+Gpz6y6Sw/vv0/48I8yKLLFWHcXUZ3+TTtMDLEtJzI=
-X-Received: by 2002:a25:4dd7:0:b0:6f1:535f:2f38 with SMTP id
- a206-20020a254dd7000000b006f1535f2f38mr65304962ybb.153.1670705667741; Sat, 10
- Dec 2022 12:54:27 -0800 (PST)
+        h=to:reply-to:subject:mime-version:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYwkHxpnQAf/j6hVbOuHsfpcNTzM4x9BQKZcSB0Ugdw=;
+        b=KnrawZhO8syKyUoXLzqyZTvc1soYelb222HN9IrMjH+aKer++mMiIZBEmHIqwnqSvN
+         fguUNg5PoZVPZgD63nxE5QPIc9Jbjf0AJkrIlOydwbwh5M6l3Ym7gCBJu+rguyIAMk43
+         eS7X7Xd1fAxss33STt7wXK1gsE7n4HIQbjMIUOxA/swsU/GQqLjXg9MTjlxlgj75jAlY
+         zT5OnzqYpC6NGrOXxPRboMjs1mzfD3bIStdkbL+Ev3gHCvs42U71uWyMOlwHy4oqZ5+x
+         5nUZXu+hl0fjqlBN0TTK3W58ZoWD0iUsU7tFuLG7Jf0IdegozrF3CMihE5T9Vokl5l58
+         vYmg==
+X-Gm-Message-State: ANoB5pnlZ6Vc1Z96UFAJhmJEIcVMzxun6AgEkAcQWd9jWf/gSIFRwtG/
+        Z3BjM8AnQ9+eurBGfUtURVP8+/ojXHL9PQcM
+X-Google-Smtp-Source: AA0mqf52l0Vo+JfLdKr5rGMxYJ7uarFrhTqdsV9MEDHPg+W33efc6J0fNFXSJ8OszP9o4G24Gvpokw==
+X-Received: by 2002:a17:90b:2685:b0:21b:c5d9:3478 with SMTP id pl5-20020a17090b268500b0021bc5d93478mr9984784pjb.0.1670705661698;
+        Sat, 10 Dec 2022 12:54:21 -0800 (PST)
+Received: from [127.0.1.1] ([202.184.51.63])
+        by smtp.gmail.com with ESMTPSA id z9-20020a17090a7b8900b001fd6066284dsm2864132pjc.6.2022.12.10.12.54.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 12:54:21 -0800 (PST)
+Message-ID: <6394f1fd.170a0220.c72d1.5884@mx.google.com>
+Date:   Sat, 10 Dec 2022 12:54:21 -0800 (PST)
+From:   Maria Chevchenko <17jackson5ive@gmail.com>
+X-Google-Original-From: Maria Chevchenko <mariachevchenko417@outlook.com>
+Content-Type: multipart/alternative; boundary="===============0290070728803801404=="
 MIME-Version: 1.0
-References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-5-konrad.dybcio@linaro.org>
-In-Reply-To: <20221210200353.418391-5-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 10 Dec 2022 23:54:17 +0300
-Message-ID: <CAA8EJppJoc8bCOgFjiWagbiVOF3RCFWmEEYObcErv26bfeuM9Q@mail.gmail.com>
-Subject: Re: [PATCH 4/5] interconnect: qcom: rpm: Use _optional func for
- provider clocks
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Compliment Of The Day,
+Reply-To: Maria Chevchenko <mariachevchenko417@outlook.com>
+To:     linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Dec 2022 at 23:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> It turned out that - very unfortunately - msm8996 needs a binding
-> update, adding 2 more clocks to the A2NoC node. Use the _optional
-> variant of devm_clk_get to make sure old DTs will still probe with
-> newer versions of the driver.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+--===============0290070728803801404==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
+Please, i need your help; I have important business/project information that i wish to share with you. And, I want you to handle the investment. 
+  Please, reply back for more information about this.
+  Thank you.
+--===============0290070728803801404==--
