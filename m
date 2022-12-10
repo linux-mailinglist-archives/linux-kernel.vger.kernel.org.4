@@ -2,74 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469D2648D68
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 08:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A57648D6C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 08:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiLJHYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 02:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S229720AbiLJHcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 02:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLJHYX (ORCPT
+        with ESMTP id S229468AbiLJHcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 02:24:23 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4AA1F2DA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 23:24:22 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id x9-20020a056e021ca900b003037ca1af0cso1397514ill.16
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 23:24:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+a9Ql9iwWvSSIQfP/aoYCXm5wknpc2hGGVoKjPNBRU=;
-        b=xkDNl/HRyb+Ajn7G+Vt5I+h9p2mTwWn1uaJkQ52SO30Fwd9IinQxL+mea0qhBzvj2W
-         437wZ6usTZRHE3gdEfarK/sIHToBZ1quLjiCZlYSRJeN4J4LSL80vrljW27YkXkEk845
-         oDZBvHO/l5cponI3+soQwJlBtAs7QBdCN878I4bHIwt12ler1ZJZaPQ6dZrGT0UFJtM7
-         lEvr8HludIvs/JLPgcH5kyI8lh2pkODnvdBMiG6cwFiVYWFWL89YvjkUg9zPSSLaFDOa
-         JxVnkAWSpYR4oIVgcAjeFdGhvfrJjj3la0JScZCaSMHydEv3dle1Whg+dJBuxlaXl5Pu
-         bqWg==
-X-Gm-Message-State: ANoB5plizL1MQ28lIBigAs6PzpOcQ6Dn6p3bVGFduTQiHYCehDWa4QO6
-        /cxUH/yY9ClP5MU8JmiS2tNRRm+m31Tof5Dl6ccwh2GLCdf6
-X-Google-Smtp-Source: AA0mqf7VNRH/XCjri7PycICQMeqjl0/JRHkrzBmIHP89YY01jEf4ioRJpLCxDCzAaBdGVTNrWuutB/s3ZDmpUrMlO7VFlcKBWQQZ
+        Sat, 10 Dec 2022 02:32:33 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2021263B;
+        Fri,  9 Dec 2022 23:32:27 -0800 (PST)
+X-UUID: ca6ba3865f0e40758cb07f733de742cf-20221210
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=RV9FBZj19jlJj76zizzD8sDNUjqQGz9+DRIs5bQdvgo=;
+        b=dpGonxXrGs6UCuur090hQkAr6Q9Ja6LSvMw4j9VSg+YOmtyXc5d+p4dlQyyCHWP+IJeeLfYzpG2+3E+OJXKnpMxZ8BMi9en5AvnBZAfxOm/y9bTyBDbhEJWelks7sUgsyXRujnMvDXbI2M2sL9TO674qpnvvulTTimthE1ClxI4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:35998799-579d-492b-ba45-6a4975e798b6,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.14,REQID:35998799-579d-492b-ba45-6a4975e798b6,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:dcaaed0,CLOUDID:f8a531d2-652d-43fd-a13a-a5dd3c69a43d,B
+        ulkID:2212101532234J9HKBJQ,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ca6ba3865f0e40758cb07f733de742cf-20221210
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 21752955; Sat, 10 Dec 2022 15:32:22 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 10 Dec 2022 15:32:20 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 10 Dec 2022 15:32:19 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 0/5] media: mediatek: vcodec: Fix power_VideoCall test fail
+Date:   Sat, 10 Dec 2022 15:32:13 +0800
+Message-ID: <20221210073218.17350-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:5ac:b0:303:9599:52b6 with SMTP id
- k12-20020a056e0205ac00b00303959952b6mr413152ils.58.1670657061497; Fri, 09 Dec
- 2022 23:24:21 -0800 (PST)
-Date:   Fri, 09 Dec 2022 23:24:21 -0800
-In-Reply-To: <20221210011440.2050-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b133c805ef74280a@google.com>
-Subject: Re: [syzbot] WARNING in do_mkdirat
-From:   syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Random getting below error message when test power_VideoCall/control.49_vp9:
+pc : __list_del_entry_valid+0xb0/0xfc
+lr : __list_del_entry_valid+0xac/0xfc
+sp : ffffffc020f23ce0
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+The lat_buf in core list won't be deleted when one instance decode done.
+Will access invalid released lat_buf list when queue work continue to decode.
+Firstly, remove all unused lat_buf to the top of core list, making sure
+these buffers can be decoded in highest priority; lastly, remove all unused
+lat_buf when the instance is freed.
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4107 } 2635 jiffies s: 2829 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+patch 1 add params to record lat and core lat_buf count.
+patch 2 using each instance lat_buf count replace core ready list.
+patch 3 move lat_buf to the top of core list.
+patch 4 add core decode done event.
+patch 5 remove unused lat_buf.
+---
+Yunfei Dong (5):
+  media: mediatek: vcodec: add params to record lat and core lat_buf
+    count
+  media: mediatek: vcodec: using each instance lat_buf count replace
+    core ready list
+  media: mediatek: vcodec: move lat_buf to the top of core list
+  media: mediatek: vcodec: add core decode done event
+  media: mediatek: vcodec: remove unused lat_buf
 
+ .../platform/mediatek/vcodec/vdec_msg_queue.c | 74 +++++++++++++++++--
+ .../platform/mediatek/vcodec/vdec_msg_queue.h | 13 ++++
+ 2 files changed, 81 insertions(+), 6 deletions(-)
 
-Tested on:
-
-commit:         0d1409e4 Merge tag 'drm-fixes-2022-12-09' of git://ano..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=14f4750b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1070ffdf880000
+-- 
+2.18.0
 
