@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D3B648D1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 05:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF8D648D1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 05:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiLJEQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 23:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S229760AbiLJERf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 23:17:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiLJEPy (ORCPT
+        with ESMTP id S229897AbiLJERK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 23:15:54 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507FA750B8;
-        Fri,  9 Dec 2022 20:15:53 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 65so5046249pfx.9;
-        Fri, 09 Dec 2022 20:15:53 -0800 (PST)
+        Fri, 9 Dec 2022 23:17:10 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E1076153
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 20:16:50 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id j18-20020a170902da9200b00189b3b16addso5740800plx.23
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 20:16:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ozEVuMBsrz2fGpZPaf5TBc56Rb5hAzeIeLY45YAmjg=;
-        b=qBuyZR9xJuqckUAwIQgashHsDw96Aw3Jld/uVlEvbCsfcLt46kL96bojo8qKgzJZtK
-         FygLn59+S6HBFyAz6rV5sxdMykV3+DwsLnQb03+ohkhmmhJthTwX/6v2orYRqHQCtGgD
-         9ANAMJ/CC+ocvoN5WiGy2CWKEjV/EEZn4dKGLD5bzOsfN0CZpQhbrvwd5iND2vqfFaq6
-         7DxKT/IpCfoPsI4ey/RRAb0T72Dpdwq4xL50pZq0sLv0K4ndk9K1KYaKzalDPvNV2wq6
-         dWB0wi+d54AycCMonGVteTXR7X3BymFAWaUwk7YpRWJzqBAMdVWYdLOfSsPFOHbXpB3C
-         CIOg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C6RTbmmSkPOFm902+mLMHGPXN9xcjb04HtLDqi+Zh0c=;
+        b=BvO0Vvnynj96CFRnXCmTlxB2yUgmetu/LkyKo83qxWb7GC5KxrSYBwHscaynK6luPu
+         sfvKOizMxzBtaEwMS0MrAG7ys4gWlbeE5d4PvbpEsoQCEGAnVrvs9UqIq1L3dvTrVmB4
+         sxsoQzAV/K+9upPPpNXGaO513a6HTYhNAxZE8pd+mI/YOhOvgCm+Vxajs5j72RwQw1dS
+         n77gzfpXonUFXlPYp7Yw3hO3zxu6aAu/cA7uyc05gF7uVoanoRiL2iIvWzicf+NFB4cl
+         rypFBaVwhkN3QK5DFXDvbUHguHVLeAwQNDU8aBKYG77ZN0udlOg8YJD3P/0p6ZWf6nS+
+         vNsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ozEVuMBsrz2fGpZPaf5TBc56Rb5hAzeIeLY45YAmjg=;
-        b=xVBBji3+crHkl5gRxj/aUzKHNTYEqtasurYdEqH5myOg2CDE58mnYkae5JnOfCXCI7
-         JwfShkar+3oolzQZ5tE+saHK+Nrv0izasJ9Pv3EzqhJ5cwBzC/l4S9T0y2LAk+t9Oj5f
-         vpOQ/H4V/BAUxwpw4zUxW7miE58qerF/ttZOp31BUo+8cGn9CvxO+wwIhBfb1NcGSmM7
-         cvBT/ccOaLTrnfxysqV9axp/mbEiUIcyyDEIMqh+h0Lurs/urTcCdrfANhRIJQqanIog
-         EICl8XHdnZaO3rN645bfLaMda5BQP9P9hKxtOcO5Tnj/pSEaIdBBcgZVq3J8EVy0Gj9N
-         Fx9w==
-X-Gm-Message-State: ANoB5plYjRUPGXDsNgcnxO+hLiR1LOTYq16LUyqCr3ZFjQQ5TazghnBF
-        CloWaGc5T21fFwLEpJtf9p4=
-X-Google-Smtp-Source: AA0mqf6INOrKloviSF3T6uZisghveh/vGMlmOCeTTviA5Pj5gFIHDKQkWAafIbmnMBVlQbMX9yDAAQ==
-X-Received: by 2002:a62:de04:0:b0:577:3885:9d43 with SMTP id h4-20020a62de04000000b0057738859d43mr8063841pfg.18.1670645752742;
-        Fri, 09 Dec 2022 20:15:52 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
-        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0056bc5ad4862sm1926655pfr.28.2022.12.09.20.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 20:15:52 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 0FB8510463F; Sat, 10 Dec 2022 11:15:48 +0700 (WIB)
-Date:   Sat, 10 Dec 2022 11:15:48 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/21] documentation, blkfilter: Block Device
- Filtering Mechanism
-Message-ID: <Y5QH9FdUvgZ7A8cu@debian.me>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-2-sergei.shtepa@veeam.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="djxDLq4t0gK1VZM2"
-Content-Disposition: inline
-In-Reply-To: <20221209142331.26395-2-sergei.shtepa@veeam.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C6RTbmmSkPOFm902+mLMHGPXN9xcjb04HtLDqi+Zh0c=;
+        b=CSAalrlxyLsOsrOYux5NjIZ7HNe7WmBXBy1atjokNpF0AvOw386+ifX/Jl9V34fea9
+         /XoMfTlDaXrj9j8tcKeMenCMaIonAGN2vRSSXPDZExI6BBVvL5wYW0AREKHcC2cBu1MK
+         /106MpkgjPGTOoujwV+izkZZDfYMSFurmQS7NF6etbPXQ7MGi1W+on6MuLRnuzmg1GA8
+         uWtP/aNzls0Uje5vbNvcnEIoAiEs/bcooJJsTjrQuGeUJFGkLa9Ibe7MIZZlhL5UBTMi
+         wlCQqDt6J/gzh07YvP04cnwdCm7YrfD9B7+JDTg7sIwZj+u/fTtlvCx4Aqvtg3DRG/K6
+         ej1Q==
+X-Gm-Message-State: ANoB5pnfjAYMCuSN9QrUjI0gy2lzhn4atsvRsOByhK4ko2QX4i6i2sMf
+        iWh1aDWkfii4DV8gJ1We9wpNvJktaI+hEtU=
+X-Google-Smtp-Source: AA0mqf5ReNfWId0H/gPB/QbbYUelHRoprIljtlKARcNQUX7xC3FBUYq9e6dGGf3dNWwFpgfcxul4j4LTOBFxFLw=
+X-Received: from coco0920.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5738])
+ (user=lixiaoyan job=sendgmr) by 2002:a17:90a:2a88:b0:220:1f03:129b with SMTP
+ id j8-20020a17090a2a8800b002201f03129bmr28851pjd.0.1670645809623; Fri, 09 Dec
+ 2022 20:16:49 -0800 (PST)
+Date:   Sat, 10 Dec 2022 04:16:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221210041646.3587757-1-lixiaoyan@google.com>
+Subject: [PATCH net-next v6 1/2] IPv6/GRO: generic helper to remove temporary
+ HBH/jumbo header in driver
+From:   Coco Li <lixiaoyan@google.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Chan <michael.chan@broadcom.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Coco Li <lixiaoyan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,174 +73,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IPv6/TCP and GRO stacks can build big TCP packets with an added
+temporary Hop By Hop header.
 
---djxDLq4t0gK1VZM2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is GSO is not involved, then the temporary header needs to be removed in
+the driver. This patch provides a generic helper for drivers that need
+to modify their headers in place.
 
-On Fri, Dec 09, 2022 at 03:23:11PM +0100, Sergei Shtepa wrote:
-> The document contains:
-> * Describes the purpose of the mechanism
-> * A little historical background on the capabilities of handling I/O
->   units of the Linux kernel
-> * Brief description of the design
-> * Reference to interface description
->=20
+Tested:
+Compiled and ran with ethtool -K eth1 tso off
+Could send Big TCP packets
 
-The patch subject should be "Documentation: document block device
-filtering"
+Signed-off-by: Coco Li <lixiaoyan@google.com>
+---
+ include/net/ipv6.h     | 33 +++++++++++++++++++++++++++++++++
+ net/ipv6/ip6_offload.c | 27 ++++-----------------------
+ 2 files changed, 37 insertions(+), 23 deletions(-)
 
-Also, write the patch description in imperative mood.
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index d383c895592a..03f3af02a9a6 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -500,6 +500,39 @@ static inline int ipv6_has_hopopt_jumbo(const struct sk_buff *skb)
+ 	return jhdr->nexthdr;
+ }
+ 
++/* Return 0 if HBH header is successfully removed
++ * Or if HBH removal is unnecessary (packet is not big TCP)
++ * Return error to indicate dropping the packet
++ */
++static inline int ipv6_hopopt_jumbo_remove(struct sk_buff *skb)
++{
++	const int hophdr_len = sizeof(struct hop_jumbo_hdr);
++	int nexthdr = ipv6_has_hopopt_jumbo(skb);
++	struct ipv6hdr *h6;
++
++	if (!nexthdr)
++		return 0;
++
++	if (skb_cow_head(skb, 0))
++		return -1;
++
++	/* Remove the HBH header.
++	 * Layout: [Ethernet header][IPv6 header][HBH][L4 Header]
++	 */
++	memmove(skb_mac_header(skb) + hophdr_len, skb_mac_header(skb),
++		skb_network_header(skb) - skb_mac_header(skb) +
++		sizeof(struct ipv6hdr));
++
++	__skb_pull(skb, hophdr_len);
++	skb->network_header += hophdr_len;
++	skb->mac_header += hophdr_len;
++
++	h6 = ipv6_hdr(skb);
++	h6->nexthdr = nexthdr;
++
++	return 0;
++}
++
+ static inline bool ipv6_accept_ra(struct inet6_dev *idev)
+ {
+ 	/* If forwarding is enabled, RA are not accepted unless the special
+diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+index 3ee345672849..00dc2e3b0184 100644
+--- a/net/ipv6/ip6_offload.c
++++ b/net/ipv6/ip6_offload.c
+@@ -77,7 +77,7 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
+ 	struct sk_buff *segs = ERR_PTR(-EINVAL);
+ 	struct ipv6hdr *ipv6h;
+ 	const struct net_offload *ops;
+-	int proto, nexthdr;
++	int proto, err;
+ 	struct frag_hdr *fptr;
+ 	unsigned int payload_len;
+ 	u8 *prevhdr;
+@@ -87,28 +87,9 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
+ 	bool gso_partial;
+ 
+ 	skb_reset_network_header(skb);
+-	nexthdr = ipv6_has_hopopt_jumbo(skb);
+-	if (nexthdr) {
+-		const int hophdr_len = sizeof(struct hop_jumbo_hdr);
+-		int err;
+-
+-		err = skb_cow_head(skb, 0);
+-		if (err < 0)
+-			return ERR_PTR(err);
+-
+-		/* remove the HBH header.
+-		 * Layout: [Ethernet header][IPv6 header][HBH][TCP header]
+-		 */
+-		memmove(skb_mac_header(skb) + hophdr_len,
+-			skb_mac_header(skb),
+-			ETH_HLEN + sizeof(struct ipv6hdr));
+-		skb->data += hophdr_len;
+-		skb->len -= hophdr_len;
+-		skb->network_header += hophdr_len;
+-		skb->mac_header += hophdr_len;
+-		ipv6h = (struct ipv6hdr *)skb->data;
+-		ipv6h->nexthdr = nexthdr;
+-	}
++	err = ipv6_hopopt_jumbo_remove(skb);
++	if (err)
++		return ERR_PTR(err);
+ 	nhoff = skb_network_header(skb) - skb_mac_header(skb);
+ 	if (unlikely(!pskb_may_pull(skb, sizeof(*ipv6h))))
+ 		goto out;
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-> diff --git a/Documentation/block/blkfilter.rst b/Documentation/block/blkf=
-ilter.rst
-> new file mode 100644
-> index 000000000000..3482e16c1964
-> --- /dev/null
-> +++ b/Documentation/block/blkfilter.rst
-> @@ -0,0 +1,50 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> +Block Device Filtering Mechanism
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The block device filtering mechanism is an API that allows to attach blo=
-ck
-> +device filters. Block device filters allow perform additional processing
-> +for I/O units.
-> +
-> +Introduction
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +The idea of handling I/O units on block devices is not new. Back in the
-> +2.6 kernel, there was an undocumented possibility of handling I/O units
-> +by substituting the make_request_fn() function, which belonged to the
-> +request_queue structure. But no kernel module used this feature, and it
-> +was eliminated in the 5.10 kernel.
-> +
-> +The block device filtering mechanism returns the ability to handle I/O u=
-nits.
-> +It is possible to safely attach filter to a block device "on the fly" wi=
-thout
-> +changing the structure of block devices.
-> +
-> +It supports attaching one filter to one block device, because there is o=
-nly
-> +one filter implementation in the kernel.
-> +See Documentation/block/blksnap.rst.
-> +
-> +Design
-> +=3D=3D=3D=3D=3D=3D
-> +
-> +The block device filtering mechanism provides functions for attaching and
-> +detaching the filter. The filter is a structure with a reference counter
-> +and callback functions.
-> +
-> +The submit_bio_cb() callback function is called for each I/O unit for a =
-block
-> +device, providing I/O unit filtering. Depending on the result of filteri=
-ng
-> +the I/O unit, it can either be passed for subsequent processing by the b=
-lock
-> +layer, or skipped.
-> +
-> +The reference counter allows to control the filter lifetime. When the re=
-ference
-> +count is reduced to zero, the release_cb() callback function is called to
-> +release the filter. This allows the filter to be released when the block
-> +device is disconnected.
-> +
-> +Interface description
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +.. kernel-doc:: include/linux/blkdev.h
-> +	:functions: bdev_filter_operations bdev_filter bdev_filter_init bdev_fi=
-lter_get bdev_filter_put
-> +.. kernel-doc:: block/bdev.c
-> +	:functions: bdev_filter_attach bdev_filter_detach
-
-What about the wording below instead?
-
----- >8 ----
-diff --git a/Documentation/block/blkfilter.rst b/Documentation/block/blkfil=
-ter.rst
-index 3482e16c1964e6..fe2a4151c38fde 100644
---- a/Documentation/block/blkfilter.rst
-+++ b/Documentation/block/blkfilter.rst
-@@ -5,7 +5,7 @@ Block Device Filtering Mechanism
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- The block device filtering mechanism is an API that allows to attach block
--device filters. Block device filters allow perform additional processing
-+device filters. Block device filters allow performing additional processing
- for I/O units.
-=20
- Introduction
-@@ -14,16 +14,16 @@ Introduction
- The idea of handling I/O units on block devices is not new. Back in the
- 2.6 kernel, there was an undocumented possibility of handling I/O units
- by substituting the make_request_fn() function, which belonged to the
--request_queue structure. But no kernel module used this feature, and it
--was eliminated in the 5.10 kernel.
-+request_queue structure. But no kernel module used this feature, which was
-+the reason why it was removed in the 5.10 kernel.
-=20
--The block device filtering mechanism returns the ability to handle I/O uni=
-ts.
--It is possible to safely attach filter to a block device "on the fly" with=
-out
-+With block device filtering, the ability to handling I/O units is back. It=
- is
-+now possible to safely attaching filter to a block device "on the fly" wit=
-hout
- changing the structure of block devices.
-=20
--It supports attaching one filter to one block device, because there is only
--one filter implementation in the kernel.
--See Documentation/block/blksnap.rst.
-+It supports attaching a filter to a block device, due to there is only
-+one filter implementation in the kernel. See Documentation/block/blksnap.r=
-st
-+for details.
-=20
- Design
- =3D=3D=3D=3D=3D=3D
-@@ -33,9 +33,9 @@ detaching the filter. The filter is a structure with a re=
-ference counter
- and callback functions.
-=20
- The submit_bio_cb() callback function is called for each I/O unit for a bl=
-ock
--device, providing I/O unit filtering. Depending on the result of filtering
--the I/O unit, it can either be passed for subsequent processing by the blo=
-ck
--layer, or skipped.
-+device, providing I/O unit filtering. Depending on filtering result, it can
-+either be passed for subsequent processing by the block
-+layer, or be skipped.
-=20
- The reference counter allows to control the filter lifetime. When the refe=
-rence
- count is reduced to zero, the release_cb() callback function is called to
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---djxDLq4t0gK1VZM2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5QH7gAKCRD2uYlJVVFO
-ozyBAP4y2s2pM1cq93OuuJUSPvRd1Qz1ElJR2eNrN63nSWIPtgD/U3JNGKJ3bzNp
-6SMFiHhd6OvERXUaW7U/TJ2hkKacrgc=
-=yUM4
------END PGP SIGNATURE-----
-
---djxDLq4t0gK1VZM2--
