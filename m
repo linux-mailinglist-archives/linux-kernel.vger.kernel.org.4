@@ -2,112 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CA0648C6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 02:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C644648C73
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 02:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLJBsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 20:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S229785AbiLJB5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 20:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLJBsR (ORCPT
+        with ESMTP id S229538AbiLJB5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 20:48:17 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CF310545
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 17:48:16 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so9959035pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 17:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y+mZaxqrf16SOvU4T4amo68YYff+Aio6hmzF4Lq3mwk=;
-        b=cPB1PRjIjqGXgaKo8CMFxdM4garoBeOIt12F0NkqM6Z58Pxof81vbzQCY3Nnhpi4ib
-         CoRUuzTDKGWrQ/s1D5JZW+htpjp0EYoqufGG3ZiMU5e27xZA6tple3R6hJjKQf2KCcZu
-         nGTxHHmw6CvIegvFKsg4CNaWPFUGWm0ANDZiybEuiVWPCGQ6ek2Q//9HjGCNEk29nTT8
-         pzW33RxmGYtrQVnXPs6+dIsvba55W0v/toW8ypWrNPYIXJqjvCevsqBU006hysNRGCY3
-         YQDPdvRv0+WkRBMs+prg0IbLHV/brZR/48Zvpt8e9/NhTwmp3bC0lANCvmzHAjyH2mti
-         FKaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y+mZaxqrf16SOvU4T4amo68YYff+Aio6hmzF4Lq3mwk=;
-        b=dr9lqdroMKc9mRUHWx+IZUGMY+v3NYZLTpi7hzipIULr4dhT+3uVCcTA3XrS7PAbxR
-         LpCrPlEq5k3x8JomWni65Q1l1o50Nhmb36l9tWbjCayDJkzyaYmTmRd9vyIE2VbMZpxf
-         otEunG93J8ELy9rgM9i1oYFBAIw2AK4mYFCbVSML/27Lv6ZRrXE4RjeN3AfkNiUGNWsp
-         px/5L8qMGQ8KFiNnN3tMul80brCIW5IdMZ+RM/jDcTmR/x7J5upmUEBvVfyHE0qe3jH1
-         TnYM1TGacR0++O78GHSwVOJ9O73nFcnoo30rgUCu/7M5O0ku9rzro4Gs8WmouezHgW4D
-         nwxw==
-X-Gm-Message-State: ANoB5pnIHyVU6hFwnNffZsI2kHmnVaMbTDQGlx6OXEu3y0wAtTbz1BdJ
-        oDo6xmwOtJis8nfHlxll4BYTZg==
-X-Google-Smtp-Source: AA0mqf4fMR39Ehk9JSfVhh0GjRlhI2XVjPC//spVAQ5AfeXItJD5XT7p+m66qSVhzJiA2L8HEoBuVA==
-X-Received: by 2002:a17:903:40cd:b0:189:858f:b5c0 with SMTP id t13-20020a17090340cd00b00189858fb5c0mr109490pld.0.1670636895607;
-        Fri, 09 Dec 2022 17:48:15 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b0018999a3dd7esm1925340plg.28.2022.12.09.17.48.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 17:48:15 -0800 (PST)
-Date:   Sat, 10 Dec 2022 01:48:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v3 12/13] KVM: selftests: Make vCPU exit reason test
- assertion common.
-Message-ID: <Y5PlW+U2MblIObHT@google.com>
-References: <20221205191430.2455108-1-vipinsh@google.com>
- <20221205191430.2455108-13-vipinsh@google.com>
- <Y5OtpwM8ue8nZwG/@google.com>
+        Fri, 9 Dec 2022 20:57:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7825B4B9A2;
+        Fri,  9 Dec 2022 17:57:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26EF1B82A10;
+        Sat, 10 Dec 2022 01:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79397C433EF;
+        Sat, 10 Dec 2022 01:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670637428;
+        bh=dvjlzdS44RuljlbbdBTVkDuGixoXT1Nurmf7l9sdQCM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AU3gcHjlu1K7/nqcP0qw2upsrfRuwYjwGYCEDM1WmXjAyWLoArL+/vj6A5eSXIOjU
+         XBXXVW+eEhyZj/i4pg9iQU8lECIDahlX+M/RSPNsmjzePzaUZy5EuagVqEIOAvOAHP
+         AdLuHaS3aUq/ReZJKKjVmfgx5n+p2e2qCQ/ScOot6m8iGm8xwURDmhy2+3iFa850HU
+         Ve3QRhyjdBXEjJb4y6htm4zpnguoOIsHq6Yy6n+QJ1BJlKW4Q74HzP9NFZxZwFnNSO
+         iJO+RyZiKS8Fwlkzjgx4228P1HtQsY95kBalXWag51nn8j9ZCvJGF6xFjT8AofLn2d
+         SepSsuc64JKKA==
+Date:   Sat, 10 Dec 2022 01:57:05 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Message-ID: <Y5PnceyKQgBlcEUs@kernel.org>
+References: <20221128195651.322822-1-Jason@zx2c4.com>
+ <Y4zTnhgunXuwVXHe@kernel.org>
+ <Y4zUotH0UeHlRBGP@kernel.org>
+ <Y4zxly0XABDg1OhU@zx2c4.com>
+ <Y5Gs9jaSIGTNdRbV@kernel.org>
+ <6d13f2ba-7598-4522-e0e6-32f1577a2655@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5OtpwM8ue8nZwG/@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6d13f2ba-7598-4522-e0e6-32f1577a2655@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022, David Matlack wrote:
-> On Mon, Dec 05, 2022 at 11:14:29AM -0800, Vipin Sharma wrote:
-> > Make ASSERT_EXIT_REASON() macro and replace all exit reason test assert
-> > statements with it.
+On Thu, Dec 08, 2022 at 11:51:24AM +0100, Vlastimil Babka wrote:
+> On 12/8/22 10:23, Jarkko Sakkinen wrote:
+> > On Sun, Dec 04, 2022 at 08:14:31PM +0100, Jason A. Donenfeld wrote:
+> >> > 
+> >> > Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+> >> 
+> >> Oh thank goodness. You'll send this in for rc8 today?
 > > 
-> > No functional changes intended.
-> > 
-> > Suggested-by: David Matlack <dmatlack@google.com>
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > for 6.2-rc1
 > 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> 
-> > ---
-> >  .../testing/selftests/kvm/aarch64/psci_test.c |  4 +--
-> >  .../testing/selftests/kvm/include/test_util.h | 10 ++++++++
-> [...]
-> >  .../selftests/kvm/x86_64/xapic_ipi_test.c     |  6 +----
-> >  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  7 +-----
-> >  .../selftests/kvm/x86_64/xen_vmcall_test.c    |  5 +---
-> >  44 files changed, 71 insertions(+), 293 deletions(-)
-> 
-> Nice diff stat :)
+> Linus took it directly to rc8, so it would conflict now.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.1-rc8&id=23393c6461422df5bf8084a086ada9a7e17dc2ba
 
-I like the diffstat too, but I think we need a slightly different name for the
-macro.  "EXIT_REASON" can be interpreted as "hardware exit reason" or "KVM exit
-(to userspace) reason".  Most usage will be fairly obvious, but I'd like to avoid
-confusion when swapping between selftests and KVM-unit-tests (which often asserts
-on the hardware exit reason).   The name will be a bit longer, but I don't think
-line length with ever be a problem.  And most people will just copy+paste so finger
-fatigue likeliy won't be an issue either.
+Thanks for the remark!
 
-I also vote to prefix it with TEST, i.e. TEST_ASSERT_KVM_EXIT_REASON(), for
-consistency and to make it very clear it's a TEST_ASSERT() wrapper.  ASSERT_EQ()
-makes me twitch every time I see it.  This is definitely a personal preference 
-(or problem) I can survive with though :-)
+BR, Jarkko
