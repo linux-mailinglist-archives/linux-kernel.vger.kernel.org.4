@@ -2,95 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1B064918A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 00:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA4D64918C
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 00:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiLJXan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 18:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S229684AbiLJXjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 18:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJXal (ORCPT
+        with ESMTP id S229475AbiLJXjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 18:30:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411EFDF26
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 15:30:40 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670715036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQUtA/o32bo53tf1Eepa0K5uzactmbN/psEIDg7UwN8=;
-        b=3nzezORCzAp5TL6d+IFZGytwxYpF73cyzdk9LmAjNtTF3oYQsbLpU/btACkdb/EZ4DpCoT
-        PJasKHAkUSuBR6Pk2bxkllxRnV+OBzDHvVS1whFzWmYDjLlf2ZHSdKW+GdmqbtqvTFWDR2
-        1ghhyddCEawoRycSgq/uXFUBZ8FYEUiqe9wIuVpl26cGvUswuP6RR4RVwUm3Siv2v9NH1q
-        h8S3zvZX3cVOKFJiv0X/p41EhIITAQ5Fc4pf1pO38nruB6jtnYBMOTSIKE4js188SlFkFw
-        7ftrJG+XlsJ8oggQp8zwozo+WJG/iKI+hT8NV6Ewmpknb6iFo8yI0xYwIJkcsQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670715036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qQUtA/o32bo53tf1Eepa0K5uzactmbN/psEIDg7UwN8=;
-        b=cGQGwaUmqIUxzjyoBKcxX7uAyriyRKIknKJyTPLHuDoykv7ag2XoT6OzfT5YSE/5czA07Y
-        oWkBM/gdtezRr7CA==
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
-Subject: Re: [for-next][PATCH 13/25] x86/mm/kmmio: Use
- rcu_read_lock_sched_notrace()
-In-Reply-To: <20221210133425.4657985e@gandalf.local.home>
-References: <20221210135750.425719934@goodmis.org>
- <20221210135825.241167123@goodmis.org>
- <20221210174753.GD4001@paulmck-ThinkPad-P17-Gen-1>
- <20221210133425.4657985e@gandalf.local.home>
-Date:   Sun, 11 Dec 2022 00:30:36 +0100
-Message-ID: <87359mdeg3.ffs@tglx>
+        Sat, 10 Dec 2022 18:39:39 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89EA12AC5;
+        Sat, 10 Dec 2022 15:39:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P+spEQ7y7ZasIxb9ryrQ8rQPt1SUgFzIVniakYJnQDA=; b=BbZev/yZ9MElz9Qciq0BWl3CaP
+        YvNPVKoowz1lJpyXpdl9qFxTsH5r0hjH34FAwT1/+v0az8xNpWUMxmi2HFA7YBOQnMK0lVi/2ztwL
+        WpQDRgFb1r6S6WZCirFKuZs+oGtKSSrCOD1aJ92i3dRcHd4Vf48kVpzqGZ3bCECoAoK5IvVIFMytS
+        p3BEi1mukSRwkJzmfOv8WA+MRk4UhQyRqHl0mOAy+RLNqp5n4g2J5kNIk2FDPIHu+JU3z09vOQ/Jy
+        kQCJrLkkZR+ga6Nusgp1NWfU0dyyBD9WTtplasVrYYY0UGWF2xu0l5nLJS+QbxDrGB7ERQ9/eVztZ
+        yGIz2QQQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1p49RP-00AuJN-2N;
+        Sat, 10 Dec 2022 23:39:35 +0000
+Date:   Sat, 10 Dec 2022 23:39:35 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Chuang Wang <nashuiliang@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mount: rebuild error handling in do_new_mount
+Message-ID: <Y5UYt538lOFTwr5R@ZenIV>
+References: <20221204150006.753148-1-nashuiliang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221204150006.753148-1-nashuiliang@gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10 2022 at 13:34, Steven Rostedt wrote:
-> On Sat, 10 Dec 2022 09:47:53 -0800 "Paul E. McKenney" <paulmck@kernel.org> wrote:
->> This does mess with preempt_count() redundantly, but the overhead from
->> that should be way down in the noise.
->
-> I was going to remove it, but then I realized that it would be a functional
-> change, as from the comment above, it uses "preempt_enable_no_resched(),
-> which there is not a rcu_read_unlock_sched() variant.
+On Sun, Dec 04, 2022 at 11:00:05PM +0800, Chuang Wang wrote:
+> When a function execution error is detected in do_new_mount, it should
+> return immediately. Using this can make the code easier to understand.
 
-preempt_enable_no_resched() in this context is simply garbage.
+Your piles of goto make it harder to follow and reason about.
 
-preempt_enable_no_resched() tries to avoid the overhead of checking
-whether rescheduling is due after decrementing preempt_count() because
-the code which it this claims to know that it is _not_ the outermost one
-which brings preempt count back to preemtible state.
-
-I concede that there are hot paths which actually can benefit, but this
-code has exactly _ZERO_ benefit from that. Taking that tracing exception
-and handling it is orders of magnitudes more expensive than a regular
-preempt_enable().
-
-So just get rid of it and don't proliferate cargo cult programming.
-
-Thanks,
-
-        tglx
-
-
+NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
