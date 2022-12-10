@@ -2,191 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B743648FC6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0605F648F6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 16:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiLJQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 11:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
+        id S229732AbiLJPTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 10:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLJQWW (ORCPT
+        with ESMTP id S229524AbiLJPTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 11:22:22 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188C0193F2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 08:22:00 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 1so11736226lfz.4
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 08:22:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xa+wgF2f+V8JgfQAupJPW6uYsxXB4NP4JKODbl1KcqE=;
-        b=UHt1iU52cWqV3BAWi2M31hRUbBoSdtprzdHKUypxkiBjFMKxbSq9IiRqrhJs03Steo
-         JrQUveWNUsk8SrBlSJf86PsiW2o9G02STZ5j5tTMALOTPjklJQ2ApAqDIPIm921N/59b
-         lZvDEt9nvEYZYQzOC8zBo87MHwk0WzWGXBZkgvG23G1TLRfVhQaNU7WxYOZVBhAzJ9Ut
-         2Mg+RZ4DZJsVluciDSLnYZlrwWnhCq4RLDEkYcOyMYHfMG/AH4oUNpKJPBlRWydGYEMr
-         Y0NdDkg3vIDdJEdbBtU5NZtAgfcawxryqFnxxHvWtD3AlTKHOZ3WxR6vapMSSXGX/tSL
-         K35Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xa+wgF2f+V8JgfQAupJPW6uYsxXB4NP4JKODbl1KcqE=;
-        b=RSyj3jRuDFKj74In5I0vGoxyOQcQ11jeykqiYbVgVK8jmWTgHcHNQVEGh2UhGY4n/e
-         FnROynq0jB9doo/S79MRIzZmZ2zNbF73KlgFjZwJqXD7zmMF/nmG/cXa6vlOkarIT4dV
-         8Bgvb7DVU3ysaL9I/PZgB4SUWF0Cl4KbrJoSYniBZnLrjnLqUqCtVhSWlgx1/EjhPSZe
-         y/d2s1l1aeHcYC1Zyh2k8uwoeMsFeCe608ErARrm0rnRx9PAW/cUElgNkJkFhrImA+e6
-         H4bvHPvO+399EfFKKjExNThYsVK+5xuFTtruFrT/yZgkSGjSq0l+acoXBVipWLxPtDpt
-         QKPQ==
-X-Gm-Message-State: ANoB5pkXU5VdhVFHIIo9+elzQTQUDUxQKUJ+3n+YYTMvg7r5ypRTdWs/
-        Lox8TgURdYaeT2NwlEsiaNn7bXZiUTxIjsyZVdU9wQ==
-X-Google-Smtp-Source: AA0mqf45e7e/ZiGpqcz90FYEYvqQ9RR7rpC8puKLEoNvnvF7lguelAa0o72DjwztPRv1/xDr9IEHXEixoR9K3zAR4lk=
-X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id
- m3-20020a0565120a8300b004aaf944f7ecmr27167047lfu.467.1670689318339; Sat, 10
- Dec 2022 08:21:58 -0800 (PST)
+        Sat, 10 Dec 2022 10:19:50 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF6412AB9;
+        Sat, 10 Dec 2022 07:19:48 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NTs3w3X5qzJqKw;
+        Sat, 10 Dec 2022 23:18:52 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 10 Dec
+ 2022 23:19:16 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <pkshih@realtek.com>
+CC:     <Larry.Finger@lwfinger.net>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <kvalo@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <linville@tuxdriver.com>, <lizetao1@huawei.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: [PATCH v2] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
+Date:   Sun, 11 Dec 2022 00:23:36 +0800
+Message-ID: <20221210162336.1383856-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <e985ead3ea7841b8b3a94201dfb18776@realtek.com>
+References: <e985ead3ea7841b8b3a94201dfb18776@realtek.com>
 MIME-Version: 1.0
-References: <20221207062913.3154262-1-bhupesh.sharma@linaro.org>
- <CAA8EJpo30L=KYvrkbnWOrSXGVPk5++r77MTqVd12SZtaUqo-_w@mail.gmail.com>
- <CAH=2Ntw7EKxkrRwp7mqkBm0gGE7=jVruViPa7ZiG1aSA0ipMzQ@mail.gmail.com> <CAA8EJpqUT+Zy0uD+0NnUTbQWOM_+CAfXTU+ED=GwgcNe2MpVHQ@mail.gmail.com>
-In-Reply-To: <CAA8EJpqUT+Zy0uD+0NnUTbQWOM_+CAfXTU+ED=GwgcNe2MpVHQ@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Sat, 10 Dec 2022 21:51:46 +0530
-Message-ID: <CAH=2NtyQKBd3VQczfBzC5GU_y073wBdEH0gJBEfVm1ojsuWSag@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Fix iommu sid values for PCIe nodes
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
-        andersson@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 at 19:43, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Thu, 8 Dec 2022 at 14:05, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> >
-> > On Thu, 8 Dec 2022 at 16:14, Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Wed, 7 Dec 2022 at 09:29, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> > > >
-> > > > Fix the iommu sid values for the PCIe nodes present on
-> > > > Qualcomm SM8150 SoC dtsi (in sync the with downstream code).
-> > >
-> > > The commit message describes what you did, not why. Is there any
-> > > actual issue that you are trying to solve?
-> >
-> > Right, I will add that in v2. We have a customer facing some sid
-> > related IOMMU transactional errors on sm8150 based boards.
-> >
-> > > It makes me wonder because all modern Qualcomm platforms share more or
-> > > less the same setup.
-> >
-> > Please see sdm845.dtsi, which does the same as suggested via this
-> > patch for sm8150.
->
-> Should we also apply the same change to other platforms?
+There is a global-out-of-bounds reported by KASAN:
 
-That's a good question. But I have no test data points to say that
-this should be valid for other platforms as well. Let me check with
-the folks @ qcom who reported this, (i.e. whether they see this with
-other qcom platforms as well), but let's not hold back this fix while
-we wait for more data.
+  BUG: KASAN: global-out-of-bounds in
+  _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+  Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
 
-Thanks.
+  CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
+  6.1.0-rc8+ #144 e15588508517267d37
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+  Call Trace:
+   <TASK>
+   ...
+   kasan_report+0xbb/0x1c0
+   _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+   rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
+   rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
+   ...
+   </TASK>
 
-> > > > Fixes: a1c86c680533 ("arm64: dts: qcom: sm8150: Add PCIe nodes")
-> > > > Cc: Bjorn Andersson <andersson@kernel.org>
-> > > > Cc: Rob Herring <robh+dt@kernel.org>
-> > >
-> > > No need to have regular maintainers in Cc tags. Please use regular
-> > > git-send-email arguments instead.
-> > >
-> > > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > > ---
-> > > >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 32 ++++++++++++++++++++++++++--
-> > > >  1 file changed, 30 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > > > index d1b64280ab0b..e88d1617a1ab 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > > > @@ -1810,9 +1810,23 @@ pcie0: pci@1c00000 {
-> > > >                                       "slave_q2a",
-> > > >                                       "tbu";
-> > > >
-> > > > -                       iommus = <&apps_smmu 0x1d80 0x7f>;
-> > > > +                       iommus = <&apps_smmu 0x1d80 0xf>;
-> > > >                         iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
-> > > >                                     <0x100 &apps_smmu 0x1d81 0x1>;
-> > >
-> > > it looks like the patch was not even compile-tested.
-> > >
-> > > > +                                   <0x200 &apps_smmu 0x1d82 0x1>,
-> > > > +                                   <0x300 &apps_smmu 0x1d83 0x1>,
-> > > > +                                   <0x400 &apps_smmu 0x1d84 0x1>,
-> > > > +                                   <0x500 &apps_smmu 0x1d85 0x1>,
-> > > > +                                   <0x600 &apps_smmu 0x1d86 0x1>,
-> > > > +                                   <0x700 &apps_smmu 0x1d87 0x1>,
-> > > > +                                   <0x800 &apps_smmu 0x1d88 0x1>,
-> > > > +                                   <0x900 &apps_smmu 0x1d89 0x1>,
-> > > > +                                   <0xa00 &apps_smmu 0x1d8a 0x1>,
-> > > > +                                   <0xb00 &apps_smmu 0x1d8b 0x1>,
-> > > > +                                   <0xc00 &apps_smmu 0x1d8c 0x1>,
-> > > > +                                   <0xd00 &apps_smmu 0x1d8d 0x1>,
-> > > > +                                   <0xe00 &apps_smmu 0x1d8e 0x1>,
-> > > > +                                   <0xf00 &apps_smmu 0x1d8f 0x1>;
-> > > >
-> > > >                         resets = <&gcc GCC_PCIE_0_BCR>;
-> > > >                         reset-names = "pci";
-> > > > @@ -1909,9 +1923,23 @@ pcie1: pci@1c08000 {
-> > > >                         assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
-> > > >                         assigned-clock-rates = <19200000>;
-> > > >
-> > > > -                       iommus = <&apps_smmu 0x1e00 0x7f>;
-> > > > +                       iommus = <&apps_smmu 0x1e00 0xf>;
-> > > >                         iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
-> > > >                                     <0x100 &apps_smmu 0x1e01 0x1>;
-> > > > +                                   <0x200 &apps_smmu 0x1e02 0x1>,
-> > > > +                                   <0x300 &apps_smmu 0x1e03 0x1>,
-> > > > +                                   <0x400 &apps_smmu 0x1e04 0x1>,
-> > > > +                                   <0x500 &apps_smmu 0x1e05 0x1>,
-> > > > +                                   <0x600 &apps_smmu 0x1e06 0x1>,
-> > > > +                                   <0x700 &apps_smmu 0x1e07 0x1>,
-> > > > +                                   <0x800 &apps_smmu 0x1e08 0x1>,
-> > > > +                                   <0x900 &apps_smmu 0x1e09 0x1>,
-> > > > +                                   <0xa00 &apps_smmu 0x1e0a 0x1>,
-> > > > +                                   <0xb00 &apps_smmu 0x1e0b 0x1>,
-> > > > +                                   <0xc00 &apps_smmu 0x1e0c 0x1>,
-> > > > +                                   <0xd00 &apps_smmu 0x1e0d 0x1>,
-> > > > +                                   <0xe00 &apps_smmu 0x1e0e 0x1>,
-> > > > +                                   <0xf00 &apps_smmu 0x1e0f 0x1>;
-> > > >
-> > > >                         resets = <&gcc GCC_PCIE_1_BCR>;
-> > > >                         reset-names = "pci";
-> > > > --
-> > > > 2.38.1
-> > > >
-> > >
-> > >
-> > > --
-> > > With best wishes
-> > > Dmitry
->
->
->
-> --
-> With best wishes
-> Dmitry
+The root cause of the problem is that the comparison order of
+"prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
+_rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
+strings from tail to head, which causes the problem. In the
+_rtl8812ae_phy_set_txpower_limit(), it was originally intended to meet
+this requirement by carefully designing the comparison order.
+For example, "pregulation" and "pbandwidth" are compared in order of
+length from small to large, first is 3 and last is 4. However, the
+comparison order of "prate_section" dose not obey such order requirement,
+therefore when "prate_section" is "HT", when comparing from tail to head,
+it will lead to access out of bounds in _rtl8812ae_eq_n_byte(). As
+mentioned above, the _rtl8812ae_eq_n_byte() has the same function as
+strcmp(), so just strcmp() is enough.
+
+Fix it by replacing _rtl8812ae_eq_n_byte() with strcmp(). Although it
+can be fixed by adjusting the comparison order of "prate_section", this
+may cause the value of "rate_section" to not be from 0 to 5. In
+addition, commit "21e4b0726dc6" not only moved driver from staging to
+regular tree, but also added setting txpower limit function during the
+driver config phase, so the problem was introduced by this commit.
+
+Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+v1 was posted at: https://lore.kernel.org/all/20221207152319.3135500-1-lizetao1@huawei.com/
+v1 -> v2: delete the third parameter of _rtl8812ae_eq_n_byte() and use
+strcmp to replace loop comparison.
+
+ .../wireless/realtek/rtlwifi/rtl8821ae/phy.c  | 51 ++++++++-----------
+ 1 file changed, 22 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+index a29321e2fa72..14b569d7d8fa 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+@@ -1598,16 +1598,9 @@ static bool _rtl8812ae_get_integer_from_string(const char *str, u8 *pint)
+ 	return true;
+ }
+ 
+-static bool _rtl8812ae_eq_n_byte(const char *str1, const char *str2, u32 num)
++static bool _rtl8812ae_eq_n_byte(const char *str1, const char *str2)
+ {
+-	if (num == 0)
+-		return false;
+-	while (num > 0) {
+-		num--;
+-		if (str1[num] != str2[num])
+-			return false;
+-	}
+-	return true;
++	return strcmp(str1, str2) == 0;
+ }
+ 
+ static s8 _rtl8812ae_phy_get_chnl_idx_of_txpwr_lmt(struct ieee80211_hw *hw,
+@@ -1659,42 +1652,42 @@ static void _rtl8812ae_phy_set_txpower_limit(struct ieee80211_hw *hw,
+ 	power_limit = power_limit > MAX_POWER_INDEX ?
+ 		      MAX_POWER_INDEX : power_limit;
+ 
+-	if (_rtl8812ae_eq_n_byte(pregulation, "FCC", 3))
++	if (_rtl8812ae_eq_n_byte(pregulation, "FCC"))
+ 		regulation = 0;
+-	else if (_rtl8812ae_eq_n_byte(pregulation, "MKK", 3))
++	else if (_rtl8812ae_eq_n_byte(pregulation, "MKK"))
+ 		regulation = 1;
+-	else if (_rtl8812ae_eq_n_byte(pregulation, "ETSI", 4))
++	else if (_rtl8812ae_eq_n_byte(pregulation, "ETSI"))
+ 		regulation = 2;
+-	else if (_rtl8812ae_eq_n_byte(pregulation, "WW13", 4))
++	else if (_rtl8812ae_eq_n_byte(pregulation, "WW13"))
+ 		regulation = 3;
+ 
+-	if (_rtl8812ae_eq_n_byte(prate_section, "CCK", 3))
++	if (_rtl8812ae_eq_n_byte(prate_section, "CCK"))
+ 		rate_section = 0;
+-	else if (_rtl8812ae_eq_n_byte(prate_section, "OFDM", 4))
++	else if (_rtl8812ae_eq_n_byte(prate_section, "OFDM"))
+ 		rate_section = 1;
+-	else if (_rtl8812ae_eq_n_byte(prate_section, "HT", 2) &&
+-		 _rtl8812ae_eq_n_byte(prf_path, "1T", 2))
++	else if (_rtl8812ae_eq_n_byte(prate_section, "HT") &&
++		 _rtl8812ae_eq_n_byte(prf_path, "1T"))
+ 		rate_section = 2;
+-	else if (_rtl8812ae_eq_n_byte(prate_section, "HT", 2) &&
+-		 _rtl8812ae_eq_n_byte(prf_path, "2T", 2))
++	else if (_rtl8812ae_eq_n_byte(prate_section, "HT") &&
++		 _rtl8812ae_eq_n_byte(prf_path, "2T"))
+ 		rate_section = 3;
+-	else if (_rtl8812ae_eq_n_byte(prate_section, "VHT", 3) &&
+-		 _rtl8812ae_eq_n_byte(prf_path, "1T", 2))
++	else if (_rtl8812ae_eq_n_byte(prate_section, "VHT") &&
++		 _rtl8812ae_eq_n_byte(prf_path, "1T"))
+ 		rate_section = 4;
+-	else if (_rtl8812ae_eq_n_byte(prate_section, "VHT", 3) &&
+-		 _rtl8812ae_eq_n_byte(prf_path, "2T", 2))
++	else if (_rtl8812ae_eq_n_byte(prate_section, "VHT") &&
++		 _rtl8812ae_eq_n_byte(prf_path, "2T"))
+ 		rate_section = 5;
+ 
+-	if (_rtl8812ae_eq_n_byte(pbandwidth, "20M", 3))
++	if (_rtl8812ae_eq_n_byte(pbandwidth, "20M"))
+ 		bandwidth = 0;
+-	else if (_rtl8812ae_eq_n_byte(pbandwidth, "40M", 3))
++	else if (_rtl8812ae_eq_n_byte(pbandwidth, "40M"))
+ 		bandwidth = 1;
+-	else if (_rtl8812ae_eq_n_byte(pbandwidth, "80M", 3))
++	else if (_rtl8812ae_eq_n_byte(pbandwidth, "80M"))
+ 		bandwidth = 2;
+-	else if (_rtl8812ae_eq_n_byte(pbandwidth, "160M", 4))
++	else if (_rtl8812ae_eq_n_byte(pbandwidth, "160M"))
+ 		bandwidth = 3;
+ 
+-	if (_rtl8812ae_eq_n_byte(pband, "2.4G", 4)) {
++	if (_rtl8812ae_eq_n_byte(pband, "2.4G")) {
+ 		ret = _rtl8812ae_phy_get_chnl_idx_of_txpwr_lmt(hw,
+ 							       BAND_ON_2_4G,
+ 							       channel);
+@@ -1718,7 +1711,7 @@ static void _rtl8812ae_phy_set_txpower_limit(struct ieee80211_hw *hw,
+ 			regulation, bandwidth, rate_section, channel_index,
+ 			rtlphy->txpwr_limit_2_4g[regulation][bandwidth]
+ 				[rate_section][channel_index][RF90_PATH_A]);
+-	} else if (_rtl8812ae_eq_n_byte(pband, "5G", 2)) {
++	} else if (_rtl8812ae_eq_n_byte(pband, "5G")) {
+ 		ret = _rtl8812ae_phy_get_chnl_idx_of_txpwr_lmt(hw,
+ 							       BAND_ON_5G,
+ 							       channel);
+-- 
+2.31.1
+
