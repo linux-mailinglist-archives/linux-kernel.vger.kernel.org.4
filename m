@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E8E648F20
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 15:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF96648F1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 15:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiLJOHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 09:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S229902AbiLJOHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 09:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiLJOGx (ORCPT
+        with ESMTP id S230045AbiLJOGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Dec 2022 09:06:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917791BE98;
-        Sat, 10 Dec 2022 06:03:56 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384061BE8D
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 06:03:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38701B82A56;
-        Sat, 10 Dec 2022 14:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC70C433D2;
-        Sat, 10 Dec 2022 14:03:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C526960C24
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 14:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D4AEC433F0;
+        Sat, 10 Dec 2022 14:03:54 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1p40SG-000l40-39;
-        Sat, 10 Dec 2022 09:03:52 -0500
-Message-ID: <20221210140352.840122725@goodmis.org>
+        id 1p40SH-000l4y-0w;
+        Sat, 10 Dec 2022 09:03:53 -0500
+Message-ID: <20221210140353.153775027@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 10 Dec 2022 09:03:21 -0500
+Date:   Sat, 10 Dec 2022 09:03:23 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Rafael Mendonca <rafaelmendsr@gmail.com>
-Subject: [for-next][PATCH 1/3] tracing: Fix race where eprobes can be called before the event
+        Li Huafei <lihuafei1@huawei.com>
+Subject: [for-next][PATCH 3/3] kprobes: Fix check for probe enabled in kill_kprobe()
 References: <20221210140320.609495935@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Li Huafei <lihuafei1@huawei.com>
 
-The flag that tells the event to call its triggers after reading the event
-is set for eprobes after the eprobe is enabled. This leads to a race where
-the eprobe may be triggered at the beginning of the event where the record
-information is NULL. The eprobe then dereferences the NULL record causing
-a NULL kernel pointer bug.
+In kill_kprobe(), the check whether disarm_kprobe_ftrace() needs to be
+called always fails. This is because before that we set the
+KPROBE_FLAG_GONE flag for kprobe so that "!kprobe_disabled(p)" is always
+false.
 
-Test for a NULL record to keep this from happening.
+The disarm_kprobe_ftrace() call introduced by commit:
 
-Link: https://lore.kernel.org/linux-trace-kernel/20221116192552.1066630-1-rafaelmendsr@gmail.com/
-Link: https://lore.kernel.org/all/20221117214249.2addbe10@gandalf.local.home/
+  0cb2f1372baa ("kprobes: Fix NULL pointer dereference at kprobe_ftrace_handler")
 
-Cc: stable@vger.kernel.org
-Fixes: 7491e2c442781 ("tracing: Add a probe that attaches to trace events")
-Reported-by: Rafael Mendonca <rafaelmendsr@gmail.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+to fix the NULL pointer reference problem. When the probe is enabled, if
+we do not disarm it, this problem still exists.
+
+Fix it by putting the probe enabled check before setting the
+KPROBE_FLAG_GONE flag.
+
+Link: https://lore.kernel.org/all/20221126114316.201857-1-lihuafei1@huawei.com/
+
+Fixes: 3031313eb3d54 ("kprobes: Fix to check probe enabled before disarm_kprobe_ftrace()")
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/trace/trace_eprobe.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/kprobes.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 123d2c0a6b68..352b65e2b910 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -564,6 +564,9 @@ static void eprobe_trigger_func(struct event_trigger_data *data,
- {
- 	struct eprobe_data *edata = data->private_data;
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 3050631e528d..a35074f0daa1 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2364,6 +2364,14 @@ static void kill_kprobe(struct kprobe *p)
  
-+	if (unlikely(!rec))
-+		return;
+ 	lockdep_assert_held(&kprobe_mutex);
+ 
++	/*
++	 * The module is going away. We should disarm the kprobe which
++	 * is using ftrace, because ftrace framework is still available at
++	 * 'MODULE_STATE_GOING' notification.
++	 */
++	if (kprobe_ftrace(p) && !kprobe_disabled(p) && !kprobes_all_disarmed)
++		disarm_kprobe_ftrace(p);
 +
- 	__eprobe_trace_func(edata, rec);
+ 	p->flags |= KPROBE_FLAG_GONE;
+ 	if (kprobe_aggrprobe(p)) {
+ 		/*
+@@ -2380,14 +2388,6 @@ static void kill_kprobe(struct kprobe *p)
+ 	 * the original probed function (which will be freed soon) any more.
+ 	 */
+ 	arch_remove_kprobe(p);
+-
+-	/*
+-	 * The module is going away. We should disarm the kprobe which
+-	 * is using ftrace, because ftrace framework is still available at
+-	 * 'MODULE_STATE_GOING' notification.
+-	 */
+-	if (kprobe_ftrace(p) && !kprobe_disabled(p) && !kprobes_all_disarmed)
+-		disarm_kprobe_ftrace(p);
  }
  
+ /* Disable one kprobe */
 -- 
 2.35.1
 
