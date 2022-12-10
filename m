@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01058648FD0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4F8648FD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiLJQbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 11:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S229710AbiLJQff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 11:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiLJQb2 (ORCPT
+        with ESMTP id S229475AbiLJQfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 11:31:28 -0500
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B0F1056A
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 08:31:26 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A70201F892;
-        Sat, 10 Dec 2022 17:31:22 +0100 (CET)
-Date:   Sat, 10 Dec 2022 17:31:21 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
- peripheral
-Message-ID: <20221210163121.woacrjuicb3vuzcn@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
- <36eb03e8-aace-f7ce-edc8-53715021c0ea@linaro.org>
- <20221208112055.m7sqg3ysxzskqjp4@SoMainline.org>
- <5740737.DvuYhMxLoT@g550jk>
- <20221209203851.sy37qqzczoaruuyb@SoMainline.org>
- <4846bb5f-79a9-e199-6a1c-5021e975e7ee@linaro.org>
+        Sat, 10 Dec 2022 11:35:33 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66DD15A09;
+        Sat, 10 Dec 2022 08:35:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1670690108; bh=hULunELhZdtE1GkCID2SUUW9EZF1DKJ0BvrmvOkyd/U=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=VX1bnl5U1jf13nWLdnNpuh9QmBQXFG9Rz4rVXr6BgCjuSx+R1MrVUyfgH1IZGIpV2
+         QZ0LWlxofK0NlVDMby3E6Z690cIjgsR1GEVQs18NCb9YYwYI4JkHT8sWTY1DcZsbum
+         peZtMMBx8b96MDIGAR84eyDLf0M/MdNiGazENxbGkmL0Iq2iAoHKOPDfnNlwa3xrgL
+         M1436TQaAvpUvh7JjoMOZmHjTNvuIsYVSSVM5vQoRp7eygO/zETPDfIrTgWlCwXCv2
+         JgQDtyFXCgvb62+bxrUcCxh4vxQ9CTDYfq+EjanGMR+FWUbC4huO01I23+mxz0jfWo
+         kirS5+pOqdGuw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.157.120]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBDj4-1pESvq0s9e-00CjAD; Sat, 10
+ Dec 2022 17:35:08 +0100
+Message-ID: <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
+Date:   Sat, 10 Dec 2022 17:35:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4846bb5f-79a9-e199-6a1c-5021e975e7ee@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] fbdev: make offb driver tristate
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221126000401.25302-1-rdunlap@infradead.org>
+ <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3Q0WJF64Q10zFZW6VO/GCqoYxns0l0hOMM9nr71J/mwrFHaUIW0
+ hHaa21eYA8KaBbR8FgN6lOCWFk6XJsBMqiz2o0hSJFz8baJzpzOmfJhel4aAbnw3E07zDZ4
+ g/3b042iW+L+MvTBCSUknRi3WUJRyWFHZzydh/p3Wg/R/adLxtJIIcWYI1tvdQinLd8MtjU
+ H+4y4GF/teZ1STuzK0M7A==
+UI-OutboundReport: notjunk:1;M01:P0:m/0dMCGSrkU=;l0P/Rf3YleDLfkrX5OOk7Wq/wFp
+ tVqoL2SQrGkJtqHu9UCslKyVqe0ukrrs4wpzI7+5OPWS+RLdXZZ1JEmvJrn/Uku8G0naw6Jdn
+ /lIJB+vFmPtu4mmhorMUP4Q683Y5LyhPAGYjtVQqITAMF3c7Zdaz9D+DC+jzgY/5DUEks63xD
+ ET06nL6V1IpYZt8w0McCH6Zx/PI0/ybsRO7rVuAM8nqWXhe2avw8WMCKoFKCdUhKqOrxVAN7e
+ AtXsss4sRNZapiQb3fEtV9m0o/Zx/R5R+0gC0bzEUEdpZ3kJ8Bk/V5s8W+T1ehM6QX2Yg+80s
+ P+MKlpLj0++iXRwbfPqAqyKxPHV2X3OEonKkSvzrSrrCBoNerkS/KWHHpcpxGYMXQEyv09qYO
+ JoaIwNgoh5I92/rMZJme4imkHxVbtkcZw5dul82QnOPFatOYglXGxoA82QJFN48ZoCm5570fy
+ 9dfIvCTqCKpfOXf4Pw9jJW/bIPLaBhWeoxTyVFmV2c6ub80BxeLi7XzoNqUwEEliIyWOj7h6i
+ zp2Cd115of3/v+4Mht3LoDOkLfFCE7DaoUZWYud6CUbWjr7UsxonX4LiE6ziHfGNh5l+i18rV
+ FM3JViTpi4Qer5zgP+nCdbCPPUEu1i7tpymK3xVpoLD/56GFtEXnITpsXFoKrQOaUQoJz8pn/
+ LVNs8MeOEuhpyv3W07AFIj2SXHMWcZ3ipLYyKHZCS6ScKCcG/m1sag7gc7kgQOBoEnuA6cCk1
+ OEMRnvxCxKiM9kZkS8YsUaXXKHEEayO14uo9ctlLf1L8IT/nnq+8+F3n7A/5t0a7Kle1WjN17
+ iIA+mrK26YuFLQeZyzMGpC8bqgOiMKD0Vu+2lc1JDdHbTPWxb005pFuxLWqRprvItLeMvS15n
+ R12WpKKYbW4kMQEqlIjCjI6ghT3Ip5kgrMvoPbk/j7Hd/+p+HCPBh86D8dKZPON37CwhbUURZ
+ GDW35A==
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-10 11:58:24, Krzysztof Kozlowski wrote:
-> On 09/12/2022 21:38, Marijn Suijten wrote:
-> > On 2022-12-09 17:54:50, Luca Weiss wrote:
-> >> On Donnerstag, 8. Dezember 2022 12:20:55 CET Marijn Suijten wrote:
-> >>> On 2022-12-08 11:23:17, Krzysztof Kozlowski wrote:
-> >>>> On 08/12/2022 11:12, Marijn Suijten wrote:
-> >>>>> On 2022-12-04 17:19:05, Luca Weiss wrote:
-> >>>>>> On Freitag, 2. Dezember 2022 10:36:58 CET Marijn Suijten wrote:
-> >>>>>> [..]
-> >>>>>>
-> >>>>>> So the way this patch does it is good or does it need changes?
-> >>>>>
-> >>>>> Except the typo(s?) pointed out in my first reply, this is good to go.
-> >>>>>
-> >>>>> If we stick with generic adc-chan node names that should be documented
-> >>>>> in the bindings IMO, as it is currently only captured implicitly in the
-> >>>>> examples.  Krzysztof, what is your thought on this?
-> >>>>
-> >>>> If I understand correctly, the outcome of other discussion [1] was to
-> >>>> use labels and generic node names.
-> >>>
-> >>> The outcome was to use labels in the driver and disregard node names as
-> >>> the new fwnode API clobbers those names by including the @xx register
-> >>> bit.
-> >>>
-> >>> (I'll follow up with Jonathan whether or not to remove the current
-> >>> fallback to node names, as [1] ended up discussing many different issues
-> >>> and nits)
-> >>>
-> >>>> In such case the patch was correct
-> >>>> (except other comments).
-> >>>
-> >>> As a consequence it _doesn't matter_ how nodes are named, and we _can_
-> >>> use generic node names.  My question for you is whether we should, and
-> >>> if we should lock that in via dt-bindings to guide everyone towards
-> >>> using labels (which i did _not_ do in the recently-landed PM8950 and
-> >>> PM6125, but will send followup for).
-> >>
-> >> FYI the patch has been merged already and is now in linux-next
-> >> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/arch/arm64/boot/dts/qcom/pmi8950.dtsi?id=0d97fdf380b478c358c94f50f1b942e87f407b9b
-> >>
-> >> If you have any changes that need to be done please send a follow-up patch.
-> > 
-> > Unfortunately saw that today as well, well after sending this reply.  I
-> > would've loved to correct the pmi8950_gpio label _gpios before someone
-> 
-> I don't understand what is there to correct. The "pmi8950_gpio" is a
-> correct label. There is no single rule saying label should have "s" at
-> the end. The only rules are: using underscores and having similar naming
-> (e.g. mdss_ for all display labels).
+On 11/26/22 14:40, Thomas Zimmermann wrote:
+> Am 26.11.22 um 01:04 schrieb Randy Dunlap:
+>> Make the offb (Open Firmware frame buffer) driver tristate,
+>> i.e., so that it can be built as a loadable module.
+>>
+>> However, it still depends on the setting of DRM_OFDRM
+>> so that both of these drivers cannot be builtin at the same time
+>> nor can one be builtin and the other one a loadable module.
+>>
+>> Build-tested successfully with all combination of DRM_OFDRM and FB_OF.
+>>
+>> This fixes a build issue that Michal reported when FB_OF=3Dy and
+>> DRM_OFDRM=3Dm:
+>>
+>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): und=
+efined reference to `cfb_fillrect'
+>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): und=
+efined reference to `cfb_copyarea'
+>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): und=
+efined reference to `cfb_imageblit'
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Masahiro Yamada <masahiroy@kernel.org>
+>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>> Cc: Michal Such=C3=A1nek <msuchanek@suse.de>
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-fbdev@vger.kernel.org
+>> Cc: dri-devel@lists.freedesktop.org
+>
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-If we were able to have rules for labels, would I then be allowed to
-"correct" this?  The inconsistency between DTs is /super/ annoying (and
-it looks wrong to have a singular _gpio named thing contain /multiple
-gpios/), but just because we can't express this in dt-bindings (or so I
-think) we shouldn't change it?
+applied.
 
-- Marijn
+Thanks!
+Helge
+
+
+
+>>
+>> ---
+>> =C2=A0 drivers/video/fbdev/Kconfig |=C2=A0=C2=A0=C2=A0 4 ++--
+>> =C2=A0 1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+>> --- a/drivers/video/fbdev/Kconfig
+>> +++ b/drivers/video/fbdev/Kconfig
+>> @@ -456,8 +456,8 @@ config FB_ATARI
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chipset found in Ataris.
+>> =C2=A0 config FB_OF
+>> -=C2=A0=C2=A0=C2=A0 bool "Open Firmware frame buffer device support"
+>> -=C2=A0=C2=A0=C2=A0 depends on (FB =3D y) && PPC && (!PPC_PSERIES || PC=
+I)
+>> +=C2=A0=C2=A0=C2=A0 tristate "Open Firmware frame buffer device support=
+"
+>> +=C2=A0=C2=A0=C2=A0 depends on FB && PPC && (!PPC_PSERIES || PCI)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on !DRM_OFDRM
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select APERTURE_HELPERS
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select FB_CFB_FILLRECT
+>
+
