@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBE46490B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5A86490C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLJUyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 15:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S229814AbiLJUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 15:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiLJUyA (ORCPT
+        with ESMTP id S229761AbiLJUya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 15:54:00 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F60165A9
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:59 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3704852322fso96010007b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:59 -0800 (PST)
+        Sat, 10 Dec 2022 15:54:30 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E10017066
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:28 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id d128so9470121ybf.10
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:54:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mhrAb+yQ8r5Pj6JbLxX6H679hMkP8WxpYQ53O58DWDA=;
-        b=RbF+zsbkFenK5oP6pcpKvnk2q8et0ziZuupBucQguQu4GEqvyuCPTcXn5uANp7pTCZ
-         ZVUkGih6xULK3gVfvZAvg6xIq+visBaDzsQP6Nxt0IO9340ODMtzdcNxI0FV5IwBzN9G
-         u7WpoKfaM5hgUmT0PqGdJtXV5umTsNasJsVkUhIkDc2H7CXncszicY+FqnH9q05xl290
-         eIHq9KAEMsW/xtaPZC1TQSIK2bpGH3/Qu9IToLO7UW4FdfX+cBk1qZU6GercHqSv/X5u
-         +7DW8P4iB08wemfc0Bkyq++1a30UlOqLYZMCYVaZlyBWK+PF8mpwW06XUyv6y7bZprxH
-         GQug==
+        bh=Q16cxr3s5Ib/3QCtLbMCElaACH8JgEzemBLFcm7MiOY=;
+        b=R7AKYZndABWJMDjQgvNBO5XgFt85b6LX7zTVDJMZsdueHvaM+Z135Q1XPrHodiM2He
+         MoisOf/uej3tuCrxds1VVXgZUfv+Zsr+8qUU5pZfgDFTzmtvyZdG0MjGg8x1PKFkAUBI
+         0MQeqI3t1694tpSlNEgAIQIRHMOhvgxLZg2pE/tDFuju9CMuV2Je18n8RJIWAJm95tUO
+         kDAZfMfk2qaV1HlMAYERx41LZ1LyDJNPAYF5tKfkzeCAFnAQLdUnq+IjXfTSYbgQufM2
+         NOptWSc+ja72x5n7+7N9AkvsNqfa5deh7gFQao7PIXNUogBqPT3+vbIVE2NYHyR8fPFh
+         UrfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mhrAb+yQ8r5Pj6JbLxX6H679hMkP8WxpYQ53O58DWDA=;
-        b=xfzGmNc+CF+HUvJGuwamtA6MrXZfgFTDCEzpbRZ0pfjaj6/z5b6a0TrtuLwyMAlOQZ
-         fhHfK3AfovH7bkHVpeWm/I7IwjTKejd/HOlGd3t/C10ChwYi1FUZGCYa5e1KxvRzdDc3
-         cj6VLFk736uY8cJ5xB8l9NufSKUQcYPSGR83TXxUMClLFjuZrDHMKROXIWPJZYVFAdOD
-         72rbeXaeRqBQcv1el6/y4+mRv/9ufbPIul6IvpY76bXLRRqDmre2wtWpsoneD6TJ5ILj
-         xayfnSxJMAgUPI2XtNA8ckXhZIEm8GfCPRAJoKp8GKfAClWwViqz61LWTKqiKBaAlui+
-         0VqA==
-X-Gm-Message-State: ANoB5pkglQxqAn/tuB5Rr70E94zYbfGY9lNktaydE36So2vxrRuT+X4o
-        wmnH99dh2lVR6GqVNPWGvZJyVvut4AHht+bLzrqDRA==
-X-Google-Smtp-Source: AA0mqf6Euj77tZGpcvvSY4sr3yOGyX27MYYokI5ryaiVO9AZutI69pj2NuNT2S9i+T+aEe+S9Uo4ft9kiJCYkcye4dU=
-X-Received: by 2002:a81:6704:0:b0:3d2:61bc:e6a with SMTP id
- b4-20020a816704000000b003d261bc0e6amr40897805ywc.132.1670705638304; Sat, 10
- Dec 2022 12:53:58 -0800 (PST)
+        bh=Q16cxr3s5Ib/3QCtLbMCElaACH8JgEzemBLFcm7MiOY=;
+        b=SP9pVdLSQLUWYfY/5g6ebx47VQLlSBcYp7OqXrikaFujaAzBNkC4OyKvx9f1OTBMeW
+         MRzKuZq9FM8UMrKZKETQTKPe9WZjRpbQU60le8unBRfTmy3YcJnQa034QiQBu3znovRK
+         RZuGPN7DzISFyWrNE6fiF8cIkFIWAwe/ANXnCnVQg4nxyiQxxzFyE/6/VZAj7lznwo+W
+         jNMh8OfHmBS+T8g+0yUq7byWsbVKsd/5p0A94kxJ54njsvuLNCBZ4t0xm9XxnMNx4OK2
+         fzqCmyqmHjyVDyhD6Tc91dfYnG7qr8HMYKlv6u6Zz7Vh1lbehkkbM17At6DM9QYnFiHO
+         NJcw==
+X-Gm-Message-State: ANoB5pkiEW8lg1iZC3AbBm6PSAMGAVtplIEYIGhNejN68NxBTJwpsbg7
+        8gchtZpMKQVwv4uMQ6aFvhGhsgECC3Cs5eLifAKWuw==
+X-Google-Smtp-Source: AA0mqf44ulwHZCa6/pZ9L/2X+QF6ko7HvjIj/me7Y25mH3+MX+Gpz6y6Sw/vv0/48I8yKLLFWHcXUZ3+TTtMDLEtJzI=
+X-Received: by 2002:a25:4dd7:0:b0:6f1:535f:2f38 with SMTP id
+ a206-20020a254dd7000000b006f1535f2f38mr65304962ybb.153.1670705667741; Sat, 10
+ Dec 2022 12:54:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-6-konrad.dybcio@linaro.org>
-In-Reply-To: <20221210200353.418391-6-konrad.dybcio@linaro.org>
+References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-5-konrad.dybcio@linaro.org>
+In-Reply-To: <20221210200353.418391-5-konrad.dybcio@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 10 Dec 2022 23:53:47 +0300
-Message-ID: <CAA8EJppQu=f5aXn3F_xAxZ6h+YgGYfCe6M8J77S_LLWH7NkE4g@mail.gmail.com>
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: msm8996: Add additional A2NoC clocks
+Date:   Sat, 10 Dec 2022 23:54:17 +0300
+Message-ID: <CAA8EJppJoc8bCOgFjiWagbiVOF3RCFWmEEYObcErv26bfeuM9Q@mail.gmail.com>
+Subject: Re: [PATCH 4/5] interconnect: qcom: rpm: Use _optional func for
+ provider clocks
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,19 +71,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sat, 10 Dec 2022 at 23:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> On eMMC devices, the UFS clocks aren't started in the bootloader (or well,
-> at least it should not be, as that would just leak power..), which results
-> in platform reboots when trying to access the unclocked UFS hardware,
-> which unfortunately happens on each and every boot, as interconnect calls
-> sync_state and goes over each and every path.
+> It turned out that - very unfortunately - msm8996 needs a binding
+> update, adding 2 more clocks to the A2NoC node. Use the _optional
+> variant of devm_clk_get to make sure old DTs will still probe with
+> newer versions of the driver.
 >
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
 
 -- 
 With best wishes
