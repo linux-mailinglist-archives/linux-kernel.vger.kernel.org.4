@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D0F648F07
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F70648F01
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiLJN67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S229628AbiLJN6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiLJN62 (ORCPT
+        with ESMTP id S229560AbiLJN60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:58:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597301839E
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 05:58:27 -0800 (PST)
+        Sat, 10 Dec 2022 08:58:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF43613F90;
+        Sat, 10 Dec 2022 05:58:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00D45B8282B
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 13:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA85C433F2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59BE560C1E;
+        Sat, 10 Dec 2022 13:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC867C43396;
         Sat, 10 Dec 2022 13:58:24 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1p40Mx-000klQ-2A;
+        id 1p40Mx-000klu-2e;
         Sat, 10 Dec 2022 08:58:23 -0500
-Message-ID: <20221210135823.536214084@goodmis.org>
+Message-ID: <20221210135823.690094761@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 10 Dec 2022 08:57:52 -0500
+Date:   Sat, 10 Dec 2022 08:57:53 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-next][PATCH 02/25] tracing: Update MAINTAINERS file for new patchwork and mailing list
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@kernel.org>, stable@vger.kernel.org
+Subject: [for-next][PATCH 03/25] ftrace/x86: Add back ftrace_expected for ftrace bug reports
 References: <20221210135750.425719934@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,53 +52,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The tracing subsystem now has its own mailing list (although patches
-should also be sent to LKML) as well as a new patchwork entry for kernel
-related tracing patches.
+After someone reported a bug report with a failed modification due to the
+expected value not matching what was found, it came to my attention that
+the ftrace_expected is no longer set when that happens. This makes for
+debugging the issue a bit more difficult.
 
-Update the MAINTAINERS file to reflect the changes.
+Set ftrace_expected to the expected code before calling ftrace_bug, so
+that it shows what was expected and why it failed.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20221017140513.14b9ce2e@gandalf.local.home
+Link: https://lore.kernel.org/all/CA+wXwBQ-VhK+hpBtYtyZP-NiX4g8fqRRWithFOHQW-0coQ3vLg@mail.gmail.com/
+Link: https://lore.kernel.org/linux-trace-kernel/20221209105247.01d4e51d@gandalf.local.home
 
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "x86@kernel.org" <x86@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 768ae4406a5c ("x86/ftrace: Use text_poke()")
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/x86/kernel/ftrace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2585e7edc335..d12576150a70 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8461,6 +8461,9 @@ FUNCTION HOOKS (FTRACE)
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Masami Hiramatsu <mhiramat@kernel.org>
- R:	Mark Rutland <mark.rutland@arm.com>
-+L:	linux-kernel@vger.kernel.org
-+L:	linux-trace-kernel@vger.kernel.org
-+Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
- F:	Documentation/trace/ftrace*
-@@ -11483,6 +11486,9 @@ M:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
- M:	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
- M:	"David S. Miller" <davem@davemloft.net>
- M:	Masami Hiramatsu <mhiramat@kernel.org>
-+L:	linux-kernel@vger.kernel.org
-+L:	linux-trace-kernel@vger.kernel.org
-+Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
- F:	Documentation/trace/kprobes.rst
-@@ -20862,6 +20868,9 @@ F:	drivers/hwmon/pmbus/tps546d24.c
- TRACING
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Masami Hiramatsu <mhiramat@kernel.org>
-+L:	linux-kernel@vger.kernel.org
-+L:	linux-trace-kernel@vger.kernel.org
-+Q:	https://patchwork.kernel.org/project/linux-trace-kernel/list/
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
- F:	Documentation/trace/*
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index bd165004776d..e07234ec7e23 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -217,7 +217,9 @@ void ftrace_replace_code(int enable)
+ 
+ 		ret = ftrace_verify_code(rec->ip, old);
+ 		if (ret) {
++			ftrace_expected = old;
+ 			ftrace_bug(ret, rec);
++			ftrace_expected = NULL;
+ 			return;
+ 		}
+ 	}
 -- 
 2.35.1
 
