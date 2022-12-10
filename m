@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D64C648E56
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFAD648E59
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLJLFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 06:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S229658AbiLJLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 06:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLJLFp (ORCPT
+        with ESMTP id S229512AbiLJLM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 06:05:45 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F501E724
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:05:42 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id l8so7470058ljh.13
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:05:42 -0800 (PST)
+        Sat, 10 Dec 2022 06:12:27 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EB513DEB
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:12:26 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id s8so10941173lfc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:12:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QXt9l3h8UvC056p18+migPDLHDHm/JWJnpRirDbc2MY=;
-        b=C82qGunJQ2dy9pwQdHEanL/NMVDY0YXEC6y+Dl0CoxD3IEhUtbTDVOGF+KZL3nUG78
-         qLcFNyDAYiQEaffD4fJSd9K0L7lMhUxkWj+EMeBLUuHF13eZMssi8EkyP+63ziVoSsPm
-         DbV3fdtWynxgFeuDjrNfzNhUD/QLhC4eASJXSB/Az4z6RAoozaqTXAkrUldN6dokx3AB
-         sR2fxtOKbC1I0kOtnICRc5Di/+v2HEO9Vkx9dwa+/ktyk8Bd/Lsd13Zxf1l6ehWNEDF1
-         ZcXhLjz+fAuE1ZXZSamZzMYcHD+e/KcBVYPPaIiud55+R4BgwNerJZpGR/T48ttnlc5v
-         QH3Q==
+        bh=nUWe/lJzYpuKf3Av5zO7RUZ3TI86aWXIsye1tEfPo2I=;
+        b=lRAApWHEYfBVlOkenByx10ySgUnLtkzYn9E/OZuRAGGBLu977yOpGONJe/M49M9EQW
+         7u0Yoi272EPu/9rBqhtY+N9IE9qd0zDcAVmDCSjAOfhZ2sBB7egXo73DWa6YKYXZxJcp
+         TxAuH2lKPKmtttQEhMovZqKjJ3KRNrMAN4MO7JYCI0THGjXpLI/sSDE/KxnszCJBeHNv
+         dzPARVRC05sFmBgLafXkQ5jrMR3x8HEs9wKqAWbqdKA8M9DOsQyZ96QpNPZcGhoNLNNf
+         /fbx8dS8KB4DIRuSsC2u3XaeeQ1Eb27LgGLMi2Sl/aajv1JAx0vly5DScFlRg4ve7Ys0
+         ss9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QXt9l3h8UvC056p18+migPDLHDHm/JWJnpRirDbc2MY=;
-        b=BHHRwRkSOzKOt5SEDOR+m+9nNBaq9/LXNmJ95iJT3ZGCRCa1xGLFGvuZBa9bavMhIz
-         Vgd1pyotrquluxbkpIcqMV+KROaxL+a6r9wAcAiGn0Ugw0Efl81BEljT6VQGIyd30+Jj
-         1m7zFdFDjlpkxRnrUKfdsTHknpj8tKb+rL/Jb2kds9CmenO78r2o2XXK7Q9w8tbRMcXT
-         rwn11ELPQ7SYb4RMx7JUryfdEVo4YKBkqoyWa8czcaL9q2eMyBqNYUPUUPRPyQ8foJQ0
-         7YDJ3qw/uP6fJWEXRy9XF1igKy/h9wXYqFdGycO6GTZKQfvANmqYvzk20r/SUXJmMPoC
-         FGSA==
-X-Gm-Message-State: ANoB5pkvmlavn/G1u8rC5CWJ5g3cjRBq8d5ako6scWVvE8WbpQJYFhqh
-        YBFJ6Cnm1zZv59G8shtsNhxXDg==
-X-Google-Smtp-Source: AA0mqf5Si5nKtGdnoatbchxOVi5LIC4FAgomZdP25gPowAC+O+GoQWEt5Yh3XnXrEgFDwaKkXOG7Dg==
-X-Received: by 2002:a05:651c:894:b0:277:9f5:1e16 with SMTP id d20-20020a05651c089400b0027709f51e16mr3462870ljq.4.1670670340636;
-        Sat, 10 Dec 2022 03:05:40 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id a25-20020a2e8619000000b00279b292115asm538527lji.109.2022.12.10.03.05.39
+        bh=nUWe/lJzYpuKf3Av5zO7RUZ3TI86aWXIsye1tEfPo2I=;
+        b=g07jWboRL8hAdoeg/j/PxjsoPhfq9ARx/CPnDK4Qy4+n44mIMvIlvMzhnnqKAfE3OC
+         ICjHYiAnlIlm2EJNjThHG1nGcrU65rTHXLA6lTgbxUwZzXWJonItApM3stHIOnMmq6+W
+         n815GRhW6PYB3U9aKhQl1e7kyqZHiX2oNfQgSDIMHmXo49dZFBHU2QMq7zJQ4vsvsi0a
+         jHCR1KXiYjBeILZDAnHEED3+zeY7z4pGOZyZSW6hVsr5Qbk5dQBdZKs2NbH25+QPKK6P
+         j69Cqhyq6BJ2X4xYALlGhKTq3UCV4hfHE8B70YBjIL3Wn8QUm7gH3El7rTQ7C+EKPvZm
+         elxQ==
+X-Gm-Message-State: ANoB5pm2mT9v39fCObR3C9Uj8aK+whUJEJ3wBFlL5N69Xz9HlZNqPdgI
+        lEZ0ykP/xSE+0l7KaXD5qkRe+g==
+X-Google-Smtp-Source: AA0mqf4tosMB9oGs48hvCQtQJRrjgm7uRLf0m5dafks3wVJH8awhOCaRWT1jU2K4y5VBxFqJtvdzFA==
+X-Received: by 2002:a05:6512:2215:b0:4b5:4606:7ae3 with SMTP id h21-20020a056512221500b004b546067ae3mr3403483lfu.46.1670670744618;
+        Sat, 10 Dec 2022 03:12:24 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v21-20020ac25935000000b0049771081b10sm680500lfi.31.2022.12.10.03.12.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 03:05:40 -0800 (PST)
-Message-ID: <a333fef9-2cff-9a42-9368-b908f282137b@linaro.org>
-Date:   Sat, 10 Dec 2022 12:05:38 +0100
+        Sat, 10 Dec 2022 03:12:24 -0800 (PST)
+Message-ID: <a03675e1-3456-54a2-d362-08f06937f80f@linaro.org>
+Date:   Sat, 10 Dec 2022 12:12:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v3 1/4] arm64: dts: qcom: sc7180: Bump up trogdor
- ts_reset_l drive strength
+Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP1530 variant
 Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     swboyd@chromium.org, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        mka@chromium.org, Yunlong Jia <ecs.beijing2022@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
+To:     Martin Botka <martin.botka@somainline.org>, martin.botka1@gmail.com
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221209171240.1614904-1-dianders@chromium.org>
- <20221209091234.v3.1.I39c387f1e3176fcf340039ec12d54047de9f8526@changeid>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221209091234.v3.1.I39c387f1e3176fcf340039ec12d54047de9f8526@changeid>
+References: <20221209234654.1082522-1-martin.botka@somainline.org>
+ <20221209234654.1082522-2-martin.botka@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209234654.1082522-2-martin.botka@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.12.2022 18:12, Douglas Anderson wrote:
-> On at least one board (pazquel360) the reset line for the touchscreen
-> was scoped and found to take almost 2 ms to fall when we drove it
-> low. This wasn't great because the Linux driver for the touchscreen
-> (the elants_i2c driver) thinks it can do a 500 us reset pulse. If we
-> bump the drive strength to 8 mA then the reset line went down in ~421
-> us.
+On 10/12/2022 00:46, Martin Botka wrote:
+> AXP1530 is a PMIC used on board BIQU CB1 SoM
 > 
-> NOTE: we could apply this fix just for pazquel360, but:
-> * Probably other trogdor devices have similar timings and it's just
->   that nobody has noticed it before.
-> * There are other trogdor boards using the same elan driver that tries
->   to do 500 us reset pulses.
-> * Bumping the drive strength to 8mA across the board won't hurt. This
->   isn't a high speed signal or anything.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
+What are the changes against v1? Nothing in cover letter, nothing here.
+
+
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> (no changes since v1)
-> 
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> index f1defb94d670..ff1c7aa6a722 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> @@ -1376,7 +1376,15 @@ ts_reset_l: ts-reset-l-state {
->  		pins = "gpio8";
->  		function = "gpio";
->  		bias-disable;
-> -		drive-strength = <2>;
-> +
-> +		/*
-> +		 * The reset GPIO to the touchscreen takes almost 2ms to drop
-> +		 * at the default drive strength. When we bump it up to 8mA it
-> +		 * falls in under 500us. We want this to be fast since the Elan
-> +		 * datasheet (and any drivers written based on it) talk about using
-> +		 * a 500 us reset pulse.
-> +		 */
-> +		drive-strength = <8>;
->  	};
->  
->  	sdc1_on: sdc1-on-state {
+> diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> index b7a8747d5fa0..893a1802116c 100644
+> --- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
+> @@ -92,6 +92,7 @@ properties:
+>            - x-powers,axp806
+>            - x-powers,axp809
+>            - x-powers,axp813
+> +          - x-powers,axp1530
+
+Put in alphabetical order.
+
+>        - items:
+>            - const: x-powers,axp228
+>            - const: x-powers,axp221
+
+Best regards,
+Krzysztof
+
