@@ -2,68 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928F9648E83
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1235648E88
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLJLxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 06:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S229793AbiLJL5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 06:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiLJLxH (ORCPT
+        with ESMTP id S229720AbiLJL5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 06:53:07 -0500
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0E5FD3D
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:52:59 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 3yPYpAeHxFUJ33yPYptfah; Sat, 10 Dec 2022 12:52:58 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Dec 2022 12:52:58 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Max Filippov <jcmvbkbc@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-xtensa@linux-xtensa.org, linux-spi@vger.kernel.org
-Subject: [PATCH v1] spi: xtensa-xtfpga: Fix a double put() in xtfpga_spi_remove()
-Date:   Sat, 10 Dec 2022 12:52:53 +0100
-Message-Id: <7946a26c6e53a4158f0f5bad5276d8654fd59415.1670673147.git.christophe.jaillet@wanadoo.fr>
+        Sat, 10 Dec 2022 06:57:10 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8446110B45
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:57:09 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id s8so11048887lfc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXM/ZzQf3i83h9TWbUQNWzaHxNpC3fWU4P5IeO/SlrM=;
+        b=pi/xxaQJP3Gab0CcC8mIr8CIVqw5IgnkcLFWRo8KmH9qXJg6yESHyINGyzUKjb5fmF
+         0D89U8j6bo5hy1JIHnKczyEfHvL6STsIutwDlm+sLu5EPZqu1N3ALILNjj5POrY4p8Lt
+         JXjU3Wp8BPvcAmXJ/rrLMBcK54xQoI202IXBhUeqj5haVaTHqRxsFxO0ZV3y6TrbgiZs
+         cfkwd4hV7pP95Abx2fRmYiWg4L79WvsJyLi0Ep3gOKHK2wR7SY9bfphqLyUMWGRwV9zM
+         k0DeR6a0Soq5xI1HdXlvkwP2R/QmtvrKmpnC+lHwI6kHPan2qYFPaj4fON1/cRlAPSfS
+         WbKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXM/ZzQf3i83h9TWbUQNWzaHxNpC3fWU4P5IeO/SlrM=;
+        b=TuUTjM7YyJDldld1OqmVgNeYXCmDpjaDWq7Yq+lecuhC2tB3DoqyoZg9jgbn994B7d
+         vnmWYCngSweik6Wk3r5D2OisqrXrLH+rlieDyYO+wM/7HQDCCbmMMdQqXAU3+TfsF3xr
+         mRuDiuBFBpv1zJ2t3ewhghEAu/KP2MkbkBHvgvHWJQ45c5XH05RQ1SxMWmPY8pLZDtK8
+         rsajP1sqmW6lemxrGAkiGsEIQXRcb72zyoOcOUAJogKiZQ9OpiL1F4BP4koPhXD0wMFQ
+         DiBe5aVTpkJca7ePP2R52qD71TRJWszeJFLuZuqD1gk1YsnKWNBuYgQAfoYERwaUP5hP
+         cYlg==
+X-Gm-Message-State: ANoB5pnivAIC0toh7RLTQI6zu1XSi+FA/c2iOosLYW13jxtA5NVigKKj
+        2qGrRxGbd2lzw4lMqjXll4N6bg==
+X-Google-Smtp-Source: AA0mqf5XaOq7OV4/HZSBVoFJvhrmxRR53GKZ/sazpnkP5JCsmbrdEjUcBJ7GAqW3DoEHSzIT7rPbfw==
+X-Received: by 2002:a05:6512:3c99:b0:4b5:5f2e:3cc6 with SMTP id h25-20020a0565123c9900b004b55f2e3cc6mr4395279lfv.47.1670673427883;
+        Sat, 10 Dec 2022 03:57:07 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u20-20020a2eb814000000b002778d482800sm578343ljo.59.2022.12.10.03.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 03:57:07 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] arm64: dts: qcom: sc7180: move QUP and QSPI opp tables out of SoC node
+Date:   Sat, 10 Dec 2022 12:57:01 +0100
+Message-Id: <20221210115704.97614-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'master' is allocated with devm_spi_alloc_master(), there is no need to
-put it explicitly in the remove function.
+The SoC node is a simple-bus and its schema expect to have nodes only
+with unit addresses:
 
-Fixes: 478cc2fc3dd7 ("spi: xtensa-xtfpga: Switch to use devm_spi_alloc_master()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+  sc7180-trogdor-lazor-r3.dtb: soc@0: opp-table-qspi: {'compatible': ['operating-points-v2'], 'phandle': [[186]], 'opp-75000000':
+    ...  'required-opps': [[47]]}} should not be valid under {'type': 'object'}
+
+Move to top-level OPP tables:
+ - QUP which is shared between multiple nodes,
+ - QSPI which cannot be placed in its node due to address/size cells.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/spi-xtensa-xtfpga.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 76 ++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/spi/spi-xtensa-xtfpga.c b/drivers/spi/spi-xtensa-xtfpga.c
-index 2fa7608f94cd..271ae98f441c 100644
---- a/drivers/spi/spi-xtensa-xtfpga.c
-+++ b/drivers/spi/spi-xtensa-xtfpga.c
-@@ -123,7 +123,6 @@ static int xtfpga_spi_remove(struct platform_device *pdev)
- 	struct xtfpga_spi *xspi = spi_master_get_devdata(master);
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index ea886cf08b4d..735581097295 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -538,6 +538,44 @@ cpu6_opp16: opp-2553600000 {
+ 		};
+ 	};
  
- 	spi_bitbang_stop(&xspi->bitbang);
--	spi_master_put(master);
++	qspi_opp_table: opp-table-qspi {
++		compatible = "operating-points-v2";
++
++		opp-75000000 {
++			opp-hz = /bits/ 64 <75000000>;
++			required-opps = <&rpmhpd_opp_low_svs>;
++		};
++
++		opp-150000000 {
++			opp-hz = /bits/ 64 <150000000>;
++			required-opps = <&rpmhpd_opp_svs>;
++		};
++
++		opp-300000000 {
++			opp-hz = /bits/ 64 <300000000>;
++			required-opps = <&rpmhpd_opp_nom>;
++		};
++	};
++
++	qup_opp_table: opp-table-qup {
++		compatible = "operating-points-v2";
++
++		opp-75000000 {
++			opp-hz = /bits/ 64 <75000000>;
++			required-opps = <&rpmhpd_opp_low_svs>;
++		};
++
++		opp-100000000 {
++			opp-hz = /bits/ 64 <100000000>;
++			required-opps = <&rpmhpd_opp_svs>;
++		};
++
++		opp-128000000 {
++			opp-hz = /bits/ 64 <128000000>;
++			required-opps = <&rpmhpd_opp_nom>;
++		};
++	};
++
+ 	memory@80000000 {
+ 		device_type = "memory";
+ 		/* We expect the bootloader to fill in the size */
+@@ -739,25 +777,6 @@ opp-384000000 {
+ 			};
+ 		};
  
- 	return 0;
- }
+-		qup_opp_table: opp-table-qup {
+-			compatible = "operating-points-v2";
+-
+-			opp-75000000 {
+-				opp-hz = /bits/ 64 <75000000>;
+-				required-opps = <&rpmhpd_opp_low_svs>;
+-			};
+-
+-			opp-100000000 {
+-				opp-hz = /bits/ 64 <100000000>;
+-				required-opps = <&rpmhpd_opp_svs>;
+-			};
+-
+-			opp-128000000 {
+-				opp-hz = /bits/ 64 <128000000>;
+-				required-opps = <&rpmhpd_opp_nom>;
+-			};
+-		};
+-
+ 		qupv3_id_0: geniqup@8c0000 {
+ 			compatible = "qcom,geni-se-qup";
+ 			reg = <0 0x008c0000 0 0x6000>;
+@@ -2655,25 +2674,6 @@ opp-202000000 {
+ 			};
+ 		};
+ 
+-		qspi_opp_table: opp-table-qspi {
+-			compatible = "operating-points-v2";
+-
+-			opp-75000000 {
+-				opp-hz = /bits/ 64 <75000000>;
+-				required-opps = <&rpmhpd_opp_low_svs>;
+-			};
+-
+-			opp-150000000 {
+-				opp-hz = /bits/ 64 <150000000>;
+-				required-opps = <&rpmhpd_opp_svs>;
+-			};
+-
+-			opp-300000000 {
+-				opp-hz = /bits/ 64 <300000000>;
+-				required-opps = <&rpmhpd_opp_nom>;
+-			};
+-		};
+-
+ 		qspi: spi@88dc000 {
+ 			compatible = "qcom,sc7180-qspi", "qcom,qspi-v1";
+ 			reg = <0 0x088dc000 0 0x600>;
 -- 
 2.34.1
 
