@@ -2,182 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9C9649006
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8C564900E
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiLJRhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 12:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S229814AbiLJRr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 12:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiLJRhG (ORCPT
+        with ESMTP id S229703AbiLJRr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 12:37:06 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5CD18B2E
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 09:37:06 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so8123849pjm.2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 09:37:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqUBKqwPdJHPULoATm27gxzC28eB4+7WQFwnd7nAT2U=;
-        b=srm8uicQC7djemNooluTWqVQUSA5hVycoK3IsiTkwfs38lZEeungEgqaAqsyIy53hy
-         TR31xNiSFwmxhnehxhezkxa2xiLykBXAKzo7qgRp1f2xaFGVBqF2Fq8E0MqVuhbtaZRv
-         utJjVf8YoPGaccqeXanU7FwtcfeJM/OAJMoB+d9Chb4Cioql8PrR37Q0yEhrws2vYL64
-         4xEtlD+zLWkstLF2spu/ism0ZusHJbm5xBlfPoNImf77JjUkW9TsgD1vu4kN8pxQoGK9
-         wqgWtOzhOE2BZMl8EjzS3eMcioM5fa3/2neVRlk6C+56oyT+vValesM2gaoVwXRxTBzU
-         GSQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OqUBKqwPdJHPULoATm27gxzC28eB4+7WQFwnd7nAT2U=;
-        b=hdPhT3EvWAI6ldPsRE8UIyobdh4lzb6+DFhSPGaDXOnWYW37i31AzskYJC4NCRc/bO
-         Ey8RSHp48npbfL7VGu/KzPsjtoj/X+KTvn1XCVyEIPUrnOjf4d5I5n8wzG/TyrcOCq19
-         Qz52/DwbiGYpyonkDy/IS5uXYBiuuruQaPaBqP4ppByzJeQkoz4MHnoeOTXXMdMpYYgz
-         krUndS6st3BJcEeluWNh7d8rzCu9QXD7AHsyGSPgjHy6eeZZNyNvrtxI3xMvZVdL/CeD
-         Rv8KOnl23FaCtbWPmPv5eWVO46l97tf3ZFRly4l2HCbJioM3ws6YEMfQBcLTAC55A11K
-         FcSw==
-X-Gm-Message-State: ANoB5pkGIyVY9/T/4ag30L/BByyrFVEC59SQhWFy8CaY2sJ66TYIa4Xp
-        48GivcK/m8PHKKs/MD/xCVzkK7TegWJtrhEgq1p7jA==
-X-Google-Smtp-Source: AA0mqf5n/NJnZRJCq74Kvxu0KgB0hENlHdC69qo+4DFmD/1rtdeQCWgcFlu7iLQlbUK7jVJJlGF5zic3gMY9kwqnk3k=
-X-Received: by 2002:a17:902:c1ca:b0:189:e149:a1b2 with SMTP id
- c10-20020a170902c1ca00b00189e149a1b2mr15422691plc.17.1670693825032; Sat, 10
- Dec 2022 09:37:05 -0800 (PST)
+        Sat, 10 Dec 2022 12:47:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E11634C
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 09:47:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF519B80884
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 17:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4F9C433D2;
+        Sat, 10 Dec 2022 17:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670694473;
+        bh=eGEHQ/VAOok5w7QGZwJySepr/dzmtnSDc+W5FmrQevg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fQfI5OsuPa7u19qb3TYtkYtgfula+Ktq0+C+CP1fOfg3NCaCcfcesikGTVcsZQQPu
+         B1mT48cIlRnQi59LltjG/3ibHsC1v9Beszv5Bad+t47i7Vd8onIuJUoPJ7Caxls6jq
+         ck8Pun446A/bK/e6ZUs5OIio4JQ64+KXD0rGdPctvpKU0ExFYOkdJ+16icuxIjrQvY
+         8g4qDbxmI7+gwxEWYhbVmXb9L208G70RyNLejGRXrpBSDKUmcrXab9a7nqEKeY/Sab
+         BrusZjtj4RHOnK9dGchGE4+FJv/cCpTSdjQ4REqMUWFE2jva9dQIM2L4yl6a+hWGZD
+         g/uRln229tl4A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2FD795C05C0; Sat, 10 Dec 2022 09:47:53 -0800 (PST)
+Date:   Sat, 10 Dec 2022 09:47:53 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [for-next][PATCH 13/25] x86/mm/kmmio: Use
+ rcu_read_lock_sched_notrace()
+Message-ID: <20221210174753.GD4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221210135750.425719934@goodmis.org>
+ <20221210135825.241167123@goodmis.org>
 MIME-Version: 1.0
-References: <20221210061626.948426-1-badhri@google.com> <20221210061626.948426-2-badhri@google.com>
- <52ed8d2f-813f-b9b6-238a-b7764f488924@roeck-us.net>
-In-Reply-To: <52ed8d2f-813f-b9b6-238a-b7764f488924@roeck-us.net>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Sat, 10 Dec 2022 09:36:28 -0800
-Message-ID: <CAPTae5LnoMR0t9v9r=oCZ14Ma1trOwJco4TjFGNPD2AiJ1UN8Q@mail.gmail.com>
-Subject: Re: [PATCH v9 2/3] usb: typec: tcpci: Add callback for evaluating
- contaminant presence
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210135825.241167123@goodmis.org>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 8:08 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 12/9/22 22:16, Badhri Jagan Sridharan wrote:
-> > This change adds callback to evaluate presence of contaminant in
-> > the TCPCI layer.
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> > Changes since v7:
-> > * None. Skipped versions by mistake.
-> > Changes since v6:
-> > * Removed is_potential_contaminant callback
-> > Changes since v5:
-> > * None
-> > Changes since v4:
-> > * None
-> > Changes since v3:
-> > * None
-> > Changes since v2:
-> > * Added tcpci_is_potential_contaminant to offload
-> > * disconnect_while_debounce logic
-> > ---
-> >   drivers/usb/typec/tcpm/tcpci.c | 9 +++++++++
-> >   include/linux/usb/tcpci.h      | 7 +++++++
-> >   2 files changed, 16 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > index fe781a38dc82..c8e78c13c9c4 100644
-> > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > @@ -403,6 +403,14 @@ static void tcpci_frs_sourcing_vbus(struct tcpc_dev *dev)
-> >               tcpci->data->frs_sourcing_vbus(tcpci, tcpci->data);
-> >   }
-> >
-> > +static void tcpci_check_contaminant(struct tcpc_dev *dev)
-> > +{
-> > +     struct tcpci *tcpci = tcpc_to_tcpci(dev);
-> > +
-> > +     if (tcpci->data->check_contaminant)
-> > +             tcpci->data->check_contaminant(tcpci, tcpci->data);
-> > +}
-> > +
->
-> With this callback to tcpm in place, how does tcpm ever leave the
-> CHECK_CONTAMINANT state if the low level driver does not support
-> the callback ?
+On Sat, Dec 10, 2022 at 08:58:03AM -0500, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> The mmiotrace tracer is "special". The purpose is to help reverse engineer
+> binary drivers by removing the memory allocated by the driver and when the
+> driver goes to access it, a fault occurs, the mmiotracer will record what
+> the driver was doing and then do the work on its behalf by single stepping
+> through the process.
+> 
+> But to achieve this ability, it must do some special things. One is to
+> take the rcu_read_lock() when the fault occurs, and then release it in the
+> breakpoint that is single stepping. This makes lockdep unhappy, as it
+> changes the state of RCU from within an exception that is not contained in
+> that exception, and we get a nasty splat from lockdep.
+> 
+> Instead, switch to rcu_read_lock_sched_notrace() as the RCU sched variant
+> has the same grace period as normal RCU. This is basically the same as
+> rcu_read_lock() but does not make lockdep complain about it.
+> 
+> Note, the preempt_disable() is still needed as it uses preempt_enable_no_resched().
+> 
+> Link: https://lore.kernel.org/linux-trace-kernel/20221209134144.04f33626@gandalf.local.home
+> 
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Karol Herbst <karolherbst@gmail.com>
+> Cc: Pekka Paalanen <ppaalanen@gmail.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Ah ! Good point.. I will fix it by installing the callback only when
-the lower level driver implements check_contaminant.
-Let me know if you think it wouldn't work.
+Executable code can be the best form of comment.  ;-)
 
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -785,7 +785,9 @@ struct tcpci *tcpci_register_port(struct device
-*dev, struct tcpci_data *data)
-        tcpci->tcpc.enable_frs = tcpci_enable_frs;
-        tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
-        tcpci->tcpc.set_partner_usb_comm_capable =
-tcpci_set_partner_usb_comm_capable;
--       tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
-+
-+       if (tcpci->data->check_contaminant)
-+               tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
+This does mess with preempt_count() redundantly, but the overhead from
+that should be way down in the noise.
 
-Thanks,
-Badhri
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
->
-> Thanks,
-> Guenter
->
->
-> >   static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
-> >   {
-> >       struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-> > @@ -777,6 +785,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
-> >       tcpci->tcpc.enable_frs = tcpci_enable_frs;
-> >       tcpci->tcpc.frs_sourcing_vbus = tcpci_frs_sourcing_vbus;
-> >       tcpci->tcpc.set_partner_usb_comm_capable = tcpci_set_partner_usb_comm_capable;
-> > +     tcpci->tcpc.check_contaminant = tcpci_check_contaminant;
-> >
-> >       if (tcpci->data->auto_discharge_disconnect) {
-> >               tcpci->tcpc.enable_auto_vbus_discharge = tcpci_enable_auto_vbus_discharge;
-> > diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> > index 17657451c762..85e95a3251d3 100644
-> > --- a/include/linux/usb/tcpci.h
-> > +++ b/include/linux/usb/tcpci.h
-> > @@ -188,6 +188,12 @@ struct tcpci;
-> >    *          Optional; The USB Communications Capable bit indicates if port
-> >    *          partner is capable of communication over the USB data lines
-> >    *          (e.g. D+/- or SS Tx/Rx). Called to notify the status of the bit.
-> > + * @check_contaminant:
-> > + *           Optional; The callback is invoked when chiplevel drivers indicated
-> > + *           that the USB port needs to be checked for contaminant presence.
-> > + *           Chip level drivers are expected to check for contaminant and call
-> > + *           tcpm_clean_port when the port is clean to put the port back into
-> > + *           toggling state.
-> >    */
-> >   struct tcpci_data {
-> >       struct regmap *regmap;
-> > @@ -204,6 +210,7 @@ struct tcpci_data {
-> >       void (*frs_sourcing_vbus)(struct tcpci *tcpci, struct tcpci_data *data);
-> >       void (*set_partner_usb_comm_capable)(struct tcpci *tcpci, struct tcpci_data *data,
-> >                                            bool capable);
-> > +     void (*check_contaminant)(struct tcpci *tcpci, struct tcpci_data *data);
-> >   };
-> >
-> >   struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
->
+> ---
+>  arch/x86/mm/kmmio.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
+> index edb486450158..853c49877c16 100644
+> --- a/arch/x86/mm/kmmio.c
+> +++ b/arch/x86/mm/kmmio.c
+> @@ -254,7 +254,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+>  	 * again.
+>  	 */
+>  	preempt_disable();
+> -	rcu_read_lock();
+> +	rcu_read_lock_sched_notrace();
+>  
+>  	faultpage = get_kmmio_fault_page(page_base);
+>  	if (!faultpage) {
+> @@ -323,7 +323,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+>  	return 1; /* fault handled */
+>  
+>  no_kmmio:
+> -	rcu_read_unlock();
+> +	rcu_read_unlock_sched_notrace();
+>  	preempt_enable_no_resched();
+>  	return ret;
+>  }
+> @@ -363,7 +363,7 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
+>  	/* These were acquired in kmmio_handler(). */
+>  	ctx->active--;
+>  	BUG_ON(ctx->active);
+> -	rcu_read_unlock();
+> +	rcu_read_unlock_sched_notrace();
+>  	preempt_enable_no_resched();
+>  
+>  	/*
+> -- 
+> 2.35.1
+> 
+> 
