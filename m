@@ -2,200 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87311648F0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA140648F22
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 15:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiLJN7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S229677AbiLJOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 09:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiLJN62 (ORCPT
+        with ESMTP id S229475AbiLJOMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:58:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337CD18394;
-        Sat, 10 Dec 2022 05:58:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B31FC60C1E;
-        Sat, 10 Dec 2022 13:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2DBC4332A;
-        Sat, 10 Dec 2022 13:58:26 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1p40Mz-000krr-2D;
-        Sat, 10 Dec 2022 08:58:25 -0500
-Message-ID: <20221210135825.551404522@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sat, 10 Dec 2022 08:58:05 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <zanussi@kernel.org>, stable@vger.kernel.org,
-        Zheng Yejian <zhengyejian1@huawei.com>
-Subject: [for-next][PATCH 15/25] tracing/hist: Fix out-of-bound write on action_data.var_ref_idx
-References: <20221210135750.425719934@goodmis.org>
+        Sat, 10 Dec 2022 09:12:09 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C9A15710
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 06:12:08 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q7so7853550wrr.8
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 06:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpyotPft42ZV60u0TngY41SM20HFUNP0Glod1vYIdB8=;
+        b=K3qcscChK3t3/dx/b601XowcWiGEKiasE0saMoFPkEWBhwby25BPEMO6+Et5j3PJQK
+         +XnBTW323hxe+cOA1+AC552/9Atbuxavy4GzZvszgBvpjfBvXNNEt9kccZK6pnMkOvSs
+         2ZxF2SMn4qZGZY7B9KhHQLB/xL+J9BzuUHzvD/oARisLfcC0UX0v0Khll+MCo8tIcxYz
+         puwPXq41YO0ZgJtysNLLQLwBG0EQ8bk1k1zkz2nMKYwha9qnkxIZr4JLL+gGGJU5s5NG
+         bxZkH1cbmfjYE/30qZ11YTZKZ/42VpqMR6/CBb9UBaDgrBYH0Uo49vXG0mQ2jEtssSKP
+         xpfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bpyotPft42ZV60u0TngY41SM20HFUNP0Glod1vYIdB8=;
+        b=LAhiKIPzHY5Q6zbVO9oBhzhE1CZOlvsGUhramqQxcvbVM6jwrJc/uw0r01L2wDBlE/
+         +LAdE8tX4DThhh6Sn3m+mkJZgnbvqrhkQx+CZfn2qen4BCQ0FpCfFjXSqVok24rEIhPv
+         Q4qaAwiFjUkC6SiuZOHlNuYtt5jUcAm9CuNAxH5/Uh7xyVaJmhbNId5NRdZ1y0oM4Z/Z
+         70ujWdiDH8lWZNZ6ugmEB64rde264zSzwa4M2874LTFO1GsifhclL2FROSbnf3kyKNJk
+         jLvK5pjQ0DbJ93cny/Ga/Vm/6lclUh5f/wjtyILLshQMEX+kuGBDkUTM2Y/XR69VMQoP
+         FU7g==
+X-Gm-Message-State: ANoB5plKBUeLuZZr6jWE122jS/nLS0+y77ztRQc9pnp4tVnKnVjiOguS
+        Akt24zeco+WNCgtLCam9M811+qfm3CigMwUE
+X-Google-Smtp-Source: AA0mqf5LgOj4pB1jzSksCkqXwVPTChw10DqfAzOym5ouXClHMmQB9+TBsaGcVkwicGHxof5kwFMsvg==
+X-Received: by 2002:a2e:8e31:0:b0:277:2:bb81 with SMTP id r17-20020a2e8e31000000b002770002bb81mr2277570ljk.11.1670680692732;
+        Sat, 10 Dec 2022 05:58:12 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id p20-20020a2eba14000000b002770566d642sm614567lja.17.2022.12.10.05.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 05:58:12 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 MPSS
+Date:   Sat, 10 Dec 2022 14:58:06 +0100
+Message-Id: <20221210135807.10688-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+Add entries for SM6375 MPSS. Unlike most other modems, this one only
+expects a single (cx) power domain.
 
-When generate a synthetic event with many params and then create a trace
-action for it [1], kernel panic happened [2].
-
-It is because that in trace_action_create() 'data->n_params' is up to
-SYNTH_FIELDS_MAX (current value is 64), and array 'data->var_ref_idx'
-keeps indices into array 'hist_data->var_refs' for each synthetic event
-param, but the length of 'data->var_ref_idx' is TRACING_MAP_VARS_MAX
-(current value is 16), so out-of-bound write happened when 'data->n_params'
-more than 16. In this case, 'data->match_data.event' is overwritten and
-eventually cause the panic.
-
-To solve the issue, adjust the length of 'data->var_ref_idx' to be
-SYNTH_FIELDS_MAX and add sanity checks to avoid out-of-bound write.
-
-[1]
- # cd /sys/kernel/tracing/
- # echo "my_synth_event int v1; int v2; int v3; int v4; int v5; int v6;\
-int v7; int v8; int v9; int v10; int v11; int v12; int v13; int v14;\
-int v15; int v16; int v17; int v18; int v19; int v20; int v21; int v22;\
-int v23; int v24; int v25; int v26; int v27; int v28; int v29; int v30;\
-int v31; int v32; int v33; int v34; int v35; int v36; int v37; int v38;\
-int v39; int v40; int v41; int v42; int v43; int v44; int v45; int v46;\
-int v47; int v48; int v49; int v50; int v51; int v52; int v53; int v54;\
-int v55; int v56; int v57; int v58; int v59; int v60; int v61; int v62;\
-int v63" >> synthetic_events
- # echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="bash"' >> \
-events/sched/sched_waking/trigger
- # echo "hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(\
-pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
-pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
-pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
-pid,pid,pid,pid,pid,pid,pid,pid,pid)" >> events/sched/sched_switch/trigger
-
-[2]
-BUG: unable to handle page fault for address: ffff91c900000000
-PGD 61001067 P4D 61001067 PUD 0
-Oops: 0000 [#1] PREEMPT SMP NOPTI
-CPU: 2 PID: 322 Comm: bash Tainted: G        W          6.1.0-rc8+ #229
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-RIP: 0010:strcmp+0xc/0x30
-Code: 75 f7 31 d2 44 0f b6 04 16 44 88 04 11 48 83 c2 01 45 84 c0 75 ee
-c3 cc cc cc cc 0f 1f 00 31 c0 eb 08 48 83 c0 01 84 d2 74 13 <0f> b6 14
-07 3a 14 06 74 ef 19 c0 83 c8 01 c3 cc cc cc cc 31 c3
-RSP: 0018:ffff9b3b00f53c48 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffffffffba958a68 RCX: 0000000000000000
-RDX: 0000000000000010 RSI: ffff91c943d33a90 RDI: ffff91c900000000
-RBP: ffff91c900000000 R08: 00000018d604b529 R09: 0000000000000000
-R10: ffff91c9483eddb1 R11: ffff91ca483eddab R12: ffff91c946171580
-R13: ffff91c9479f0538 R14: ffff91c9457c2848 R15: ffff91c9479f0538
-FS:  00007f1d1cfbe740(0000) GS:ffff91c9bdc80000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff91c900000000 CR3: 0000000006316000 CR4: 00000000000006e0
-Call Trace:
- <TASK>
- __find_event_file+0x55/0x90
- action_create+0x76c/0x1060
- event_hist_trigger_parse+0x146d/0x2060
- ? event_trigger_write+0x31/0xd0
- trigger_process_regex+0xbb/0x110
- event_trigger_write+0x6b/0xd0
- vfs_write+0xc8/0x3e0
- ? alloc_fd+0xc0/0x160
- ? preempt_count_add+0x4d/0xa0
- ? preempt_count_add+0x70/0xa0
- ksys_write+0x5f/0xe0
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1d1d0cf077
-Code: 64 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 00 f3 0f 1e
-fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00
-f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74
-RSP: 002b:00007ffcebb0e568 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000143 RCX: 00007f1d1d0cf077
-RDX: 0000000000000143 RSI: 00005639265aa7e0 RDI: 0000000000000001
-RBP: 00005639265aa7e0 R08: 000000000000000a R09: 0000000000000142
-R10: 000056392639c017 R11: 0000000000000246 R12: 0000000000000143
-R13: 00007f1d1d1ae6a0 R14: 00007f1d1d1aa4a0 R15: 00007f1d1d1a98a0
- </TASK>
-Modules linked in:
-CR2: ffff91c900000000
----[ end trace 0000000000000000 ]---
-RIP: 0010:strcmp+0xc/0x30
-Code: 75 f7 31 d2 44 0f b6 04 16 44 88 04 11 48 83 c2 01 45 84 c0 75 ee
-c3 cc cc cc cc 0f 1f 00 31 c0 eb 08 48 83 c0 01 84 d2 74 13 <0f> b6 14
-07 3a 14 06 74 ef 19 c0 83 c8 01 c3 cc cc cc cc 31 c3
-RSP: 0018:ffff9b3b00f53c48 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffffffffba958a68 RCX: 0000000000000000
-RDX: 0000000000000010 RSI: ffff91c943d33a90 RDI: ffff91c900000000
-RBP: ffff91c900000000 R08: 00000018d604b529 R09: 0000000000000000
-R10: ffff91c9483eddb1 R11: ffff91ca483eddab R12: ffff91c946171580
-R13: ffff91c9479f0538 R14: ffff91c9457c2848 R15: ffff91c9479f0538
-FS:  00007f1d1cfbe740(0000) GS:ffff91c9bdc80000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff91c900000000 CR3: 0000000006316000 CR4: 00000000000006e0
-
-Link: https://lore.kernel.org/linux-trace-kernel/20221207035143.2278781-1-zhengyejian1@huawei.com
-
-Cc: <mhiramat@kernel.org>
-Cc: <zanussi@kernel.org>
-Cc: stable@vger.kernel.org
-Fixes: d380dcde9a07 ("tracing: Fix now invalid var_ref_vals assumption in trace action")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- kernel/trace/trace_events_hist.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index b4ad86c22b43..8264b28d5a57 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -621,7 +621,7 @@ struct action_data {
- 	 * event param, and is passed to the synthetic event
- 	 * invocation.
- 	 */
--	unsigned int		var_ref_idx[TRACING_MAP_VARS_MAX];
-+	unsigned int		var_ref_idx[SYNTH_FIELDS_MAX];
- 	struct synth_event	*synth_event;
- 	bool			use_trace_keyword;
- 	char			*synth_event_name;
-@@ -2186,7 +2186,9 @@ static struct hist_field *create_var_ref(struct hist_trigger_data *hist_data,
- 			return ref_field;
- 		}
- 	}
--
-+	/* Sanity check to avoid out-of-bound write on 'hist_data->var_refs' */
-+	if (hist_data->n_var_refs >= TRACING_MAP_VARS_MAX)
-+		return NULL;
- 	ref_field = create_hist_field(var_field->hist_data, NULL, flags, NULL);
- 	if (ref_field) {
- 		if (init_var_ref(ref_field, var_field, system, event_name)) {
-@@ -3946,6 +3948,10 @@ static int trace_action_create(struct hist_trigger_data *hist_data,
- 
- 	lockdep_assert_held(&event_mutex);
- 
-+	/* Sanity check to avoid out-of-bound write on 'data->var_ref_idx' */
-+	if (data->n_params > SYNTH_FIELDS_MAX)
-+		return -EINVAL;
-+
- 	if (data->use_trace_keyword)
- 		synth_event_name = data->synth_event_name;
- 	else
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index a9219c7c8349..434d34578fc5 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -42,6 +42,7 @@ properties:
+       - qcom,sm6350-mpss-pas
+       - qcom,sm6375-adsp-pas
+       - qcom,sm6375-cdsp-pas
++      - qcom,sm6375-mpss-pas
+       - qcom,sm8150-adsp-pas
+       - qcom,sm8150-cdsp-pas
+       - qcom,sm8150-mpss-pas
+@@ -201,6 +202,7 @@ allOf:
+               - qcom,sm6350-mpss-pas
+               - qcom,sm6375-adsp-pas
+               - qcom,sm6375-cdsp-pas
++              - qcom,sm6375-mpss-pas
+               - qcom,sm8150-adsp-pas
+               - qcom,sm8150-cdsp-pas
+               - qcom,sm8150-mpss-pas
+@@ -350,6 +352,7 @@ allOf:
+               - qcom,sc8180x-mpss-pas
+               - qcom,sdx55-mpss-pas
+               - qcom,sm6350-mpss-pas
++              - qcom,sm6375-mpss-pas
+               - qcom,sm8150-mpss-pas
+               - qcom,sm8350-mpss-pas
+               - qcom,sm8450-mpss-pas
+@@ -379,6 +382,7 @@ allOf:
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8998-adsp-pas
+               - qcom,sm6375-cdsp-pas
++              - qcom,sm6375-mpss-pas
+               - qcom,sm8150-adsp-pas
+               - qcom,sm8150-cdsp-pas
+     then:
 -- 
-2.35.1
-
+2.38.1
 
