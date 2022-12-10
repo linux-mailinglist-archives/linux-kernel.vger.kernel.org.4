@@ -2,201 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE310648FAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B743648FC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLJQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 11:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S229861AbiLJQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 11:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiLJQPk (ORCPT
+        with ESMTP id S229548AbiLJQWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 11:15:40 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF203E68;
-        Sat, 10 Dec 2022 08:15:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1670688924; bh=h00Fm2qWXbZoWo2rUfDdE3zBb0Tv4j2FoeWjcOJSENo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=S21DvIUXJCuinMP5FTnkRRQc8MdJXEe59VyFK2QRxi2ZE2ec6mxS7T9quLPcDAUIN
-         xzCEPhimM2lE7e2r9Vt88ekcbSGmKJ1yfJriHQF4l9NFGAb2SEZruZxwO/RoKx60f/
-         11cfV1ii8EMfGkyDnSjo6lW9tkJWHepdry1YbAgzFc+tWRboJiy8raRQrcN/EtZeHo
-         DnBOJpR2xB+FES+g+nmsXLdq04BO3U1QOMibVGT2Cax1/Lt8okuvwI0J/skEnWtK3W
-         uEu6qD38ssEGpvx3HhuRzTo0upaY+vezK3ej9jxuc95iOsEalhpZP6WmbyG/B4vMCG
-         Gub5VeTKmpe0g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.157.120]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6bjy-1osNuc1qLW-017zJc; Sat, 10
- Dec 2022 17:15:24 +0100
-Message-ID: <40d7b576-9e4d-8d05-9273-48874d53591f@gmx.de>
-Date:   Sat, 10 Dec 2022 17:15:22 +0100
+        Sat, 10 Dec 2022 11:22:22 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188C0193F2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 08:22:00 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id 1so11736226lfz.4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 08:22:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xa+wgF2f+V8JgfQAupJPW6uYsxXB4NP4JKODbl1KcqE=;
+        b=UHt1iU52cWqV3BAWi2M31hRUbBoSdtprzdHKUypxkiBjFMKxbSq9IiRqrhJs03Steo
+         JrQUveWNUsk8SrBlSJf86PsiW2o9G02STZ5j5tTMALOTPjklJQ2ApAqDIPIm921N/59b
+         lZvDEt9nvEYZYQzOC8zBo87MHwk0WzWGXBZkgvG23G1TLRfVhQaNU7WxYOZVBhAzJ9Ut
+         2Mg+RZ4DZJsVluciDSLnYZlrwWnhCq4RLDEkYcOyMYHfMG/AH4oUNpKJPBlRWydGYEMr
+         Y0NdDkg3vIDdJEdbBtU5NZtAgfcawxryqFnxxHvWtD3AlTKHOZ3WxR6vapMSSXGX/tSL
+         K35Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xa+wgF2f+V8JgfQAupJPW6uYsxXB4NP4JKODbl1KcqE=;
+        b=RSyj3jRuDFKj74In5I0vGoxyOQcQ11jeykqiYbVgVK8jmWTgHcHNQVEGh2UhGY4n/e
+         FnROynq0jB9doo/S79MRIzZmZ2zNbF73KlgFjZwJqXD7zmMF/nmG/cXa6vlOkarIT4dV
+         8Bgvb7DVU3ysaL9I/PZgB4SUWF0Cl4KbrJoSYniBZnLrjnLqUqCtVhSWlgx1/EjhPSZe
+         y/d2s1l1aeHcYC1Zyh2k8uwoeMsFeCe608ErARrm0rnRx9PAW/cUElgNkJkFhrImA+e6
+         H4bvHPvO+399EfFKKjExNThYsVK+5xuFTtruFrT/yZgkSGjSq0l+acoXBVipWLxPtDpt
+         QKPQ==
+X-Gm-Message-State: ANoB5pkXU5VdhVFHIIo9+elzQTQUDUxQKUJ+3n+YYTMvg7r5ypRTdWs/
+        Lox8TgURdYaeT2NwlEsiaNn7bXZiUTxIjsyZVdU9wQ==
+X-Google-Smtp-Source: AA0mqf45e7e/ZiGpqcz90FYEYvqQ9RR7rpC8puKLEoNvnvF7lguelAa0o72DjwztPRv1/xDr9IEHXEixoR9K3zAR4lk=
+X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id
+ m3-20020a0565120a8300b004aaf944f7ecmr27167047lfu.467.1670689318339; Sat, 10
+ Dec 2022 08:21:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH linux-next v3] fbdev: use sysfs_emit() to instead of
- scnprintf()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn
-Cc:     javierm@redhat.com, tzimmermann@suse.de, geert+renesas@glider.be,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <202212051631391777945@zte.com.cn>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202212051631391777945@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Yxpyg0z1Wsf2EkKIlQdv8JUvwbqEH65fo8s9lyyqbgL4549OASJ
- gGH/U5xVKZSq2JxPpLjeEIMTHDdmuVG+csXCEw2vAyMhNee9revYLUXvKr7DrP57CukkSuv
- hkI9ibwdRz4fs+lOosuQb3PnEK+JDW6hKgrc1Zrh3dfYT346DJf6Jj3JTIfeF4tEj4JOEnP
- q2W0VoLC35YlkERuIRszQ==
-UI-OutboundReport: notjunk:1;M01:P0:/pTpdg5l5/M=;1hS/ZXg7URABp3DKU9wCvKM3Vum
- RL0/YRgS03/rXcKu9G2bJvhRgfByHgeB9dxf3yZyUf//gSUX/S9YbhFWoYSjrHO8Qp3sSxf8u
- fa3oibhkGpWKIua7xNm2dU/qbotPtgCjuMjCPBwKSw/Me8fXmhEwJHJnmj7mUH7TAWUfKDgRa
- u8ZURjA6lzLd5kItqLQx+35S7Cp84jX/971iScwbvhWFkBKR4grAXC+3UAKLlx1L3CThRQ5W1
- zuBp14V0NDE+2skRrVa7Iwg4qa2C4ir6JAJcRWrl3ESRvpkKJWE+ROPOlUG6mUdVRa+mrIp5P
- 0jxUmwC54jyIbsqyHEfPwTfnQBskYFetcKM9g1h3tobhUfjcRZy+bxtS0irtX18TBxOAa6Lww
- SomoUIuZ8wE5kfo2oXcheBn765MBa8x0WD62kWH9j4hzrS8uH6Rxkaen6Zb9CAAKySvno0rSn
- 0X/fiKYFjDujkKrDyA99MBDqHAN9KfEWMPG6ZirPgO0eMpXSEzWTWsz6i9bOrOzBUoWAf5u2i
- hNDLv+5WTZpgB61Wjmd29TMoGfLknH+Fbd2Gv8bxx6YdGqQk6nvYrgGC4HwezRW9THyl6eRSL
- jrElcAMAC+B5x8B25TPQPqwMLQBSREQXJAHk4jw+vbk8IZE98kstNpkkAJFSys8tbNyyzHxt3
- Zce29UmVdvqwtPR2ZhMIRmtRZLNu2V11vB4BnPydOOdjR+8WYJfmxMgM+C4lq8g3UIAK30OIR
- 7KkS2uytZ8FASK+GjCzzYHQy5UDuhcIWNGMUeP4E47gMrI41qf4h0bGLRECBiHKvmb8V5bQgp
- gyzwKo5MWaXsd0U7/0QnokZN7lN3KJ0crCEkPa7fcA7Vf3w9vU7V2UmeM0+/jf6juldoX+TLr
- SZhAHHiaHAb1vu2ynjfO02ow/UDd+Cd5Aql4Z8+vQOj1IuX9BxPZrk2jKlyANmlQvxwGU/zR7
- +6+EEwLuyiYb9DJCe3zucnv/XsY=
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207062913.3154262-1-bhupesh.sharma@linaro.org>
+ <CAA8EJpo30L=KYvrkbnWOrSXGVPk5++r77MTqVd12SZtaUqo-_w@mail.gmail.com>
+ <CAH=2Ntw7EKxkrRwp7mqkBm0gGE7=jVruViPa7ZiG1aSA0ipMzQ@mail.gmail.com> <CAA8EJpqUT+Zy0uD+0NnUTbQWOM_+CAfXTU+ED=GwgcNe2MpVHQ@mail.gmail.com>
+In-Reply-To: <CAA8EJpqUT+Zy0uD+0NnUTbQWOM_+CAfXTU+ED=GwgcNe2MpVHQ@mail.gmail.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Sat, 10 Dec 2022 21:51:46 +0530
+Message-ID: <CAH=2NtyQKBd3VQczfBzC5GU_y073wBdEH0gJBEfVm1ojsuWSag@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Fix iommu sid values for PCIe nodes
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
+        andersson@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 09:31, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Thu, 8 Dec 2022 at 19:43, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
+> On Thu, 8 Dec 2022 at 14:05, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+> >
+> > On Thu, 8 Dec 2022 at 16:14, Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > On Wed, 7 Dec 2022 at 09:29, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+> > > >
+> > > > Fix the iommu sid values for the PCIe nodes present on
+> > > > Qualcomm SM8150 SoC dtsi (in sync the with downstream code).
+> > >
+> > > The commit message describes what you did, not why. Is there any
+> > > actual issue that you are trying to solve?
+> >
+> > Right, I will add that in v2. We have a customer facing some sid
+> > related IOMMU transactional errors on sm8150 based boards.
+> >
+> > > It makes me wonder because all modern Qualcomm platforms share more or
+> > > less the same setup.
+> >
+> > Please see sdm845.dtsi, which does the same as suggested via this
+> > patch for sm8150.
 >
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Should we also apply the same change to other platforms?
 
-I've applied this patch, but split it up into two (one for each driver).
-Please, send seperate patches per driver next time (and add proper changel=
-og
-if you do a v2/v3 version).
+That's a good question. But I have no test data points to say that
+this should be valid for other platforms as well. Let me check with
+the folks @ qcom who reported this, (i.e. whether they see this with
+other qcom platforms as well), but let's not hold back this fix while
+we wait for more data.
 
-Thanks!
-Helge
+Thanks.
 
-
-> ---
-> v2 -> v3
-> Fix the mistakes in v2.
->   drivers/video/fbdev/sh_mobile_lcdcfb.c |  8 ++++----
->   drivers/video/fbdev/uvesafb.c          | 10 +++++-----
->   2 files changed, 9 insertions(+), 9 deletions(-)
+> > > > Fixes: a1c86c680533 ("arm64: dts: qcom: sm8150: Add PCIe nodes")
+> > > > Cc: Bjorn Andersson <andersson@kernel.org>
+> > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > >
+> > > No need to have regular maintainers in Cc tags. Please use regular
+> > > git-send-email arguments instead.
+> > >
+> > > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 32 ++++++++++++++++++++++++++--
+> > > >  1 file changed, 30 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > > > index d1b64280ab0b..e88d1617a1ab 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > > > @@ -1810,9 +1810,23 @@ pcie0: pci@1c00000 {
+> > > >                                       "slave_q2a",
+> > > >                                       "tbu";
+> > > >
+> > > > -                       iommus = <&apps_smmu 0x1d80 0x7f>;
+> > > > +                       iommus = <&apps_smmu 0x1d80 0xf>;
+> > > >                         iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
+> > > >                                     <0x100 &apps_smmu 0x1d81 0x1>;
+> > >
+> > > it looks like the patch was not even compile-tested.
+> > >
+> > > > +                                   <0x200 &apps_smmu 0x1d82 0x1>,
+> > > > +                                   <0x300 &apps_smmu 0x1d83 0x1>,
+> > > > +                                   <0x400 &apps_smmu 0x1d84 0x1>,
+> > > > +                                   <0x500 &apps_smmu 0x1d85 0x1>,
+> > > > +                                   <0x600 &apps_smmu 0x1d86 0x1>,
+> > > > +                                   <0x700 &apps_smmu 0x1d87 0x1>,
+> > > > +                                   <0x800 &apps_smmu 0x1d88 0x1>,
+> > > > +                                   <0x900 &apps_smmu 0x1d89 0x1>,
+> > > > +                                   <0xa00 &apps_smmu 0x1d8a 0x1>,
+> > > > +                                   <0xb00 &apps_smmu 0x1d8b 0x1>,
+> > > > +                                   <0xc00 &apps_smmu 0x1d8c 0x1>,
+> > > > +                                   <0xd00 &apps_smmu 0x1d8d 0x1>,
+> > > > +                                   <0xe00 &apps_smmu 0x1d8e 0x1>,
+> > > > +                                   <0xf00 &apps_smmu 0x1d8f 0x1>;
+> > > >
+> > > >                         resets = <&gcc GCC_PCIE_0_BCR>;
+> > > >                         reset-names = "pci";
+> > > > @@ -1909,9 +1923,23 @@ pcie1: pci@1c08000 {
+> > > >                         assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+> > > >                         assigned-clock-rates = <19200000>;
+> > > >
+> > > > -                       iommus = <&apps_smmu 0x1e00 0x7f>;
+> > > > +                       iommus = <&apps_smmu 0x1e00 0xf>;
+> > > >                         iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
+> > > >                                     <0x100 &apps_smmu 0x1e01 0x1>;
+> > > > +                                   <0x200 &apps_smmu 0x1e02 0x1>,
+> > > > +                                   <0x300 &apps_smmu 0x1e03 0x1>,
+> > > > +                                   <0x400 &apps_smmu 0x1e04 0x1>,
+> > > > +                                   <0x500 &apps_smmu 0x1e05 0x1>,
+> > > > +                                   <0x600 &apps_smmu 0x1e06 0x1>,
+> > > > +                                   <0x700 &apps_smmu 0x1e07 0x1>,
+> > > > +                                   <0x800 &apps_smmu 0x1e08 0x1>,
+> > > > +                                   <0x900 &apps_smmu 0x1e09 0x1>,
+> > > > +                                   <0xa00 &apps_smmu 0x1e0a 0x1>,
+> > > > +                                   <0xb00 &apps_smmu 0x1e0b 0x1>,
+> > > > +                                   <0xc00 &apps_smmu 0x1e0c 0x1>,
+> > > > +                                   <0xd00 &apps_smmu 0x1e0d 0x1>,
+> > > > +                                   <0xe00 &apps_smmu 0x1e0e 0x1>,
+> > > > +                                   <0xf00 &apps_smmu 0x1e0f 0x1>;
+> > > >
+> > > >                         resets = <&gcc GCC_PCIE_1_BCR>;
+> > > >                         reset-names = "pci";
+> > > > --
+> > > > 2.38.1
+> > > >
+> > >
+> > >
+> > > --
+> > > With best wishes
+> > > Dmitry
 >
-> diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbde=
-v/sh_mobile_lcdcfb.c
-> index 6d00893d41f4..ad9323ed8e2e 100644
-> --- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
-> +++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
-> @@ -1188,7 +1188,7 @@ overlay_alpha_show(struct device *dev, struct devi=
-ce_attribute *attr, char *buf)
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
 >
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->alpha);
-> +	return sysfs_emit(buf, "%u\n", ovl->alpha);
->   }
 >
->   static ssize_t
-> @@ -1226,7 +1226,7 @@ overlay_mode_show(struct device *dev, struct devic=
-e_attribute *attr, char *buf)
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
->
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->mode);
-> +	return sysfs_emit(buf, "%u\n", ovl->mode);
->   }
->
->   static ssize_t
-> @@ -1265,7 +1265,7 @@ overlay_position_show(struct device *dev, struct d=
-evice_attribute *attr,
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
->
-> -	return scnprintf(buf, PAGE_SIZE, "%d,%d\n", ovl->pos_x, ovl->pos_y);
-> +	return sysfs_emit(buf, "%d,%d\n", ovl->pos_x, ovl->pos_y);
->   }
->
->   static ssize_t
-> @@ -1306,7 +1306,7 @@ overlay_rop3_show(struct device *dev, struct devic=
-e_attribute *attr, char *buf)
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
->
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->rop3);
-> +	return sysfs_emit(buf, "%u\n", ovl->rop3);
->   }
->
->   static ssize_t
-> diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb=
-.c
-> index 00d789b6c0fa..ba8028a0cc7a 100644
-> --- a/drivers/video/fbdev/uvesafb.c
-> +++ b/drivers/video/fbdev/uvesafb.c
-> @@ -1580,7 +1580,7 @@ static ssize_t uvesafb_show_vendor(struct device *=
-dev,
->   	struct uvesafb_par *par =3D info->par;
->
->   	if (par->vbe_ib.oem_vendor_name_ptr)
-> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
-> +		return sysfs_emit(buf, "%s\n", (char *)
->   			(&par->vbe_ib) + par->vbe_ib.oem_vendor_name_ptr);
->   	else
->   		return 0;
-> @@ -1595,7 +1595,7 @@ static ssize_t uvesafb_show_product_name(struct de=
-vice *dev,
->   	struct uvesafb_par *par =3D info->par;
->
->   	if (par->vbe_ib.oem_product_name_ptr)
-> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
-> +		return sysfs_emit(buf, "%s\n", (char *)
->   			(&par->vbe_ib) + par->vbe_ib.oem_product_name_ptr);
->   	else
->   		return 0;
-> @@ -1610,7 +1610,7 @@ static ssize_t uvesafb_show_product_rev(struct dev=
-ice *dev,
->   	struct uvesafb_par *par =3D info->par;
->
->   	if (par->vbe_ib.oem_product_rev_ptr)
-> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
-> +		return sysfs_emit(buf, "%s\n", (char *)
->   			(&par->vbe_ib) + par->vbe_ib.oem_product_rev_ptr);
->   	else
->   		return 0;
-> @@ -1625,7 +1625,7 @@ static ssize_t uvesafb_show_oem_string(struct devi=
-ce *dev,
->   	struct uvesafb_par *par =3D info->par;
->
->   	if (par->vbe_ib.oem_string_ptr)
-> -		return scnprintf(buf, PAGE_SIZE, "%s\n",
-> +		return sysfs_emit(buf, "%s\n",
->   			(char *)(&par->vbe_ib) + par->vbe_ib.oem_string_ptr);
->   	else
->   		return 0;
-> @@ -1639,7 +1639,7 @@ static ssize_t uvesafb_show_nocrtc(struct device *=
-dev,
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct uvesafb_par *par =3D info->par;
->
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", par->nocrtc);
-> +	return sysfs_emit(buf, "%d\n", par->nocrtc);
->   }
->
->   static ssize_t uvesafb_store_nocrtc(struct device *dev,
-
+> --
+> With best wishes
+> Dmitry
