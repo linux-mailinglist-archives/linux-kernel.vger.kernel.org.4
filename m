@@ -2,349 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD88A648E2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C255648E3B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLJK1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 05:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S229538AbiLJKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 05:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLJK1q (ORCPT
+        with ESMTP id S229684AbiLJKu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 05:27:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965EE6F;
-        Sat, 10 Dec 2022 02:27:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7EFA60303;
-        Sat, 10 Dec 2022 10:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045FDC4339C;
-        Sat, 10 Dec 2022 10:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670668064;
-        bh=Mdz8RUBKtZSqhDXWmWhXs1hxqSCd3eah7I+k/KBibAU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fyia8Yw0j50M3N4ZjN9mkh3kA4Ko9vMpXNjtUqtldhDm8v7HWirOrxWpAnpf8FYrR
-         WiDUbaLhvQuTBZd0lZW0ZfqEOX90Y7J7AzDi2BvPVrZQB5qbdsr46PC8Sv93+Oo8aJ
-         7pMUR5+ZMkSZijQLboex4vlvu94h6It/2gPLscwwyzioCte1esJvotO2MNXh67idU4
-         3GTrqBGG5pgHPS6eN7UgaXjlt61LZewMmFyCifV46zYRzKENY/J4gXHmLkvF5psMbu
-         Uz8EcUTVRS+DRW5G6vm/07uQoR00rT7JjkoSftG93zEl1LgwkUtHufsETGMCd4YE8U
-         Rh6NSg5Y+nDfw==
-Received: by mail-ed1-f46.google.com with SMTP id c66so6387016edf.5;
-        Sat, 10 Dec 2022 02:27:43 -0800 (PST)
-X-Gm-Message-State: ANoB5pn+hTvtat9cAeLYIHYt0p1DtbSecv6S5m5ui0t4PsaRfDs2Cuta
-        TVZfILPRI+n8WFfDmI05HGH1v6n83Nf3aDmEaco=
-X-Google-Smtp-Source: AA0mqf5Gjk7IIhV2NfbhD3LwNHreZo3C6l0uKNZ1ltwuUDfi8ijlL0vCBE23MaBWsMSReHAv2BPTCodSmEyRgeGKFs0=
-X-Received: by 2002:aa7:c046:0:b0:461:54f0:f7dc with SMTP id
- k6-20020aa7c046000000b0046154f0f7dcmr84737630edo.117.1670668062036; Sat, 10
- Dec 2022 02:27:42 -0800 (PST)
+        Sat, 10 Dec 2022 05:50:57 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F350F1C10F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 02:50:54 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so10896860lfi.7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 02:50:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yDA7kzHD0wSeXE9lUVEr+JunSQpUfMbT+/Dt8szK8WY=;
+        b=Qj3U4f7zU7uZc7imsQvIcSHrcI0JwELGl4nl4IyyJgZ7bggAqHgU6DyKmjUX08LETI
+         E02/PhpQSIUwInNgAg9gh2RFdeNyrIqc6hnM+cFsi7LdcXx1BGc5S2FODlcJzqMqgUcH
+         8DDmjl5msjzGTM8UBLXNxK8JkJyJu03z2P9HX42Jhi2ElmpwD097HKqFk6Uazd8pp2Cc
+         WAYcxlwIsM+YV703lFvNu+2ZomFsS1WyluRw9YdH4hN9hItP3h5Lra4FC1Mwmcg1tygM
+         GE8wm53x4i/S7MUy8G/7ApYH/w4Ozwos37iH/LTvdk4B3nxdJKgV0hVmgeQ6G6NJlvkC
+         mvNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yDA7kzHD0wSeXE9lUVEr+JunSQpUfMbT+/Dt8szK8WY=;
+        b=lWLStPiIiaTmUBgln6bF9lpx7UVCEtsisIJ9Pzn4kB+6GAaNcAhjqojtxODdqQeYzc
+         nOG1NiwwpAfC3yA4aTVYgXHzOHPM6mjwXDbcSD85J/QdzZUXk3mMuPVpR4Y+A19BU7TU
+         8+eU3shweA/2DZ2sTK67dZzmaYNamYLy0WZeLYOlX9OlOM/NlmchR0trBUaGl21oPcPi
+         do4r+VPeoFhHpe4UayTS5XupKWUVYeJ6gWAGZDAxOwzrebD861n0z1wdSV80hMbM2VbZ
+         G3QPE1evGu2/uWDsBug/K2XqKladEEeKpcOftdDymyEJC1u23tCKBQplXAoE888LJEC/
+         Rlzw==
+X-Gm-Message-State: ANoB5pnwaTOr+IL19i07XYEEWY6qXGsWhnCwUVpHgK7hQtohnAlIn75q
+        PQSC0oAFTk6OwAlazLti21VU6g==
+X-Google-Smtp-Source: AA0mqf6m/o/EMksGT87qFi6KgEsGB+5prCYmxw2WQ2Nn9uMcPLVu9rRkanXRvxdT8P6EGaJz95hqyw==
+X-Received: by 2002:a05:6512:3e0a:b0:4aa:301f:3e3a with SMTP id i10-20020a0565123e0a00b004aa301f3e3amr5925939lfv.11.1670669453325;
+        Sat, 10 Dec 2022 02:50:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b22-20020a0565120b9600b0047f7722b73csm662708lfv.142.2022.12.10.02.50.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Dec 2022 02:50:52 -0800 (PST)
+Message-ID: <714ac62a-7bab-e16e-e3b6-bdd86e422699@linaro.org>
+Date:   Sat, 10 Dec 2022 11:50:51 +0100
 MIME-Version: 1.0
-References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-5-guoren@kernel.org>
- <87tu26w6gn.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87tu26w6gn.fsf@all.your.base.are.belong.to.us>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 10 Dec 2022 18:27:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTE_ZtKR6YTDEpF5uXHxUkuZ1PsZoL2Nf3NXpJWca9W7Q@mail.gmail.com>
-Message-ID: <CAJF2gTTE_ZtKR6YTDEpF5uXHxUkuZ1PsZoL2Nf3NXpJWca9W7Q@mail.gmail.com>
-Subject: Re: [PATCH -next V10 04/10] riscv: entry: Convert to generic entry
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH] arm64: dts: qcom: Use plural _gpios node label for
+ PMIC gpios
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209220450.1793421-1-marijn.suijten@somainline.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209220450.1793421-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 6:11 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
-te:
->
-> guoren@kernel.org writes:
->
-> The RISC-V entry.S is much more paletable after this patch! :-)
->
-> Some minor things...
->
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > This patch converts riscv to use the generic entry infrastructure from
-> > kernel/entry/*. The generic entry makes maintainers' work easier and
-> > codes more elegant. Here are the changes than before:
->
-> s/changes than before/changes/
-Okay
+On 09/12/2022 23:04, Marijn Suijten wrote:
+> The gpio node in PMIC dts'es define access to multiple GPIOs.  Most Qcom
+> PMICs were already using the plural _gpios label to point to this node,
+> but a few PMICs were left behind including the recently-pulled
+> pm(i)8950.
+> 
+> Rename it from *_gpio to *_gpios for pm6125, pm6150(l), pm8005,
+> pm(i)8950, and pm(i)8998.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> ---
+> 
+> This was brought up for discussion in [1] but hasn't seen any relevant
+> reply, unfortunately.
 
->
-> >  - More clear entry.S with handle_exception and ret_from_exception
-> >  - Get rid of complex custom signal implementation
-> >  - More readable syscall procedure
->
-> Maybe reword this a bit? It's a move from assembly to C (which, is much
-> more readable!).
-Okay.
+This is just a label, it does not matter. Why changing all exisitng
+files? I don't think it was a part of previous discussions...
 
->
-> >  - Little modification on ret_from_fork & ret_from_kernel_thread
->
-> What changes?
- ENTRY(ret_from_fork)
-+       call schedule_tail
-+       move a0, sp /* pt_regs */
-        la ra, ret_from_exception
--       tail schedule_tail
-+       tail syscall_exit_to_user_mode
- ENDPROC(ret_from_fork)
+To me it is unneeded churn.
 
- ENTRY(ret_from_kernel_thread)
-        call schedule_tail
-        /* Call fn(arg) */
--       la ra, ret_from_exception
-        move a0, s1
--       jr s0
-+       jalr s0
-+       move a0, sp /* pt_regs */
-+       la ra, ret_from_exception
-+       tail syscall_exit_to_user_mode
- ENDPROC(ret_from_kernel_thread)
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20221104234435.xwjpwfxs73puvfca@SoMainline.org/
+> ---
+>  arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts  |  8 ++++----
+>  .../dts/qcom/msm8998-oneplus-cheeseburger.dts    |  4 ++--
+>  .../boot/dts/qcom/msm8998-oneplus-common.dtsi    |  6 +++---
+>  .../qcom/msm8998-sony-xperia-yoshino-maple.dts   |  4 ++--
+>  .../dts/qcom/msm8998-sony-xperia-yoshino.dtsi    | 16 ++++++++--------
+>  .../arm64/boot/dts/qcom/msm8998-xiaomi-sagit.dts |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm6125.dtsi             |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm6150.dtsi             |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm6150l.dtsi            |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm8005.dtsi             |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm8950.dtsi             |  4 ++--
+>  arch/arm64/boot/dts/qcom/pm8998.dtsi             |  4 ++--
+>  arch/arm64/boot/dts/qcom/pmi8950.dtsi            |  4 ++--
+>  arch/arm64/boot/dts/qcom/pmi8998.dtsi            |  4 ++--
+>  arch/arm64/boot/dts/qcom/sc7180-idp.dts          |  4 ++--
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi     |  4 ++--
+>  arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi       |  4 ++--
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts       | 16 ++++++++--------
+>  arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi   |  4 ++--
+>  .../boot/dts/qcom/sdm845-oneplus-common.dtsi     |  6 +++---
+>  .../arm64/boot/dts/qcom/sdm845-shift-axolotl.dts |  4 ++--
+>  .../boot/dts/qcom/sdm845-sony-xperia-tama.dtsi   |  2 +-
+>  .../dts/qcom/sdm845-xiaomi-beryllium-common.dtsi |  4 ++--
+>  .../boot/dts/qcom/sdm845-xiaomi-polaris.dts      |  4 ++--
+>  .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts |  2 +-
+>  25 files changed, 64 insertions(+), 64 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+> index 310f7a2df1e8..0e273938b59d 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+> @@ -113,7 +113,7 @@ gpio-keys {
+>  			    <&cam_snapshot_pin_a>;
+>  		button-vol-up {
+>  			label = "Volume Up";
+> -			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
+> +			gpios = <&pm8998_gpios 6 GPIO_ACTIVE_LOW>;
+>  			linux,input-type = <EV_KEY>;
+>  			linux,code = <KEY_VOLUMEUP>;
 
->
-> >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
-> >  - Use the standard preemption code instead of custom
->
-> > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Ben Hutchings <ben@decadent.org.uk>
-> > ---
-> >  arch/riscv/Kconfig                    |   1 +
-> >  arch/riscv/include/asm/csr.h          |   1 -
-> >  arch/riscv/include/asm/entry-common.h |   8 +
-> >  arch/riscv/include/asm/ptrace.h       |  10 +-
-> >  arch/riscv/include/asm/stacktrace.h   |   5 +
-> >  arch/riscv/include/asm/syscall.h      |   6 +
-> >  arch/riscv/include/asm/thread_info.h  |  13 +-
-> >  arch/riscv/kernel/entry.S             | 237 ++++----------------------
-> >  arch/riscv/kernel/irq.c               |  15 ++
-> >  arch/riscv/kernel/ptrace.c            |  43 -----
-> >  arch/riscv/kernel/signal.c            |  21 +--
-> >  arch/riscv/kernel/sys_riscv.c         |  29 ++++
-> >  arch/riscv/kernel/traps.c             |  70 ++++++--
-> >  arch/riscv/mm/fault.c                 |  16 +-
-> >  14 files changed, 175 insertions(+), 300 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/entry-common.h
->
-> [...]
->
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index da44fe2d0d82..69097dfffdc9 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -14,10 +14,6 @@
-> >  #include <asm/asm-offsets.h>
-> >  #include <asm/errata_list.h>
-> >
-> > -#if !IS_ENABLED(CONFIG_PREEMPTION)
-> > -.set resume_kernel, restore_all
-> > -#endif
-> > -
-> >  ENTRY(handle_exception)
-> >       /*
-> >        * If coming from userspace, preserve the user thread pointer and=
- load
-> > @@ -106,19 +102,8 @@ _save_context:
-> >  .option norelax
-> >       la gp, __global_pointer$
-> >  .option pop
-> > -
-> > -#ifdef CONFIG_TRACE_IRQFLAGS
-> > -     call __trace_hardirqs_off
-> > -#endif
-> > -
-> > -#ifdef CONFIG_CONTEXT_TRACKING_USER
-> > -     /* If previous state is in user mode, call user_exit_callable(). =
-*/
-> > -     li   a0, SR_PP
-> > -     and a0, s1, a0
-> > -     bnez a0, skip_context_tracking
-> > -     call user_exit_callable
-> > -skip_context_tracking:
-> > -#endif
-> > +     move a0, sp /* pt_regs */
-> > +     la ra, ret_from_exception
->
-> Not for this series, but at some point it would be nice to get rid of
-> the "move" pseudoinsn in favor of "mv".
->
-> [...]
->
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index f7fa973558bc..ee9a0ef672e9 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -17,6 +17,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/irq.h>
-> >  #include <linux/kexec.h>
-> > +#include <linux/entry-common.h>
-> >
-> >  #include <asm/asm-prototypes.h>
-> >  #include <asm/bug.h>
-> > @@ -99,10 +100,19 @@ static void do_trap_error(struct pt_regs *regs, in=
-t signo, int code,
-> >  #else
-> >  #define __trap_section noinstr
-> >  #endif
-> > -#define DO_ERROR_INFO(name, signo, code, str)                         =
-       \
-> > -asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> > -{                                                                    \
-> > -     do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
-> > +#define DO_ERROR_INFO(name, signo, code, str)                         =
-               \
-> > +asmlinkage __visible __trap_section void name(struct pt_regs *regs)   =
-       \
-> > +{                                                                     =
-       \
-> > +     if (user_mode(regs)) {                                           =
-       \
-> > +             irqentry_enter_from_user_mode(regs);                     =
-       \
-> > +             do_trap_error(regs, signo, code, regs->epc, "Oops - " str=
-);     \
-> > +             irqentry_exit_to_user_mode(regs);                        =
-       \
-> > +     } else {                                                         =
-       \
-> > +             irqentry_state_t irq_state =3D irqentry_nmi_enter(regs); =
-         \
-> > +             do_trap_error(regs, signo, code, regs->epc, "Oops - " str=
-);     \
-> > +             irqentry_nmi_exit(regs, irq_state);                      =
-       \
-> > +     }                                                                =
-       \
-> > +     BUG_ON(!irqs_disabled());                                        =
-       \
-> >  }
-> >
-> >  DO_ERROR_INFO(do_trap_unknown,
-> > @@ -126,18 +136,38 @@ int handle_misaligned_store(struct pt_regs *regs)=
-;
-> >
-> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs =
-*regs)
-> >  {
-> > -     if (!handle_misaligned_load(regs))
-> > -             return;
-> > -     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > -                   "Oops - load address misaligned");
-> > +     if (user_mode(regs)) {
-> > +             irqentry_enter_from_user_mode(regs);
-> > +             if (handle_misaligned_load(regs))
-> > +                     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc=
-,
-> > +                           "Oops - load address misaligned");
-> > +             irqentry_exit_to_user_mode(regs);
-> > +     } else {
-> > +             irqentry_state_t irq_state =3D irqentry_nmi_enter(regs);
->
-> Please add a newline.
-okay
->
-> > +             if (handle_misaligned_load(regs))
-> > +                     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc=
-,
-> > +                           "Oops - load address misaligned");
-> > +             irqentry_nmi_exit(regs, irq_state);
-> > +     }
-> > +     BUG_ON(!irqs_disabled());
-> >  }
-> >
-> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs=
- *regs)
-> >  {
-> > -     if (!handle_misaligned_store(regs))
-> > -             return;
-> > -     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > -                   "Oops - store (or AMO) address misaligned");
-> > +     if (user_mode(regs)) {
-> > +             irqentry_enter_from_user_mode(regs);
-> > +             if (handle_misaligned_store(regs))
-> > +                     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc=
-,
-> > +                             "Oops - store (or AMO) address misaligned=
-");
-> > +             irqentry_exit_to_user_mode(regs);
-> > +     } else {
-> > +             irqentry_state_t irq_state =3D irqentry_nmi_enter(regs);
->
-> Please add a newline.
-okay
->
-> > +             if (handle_misaligned_store(regs))
-> > +                     do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc=
-,
-> > +                             "Oops - store (or AMO) address misaligned=
-");
-> > +             irqentry_nmi_exit(regs, irq_state);
-> > +     }
-> > +     BUG_ON(!irqs_disabled());
-> >  }
-> >  #endif
-> >  DO_ERROR_INFO(do_trap_store_fault,
-> > @@ -159,7 +189,7 @@ static inline unsigned long get_break_insn_length(u=
-nsigned long pc)
-> >       return GET_INSN_LENGTH(insn);
-> >  }
-> >
-> > -asmlinkage __visible __trap_section void do_trap_break(struct pt_regs =
-*regs)
-> > +static void __do_trap_break(struct pt_regs *regs)
-> >  {
-> >  #ifdef CONFIG_KPROBES
-> >       if (kprobe_single_step_handler(regs))
-> > @@ -189,6 +219,20 @@ asmlinkage __visible __trap_section void do_trap_b=
-reak(struct pt_regs *regs)
-> >       else
-> >               die(regs, "Kernel BUG");
-> >  }
-> > +
-> > +asmlinkage __visible __trap_section void do_trap_break(struct pt_regs =
-*regs)
-> > +{
-> > +     if (user_mode(regs)) {
-> > +             irqentry_enter_from_user_mode(regs);
-> > +             __do_trap_break(regs);
-> > +             irqentry_exit_to_user_mode(regs);
-> > +     } else {
-> > +             irqentry_state_t irq_state =3D irqentry_nmi_enter(regs);
->
-> Please add a newline.
-okay
->
->
-> Bj=C3=B6rn
+Best regards,
+Krzysztof
 
-
-
---=20
-Best Regards
- Guo Ren
