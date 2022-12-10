@@ -2,248 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51281648ED7
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3495648F83
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 16:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLJNNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
+        id S229784AbiLJPl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 10:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLJNNT (ORCPT
+        with ESMTP id S229835AbiLJPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:13:19 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3CEE00;
-        Sat, 10 Dec 2022 05:13:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670677998; x=1702213998;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cKTLdomiXShuiVZb7T/R0fh5k4rDBEVPYzeUoRr66wQ=;
-  b=h0zbt7U7CtDs0BwtY9I3UVzDLilZhZGv1r/1LJh+FR+Wq25AkxbVx/s7
-   74emvTZ1x0Ap3HXVdL98yH+e66l6JQYGYobQEewNGqwY4lO/pJmA/E5oa
-   dn4n7qwcSboCy2UwDoXv8kAjEocevCRklZi7nBAwU+YoytTJen2eXJl6R
-   QgpZZyCYhJY3PvH/HuPUDNoQYdw1ewVFn5gbPDszk2MZBu1X5y+/ZuFg5
-   sgTehCCebCcrsRXXvniIs2EymRQqYRFN4UHVgeJkp37Q7092HJFADD9jp
-   Rg5WndnMgfpOvpogGM+kqfn3FHA1mqjvHvFT+5Clyw6/lnX7vbCnQGt/e
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,234,1665471600"; 
-   d="scan'208";a="187511491"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2022 06:13:17 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sat, 10 Dec 2022 06:13:17 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Sat, 10 Dec 2022 06:13:11 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <ilpo.jarvinen@linux.intel.com>,
-        <macro@orcam.me.uk>, <andriy.shevchenko@linux.intel.com>,
-        <cang1@live.co.uk>, <colin.i.king@gmail.com>,
-        <phil.edworthy@renesas.com>, <biju.das.jz@bp.renesas.com>,
-        <geert+renesas@glider.be>, <lukas@wunner.de>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        <UNGLinuxDriver@microchip.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v8 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
-Date:   Sun, 11 Dec 2022 07:17:30 +0530
-Message-ID: <20221211014730.1233272-5-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
-References: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
+        Sat, 10 Dec 2022 10:41:53 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4BF1408C
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 07:41:51 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h10so7983225wrx.3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 07:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K3CkQrIxpcKZmpNzno1f/XqJw/g2MsuKc2yDZ3HQ1+Q=;
+        b=W227L6KzcAYmrjGuU4Ve0Ec0FdrlLVq4GdTMmyDQacgEpLQqgpYOZq/3GB7AqNNjZV
+         hT9CPQ77bnb+Yoa+jI1ox0OhGjhinY3XR4Eb00gtcXc0ZEIrsiDCQGKsqUDD4iUAHH6P
+         rx26ML5w70ZqmAgb6XNPIdmk1RJPnpTVv410WWtJYQG/mU9mdQ+8Ojm08XJPerTY4VHy
+         TbunGmTuPae+E67rvJRFLjZCaD4Wr2Rnu9LsKtjPk/FQupuxbz5Y+SS7MhMVmYpE0s7e
+         V/w2Kfo75QRHHtOshdsoWzObO1ZEdnKTSs63DkvgMnT0vrLLFGpxl0w0WQLdjqR1zSUl
+         Cv1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K3CkQrIxpcKZmpNzno1f/XqJw/g2MsuKc2yDZ3HQ1+Q=;
+        b=XxdO/+LCkOudjiTulyrUVHmh6R5X1fYAYxuIW185OZI8NKbrJSDn8gkPjLX4Mxaa7a
+         3LS27YoQk3XagaR93+W03i0/MIYFKUd32O1ZfNeaKV9dc1zY5CssAQS011WL22OyqUkS
+         bf57g67mkizP5Pl7w4OG1iZGfUyWaM3UI9koHueYRTZLPRBtuY8rE/kd3hPTx227XZdt
+         UuwixMPICMlOnU/URD4kt44IhGx9Pjc3n3m6ZfZ/XlnA5Z63f9IFJg9sNkSlqvJAI+Fm
+         zqFnWCX/QhLUKAinENtBpKpvskKQvPxM++J8fEZ9COlSvImfnzfPt+1o5R+aslaJMfDu
+         1idw==
+X-Gm-Message-State: ANoB5pnY63xQAmJs7XdSmcJsV1cM+W6U/mXoRC0gGRY8IEX/wzn5/2LZ
+        C7v8NaYkV6MjUd+0dzHl3fL0lKFXxwYRXlla
+X-Google-Smtp-Source: AA0mqf7tgUvEUG2vCMK38KjGFgMT6DDo+K4JgmplI2XtNPVkh9E6U28H7mgimecBcPqhfng4BsXrKQ==
+X-Received: by 2002:a05:6512:3050:b0:4b5:1545:222b with SMTP id b16-20020a056512305000b004b51545222bmr3368018lfb.47.1670681404294;
+        Sat, 10 Dec 2022 06:10:04 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id bf38-20020a05651225a600b004b5901b8011sm734857lfb.105.2022.12.10.06.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 06:10:03 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: msm8996-tone: Enable SDHCI1
+Date:   Sat, 10 Dec 2022 15:09:59 +0100
+Message-Id: <20221210141000.14344-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up UART
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
+With the recent patch that allowed us to reset the SDHCI controller from
+Linux, things started working properly. Enable SDHCI1, and by extension
+eMMC. Also, remove the now-useless cmdline SDHCI quirks.
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Changes in v8:
-- No Change
+ arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Changes in v7:
-- No Change
-
-Changes in v6:
-- No Change
-
-Changes in v5:
-- Corrected commit message
-
-Changes in v4:
-- No Change
-
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
-
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
- 1 file changed, 115 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index c4e44bfbd9e2..2dffa1b1f148 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -193,6 +193,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+index dec361b93cce..c9be32b81d36 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+@@ -24,11 +24,7 @@ / {
+ 	qcom,board-id = <8 0>;
+ 
+ 	chosen {
+-		/*
+-		 * Due to an unknown-for-a-few-years regression,
+-		 * SDHCI only works on MSM8996 in PIO (lame) mode.
+-		 */
+-		bootargs = "sdhci.debug_quirks=0x40 sdhci.debug_quirks2=0x4 maxcpus=2";
++		bootargs = "maxcpus=2";
+ 	};
+ 
+ 	reserved-memory {
+@@ -825,8 +821,7 @@ pm8994_l32: l32 {
  };
  
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 			  struct uart_8250_port *port, int port_idx)
- {
-@@ -363,6 +473,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	}
- }
+ &sdhc1 {
+-	/* eMMC doesn't seem to cooperate even in PIO mode.. */
+-	status = "disabled";
++	status = "okay";
  
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -377,6 +489,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- module_pci_driver(pci1xxxx_pci_driver);
+ 	vmmc-supply = <&pm8994_l20>;
+ 	vqmmc-supply = <&pm8994_s4>;
 -- 
-2.25.1
+2.38.1
 
