@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B392E6490AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB306490B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLJUr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 15:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S229658AbiLJUw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 15:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJUr0 (ORCPT
+        with ESMTP id S229548AbiLJUwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 15:47:26 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7496416587
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:47:25 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id s14so5540669qvo.11
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:47:25 -0800 (PST)
+        Sat, 10 Dec 2022 15:52:53 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DDB9591
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:52:49 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3e45d25de97so95974657b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:52:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CEKDlkVHglW99KqRbYgf1kkkoJ7bs9WkvbGtzTesMCs=;
-        b=hwC5B2Bgy2YVuZuCIuWyBobOEB0Fe1BJpWJkSIc4oQwwNvQsHqnsFDkYfFz2xJg/P8
-         KyDos3k7Ukf7s5O9TUgyvWEiFEkj48jNTv3JBjNNV73hqsqiQLrriLriz4KkLZDk0dl5
-         KwC56ngev8pyOYgI1TwGdv/aQ4JedTsClDKuUpKnjTZs6QfzCgyggCRqIH4tWKI2Waxf
-         hU7dZwT8YJYsR6L70zml9KojkBtwJi/hU7NH1JWVNcq3QNhFuJI4JQ3FEjk+mBsnaQ8/
-         0RN5lUIhJG/9ePxr6E0U0WJwjQsLRP+UfUUzQ/jivadqgHfFYQmiXTP91rw36oZLjBWy
-         u2uQ==
+        bh=Xvmi+e21rnUYDcPqPEGtPeb0mB+EMYrDiHDG509o8t0=;
+        b=Smjt4z1iWBtjSDhxVUBVrdgEBiemFhe26IcMeNnJl3d4vzh7Jx/+JRWvO5Ppt3/39K
+         jHNEsRvkHpUzz2ECW62wN24b4nYbgh9nnu1Tw/NdVJGW2DEeQVxAaX5clIydlksZaKnB
+         W1xNrL9B87Oxa+AjuKGiuF4nL9oPt4BwQmmEKgkGNtzSqZdOhx3hAdrvxQkMvBiVxG31
+         Euu0P5JHP23O4hkUZzhs6+KeXgogMgVaOhh3rivRF52PMU5ClAJTs2iBekQyZV1QXz/M
+         zOLn9hc8CJO23+K32itqlHM0zD6UMINBrjfSDJyD/amH42XKkH2xRlQyrqqGXbQ+FOsJ
+         P5lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CEKDlkVHglW99KqRbYgf1kkkoJ7bs9WkvbGtzTesMCs=;
-        b=ipiB3QlInmNWbsTX1xDZUCqloe1FoxRxb0cfOhbXcyMI7tNNmk2kHG4eZWJQEKEsxC
-         bzUxhoyjRCpMR6lzeg19tw6TvyM5l8PDlksY3KuloAg2fl7I8ubq/1Z4KCL58E6UUqfZ
-         ZWpNuPc4BJ8cE8/Y0RkRdVIqYMcYhHfaF7cEZceLvKb+5Oqhr+DIU5hDyBlPhzAZNc3+
-         zxBfuAASVFUF4dR78aUpo02YMQHj3O5y0DEk4Qddv0Y3q/q4bPj8c0Mz6TcpG95ojgqg
-         NY/3CwRuCTQ1gkGK3U8Tk9x5q9zoQzfXALOwmWfIR15K86MiKY1YNP/WiUarPZiWNTD1
-         Dobw==
-X-Gm-Message-State: ANoB5pkvHTHVP19ekx06kiyM6x0KZk2gBYqxgGXJyPsbeHEF4Ji5WNnu
-        mHR2imqht2EHEGAm03bQ1YD/AFo8qBsA8XwNM4wD/YHg
-X-Google-Smtp-Source: AA0mqf4JTJfe7jmmA7m3FjSkVUtgmodjbVf1DUnU0IQstXdpNbVdR2cLfJKeSgJLRqc8cS7xZkvdLPapsgCpdzuloPU=
-X-Received: by 2002:a05:6214:c5:b0:4c6:f93f:1cfd with SMTP id
- f5-20020a05621400c500b004c6f93f1cfdmr45555224qvs.35.1670705244513; Sat, 10
- Dec 2022 12:47:24 -0800 (PST)
+        bh=Xvmi+e21rnUYDcPqPEGtPeb0mB+EMYrDiHDG509o8t0=;
+        b=ODg8ONv2L+Q+7SCeBqYttMXhE1jSme0BeGKHF5ReKuWA7Y1NqaonnalmPyO9SBcTiL
+         tBVfJH2Ic5PIYq/yclVP3wdDF7nVoGZb+z5yxc8NAGLeArH6gEABCTUscekYp175zb10
+         YrQZkXZHATA4l62rbRVLBFANFZFt0MTtyFiIhwJiCWYAwA8vGmb9qnA5PXkKoFD/B7Ux
+         PQn95mWET1k6o+F4rTF/zABcZBvHT89NpsHufJGUAUW6GsCN7yHTU9RB2HSiWmn6pbz/
+         3dVJ+LsNAG9AAwOOggshQCyjP4KnUeG0JikZWcYWZmSJcx9RwTnlx6alP5N2RvNV4w81
+         u5MA==
+X-Gm-Message-State: ANoB5pmMDzSPtaDmVL3+6e7O/j/IRNOhD1lkRTOMQuBGMM1SuqOeGO7m
+        +TFz57iJM+cqms3E+vi21we2DIX4F/nVOJK9pXLL+g==
+X-Google-Smtp-Source: AA0mqf40HhdX+ecVqW2NUg2PGTBuW4p30UeBPrr+0tVf28XIWQvW8XXYMAxtH4mgaYfkIk29ZntupwKS9P9v8tzmyO0=
+X-Received: by 2002:a81:520d:0:b0:3c0:c065:7608 with SMTP id
+ g13-20020a81520d000000b003c0c0657608mr56545246ywb.378.1670705568483; Sat, 10
+ Dec 2022 12:52:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20221204043530.1673752-1-jiucheng.xu@amlogic.com> <6e0dcfa8-6855-cc80-5e23-443d44cae07b@linaro.org>
-In-Reply-To: <6e0dcfa8-6855-cc80-5e23-443d44cae07b@linaro.org>
-From:   Chris Healy <cphealy@gmail.com>
-Date:   Sat, 10 Dec 2022 12:47:13 -0800
-Message-ID: <CAFXsbZr8yLOy2MnhX2SaCECY38DHcfpS1pOu3tZvt3xNBuH6HQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: Add Meson DDR PMU as module
-To:     neil.armstrong@linaro.org
-Cc:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <healych@amazon.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>
+References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-3-konrad.dybcio@linaro.org>
+In-Reply-To: <20221210200353.418391-3-konrad.dybcio@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 10 Dec 2022 23:52:37 +0300
+Message-ID: <CAA8EJppOWvk5YcNZy6qttfCX4eEiz3eENvnV2HMKecTZMLDhZw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] interconnect: qcom: msm8996: Provide UFS clocks to A2NoC
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 12:40 AM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
+On Sat, 10 Dec 2022 at 23:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> +CC linux-amlogic@lists.infradead.org
->
-> On 04/12/2022 05:35, Jiucheng Xu wrote:
-> > Add Meson DDR PMU to defconfig so that build errors are caught.
-> >
-> > Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> > ---
-> >   arch/arm64/configs/defconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > index 0b6af3348e79..f2324b54a6ba 100644
-> > --- a/arch/arm64/configs/defconfig
-> > +++ b/arch/arm64/configs/defconfig
-> > @@ -1265,6 +1265,7 @@ CONFIG_ARM_DMC620_PMU=m
-> >   CONFIG_QCOM_L2_PMU=y
-> >   CONFIG_QCOM_L3_PMU=y
-> >   CONFIG_HISI_PMU=y
-> > +CONFIG_MESON_DDR_PMU=m
+> On eMMC devices the bootloader has no business enabling UFS clocks.
+> That results in a platform hang and hard reboot when trying to vote
+> on paths including MASTER_UFS and since sync_state guarantees that
+> it's done at boot time, this effectively prevents such devices from
+> booting. Fix that.
 
-Given that the other vendor specific PMU counter drivers are being
-configured as built-in, perhaps it makes more sense to do the same
-with the new MESON DDR PMU driver and also set it to "y"?
+The vendor kernel separates bus clocks and QoS clocks, so there is
+possibly room for improvement.
 
-> >   CONFIG_NVMEM_IMX_OCOTP=y
-> >   CONFIG_NVMEM_IMX_OCOTP_SCU=y
-> >   CONFIG_NVMEM_MTK_EFUSE=y
+Anyway:
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 >
+> Fixes: 7add937f5222 ("interconnect: qcom: Add MSM8996 interconnect provider driver")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/interconnect/qcom/msm8996.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+> index c2903ae3b3bc..7ddb1f23fb2a 100644
+> --- a/drivers/interconnect/qcom/msm8996.c
+> +++ b/drivers/interconnect/qcom/msm8996.c
+> @@ -33,6 +33,13 @@ static const char * const bus_a0noc_clocks[] = {
+>         "aggre0_noc_mpu_cfg"
+>  };
+>
+> +static const char * const bus_a2noc_clocks[] = {
+> +       "bus",
+> +       "bus_a",
+> +       "aggre2_ufs_axi",
+> +       "ufs_axi"
+> +};
+> +
+>  static const u16 mas_a0noc_common_links[] = {
+>         MSM8996_SLAVE_A0NOC_SNOC
+>  };
+> @@ -1859,6 +1866,8 @@ static const struct qcom_icc_desc msm8996_a2noc = {
+>         .type = QCOM_ICC_NOC,
+>         .nodes = a2noc_nodes,
+>         .num_nodes = ARRAY_SIZE(a2noc_nodes),
+> +       .clocks = bus_a2noc_clocks,
+> +       .num_clocks = ARRAY_SIZE(bus_a2noc_clocks),
+>         .regmap_cfg = &msm8996_a2noc_regmap_config
+>  };
+>
+> --
+> 2.38.1
+>
+
+
+-- 
+With best wishes
+Dmitry
