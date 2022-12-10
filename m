@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F77964902D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8730D64902F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiLJSgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 13:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S229769AbiLJSgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 13:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJSgr (ORCPT
+        with ESMTP id S229749AbiLJSgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 13:36:47 -0500
+        Sat, 10 Dec 2022 13:36:49 -0500
 Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3417412
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:36:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213C913DE1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:36:49 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id 44iJpNwaA1SdM44iJpAGuk; Sat, 10 Dec 2022 19:36:44 +0100
+        id 44iJpNwaA1SdM44iNpAGvA; Sat, 10 Dec 2022 19:36:47 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Dec 2022 19:36:44 +0100
+X-ME-Date: Sat, 10 Dec 2022 19:36:47 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Tony Huang <tonyhuang.sunplus@gmail.com>,
@@ -30,10 +30,12 @@ To:     Tony Huang <tonyhuang.sunplus@gmail.com>,
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-mmc@vger.kernel.org
-Subject: [PATCH 1/3] mmc: sunlpus: Fix an error handling path in spmmc_drv_probe()
-Date:   Sat, 10 Dec 2022 19:36:37 +0100
-Message-Id: <7c686fecb11b4ec1f55cd7075dc7cfcdd9b445ba.1670697358.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 2/3] mmc: sunlpus: Fix a memory leak in case of error in spmmc_drv_probe()
+Date:   Sat, 10 Dec 2022 19:36:38 +0100
+Message-Id: <9c52251e1ba837ca204e253627679f1e42ebe9fa.1670697358.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <7c686fecb11b4ec1f55cd7075dc7cfcdd9b445ba.1670697358.git.christophe.jaillet@wanadoo.fr>
+References: <7c686fecb11b4ec1f55cd7075dc7cfcdd9b445ba.1670697358.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
@@ -45,53 +47,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs after successful clk_prepare_enable() call in the probe,
-the clk is not clk_disable_unprepare()'ed.
-
-Use devm_clk_get_enabled() instead of devm_clk_get() to fix, and simplify
-the probe and the remove function accordingly.
+If an error occurs after a successful mmc_alloc_host() call in the probe,
+the error handling path should be executed in order to call
+mmc_free_host().
 
 Fixes: 4e268fed8b18 ("mmc: Add mmc driver for Sunplus SP7021")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-This changes the order of resource releasing when the driver is removed,
-but it looks ok to me.
----
- drivers/mmc/host/sunplus-mmc.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/mmc/host/sunplus-mmc.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/mmc/host/sunplus-mmc.c b/drivers/mmc/host/sunplus-mmc.c
-index db5e0dcdfa7f..3e8856a82188 100644
+index 3e8856a82188..ed789a9bdd23 100644
 --- a/drivers/mmc/host/sunplus-mmc.c
 +++ b/drivers/mmc/host/sunplus-mmc.c
-@@ -878,7 +878,7 @@ static int spmmc_drv_probe(struct platform_device *pdev)
- 	if (IS_ERR(host->base))
- 		return PTR_ERR(host->base);
+@@ -875,26 +875,34 @@ static int spmmc_drv_probe(struct platform_device *pdev)
+ 	host->dma_int_threshold = 1024;
  
--	host->clk = devm_clk_get(&pdev->dev, NULL);
-+	host->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(host->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(host->clk), "clk get fail\n");
+ 	host->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+-	if (IS_ERR(host->base))
+-		return PTR_ERR(host->base);
++	if (IS_ERR(host->base)) {
++		ret = PTR_ERR(host->base);
++		goto probe_free_host;
++	}
  
-@@ -896,10 +896,6 @@ static int spmmc_drv_probe(struct platform_device *pdev)
+ 	host->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+-	if (IS_ERR(host->clk))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(host->clk), "clk get fail\n");
++	if (IS_ERR(host->clk)) {
++		ret = dev_err_probe(&pdev->dev, PTR_ERR(host->clk), "clk get fail\n");
++		goto probe_free_host;
++	}
+ 
+ 	host->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-	if (IS_ERR(host->rstc))
+-		return dev_err_probe(&pdev->dev, PTR_ERR(host->rstc), "rst get fail\n");
++	if (IS_ERR(host->rstc)) {
++		ret = dev_err_probe(&pdev->dev, PTR_ERR(host->rstc), "rst get fail\n");
++		goto probe_free_host;
++	}
+ 
+ 	host->irq = platform_get_irq(pdev, 0);
+-	if (host->irq <= 0)
+-		return host->irq;
++	if (host->irq <= 0) {
++		ret = host->irq;
++		goto probe_free_host;
++	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, host->irq,
+ 					spmmc_irq, spmmc_func_finish_req, IRQF_SHARED,
+ 			NULL, host);
  	if (ret)
- 		return ret;
+-		return ret;
++		goto probe_free_host;
  
--	ret = clk_prepare_enable(host->clk);
--	if (ret)
--		return dev_err_probe(&pdev->dev, ret, "failed to enable clk\n");
--
  	ret = mmc_of_parse(mmc);
  	if (ret)
- 		goto probe_free_host;
-@@ -944,7 +940,6 @@ static int spmmc_drv_remove(struct platform_device *dev)
- 
- 	mmc_remove_host(host->mmc);
- 	pm_runtime_get_sync(&dev->dev);
--	clk_disable_unprepare(host->clk);
- 	pm_runtime_put_noidle(&dev->dev);
- 	pm_runtime_disable(&dev->dev);
- 	platform_set_drvdata(dev, NULL);
 -- 
 2.34.1
 
