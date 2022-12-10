@@ -2,51 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359C4648CA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 04:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53002648CAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 04:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLJDJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 22:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
+        id S229721AbiLJDRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 22:17:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLJDJw (ORCPT
+        with ESMTP id S229470AbiLJDRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 22:09:52 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E6143860
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 19:09:50 -0800 (PST)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NTXsk0wyjzJqQB;
-        Sat, 10 Dec 2022 11:08:58 +0800 (CST)
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 10 Dec 2022 11:09:48 +0800
-Message-ID: <cbda63de-6eb4-30e9-c19e-be58d5c325ec@huawei.com>
-Date:   Sat, 10 Dec 2022 11:09:48 +0800
+        Fri, 9 Dec 2022 22:17:18 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEBE31375;
+        Fri,  9 Dec 2022 19:17:15 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id fy4so6412106pjb.0;
+        Fri, 09 Dec 2022 19:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IfcCAQaJ3kmduYpB+rQFe6/68zr6eEOSwUILoiuNatw=;
+        b=Xjq6quRw4g+29K0K78R7a4vLy44NwsFzw6TZSBK9OCfyQRx170exAX73wg3cm/uuov
+         FUNCfoF7IoEw4A3AxQw4s1uQRQKazTCWKnmF5OKGZeUPM9/2g2OUedRJA8GXMHgHM4CT
+         i0dfazNwsh7gDUk9x6QaOiQJgvk5FzoMdL7Ip9pFZKB5qfm/Hed02yyChkZGhjGy5Oes
+         PyrOqjq0FDGq876qkkckC5sOykLxGzUeGJOXzxeqrNVk8LcPvqM32orucn//1F4xOZW6
+         n9i7dY4kyyRFelPJo4Jkmth/Yx3CHpunRMRgIkAmOasILtalMGeWBLwvdkQpjQK2S5pp
+         AI4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IfcCAQaJ3kmduYpB+rQFe6/68zr6eEOSwUILoiuNatw=;
+        b=oVnCNFfnxzKcQtN3k0aExCkFjxA4CCrLwWW2auMA6FiLM2LiEAPMe0o6EdkWSx2+AP
+         TnjAWtciGsjnqR55mcCTAHSA3I90KdGfEplesAszecJhlhoX0TiBNdfsaqSS14LaIP25
+         T+uhLmnwRf2OsAikJZtaQBjVwFcgf7KQPtKEhDcYY07iJVM2Zhg26+kzFvkrikOmKWZs
+         X4APWIj53iXKtXQL4OIlGWFRcugK4EGT3tM3/AC66vLHNmqUBtkpaMF/E+91YqxfsAKV
+         a9NzZdk0x79y2aNMVdZNyI9GpbQjsWBiGDr1m1ApkHqGl/AfitDrpKcf4zdzoF9Gnl4m
+         cejA==
+X-Gm-Message-State: ANoB5pnArcc0gBNRkZ8WsAnQOnK5kiRG9RsbAUo9G2bN/7Izd+I6bZDW
+        TT/Nv/X+0YhvcyxFWJ8u0RIijl+K678=
+X-Google-Smtp-Source: AA0mqf6ojaModjo5JyfiHSc0P0dszlj8oHPmvLBUk1QMqMk0FkyE1RFBGz4RkV0BJXKBL+JL48Vytg==
+X-Received: by 2002:a17:902:f647:b0:189:101d:9bad with SMTP id m7-20020a170902f64700b00189101d9badmr9451391plg.59.1670642235205;
+        Fri, 09 Dec 2022 19:17:15 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b0018982bf03b4sm1970629pld.117.2022.12.09.19.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 19:17:14 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 241A3103E00; Sat, 10 Dec 2022 10:17:10 +0700 (WIB)
+Date:   Sat, 10 Dec 2022 10:17:10 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     matthew.gerlach@linux.intel.com, hao.wu@intel.com,
+        yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v6 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+Message-ID: <Y5P6NjDxy/S7nlF7@debian.me>
+References: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
+ <20221209214523.3484193-2-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-CC:     <mawupeng1@huawei.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <kuleshovmail@gmail.com>,
-        <aneesh.kumar@linux.ibm.com>, <clameter@sgi.com>
-Subject: Re: [PATCH 1/4] mm/mlock: return EINVAL for illegal user memory range
- in mlock
-Content-Language: en-US
-To:     <akpm@linux-foundation.org>
-References: <20221205034108.3365182-1-mawupeng1@huawei.com>
- <20221205034108.3365182-2-mawupeng1@huawei.com>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <20221205034108.3365182-2-mawupeng1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HlPKI/korhvKEuYx"
+Content-Disposition: inline
+In-Reply-To: <20221209214523.3484193-2-matthew.gerlach@linux.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,63 +86,311 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--HlPKI/korhvKEuYx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/12/5 11:41, Wupeng Ma wrote:
-> From: Ma Wupeng <mawupeng1@huawei.com>
-> 
-> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
-> The return value of mlock is zero. But nothing will be locked since the
-> len in do_mlock overflows to zero due to the following code in mlock:
-> 
->   len = PAGE_ALIGN(len + (offset_in_page(start)));
-> 
-> The same problem happens in munlock.
-> 
-> Since TASK_SIZE is the maximum user space address. The start or len of
-> mlock shouldn't be bigger than this. Function access_ok can be used to
-> check this issue, so return -EINVAL if bigger.
-> 
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-> ---
->  mm/mlock.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index 7032f6dd0ce1..b9422a62a4cf 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -575,6 +575,9 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
->  	if (!can_do_mlock())
->  		return -EPERM;
->  
-> +	if (unlikely(!access_ok((void __user *)start, len)))
-> +		return -EINVAL;
-
-When we are runing ltp testcase, a error occurs on mlock[1]. It seems that
-ENOMEN is expencted for this testcase.
-
-In the manual of mlock[2]
-
-       ENOMEM (mlock(), mlock2(), and munlock()) Some of the specified
-              address range does not correspond to mapped pages in the
-              address space of the process.
-
-ENOMEM seem more appropriate for this situation?
-
-[1] https://github.com/linux-test-project/ltp/blob/20220930/testcases/open_posix_testsuite/conformance/interfaces/mlock/8-1.c
-[2] https://man7.org/linux/man-pages/man2/mlock.2.html
-
+On Fri, Dec 09, 2022 at 01:45:20PM -0800, matthew.gerlach@linux.intel.com w=
+rote:
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 15b670926084..606b4b070c33 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -561,6 +561,109 @@ new DFL feature via UIO direct access, its feature =
+id should be added to the
+>  driver's id_table.
+> =20
+> =20
+> +Device Feature Header - Version 0
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Version 0 (DFHv0) is the original version of the Device Feature Header.
+> +The format of DFHv0 is shown below::
 > +
->  	len = PAGE_ALIGN(len + (offset_in_page(start)));
->  	start &= PAGE_MASK;
->  
-> @@ -635,6 +638,9 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
->  
->  	start = untagged_addr(start);
->  
-> +	if (unlikely(!access_ok((void __user *)start, len)))
-> +		return -EINVAL;
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 =
+ID 0| 0x00
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                                 GUID_L                          =
+   0| 0x08
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                                 GUID_H                          =
+   0| 0x10
+> +    +-------------------------------------------------------------------=
+----+
 > +
->  	len = PAGE_ALIGN(len + (offset_in_page(start)));
->  	start &= PAGE_MASK;
->  
+> +- Offset 0x00
+> +
+> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +  * DFH VER - The version of the DFH.
+> +  * Rsvd - Currently unused.
+> +  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> +  * Next - The offset of the next DFH in the DFL from the start of the D=
+FH. If EOL is set, Next is the size of MMIO ofthe last feature in the list.
+> +  * ID - The ID of the feature if Type is private feature.
+> +
+> +- Offset 0x08
+> +
+> +  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Iden=
+tifier (present only if Type is FME or AFU).
+> +
+> +- Offset 0x10
+> +
+> +  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Ident=
+ifier (present only if Type is FME or AFU).
+> +
+> +
+> +Device Feature Header - Version 1
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Version 1 (DFHv1) of the Device Feature Header adds the following functi=
+onality:
+> +
+> +* Provides a standardized mechanism for features to describe parameters/=
+capabilities to software.
+> +* Standardize the use of a GUID for all DFHv1 types.
+> +* Decouples the location of the DFH from the register space of the featu=
+re itself.
+> +
+> +The format of Version 1 of the Device Feature Header (DFH) is shown belo=
+w::
+> +
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 =
+ID 0| 0x00
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                                 GUID_L                          =
+   0| 0x08
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                                 GUID_H                          =
+   0| 0x10
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                   Reg Address/Offset                      1|  Re=
+l  0| 0x18
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance   =
+   0| 0x20
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID        =
+   0| 0x28
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                 Parameter Data                                  =
+   0| 0x30
+> +    +-------------------------------------------------------------------=
+----+
+> +
+> +                                  ...
+> +
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63 Next    35|34RSV33|EOP32|31 Param Version 16|15 Param ID        =
+   0|
+> +    +-------------------------------------------------------------------=
+----+
+> +    |63                 Parameter Data                                  =
+   0|
+> +    +-------------------------------------------------------------------=
+----+
+> +
+> +- Offset 0x00
+> +
+> +  * Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +  * DFH VER - The version of the DFH.
+> +  * Rsvd - Currently unused.
+> +  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> +  * Next - The offset of the next DFH in the DFL from the start of the D=
+FH.
+> +  * ID - The ID of the feature if Type is private feature.
+> +
+> +- Offset 0x08
+> +
+> +  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Iden=
+tifier.
+> +
+> +- Offset 0x10
+> +
+> +  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Ident=
+ifier.
+> +
+> +- Offset 0x18
+> +
+> +  * Reg Address/Offset - If Rel bit is set, then the value is the high 6=
+3 bits of a 16 bit aligned absolute address of the feature's registers. If =
+Rel bit is clear, then the value is the offset from the start of the DFH of=
+ the feature's registers.
+> +
+> +- Offset 0x20
+> +
+> +  * Reg Size - Size of feature's register set in bytes.
+> +  * Params - Set if DFH has a list of parameter blocks.
+> +  * Group - Id of group if feature is part of a group.
+> +  * Instance - Id of instance of feature within a group.
+> +
+> +- Offset 0x28 if feature has parameters
+> +
+> +  * Next - Offset to the next parameter block in 8 byte words. If EOP se=
+t, size in 8 byte words of last parameter.
+> +  * Param Version - Version of Param ID.
+> +  * Param ID - ID of parameter.
+> +
+> +- Offset 0x30
+> +
+> +  * Parameter Data - Parameter data whose size and format is defined by =
+version and ID of the parameter.
+> +
+>  Open discussion
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfig=
+uration
+
+What about this wording below (including fitting the prose within 80 column=
+s)?
+
+---- >8 ----
+diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+index 606b4b070c3321..3d8f8dde6021db 100644
+--- a/Documentation/fpga/dfl.rst
++++ b/Documentation/fpga/dfl.rst
+@@ -579,26 +579,30 @@ The format of DFHv0 is shown below::
+   * Type - The type of DFH (e.g. FME, AFU, or private feature).
+   * DFH VER - The version of the DFH.
+   * Rsvd - Currently unused.
+-  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+-  * Next - The offset of the next DFH in the DFL from the start of the DFH=
+=2E If EOL is set, Next is the size of MMIO ofthe last feature in the list.
+-  * ID - The ID of the feature if Type is private feature.
++  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
++  * Next - The offset of the next DFH in the DFL from the DFH start. If EO=
+L is
++    set, Next is the size of MMIO of the last feature in the list.
++  * ID - The feature ID if Type is private feature.
+=20
+ - Offset 0x08
+=20
+-  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identi=
+fier (present only if Type is FME or AFU).
++  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique Identi=
+fier
++    (present only if Type is FME or AFU).
+=20
+ - Offset 0x10
+=20
+-  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identif=
+ier (present only if Type is FME or AFU).
++  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique Identif=
+ier
++    (present only if Type is FME or AFU).
+=20
+=20
+ Device Feature Header - Version 1
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ Version 1 (DFHv1) of the Device Feature Header adds the following function=
+ality:
+=20
+-* Provides a standardized mechanism for features to describe parameters/ca=
+pabilities to software.
++* Provides a standardized mechanism for features to describe
++  parameters/capabilities to software.
+ * Standardize the use of a GUID for all DFHv1 types.
+-* Decouples the location of the DFH from the register space of the feature=
+ itself.
++* Decouples the DFH location from the register space of the feature itself.
+=20
+ The format of Version 1 of the Device Feature Header (DFH) is shown below::
+=20
+@@ -631,38 +635,43 @@ The format of Version 1 of the Device Feature Header =
+(DFH) is shown below::
+   * Type - The type of DFH (e.g. FME, AFU, or private feature).
+   * DFH VER - The version of the DFH.
+   * Rsvd - Currently unused.
+-  * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+-  * Next - The offset of the next DFH in the DFL from the start of the DFH.
+-  * ID - The ID of the feature if Type is private feature.
++  * EOL - Set if the DFH is the end of the Device Feature List (DFL).
++  * Next - The offset of the next DFH in the DFL from the DFH start.
++  * ID - The feature ID if Type is private feature.
+=20
+ - Offset 0x08
+=20
+-  * GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identi=
+fier.
++  * GUID_L - Least significant 64 bits of a 128-bit Globally Unique Identi=
+fier.
+=20
+ - Offset 0x10
+=20
+-  * GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identif=
+ier.
++  * GUID_H - Most significant 64 bits of a 128-bit Globally Unique Identif=
+ier.
+=20
+ - Offset 0x18
+=20
+-  * Reg Address/Offset - If Rel bit is set, then the value is the high 63 =
+bits of a 16 bit aligned absolute address of the feature's registers. If Re=
+l bit is clear, then the value is the offset from the start of the DFH of t=
+he feature's registers.
++  * Reg Address/Offset - If Rel bit is set, then the value is the high 63 =
+bits
++    of a 16-bit aligned absolute address of the feature's registers. Other=
+wise
++    the value is the offset from the start of the DFH of the feature's
++    registers.
+=20
+ - Offset 0x20
+=20
+   * Reg Size - Size of feature's register set in bytes.
+   * Params - Set if DFH has a list of parameter blocks.
+-  * Group - Id of group if feature is part of a group.
+-  * Instance - Id of instance of feature within a group.
++  * Group - ID of group if feature is part of a group.
++  * Instance - ID of feature instance within a group.
+=20
+ - Offset 0x28 if feature has parameters
+=20
+-  * Next - Offset to the next parameter block in 8 byte words. If EOP set,=
+ size in 8 byte words of last parameter.
++  * Next - Offset to the next parameter block in 8 byte words. If EOP set,
++    the value is size in 8 byte words of last parameter.
+   * Param Version - Version of Param ID.
+   * Param ID - ID of parameter.
+=20
+ - Offset 0x30
+=20
+-  * Parameter Data - Parameter data whose size and format is defined by ve=
+rsion and ID of the parameter.
++  * Parameter Data - Parameter data whose size and format is defined by
++    version and ID of the parameter.
+=20
+ Open discussion
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--HlPKI/korhvKEuYx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5P6LAAKCRD2uYlJVVFO
+o85tAQCQ/X7C1BEESFknhpc4XhzPdvuzYCUGCrYY8DoHuUzFcwEApc18F0w7QxFL
+9q1TeTSERdjvegYjcO0UIpLDCmSE2Qc=
+=0Q96
+-----END PGP SIGNATURE-----
+
+--HlPKI/korhvKEuYx--
