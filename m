@@ -2,124 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF894648D8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 09:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E6A648DA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 09:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLJIO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 03:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S229759AbiLJIkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 03:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiLJIO0 (ORCPT
+        with ESMTP id S229470AbiLJIkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 03:14:26 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A012A409;
-        Sat, 10 Dec 2022 00:14:24 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id g7so10538897lfv.5;
-        Sat, 10 Dec 2022 00:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DmClvcZtLY6vVe4LXZcv5HXQNt4GbFAtq6k3JgK+1qU=;
-        b=kQxIQHBQw4fnRaviMhpZiiSfwh6EDRBTDWs3xVUgyIHMWnb6Qs4EJ5RpEqoY5L4N+d
-         Y3/ZUQLyKd+NFv5FbGsLNOUR3Kk8F7Ra5NBIdojjnthFdZBE6jPjtFhmbX/d800v574w
-         Vv2U5bfxhVdm9x4XbQ+j6bZdWJerE8WqWngqvJuJCpH0QowZQNYOyao6p1MZRLmpDtva
-         /+9ZRPeLmwRy6y28WljYl4+nAFKIRuMgNHIcabb45oQZgeGXKYIITAz4hdmpOO3xtej/
-         BnM6ZHiS0V2IyMuSSIwaG1vR2FJTVFoZmFDQy5Znz+D+rmo1pc1FYi2NNfgRd0w4n5kK
-         cTfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmClvcZtLY6vVe4LXZcv5HXQNt4GbFAtq6k3JgK+1qU=;
-        b=EGGWt4hJ1tKaJOWREm3Oi/Q2sYQErXloNKZHvXa6zCkZFFsZkQN5lHYNPkv6XPR7Vq
-         bOoHCNqKND+XRE58jGRFVjIT9MOuyBZ2q6IArKloRtihYU4bEoXMCTdCizXVNjhUghTw
-         Ar+xKJn7B5L0Xh3JAtjE4Qm0iw5oKnHidYvYth0aqw29f0qeLknrMuB0z7RvvE0RYxUp
-         nbZvqkBxK0ETi237qtRHL2ZAdCYh6c8rln09w9gLvq2ztFby0HWjMtlVJm+lk34PkDg2
-         03xvIdnRcN3QOOShCv0O2rXkhGNSAX7jYFblOXhBP2Ny5dUV6LfkiPC+qDwvPjxTlrVe
-         9SnQ==
-X-Gm-Message-State: ANoB5pnlzUaZJaTjNCXRZ6jQQfgabg2jq7iL6VRcLd8camGeBinGMouo
-        uq9LmHNRbHfmXC5eOklc+uQgl+B9XU0qUA==
-X-Google-Smtp-Source: AA0mqf665jfrVmswfHcYG4WMvaG6DDty77ndjL4bEkIm8gmUBQMtPi6wknRRfgxFReV4IIMU39BP6A==
-X-Received: by 2002:a19:ad49:0:b0:4b5:c489:8cf8 with SMTP id s9-20020a19ad49000000b004b5c4898cf8mr213770lfd.61.1670660062593;
-        Sat, 10 Dec 2022 00:14:22 -0800 (PST)
-Received: from [10.0.0.42] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
-        by smtp.gmail.com with ESMTPSA id o12-20020ac2494c000000b004a6f66eed7fsm625959lfi.165.2022.12.10.00.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 00:14:22 -0800 (PST)
-Message-ID: <c56e89a3-3a35-8a5a-8f39-a4e82b19a092@gmail.com>
-Date:   Sat, 10 Dec 2022 10:24:18 +0200
+        Sat, 10 Dec 2022 03:40:46 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A12E14D0D;
+        Sat, 10 Dec 2022 00:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1670661631; bh=gb6jQctZQdJLMrohgPSsWQC3besPinsKjN42uisSC1g=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=TNDBFp6OUf/CaBSd8L0uzCqxhaTYEIfZ+NIX5fViG2469RhN5WyM1b3pzUxFhAEDO
+         X+DSp80NWYKyV24KdSy9doW/EvUg9AQlnzPqd5GDbKOKEF5Z6Iqgx42OY7woE/x+4d
+         ZysB07bOlH5P+ozBsD9kCENRS9B6TIal4LVeXGLA=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 10 Dec 2022 09:40:31 +0100 (CET)
+X-EA-Auth: ZGpsW37M5hSIwmgrInD3iTM9iZgpWlfUAd0dqokCc3uteBm/7yhWcaQXQWgjBMXNRuM2J5cGOfGK0zMKPSQDcxhEcgiHVUsP
+Date:   Sat, 10 Dec 2022 14:10:24 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: [PATCH] scsi: qla4xxx: Use sysfs_emit in show function callsbacks
+Message-ID: <Y5RF+PGBuiXu7UrX@qemulion>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/5] dmaengine: ti: k3-udma: Fix BCDMA for case w/o BCHAN
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221206043554.1521522-1-vigneshr@ti.com>
- <20221206043554.1521522-3-vigneshr@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20221206043554.1521522-3-vigneshr@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to Documentation/filesystems/sysfs.rst, the show() callback
+function of kobject attributes should strictly use sysfs_emit instead
+of sprintf family functions.
+Issue identified using the coccinelle device_attr_show.cocci script.
 
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/scsi/qla4xxx/ql4_attr.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-On 12/6/22 06:35, Vignesh Raghavendra wrote:
-> Reusing loop iterator fails if BCHAN is not present as iterator is
-> uninitialized
-> 
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  drivers/dma/ti/k3-udma.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index ce8b80bb34d7..791cf6354946 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -4758,6 +4758,7 @@ static int bcdma_setup_resources(struct udma_dev *ud)
->  		}
->  	}
->  
-> +	i = 0;
+diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
+index abfa6ef60480..773b8dbe1121 100644
+--- a/drivers/scsi/qla4xxx/ql4_attr.c
++++ b/drivers/scsi/qla4xxx/ql4_attr.c
+@@ -156,11 +156,11 @@ qla4xxx_fw_version_show(struct device *dev,
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
 
-I think this would be more appropriate:
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index ce8b80bb34d7..7f8737da3613 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -4774,6 +4774,8 @@ static int bcdma_setup_resources(struct udma_dev *ud)
- 				irq_res.desc[i].num = rm_res->desc[i].num;
- 			}
- 		}
-+	} else {
-+		i = 0;
+ 	if (is_qla80XX(ha))
+-		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
++		return sysfs_emit(buf, "%d.%02d.%02d (%x)\n",
+ 				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+ 				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+ 	else
+-		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
++		return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+ 				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+ 				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+ }
+@@ -170,7 +170,7 @@ qla4xxx_serial_num_show(struct device *dev, struct device_attribute *attr,
+ 			char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ha->serial_number);
++	return sysfs_emit(buf, "%s\n", ha->serial_number);
+ }
+
+ static ssize_t
+@@ -178,7 +178,7 @@ qla4xxx_iscsi_version_show(struct device *dev, struct device_attribute *attr,
+ 			   char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
++	return sysfs_emit(buf, "%d.%02d\n", ha->fw_info.iscsi_major,
+ 			ha->fw_info.iscsi_minor);
+ }
+
+@@ -187,7 +187,7 @@ qla4xxx_optrom_version_show(struct device *dev, struct device_attribute *attr,
+ 			    char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
++	return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+ 			ha->fw_info.bootload_major, ha->fw_info.bootload_minor,
+ 			ha->fw_info.bootload_patch, ha->fw_info.bootload_build);
+ }
+@@ -197,7 +197,7 @@ qla4xxx_board_id_show(struct device *dev, struct device_attribute *attr,
+ 		      char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
++	return sysfs_emit(buf, "0x%08X\n", ha->board_id);
+ }
+
+ static ssize_t
+@@ -207,7 +207,7 @@ qla4xxx_fw_state_show(struct device *dev, struct device_attribute *attr,
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+
+ 	qla4xxx_get_firmware_state(ha);
+-	return snprintf(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
++	return sysfs_emit(buf, "0x%08X%8X\n", ha->firmware_state,
+ 			ha->addl_fw_state);
+ }
+
+@@ -220,7 +220,7 @@ qla4xxx_phy_port_cnt_show(struct device *dev, struct device_attribute *attr,
+ 	if (is_qla40XX(ha))
+ 		return -ENOSYS;
+
+-	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
++	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_cnt);
+ }
+
+ static ssize_t
+@@ -232,7 +232,7 @@ qla4xxx_phy_port_num_show(struct device *dev, struct device_attribute *attr,
+ 	if (is_qla40XX(ha))
+ 		return -ENOSYS;
+
+-	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
++	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_num);
+ }
+
+ static ssize_t
+@@ -244,7 +244,7 @@ qla4xxx_iscsi_func_cnt_show(struct device *dev, struct device_attribute *attr,
+ 	if (is_qla40XX(ha))
+ 		return -ENOSYS;
+
+-	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
++	return sysfs_emit(buf, "0x%04X\n", ha->iscsi_pci_func_cnt);
+ }
+
+ static ssize_t
+@@ -253,7 +253,7 @@ qla4xxx_hba_model_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ha->model_name);
++	return sysfs_emit(buf, "%s\n", ha->model_name);
+ }
+
+ static ssize_t
+@@ -261,7 +261,7 @@ qla4xxx_fw_timestamp_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
++	return sysfs_emit(buf, "%s %s\n", ha->fw_info.fw_build_date,
+ 			ha->fw_info.fw_build_time);
+ }
+
+@@ -270,7 +270,7 @@ qla4xxx_fw_build_user_show(struct device *dev, struct device_attribute *attr,
+ 			   char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.fw_build_user);
++	return sysfs_emit(buf, "%s\n", ha->fw_info.fw_build_user);
+ }
+
+ static ssize_t
+@@ -278,7 +278,7 @@ qla4xxx_fw_ext_timestamp_show(struct device *dev, struct device_attribute *attr,
+ 			      char *buf)
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+-	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.extended_timestamp);
++	return sysfs_emit(buf, "%s\n", ha->fw_info.extended_timestamp);
+ }
+
+ static ssize_t
+@@ -300,7 +300,7 @@ qla4xxx_fw_load_src_show(struct device *dev, struct device_attribute *attr,
+ 		break;
  	}
- 	if (ud->tchan_cnt) {
- 		rm_res = tisci_rm->rm_ranges[RM_RANGE_TCHAN];
+
+-	return snprintf(buf, PAGE_SIZE, "%s\n", load_src);
++	return sysfs_emit(buf, "%s\n", load_src);
+ }
+
+ static ssize_t
+@@ -309,7 +309,7 @@ qla4xxx_fw_uptime_show(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+ 	qla4xxx_about_firmware(ha);
+-	return snprintf(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
++	return sysfs_emit(buf, "%u.%u secs\n", ha->fw_uptime_secs,
+ 			ha->fw_uptime_msecs);
+ }
+
+--
+2.34.1
 
 
->  	irq_res.desc = kcalloc(irq_res.sets, sizeof(*irq_res.desc), GFP_KERNEL);
->  	if (!irq_res.desc)
->  		return -ENOMEM;
 
-
--- 
-Péter
