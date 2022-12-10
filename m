@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAAD648F02
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9FD648F06
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiLJN6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S229966AbiLJN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLJN61 (ORCPT
+        with ESMTP id S229775AbiLJN61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Dec 2022 08:58:27 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3AC16599
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 05:58:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CC6275;
+        Sat, 10 Dec 2022 05:58:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3998D60C13
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 13:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D09C433B4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD6560C21;
+        Sat, 10 Dec 2022 13:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D709EC43445;
         Sat, 10 Dec 2022 13:58:25 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1p40My-000koq-2R;
+        id 1p40My-000kpL-2w;
         Sat, 10 Dec 2022 08:58:24 -0500
-Message-ID: <20221210135824.622690768@goodmis.org>
+Message-ID: <20221210135824.775707099@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 10 Dec 2022 08:57:59 -0500
+Date:   Sat, 10 Dec 2022 08:58:00 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Song Chen <chensong_2000@189.cn>
-Subject: [for-next][PATCH 09/25] trace/kprobe: remove duplicated calls of ring_buffer_event_data
+        stable@vger.kernel.org, Rafael Mendonca <rafaelmendsr@gmail.com>
+Subject: [for-next][PATCH 10/25] tracing/probes: Handle system names with hyphens
 References: <20221210135750.425719934@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,44 +47,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Chen <chensong_2000@189.cn>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Function __kprobe_trace_func calls ring_buffer_event_data to
-get a ring buffer, however, it has been done in above call
-trace_event_buffer_reserve. So does __kretprobe_trace_func.
+When creating probe names, a check is done to make sure it matches basic C
+standard variable naming standards. Basically, starts with alphabetic or
+underline, and then the rest of the characters have alpha-numeric or
+underline in them.
 
-This patch removes those duplicated calls.
+But system names do not have any true naming conventions, as they are
+created by the TRACE_SYSTEM macro and nothing tests to see what they are.
+The "xhci-hcd" trace events has a '-' in the system name. When trying to
+attach a eprobe to one of these trace points, it fails because the system
+name does not follow the variable naming convention because of the
+hyphen, and the eprobe checks fail on this.
 
-Link: https://lore.kernel.org/all/1666145478-4706-1-git-send-email-chensong_2000@189.cn/
+Allow hyphens in the system name so that eprobes can attach to the
+"xhci-hcd" trace events.
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Song Chen <chensong_2000@189.cn>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Link: https://lore.kernel.org/all/Y3eJ8GiGnEvVd8%2FN@macondo/
+Link: https://lore.kernel.org/linux-trace-kernel/20221122122345.160f5077@gandalf.local.home
+
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 5b7a96220900e ("tracing/probe: Check event/group naming rule at parsing")
+Reported-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_kprobe.c | 2 --
- 1 file changed, 2 deletions(-)
+ kernel/trace/trace.h       | 19 ++++++++++++++++---
+ kernel/trace/trace_probe.c |  2 +-
+ 2 files changed, 17 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 5a75b039e586..ee77c8203bd5 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1344,7 +1344,6 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 		return;
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 48643f07bc01..8f37ff032b4f 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -1954,17 +1954,30 @@ static __always_inline void trace_iterator_reset(struct trace_iterator *iter)
+ }
  
- 	fbuffer.regs = regs;
--	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->ip = (unsigned long)tk->rp.kp.addr;
- 	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
+ /* Check the name is good for event/group/fields */
+-static inline bool is_good_name(const char *name)
++static inline bool __is_good_name(const char *name, bool hash_ok)
+ {
+-	if (!isalpha(*name) && *name != '_')
++	if (!isalpha(*name) && *name != '_' && (!hash_ok || *name != '-'))
+ 		return false;
+ 	while (*++name != '\0') {
+-		if (!isalpha(*name) && !isdigit(*name) && *name != '_')
++		if (!isalpha(*name) && !isdigit(*name) && *name != '_' &&
++		    (!hash_ok || *name != '-'))
+ 			return false;
+ 	}
+ 	return true;
+ }
  
-@@ -1385,7 +1384,6 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 		return;
- 
- 	fbuffer.regs = regs;
--	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->func = (unsigned long)tk->rp.kp.addr;
- 	entry->ret_ip = get_kretprobe_retaddr(ri);
- 	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
++/* Check the name is good for event/group/fields */
++static inline bool is_good_name(const char *name)
++{
++	return __is_good_name(name, false);
++}
++
++/* Check the name is good for system */
++static inline bool is_good_system_name(const char *name)
++{
++	return __is_good_name(name, true);
++}
++
+ /* Convert certain expected symbols into '_' when generating event names */
+ static inline void sanitize_event_name(char *name)
+ {
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index 36dff277de46..bb2f95d7175c 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -246,7 +246,7 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
+ 			return -EINVAL;
+ 		}
+ 		strlcpy(buf, event, slash - event + 1);
+-		if (!is_good_name(buf)) {
++		if (!is_good_system_name(buf)) {
+ 			trace_probe_log_err(offset, BAD_GROUP_NAME);
+ 			return -EINVAL;
+ 		}
 -- 
 2.35.1
 
