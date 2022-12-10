@@ -2,114 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984366490CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 22:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3E86490CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 22:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLJVDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 16:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S229760AbiLJVPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 16:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJVDt (ORCPT
+        with ESMTP id S229475AbiLJVPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 16:03:49 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D310515727;
-        Sat, 10 Dec 2022 13:03:41 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M42X0-1p46zk1RVQ-0004TJ; Sat, 10 Dec 2022 22:02:52 +0100
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 94DCD3C1B0; Sat, 10 Dec 2022 22:02:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1670706168; bh=7qSFBPGHl0bfqIeEqeYNfCRTFMgAscCGdAYDrFciekQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UG8rqOQbvcecqzqAJfHX7/67UxATB7jBBpiKkInUIQkDxDQLn3DlhFpQIL5oBRuqI
-         KPQ0eqcFzmVIpiMApE6gsfoO4oeD9TlccyIWb1MGXahNIutKuG2T1IHMHfKcHE1NjD
-         Hh0XRkKYCmZ9UGbvfpIDR/HkXhHEBnpVzsvFjVhY=
-Date:   Sat, 10 Dec 2022 22:02:48 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v3 3/5] kbuild: add read-file macro
-Message-ID: <Y5Tz+MBfYMVkqAn3@fjasle.eu>
-References: <20221126225624.751661-1-masahiroy@kernel.org>
- <20221126225624.751661-3-masahiroy@kernel.org>
- <20221207154044.2181347-1-alexandr.lobakin@intel.com>
- <20221207162208.2200189-1-alexandr.lobakin@intel.com>
- <CAK7LNAQbGaXDRzeByOcJhMX4y-ShA6Qtpcqhr4gNZ5t8vX-PPw@mail.gmail.com>
+        Sat, 10 Dec 2022 16:15:00 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C9A13E87;
+        Sat, 10 Dec 2022 13:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670706899; x=1702242899;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fTHzlu07EReOStPNYo6Zt9UjnYvA8xXuJZx2IneZddI=;
+  b=QlH5Pndxd6Ty6nrNknscUt5ntVt2vivSCylPo5es0/EgCSFSSsuqVKfV
+   DHAQMJLS3NxxUTy6Wlh1k17na2/XKfLOtjL/nm3y/6/XKEmoxpOvExSNH
+   9RRZyQbhf63756nfFI8610EUts5QZI8gcKGMGvuFAnjOa4Khr7F9dR7wQ
+   2bjLPBz2qF/PUPErf69KVEttkj0zdgA2jXOgyHFfYWWPJIKQfSrS1Bz00
+   PZskY/3FzHOJk6CQRfmoLivtdh4LH2PQBFCogNql20CLlaKH2tZ6QsqYn
+   0grX9f9xt0m2XH1+dQmeNYrD9TcILzMDhylP/CWMIJzPJVfpexSizihYd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="301072123"
+X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
+   d="scan'208";a="301072123"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 13:14:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="736543155"
+X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
+   d="scan'208";a="736543155"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Dec 2022 13:14:54 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p47BL-007gRz-15;
+        Sat, 10 Dec 2022 23:14:51 +0200
+Date:   Sat, 10 Dec 2022 23:14:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk, cang1@live.co.uk,
+        colin.i.king@gmail.com, phil.edworthy@renesas.com,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        lukas@wunner.de, u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        UNGLinuxDriver@microchip.com,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH v8 tty-next 2/4] serial: 8250_pci1xxxx: Add driver for
+ quad-uart support
+Message-ID: <Y5T2ymgsCQhggtvz@smile.fi.intel.com>
+References: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
+ <20221211014730.1233272-3-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNAQbGaXDRzeByOcJhMX4y-ShA6Qtpcqhr4gNZ5t8vX-PPw@mail.gmail.com>
-X-Provags-ID: V03:K1:MQr0B95Rb2frj5hoYtDcHcvz46tIGN3vAvFxXptwL5n4uUmWEBc
- S55km1w89a8cYBpeAt0E2tymvkY2s1DxGCBw7dJGisDA+jyfy65ZINIEBZrlUXYDcYhfNhg
- GuSbgMxzIxNkF9Incnc64Ocl4tIEZSh8ctfqCr3bKFCZN+EbnLFiW/53WitDbQ+YRLrqXUZ
- dVCrbSRLvlvM1khT2rXFQ==
-UI-OutboundReport: notjunk:1;M01:P0:AhPU3HFi/yg=;BQgylnf9syDxKYtQpyLisUDJliE
- Vg9P3oFbpoaClJSTdY7aCKIoHWJPNRQwl0jSjwqbPRnGM4gyxrxwfM8O+tJLRGQTlNv293Ynx
- 4r/Smwn0AQ3RcCW9Sgjx0S3MOAwIv00+x1XBDDnvNPe3ElqIcE/xAEsjHckaf2W8XGNJ3HHUL
- 7dzsHMGEadqDR8lOgyHtp7rCQ8u2rrUEMir1egY1BiSYbzV0liuFSyrEJpfHdzdOLl9GmjfHk
- qw9TOH8jIFZxYP8qdbOxCPLz1HnNBEvXsHi87pctdTKPBmvVe39RtRj37ogqD5sI49/sbSs4s
- 4MIhctyGL921dxFkyR4To24N9F+0u8qbx1I78rDrQcA3Ne3Mj2af3HoLqkjLCHNyjd161WSWT
- uAFuY4Ma4aDtJgfSwv9MonNHZ4KkZqfQjIXNy6x8PHOl8t8ba1xQSwaCI2RHbbqhIH6+4yNYm
- vt2tcbZovCbfgp4RXp4EF/6j4hhSDCWVIGlJ+maVGWvzFDwz4vpFMiob2VzNXLI5mcnjJQ0rL
- 422JdlZl8FNKYkfRmhSxz0+Jv2og+VqDwFA7R79/NwlhYegEhufxVs2+nJogUnEUrXwfIQKZT
- BZwOLI9iLgIOrmM6qNtFxdPiSy9b+bRsMNM+BdSUdhLpU481ny5Jh3JfHy6uRRP7c+D3J0MOI
- uWiU0f0GePIokuJPZ1gTi9zi3Zh5QrUdN0+AZXRorg==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221211014730.1233272-3-kumaravel.thiagarajan@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 11:10:12PM +0900 Masahiro Yamada wrote:
-> On Thu, Dec 8, 2022 at 1:25 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > From: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Date: Wed, 7 Dec 2022 16:40:44 +0100
-> >
-> > > From: Masahiro Yamada <masahiroy@kernel.org>
-> > > Date: Sun, 27 Nov 2022 07:56:22 +0900
-> > >
-> > > > Since GNU Make 4.2, $(file ...) supports the read operater '<', which
-> > > > is useful to read a file without forking any process. No warning is
-> > > > shown even if the input file is missing.
-> >
-> > [...]
-> >
-> > > Great stuff. Used it in my upcoming series to simplify things, works
-> > > as expected.
-> > >
-> > > sed-syms = $(subst $(space),\|,$(foreach file,$(sym-files-y),$(call read-file,$(file))))
-> > >
-> > > The only thing that came to my mind while I was implementing the
-> > > oneliner above: maybe add ability to read multiple files? For now,
-> > > I used a foreach, could it be somehow incorporated into read-file
-> > > already?
-> >
-> > Oh, nevermind. This one also works:
-> >
-> > sed-syms = $(subst $(space),\|,$(call read-file,$(sym-files-y)))
-> >
-> > So I believe read-file works for an arbitrary number of files.
-> 
-> 
-> 
-> Really?
-> 
-> 
-> In my understanding, $(call read-file, foo bar) reads a single file "foo bar".
-> (a space in the file name).
+On Sun, Dec 11, 2022 at 07:17:28AM +0530, Kumaravel Thiagarajan wrote:
+> pci1xxxx is a PCIe switch with a multi-function endpoint on one of
+> its downstream ports. Quad-uart is one of the functions in the
+> multi-function endpoint. This driver loads for the quad-uart and
+> enumerates single or multiple instances of uart based on the PCIe
+> subsystem device ID.
 
-yes, except for make < 4.2, due to:
+...
 
-read-file = $(shell cat $1 2>/dev/null)
+> +static int pci1xxxx_get_max_port(int subsys_dev)
+> +{
+> +	static int max_port[] = {
+> +		1,/* PCI12000 PCI11010 PCI11101 PCI11400 */
+
+I would put the commas in between in the comment, or is it the name of a single
+product?
+
+> +		4,/* PCI4p */
+> +		3,/* PCI3p012 */
+> +		4,/* PCI3p013 */
+> +		4,/* PCI3p023 */
+> +		4,/* PCI3p123 */
+> +		2,/* PCI2p01 */
+> +		3,/* PCI2p02 */
+> +		4,/* PCI2p03 */
+> +		3,/* PCI2p12 */
+> +		4,/* PCI2p13 */
+> +		4,/* PCI2p23 */
+> +		1,/* PCI1p0 */
+> +		2,/* PCI1p1 */
+> +		3,/* PCI1p2 */
+> +		4,/* PCI1p3 */
+> +	};
+
+If you move this outside of the function you may use static_assert(), see below
+why.
+
+> +	if (subsys_dev > PCI_SUBDEVICE_ID_EFAR_PCI1XXXX_1p3)
+> +		if (subsys_dev != PCI_SUBDEVICE_ID_EFAR_PCI11414)
+> +			return max_port[0];
+> +		else
+> +			return 4;
+> +	else
+> +		return max_port[subsys_dev];
+
+Too many redundant 'else'.
+
+	if (subsys_dev <= PCI_SUBDEVICE_ID_EFAR_PCI1XXXX_1p3)
+		return max_port[subsys_dev];
+
+(however better to compare with your size of the array)
+
+	if (subsys_dev <= ARRAY_SIZE(max_port))
+		return max_port[subsys_dev];
+
+(in this case you can make sure it is the same as the above using
+ static_assert(), so it won't compile otherwise)
+
+	if (subsys_dev != PCI_SUBDEVICE_ID_EFAR_PCI11414)
+		return max_port[0];
+
+	return 4;
+
+> +}
+
+...
+
+> +static int pci1xxxx_logical_to_physical_port_translate(int subsys_dev, int port)
+> +{
+> +	static int logical_to_physical_port_idx[][MAX_PORTS] = {
+> +		{0,  1,  2,  3},/* PCI12000 PCI11010 PCI11101 PCI11400 PCI11414 */
+> +		{0,  1,  2,  3},/* PCI4p */
+> +		{0,  1,  2, -1},/* PCI3p012 */
+> +		{0,  1,  3, -1},/* PCI3p013 */
+> +		{0,  2,  3, -1},/* PCI3p023 */
+> +		{1,  2,  3, -1},/* PCI3p123 */
+> +		{0,  1, -1, -1},/* PCI2p01 */
+> +		{0,  2, -1, -1},/* PCI2p02 */
+> +		{0,  3, -1, -1},/* PCI2p03 */
+> +		{1,  2, -1, -1},/* PCI2p12 */
+> +		{1,  3, -1, -1},/* PCI2p13 */
+> +		{2,  3, -1, -1},/* PCI2p23 */
+> +		{0, -1, -1, -1},/* PCI1p0 */
+> +		{1, -1, -1, -1},/* PCI1p1 */
+> +		{2, -1, -1, -1},/* PCI1p2 */
+> +		{3, -1, -1, -1},/* PCI1p3 */
+> +	};
+> +
+> +	if (subsys_dev > PCI_SUBDEVICE_ID_EFAR_PCI1XXXX_1p3)
+> +		return logical_to_physical_port_idx[0][port];
+> +	else
+> +		return logical_to_physical_port_idx[subsys_dev][port];
+
+Similar comments as per above function.
+
+> +}
+
+...
+
+> +	priv->membase = pcim_iomap(pdev, 0, 0);
+
+You issued a new version of the series without settling on this.
+As you said there will be no hardware that uses IO ports, why do
+you need pci_iomap()? I guess what you may use pci_ioremap_bar().
+
+> +	if (!priv->membase)
+> +		return -ENOMEM;
+
+...
+
+> +	priv->pdev = pdev;
+
+> +	subsys_dev = priv->pdev->subsystem_device;
+
+Why use priv?
+
+> +	priv->nr = nr_ports;
+> +	pci_set_master(pdev);
+> +	max_vec_reqd = pci1xxxx_get_max_port(subsys_dev);
+
+The above needs a bit of reshuffling and perhaps a blank line or lines.
+Make it ordered and grouped more logically.
+
+...
+
+> +	num_vectors = pci_alloc_irq_vectors(pdev, 1, max_vec_reqd,
+> +					    PCI_IRQ_ALL_TYPES);
+
+I would leave this on a single line (you have such a long lines already in your
+code).
+
+> +	if (num_vectors < 0)
+> +		return num_vectors;
+
+...
+
+> +static const struct pci_device_id pci1xxxx_pci_tbl[] = {
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11400) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11414) },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI12000) },
+
+Can be simplified a bit by PCI_VDEVICE().
+
+> +	{}
+> +};
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
