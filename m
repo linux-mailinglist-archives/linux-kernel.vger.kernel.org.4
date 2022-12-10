@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42980648E6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BCD648E70
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLJLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 06:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S229658AbiLJLeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 06:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiLJLdt (ORCPT
+        with ESMTP id S229761AbiLJLdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 06:33:49 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0A41FCF6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:33:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g7so11006370lfv.5
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:33:48 -0800 (PST)
+        Sat, 10 Dec 2022 06:33:51 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7604F1FCFF
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:33:50 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id cf42so11035982lfb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:33:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0lueEQV8bs/kWVCH3tW3cQ/+828DDvHkZS20zWBKkg=;
-        b=XiFKTRMJcoCBme3OwFouiPgQFj1gcilzzvXTE2QsjRQFlKr+B6eQBzFjMpz4z8Bl1X
-         D+A861aGAd9Rdxn6h6dgct3xdIvmYogMCPEkpJ31IVL9EgBMdVUjWsQ0YNSuNmLZEEvr
-         yC4haFPjjo/Le7uZj2jnhzh7zV/4ObOJ+yQtICOraIMGzVIDpx1kD6GUXoi+/3iwsbt5
-         spbAiReRXa4gRwybgEuYevNFheiBUAJgM4f3V5OXwcwnSfTzLSga/AaPoPgraRzZoRhY
-         lc4Q43FuSrfCMozkvVkxHt/kWUZbPl2/Z7ApHIsib39W2ltRK921Rdaj5ufcPrHbJtN9
-         hj3w==
+        bh=VQb/YxDmg3WRV5VwyOoHcCZWorD7UL47Mk4PA4a4FQc=;
+        b=OXATOLg9JYiPcxWSD6cU9ST5jmTx4pL0IeHcP8/15/6bkbVpwDzKpRzmt+pyS834AW
+         iHLna+Y4Y1RURsuohQddgiDFW42KPnyLYyvxgCOKzTRx18xqloVYRU28cCHkijwG9/vh
+         vlTnRUSR1jtZ97lDxvJKJcb2+IhFllmsZca0eMOZRdoxss01jhIqeoU7OayPL/xUm48Z
+         qwPlzOmT6HddRrbMpcAIHYLtTQ+lWFTmqXa9wPvyGnoxUtbjTfF/Bhl2GaT3EHMKv8mN
+         9XDV+BRvbup3p4gab0wKRexSM2fBwCDAmWwGroeYfhQ+qVavVLPNJoswp0CT0PcL6fQ0
+         8cew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p0lueEQV8bs/kWVCH3tW3cQ/+828DDvHkZS20zWBKkg=;
-        b=wrOCEsZZFVX8f72V3/FTNC8QhGVyzqesg9gVpV8zZT965EMqeQFPI1FQOjWINVsjxw
-         qRGu2LaX7kfn/V2TPfJzwLhdM3QJj0GdF2LLD79Ww3Papu/hijMpG6R0mqY0AMUrWaL0
-         qhnbEbKBBYZDToGjAM473V3jGceOSCw3xd4W2DsWEMxk9QbrU6UNA0l4b67tnudvgwh7
-         jEQtMx+YP+RHYaZpEoNx23gpbhwP1r/1PtGDY9TKx2PV9hn/MSqAmZlRYsBKKiizOtfA
-         6ZleYI/zT2Po/9aqEpYO43I5gzSCNtWUrq/BjuHHHM5Pfn87iyyzQpw+ffxEtvSuz9L6
-         UZww==
-X-Gm-Message-State: ANoB5pk0S+oxDq5zUgXxPnmRKmc+ii0OvZ3Dr0EEpVlF1A2GBw82j6YO
-        qvyIcanC7Oz82dOeb93Z1RgcEg==
-X-Google-Smtp-Source: AA0mqf46q/ie95zjF6yLjSM5spNdYweGqVtRQ8OpQQWRaxrTO9l+rMk6UgCs0ErZI2A0vUsG8WkMQA==
-X-Received: by 2002:a05:6512:34c6:b0:4b5:6569:ab0 with SMTP id w6-20020a05651234c600b004b565690ab0mr3855943lfr.62.1670672026588;
-        Sat, 10 Dec 2022 03:33:46 -0800 (PST)
+        bh=VQb/YxDmg3WRV5VwyOoHcCZWorD7UL47Mk4PA4a4FQc=;
+        b=D3mGeA8ddyyNT5Puzzoi6P9ZehUqNcyUVBbgIs2zGz0nANbqdVty3c9VUs3zD8EBia
+         O5i7ZPwW+3KhL121IvC0+j2effTq6cR5gWCPOby+nigoTrlMl88CL4WeZ0uqL3YhtBsP
+         83CzTyApsHrWJQiCGxzK8UPXZ1bGzIJhJa18WyRrfeqCLfQN0RKYLlaxG9KMNQ1yiGT9
+         oNFQt4aMajEAK2DMWCtxRA48FheTjudXoTGYMvrtjP/d0CadjlStT8RXnNC04swVMkL9
+         +G8FDI0S5+OP19URKlTz1EIBm84y1o9sFqrCE2sGGvNUD530Xw7eYqSYUZAD2sKzbFYU
+         j4bQ==
+X-Gm-Message-State: ANoB5pnlEY0tg9N4F3V4PWsiYLizsuOwP51KWjpUXuTvOOmYCVIfP2pH
+        Tmy3T+wi5Z9QtIuwK3KmSie21tUoX222urRJOaA=
+X-Google-Smtp-Source: AA0mqf7IVjYG4W4DNo+gzrSYxWA7ZCl5Mvajox9s4euvPH1Z/9LN1C2ZpcnKKzYqNF1IvrtLWQILhQ==
+X-Received: by 2002:ac2:555b:0:b0:4b0:6023:6f71 with SMTP id l27-20020ac2555b000000b004b060236f71mr2460351lfk.62.1670672028799;
+        Sat, 10 Dec 2022 03:33:48 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t1-20020ac24c01000000b004b501497b6fsm691532lfq.148.2022.12.10.03.33.45
+        by smtp.gmail.com with ESMTPSA id o27-20020ac25e3b000000b0048a9e899693sm696055lfg.16.2022.12.10.03.33.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 03:33:46 -0800 (PST)
+        Sat, 10 Dec 2022 03:33:48 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
+To:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: imx8dxl: drop 0x from unit address
-Date:   Sat, 10 Dec 2022 12:33:45 +0100
-Message-Id: <20221210113345.63912-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: spear: drop 0x from unit address
+Date:   Sat, 10 Dec 2022 12:33:46 +0100
+Message-Id: <20221210113347.63939-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,22 +77,50 @@ By coding style, unit address should not start with 0x.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/spear300.dtsi | 2 +-
+ arch/arm/boot/dts/spear310.dtsi | 2 +-
+ arch/arm/boot/dts/spear320.dtsi | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-index 6b416fb760d5..ca195e6d8f37 100644
---- a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-@@ -67,7 +67,7 @@ usbmisc2: usbmisc@5b0e0200 {
- 		reg = <0x5b0e0200 0x200>;
- 	};
+diff --git a/arch/arm/boot/dts/spear300.dtsi b/arch/arm/boot/dts/spear300.dtsi
+index b39bd5a22627..f1135e887f7b 100644
+--- a/arch/arm/boot/dts/spear300.dtsi
++++ b/arch/arm/boot/dts/spear300.dtsi
+@@ -46,7 +46,7 @@ sdhci@70000000 {
+ 			status = "disabled";
+ 		};
  
--	usbphy2: usbphy@0x5b110000 {
-+	usbphy2: usbphy@5b110000 {
- 		compatible = "fsl,imx8dxl-usbphy", "fsl,imx7ulp-usbphy";
- 		reg = <0x5b110000 0x1000>;
- 		clocks = <&usb2_2_lpcg IMX_LPCG_CLK_7>;
+-		shirq: interrupt-controller@0x50000000 {
++		shirq: interrupt-controller@50000000 {
+ 			compatible = "st,spear300-shirq";
+ 			reg = <0x50000000 0x1000>;
+ 			interrupts = <28>;
+diff --git a/arch/arm/boot/dts/spear310.dtsi b/arch/arm/boot/dts/spear310.dtsi
+index 77570833d46b..ce08d8820940 100644
+--- a/arch/arm/boot/dts/spear310.dtsi
++++ b/arch/arm/boot/dts/spear310.dtsi
+@@ -34,7 +34,7 @@ fsmc: flash@44000000 {
+ 			status = "disabled";
+ 		};
+ 
+-		shirq: interrupt-controller@0xb4000000 {
++		shirq: interrupt-controller@b4000000 {
+ 			compatible = "st,spear310-shirq";
+ 			reg = <0xb4000000 0x1000>;
+ 			interrupts = <28 29 30 1>;
+diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
+index b12474446a48..56f141297ea3 100644
+--- a/arch/arm/boot/dts/spear320.dtsi
++++ b/arch/arm/boot/dts/spear320.dtsi
+@@ -49,7 +49,7 @@ sdhci@70000000 {
+ 			status = "disabled";
+ 		};
+ 
+-		shirq: interrupt-controller@0xb3000000 {
++		shirq: interrupt-controller@b3000000 {
+ 			compatible = "st,spear320-shirq";
+ 			reg = <0xb3000000 0x1000>;
+ 			interrupts = <30 28 29 1>;
 -- 
 2.34.1
 
