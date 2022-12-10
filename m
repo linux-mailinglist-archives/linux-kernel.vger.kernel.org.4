@@ -2,144 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50185648E46
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6064E648E4C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiLJK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 05:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
+        id S229568AbiLJLCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 06:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLJK7g (ORCPT
+        with ESMTP id S229680AbiLJLCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 05:59:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B49DBCA4;
-        Sat, 10 Dec 2022 02:59:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F84460B2B;
-        Sat, 10 Dec 2022 10:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1BDC433EF;
-        Sat, 10 Dec 2022 10:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670669974;
-        bh=9Ba55FamUQD94n7+bqRFC7LNfipEY1H++sF1ApKOw4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HldOCBwKAo1ZvYfSMLipFcFrb6nAK5WqavEa4FPhS3b0iQa5y3I7D0af7P5C3v3rd
-         /Zgk8XLopjlqjBaM2Dp9l84a/1a1+azpRSBry9EcMxLaKwjJSN/r4ilmjIaaxxwnVR
-         z0L0wFTLNiy8vwesv673SaCpBH6Zmc3kBVN2hx77Frw7J9lP2yXX3jbI+SSi0EM1rX
-         6CpIFoLkvRN9dQ79EEXnNjZyhR/N1HVxh7bPbwFdGdLdFEf0oq7I5cQpME+4v2042u
-         Hzxg+xNfJVc2Xss/kU6AwkvuVe0LvXW0oZ/wwhqtP/DlT+I+KKVODbszwNT3YbN60i
-         5zKJ03RmH3sdw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p3xaB-0005xq-OH; Sat, 10 Dec 2022 11:59:52 +0100
-Date:   Sat, 10 Dec 2022 11:59:51 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Christoph =?utf-8?Q?M=C3=B6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        Remigiusz =?utf-8?B?S2/FgsWCxIV0YWo=?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] can: ems_usb: ems_usb_disconnect(): fix NULL
- pointer dereference
-Message-ID: <Y5Rmp66zvlwykRLq@hovoldconsulting.com>
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
- <20221210090157.793547-1-mailhol.vincent@wanadoo.fr>
- <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
+        Sat, 10 Dec 2022 06:02:05 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2C51C928
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:02:02 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id 1so10927241lfz.4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:02:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qtLsUqxObl5gNvozPidJotWpMooTYg5mjWrhCt6bCKc=;
+        b=sa7G/COWN4N2/rdfMXhPIS4QNgjWvxGqmVy3Kc/nEw8P5EMBZI2C9N2iJ1ZOBf5Gtr
+         CZEe6BLdgqFCsRv4qp0Itb+kxQeZOjuF3zHRFkTVbQTLgI3xStpWZ6cvud8cbontaloD
+         b1S8+u79d2H5OY46sujlez8DAwRSB1znFSbOeFwavjs4T6j/5L6kw98dy9/vXPsWCZiX
+         FUWpLR/Lxz66vOnSxEmcpnmfj/waImf3y9bzM89ybGBDcvPGUooZaJfS9Wm+vIpqDayj
+         d5IlEvXfo1RR7jZ62abZyW1mZtdexBsNyUzRwZX6qTdWMe6fJb7HjXScpkRGzw0lDVmZ
+         CAyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtLsUqxObl5gNvozPidJotWpMooTYg5mjWrhCt6bCKc=;
+        b=tTrineLwu5ZVDRXRz/0tcKcgEn57LtHKFvw/lBQ7oq11mtF/9REG4AIrPwliEM1CpZ
+         HNVZeRbiVN5Q4ni81fHfDxWPxgYNLqX3ncHRw4UM0s20108vpBegr5vJoO2oecZOyxZg
+         5GnG5s7LZNBz/CBFj/ZxAKketd9nbiIpfqwwjJFsUeqmmdAFUCPEz2sRaz7hZbaofwmo
+         ux8GlCnJNi9Bgn/5aEM/2N4hiOuI6Fe+WVljhSKe7JSqJDfOyQUNc3tMhO0b8oBZCEuv
+         CUvv+uDQdIoo6FtDx7UTnSMEwPgvPcagG8N32wkVMNjYTqC/eNKGmm3eUViBo+fZgM0p
+         Z13A==
+X-Gm-Message-State: ANoB5plczxXIhf30wHcx9pxUBl1M+29rDWNCJO1DeebYExzgoA1KnpsT
+        yc//nLzibuSjeLnTGp1u9jcV3w==
+X-Google-Smtp-Source: AA0mqf4ukIq8f55ZwoT5lfBoGPIv3vIjf6EYKWXJHuBG4yXo1R8WH7bHnid2bOObROuEjdX9eqdlcg==
+X-Received: by 2002:ac2:569e:0:b0:4b5:9e59:8cdd with SMTP id 30-20020ac2569e000000b004b59e598cddmr1912500lfr.67.1670670120896;
+        Sat, 10 Dec 2022 03:02:00 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s14-20020a056512202e00b004b5284a92f9sm674523lfs.208.2022.12.10.03.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Dec 2022 03:02:00 -0800 (PST)
+Message-ID: <3c5aeda7-6773-0b41-9c02-5f423117c3b3@linaro.org>
+Date:   Sat, 10 Dec 2022 12:01:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Luca Weiss <luca.weiss@fairphone.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+ <24fa41d2-87d1-be19-af44-337784b0f0a4@linaro.org>
+ <COXDTKRPPU1J.373YHYKBQIN38@otso>
+ <a527720e-d4d9-6c90-f991-a5b123c4559b@linaro.org>
+ <Y5OOA2+OuwgZ1i7B@sol.localdomain>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y5OOA2+OuwgZ1i7B@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 06:01:49PM +0900, Vincent Mailhol wrote:
-> ems_usb sets the driver's priv data to NULL before waiting for the
-> completion of outsdanding urbs. This can results in NULL pointer
-> dereference, c.f. [1] and [2].
-
-Please stop making hand-wavy claims like this. There is no risk for a
-NULL-pointer deference here, and if you think otherwise you need to
-explain how that can happen in detail for each driver.
-
-> Remove the call to usb_set_intfdata(intf, NULL). The core will take
-> care of setting it to NULL after ems_usb_disconnect() at [3].
+On 09/12/2022 20:35, Eric Biggers wrote:
+> On Fri, Dec 09, 2022 at 04:19:20PM +0100, Krzysztof Kozlowski wrote:
+>> On 09/12/2022 16:11, Luca Weiss wrote:
+>>> On Fri Dec 9, 2022 at 4:05 PM CET, Krzysztof Kozlowski wrote:
+>>>> On 09/12/2022 15:29, Luca Weiss wrote:
+>>>>> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+>>>>> in the bindings so the existing dts can validate successfully.
+>>>>>
+>>>>> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+>>>>> sm8450: add Inline Crypto Engine registers and clock") so move the
+>>>>> compatible to the correct if.
+>>>>>
+>>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>>>> ---
+>>>>> (no cover subject)
+>>>>>
+>>>>> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+>>>>> and sa8540p-ride.dtb:
+>>>>>
+>>>>>   Unevaluated properties are not allowed ('required-opps', 'dma-coherent' were unexpected)
+>>>>>
+>>>>> Maybe someone who knows something about this can handle this?
+>>>>>
+>>>>> And the patch adding qcom,sm6115-ufshc hasn't been applied yet.
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 8 +++++++-
+>>>>>  1 file changed, 7 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>>> index f2d6298d926c..58a2fb2c83c3 100644
+>>>>> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>>>> @@ -102,7 +102,6 @@ allOf:
+>>>>>                - qcom,sc8280xp-ufshc
+>>>>>                - qcom,sm8250-ufshc
+>>>>>                - qcom,sm8350-ufshc
+>>>>> -              - qcom,sm8450-ufshc
+>>>>>      then:
+>>>>>        properties:
+>>>>>          clocks:
+>>>>> @@ -130,6 +129,7 @@ allOf:
+>>>>>                - qcom,sdm845-ufshc
+>>>>>                - qcom,sm6350-ufshc
+>>>>>                - qcom,sm8150-ufshc
+>>>>> +              - qcom,sm8450-ufshc
+>>>>>      then:
+>>>>>        properties:
+>>>>>          clocks:
+>>>>> @@ -149,6 +149,12 @@ allOf:
+>>>>>          reg:
+>>>>>            minItems: 2
+>>>>>            maxItems: 2
+>>>>> +        reg-names:
+>>>>
+>>>> There are no reg-names in top-level, so it's surprising to see its
+>>>> customized here. It seems no one ever documented that usage...
+>>>
+>>> From what I can tell, from driver side all devices not using ICE don't
+>>> need reg-names, only the "ice" reg is referenced by name in the driver.
+>>>
+>>> I didn't add it top-level because with only one reg I think we're not
+>>> supposed to use reg-names, right?
+>>
+>> And you still won't need to use. Yet property should be rather described
+>> in top-level which also will unify the items here (so no different
+>> 2-item reg-names in variants).
+>>
+>> Just add it to top-level with minItems: 1 and per variant customize:
+>> 1. maxItems: 1
+>> 2. minItems: 2 + required
+>>
+>> The "required" is a bit questionable... this was never added by Eric to
+>> the bindings. Driver support and DTS were added completely skipping
+>> bindings...
+>>
 > 
-> [1] c/27ef17849779 ("usb: add usb_set_intfdata() documentation")
-> Link: https://git.kernel.org/gregkh/usb/c/27ef17849779
+> Sorry about that.  At the time
+> (https://lore.kernel.org/linux-scsi/20200722051143.GU388985@builder.lan/T/#t)
+> I didn't know there was a Documentation file that should have been updated.
 
-The claim in this commit is not correct either.
+Any change regarding bindings (so adding/changing compatibles,
+properties, nodes) a driver is using must be followed by... change in
+the bindings.
 
-> [2] thread about usb_set_intfdata() on linux-usb mailing.
-> Link: https://lore.kernel.org/linux-usb/Y4OD70GD4KnoRk0k@rowland.harvard.edu/
 > 
-> [3] function usb_unbind_interface() from drivers/usb/core/driver.c
-> Link: https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L497
+> The UFS core assumes that the reg at index 0 is the UFS standard registers.
+> It is not referenced by name.
 > 
-> Fixes: 702171adeed3 ("ems_usb: Added support for EMS CPC-USB/ARM7 CAN/USB interface")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/net/can/usb/ems_usb.c | 2 --
->  1 file changed, 2 deletions(-)
+> ufs-qcom already had an optional reg at index 1.  I needed to add another
+> optional reg.  So I made the regs at index 1 and later be optional named regs:
+> dev_ref_clk_ctrl_mem and ice.  That seemed better than hardcoding the indices.
 > 
-> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
-> index 050c0b49938a..c64cb40ac8de 100644
-> --- a/drivers/net/can/usb/ems_usb.c
-> +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -1062,8 +1062,6 @@ static void ems_usb_disconnect(struct usb_interface *intf)
->  {
->  	struct ems_usb *dev = usb_get_intfdata(intf);
+> Is it causing a problem that the UFS standard reg at index 0 is being mixed with
+> named regs in the same list?
 
-The interface data pointer is only used in this function so there is no
-risk for any NULL pointer dereference here. I only checked one of the
-other drivers you patch, but I'm pretty sure all of your claims about
-fixing NULL-pointer dereferences in this series are equally bogus.
+The indexes should be ordered (hard-coded), not flexible. If there is
+already second IO address at index 1, then the patch does not look
+correct. When fixing, please fix it completely.
 
->  
-> -	usb_set_intfdata(intf, NULL);
-> -
->  	if (dev) {
->  		unregister_netdev(dev->netdev);
+Best regards,
+Krzysztof
 
-Johan
