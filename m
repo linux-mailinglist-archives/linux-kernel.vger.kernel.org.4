@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D675649100
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 23:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EB4649103
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 23:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiLJWHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 17:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S229798AbiLJWcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 17:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiLJWHW (ORCPT
+        with ESMTP id S229538AbiLJWcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 17:07:22 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1F212083;
-        Sat, 10 Dec 2022 14:07:20 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 754C61C0002;
-        Sat, 10 Dec 2022 22:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670710038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ueh8h8K5la+rt80fMQ8vcYLiSzG6Mqr+N8q3yCay810=;
-        b=Zv8t/FhTd1Zc2QlXoRmxmacKAZv75Rfx3VVjjTJns95L95S8o352asFO7BYWrY0IIsdnl8
-        lHxeqg2CWb6BSAQzY7ZeV6YBsa4zQD88dIX3uDi459AKB0ZVgTdZukGZe+eM02YXuSH9Rx
-        J7TNQLGd29uFin7i6PDyyAdPhQVV929JwWWbk5mX6owi7CHB4wXcsE3ilKaAFaBwNBrtDU
-        UZXWRd5dvg5KlxiDvDkAO0VB0vLCf9tlZZjN0K/iSInx7RiGuHboPdNgBzNNosDnGmVzbR
-        R+snAOpDsaRqivcL9kcaNdpu2Mm+SMX9Nvw0WHqqllaPmrJ0+qtmj3uCavQWoA==
-Date:   Sat, 10 Dec 2022 23:07:14 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Vinod Koul <vkoul@kernel.org>,
+        Sat, 10 Dec 2022 17:32:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E081913F16
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 14:32:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 771AF60C98
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:32:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D772C433D2;
+        Sat, 10 Dec 2022 22:32:30 +0000 (UTC)
+Date:   Sat, 10 Dec 2022 17:32:27 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-watchdog@vger.kernel.org
-Subject: Re: (subset) [PATCH 06/12] dt-bindings: rtc: convert rtc-meson.txt
- to dt-schema
-Message-ID: <167070996827.280754.10880226731567626980.b4-ty@bootlin.com>
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v1-6-3f025599b968@linaro.org>
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [for-next][PATCH 13/25] x86/mm/kmmio: Use
+ rcu_read_lock_sched_notrace()
+Message-ID: <20221210173227.7063269d@gandalf.local.home>
+In-Reply-To: <20221210213412.GF4001@paulmck-ThinkPad-P17-Gen-1>
+References: <20221210135750.425719934@goodmis.org>
+        <20221210135825.241167123@goodmis.org>
+        <20221210174753.GD4001@paulmck-ThinkPad-P17-Gen-1>
+        <20221210133425.4657985e@gandalf.local.home>
+        <20221210213412.GF4001@paulmck-ThinkPad-P17-Gen-1>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-6-3f025599b968@linaro.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 15:33:32 +0100, Neil Armstrong wrote:
-> Convert the Amlogic Meson6 RTC bindings to dt-schema.
+On Sat, 10 Dec 2022 13:34:12 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
+
+> > I was going to remove it, but then I realized that it would be a functional
+> > change, as from the comment above, it uses "preempt_enable_no_resched(),
+> > which there is not a rcu_read_unlock_sched() variant.  
 > 
-> 
+> If this happens often enough, it might be worth adding something like
+> rcu_read_unlock_sched_no_resched(), but we clearly are not there yet.
+> Especially not with a name like that!  ;-)
 
-Applied, thanks!
+Please don't ;-)
 
-[06/12] dt-bindings: rtc: convert rtc-meson.txt to dt-schema
-        commit: 800b55b4dc62c4348fbc1f7570a8ac8be3f0eb66
+This is only to handle the bizarre case that mmio tracing does. Remember,
+this tracer is only for those that want to reverse engineer a binary
+driver. It's not even SMP safe! When you enable it, it shuts down all but
+one CPU. This is actually the reason I worked so hard to keep it working
+with lockdep. The shutting down of CPUs has caught so many bugs in other
+parts of the kernel! ;-)
 
-Best regards,
+Thus, anything that mmio tracer does, is considered niche, and not
+something to much care about.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- Steve
