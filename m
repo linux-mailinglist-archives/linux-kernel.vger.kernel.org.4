@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20B7648F12
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8215B648F14
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiLJN7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S230134AbiLJN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLJN63 (ORCPT
+        with ESMTP id S229851AbiLJN63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Dec 2022 08:58:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E87A18B1D
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7E518E0A
         for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 05:58:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C385860C1C
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF6D60C2B
         for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 13:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E270C433F2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A47C433F0;
         Sat, 10 Dec 2022 13:58:27 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1p40N0-000kvM-2S;
+        id 1p40N0-000kvr-2y;
         Sat, 10 Dec 2022 08:58:26 -0500
-Message-ID: <20221210135826.629673261@goodmis.org>
+Message-ID: <20221210135826.783518244@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Sat, 10 Dec 2022 08:58:12 -0500
+Date:   Sat, 10 Dec 2022 08:58:13 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        kernel test robot <lkp@intel.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-next][PATCH 22/25] Documentation/osnoise: Escape underscore of NO_ prefix
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [for-next][PATCH 23/25] tracing/osnoise: Add PANIC_ON_STOP option
 References: <20221210135750.425719934@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,46 +51,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bagas Sanjaya <bagasdotme@gmail.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-kernel test robot reported unknown target name warning:
+Often the latency observed in a CPU is not caused by the work being done
+in the CPU itself, but by work done on another CPU that causes the
+hardware to stall all CPUs. In this case, it is interesting to know
+what is happening on ALL CPUs, and the best way to do this is via
+crash dump analysis.
 
-Documentation/trace/osnoise-tracer.rst:112: WARNING: Unknown target name: "no".
+Add the PANIC_ON_STOP option to osnoise/timerlat tracers. The default
+behavior is having this option off. When enabled by the user, the system
+will panic after hitting a stop tracing condition.
 
-The warning causes NO_ prefix to be rendered as link text instead, which
-points to non-existent link target.
+This option was motivated by a real scenario that Juri Lelli and I
+were debugging.
 
-Escape the prefix underscore to fix the warning.
+Link: https://lkml.kernel.org/r/249ce4287c6725543e6db845a6e0df621dc67db5.1670623111.git.bristot@kernel.org
 
-Link: https://lkml.kernel.org/r/20221125034300.24168-1-bagasdotme@gmail.com
-
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Clark Williams <williams@redhat.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Link: https://lore.kernel.org/linux-doc/202211240447.HxRNftE5-lkp@intel.com/
-Fixes: 67543cd6b8eee5 ("Documentation/osnoise: Add osnoise/options documentation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- Documentation/trace/osnoise-tracer.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_osnoise.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/osnoise-tracer.rst
-index 3c675ed82b27..fdd562d7c22d 100644
---- a/Documentation/trace/osnoise-tracer.rst
-+++ b/Documentation/trace/osnoise-tracer.rst
-@@ -111,7 +111,7 @@ The tracer has a set of options inside the osnoise directory, they are:
-    be used, which is currently 5 us.
-  - osnoise/options: a set of on/off options that can be enabled by
-    writing the option name to the file or disabled by writing the option
--   name preceded with the 'NO_' prefix. For example, writing
-+   name preceded with the 'NO\_' prefix. For example, writing
-    NO_OSNOISE_WORKLOAD disables the OSNOISE_WORKLOAD option. The
-    special DEAFAULTS option resets all options to the default value.
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 8ba82c71268f..5a7613942223 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -54,10 +54,11 @@
+ enum osnoise_options_index {
+ 	OSN_DEFAULTS = 0,
+ 	OSN_WORKLOAD,
++	OSN_PANIC_ON_STOP,
+ 	OSN_MAX
+ };
  
+-static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD" };
++static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD", "PANIC_ON_STOP" };
+ 
+ #define OSN_DEFAULT_OPTIONS		0x2
+ static unsigned long osnoise_options	= OSN_DEFAULT_OPTIONS;
+@@ -1270,6 +1271,9 @@ static __always_inline void osnoise_stop_tracing(void)
+ 		trace_array_printk_buf(tr->array_buffer.buffer, _THIS_IP_,
+ 				"stop tracing hit on cpu %d\n", smp_processor_id());
+ 
++		if (test_bit(OSN_PANIC_ON_STOP, &osnoise_options))
++			panic("tracer hit stop condition on CPU %d\n", smp_processor_id());
++
+ 		tracer_tracing_off(tr);
+ 	}
+ 	rcu_read_unlock();
 -- 
 2.35.1
 
