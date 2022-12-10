@@ -2,281 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F94649018
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6310664901A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiLJSDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 13:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S229845AbiLJSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 13:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiLJSC5 (ORCPT
+        with ESMTP id S229628AbiLJSGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 13:02:57 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2138.outbound.protection.outlook.com [40.107.220.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06A06179;
-        Sat, 10 Dec 2022 10:02:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yocr/C66K4NySUXMn+MnRzctgSxH6VGtxU/EuOXMXRrSttKRQXXExN9JMFmQ1VfoZF8xPCJZGALKTILn+MiqX46ptYkVlFZkW1rXvLnxkTLadbJFW24a5g2Bqa4zdUx1+UHP/KFN3oSe6P8UobEjLy4WYh+wDOFGxR0vIi1pFMjsXSuiVVZ7cD8dUiU0sSy9erg9V1AeJhg4TI4NZbJ1mSLPDw23Wly1ymWOgOAMWArFyePwpNZVVDaPGJDMWo/aKVVgcQLW+wTp+2JZCj5Gbn5w1VEKI9WckweHTqIG+khxCNCF749d2XreZPdOjy54WDf3fx24uaMVHHVOPzXxUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w3e/rTDe5rDlOS8xoZhx8OMQalncieQUoom0yzMoAMg=;
- b=O9NaoPTLCFEvKM3ZDCvrjT5zFN+Fo+Gsf4FAQPzznWvWhICaUZA9naHRHog9AZ2Fu7yof4xH6eCJPdLfkcTl10M2qtU7H170C9U9a+l+SswY0Fsm/YLYjT6SADdFZhnFFg8Yibx+h4DitCOcCRQRkrAM1S6lw5xFQCnGtfCBEW2MHtXY1doXXInMVTWsHcH69edfpa1U4I7eOTmS9RD0AVS+DJaiVZqRKbOBAD7OIzeIVw9mkT4zeer+SbpP4Fw3DDnmWgqGv2Nd8k1enxeeanLpTxMDy7xeK2M2fDtT6w7q0Io+wj+6DBRKaEio7BVQm480Oq6I2GgRmJL8KmkWAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w3e/rTDe5rDlOS8xoZhx8OMQalncieQUoom0yzMoAMg=;
- b=hCgSXpQvsAUhQJELVLOUHsddYFaANAT1uBo0SmD5SvjVHqhzscvOuyNQD4oXnQqQVKAnJNFJL1xfNcDnOPaG0SvREjNnsTE7Fx1yTpvzYLApEwMi9P+twft+Ztcbpsqv6uHmd1oc30X9QNEjTC3CLxWTeNfQkvRXJcv0ifg99lE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by BLAPR10MB4897.namprd10.prod.outlook.com
- (2603:10b6:208:30f::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Sat, 10 Dec
- 2022 18:02:48 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::45b5:a860:9cea:a74c]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::45b5:a860:9cea:a74c%4]) with mapi id 15.20.5880.019; Sat, 10 Dec 2022
- 18:02:48 +0000
-Date:   Sat, 10 Dec 2022 10:02:43 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v5 net-next 04/10] dt-bindings: net: dsa: utilize base
- definitions for standard dsa switches
-Message-ID: <Y5TJw+zcEDf2ItZ5@euler>
-References: <20221210033033.662553-1-colin.foster@in-advantage.com>
- <20221210033033.662553-5-colin.foster@in-advantage.com>
- <1df417b5-a924-33d4-a302-eb526f7124b4@arinc9.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1df417b5-a924-33d4-a302-eb526f7124b4@arinc9.com>
-X-ClientProxiedBy: BY3PR04CA0021.namprd04.prod.outlook.com
- (2603:10b6:a03:217::26) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Sat, 10 Dec 2022 13:06:45 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C419317
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:06:43 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id d6-20020a056e02214600b00303620c6e39so2103172ilv.6
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:06:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JECtRbncHYvgBMdSUzE8pbHud/cHTvPqn5LLrWNFGFY=;
+        b=CSNIOsd7a7PRoVN/K7SCVKQibzm8fdXdWYm257pVAVN/q0JGtyRjyVaeEt2AwwdssB
+         0CSGmdfW9+q1L1NCUtlwGlprhb4Qa1L62nYXJ8R+8YoWrvXxI30jIwbhDTZ/BXixcm5Q
+         oI/RdUN9xVwZNtCpRzc5LvOyO4qmGyREJ2qq+x2yjYtRDzZ+A2/E9230aES0hfrLCh+O
+         oqYCCK5V9UmIiZiB76nZ0Ngmd9ZR9HcXm7MW42CUrxjSjoea+xIujrclo+rl8P3Ptbp/
+         vbNB93NUfUTSWcwyh8R36qgzK4MSE1gY/piw+s6HAUM+FYANdacJqPjxE+/oJFNGke6e
+         e5/Q==
+X-Gm-Message-State: ANoB5pn2G9fs4vm47xqsdDpED1zbI1sOfMLgKaL/xC4SbfK1ZOzdIiMD
+        /bdyQdKKKlrocicTpuHhC8y57WMJkjSpvhVmXT8Kx0sRF3v3
+X-Google-Smtp-Source: AA0mqf6Ia0oAutUmIX0aGI/02T24yKYbhKYIt5JebEnniuwDbREF05docSBkOfV4gTmu85eollvx1qMBBlhT8J5egE1DHo/XLS5l
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|BLAPR10MB4897:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6178d276-0e66-4845-30a4-08dadad8beec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ov38+xffhCr+VSSf0jn65pBMEkIWvtiEOS4iF+OKQvV5HVdyNfGe34BftHXMX5e0r9WwQ01fnd4HS6xosSUrrenxf/uGe5iNYqRLYOizWGnLF2VOP8RgN7xbCCVCOzGUrlHjGmAV2AD5Db+wd2w0N1/xH+KfhnkYlvNZL7NYgxDiYLOTvzCMBNO+UZzBcHIK44YIk7e2vL8de2+HaiudXu5tC1O0uiQBJnqftTUVBq3Q5XYKB9CU2mzuBBgiMjpZkpX0CZ9S+3TeeWuoI//5ruxwezCz4ZKfjJoC5knTJu333VEkj+ockEMP2+4UzeWboz8c4kkWVj3cGlpKYtinuOOWRTGlLE6cuuFjTutzfLT0TdCyJCEZguPmceeF9WS81GNkIC+NWiy1E9tooWByHPKwL1N4fcubLusf9pZE0exIGO/D4kci5XjNlx7idUXH8ug2TAnu+QqYtwhBo4bPNYc7Z3xXN8/o/9wxzS77QtQEFk8RDzBvEXk9vb55MVWoLmhe3B0lf64AsVV+t1Pfs7Enku20dHhHp4guCqBimYUswEumlkgKytW0lQ1cKbaLOYp1JFDkwE/P1ZecJvJMJz/tpKx0gPlqi/09qkqA4ngZepLJCDY9sagMkODyGyJxl76YZE0eAXkMx4QG0x8N9KbVX1ZciGp0/8oh1ggJzzlsCao+q4QOOSkK38UzX7/sGZ/9dOJkRdeXUAtz6jkaCA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39840400004)(366004)(136003)(396003)(376002)(451199015)(66574015)(41300700001)(38100700002)(66556008)(66946007)(4326008)(5660300002)(66476007)(8676002)(8936002)(83380400001)(86362001)(478600001)(54906003)(966005)(33716001)(6486002)(26005)(6512007)(9686003)(2906002)(44832011)(6666004)(7416002)(7406005)(316002)(6916009)(53546011)(6506007)(186003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TmxyVG95TXhQZFVIeHdJV0JzUXdqZkFsbVVxYmxYeHZub1JOU1hMUEQxM0Ir?=
- =?utf-8?B?ZTdMTGZINDlqMWxKQ3JNWEkxSjYrWmJ3S3dscXAzRWpvODAvb0dIbzRmazI2?=
- =?utf-8?B?SnVORUFjajBDT3dhajhUQW96VzNrMWVIYWJxc1liUmRlL1Z4VTBLc1AvbHJk?=
- =?utf-8?B?ZFJsRW1pdDdndzZFdWV3Y052NzJ5M1QwYTdSbTJLOGYydkhWM0loRXVROHA0?=
- =?utf-8?B?U2MvSHRsQjhUeVVFK2x1Ryt1QTEwVnFmR0NVYUZtREs2T09nMHFtK3lhVnFs?=
- =?utf-8?B?aURGOURTMWJlTmEwYjFRbkt5cDhVd3k3OWNoOUNzNklkR1NuQlVFamlUV3ZZ?=
- =?utf-8?B?VEtZdG8rTUlhdmZ3K3doeE5aM3hsbGdoTW9zSmtCSlRudVB6ejFKdXJKRjlU?=
- =?utf-8?B?ZisxV00yclN1NjZ3a0JBVzBlTUJVWC9MamgrUmlqejZMUUo5MkszbVRFejR5?=
- =?utf-8?B?ZW4wRkZiNUxoaWxJeHJCSTVjajNYQng0bDZoci9QNVFYZk8yanNUblhHY2hS?=
- =?utf-8?B?TGN5R0poMUVmeTZQQVJEOGtxSUZkRWpXNUtScUJmcTRsTk5wZkxtZXRTMWxX?=
- =?utf-8?B?V0VLVjVSQUhheENKYXo2QTRuZTkzQVp4M2ZzZU93VXlsMlNFRzNGYmFydWkv?=
- =?utf-8?B?NUJnTE5ZbkdnZEFrRFFUTUJCSG04RkdYeXBUcXZpZEg1N2gwL211MjV1djhD?=
- =?utf-8?B?Y2RxTWJMNkQ2T0R5WW54WENnN1B6MUtEUG5iK3dkUmF0MFI5NVNpRW1ndmdy?=
- =?utf-8?B?ejRrR1M0a0dwSktHWk9mclJBWGNyTmNxYjkrVG5Gb1NSN01KbFZjWGJBN3BV?=
- =?utf-8?B?TU52cWxGNUxiKyttcG83OUpoY2xrbmdqSjFUM0ppOUNRS3ZHQzQzSlJ2dllh?=
- =?utf-8?B?cDByN1NKZ0o1OUNQOUMyUzhKVlU4UHd6NlBMWjNXclFyL2dVZXhGbmNldEpo?=
- =?utf-8?B?RnIzTWtYSmd4clZJODBBd084TU5zSW45SXEydSs4YU0xaGJmUFhQWmFDR1NM?=
- =?utf-8?B?NUplaXJXZEpia25uRVEzNGtsZEdyV2tLWXE1czIwQ1ZpaTl3K2tFd0pFWVU0?=
- =?utf-8?B?d25XK1RjYlpSL0EwT0g5YWp6ODlnNlFRM0c2UlBScmtlTk1wYXhDaE1qY2hx?=
- =?utf-8?B?ZEtEa1doRy9rcmkyUnVQK2k4bUJHMWpKTVU1LzZBZjZWUkhnMnBLUHQ0dTQw?=
- =?utf-8?B?ZzEvM08rWFdSNUxzSG44bVhmdWRTVk0xeUVwUDdPUmJZdDYwUkp4dmVSYTRh?=
- =?utf-8?B?MlIvbDVUd3BEc1NwNENXcGdLRnZFbVZxUEE4dk10THAySksxTDNUODUwbzl0?=
- =?utf-8?B?amZ1Y3BmcU1wTDBKWHYyYitCZWdXMVNYeHo1b0RraWdKYlY1Kzhjci9kdU1J?=
- =?utf-8?B?dDFNM2tnRnJNdnJqbWpQZ29NbWUrRUhlYW9uSjJ2d05zb2JoakdSc1lnSlpR?=
- =?utf-8?B?bEhONUpNSnlpVWMyTmJTUE40NTlsa0VKaWR4aXduTGdtZGhIbDBCZUE5cGFs?=
- =?utf-8?B?cHBDVGIwQlp5b0tIUW11L0cxNVp3MHVWS01xUElLUHk3RVZOeGpsK3EzYXU0?=
- =?utf-8?B?K3NmU3h2NjU2MGI5L2ZPRVd2TW9XSmhGdE1oUENTcWxMeEkzYnoxYXlKV25l?=
- =?utf-8?B?eGdvWjdyY3c0MmJmOUtBdFpLdWJPWlpIQTJ5UlA1dHF2WGxqbGNEVjRVaVRF?=
- =?utf-8?B?SkZYRXc4cGJkZTNEN1RPNEpDWDg1WVpOQmFZOTkrUXFPY2pQSE10akw1dEY1?=
- =?utf-8?B?dy80dUhrbjMrZTVOeWNVWXNXMW1HeWZnWW5vK0RoTkloZ2J6ZjhzTFhpaWxE?=
- =?utf-8?B?cEJxNmQwKzFNRFg1K1FkVWdWL2VPcTl6N0FQVlhJcTlYMjlRQ1dSUDBEd3Jy?=
- =?utf-8?B?SDJ6R1JWVllUUXNFd01PMHI0LzdNYWFsaDdTc2JmdmJWV09hNVJrRVltbW9Y?=
- =?utf-8?B?aGlKeFFkV1Q0dmRZWkFZSks2eGxOWWRkOWwyd1ljbm5oSWpRcHZ1T0E4YkNn?=
- =?utf-8?B?WGNRRGVRQUNQajVrM0FuUDRzYjBEN2YvcWRBQ2JuQlVSd1JCSktGU0xES2RO?=
- =?utf-8?B?U29iMHd5WS9hLytUVWI4SFk4T01VbGxCNTFRSW5GaTBqNGQ1aC9Ga3hPSmVk?=
- =?utf-8?B?SEZ2bC83dkFSaGF0S24xSjUzNHdOQjA2ME1SalJLeTc4dzZjYU1QeEJhOFV6?=
- =?utf-8?Q?w2lqkCsEecPypWoX1kbvVAY=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6178d276-0e66-4845-30a4-08dadad8beec
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2022 18:02:47.9474
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ALMRrMXxxxA12SIhVkR1cYWFqESdCSPJ4muZ31MxZTdQ8QJlnvSs0ywX66GT9ksohlII1+z86he4D2uviyNJOi2jLo/QBv82/tm3neIm404=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4897
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
+ q48-20020a056638347000b00389c976846emr26967141jav.246.1670695602581; Sat, 10
+ Dec 2022 10:06:42 -0800 (PST)
+Date:   Sat, 10 Dec 2022 10:06:42 -0800
+In-Reply-To: <00000000000064d06705eeed9b4e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eb761405ef7d2113@google.com>
+Subject: Re: [syzbot] WARNING in do_mkdirat
+From:   syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>
+To:     dvyukov@google.com, elver@google.com, hdanton@sina.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arınç,
-On Sat, Dec 10, 2022 at 07:24:42PM +0300, Arınç ÜNAL wrote:
-> On 10.12.2022 06:30, Colin Foster wrote:
-> > DSA a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> > @@ -58,4 +58,26 @@ oneOf:
-> >   additionalProperties: true
-> > +$defs:
-> > +  ethernet-ports:
-> > +    description: A DSA switch without any extra port properties
-> > +    $ref: '#/'
-> > +
-> > +    patternProperties:
-> > +      "^(ethernet-)?ports$":
-> > +        type: object
-> > +        additionalProperties: false
-> > +
-> > +        properties:
-> > +          '#address-cells':
-> > +            const: 1
-> > +          '#size-cells':
-> > +            const: 0
-> > +
-> > +        patternProperties:
-> > +          "^(ethernet-)?port@[0-9]+$":
-> > +            description: Ethernet switch ports
-> > +            $ref: dsa-port.yaml#
-> > +            unevaluatedProperties: false
-> 
-> I've got moderate experience in json-schema but shouldn't you put 'type:
-> object' here like you did for "^(ethernet-)?ports$"?
+syzbot has found a reproducer for the following issue on:
 
-I can't say for sure, but adding "type: object" here and removing it
-from mediatek,mt7530.yaml still causes the same issue I mention below.
+HEAD commit:    3ecc37918c80 Merge tag 'media/v6.1-4' of git://git.kernel...
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ae071d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
+dashboard link: https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10aaf2b7880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b652b7880000
 
-Rob's initial suggestion for this patch set (which was basically the
-entire implementation... many thanks again Rob) can be found here:
-https://lore.kernel.org/netdev/20221104200212.GA2315642-robh@kernel.org/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/be14794fd26b/disk-3ecc3791.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/35b850996388/vmlinux-3ecc3791.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0eec0f8f6777/bzImage-3ecc3791.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/547e98eae9c0/mount_0.gz
 
-From what I can tell, the omission of "type: object" here was
-intentional. At the very least, it doesn't seem to have any effect on
-warnings.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com
 
-> 
-> > +
-> >   ...
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> > index 73b774eadd0b..748ef9983ce2 100644
-> > --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> > @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >   title: Hirschmann Hellcreek TSN Switch Device Tree Bindings
-> >   allOf:
-> > -  - $ref: dsa.yaml#
-> > +  - $ref: dsa.yaml#/$defs/ethernet-ports
-> >   maintainers:
-> >     - Andrew Lunn <andrew@lunn.ch>
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > index f2e9ff3f580b..20312f5d1944 100644
-> > --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> > @@ -157,9 +157,6 @@ patternProperties:
-> >       patternProperties:
-> >         "^(ethernet-)?port@[0-9]+$":
-> >           type: object
-> 
-> This line was being removed on the previous version. Must be related to
-> above.
+------------[ cut here ]------------
+DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff888072216a70, owner = 0x0, curr 0xffff888078ce57c0, list empty
+WARNING: CPU: 0 PID: 4093 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
+WARNING: CPU: 0 PID: 4093 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Modules linked in:
+CPU: 0 PID: 4093 Comm: syz-executor196 Not tainted 6.1.0-rc8-syzkaller-00152-g3ecc37918c80 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
+RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
+Code: c7 c0 a3 ed 8a 48 c7 c6 60 a6 ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 ab 7c e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 18 2a 76 8e 80 e1 07 80 c1 03 38 c1
+RSP: 0018:ffffc900043ffd40 EFLAGS: 00010292
+RAX: 7c48dcb6c422ab00 RBX: ffffffff8aeda4a0 RCX: ffff888078ce57c0
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc900043ffe10 R08: ffffffff816e5c7d R09: fffff5200087ff21
+R10: fffff5200087ff21 R11: 1ffff9200087ff20 R12: 0000000000000000
+R13: ffff888072216a70 R14: 1ffff9200087ffb0 R15: dffffc0000000000
+FS:  00007f68743c0700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000026c1b000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ inode_unlock include/linux/fs.h:761 [inline]
+ done_path_create fs/namei.c:3857 [inline]
+ do_mkdirat+0x2de/0x550 fs/namei.c:4064
+ __do_sys_mkdirat fs/namei.c:4076 [inline]
+ __se_sys_mkdirat fs/namei.c:4074 [inline]
+ __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4074
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f687c635589
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f68743c02f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
+RAX: ffffffffffffffda RBX: 00007f687c6d97b0 RCX: 00007f687c635589
+RDX: 0000000000000000 RSI: 0000000020000200 RDI: 0000000000000004
+RBP: 00007f687c6d97bc R08: 00007f68743c0700 R09: 0000000000000000
+R10: 00007f68743c0700 R11: 0000000000000246 R12: 00007f687c6a6258
+R13: 0032656c69662f2e R14: 69662f7375622f2e R15: 00007f687c6d97b8
+ </TASK>
 
-Without the 'object' type here, I get the following warning:
-
-Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: patternProperties:^(ethernet-)?ports$:patternProperties:^(ethernet-)?port@[0-9]+$: 'anyOf' conditional failed, one must be fixed:
-        'type' is a required property
-        '$ref' is a required property
-        hint: node schemas must have a type or $ref
-        from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-./Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-/home/colin/src/work/linux_vsc/linux-imx/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: ignoring, error in schema: patternProperties: ^(ethernet-)?ports$: patternProperties: ^(ethernet-)?port@[0-9]+$
-
-
-I'm testing this now and I'm noticing something is going on with the
-"ref: dsa-port.yaml"
-
-
-Everything seems to work fine (in that I don't see any warnings) when I
-have this diff:
-
-
-diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index 20312f5d1944..db0122020f98 100644
---- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yam
-@@ -156,8 +156,7 @@ patternProperties:
-
-     patternProperties:
-       "^(ethernet-)?port@[0-9]+$":
--        type: object
--
-+        $ref: dsa-port.yaml#
-         properties:
-           reg:
-             description:
-@@ -165,7 +164,6 @@ patternProperties:
-               for user ports.
-
-         allOf:
--          - $ref: dsa-port.yaml#
-           - if:
-               required: [ ethernet ]
-             then:
-
-
-
-This one has me [still] scratching my head...
-
-
-
-> 
-> > -        description: Ethernet switch ports
-> > -
-> > -        unevaluatedProperties: false
-> >           properties:
-> >             reg:
-> 
-> Arınç
