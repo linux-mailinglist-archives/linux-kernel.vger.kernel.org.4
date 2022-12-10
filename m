@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFAD648E59
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C334A648E5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 12:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLJLMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 06:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S229732AbiLJLSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 06:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLJLM1 (ORCPT
+        with ESMTP id S229665AbiLJLSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 06:12:27 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EB513DEB
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:12:26 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id s8so10941173lfc.8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:12:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nUWe/lJzYpuKf3Av5zO7RUZ3TI86aWXIsye1tEfPo2I=;
-        b=lRAApWHEYfBVlOkenByx10ySgUnLtkzYn9E/OZuRAGGBLu977yOpGONJe/M49M9EQW
-         7u0Yoi272EPu/9rBqhtY+N9IE9qd0zDcAVmDCSjAOfhZ2sBB7egXo73DWa6YKYXZxJcp
-         TxAuH2lKPKmtttQEhMovZqKjJ3KRNrMAN4MO7JYCI0THGjXpLI/sSDE/KxnszCJBeHNv
-         dzPARVRC05sFmBgLafXkQ5jrMR3x8HEs9wKqAWbqdKA8M9DOsQyZ96QpNPZcGhoNLNNf
-         /fbx8dS8KB4DIRuSsC2u3XaeeQ1Eb27LgGLMi2Sl/aajv1JAx0vly5DScFlRg4ve7Ys0
-         ss9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUWe/lJzYpuKf3Av5zO7RUZ3TI86aWXIsye1tEfPo2I=;
-        b=g07jWboRL8hAdoeg/j/PxjsoPhfq9ARx/CPnDK4Qy4+n44mIMvIlvMzhnnqKAfE3OC
-         ICjHYiAnlIlm2EJNjThHG1nGcrU65rTHXLA6lTgbxUwZzXWJonItApM3stHIOnMmq6+W
-         n815GRhW6PYB3U9aKhQl1e7kyqZHiX2oNfQgSDIMHmXo49dZFBHU2QMq7zJQ4vsvsi0a
-         jHCR1KXiYjBeILZDAnHEED3+zeY7z4pGOZyZSW6hVsr5Qbk5dQBdZKs2NbH25+QPKK6P
-         j69Cqhyq6BJ2X4xYALlGhKTq3UCV4hfHE8B70YBjIL3Wn8QUm7gH3El7rTQ7C+EKPvZm
-         elxQ==
-X-Gm-Message-State: ANoB5pm2mT9v39fCObR3C9Uj8aK+whUJEJ3wBFlL5N69Xz9HlZNqPdgI
-        lEZ0ykP/xSE+0l7KaXD5qkRe+g==
-X-Google-Smtp-Source: AA0mqf4tosMB9oGs48hvCQtQJRrjgm7uRLf0m5dafks3wVJH8awhOCaRWT1jU2K4y5VBxFqJtvdzFA==
-X-Received: by 2002:a05:6512:2215:b0:4b5:4606:7ae3 with SMTP id h21-20020a056512221500b004b546067ae3mr3403483lfu.46.1670670744618;
-        Sat, 10 Dec 2022 03:12:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v21-20020ac25935000000b0049771081b10sm680500lfi.31.2022.12.10.03.12.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 03:12:24 -0800 (PST)
-Message-ID: <a03675e1-3456-54a2-d362-08f06937f80f@linaro.org>
-Date:   Sat, 10 Dec 2022 12:12:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: mfd: x-powers,axp152: Document the
- AXP1530 variant
-Content-Language: en-US
-To:     Martin Botka <martin.botka@somainline.org>, martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Sat, 10 Dec 2022 06:18:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC6E1AF2F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 03:18:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17BD9B82A53
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 11:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00BDC433D2;
+        Sat, 10 Dec 2022 11:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670671096;
+        bh=2ol2CYikgIYVfVb+OZiZSB+xwMyqaLEDiIfsEIqMMHk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IRXwJzG5tMMKaadAVZ+PcfLGh9BTuFHJX08H6Sc6kTynyxsZOMM8gw8o8kpOlLYAj
+         F1TkATzT9Jrv2AKL28Cnm+dvydIYU3RONnQ78BmIF6Mq03PpSpyKBz4qsZasO45Yo7
+         nSq5R3vNDfBybRW+arijzqeplXYbj/E1RCn9lIOjMnjkdpx7Ybt2ELEAHsBhj3EaBZ
+         GB+zNQ5a4/PovtZIvbHpHhjADiuELKffmgv7VwmrPNYxuj5iErELcWDtwy2HAgfzwo
+         OsYZCGfxebtYlG1yohwGwzDG1YeC6YypJHdPgNYPD3JIIc8Y04F/aahYlBf1Hw289z
+         ncclXffxQxU2g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p3xry-00BlMm-B4;
+        Sat, 10 Dec 2022 11:18:14 +0000
+Date:   Sat, 10 Dec 2022 11:16:37 +0000
+Message-ID: <87edt7fqzu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Clark <james.clark@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Cc:     kvmarm@lists.linux.dev, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
-References: <20221209234654.1082522-1-martin.botka@somainline.org>
- <20221209234654.1082522-2-martin.botka@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221209234654.1082522-2-martin.botka@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 1/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
+In-Reply-To: <Y5N3R+w3GF94hxHa@google.com>
+References: <20221209164446.1972014-1-james.clark@arm.com>
+        <20221209164446.1972014-2-james.clark@arm.com>
+        <Y5N3R+w3GF94hxHa@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: james.clark@arm.com, oliver.upton@linux.dev, kvmarm@lists.linux.dev, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,34 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/12/2022 00:46, Martin Botka wrote:
-> AXP1530 is a PMIC used on board BIQU CB1 SoM
+On Fri, 09 Dec 2022 17:58:31 +0000,
+Oliver Upton <oliver.upton@linux.dev> wrote:
 > 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
-
-What are the changes against v1? Nothing in cover letter, nothing here.
-
-
->  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> On Fri, Dec 09, 2022 at 04:44:46PM +0000, James Clark wrote:
+> > ARMV8_PMU_PMCR_N_MASK is an unshifted value which results in the wrong
+> > reset value for PMCR_EL0, so shift it to fix it.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> index b7a8747d5fa0..893a1802116c 100644
-> --- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-> @@ -92,6 +92,7 @@ properties:
->            - x-powers,axp806
->            - x-powers,axp809
->            - x-powers,axp813
-> +          - x-powers,axp1530
+> That's just mean. *_MASK tends to be a shifted mask, although it would
+> appear that asm/perf_event.h does not follow this convention. Fixing
+> that would be nice (as I'm sure somebody else will get burned by this),
+> but for the sake of an immediate fix:
 
-Put in alphabetical order.
+Well, that'll teach me the usual lesson: last minute changes without
+full non-regression testing are bound to end in disaster.
 
->        - items:
->            - const: x-powers,axp228
->            - const: x-powers,axp221
+> 
+> > This fixes the following error when running qemu:
+> > 
+> >   $ qemu-system-aarch64 -cpu host -machine type=virt,accel=kvm -kernel ...
+> > 
+> >   target/arm/helper.c:1813: pmevcntr_rawwrite: Assertion `counter < pmu_num_counters(env)' failed.
+> > 
+> > Fixes: 292e8f149476 ("KVM: arm64: PMU: Simplify PMCR_EL0 reset handling")
+> > Signed-off-by: James Clark <james.clark@arm.com>
+> 
+> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
 
-Best regards,
-Krzysztof
+Thanks both. I'll queue that ASAP as a fix.
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
