@@ -2,196 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777A4648CFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 04:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D7E648CFF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 04:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLJDvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 22:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S229815AbiLJDxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 22:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiLJDvJ (ORCPT
+        with ESMTP id S229605AbiLJDxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 22:51:09 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8CE60EB7;
-        Fri,  9 Dec 2022 19:51:05 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id jl24so6850253plb.8;
-        Fri, 09 Dec 2022 19:51:05 -0800 (PST)
+        Fri, 9 Dec 2022 22:53:19 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707AB1573E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 19:53:18 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id g14so2889193ljh.10
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 19:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Z1BxGqgHITzxO8Bw1N1uCOjsI728aaE4AlHdATKeMY=;
-        b=f+DxILPCiJEbc3+xycVStaiFr60dHklhd9G068nwGG1d6SfL1d7MTVFBW2kC027c/X
-         kD+IQ/CMX1QBrt2LoumioD57wI/07k2HHIstp1PZC5Ci/MsZlgtDnT948fkpgqEOuRPE
-         hN+kSiqO0Lc/uKx6qc94XL40oyB5c5EWEZr9yVpZbfF4ZGguSe8hXqtJRL5jOOAmRt7t
-         ZkXCy6oL8Nf4xkkGkcWAFGzw2dzaDF832rFg1t6KjkkEEuGl2gyz5lFFFJ5kAxUhoGmq
-         0GZ6tuqlSXH3zK12qTVApHROmJaTU+t1lMIgtlReHTcARzZRLQcNyl+dKyQzXFxBTYmK
-         XhZw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RDv4NbsPAYs3WKpRNnfyHzyOTn53LRoGs77iSY7uqyE=;
+        b=GnFcUoF0xhVZqBs4jqSZsM4qyT8+w6K5+jIDnA0cERsIOKSb5yzvON7E9pMJKhYBqI
+         QZ5wT2ntBy6Mr3b3+GY47Ar8pLjit+RdbYeQGZjGvcmBB57YUAOuv+0bpkVVG2biElhk
+         /eHvwwU6BRP79HJKX6GpPLjrruw60b863FZnRfHLVrraVDNUauIlhrTKoE5YgAZKS+j2
+         u/Ij4wUAaofMBlBiE0IsdTN0AP50zQdrHKEPkEBMCxTGvqXAeHHEgeq4rBh3VFY79Gdx
+         FIpdkgP6A1CKVb7pwylH3YuxEVL8BUinqK/Kp9+ulButaYBwGrokQ8k6BsAGmgiIuMtk
+         Gwsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Z1BxGqgHITzxO8Bw1N1uCOjsI728aaE4AlHdATKeMY=;
-        b=kj3eVe4xufZGvjh6CZaYw4QBiL8SP4IWjqx68kdy0nkR2wv+ty3suVsqROjAoBJZ6L
-         SFxEXhNhYHkxb3TlIXIPepWiRBwQckS5jvGu4ij14J8NQBdVV2XMKZA+9MwaUS7Ku0Kh
-         SOweX4PQXbpRAKvHIn6VvMaS3sEaPboQ8oAgmYXqKPHlEsCXNdHnotHwODGfV3qBZNLo
-         TszziLaPDsVhwhxCk1+QVB0awauEEJXkFo5amryjJFoXDtntHo6ueKefKjv0TohrLz3j
-         eNaODaNNy7WzBe60KUIEydSJCfmwxVT0Vw48PFwBmicdV1rjO9Iz9FDx/+yn6AmQMfCh
-         Ktwg==
-X-Gm-Message-State: ANoB5pk1JRxspA7DwU54VrJzteNReUglWqmg8Jdo7euxrXarsECEPJ/x
-        eUVNScD5TgW3bgXrujoLQQc=
-X-Google-Smtp-Source: AA0mqf4rCVdO8UL0ztSnV+pTxDUcUzFbCj5XZieEIPqwQnHFA5oe7BYNe4+ZjB0ris45py/m6zJN1g==
-X-Received: by 2002:a17:902:7890:b0:188:fc0c:cdb1 with SMTP id q16-20020a170902789000b00188fc0ccdb1mr8238689pll.16.1670644265334;
-        Fri, 09 Dec 2022 19:51:05 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-76.three.co.id. [180.214.232.76])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902a3cf00b0016d9b101413sm1993404plb.200.2022.12.09.19.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 19:51:03 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 18D54103E00; Sat, 10 Dec 2022 10:50:59 +0700 (WIB)
-Date:   Sat, 10 Dec 2022 10:50:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/21] documentation, blksnap:  Block Devices
- Snapshots Module
-Message-ID: <Y5QCI9rXE+HW03ci@debian.me>
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-5-sergei.shtepa@veeam.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RDv4NbsPAYs3WKpRNnfyHzyOTn53LRoGs77iSY7uqyE=;
+        b=qo+TNv8cjW/ZFxoeoY7n5t4s+TGhUqR0GZl+n17sSEPcms4063O9H2ArAgV9GR20RP
+         03hdvNO7bw4rdT+1ZMvRD4PKN1ZvqbrfJtdreIByeWBxnFUaKpH5jnzOVKdbs0Eid77N
+         y33uHpdAiKNA+bmJt3osXf0oj7C93GibmaeVZTapVGdnuV810rKumPU12aWNF9W1QHPZ
+         O3aXXl4qn18M9Ot6I7xiVk4lBpHC3wGHtunQlVUUWxQ3VzxZQcCaMkNXpJQcZuSHnh9j
+         9zaipLbxEYWlMag+wyAm2NyDVG3f/3EmG+nEMKRSbMNklNVuLUjD6Vgx0jz1u5SyACiI
+         0cBg==
+X-Gm-Message-State: ANoB5pnXprMtVyH/wkH/zqSR2AWAXn8VfXcjP7lLvBt3+cplgvhTmu93
+        Jd55EFmrfwMDt6OMLIIut3f4nF7tkuXE2jYij9b5rQ==
+X-Google-Smtp-Source: AA0mqf4EtRKxKDGmET7yKxaCD2fZeNFEoZOBuc5UR05LsviY9qdHGI9xZcXhXdA2P3LySKF/h7ACvTXSXrWy3670Jnc=
+X-Received: by 2002:a05:651c:1681:b0:279:f29b:3dfc with SMTP id
+ bd1-20020a05651c168100b00279f29b3dfcmr6533243ljb.470.1670644396550; Fri, 09
+ Dec 2022 19:53:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="740pxZ5UMCIx1ZPc"
-Content-Disposition: inline
-In-Reply-To: <20221209142331.26395-5-sergei.shtepa@veeam.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221207225435.1273226-1-lixiaoyan@google.com>
+ <20221207225435.1273226-2-lixiaoyan@google.com> <Y5EwunX89Nq59vf0@x130>
+In-Reply-To: <Y5EwunX89Nq59vf0@x130>
+From:   Coco Li <lixiaoyan@google.com>
+Date:   Fri, 9 Dec 2022 19:53:05 -0800
+Message-ID: <CADjXwjg8iVQuviKNwf9b2aKeD3SQcUhd4o1O4XL6ncc87wcjkA@mail.gmail.com>
+Subject: Re: [RFC net-next v5 2/2] bnxt: Use generic HBH removal helper in tx path
+To:     Saeed Mahameed <saeed@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I agree that this function isn't efficient for drivers who already
+copy headers, which can just copy over the needed parts of the header
+as you mentioned. However, for drivers that need HBH header removed in
+place, it would be a nice function to have (and it reduces code
+duplication, see function be reused for GSO path).
 
---740pxZ5UMCIx1ZPc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Dec 09, 2022 at 03:23:14PM +0100, Sergei Shtepa wrote:
-> The document contains:
-> * Describes the purpose of the mechanism
-> * Description of features
-> * Description of algorithms
-> * Recommendations about using the module from the user-space side
-> * Reference to module interface description
-
-The patch subject should be "Documentation: document Block Devices
-Snapshots Module".
-
-Don't forget to write the description in imperative mood instead.
-
-> +Introduction
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +At first glance, there is no novelty in the idea of creating snapshots f=
-or
-> +block devices. The Linux kernel already has mechanisms for creating snap=
-shots.
-> +Device Mapper includes dm-snap, which allows to create snapshots of block
-> +devices. BTRFS supports snapshots at the file system level. However, both
-> +of these options have flaws that do not allow to use them as a universal
-> +tool for creating backups.
-> +
-> +Device Mapper flaws:
-> +
-> +- Block devices must have LVM markup.
-> +  If no logical volumes were created during system installation, then dm=
--snap
-> +  cannot be applied.
-> +- To store snapshot differences of one logical volume, it is necessary to
-> +  reserve a fixed range of sectors on a reserved empty logical volume.
-> +  Firstly, it is required that the system has enough space unoccupied by=
- the
-> +  file system, which rarely occurs on real servers. Secondly, as a rule,
-> +  it is necessary to create snapshots for all logical volumes at once, w=
-hich
-> +  requires dividing this reserved space between several logical volumes.
-> +  This space can be divided equally or proportionally to the size. But
-> +  the load on different disks is usually uneven. As a result, a snapshot
-> +  overflow may occur for one of the block devices, while for others all
-> +  the reserved space may remain free. This complicates management of the
-> +  difference storage and makes it almost impossible to create a coherent
-> +  snapshot of multiple logical volumes.
-> +
-> +BTRFS flaws:
-> +
-> +- Snapshots create a persistent image of the file system, not a block de=
-vice.
-> +  Such a snapshot is only applicable for a file backup.
-> +- When synchronizing the snapshot subvolume with the backup subvolume, r=
-eading
-> +  the differences leads to random access to the block device, which leads
-> +  to decrease in efficiency compared to direct copying of the block devi=
-ce.
-> +- BTRFS allows to get an incremental backup [#btrfs_increment]_, but it =
-is
-> +  necessary to keep a snapshot of the previous backup cycle on the syste=
-m,
-> +  which leads to excessive consumption of disk space.
-> +- If there is not enough free space on the file system while holding the
-> +  snapshot, new data cannot be saved, which leads to a server malfunctio=
-n.
-> +
-> +Features of the blksnap module:
-> +
-> +- Change tracker
-> +- Snapshots at the block device level
-> +- Dynamic allocation of space for storing differences
-> +- Snapshot overflow resistance
-> +- Coherent snapshot of multiple block devices
-
-There is a jump from drawbacks of existing method to blksnap features.
-Before introducing the latter, there should have been blksnap
-description and how it solves the drawbacks. Also, the features list
-above is redundant due to features section which describes each of them.
-
-> +Static C++ library
-> +------------------
-> +
-> +The [#userspace_libs]_ library was created primarily to simplify creatio=
-n of
-
-"The libblksnap [#userspace_libs]_ library was ..."
-
-
-> +Module interface description
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> +
-> +.. kernel-doc:: include/uapi/linux/blksnap.h
-
-IMO this section should be placed after "How to use" section, because
-it's quite odd to add another info after references section.
-
-Thanks.=20
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---740pxZ5UMCIx1ZPc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5QCHwAKCRD2uYlJVVFO
-o28kAP9cdVAiAeRGozPZ57xf/LM6z/ASMVfrquTf9kSnycL3NAEAoW6WPu+U1KsR
-azbIOnLYwKahdIXUoQ0AkDbSqBO5Vgw=
-=L60b
------END PGP SIGNATURE-----
-
---740pxZ5UMCIx1ZPc--
+On Wed, Dec 7, 2022 at 4:33 PM Saeed Mahameed <saeed@kernel.org> wrote:
+>
+>
+> On 07 Dec 14:54, Coco Li wrote:
+> >Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
+> >for IPv6 traffic. See patch series:
+> >'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+> >
+> >This reduces the number of packets traversing the networking stack and
+> >should usually improves performance. However, it also inserts a
+> >temporary Hop-by-hop IPv6 extension header.
+> >
+> >Using the HBH header removal method in the previous path, the extra header
+>                                                       ^ patch
+> >be removed in bnxt drivers to allow it to send big TCP packets (bigger
+> >TSO packets) as well.
+> >
+>
+> I think Eric didn't expose this function because it isn't efficient for
+> drivers who are already processing the headers separately from payload for
+> LSO packets .. the trick is to have an optimized copy method depending on
+> your driver xmit function, usually you would just memcpy the TCP header over
+> the HBH exactly at the point you copy/process those headers into the HW
+> descriptor.
+>
+> >Tested:
+> >Compiled locally
+> >
+> >To further test functional correctness, update the GSO/GRO limit on the
+> >physical NIC:
+> >
+> >ip link set eth0 gso_max_size 181000
+> >ip link set eth0 gro_max_size 181000
+> >
+> >Note that if there are bonding or ipvan devices on top of the physical
+> >NIC, their GSO sizes need to be updated as well.
+> >
+> >Then, IPv6/TCP packets with sizes larger than 64k can be observed.
+> >
+> >Big TCP functionality is tested by Michael, feature checks not yet.
+> >
+> >Tested by Michael:
+> >I've confirmed with our hardware team that this is supported by our
+> >chips, and I've tested it up to gso_max_size of 524280.  Thanks.
+> >
+> >Tested-by: Michael Chan <michael.chan@broadcom.com>
+> >Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+> >Signed-off-by: Coco Li <lixiaoyan@google.com>
+> >---
+> > drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
+> > 1 file changed, 25 insertions(+), 1 deletion(-)
+> >
+> >diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> >index 0fe164b42c5d..6ba1cd342a80 100644
+> >--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> >+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> >@@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
+> >                       return NETDEV_TX_BUSY;
+> >       }
+> >
+> >+      if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
+> >+              goto tx_free;
+> >+
+> >       length = skb->len;
+> >       len = skb_headlen(skb);
+> >       last_frag = skb_shinfo(skb)->nr_frags;
+> >@@ -11315,6 +11318,7 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+> >                             u8 **nextp)
+> > {
+> >       struct ipv6hdr *ip6h = (struct ipv6hdr *)(skb->data + nw_off);
+> >+      struct hop_jumbo_hdr *jhdr;
+> >       int hdr_count = 0;
+> >       u8 *nexthdr;
+> >       int start;
+> >@@ -11342,9 +11346,27 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+> >
+> >               if (hdrlen > 64)
+> >                       return false;
+> >+
+> >+              /* The ext header may be a hop-by-hop header inserted for
+> >+               * big TCP purposes. This will be removed before sending
+> >+               * from NIC, so do not count it.
+> >+               */
+> >+              if (*nexthdr == NEXTHDR_HOP) {
+> >+                      if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
+> >+                              goto increment_hdr;
+> >+
+> >+                      jhdr = (struct hop_jumbo_hdr *)nexthdr;
+> >+                      if (jhdr->tlv_type != IPV6_TLV_JUMBO || jhdr->hdrlen != 0 ||
+> >+                          jhdr->nexthdr != IPPROTO_TCP)
+> >+                              goto increment_hdr;
+> >+
+> >+                      goto next_hdr;
+> >+              }
+> >+increment_hdr:
+> >+              hdr_count++;
+> >+next_hdr:
+> >               nexthdr = &hp->nexthdr;
+> >               start += hdrlen;
+> >-              hdr_count++;
+> >       }
+> >       if (nextp) {
+> >               /* Caller will check inner protocol */
+> >@@ -13657,6 +13679,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >               dev->features &= ~NETIF_F_LRO;
+> >       dev->priv_flags |= IFF_UNICAST_FLT;
+> >
+> >+      netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+> >+
+> > #ifdef CONFIG_BNXT_SRIOV
+> >       init_waitqueue_head(&bp->sriov_cfg_wait);
+> > #endif
+> >--
+> >2.39.0.rc0.267.gcb52ba06e7-goog
+> >
