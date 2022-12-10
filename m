@@ -2,135 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53011648BF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B169B648BFA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiLJAxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 19:53:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S229913AbiLJAyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 19:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLJAxh (ORCPT
+        with ESMTP id S229468AbiLJAys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 19:53:37 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0F09764E;
-        Fri,  9 Dec 2022 16:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670633616; x=1702169616;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TnfD0mZeAmpMteacT6BU2lU8PJ8wEOvUACMJDMCbvLU=;
-  b=Nw1ViKztQzGLZwlBg+YKIZwWaQeK3D8s07fimCl4UJqaKcxCdCz3MfIt
-   4DAAXX23lyx6/hyRdK7prInqXIlhqJpF2j26Ocz7Mu8MTC82SEuNTn2FQ
-   U7hpgDzaMURZt9EGu25D6UFX7l1nYeFt7zlObJWc75bEjH/MNAddBkJfD
-   pvsHC6BQcYAii1sLMN2qwIX5cwSl3/iROuyG+IuJ3Sw4k5EzpsBWoWBCb
-   5hxN3s8s9NCV+vUHVF5TsE88zpb/WgQS1CNJkeIxa3hLRTueoCwZKOMg4
-   1vlupKUVdqwbmonDX8Zc7vLqb/lwAb7yc+1sKSajSfvkXVig9gmx52RAf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="403833308"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="403833308"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 16:53:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="597895810"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="597895810"
-Received: from rrode-mobl1.amr.corp.intel.com (HELO [10.251.24.37]) ([10.251.24.37])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 16:53:35 -0800
-Message-ID: <240a1988-4d4a-87dd-8d4f-f9e198660175@linux.intel.com>
-Date:   Fri, 9 Dec 2022 16:53:34 -0800
+        Fri, 9 Dec 2022 19:54:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8C9764F;
+        Fri,  9 Dec 2022 16:54:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F99623C2;
+        Sat, 10 Dec 2022 00:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A419C433D2;
+        Sat, 10 Dec 2022 00:54:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670633686;
+        bh=FP1qLoUU0jd+2nXYMOllgA1lD6uDuIS62Q6du/B++M0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XZqF4zvTXtTvVVFsAGnuBfiFvso/jnHfd/eziHuArjtHt+s5JXLUTDp5I4AkkpLHy
+         ruCo2bxFp9cqtBUwvAhdzzUCalejLFBtRcLDnhwdFo/s/DGzO1hLUSUTRdL//JtP6e
+         G2QU/HzsVH8ABQKR3KMMYYTkscuWN8sRNhEH24BLjv+mizndCQd8z21Omu9dWtWlTT
+         4eNpZCMxkxmh44Y0ksmlwe9WoWuyHOKu01jQbvNKH1MMtj1O4QK6hJOs3tITP6hTAC
+         EJcZl2Ol1qtaubE669lpzktaF/zJBb+X8j3sC9npmNMgduR0S23DEZTCz7OuGjyRk9
+         NsGmgPKX49sow==
+Date:   Fri, 9 Dec 2022 16:54:44 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
+        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+        vigneshr@ti.com, s-vadapalli@ti.com, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: ethernet: ti: am65-cpsw: Fix PM runtime
+ leakage in am65_cpsw_nuss_ndo_slave_open()
+Message-ID: <Y5PY1Cdp3px3vRqE@x130>
+References: <20221208105534.63709-1-rogerq@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v3] PCI/portdrv: Allow AER service only for Root Ports &
- RCECs
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221210002922.1749403-1-helgaas@kernel.org>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221210002922.1749403-1-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221208105534.63709-1-rogerq@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08 Dec 12:55, Roger Quadros wrote:
+>Ensure pm_runtime_put() is issued in error path.
+>
+>Reported-by: Jakub Kicinski <kuba@kernel.org>
+>Signed-off-by: Roger Quadros <rogerq@kernel.org>
 
 
-On 12/9/22 4:29 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Previously portdrv allowed the AER service for any device with an AER
-> capability (assuming Linux had control of AER) even though the AER service
-> driver only attaches to Root Port and RCECs.
-> 
-> Because get_port_device_capability() included AER for non-RP, non-RCEC
-> devices, we tried to initialize the AER IRQ even though these devices
-> don't generate AER interrupts.
-> 
-> Intel DG1 and DG2 discrete graphics cards contain a switch leading to a
-> GPU.  The switch supports AER but not MSI, so initializing an AER IRQ
-> failed, and portdrv failed to claim the switch port at all.  The GPU itself
-> could be suspended, but the switch could not be put in a low-power state
-> because it had no driver.
-> 
-> Don't allow the AER service on non-Root Port, non-Root Complex Event
-> Collector devices.  This means we won't enable Bus Mastering if the device
-> doesn't require MSI, the AER service will not appear in sysfs, and the AER
-> service driver will not bind to the device.
-> 
-> Link: https://lore.kernel.org/r/20221207084105.84947-1-mika.westerberg@linux.intel.com
-> Based-on-patch-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
+Reviewed-by: Saeed Mahameed <saeed@kernel.org>
 
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-> 
-> This is a v3 based on Mika's patch at
-> https://lore.kernel.org/r/20221207084105.84947-1-mika.westerberg@linux.intel.com
-> 
-> I wouldn't normally kibbitz like this, but I'm hoping to squeeze this into
-> the v6.2 merge window.
-> 
-> Changes from v2:
-> 
->   * Test the device type in get_port_device_capability() instead of
->     pcie_init_service_irqs().  The benefits are to keep the device type
->     checking together (this is similar to the PME test), avoid enabling Bus
->     Mastering unnecessarily, avoid exposing the portdrv AER service in
->     sysfs, and preventing the AER service driver from binding to devices it
->     doesn't need to.
-> 
->  drivers/pci/pcie/portdrv.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index a6c4225505d5..8b16e96ec15c 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -232,7 +232,9 @@ static int get_port_device_capability(struct pci_dev *dev)
->  	}
->  
->  #ifdef CONFIG_PCIEAER
-> -	if (dev->aer_cap && pci_aer_available() &&
-> +	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-> +             pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
-> +	    dev->aer_cap && pci_aer_available() &&
->  	    (pcie_ports_native || host->native_aer))
->  		services |= PCIE_PORT_SERVICE_AER;
->  #endif
+[...]
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>@@ -622,6 +623,10 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
+> error_cleanup:
+> 	am65_cpsw_nuss_ndo_slave_stop(ndev);
+
+BTW, while looking at the ndo_slave_stop() call, it seems to abort if 
+am65_cpsw_nuss_common_stop() fails, but looking deeper at that and it seems 
+am65_cpsw_nuss_common_stop() can never fail, so you might want to fix that.
+
+> 	return ret;
+>+
+>+runtime_put:
+>+	pm_runtime_put(common->dev);
+>+	return ret;
+> }
+>
+> static void am65_cpsw_nuss_rx_cleanup(void *data, dma_addr_t desc_dma)
+>-- 
+>2.34.1
+>
