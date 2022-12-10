@@ -2,123 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D38648C06
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E60648C32
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 02:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLJA5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 19:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S229822AbiLJBJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 20:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiLJA5i (ORCPT
+        with ESMTP id S229545AbiLJBJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 19:57:38 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C63D83
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 16:57:37 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id k6-20020a92c246000000b003035797fa8cso992322ilo.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 16:57:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OQCSmNJ3Xc0dOvaQuhHN4Oz2uPX+uvhvUhd62uhM/9k=;
-        b=BfXDY8weXm98C5qgaRg/khs8onI/uUmHgojZUqgwCxzmglkO8lf3j1m4DYjFkneW5X
-         AG30pv/wpbHbV7glhaR07UFNL4gEqdspdYfTtZshnog2P/9UOcFJGAkfRncdbDxglxve
-         TeBFwrUMFIM+WKqFog9SrcrkcuXRAiDvXTfvVjuHJlQPnAoTN34FI2UD7Dk1EdQW/RvG
-         YQFaT6f3hzNAbFN15hFAJ6zYwuydYJexI1KUXGsD1ZWeuPpXlccn0sT6MOp/UK9Heumo
-         /flGJdfRvfiuEiAxpPdrloIX4bECkgpnDLp55z1NYxGVPiOnoH3lC7Pg1j8ClVm8E/jo
-         QYsA==
-X-Gm-Message-State: ANoB5pmFaWTRh+BI5hBKf+pKSwDtOJzWmNdZOjg98Esl2tHbZLJG82nc
-        AmVkn2eba7ShPZ4IyHo/2tN7djNUk5THGNOtaMOy5Sr4zI1z
-X-Google-Smtp-Source: AA0mqf4io54+Avwf2gqBz+hJLuZyKNGq0VSSL9wcWnqxD2PXA/Ztg2riR/hYBDvNH4AMr5u6Edgg8BgqqOLGEaoQ49mxyvg/4Qll
+        Fri, 9 Dec 2022 20:09:48 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CB7F010;
+        Fri,  9 Dec 2022 17:09:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MUb4yQoHyZ6YBjsxLLL/BLZnhDgIi+qZpS97jRSQv/s=; b=RyB09IfH8GMuhNGE4qhj3s11XX
+        Gh48husrdvAU3Nq/AusbekicUXfnBsLWplnp3iq8CH/Q6NYDXhPtP5EZUphDlpbmZ/sH6d2VplG/9
+        nK/LAAqwsagN7OXoCAcL7SiyiTJB1GVMAsH4BZm3YQdG+JQ2Aa1J4XC53KSa9Pm5U4XulnbLaQcD5
+        VnKQ1Lksb2zdm5MlPcidD3yjZgQ/J2xCTgzjEKNOQwu5P2KrRMHOW41FAfn/sIxp4v2LeK0ZpBXip
+        00gUhC537DhMlOCiO0BQIyzw3Yj+bPUkViRV9qrlfjxllKyrnm0Pso+eGHsf0O1ftJnN+skBMIfRr
+        v298eRdQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p3oN0-00CzOy-0z; Sat, 10 Dec 2022 01:09:38 +0000
+Date:   Fri, 9 Dec 2022 17:09:37 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH] livepatch: Call klp_match_callback() in
+ klp_find_callback() to avoid code duplication
+Message-ID: <Y5PcUYXGY4ct/FXL@bombadil.infradead.org>
+References: <20221207032304.2017-1-thunder.leizhen@huawei.com>
+ <Y5L75x+W1NrWCOcm@alley>
+ <aed3ca41-0f27-b44e-b95c-f7ed0a8ef468@huawei.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a0c3:0:b0:38a:d70:cd27 with SMTP id
- i3-20020a02a0c3000000b0038a0d70cd27mr16150140jah.226.1670633856345; Fri, 09
- Dec 2022 16:57:36 -0800 (PST)
-Date:   Fri, 09 Dec 2022 16:57:36 -0800
-In-Reply-To: <0000000000001a6b6705e9b3533d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008eac3f05ef6ec145@google.com>
-Subject: Re: [syzbot] WARNING in nilfs_segctor_do_construct
-From:   syzbot <syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, stable-commits@vger.kernel.org,
-        stable@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aed3ca41-0f27-b44e-b95c-f7ed0a8ef468@huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Dec 09, 2022 at 07:29:56PM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/12/9 17:12, Petr Mladek wrote:
+> > On Wed 2022-12-07 11:23:04, Zhen Lei wrote:
+> >> The implementation of function klp_match_callback() is identical to the
+> >> partial implementation of function klp_find_callback(). So call function
+> >> klp_match_callback() in function klp_find_callback() instead of the
+> >> duplicated code.
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > 
+> > Thanks for cleaning this.
+> > 
+> > Reviewed-by: Petr Mladek <pmladek@suse.com>
+> 
+> Oh, sorry, I realized that I had forgotten to add:
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> 
+> Hi Luis:
+>   Can you help me add it?
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c56bdb880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=fbb3e0b24e8dae5a16ee
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14caa71d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1032f2b7880000
+Done!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0911b0ec76cf/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com
-
-NILFS (loop0): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
-NILFS (loop0): nilfs_sufile_update: invalid segment number: 53
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
-WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
-WARNING: CPU: 0 PID: 3149 at fs/nilfs2/segment.c:1482 nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
-Modules linked in:
-CPU: 0 PID: 3149 Comm: segctord Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
-pc : nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
-pc : nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
-lr : nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
-lr : nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
-lr : nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
-sp : ffff800012f6bc80
-x29: ffff800012f6bd00 x28: ffff800008f744fc x27: ffff0000c6cf9128
-x26: ffff0000c6cf9258 x25: ffff0000c9039138 x24: ffff0000ca797818
-x23: ffff0000c90390b8 x22: 00000000ffffffea x21: 0000000000000001
-x20: ffff0000cb9a8000 x19: ffff0000c9039000 x18: 000000000000027f
-x17: 0000000000000000 x16: ffff80000dbe6158 x15: ffff0000c6508000
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6508000
-x11: ff80800008f68d3c x10: 0000000000000000 x9 : ffff800008f68d3c
-x8 : ffff0000c6508000 x7 : ffff80000816678c x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefbecd0 x1 : 00000000ffffffea x0 : 0000000000000000
-Call trace:
- nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1482 [inline]
- nilfs_segctor_collect fs/nilfs2/segment.c:1534 [inline]
- nilfs_segctor_do_construct+0x6cc/0xefc fs/nilfs2/segment.c:2045
- nilfs_segctor_construct+0xa0/0x380 fs/nilfs2/segment.c:2379
- nilfs_segctor_thread_construct fs/nilfs2/segment.c:2487 [inline]
- nilfs_segctor_thread+0x180/0x634 fs/nilfs2/segment.c:2570
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 8892
-hardirqs last  enabled at (8891): [<ffff80000816681c>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
-hardirqs last  enabled at (8891): [<ffff80000816681c>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4968
-hardirqs last disabled at (8892): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (8698): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (8677): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
-
+  Luis
