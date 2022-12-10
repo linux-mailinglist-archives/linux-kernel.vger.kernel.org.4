@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF745648FFB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9F5648FFE
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 18:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiLJRQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 12:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S229655AbiLJR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 12:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiLJRQ3 (ORCPT
+        with ESMTP id S229529AbiLJR3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 12:16:29 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773F81FB;
-        Sat, 10 Dec 2022 09:16:28 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 399DF1C09F6; Sat, 10 Dec 2022 18:16:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1670692587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdQHQ5s+tXy+ERTEJcEFuFB1iLfks/vH0fSWLk/R1XU=;
-        b=dWRl/z/DQFNmcGUBaWofIwuApXxBt7IaiY7S944ChkKAygdKedlqeVYseF8xjEqlWokFQJ
-        xGboTiYgmijEegmXoNXTRBOmyxNym2ra2+/eAwFUINi7AvnUqzvsNBEZJSeyi/yvMf/aCN
-        aaeiYcOZztfN/YsfKftqmtFX/056z7k=
-Date:   Sat, 10 Dec 2022 18:16:26 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fenglin Wu <quic_fenglinw@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm7225-fairphone-fp4: configure
- flash LED
-Message-ID: <Y5S+6j1yJ62RJU/v@duo.ucw.cz>
-References: <20221209-fp4-pm6150l-flash-v1-0-531521eb2a72@fairphone.com>
- <20221209-fp4-pm6150l-flash-v1-3-531521eb2a72@fairphone.com>
+        Sat, 10 Dec 2022 12:29:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355751707B
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 09:29:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB65D60C54
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 17:29:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EE5C433EF;
+        Sat, 10 Dec 2022 17:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670693361;
+        bh=wiKXS951R0J+e00NOnz0xf3GpSwcSCJH0lNaVupW9nI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kMSpuHF7sqpW85DL5XJkXQKYMtiAuEYhuNgN51FDAJvmcdOL6MssYdhHd6lO1h87I
+         1XVMiQWszGqFcDrS9LMJOh6rxSg4vmeXEKg8z7+/dfBQlHkmmzi0utn0gKsh9J3/ga
+         fNdXeUlrSx0Bs62FCtIPqphI3/vS+bBW1ISf6lknyqvby+TIlK8sEYWPxysf/tcQFC
+         gBLSkAKMBWeSwb4Guui3Bnm2EyohjiiWpBgYsBYHKZNAEQTPPkTzeKFfkj9FaTOOot
+         OKLXUZRPEjFZ+AAqk8IQk5Ugx8LkhpZKKlpGh293g2YeHgKOAQOHQPdcQ7D1lAbz/+
+         tO8xEtS25vCMA==
+Date:   Sun, 11 Dec 2022 01:29:12 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>
+Subject: [GIT PULL] erofs updates for 6.2-rc1 (fscache part inclusive)
+Message-ID: <Y5TB6E77vbpRMhIk@debian>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>, Jingbo Xu <jefflexu@linux.alibaba.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="HG3oTbixxIVumDLy"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221209-fp4-pm6150l-flash-v1-3-531521eb2a72@fairphone.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---HG3oTbixxIVumDLy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Once the merge window opens, could you consider this pull request for
+6.2-rc1?
 
-Hi!
+In this cycle, large folios are now enabled in the iomap/fscache mode
+for uncompressed files first.  In order to do that, we've also cleaned
+up better interfaces between erofs and fscache, which are acked by
+fscache/netfs folks and included in this pull request.
 
-> Configure the pm6150l flash node for the dual flash LEDs found on FP4.
+Other than that, there are random fixes around erofs over fscache and
+crafted images by syzbot, minor cleanups and documentation updates.
 
-> +&pm6150l_flash {
-> +	status =3D "okay";
-> +
-> +	led-0 {
-> +		function =3D LED_FUNCTION_FLASH;
-> +		color =3D <LED_COLOR_ID_YELLOW>;
-> +		led-sources =3D <1>;
-> +		led-max-microamp =3D <180000>;
-> +		flash-max-microamp =3D <1000000>;
-> +		flash-max-timeout-us =3D <1280000>;
-> +	};
+Note that there could be a trivial conflict between erofs and vfs
+tree according to linux-next report [1].
 
-I'm pretty sure the flash is not yellow.
+Happy Holidays!
+Gao Xiang
 
-Plus, how is the node in /sys/class/leds called? Can you make an entry
-in Documentation/leds/well-known-leds.txt and ensure the name stays
-consistent across devices?
+[1] https://lore.kernel.org/r/20221205092415.56cc6e19@canb.auug.org.au/
 
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
 
---HG3oTbixxIVumDLy
-Content-Type: application/pgp-signature; name="signature.asc"
+  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY5S+6gAKCRAw5/Bqldv6
-8mv/AJ0bt0t8Kg/jefzjZ1+T0YiFck3AwQCgm0aNvzYQBqjPy6v98GKiO6emCiw=
-=zhQd
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.2-rc1
 
---HG3oTbixxIVumDLy--
+for you to fetch changes up to c505feba4c0d76084e56ec498ce819f02a7043ae:
+
+  erofs: validate the extent length for uncompressed pclusters (2022-12-07 10:56:31 +0800)
+
+----------------------------------------------------------------
+Changes since the last update:
+
+ - Enable large folios for iomap/fscache mode;
+
+ - Avoid sysfs warning due to mounting twice with the same fsid and
+   domain_id in fscache mode;
+
+ - Refine fscache interface among erofs, fscache, and cachefiles;
+
+ - Use kmap_local_page() only for metabuf;
+
+ - Fixes around crafted images found by syzbot;
+
+ - Minor cleanups and documentation updates.
+
+----------------------------------------------------------------
+Chen Zhongjin (1):
+      erofs: Fix pcluster memleak when its block address is zero
+
+Gao Xiang (5):
+      erofs: update documentation
+      erofs: clean up cached I/O strategies
+      erofs: use kmap_local_page() only for erofs_bread()
+      erofs: fix missing unmap if z_erofs_get_extent_compressedlen() fails
+      erofs: validate the extent length for uncompressed pclusters
+
+Hou Tao (1):
+      erofs: check the uniqueness of fsid in shared domain in advance
+
+Jingbo Xu (5):
+      erofs: enable large folios for iomap mode
+      fscache,cachefiles: add prepare_ondemand_read() callback
+      erofs: switch to prepare_ondemand_read() in fscache mode
+      erofs: support large folios for fscache mode
+      erofs: enable large folios for fscache mode
+
+ Documentation/filesystems/erofs.rst |  38 ++--
+ fs/cachefiles/io.c                  |  77 ++++---
+ fs/erofs/data.c                     |  10 +-
+ fs/erofs/fscache.c                  | 408 ++++++++++++++++--------------------
+ fs/erofs/inode.c                    |   2 +
+ fs/erofs/internal.h                 |  13 +-
+ fs/erofs/super.c                    |   2 +-
+ fs/erofs/xattr.c                    |   8 +-
+ fs/erofs/zdata.c                    |  80 +++----
+ fs/erofs/zmap.c                     |  15 +-
+ include/linux/netfs.h               |   8 +
+ include/trace/events/cachefiles.h   |  27 +--
+ 12 files changed, 344 insertions(+), 344 deletions(-)
