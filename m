@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA4D64918C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 00:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708B5649190
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 00:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiLJXjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 18:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S229728AbiLJXvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 18:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLJXjj (ORCPT
+        with ESMTP id S229475AbiLJXvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 18:39:39 -0500
+        Sat, 10 Dec 2022 18:51:38 -0500
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89EA12AC5;
-        Sat, 10 Dec 2022 15:39:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F170A11C28
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 15:51:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=P+spEQ7y7ZasIxb9ryrQ8rQPt1SUgFzIVniakYJnQDA=; b=BbZev/yZ9MElz9Qciq0BWl3CaP
-        YvNPVKoowz1lJpyXpdl9qFxTsH5r0hjH34FAwT1/+v0az8xNpWUMxmi2HFA7YBOQnMK0lVi/2ztwL
-        WpQDRgFb1r6S6WZCirFKuZs+oGtKSSrCOD1aJ92i3dRcHd4Vf48kVpzqGZ3bCECoAoK5IvVIFMytS
-        p3BEi1mukSRwkJzmfOv8WA+MRk4UhQyRqHl0mOAy+RLNqp5n4g2J5kNIk2FDPIHu+JU3z09vOQ/Jy
-        kQCJrLkkZR+ga6Nusgp1NWfU0dyyBD9WTtplasVrYYY0UGWF2xu0l5nLJS+QbxDrGB7ERQ9/eVztZ
-        yGIz2QQQ==;
+        bh=ko2Bdie58wq+qfL0iVpDiNVXLRQwo/jVbmX5noXhSs0=; b=AElgV/H0LOWNFHgrJZHIWZjYrx
+        7Ugtk16NVV+kKntFkQ0zS3BwRRjEGFz8WdYPlrVzhkSUbkoIhoTzOTyNU+5zYlMNLdkphZ/BPrBFO
+        4ZQqvzPAf8CP00IitZRYnn9uGR9Gmc3NU4zzT11+WU5kZKGRnge9xhT5vD3cZcSE6tpdd1UvyJsiP
+        Nmo6mzzxBQqdOsY3VQTrLFOLfulbq5N5NfabZ3MnojOMFi4Qf0tkJRT34uMYdgYi5sQrOONhMsX2z
+        8Fa17RQNez5SNU22Ht4FD1n0NDngpko2trWQh/aNgFcuP5DTjepFFPaXxP7RtDo1wmVYykCOB3Cef
+        tmhIoX+w==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1p49RP-00AuJN-2N;
-        Sat, 10 Dec 2022 23:39:35 +0000
-Date:   Sat, 10 Dec 2022 23:39:35 +0000
+        id 1p49cy-00Auet-2n;
+        Sat, 10 Dec 2022 23:51:32 +0000
+Date:   Sat, 10 Dec 2022 23:51:32 +0000
 From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Chuang Wang <nashuiliang@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mount: rebuild error handling in do_new_mount
-Message-ID: <Y5UYt538lOFTwr5R@ZenIV>
-References: <20221204150006.753148-1-nashuiliang@gmail.com>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 3/4] cachestat: implement cachestat syscall
+Message-ID: <Y5UbhBTB2nSMN4UD@ZenIV>
+References: <20221205175140.1543229-1-nphamcs@gmail.com>
+ <20221205175140.1543229-4-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221204150006.753148-1-nashuiliang@gmail.com>
+In-Reply-To: <20221205175140.1543229-4-nphamcs@gmail.com>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -49,10 +52,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 11:00:05PM +0800, Chuang Wang wrote:
-> When a function execution error is detected in do_new_mount, it should
-> return immediately. Using this can make the code easier to understand.
+On Mon, Dec 05, 2022 at 09:51:39AM -0800, Nhat Pham wrote:
 
-Your piles of goto make it harder to follow and reason about.
+> +	if (!access_ok(cstat, sizeof(struct cachestat)))
+> +		return -EFAULT;
 
-NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
+What for?  You are using copy_to_user() later, right?
+
+> +	f = fdget(fd);
+> +	if (f.file) {
+
+It would be easier to read if you inverted the condition here.
