@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B156490B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBE46490B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 21:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLJUxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 15:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S229734AbiLJUyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 15:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLJUxm (ORCPT
+        with ESMTP id S229738AbiLJUyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 15:53:42 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DFC140DD
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:41 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3e78d07ab4fso96095127b3.9
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:41 -0800 (PST)
+        Sat, 10 Dec 2022 15:54:00 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F60165A9
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:59 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3704852322fso96010007b3.8
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 12:53:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a21vG+wPlzPxqZ+Oa5IoCuijwrOLduv3F7rsjZNsHis=;
-        b=FudWoTYk6AALLuiwnDG+LiJiY9jA/rWWK3cGHOwv6D7eVIW09bqLd16OwKQnsfeIBZ
-         sR4/QX6IDgcEo8L9sT0wGN0TWe+CEvh0UkhsDAkeoLhakc4vJYdBTUFNlNRsksGR0MwM
-         BwnHKJQjXlPhL77VWCXpYePtzqNc7XlABzJddnzNi6/YOYwqOvlwhdK5LGc1WdgW8zig
-         h59fBH6UbM7IjDP8wwPA6AcD1XSFE2LV92HAnIOnQ8iuw3amo3bGLfxYvU9PL+cHSsyN
-         NaBUxPVWogUP30/VCD6Tg+Z5i8rOSeSO9JdVos/+YLBSfwEYlRHY2IbXPfAFiqc7I/Hg
-         eNdg==
+        bh=mhrAb+yQ8r5Pj6JbLxX6H679hMkP8WxpYQ53O58DWDA=;
+        b=RbF+zsbkFenK5oP6pcpKvnk2q8et0ziZuupBucQguQu4GEqvyuCPTcXn5uANp7pTCZ
+         ZVUkGih6xULK3gVfvZAvg6xIq+visBaDzsQP6Nxt0IO9340ODMtzdcNxI0FV5IwBzN9G
+         u7WpoKfaM5hgUmT0PqGdJtXV5umTsNasJsVkUhIkDc2H7CXncszicY+FqnH9q05xl290
+         eIHq9KAEMsW/xtaPZC1TQSIK2bpGH3/Qu9IToLO7UW4FdfX+cBk1qZU6GercHqSv/X5u
+         +7DW8P4iB08wemfc0Bkyq++1a30UlOqLYZMCYVaZlyBWK+PF8mpwW06XUyv6y7bZprxH
+         GQug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a21vG+wPlzPxqZ+Oa5IoCuijwrOLduv3F7rsjZNsHis=;
-        b=3+H/upa4AcIeRgUyhCbTmJ4+EgnUKp4CXU/AZ12A+LBOyF4tYcRV/PbnwjD7maxUQa
-         LU6X/bexBuYyltqUtjeaRoE0slnOzMIPbNL0kYc+cp27wSGV+BEq6uBHHPzcxcbLAl0U
-         LtyqcKICynKkcTMyTKK9XkDP1oA5S45pXPSFoGUkZp5rZbTtNttCqBXlsqRiz57//Snw
-         Ld3hpovnOr7WbAh03Mo3BpJa+oEYc6BGKCbvfe/AwQxQ189Bwg80SGxhvONdMu6I8+vn
-         ntS5vIisBEjQWmgV39Sr9oGE7uag/sYmTZpAX5/8fNhOGXj0sahJo8odNQxRZ/SNwtbq
-         Sqeg==
-X-Gm-Message-State: ANoB5pltckHlrhqihwmsSskJFYTDXXE/kNIOPt67eATm0QEhsXrY0wfi
-        mee0mi8W1DexxL0p1AszzNNNFsro/HLeLF6IrxNt3Q==
-X-Google-Smtp-Source: AA0mqf5IqOvmfRiYI8fvELbDxeRX/KysHofdM4YVTwzqpjg7I9BXfm6VQ9PClh4KiuGKIpTjkqHAC8UCNt7rwC9xhaE=
-X-Received: by 2002:a81:4d6:0:b0:402:7be6:f265 with SMTP id
- 205-20020a8104d6000000b004027be6f265mr3317452ywe.188.1670705620690; Sat, 10
- Dec 2022 12:53:40 -0800 (PST)
+        bh=mhrAb+yQ8r5Pj6JbLxX6H679hMkP8WxpYQ53O58DWDA=;
+        b=xfzGmNc+CF+HUvJGuwamtA6MrXZfgFTDCEzpbRZ0pfjaj6/z5b6a0TrtuLwyMAlOQZ
+         fhHfK3AfovH7bkHVpeWm/I7IwjTKejd/HOlGd3t/C10ChwYi1FUZGCYa5e1KxvRzdDc3
+         cj6VLFk736uY8cJ5xB8l9NufSKUQcYPSGR83TXxUMClLFjuZrDHMKROXIWPJZYVFAdOD
+         72rbeXaeRqBQcv1el6/y4+mRv/9ufbPIul6IvpY76bXLRRqDmre2wtWpsoneD6TJ5ILj
+         xayfnSxJMAgUPI2XtNA8ckXhZIEm8GfCPRAJoKp8GKfAClWwViqz61LWTKqiKBaAlui+
+         0VqA==
+X-Gm-Message-State: ANoB5pkglQxqAn/tuB5Rr70E94zYbfGY9lNktaydE36So2vxrRuT+X4o
+        wmnH99dh2lVR6GqVNPWGvZJyVvut4AHht+bLzrqDRA==
+X-Google-Smtp-Source: AA0mqf6Euj77tZGpcvvSY4sr3yOGyX27MYYokI5ryaiVO9AZutI69pj2NuNT2S9i+T+aEe+S9Uo4ft9kiJCYkcye4dU=
+X-Received: by 2002:a81:6704:0:b0:3d2:61bc:e6a with SMTP id
+ b4-20020a816704000000b003d261bc0e6amr40897805ywc.132.1670705638304; Sat, 10
+ Dec 2022 12:53:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-4-konrad.dybcio@linaro.org>
-In-Reply-To: <20221210200353.418391-4-konrad.dybcio@linaro.org>
+References: <20221210200353.418391-1-konrad.dybcio@linaro.org> <20221210200353.418391-6-konrad.dybcio@linaro.org>
+In-Reply-To: <20221210200353.418391-6-konrad.dybcio@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 10 Dec 2022 23:53:30 +0300
-Message-ID: <CAA8EJpo0MJ_-S5ZZXq3mrwod3bUdnnMHNwSOzpwK=gXSjDO6vg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] interconnect: qcom: msm8996: Fix regmap max_register values
+Date:   Sat, 10 Dec 2022 23:53:47 +0300
+Message-ID: <CAA8EJppQu=f5aXn3F_xAxZ6h+YgGYfCe6M8J77S_LLWH7NkE4g@mail.gmail.com>
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: msm8996: Add additional A2NoC clocks
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,73 +72,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Sat, 10 Dec 2022 at 23:04, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> The device tree reg starts at BUS_BASE + QoS_OFFSET, but the regmap
-> configs in the ICC driver had values suggesting the reg started at
-> BUS_BASE. Shrink them down (where they haven't been already, so for
-> providers where QoS_OFFSET = 0) to make sure they stay within their
-> window.
+> On eMMC devices, the UFS clocks aren't started in the bootloader (or well,
+> at least it should not be, as that would just leak power..), which results
+> in platform reboots when trying to access the unclocked UFS hardware,
+> which unfortunately happens on each and every boot, as interconnect calls
+> sync_state and goes over each and every path.
 >
-> Fixes: 7add937f5222 ("interconnect: qcom: Add MSM8996 interconnect provider driver")
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/interconnect/qcom/msm8996.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
->
-> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-> index 7ddb1f23fb2a..25a1a32bc611 100644
-> --- a/drivers/interconnect/qcom/msm8996.c
-> +++ b/drivers/interconnect/qcom/msm8996.c
-> @@ -1813,7 +1813,7 @@ static const struct regmap_config msm8996_a0noc_regmap_config = {
->         .reg_bits       = 32,
->         .reg_stride     = 4,
->         .val_bits       = 32,
-> -       .max_register   = 0x9000,
-> +       .max_register   = 0x6000,
->         .fast_io        = true
->  };
->
-> @@ -1837,7 +1837,7 @@ static const struct regmap_config msm8996_a1noc_regmap_config = {
->         .reg_bits       = 32,
->         .reg_stride     = 4,
->         .val_bits       = 32,
-> -       .max_register   = 0x7000,
-> +       .max_register   = 0x5000,
->         .fast_io        = true
->  };
->
-> @@ -1858,7 +1858,7 @@ static const struct regmap_config msm8996_a2noc_regmap_config = {
->         .reg_bits       = 32,
->         .reg_stride     = 4,
->         .val_bits       = 32,
-> -       .max_register   = 0xa000,
-> +       .max_register   = 0x7000,
->         .fast_io        = true
->  };
->
-> @@ -1886,7 +1886,7 @@ static const struct regmap_config msm8996_bimc_regmap_config = {
->         .reg_bits       = 32,
->         .reg_stride     = 4,
->         .val_bits       = 32,
-> -       .max_register   = 0x62000,
-> +       .max_register   = 0x5a000,
->         .fast_io        = true
->  };
->
-> @@ -1997,7 +1997,7 @@ static const struct regmap_config msm8996_mnoc_regmap_config = {
->         .reg_bits       = 32,
->         .reg_stride     = 4,
->         .val_bits       = 32,
-> -       .max_register   = 0x20000,
-> +       .max_register   = 0x1c000,
->         .fast_io        = true
->  };
->
-> --
-> 2.38.1
->
 
 
 -- 
