@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6310664901A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E817649025
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 19:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiLJSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 13:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S229548AbiLJSdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 13:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLJSGp (ORCPT
+        with ESMTP id S229475AbiLJSdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 13:06:45 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C419317
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:06:43 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id d6-20020a056e02214600b00303620c6e39so2103172ilv.6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:06:43 -0800 (PST)
+        Sat, 10 Dec 2022 13:33:15 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A8310FEA;
+        Sat, 10 Dec 2022 10:33:13 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id s7so8112789plk.5;
+        Sat, 10 Dec 2022 10:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=erjJZ3BPLuF4fh5E96B8USxD9G40KMRBirufYCK/yho=;
+        b=m87yCXDKsTffULppu3iMrVZ6qDGYyGYS8EBcgLw4eBJkmuxFpBVOL+7JEw4XErKQGC
+         vLtJw+xsdY5BZlrCtOvEQGtNbgh7czgcay3iDqkEGsbY4qDA6JAhhC2RiQiGf63eUABC
+         p9+USAbJEUvcTLi71QGdGxt+iPBTZorJbWqNoxIguBi8PAHdHsS1LV+Ib0F4XuB/96Fu
+         8yUp988BD3BKPfsWqy4viBsrVQe6N010fxyG8HGst1vYlbmeW/qSYikPO0cUhHobDrDO
+         hFAvxy0vvncTEfbkphhPsS0ZkUBk0i0VcT20KQsFijHFyxfG8rtA7mEhMXuDiPy24wFs
+         N1/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JECtRbncHYvgBMdSUzE8pbHud/cHTvPqn5LLrWNFGFY=;
-        b=CSNIOsd7a7PRoVN/K7SCVKQibzm8fdXdWYm257pVAVN/q0JGtyRjyVaeEt2AwwdssB
-         0CSGmdfW9+q1L1NCUtlwGlprhb4Qa1L62nYXJ8R+8YoWrvXxI30jIwbhDTZ/BXixcm5Q
-         oI/RdUN9xVwZNtCpRzc5LvOyO4qmGyREJ2qq+x2yjYtRDzZ+A2/E9230aES0hfrLCh+O
-         oqYCCK5V9UmIiZiB76nZ0Ngmd9ZR9HcXm7MW42CUrxjSjoea+xIujrclo+rl8P3Ptbp/
-         vbNB93NUfUTSWcwyh8R36qgzK4MSE1gY/piw+s6HAUM+FYANdacJqPjxE+/oJFNGke6e
-         e5/Q==
-X-Gm-Message-State: ANoB5pn2G9fs4vm47xqsdDpED1zbI1sOfMLgKaL/xC4SbfK1ZOzdIiMD
-        /bdyQdKKKlrocicTpuHhC8y57WMJkjSpvhVmXT8Kx0sRF3v3
-X-Google-Smtp-Source: AA0mqf6Ia0oAutUmIX0aGI/02T24yKYbhKYIt5JebEnniuwDbREF05docSBkOfV4gTmu85eollvx1qMBBlhT8J5egE1DHo/XLS5l
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=erjJZ3BPLuF4fh5E96B8USxD9G40KMRBirufYCK/yho=;
+        b=RnlBDRFGbyRfzHT5+gJTMpqPSsfPVxwoJWc08TbJneCGFogZCEJ3B6W8CyouVTT8XN
+         0nXvoHvHbNBgQ+SHr3pghDAtaGEAsf/jM5HRQrhrB+EzqLNo8PnvMgt7cfLpfRZerH0k
+         TVAD/39U0uZV4T3xLwgitAvmpLzySrOD7PV+yvlM+up7BN6Hc5qxvSqDBiBiAQ3AKTUE
+         fZsJMB9CUclJ/LyCAadgKlUtJlQbO/SUPK6tdRXDlCceV9v17+EsAKvyzVBs+AFqt3qz
+         e+81Wxg/tIJcjluZFrPxmocDBZvQJYmqei9NIEp1onJAZpQb7i4aFW62TUl29i4zAzEf
+         Tebw==
+X-Gm-Message-State: ANoB5pnBqCIU/uB0HAswcYdXpbVYIpo9Hq+KdZWVv1dQeKs8TZZASl15
+        LAbooYmKKjT+xQyhY+v/Xuvn2Zemc3gPbw==
+X-Google-Smtp-Source: AA0mqf7IM/h/sKpCbZ5v9LMPJBptNljSVRd+DB/beyA2pSYIvoWdAuZWxxlsqtPH9n99+jqe2zXwHQ==
+X-Received: by 2002:a17:903:138a:b0:189:5f5c:da1f with SMTP id jx10-20020a170903138a00b001895f5cda1fmr10668384plb.5.1670697192213;
+        Sat, 10 Dec 2022 10:33:12 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id jj12-20020a170903048c00b0018996404dd5sm3284296plb.109.2022.12.10.10.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 10:33:11 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sat, 10 Dec 2022 08:33:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        darklight2357@icloud.com, Josef Bacik <josef@toxicpanda.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        cgroups@vger.kernel.org
+Subject: [PATCH 1/2 block/for-6.2] blk-iolatency: Fix memory leak on
+ add_disk() failures
+Message-ID: <Y5TQ5gm3O4HXrXR3@slm.duckdns.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
- q48-20020a056638347000b00389c976846emr26967141jav.246.1670695602581; Sat, 10
- Dec 2022 10:06:42 -0800 (PST)
-Date:   Sat, 10 Dec 2022 10:06:42 -0800
-In-Reply-To: <00000000000064d06705eeed9b4e@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eb761405ef7d2113@google.com>
-Subject: Re: [syzbot] WARNING in do_mkdirat
-From:   syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>
-To:     dvyukov@google.com, elver@google.com, hdanton@sina.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+When a gendisk is successfully initialized but add_disk() fails such as when
+a loop device has invalid number of minor device numbers specified,
+blkcg_init_disk() is called during init and then blkcg_exit_disk() during
+error handling. Unfortunately, iolatency gets initialized in the former but
+doesn't get cleaned up in the latter.
 
-HEAD commit:    3ecc37918c80 Merge tag 'media/v6.1-4' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ae071d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10aaf2b7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b652b7880000
+This is because, in non-error cases, the cleanup is performed by
+del_gendisk() calling rq_qos_exit(), the assumption being that rq_qos
+policies, iolatency being one of them, can only be activated once the disk
+is fully registered and visible. That assumption is true for wbt and iocost,
+but not so for iolatency as it gets initialized before add_disk() is called.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/be14794fd26b/disk-3ecc3791.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/35b850996388/vmlinux-3ecc3791.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0eec0f8f6777/bzImage-3ecc3791.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/547e98eae9c0/mount_0.gz
+It is desirable to lazy-init rq_qos policies because they are optional
+features and add to hot path overhead once initialized - each IO has to walk
+all the registered rq_qos policies. So, we want to switch iolatency to lazy
+init too. However, that's a bigger change. As a fix for the immediate
+problem, let's just add an extra call to rq_qos_exit() in blkcg_exit_disk().
+This is safe because duplicate calls to rq_qos_exit() become noop's.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: darklight2357@icloud.com
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
+Cc: stable@vger.kernel.org # v4.19+
+---
+Hello,
 
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff888072216a70, owner = 0x0, curr 0xffff888078ce57c0, list empty
-WARNING: CPU: 0 PID: 4093 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
-WARNING: CPU: 0 PID: 4093 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Modules linked in:
-CPU: 0 PID: 4093 Comm: syz-executor196 Not tainted 6.1.0-rc8-syzkaller-00152-g3ecc37918c80 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
-RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Code: c7 c0 a3 ed 8a 48 c7 c6 60 a6 ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 ab 7c e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 18 2a 76 8e 80 e1 07 80 c1 03 38 c1
-RSP: 0018:ffffc900043ffd40 EFLAGS: 00010292
-RAX: 7c48dcb6c422ab00 RBX: ffffffff8aeda4a0 RCX: ffff888078ce57c0
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc900043ffe10 R08: ffffffff816e5c7d R09: fffff5200087ff21
-R10: fffff5200087ff21 R11: 1ffff9200087ff20 R12: 0000000000000000
-R13: ffff888072216a70 R14: 1ffff9200087ffb0 R15: dffffc0000000000
-FS:  00007f68743c0700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000026c1b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- inode_unlock include/linux/fs.h:761 [inline]
- done_path_create fs/namei.c:3857 [inline]
- do_mkdirat+0x2de/0x550 fs/namei.c:4064
- __do_sys_mkdirat fs/namei.c:4076 [inline]
- __se_sys_mkdirat fs/namei.c:4074 [inline]
- __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4074
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f687c635589
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f68743c02f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 00007f687c6d97b0 RCX: 00007f687c635589
-RDX: 0000000000000000 RSI: 0000000020000200 RDI: 0000000000000004
-RBP: 00007f687c6d97bc R08: 00007f68743c0700 R09: 0000000000000000
-R10: 00007f68743c0700 R11: 0000000000000246 R12: 00007f687c6a6258
-R13: 0032656c69662f2e R14: 69662f7375622f2e R15: 00007f687c6d97b8
- </TASK>
+I'm posting two patches for the iolatency memory leak issue after add_disk()
+failure. This one is the immediate fix and should be really safe. However,
+any change has risks and given that the bug being address is not critical at
+all, I still think it'd make sense to route it through 6.2-rc1 rather than
+applying directly to master for 6.1 release. So, it's tagged for the 6.2
+merge window.
 
+Thanks.
+
+ block/blk-cgroup.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -33,6 +33,7 @@
+ #include "blk-cgroup.h"
+ #include "blk-ioprio.h"
+ #include "blk-throttle.h"
++#include "blk-rq-qos.h"
+ 
+ /*
+  * blkcg_pol_mutex protects blkcg_policy[] and policy [de]activation.
+@@ -1322,6 +1323,7 @@ err_unlock:
+ void blkcg_exit_disk(struct gendisk *disk)
+ {
+ 	blkg_destroy_all(disk);
++	rq_qos_exit(disk->queue);
+ 	blk_throtl_exit(disk);
+ }
+ 
