@@ -2,234 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C466648FA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE310648FAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 17:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiLJQJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 11:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S229760AbiLJQPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 11:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLJQJi (ORCPT
+        with ESMTP id S229529AbiLJQPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 11:09:38 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4106819038;
-        Sat, 10 Dec 2022 08:09:37 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BAFTJtb001510;
-        Sat, 10 Dec 2022 16:09:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=IEGl/+Ylx/r7vXv0P6G63Dc8Y7BBwJG2jgLnQnkWIHA=;
- b=lgdjrtyF6Md9iSrxrrEMMuOpsZ0q8SkPACM3OvCgTPA9PIRCqiNeRL/jNpq5uJT70p52
- GCCeHMlniNU72A8WaO6dSj6Me2tDYElFiTYJXiv9FyVVqFe66B01KNJiEVVx4mPqJb9N
- uw+vXBqL+bAdQlSu+cgjjcFTiUO8LIQbpoVdt4BvuqXfsxiLY5lJHMMYnMMSOZphQjWV
- IKd4c+cndr3neAQzdqDoERXlRXvgIogWYJ9KHhqdgGOdL+F+Klj702PuwyPHtAAGqe0A
- tkEiXHVQCoGAQEwaA8d6mZxo6yQKqIlLyT9JNTAHtaxZjHwnK+HtPu5e0nR73p9r88hV RQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mchqsrgbw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Dec 2022 16:09:08 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BAFSiW1011454;
-        Sat, 10 Dec 2022 16:09:07 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2044.outbound.protection.outlook.com [104.47.57.44])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3mcgj8586r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 10 Dec 2022 16:09:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SBX2zw6z8h+x/hbOArTBhNfKgWeUVvQhw3m1/PlyQ4zPsAYBX3JYflPlh3OZCwtcLN2AJCEYJ2LFBREsN0zLcdDKR1z5tS5o6w2U7B2B0ENEa1q0OJl8jupY4hdZbOz77gvto1RJ/mk35XgImVx2LrOL3x5LYSoObeews9iHlEZVBe62r4KqPhkjw5sZyjOO+dtKaFOmnTbSWu0OOM89tiNJZxu1Z8adiO4AdfpAOTcrfvC3lTkz7ngxvqwjDwXKbUtQkQx+w1sSzfE2tBpxXocSJNkPAO4yJN8ItL4wSx8IflS+3ND/NUuT1QK7PDuojN15pV+y042lU1x7z8v2Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IEGl/+Ylx/r7vXv0P6G63Dc8Y7BBwJG2jgLnQnkWIHA=;
- b=ZJq9nlps+qSfAdPjw5pINGONdjuOVpAT8Mj+cpuvf04TVEShn3LEuB4nvtmg6q2RdN2N2JYemU83MYyRH2aL3Fx8SXLeNFQ35vBqMYvJ6jt1yX7JsblHKXwR+g+5f6v+DULUqGKT4yhguVrCadmvSmpCeLljzQL1Wa0Awz95nFHU8RtiNa1bU0UtLfBOcit/ppMnv29jhfeOtNsD00FXPuMizLgvZiufa+ylQdulyEszq3JfQpZH9lq7scjZ684msmDab9eeDrnVgW5DT/jP7s2BNtfs8QUiSFH7P8lF68RrL8CvC7QwTqeu9WDk20oDw6H+xxi5EQQ0qNKWxy417A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IEGl/+Ylx/r7vXv0P6G63Dc8Y7BBwJG2jgLnQnkWIHA=;
- b=VsGMYClVsOPqcySi+M356VpUl07E16VG65K67kRdtzb5Y4qirQ+wc7x7P+LT5Di4QINZYl1gZljsDdQ8s4h10BtZ5EyQT2c916JZS64c0IEaFk09uFKvEjjp15p86LyS9mG3/hd+jkj2IIzPfBJEExVgcGe14aGMWZB3GgFYjvU=
-Received: from CH0PR10MB5131.namprd10.prod.outlook.com (2603:10b6:610:c6::24)
- by SJ1PR10MB5908.namprd10.prod.outlook.com (2603:10b6:a03:489::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Sat, 10 Dec
- 2022 16:09:05 +0000
-Received: from CH0PR10MB5131.namprd10.prod.outlook.com
- ([fe80::773f:eb65:8d20:f9c8]) by CH0PR10MB5131.namprd10.prod.outlook.com
- ([fe80::773f:eb65:8d20:f9c8%6]) with mapi id 15.20.5880.019; Sat, 10 Dec 2022
- 16:09:05 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Richard Weinberger <richard@nod.at>
-CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Anna Schumaker <anna@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>,
-        "chris.chilvers@appsbroker.com" <chris.chilvers@appsbroker.com>,
-        "david.young@appsbroker.com" <david.young@appsbroker.com>,
-        "luis.turcitu@appsbroker.com" <luis.turcitu@appsbroker.com>,
-        "david@sigma-star.at" <david@sigma-star.at>,
-        "benmaynard@google.com" <benmaynard@google.com>
-Subject: Re: [PATCH 0/3 v2] NFS: NFSD: Allow crossing mounts when re-exporting
-Thread-Topic: [PATCH 0/3 v2] NFS: NFSD: Allow crossing mounts when
- re-exporting
-Thread-Index: AQHZChf8XdRuFhfYVUuBoBZu4IH8sa5nT0OA
-Date:   Sat, 10 Dec 2022 16:09:05 +0000
-Message-ID: <1AFA78FF-3F09-47E3-BE13-F5BB7F9C779C@oracle.com>
-References: <20221207084309.8499-1-richard@nod.at>
-In-Reply-To: <20221207084309.8499-1-richard@nod.at>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH0PR10MB5131:EE_|SJ1PR10MB5908:EE_
-x-ms-office365-filtering-correlation-id: 15e5d887-ab3f-4312-5082-08dadac8dcb9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lkvM3NGVXIfJhfuLOF6+OPYPuPo12AfqvlA+AnrC+IOIppsVMXN7vHWHiFL7M2XFRtDc3wx/CxY9HOt3la5j1jN3nzFUZu8o5iprC2ZjmaksxWga2gPVnQYtCWggDQcOAPoYHh74IhUrrJVVug19zbFDe1kfgfDHScNNDHhe+6lMZfTckAshXysaj3ZQ71NbGLl5FVd+UzPFKMLSLGFAHksw+rsD1PBGDfxyVdBdm8o0wNAuACXg3L1dtl+Hp9M4bwnN+ZiqTFtE4ZnMRd91BY4t+GiHHAa1PtYEBNYUV0buBtK34nsuIrhx98jqrn5bMi486S4FYPaAJy4wRbFD1oRmHFswp83IJGnOfByQJiMjQ7PHEnNPm9OECooGA6TTcP9KbdfXT2+mQwHoYmndMyvzAW5P2Ob3YHHGDuRZR8rifkBgSIataZluyXKsVjQhF2qhZ814ro7WuUDwqi/ml8dYmr9NvfCmitMEApUpbhV4aoffyMrqWnvZht7SjueNCBjowqVINwZgLZ1UXRBqh0+k8ipeASOfGvQYCTlq8ygRodxqLW7LP1VLTbpzMGvsMKvQ0b8GPLETu0smlHDoMnw6GJwx3dN8kc9ID/v3j2eQJCnNluMpeO8CMmGVMgEQqNFCmqBIqAXVCb3/V0+0i93CwtN0IDuiz+e57GFLdyfnC3vXMG4aZlxVnxtqVTI+TwJ3nozqdjKn/aDzfF2qV5SRDkIuVDbu/luPHX1uA3MsBUa+Gd9Lr7zA5J1KlFX++THNM3YX2Ce8JXqGSz3FJj/NtjIjKiSmAKKwB1a0SBA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5131.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199015)(38100700002)(2906002)(7416002)(66946007)(66446008)(66556008)(41300700001)(66476007)(2616005)(8676002)(5660300002)(64756008)(76116006)(33656002)(8936002)(36756003)(122000001)(86362001)(478600001)(83380400001)(66899015)(966005)(4326008)(6486002)(6916009)(6512007)(71200400001)(38070700005)(26005)(6506007)(186003)(316002)(54906003)(53546011)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nuSMUczSC9+ymGWkYwDd8hXhyNsSFsyzOTVSWtf9wDveOxQCFwpqTndcaKRL?=
- =?us-ascii?Q?JQcojW2k6QW8GLC+h+52R54bPdgI3uMvt/kuArrDEFQgbLQZFwCshv/Fdj3D?=
- =?us-ascii?Q?5ELibJBU3WpF08nHnHhgCX/M2RkBuerbm7Kl1OHncn7PvR2Z0C5ElSv4m2PP?=
- =?us-ascii?Q?NP9W9pRDXo5jzXMjWdDBEWQBkMH7CaMpfDKXaGX3NxjG47jfB5VieG3ytn57?=
- =?us-ascii?Q?TaL7jnLq2odCtXm+D+AJ7XJyqCwFNOcMw2ttkfkMHDej8TYMit30sOa7ea4w?=
- =?us-ascii?Q?p3ytWLORSset6iyWD6f/FJJG+upe+3fT9pzohLZezD9RBQfVKkeROSw6HPiz?=
- =?us-ascii?Q?xNSu7klygBQ3hpFmvm/2bmtBY9tJJkQMf4OQ8F+MwuE5MVydNPMfAOow2FCs?=
- =?us-ascii?Q?0QrDO7DgmIdqmLkIOr5XlyIZY39huPjZM86b8aw7KXaYq3oLNdC9ht2wj59M?=
- =?us-ascii?Q?C2vRmgELKKjJCLoWEBktMXN8jCO0WPwq7MDrLGbdhNc9HUvZ7mXMNd8exneU?=
- =?us-ascii?Q?zk44PT4rfvL+bTOp8MRM/3FhONp3gZYbyZABrRWENkAsxlKw8t0DEu9JvUSP?=
- =?us-ascii?Q?Et6it2QhrWPnQd+d+LqIzEzP5OqIINDadXCQ4uSgpaVmup59FnLghSuADBBD?=
- =?us-ascii?Q?oANIdfeBO9Paeb7Ptc6GsZPnzopnx7AVnIH3paCm1thDhgOYryT4cN5byGOI?=
- =?us-ascii?Q?UVjdv3fWcTQTqXiFn/G89gqROXT6jGn0U31n3pqT0TLeq1XP9FbjK2M92eMz?=
- =?us-ascii?Q?TWbrHoDuvLln1+8B3sVqwOQUD3Lh1YQnntgvZc9JZwJqMFSt9pI2BB7snPL9?=
- =?us-ascii?Q?YpSGyFZM1YziQTLDNxtP9bJd3LvNyZdD7TaHQmpRsjOaXKm7ofX95kz6I2As?=
- =?us-ascii?Q?07Q24nydY/NcOtExYZ/MdJuANlNLy8hvh4jNFATSgf0pJeR17zMpZlPcVS30?=
- =?us-ascii?Q?qx9EhgTKsfrN0lZ1+33fjfTZF95jaEW/n9IjX47EgszJQ+nr7KJ7e9Z8tE29?=
- =?us-ascii?Q?guOSwkZ46n0P5mgIodAl2qj+h4vZRNz677CZjKHx0PrbW2vrL5zkK7eUDJ4e?=
- =?us-ascii?Q?VKj3B3GZdGQ7uX3onKid0hnQdDHBhF+Vr1yh1RoQmbiQRaTsGqYBbAnhHSJb?=
- =?us-ascii?Q?BqMI1oy/umbMSY+NoITeXs14zklG7sUL4ni+epmFYDatXiwEMG2q0zmfYLzq?=
- =?us-ascii?Q?NYM2tHWSUddwGqfe23PcaoqlqB46kjfxUTFXtf0c3NUzEpfxgEtl8Ie3znUn?=
- =?us-ascii?Q?ahMT43j8Azg6vF5XgkJHUjxT0+aYK3N65f/qKZ62wEC/CPzJJRFJlHJUIVPr?=
- =?us-ascii?Q?xMCbpSvFvFtMPnk5rkbHKdVpvR6iMNISti9y4a+GE2mxk2SfjMPElcCnQ1DT?=
- =?us-ascii?Q?X0aGGfYNxqsLvJRIuOsTINFcFeWpnvnZQkZF5ECONbT2PwIjHYlRrzXVxGTx?=
- =?us-ascii?Q?QjHJk2WESlTGJUvg9Ntg0BC7P/qJ5/Gyh1HUOPrxBDbMhZv7liro//IiThAD?=
- =?us-ascii?Q?bWEK8ou+OVuBpywdddk1MJjmlpHUd7vpBUzQls8z6hr0sHbIoj2xliapLXvx?=
- =?us-ascii?Q?Q/vX+l3XumFQUfc8dAeZgxWwJ6DMfOLihelA86HH/0XCYvY737yLLXPRyeNN?=
- =?us-ascii?Q?gg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <34B45318855445469B284739E6D03DE2@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 10 Dec 2022 11:15:40 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF203E68;
+        Sat, 10 Dec 2022 08:15:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1670688924; bh=h00Fm2qWXbZoWo2rUfDdE3zBb0Tv4j2FoeWjcOJSENo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=S21DvIUXJCuinMP5FTnkRRQc8MdJXEe59VyFK2QRxi2ZE2ec6mxS7T9quLPcDAUIN
+         xzCEPhimM2lE7e2r9Vt88ekcbSGmKJ1yfJriHQF4l9NFGAb2SEZruZxwO/RoKx60f/
+         11cfV1ii8EMfGkyDnSjo6lW9tkJWHepdry1YbAgzFc+tWRboJiy8raRQrcN/EtZeHo
+         DnBOJpR2xB+FES+g+nmsXLdq04BO3U1QOMibVGT2Cax1/Lt8okuvwI0J/skEnWtK3W
+         uEu6qD38ssEGpvx3HhuRzTo0upaY+vezK3ej9jxuc95iOsEalhpZP6WmbyG/B4vMCG
+         Gub5VeTKmpe0g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.157.120]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6bjy-1osNuc1qLW-017zJc; Sat, 10
+ Dec 2022 17:15:24 +0100
+Message-ID: <40d7b576-9e4d-8d05-9273-48874d53591f@gmx.de>
+Date:   Sat, 10 Dec 2022 17:15:22 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5131.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15e5d887-ab3f-4312-5082-08dadac8dcb9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2022 16:09:05.7168
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iYPu6cQp/oYPGW0Ot/Rm0ygwI+kAJyvgV6dMudFLrCA9LKwuaN+bYeQYFTfEfFxy/uj4s8sJuBgmN72ZKIpN3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR10MB5908
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-10_06,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=943 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212100146
-X-Proofpoint-ORIG-GUID: ktye45PP4s5iIRTNAssdfKpXDEt9487q
-X-Proofpoint-GUID: ktye45PP4s5iIRTNAssdfKpXDEt9487q
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH linux-next v3] fbdev: use sysfs_emit() to instead of
+ scnprintf()
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn
+Cc:     javierm@redhat.com, tzimmermann@suse.de, geert+renesas@glider.be,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <202212051631391777945@zte.com.cn>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202212051631391777945@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Yxpyg0z1Wsf2EkKIlQdv8JUvwbqEH65fo8s9lyyqbgL4549OASJ
+ gGH/U5xVKZSq2JxPpLjeEIMTHDdmuVG+csXCEw2vAyMhNee9revYLUXvKr7DrP57CukkSuv
+ hkI9ibwdRz4fs+lOosuQb3PnEK+JDW6hKgrc1Zrh3dfYT346DJf6Jj3JTIfeF4tEj4JOEnP
+ q2W0VoLC35YlkERuIRszQ==
+UI-OutboundReport: notjunk:1;M01:P0:/pTpdg5l5/M=;1hS/ZXg7URABp3DKU9wCvKM3Vum
+ RL0/YRgS03/rXcKu9G2bJvhRgfByHgeB9dxf3yZyUf//gSUX/S9YbhFWoYSjrHO8Qp3sSxf8u
+ fa3oibhkGpWKIua7xNm2dU/qbotPtgCjuMjCPBwKSw/Me8fXmhEwJHJnmj7mUH7TAWUfKDgRa
+ u8ZURjA6lzLd5kItqLQx+35S7Cp84jX/971iScwbvhWFkBKR4grAXC+3UAKLlx1L3CThRQ5W1
+ zuBp14V0NDE+2skRrVa7Iwg4qa2C4ir6JAJcRWrl3ESRvpkKJWE+ROPOlUG6mUdVRa+mrIp5P
+ 0jxUmwC54jyIbsqyHEfPwTfnQBskYFetcKM9g1h3tobhUfjcRZy+bxtS0irtX18TBxOAa6Lww
+ SomoUIuZ8wE5kfo2oXcheBn765MBa8x0WD62kWH9j4hzrS8uH6Rxkaen6Zb9CAAKySvno0rSn
+ 0X/fiKYFjDujkKrDyA99MBDqHAN9KfEWMPG6ZirPgO0eMpXSEzWTWsz6i9bOrOzBUoWAf5u2i
+ hNDLv+5WTZpgB61Wjmd29TMoGfLknH+Fbd2Gv8bxx6YdGqQk6nvYrgGC4HwezRW9THyl6eRSL
+ jrElcAMAC+B5x8B25TPQPqwMLQBSREQXJAHk4jw+vbk8IZE98kstNpkkAJFSys8tbNyyzHxt3
+ Zce29UmVdvqwtPR2ZhMIRmtRZLNu2V11vB4BnPydOOdjR+8WYJfmxMgM+C4lq8g3UIAK30OIR
+ 7KkS2uytZ8FASK+GjCzzYHQy5UDuhcIWNGMUeP4E47gMrI41qf4h0bGLRECBiHKvmb8V5bQgp
+ gyzwKo5MWaXsd0U7/0QnokZN7lN3KJ0crCEkPa7fcA7Vf3w9vU7V2UmeM0+/jf6juldoX+TLr
+ SZhAHHiaHAb1vu2ynjfO02ow/UDd+Cd5Aql4Z8+vQOj1IuX9BxPZrk2jKlyANmlQvxwGU/zR7
+ +6+EEwLuyiYb9DJCe3zucnv/XsY=
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/5/22 09:31, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+
+I've applied this patch, but split it up into two (one for each driver).
+Please, send seperate patches per driver next time (and add proper changel=
+og
+if you do a v2/v3 version).
+
+Thanks!
+Helge
 
 
-> On Dec 7, 2022, at 3:43 AM, Richard Weinberger <richard@nod.at> wrote:
->=20
-> Currently when re-exporting a NFS share the NFS cross mount feature does
-> not work [0].
-> This patch series outlines an approach to address the problem.
->=20
-> Crossing mounts does not work for two reasons:
->=20
-> 1. As soon the NFS client (on the re-exporting server) sees a different
-> filesystem id, it installs an automount. That way the other filesystem
-> will be mounted automatically when someone enters the directory.
-> But the cross mount logic of KNFS does not know about automount.
-> This patch series addresses the problem and teach both KNFSD
-> and the exportfs logic of NFS to deal with automount.
->=20
-> 2. When KNFSD detects crossing of a mount point, it asks rpc.mountd to in=
-stall
-> a new export for the target mount point. Beside of authentication rpc.mou=
-ntd
-> also has to find a filesystem id for the new export. Is the to be exporte=
-d
-> filesystem a NFS share, rpc.mountd cannot derive a filesystem id from it =
-and
-> refuses to export. In the logs you'll see errors such as:
->=20
-> mountd: Cannot export /srv/nfs/vol0, possibly unsupported filesystem or f=
-sid=3D required
->=20
-> To deal with that I've changed rpc.mountd to use generate and store fsids=
- [1].
-> Since the kernel side of my changes did change for a long time I decided =
-to
-> try upstreaming it first.
-> A 3rd iteration of my rpc.mountd will happen soon.
->=20
-> [0] https://marc.info/?l=3Dlinux-nfs&m=3D161653016627277&w=3D2
-> [1] https://lore.kernel.org/linux-nfs/20220217131531.2890-1-richard@nod.a=
-t/
->=20
-> Changes since v1:
-> https://lore.kernel.org/linux-nfs/20221117191151.14262-1-richard@nod.at/
->=20
-> - Use LOOKUP_AUTOMOUNT only when NFSEXP_CROSSMOUNT is set (Jeff Layton)
->=20
-> Richard Weinberger (3):
->  NFSD: Teach nfsd_mountpoint() auto mounts
->  fs: namei: Allow follow_down() to uncover auto mounts
->  NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
->=20
-> fs/namei.c            | 6 +++---
-> fs/nfs/export.c       | 2 +-
-> fs/nfsd/vfs.c         | 8 ++++++--
-> include/linux/namei.h | 2 +-
-> 4 files changed, 11 insertions(+), 7 deletions(-)
->=20
-> --=20
-> 2.26.2
->=20
-
-This series is a bit late for inclusion in v6.2. The next opportunity
-will be v6.3 in a couple of months. I prefer to have a "final" version
-of patches by -rc5.
-
-I'm waiting for review comments on v2 of this series.
-
-
---
-Chuck Lever
-
-
+> ---
+> v2 -> v3
+> Fix the mistakes in v2.
+>   drivers/video/fbdev/sh_mobile_lcdcfb.c |  8 ++++----
+>   drivers/video/fbdev/uvesafb.c          | 10 +++++-----
+>   2 files changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/sh_mobile_lcdcfb.c b/drivers/video/fbde=
+v/sh_mobile_lcdcfb.c
+> index 6d00893d41f4..ad9323ed8e2e 100644
+> --- a/drivers/video/fbdev/sh_mobile_lcdcfb.c
+> +++ b/drivers/video/fbdev/sh_mobile_lcdcfb.c
+> @@ -1188,7 +1188,7 @@ overlay_alpha_show(struct device *dev, struct devi=
+ce_attribute *attr, char *buf)
+>   	struct fb_info *info =3D dev_get_drvdata(dev);
+>   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->alpha);
+> +	return sysfs_emit(buf, "%u\n", ovl->alpha);
+>   }
+>
+>   static ssize_t
+> @@ -1226,7 +1226,7 @@ overlay_mode_show(struct device *dev, struct devic=
+e_attribute *attr, char *buf)
+>   	struct fb_info *info =3D dev_get_drvdata(dev);
+>   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->mode);
+> +	return sysfs_emit(buf, "%u\n", ovl->mode);
+>   }
+>
+>   static ssize_t
+> @@ -1265,7 +1265,7 @@ overlay_position_show(struct device *dev, struct d=
+evice_attribute *attr,
+>   	struct fb_info *info =3D dev_get_drvdata(dev);
+>   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%d,%d\n", ovl->pos_x, ovl->pos_y);
+> +	return sysfs_emit(buf, "%d,%d\n", ovl->pos_x, ovl->pos_y);
+>   }
+>
+>   static ssize_t
+> @@ -1306,7 +1306,7 @@ overlay_rop3_show(struct device *dev, struct devic=
+e_attribute *attr, char *buf)
+>   	struct fb_info *info =3D dev_get_drvdata(dev);
+>   	struct sh_mobile_lcdc_overlay *ovl =3D info->par;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%u\n", ovl->rop3);
+> +	return sysfs_emit(buf, "%u\n", ovl->rop3);
+>   }
+>
+>   static ssize_t
+> diff --git a/drivers/video/fbdev/uvesafb.c b/drivers/video/fbdev/uvesafb=
+.c
+> index 00d789b6c0fa..ba8028a0cc7a 100644
+> --- a/drivers/video/fbdev/uvesafb.c
+> +++ b/drivers/video/fbdev/uvesafb.c
+> @@ -1580,7 +1580,7 @@ static ssize_t uvesafb_show_vendor(struct device *=
+dev,
+>   	struct uvesafb_par *par =3D info->par;
+>
+>   	if (par->vbe_ib.oem_vendor_name_ptr)
+> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
+> +		return sysfs_emit(buf, "%s\n", (char *)
+>   			(&par->vbe_ib) + par->vbe_ib.oem_vendor_name_ptr);
+>   	else
+>   		return 0;
+> @@ -1595,7 +1595,7 @@ static ssize_t uvesafb_show_product_name(struct de=
+vice *dev,
+>   	struct uvesafb_par *par =3D info->par;
+>
+>   	if (par->vbe_ib.oem_product_name_ptr)
+> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
+> +		return sysfs_emit(buf, "%s\n", (char *)
+>   			(&par->vbe_ib) + par->vbe_ib.oem_product_name_ptr);
+>   	else
+>   		return 0;
+> @@ -1610,7 +1610,7 @@ static ssize_t uvesafb_show_product_rev(struct dev=
+ice *dev,
+>   	struct uvesafb_par *par =3D info->par;
+>
+>   	if (par->vbe_ib.oem_product_rev_ptr)
+> -		return scnprintf(buf, PAGE_SIZE, "%s\n", (char *)
+> +		return sysfs_emit(buf, "%s\n", (char *)
+>   			(&par->vbe_ib) + par->vbe_ib.oem_product_rev_ptr);
+>   	else
+>   		return 0;
+> @@ -1625,7 +1625,7 @@ static ssize_t uvesafb_show_oem_string(struct devi=
+ce *dev,
+>   	struct uvesafb_par *par =3D info->par;
+>
+>   	if (par->vbe_ib.oem_string_ptr)
+> -		return scnprintf(buf, PAGE_SIZE, "%s\n",
+> +		return sysfs_emit(buf, "%s\n",
+>   			(char *)(&par->vbe_ib) + par->vbe_ib.oem_string_ptr);
+>   	else
+>   		return 0;
+> @@ -1639,7 +1639,7 @@ static ssize_t uvesafb_show_nocrtc(struct device *=
+dev,
+>   	struct fb_info *info =3D dev_get_drvdata(dev);
+>   	struct uvesafb_par *par =3D info->par;
+>
+> -	return scnprintf(buf, PAGE_SIZE, "%d\n", par->nocrtc);
+> +	return sysfs_emit(buf, "%d\n", par->nocrtc);
+>   }
+>
+>   static ssize_t uvesafb_store_nocrtc(struct device *dev,
 
