@@ -2,138 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C44648EB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 13:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B5A648EB4
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 13:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLJMdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 07:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S229738AbiLJMfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 07:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiLJMdk (ORCPT
+        with ESMTP id S229710AbiLJMfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 07:33:40 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FE01403E
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:33:38 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id c1so11147536lfi.7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j54S5Em5+8fuXtAhZt+VBjnKSV0CzJD1XR4mN9x18UM=;
-        b=u0c26ti67BTJLnOKzoiTFRBdFQ70JeRXVorvxrjfQL0/JT91RIxF7ge9BKWwf+jKZh
-         /PRGuba3uldElOiRWMNaGjLHFiNeM57AR0EE+INZUOyhrocLl6bfYotaxx2Grg3polYG
-         XRgeLQwKr3lUa3pQA8lb5JHbA+qq/yQHrHSzuBnceI0f9HGCXaGXqM3ifgG33Tj5KGz8
-         ZxRigeAZSkhboqUgKwcGklGaflHn7j3UtcQfOZf8KT9FFn9cu8fLrnxJS5zt19efClSJ
-         iYnDt4tpPlepejmc8av5INjjxgdSoAwULAP6NCysrjaycpumb1rvgQmEwsHSVCH6sjuQ
-         pKtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j54S5Em5+8fuXtAhZt+VBjnKSV0CzJD1XR4mN9x18UM=;
-        b=61AAjPnRmVeZVhQcQ8acjGgX11mowKBuzscaaH9zqfbppyJz7/jflIWqw9g0TcKE9T
-         Z7QqzzXIkxshlkbcG8GYQM7NzyAu1tlQfCq/hFD34uZGu9EDD17DKN7Q21Tt6muY4zad
-         4bscrJSjBbYVcV99yhZQNeRoAbB1PcHYZabUyeRdE+r+8HiD9PyTdNJwC0si8UAetffB
-         tf38DJ2q5II3tsJxRJExNdFryNfRyUpal+2mITUtuu+RzddoWTS3yFktRJJfPf24P+/8
-         qEx41fWy9eh/N/+oGaA6/WVcbC2RB33mwzDoyoOwA/yw6BBW8Bp9ACEM1VK1FNSWKNeS
-         eFTw==
-X-Gm-Message-State: ANoB5pnMeQSkPFgCrg0QdDgx/V0zpDDnoyp7IzcBJvVCvA4F1XIU7l4x
-        nKRSbO/MWiaRr3jvf6kGMaDU5Q==
-X-Google-Smtp-Source: AA0mqf5sTbXNIj4peDSXi1jFPi5ColXFTS69QqfLw5bBrS1dWKTI+x0SjojBJPRrOC0eTZuccH4PKQ==
-X-Received: by 2002:a05:6512:2007:b0:4b5:650b:ba3f with SMTP id a7-20020a056512200700b004b5650bba3fmr2516614lfb.12.1670675616841;
-        Sat, 10 Dec 2022 04:33:36 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id c6-20020a056512324600b00492e3a8366esm708109lfr.9.2022.12.10.04.33.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 04:33:36 -0800 (PST)
-Message-ID: <68796aa4-2dc5-d4a3-a104-1587b8589a81@linaro.org>
-Date:   Sat, 10 Dec 2022 13:33:35 +0100
+        Sat, 10 Dec 2022 07:35:31 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E5E13D5F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:35:30 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p3z4g-00033k-Vs; Sat, 10 Dec 2022 13:35:27 +0100
+Message-ID: <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
+Date:   Sat, 10 Dec 2022 13:35:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm7225-fairphone-fp4: configure
- flash LED
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fenglin Wu <quic_fenglinw@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209-fp4-pm6150l-flash-v1-0-531521eb2a72@fairphone.com>
- <20221209-fp4-pm6150l-flash-v1-3-531521eb2a72@fairphone.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221209-fp4-pm6150l-flash-v1-3-531521eb2a72@fairphone.com>
+Subject: Re: Fwd: nvmem-cells regression after adding 'call
+ of_platform_populate() for MTD partitions'
+Content-Language: en-US, de-DE
+To:     Maxim Kiselev <bigunclemax@gmail.com>,
+        linux-mtd@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
+ <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670675730;7ba875b6;
+X-HE-SMSGID: 1p3z4g-00033k-Vs
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[CCing the regression mailing list, as it should be in the loop for all
+regressions, as explained in
+https://docs.kernel.org/admin-guide/reporting-regressions.html ]
 
+Hi, this is your Linux kernel regression tracker. Thx for the report.
 
-On 9.12.2022 14:54, Luca Weiss wrote:
-> Configure the pm6150l flash node for the dual flash LEDs found on FP4.
+On 10.12.22 10:52, Maxim Kiselev wrote:
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> After applying
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+This makes me wonder: "applying" as in "applying it to some version that
+doesn't contain this change normally" or as it "after it was applied to
+mainline I have the following problem with vanilla kernel version <???>"?
+
+> this commit 'mtd: call of_platform_populate() for MTD
+> partitions' (bcdf0315),
+
+CCing Rafał, who authored bcdf0315.
+
+> I faced with a problem that my ethernet device can't be probed because it
+> wait when 'nvmem-cells' device will be probed first.
+
+FWIW, there is a discussion about a problems that at least to my
+untrained eyes looks similar:
+https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+
+Rafał, has some progress been made to resolve this?
+
+To me it sounds like this might warrant a "revert, and reapply later
+when the cause for the regression was addressed". Rafał, it seems you
+suggested something like that, but it doesn't look like that happened
+for one reason or another. Or am I missing something?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+> But there is no such driver which is compatible with 'nvmem-cells' because
+> 'nvmem-cells' is just a mark used by the 'mtd_nvmem_add' function.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> index c456e9594ea5..fef7d1d02925 100644
-> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> @@ -7,6 +7,7 @@
->  
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
->  #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  #include "sm7225.dtsi"
-> @@ -367,6 +368,28 @@ &mpss {
->  	firmware-name = "qcom/sm7225/fairphone4/modem.mdt";
->  };
->  
-> +&pm6150l_flash {
-> +	status = "okay";
-> +
-> +	led-0 {
-> +		function = LED_FUNCTION_FLASH;
-> +		color = <LED_COLOR_ID_YELLOW>;
-> +		led-sources = <1>;
-> +		led-max-microamp = <180000>;
-> +		flash-max-microamp = <1000000>;
-> +		flash-max-timeout-us = <1280000>;
-> +	};
-> +
-> +	led-1 {
-> +		function = LED_FUNCTION_FLASH;
-> +		color = <LED_COLOR_ID_WHITE>;
-> +		led-sources = <2>;
-> +		led-max-microamp = <180000>;
-> +		flash-max-microamp = <1000000>;
-> +		flash-max-timeout-us = <1280000>;
-> +	};
-> +};
-> +
->  &pm6150l_wled {
->  	status = "okay";
->  
+> So this leads to appeating of unresolved dependency for the ethernet device.
+> And that's why the ethernet device can't be added and probed.
 > 
+> Here is a part of kernel log when spi flash probe start:
+> 
+>> device: 'spi0': device_add
+>> device: 'spi0.0': device_add
+>> spi-nor spi0.0: mx66l51235f (65536 Kbytes)
+>> 7 fixed-partitions partitions found on MTD device spi0.0
+> 
+> After 'm25p80' probe 'f1070000.ethernet' linked to 'partition@1' :
+> 
+>> device: 'f1010600.spi:m25p80@0:
+> partitions:partition@1': device_add
+>> device: 'platform:f1010600.spi:m25p80@0:partitions:partition@1--platform:f1070000.ethernet': device_add
+>> devices_kset: Moving f1070000.ethernet to end of list
+>> platform f1070000.ethernet: Linked as a consumer to f1010600.spi:m25p80@0:partitions:partition@1
+>> ethernet@70000 Dropping the fwnode link to partition@1
+> 
+> And as a result I got `-EPROBE_DEFER` for `f1070000.ethernet`
+> 
+>> platform f1070000.ethernet: error -EPROBE_DEFER: supplier f1010600.spi:m25p80@0:partitions:partition@1 not ready
+> 
+> Here is a part of my device tree:
+> 
+>     enet1: ethernet@70000 {
+>         status = "okay";
+>         nvmem-cells = <&macaddr>;
+>         nvmem-cell-names = "mac-address";
+>         phy-mode = "rgmii";
+>         phy = <&phy0>;
+>     };
+> 
+>     spi@10600 {
+>         status = "okay";
+> 
+>         m25p80@0 {
+>             compatible = "mx66l51235l";
+>             reg = <0>;
+>             #address-cells = <1>;
+>             #size-cells = <1>;
+> 
+>             partitions {
+>                 compatible = "fixed-partitions";
+>                 #address-cells = <1>;
+>                 #size-cells = <1>;
+> 
+>                 partition@0 {
+>                     reg = <0x00000000 0x000080000>;
+>                     label = "SPI.U_BOOT";
+>                 };
+> 
+>                 partition@1 {
+>                     compatible = "nvmem-cells";
+>                     reg = <0x000A0000 0x00020000>;
+>                     label = "SPI.INV_INFO";
+>                     #address-cells = <1>;
+>                     #size-cells = <1>;
+>                     ranges = <0 0x000A0000 0x00020000>;
+> 
+>                     macaddr: mac@6 {
+>                         reg = <0x6 0x6>;
+>                     };
+>                 };
+> 
+>             };
+>         };
+>     };
+> 
+> In the example above 'ethernet@70000' requires 'macaddr: mac@6' which is
+> located inside mtd 'partition@1' of 'm25p80@0' spi flash.
+
+P.P.S.: let me add this to the regression tracking:
+
+#regzbot ^introduced bcdf0315
+#regzbot title mtd: ethernet device can't be probed anymore due to
+broken nvmem-cells dep
+#regzbot monitor: https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+#regzbot ignore-activity
