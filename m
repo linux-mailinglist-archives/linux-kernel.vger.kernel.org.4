@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5442D648EF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447C7648F1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 15:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLJNwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S229628AbiLJOHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 09:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLJNwV (ORCPT
+        with ESMTP id S229919AbiLJOGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:52:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D551B1C2;
-        Sat, 10 Dec 2022 05:52:18 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NTq6x0BLyzRpSN;
-        Sat, 10 Dec 2022 21:51:21 +0800 (CST)
-Received: from [10.67.111.176] (10.67.111.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 10 Dec 2022 21:52:15 +0800
-Message-ID: <030cca54-2e15-6723-7e07-9b393adc4d17@huawei.com>
-Date:   Sat, 10 Dec 2022 21:52:15 +0800
+        Sat, 10 Dec 2022 09:06:38 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D46318E0A
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 06:03:03 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 62so5338143pgb.13
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 06:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UaR6A5lOJuxq2TDA8bCpWrZebNLPRf+mo+8EFGWYDjI=;
+        b=jVarftiIsUKe4oUm0+iOvIJrTMCBL5LtSeCvNPiBKivy8Y9EKQFEKDEvLbFaPpLyEl
+         z5te5eqFluV7gWGI295Y/43mN2CV1RKYW1/0N18c8dQUA/Q/M5nM22L8PZcZG7V0Mgi2
+         huautCDQlJbi3FVnnXy2i8umhUyPjcbhqQWCCE9fVzFzvml+A6fB3hHhrgZvPXw7uMcU
+         xI6gRNVG1nwuN94fyBZ7HUwHvpkDnds+c+CZ2SDkVntqx2P5h61cL8Y3e1Evdhotie88
+         GEp4Bk9eN7xFwA9OSPMJ9FS0mhjWnQ0urbYnDc+s1gBBsAIUQWVc4dteuicLVCLcP6FD
+         7QUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UaR6A5lOJuxq2TDA8bCpWrZebNLPRf+mo+8EFGWYDjI=;
+        b=z9dshTXYSfZKM+5QWj1GDrHwO6GIudXErmNSxr6PPUpyOlhHJYNPQQ0op2EmdrNlwu
+         6nIhzm4E31rhFoOLAqE8TWZLBohyYlEMVSUXVGYv6gdAZ5wmgmUE4JNnx62ax4+4nise
+         CEXjDxpG6dCC8PNc8CXpBzQVBf8YT7fICBLZd4tlZcefd/+a3IqnoosTGIrMte85giM0
+         4jHQ0LV4qY50qoNFv5p9rvx/W3V9KslRlyFGpvnLJY+0SmwaHaSp8inBbl98ObpFLDCi
+         zXY/o6w01m0MoPBT5G+wWzXxgayn9D+AzA5rPRnzipJ+k0mNs/t6g+e2OS49D2RTHYSX
+         n2MQ==
+X-Gm-Message-State: ANoB5pn0KiYKpQB3gRxLNL98iDtyj3UPPZJ9jcL4rZ66sLY6iPHax/Io
+        3jadAzNZVBP338WpFw88SJkCFV5+/AWC7877NXbIzY60PMyXYQ==
+X-Google-Smtp-Source: AA0mqf6b7ZTj017Mu7LQIgO/MQmzZ+I/rXNdKSwu8/8itg8SrOMP9Ol22Co6/iGAHYSlfZOn47uBgB966trTFmTHiqU=
+X-Received: by 2002:a63:3153:0:b0:478:9503:f498 with SMTP id
+ x80-20020a633153000000b004789503f498mr23993265pgx.96.1670680486804; Sat, 10
+ Dec 2022 05:54:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
- _rtl8812ae_phy_set_txpower_limit()
-Content-Language: en-US
-To:     Ping-Ke Shih <pkshih@realtek.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "linville@tuxdriver.com" <linville@tuxdriver.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221207152319.3135500-1-lizetao1@huawei.com>
- <e985ead3ea7841b8b3a94201dfb18776@realtek.com>
- <40c4ace2-68f3-5e7d-2e68-7ea36a104a28@huawei.com>
- <4b0f5ddb6d5ccc2785f9c4e9f97eadd06a945ed7.camel@realtek.com>
-From:   Li Zetao <lizetao1@huawei.com>
-In-Reply-To: <4b0f5ddb6d5ccc2785f9c4e9f97eadd06a945ed7.camel@realtek.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.176]
-X-ClientProxiedBy: dggpeml500022.china.huawei.com (7.185.36.66) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn> <CAAhV-H6e2HzXs9PCcdnebPBvGZrx5vRXji1vGXfPwkEihBOiKA@mail.gmail.com>
+In-Reply-To: <CAAhV-H6e2HzXs9PCcdnebPBvGZrx5vRXji1vGXfPwkEihBOiKA@mail.gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Sat, 10 Dec 2022 21:54:34 +0800
+Message-ID: <CAEr6+EC2wPAtK8zb3=e1mUiya3gv0UhqF9J_ySYx9p_96pB+tg@mail.gmail.com>
+Subject: Re: [PATCH v10 0/4] Add kprobe and kretprobe support for LoongArch
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,134 +71,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke,
+On Fri, Dec 9, 2022 at 6:01 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Masami,
+>
+> This series looks good to me now, but I'm not familiar with kprobes.
+> So, if you have any comments, please let me know.
+>
+> And Jeff,
+>
+> As we all know, you are an expert in this domain, so could you please
+> help me to test this series?
+>
+> If there are no objections, I plan to merge this series in a few days.
+> But since the next merge window will be open soon, if there are any
+> problems, I will revert the patches to wait for the next cycle.
 
-On 2022/12/10 21:15, Ping-Ke Shih wrote:
-> On Sat, 2022-12-10 at 20:47 +0800, Li Zetao wrote:
->> Hi Ping-Ke,
->>
->> On 2022/12/9 13:11, Ping-Ke Shih wrote:
->>>> -----Original Message-----
->>>> From: Li Zetao <lizetao1@huawei.com>
->>>> Sent: Wednesday, December 7, 2022 11:23 PM
->>>> To: Ping-Ke Shih <pkshih@realtek.com>; kvalo@kernel.org; davem@davemloft.net;
->>>> edumazet@google.com;
->>>> kuba@kernel.org; pabeni@redhat.com
->>>> Cc: lizetao1@huawei.com; Larry.Finger@lwfinger.net; linville@tuxdriver.com;
->>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
->>>> Subject: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
->>>> _rtl8812ae_phy_set_txpower_limit()
->>>>
->>>> There is a global-out-of-bounds reported by KASAN:
->>>>
->>>>     BUG: KASAN: global-out-of-bounds in
->>>>     _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
->>>>     Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
->>>>
->>>>     CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
->>>>     6.1.0-rc8+ #144 e15588508517267d37
->>>>     Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
->>>>     Call Trace:
->>>>      <TASK>
->>>>      ...
->>>>      kasan_report+0xbb/0x1c0
->>>>      _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
->>>>      rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
->>>>      rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
->>>>      ...
->>>>      </TASK>
->>>>
->>>> The root cause of the problem is that the comparison order of
->>>> "prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
->>>> _rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
->>>> strings, so this requires the length of the two strings be greater
->>>> than or equal to n. In the  _rtl8812ae_phy_set_txpower_limit(), it was
->>>> originally intended to meet this requirement by carefully designing
->>>> the comparison order. For example, "pregulation" and "pbandwidth" are
->>>> compared in order of length from small to large, first is 3 and last
->>>> is 4. However, the comparison order of "prate_section" dose not obey
->>>> such order requirement, therefore when "prate_section" is "HT", it will
->>>> lead to access out of bounds in _rtl8812ae_eq_n_byte().
->>>>
->>>> Fix it by adding a length check in _rtl8812ae_eq_n_byte(). Although it
->>>> can be fixed by adjusting the comparison order of "prate_section", this
->>>> may cause the value of "rate_section" to not be from 0 to 5. In
->>>> addition, commit "21e4b0726dc6" not only moved driver from staging to
->>>> regular tree, but also added setting txpower limit function during the
->>>> driver config phase, so the problem was introduced by this commit.
->>>>
->>>> Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
->>>> Signed-off-by: Li Zetao <lizetao1@huawei.com>
->>>> ---
->>>>    drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
->>>> b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
->>>> index a29321e2fa72..720114a9ddb2 100644
->>>> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
->>>> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
->>>> @@ -1600,7 +1600,7 @@ static bool _rtl8812ae_get_integer_from_string(const char *str, u8
->>>> *pint)
->>>>
->>>>    static bool _rtl8812ae_eq_n_byte(const char *str1, const char *str2, u32 num)
->>>>    {
->>> This can causes problem because it compares characters from tail to head, and
->>> we can't simply replace this by strncmp() that does similar work. But, I also
->>> don't like strlen() to loop 'str1' constantly.
->>>
->>> How about having a simple loop to compare characters forward:
->>>
->>> for (i = 0; i < num; i++)
->>>       if (str1[i] != str2[i])
->>>            return false;
->>>
->>> return true;
->> Thanks for your comment, but I don't think the problem has anything to
->> do with head-to-tail or
->>
->> tail-to-head comparison. The problem is that num is the length of str2,
->> but the length of str1 may
->>
->> be less than num, which may lead to reading str1 out of bounds, for
->> example, when comparing
->>
->> "prate_section", str1 may be "HT", while str2 may by "CCK", and num is
->> 3. So I think it is neccssary
->>
->> to check the length of str1 to ensure that will not read out of bounds.
->>
-> I know your point, and I believe your patch can work well, but I would like
-> to have simple code that can solve this specific problem.
->
-> Since both str1 and str2 are null-terminator strings, so str1[2]='\0' is
-> accessible if str1="HT", right? Then, if length of str1 and str2 is
-> different, null-terminator can help to break head-to-tail loop.
->
-> Take "12" and "1234" as an example:
-> Then, num=4,
->
-> head-to-tail                tail-to-head
-> -------------------        -------------------------------------------------
-> str1[0] == str2[0]          str1[3] >< str2[3]   (str1[3] is inaccessible)
-> str1[1] == str2[1]
-> str1[2] != str2[2]
->
->
-> I hope this can help to explain my point.
-Thank you, I get your point now.
->
-> After I think deeper, it seems like third parameter 'u32 num' isn't necessary,
-> and then just strcmp(str1, str2) is enough.
->
-> Ping-Ke
+I can't use the kprobe function normally now, tested the function from
+the branch: https://github.com/loongson/linux/commits/loongarch-next
 
-I will replace _rtl8812ae_eq_n_byte with strcmp in the v2 and do a full 
-test.
+steps:
+1. Try to probe __memset_fast()
+
+[root@loongarch ]# cat /proc/kallsyms | grep __memset_fast
+90000000012c75f0 T __memset_fast
+
+./samples/kprobes/kprobe_example.c
+static char symbol[KSYM_NAME_LEN] =3D "__memset_fast";
+
+2. Loading the kprobe_example.ko
+[root@loongarch mnt]# insmod ./kprobe_example.ko
+
+*** The system will keep hanging ***
+
+dmesg-messages:
+gef=E2=9E=A4  lx-dmesg
+[   12.348047] handler_pre: <__memset_fast> p->addr =3D
+0x(____ptrval____), era =3D 0x90000000012c75f0, estat =3D 0xc0000
+[   12.348512] handler_post: <__memset_fast> p->addr =3D
+0x(____ptrval____), estat =3D 0xc0000
+[   12.348525] handler_post: <__memset_fast> p->addr =3D
+0x(____ptrval____), estat =3D 0xc0000
+[   12.349248] handler_pre: <__memset_fast> p->addr =3D
+0x(____ptrval____), era =3D 0x90000000012c75f0, estat =3D 0xc0000
+[   12.349259] handler_post: <__memset_fast> p->addr =3D
+0x(____ptrval____), estat =3D 0xc0000
+
+call trace:
+gef=E2=9E=A4  bt
+#0  0x90000000012f45f8 in queued_spin_lock_slowpath
+(lock=3D0x9000000001cc0018 <die_lock>, val=3D0x1) at
+kernel/locking/qspinlock.c:383
+#1  0x9000000000223b2c in die (str=3Dstr@entry=3D0x90000000017e3488 "Break
+instruction in kernel code", regs=3Dregs@entry=3D0x900000010fd735f0) at
+arch/loongarch/kernel/traps.c:240
+#2  0x90000000012e3968 in die_if_kernel (regs=3D<optimized out>,
+str=3D<optimized out>) at ./arch/loongarch/include/asm/ptrace.h:131
+#3  do_bp (regs=3D0x900000010fd735f0) at arch/loongarch/kernel/traps.c:485
+#4  0x9000000001cb1924 in exception_handlers ()
+Backtrace stopped: frame did not save the PC
 
 
-With Best Regards,
 
-Li Zetao
-
+> Thanks,
+> Huacai
 >
+> On Fri, Dec 9, 2022 at 4:53 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote=
+:
+> >
+> > v10:
+> >   -- Remove sign_extend() based on the latest code
+> >   -- Rename insns_are_not_supported() to insns_not_supported()
+> >   -- Rename insns_are_not_simulated() to insns_not_simulated()
+> >   -- Set KPROBE_HIT_SSDONE if cur->post_handler is not NULL
+> >   -- Enable preemption for KPROBE_REENTER in kprobe_fault_handler()
+> >
+> > v9:
+> >   -- Rename sign_extended() to sign_extend()
+> >   -- Modify kprobe_fault_handler() to handle all of kprobe_status
+> >
+> > v8:
+> >   -- Put "regs->csr_prmd &=3D ~CSR_PRMD_PIE;" ahead to save one line
+> >   -- Add code comment of preempt_disable()
+> >   -- Put kprobe_page_fault() in __do_page_fault()
+> >   -- Modify the check condition of break insn in kprobe_breakpoint_hand=
+ler()
+> >
+> > v7:
+> >   -- Remove stop_machine_cpuslocked() related code
+> >
+> > v6:
+> >   -- Add a new patch to redefine larch_insn_patch_text() with
+> >      stop_machine_cpuslocked()
+> >   -- Modify kprobe_breakpoint_handler() to consider the original
+> >      insn is break and return the correct value
+> >   -- Modify do_bp() to refresh bcode when original insn is break
+> >
+> > v5:
+> >   -- Rebase on the latest code
+> >   -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
+> >
+> > v4:
+> >   -- Remove kprobe_exceptions_notify() in kprobes.c
+> >   -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
+> >      in do_bp()
+> >
+> > v3:
+> >   -- Rebase on the latest code
+> >   -- Check the alignment of PC in simu_branch() and simu_pc()
+> >   -- Add ibar in flush_insn_slot()
+> >   -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+> >   -- Add preempt_disable() and preempt_enable_no_resched()
+> >   -- Remove r0 save/restore and do some minor changes
+> >      in kprobes_trampoline.S
+> >   -- Do not enable CONFIG_KPROBES by default
+> >
+> > v2:
+> >   -- Split simu_branch() and simu_pc() into a single patch
+> >   -- Call kprobe_page_fault() in do_page_fault()
+> >   -- Add kprobes_trampoline.S for kretprobe
+> >
+> > Tiezhu Yang (4):
+> >   LoongArch: Simulate branch and PC instructions
+> >   LoongArch: Add kprobe support
+> >   LoongArch: Add kretprobe support
+> >   samples/kprobes: Add LoongArch support
+> >
+> >  arch/loongarch/Kconfig                     |   2 +
+> >  arch/loongarch/include/asm/inst.h          |  20 ++
+> >  arch/loongarch/include/asm/kprobes.h       |  59 +++++
+> >  arch/loongarch/include/asm/ptrace.h        |   1 +
+> >  arch/loongarch/kernel/Makefile             |   2 +
+> >  arch/loongarch/kernel/inst.c               | 123 ++++++++++
+> >  arch/loongarch/kernel/kprobes.c            | 364 +++++++++++++++++++++=
+++++++++
+> >  arch/loongarch/kernel/kprobes_trampoline.S |  96 ++++++++
+> >  arch/loongarch/kernel/traps.c              |  13 +-
+> >  arch/loongarch/mm/fault.c                  |   3 +
+> >  samples/kprobes/kprobe_example.c           |   8 +
+> >  11 files changed, 687 insertions(+), 4 deletions(-)
+> >  create mode 100644 arch/loongarch/include/asm/kprobes.h
+> >  create mode 100644 arch/loongarch/kernel/kprobes.c
+> >  create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+> >
+> > --
+> > 2.1.0
+> >
+
+
+
+--=20
+Thanks,
+JeffXie
