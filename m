@@ -2,198 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C8A648EF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5442D648EF5
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLJNsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S229720AbiLJNwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLJNso (ORCPT
+        with ESMTP id S229656AbiLJNwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:48:44 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D681B1C2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 05:48:43 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so1747766wms.2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 05:48:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dSQKkxRzbEqk8NGysQnios/WZfjA0FuVvZI1N95s5Ak=;
-        b=SdA04jqB0UoHdIJkeCpZLL5hrjqwJnYjNYgtb8KK61KaFXvfk5vDXphWTHwMToj80O
-         FFLj+XlDxAX0GjxHzhUYM/lTAy2nKPahLb5bbfySjWNrEM2OL6UE6U1xp4RVxhS7rGuv
-         PtYWyxYtT0JH/T5fM1MsRtltDgOfZaZJ/ySa1DkMdImn51J93NhtJnBqtoLyBHY9rEaw
-         TGFYGnqOovVcOnsKtPz63KiUd33qtOceMCaaKGkq5ZwuGSE1uXMb+EkjLupRAOLZUsMA
-         GVkvgdL4YR/mzomfbEFjNNrWJEm1rzSg3iZ5sp6/eDYnitspPnWJz6HUDSwQ25w2BiHl
-         maXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dSQKkxRzbEqk8NGysQnios/WZfjA0FuVvZI1N95s5Ak=;
-        b=keGlAVlj9WZc5t+uToriaAJxAWi05IPa4SdTwn0Hj12UKsgRu5u5RQFl4Dd8PO8lkf
-         /gTbXhT+Oia0KNAosT4oTz1+mNKYf7g6pB9sRcftbql1qxblrbnXFrU6OCBr1yAT1WXR
-         dBRCiMdmYE9cF892NsCkywOI/7QTuZWn1TgLU3+2JdyRBCkp74hNXhQVKk6fu4ZM87wK
-         FAq8sNX7CDt2/XY8I1jj/qLbpA+de7HgJQnNgKN/Lym+Xjz4LB9uV38vphPw3qGJXSeS
-         pvshrRn8AGXqpaZISN0qKm9Se9eQFqt8HgDxaxuu9KpQ29DnNHEF2rbN+6vyDe2kq1VV
-         L7+g==
-X-Gm-Message-State: ANoB5pmWSXQcMnC84NkOCa2clMEs4vo4I1s0b3SnWrTzlaB261EwzuoS
-        sYUDQTJu/g57B9+6GEut3PreIXRm921Akxu2
-X-Google-Smtp-Source: AA0mqf5//g7RtnurYSmzlilQego85/+M/3CO6DQQUrfZUnsocmkGcLiPK2bC4qeGFlu1DQUpKbQVdg==
-X-Received: by 2002:a05:651c:17a7:b0:276:5727:c57a with SMTP id bn39-20020a05651c17a700b002765727c57amr3116582ljb.29.1670679534637;
-        Sat, 10 Dec 2022 05:38:54 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id 11-20020a2eb94b000000b0026c5579c64csm605052ljs.89.2022.12.10.05.38.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 05:38:54 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm8350-sagami: Rectify GPIO keys
-Date:   Sat, 10 Dec 2022 14:38:50 +0100
-Message-Id: <20221210133850.3664-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Sat, 10 Dec 2022 08:52:21 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D551B1C2;
+        Sat, 10 Dec 2022 05:52:18 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NTq6x0BLyzRpSN;
+        Sat, 10 Dec 2022 21:51:21 +0800 (CST)
+Received: from [10.67.111.176] (10.67.111.176) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 10 Dec 2022 21:52:15 +0800
+Message-ID: <030cca54-2e15-6723-7e07-9b393adc4d17@huawei.com>
+Date:   Sat, 10 Dec 2022 21:52:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
+ _rtl8812ae_phy_set_txpower_limit()
+Content-Language: en-US
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "linville@tuxdriver.com" <linville@tuxdriver.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221207152319.3135500-1-lizetao1@huawei.com>
+ <e985ead3ea7841b8b3a94201dfb18776@realtek.com>
+ <40c4ace2-68f3-5e7d-2e68-7ea36a104a28@huawei.com>
+ <4b0f5ddb6d5ccc2785f9c4e9f97eadd06a945ed7.camel@realtek.com>
+From:   Li Zetao <lizetao1@huawei.com>
+In-Reply-To: <4b0f5ddb6d5ccc2785f9c4e9f97eadd06a945ed7.camel@realtek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.176]
+X-ClientProxiedBy: dggpeml500022.china.huawei.com (7.185.36.66) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With enough pins set properly, the hardware buttons now also work
-like a charm.
+Hi Ping-Ke,
 
-Fixes: c2721b0c23d9 ("arm64: dts: qcom: Add support for Xperia 1 III / 5 III")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../qcom/sm8350-sony-xperia-sagami-pdx214.dts | 24 ++++++++++
- .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 47 ++++++++++++++++++-
- 2 files changed, 70 insertions(+), 1 deletion(-)
+On 2022/12/10 21:15, Ping-Ke Shih wrote:
+> On Sat, 2022-12-10 at 20:47 +0800, Li Zetao wrote:
+>> Hi Ping-Ke,
+>>
+>> On 2022/12/9 13:11, Ping-Ke Shih wrote:
+>>>> -----Original Message-----
+>>>> From: Li Zetao <lizetao1@huawei.com>
+>>>> Sent: Wednesday, December 7, 2022 11:23 PM
+>>>> To: Ping-Ke Shih <pkshih@realtek.com>; kvalo@kernel.org; davem@davemloft.net;
+>>>> edumazet@google.com;
+>>>> kuba@kernel.org; pabeni@redhat.com
+>>>> Cc: lizetao1@huawei.com; Larry.Finger@lwfinger.net; linville@tuxdriver.com;
+>>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+>>>> Subject: [PATCH] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
+>>>> _rtl8812ae_phy_set_txpower_limit()
+>>>>
+>>>> There is a global-out-of-bounds reported by KASAN:
+>>>>
+>>>>     BUG: KASAN: global-out-of-bounds in
+>>>>     _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+>>>>     Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
+>>>>
+>>>>     CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
+>>>>     6.1.0-rc8+ #144 e15588508517267d37
+>>>>     Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+>>>>     Call Trace:
+>>>>      <TASK>
+>>>>      ...
+>>>>      kasan_report+0xbb/0x1c0
+>>>>      _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+>>>>      rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
+>>>>      rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
+>>>>      ...
+>>>>      </TASK>
+>>>>
+>>>> The root cause of the problem is that the comparison order of
+>>>> "prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
+>>>> _rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
+>>>> strings, so this requires the length of the two strings be greater
+>>>> than or equal to n. In the  _rtl8812ae_phy_set_txpower_limit(), it was
+>>>> originally intended to meet this requirement by carefully designing
+>>>> the comparison order. For example, "pregulation" and "pbandwidth" are
+>>>> compared in order of length from small to large, first is 3 and last
+>>>> is 4. However, the comparison order of "prate_section" dose not obey
+>>>> such order requirement, therefore when "prate_section" is "HT", it will
+>>>> lead to access out of bounds in _rtl8812ae_eq_n_byte().
+>>>>
+>>>> Fix it by adding a length check in _rtl8812ae_eq_n_byte(). Although it
+>>>> can be fixed by adjusting the comparison order of "prate_section", this
+>>>> may cause the value of "rate_section" to not be from 0 to 5. In
+>>>> addition, commit "21e4b0726dc6" not only moved driver from staging to
+>>>> regular tree, but also added setting txpower limit function during the
+>>>> driver config phase, so the problem was introduced by this commit.
+>>>>
+>>>> Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
+>>>> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+>>>> ---
+>>>>    drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+>>>> b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+>>>> index a29321e2fa72..720114a9ddb2 100644
+>>>> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+>>>> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.c
+>>>> @@ -1600,7 +1600,7 @@ static bool _rtl8812ae_get_integer_from_string(const char *str, u8
+>>>> *pint)
+>>>>
+>>>>    static bool _rtl8812ae_eq_n_byte(const char *str1, const char *str2, u32 num)
+>>>>    {
+>>> This can causes problem because it compares characters from tail to head, and
+>>> we can't simply replace this by strncmp() that does similar work. But, I also
+>>> don't like strlen() to loop 'str1' constantly.
+>>>
+>>> How about having a simple loop to compare characters forward:
+>>>
+>>> for (i = 0; i < num; i++)
+>>>       if (str1[i] != str2[i])
+>>>            return false;
+>>>
+>>> return true;
+>> Thanks for your comment, but I don't think the problem has anything to
+>> do with head-to-tail or
+>>
+>> tail-to-head comparison. The problem is that num is the length of str2,
+>> but the length of str1 may
+>>
+>> be less than num, which may lead to reading str1 out of bounds, for
+>> example, when comparing
+>>
+>> "prate_section", str1 may be "HT", while str2 may by "CCK", and num is
+>> 3. So I think it is neccssary
+>>
+>> to check the length of str1 to ensure that will not read out of bounds.
+>>
+> I know your point, and I believe your patch can work well, but I would like
+> to have simple code that can solve this specific problem.
+>
+> Since both str1 and str2 are null-terminator strings, so str1[2]='\0' is
+> accessible if str1="HT", right? Then, if length of str1 and str2 is
+> different, null-terminator can help to break head-to-tail loop.
+>
+> Take "12" and "1234" as an example:
+> Then, num=4,
+>
+> head-to-tail                tail-to-head
+> -------------------        -------------------------------------------------
+> str1[0] == str2[0]          str1[3] >< str2[3]   (str1[3] is inaccessible)
+> str1[1] == str2[1]
+> str1[2] != str2[2]
+>
+>
+> I hope this can help to explain my point.
+Thank you, I get your point now.
+>
+> After I think deeper, it seems like third parameter 'u32 num' isn't necessary,
+> and then just strcmp(str1, str2) is enough.
+>
+> Ping-Ke
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dts b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dts
-index e6824c8c2774..6fa830bdc6bd 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx214.dts
-@@ -10,6 +10,20 @@
- / {
- 	model = "Sony Xperia 5 III";
- 	compatible = "sony,pdx214-generic", "qcom,sm8350";
-+
-+	gpio-keys {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&focus_n &snapshot_n &vol_down_n &g_assist_n>;
-+
-+		key-google-assist {
-+			label = "Google Assistant Key";
-+			gpios = <&pm8350_gpios 9 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_LEFTMETA>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
-+	};
- };
- 
- &framebuffer {
-@@ -18,6 +32,16 @@ &framebuffer {
- 	stride = <(1080 * 4)>;
- };
- 
-+&pm8350_gpios {
-+	g_assist_n: g-assist-n-state {
-+		pins = "gpio9";
-+		function = "normal";
-+		power-source = <1>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+};
-+
- &pm8350b_gpios {
- 	gpio-line-names = "NC", /* GPIO_1 */
- 			  "NC",
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-index d73e1f3fa501..557b4538a031 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-@@ -49,7 +49,26 @@ framebuffer: framebuffer@e1000000 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		/* For reasons still unknown, GAssist key and Camera Focus/Shutter don't work.. */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&focus_n &snapshot_n &vol_down_n>;
-+
-+		key-camera-focus {
-+			label = "Camera Focus";
-+			linux,code = <KEY_CAMERA_FOCUS>;
-+			gpios = <&pm8350b_gpios 8 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
-+
-+		key-camera-snapshot {
-+			label = "Camera Snapshot";
-+			linux,code = <KEY_CAMERA>;
-+			gpios = <&pm8350b_gpios 5 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
- 
- 		key-vol-down {
- 			label = "Volume Down";
-@@ -547,11 +566,37 @@ &pm8350_gpios {
- 			  "PM8350_OPTION"; /* GPIO_10 */
- };
- 
-+&pm8350b_gpios {
-+	snapshot_n: snapshot-n-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		power-source = <0>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+
-+	focus_n: focus-n-state {
-+		pins = "gpio8";
-+		function = "normal";
-+		power-source = <0>;
-+		input-enable;
-+		bias-pull-up;
-+	};
-+};
-+
- &pmk8350_gpios {
- 	gpio-line-names = "NC", /* GPIO_1 */
- 			  "NC",
- 			  "VOL_DOWN_N",
- 			  "PMK8350_OPTION";
-+
-+	vol_down_n: vol-down-n-state {
-+		pins = "gpio3";
-+		function = "normal";
-+		power-source = <0>;
-+		bias-pull-up;
-+		input-enable;
-+	};
- };
- 
- &pmk8350_rtc {
--- 
-2.38.1
+I will replace _rtl8812ae_eq_n_byte with strcmp in the v2 and do a full 
+test.
 
+
+With Best Regards,
+
+Li Zetao
+
+>
