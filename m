@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82FB648B8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3AA648B90
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 01:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiLJAKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 19:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S229873AbiLJALC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 19:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLJAKc (ORCPT
+        with ESMTP id S229470AbiLJALA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 19:10:32 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608DE12D01;
-        Fri,  9 Dec 2022 16:10:31 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id s14so4144118qvo.11;
-        Fri, 09 Dec 2022 16:10:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=83yKsDDpGa+B1Yd9NVuHHt+5qk4/fmovDh0eIAQ7bps=;
-        b=QFyRFap5zjKKrJKxWJeJfM0E1Lg9UOAMu58abHfgowtIE1hcv4or4BR+spy+YhkStm
-         V69D9dl6n2t6lTMS0cgHQH4oVA6ggeU6l0WaZ7fMxcoAP244Leymu7omg+SAQ22sTeOJ
-         gwEI04wsqUCa6J6FI+iKGR+z/OwsnUb8IGcDBShPqRCGCQeCIt3C9aziFnJT8Z9cqBZ5
-         IyPSnWwdm/HbPhpADy+wc9Q8YTDWw7B9OgFUPytmXCHsLgBzTR9/oumxLJXZLxJzB6g1
-         rCWuJay5czOhGhAVcV0F2vn/f7HdZHyCwFd024ZCDzDv8UBNeDqZsb02R2s5vrIqINNb
-         UvdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83yKsDDpGa+B1Yd9NVuHHt+5qk4/fmovDh0eIAQ7bps=;
-        b=TQ3GRfq7nEJt7mE2fcTlaBlc1Ni8ThYw8tDRvZ8SkGr1xVDsvS2qXqJWecNKHVY7VC
-         /rqQKPtC3VrA2sySdrFz1EMPUNDC84ZVC4GTR4AQotBeORN4LTHbx5J7D3Aw4eusv+nX
-         zcYHoIApHgZBuea5nNEMOPC41oNUEDs01y953X94/HrF9jymdyQBqMtTa8w02Pfk/wSg
-         aYGlOUQvm1xq3VdwKK8KqO27DHhd+n3R64kRQ3k5vc6qUnTFPTg9gZnai0YiqzYzxMg9
-         Jfxd8KhY5ecUrCeA04zmlluJOrjf2aZenzGfDU4Q4fQfJUPGOXTu6lGgFIt+CFWGFmYY
-         Rd3w==
-X-Gm-Message-State: ANoB5pmkHoJaWZ5+ucwX5l7ZxjYS+FovqxZS2jBsFpQdcW+8LjvHeDB5
-        TluIBiPoIi35c/1UahSGhtkWkdMjzSt+Dw==
-X-Google-Smtp-Source: AA0mqf7KMKvowTK05+W8GvJbHY9krYjCC5Fh7SkVTQtQ5V5o9iJq9Rtge9BiITN+kc8CJHOrRbw1Lw==
-X-Received: by 2002:ad4:43cb:0:b0:4bb:69e5:920f with SMTP id o11-20020ad443cb000000b004bb69e5920fmr8575765qvs.14.1670631030412;
-        Fri, 09 Dec 2022 16:10:30 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id br20-20020a05620a461400b006faf76e7c9asm955715qkb.115.2022.12.09.16.10.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 16:10:29 -0800 (PST)
-Message-ID: <fe85438d-8774-505f-4ac2-0df1c3368f6f@gmail.com>
-Date:   Fri, 9 Dec 2022 16:10:20 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch net-next v3 01/13] net: dsa: microchip: ptp: add the posix
- clock support
-Content-Language: en-US
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de
-References: <20221209072437.18373-1-arun.ramadoss@microchip.com>
- <20221209072437.18373-2-arun.ramadoss@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221209072437.18373-2-arun.ramadoss@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Dec 2022 19:11:00 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D3430F7F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 16:10:58 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id AD31DC01B; Sat, 10 Dec 2022 01:11:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670631067; bh=HyFR8xSzRUqVUlavgT48EJ0ZVGK/uZU9vO4AzilxacY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ripLB6FSl1Bmq/LE0nufGTv/HavizAqpw2unUao7R6KQeDmBLo8GB0b+YIqjNKC8d
+         IutrWk/aOL2SpRYc/jOimr2kFQc81MPr34AIuIGh6BvMfotO9THbNxF6BO7M523mtT
+         r/5NpZF05pVFzmEL9lYlDP79bzUkPmx/3941oZ0q3mQm2Qt3Z9nP0XKZj0YsK3gyi9
+         dzRzt3oWA9WL41q8O3r0btW28xJdAR4JMLX2aPDp9s4mU29gn1aeeADbTtMEHW8qkC
+         oZzhsEmZGJKhFbsK2VRarstSlxU+gxhxfgUs+aNlVLQaciwtBIuINexy6N07DMV4uM
+         6CSDhOOTSOPeQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 7E094C01B;
+        Sat, 10 Dec 2022 01:11:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670631067; bh=HyFR8xSzRUqVUlavgT48EJ0ZVGK/uZU9vO4AzilxacY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ripLB6FSl1Bmq/LE0nufGTv/HavizAqpw2unUao7R6KQeDmBLo8GB0b+YIqjNKC8d
+         IutrWk/aOL2SpRYc/jOimr2kFQc81MPr34AIuIGh6BvMfotO9THbNxF6BO7M523mtT
+         r/5NpZF05pVFzmEL9lYlDP79bzUkPmx/3941oZ0q3mQm2Qt3Z9nP0XKZj0YsK3gyi9
+         dzRzt3oWA9WL41q8O3r0btW28xJdAR4JMLX2aPDp9s4mU29gn1aeeADbTtMEHW8qkC
+         oZzhsEmZGJKhFbsK2VRarstSlxU+gxhxfgUs+aNlVLQaciwtBIuINexy6N07DMV4uM
+         6CSDhOOTSOPeQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 19dbb211;
+        Sat, 10 Dec 2022 00:10:51 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH] 9p/virtio: add a read barrier in p9_virtio_zc_request
+Date:   Sat, 10 Dec 2022 09:10:44 +0900
+Message-Id: <20221210001044.534859-1-asmadeus@codewreck.org>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 23:24, Arun Ramadoss wrote:
-> From: Christian Eggers <ceggers@arri.de>
-> 
-> This patch implement routines (adjfine, adjtime, gettime and settime)
-> for manipulating the chip's PTP clock. It registers the ptp caps
-> to posix clock register.
-> 
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Co-developed-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+The request receiving thread writes into request then marks the request
+valid in p9_client_cb by setting status after a write barrier.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+p9_virtio_zc_request must like p9_client_rpc issue a read barrier after
+getting notified of the new request status before reading other request
+files.
+
+(This has been noticed while fixing the usage of READ/WRITE_ONCE macros
+for request status)
+
+Link: https://lkml.kernel.org/r/167052961.MU3OA6Uzks@silver
+Reported-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+ net/9p/trans_virtio.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/net/9p/trans_virtio.c b/net/9p/trans_virtio.c
+index 3c27ffb781e3..98425c63b3c3 100644
+--- a/net/9p/trans_virtio.c
++++ b/net/9p/trans_virtio.c
+@@ -533,6 +533,12 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
+ 	p9_debug(P9_DEBUG_TRANS, "virtio request kicked\n");
+ 	err = wait_event_killable(req->wq,
+ 			          READ_ONCE(req->status) >= REQ_STATUS_RCVD);
++
++	/* Make sure our req is coherent with regard to updates in other
++	 * threads - echoes to wmb() in the callback like p9_client_rpc
++	 */
++	smp_rmb();
++
+ 	// RERROR needs reply (== error string) in static data
+ 	if (READ_ONCE(req->status) == REQ_STATUS_RCVD &&
+ 	    unlikely(req->rc.sdata[4] == P9_RERROR))
 -- 
-Florian
+2.38.1
 
