@@ -2,179 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02365648E15
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D084E648E1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 11:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLJKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 05:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S229777AbiLJKSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 05:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiLJKJu (ORCPT
+        with ESMTP id S229548AbiLJKSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 05:09:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D3205F9
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 02:09:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A2FE60A24
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 10:09:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D610AC433F0;
-        Sat, 10 Dec 2022 10:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670666988;
-        bh=5ghN9JW2HFtpVtwiWAlI7UySwVA3lyKrsQIFRBo/g8o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJ0pBgLJTq5BcrKXlsghFrcJv0XBGPXuSeLbIAYvi4wXGi06KeGKZqj7UecDjHLSU
-         Jaw0wt3GoUQ29OWIobpCjxTM+aXOQwesa0QnvBfqG5gwF9b4W0kIW/HHsW+DEEB9rs
-         +phKyCzJVYxUoMYfieAekbg/Lbs9xY5zttYMPrUHQxyrdPq26Dael08jIStJKKE1Sh
-         SFwQYQGaJG/y8EHGaA/gZTG4h5j79CCuws7spiqSKNks63EYkzQMXfYezT0LH3dvSc
-         NvU2OvGLsGiZvofWJaxvAJJebE9XLJdtz2cEZuqy7okQdKGUvbqn34XikhAZCSaCq7
-         ZwB0hmfStFpag==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, conor.Dooley@microchip.com, guoren@kernel.org,
-        andy.chiu@sifive.com, greentime.hu@sifive.com,
-        paul.walmsley@sifive.com, peterz@infradead.org,
-        rostedt@goodmis.org, jrtc27@jrtc27.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH -next V2 2/2] riscv: jump_label: Using c.j for CONFIG_RISCV_ISA_C
-Date:   Sat, 10 Dec 2022 05:09:27 -0500
-Message-Id: <20221210100927.835145-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221210100927.835145-1-guoren@kernel.org>
-References: <20221210100927.835145-1-guoren@kernel.org>
+        Sat, 10 Dec 2022 05:18:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE8A22508;
+        Sat, 10 Dec 2022 02:18:34 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670667511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ty5wsGimI0tKO4tCsLTXg96lpBlywCG0/ZSuieeSBNw=;
+        b=z4YFhF/4tnkRVvjv/OClKIp/5pRw40DctYX83xCGrgIVgpabgHlXlTO5MirwipzH98lhqq
+        TRfavDq5zBiKwzwECYHlNm4VaCLNmUN1b1bW2ANkG5tjxuI1WDNw/3hUbmDLYchO+NWExq
+        /+3sUjxrNzDQfycwHZwbD91gSij7fOeJFvyn7ln/dCNjNhks8vJOYuuWCfFrSY3aOHuDLe
+        F8bgvPKrR6Z7NmjSO/5N6yGn/Lb3AWNxjltqgMp4kDTB9DkRhihJdiQquseUAod/KyHDkx
+        0GjMt/1BCftpv/mLax/KKu+NUOssKiFz61elqq05VLC9u0wmg6ywK2IuijQHAg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670667511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ty5wsGimI0tKO4tCsLTXg96lpBlywCG0/ZSuieeSBNw=;
+        b=jUtHSXMT5MAJkecXlOrwudnyd6w97zyYvKRhYfEB1n79hLqdxZKcSt/HHrjSvQ/K6el/g/
+        RKMDdW7Dcwyd1OCA==
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Cc:     John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v5 net-next 01/10] dt-bindings: dsa: sync with maintainers
+In-Reply-To: <20221210033033.662553-2-colin.foster@in-advantage.com>
+References: <20221210033033.662553-1-colin.foster@in-advantage.com>
+ <20221210033033.662553-2-colin.foster@in-advantage.com>
+Date:   Sat, 10 Dec 2022 11:18:29 +0100
+Message-ID: <87o7sbh896.fsf@kurt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reduce the size of the static branch instruction and prevent atomic
-update problems. It would also reduce the range from 1MB to 4KB.
-The range of 4K is enough for static branch.
+On Fri Dec 09 2022, Colin Foster wrote:
+> The MAINTAINERS file has Andrew Lunn, Florian Fainelli, and Vladimir Olte=
+an
+> listed as the maintainers for generic dsa bindings. Update dsa.yaml and
+> dsa-port.yaml accordingly.
+>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+>
+> ---
+>
+> v5
+>   * New patch
+>
+> ---
+>  Documentation/devicetree/bindings/net/dsa/dsa-port.yaml | 2 +-
+>  Documentation/devicetree/bindings/net/dsa/dsa.yaml      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Do=
+cumentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> index 9abb8eba5fad..2b8317911bef 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> @@ -9,7 +9,7 @@ title: Ethernet Switch port Device Tree Bindings
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+>    - Florian Fainelli <f.fainelli@gmail.com>
+> -  - Vivien Didelot <vivien.didelot@gmail.com>
+> +  - Vladimir Oltean <olteanv@gmail.com>
+>=20=20
+>  description:
+>    Ethernet switch port Description
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documen=
+tation/devicetree/bindings/net/dsa/dsa.yaml
+> index b9d48e357e77..5efc0ee8edcb 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> @@ -9,7 +9,7 @@ title: Ethernet Switch Device Tree Bindings
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+>    - Florian Fainelli <f.fainelli@gmail.com>
+> -  - Vivien Didelot <vivien.didelot@gmail.com>
+> +  - Vladimir Oltean <olteanv@gmail.com>
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Jessica Clarke <jrtc27@jrtc27.com>
----
- arch/riscv/include/asm/jump_label.h | 16 +++++++++++----
- arch/riscv/kernel/jump_label.c      | 30 +++++++++++++++++++++++++++--
- 2 files changed, 40 insertions(+), 6 deletions(-)
+You can update the hellcreek binding as well. Thanks.
 
-diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-index 729991e8f782..e5f772ad5887 100644
---- a/arch/riscv/include/asm/jump_label.h
-+++ b/arch/riscv/include/asm/jump_label.h
-@@ -12,17 +12,23 @@
- #include <linux/types.h>
- #include <asm/asm.h>
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+#define JUMP_LABEL_NOP_SIZE 2
-+#else
- #define JUMP_LABEL_NOP_SIZE 4
-+#endif
- 
- static __always_inline bool arch_static_branch(struct static_key *key,
- 					       bool branch)
- {
- 	asm_volatile_goto(
--		"	.align		2			\n\t"
- 		"	.option push				\n\t"
- 		"	.option norelax				\n\t"
--		"	.option norvc				\n\t"
-+#ifdef CONFIG_RISCV_ISA_C
-+		"1:	c.nop					\n\t"
-+#else
- 		"1:	nop					\n\t"
-+#endif
- 		"	.option pop				\n\t"
- 		"	.pushsection	__jump_table, \"aw\"	\n\t"
- 		"	.align		" RISCV_LGPTR "		\n\t"
-@@ -40,11 +46,13 @@ static __always_inline bool arch_static_branch_jump(struct static_key *key,
- 						    bool branch)
- {
- 	asm_volatile_goto(
--		"	.align		2			\n\t"
- 		"	.option push				\n\t"
- 		"	.option norelax				\n\t"
--		"	.option norvc				\n\t"
-+#ifdef CONFIG_RISCV_ISA_C
-+		"1:	c.j		%l[label]		\n\t"
-+#else
- 		"1:	jal		zero, %l[label]		\n\t"
-+#endif
- 		"	.option pop				\n\t"
- 		"	.pushsection	__jump_table, \"aw\"	\n\t"
- 		"	.align		" RISCV_LGPTR "		\n\t"
-diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
-index e6694759dbd0..08f42c49e3a0 100644
---- a/arch/riscv/kernel/jump_label.c
-+++ b/arch/riscv/kernel/jump_label.c
-@@ -11,26 +11,52 @@
- #include <asm/bug.h>
- #include <asm/patch.h>
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+#define RISCV_INSN_NOP 0x0001U
-+#define RISCV_INSN_C_J 0xa001U
-+#else
- #define RISCV_INSN_NOP 0x00000013U
- #define RISCV_INSN_JAL 0x0000006fU
-+#endif
- 
- void arch_jump_label_transform(struct jump_entry *entry,
- 			       enum jump_label_type type)
- {
- 	void *addr = (void *)jump_entry_code(entry);
-+#ifdef CONFIG_RISCV_ISA_C
-+	u16 insn;
-+#else
- 	u32 insn;
-+#endif
- 
- 	if (type == JUMP_LABEL_JMP) {
- 		long offset = jump_entry_target(entry) - jump_entry_code(entry);
--
--		if (WARN_ON(offset & 1 || offset < -524288 || offset >= 524288))
-+		if (WARN_ON(offset & 1 || offset < -2048 || offset >= 2048))
- 			return;
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+		/*
-+		 * 001 | imm[11|4|9:8|10|6|7|3:1|5] 01 - C.J
-+		 */
-+		insn = RISCV_INSN_C_J |
-+			(((u16)offset & GENMASK(5, 5)) >> (5 - 2)) |
-+			(((u16)offset & GENMASK(3, 1)) << (3 - 1)) |
-+			(((u16)offset & GENMASK(7, 7)) >> (7 - 6)) |
-+			(((u16)offset & GENMASK(6, 6)) << (7 - 6)) |
-+			(((u16)offset & GENMASK(10, 10)) >> (10 - 8)) |
-+			(((u16)offset & GENMASK(9, 8)) << (9 - 8)) |
-+			(((u16)offset & GENMASK(4, 4)) << (11 - 4)) |
-+			(((u16)offset & GENMASK(11, 11)) << (12 - 11));
-+#else
-+		/*
-+		 * imm[20|10:1|11|19:12] | rd | 1101111 - JAL
-+		 */
- 		insn = RISCV_INSN_JAL |
- 			(((u32)offset & GENMASK(19, 12)) << (12 - 12)) |
- 			(((u32)offset & GENMASK(11, 11)) << (20 - 11)) |
- 			(((u32)offset & GENMASK(10,  1)) << (21 -  1)) |
- 			(((u32)offset & GENMASK(20, 20)) << (31 - 20));
-+#endif
- 	} else {
- 		insn = RISCV_INSN_NOP;
- 	}
--- 
-2.36.1
+diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek=
+.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+index 73b774eadd0b..1d7dab31457d 100644
+=2D-- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+@@ -12,7 +12,7 @@ allOf:
+ maintainers:
+   - Andrew Lunn <andrew@lunn.ch>
+   - Florian Fainelli <f.fainelli@gmail.com>
+=2D  - Vivien Didelot <vivien.didelot@gmail.com>
++  - Vladimir Oltean <olteanv@gmail.com>
+   - Kurt Kanzenbach <kurt@linutronix.de>
+=20
+ description:
 
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmOUXPUTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgrQFD/4qzANLVIDNmAXq6YHaa1ML5D21go2L
+PrwddcGJRfn4INzwchv05dIML2gtqasZ6ug1NTpJ8ypmod396M/i/J62taZ7TEM/
+9DK9rARUgAUdXCeM95tdlV6pmA6M46Sf7iYYH/enczZNkTZI/qCQrRN/4qDq+WAs
+MVRNX4++Qw3ytahvNXrzlDrKoDY4N0NqpJ7kPyWvwqo5dSpAAlLKWhASXvh3qrae
+6ObFLssKhEFIfKNErR6iQdcqOREGRH/LJyKX4u7m/CNGDBz5x6riMDMOh5Rih1LG
+qeEZ7gJoTsISVySHQgJ58EU2LNdPpbr8y+DEFgDpxjnXDCW90vPzCxu9kbi8jwIR
+XrHaRTDagP+IQB4aOpbbxLpNHwa3yuYjSF0A1N7keXWWG9koyXU5MOruMOnveyXh
+O7Eu/47wTx8lY5i5n2Tbd3I/6i6zmTmVogL5RBjml9RgZvDuKi2Gmu/IFCdXVNEw
+6/uBpkTepOHRyhOOZbIcWfZX3hqeC6THGwHAf1pJHSsCTGDwFBWJ/z13wSa9ZBDI
+2OZGCV37dYLLxgLXbz4KOTNzUsTwlIztDZklGfEyHoHtqX7UdFuzlzL1+3Di0yHB
+zjpvFphD8FMokYY8pOfsyz5k5CpqXJISAZ15INvc5FUX6upDS8xGNGi5AJfZ71XR
+OvYRLoO2PCLRuA==
+=ti3Q
+-----END PGP SIGNATURE-----
+--=-=-=--
