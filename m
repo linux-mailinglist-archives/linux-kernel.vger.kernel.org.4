@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D60C648EAB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 13:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D64648EAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 13:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiLJMbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 07:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S229738AbiLJMcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 07:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLJMbh (ORCPT
+        with ESMTP id S229732AbiLJMcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 07:31:37 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7722A6141
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:31:36 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id a19so7684053ljk.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:31:36 -0800 (PST)
+        Sat, 10 Dec 2022 07:32:47 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A79DFBD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:32:46 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id q6so1072970lfm.10
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 04:32:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6R8r/VCnswD9bNbiIPd9uK6NspRqfrl1hwseDl8et58=;
-        b=DQ4L2hWmrXP/0KrFothmtefJZbYb/r0ZAc9PLsTvKVvK8+rXRLpwspGHAbbIi8cpu4
-         VSjFVut4D+HpN8upau3fIbyiN9xKcTArNrEISnyKeAhlQqi5ijCXfF+YYhCWFK+Ie3Xo
-         NUT8hEDgzV+Qik5myxtCLLTE+DdBXiS0vHXD1nsIzgNVmTmDRkOFtcw8eXZTW1VjOPF7
-         tB6vNLm4Ta5KfhXzjomqzmtL3eEztdGTQu3j6H/9uYmD992e+MeDvGM2F2fdlEUqOoPQ
-         6IwqZkyqujxsWULV4u4WEOn1u5PRaL6rdtVFrPyhuiW+gK9kSDPxs8TOGxt7jbEXRoNL
-         tRLg==
+        bh=Bt1IcNSVmqyqXv33Ev5rTYvEXElPqvKitUErcFHS9UE=;
+        b=DtRoMkD32qwCMx4G9MRJapH/ZCgdnOt4mBQI5IUu/FJtRc2K3jri5yxMKTn6FTjZPs
+         4D5YF+i+1zZtG/Ax75L/U96Ex86vsIicVJ9/1xmkbFzNZv+RGiasBnQqNL16/Bh93o81
+         vV1iv0W/agKM+UDU2Z17Re9lBqwymNE3iz0ywIUNgTsZP6jwzUJ0nPHgbjiWbjCjwePQ
+         hSeZ8+ghFIHpP7B/IR1AvqOVQEe8g2dgXynPJ1v0msYCwRNh/5fd60Jf7aiE6QQxf+rG
+         CxuDf550Ur+hBQKUjHniVbYnFB1Oku/X82FTwWjahVK9ImurdExBVxRBSBj/Fbjfb663
+         Kstw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6R8r/VCnswD9bNbiIPd9uK6NspRqfrl1hwseDl8et58=;
-        b=6HQFyIkEACytwsQjVz5mofYRkAlIOshs1UHHlfBRzvlBI2ZGDGIDBhYqqhX10JcZUI
-         2wtO1InduHXStYrFcwCiWwWH+hm6vfz7YHa5kMAj+ZzXjj7Y04cI4mjqQAFJ3gME3/fg
-         BaGxS4oW5iY3iC81dOzBKd8TO0N4XiE8uQxt/Lkw1P2GADazddt+wEBMLClYkhtPnYYK
-         qLWqE5iW6os3CgoAFaRX1OK6i1SiVdQ+JgCxFwT0l1aXjbPpk3m3afQ7Mvbyhh06SFZe
-         8AmGSWbD07XW1vT2sTIjGXCzxvwfk2atBARMv/Elo6WNl2lrDCcuI54CuWqguT1cyy0L
-         Qazg==
-X-Gm-Message-State: ANoB5pn/HW87FQ7XK5G3S3GWQoIx8/uYbO9R2rZhbAl6vKntfQtHTYbp
-        cQ4w24FJNNben6XYpobVf7vzJPz+HqzW/fwX
-X-Google-Smtp-Source: AA0mqf6zQLudSfVoP+2ESlC9qRg45Z0hawTwkJbBvY4gjggHy74NHpNZMLavCGj6eOdmtmbHGDRyPw==
-X-Received: by 2002:a2e:9d8b:0:b0:279:f30f:78db with SMTP id c11-20020a2e9d8b000000b00279f30f78dbmr2275693ljj.44.1670675494844;
-        Sat, 10 Dec 2022 04:31:34 -0800 (PST)
+        bh=Bt1IcNSVmqyqXv33Ev5rTYvEXElPqvKitUErcFHS9UE=;
+        b=3gh7wJ+V11ia46VbTb7WHiYp+MgK0jIWObju4plvWl8z0Lj7inzeTRwB9mJiETEMw7
+         wWdvtzad/QJwuqrrXOlqnv/Z4TJs8Q5lF3HasuOvtrM/th/b0HVSKlnOiX4Gwqpkzdiq
+         WPE2JJT6OfK7JALt78ElmVljrjAJpTUK9mvl+eCukSWtB96I45JYBEuyyBHK+Jv0pR9Q
+         ZoTO6syrmVWiIwW4vShrq1EQUV26vDJOpo1C2ZQpHhYCr29YjNg44vZcAXQepdmtrEIH
+         4gjNNRPd1NqH2AImpMf8yBZuVDU/cdxTsaHHoTpldlIFb1XXzjNT+j3/BX4DxVcS2Z8B
+         NxWA==
+X-Gm-Message-State: ANoB5pnG9SWJz8hL+SA7QQpMCRLF9FBQ84azjznC2orcuNBaUIpGOmJb
+        a44pfr/C9ixgOZE/vkpiTPM20A==
+X-Google-Smtp-Source: AA0mqf56H+QMRP3S56B1qjMyIqh/55KZDkH2G+/pHZd2w2zcCFV7U/WR10Md+4TR2E+bFi5muvEVLA==
+X-Received: by 2002:ac2:559a:0:b0:4b4:e429:e912 with SMTP id v26-20020ac2559a000000b004b4e429e912mr2237863lfg.45.1670675564497;
+        Sat, 10 Dec 2022 04:32:44 -0800 (PST)
 Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id h9-20020a2e9ec9000000b0027738fd1eb6sm574877ljk.110.2022.12.10.04.31.33
+        by smtp.gmail.com with ESMTPSA id r26-20020ac25c1a000000b004a03d5c2140sm704411lfp.136.2022.12.10.04.32.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Dec 2022 04:31:34 -0800 (PST)
-Message-ID: <f1aa7f4c-35e4-47d2-2443-8271175dc5af@linaro.org>
-Date:   Sat, 10 Dec 2022 13:31:33 +0100
+        Sat, 10 Dec 2022 04:32:44 -0800 (PST)
+Message-ID: <ae00359a-c920-aefd-d657-0c859287207f@linaro.org>
+Date:   Sat, 10 Dec 2022 13:32:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8250: move sound and codec nodes
- out of soc
+Subject: Re: [PATCH 2/3] arm64: dts: qcom: pm6150l: add spmi-flash-led node
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Luca Weiss <luca.weiss@fairphone.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221210115704.97614-1-krzysztof.kozlowski@linaro.org>
- <20221210115704.97614-4-krzysztof.kozlowski@linaro.org>
+Cc:     Fenglin Wu <quic_fenglinw@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209-fp4-pm6150l-flash-v1-0-531521eb2a72@fairphone.com>
+ <20221209-fp4-pm6150l-flash-v1-2-531521eb2a72@fairphone.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221210115704.97614-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209-fp4-pm6150l-flash-v1-2-531521eb2a72@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,104 +83,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10.12.2022 12:57, Krzysztof Kozlowski wrote:
-> The sound and codec nodes are not a property of a soc, but rather board
-> as it describes the sound configuration.
-* in this case, there exist SoC-internal codecs
-
- It also does not have unit
-> address:
+On 9.12.2022 14:54, Luca Weiss wrote:
+> Add a node describing the flash block found on pm6150l.
 > 
->   sm8250-hdk.dtb: soc@0: sound: {} should not be valid under {'type': 'object'}
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 40 ++++++++++++-------------
->  arch/arm64/boot/dts/qcom/sm8250.dtsi    |  6 ++--
->  2 files changed, 22 insertions(+), 24 deletions(-)
+>  arch/arm64/boot/dts/qcom/pm6150l.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> index 3ed8c84e25b8..b741b7da1afc 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> @@ -27,6 +27,25 @@ chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
+> diff --git a/arch/arm64/boot/dts/qcom/pm6150l.dtsi b/arch/arm64/boot/dts/qcom/pm6150l.dtsi
+> index 90aac61ad264..86e659fcbba6 100644
+> --- a/arch/arm64/boot/dts/qcom/pm6150l.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pm6150l.dtsi
+> @@ -112,6 +112,12 @@ pm6150l_lsid5: pmic@5 {
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
 >  
-> +	wcd938x: codec {
-> +		compatible = "qcom,wcd9380-codec";
-> +		#sound-dai-cells = <1>;
-> +		reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
-> +		vdd-buck-supply = <&vreg_s4a_1p8>;
-> +		vdd-rxtx-supply = <&vreg_s4a_1p8>;
-> +		vdd-io-supply = <&vreg_s4a_1p8>;
-> +		vdd-mic-bias-supply = <&vreg_bob>;
-> +		qcom,micbias1-microvolt = <1800000>;
-> +		qcom,micbias2-microvolt = <1800000>;
-> +		qcom,micbias3-microvolt = <1800000>;
-> +		qcom,micbias4-microvolt = <1800000>;
-> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> +		qcom,rx-device = <&wcd_rx>;
-> +		qcom,tx-device = <&wcd_tx>;
-> +	};
+> +		pm6150l_flash: led-controller@d300 {
+> +			compatible = "qcom,pm6150l-flash-led", "qcom,spmi-flash-led";
+> +			reg = <0xd300>;
+> +			status = "disabled";
+> +		};
 > +
->  	thermal-zones {
->  		camera-thermal {
->  			polling-delay-passive = <0>;
-> @@ -631,27 +650,6 @@ &slpi {
->  	firmware-name = "qcom/sm8250/slpi.mbn";
->  };
->  
-> -&soc {
-> -	wcd938x: codec {
-> -		compatible = "qcom,wcd9380-codec";
-> -		#sound-dai-cells = <1>;
-> -		reset-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
-> -		vdd-buck-supply = <&vreg_s4a_1p8>;
-> -		vdd-rxtx-supply = <&vreg_s4a_1p8>;
-> -		vdd-io-supply = <&vreg_s4a_1p8>;
-> -		vdd-mic-bias-supply = <&vreg_bob>;
-> -		qcom,micbias1-microvolt = <1800000>;
-> -		qcom,micbias2-microvolt = <1800000>;
-> -		qcom,micbias3-microvolt = <1800000>;
-> -		qcom,micbias4-microvolt = <1800000>;
-> -		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
-> -		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-> -		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> -		qcom,rx-device = <&wcd_rx>;
-> -		qcom,tx-device = <&wcd_tx>;
-> -	};
-> -};
-> -
->  &sound {
->  	compatible = "qcom,sm8250-sndcard";
->  	model = "SM8250-MTP-WCD9380-WSA8810-VA-DMIC";
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index d517d6a80bdc..fbbbae29e0c2 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -2826,9 +2826,6 @@ compute-cb@8 {
->  			};
->  		};
->  
-> -		sound: sound {
-> -		};
-> -
->  		usb_1_hsphy: phy@88e3000 {
->  			compatible = "qcom,sm8250-usb-hs-phy",
->  				     "qcom,usb-snps-hs-7nm-phy";
-> @@ -4910,6 +4907,9 @@ cpufreq_hw: cpufreq@18591000 {
->  		};
->  	};
->  
-> +	sound: sound {
-> +	};
-> +
->  	timer {
->  		compatible = "arm,armv8-timer";
->  		interrupts = <GIC_PPI 13
+>  		pm6150l_wled: leds@d800 {
+>  			compatible = "qcom,pm6150l-wled";
+>  			reg = <0xd800>, <0xd900>;
+> 
