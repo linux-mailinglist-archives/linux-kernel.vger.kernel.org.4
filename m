@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7F66492BA
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2DC6492BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiLKGRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S230100AbiLKGRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiLKGRe (ORCPT
+        with ESMTP id S230074AbiLKGRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 01:17:34 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9190A13CC7
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:33 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id k7so8948699pll.6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:33 -0800 (PST)
+        Sun, 11 Dec 2022 01:17:36 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B587E13CCB
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:34 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso12384450pjt.0
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nR//y9PZ1dntNQ5jP8JSgcJW+jEOWFZxxe2Fy8nYAA0=;
-        b=snrBPyBlGY/kCleEd1Ck1RD95PHIuiY8cFm0R72xEkCr4+6olsksPCtxrNKE5+tFyV
-         2pqLh1r7KDQPWsRj8+YGYd9AepBWR30XnW093nHxZUyMSwxTkSE0faJCisRX91+XyZb8
-         kzU3ThS1J2yuXPH0iKFzMO6quAY+Tr+aF0ERMjBgCH377d1Rs119yPy+8nBJXR/DitcE
-         y4vgPsbJKIzHGRvrBR+beiRZiFrMgB4unlaVn/RM8NVZ4rNsEiqvAbWClZ8vAkMQEc0q
-         KTRJ1sKSsa5T2gVhmstQT7WiBI1eKW8vhRB1dRpVJ2dfJUpeGzdqaBF3zZ4lubB1ycOg
-         3BpA==
+        bh=zwyYiFcRsjmX6zCX8NLBJ5b8ChthtpnvjsyMaVpr40U=;
+        b=Ltz5b/ttpkf0F/fmmQs4lgqoncjlikqfqixnebILoI0nGAu8o0Dk2BvoOSMNY3zAAa
+         hSuF16fMwsfhyQ5Fqg4BxO8IAOMY0gjFReVmPXhDQpC6NMQLTYLmW3/uldpK97kb3lH3
+         28ZrSAX43FIPIgfv8iRS+AJNDBVxgPlVoDtj92Z8+yOo8gpvaixsR5g1uU28DdR/s9F3
+         ndMMZbdAWlpb7I2bY3SX2nQCfVEPVCIySJSc+O9H0ZVMyPDoONuL8nZ9vN+SpRVNjZxZ
+         Qdi1D4q1oz/V6t2nzVDIrzIhR/dlDculHPJ1XWu5+P7B3lULyRnuzxdOel27wQPLLf8z
+         lOoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nR//y9PZ1dntNQ5jP8JSgcJW+jEOWFZxxe2Fy8nYAA0=;
-        b=1qq8XDnjccdXsObRGAuPmxXF5Y7wS1CvbfbpNvhSvSpdHxdpVfew+J5PKfwReJq2pr
-         bWZq5NEewN/Xp60msb19KkHTheZTqCeFc2inhJwwvX2zS+AFJ1FHekCg3ywgrGV9gKQ+
-         u6lm+CO6V7wQtJHaUSxm1S1/XkdesuKD7cMeb3043rlOxfaKO32toz56IdMS4/r60nUH
-         lAZIjvfrgUBGTU4NSuLCvYuP+y5+zPBKcPjd50bZeYAyN9JnDtts19ZElBpBqBjB3GBv
-         pVvImZQOJYNLnqsDIR1190Io50YWVZnBIYIZkcvjoyCxlvOH/TTFNHexScVzkA3CsBpZ
-         fqLA==
-X-Gm-Message-State: ANoB5pl8xQNfLEzGt2c29NyAJV6mDbSPKPEvAoziaGPrlrEHGntW71Gj
-        HHbd3EidlAEGslPxwcuBVzevzg==
-X-Google-Smtp-Source: AA0mqf7WhMefvDP0t+eexqV7L7Cdprsa0v+iAFpVLd06mXseEtAFFdcermtmvNtqfm/gxwpPfuXBAg==
-X-Received: by 2002:a05:6a20:9f87:b0:9d:efbf:787d with SMTP id mm7-20020a056a209f8700b0009defbf787dmr13973336pzb.50.1670739453091;
-        Sat, 10 Dec 2022 22:17:33 -0800 (PST)
+        bh=zwyYiFcRsjmX6zCX8NLBJ5b8ChthtpnvjsyMaVpr40U=;
+        b=HooNi07/+yQPxgKVy2HnQuN2oVGaRaWX8BSEMliLAqp+WkBbOUjyisUsd/mMQxDqmU
+         vhhFS+6UYk3TMqlihyzSUeyyG1IYo7Y50htHH245NcTEquLgG4mPpGjKqQKz9iy4O1YK
+         udd7AGWdA/2Ybo03NXU15/aXSp+VtDHR7TGuNzY4eYFDrkGY2BLMHr07lT7FXW2hw0iJ
+         ut9UqoFOL1NLGzb2TUAJ4Y1AUMMElULV+5Oym15l3lFWshqGI4Vut9wSMyKgNg02Vqty
+         NSBFmB0lCBQIl6TlVWuPqKwt0VQjpI/3/x1cfEt8eMIcrzfbOl7Nf1ircjjZq5/rASbP
+         NOQw==
+X-Gm-Message-State: ANoB5pmUHTpQHGradQUsDuzpgD4OUtxGSeDZk+8QvHh75U7W5gdrjUkS
+        FSclplfReuOXT+tVRs9gjRGWmg==
+X-Google-Smtp-Source: AA0mqf5ieqzOjEVSZd3sKLcQkNQyEBa4YxDWUVuioCdshPhv+YJR6fEbkPsUKg8QyKn0R/3ssTkadQ==
+X-Received: by 2002:a17:90a:d347:b0:219:9676:fef5 with SMTP id i7-20020a17090ad34700b002199676fef5mr11448796pjx.12.1670739454184;
+        Sat, 10 Dec 2022 22:17:34 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id s3-20020a656443000000b00478b2d5d148sm3135453pgv.5.2022.12.10.22.17.32
+        by smtp.gmail.com with ESMTPSA id nd17-20020a17090b4cd100b002135de3013fsm3257566pjb.32.2022.12.10.22.17.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:32 -0800 (PST)
-Subject: [PATCH v2 03/24] arm64: Remove COMMAND_LINE_SIZE from uapi
-Date:   Sat, 10 Dec 2022 22:13:37 -0800
-Message-Id: <20221211061358.28035-4-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:33 -0800 (PST)
+Subject: [PATCH v2 04/24] ia64: Remove COMMAND_LINE_SIZE from uapi
+Date:   Sat, 10 Dec 2022 22:13:38 -0800
+Message-Id: <20221211061358.28035-5-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
 References: <20221211061358.28035-1-palmer@rivosinc.com>
@@ -76,38 +76,40 @@ be part of the user-visible API.
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
-This leaves an empty <uapi/asm/setup.h>, which will soon be cleaned up.
----
- arch/arm64/include/asm/setup.h      | 3 ++-
- arch/arm64/include/uapi/asm/setup.h | 2 --
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ arch/ia64/include/asm/setup.h      | 8 ++++++++
+ arch/ia64/include/uapi/asm/setup.h | 6 ++----
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+ create mode 100644 arch/ia64/include/asm/setup.h
 
-diff --git a/arch/arm64/include/asm/setup.h b/arch/arm64/include/asm/setup.h
-index f4af547ef54c..7ca70f883cee 100644
---- a/arch/arm64/include/asm/setup.h
-+++ b/arch/arm64/include/asm/setup.h
-@@ -4,8 +4,9 @@
- #define __ARM64_ASM_SETUP_H
- 
- #include <linux/string.h>
-+#include <linux/types.h>
- 
--#include <uapi/asm/setup.h>
+diff --git a/arch/ia64/include/asm/setup.h b/arch/ia64/include/asm/setup.h
+new file mode 100644
+index 000000000000..5625a17ddbe4
+--- /dev/null
++++ b/arch/ia64/include/asm/setup.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++
++#ifndef __IA64_SETUP_H
++#define __IA64_SETUP_H
++
 +#define COMMAND_LINE_SIZE	2048
- 
- void *get_early_fdt_ptr(void);
- void early_fdt_map(u64 dt_phys);
-diff --git a/arch/arm64/include/uapi/asm/setup.h b/arch/arm64/include/uapi/asm/setup.h
-index 5d703888f351..f9f51e5925aa 100644
---- a/arch/arm64/include/uapi/asm/setup.h
-+++ b/arch/arm64/include/uapi/asm/setup.h
-@@ -22,6 +22,4 @@
- 
- #include <linux/types.h>
- 
--#define COMMAND_LINE_SIZE	2048
++
++#endif
+diff --git a/arch/ia64/include/uapi/asm/setup.h b/arch/ia64/include/uapi/asm/setup.h
+index 8d13ce8fb03a..bcbb2b242ded 100644
+--- a/arch/ia64/include/uapi/asm/setup.h
++++ b/arch/ia64/include/uapi/asm/setup.h
+@@ -1,8 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef __IA64_SETUP_H
+-#define __IA64_SETUP_H
 -
- #endif
+-#define COMMAND_LINE_SIZE	2048
++#ifndef __UAPI_IA64_SETUP_H
++#define __UAPI_IA64_SETUP_H
+ 
+ extern struct ia64_boot_param {
+ 	__u64 command_line;		/* physical address of command line arguments */
 -- 
 2.38.1
 
