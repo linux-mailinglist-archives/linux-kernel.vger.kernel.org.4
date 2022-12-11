@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF45649438
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46376649436
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiLKMpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 07:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S230267AbiLKMfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 07:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiLKMo7 (ORCPT
+        with ESMTP id S230026AbiLKMf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 07:44:59 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88A9BE31;
-        Sun, 11 Dec 2022 04:44:58 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id fy4so8996794pjb.0;
-        Sun, 11 Dec 2022 04:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/BIynU2NWG7vKdIOfvZ+4asmhXgFyDxZr8sjMOqoFm8=;
-        b=VLTR7S/5ahNq29JrLlj5T02niU5r0jRh5WDqvlUJIfcTSpIEpzp81s8kGrBPHDXP0B
-         tOZN0FlJjcKYQwFlxGliUGZTkgXsKcQc3RbSg3t9HqcCLJ2sYbN65lsRdjEv4d3Ieipd
-         /++8MJEOed7jHqmpcLZRBpL6fxIgF5bnecqhSUejVteb9/vPQW06qcwOHn0sok3JZoOO
-         js6Jk/GGYyV3M2lHhJ5Tae1CGHfTY8+Nvz1idEjTvRwOEq++Zj4MFSLqu8XwLTqyxX8c
-         v8dbXeurnS/gLdxLUrM/xLQhp8LQwFg2BTGpf47mhbi20bXhzX+IdV9hoRhu5vfwW1qM
-         fKog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/BIynU2NWG7vKdIOfvZ+4asmhXgFyDxZr8sjMOqoFm8=;
-        b=PPKK+/z+XeXnRGEw+lZBACFF8NToFRSFXb3W8X4xT3g8e91Z5Ksiz5sTNOkDPRhWxm
-         uPLVZxvq4lmJFUhpDC2UDuyq/YQKhaXAt+nmgNHK0ysxl+ZK0a4pGwLJjdNJcKidNnS6
-         4eXbFKTY1OWWkZlpeG5WMNqtkUV/E/b/qw7BUqAjd9lWMszB/5NsbDa1h9pv5DlYf6eK
-         0C91IEfZ1VjMHeOeE3eZ3TXwXJY+XvFbLyaAMBMr+e86N8t7JGVDnaLaMLauH5xuxVTM
-         bNlDIG6Dt8/hLrkKtXKK6g5hKmbM5KsxAhiSL8msDFNnVE13yB3gkLaGol4SrG10clRN
-         lz6A==
-X-Gm-Message-State: ANoB5pkIBJwS05jpTNXTUpCC7ok4rBa5+H7MD3s7CPYI8ayod+Dv3dAH
-        s82iWgybJkWFzMebkGC1zl0=
-X-Google-Smtp-Source: AA0mqf7yK/8RDsOO7DyGcjv6lNtY/SWehdEVnXgQu3jHlPDi09fOM7Wba1DgYdpDPCZKOaXs9yAeeA==
-X-Received: by 2002:a05:6a20:ce4a:b0:a4:69a2:6dd7 with SMTP id id10-20020a056a20ce4a00b000a469a26dd7mr15160149pzb.0.1670762698199;
-        Sun, 11 Dec 2022 04:44:58 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id w15-20020a17090a4f4f00b00218fb3bec27sm3620808pjl.56.2022.12.11.04.44.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Dec 2022 04:44:57 -0800 (PST)
-Message-ID: <38ad5cab-bcb1-bb23-b141-7ffc07acde78@gmail.com>
-Date:   Sun, 11 Dec 2022 19:44:50 +0700
+        Sun, 11 Dec 2022 07:35:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC1C11153;
+        Sun, 11 Dec 2022 04:35:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C10D7B80ACE;
+        Sun, 11 Dec 2022 12:35:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F50C433D2;
+        Sun, 11 Dec 2022 12:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670762125;
+        bh=rGDsH1LcYLgClznS/DD5dyNhbVZXJJd+xXXfJMafRdo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nSBYBrnFFnHx0GRNMxQvsc6cMeOZkg3XeueVucUuWs7oOVCuVQ+vYwl4zdQ908B2h
+         g+qLsbGzbuzydDma8h0Dr7T2ghgBfh6uiCkV7TlOTyjDfflXtjoVar5mO/cHCAbeSr
+         urGJZNDHB5KQ/132MmD9PcyCDpN95zzY3++kU8REfAyJWYj7V9L/xg6buRljWoE8Fi
+         4/Qf1juAqJj4kDw2pgFyQrvSqAFDrfFqJtYcK7NJngk47omkLVg4RJfa+3ZvbzaiMS
+         WwSUURRDrDHzUHOzqfRpZ/VUEmYwklUsatqTcblXpNLNC6YN/2B7PP9+UAXJWBp2gf
+         iSsVJN/RpLYgg==
+Date:   Sun, 11 Dec 2022 12:48:17 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     <outreachy@lists.linux.dev>, Lee Jones <lee@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH 3/5] staging: drivers: regulator: Add MAX77541 Regulator
+ Support
+Message-ID: <20221211124817.5bd07ef8@jic23-huawei>
+In-Reply-To: <20221207090906.5896-4-okan.sahin@analog.com>
+References: <20221207090906.5896-1-okan.sahin@analog.com>
+        <20221207090906.5896-4-okan.sahin@analog.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] Documentation: gpu: vc4: add blank line separator before
- KUnit code block
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        kernel test robot <lkp@intel.com>
-References: <202212102116.A10vg3jG-lkp@intel.com>
- <20221211053051.18125-1-bagasdotme@gmail.com>
- <fb978a9e-43af-865a-00c6-d98499414ec5@igalia.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <fb978a9e-43af-865a-00c6-d98499414ec5@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/22 18:32, Maíra Canal wrote:
-> I believe Maxime fixed this issue on [1], but it hasn't been yet merged
-> into drm-misc-next.
+On Wed, 7 Dec 2022 12:08:42 +0300
+Okan Sahin <okan.sahin@analog.com> wrote:
+
+> This patch adds regulator driver for both MAX77541 and MAX77540.
+> The MAX77541 is a high-efficiency step-down converter
+> with two 3A switching phases for single-cell Li+ battery and 5VDC systems.
 > 
-> [1]
-> https://lore.kernel.org/dri-devel/20221208094727.2848310-1-maxime@cerno.tech/
+> The MAX77540 is a high-efficiency step-down converter
+> with two 3A switching phases.
 > 
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
 
-Ah! I don't see that!
+...
 
-Thanks anyway.
+> +static int max77541_regulator_probe(struct platform_device *pdev)
+> +{
+> +	struct max77541_dev *max77541 = dev_get_drvdata(pdev->dev.parent);
+> +	struct max77541_regulator_dev *regulator;
+> +	struct regulator_config config = {};
+> +	struct regulator_dev *rdev;
+> +	int i;
+> +
+> +	regulator = devm_kzalloc(&pdev->dev, sizeof(*regulator), GFP_KERNEL);
+> +	if (!regulator)
+> +		return -ENOMEM;
+> +
+> +	regulator->dev = &pdev->dev;
+> +	regulator->max77541 = max77541;
+> +
+> +	config.dev = pdev->dev.parent;
+> +	config.driver_data = regulator;
+> +	config.regmap = regulator->max77541->regmap;
+> +
+> +	for (i = 0; i < MAX77541_MAX_REGULATORS; i++) {
+> +		switch (regulator->max77541->type) {
+> +		case MAX77540:
 
--- 
-An old man doll... just what I always wanted! - Clara
+As in mfd driver, better to move this from code to constant data
+by using a chip_info type structure.  You could just use the
+*_regulator_desc array, but probably better to wrap that in a structure
+to reduce difficulty of adding other stuff in future.
 
+
+> +			rdev = devm_regulator_register(&pdev->dev,
+> +						       &max77540_regulators_desc[i], &config);
+> +			if (IS_ERR(rdev))
+> +				return dev_err_probe(&pdev->dev, PTR_ERR(rdev),
+> +							"Failed to register regulator\n");
+> +			break;
+> +		case MAX77541:
+> +			rdev = devm_regulator_register(&pdev->dev,
+> +						       &max77541_regulators_desc[i], &config);
+> +			if (IS_ERR(rdev))
+> +				return dev_err_probe(&pdev->dev, PTR_ERR(rdev),
+> +						"Failed to register regulator\n");
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
