@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E306492C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8965D6492C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiLKGSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S230132AbiLKGST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKGRj (ORCPT
+        with ESMTP id S230074AbiLKGRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 01:17:39 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26387292
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:37 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id q71so6170717pgq.8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:37 -0800 (PST)
+        Sun, 11 Dec 2022 01:17:51 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8A4CF1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:38 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d7so8946178pll.9
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DPi1+9dd1OzGMb8V4tO32iZao04Be47mu+TCBKzmOrs=;
-        b=gDe1pfAK6GlB/CWhPmT8mjMQPYR/zs1uifvQ0a/sdpY5qSuBSHqAnUudCaQDUTS70v
-         KboZU92hU1wsApD3VvvkZCbEJCdjFmi/KWU4i0/B+zAKDNO67lt8S8Rs52dzNs5s34sE
-         mUgiZYjeZ93ElCfXhk9XKTCpcIa+DNejHhdFdpNsRiajKJWyLG6dMPBam0FAIFomTcLv
-         4OJxqXxzqYaHFq8p61P+6WAM5AD3tvA5ZW7C10RAbIsxYmqpWfqZFynQ9lD1LaTzxOKB
-         8Nt79Uv2gqjnymnlERygJ7q4vbkFnnAiSTlUl88cTZdHStk1TGOQ7BGKD74YyRAqsuKH
-         47/A==
+        bh=/oCv9XoaVNYo+jL/v5xfJUE2DYPkG1RC+xndRSMwe0Q=;
+        b=cIZ9SqzDNQCPr3UJZFEXATImDHAB7fMNW1VvAH6jmO6ZOC5l1XnWV4sUmFJJkMw6B6
+         AB62H7DErl1yzvCeLYz9rerSJoe6GQtfYGIS4+hXTTx8oLxVHJAixBjRnM7bGUmoWjCy
+         sfkJZ9IYuJ3VLh1yTwGqtCiFiHFDryoP7/v106V7FWxOAhnAzxJpfd8EmQ/ycX39Oxq7
+         59gQyRAbAvUr2QVQYP8gB8/KPfgVHyleDlRw4fWvxF4PbFDrUOncIepihH2ydRsARKzn
+         bpn/ybaOUkQS6GxCrP2vMXr3njG1DbXrXqxw7vv4j51hndzAE9fd6E+4RqS+XJwxvN6u
+         Vt0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DPi1+9dd1OzGMb8V4tO32iZao04Be47mu+TCBKzmOrs=;
-        b=ic669m+a0kIOO8+KtwOO/wWuzlOCsunlE0GV9SQWtkUh1oQLRbvHKiDFsm5Fy3hCO1
-         0h6WMzjGAaDyjEZzPbqWryVZz7swmPwlkT3c67lLUqDIvy3Km17jlgNkktu3EjFAbp6W
-         hWwS4rSpZk5JbsIx7a8Y5t0Lt+XC+QM2J4IQ2XGtkd/CROjKZOQcTE990v6x/XG0aRqC
-         2p5vwUIzRw6W3pIJRk6mWkjetvm460o4tMBVDlFWlnQoxyCXROX/rc5Myz1KdhuJ6dNf
-         RiVklvkmoUzlIkPoV9FslQZOEGeBXdT3VVN6+Df7IJ4cypgWLk6xVVwgi0ZzN+fEbT9A
-         kqjA==
-X-Gm-Message-State: ANoB5pmKcPlpz7Vdaz0/x4l8yhfDnD484jQ2nbiiBb2OYMT+hQ7GFowz
-        tDXl/qUi8GtTuB2kdAKgIk2e1Q==
-X-Google-Smtp-Source: AA0mqf6atZJqkHi9qVy/4Ze0hJxYK0HVKrWNCXqvjVnI2X+gMgg/z/q59xDcKKPiyvvTVIjJn67dvw==
-X-Received: by 2002:aa7:9112:0:b0:574:35fd:379e with SMTP id 18-20020aa79112000000b0057435fd379emr9869544pfh.2.1670739456566;
-        Sat, 10 Dec 2022 22:17:36 -0800 (PST)
+        bh=/oCv9XoaVNYo+jL/v5xfJUE2DYPkG1RC+xndRSMwe0Q=;
+        b=1hlt2+SN0ZExKBGGTWeZEEOiCtszQisS8KfCUOixBoAEjwfuGcts0Oj4I79Hg5J+41
+         edGLEZYpfFMihPmmnJsvv9QrmG3Zl7JugHBFJJAeFD8rLKIsJc+P26W14xoIiQEmQU46
+         xRsBlxqNrFUIWPOV9sIbao0AP6ThtuRdm9OeacbHPEeBGxTcyJimdRWVa3AJ3OEi1MsX
+         yPiW9uRu8E9qPcKrynwj9hZtA9YYUCaJa3hBRw+07p1qZ/5ScP1SRAiC8QQHY50rrb+v
+         Zf7NB29Z3RbHjaPh0h/1hU8ci+FeReVME5/JLRlDJRteeerSqPCaWxu0yN08wEOTNyTE
+         makA==
+X-Gm-Message-State: ANoB5plEoMo1vIrrVmDFZDWZnWFX/vxmD7PF3pNzubr15MRmvGv6VpZs
+        LI/5NgubGpcQfVpDwjKGzhwi/HeWii7MCyhL
+X-Google-Smtp-Source: AA0mqf4HTgVHRO7hmDLAGWd3ZyZYpV/4BdjLiF3anPOviNm3GIvwadjdXE4fX6g02HJ+lgegtp8SxQ==
+X-Received: by 2002:a17:90a:2ec2:b0:219:a698:8c5e with SMTP id h2-20020a17090a2ec200b00219a6988c5emr11371478pjs.35.1670739457616;
+        Sat, 10 Dec 2022 22:17:37 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id i1-20020a62c101000000b0053e62b6fd22sm3495367pfg.126.2022.12.10.22.17.36
+        by smtp.gmail.com with ESMTPSA id w2-20020a17090a1b8200b00219b04cf66asm3308333pjc.36.2022.12.10.22.17.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:36 -0800 (PST)
-Subject: [PATCH v2 06/24] microblaze: Remove COMMAND_LINE_SIZE from uapi
-Date:   Sat, 10 Dec 2022 22:13:40 -0800
-Message-Id: <20221211061358.28035-7-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:37 -0800 (PST)
+Subject: [PATCH v2 07/24] mips: Remove COMMAND_LINE_SIZE from uapi
+Date:   Sat, 10 Dec 2022 22:13:41 -0800
+Message-Id: <20221211061358.28035-8-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
 References: <20221211061358.28035-1-palmer@rivosinc.com>
@@ -63,8 +63,8 @@ From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,36 +78,36 @@ Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
 This leaves an empty <uapi/asm/setup.h>, which will soon be cleaned up.
 ---
- arch/microblaze/include/asm/setup.h      | 2 +-
- arch/microblaze/include/uapi/asm/setup.h | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ arch/mips/include/asm/setup.h      | 3 ++-
+ arch/mips/include/uapi/asm/setup.h | 3 ---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/microblaze/include/asm/setup.h b/arch/microblaze/include/asm/setup.h
-index a06cc1f97aa9..2becbf3b8baf 100644
---- a/arch/microblaze/include/asm/setup.h
-+++ b/arch/microblaze/include/asm/setup.h
-@@ -7,7 +7,7 @@
- #ifndef _ASM_MICROBLAZE_SETUP_H
- #define _ASM_MICROBLAZE_SETUP_H
+diff --git a/arch/mips/include/asm/setup.h b/arch/mips/include/asm/setup.h
+index 8c56b862fd9c..a13b9259b476 100644
+--- a/arch/mips/include/asm/setup.h
++++ b/arch/mips/include/asm/setup.h
+@@ -3,7 +3,8 @@
+ #define _MIPS_SETUP_H
  
+ #include <linux/types.h>
 -#include <uapi/asm/setup.h>
-+#define COMMAND_LINE_SIZE	256
++
++#define COMMAND_LINE_SIZE	4096
  
- # ifndef __ASSEMBLY__
- extern char cmd_line[COMMAND_LINE_SIZE];
-diff --git a/arch/microblaze/include/uapi/asm/setup.h b/arch/microblaze/include/uapi/asm/setup.h
-index 6831794e6f2c..51aed65880e7 100644
---- a/arch/microblaze/include/uapi/asm/setup.h
-+++ b/arch/microblaze/include/uapi/asm/setup.h
-@@ -12,8 +12,6 @@
- #ifndef _UAPI_ASM_MICROBLAZE_SETUP_H
- #define _UAPI_ASM_MICROBLAZE_SETUP_H
+ extern void prom_putchar(char);
+ extern void setup_early_printk(void);
+diff --git a/arch/mips/include/uapi/asm/setup.h b/arch/mips/include/uapi/asm/setup.h
+index 7d48c433b0c2..157c3c392fb4 100644
+--- a/arch/mips/include/uapi/asm/setup.h
++++ b/arch/mips/include/uapi/asm/setup.h
+@@ -2,7 +2,4 @@
+ #ifndef _UAPI_MIPS_SETUP_H
+ #define _UAPI_MIPS_SETUP_H
  
--#define COMMAND_LINE_SIZE	256
+-#define COMMAND_LINE_SIZE	4096
 -
- # ifndef __ASSEMBLY__
- 
- # endif /* __ASSEMBLY__ */
+-
+ #endif /* _UAPI_MIPS_SETUP_H */
 -- 
 2.38.1
 
