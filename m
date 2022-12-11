@@ -2,188 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DB0649446
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E7364944D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiLKNDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 08:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S230288AbiLKNEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 08:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiLKNC6 (ORCPT
+        with ESMTP id S230240AbiLKNE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 08:02:58 -0500
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DD6B494;
-        Sun, 11 Dec 2022 05:02:55 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 9309CEF95D;
-        Sun, 11 Dec 2022 05:02:54 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LLMKInvpj9o2; Sun, 11 Dec 2022 05:02:53 -0800 (PST)
-Date:   Sun, 11 Dec 2022 14:02:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1670763773; bh=i0g+3oryYH+bTrIcDnrXvCPR8IHUH6ivXegwOUCTJr8=;
-        h=Date:From:To:Subject:In-Reply-To:References:From;
-        b=R1h3ppXnvqwH42II/jPs2ZonYRC/ueCjjTydIr5+A1IGl3KCDSKZSDLlC2qunK9Zt
-         XLy/Po5QR46esOiiwtLbInNzJ+ATqHc7Rpf6Bw9PcHNCNT+nxPuDB8++phKpm+oWar
-         Cn8lvBziyw5Ma+xDVkXu1rEB0pnbzZ4EsOuZrTmAyevgZBXXCegxVi8bI8SACw2fO2
-         0h19hqAwm7NC6o4Jn0l9Kv9YMChlRXFq7T10/sxT18YKDpt4ZlqLYrRq7u7gjzcbsN
-         9kaKjRmdXCtwSSC0kIhoSs3WQzZMiWIY/2yDqx7eQX4xAjCZ3qbOZ44R3T61rCDX/Q
-         lBFtyiGCRdXJg==
-From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: [PATCHv3 2/2] media api: Try to make enum usage clearer
-Message-ID: <20221211125718.2815126-2-dorota.czaplejewicz@puri.sm>
-In-Reply-To: <20221211125718.2815126-1-dorota.czaplejewicz@puri.sm>
-References: <20221211125718.2815126-1-dorota.czaplejewicz@puri.sm>
-Organization: Purism
+        Sun, 11 Dec 2022 08:04:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9CCA46B;
+        Sun, 11 Dec 2022 05:04:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8CC04CE0B3C;
+        Sun, 11 Dec 2022 13:04:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DE3C433EF;
+        Sun, 11 Dec 2022 13:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670763863;
+        bh=Xic9HRp6xQVGQZjjCvAaASkUaXZAG9Z4CIG2ZfttFHY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hXIVlWe8x7vJgwKNkFoAfdOLZpnLVZQAkgfiJgA1zgEfno1WvyijqCjZehXZvfQRA
+         fgoQRHOD8fz5nF46cOLpTaimBzeb3WV+xzGgpq1yP7uQ02mbLv4eNG5XrBMrDvyqFc
+         mz8T3HeyKuwOL7VlS4mL1x8stSN/ZwIplQ9WdCIWryyv+mzui0ORvluTFVCsyw0vV0
+         yxMoMDJKYWc5fSGQilbhO8vTWhnNzDBm4tpb8o9llm39P4CkDGv8p0rzLwCwsTL6yE
+         PpZTjVGhgX4PBoKflzZ8apiiCjecKIU/jxKpjVt+7JiHOApv6KIv+dFedXqDg0/lDR
+         HYDzsuXnkHLyg==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 1/2] kbuild: change module.order to list *.o instead of *.ko
+Date:   Sun, 11 Dec 2022 22:04:07 +0900
+Message-Id: <20221211130408.2800314-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.sImXqZfT50grP0_PGGp8hG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.sImXqZfT50grP0_PGGp8hG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+scripts/Makefile.build replaces the suffix .o with .ko, then
+scripts/Makefile.modpost calls the sed command to change .ko back
+to the original .o suffix.
 
-This clarifies which side of the calls is responsible for doing what to whi=
-ch parts of the struct.
-It also expands the terse description of the access algorithm into more pro=
-se-like, active voice description, which trades conciseness for ease of com=
-prehension.
+Instead of converting the suffixes back-and-forth, store the .o paths
+in modules.order, and replace it with .ko in 'make modules_install'.
 
-Fixed: typo "format" -> "frame size" in enum-frame-size
-Added: no holes in the enumeration
-Added: enumerations per what?
-Added: who fills in what in calls
-Changed: "given" -> "specified"
+This avoids the unneeded sed command.
 
-Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- .../v4l/vidioc-subdev-enum-frame-size.rst     | 44 ++++++++++++-------
- 1 file changed, 29 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame=
--size.rst b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-=
-size.rst
-index c25a9896df0e..82b5d2538fa9 100644
---- a/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.r=
-st
-+++ b/Documentation/userspace-api/media/v4l/vidioc-subdev-enum-frame-size.r=
-st
-@@ -31,18 +31,30 @@ Arguments
- Description
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--This ioctl allows applications to enumerate all frame sizes supported by
--a sub-device on the given pad for the given media bus format. Supported
--formats can be retrieved with the
-+This ioctl allows applications to access the enumeration of frame sizes
-+supported by a sub-device on the specified pad
-+for the specified media bus format.
-+Supported formats can be retrieved with the
- :ref:`VIDIOC_SUBDEV_ENUM_MBUS_CODE`
- ioctl.
-=20
--To enumerate frame sizes applications initialize the ``pad``, ``which``
--, ``code`` and ``index`` fields of the struct
--:c:type:`v4l2_subdev_mbus_code_enum` and
--call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to the
--structure. Drivers fill the minimum and maximum frame sizes or return an
--EINVAL error code if one of the input parameters is invalid.
-+The enumerations are defined by the driver, and indexed using the ``index`=
-` field
-+of the struct :c:type:`v4l2_subdev_mbus_code_enum`.
-+Each pair of ``pad`` and ``code`` correspond to a separate enumeration.
-+Each enumeration starts with the ``index`` of 0, and
-+the lowest invalid index marks the end of the enumeration.
-+
-+Therefore, to enumerate frame sizes allowed on the specified pad
-+and using the specified mbus format, initialize the
-+``pad``, ``which``, and ``code`` fields to desired values,
-+and set ``index`` to 0.
-+Then call the :ref:`VIDIOC_SUBDEV_ENUM_FRAME_SIZE` ioctl with a pointer to=
- the
-+structure.
-+
-+A successful call will return with minimum and maximum frame sizes filled =
-in.
-+Repeat with increasing ``index`` until ``EINVAL`` is received.
-+``EINVAL`` means that either no more entries are available in the enumerat=
-ion,
-+or that an input parameter was invalid.
-=20
- Sub-devices that only support discrete frame sizes (such as most
- sensors) will return one or more frame sizes with identical minimum and
-@@ -72,26 +84,28 @@ information about try formats.
-=20
-     * - __u32
-       - ``index``
--      - Number of the format in the enumeration, set by the application.
-+      - Index of the frame size in the enumeration belonging to the given =
-pad and format.
-+	Filled in by the application.
-     * - __u32
-       - ``pad``
-       - Pad number as reported by the media controller API.
-+	Filled in by the application.
-     * - __u32
-       - ``code``
-       - The media bus format code, as defined in
--	:ref:`v4l2-mbus-format`.
-+	:ref:`v4l2-mbus-format`. Filled in by the application.
-     * - __u32
-       - ``min_width``
--      - Minimum frame width, in pixels.
-+      - Minimum frame width, in pixels. Filled in by the driver.
-     * - __u32
-       - ``max_width``
--      - Maximum frame width, in pixels.
-+      - Maximum frame width, in pixels. Filled in by the driver.
-     * - __u32
-       - ``min_height``
--      - Minimum frame height, in pixels.
-+      - Minimum frame height, in pixels. Filled in by the driver.
-     * - __u32
-       - ``max_height``
--      - Maximum frame height, in pixels.
-+      - Maximum frame height, in pixels. Filled in by the driver.
-     * - __u32
-       - ``which``
-       - Frame sizes to be enumerated, from enum
---=20
-2.38.1
+ Makefile                                    |  2 +-
+ scripts/Makefile.build                      |  2 +-
+ scripts/Makefile.modfinal                   |  6 +++---
+ scripts/Makefile.modinst                    |  2 +-
+ scripts/Makefile.modpost                    |  7 +++++--
+ scripts/clang-tools/gen_compile_commands.py |  8 ++++----
+ scripts/mod/modpost.c                       | 11 ++++-------
+ scripts/modules-check.sh                    |  2 +-
+ 8 files changed, 20 insertions(+), 20 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 8b5930d521fc..669e25970917 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1569,7 +1569,7 @@ __modinst_pre:
+ 		rm -f $(MODLIB)/build ; \
+ 		ln -s $(CURDIR) $(MODLIB)/build ; \
+ 	fi
+-	@sed 's:^:kernel/:' modules.order > $(MODLIB)/modules.order
++	@sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
+ 	@cp -f modules.builtin $(MODLIB)/
+ 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
+ 
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 799df12b53f3..267eb7aac5b2 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -435,7 +435,7 @@ $(obj)/built-in.a: $(real-obj-y) FORCE
+ # modules.order unless contained modules are updated.
+ 
+ cmd_modules_order = { $(foreach m, $(real-prereqs), \
+-	$(if $(filter %/modules.order, $m), cat $m, echo $(patsubst %.o,%.ko,$m));) :; } \
++	$(if $(filter %/modules.order, $m), cat $m, echo $m);) :; } \
+ 	> $@
+ 
+ $(obj)/modules.order: $(obj-m) FORCE
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 83f2797e530c..a30d5b08eee9 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -15,7 +15,7 @@ include $(srctree)/scripts/Makefile.lib
+ # find all modules listed in modules.order
+ modules := $(call read-file, $(MODORDER))
+ 
+-__modfinal: $(modules)
++__modfinal: $(modules:%.o=%.ko)
+ 	@:
+ 
+ # modname and part-of-module are set to make c_flags define proper module flags
+@@ -57,13 +57,13 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+-$(modules): %.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
++%.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
+ 	+$(call if_changed_except,ld_ko_o,vmlinux)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+ endif
+ 
+-targets += $(modules) $(modules:.ko=.mod.o)
++targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o)
+ 
+ # Add FORCE to the prequisites of a target to force it to be always rebuilt.
+ # ---------------------------------------------------------------------------
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index 65aac6be78ec..836391e5d209 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -26,7 +26,7 @@ suffix-$(CONFIG_MODULE_COMPRESS_GZIP)	:= .gz
+ suffix-$(CONFIG_MODULE_COMPRESS_XZ)	:= .xz
+ suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)	:= .zst
+ 
+-modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
++modules := $(patsubst $(extmod_prefix)%.o, $(dst)/%.ko$(suffix-y), $(modules))
+ 
+ __modinst: $(modules)
+ 	@:
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 55a72f5eb76d..f814a6acd200 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -107,7 +107,10 @@ ifneq ($(KBUILD_MODPOST_WARN)$(missing-input),)
+ modpost-args += -w
+ endif
+ 
+-modorder-if-needed := $(if $(KBUILD_MODULES), $(MODORDER))
++ifdef KBUILD_MODULES
++modorder-if-needed := $(MODORDER)
++modpost-args += -T $(MODORDER)
++endif
+ 
+ MODPOST = scripts/mod/modpost
+ 
+@@ -119,7 +122,7 @@ quiet_cmd_modpost = MODPOST $@
+ 		echo >&2 "WARNING: $(missing-input) is missing."; \
+ 		echo >&2 "         Modules may not have dependencies or modversions."; \
+ 		echo >&2 "         You may get many unresolved symbol warnings.";) \
+-	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(modpost-args) -T - $(vmlinux.o-if-present)
++	$(MODPOST) $(modpost-args) $(vmlinux.o-if-present)
+ 
+ targets += $(output-symdump)
+ $(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(module.symvers-if-present) $(MODPOST) FORCE
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index d800b2c0af97..0227522959a4 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -138,10 +138,10 @@ def cmdfiles_for_modorder(modorder):
+     """
+     with open(modorder) as f:
+         for line in f:
+-            ko = line.rstrip()
+-            base, ext = os.path.splitext(ko)
+-            if ext != '.ko':
+-                sys.exit('{}: module path must end with .ko'.format(ko))
++            obj = line.rstrip()
++            base, ext = os.path.splitext(obj)
++            if ext != '.o':
++                sys.exit('{}: module path must end with .o'.format(obj))
+             mod = base + '.mod'
+             # Read from *.mod, to get a list of objects that compose the module.
+             with open(mod) as m:
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 56d856f2e511..b48838a71bf6 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1856,11 +1856,9 @@ static void read_symbols_from_files(const char *filename)
+ 	FILE *in = stdin;
+ 	char fname[PATH_MAX];
+ 
+-	if (strcmp(filename, "-") != 0) {
+-		in = fopen(filename, "r");
+-		if (!in)
+-			fatal("Can't open filenames file %s: %m", filename);
+-	}
++	in = fopen(filename, "r");
++	if (!in)
++		fatal("Can't open filenames file %s: %m", filename);
+ 
+ 	while (fgets(fname, PATH_MAX, in) != NULL) {
+ 		if (strends(fname, "\n"))
+@@ -1868,8 +1866,7 @@ static void read_symbols_from_files(const char *filename)
+ 		read_symbols(fname);
+ 	}
+ 
+-	if (in != stdin)
+-		fclose(in);
++	fclose(in);
+ }
+ 
+ #define SZ 500
+diff --git a/scripts/modules-check.sh b/scripts/modules-check.sh
+index e06327722263..4c8da90de78e 100755
+--- a/scripts/modules-check.sh
++++ b/scripts/modules-check.sh
+@@ -16,7 +16,7 @@ check_same_name_modules()
+ 	for m in $(sed 's:.*/::' "$1" | sort | uniq -d)
+ 	do
+ 		echo "error: the following would cause module name conflict:" >&2
+-		sed -n "/\/$m/s:^:  :p" "$1" >&2
++		sed -n "/\/$m/s:^\(.*\)\.o\$:  \1.ko:p" "$1" >&2
+ 		exit_code=1
+ 	done
+ }
+-- 
+2.34.1
 
---Sig_/.sImXqZfT50grP0_PGGp8hG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmOV1O8ACgkQADBpX4S8
-ZndWrg/+ICE/fK0SrMOV9BqatDcSIxomz8zoyXZya+OYQWRTRFosJLtZ4PYG5keB
-FOOddKdX66pHi3r3qz5rTtaENgLStIxT+43N4LDdDCmfK/bJK5aI+4wsaedKsfSi
-UqN7EJr28jpc/g4mfyZeMzj/bo0yEv6WVSsVxvOZME7NHlhUNyw/whbeYwE6A9/9
-W+bID39V4QOlE8AK0rip0dYyYKlxsu0HLdQkq1hXIm9FeeNXJwBn5oPE80VKb/RJ
-ReN/5iZwoNAx/eqGpg0oTq5fZwTReJ0HbDT/ntHCDEbjXsUAA+JqKo1g+yDa2PX4
-8ILBIAVq/JLfIwbXUge88YEpI8DYB3/6thK2XdFlX5QDAXWyS4bgrKG/8xLZgtGc
-KgileQuMKQyDjCqyqR5h2FhWXug6LCII3FIvKQwuBGzQXGLqwSErRu3oT/qFjSdg
-Dp56U/QUzZROhxc3/Ea32dz4HqbPw4PAqqRtqMDVbI/XeKnbyQL1S4Y7TylfM4LL
-P4o2E5x/9tomgZliVnRVLcA//uOI8V/nsn4gImOi/QYihYx8f5JzuC79D+ZSRqpc
-f36HM47CeCUP3hWQquIUrohvp21deidc1pEnauLLeKujwJakmy+aff6JY+XFMANq
-KUe4iBrDYddHbWrEG/El0HbfLDVCi87bG3wwuPn8gP7b8s5yQeY=
-=PWR3
------END PGP SIGNATURE-----
-
---Sig_/.sImXqZfT50grP0_PGGp8hG--
