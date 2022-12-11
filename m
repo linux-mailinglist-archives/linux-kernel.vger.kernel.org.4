@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEA26496AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 23:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C194B6496B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 23:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiLKWQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 17:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S230382AbiLKWQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 17:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiLKWQZ (ORCPT
+        with ESMTP id S230340AbiLKWQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 17:16:25 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75839DECF
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:24 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h12so10289868wrv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:24 -0800 (PST)
+        Sun, 11 Dec 2022 17:16:28 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2E4DE88
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:26 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h7so10307372wrs.6
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.huji.ac.il; s=mailhuji;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ni6ap3ZTSSQLWT4jw5HwfmJdLJiMoNH+N4dU0gGowyA=;
-        b=EYLzQOAopum3pSRQHrpnKxi13r3F+Hy0yhyJAoTuvDz33Ch7Tv2ysaS8m4GyyOxgBi
-         q/k32WQO5EX91YsdGdGMabqCZ9P8blItNhs9fIQM7o1mTlleCHIr3HtU1PIWR6v+z85I
-         cDLhaKRLFOCzCBXGxHMwhxnrJmimSYjeYJIx0=
+        bh=zM8KEovEBPpuDpU7J5nrYIVpuEqDseyeMIrsp4iQznI=;
+        b=fWKZ9AyL/cITc+iqt3VV5VKWgDaeRzwAk2ZBkHGdlAsfED8yw9QZsYVlvaF0m6MBrK
+         WVS5xYAnIG/aiFcxxZayewGR0nVoRWNeAPy8fdwmVZKrovRizmZEv3AonkIYuwTR2VbR
+         ipyYIpxN6IgV4M3EMaYlBX6qyfqYkyHcILUeU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ni6ap3ZTSSQLWT4jw5HwfmJdLJiMoNH+N4dU0gGowyA=;
-        b=0/EKU37xuNrhtAV24vQFIFfFMHwbGwnWh1x6gLCVyPjJ0xauF8P1MvUb+oRDTvilBa
-         IMyEWyyJ2mulv++dBKMzGs8zMazrLHROpyZPfl1f42k/VjEjs4hsv4z4bFNTPGsA1eR/
-         6K1o4kzGRB8QGaIHpED3SOM3tAR6BXTsR29WbI02WToOwrKsfeHGu708jNREGKNIovbK
-         yLT/ATuFDUgrUzGaVre2F/Pq8lmuMmbRb3iYin4vSWwaZIDjqldUgQaG0lYQJyri9uiA
-         b5+gQ3WNrdOrDP3/IQtJ21wSqfyVuFYAypbQzwG+oXhF+eVUK11aZSTrEbH2AE1S/uhg
-         j5wA==
-X-Gm-Message-State: ANoB5pk9kQVJXlwtjB+GCZTbmtsCPsdCtbU/elGy+d60eyNGDSnohJ0W
-        P/xscJMb82I3euDYmTbzSjoSCQ==
-X-Google-Smtp-Source: AA0mqf5eiE3KSbJCRDLvM+KkM9HyqMO32IozmzWEX6a96+v4zJ+rNb9OcomTmXFxRzIrFkqdGIBt3A==
-X-Received: by 2002:a05:6000:81a:b0:242:69f4:cb6f with SMTP id bt26-20020a056000081a00b0024269f4cb6fmr9084177wrb.32.1670796982926;
-        Sun, 11 Dec 2022 14:16:22 -0800 (PST)
+        bh=zM8KEovEBPpuDpU7J5nrYIVpuEqDseyeMIrsp4iQznI=;
+        b=eqQXt5jTDCpumT323xi8rZlFzV+l+Rxv13jgYWXLnEjJkwvhbZbcD7jOhC2t+kPgcX
+         kgT4UyIXfB/OPzkUVxDN9Hjj/jQRx2Y1fUBzuEkYm+BGdFCJGkHOb72LJC1d6jrEAqu9
+         GkVnV8HpVB5RBixiFVxQ/rF/I/6Ocx9bVVFrsccfWgebh6U0nFm7vCQa2e9C/olv9FoJ
+         5n5g9dpuSWzLXbv6QzmVOyJyScTPA7YtjAlhajWz+wVOFQdAya0+AG89VeDTuk7VqQ65
+         bzR2LrGB7TleDMgc76SlGizlVTR+aOJYgAVkrC3xaPaYgpgqO/P8wRLtkRMphMCnU08J
+         Auuw==
+X-Gm-Message-State: ANoB5pmzkfmzObvfcth5ske6aR8+SsCbw2O1ys3VnyF8v+KPPZRH0u3c
+        GZdt0NrwGUsk5eyYa1yaoSnkig==
+X-Google-Smtp-Source: AA0mqf5QscAKPqWC/oCh0m4RyFsDHTkAHL/kHN3AUFV3csBH/BHNtmhVewKthz4gV534opneQKsf0g==
+X-Received: by 2002:adf:f205:0:b0:242:1809:7e17 with SMTP id p5-20020adff205000000b0024218097e17mr8808872wro.6.1670796985307;
+        Sun, 11 Dec 2022 14:16:25 -0800 (PST)
 Received: from MacBook-Pro-5.lan ([2a0d:6fc2:218c:1a00:a91c:f8bf:c26f:4f15])
-        by smtp.gmail.com with ESMTPSA id d7-20020adffd87000000b002422bc69111sm8605805wrr.9.2022.12.11.14.16.20
+        by smtp.gmail.com with ESMTPSA id d7-20020adffd87000000b002422bc69111sm8605805wrr.9.2022.12.11.14.16.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 14:16:22 -0800 (PST)
+        Sun, 11 Dec 2022 14:16:24 -0800 (PST)
 From:   david.keisarschm@mail.huji.ac.il
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
 Cc:     David <david.keisarschm@mail.huji.ac.il>, aksecurity@gmail.com,
-        ilay.bahat1@gmail.com, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 2/5] Replace invocation of weak PRNG in kernel/bpf/core.c
-Date:   Mon, 12 Dec 2022 00:16:05 +0200
-Message-Id: <7c16cafe96c47ff5234fbb980df9d3e3d48a0296.1670778652.git.david.keisarschm@mail.huji.ac.il>
+        ilay.bahat1@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 3/5] Replace invocation of weak PRNG in mm/slab.c
+Date:   Mon, 12 Dec 2022 00:16:06 +0200
+Message-Id: <18076e09f1062f38f5d02e8fefb73b810f437ca3.1670778652.git.david.keisarschm@mail.huji.ac.il>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
 References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
@@ -84,90 +79,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: David <david.keisarschm@mail.huji.ac.il>
 
 We changed the invocation of
- prandom_u32_state to get_random_u32.
- We deleted the maintained state,
- which was a CPU-variable,
- since get_random_u32 maintains its own CPU-variable.
- We also deleted the state initializer,
- since it is not needed anymore.
+prandom_u32_state to get_random_u32.
+ We also changed the freelist_init_state
+to struct instead of a union,
+since the rnd_state is not needed anymore -
+ get_random_u32 maintains its own state.
 
 Signed-off-by: David <david.keisarschm@mail.huji.ac.il>
 ---
- include/linux/bpf.h   |  1 -
- kernel/bpf/core.c     | 13 +------------
- kernel/bpf/verifier.c |  2 --
- net/core/filter.c     |  1 -
- 4 files changed, 1 insertion(+), 16 deletions(-)
+ mm/slab.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c1bd1bd10..0689520b9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2572,7 +2572,6 @@ const struct bpf_func_proto *tracing_prog_func_proto(
-   enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/mm/slab.c b/mm/slab.c
+index ff71c5757..1476104f4 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -2360,20 +2360,17 @@ static void cache_init_objs_debug(struct kmem_cache *cachep, struct slab *slab)
  
- /* Shared helpers among cBPF and eBPF. */
--void bpf_user_rnd_init_once(void);
- u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ #ifdef CONFIG_SLAB_FREELIST_RANDOM
+ /* Hold information during a freelist initialization */
+-union freelist_init_state {
+-	struct {
+-		unsigned int pos;
+-		unsigned int *list;
+-		unsigned int count;
+-	};
+-	struct rnd_state rnd_state;
++struct freelist_init_state {
++	unsigned int pos;
++	unsigned int *list;
++	unsigned int count;
+ };
  
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 4cb5421d9..a6f06894e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2579,13 +2579,6 @@ void bpf_prog_free(struct bpf_prog *fp)
- }
- EXPORT_SYMBOL_GPL(bpf_prog_free);
- 
--/* RNG for unpriviledged user space with separated state from prandom_u32(). */
--static DEFINE_PER_CPU(struct rnd_state, bpf_user_rnd_state);
--
--void bpf_user_rnd_init_once(void)
--{
--	prandom_init_once(&bpf_user_rnd_state);
--}
- 
- BPF_CALL_0(bpf_user_rnd_u32)
+ /*
+  * Initialize the state based on the randomization method available.
+  * return true if the pre-computed list is available, false otherwise.
+  */
+-static bool freelist_state_initialize(union freelist_init_state *state,
++static bool freelist_state_initialize(struct freelist_init_state *state,
+ 				struct kmem_cache *cachep,
+ 				unsigned int count)
  {
-@@ -2595,12 +2588,8 @@ BPF_CALL_0(bpf_user_rnd_u32)
- 	 * transformations. Register assignments from both sides are
- 	 * different, f.e. classic always sets fn(ctx, A, X) here.
- 	 */
--	struct rnd_state *state;
- 	u32 res;
--
--	state = &get_cpu_var(bpf_user_rnd_state);
--	res = predictable_rng_prandom_u32_state(state);
--	put_cpu_var(bpf_user_rnd_state);
-+	res = get_random_u32();
+@@ -2385,7 +2382,6 @@ static bool freelist_state_initialize(union freelist_init_state *state,
  
- 	return res;
+ 	/* Use a random state if the pre-computed list is not available */
+ 	if (!cachep->random_seq) {
+-		prandom_seed_state(&state->rnd_state, rand);
+ 		ret = false;
+ 	} else {
+ 		state->list = cachep->random_seq;
+@@ -2397,7 +2393,7 @@ static bool freelist_state_initialize(union freelist_init_state *state,
  }
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 264b3dc71..9f22fb3fa 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14049,8 +14049,6 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
  
- 		if (insn->imm == BPF_FUNC_get_route_realm)
- 			prog->dst_needed = 1;
--		if (insn->imm == BPF_FUNC_get_prandom_u32)
--			bpf_user_rnd_init_once();
- 		if (insn->imm == BPF_FUNC_override_return)
- 			prog->kprobe_override = 1;
- 		if (insn->imm == BPF_FUNC_tail_call) {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bb0136e7a..7a595ac00 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -443,7 +443,6 @@ static bool convert_bpf_extensions(struct sock_filter *fp,
- 			break;
- 		case SKF_AD_OFF + SKF_AD_RANDOM:
- 			*insn = BPF_EMIT_CALL(bpf_user_rnd_u32);
--			bpf_user_rnd_init_once();
- 			break;
+ /* Get the next entry on the list and randomize it using a random shift */
+-static freelist_idx_t next_random_slot(union freelist_init_state *state)
++static freelist_idx_t next_random_slot(struct freelist_init_state *state)
+ {
+ 	if (state->pos >= state->count)
+ 		state->pos = 0;
+@@ -2418,7 +2414,7 @@ static void swap_free_obj(struct slab *slab, unsigned int a, unsigned int b)
+ static bool shuffle_freelist(struct kmem_cache *cachep, struct slab *slab)
+ {
+ 	unsigned int objfreelist = 0, i, rand, count = cachep->num;
+-	union freelist_init_state state;
++	struct freelist_init_state state;
+ 	bool precomputed;
+ 
+ 	if (count < 2)
+@@ -2447,7 +2443,7 @@ static bool shuffle_freelist(struct kmem_cache *cachep, struct slab *slab)
+ 
+ 		/* Fisher-Yates shuffle */
+ 		for (i = count - 1; i > 0; i--) {
+-			rand = predictable_rng_prandom_u32_state(&state.rnd_state);
++			rand = get_random_u32();
+ 			rand %= (i + 1);
+ 			swap_free_obj(slab, i, rand);
  		}
- 		break;
 -- 
 2.38.0
 
