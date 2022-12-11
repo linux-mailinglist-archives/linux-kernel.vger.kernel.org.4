@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F336496DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 23:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C66649740
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 00:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiLKW6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 17:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S230444AbiLKX4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 18:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKW6a (ORCPT
+        with ESMTP id S229475AbiLKX4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 17:58:30 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B499FF7;
-        Sun, 11 Dec 2022 14:58:28 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id fc4so23735771ejc.12;
-        Sun, 11 Dec 2022 14:58:28 -0800 (PST)
+        Sun, 11 Dec 2022 18:56:17 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD43CBF64;
+        Sun, 11 Dec 2022 15:56:13 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so3855424wmh.0;
+        Sun, 11 Dec 2022 15:56:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M33qCD7Tm8dDEgZk34tGAUKV2pp9BjLWodh2i56ini8=;
-        b=YM/EYtHkM9CzZbVfnNVz3ugqNlk3HA3Qywye8HmZNtAVcbE8mI+jSfGVkYqFn/uidC
-         GmaGFF3VGDlrfL7HwRPrWg2gx8OfTYa7KZJUQq0fNQzLNVIs3k7nkPn79sp8pYm5u5gN
-         uJnxyNLtDSmRjf7Kp6IngeT2ofr0NQPEy3JC76VutmwpVNpmowA5+12MeB6WYVxMWD4n
-         AdO/pAa1/8xPsrWuuzD+Os91s3wQpBwmiEDec3mfzWaNdFQaxgZ7KTUsVyMpIxo4snfp
-         HM7ez7UKZKgsBcF+H5s+8TCro4smINVZnBLSR44U/xI5lmqrEyhvy2FlFmn3XJqCVDtp
-         KY9g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vygAuf7AwXJYsfDW0hXyAUjykBCmNaNkMCNxlpUfxbk=;
+        b=bj9PhQGuMqRiNXSSbU31EGyIWtiimrvGvPa/6yhxwEvSQsAAH1nRpVo1I0yW+Mg21Z
+         lWgw+a7YqjCTOj7cyCnaz/nCbX0cE9lnYImnOlY0cr94NoKMjI+1FtRqOeHilAPJI2d2
+         sU0SlG4jlczdpwOlVmtjNmsF1H7JI7D/b/a/Bo+PPTO/PcF+HjZeCCUJUf0tFjMJFmfK
+         paemNxrijeAJfMKmW7SwHRYbe2vhCA/Mk/LMcVxZPuqGJcbcxO6xDsF0CT+eOHVEtgNY
+         x5aAjoaKH6RsD+Bc3uQb5T9Jd6sR6k/vu0NXujiRkBGPB0jMATN0sf+SRuIsiFuQ/VMq
+         y0kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M33qCD7Tm8dDEgZk34tGAUKV2pp9BjLWodh2i56ini8=;
-        b=s2VQKXUhzZx8VCDFWWzWXvQqPtdI7F5LZaj+APawwx0unXOIKmJJP3K2duGlr29kxd
-         NMVLVXkNDsEdiyJcbMMRMjg3FpwdNboyCgV8m+eaE7fy0geEBMX61G7LLZcHPuOCBUiF
-         wJrtDVZS0/bq3KQ8flUJNJnpwxxqO/babYLNBCgZdKOrGCtDdN7A74ZnWvpIiJk8my7U
-         hH91no/5yhotNOggO5vlzUUr3J3UmSsVe1gWfbyJQr8YC0djZ0aGwB19LDwvFSTRzvfc
-         lqE7mEi7cgY65AEcoKNvfu5jopPsR10yEXtTv+WDk/rb4lqL/Z5T+oSDq9FZqtKrbOnU
-         CV2A==
-X-Gm-Message-State: ANoB5pmjSK5f6Ff/NiUDzTXWy0dEdqLCtO3rsjL2aiohEhz/P5Pu+Gvc
-        XlrHBenBQ2BS+oAkmIlxcCs=
-X-Google-Smtp-Source: AA0mqf7p50+L95OeIEuBxlGylcnhYmtBdgeQFosfuZf9XnCV73/tM0sQHCcFFJhDfhxd79fyjh6MQw==
-X-Received: by 2002:a17:906:150d:b0:7c1:65f5:7b92 with SMTP id b13-20020a170906150d00b007c165f57b92mr4674347ejd.48.1670799506624;
-        Sun, 11 Dec 2022 14:58:26 -0800 (PST)
-Received: from skbuf ([188.27.185.175])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170906390c00b007c0aa8eaf47sm2504998eje.116.2022.12.11.14.58.24
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vygAuf7AwXJYsfDW0hXyAUjykBCmNaNkMCNxlpUfxbk=;
+        b=d0l9tcHg1Oy3l+2l7RGOz3yIsnx0oGQVMMEQvr4QQmdOo5/ZYERTpLsxqm5AJTCSj0
+         RJzkb/V9z/ybXIPLckCY/7ZURxhQv8lg0MzVWCPlEiPScV+UQYz9ApvXod1wB5rW+wyS
+         NzmJ1jIFnfZK//Mpin0URubf2n1HQU5l7qQjVeR2B2EDGF7wvxbqYjYN4g1fZND42/15
+         Nj1V/EPMs70F2O9GRe0mTbHq58VlBu/VSHZuMywRwjdKBhMUkXjOgMOOdENzUo6Uyc5a
+         WyJf60kTkckTp07sZ/MxXeyhsB/wWI1S1qQvKbzN+M9Wy+Nwp3040GBtQrwBx/KJy7kX
+         meNQ==
+X-Gm-Message-State: ANoB5pl+UN+9NpYeD9zqPIcZPwUPUc/Eq411qr2r1BKceQBuDrvYkGQV
+        Nxr9qEWd7qulvqYJGjqUvYc=
+X-Google-Smtp-Source: AA0mqf5NCJIGiqe70JK1gk8LPNdAPiVZldPd9qB/UlVKOD/eiPOFbTGr+OMLtuM/7ANkqxKUBwQ1Ug==
+X-Received: by 2002:a7b:ca49:0:b0:3cf:8b22:76bc with SMTP id m9-20020a7bca49000000b003cf8b2276bcmr11113607wml.28.1670802972144;
+        Sun, 11 Dec 2022 15:56:12 -0800 (PST)
+Received: from suse.localnet (host-95-247-100-134.retail.telecomitalia.it. [95.247.100.134])
+        by smtp.gmail.com with ESMTPSA id bg16-20020a05600c3c9000b003c7087f6c9asm7882837wmb.32.2022.12.11.15.56.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 14:58:26 -0800 (PST)
-Date:   Mon, 12 Dec 2022 00:58:23 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>
-Subject: Re: [PATCH v5 net-next 01/10] dt-bindings: dsa: sync with maintainers
-Message-ID: <20221211225823.nde77nlfriok4q6x@skbuf>
-References: <20221210033033.662553-1-colin.foster@in-advantage.com>
- <20221210033033.662553-2-colin.foster@in-advantage.com>
- <87o7sbh896.fsf@kurt>
+        Sun, 11 Dec 2022 15:56:11 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 2/3] fs/ufs: Change the signature of ufs_get_page()
+Date:   Mon, 12 Dec 2022 00:56:10 +0100
+Message-ID: <2397878.jE0xQCEvom@suse>
+In-Reply-To: <Y5ZZy23FFAnQDR3C@ZenIV>
+References: <20221211213111.30085-1-fmdefrancesco@gmail.com>
+ <20221211213111.30085-3-fmdefrancesco@gmail.com> <Y5ZZy23FFAnQDR3C@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7sbh896.fsf@kurt>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -100,25 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 11:18:29AM +0100, Kurt Kanzenbach wrote:
-> You can update the hellcreek binding as well. Thanks.
+On domenica 11 dicembre 2022 23:29:31 CET Al Viro wrote:
+> On Sun, Dec 11, 2022 at 10:31:10PM +0100, Fabio M. De Francesco wrote:
+> > -static struct page *ufs_get_page(struct inode *dir, unsigned long n)
+> > +static void *ufs_get_page(struct inode *dir, unsigned long n, struct page
+> > **page)> 
+> >  {
+> >  
+> >  	struct address_space *mapping = dir->i_mapping;
+> > 
+> > -	struct page *page = read_mapping_page(mapping, n, NULL);
+> > -	if (!IS_ERR(page)) {
+> > -		kmap(page);
+> > -		if (unlikely(!PageChecked(page))) {
+> > -			if (!ufs_check_page(page))
+> > +	*page = read_mapping_page(mapping, n, NULL);
+> > +	if (!IS_ERR(*page)) {
+> > +		kmap(*page);
+> > +		if (unlikely(!PageChecked(*page))) {
+> > +			if (!ufs_check_page(*page))
+> > 
+> >  				goto fail;
+> >  		
+> >  		}
+> >  	
+> >  	}
+> >  	return page;
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> index 73b774eadd0b..1d7dab31457d 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
-> @@ -12,7 +12,7 @@ allOf:
->  maintainers:
->    - Andrew Lunn <andrew@lunn.ch>
->    - Florian Fainelli <f.fainelli@gmail.com>
-> -  - Vivien Didelot <vivien.didelot@gmail.com>
-> +  - Vladimir Oltean <olteanv@gmail.com>
->    - Kurt Kanzenbach <kurt@linutronix.de>
->  
->  description:
+> 	return page_address(page), surely?
+> 
+Yes, I'm sorry for these kinds of silly mistakes because while I was expecting 
+to err on much more difficult topics I overlooked what I know pretty well  :-(
 
-Good observation. If there are no other comments on this patch series
-(which otherwise looks reasonable to me), I suppose that could be
-accomplished via a parallel patch as well? The diff you're proposing
-does not seem to conflict with something else that Colin is touching in
-this patch set.
+Shouldn't it be "return page_address(*page)" because of "page" being a pointer 
+to pointer to "struct page"? Am I overlooking something?
+
+However, the greater mistake was about doing the decomposition into three 
+patches starting from the old single thing. I think that I had to start from 
+scratch. I made the process the other way round. 
+>
+> >  fail:
+> > -	ufs_put_page(page);
+> > +	ufs_put_page(*page);
+> > 
+> >  	return ERR_PTR(-EIO);
+> >  
+> >  }
+> > 
+> > @@ -227,15 +227,12 @@ ufs_next_entry(struct super_block *sb, struct
+> > ufs_dir_entry *p)> 
+> >  struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
+> >  {
+> > 
+> > -	struct page *page = ufs_get_page(dir, 0);
+> > -	struct ufs_dir_entry *de = NULL;
+> > +	struct ufs_dir_entry *de = ufs_get_page(dir, 0, p);
+> 
+> ... considering e.g. this.  The caller expects the pointer to beginning of
+> page, not pointer to struct page itself.  Other callers are also like 
+that...
+>
+I'll send next version within tomorrow (before or after work time) because 
+here it is 00.40 CET.
+
+Thank you very much for your immediate reply.
+
+Fabio
+
+
+
