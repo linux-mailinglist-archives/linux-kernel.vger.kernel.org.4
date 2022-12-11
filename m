@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48116648ED6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51281648ED7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Dec 2022 14:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiLJNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 08:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S229816AbiLJNNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 08:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiLJNNL (ORCPT
+        with ESMTP id S229785AbiLJNNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 08:13:11 -0500
+        Sat, 10 Dec 2022 08:13:19 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E1BE019;
-        Sat, 10 Dec 2022 05:13:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3CEE00;
+        Sat, 10 Dec 2022 05:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670677990; x=1702213990;
+  t=1670677998; x=1702213998;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mrkqcNvltIR0FVDb8leL5+vBXxZP/C/rJqlshPmIueA=;
-  b=DGbrMH/Tnh0OaLu2zCZiwGrLD4F0NLVAwq8w6yQPaDlKH03Gut0MeNeM
-   7NfneroDBQxzLVxOobZdYvJh45TaN4JpE23KlQre+tTWOqX9dgFPHLGrQ
-   fP5A/EYMCWS2AzO2+iQ/Ha2+UAx9QMe2qC5AIOArRUi0eABmJobmLuKnm
-   /b24LNmrsB71Y8P6ECtGN/RMym//fnZe7ceA1l4ofwjt+Na6wWdNTsQ8O
-   bfkiiKKq748WDAyxJf6OvMNXcjA5esi2x3nnNMTeXe825zom+po46RXig
-   qj4Vee2g9Xc6YQYLXkfOZ3hv149OtF9EJoeqvf2ktZn5XUnve87Bn6rhO
-   Q==;
+  bh=cKTLdomiXShuiVZb7T/R0fh5k4rDBEVPYzeUoRr66wQ=;
+  b=h0zbt7U7CtDs0BwtY9I3UVzDLilZhZGv1r/1LJh+FR+Wq25AkxbVx/s7
+   74emvTZ1x0Ap3HXVdL98yH+e66l6JQYGYobQEewNGqwY4lO/pJmA/E5oa
+   dn4n7qwcSboCy2UwDoXv8kAjEocevCRklZi7nBAwU+YoytTJen2eXJl6R
+   QgpZZyCYhJY3PvH/HuPUDNoQYdw1ewVFn5gbPDszk2MZBu1X5y+/ZuFg5
+   sgTehCCebCcrsRXXvniIs2EymRQqYRFN4UHVgeJkp37Q7092HJFADD9jp
+   Rg5WndnMgfpOvpogGM+kqfn3FHA1mqjvHvFT+5Clyw6/lnX7vbCnQGt/e
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,234,1665471600"; 
-   d="scan'208";a="191021807"
+   d="scan'208";a="187511491"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2022 06:13:09 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Dec 2022 06:13:17 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sat, 10 Dec 2022 06:13:09 -0700
+ 15.1.2507.12; Sat, 10 Dec 2022 06:13:17 -0700
 Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Sat, 10 Dec 2022 06:13:03 -0700
+ 15.1.2507.16 via Frontend Transport; Sat, 10 Dec 2022 06:13:11 -0700
 From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
@@ -51,15 +51,15 @@ CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
         <etremblay@distech-controls.com>, <jk@ozlabs.org>,
         <UNGLinuxDriver@microchip.com>,
         Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v8 tty-next 3/4] serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
-Date:   Sun, 11 Dec 2022 07:17:29 +0530
-Message-ID: <20221211014730.1233272-4-kumaravel.thiagarajan@microchip.com>
+Subject: [PATCH v8 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
+Date:   Sun, 11 Dec 2022 07:17:30 +0530
+Message-ID: <20221211014730.1233272-5-kumaravel.thiagarajan@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
 References: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
         DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -70,109 +70,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx uart supports RS485 mode of operation in the hardware with
-auto-direction control with configurable delay for releasing RTS after
-the transmission. This patch adds support for the RS485 mode.
+pci1xxxx's quad-uart function has the capability to wake up UART
+from suspend state. Enable wakeup before entering into suspend and
+disable wakeup on resume.
 
 Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
 Changes in v8:
-- Modified datatype of delay_in_baud_periods to u32
+- No Change
 
 Changes in v7:
 - No Change
 
 Changes in v6:
-- Modified datatype of delay_in_baud_periods to u64 to avoid overflows
+- No Change
 
 Changes in v5:
-- Removed unnecessary assignments
-- Corrected styling issues in comments
+- Corrected commit message
 
 Changes in v4:
 - No Change
 
 Changes in v3:
-- Remove flags sanitization in driver which is taken care in core
+- Handled race condition in suspend and resume callbacks
 
 Changes in v2:
-- move pci1xxxx_rs485_config to a separate patch with
-  pci1xxxx_rs485_supported.
+- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
+- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
+- Change the return data type of pci1xxxx_port_suspend to bool from int.
 ---
- drivers/tty/serial/8250/8250_pci1xxxx.c | 50 +++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
 diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 05d1bd386f07..c4e44bfbd9e2 100644
+index c4e44bfbd9e2..2dffa1b1f148 100644
 --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
 +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -145,6 +145,54 @@ static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
- 	       port->membase + UART_BAUD_CLK_DIVISOR_REG);
- }
+@@ -193,6 +193,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
+ 	/* Delay RTS before send is not supported */
+ };
  
-+static int pci1xxxx_rs485_config(struct uart_port *port,
-+				 struct ktermios *termios,
-+				 struct serial_rs485 *rs485)
++static bool pci1xxxx_port_suspend(int line)
 +{
-+	u32 delay_in_baud_periods;
-+	u32 baud_period_in_ns;
-+	u32 mode_cfg = 0;
-+	u32 clock_div;
++	struct uart_8250_port *up = serial8250_get_port(line);
++	struct uart_port *port = &up->port;
++	struct tty_port *tport = &port->state->port;
++	unsigned long flags;
++	bool ret = false;
++	u8 wakeup_mask;
 +
-+	/*
-+	 * pci1xxxx's uart hardware supports only RTS delay after
-+	 * Tx and in units of bit times to a maximum of 15
-+	 */
-+	if (rs485->flags & SER_RS485_ENABLED) {
-+		mode_cfg = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
++	mutex_lock(&tport->mutex);
++	if (port->suspended == 0 && port->dev) {
++		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
 +
-+		if (!(rs485->flags & SER_RS485_RTS_ON_SEND))
-+			mode_cfg |= ADCL_CFG_POL_SEL;
++		spin_lock_irqsave(&port->lock, flags);
++		port->mctrl &= ~TIOCM_OUT2;
++		port->ops->set_mctrl(port, port->mctrl);
++		spin_unlock_irqrestore(&port->lock, flags);
 +
-+		if (rs485->delay_rts_after_send) {
-+			clock_div = readl(port->membase + UART_BAUD_CLK_DIVISOR_REG);
-+			baud_period_in_ns =
-+				FIELD_GET(BAUD_CLOCK_DIV_INT_MSK, clock_div) *
-+				UART_BIT_SAMPLE_CNT;
-+			delay_in_baud_periods =
-+				rs485->delay_rts_after_send * NSEC_PER_MSEC /
-+				baud_period_in_ns;
-+			delay_in_baud_periods =
-+				min_t(u32, delay_in_baud_periods,
-+				      FIELD_MAX(ADCL_CFG_RTS_DELAY_MASK));
-+			mode_cfg |= FIELD_PREP(ADCL_CFG_RTS_DELAY_MASK,
-+					   delay_in_baud_periods);
-+			rs485->delay_rts_after_send =
-+				baud_period_in_ns * delay_in_baud_periods /
-+				NSEC_PER_MSEC;
++		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
++	}
++
++	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
++	mutex_unlock(&tport->mutex);
++
++	return ret;
++}
++
++static void pci1xxxx_port_resume(int line)
++{
++	struct uart_8250_port *up = serial8250_get_port(line);
++	struct uart_port *port = &up->port;
++	struct tty_port *tport = &port->state->port;
++	unsigned long flags;
++
++	mutex_lock(&tport->mutex);
++	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
++	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
++
++	if (port->suspended == 0) {
++		spin_lock_irqsave(&port->lock, flags);
++		port->mctrl |= TIOCM_OUT2;
++		port->ops->set_mctrl(port, port->mctrl);
++		spin_unlock_irqrestore(&port->lock, flags);
++	}
++	mutex_unlock(&tport->mutex);
++}
++
++static int pci1xxxx_suspend(struct device *dev)
++{
++	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
++	struct pci_dev *pcidev = to_pci_dev(dev);
++	bool wakeup = false;
++	unsigned int data;
++	void __iomem *p;
++	int i;
++
++	for (i = 0; i < priv->nr; i++) {
++		if (priv->line[i] >= 0) {
++			serial8250_suspend_port(priv->line[i]);
++			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
 +		}
 +	}
-+	writel(mode_cfg, port->membase + ADCL_CFG_REG);
++
++	p = pci_ioremap_bar(pcidev, 0);
++	if (!p) {
++		dev_err(dev, "remapping of bar 0 memory failed");
++		return -ENOMEM;
++	}
++
++	data = readl(p + UART_RESET_REG);
++	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
++
++	if (wakeup)
++		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
++
++	iounmap(p);
++	device_set_wakeup_enable(dev, true);
++	pci_wake_from_d3(pcidev, true);
++
 +	return 0;
 +}
 +
-+static const struct serial_rs485 pci1xxxx_rs485_supported = {
-+	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
-+		 SER_RS485_RTS_AFTER_SEND,
-+	.delay_rts_after_send = 1,
-+	/* Delay RTS before send is not supported */
-+};
++static int pci1xxxx_resume(struct device *dev)
++{
++	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
++	struct pci_dev *pcidev = to_pci_dev(dev);
++	unsigned int data;
++	void __iomem *p;
++	int i;
++
++	p = pci_ioremap_bar(pcidev, 0);
++	if (!p) {
++		dev_err(dev, "remapping of bar 0 memory failed");
++		return -ENOMEM;
++	}
++
++	data = readl(p + UART_RESET_REG);
++	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
++	iounmap(p);
++
++	for (i = 0; i < priv->nr; i++) {
++		if (priv->line[i] >= 0) {
++			pci1xxxx_port_resume(priv->line[i]);
++			serial8250_resume_port(priv->line[i]);
++		}
++	}
++
++	return 0;
++}
 +
  static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
  			  struct uart_8250_port *port, int port_idx)
  {
-@@ -155,6 +203,8 @@ static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 	port->port.set_termios = serial8250_do_set_termios;
- 	port->port.get_divisor = pci1xxxx_get_divisor;
- 	port->port.set_divisor = pci1xxxx_set_divisor;
-+	port->port.rs485_config = pci1xxxx_rs485_config;
-+	port->port.rs485_supported = pci1xxxx_rs485_supported;
+@@ -363,6 +473,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
+ 	}
+ }
  
- 	ret = serial8250_pci_setup_port(priv->pdev, port, 0, port_idx * 256, 0);
- 	if (ret < 0)
++static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
++
+ static const struct pci_device_id pci1xxxx_pci_tbl[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
+@@ -377,6 +489,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
+ 	.name = "pci1xxxx serial",
+ 	.probe = pci1xxxx_serial_probe,
+ 	.remove = pci1xxxx_serial_remove,
++	.driver = {
++		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
++	},
+ 	.id_table = pci1xxxx_pci_tbl,
+ };
+ module_pci_driver(pci1xxxx_pci_driver);
 -- 
 2.25.1
 
