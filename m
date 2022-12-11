@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E05A6496B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 23:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8406496B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 23:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiLKWQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 17:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S229471AbiLKWRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 17:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiLKWQ2 (ORCPT
+        with ESMTP id S230394AbiLKWRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 17:16:28 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1F5CE2E
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:27 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h12so10289986wrv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:27 -0800 (PST)
+        Sun, 11 Dec 2022 17:17:04 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CD3DF14
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:30 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h10so10310616wrx.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 14:16:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.huji.ac.il; s=mailhuji;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=haTxffWmHSbAPwv39fal7v0AA4S/hzfP5R1mLvgRpek=;
-        b=UbLp/WJdGEjbrNFkSsIuV78VgoO68KxhGH2WYTQpJtOfXrKCllm7Y+e+mOcVYVBjmd
-         54ZjcvsZUdzXyeVth+DloJ5pZNO1lLMOm4QQA5AqbesJaSqGG0SKj2+MBqhmW8fczXDm
-         rFe1P4tp6xRSDbJjsqwUHsIkj5X77hGVZleuI=
+        bh=0p9rX14s+h4y1SuQ3mCW9PMi26HVbeJ/xr8u7413PZ4=;
+        b=Ewkk6rnjnZvSU3LuAwd4bzx27RRFGN8QxuqDoa/OJEnAVAORO4VWqQEYhQSM8n+2Xm
+         Z27ddssgjax3jnypckCl3fqqv6a1+uwZJnebns2S7RPwDFf1yM3Go+uXjR3E6mr2oNvw
+         fAL1PZfsN/UhzidzySCKC2dAaE7eSASiEWhAs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=haTxffWmHSbAPwv39fal7v0AA4S/hzfP5R1mLvgRpek=;
-        b=ly1iJ/63ZiQH490nnUBBWg3lFleruNDCM+ev5Oko1hLXgWXJxmR5M8Yy0/85ZrwVU2
-         ieIJHajL9jhYxZ8qM2DgN5Y5BzcD8GhJFjMJ/bSjf7oC6CcMuaXYqF4GwRVx7CBOz5fv
-         CpgJNQkkZy5SitFIP3QwnwpP0zTp+3ucBHEa3XqTwacl7d3O2/LEBn4xFhIhiiVFcgfc
-         zHHNunghvGE7YvKukdT9rPaAae+VNSY2cWq7wRAzOF4xX1NUL62zcQHcLlefy2n8FTtr
-         2ztfZ+jMw1OGhZKFlB0AISrRV//y8TiBdCH+SBwAgtTlBrQfGv9DacZrJQItAslpdtHs
-         T6Kg==
-X-Gm-Message-State: ANoB5pmf+IXA+7GnczS+txTFVo9zILwYLozc+2xjjzQ58itpuiaSgCwa
-        Ap4Owj8HZxzBTxG7rsV4xQdgHA==
-X-Google-Smtp-Source: AA0mqf4+pbXX8gZcvwBJDDX/GsbtFqpKUq1E1bX85Vp1pP715Zv9EOXv/m3uGnNCBqE5llnuBJD80w==
-X-Received: by 2002:a5d:4090:0:b0:24d:5829:4e59 with SMTP id o16-20020a5d4090000000b0024d58294e59mr4060976wrp.58.1670796987434;
-        Sun, 11 Dec 2022 14:16:27 -0800 (PST)
+        bh=0p9rX14s+h4y1SuQ3mCW9PMi26HVbeJ/xr8u7413PZ4=;
+        b=ysBi0RaED4WNn/rSH1CwZhQ7TkErETp/PD2HLzqgxIs/+rTCX7gSFvedyD9aXu3T9E
+         rQd6Y6VbMO0DRuYEf69mLfGDJKL53uk8h9pycUtAnI8+S6YIvwetam62XzrJ6PNCpDef
+         h+i54myMVj2wVPGaj4Zep3eXXTaLVoHTde8NjIZZRZBA5N5YYKZy+ZIzcDRNSZDa94M9
+         Naz7ZfngtoLt2e6M9/A8JQGPIm/n3CFoQnwOIrK1kvudycAGj4DAZiCgm9yNAzb97zCM
+         D4XwhEJ7GCJhsTwJMycDGzeGtfTP5yYlw48Rizis9krMP86PcwpTiEjddFad7FUkOGvr
+         3EQg==
+X-Gm-Message-State: ANoB5pnet8/GnT5xQOgVq0pGT0Z4pCA6URfO8qdHi4J1Bg4TT8Xjc/LW
+        ehVAl7TIDD5dW6If6aTtwcqGjg==
+X-Google-Smtp-Source: AA0mqf7VD+2uF8zSkzKae34TDCfQTqaFDb9gL1sQvmMaKdmF9DR4P+rCMw32YAl2RZStSK/ZkojrAg==
+X-Received: by 2002:adf:e544:0:b0:242:5469:55dd with SMTP id z4-20020adfe544000000b00242546955ddmr8306139wrm.36.1670796989537;
+        Sun, 11 Dec 2022 14:16:29 -0800 (PST)
 Received: from MacBook-Pro-5.lan ([2a0d:6fc2:218c:1a00:a91c:f8bf:c26f:4f15])
-        by smtp.gmail.com with ESMTPSA id d7-20020adffd87000000b002422bc69111sm8605805wrr.9.2022.12.11.14.16.26
+        by smtp.gmail.com with ESMTPSA id d7-20020adffd87000000b002422bc69111sm8605805wrr.9.2022.12.11.14.16.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 14:16:27 -0800 (PST)
+        Sun, 11 Dec 2022 14:16:29 -0800 (PST)
 From:   david.keisarschm@mail.huji.ac.il
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
 Cc:     David <david.keisarschm@mail.huji.ac.il>, aksecurity@gmail.com,
-        ilay.bahat1@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] Replace invocation of weak PRNG inside mm/slab_common.c
-Date:   Mon, 12 Dec 2022 00:16:07 +0200
-Message-Id: <095bc8aafcc97d6a53d1f946a9528b10a826116d.1670778652.git.david.keisarschm@mail.huji.ac.il>
+        ilay.bahat1@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] Replace invocation of weak PRNG in arch/x86/mm/kaslr.c
+Date:   Mon, 12 Dec 2022 00:16:08 +0200
+Message-Id: <b9ab9fa5d7d4d0763566dabe83e445331c970d51.1670778652.git.david.keisarschm@mail.huji.ac.il>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
 References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
@@ -78,60 +75,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David <david.keisarschm@mail.huji.ac.il>
 
-We changed the invocation
- of prandom_u32_state to get_random_u32.
- We also omitted the initial seeding for the state,
- since get_random_u32 maintains its own,
- so there is no need to keep
-storing the state of prandom_u32_state here.
+We changed the invocation of
+ prandom_bytes_state which is
+ considered weak to get_random_bytes.
+ We also omitted the call to the seeding function,
+ since prandom_bytes matintains its own state,
+ so there is no need for seeding here anymore.
 
 Signed-off-by: David <david.keisarschm@mail.huji.ac.il>
 ---
- mm/slab_common.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ arch/x86/mm/kaslr.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index deb764785..6ac68b9a6 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -1130,7 +1130,7 @@ EXPORT_SYMBOL(kmalloc_large_node);
+diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
+index 66c17b449..466111c99 100644
+--- a/arch/x86/mm/kaslr.c
++++ b/arch/x86/mm/kaslr.c
+@@ -66,7 +66,6 @@ void __init kernel_randomize_memory(void)
+ 	size_t i;
+ 	unsigned long vaddr_start, vaddr;
+ 	unsigned long rand, memory_tb;
+-	struct rnd_state rand_state;
+ 	unsigned long remain_entropy;
+ 	unsigned long vmemmap_size;
  
- #ifdef CONFIG_SLAB_FREELIST_RANDOM
- /* Randomize a generic freelist */
--static void freelist_randomize(struct rnd_state *state, unsigned int *list,
-+static void freelist_randomize(unsigned int *list,
- 			       unsigned int count)
- {
- 	unsigned int rand;
-@@ -1141,7 +1141,7 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+@@ -113,8 +112,6 @@ void __init kernel_randomize_memory(void)
+ 	for (i = 0; i < ARRAY_SIZE(kaslr_regions); i++)
+ 		remain_entropy -= get_padding(&kaslr_regions[i]);
  
- 	/* Fisher-Yates shuffle */
- 	for (i = count - 1; i > 0; i--) {
--		rand = predictable_rng_prandom_u32_state(state);
-+		rand = get_random_u32();
- 		rand %= (i + 1);
- 		swap(list[i], list[rand]);
- 	}
-@@ -1151,7 +1151,6 @@ static void freelist_randomize(struct rnd_state *state, unsigned int *list,
- int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
- 				    gfp_t gfp)
- {
--	struct rnd_state state;
- 
- 	if (count < 2 || cachep->random_seq)
- 		return 0;
-@@ -1160,10 +1159,7 @@ int cache_random_seq_create(struct kmem_cache *cachep, unsigned int count,
- 	if (!cachep->random_seq)
- 		return -ENOMEM;
- 
--	/* Get best entropy at this stage of boot */
--	prandom_seed_state(&state, get_random_long());
+-	prandom_seed_state(&rand_state, kaslr_get_random_long("Memory"));
 -
--	freelist_randomize(&state, cachep->random_seq, count);
-+	freelist_randomize(cachep->random_seq, count);
- 	return 0;
- }
+ 	for (i = 0; i < ARRAY_SIZE(kaslr_regions); i++) {
+ 		unsigned long entropy;
  
+@@ -123,7 +120,7 @@ void __init kernel_randomize_memory(void)
+ 		 * available.
+ 		 */
+ 		entropy = remain_entropy / (ARRAY_SIZE(kaslr_regions) - i);
+-		predictable_rng_prandom_bytes_state(&rand_state, &rand, sizeof(rand));
++		prandom_bytes(&rand, sizeof(rand));
+ 		entropy = (rand % (entropy + 1)) & PUD_MASK;
+ 		vaddr += entropy;
+ 		*kaslr_regions[i].base = vaddr;
 -- 
 2.38.0
 
