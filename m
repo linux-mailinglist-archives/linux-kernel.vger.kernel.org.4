@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F5C649243
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 04:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E74C649246
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 04:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbiLKD1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 22:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S229892AbiLKDaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 22:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLKD1k (ORCPT
+        with ESMTP id S229538AbiLKDaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 22:27:40 -0500
+        Sat, 10 Dec 2022 22:30:35 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3237CC3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 19:27:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F6912749
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 19:30:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE53260D27
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 03:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86343C433EF;
-        Sun, 11 Dec 2022 03:27:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B91F160D27
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 03:30:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93F97C433EF;
+        Sun, 11 Dec 2022 03:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670729255;
-        bh=SLRW9XaslzwlpQy6leJBYpMTuYIaNwDRf33UV6+Ao14=;
+        s=k20201202; t=1670729433;
+        bh=wRIobwquSy08Tv0LJs3ziIB87YrLx/8nhlifA+ng4tI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=idDjc3uCqWJjnZF16XCZDJO66hS7lkkDiIcGq6/UKMwWocZcnfuiSaKLZkDMKJYlI
-         4g/U0GeRdgDdQ32dXwkTOZ1ZC34UeGWlAQGu9maCWgA9eK/nzySbCVrLWM8a76pWVf
-         wyrfKKFWmgDC2mvbP0rAylq8FsZGYZGXShJN9ljuP7e7tFoFSaWaFm/GGN1KDpl9OW
-         C2IcsmI2F+8zk7v8v3KQPtp4rgAIREN3H64ano+Fep86knUPDQipY5X9iJrUpTrwbX
-         fRFKDdOQUGPnCMq7CyN3rgsTHbaVS5xmnKOtKr492jtj2j0sMVbnITkTfKFJrd5euu
-         0FF+YLliePkhA==
-Date:   Sun, 11 Dec 2022 12:27:31 +0900
+        b=COwvuUMhLT1w595/Z62ZeDhM3fgXSsL9WJGnzmuog5Rd3DY87jZre81QsY0v9uRVQ
+         atmFGugj0dHYz8J2FtejpBu+P0NVXRMh1sSrdatvYr5Mw5pzunI4qPNt47zqTDdg2+
+         YWL6kVhzgzXF0eiNblr8S+vBNyvWTA7epWJNG0EraOv7eOCtb1APygannpY7q2HwkG
+         OAytKPRissF7j0Yq0j4Gi4LVzVcAQrVm9LtmqCWX8yrjyQ3wO3N5ju6sK8BQ2cMn+2
+         QmifXw1Kz2OSgRedSoS+iYO24QIxKlzvibIPiDMnsqN2nkgChaxmB2r8OWjiaklRGn
+         DLPo1NuYFUGaA==
+Date:   Sun, 11 Dec 2022 12:30:28 +0900
 From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mark.rutland@arm.com, will@kernel.org, rostedt@goodmis.org,
-        samitolvanen@google.com, keescook@chromium.org, mhiramat@kernel.org
-Subject: Re: [PATCH] ftrace: Allow WITH_ARGS flavour of graph tracer with
- shadow call stack
-Message-Id: <20221211122731.f909ac15e227675229f03ecf@kernel.org>
-In-Reply-To: <20221209143402.3332369-1-ardb@kernel.org>
-References: <20221209143402.3332369-1-ardb@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: Re: [PATCH v2 1/3] arm64: Prohibit instrumentation on
+ arch_stack_walk()
+Message-Id: <20221211123028.3b1aa794a1bcaf7f6dc92ac3@kernel.org>
+In-Reply-To: <Y5MZEhIpBYd81lZV@FVFF77S0Q05N>
+References: <166994750386.439920.1754385804350980158.stgit@devnote3>
+        <166994751368.439920.3236636557520824664.stgit@devnote3>
+        <Y4n66ioPq0BZF4Pi@FVFF77S0Q05N>
+        <20221206094137.389e4c374f4be060af19f33a@kernel.org>
+        <Y5MZEhIpBYd81lZV@FVFF77S0Q05N>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,48 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  9 Dec 2022 15:34:02 +0100
-Ard Biesheuvel <ardb@kernel.org> wrote:
+On Fri, 9 Dec 2022 11:16:34 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-> The recent switch on arm64 from DYNAMIC_FTRACE_WITH_REGS to
-> DYNAMIC_FTRACE_WITH_ARGS failed to take into account that we currently
-> require the former in order to allow the function graph tracer to be
-> enabled in combination with shadow call stacks. This means that this is
-> no longer permitted at all, in spite of the fact that either flavour of
-> ftrace works perfectly fine in this combination.
+> On Tue, Dec 06, 2022 at 09:41:37AM +0900, Masami Hiramatsu wrote:
+> > On Fri, 2 Dec 2022 13:17:30 +0000
+> > Mark Rutland <mark.rutland@arm.com> wrote:
+> > > I had a go at testing this patch, and it fixes the crash with the reproducer
+> > > above, but there are plenty of other instances in stacktrace.c that lead to the
+> > > same sort of crash, e.g.
+> > > 
+> > > # echo p stackinfo_get_task >> ${TRACEFS}/kprobe_events
+> > > # echo 1 > ${TRACEFS}/events/kprobes/enable
+> > 
+> > Oops, thanks for pointing! Hmm, I thought stackinfo_get_task() is an
+> > inlined function usually. Maybe we should make it nokprobe_inline.
+> > But this is just one case. I need to scan all symbols to trace...
 > 
-> Given that arm64 is the only arch that implements shadow call stacks in
-> the first place, let's update the condition to just reflect the arm64
-> change. When other architectures adopt shadow call stack support, this
-> can be revisited if needed.
+> FWIW, due to other instrumentation issues I've started doing a larger noinstr
+> cleanup on arm64 which should address this, as fixing this properly involves
+> also modifying a bunch of underlying helpers (e.g. preempt_count()).
+> 
+> I can Cc you when sending that out, if you'd like? That'll probably be in the
+> new year.
 
-This brings a question. Is the SCS safe if kretprobe(rethook) is enabled?
-it also changes the stack entry after a calling function.
+Thanks Mark, yes, I'm interested in that work.
+Until that, I'll finish making a script for testing kprobes widely on
+kernel symbols.
 
 Thank you,
 
 > 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 072a1b39e3afd0d1..683f365b5e31c856 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -635,7 +635,7 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
->  config SHADOW_CALL_STACK
->  	bool "Shadow Call Stack"
->  	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
-> -	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
-> +	depends on DYNAMIC_FTRACE_WITH_ARGS || !FUNCTION_GRAPH_TRACER
->  	help
->  	  This option enables the compiler's Shadow Call Stack, which
->  	  uses a shadow stack to protect function return addresses from
-> -- 
-> 2.35.1
-> 
+> Thanks,
+> Mark.
 
 
 -- 
