@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E9E649523
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 17:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027A8649526
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 18:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiLKQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 11:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S230308AbiLKRCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 12:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiLKQzq (ORCPT
+        with ESMTP id S230014AbiLKRCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 11:55:46 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA7BAE73;
-        Sun, 11 Dec 2022 08:55:44 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 73E2A6CF;
-        Sun, 11 Dec 2022 17:55:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670777741;
-        bh=LDWOw2Sq4MMvUwwej0eOVEDdbPyRwLKB+gzMBo56Qj4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vUoExSChEqnDa4coecD0xRZOS1LhwMtXyrNsuCa2Z7Kmj/JFjJQrDmy/ix474Hw6b
-         rthJC7QYuf/F2VBxUeR4sCGQTnKmm4LK0M/gEyABOxQ2LpbcGuPxxU+UAVpWpaDBrB
-         wQ8XlhGMULJpK2F1xqtxPX03y3F0I9OrkrEGikIM=
-Date:   Sun, 11 Dec 2022 18:55:39 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v5 1/8] i2c: core: let adapters be notified of client
- attach/detach
-Message-ID: <Y5YLi2md2571NQrY@pendragon.ideasonboard.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
+        Sun, 11 Dec 2022 12:02:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E0AB2E;
+        Sun, 11 Dec 2022 09:02:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C504FB80A2B;
+        Sun, 11 Dec 2022 17:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FA3C433EF;
+        Sun, 11 Dec 2022 17:02:28 +0000 (UTC)
+Date:   Sun, 11 Dec 2022 12:02:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-ID: <20221211120226.11c97578@rorschach.local.home>
+In-Reply-To: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206233947.4c27cc9d@gandalf.local.home>
+        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
+        <20221207074806.6f869be2@gandalf.local.home>
+        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+        <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
+        <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,116 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi and Luca,
+On Sun, 11 Dec 2022 08:49:01 +0100
+KP Singh <kpsingh@kernel.org> wrote:
 
-Thank you for the patch.
+> Let's take a step back and focus on solving debuggability and
+> introspection as we clearly have some perception issues about taints
+> in the community. (distro maintainers, users) before we go and add
+> more taints.
 
-On Thu, Dec 08, 2022 at 12:39:59PM +0200, Tomi Valkeinen wrote:
-> From: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> An adapter might need to know when a new device is about to be
-> added. This will soon bee needed to implement an "I2C address
-> translator" (ATR for short), a device that propagates I2C transactions
-> with a different slave address (an "alias" address). An ATR driver
-> needs to know when a slave is being added to find a suitable alias and
-> program the device translation map.
-> 
-> Add an attach/detach callback pair to allow adapter drivers to be
-> notified of clients being added and removed.
+Note, you will likely get the same push back if the dump includes bpf
+programs known to change the return of a function that may be involved
+with the bug report. That is, if a crash is reported to code I
+maintain, and I see that the bug report includes a list of BPF programs
+that can modify the return of a function, and one of those functions
+could affect the place that crashed, I'd push back and ask if the crash
+could be done without that BPF program loaded, regardless of taints.
 
-This may be a stupid question, but couldn't you instead use the
-BUS_NOTIFY_ADD_DEVICE and BUS_NOTIFY_DEL_DEVICE bus notifiers ?
+I agree that a taint is just a hint and it can include something that
+caused the bug or it may not. I would like to see more details in how
+the crashed kernel was configured. That includes loaded BPF programs
+(just like we include loaded modules). And if any BPF program modifies
+a core function (outside of syscall returns) I'd be a bit suspect of
+what happened.
 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->  drivers/i2c/i2c-core-base.c | 18 +++++++++++++++++-
->  include/linux/i2c.h         | 16 ++++++++++++++++
->  2 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index b4edf10e8fd0..c8bc71b1db82 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -966,15 +966,23 @@ i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *inf
->  		}
->  	}
->  
-> +	if (adap->attach_ops &&
-> +	    adap->attach_ops->attach_client &&
-> +	    adap->attach_ops->attach_client(adap, info, client) != 0)
-> +		goto out_remove_swnode;
-> +
->  	status = device_register(&client->dev);
->  	if (status)
-> -		goto out_remove_swnode;
-> +		goto out_detach_client;
->  
->  	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
->  		client->name, dev_name(&client->dev));
->  
->  	return client;
->  
-> +out_detach_client:
-> +	if (adap->attach_ops && adap->attach_ops->detach_client)
-> +		adap->attach_ops->detach_client(adap, client);
->  out_remove_swnode:
->  	device_remove_software_node(&client->dev);
->  out_err_put_of_node:
-> @@ -996,9 +1004,17 @@ EXPORT_SYMBOL_GPL(i2c_new_client_device);
->   */
->  void i2c_unregister_device(struct i2c_client *client)
->  {
-> +	struct i2c_adapter *adap;
-> +
->  	if (IS_ERR_OR_NULL(client))
->  		return;
->  
-> +	adap = client->adapter;
-> +
-> +	if (adap->attach_ops &&
-> +	    adap->attach_ops->detach_client)
-> +		adap->attach_ops->detach_client(adap, client);
-> +
->  	if (client->dev.of_node) {
->  		of_node_clear_flag(client->dev.of_node, OF_POPULATED);
->  		of_node_put(client->dev.of_node);
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index f7c49bbdb8a1..9a385b6de388 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -584,6 +584,21 @@ struct i2c_lock_operations {
->  	void (*unlock_bus)(struct i2c_adapter *adapter, unsigned int flags);
->  };
->  
-> +/**
-> + * struct i2c_attach_operations - callbacks to notify client attach/detach
-> + * @attach_client: Notify of new client being attached
-> + * @detach_client: Notify of new client being detached
-> + *
-> + * Both ops are optional.
-> + */
-> +struct i2c_attach_operations {
-> +	int  (*attach_client)(struct i2c_adapter *adapter,
-> +			      const struct i2c_board_info *info,
-> +			      const struct i2c_client *client);
-> +	void (*detach_client)(struct i2c_adapter *adapter,
-> +			      const struct i2c_client *client);
-> +};
-> +
->  /**
->   * struct i2c_timings - I2C timing information
->   * @bus_freq_hz: the bus frequency in Hz
-> @@ -726,6 +741,7 @@ struct i2c_adapter {
->  
->  	/* data fields that are valid for all devices	*/
->  	const struct i2c_lock_operations *lock_ops;
-> +	const struct i2c_attach_operations *attach_ops;
->  	struct rt_mutex bus_lock;
->  	struct rt_mutex mux_lock;
->  
+I also agree that if a function that checks error paths fails, it
+should be fixed, but knowing that the error path was caused by fault
+injection will prevent the wasted effort that most developers will go
+through to find out why the error path was hit in the first place.
 
--- 
-Regards,
-
-Laurent Pinchart
+-- Steve
