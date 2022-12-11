@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD8D649405
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 12:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA84F64940C
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 12:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiLKL5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 06:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S229914AbiLKL7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 06:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiLKL5d (ORCPT
+        with ESMTP id S230246AbiLKL7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 06:57:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D3EE17;
-        Sun, 11 Dec 2022 03:57:33 -0800 (PST)
+        Sun, 11 Dec 2022 06:59:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506D711473;
+        Sun, 11 Dec 2022 03:59:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD1E960DC9;
-        Sun, 11 Dec 2022 11:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 216F2C433D2;
-        Sun, 11 Dec 2022 11:57:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 096BDB80AB3;
+        Sun, 11 Dec 2022 11:59:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E813DC433F0;
+        Sun, 11 Dec 2022 11:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670759852;
-        bh=mWMkULjKxBFFnGTfZ+MLCpvFKUSoafn+wfGvflQmGqM=;
+        s=k20201202; t=1670759962;
+        bh=BzJnh42n6fWjgs4W7n57fEcjIGF+ndH9j7hFI/k3Jsk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V9/2QCl2+/dX9s4wmGfcKzs8hZVsTlpp7vUYeCKOZI5hgDb+oYjjKuGKN/hkk5H+F
-         2g84VQhf5/cCC55ZmCLul6CKTRlqXXwHpIOQoX0HSYiiPTsUYrIk1uq77cJ/l1XZlb
-         tWHRofg8Zakjq7ygl/zIni6W9Xx7WdgfVKnEwW1Rz/ZSLva0IsKlQR9iZkHP9wAzzs
-         uB4H2EaSZgKC6JaQiWM5b7tFDysVKT0zxN4nskF4OdzDImgsecH1DoBuwClClcn7mW
-         YYUSFtrF06M0l4sgmz5jfhZ3gzjTTf+q+vxPenPtCoF1FGVdqt0HoIIPJKIfLWriN9
-         SWk4lnV6nQlAg==
-Date:   Sun, 11 Dec 2022 12:10:26 +0000
+        b=pbn4s2K1fvHQlsK0HusUFv5gCz/kRXHc5Dlr01BvUjMqAdQLceM7j4XPaQJyzSiXG
+         Pod3kQJPjFb2STAuDLMDKwangCbkS2GwqoDvxst85WM4w8IrXjM3fsVUur5itq5VS6
+         XJ03x3LxeqxuwwGGP5v5A1VQyDExVI3Uu2+NDIfdCOetgTG0eiRsai6uAxtdNCTTF2
+         Yns0cf1Thvh/nzjN+W/K86wtNYHOIqkBCaikiG/qbFhRr16m9LwEoCeumVK16R2frL
+         HLJvKgR8PVi+Dmx2iA+qKgS/JDC7QXcNfJpSxHVfThiKsJBApuntDKewEoNoeOW/gf
+         FlEBcxOcvvJBw==
+Date:   Sun, 11 Dec 2022 12:12:16 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     <ye.xingchen@zte.com.cn>
-Cc:     <lars@metafoo.de>, <andriy.shevchenko@linux.intel.com>,
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     <ye.xingchen@zte.com.cn>, <andriy.shevchenko@linux.intel.com>,
+        <lars@metafoo.de>, <u.kleine-koenig@pengutronix.de>,
+        <petrm@nvidia.com>, <olteanv@gmail.com>,
         <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iio: health: afe440x: Convert to use sysfs_emit_at()
- API
-Message-ID: <20221211121026.10920c57@jic23-huawei>
-In-Reply-To: <202212071537405832465@zte.com.cn>
-References: <202212071537405832465@zte.com.cn>
+Subject: Re: [PATCH] iio: bma180: Convert to use sysfs_emit_at() API
+Message-ID: <20221211121216.33006598@jic23-huawei>
+In-Reply-To: <20221207095614.z4gv3q76hfx47qs2@CAB-WSD-L081021>
+References: <202212071003192805636@zte.com.cn>
+        <20221207095614.z4gv3q76hfx47qs2@CAB-WSD-L081021>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -55,37 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 15:37:40 +0800 (CST)
-<ye.xingchen@zte.com.cn> wrote:
+On Wed, 7 Dec 2022 12:56:14 +0300
+Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+> On Wed, Dec 07, 2022 at 10:03:19AM +0800, ye.xingchen@zte.com.cn wrote:
+> > From: ye xingchen <ye.xingchen@zte.com.cn>
+> > 
+> > Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> > should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> > value to be returned to user space.
+> > 
+> > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>  
 > 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
+> I think it would be better, if you provide one cover letter as 0/3 patch
+> and three nested real patches to each iio/accel driver which you want to
+> rework: adxl372, bma180, mma8452. Or fix all iio drivers (no only accel)
+> and send all of these changes as nested patches for one cover letter.
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/iio/health/afe440x.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Please refer to https://www.kernel.org/doc/html/latest/process/submitting-patches.html
 > 
-> diff --git a/drivers/iio/health/afe440x.h b/drivers/iio/health/afe440x.h
-> index 0adea0047eba..7750b1adc423 100644
-> --- a/drivers/iio/health/afe440x.h
-> +++ b/drivers/iio/health/afe440x.h
-> @@ -122,9 +122,7 @@ static ssize_t _name ## _show(struct device *dev,			\
->  	int i;								\
->  									\
->  	for (i = 0; i < ARRAY_SIZE(_table); i++)			\
-> -		len += scnprintf(buf + len, PAGE_SIZE - len, "%d.%06u ", \
-> -				 _table[i].integer,			\
-> -				 _table[i].fract);			\
-> +		len += sysfs_emit_at(buf, len, "%d.%06u ", _table[i].integer, _table[i].fract); \
-Please keep to the shorter original wrapping on this.
-It's fine to go above 80 chars (below 100) if it makes a significant improvement
-to readability.  I don't think that's true here, so better to stick to the shorter length.
+> and use the following commands to generate such patches hierarchy:
+> 
+> $ git format-patch --cover-letter -o patches ...
+> $ git send-email \     
+>       --annotate \               
+>       --to="john.doe@kernel.org" \               
+>       --cc="linux-iio@vger.kernel.org" \
+>       --cc="linux-kernel@vger.kernel.org" \
+>       --smtp-debug 1 \                  
+>       patches/*
 
->  									\
->  	buf[len - 1] = '\n';						\
->  									\
+Second this comment - also mark it at least v3 as some of these
+patches will be on their 3rd version.
+
+One major advantage of such a series is that a reply to the cover letter
+can be used to indicate that someone is giving a tag for all the patches
+underneath it.  Right now they'd have to reply to every single email.
+
+So please send a v3 with all the similar IIO patches under a single cover
+letter.  Make sure to gather tags from earlier versions.
+
+Thanks,
+
+Jonathan
+
+> 
+> > ---
+> >  drivers/iio/accel/bma180.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/iio/accel/bma180.c b/drivers/iio/accel/bma180.c
+> > index eb697eeb4301..9e3e5dfdded7 100644
+> > --- a/drivers/iio/accel/bma180.c
+> > +++ b/drivers/iio/accel/bma180.c
+> > @@ -488,8 +488,7 @@ static ssize_t bma180_show_avail(char *buf, const int *vals, unsigned int n,
+> >  	for (i = 0; i < n; i++) {
+> >  		if (!vals[i])
+> >  			continue;
+> > -		len += scnprintf(buf + len, PAGE_SIZE - len,
+> > -			micros ? "0.%06d " : "%d ", vals[i]);
+> > +		len += sysfs_emit_at(buf, len, micros ? "0.%06d " : "%d ", vals[i]);
+> >  	}
+> >  	buf[len - 1] = '\n';
+> > 
+> > -- 
+> > 2.25.1  
+> 
 
