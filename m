@@ -2,240 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7E1649328
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 09:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E81649335
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 09:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLKI0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 03:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S229915AbiLKIl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 03:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKI0o (ORCPT
+        with ESMTP id S229475AbiLKIl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 03:26:44 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A1D11164
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:26:42 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id kw15so20931990ejc.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:26:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=df12UQhWiYTYmdTCUvBoHsOBYTq2DGnQpQX0Hny7LVU=;
-        b=iH+2AItbsTINdOr0Cj28qQmO2p56KfxkOIyQJl/yjKRAmjwb9acWJh/+Vd0E6Ahoeb
-         mMq8nEb2WmHUcXwcQE2oY8N3FBbbMDwT4iuXyZV9ACkXkH2LCEBCsZ1XNOHOWKiX9VlT
-         eAUshl7Bj+PG6ouRCLGKRhdgEsP6ykJvCnIDMW5gl2h7PHFrZsccJSm9kbBQ2SfwuSQy
-         j8/dMUbcUIhYJ9noiW4E7jhX++Xkk2yUCfyeqiZ1zpOFYZ9kuQ8bahEUuU6amf+q0gOT
-         oLOW4eBsfY8FX3clPot4jSlbDaOqN801X/wBsrUsiyBPllp+Ti4m8gWLCQI9Jx6+mc1m
-         D4+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=df12UQhWiYTYmdTCUvBoHsOBYTq2DGnQpQX0Hny7LVU=;
-        b=s0aIlbOAaDa1Nm9N2xptyFdYRranlhXSRwEsBFidJ2P9uKiHihUBRqybljy86sQ4bT
-         eClB+R1cI7+mQpk5KV9qeVcsrAccWdVqYKYSDZzv5eG3mknGevZWjZCEuJtcG9Mi5Y3y
-         Iu+Vxa9eqRjiUAhcVlfTrpZXMIZLEIWVb4G8H8BbamYMzZ8uBjYpKnjwoLEiVeJ3pEcc
-         Ar8waTB5T4RFImbSJddwLsg99R90zB50aGCQeCc0f5WNq5s0PXE7yiYQx1OVIUyF8+s1
-         Fn7yR3IJyv+NLsj+E7ccaQ/6iJJgWDU1+Ll+6Y6rgF9UlrXeNtIdXAjTCETaIuhMH6q8
-         XIjw==
-X-Gm-Message-State: ANoB5pl3WpoA6p2i//yB/s/F1FIZGAD9NRgTLUToJK7UOU8zxIOkiFff
-        HDDOpt2+qcTKnsZQiX8bZpc2V4CWL14ayHMFJydPYbrEw/HniA==
-X-Google-Smtp-Source: AA0mqf7ZMdYKNktXbDEDsUat0++lY1WTIOMpXUb/tlsZdsovERwynkwAvgxd5PA7NHNObE1yohlrO37VKDTfvyH6zNQ=
-X-Received: by 2002:a17:906:6d03:b0:78d:9d0b:a9f6 with SMTP id
- m3-20020a1709066d0300b0078d9d0ba9f6mr34394004ejr.661.1670747200885; Sun, 11
- Dec 2022 00:26:40 -0800 (PST)
+        Sun, 11 Dec 2022 03:41:56 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2067.outbound.protection.outlook.com [40.92.22.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4E312095;
+        Sun, 11 Dec 2022 00:41:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M0hj/ynTA17cP/51HwPyKdj85P53zNLrCrxSOjhQ0Tx1dOhQbQi7BboC34U3ocxxmqkJWH0w8L5wuIlUiYf8GK24pdgF49VkFf0Klszj958JEa14uwtTlV4ho0jTQQDG9sBBX+Ow+1Nj2Hj462hUxvhZRoe+5H5pPPtQEijgU0Q5Uiyn7upuyNlRwKkdOEbxeFlamkegejGdyPm1asF8AuJAxLAJmj7XRteIOT6pubNhs3V3fsD0ktvo1yCBly8Y0JzzjrsGEadxw1LvGSjMb/KAcPQe59eyDeBUyxkBEJrggYAQxg4Bo8P0ZCbM6FFtoNgum9p5NAN6o8N7dnlBIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2z8yZa3MBYSHLL67aTDBLgpsTYf2yjah9chvTfC4f0A=;
+ b=nAWnOThfv67mV5fmuP8PA+V1928nseSOZHrlvoD0gLqro6+tnrqw5nkP+8VMWPZMlucWyd5KvcAkWsqf5ozan2bvu6sK0EgRpT7qE/u3gvlOzSa3jaXhOQwZMM/sTPbzW69UnJfKih4EhA83c7rVR7lsLA3eviTGPIVMRZnRCqs6XraXpybHa2wjs0JloCIud7MhnAu13jXMnxVdcGrUb65DLWw+H3Th3I9h+MLLzo0G7R/KI+6rUV0UF7VoO4vy+hXbmbwltnjb1AeKGpP02HpC7aiG0RPntv+yhPnMLjYnaUen8r/K8vHH73/6FUNaAfn1JXbhEDq9zCbTJIu37A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2z8yZa3MBYSHLL67aTDBLgpsTYf2yjah9chvTfC4f0A=;
+ b=clJjGCyohcODurIkwuEY4UOq6Vk4bUP2nvd/4AFzHYahwQrpYJM8+dy/KaaU98q1nE5yvB68ldra61h/YZbnOYUTcqWogaETbNn7ujXUwPWVs+DR1Va77rjto3OUjqjMBD4zehsdsriTT9PkU8qEJ1AGHyoTQMTXGNbYArrIQv4+Ecb+v4JvVQWzh5g4E6xhFrDgDLPTQL1NFlSV4C6gKo+ubJ5ju2Jh8YBbCglMRvjoqMVdWHDorKAQvIHx7ZM4HTEtZTHrfgmv5iAMHzY4PxzuaoClGoRARfu6r5CjKFK9/7DdHtu/GToCV+Mg+NXZ0EWQhCWPytrpAYx264A/Zw==
+Received: from PH7PR20MB4962.namprd20.prod.outlook.com (2603:10b6:510:1fa::6)
+ by IA0PR20MB6260.namprd20.prod.outlook.com (2603:10b6:208:40a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.6; Sun, 11 Dec
+ 2022 08:41:53 +0000
+Received: from PH7PR20MB4962.namprd20.prod.outlook.com
+ ([fe80::f892:b1e5:165b:c2ce]) by PH7PR20MB4962.namprd20.prod.outlook.com
+ ([fe80::f892:b1e5:165b:c2ce%9]) with mapi id 15.20.5880.019; Sun, 11 Dec 2022
+ 08:41:53 +0000
+From:   Inochi Amaoto <inochiama@outlook.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Inochi Amaoto <inochiama@outlook.com>
+Subject: [PATCH] HID: uclogic: Add support for recent Huion tablets
+Date:   Sun, 11 Dec 2022 16:37:34 +0800
+Message-ID: <PH7PR20MB49624FFCDF1F9382886933D3BB1E9@PH7PR20MB4962.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [4uZkW4fJMWZeP9zV3tfzo7Of6Ov2XGjz7y/US5qKn8Q=]
+X-ClientProxiedBy: BYAPR07CA0028.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::41) To PH7PR20MB4962.namprd20.prod.outlook.com
+ (2603:10b6:510:1fa::6)
+X-Microsoft-Original-Message-ID: <20221211083734.1504212-1-inochiama@outlook.com>
 MIME-Version: 1.0
-References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
- <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com> <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
-In-Reply-To: <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sun, 11 Dec 2022 11:26:29 +0300
-Message-ID: <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
-Subject: Re: Fwd: nvmem-cells regression after adding 'call
- of_platform_populate() for MTD partitions'
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR20MB4962:EE_|IA0PR20MB6260:EE_
+X-MS-Office365-Filtering-Correlation-Id: 142d12a4-bdad-4168-7c78-08dadb538d5f
+X-MS-Exchange-SLBlob-MailProps: 9IecXKUgicB5qK9jKkWuStJwctdoPmcF4GArdOMPFFhSJEVIDZi4KjxGCcQuqlSIasvaNqjsvm9kFTYHaT21Uv9B1RhlClHyaAdabEJQyLj38+LOmOta0ad7L6qDP835vj/j/NfogTwsInFCKNkBREDO/kCmAhqIct1JzzjOsHSKxadkWSBQkphGnb3PR54bpCQBJ4+59rvXy6fg3jwA3Obvbyg+spPMQArlOKDPsb13+9OlVq4b96yvRa0/aGaUp9x5RHo/XuJMSLJJFR478QzSTY8kPojwA7jArlgmk0gz6HRTZZutbWEfFsPEJ4cEOSy/vRar//whOvGSckkOYHG+IvBocxlEDC8bYq3I9zSctCuvzPQ5esA0OuWb5u/vLGLw+I1LzvhOmaP2liNToIhUc0/4j3vPAfYSmGmd2aGbtH/dKEy3rjtOWR7+/3NkW49i8+XsniB/C2mpFh8JtEyl8n4FFLd/pqO2X5Q1Sv9MZKTE/tlejvvSKvN3pEMm6ChHlzuIzbIGVvAV5RuQyb6XjLujq+khX6OTLw58Qm0Y2iH5QQsN0AfqrUB8TEFtNS3lG/33vwyu4/iHwcTbpkRtl/QNw8xgoKO9sabfWF9dEBeZkoF148GO+nsS3ogF/mEU6+lJ9DnV9UwVJE0ph31NjFUCSnzxWieU27vWXtp9H68EF2UDSJjrW+6XXD/fCEHqx6oqqDzGWm2/08HlN0U1HsHYHXW+qF7/8ULhMFMpJe2i74a0/w==
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dKISgd4fmTqlqpJwdy18Hl44jicAJ1T0Wq+LS60LjTrjvueGhu1uGFIUoWMnjtJkruIB8FAt4jaqDpMol71ZLvFBMTzeufOxrg5gY5VAOYnkfv/21m1XScpmSXfpKIk9Aq2cAsVf8GITnlUrtHSHcI0sD+q2w7opsxJfcE/rI4A1SMQ87iIPxlrNYsjGW+/hw101sLXfUusymQkQHW2Uc1GrBI30uGmR7yArdGy/nvTIgDlTuQqRygHJ6faPpMv/8WIQwFRhVf7DJ9kPvSkZLgxGrlEBaWTNj5ye1wCcMcVSGAl02FBA493mMZZP5pRDJYMRGZIqzL96RbH3+yXkOj/gVKuC5V3GiRtCi8K3SLD4uXekTwmZNPg9uepbf1Y/BMoKaVgC+HUftV+PI6hCa7IBwVKcjlVK8v3cjHm/JQyUySjWlSJAI3znXwyMtzcl6/GRdyYV+AzdLePzdbeJanylpBCwABA4HmITOgTViuu9RgiG3gwSclEyUS+mjRV/hfaotf0d4/Ph/61MvWUKFt+yY14rY8w8fM7zoiruVjbLOIupC9XM21tGvvZx8PPDTQilJbniTq9ZDCUdBkqTTJ6y+0XVdQxr9eKYdtwfWQBirTEfg64XS8HNXkZcByCrE18YAGzcfLElTndH3ikSKg==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?U0CjRBqMRRU8q8RHpB9aJ6uLkPJ0eehjU958qJ0npMbXoZ/ltf8kZ+D4Idth?=
+ =?us-ascii?Q?iq0evkHlN2YEiq+U0cYygibMDgdJQkGS/tF6C5v6Trsd4G7RIUvrZa6/bn73?=
+ =?us-ascii?Q?oGIWf49IryNUXCOQoez47dhl8xlk+BHcOnA6h6l6IoPI5UtQQfhiq4OBeY2z?=
+ =?us-ascii?Q?i1KA3S6klApj92G/NyL27SGQbtQA9xQtFQXeCXA34QEV0DAmTEQEcOjkEHUl?=
+ =?us-ascii?Q?EYMVZhvqdAfct6xAz8Gwpu04jiXe3+20NfTYUX6vlMi5n+lTLMXjR9z7nWkE?=
+ =?us-ascii?Q?LGTGAn6DCF4KHH+rHf4nigDYWNk3d2wWrXB13HulR09XycHNoGSeSf3hw+pW?=
+ =?us-ascii?Q?MILdrDUYpdWJr+EfoyDv4ZZpbQVT0doM6FrS139YedORRba3TbMnOqCHv0ns?=
+ =?us-ascii?Q?HePoBNn97UetPGPz9X2KLeCV86fkgT2SNJ1Xnk2SsJWUzBEkh+kdvXQ9Ptc2?=
+ =?us-ascii?Q?nBzldYI3+x7pdNvnb71DR7itMp582Kdrse7pHakTHsEOdzD+PJbdfpWpw1Pl?=
+ =?us-ascii?Q?JIRLOuXvbdaDtaGxhkPjCwxRkAK2CVjUbZS76IpRPM/6OcBjGOXs7Ffo8pNG?=
+ =?us-ascii?Q?Rk9wdDiIsDO4BxMqaHGMHVQuflnLB7vtoDNsD5jz1q54lCBAOKINRVSnXtVv?=
+ =?us-ascii?Q?8NDmY3W5NLDi3gqXRD0Aqem+vqe/6czrHrLB2KyRhcf6f4tdCgpEkjijkopO?=
+ =?us-ascii?Q?0w3+xRTX2qwcdWuK6hiWueyVh8pJno7tcRE4outMZVtg+B0evO4jHS/TguvQ?=
+ =?us-ascii?Q?ADA3yVu0wXN3DJHfO0GbzfP8sSU+Ct6qnyXbc7+pehMl64YZC+ejHh3PjQ8a?=
+ =?us-ascii?Q?tvg/DhDzAeiE6S8mrj+biDTCdx3E+CvI3EqsqJXc15rt3FwGjCj3M+jGjb3i?=
+ =?us-ascii?Q?1cTT1OBQroQPBbUExQA0EcHnXDgHQZY+gw8pcWDy+iQn2MdI2Jk8Hod9PUAZ?=
+ =?us-ascii?Q?YKDOJW+Xhl+YxXJmrrVeEbO4Jp6/+bNVTwIFkh2KkstufzbHkSdKaLOmZ59+?=
+ =?us-ascii?Q?GmOjwXd1/BpWRN9GQmBF2/uLgBq6uUpfn4YhjhZhTrwyjJ2OZW+lR6Rj2bRU?=
+ =?us-ascii?Q?v0069dYypS3NbXXgbt1i7kG8Ir3Afh1PpzO2n2PBy5SbsiigzBHv8/6Bfa91?=
+ =?us-ascii?Q?TdKZdeZgLvkhp+pUgIVaGZo0/U7MVpb8ZobOODBvJngppQlZV1tdZWmVK6H3?=
+ =?us-ascii?Q?Y8i01Us05PlswJvwj2xC9XDOAGXkTUbIQQCPfUOXGv4XDh5UjXYtV3tH6uNI?=
+ =?us-ascii?Q?E2vpaqpl0MWUriUJpqESStEMzdsZ9B9uuPxS6erL91eLfHnQn5HUm3Pz+RxE?=
+ =?us-ascii?Q?aRc=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 142d12a4-bdad-4168-7c78-08dadb538d5f
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR20MB4962.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2022 08:41:53.3188
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR20MB6260
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On 10.12.22 10:52, Maxim Kiselev wrote:
->>
->> After applying
->
->This makes me wonder: "applying" as in "applying it to some version that
->doesn't contain this change normally" or as it "after it was applied to
->mainline I have the following problem with vanilla kernel version <???>"?
+Since Huion uses a new device id for recent tablets, add a new
+device id 0x0064 to support recent Huion tablets.
 
-Sorry for confusing you, I mean "after it was applied to mainline".
-I have this problem with vanilla kernel version 6.0.
+At least these tablets are using device id 0x0064:
 
->>> I faced with a problem that my ethernet device can't be probed because =
-it
->>> wait when 'nvmem-cells' device will be probed first.
->>
->>FWIW, there is a discussion about a problems that at least to my
->>untrained eyes looks similar:
->>https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+Gaomon 1060 Pro (0x256c:0x0064)
+Gaomon M6       (0x256c:0x0064)
+Huion KD200     (0x256c:0x0064)
+Huion KD100     (0x256c:0x0064)
 
-Yes it looks like the same issue.
+This patch was tested on Gaomon 1060 Pro and Huion KD200. This patch
+may affect other models with the same id, however, it's seems that the
+other models of Huion do not have incompatible hardware changes, so
+this patch should still work.
 
+Signed-off-by: Inochi Amaoto <inochiama@outlook.com>
+---
+ drivers/hid/hid-ids.h            | 1 +
+ drivers/hid/hid-uclogic-core.c   | 2 ++
+ drivers/hid/hid-uclogic-params.c | 2 ++
+ 3 files changed, 5 insertions(+)
 
-I think the root of the problem was the choice of 'compatible'
-device tree property to mark the mtd partition node as a nvmem provider.
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 8f58c3c1bec3..142186a6c14d 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -620,6 +620,7 @@
+ #define USB_VENDOR_ID_HUION		0x256c
+ #define USB_DEVICE_ID_HUION_TABLET	0x006e
+ #define USB_DEVICE_ID_HUION_TABLET2	0x006d
++#define USB_DEVICE_ID_HUION_TABLET3	0x0064
+ 
+ #define USB_VENDOR_ID_IBM					0x04b3
+ #define USB_DEVICE_ID_IBM_SCROLLPOINT_III			0x3100
+diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
+index 7fa6fe04f1b2..0c31c13bfbfd 100644
+--- a/drivers/hid/hid-uclogic-core.c
++++ b/drivers/hid/hid-uclogic-core.c
+@@ -493,6 +493,8 @@ static const struct hid_device_id uclogic_devices[] = {
+ 				USB_DEVICE_ID_HUION_TABLET) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION,
+ 				USB_DEVICE_ID_HUION_TABLET2) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_HUION,
++				USB_DEVICE_ID_HUION_TABLET3) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_TRUST,
+ 				USB_DEVICE_ID_TRUST_PANORA_TABLET) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC,
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index 34fa991e6267..f27292d71b6d 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -1514,6 +1514,8 @@ int uclogic_params_init(struct uclogic_params *params,
+ 		     USB_DEVICE_ID_HUION_TABLET):
+ 	case VID_PID(USB_VENDOR_ID_HUION,
+ 		     USB_DEVICE_ID_HUION_TABLET2):
++	case VID_PID(USB_VENDOR_ID_HUION,
++		     USB_DEVICE_ID_HUION_TABLET3):
+ 	case VID_PID(USB_VENDOR_ID_UCLOGIC,
+ 		     USB_DEVICE_ID_HUION_TABLET):
+ 	case VID_PID(USB_VENDOR_ID_UCLOGIC,
+-- 
+2.38.1
 
-I'm talking about this part in 'mtd_nvmem_add' function.
-> config.no_of_node =3D !of_device_is_compatible(node, "nvmem-cells");
-
-Maybe we should change the 'compatible' property to something else?
-
-=D1=81=D0=B1, 10 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 15:35, Thorsten Le=
-emhuis <regressions@leemhuis.info>:
->
-> [CCing the regression mailing list, as it should be in the loop for all
-> regressions, as explained in
-> https://docs.kernel.org/admin-guide/reporting-regressions.html ]
->
-> Hi, this is your Linux kernel regression tracker. Thx for the report.
->
-> On 10.12.22 10:52, Maxim Kiselev wrote:
-> >
-> > After applying
->
-> This makes me wonder: "applying" as in "applying it to some version that
-> doesn't contain this change normally" or as it "after it was applied to
-> mainline I have the following problem with vanilla kernel version <???>"?
->
-> > this commit 'mtd: call of_platform_populate() for MTD
-> > partitions' (bcdf0315),
->
-> CCing Rafa=C5=82, who authored bcdf0315.
->
-> > I faced with a problem that my ethernet device can't be probed because =
-it
-> > wait when 'nvmem-cells' device will be probed first.
->
-> FWIW, there is a discussion about a problems that at least to my
-> untrained eyes looks similar:
-> https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
->
-> Rafa=C5=82, has some progress been made to resolve this?
->
-> To me it sounds like this might warrant a "revert, and reapply later
-> when the cause for the regression was addressed". Rafa=C5=82, it seems yo=
-u
-> suggested something like that, but it doesn't look like that happened
-> for one reason or another. Or am I missing something?
->
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
->
-> > But there is no such driver which is compatible with 'nvmem-cells' beca=
-use
-> > 'nvmem-cells' is just a mark used by the 'mtd_nvmem_add' function.
-> >
-> > So this leads to appeating of unresolved dependency for the ethernet de=
-vice.
-> > And that's why the ethernet device can't be added and probed.
-> >
-> > Here is a part of kernel log when spi flash probe start:
-> >
-> >> device: 'spi0': device_add
-> >> device: 'spi0.0': device_add
-> >> spi-nor spi0.0: mx66l51235f (65536 Kbytes)
-> >> 7 fixed-partitions partitions found on MTD device spi0.0
-> >
-> > After 'm25p80' probe 'f1070000.ethernet' linked to 'partition@1' :
-> >
-> >> device: 'f1010600.spi:m25p80@0:
-> > partitions:partition@1': device_add
-> >> device: 'platform:f1010600.spi:m25p80@0:partitions:partition@1--platfo=
-rm:f1070000.ethernet': device_add
-> >> devices_kset: Moving f1070000.ethernet to end of list
-> >> platform f1070000.ethernet: Linked as a consumer to f1010600.spi:m25p8=
-0@0:partitions:partition@1
-> >> ethernet@70000 Dropping the fwnode link to partition@1
-> >
-> > And as a result I got `-EPROBE_DEFER` for `f1070000.ethernet`
-> >
-> >> platform f1070000.ethernet: error -EPROBE_DEFER: supplier f1010600.spi=
-:m25p80@0:partitions:partition@1 not ready
-> >
-> > Here is a part of my device tree:
-> >
-> >     enet1: ethernet@70000 {
-> >         status =3D "okay";
-> >         nvmem-cells =3D <&macaddr>;
-> >         nvmem-cell-names =3D "mac-address";
-> >         phy-mode =3D "rgmii";
-> >         phy =3D <&phy0>;
-> >     };
-> >
-> >     spi@10600 {
-> >         status =3D "okay";
-> >
-> >         m25p80@0 {
-> >             compatible =3D "mx66l51235l";
-> >             reg =3D <0>;
-> >             #address-cells =3D <1>;
-> >             #size-cells =3D <1>;
-> >
-> >             partitions {
-> >                 compatible =3D "fixed-partitions";
-> >                 #address-cells =3D <1>;
-> >                 #size-cells =3D <1>;
-> >
-> >                 partition@0 {
-> >                     reg =3D <0x00000000 0x000080000>;
-> >                     label =3D "SPI.U_BOOT";
-> >                 };
-> >
-> >                 partition@1 {
-> >                     compatible =3D "nvmem-cells";
-> >                     reg =3D <0x000A0000 0x00020000>;
-> >                     label =3D "SPI.INV_INFO";
-> >                     #address-cells =3D <1>;
-> >                     #size-cells =3D <1>;
-> >                     ranges =3D <0 0x000A0000 0x00020000>;
-> >
-> >                     macaddr: mac@6 {
-> >                         reg =3D <0x6 0x6>;
-> >                     };
-> >                 };
-> >
-> >             };
-> >         };
-> >     };
-> >
-> > In the example above 'ethernet@70000' requires 'macaddr: mac@6' which i=
-s
-> > located inside mtd 'partition@1' of 'm25p80@0' spi flash.
->
-> P.P.S.: let me add this to the regression tracking:
->
-> #regzbot ^introduced bcdf0315
-> #regzbot title mtd: ethernet device can't be probed anymore due to
-> broken nvmem-cells dep
-> #regzbot monitor: https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
-> #regzbot ignore-activity
