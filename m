@@ -2,339 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C5564942F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C833649431
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiLKMYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 07:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S230196AbiLKMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 07:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLKMYK (ORCPT
+        with ESMTP id S229696AbiLKMaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 07:24:10 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1510568;
-        Sun, 11 Dec 2022 04:24:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6i6N09X3DCcqlDINO1vV/DEzMCBg+KMZPnNEzHal4ZY=; b=GINXTrh2vDLUlYv2ye/+pYmWaD
-        hXmMFNwOOJ3ZRzJd7HTxAIGobz7MBqhcvq9kCOf2WHYSdSMgUMEeZCZgwRCIXyNBzh0AEE6/XlY3Z
-        jdYJmK4TPWKbRZOprsxntzdj/etZcZLXI+QWW8rcPYYry59PzfseTgRLzJo4sc4EjhXDkJ6We280u
-        zTdyAO0m3Nch/llk/OJjaYeW6CzfoGfCBKJMRKag9/W49uqvLDJsB3qQkMix5sr7C92ltZsdHNivl
-        SKyH8wdBWa/LSZB68YqNFe0dWQMpooMzcTlJBHUUbTvz7imdShDImOt5ry4m36HfLFzBKfgD6yrUj
-        oFhLN+BA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35660)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p4LN7-0004hT-1R; Sun, 11 Dec 2022 12:23:57 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p4LN3-0004YX-Be; Sun, 11 Dec 2022 12:23:53 +0000
-Date:   Sun, 11 Dec 2022 12:23:53 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v6 net-next 3/5] drivers/net/phy: add connection between
- ethtool and phylib for PLCA
-Message-ID: <Y5XL2fqXSRmDgkUQ@shell.armlinux.org.uk>
-References: <cover.1670712151.git.piergiorgio.beruto@gmail.com>
- <75cb0eab15e62fc350e86ba9e5b0af72ea45b484.1670712151.git.piergiorgio.beruto@gmail.com>
+        Sun, 11 Dec 2022 07:30:17 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF6C76E
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 04:30:16 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id gt4so7615530pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 04:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXB5W428WcmiLDh9olLI0YAELLNF2UnndQkJgDlXhtk=;
+        b=KoKtLqBOByRsEcfyjWQLuoxwGM6iAXlVuWfSMJXj9gBME51IW/0T1ov2mSja5aLe0k
+         CZrLrdq7nVtdxx4W+kmUZXSK+MCyz+oe8mfuZnDeH32DxROtXrP3k5xQb46uskeXZfN5
+         mtTBe4T7GKZvsm79NJFSxYX1nZ2l+YyyHXYi4DJsnI/DwruI/SYZ+e632zlegMxYxW8G
+         TIym35cFXDp5I2wtgeUynjAQIHYETZql6kELmLYGJhos2h6fL6FXEsI0IwjAASWRa+um
+         annuXZ0cwr0d5pf4ayx5w/5rsxfgL/oFVxzauPt5PlpI+Hu8w0TnDeXGtdF7iXTnRD21
+         rlgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TXB5W428WcmiLDh9olLI0YAELLNF2UnndQkJgDlXhtk=;
+        b=Xkct3gckd8N987k7BsRTSsYawsJhA1/WxgaMFaKANE7BieiM0xG2qHS4j7bQO+5djL
+         c15ydsGRObgRCvjaZkPD2J9UHo05cpJtJcuTzuvnFaUMwgHgwVPTkd5Yukveo7Xw8zps
+         Au1cuc5S+gwjepoRGqOGRQRg4jFXUkXyDUbCLFBTnQdYhPBODqe3Wiobg6fNE42LHCrh
+         3xQqjMQt5vHSjNMveY4W3D4RZs1h+LkwrF7AelzNBiWW3uuTxRxvK4Lhqo4JKs8dpFL+
+         iYQOsYcoVm2VZZIv0hkWN/E6ViHx7pchGpTKpPH/+inzDt5Ey2a8H2xKgZYPjFOr1xNj
+         nWBg==
+X-Gm-Message-State: ANoB5plciqQgj87sKFr87g6lQUjzCW9fSsXSdbTEUPi84L+PMm1DqjRN
+        3/33rJD3GdLmNEVtBTTtw+M=
+X-Google-Smtp-Source: AA0mqf5KGDAJiOQZeIj6Gt4exWhqZP2aizPD5q3LuOo2o9CDxLBTTIMEfZaGP3etGnf+MCPuvTU+Fg==
+X-Received: by 2002:a17:902:e30a:b0:189:deeb:8c94 with SMTP id q10-20020a170902e30a00b00189deeb8c94mr11162599plc.22.1670761816017;
+        Sun, 11 Dec 2022 04:30:16 -0800 (PST)
+Received: from [127.0.0.1] (ec2-18-162-209-88.ap-east-1.compute.amazonaws.com. [18.162.209.88])
+        by smtp.gmail.com with ESMTPSA id x19-20020a633113000000b00478dad38eacsm3528425pgx.38.2022.12.11.04.30.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 04:30:15 -0800 (PST)
+Message-ID: <3b51e6ae-5df5-60c4-3261-557b44e34291@gmail.com>
+Date:   Sun, 11 Dec 2022 20:30:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75cb0eab15e62fc350e86ba9e5b0af72ea45b484.1670712151.git.piergiorgio.beruto@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] f2fs: do decrease_sleep_time() if any of the victims have
+ been selected
+To:     Chao Yu <chao@kernel.org>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
+References: <20221209112813.73700-1-Yuwei.Guan@zeekrlife.com>
+ <810bd221-1f35-db79-e9f3-a521464b3eaf@kernel.org>
+From:   Yuwei Guan <ssawgyw@gmail.com>
+In-Reply-To: <810bd221-1f35-db79-e9f3-a521464b3eaf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022 at 11:46:39PM +0100, Piergiorgio Beruto wrote:
-> This patch adds the required connection between netlink ethtool and
-> phylib to resolve PLCA get/set config and get status messages.
+
+
+在 2022/12/11 10:52, Chao Yu 写道:
+> On 2022/12/9 19:28, Yuwei Guan wrote:
+>> In non-foreground gc mode, if no victim is selected, the gc process
+>> will wait for no_gc_sleep_time before waking up again. In this
+>> subsequent time, even though a victim will be selected, the gc process
+>> still waits for no_gc_sleep_time before waking up. The configuration
+>> of wait_ms is not reasonable.
+>>
+>> After any of the victims have been selected, we need to do
+>> decrease_sleep_time() to reduce wait_ms.
+>>
+>> If it is GC_URGENT_HIGH or GC_URGENT_MID gc mode,
+>> wait_ms will keep urgent_sleep_time after executing 
+>> decrease_sleep_time().
+>>
+>> In decrease_sleep_time() wait_time will be reduced to max_sleep_time
+>> from no_gc_sleep_time, if *wait is no_gc_sleep_time. And then it goes
+>> down in the next step.
+>>
+>> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+>> ---
+>>   fs/f2fs/gc.c | 2 ++
+>>   fs/f2fs/gc.h | 7 ++++++-
+>>   2 files changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>> index f0c6506d8975..c023ffeb9268 100644
+>> --- a/fs/f2fs/gc.c
+>> +++ b/fs/f2fs/gc.c
+>> @@ -141,6 +141,8 @@ static int gc_thread_func(void *data)
+>>               /* don't bother wait_ms by foreground gc */
+>>               if (!foreground)
+>>                   wait_ms = gc_th->no_gc_sleep_time;
+>> +        } else {
+>> +            decrease_sleep_time(gc_th, &wait_ms);
 > 
-> Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-> ---
->  drivers/net/phy/phy.c        | 175 +++++++++++++++++++++++++++++++++++
->  drivers/net/phy/phy_device.c |   3 +
->  include/linux/phy.h          |   7 ++
->  3 files changed, 185 insertions(+)
+> Once BGGC selects valid victim, it will go faster and fater?
+> > How about:
 > 
-> diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-> index e5b6cb1a77f9..40d90ed2f0fb 100644
-> --- a/drivers/net/phy/phy.c
-> +++ b/drivers/net/phy/phy.c
-> @@ -543,6 +543,181 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
->  }
->  EXPORT_SYMBOL(phy_ethtool_get_stats);
->  
-> +/**
-> + * phy_ethtool_get_plca_cfg - Get PLCA RS configuration
-> + *
-
-You shouldn't have an empty line in the comment here
-
-> + * @phydev: the phy_device struct
-> + * @plca_cfg: where to store the retrieved configuration
-
-Maybe have an empty line, followed by a bit of text describing what this
-function does and the return codes it generates?
-
-> + */
-> +int phy_ethtool_get_plca_cfg(struct phy_device *phydev,
-> +			     struct phy_plca_cfg *plca_cfg)
-> +{
-> +	int ret;
-> +
-> +	if (!phydev->drv) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	if (!phydev->drv->get_plca_cfg) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out;
-> +	}
-> +
-> +	memset(plca_cfg, 0xFF, sizeof(*plca_cfg));
-> +
-> +	mutex_lock(&phydev->lock);
-
-Maybe move the memset() and mutex_lock() before the first if() statement
-above? Maybe the memset() should be done by plca_get_cfg_prepare_data()?
-Wouldn't all implementations need to memset this to 0xff?
-
-Also, lower-case 0xff please.
-
-> +	ret = phydev->drv->get_plca_cfg(phydev, plca_cfg);
-> +
-> +	if (ret)
-> +		goto out_drv;
-> +
-> +out_drv:
-
-This if() and out_drv label seems unused (although with the above
-suggested change, you will need to move the "out" label here.)
-
-> +	mutex_unlock(&phydev->lock);
-> +out:
-> +	return ret;
-> +}
-> +
-> +/**
-> + * phy_ethtool_set_plca_cfg - Set PLCA RS configuration
-> + *
-> + * @phydev: the phy_device struct
-> + * @extack: extack for reporting useful error messages
-> + * @plca_cfg: new PLCA configuration to apply
-> + */
-> +int phy_ethtool_set_plca_cfg(struct phy_device *phydev,
-> +			     const struct phy_plca_cfg *plca_cfg,
-> +			     struct netlink_ext_ack *extack)
-> +{
-> +	int ret;
-> +	struct phy_plca_cfg *curr_plca_cfg = 0;
-
-Unnecessary initialiser. Also, reverse Christmas-tree please.
-
-> +
-> +	if (!phydev->drv) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	if (!phydev->drv->set_plca_cfg ||
-> +	    !phydev->drv->get_plca_cfg) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out;
-> +	}
-> +
-> +	curr_plca_cfg = kmalloc(sizeof(*curr_plca_cfg), GFP_KERNEL);
-
-What if kmalloc() returns NULL?
-
-> +	memset(curr_plca_cfg, 0xFF, sizeof(*curr_plca_cfg));
-> +
-> +	mutex_lock(&phydev->lock);
-
-Consider moving the above three to the beginning of the function so
-phydev->drv is checked under the mutex.
-
-> +
-> +	ret = phydev->drv->get_plca_cfg(phydev, curr_plca_cfg);
-> +	if (ret)
-> +		goto out_drv;
-> +
-> +	if (curr_plca_cfg->enabled < 0 && plca_cfg->enabled >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'enable' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	if (curr_plca_cfg->node_id < 0 && plca_cfg->node_id >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'local node ID' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	if (curr_plca_cfg->node_cnt < 0 && plca_cfg->node_cnt >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'node count' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	if (curr_plca_cfg->to_tmr < 0 && plca_cfg->to_tmr >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'TO timer' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	if (curr_plca_cfg->burst_cnt < 0 && plca_cfg->burst_cnt >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'burst count' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	if (curr_plca_cfg->burst_tmr < 0 && plca_cfg->burst_tmr >= 0) {
-> +		NL_SET_ERR_MSG(extack,
-> +			       "PHY does not support changing the PLCA 'burst timer' attribute");
-> +		ret = -EINVAL;
-> +		goto out_drv;
-> +	}
-> +
-> +	// if enabling PLCA, perform additional sanity checks
-> +	if (plca_cfg->enabled > 0) {
-> +		if (!linkmode_test_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
-> +				       phydev->advertising)) {
-> +			ret = -EOPNOTSUPP;
-> +			NL_SET_ERR_MSG(extack,
-> +				       "Point to Multi-Point mode is not enabled");
-> +		}
-> +
-> +		// allow setting node_id concurrently with enabled
-> +		if (plca_cfg->node_id >= 0)
-> +			curr_plca_cfg->node_id = plca_cfg->node_id;
-> +
-> +		if (curr_plca_cfg->node_id >= 255) {
-> +			NL_SET_ERR_MSG(extack, "PLCA node ID is not set");
-> +			ret = -EINVAL;
-> +			goto out_drv;
-> +		}
-> +	}
-> +
-> +	ret = phydev->drv->set_plca_cfg(phydev, plca_cfg);
-> +	if (ret)
-> +		goto out_drv;
-
-Unnecessary if() statement.
-
-> +
-> +out_drv:
-> +	kfree(curr_plca_cfg);
-> +	mutex_unlock(&phydev->lock);
-> +out:
-> +	return ret;
-> +}
-> +
-> +/**
-> + * phy_ethtool_get_plca_status - Get PLCA RS status information
-> + *
-> + * @phydev: the phy_device struct
-> + * @plca_st: where to store the retrieved status information
-> + */
-> +int phy_ethtool_get_plca_status(struct phy_device *phydev,
-> +				struct phy_plca_status *plca_st)
-> +{
-> +	int ret;
-> +
-> +	if (!phydev->drv) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	if (!phydev->drv->get_plca_status) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out;
-> +	}
-> +
-> +	mutex_lock(&phydev->lock);
-
-Same comment here.
-
-> +	ret = phydev->drv->get_plca_status(phydev, plca_st);
-> +
-> +	if (ret)
-> +		goto out_drv;
-
-And here.
-
-> +
-> +out_drv:
-> +	mutex_unlock(&phydev->lock);
-> +out:
-> +	return ret;
-> +}
-> +
->  /**
->   * phy_start_cable_test - Start a cable test
->   *
-> diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-> index 8e48b3cec5e7..44bd06be9691 100644
-> --- a/drivers/net/phy/phy_device.c
-> +++ b/drivers/net/phy/phy_device.c
-> @@ -3276,6 +3276,9 @@ static const struct ethtool_phy_ops phy_ethtool_phy_ops = {
->  	.get_sset_count		= phy_ethtool_get_sset_count,
->  	.get_strings		= phy_ethtool_get_strings,
->  	.get_stats		= phy_ethtool_get_stats,
-> +	.get_plca_cfg		= phy_ethtool_get_plca_cfg,
-> +	.set_plca_cfg		= phy_ethtool_set_plca_cfg,
-> +	.get_plca_status	= phy_ethtool_get_plca_status,
->  	.start_cable_test	= phy_start_cable_test,
->  	.start_cable_test_tdr	= phy_start_cable_test_tdr,
->  };
-> diff --git a/include/linux/phy.h b/include/linux/phy.h
-> index 2a5c2d3a5da5..e0dcd534fe6f 100644
-> --- a/include/linux/phy.h
-> +++ b/include/linux/phy.h
-> @@ -1845,6 +1845,13 @@ int phy_ethtool_get_strings(struct phy_device *phydev, u8 *data);
->  int phy_ethtool_get_sset_count(struct phy_device *phydev);
->  int phy_ethtool_get_stats(struct phy_device *phydev,
->  			  struct ethtool_stats *stats, u64 *data);
-> +int phy_ethtool_get_plca_cfg(struct phy_device *phydev,
-> +			     struct phy_plca_cfg *plca_cfg);
-> +int phy_ethtool_set_plca_cfg(struct phy_device *phydev,
-> +			     const struct phy_plca_cfg *plca_cfg,
-> +			     struct netlink_ext_ack *extack);
-> +int phy_ethtool_get_plca_status(struct phy_device *phydev,
-> +				struct phy_plca_status *plca_st);
->  
->  static inline int phy_package_read(struct phy_device *phydev, u32 regnum)
->  {
-> -- 
-> 2.37.4
+>      } else {
+>          /* reset wait_ms to default sleep time */
+>          if (wait_ms == gc_th->no_gc_sleep_time)
+>              wait_ms = gc_th->min_sleep_time;
+>      }
+Indeed. it will go faster and fater, until wait_ms reduces to 
+min_sleep_time. But your suggestion seems more reasonable, I will send 
+it in v2 patch.
 > 
+> Thanks,
 > 
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>>           }
+>>           if (foreground)
+>> diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+>> index 19b956c2d697..6402584dcd72 100644
+>> --- a/fs/f2fs/gc.h
+>> +++ b/fs/f2fs/gc.h
+>> @@ -150,8 +150,13 @@ static inline void decrease_sleep_time(struct 
+>> f2fs_gc_kthread *gc_th,
+>>   {
+>>       unsigned int min_time = gc_th->min_sleep_time;
+>> -    if (*wait == gc_th->no_gc_sleep_time)
+>> +    if (*wait == gc_th->urgent_sleep_time)
+>> +        return;
+>> +
+>> +    if (*wait == gc_th->no_gc_sleep_time) {
+>>           *wait = gc_th->max_sleep_time;
+>> +        return;
+>> +    }
+>>       if ((long long)*wait - (long long)min_time < (long long)min_time)
+>>           *wait = min_time;
