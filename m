@@ -2,241 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A32464931A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 08:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7E1649328
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 09:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiLKHtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 02:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S229775AbiLKI0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 03:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLKHtS (ORCPT
+        with ESMTP id S229475AbiLKI0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 02:49:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04549EE07
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 23:49:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D52FB80943
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 07:49:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DCDC433F0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 07:49:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670744954;
-        bh=iKhB+x85Y44rcwW81uXsE7vfiZs3wf+uJ2n5QyDonP4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gMPLLc2Gj0T01rsnFtqhXBJ7tskaNFX5jaUzFXRcQQ5bQH6dHbmOQkLqazRKWa9fE
-         LaNON3TfyQr0xS2W93MmifPS+oryM6pwR7cKqT/KoIEscobjVIjb1N8upfB3tpxOLa
-         1qlb7gL+9EsX71u0b/qgaPWy2AiDHNLConTGlfw0g9+nXSnqjpEouOY7iDs5Wgpj6v
-         ttaR0u5RMvVI358NK+F1xoLAQLLyFlW1xk3uCNgJZLv/zwswr6uYyqDF9q6iLZc02i
-         nw941HOv018nFmxDN17zm4fHnVTU1l2sFJwrja7AxK7akmCSlRTjNR8xgTDXAKFVgi
-         E5LVu0JpoX37A==
-Received: by mail-ed1-f42.google.com with SMTP id m19so8713163edj.8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 23:49:13 -0800 (PST)
-X-Gm-Message-State: ANoB5pktM1GzwwuGBa3KUFtoFct7djcnk0mp8Nk+7nHegoyZ84yNcP7S
-        GVz9wbhGu3oh5Eh18DVn4hSemHDkKDZQcj9K10exSQ==
-X-Google-Smtp-Source: AA0mqf5W9clnzL/U0TtvIeRFtGXcW2GGQgs5zmL+g68JnLoefinLgmRj3yuwTuIdS+dAEImPGwc7yLmfRe2QKWpVobQ=
-X-Received: by 2002:a05:6402:5149:b0:46f:c942:7775 with SMTP id
- n9-20020a056402514900b0046fc9427775mr98716edd.385.1670744952071; Sat, 10 Dec
- 2022 23:49:12 -0800 (PST)
+        Sun, 11 Dec 2022 03:26:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A1D11164
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:26:42 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id kw15so20931990ejc.10
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:26:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=df12UQhWiYTYmdTCUvBoHsOBYTq2DGnQpQX0Hny7LVU=;
+        b=iH+2AItbsTINdOr0Cj28qQmO2p56KfxkOIyQJl/yjKRAmjwb9acWJh/+Vd0E6Ahoeb
+         mMq8nEb2WmHUcXwcQE2oY8N3FBbbMDwT4iuXyZV9ACkXkH2LCEBCsZ1XNOHOWKiX9VlT
+         eAUshl7Bj+PG6ouRCLGKRhdgEsP6ykJvCnIDMW5gl2h7PHFrZsccJSm9kbBQ2SfwuSQy
+         j8/dMUbcUIhYJ9noiW4E7jhX++Xkk2yUCfyeqiZ1zpOFYZ9kuQ8bahEUuU6amf+q0gOT
+         oLOW4eBsfY8FX3clPot4jSlbDaOqN801X/wBsrUsiyBPllp+Ti4m8gWLCQI9Jx6+mc1m
+         D4+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=df12UQhWiYTYmdTCUvBoHsOBYTq2DGnQpQX0Hny7LVU=;
+        b=s0aIlbOAaDa1Nm9N2xptyFdYRranlhXSRwEsBFidJ2P9uKiHihUBRqybljy86sQ4bT
+         eClB+R1cI7+mQpk5KV9qeVcsrAccWdVqYKYSDZzv5eG3mknGevZWjZCEuJtcG9Mi5Y3y
+         Iu+Vxa9eqRjiUAhcVlfTrpZXMIZLEIWVb4G8H8BbamYMzZ8uBjYpKnjwoLEiVeJ3pEcc
+         Ar8waTB5T4RFImbSJddwLsg99R90zB50aGCQeCc0f5WNq5s0PXE7yiYQx1OVIUyF8+s1
+         Fn7yR3IJyv+NLsj+E7ccaQ/6iJJgWDU1+Ll+6Y6rgF9UlrXeNtIdXAjTCETaIuhMH6q8
+         XIjw==
+X-Gm-Message-State: ANoB5pl3WpoA6p2i//yB/s/F1FIZGAD9NRgTLUToJK7UOU8zxIOkiFff
+        HDDOpt2+qcTKnsZQiX8bZpc2V4CWL14ayHMFJydPYbrEw/HniA==
+X-Google-Smtp-Source: AA0mqf7ZMdYKNktXbDEDsUat0++lY1WTIOMpXUb/tlsZdsovERwynkwAvgxd5PA7NHNObE1yohlrO37VKDTfvyH6zNQ=
+X-Received: by 2002:a17:906:6d03:b0:78d:9d0b:a9f6 with SMTP id
+ m3-20020a1709066d0300b0078d9d0ba9f6mr34394004ejr.661.1670747200885; Sun, 11
+ Dec 2022 00:26:40 -0800 (PST)
 MIME-Version: 1.0
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
- <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
- <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
- <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
- <20221206233947.4c27cc9d@gandalf.local.home> <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
- <20221207074806.6f869be2@gandalf.local.home> <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
- <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
-In-Reply-To: <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Sun, 11 Dec 2022 08:49:01 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-Message-ID: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
+References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
+ <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com> <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
+In-Reply-To: <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Sun, 11 Dec 2022 11:26:29 +0300
+Message-ID: <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
+Subject: Re: Fwd: nvmem-cells regression after adding 'call
+ of_platform_populate() for MTD partitions'
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 3:52 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>On 10.12.22 10:52, Maxim Kiselev wrote:
+>>
+>> After applying
 >
-> Hi Alexei,
->
-> On Wed, 7 Dec 2022 20:36:28 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
-> > And that happens all the time on lkml. Somebody reports a bug and kernel devs
-> > jump on the poor person:
-> > "Can you repro without taint?",
-> > "Can you repro with upstream kernel?"
-> > This is discouraging.
-> > The 'taint' concept makes it easier for kernel devs to ignore bug reports
-> > and push back on the reporter.
-> > Do it few times and people stop reporting bugs.
->
-> That seems off topic for me. You seems complained against the taint flag
-> itself.
+>This makes me wonder: "applying" as in "applying it to some version that
+>doesn't contain this change normally" or as it "after it was applied to
+>mainline I have the following problem with vanilla kernel version <???>"?
 
-The series is about adding a taint for, so discussing the user
-experience, when someone reports a "tainted crash" seems reasonable to
-me and not off topic.
+Sorry for confusing you, I mean "after it was applied to mainline".
+I have this problem with vanilla kernel version 6.0.
 
+>>> I faced with a problem that my ethernet device can't be probed because =
+it
+>>> wait when 'nvmem-cells' device will be probed first.
+>>
+>>FWIW, there is a discussion about a problems that at least to my
+>>untrained eyes looks similar:
+>>https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+
+Yes it looks like the same issue.
+
+
+I think the root of the problem was the choice of 'compatible'
+device tree property to mark the mtd partition node as a nvmem provider.
+
+I'm talking about this part in 'mtd_nvmem_add' function.
+> config.no_of_node =3D !of_device_is_compatible(node, "nvmem-cells");
+
+Maybe we should change the 'compatible' property to something else?
+
+=D1=81=D0=B1, 10 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 15:35, Thorsten Le=
+emhuis <regressions@leemhuis.info>:
 >
-> > Say, this particular bug in rethook was found by one of our BPF CI developers.
-> > They're not very familiar with the kernel, but they can see plenty of 'rethook'
-> > references in the stack trace, lookup MAINTAINER file and ping Massami,
-> > but to the question "can you repro without taint?" they can only say NO,
-> > because this is how our CI works. So they will keep silence and the bug will be lost.
+> [CCing the regression mailing list, as it should be in the loop for all
+> regressions, as explained in
+> https://docs.kernel.org/admin-guide/reporting-regressions.html ]
 >
-> BTW, this sounds like the BPF CI system design issue. If user is NOT easily
-> identifying what test caused the issue (e.g. what tests ran on the system
-> until the bug was found), the CI system is totally useless, because after
-> finding a problem, it must be investigated to solve the problem.
+> Hi, this is your Linux kernel regression tracker. Thx for the report.
 >
-> Without investigation, how would you usually fix the bug??
-
-Masami, this seems accusational and counter productive, it was never
-said that issues can be solved without investigation.
-
-The BPF CI does find issues, the BPF reviewers and maintainers
-regularly fix bugs using it. Alexei's point here is that a taint does
-not help in solving the problem, rather deter some people from even
-looking at it. (not BPF people, but other maintainers [distro, kernel]
-who would ask for a reproduction without a taint).
-
-Let's take a step back and focus on solving debuggability and
-introspection as we clearly have some perception issues about taints
-in the community. (distro maintainers, users) before we go and add
-more taints.
-
->
-> > That's not the only reason why I'm against generalizing 'taint'.
-> > Tainting because HW is misbehaving makes sense, but tainting because
-> > of OoO module or because of live-patching does not.
-> > It becomes an excuse that people abuse.
->
-> yeah, it is possible to be abused. but that is the problem who
-> abuse it.
-
-I am sorry, but it's our responsibility as developers to design
-features so that users don't face arduous pushbacks.
-
-> > Right now syzbot is finding all sorts of bugs. Most of the time syzbot
-> > turns error injection on to find those allocation issues.
-> > If syzbot reports will start coming as tainted there will be even less
-> > attention to them. That will not be good.
->
-> Hmm, what kind of error injection does syzbot do? I would like to know
-> how it is used. For example, does that use only a specify set of
-> injection points, or use all existing points?
->
-> If the latter, I feel safer because syzbot ensures the current all
-> ALLOW_ERROR_INJECTION() functions will work with error injection. If not,
-> we need to consider removing the ALLOW_ERROR_INJECTION() from the
-> function which is not tested well (or add this taint flag.)
->
-> Documentation/fault-injection/fault-injection.rst has no explanation
-> about ALLOW_ERROR_INJECTION(), but obviously the ALLOW_ERROR_INJECTION()
-> marked functions and its caller MUST be designed safely against the
-> error injection. e.g.
->
-> - It must return an error code. (so EI_ETYPE_NONE must be removed)
-
-This is already the case with BPF, the modify return trampolines
-further limits the error injection to functions that return errors.
-
-> - Caller must check the return value always.
->   (but I thought this was the reason why we need this test framework...)
-> - It should not run any 'effective' code before checking an error.
->   For example, increment counter, call other functions etc.
->   (this means it can return without any side-effect)
-
-This is the case with modify_return trampolines in BPF which avoid
-side effects and limit the attachment surface further and avoiding
-side effects is a design goal. If we missed anything, let's fix that.
-
-https://lwn.net/Articles/813724/https://lwn.net/Articles/813724/
-
->
-> Anything else?
->
-> [...]
-> > All these years we've been working on improving bpf introspection and
-> > debuggability. Today crash dumps look like this:
-> >   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
-> >   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
-> >   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
-> >   __bpf_prog_run include/linux/filter.h:600 [inline]
-> >   bpf_prog_run include/linux/filter.h:607 [inline]
+> On 10.12.22 10:52, Maxim Kiselev wrote:
 > >
-> > The 2nd from the top is a bpf prog. The rest are kernel functions.
-> > bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
-> >          ^^ is a prog tag   ^^ name of bpf prog
+> > After applying
+>
+> This makes me wonder: "applying" as in "applying it to some version that
+> doesn't contain this change normally" or as it "after it was applied to
+> mainline I have the following problem with vanilla kernel version <???>"?
+>
+> > this commit 'mtd: call of_platform_populate() for MTD
+> > partitions' (bcdf0315),
+>
+> CCing Rafa=C5=82, who authored bcdf0315.
+>
+> > I faced with a problem that my ethernet device can't be probed because =
+it
+> > wait when 'nvmem-cells' device will be probed first.
+>
+> FWIW, there is a discussion about a problems that at least to my
+> untrained eyes looks similar:
+> https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+>
+> Rafa=C5=82, has some progress been made to resolve this?
+>
+> To me it sounds like this might warrant a "revert, and reapply later
+> when the cause for the regression was addressed". Rafa=C5=82, it seems yo=
+u
+> suggested something like that, but it doesn't look like that happened
+> for one reason or another. Or am I missing something?
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+>
+> > But there is no such driver which is compatible with 'nvmem-cells' beca=
+use
+> > 'nvmem-cells' is just a mark used by the 'mtd_nvmem_add' function.
 > >
-> > If you do 'bpftool prog show' you can see both tag and name.
-> > 'bpftool prog dump jited'
-> > dumps x86 code mixed with source line text.
-> > Often enough +0x2b offset will have some C code right next to it.
->
-> This is good, but this only works when the vmcore is dumped and
-> on the stack. My concern about the function error injection is
-> that makes some side effects, which can cause a problem afterwards
-> (this means after unloading the bpf prog)
-
-I think careful choices need to be made on when error injection is
-allowed so that these situations don't occur. (as you mentioned in
-your comment). [1]. If a BPF program is unloaded, there is no error
-injection any more, let's ensure that we design the error injection
-allow list and the BPF logic to ensure this cannot happen.
-
-
->
+> > So this leads to appeating of unresolved dependency for the ethernet de=
+vice.
+> > And that's why the ethernet device can't be added and probed.
 > >
-> > One can monitor all prog load/unload via perf or via audit.
-
-I would like us to focus on debuggability as it helps both the
-maintainers and the user. And I see a few things that need to be done:
-
-1. Revisit what is allowed for error injection in the kernel and if
-they can cause any subtle issues. My initial take is that functions
-that are directly called from syscall path should generally be okay.
-But let's check them for the patterns you mentioned.
-2. If it helps, add the list of BPF modify return programs to stack
-traces. Although this is really needed if we don't do [1] properly.
-3. Check if anything needs to be improved in the verification logic
-for modify return trampolines.
-
-- KP
-
+> > Here is a part of kernel log when spi flash probe start:
+> >
+> >> device: 'spi0': device_add
+> >> device: 'spi0.0': device_add
+> >> spi-nor spi0.0: mx66l51235f (65536 Kbytes)
+> >> 7 fixed-partitions partitions found on MTD device spi0.0
+> >
+> > After 'm25p80' probe 'f1070000.ethernet' linked to 'partition@1' :
+> >
+> >> device: 'f1010600.spi:m25p80@0:
+> > partitions:partition@1': device_add
+> >> device: 'platform:f1010600.spi:m25p80@0:partitions:partition@1--platfo=
+rm:f1070000.ethernet': device_add
+> >> devices_kset: Moving f1070000.ethernet to end of list
+> >> platform f1070000.ethernet: Linked as a consumer to f1010600.spi:m25p8=
+0@0:partitions:partition@1
+> >> ethernet@70000 Dropping the fwnode link to partition@1
+> >
+> > And as a result I got `-EPROBE_DEFER` for `f1070000.ethernet`
+> >
+> >> platform f1070000.ethernet: error -EPROBE_DEFER: supplier f1010600.spi=
+:m25p80@0:partitions:partition@1 not ready
+> >
+> > Here is a part of my device tree:
+> >
+> >     enet1: ethernet@70000 {
+> >         status =3D "okay";
+> >         nvmem-cells =3D <&macaddr>;
+> >         nvmem-cell-names =3D "mac-address";
+> >         phy-mode =3D "rgmii";
+> >         phy =3D <&phy0>;
+> >     };
+> >
+> >     spi@10600 {
+> >         status =3D "okay";
+> >
+> >         m25p80@0 {
+> >             compatible =3D "mx66l51235l";
+> >             reg =3D <0>;
+> >             #address-cells =3D <1>;
+> >             #size-cells =3D <1>;
+> >
+> >             partitions {
+> >                 compatible =3D "fixed-partitions";
+> >                 #address-cells =3D <1>;
+> >                 #size-cells =3D <1>;
+> >
+> >                 partition@0 {
+> >                     reg =3D <0x00000000 0x000080000>;
+> >                     label =3D "SPI.U_BOOT";
+> >                 };
+> >
+> >                 partition@1 {
+> >                     compatible =3D "nvmem-cells";
+> >                     reg =3D <0x000A0000 0x00020000>;
+> >                     label =3D "SPI.INV_INFO";
+> >                     #address-cells =3D <1>;
+> >                     #size-cells =3D <1>;
+> >                     ranges =3D <0 0x000A0000 0x00020000>;
+> >
+> >                     macaddr: mac@6 {
+> >                         reg =3D <0x6 0x6>;
+> >                     };
+> >                 };
+> >
+> >             };
+> >         };
+> >     };
+> >
+> > In the example above 'ethernet@70000' requires 'macaddr: mac@6' which i=
+s
+> > located inside mtd 'partition@1' of 'm25p80@0' spi flash.
 >
-> Ah, audit is helpful :), because we can dig the log what was loaded
-> before crash.
+> P.P.S.: let me add this to the regression tracking:
 >
->
-> Thank you,
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> #regzbot ^introduced bcdf0315
+> #regzbot title mtd: ethernet device can't be probed anymore due to
+> broken nvmem-cells dep
+> #regzbot monitor: https://lore.kernel.org/all/Yyj7wJlqJkCwObRn@lx2k/
+> #regzbot ignore-activity
