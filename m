@@ -2,197 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA4E649337
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 09:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C924649338
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 09:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiLKIpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 03:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S229961AbiLKIpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 03:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKIpF (ORCPT
+        with ESMTP id S230034AbiLKIpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 03:45:05 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A17DDFC3;
-        Sun, 11 Dec 2022 00:45:04 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BB6jRGV015337;
-        Sun, 11 Dec 2022 08:44:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=0t+5Zv1W3aD2R4Ebr6eP+axBbcGNw5ggeuo2oOxENVQ=;
- b=XK7EgWOF8PbJeAmgqImL+L59pExqClaFDc7RDw9OGGM+YVU9WM8T7Yt1YRLYZmEOn6yK
- 1+f7OD/0mcxS5lBI6DPXrQX8GmixcHhKZthYd7+PGfn1c7TLmMhx34xl2mdl5s7SXvwz
- 78xIK/038IrO7xGuBoQ7zFx7KkrcaYSE8m8tLoOVwHbX2NpYVg+KFWwQq6OYWV5Gtro2
- DmmHY+71zjB/Dq27HaL1eicdhIVVowxl6Rrr8NalQVWxvKvC1nCsFTV+KJi37sLTApwK
- +A17+UK6DVnn+CkLuzo/dbcT1koxoPJqSsK+KakdD6a36/mYCs5Ax3PRCM6kAW7hsjPU qQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3md3shxtan-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Dec 2022 08:44:41 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BB8ieFN017015;
-        Sun, 11 Dec 2022 08:44:40 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3md3shxta7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Dec 2022 08:44:40 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BB12xAb007894;
-        Sun, 11 Dec 2022 08:44:38 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mchcf187x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 11 Dec 2022 08:44:38 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BB8iacc44368144
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 11 Dec 2022 08:44:36 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E882220049;
-        Sun, 11 Dec 2022 08:44:35 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2CBB20040;
-        Sun, 11 Dec 2022 08:44:35 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Sun, 11 Dec 2022 08:44:35 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, kuniyu@amazon.com, netdev@vger.kernel.org,
-        leit@fb.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 net-next] tcp: socket-specific version of WARN_ON_ONCE()
-References: <20221208154656.60623-1-leitao@debian.org>
-Date:   Sun, 11 Dec 2022 09:44:35 +0100
-In-Reply-To: <20221208154656.60623-1-leitao@debian.org> (Breno Leitao's
-        message of "Thu, 8 Dec 2022 07:46:56 -0800")
-Message-ID: <yt9dlenes51o.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Sun, 11 Dec 2022 03:45:38 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C64112623
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:45:35 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so3124319ilt.9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 00:45:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f5qgcerx3Vj6Wa6NeDWtuCgq/K/ALlOEmy7+WWRKZ4M=;
+        b=Qy8QIoJTBn5g2x1u5MkyUu88/M+AD9yWGD4iO+VuFqne67QksUyMRio3WlJCjDvwww
+         6MSuSRaHtMWzpdqbpr9SHYfQjuyRcPg/FbiEKIDTMGN2uTAlnCXWjXPJCBdhW+zwXZ2d
+         cj1uJKprQSh81nJk+jdsdblX+6ehILHcXQrh04BY+Dx4nFgScB2BUscDvFeWDXx1euTr
+         wvcPorhOaVSs45F74Ve/1GYWZjctyxB0r1rXHaipT0N3HyTFxW6r1ceA2aTDtb3AROn4
+         2EMtZWcSbincD3mIdNtym+FUIJqa7SvAv8cLAAjdu7+kF4TYKPwnrPqLyd0qJfeCNHBe
+         64BQ==
+X-Gm-Message-State: ANoB5pnAlsrwx35IrzTEkoV4xqzN3Eb23tQsYGdgHL5K8J+lTgk2saGh
+        mvnzt2ERHpl0M35ng81jMevmLYwRkHOo0OV2IVK+2j8HuRa/
+X-Google-Smtp-Source: AA0mqf6JuYcddMUyQ/erCSxEFnAPqYSVM3gYrUn9lylBQ32nF5BTKgcXAY0RBeKgVSYyy88U6/6hh4uld36/nSxDTNTVSZgvQWlZ
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BZgq7nMdeAAqcHY__5dyZycxX7JwhY4U
-X-Proofpoint-ORIG-GUID: tc4yxaiE8-F7n2e8ayWK0usAiBEj7MZJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-10_10,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 phishscore=0 malwarescore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 mlxlogscore=834 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212110079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d0f:0:b0:300:c3d4:e9f5 with SMTP id
+ 15-20020a920d0f000000b00300c3d4e9f5mr36073009iln.317.1670748334581; Sun, 11
+ Dec 2022 00:45:34 -0800 (PST)
+Date:   Sun, 11 Dec 2022 00:45:34 -0800
+In-Reply-To: <0000000000007e22cb05dd7cbada@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fdf1b505ef896889@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in
+ do_page_fault (3)
+From:   syzbot <syzbot+2845b2dfa28dec36e215@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, boqun.feng@gmail.com,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        longman@redhat.com, mingo@redhat.com, peterz@infradead.org,
+        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Breno Leitao <leitao@debian.org> writes:
+syzbot has found a reproducer for the following issue on:
 
-> There are cases where we need relevant information about the socket
-> during a warning, so, it could help us to find bugs that happens and do
-> not have an easy repro.
->
-> This patch creates a TCP-socket specific version of WARN_ON_ONCE(), which
-> dumps revelant information about the TCP socket when it hits rare
-> warnings, which is super useful for debugging purposes.
->
-> Hooking this warning tcp_snd_cwnd_set() for now, but, the intent is to
-> convert more TCP warnings to this helper later.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  include/net/tcp.h       |  3 ++-
->  include/net/tcp_debug.h | 10 ++++++++++
->  net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+), 1 deletion(-)
->  create mode 100644 include/net/tcp_debug.h
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 14d45661a84d..e490af8e6fdc 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -40,6 +40,7 @@
->  #include <net/inet_ecn.h>
->  #include <net/dst.h>
->  #include <net/mptcp.h>
-> +#include <net/tcp_debug.h>
->  
->  #include <linux/seq_file.h>
->  #include <linux/memcontrol.h>
-> @@ -1229,7 +1230,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
->  
->  static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
->  {
-> -	WARN_ON_ONCE((int)val <= 0);
-> +	TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
->  	tp->snd_cwnd = val;
->  }
->  
-> diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
-> new file mode 100644
-> index 000000000000..50e96d87d335
-> --- /dev/null
-> +++ b/include/net/tcp_debug.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_TCP_DEBUG_H
-> +#define _LINUX_TCP_DEBUG_H
-> +
-> +void tcp_sock_warn(const struct tcp_sock *tp);
-> +
-> +#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
-> +		DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
-> +
-> +#endif  /* _LINUX_TCP_DEBUG_H */
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 54836a6b81d6..5985ba9c4231 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -4705,6 +4705,36 @@ int tcp_abort(struct sock *sk, int err)
->  }
->  EXPORT_SYMBOL_GPL(tcp_abort);
->  
-> +void tcp_sock_warn(const struct tcp_sock *tp)
-> +{
-> +	const struct sock *sk = (const struct sock *)tp;
-> +	struct inet_sock *inet = inet_sk(sk);
-> +	struct inet_connection_sock *icsk = inet_csk(sk);
-> +
-> +	WARN_ON(1);
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=127e776d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=2845b2dfa28dec36e215
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1578ffdf880000
 
-Never looked into the details of WARN_ON, but shouldn't that come at the
-end of the function? If one has kernel.panic_on_warn=1, the kernel
-would already panic in WARN_ON, and the lines below wouldn't be printed?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/59313e0459cb/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/1afee1432fbe/mount_4.gz
 
-> +
-> +	pr_warn("Socket Info: family=%u state=%d ccname=%s cwnd=%u",
-> +		sk->sk_family, sk->sk_state, icsk->icsk_ca_ops->name,
-> +		tcp_snd_cwnd(tp));
-> +
-> +	switch (sk->sk_family) {
-> +	case AF_INET:
-> +		pr_warn("saddr=%pI4:%u daddr=%pI4:%u", &inet->inet_saddr,
-> +			ntohs(inet->inet_sport), &inet->inet_daddr,
-> +			ntohs(inet->inet_dport));
-> +
-> +		break;
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +	case AF_INET6:
-> +		pr_warn("saddr=[%pI6]:%u daddr=[%pI6]:%u", &sk->sk_v6_rcv_saddr,
-> +			ntohs(inet->inet_sport), &sk->sk_v6_daddr,
-> +			ntohs(inet->inet_dport));
-> +		break;
-> +#endif
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(tcp_sock_warn);
-> +
->  extern struct tcp_congestion_ops tcp_reno;
->  
->  static __initdata unsigned long thash_entries;
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2845b2dfa28dec36e215@syzkaller.appspotmail.com
+
+gfs2: fsid=syz:syz.0:  H: s:?? f:pn e:-32768 p:0 [(none)] preempt_count+0x10/0x24 arch/arm64/include/asm/preempt.h:12
+BUG: sleeping function called from invalid context at arch/arm64/mm/fault.c:599
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 3596, name: syz-executor.0
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+3 locks held by syz-executor.0/3596:
+ #0: ffff0000d0712d10 (&type->i_mutex_dir_key#8){.+.+}-{3:3}, at: inode_lock_shared include/linux/fs.h:766 [inline]
+ #0: ffff0000d0712d10 (&type->i_mutex_dir_key#8){.+.+}-{3:3}, at: open_last_lookups fs/namei.c:3480 [inline]
+ #0: ffff0000d0712d10 (&type->i_mutex_dir_key#8){.+.+}-{3:3}, at: path_openat+0x2e4/0x11c4 fs/namei.c:3711
+ #1: ffff80000d4a4640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x10/0x4c include/linux/rcupdate.h:303
+ #2: ffff0000d51feb48 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_trylock include/linux/mmap_lock.h:136 [inline]
+ #2: ffff0000d51feb48 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault+0x1ec/0x79c arch/arm64/mm/fault.c:589
+CPU: 1 PID: 3596 Comm: syz-executor.0 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ __might_resched+0x208/0x218 kernel/sched/core.c:9908
+ __might_sleep+0x48/0x78 kernel/sched/core.c:9837
+ do_page_fault+0x214/0x79c arch/arm64/mm/fault.c:599
+ do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
+ el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
+ pid_nr include/linux/pid.h:185 [inline]
+ dump_holder fs/gfs2/glock.c:2337 [inline]
+ gfs2_dump_glock+0x518/0x904 fs/gfs2/glock.c:2447
+ gfs2_consist_inode_i+0x68/0x88 fs/gfs2/util.c:465
+ gfs2_dirent_scan+0x2dc/0x3b4 fs/gfs2/dir.c:602
+ gfs2_dirent_search+0x134/0x494 fs/gfs2/dir.c:850
+ gfs2_dir_search+0x58/0x130 fs/gfs2/dir.c:1650
+ gfs2_lookupi+0x23c/0x354 fs/gfs2/inode.c:323
+ __gfs2_lookup+0x5c/0x1dc fs/gfs2/inode.c:870
+ gfs2_atomic_open+0x74/0x148 fs/gfs2/inode.c:1274
+ atomic_open fs/namei.c:3276 [inline]
+ lookup_open fs/namei.c:3384 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x67c/0x11c4 fs/namei.c:3711
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3741
+ do_sys_openat2+0xb8/0x22c fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Unable to handle kernel paging request at virtual address 000003fda9bf7ccd
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+
