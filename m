@@ -2,345 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63BE6494BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 15:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0526494C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 16:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiLKO5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 09:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S230163AbiLKPOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 10:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLKO5Q (ORCPT
+        with ESMTP id S229471AbiLKPOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 09:57:16 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F87FAF6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 06:57:15 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id x9-20020a056e021ca900b003037ca1af0cso3528377ill.16
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 06:57:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xvkpXpfVfgnMfnO3Z4yvKzaCN0mlfAZYTG7pI/XqAng=;
-        b=Brfph2aNj7i73YADM4ZgE/nJNjbEgWZAt27gNkiwl4o0R0bv5HXm4Jsyx3LwpO8yEW
-         qJvE3+P3BXnhuYm6n9TqNKlv4ROrIjGYCrYsJSXPhwmDXBDlKnISNmyFU7x4VrJ2PSn1
-         TaX5LmUzOFMPpw6ds+DqmLDqfkgcZMPq1JHg7lG8i0axC4rGesRO9wYocozHcBkK2jGD
-         SwoqpPbXPeqe7UN/cxNcdaOKeHED3/bA24TDiYYyR5pgRuRcSwZyW/34jQOF89JfBR2T
-         eWK3ZYAoge7FAeVVSoY6ns+h3unGQ7GsYTFd7hIY5YLfUt+ZZ03cg8IkTHcJPuKKiaAa
-         WPNw==
-X-Gm-Message-State: ANoB5plpahTs0WZvIBboAnHNDcRVTo5VvGc6rP1j6P/h8PvhhTCIVbFG
-        WRcrOU+5s2jeGjXATYKLw7JfuaXmQRhV26ingCeiZJUjE3oH
-X-Google-Smtp-Source: AA0mqf6/3mDg8S/TFsp/57L1zuORe65vjJ4pLwbMlvXAByRSAMbHaRcvfEla0rByPZ6ImJXkHgQNu9diVVyesEqmK98o+BzZZvC8
-MIME-Version: 1.0
-X-Received: by 2002:a92:d2c9:0:b0:303:4c12:437b with SMTP id
- w9-20020a92d2c9000000b003034c12437bmr10614096ilg.80.1670770634788; Sun, 11
- Dec 2022 06:57:14 -0800 (PST)
-Date:   Sun, 11 Dec 2022 06:57:14 -0800
-In-Reply-To: <20221211142633.2817-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000030264d05ef8e9abf@google.com>
-Subject: Re: [syzbot] kernel stack overflow in sock_close
-From:   syzbot <syzbot+09329bd987ebca21bced@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sun, 11 Dec 2022 10:14:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C37DEB7;
+        Sun, 11 Dec 2022 07:14:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFA55B80A0A;
+        Sun, 11 Dec 2022 15:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29ABC433EF;
+        Sun, 11 Dec 2022 15:14:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670771676;
+        bh=S+dePhuFVYzE09I1ehDeQ+chUuv34q59iPw1Ji8ZLzg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YCXTquS5I2SIfB44V4P/C3SmSJXTjbkVUMhFy5Aj9YnSfnFE1+aZhie2d1BWv9Zn8
+         b7lrUYTjEStJKjAmKcAr4PgbfkLt2WRkWq/jNE7Q4pkX3SNGhf+szM+sp7EKfuV2JS
+         N2B6/Qc8e3kCuiy+V7o8HuxalpuYlDkiuaVjs2CIF7np2yFKaaiDRtYTcPABNWgdY1
+         iBnHnqJ1uYktkN7m8TGW1XozjSG31cckvsfO30mAYkemVMXUpbrlWykOmSIJ7/1Umm
+         hS6WnuxN9LFZ//4obqT8OEAZPqgPoCzeyUWuq88p+IPsCdicLBVtsR0R/mSDn9IDFS
+         JQwC/aXZgankw==
+Date:   Mon, 12 Dec 2022 00:14:31 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-Id: <20221212001431.ac84a6320cff8d5fa8aa943e@kernel.org>
+In-Reply-To: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206233947.4c27cc9d@gandalf.local.home>
+        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
+        <20221207074806.6f869be2@gandalf.local.home>
+        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+        <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
+        <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 11 Dec 2022 08:49:01 +0100
+KP Singh <kpsingh@kernel.org> wrote:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-kernel stack overflow in sock_close
+> On Sun, Dec 11, 2022 at 3:52 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi Alexei,
+> >
+> > On Wed, 7 Dec 2022 20:36:28 -0800
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
+> > > And that happens all the time on lkml. Somebody reports a bug and kernel devs
+> > > jump on the poor person:
+> > > "Can you repro without taint?",
+> > > "Can you repro with upstream kernel?"
+> > > This is discouraging.
+> > > The 'taint' concept makes it easier for kernel devs to ignore bug reports
+> > > and push back on the reporter.
+> > > Do it few times and people stop reporting bugs.
+> >
+> > That seems off topic for me. You seems complained against the taint flag
+> > itself.
+> 
+> The series is about adding a taint for, so discussing the user
+> experience, when someone reports a "tainted crash" seems reasonable to
+> me and not off topic.
+> 
+> >
+> > > Say, this particular bug in rethook was found by one of our BPF CI developers.
+> > > They're not very familiar with the kernel, but they can see plenty of 'rethook'
+> > > references in the stack trace, lookup MAINTAINER file and ping Massami,
+> > > but to the question "can you repro without taint?" they can only say NO,
+> > > because this is how our CI works. So they will keep silence and the bug will be lost.
+> >
+> > BTW, this sounds like the BPF CI system design issue. If user is NOT easily
+> > identifying what test caused the issue (e.g. what tests ran on the system
+> > until the bug was found), the CI system is totally useless, because after
+> > finding a problem, it must be investigated to solve the problem.
+> >
+> > Without investigation, how would you usually fix the bug??
+> 
+> Masami, this seems accusational and counter productive, it was never
+> said that issues can be solved without investigation.
 
-x8 : 000000000004057a x7 : ffff80000b229b58 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : ffff0000d0b42478 x0 : ffff0000d0b41a40
-Kernel panic - not syncing: kernel stack overflow
-CPU: 0 PID: 3653 Comm: syz-executor.0 Not tainted 6.1.0-rc8-syzkaller-00164-g4cee37b3a4e6-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x5c lib/dump_stack.c:113
- panic+0x218/0x508 kernel/panic.c:274
- nmi_panic+0xbc/0xf0 kernel/panic.c:169
- panic_bad_stack+0x134/0x154 arch/arm64/kernel/traps.c:907
- handle_bad_stack+0x34/0x48 arch/arm64/kernel/entry-common.c:849
- __bad_stack+0x78/0x7c arch/arm64/kernel/entry.S:549
- mark_lock+0x4/0x1b4 kernel/locking/lockdep.c:4595
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x54/0x6c kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- lock_sock_nested+0x88/0xd8 net/core/sock.c:3450
- lock_sock include/net/sock.h:1721 [inline]
- sock_map_close+0x30/0x4bc net/core/sock_map.c:1610
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- inet_release+0xc8/0xe4 net/ipv4/af_inet.c:428
- inet6_release+0x3c/0x58 net/ipv6/af_inet6.c:488
- __sock_release net/socket.c:650 [inline]
- sock_close+0x50/0xf0 net/socket.c:1365
- __fput+0x198/0x3e4 fs/file_table.c:320
- ____fput+0x20/0x30 fs/file_table.c:348
- task_work_run+0x100/0x148 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x2dc/0xcac kernel/exit.c:820
- do_group_exit+0x98/0xcc kernel/exit.c:950
- get_signal+0xabc/0xb2c kernel/signal.c:2858
- do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
- do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x00000,02070084,26017203
-Memory Limit: none
+Let me apologies about my misunderstanding.  
+
+> 
+> The BPF CI does find issues, the BPF reviewers and maintainers
+> regularly fix bugs using it. Alexei's point here is that a taint does
+> not help in solving the problem, rather deter some people from even
+> looking at it. (not BPF people, but other maintainers [distro, kernel]
+> who would ask for a reproduction without a taint).
+
+Hmm, that is a problem. Some taint flag should be useful hints
+for finding the error patterns.
+
+> Let's take a step back and focus on solving debuggability and
+> introspection as we clearly have some perception issues about taints
+> in the community. (distro maintainers, users) before we go and add
+> more taints.
+
+Agreed.
+
+> > > That's not the only reason why I'm against generalizing 'taint'.
+> > > Tainting because HW is misbehaving makes sense, but tainting because
+> > > of OoO module or because of live-patching does not.
+> > > It becomes an excuse that people abuse.
+> >
+> > yeah, it is possible to be abused. but that is the problem who
+> > abuse it.
+> 
+> I am sorry, but it's our responsibility as developers to design
+> features so that users don't face arduous pushbacks.
+
+Sorry if I confuse you. I meant that taint flag abusing. :(
+
+> 
+> > > Right now syzbot is finding all sorts of bugs. Most of the time syzbot
+> > > turns error injection on to find those allocation issues.
+> > > If syzbot reports will start coming as tainted there will be even less
+> > > attention to them. That will not be good.
+> >
+> > Hmm, what kind of error injection does syzbot do? I would like to know
+> > how it is used. For example, does that use only a specify set of
+> > injection points, or use all existing points?
+> >
+> > If the latter, I feel safer because syzbot ensures the current all
+> > ALLOW_ERROR_INJECTION() functions will work with error injection. If not,
+> > we need to consider removing the ALLOW_ERROR_INJECTION() from the
+> > function which is not tested well (or add this taint flag.)
+> >
+> > Documentation/fault-injection/fault-injection.rst has no explanation
+> > about ALLOW_ERROR_INJECTION(), but obviously the ALLOW_ERROR_INJECTION()
+> > marked functions and its caller MUST be designed safely against the
+> > error injection. e.g.
+> >
+> > - It must return an error code. (so EI_ETYPE_NONE must be removed)
+> 
+> This is already the case with BPF, the modify return trampolines
+> further limits the error injection to functions that return errors.
+
+OK, so I also should remove it from FEI.
+
+> 
+> > - Caller must check the return value always.
+> >   (but I thought this was the reason why we need this test framework...)
+> > - It should not run any 'effective' code before checking an error.
+> >   For example, increment counter, call other functions etc.
+> >   (this means it can return without any side-effect)
+> 
+> This is the case with modify_return trampolines in BPF which avoid
+> side effects and limit the attachment surface further and avoiding
+> side effects is a design goal. If we missed anything, let's fix that.
+> 
+> https://lwn.net/Articles/813724/
+
+Yeah, if BPF tests already tested all ALLOW_ERROR_INJECTION() functions,
+it may be checked already. I think we just need adding the above
+explanation on the document, so that the people who will add additional
+ALLOW_ERROR_INJECTION() on a function, can understand the limitation.
+
+> 
+> >
+> > Anything else?
+> >
+> > [...]
+> > > All these years we've been working on improving bpf introspection and
+> > > debuggability. Today crash dumps look like this:
+> > >   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
+> > >   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
+> > >   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+> > >   __bpf_prog_run include/linux/filter.h:600 [inline]
+> > >   bpf_prog_run include/linux/filter.h:607 [inline]
+> > >
+> > > The 2nd from the top is a bpf prog. The rest are kernel functions.
+> > > bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
+> > >          ^^ is a prog tag   ^^ name of bpf prog
+> > >
+> > > If you do 'bpftool prog show' you can see both tag and name.
+> > > 'bpftool prog dump jited'
+> > > dumps x86 code mixed with source line text.
+> > > Often enough +0x2b offset will have some C code right next to it.
+> >
+> > This is good, but this only works when the vmcore is dumped and
+> > on the stack. My concern about the function error injection is
+> > that makes some side effects, which can cause a problem afterwards
+> > (this means after unloading the bpf prog)
+> 
+> I think careful choices need to be made on when error injection is
+> allowed so that these situations don't occur. (as you mentioned in
+> your comment). [1]. If a BPF program is unloaded, there is no error
+> injection any more, let's ensure that we design the error injection
+> allow list and the BPF logic to ensure this cannot happen.
+
+OK. Actually, I trust the BPF logic itself will be handle this
+correctly. I just concerned that some people who don't know much
+(because it is not carefully documented) might add ALLOW_ERROR_INJECTION()
+to a function which is not injectable by design. Thus I thought the
+taint flag can help.
+But if those are always Cc'd to bpf@vger and it will be tested by BPF
+CI, I'm OK for that.
+
+> > > One can monitor all prog load/unload via perf or via audit.
+> 
+> I would like us to focus on debuggability as it helps both the
+> maintainers and the user. And I see a few things that need to be done:
+> 
+> 1. Revisit what is allowed for error injection in the kernel and if
+> they can cause any subtle issues. My initial take is that functions
+> that are directly called from syscall path should generally be okay.
+> But let's check them for the patterns you mentioned.
+
+Yeah, I agree that syscall entries should be safe.
+
+> 2. If it helps, add the list of BPF modify return programs to stack
+> traces. Although this is really needed if we don't do [1] properly.
+
+Would you mean a list of enabled BPF programs in Oops code? If so,
+I also want to add enabled FEI list on it.
+
+> 3. Check if anything needs to be improved in the verification logic
+> for modify return trampolines.
+
+I think BPF logic itself is safe. But the targeted function itself
+or the caller may not be designed for such error injection.
+I think this is my fault that I have not documented about
+ALLOW_ERROR_INJECTION() well. Sorry about that.
+
+Thank you,
 
 
-Tested on:
-
-commit:         4cee37b3 Merge tag 'mm-hotfixes-stable-2022-12-10-1' o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10391967880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f24df90d6ec552dc
-dashboard link: https://syzkaller.appspot.com/bug?extid=09329bd987ebca21bced
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12366eb7880000
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
