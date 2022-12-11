@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A526492F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600126492F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiLKGuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S229972AbiLKGzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiLKGuQ (ORCPT
+        with ESMTP id S229835AbiLKGzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 01:50:16 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15F1FAFC
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:50:13 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
+        Sun, 11 Dec 2022 01:55:00 -0500
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ACC9585
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:54:58 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id 4GA4pPlLH5FWA4GA4pDe1A; Sun, 11 Dec 2022 07:50:10 +0100
-X-ME-Helo: pop-os.home
+        id 4GEbp4I6yvgTT4GEbpFfpL; Sun, 11 Dec 2022 07:54:53 +0100
+X-ME-Helo: [192.168.1.18]
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Dec 2022 07:50:10 +0100
+X-ME-Date: Sun, 11 Dec 2022 07:54:53 +0100
 X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH] drm/msm/hdm: Fix the error handling path of msm_hdmi_dev_probe()
-Date:   Sun, 11 Dec 2022 07:50:06 +0100
-Message-Id: <b3d9dac978f1e2e42a40ec61f58aa98c44c85dfd.1670741386.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Message-ID: <361c0911-7133-4d28-436e-1dfab2b807a8@wanadoo.fr>
+Date:   Sun, 11 Dec 2022 07:54:49 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 3/3] regulator: axp20x: Add support for AXP1530 variant
+Content-Language: fr
+To:     martin.botka@somainline.org
+Cc:     angelogioacchino.delregno@somainline.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, jamipkettunen@somainline.org,
+        jtrmal@gmail.com, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        marijn.suijten@somainline.org, martin.botka1@gmail.com,
+        paul.bouchara@somainline.org, robh+dt@kernel.org,
+        takuya@takuya.tech, wens@csie.org
+References: <20221209234654.1082522-1-martin.botka@somainline.org>
+ <20221209234654.1082522-4-martin.botka@somainline.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221209234654.1082522-4-martin.botka@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If an error occurs after a successful msm_hdmi_get_phy() call, it must be
-undone by a corresponding msm_hdmi_put_phy(), as already done in the
-remove function.
+Le 10/12/2022 à 00:46, Martin Botka a écrit :
+> AXP1530 has a few regulators that are controlled via I2C Bus.
+> 
+> Add support for them.
+> 
+> Signed-off-by: Martin Botka <martin.botka-KtrmGDJU8+nZ+VzJOa5vwg@public.gmane.org>
+> ---
+>   drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
+>   1 file changed, 44 insertions(+)
+> 
+> diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
+> index d260c442b788..ca422311a996 100644
+> --- a/drivers/regulator/axp20x-regulator.c
+> +++ b/drivers/regulator/axp20x-regulator.c
 
-Fixes: 437365464043 ("drm/msm/hdmi: move msm_hdmi_get_phy() to msm_hdmi_dev_probe()")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Not sure if the Fixes tag is correct. At least it is when the probe needs
-to be fixed but the issue was maybe there elsewhere before.
----
- drivers/gpu/drm/msm/hdmi/hdmi.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+[...]
 
-diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-index 4d3fdc806bef..97372bb241d8 100644
---- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-+++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-@@ -532,11 +532,19 @@ static int msm_hdmi_dev_probe(struct platform_device *pdev)
- 
- 	ret = devm_pm_runtime_enable(&pdev->dev);
- 	if (ret)
--		return ret;
-+		goto err_put_phy;
- 
- 	platform_set_drvdata(pdev, hdmi);
- 
--	return component_add(&pdev->dev, &msm_hdmi_ops);
-+	ret = component_add(&pdev->dev, &msm_hdmi_ops);
-+	if (ret)
-+		goto err_put_phy;
-+
-+	return 0;
-+
-+err_put_phy:
-+	msm_hdmi_put_phy(hdmi);
-+	return ret;
- }
- 
- static int msm_hdmi_dev_remove(struct platform_device *pdev)
--- 
-2.34.1
+> @@ -1252,6 +1292,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
+>   		drivevbus = of_property_read_bool(pdev->dev.parent->of_node,
+>   						  "x-powers,drive-vbus-en");
+>   		break;
+> +		case AXP1530_ID:
+
+Nit: indentation.
+
+> +		regulators = axp1530_regulators;
+> +		nregulators = AXP1530_REG_ID_MAX;
+> +		break;
+>   	default:
+>   		dev_err(&pdev->dev, "Unsupported AXP variant: %ld\n",
+>   			axp20x->variant);
 
