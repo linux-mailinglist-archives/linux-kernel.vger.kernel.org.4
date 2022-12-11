@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D196492E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8716492DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiLKGUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S230213AbiLKGUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiLKGTm (ORCPT
+        with ESMTP id S230209AbiLKGTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 01:19:42 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7513D55
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:18:00 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id f3so6185768pgc.2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:18:00 -0800 (PST)
+        Sun, 11 Dec 2022 01:19:24 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227713D3A
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:56 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id m4so8966193pls.4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qzjPiOUXUCGjDcLS1SPe25J0gPVaY+ytd1rLYHu4mKw=;
-        b=yt8hwRU4SHxTb7HBBdpIjzRBr8nYk40J5db87dPGMQiGbznKP9cRs4RxJnwbn20eDs
-         Rtj8WvS9y3iwOIGZd2ZpW92w0stU/Lne0rmD6EY2AxTHxlqipPI7652Ez/foRPgbU68z
-         RVE5uy71XAtrWrNMq3JaEq5cCuKI7MM4UXrN0+gefmZAoC4zXqgdWVpygDaYiiGHSyum
-         1rXwmNc1dFumygrpU6HEbHt5i6gL6NLMW9AeyzC+nc5ZdndhtGn3QZDD2ealOx7RlYIt
-         1vX+XDT8Vv1hMGNHrJ94E5RM4A/U649lXzOJC2If86B3n7Z+QUFkvR4unfIdQROAkrpB
-         UNig==
+        bh=0IGz3udF13u9xcCDpbGAjcYJk/g8vrZZv/DcYG4s+G4=;
+        b=enGLQOUwKDyu0qinligm4kc/92RLUm9j/ii0NoT+i1uLG2QjM5HOVPKCXawkGXQ+0v
+         ba3R4BzfLZKK/N0sz/Rprc5aTjLTjNcRQOSCxc/bWkJgAuv1gZv7s3VLVhxZ56FKmSe/
+         HtLFKxm5wOKwk3vQ6/u3Mr/fdvMCqSCoD4aLlhXt0MEhgr0ZOkcC7Cxd0Fbo/QF8ZSzn
+         c18kll7bVxj7MnPR2VUsDosDAJfLAWX+mvXHRZqM3qNjNciPVJG/vhkcW+6TpWqzJFey
+         yS/hGwZAENgNDmBuD6fzegf9ScBA8+JVHeEMmwO7/oL/xvHovTGf6gcvS/RgGJdvv29N
+         GwHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qzjPiOUXUCGjDcLS1SPe25J0gPVaY+ytd1rLYHu4mKw=;
-        b=oDBLcJLUIGFYmKdU/TfqqfZPb1oFTV3bjEnc4aQHuM8yLYSpHFXVueheLVADlUfiiS
-         4h47oBBVtBAlfKLx4fy4MOSnSEBI7ftHDg8ypJ4NCG3Gjy+SssvfivEhXcxXJe32NlQU
-         5LgaQfOm9F4arXUZb1X4SXwrUVYlYfH2sjDESI1Tp7DIv7i6R75VSm/JXpo0YxvLH2TF
-         sx5GDhqeT+fgiWau4/FgkIPyhdivnC28Q/Kq/27WeZ2y07xBXrl+Lfvep47hrIAHqDig
-         JFjzC9T0L7R7BR9uk5oYqHYrl1WC+xpRQtTx9bEjYTm0jnUeM8fyXHRVxPSXsYM6xTER
-         q87Q==
-X-Gm-Message-State: ANoB5pl1vlejdCoWeqvF7B5DOXQqvdxCWYxCsnsCRVJIFl0urRWNl0ZT
-        l9JM6EHTibwkbhy1xXqRJc4TRA==
-X-Google-Smtp-Source: AA0mqf6lkHfORa9RIyU8MAFKRk1wFqysRjn4m3TNLky5UntPRdRG1+j88tWgKw//B+WaQ3zoeGQj6A==
-X-Received: by 2002:aa7:8faa:0:b0:577:adb7:20dc with SMTP id t42-20020aa78faa000000b00577adb720dcmr12669094pfs.5.1670739474679;
-        Sat, 10 Dec 2022 22:17:54 -0800 (PST)
+        bh=0IGz3udF13u9xcCDpbGAjcYJk/g8vrZZv/DcYG4s+G4=;
+        b=GYSrU+lIY+MP52JKejbbBz++ZclCilGdv0JgeLiFBXlr233TA52frSYgaqxJabWDps
+         Mb1fn46dGqsFNMn8IRkhOu8vVV/caF5jYuLqER8piY6T7DsJTbdp5eTPanOe7Xzqr8i5
+         DXM34/CDFXkNDudjMe3fB4J990Gzm5rRjSvnkL0HxE5CUmHgjBXeXEyi2HUvnGuvr+bL
+         /N9gUBZySniGMeV5b1To3I2gbFEXeqkiuoAYW0s1AJGMa06CobImQUkF+mytfjQlS/eh
+         CF0jUAAQGdLY9r/mDW60xfXV4e1y9w5c8qNgMsJ+Xq0RiTVLi7ve4G5Ovq9/j3pt+QdN
+         vZSw==
+X-Gm-Message-State: ANoB5plqiR59ThoGMMmZPMVjO26GZkH6hbEekmcl7rvbZvZ+0+5bRVVK
+        K8w6NvaGXMVAMb1IuUcC0SGt0Q==
+X-Google-Smtp-Source: AA0mqf47op0v+60AWV+AomEgdSEMXXTn2WC66WNap3eEXjRHx0WZYOvSC7ryzhKQcQ7KYY/PJXw3fQ==
+X-Received: by 2002:a17:902:7001:b0:189:760d:c5ed with SMTP id y1-20020a170902700100b00189760dc5edmr12075930plk.28.1670739475707;
+        Sat, 10 Dec 2022 22:17:55 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id 7-20020a620607000000b0057709fce782sm3504373pfg.54.2022.12.10.22.17.54
+        by smtp.gmail.com with ESMTPSA id d9-20020a170903230900b00188f8badbcdsm3808270plh.137.2022.12.10.22.17.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:54 -0800 (PST)
-Subject: [PATCH v2 21/24] s390: Remove empty <uapi/asm/setup.h>
-Date:   Sat, 10 Dec 2022 22:13:55 -0800
-Message-Id: <20221211061358.28035-22-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:55 -0800 (PST)
+Subject: [PATCH v2 22/24] sparc: Remove empty <uapi/asm/setup.h>
+Date:   Sat, 10 Dec 2022 22:13:56 -0800
+Message-Id: <20221211061358.28035-23-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
 References: <20221211061358.28035-1-palmer@rivosinc.com>
@@ -63,8 +63,8 @@ From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,30 +73,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/s390/include/asm/setup.h      | 1 -
- arch/s390/include/uapi/asm/setup.h | 1 -
- 2 files changed, 2 deletions(-)
- delete mode 100644 arch/s390/include/uapi/asm/setup.h
+ arch/sparc/include/uapi/asm/setup.h | 9 ---------
+ 1 file changed, 9 deletions(-)
+ delete mode 100644 arch/sparc/include/uapi/asm/setup.h
 
-diff --git a/arch/s390/include/asm/setup.h b/arch/s390/include/asm/setup.h
-index 77e6506898f5..e41611c98825 100644
---- a/arch/s390/include/asm/setup.h
-+++ b/arch/s390/include/asm/setup.h
-@@ -7,7 +7,6 @@
- #define _ASM_S390_SETUP_H
- 
- #include <linux/bits.h>
--#include <uapi/asm/setup.h>
- #include <linux/build_bug.h>
- 
- #define PARMAREA		0x10400
-diff --git a/arch/s390/include/uapi/asm/setup.h b/arch/s390/include/uapi/asm/setup.h
+diff --git a/arch/sparc/include/uapi/asm/setup.h b/arch/sparc/include/uapi/asm/setup.h
 deleted file mode 100644
-index 598d769e76df..000000000000
---- a/arch/s390/include/uapi/asm/setup.h
+index c3cf1b0d30b3..000000000000
+--- a/arch/sparc/include/uapi/asm/setup.h
 +++ /dev/null
-@@ -1 +0,0 @@
+@@ -1,9 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-/*
+- *	Just a place holder. 
+- */
+-
+-#ifndef _UAPI_SPARC_SETUP_H
+-#define _UAPI_SPARC_SETUP_H
+-
+-#endif /* _UAPI_SPARC_SETUP_H */
 -- 
 2.38.1
 
