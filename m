@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCB96498C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 06:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643C56498CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiLLF5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 00:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S231235AbiLLGB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 01:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiLLF5D (ORCPT
+        with ESMTP id S230427AbiLLGBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 00:57:03 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE4F4C;
-        Sun, 11 Dec 2022 21:57:02 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id kw15so25214427ejc.10;
-        Sun, 11 Dec 2022 21:57:01 -0800 (PST)
+        Mon, 12 Dec 2022 01:01:55 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092EA2DE6;
+        Sun, 11 Dec 2022 22:01:54 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id m19so11358719edj.8;
+        Sun, 11 Dec 2022 22:01:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:mime-version:message-id:cc:cc:cc:cc:cc:cc:to:cc:cc
-         :subject:date:from:from:to:cc:subject:date:message-id:reply-to;
+        h=user-agent:mime-version:message-id:to:cc:subject:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
         bh=2zkeYUz7U/xhI7hB3XZxYQs9NMpqoObeUlI6eDOGe6U=;
-        b=K2bwvVAIKo2L/MNR+mHwdB1t0RDOpGEaWihkon/5Ro41X36b3TYft2P6X6KAsmxqXp
-         3AkZifhQJepsjl6j2K79s/TUbiOrpp8gF4wrRKCC/yk+Tr06srm/T5Gob33T2wG5XTUD
-         2G6eD2bglhVnQa8xk8FYMn5UJ0FDQn1Cx8qShuy1N9XYCnP65hmj1UIuoMEhZf6L/A0R
-         PhH5aY+pJf1Rv+zxiSU/P3z9ARnCSPXW/pzOBgCTlcK1tl3SFuntV17jV0SJaPfpw3rv
-         uiBhOTbs1OrTUm0RDVAAXKZTz4O731c2BtEGzF0AOFeK4d3wTtN/EPDHAr42/X7zVthS
-         srzg==
+        b=oHDLpIsNH/jWL9Ns3j/4mrJo+PkiFyP9H1iJ2V/InQ6cbopI+kguqhNBHOXjkrx1F0
+         60wILoOfad7NiiUy++U7/CUynnfgMHULNVOsKKVJjQhorqiHKBtNzoO+669117MRNq0q
+         7Nd+jOKLZwPGj6ZvJ31jwOdQyfebWgcTK54UycUiMw8QxS1zH7KDSJ6FM0sCTgQJmNwg
+         hSP71O9V1zlOkuuCibfc5FArkcOKu6nZsaWFuTZFZZDtCRZD37icRhKqiI/swc0AGmHG
+         w39u6UjcjoJCYORaWvZRL1cPXTRgT224NnyLSzxKFxB9DbGzIvljWlG6vyuELcak2yDS
+         erhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:mime-version:message-id:cc:cc:cc:cc:cc:cc:to:cc:cc
-         :subject:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
+        h=user-agent:mime-version:message-id:to:cc:subject:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
         bh=2zkeYUz7U/xhI7hB3XZxYQs9NMpqoObeUlI6eDOGe6U=;
-        b=KjXWzhhDfaDJ5wVmnWL4lj7Pv6oSnDHEldOzKUykChZNqCY8snsrj54KPAdZ+QlFLY
-         uKDF8HH8fg7qaii9Iaqnpbq8qH1K320w17lB0V/gQxErzVTUocssH7jXLAovlYvswNld
-         d9awLwgIcIMvgyjNrc98l4quPb0mM06fn5Z1ovJ+M0jxd11S9TIti67iAKvu0t8/OY3S
-         a/f+kp3Ty2Hc39Zu8GEDUQkKEiF9DKkSZFqeQJ4jEerCE64WKj4n3bqhK2aRgSKIVjB0
-         tX1e6gh+nTAMXARCRTGn1bgEj6vRKVxCfX5/WtudOz+/hAO9mK+acgyhv4o4Sg+c+e4F
-         C7UA==
-X-Gm-Message-State: ANoB5pmKyL77RMgNIbb/QLxSJn/G/LoAiQEZxmIdAq/rbuzORJo3DIdn
-        2RZy+bnCzUur7d0huF0dYpX+XwfqsynpbQ==
-X-Google-Smtp-Source: AA0mqf64LXZ7GWl8ZnXJP/+7q4A0IUL/2bafvU8oDu00ilAxJDPsiODsd5wEor2VuZysXB4/WvGHjg==
-X-Received: by 2002:a17:906:b013:b0:7ba:fcc1:f284 with SMTP id v19-20020a170906b01300b007bafcc1f284mr14580532ejy.73.1670824620445;
-        Sun, 11 Dec 2022 21:57:00 -0800 (PST)
+        b=Q9/SEOhzmPBzz9BQ5IK4h59IJaYKgX3zHqdHYJTijme36kC0KskSjUOBSu2s7FLLrC
+         Cp4pc0JDtWOcByEs1I2PhEgKWhWNWDbD4rkVmqh493yxWAJgKudGk+5hVxsyhBMP7foR
+         I4k223/1VOd5v6vW/FKBZdPgB54/b0kl3sNCqBax6bvxoDO6wT/Ua3TyZlkJutRi9bma
+         WAzUJTd5aBkU4K19XLPbKIc68ppu82/MAYd6BtDKolikNseDQyeaTRSS1j4t/lmpA5Qs
+         3VlZr1jo285PXKv8Kv8GuuZFP8qGVomXbUEIrBaqTKSLBcY/nT8Bgvpj4elcLLxlDjBQ
+         VjXA==
+X-Gm-Message-State: ANoB5pmnEedgkwoqTkKIGl3YRf3KSnXp0CDWQNjmQD7cb/ro+QF8WISs
+        cADLgSmqa6uFa5LFdy53FnCL8TqpyxSGPQ==
+X-Google-Smtp-Source: AA0mqf6sOIbwqdmzmTGHt1YW2HT4nuZpobdVrWOwQH0OPxjniz4MSzB08im/Lb/SEEfeJ8pv5fcC2w==
+X-Received: by 2002:a50:ec89:0:b0:46f:a73d:367c with SMTP id e9-20020a50ec89000000b0046fa73d367cmr4976062edr.34.1670824912574;
+        Sun, 11 Dec 2022 22:01:52 -0800 (PST)
 Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id eq17-20020a170907291100b007a4e02e32ffsm2869017ejc.60.2022.12.11.21.56.59
+        by smtp.gmail.com with ESMTPSA id ee48-20020a056402293000b004615f7495e0sm3385134edb.8.2022.12.11.22.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 21:57:00 -0800 (PST)
+        Sun, 11 Dec 2022 22:01:52 -0800 (PST)
 From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Date:   Mon, 12 Dec 2022 00:58:17 +0100
 Subject: [PATCH] of: fdt: Honor CONFIG_CMDLINE* even without /chosen node
-Cc:     Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linusw@kernel.org>
 To:     devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>
-Cc:     Lukasz Majewski <lukma@denx.de>
-Cc:     Linus Walleij <linusw@kernel.org>
-Message-ID: <8c17ab48c809a70d9f9e9fa195cf0d818c763245.camel@gmail.com>
+Message-ID: <11af73e05bad75e4ef49067515e3214f6d944b3d.camel@gmail.com>
 MIME-Version: 1.0
 User-Agent: Evolution 3.44.4 
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
