@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE9C6492B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA4F6492B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiLKGRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S230076AbiLKGRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiLKGRb (ORCPT
+        with ESMTP id S229942AbiLKGRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 11 Dec 2022 01:17:31 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1186412D33
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:30 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id c13so6471939pfp.5
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:30 -0800 (PST)
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4989812D38
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:31 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id t17so8847992pjo.3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=I1zT46a2qB5mE3jfFp3rNkiM+NV72r9+YjUvfROrgcA=;
-        b=KdaQHc3p4dFuOytgBX9ynpsKvo2jXJFk32WM58zoDXit3AA+mT/KNXeX8o1b1ZBoiE
-         iRmx9Q2tw5wxZ533ODjKUFMefRPQ86bGvynNOMz1BgFZI2ho5tIAO83TPssrW4/Bi7x0
-         PIireN3Hx1RpmPupDbybiqPrP/S9J6UZfVTmhElUcsxVTEyaMx/FDQj37c+M3LhNkmW/
-         n94gtuFa13EIVSsREy0p9g0Q0g0mSodQ75KnHzVm6iqRiOpPrgCAHDQR7b0BQtG4i4SB
-         Q5Tav9SRJimhoOogJgECX8ozocXgZdxhIQM6p0i+6rtJPMjIqMZdSSagbi2ngfsw2ijg
-         5sIQ==
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qw2lBl1FsFeMLJzVkNLD3m+gCDg30pmLyglZrYVzORA=;
+        b=fQa8J4z5O4qKsDtySodfbKPdNketzec2+60hqr/JE6LCw17SQOh1dTVr/Oza+7vir0
+         sZRhwPyI3ys25qRCLq6204ll/qDm+Jm74NNZDMVlr9zVIkhaucp+dRT0YwqyqUHupn7D
+         fsUz/Le7UyHidFZOIF8vJIK+lhgZpGdUxipUsh87u1NsuRJZd30zwJ4G7NJan6KymGhW
+         pulUjbd4BT8HtR4kDJFADZ5fUk+sPHVSD27ebZTHvty3YBCKHwM19+iTWyfEE5lfNrHs
+         /u4/fhicM7U0sYsdzvbW3jCAk3UU4P63qofT9jfOi5QfhU+SSb7/oZoxaIsZv8jmon2G
+         pnGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:message-id:date
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I1zT46a2qB5mE3jfFp3rNkiM+NV72r9+YjUvfROrgcA=;
-        b=J+hCc1rhC5s2HtMs70shaMI/er4PXc5x0hzDEfLaUerPYS4s8vLmmfy3ST+iqVE3qJ
-         9/tGBhxxgLRKszCrNX8C3A87r20wVR1pBbMpXjewFzLp1z7xFT+1VJOlJPnwxpHldmq8
-         LvwXAsTink2n+KGHq2gvn9/XknxBKHRlABER2Yh7ZCR6r6eBdtEO1C0OC1HLvPool8/Q
-         2n3O1I+3+ieN6Z/H850AOkFWR5OB81v7OFgs/ZqbXZL0YD9mXqSnMx10GknMQP9Q6jg1
-         DuhVGYGRBNl2wP/vk7/+XY81vljrSpVcaKco4v7IEA0LPCzyqrGb77SDHmO9lkYIXSDQ
-         3ycg==
-X-Gm-Message-State: ANoB5pkgSRi/WlJ7HQbpJHuQVHIeuLdaih0zpO0krT5FCjSjzU274q3f
-        6lRR1qJDoRtSRyHEoVH+xqm0Mg==
-X-Google-Smtp-Source: AA0mqf7n/cK/2L6C7EHdWhXnuZjhBJHwb6nNRSpHPDMLVziObOYMiAnd02w1KWFdkj/BCMG1iRqOdQ==
-X-Received: by 2002:a05:6a00:1912:b0:56b:ca7a:2de2 with SMTP id y18-20020a056a00191200b0056bca7a2de2mr14109964pfi.14.1670739449466;
-        Sat, 10 Dec 2022 22:17:29 -0800 (PST)
+        h=to:from:cc:content-transfer-encoding:mime-version:references
+         :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qw2lBl1FsFeMLJzVkNLD3m+gCDg30pmLyglZrYVzORA=;
+        b=iDBh8yh/tARnD7qeRI0Ozvrj57g0XqzdX9idLae7NItNYmzHJ5yeqWcrn2OdZpAi+k
+         l5p86G6LEQFho2VcYCiIYxnnlKOSFw4sioivPfaeLpxmfuipyAROr/2l8w1sF3Bu4mrU
+         3jMiTA6JdB5zV2EQho7n+ShnhPxpss2sOQcXYqx0h6Abh7AhL+bUeuHBAJVNb8hR/f3m
+         7r0aKXSeGOpzX1+IrCzhio/xzfssOFuptsF6++O/UO8RMHcnsns6rS+qkuM/0HHFvIM4
+         14diyCDA+zjl/ba/i3ho+pjy9GPO8RU9um5UvO1KD0kTyiEvm+Rntw/QYGhs/WS0pnLJ
+         /wYg==
+X-Gm-Message-State: ANoB5pmDjB5v/EyXmkqPjiIoNQIaHCVJsOi/C5eFYj7cfKqzn3sivvf8
+        FkXOXq5B1Y7A8LPPCV9KCPUFzw==
+X-Google-Smtp-Source: AA0mqf64cRgQgYJbI6vw3lgox0Y0zQeJU9EfnSOUsxyj5zxvVuY57NisPBozGNZqVx95fXsJuwORJw==
+X-Received: by 2002:a17:903:41c5:b0:189:cec6:7ac5 with SMTP id u5-20020a17090341c500b00189cec67ac5mr16799226ple.44.1670739450625;
+        Sat, 10 Dec 2022 22:17:30 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id b3-20020aa79503000000b00576f9773c80sm3510917pfp.206.2022.12.10.22.17.28
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b00183e2a96414sm3782118pln.121.2022.12.10.22.17.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:28 -0800 (PST)
-Subject: [PATCH v2 00/24] Remove COMMAND_LINE_SIZE from uapi
-Date:   Sat, 10 Dec 2022 22:13:34 -0800
-Message-Id: <20221211061358.28035-1-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:30 -0800 (PST)
+Subject: [PATCH v2 01/24] alpha: Remove COMMAND_LINE_SIZE from uapi
+Date:   Sat, 10 Dec 2022 22:13:35 -0800
+Message-Id: <20221211061358.28035-2-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
+References: <20221211061358.28035-1-palmer@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>
 From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -67,33 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This all came up in the context of increasing COMMAND_LINE_SIZE in the
-RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-maximum length of /proc/cmdline and userspace could staticly rely on
-that to be correct.
+As far as I can tell this is not used by userspace and thus should not
+be part of the user-visible API.
 
-Usually I wouldn't mess around with changing this sort of thing, but
-PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-increasing, but they're from before the UAPI split so I'm not quite sure
-what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-asm-generic/setup.h.").
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+This leaves an empty <uapi/asm/setup.h>, which will soon be cleaned up.
+---
+ arch/alpha/include/asm/setup.h      | 4 ++--
+ arch/alpha/include/uapi/asm/setup.h | 2 --
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-part of the uapi to begin with, and userspace should be able to handle
-/proc/cmdline of whatever length it turns out to be.  I don't see any
-references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-search, but that's not really enough to consider it unused on my end.
-
-The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-shouldn't be part of uapi, so this now touches all the ports.  I've
-tried to split this all out and leave it bisectable, but I haven't
-tested it all that aggressively.
-
-Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
-* Touches every arch.
-
+diff --git a/arch/alpha/include/asm/setup.h b/arch/alpha/include/asm/setup.h
+index 262aab99e391..ea08ca45efa8 100644
+--- a/arch/alpha/include/asm/setup.h
++++ b/arch/alpha/include/asm/setup.h
+@@ -2,8 +2,6 @@
+ #ifndef __ALPHA_SETUP_H
+ #define __ALPHA_SETUP_H
+ 
+-#include <uapi/asm/setup.h>
+-
+ /*
+  * We leave one page for the initial stack page, and one page for
+  * the initial process structure. Also, the console eats 3 MB for
+@@ -14,6 +12,8 @@
+ /* Remove when official MILO sources have ELF support: */
+ #define BOOT_SIZE	(16*1024)
+ 
++#define COMMAND_LINE_SIZE	256
++
+ #ifdef CONFIG_ALPHA_LEGACY_START_ADDRESS
+ #define KERNEL_START_PHYS	0x300000 /* Old bootloaders hardcoded this.  */
+ #else
+diff --git a/arch/alpha/include/uapi/asm/setup.h b/arch/alpha/include/uapi/asm/setup.h
+index f881ea5947cb..9b3b5ba39b1d 100644
+--- a/arch/alpha/include/uapi/asm/setup.h
++++ b/arch/alpha/include/uapi/asm/setup.h
+@@ -2,6 +2,4 @@
+ #ifndef _UAPI__ALPHA_SETUP_H
+ #define _UAPI__ALPHA_SETUP_H
+ 
+-#define COMMAND_LINE_SIZE	256
+-
+ #endif /* _UAPI__ALPHA_SETUP_H */
+-- 
+2.38.1
 
