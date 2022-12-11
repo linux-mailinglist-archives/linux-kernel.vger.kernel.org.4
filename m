@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1506492C5
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C831F6492C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 07:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiLKGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 01:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S230064AbiLKGS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 01:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiLKGSE (ORCPT
+        with ESMTP id S230118AbiLKGSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 01:18:04 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F98DFCD
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:41 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id w23so8937130ply.12
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:41 -0800 (PST)
+        Sun, 11 Dec 2022 01:18:15 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8181107
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:42 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gt4so7197629pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 22:17:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cPBm/ly9RBblZf7v4uTZvkbr2yaBuLRE19pxufz2+Qo=;
-        b=F0XaqPv5r27ASFNBC8Kjl1AIj8tX1o+JwZGTjClrmmsW0vWdoqo9TZ2/HEtXgCGiI1
-         TJK69S6h1coA2iAXKBQus6kq1X3jNAY5GuuhbkxUf7UUrQQjtqrVgCbDBbPhv4NubNrh
-         w9hC6+KWWIHADOVxYLrO+nR0ObrwTlO/7030E4D8jrlYJkAl2LmNagzYCuW1RjFkbT/v
-         lQNBn8qrh4n/0xKtPerhoEXY5q/GNl4QoeTxpU/NTtFg2UXklQgGj8cT9ly7gz9afL/7
-         L9SU9NUMSnMG5vPjHM//6So6SbCkx2AMsafAXQw32kAHwS3kYcUtyac26GY5AZ2EXinu
-         dCsw==
+        bh=nH4URxE9NVaJTKcN9EBTlF7LMLUdCbttgGWf5jBmHOA=;
+        b=3orbDVcKBSfVDHyPZ2e8HbUMgcHencxMMKa4rIJa/Ef4pi9/g1RPR7X+l3iqJB+ygS
+         mzRQEZRtdaINk+4wSrjRB/B/xDklotbWBlsUXg7G2A6B0nP0fLqegAcVktXppEq+GCIM
+         UIZC0ip0QVbWMg0REf0hCko0wE/GK6i2qNm4oa03YQwQqKyPkpKSfMe/u8lS/3HDC6Uj
+         srB8ceAMm+k0vnesbOKpZ6zrsUTmKA10Dwk351orMLp/spLHYnDuqxpUpweD9BSAG6Wz
+         lqB86iNQlj8M1A6QYXNUuYGcfO9foyUHscYfwWYZQYXdKxz1SuHDYR2KCY+np6HA/+Ls
+         YYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cPBm/ly9RBblZf7v4uTZvkbr2yaBuLRE19pxufz2+Qo=;
-        b=m3+7Dqm7lNRoXUE2llE5UWmxSCqEuaSqhEA9yQKUxkfUmrqXDEdYbiUNNfrkTjuNZo
-         OotnMX/uz3Lq2vNAxoQQERRsa6xhg27vML/IIJ7g7N3vnmuUAR/Rft3UYPx9ORs9OLtS
-         tssudUvIBo5eeC/t3QVe5PfIkEt4d/et/2gtYyq60IsFYiYlJxIKqQhFs4SXfXZivQmV
-         /KpdVlAEm/mG1+ZWPBt/xmIF3LnYQupBi8AvR3KAZu7UPqoRVMXXN3kzsU09Vhm/2sdh
-         bkE0CQmCkIslpGWAAGIgo0qDYMWk5i+vS2koBSHUZ+aJSXINXfpKii0d62/nTKHUFtGU
-         7/Wg==
-X-Gm-Message-State: ANoB5pkdCXtsIx1MeiQm59CeEpY0UydKWPcyLFebTLyfyo+f6rVtyl7n
-        GrKNNrG8doN9NyKiUSRESwt13w==
-X-Google-Smtp-Source: AA0mqf5RiBom9LXJyHsPRAI906ymLoJ4EJNLMvTgsmm9Sv2iWlFqAnP6+oKBM8BWsTlJlF8UTnppsw==
-X-Received: by 2002:a17:902:744b:b0:189:9cfd:be72 with SMTP id e11-20020a170902744b00b001899cfdbe72mr11663209plt.8.1670739460650;
-        Sat, 10 Dec 2022 22:17:40 -0800 (PST)
+        bh=nH4URxE9NVaJTKcN9EBTlF7LMLUdCbttgGWf5jBmHOA=;
+        b=eBsn4m/bm/E5Y5RMcAIXzRdta2VmymzpjW0oliUn8dy0K5Y54WCMsi8y1opszFKCt/
+         3yNm/J9UICbTLaHNozcXhqAcZUZKXLpYCC63VinebV4cLlbFlL7RTErN8xKT7GioGrGO
+         vqJscwTuL4NIe3AC17WaBIDip7WX2VdlmH34QpwrJNszUE9/rT7Bvu/DILsnOM+FUsZM
+         G147FNs25jtbq1iy066Rvm4ZwuJeaTNxx2Oq7mEdSb7QjEd9YtLnUdIqU9kcMxs07iOE
+         NZEwV38tM0gEhHHon1R6vNStAJuTlWZJO5nyH7O+/qDGXnMYS2FNTXfY+k18fKFdhiGs
+         NLJA==
+X-Gm-Message-State: ANoB5plfk++pFV+OYQZ0tsYIH3ivmH/r9tlTljJj9A6QiSGkjJlpzB//
+        vKXywEddqfpNzZpQf3lODzyo+IKy9MQdYrXK
+X-Google-Smtp-Source: AA0mqf4vNeKfYd3BIUU9pS0WakV6tU4/usPHe7L0aB/tJf330rNB1gfmkMvHnFUVTEhJZZPUr1ivJg==
+X-Received: by 2002:a17:902:e787:b0:187:1d13:f6d1 with SMTP id cp7-20020a170902e78700b001871d13f6d1mr11968057plb.52.1670739461672;
+        Sat, 10 Dec 2022 22:17:41 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b00186881e1feasm3831421plh.112.2022.12.10.22.17.40
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902c64300b001869f2120a4sm3821340pls.94.2022.12.10.22.17.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:40 -0800 (PST)
-Subject: [PATCH v2 09/24] powerpc: Remove COMMAND_LINE_SIZE from uapi
-Date:   Sat, 10 Dec 2022 22:13:43 -0800
-Message-Id: <20221211061358.28035-10-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:41 -0800 (PST)
+Subject: [PATCH v2 10/24] sparc: Remove COMMAND_LINE_SIZE from uapi
+Date:   Sat, 10 Dec 2022 22:13:44 -0800
+Message-Id: <20221211061358.28035-11-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
 References: <20221211061358.28035-1-palmer@rivosinc.com>
@@ -78,34 +78,43 @@ Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
 This leaves an empty <uapi/asm/setup.h>, which will soon be cleaned up.
 ---
- arch/powerpc/include/asm/setup.h      | 2 +-
- arch/powerpc/include/uapi/asm/setup.h | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ arch/sparc/include/asm/setup.h      | 6 +++++-
+ arch/sparc/include/uapi/asm/setup.h | 7 -------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/setup.h b/arch/powerpc/include/asm/setup.h
-index e29e83f8a89c..31786d1db2ef 100644
---- a/arch/powerpc/include/asm/setup.h
-+++ b/arch/powerpc/include/asm/setup.h
-@@ -2,7 +2,7 @@
- #ifndef _ASM_POWERPC_SETUP_H
- #define _ASM_POWERPC_SETUP_H
+diff --git a/arch/sparc/include/asm/setup.h b/arch/sparc/include/asm/setup.h
+index 72205684e51e..d1384ed92547 100644
+--- a/arch/sparc/include/asm/setup.h
++++ b/arch/sparc/include/asm/setup.h
+@@ -7,7 +7,11 @@
+ 
+ #include <linux/interrupt.h>
  
 -#include <uapi/asm/setup.h>
-+#define COMMAND_LINE_SIZE	2048
++#if defined(__sparc__) && defined(__arch64__)
++# define COMMAND_LINE_SIZE 2048
++#else
++# define COMMAND_LINE_SIZE 256
++#endif
  
- #ifndef __ASSEMBLY__
- extern void ppc_printk_progress(char *s, unsigned short hex);
-diff --git a/arch/powerpc/include/uapi/asm/setup.h b/arch/powerpc/include/uapi/asm/setup.h
-index c54940b09d06..f2ca747aa45b 100644
---- a/arch/powerpc/include/uapi/asm/setup.h
-+++ b/arch/powerpc/include/uapi/asm/setup.h
-@@ -2,6 +2,4 @@
- #ifndef _UAPI_ASM_POWERPC_SETUP_H
- #define _UAPI_ASM_POWERPC_SETUP_H
+ extern char reboot_command[];
  
--#define COMMAND_LINE_SIZE	2048
+diff --git a/arch/sparc/include/uapi/asm/setup.h b/arch/sparc/include/uapi/asm/setup.h
+index 3c208a4dd464..c3cf1b0d30b3 100644
+--- a/arch/sparc/include/uapi/asm/setup.h
++++ b/arch/sparc/include/uapi/asm/setup.h
+@@ -6,11 +6,4 @@
+ #ifndef _UAPI_SPARC_SETUP_H
+ #define _UAPI_SPARC_SETUP_H
+ 
+-#if defined(__sparc__) && defined(__arch64__)
+-# define COMMAND_LINE_SIZE 2048
+-#else
+-# define COMMAND_LINE_SIZE 256
+-#endif
 -
- #endif /* _UAPI_ASM_POWERPC_SETUP_H */
+-
+ #endif /* _UAPI_SPARC_SETUP_H */
 -- 
 2.38.1
 
