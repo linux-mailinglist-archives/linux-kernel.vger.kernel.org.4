@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB84649365
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 10:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9747C64939E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 11:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiLKJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 04:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S229909AbiLKKVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 05:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiLKJt1 (ORCPT
+        with ESMTP id S229568AbiLKKVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 04:49:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EC210FD9;
-        Sun, 11 Dec 2022 01:49:26 -0800 (PST)
+        Sun, 11 Dec 2022 05:21:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BFA659D
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:21:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C67EB80915;
-        Sun, 11 Dec 2022 09:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12EEC433D2;
-        Sun, 11 Dec 2022 09:49:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B570C60DC6
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 10:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16432C433D2;
+        Sun, 11 Dec 2022 10:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670752164;
-        bh=3GMvyRizM+Rxblh7pHwRbabkGYlPbTfIEjgrgW67JR4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tlxoHj+2xtDqNBEqNRf8IF0m7ZkxeDb7Yu/5Zs2b510WNs6EaenMSHFv8svwpUU5B
-         4Szgb6+Pn4UHMwRmr7ubmnUIBEv4uYeQ8JJYbaGefew1qSvkDh47ZNmtsSXggqdn/u
-         eCyF/uBLHxOg7dzhOU3xVqi2BueWZnmNouEVg2ZOc6fZgWrv8GBEjQ1o0ddD+KbQ01
-         64iNEJyr7vFkM1H+sx7frCHzYT8sT0yV6mfjB3GoU07Sr60r01SqwiMi0QFZlzT740
-         Q3meivDTL3+SdQjZbsYoZk16VhkXTSeDSXf0ntWWP5F7bEfQ8QUdNqX6yRwsKDEhod
-         S3wV1AOBedpzg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH] kbuild: do not sort after reading modules.order
-Date:   Sun, 11 Dec 2022 18:49:18 +0900
-Message-Id: <20221211094919.2717594-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1670754069;
+        bh=1G9KSqe0vdq9ccr1X0nvxLfUQZTSlSthV652SmeztGU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KjBSr1RPXnBgQP+doaOlXWMGKT9NRaZxT1yTIy8xiKOKM2MSU8iaU4dSvudHWF6sX
+         4qQ87mxy8dTdx90Aslihda8OBwoHAoh5dqUz/P9Yj59UAZ3QfT+4O1XFtTh8QMHabv
+         lfPS9qBBDRD5iXHot7Pj0rxMGjKzVPCOZwejwN8b7cEjeatnoFpNgMYnxzLZWz7RNG
+         p0l10zRrLQfuUiKXQg9Csb2rI0S27bYWyR52MtXFCk5YnOOHoUaROUi97hehd5X2/C
+         FKrwQoUAajE+5fmt77Gp/2xhSXzD1yiJYsqLMNFwEj/YBOn6HeBoVVrmGxT7nT9fUm
+         FlM5v0YtVAbeQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p4JSE-00Btdg-Ph;
+        Sun, 11 Dec 2022 10:21:06 +0000
+Date:   Sun, 11 Dec 2022 10:21:06 +0000
+Message-ID: <868rjeqm0d.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Akihiko Odaki <akihiko.odaki@gmail.com>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 0/3] KVM: arm64: Handle CCSIDR associativity mismatches
+In-Reply-To: <88bdcca8-4df4-15ff-2e88-c53255b1fe30@daynix.com>
+References: <20221201104914.28944-1-akihiko.odaki@daynix.com>
+        <867czbmlh1.wl-maz@kernel.org>
+        <50499ee9-33fe-4f5d-9d0a-76ceef038333@daynix.com>
+        <87lenqu37t.wl-maz@kernel.org>
+        <525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com>
+        <87h6yeta8b.wl-maz@kernel.org>
+        <d54e7e38-cdf6-ef5d-a6e6-e30ad8a59034@gmail.com>
+        <87bkojtdvy.wl-maz@kernel.org>
+        <88bdcca8-4df4-15ff-2e88-c53255b1fe30@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, akihiko.odaki@gmail.com, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,44 +84,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-modules.order lists modules in the deterministic order (that is why
-"modules order"), and there is no duplication in the list.
+On Sun, 11 Dec 2022 05:25:31 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> On 2022/12/04 23:57, Marc Zyngier wrote:
+> > On Fri, 02 Dec 2022 09:55:24 +0000,
+> > Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+> >> 
+> >> On 2022/12/02 18:40, Marc Zyngier wrote:
+> >>> On Fri, 02 Dec 2022 05:17:12 +0000,
+> >>> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> >>>> 
+> >>>>>> On M2 MacBook Air, I have seen no other difference in standard ID
+> >>>>>> registers and CCSIDRs are exceptions. Perhaps Apple designed this way
+> >>>>>> so that macOS's Hypervisor can freely migrate vCPU, but I can't assure
+> >>>>>> that without more analysis. This is still enough to migrate vCPU
+> >>>>>> running Linux at least.
+> >>>>> 
+> >>>>> I guess that MacOS hides more of the underlying HW than KVM does. And
+> >>>>> KVM definitely doesn't hide the MIDR_EL1 registers, which *are*
+> >>>>> different between the two clusters.
+> >>>> 
+> >>>> It seems KVM stores a MIDR value of a CPU and reuse it as "invariant"
+> >>>> value for ioctls while it exposes the MIDR value each physical CPU
+> >>>> owns to vCPU.
+> >>> 
+> >>> This only affects the VMM though, and not the guest which sees the
+> >>> MIDR of the CPU it runs on. The problem is that at short of pinning
+> >>> the vcpus, you don't know where they will run. So any value is fair
+> >>> game.
+> >> 
+> >> Yes, my concern is that VMM can be confused if it sees something
+> >> different from what the guest on the vCPU sees.
+> > 
+> > Well, this has been part of the ABI for about 10 years, since Rusty
+> > introduced this notion of invariant, so userspace is already working
+> > around it if that's an actual issue.
+> 
+> In that case, I think it is better to document that the interface is
+> not working properly and deprecated.
 
-$(sort ) is pointless.
+This means nothing. Deprecating an API doesn't mean we don't support
+it and doesn't solve any issue for existing userspace.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+I'd rather not change anything, TBH. Existing userspace already knows
+how to deal with this,
 
- scripts/Makefile.modfinal | 2 +-
- scripts/Makefile.modinst  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> > 
+> > This would be easily addressed though, and shouldn't result in any
+> > issue. The following should do the trick (only lightly tested on an
+> > M1).
+> 
+> This can be problematic when restoring vcpu state saved with the old
+> kernel. A possible solution is to allow the userspace to overwrite
+> MIDR_EL1 as proposed for CCSIDR_EL1.
 
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 25bedd83644b..4705d32388f3 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
- include $(srctree)/scripts/Makefile.lib
- 
- # find all modules listed in modules.order
--modules := $(sort $(shell cat $(MODORDER)))
-+modules := $(shell cat $(MODORDER))
- 
- __modfinal: $(modules)
- 	@:
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index a4c987c23750..f4cff42069ad 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -9,7 +9,7 @@ __modinst:
- include include/config/auto.conf
- include $(srctree)/scripts/Kbuild.include
- 
--modules := $(sort $(shell cat $(MODORDER)))
-+modules := $(shell cat $(MODORDER))
- 
- ifeq ($(KBUILD_EXTMOD),)
- dst := $(MODLIB)/kernel
+That would break most guests for obvious reasons. At best what can be
+done is to make the MIDR WI.
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
