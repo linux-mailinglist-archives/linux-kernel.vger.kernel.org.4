@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314D664920F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D5D649211
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiLKCw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 21:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S229983AbiLKCwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 21:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiLKCwZ (ORCPT
+        with ESMTP id S229919AbiLKCw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 21:52:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F913F27;
-        Sat, 10 Dec 2022 18:52:23 -0800 (PST)
+        Sat, 10 Dec 2022 21:52:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA9F13F35
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 18:52:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F72360D39;
-        Sun, 11 Dec 2022 02:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E86FC433EF;
-        Sun, 11 Dec 2022 02:52:20 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DEA44CE0ADC
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD9BBC433D2;
+        Sun, 11 Dec 2022 02:52:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670727142;
-        bh=rlKZwK4Kj1fXsPuO+MKRZgsrKdoPPkaovawTnxF2v9A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gWPF8u48O67+JbK7s4pT1emnY6txtEG37xTU/4QNsWfmg9cg4oBF7HAtdSIdgzB/z
-         OLTF5u8hy2dNJw9Liopf/GjC2QXwOcqU8CE1Wl7RkzPVkTBe2p5f3LeZ+1Mdzdho4V
-         UVd7ZdWeJjtfBtZ5M2VgpbYdkjlSXy76u+IgV7d49H6H4cZVIPSrlE1qxvXgU8J/tX
-         yqIjREuC08ueh+Qt6RXe/YrotxMSg3oXR1X7ca4TBNolskrXluYcanrauT52Go/ttW
-         NTeQpVSJuWylX9d78paDwog5YF2nD7k3eQnsbcT6UsWmFcm54icPXWMfcRqV8zgvQJ
-         8y23ArxGsuptg==
-Date:   Sun, 11 Dec 2022 11:52:18 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-Message-Id: <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
-In-Reply-To: <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
-        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
-        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
-        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
-        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206233947.4c27cc9d@gandalf.local.home>
-        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-        <20221207074806.6f869be2@gandalf.local.home>
-        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        s=k20201202; t=1670727144;
+        bh=yVMfp1uldktAIyVGvt7Bwh+o9jSNVgi13RdkbJkMSso=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ii8rmZPLgA65CJBwT9eRtatBx4UujWU5YmhkOIbXTyN/p8hD3c0QeM0Yg3XyxuA4e
+         0mS7XyVuhbpQrg8pKgTB2ZgLPak8OBEVwvUCgFjSaapqe5FW2UJay+PoYCYQYFM6Sq
+         MuzVq1pq8Cn15ourdetznTtcScCwSQ2h5S5Sy9ukKKZXGAofsvPSKcOjFRKJ+NTWzn
+         fKswUWgUgAdMpfXHfO6orI4DhhnWvmLLwaVVDbsq426NjAhjujhkt+vzAZku9ADsWq
+         mwUXnCZZY0E5GkGRPbCy2QSvl23+zQboHu97R2eDzsvtulb+0VKDMqruWJFFTF6Jjb
+         CMTSQ/WBcXRcQ==
+Message-ID: <810bd221-1f35-db79-e9f3-a521464b3eaf@kernel.org>
+Date:   Sun, 11 Dec 2022 10:52:20 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     Yuwei Guan <ssawgyw@gmail.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
+References: <20221209112813.73700-1-Yuwei.Guan@zeekrlife.com>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH] f2fs: do decrease_sleep_time() if any of the victims have
+ been selected
+In-Reply-To: <20221209112813.73700-1-Yuwei.Guan@zeekrlife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -77,104 +58,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexei,
-
-On Wed, 7 Dec 2022 20:36:28 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
-> And that happens all the time on lkml. Somebody reports a bug and kernel devs
-> jump on the poor person:
-> "Can you repro without taint?",
-> "Can you repro with upstream kernel?"
-> This is discouraging.
-> The 'taint' concept makes it easier for kernel devs to ignore bug reports
-> and push back on the reporter.
-> Do it few times and people stop reporting bugs.
-
-That seems off topic for me. You seems complained against the taint flag
-itself.
-
-> Say, this particular bug in rethook was found by one of our BPF CI developers.
-> They're not very familiar with the kernel, but they can see plenty of 'rethook'
-> references in the stack trace, lookup MAINTAINER file and ping Massami,
-> but to the question "can you repro without taint?" they can only say NO,
-> because this is how our CI works. So they will keep silence and the bug will be lost.
-
-BTW, this sounds like the BPF CI system design issue. If user is NOT easily
-identifying what test caused the issue (e.g. what tests ran on the system
-until the bug was found), the CI system is totally useless, because after
-finding a problem, it must be investigated to solve the problem.
-
-Without investigation, how would you usually fix the bug??
-
-> That's not the only reason why I'm against generalizing 'taint'.
-> Tainting because HW is misbehaving makes sense, but tainting because
-> of OoO module or because of live-patching does not.
-> It becomes an excuse that people abuse.
-
-yeah, it is possible to be abused. but that is the problem who
-abuse it.
-
-> Right now syzbot is finding all sorts of bugs. Most of the time syzbot
-> turns error injection on to find those allocation issues.
-> If syzbot reports will start coming as tainted there will be even less
-> attention to them. That will not be good.
-
-Hmm, what kind of error injection does syzbot do? I would like to know
-how it is used. For example, does that use only a specify set of
-injection points, or use all existing points?
-
-If the latter, I feel safer because syzbot ensures the current all
-ALLOW_ERROR_INJECTION() functions will work with error injection. If not,
-we need to consider removing the ALLOW_ERROR_INJECTION() from the
-function which is not tested well (or add this taint flag.)
-
-Documentation/fault-injection/fault-injection.rst has no explanation
-about ALLOW_ERROR_INJECTION(), but obviously the ALLOW_ERROR_INJECTION()
-marked functions and its caller MUST be designed safely against the
-error injection. e.g.
-
-- It must return an error code. (so EI_ETYPE_NONE must be removed)
-- Caller must check the return value always.
-  (but I thought this was the reason why we need this test framework...)
-- It should not run any 'effective' code before checking an error.
-  For example, increment counter, call other functions etc.
-  (this means it can return without any side-effect)
-
-Anything else?
-
-[...]
-> All these years we've been working on improving bpf introspection and
-> debuggability. Today crash dumps look like this:
->   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
->   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
->   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
->   __bpf_prog_run include/linux/filter.h:600 [inline]
->   bpf_prog_run include/linux/filter.h:607 [inline]
+On 2022/12/9 19:28, Yuwei Guan wrote:
+> In non-foreground gc mode, if no victim is selected, the gc process
+> will wait for no_gc_sleep_time before waking up again. In this
+> subsequent time, even though a victim will be selected, the gc process
+> still waits for no_gc_sleep_time before waking up. The configuration
+> of wait_ms is not reasonable.
 > 
-> The 2nd from the top is a bpf prog. The rest are kernel functions.
-> bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
->          ^^ is a prog tag   ^^ name of bpf prog
+> After any of the victims have been selected, we need to do
+> decrease_sleep_time() to reduce wait_ms.
 > 
-> If you do 'bpftool prog show' you can see both tag and name. 
-> 'bpftool prog dump jited'
-> dumps x86 code mixed with source line text.
-> Often enough +0x2b offset will have some C code right next to it.
-
-This is good, but this only works when the vmcore is dumped and
-on the stack. My concern about the function error injection is
-that makes some side effects, which can cause a problem afterwards
-(this means after unloading the bpf prog)
-
+> If it is GC_URGENT_HIGH or GC_URGENT_MID gc mode,
+> wait_ms will keep urgent_sleep_time after executing decrease_sleep_time().
 > 
-> One can monitor all prog load/unload via perf or via audit.
+> In decrease_sleep_time() wait_time will be reduced to max_sleep_time
+> from no_gc_sleep_time, if *wait is no_gc_sleep_time. And then it goes
+> down in the next step.
+> 
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+> ---
+>   fs/f2fs/gc.c | 2 ++
+>   fs/f2fs/gc.h | 7 ++++++-
+>   2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index f0c6506d8975..c023ffeb9268 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -141,6 +141,8 @@ static int gc_thread_func(void *data)
+>   			/* don't bother wait_ms by foreground gc */
+>   			if (!foreground)
+>   				wait_ms = gc_th->no_gc_sleep_time;
+> +		} else {
+> +			decrease_sleep_time(gc_th, &wait_ms);
 
-Ah, audit is helpful :), because we can dig the log what was loaded
-before crash.
+Once BGGC selects valid victim, it will go faster and fater?
 
+How about:
 
-Thank you,
+	} else {
+		/* reset wait_ms to default sleep time */
+		if (wait_ms == gc_th->no_gc_sleep_time)
+			wait_ms = gc_th->min_sleep_time;
+	}
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+
+>   		}
+>   
+>   		if (foreground)
+> diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+> index 19b956c2d697..6402584dcd72 100644
+> --- a/fs/f2fs/gc.h
+> +++ b/fs/f2fs/gc.h
+> @@ -150,8 +150,13 @@ static inline void decrease_sleep_time(struct f2fs_gc_kthread *gc_th,
+>   {
+>   	unsigned int min_time = gc_th->min_sleep_time;
+>   
+> -	if (*wait == gc_th->no_gc_sleep_time)
+> +	if (*wait == gc_th->urgent_sleep_time)
+> +		return;
+> +
+> +	if (*wait == gc_th->no_gc_sleep_time) {
+>   		*wait = gc_th->max_sleep_time;
+> +		return;
+> +	}
+>   
+>   	if ((long long)*wait - (long long)min_time < (long long)min_time)
+>   		*wait = min_time;
