@@ -2,114 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C45649414
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F860649416
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 13:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiLKMDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 07:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S230170AbiLKMFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 07:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiLKMDh (ORCPT
+        with ESMTP id S229891AbiLKMFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 07:03:37 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2CFB7F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 04:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670760216; x=1702296216;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=2lTKIKn3YaEWMXrVPAA/dLAQ0hnSuHhx+rusnpCkBng=;
-  b=eEWZ9OkAVpHFDUFMXxxTFa0iWs38Nhg++zEu/0Jxe7n2AH6gN/uBXZKf
-   IiTVF0PUVSIBa3RqeU/GzggyzNBsk2dGOlTWQoDr4kouxW8L2cnP389sW
-   FufYe1S6rHGePMhmRFHP579RvpO7C3Ks+ms2At7BJvTILTEyQqBuUehGX
-   1Tgg81VdVJRfkjBAI1svg9ZgNa60bDHY8Vy4WUl8EhLfPwBN5sLV8Wz/b
-   eOQWJt0RpxM0SvCkWmmD6htDgr8jEIQPakrvo5rG5kyuwoz9GoiUI04ig
-   ImBXgxXdP7UIdSfC3d73HMjNU6lYwGnUg4lXaWuuc9l5zgTXyRNkCo33b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="298042965"
-X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
-   d="scan'208";a="298042965"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 04:03:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="754591659"
-X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
-   d="scan'208";a="754591659"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 04:03:34 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Kairui Song <ryncsn@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 5/5] swap: avoid ra statistic lost when swapin races
-References: <20221208180209.50845-1-ryncsn@gmail.com>
-        <20221208180209.50845-6-ryncsn@gmail.com>
-        <Y5I3lSfsTmZ6tlJk@casper.infradead.org>
-        <CAMgjq7AuY_oi9Rw2r8rnA_tr7NeEXAd0OgZ4sNz4CiVV+2i9Rg@mail.gmail.com>
-Date:   Sun, 11 Dec 2022 20:02:45 +0800
-In-Reply-To: <CAMgjq7AuY_oi9Rw2r8rnA_tr7NeEXAd0OgZ4sNz4CiVV+2i9Rg@mail.gmail.com>
-        (Kairui Song's message of "Fri, 9 Dec 2022 09:54:31 +0800")
-Message-ID: <87edt6qhay.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 11 Dec 2022 07:05:18 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2071.outbound.protection.outlook.com [40.107.101.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5048CC47;
+        Sun, 11 Dec 2022 04:05:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lQNVBuH086EX96WXWRd1jBtfVXHN9Dxt8pwOfOeB++j3dY/tkBIJYorPYxZRhtAhMi89OjoFaZtPE1QRvPrtcLgNG01zt5Le8eZ43eupsV53ddyeNIvAGabLuDZ3IdO2nTx/3HoxdTi0r7eeeym3sCemGIpgQfIRdc2N/EpgBI0Qp1WhcXoaMdwYmZr88MtX6uicm6OeLOSVycrIPtPOBXtStZKVGijFKwXtmjjVUMW64d2A8IsyFgN2dV6w6ZPWwuX+k1KGrSs8gCFf+hFV7zyKENgZ7zrpt5ekVJUaW5NWPaklGZVYDgZ1bpFt2nAYxY5NxnJAY8yy2V8u8QWJVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kv7g7sf9afLZlqc+/la3k4fLfmuOGUWpKkUl+1WJECU=;
+ b=PuaiO8NNU0HlptHGIQpxzQa1s37WOaprehmmDOg3JovLsWk9Eb5LKir2OZ5ihTdpZpSblJaIRm/ShQtam6JZY3aSERaSChpOkHcU/GXuRophSFt+QTBPeF6X+id4XJ31m1Fw5AZ4alyoIo0MDu+Y7/fcaPX407XfNlFTeWklBQGm2sbRezzwZrWoS7cgp1wfI1pF44k6vUshfidxLVnHHoEndvZ7lB0R28YJjDAmipv+rmCMdFLm9++9XMmzyj9tNLObkRYI9J8jBLrqA1LsptnPsS1LNL+zhRYu4baIpJbJImf+sBRooMRQOgc9V37JAK02z6KVNYWbt/TS7Zpggg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kv7g7sf9afLZlqc+/la3k4fLfmuOGUWpKkUl+1WJECU=;
+ b=i/AZbFzL2c8DQLuW6S5Yc5MzvPe8yNvOeq3xjA4yb0VA94tAqDMt4LpIDoABkEhyJkonnEFySq/MmD0rp16U8N4Rlg2TPdDOuocV+PCaGolq+A2HwFwW+fMM3ZK7z/9eopqBj/spy2W7cuMyE4HlZKf+MRd+PcaVgYBnv+BQKByMDWg9+MlywZw5GJTmCFhLzQsSdxyUSUUZRjTS0Ki9HBKXPcaN8nH12Ap0+vetr3PPQ+QX/oTEP1vp2A8pvjG+fJx1YeGsWK8Ut2eADIsMti/WbDg3DnFVoodQN8Jc6M0MivgsK4GrgQOxgsBtDvBA8khOEqGTlDqOTSvuQNC0sA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
+ by CH2PR12MB4102.namprd12.prod.outlook.com (2603:10b6:610:a9::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Sun, 11 Dec
+ 2022 12:05:15 +0000
+Received: from DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::3fb9:3266:7937:44fc]) by DM4PR12MB5040.namprd12.prod.outlook.com
+ ([fe80::3fb9:3266:7937:44fc%8]) with mapi id 15.20.5880.019; Sun, 11 Dec 2022
+ 12:05:15 +0000
+Message-ID: <9bc8e614-a687-e419-f9fd-e3177cfb41dd@nvidia.com>
+Date:   Sun, 11 Dec 2022 14:05:04 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com,
+        Oren Duer <oren@nvidia.com>
+References: <20221206055816.292304-1-lei.rao@intel.com>
+ <20221206055816.292304-6-lei.rao@intel.com> <20221206062604.GB6595@lst.de>
+ <Y48+AaG5rSCviIhl@ziepe.ca> <20221206130901.GB24358@lst.de>
+ <Y49JNvdmRPNWw26q@ziepe.ca> <20221206140002.GB27689@lst.de>
+ <Y49PqoAhZOeraLVa@ziepe.ca> <20221206143126.GB30297@lst.de>
+ <Y49WNo7XWZ2aFfds@ziepe.ca> <20221206150131.GA32365@lst.de>
+From:   Max Gurtovoy <mgurtovoy@nvidia.com>
+In-Reply-To: <20221206150131.GA32365@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0214.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:33a::9) To DM4PR12MB5040.namprd12.prod.outlook.com
+ (2603:10b6:5:38b::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|CH2PR12MB4102:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c026b45-515e-4763-5689-08dadb6ff65c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Kv1AYbNoKSIHbUT1IlUmfUGUzkLOvOX4k59y4Pg1x5T8THrKwzE8dUTPk4mtYff2WwhdiZXezK7Uxsdwl+2SNFYtXAoXS+KCe9JYP3PQgW9kRxx+SC6iqiUxDsi/iBS1OhZisNt2t3PWxuCnKqTiwd5/kw2AUhxcNYjnWrEWD505c+iwvOEYiWP1rLr79ubV0ILD4HycTmAT0S4Hhtic2Dwu3fnvrXruXAy58XBPlrHszKYwk8T/s4wcJ+l5j++cJBDfqW18i58jZ5p5EjAbxSJc0XG1V01KhNGmmc21VIcuglyOTJcGdm3MpYa9QY2Ja3fKIYp6SjSB+nV0WQ3i5ov6lPdLScsRVgAMsa4gW6GBgcB8I08kr0aYOMYthP1hiUfsKgOpiRXdW62a2VVlEb4lzK0LNpXgQ71hrQXVOpk9ARi81qgnZ6+KqZAPxOamAv4iGtf+HR16W4jVKlbMEG9bZuaeCSl0esaM1NaOlmuKZXVl8SRh22ouYd53Js7IhQjSTvCVlaGfG3zIqAmhnIUuxWPm3wSD31EqwXi7an4RjOOr4HoY8z+u2pLl1zn4A4sAtkR9MLKA/wN2aciWUv7mD+e/Ul5ivvSCUIFvPsTWX2UndCBV1RXrxtlIBs4/Jx8nYc5FU8EW5de35eagafKCDPUPza0MaSGvhVX/fCV32FK7wUT5mXUqkDJSYJibHTL3l2/xWuXRSHasL0yaD8cdlKLgSGGPuLuUhB34rTo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199015)(41300700001)(26005)(31696002)(86362001)(8936002)(36756003)(7416002)(5660300002)(6512007)(6486002)(478600001)(66946007)(6506007)(66556008)(8676002)(4326008)(53546011)(66476007)(6666004)(316002)(110136005)(54906003)(107886003)(31686004)(83380400001)(38100700002)(2616005)(186003)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YWFlMGR4dlNHbTdjYytQVEJob3ZQakFuREV0YUxieXI1dUt0MWowWHR1NEdJ?=
+ =?utf-8?B?WnIyQ3JoZjNqK3laSDFWdjBPUW11K0d3UTd0RzMrTTJmZEduMjRqUzlNZFBU?=
+ =?utf-8?B?clk5Y28xTFIyYmdhcjNoWnNSVlg0d3M0UFVNektnazJQcUU0RUkzUzdNVU42?=
+ =?utf-8?B?OVdJQXpjbEIwSDFhMHBmMXBSTEVRak9zRGt4OW9Ka2s5Sld0eFZJd2s1MmJQ?=
+ =?utf-8?B?Mi92V1IxTzBRSEovN2poOWxFdGNhVGJaRDBpREh0WGJzelVlTUJTdzVRWXNp?=
+ =?utf-8?B?bUFyTE5EaGZaTFlIMVNJekJrT0JjdWR1WmhoZkxoZmxsSFJPajZmVS91TUpR?=
+ =?utf-8?B?VHZzTk4xQ0pZMkhQLy9ma1dCU3dMcnNycnhMYjlpV0crS2ppNFFwRzdlaVZy?=
+ =?utf-8?B?Zm5wT0Z3bThnc0pZT0ZMTEJiNVFHUUhoTS9hK1o0YzJIL3FIQWNTbHBSVXkw?=
+ =?utf-8?B?S2xYT1FzN1YxMVRXaDc1bUY0UUNObmJKeGE5NmZ6b0x2MGIybmRYV3IxeUtp?=
+ =?utf-8?B?QkJRUXNqOFI2SDdnUWFJaFg1OW5QQVhNUklCelIxK1dwZDV5OFB1SnhjVzNr?=
+ =?utf-8?B?a2xucFUrYVRvRUNGV1ZNNiswZHZIdGpYRWFkc2plaHJiZkxaUEcrNCtGWXE0?=
+ =?utf-8?B?UFpyWUVmRlZaMXN5S3dpVDlYNGg1Ni8yT1JpUHdRUmF2cU0xWnlsRWNDTnBs?=
+ =?utf-8?B?c1hReE1LNTJVS1BhQXZTZ3JNZ0pmMkFGS2ltOG5lMjd6OUR3dWIrMWhhNktX?=
+ =?utf-8?B?UThlVFJOR29YTnRLdDIxcUcydVNDZlRhb0hITVdkZ0tVSVFJTVlPV1gyUHRx?=
+ =?utf-8?B?UVpzMW9uRnBkdXErWU4xNWh6UE5oVWtGQnZnVGJNb2NpcDU2TDRnbG5jdGxT?=
+ =?utf-8?B?aUs5Yit2YkFvRDdvUWFJMnpsMVZ6ZDVmRTRmbm5yRGVTZk8yN3NCMC9KWUU2?=
+ =?utf-8?B?c2lrUjI3WkFBSnJBQjJyenQyR0MyeUk1SFg1YmtUL1lMR1pYa2VzWHlwbWho?=
+ =?utf-8?B?ZVJMaEV5RUo1eHNocXIzM3Z2a3kwRmpwZG5RT0RQeXZGV3gyMEZSejV4K3dZ?=
+ =?utf-8?B?V1NkOXNtQWgxOURNU3p2TG9FdHhNWkFQdVNnVWpiczlxSVhGeDlKV2FZbGhX?=
+ =?utf-8?B?LzhQZzIxaTBCTm5tN2lCam1yOGlTa2xSSHVZRDdhUXV4MnhmbFVWRnNvVUdw?=
+ =?utf-8?B?MUQvSDJXbkFINWU0UUVUbmpuaWZ1RTBWNGVocENnUnprOGtEcGQ4bTA2UGY1?=
+ =?utf-8?B?RjBMWTAzem9ya2dmYVI1UGxBbzRXYjgzN2Z3dlZBZWhrcHdZTllxRTg3SjVC?=
+ =?utf-8?B?QXRocG5FbFFxTE9CMTB6NE9VZjM3SE9GUU5MWTRQMmhvQTRsSHNzSzEzMFpD?=
+ =?utf-8?B?RDhhUVlYelVFV0UyYVIxbXhFbTN2NUxmTWs1TkpPbHJBZXhrcXQvaFZld2RY?=
+ =?utf-8?B?alZVdnNPem91VHgyU3J2MC95Nk80OHB2azF5cnpxS3craHNHTDB5dTE0Q3VM?=
+ =?utf-8?B?Q2RFTmZDblRQcnpqY0pWemYwRlhYM1JNZXFyL2cyWXcwcFU0WVFZOTlUbDl6?=
+ =?utf-8?B?ODNSbjdqazZXbzdrVTFFNDEvT3JoSVlFaTZJNms3QjFnQTZkOEtIRXBvdlJy?=
+ =?utf-8?B?ODBYM2RBMjdOT0lQVENEV0s5VFMwdVR5RUhyZUl2QklZNWpRQ2VZWFZacjBT?=
+ =?utf-8?B?aFYxdDdjeitoZUlSQWxvbjQxZW8xalR4czVyTDMzYkNMeElldGxlbDlId2pC?=
+ =?utf-8?B?dUQ4ZGQ1RkxRdDZTeDZnekVMREVER2FzOHdwbkVUaDJpQTkzYk54Q0xRRFNw?=
+ =?utf-8?B?bFNxZFpuYXNPeC9aWmt0UEplSFhicGdzQUoxWkJYdzl1ZVdyalpHQWI3OEJZ?=
+ =?utf-8?B?TmR0WEJRUnN6Mm0wYVBSYWx4bjN4OU5wUlBTZkp4eC9wWG50UDR5R0xxc2dp?=
+ =?utf-8?B?S1lmTFV6T1hweUNYQUF6Ui9vQXZGVlgxcjFwVDB6N1RoOS9QUEZ2dGg3b1hu?=
+ =?utf-8?B?R0VOc3cwcmh3K0ZwNFpOalozekpSUm1kMEo4VkEyTEg5MkN2NHFqcWJjMmhF?=
+ =?utf-8?B?bmhRZGdZVWp0bHQ5NVRidG53QldIeHFwT1NYcGE5THhXaU1CY0dEdkI5QWNk?=
+ =?utf-8?B?TWQyWkN5MVBNQmkxWVNjQU5SWnRsOUNWeXoxUWVrZUtINitMT2FZMFN4eTlu?=
+ =?utf-8?B?N1E9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c026b45-515e-4763-5689-08dadb6ff65c
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2022 12:05:15.0414
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nyh3NmwxsaiMnEUKCyuve930lsT+m6LLaan1ylUupdQ9VRvR2qGzW6oME+qkstLHzmOUnehst9P6S1TEqUdsrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4102
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kairui Song <ryncsn@gmail.com> writes:
 
-> Matthew Wilcox <willy@infradead.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=889=
-=E6=97=A5=E5=91=A8=E4=BA=94 03:14=E5=86=99=E9=81=93=EF=BC=9A
->>
+On 12/6/2022 5:01 PM, Christoph Hellwig wrote:
+> On Tue, Dec 06, 2022 at 10:48:22AM -0400, Jason Gunthorpe wrote:
+>> Sadly in Linux we don't have a SRIOV VF lifecycle model that is any
+>> use.
+> Beward:  The secondary function might as well be a physical function
+> as well.  In fact one of the major customers for "smart" multifunction
+> nvme devices prefers multi-PF devices over SR-IOV VFs. (and all the
+> symmetric dual ported devices are multi-PF as well).
 >
-> Hi, thanks for the review.
->
->> On Fri, Dec 09, 2022 at 02:02:09AM +0800, Kairui Song wrote:
->> > From: Kairui Song <kasong@tencent.com>
->> >
->> > __read_swap_cache_async should just call swap_cache_get_folio for tryi=
-ng
->> > to look up the swap cache. Because swap_cache_get_folio handles the
->> > readahead statistic, and clears the RA flag, looking up the cache
->> > directly will skip these parts.
->> >
->> > And the comment no longer applies after commit 442701e7058b
->> > ("mm/swap: remove swap_cache_info statistics"), just remove them.
->>
->> But what about the readahead stats?
->>
->
-> Shouldn't readahead stats be accounted here? __read_swap_cache_async
-> is called by swap read in path, if it hits the swap cache, and the
-> page have readahead page flag set, then accounting that readahead
-> should be just the right thing todo. And the readahead flag is checked
-> with folio_test_clear_readahead, so there should be no issue about
-> repeated accounting.
->
-> Only the addr info of the swap_readahead_info could be updated for
-> multiple times by racing readers, but I think that seems fine, since
-> we don't know which swap read comes later in case of race, just let
-> the last reader that hits the swap cache update the address info of
-> readahead makes sense to me.
->
-> Or do you mean I should update the comment about the readahead stat
-> instead of just drop the commnet?
+> So this isn't really about a VF live cycle, but how to manage life
+> migration, especially on the receive / restore side.  And restoring
+> the entire controller state is extremely invasive and can't be done
+> on a controller that is in any classic form live.  In fact a lot
+> of the state is subsystem-wide, so without some kind of virtualization
+> of the subsystem it is impossible to actually restore the state.
 
-__read_swap_cache_async() is called by readahead too
-(swap_vma_readahead/__read_swap_cache_async).  I don't think that it's a
-good idea to do swap readahead operation in this function.
+ohh, great !
 
-Best Regards,
-Huang, Ying
+I read this subsystem virtualization proposal of yours after I sent my 
+proposal for subsystem virtualization in patch 1/5 thread.
+I guess this means that this is the right way to go.
+Lets continue brainstorming this idea. I think this can be the way to 
+migrate NVMe controllers in a standard way.
+
+>
+> To cycle back to the hardware that is posted here, I'm really confused
+> how it actually has any chance to work and no one has even tried
+> to explain how it is supposed to work.
+
+I guess in vendor specific implementation you can assume some things 
+that we are discussing now for making it as a standard.
+
+
