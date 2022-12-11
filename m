@@ -2,353 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2148E64921D
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FC1649222
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLKCzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 21:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S230016AbiLKC5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 21:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLKCy7 (ORCPT
+        with ESMTP id S229538AbiLKC5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 21:54:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C2213FA6;
-        Sat, 10 Dec 2022 18:54:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E03D760D29;
-        Sun, 11 Dec 2022 02:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2756CC433F1;
-        Sun, 11 Dec 2022 02:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670727297;
-        bh=ru6jfYj1H6rSTcfAw+pda33MZ1ElqiPeugNK4Jd4nVU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W3/N2xad0X9f2CE34y/RoYJUcsDGBFjeIHpAOZzgGDYaASLUpYpwWT13cwXIQ8SAr
-         jGHFk16TwIX143YtSIDUMf9P//bUFK/NF5pvDjZ6BQA5w6ZLaTeefnnnDIVv/vE50c
-         OZ+N1KIpqQculQn/F06pK1DlPGbHeciFadA9kwe48474eCTbweXyjzJY9uMUfVP/AS
-         OuyLapb1OgX+Kgb0xweZbGcHqIZERAvwrqdCS9Yn3RdZmMp9zFEeDJeiuevwEM6k+Z
-         3VB1a+xEKaC/mehKvxXvRtXG7ZeWYq9hxZ6roYevwbiO4CzHcFsy4cfRS5LTLAFzPx
-         PUgcr3wmJfE+Q==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v3 2/2] kconfig: refactor Makefile to reduce process forks
-Date:   Sun, 11 Dec 2022 11:54:48 +0900
-Message-Id: <20221211025448.2620799-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221211025448.2620799-1-masahiroy@kernel.org>
-References: <20221211025448.2620799-1-masahiroy@kernel.org>
+        Sat, 10 Dec 2022 21:57:15 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FC8A1A1;
+        Sat, 10 Dec 2022 18:57:12 -0800 (PST)
+Received: by codeconstruct.com.au (Postfix, from userid 10000)
+        id DEB4B20240; Sun, 11 Dec 2022 10:57:10 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1670727430;
+        bh=B2bgi3mEW9G3IrDXy4oqFAsoYTVXakmyqNJRxS06qk8=;
+        h=From:To:Cc:Subject:Date;
+        b=XJ55m8zQFto4ChwS8Bh69mSTYjmYu2vJWCK4C9eiwks/TS8aXQqmyUSAPxgQS2Llx
+         xgAYz4pIPbzTIv85QzOB+Q8tz/KQD6Rn1BamsmnEC+piVQjeaOc1BNuezRhEYg3i3q
+         Pkw4yRWksoHU7Xl3+XiQButtzsXV2CVCcBMtLFNlbDIYKEWyIeJ3ZoU3RstTR8g69k
+         XBYKufEeZUcb78Ubm9KagzTIV4rx8Da0iaUJSC6t3XwXybRXO3H16P1Rm7FypM0wnY
+         V/O5A5DbgFApNxkQUcKfjeDSO+1RnBdBjkrWGNX+NVbWY9F6Kvz8iQkk4sxWRx2RTO
+         29JaDwuq8gUTg==
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Mark Brown <broonie@kernel.org>
+Subject: [RFC PATCH v3 0/2] Add reset control for mfd syscon devices
+Date:   Sun, 11 Dec 2022 10:56:58 +0800
+Message-Id: <20221211025700.1180843-1-jk@codeconstruct.com.au>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor Makefile and use read-file macro. For Make >= 4.2, it can read
-out a file by using the built-in function.
+This RFC series adds a facility for syscon devices to control a reset
+line when probed; we have instances of simple register-only syscon
+resources that need deassertion of a reset line for the register set to
+be accessible.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Rather than requiring a specific driver to implement this, it'd be nice
+to use the generic syscon device and the generic resets linkage to do
+so.
+
+Any comments/queries/etc are most welcome.
+
+Cheers,
+
+
+Jeremy
 ---
+v2:
+ - use direct syscon registration interface, rather than the (unused)
+   syscon platform device code
+ - consequently, add regmap infrastructure to attach a reset
+   controller, in a similar way to attaching clocks
+v3:
+ - drop regmap reset attach and just do a direct deassert from the syscon
+   driver
 
-Changes in v3:
- - Clean up *conf-cflags *conf-libs *conf-bin by "make mrproper"
+Jeremy Kerr (2):
+  dt-bindings: mfd/syscon: Add resets property
+  mfd: syscon: allow reset control for syscon devices
 
- scripts/kconfig/.gitignore   |  4 +++-
- scripts/kconfig/Makefile     | 45 +++++++++++++++++++-----------------
- scripts/kconfig/gconf-cfg.sh |  7 ++++--
- scripts/kconfig/mconf-cfg.sh | 25 +++++++++++---------
- scripts/kconfig/nconf-cfg.sh | 23 ++++++++++--------
- scripts/kconfig/qconf-cfg.sh | 10 +++++---
- scripts/remove-stale-files   |  2 ++
- 7 files changed, 68 insertions(+), 48 deletions(-)
+ .../devicetree/bindings/mfd/syscon.yaml       |  3 +++
+ drivers/mfd/syscon.c                          | 27 ++++++++++++++-----
+ 2 files changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/scripts/kconfig/.gitignore b/scripts/kconfig/.gitignore
-index 500e7424b3ef..c8a3f9cd52f0 100644
---- a/scripts/kconfig/.gitignore
-+++ b/scripts/kconfig/.gitignore
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- /conf
- /[gmnq]conf
--/[gmnq]conf-cfg
-+/[gmnq]conf-cflags
-+/[gmnq]conf-libs
-+/qconf-bin
- /qconf-moc.cc
-diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
-index b8ef0fb4bbef..0b1d15efaeb0 100644
---- a/scripts/kconfig/Makefile
-+++ b/scripts/kconfig/Makefile
-@@ -159,11 +159,12 @@ conf-objs	:= conf.o $(common-objs)
- hostprogs	+= nconf
- nconf-objs	:= nconf.o nconf.gui.o $(common-objs)
- 
--HOSTLDLIBS_nconf	= $(shell . $(obj)/nconf-cfg && echo $$libs)
--HOSTCFLAGS_nconf.o	= $(shell . $(obj)/nconf-cfg && echo $$cflags)
--HOSTCFLAGS_nconf.gui.o	= $(shell . $(obj)/nconf-cfg && echo $$cflags)
-+HOSTLDLIBS_nconf       = $(call read-file, $(obj)/nconf-libs)
-+HOSTCFLAGS_nconf.o     = $(call read-file, $(obj)/nconf-cflags)
-+HOSTCFLAGS_nconf.gui.o = $(call read-file, $(obj)/nconf-cflags)
- 
--$(obj)/nconf.o $(obj)/nconf.gui.o: $(obj)/nconf-cfg
-+$(obj)/nconf: | $(obj)/nconf-libs
-+$(obj)/nconf.o $(obj)/nconf.gui.o: | $(obj)/nconf-cflags
- 
- # mconf: Used for the menuconfig target based on lxdialog
- hostprogs	+= mconf
-@@ -171,27 +172,28 @@ lxdialog	:= $(addprefix lxdialog/, \
- 		     checklist.o inputbox.o menubox.o textbox.o util.o yesno.o)
- mconf-objs	:= mconf.o $(lxdialog) $(common-objs)
- 
--HOSTLDLIBS_mconf = $(shell . $(obj)/mconf-cfg && echo $$libs)
-+HOSTLDLIBS_mconf = $(call read-file, $(obj)/mconf-libs)
- $(foreach f, mconf.o $(lxdialog), \
--  $(eval HOSTCFLAGS_$f = $$(shell . $(obj)/mconf-cfg && echo $$$$cflags)))
-+  $(eval HOSTCFLAGS_$f = $$(call read-file, $(obj)/mconf-cflags)))
- 
--$(addprefix $(obj)/, mconf.o $(lxdialog)): $(obj)/mconf-cfg
-+$(obj)/mconf: | $(obj)/mconf-libs
-+$(addprefix $(obj)/, mconf.o $(lxdialog)): | $(obj)/mconf-cflags
- 
- # qconf: Used for the xconfig target based on Qt
- hostprogs	+= qconf
- qconf-cxxobjs	:= qconf.o qconf-moc.o
- qconf-objs	:= images.o $(common-objs)
- 
--HOSTLDLIBS_qconf	= $(shell . $(obj)/qconf-cfg && echo $$libs)
--HOSTCXXFLAGS_qconf.o	= $(shell . $(obj)/qconf-cfg && echo $$cflags)
--HOSTCXXFLAGS_qconf-moc.o = $(shell . $(obj)/qconf-cfg && echo $$cflags)
--
--$(obj)/qconf.o: $(obj)/qconf-cfg
-+HOSTLDLIBS_qconf         = $(call read-file, $(obj)/qconf-libs)
-+HOSTCXXFLAGS_qconf.o     = -std=c++11 -fPIC $(call read-file, $(obj)/qconf-cflags)
-+HOSTCXXFLAGS_qconf-moc.o = -std=c++11 -fPIC $(call read-file, $(obj)/qconf-cflags)
-+$(obj)/qconf: | $(obj)/qconf-libs
-+$(obj)/qconf.o $(obj)/qconf-moc.o: | $(obj)/qconf-cflags
- 
- quiet_cmd_moc = MOC     $@
--      cmd_moc = $(shell . $(obj)/qconf-cfg && echo $$moc) $< -o $@
-+      cmd_moc = $(call read-file, $(obj)/qconf-bin)/moc $< -o $@
- 
--$(obj)/qconf-moc.cc: $(src)/qconf.h $(obj)/qconf-cfg FORCE
-+$(obj)/qconf-moc.cc: $(src)/qconf.h FORCE | $(obj)/qconf-bin
- 	$(call if_changed,moc)
- 
- targets += qconf-moc.cc
-@@ -200,15 +202,16 @@ targets += qconf-moc.cc
- hostprogs	+= gconf
- gconf-objs	:= gconf.o images.o $(common-objs)
- 
--HOSTLDLIBS_gconf    = $(shell . $(obj)/gconf-cfg && echo $$libs)
--HOSTCFLAGS_gconf.o  = $(shell . $(obj)/gconf-cfg && echo $$cflags)
-+HOSTLDLIBS_gconf   = $(call read-file, $(obj)/gconf-libs)
-+HOSTCFLAGS_gconf.o = $(call read-file, $(obj)/gconf-cflags)
- 
--$(obj)/gconf.o: $(obj)/gconf-cfg
-+$(obj)/gconf: | $(obj)/gconf-libs
-+$(obj)/gconf.o: | $(obj)/gconf-cflags
- 
- # check if necessary packages are available, and configure build flags
--filechk_conf_cfg = $(CONFIG_SHELL) $<
-+cmd_conf_cfg = $< $(addprefix $(obj)/$*conf-, cflags libs bin)
- 
--$(obj)/%conf-cfg: $(src)/%conf-cfg.sh FORCE
--	$(call filechk,conf_cfg)
-+$(obj)/%conf-cflags $(obj)/%conf-libs $(obj)/%conf-bin: $(src)/%conf-cfg.sh
-+	$(call cmd,conf_cfg)
- 
--clean-files += *conf-cfg
-+clean-files += *conf-cflags *conf-libs *conf-bin
-diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
-index cbd90c28c05f..040d8f338820 100755
---- a/scripts/kconfig/gconf-cfg.sh
-+++ b/scripts/kconfig/gconf-cfg.sh
-@@ -1,6 +1,9 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+cflags=$1
-+libs=$2
-+
- PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
- 
- if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
-@@ -26,5 +29,5 @@ if ! ${HOSTPKG_CONFIG} --atleast-version=2.0.0 gtk+-2.0; then
- 	exit 1
- fi
- 
--echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
--echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
-+${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
-+${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
-diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
-index 025b565e0b7c..1e61f50a5905 100755
---- a/scripts/kconfig/mconf-cfg.sh
-+++ b/scripts/kconfig/mconf-cfg.sh
-@@ -1,19 +1,22 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+cflags=$1
-+libs=$2
-+
- PKG="ncursesw"
- PKG2="ncurses"
- 
- if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
- 	if ${HOSTPKG_CONFIG} --exists $PKG; then
--		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
--		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
-+		${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
-+		${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
- 		exit 0
- 	fi
- 
--	if ${HOSTPKG_CONFIG} --exists $PKG2; then
--		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
--		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
-+	if ${HOSTPKG_CONFIG} --exists ${PKG2}; then
-+		${HOSTPKG_CONFIG} --cflags ${PKG2} > ${cflags}
-+		${HOSTPKG_CONFIG} --libs ${PKG2} > ${libs}
- 		exit 0
- 	fi
- fi
-@@ -22,22 +25,22 @@ fi
- # (Even if it is installed, some distributions such as openSUSE cannot
- # find ncurses by pkg-config.)
- if [ -f /usr/include/ncursesw/ncurses.h ]; then
--	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncursesw\"
--	echo libs=\"-lncursesw\"
-+	echo -D_GNU_SOURCE -I/usr/include/ncursesw > ${cflags}
-+	echo -lncursesw > ${libs}
- 	exit 0
- fi
- 
- if [ -f /usr/include/ncurses/ncurses.h ]; then
--	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncurses\"
--	echo libs=\"-lncurses\"
-+	echo -D_GNU_SOURCE -I/usr/include/ncurses > ${cflags}
-+	echo -lncurses > ${libs}
- 	exit 0
- fi
- 
- # As a final fallback before giving up, check if $HOSTCC knows of a default
- # ncurses installation (e.g. from a vendor-specific sysroot).
- if echo '#include <ncurses.h>' | ${HOSTCC} -E - >/dev/null 2>&1; then
--	echo cflags=\"-D_GNU_SOURCE\"
--	echo libs=\"-lncurses\"
-+	echo -D_GNU_SOURCE > ${cflags}
-+	echo -lncurses > ${libs}
- 	exit 0
- fi
- 
-diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
-index 3a10bac2adb3..f871a2160e36 100755
---- a/scripts/kconfig/nconf-cfg.sh
-+++ b/scripts/kconfig/nconf-cfg.sh
-@@ -1,19 +1,22 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+cflags=$1
-+libs=$2
-+
- PKG="ncursesw menuw panelw"
- PKG2="ncurses menu panel"
- 
- if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
- 	if ${HOSTPKG_CONFIG} --exists $PKG; then
--		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
--		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
-+		${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
-+		${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
- 		exit 0
- 	fi
- 
- 	if ${HOSTPKG_CONFIG} --exists $PKG2; then
--		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
--		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
-+		${HOSTPKG_CONFIG} --cflags ${PKG2} > ${cflags}
-+		${HOSTPKG_CONFIG} --libs ${PKG2} > ${libs}
- 		exit 0
- 	fi
- fi
-@@ -22,20 +25,20 @@ fi
- # (Even if it is installed, some distributions such as openSUSE cannot
- # find ncurses by pkg-config.)
- if [ -f /usr/include/ncursesw/ncurses.h ]; then
--	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncursesw\"
--	echo libs=\"-lncursesw -lmenuw -lpanelw\"
-+	echo -D_GNU_SOURCE -I/usr/include/ncursesw > ${cflags}
-+	echo -lncursesw -lmenuw -lpanelw > ${libs}
- 	exit 0
- fi
- 
- if [ -f /usr/include/ncurses/ncurses.h ]; then
--	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncurses\"
--	echo libs=\"-lncurses -lmenu -lpanel\"
-+	echo -D_GNU_SOURCE -I/usr/include/ncurses > ${cflags}
-+	echo -lncurses -lmenu -lpanel > ${libs}
- 	exit 0
- fi
- 
- if [ -f /usr/include/ncurses.h ]; then
--	echo cflags=\"-D_GNU_SOURCE\"
--	echo libs=\"-lncurses -lmenu -lpanel\"
-+	echo -D_GNU_SOURCE > ${cflags}
-+	echo -lncurses -lmenu -lpanel > ${libs}
- 	exit 0
- fi
- 
-diff --git a/scripts/kconfig/qconf-cfg.sh b/scripts/kconfig/qconf-cfg.sh
-index ad652cb53947..117f36e568fc 100755
---- a/scripts/kconfig/qconf-cfg.sh
-+++ b/scripts/kconfig/qconf-cfg.sh
-@@ -1,6 +1,10 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- 
-+cflags=$1
-+libs=$2
-+bin=$3
-+
- PKG="Qt5Core Qt5Gui Qt5Widgets"
- 
- if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
-@@ -11,9 +15,9 @@ if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
- fi
- 
- if ${HOSTPKG_CONFIG} --exists $PKG; then
--	echo cflags=\"-std=c++11 -fPIC $(${HOSTPKG_CONFIG} --cflags $PKG)\"
--	echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
--	echo moc=\"$(${HOSTPKG_CONFIG} --variable=host_bins Qt5Core)/moc\"
-+	${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
-+	${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
-+	${HOSTPKG_CONFIG} --variable=host_bins Qt5Core > ${bin}
- 	exit 0
- fi
- 
-diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-index ccadfa3afb2b..64b14aa5aebf 100755
---- a/scripts/remove-stale-files
-+++ b/scripts/remove-stale-files
-@@ -47,3 +47,5 @@ rm -f arch/riscv/purgatory/kexec-purgatory.c
- rm -f scripts/extract-cert
- 
- rm -f arch/x86/purgatory/kexec-purgatory.c
-+
-+rm -f scripts/kconfig/[gmnq]conf-cfg
 -- 
-2.34.1
+2.35.1
 
