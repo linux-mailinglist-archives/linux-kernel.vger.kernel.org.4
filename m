@@ -2,109 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9845F64951B
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 17:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1192E64951D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 17:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiLKQeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 11:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S230235AbiLKQm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 11:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiLKQeV (ORCPT
+        with ESMTP id S230014AbiLKQmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 11:34:21 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC0A647C;
-        Sun, 11 Dec 2022 08:34:20 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id vv4so22497227ejc.2;
-        Sun, 11 Dec 2022 08:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ll6kCX33+8s5cf4iHgOPaW3i8Vl4DHq71YOPP4oWCdQ=;
-        b=RZ1RbDsik47vSTcGLGdHgmvZ8u1feKoyfhGemL8bPzoLg/g0Ex7Y/cYi7oqtU4vyje
-         bwNF35X2pvFByb7Fyd6+QYYRi2ycOQUI65VMF7ZVpdBynonHPfLtLv988vml5Sr9DAcc
-         5buFZC4d6vU+QQql4jddEb2CrqFgUe/cZpcAvNlyUEZvw1tjxcljTVtyicdSIkfvluj1
-         +2DqeEsZI1ZVGIJnOoFXeb6uDmmz+CmGYCd551xZ5dpgNgziTYbPsZNlU0FQIFmENINp
-         XptTlH8c3Be0qKtMJzIJEWAlNbz/N1h9+6S0VhKbac4SU2HuFdg7Fc6rpDqx3S8sSbi/
-         dGzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ll6kCX33+8s5cf4iHgOPaW3i8Vl4DHq71YOPP4oWCdQ=;
-        b=1yHszkH1ZOjD9gQxcp0G/9Ab34znW6mRaMlUDxK4ql1S7t6esZ8qhizvaEDgAbHEDQ
-         RfmZDGBH/lMdbHKvgPtVvxNDzWWY6OTqEPVSzSqkR774V3ENCO4nKmP3RkG5hR2mSawB
-         gxDkBLvudnS3SW0zC9s/1neQTD3r+E44R3YDGMkRrVB7PGSkFBUVy73d7wwEN2KgzEkU
-         IJHJWXjGt/hrtEHEg3Ceh30JjaLqxloeZ+NEwDe5psXfaQ5y4UL5SYphXFLhzBTc6ecc
-         7BJbzgWDG1oxPoCy6ePNOJVvALrDJOtQ6AFRPdwJArwwJVqk6S8iN670L4dC4tYJWe45
-         RkqQ==
-X-Gm-Message-State: ANoB5pkBF0tH2w06pH17AO+GvO93zwxJOiP4PpQPaE/4RcSFGFCoQe5h
-        T0cVs1Qf3BZlsUt+ghgXYek=
-X-Google-Smtp-Source: AA0mqf4NXMwfkOs1mNO8pfQyBM2Z6bwdZcilrDNTObHD8PCILQSAy9nh4q09wCuWFweuwStpxFvaow==
-X-Received: by 2002:a17:906:5213:b0:7c1:3125:9564 with SMTP id g19-20020a170906521300b007c131259564mr10131461ejm.8.1670776459101;
-        Sun, 11 Dec 2022 08:34:19 -0800 (PST)
-Received: from ?IPV6:2a01:c23:b8e1:2200:1956:d6ee:60e0:6ee2? (dynamic-2a01-0c23-b8e1-2200-1956-d6ee-60e0-6ee2.c23.pool.telefonica.de. [2a01:c23:b8e1:2200:1956:d6ee:60e0:6ee2])
-        by smtp.googlemail.com with ESMTPSA id r1-20020a1709061ba100b007bb32e2d6f5sm2180719ejg.207.2022.12.11.08.34.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Dec 2022 08:34:18 -0800 (PST)
-Message-ID: <f04435d8-9af3-1fde-c2bf-fadd045b10a1@gmail.com>
-Date:   Sun, 11 Dec 2022 17:34:15 +0100
+        Sun, 11 Dec 2022 11:42:55 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB18B5595
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 08:42:53 -0800 (PST)
+Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1p4PPf-0002SD-T5; Sun, 11 Dec 2022 17:42:51 +0100
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2022-12-11]
+Date:   Sun, 11 Dec 2022 16:42:51 +0000
+Message-Id: <167077682369.767290.4323979751797298970@leemhuis.info>
+X-Mailer: git-send-email 2.38.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] net: ipa: Remove redundant dev_err()
-To:     Kang Minchul <tegongkang@gmail.com>, Alex Elder <elder@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221211144722.754398-1-tegongkang@gmail.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20221211144722.754398-1-tegongkang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670776973;e2b23450;
+X-HE-SMSGID: 1p4PPf-0002SD-T5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.12.2022 15:47, Kang Minchul wrote:
-> Function dev_err() is redundant because platform_get_irq_byname()
-> already prints an error.
-> 
-> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
-> ---
->  drivers/net/ipa/gsi.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-> index 55226b264e3c..585cfd3f9ec0 100644
-> --- a/drivers/net/ipa/gsi.c
-> +++ b/drivers/net/ipa/gsi.c
-> @@ -1967,11 +1967,8 @@ int gsi_init(struct gsi *gsi, struct platform_device *pdev, bool prefetch,
->  
->  	/* Get the GSI IRQ and request for it to wake the system */
->  	ret = platform_get_irq_byname(pdev, "gsi");
-> -	if (ret <= 0) {
-> -		dev_err(gsi->dev,
-> -			"DT error %d getting \"gsi\" IRQ property\n", ret);
-> +	if (ret <= 0)
+Hi Linus! Below you'll find regzbot's report about regression from this
+cycle the bot and I became aware of. Most of the issue I had on the list
+last weeks were resolved, only a few problems that showed up in the past
+few days remain. One of them is the bisected BPF issue you already are
+aware of Jiri is looking into; the other two need more debugging and
+afaics will only show up in special, not that common setups...
 
-According to the function description it can't return 0.
-You can further simplify the code.
-And you patch should be annotated net-next.
+HTH, Ciao, Thorsten
 
->  		return ret ? : -EINVAL;
-> -	}
->  	irq = ret;
->  
->  	ret = request_irq(irq, gsi_isr, 0, "gsi", gsi);
+---
 
+Hi, this is regzbot, the Linux kernel regression tracking bot.
+
+Currently I'm aware of 44 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
+
+
+======================================================
+current cycle (v6.0.. aka v6.1-rc), culprit identified
+======================================================
+
+
+[ *NEW* ] net/bpf: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
+------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com/
+https://lore.kernel.org/lkml/CACkBjsYioeJLhJAZ=Sq4CAL2O_W%2B5uqcJynFgLSizWLqEjNrjw@mail.gmail.com/
+
+By Hao Sun; 5 days ago; 26 activities, latest 1 days ago.
+Introduced in c86df29d11df (v6.1-rc6)
+
+Recent activities from: Jiri Olsa (14), Alexei Starovoitov (3), Jakub
+  Kicinski (3), Daniel Borkmann (2), Hao Sun (2), Paul E. McKenney (1),
+  Yonghong Song (1)
+
+4 patch postings are associated with this regression, the latest is this:
+* Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
+  https://lore.kernel.org/lkml/Y5PNeFYJrC6D4P9p@krava/
+  1 days ago, by Jiri Olsa
+
+
+==================================================
+current cycle (v6.0.. aka v6.1-rc), unkown culprit
+==================================================
+
+
+[ *NEW* ] resume from suspend broken on Asus UX305FA after PCI/PTM changes in kernel 6.1-rc1
+--------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216782/
+https://bugzilla.kernel.org/show_bug.cgi?id=216782
+https://lore.kernel.org/regressions/5e8317f7-170a-588b-7a94-e0a546fbc9f3@leemhuis.info/
+
+By Tasev Nikola and Tasev Nikola; 4 days ago; 13 activities, latest 2 days ago.
+Introduced in v6.0..v6.1-rc1
+
+Recent activities from: Tasev Nikola (9), Bjorn Helgaas (2), Thorsten
+  Leemhuis (1), The Linux kernel's regression tracker (Thorsten
+  Leemhuis) (1)
+
+
+[ *NEW* ] bcache: memcpy: detected field-spanning write...
+----------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216785/
+https://bugzilla.kernel.org/show_bug.cgi?id=216785
+https://lore.kernel.org/lkml/19200730-a3ba-6f4f-bb81-71339bdbbf73@leemhuis.info/
+
+By Alexandre Pereira and Alexandre Pereira; 3 days ago; 1 activities, latest 3 days ago.
+Introduced in v6.0..v6.1-rc8
+
+Recent activities from: Alexandre Pereira (1)
+
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/167016324121.413036.10816787460130337195@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
