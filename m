@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E9C6493C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 11:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E377C6493CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 12:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiLKK44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 05:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
+        id S230155AbiLKLBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 06:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLKK4y (ORCPT
+        with ESMTP id S229656AbiLKLBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 05:56:54 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CCFFAE6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:56:53 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h12so9262611wrv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:56:53 -0800 (PST)
+        Sun, 11 Dec 2022 06:01:13 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C62B10059
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 03:01:12 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so9334657pjd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 03:01:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lAvGt3vLdbPiY+2Of1sNsoY/Xfkar684+8jXtNIqH/o=;
-        b=olfa3spiHiwdBT4E0YPycmSCjFe+kp3ZbHrQPbsQmCqGxibWDc8qV4Cz+GMaAg5VrV
-         BzxYFgRm30SHRXMekG2Y+n/dNSrDUBP3mmi80lzChaXL99dUyYlG/cuQEhzo8zyZjtMR
-         qxWv49uCs4ip8zaJUbclokn8H9YjUAaQ9rC+soeBppNF2TwXGZ3i2lCc9InDHa3G3w3Z
-         +QP5le2wL94RYD5WQEKe80IIFZQHJbBgN4uvZEZ6iQrgGivWQSjPWAK/b9DYR+3AoTk2
-         onOFyAIFAudQBNZkkNMJa8pEJY4HcUQIFhm2X7CzIpd/88ifNl2FPeGeJQkpVGo+kr7X
-         AuMQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9YWp6K3uTj0NW63MVBBW2akr/MvPwicO7toRTwXU04=;
+        b=vpkzLBa7VwaKp80Fya+eqmfcALDCBbks/aXLLbpLnwhzKDJxsFwhWDypY61RdNVncM
+         FSQwVjbjZgbkbAnE7qIgg//GxasF/WksP9HR46j6esl2tr6T4nguLgbN0ukWx8/0qbxW
+         ChMvaYPPjCl5wlatvXNIORsZQvj0WLRkCNZNB7IxEETc+zpsaXiPqTZkUrZPepGMVCkG
+         TnAzH8yWHfwFkW8fqxltInUzgxqmKa3BYWpNhHuiQ7hewcSu+V4HxJe1Lo3a4P20vScO
+         ZL4YcnGsiDRF/tJAVCU4mvZGnQJMIfoxRgVMsV07YRD+MUtTd3nlK3bETbtTbVX3zdsL
+         r0pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lAvGt3vLdbPiY+2Of1sNsoY/Xfkar684+8jXtNIqH/o=;
-        b=t6VgZHmlV9VQVZYh0Gg4IvpX2/0KQpwW9p97oQSs0Gvn0gmL9/Mo3mhVeGbfDnhSed
-         4pm/8xI7OI4xg/jp5u8yvzn12skB/NrMB0nsz4I0KtVKpP6LYvFRkBZAf46TBwxjOhzk
-         XkAKEuFCKKDJmW+4DKksUaegihtq2Opgg2/XyhQAe+e1CP8HYwGO52ONaHUcC0k5THHZ
-         XLXuMmpp4Ay5x41BaH75tOSGz6Oticj80RBIz+WEo4CM6OVPKiWow8joDwPf2rMxuxhz
-         5LILbhqNoerc62wquSKLmfsB1AlAgz/3MdoQu/+zJOE5fTqcs9/LJBKmu+x5R8Nu7YHD
-         4OnQ==
-X-Gm-Message-State: ANoB5pkTiAs+K+ZXC0uVBJQlpEXXzpoAjcKL9B9wDhqnniXXdn0pqAVl
-        X8TFzT7t+dPLckp7oGvLqtHkbcY51TYM
-X-Google-Smtp-Source: AA0mqf7zKuKHJILouCKRvL3z3BO4PlGpMm7J84X65Ob+k1s7jKSRMTqf9I/8n9TZCQ3eRFCbyf7EKg==
-X-Received: by 2002:adf:f88c:0:b0:242:5563:c3b with SMTP id u12-20020adff88c000000b0024255630c3bmr7406248wrp.59.1670756211870;
-        Sun, 11 Dec 2022 02:56:51 -0800 (PST)
-Received: from koolguy (dslb-094-217-227-056.094.217.pools.vodafone-ip.de. [94.217.227.56])
-        by smtp.gmail.com with ESMTPSA id h17-20020a5d4fd1000000b0024246991121sm5821908wrw.116.2022.12.11.02.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 02:56:51 -0800 (PST)
-Date:   Sun, 11 Dec 2022 11:56:49 +0100
-From:   Dalvin Aiguobas <pharcodra@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: [PATCH] staging: wlan-ng: fix checkpatch error for spinlock
-Message-ID: <20221211105649.GA4683@koolguy>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9YWp6K3uTj0NW63MVBBW2akr/MvPwicO7toRTwXU04=;
+        b=ZpE5facVkMttMcOvpmVNTIlHbzKF0AWAEsVkhMh+TFh5W5nFjDKSlu/o0W6aHCvyve
+         nLSGFXpb18LJRXkTeXfd55rlRF+bFAKyASHTi34CrCa11UVDcnAZoNNddI7FulN5sou5
+         6j5ro7VhJFRuVaDJCdw8iqyMmqAWaA+3PhPB7WCvXb+8zk0KMX/xJNvtBtsGgzvzTT+0
+         YQUMbFHTIbKVzDPdPkU6V6WfICmN0/YmkXCuQCGFmuNdituLIat+BzDAEsncCfVOmZyu
+         cqGGgSKu8LWvgzlG4Ip18SqmlOy4rmIxghX23AykQs5Gwu0huTsjUXy16556dM/gPc1W
+         gznQ==
+X-Gm-Message-State: ANoB5plVoo4iS9P5i5LKk1P5D44fZ+SHNkOTYDY5Ldrvf7M5LrA24zAp
+        9nnR18MyFHe6EkioIg1J37o+vURWr8kyxZwdxr+InQ==
+X-Google-Smtp-Source: AA0mqf7BgSNrqBFAKnAQmO46PdiwH696338bl7b2V+k1Zb1F4TNuObFzHWFsDQB7Km/uqKkDApMmMsXuRmvAiJx9a8I=
+X-Received: by 2002:a17:90a:df01:b0:21a:8ca:f73 with SMTP id
+ gp1-20020a17090adf0100b0021a08ca0f73mr11373353pjb.82.1670756471710; Sun, 11
+ Dec 2022 03:01:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221211103857.25805-1-zhangjiachen.jaycee@bytedance.com>
+In-Reply-To: <20221211103857.25805-1-zhangjiachen.jaycee@bytedance.com>
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Date:   Sun, 11 Dec 2022 19:01:00 +0800
+Message-ID: <CAFQAk7hKTnzyc8Vnnp7UNhjZBqYQC_dukBOEgR255izUNk0_Qw@mail.gmail.com>
+Subject: Re: [PATCH] virtiofs: enable multiple request queues
+To:     Vivek Goyal <vgoyal@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Cc:     virtualization@lists.linux-foundation.org,
+        "open list:FUSE: FILESYSTEM IN USERSPACE" 
+        <linux-fsdevel@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Connor Kuehl <ckuehl@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,25 +71,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checkpatch Styleproblem fixed by adding comment.
+On Sun, Dec 11, 2022 at 6:40 PM Jiachen Zhang
+<zhangjiachen.jaycee@bytedance.com> wrote:
+>
+> Support virtio-fs multiple virtqueues and distribute requests across the
+> multiqueue complex automatically based on the IRQ affinity.
+>
+> This commit is based on Connor's patch in the virtio-fs mailing-list,
+> and additionally intergates cpu-to-vq map into struct virtio_fs so that
+> this virtio-fs multi-queue feature can fit into multiple virtio-fs mounts.
+>
+> Link: https://www.mail-archive.com/virtio-fs@redhat.com/msg03320.html
+> Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
+> Cc: Connor Kuehl <ckuehl@redhat.com>
+> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> ---
 
-Signed-off-by: Dalvin <pharcodra@gmail.com>
----
- drivers/staging/wlan-ng/hfa384x.h | 1 +
- 1 file changed, 1 insertion(+)
+Hi all,
 
-diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
-index 0611e37df6ac..ad117d570bb6 100644
---- a/drivers/staging/wlan-ng/hfa384x.h
-+++ b/drivers/staging/wlan-ng/hfa384x.h
-@@ -1171,6 +1171,7 @@ struct hfa384x_usbctlx {
- };
- 
- struct hfa384x_usbctlxq {
-+	/* lock: Protect structure fields */
- 	spinlock_t lock;
- 	struct list_head pending;
- 	struct list_head active;
--- 
-2.25.1
+The corresponding QEMU virtiofsd changes can be found in the
+qemu-devel mailing list. The mail link is
+https://lore.kernel.org/qemu-devel/20221211104743.27333-1-zhangjiachen.jaycee@bytedance.com/
+.
 
+To enable this multi-queue feature with QEMU emulated virtio-fs
+devices, you should specify both the qemu-system-x86_64 vhost-user-fs
+parameter and the virtiofsd parameter.
+
+For example, to setup 16 virtio-fs request queues, you should apply
+the kernel patch in this mail, the QEMU vhost-user-fs device should be
+like  '-device vhost-user-fs-pci,chardev=char0,tag=myfs,num-request-queues=16',
+and for the virtiofsd you should specify  '-o num_request_queues=16'.
+
+Thanks,
+Jiachen
+
+>  fs/fuse/virtio_fs.c | 37 +++++++++++++++++++++++++++++--------
+>  1 file changed, 29 insertions(+), 8 deletions(-)
+>
+> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+> index 4d8d4f16c727..410968dede0c 100644
+> --- a/fs/fuse/virtio_fs.c
+> +++ b/fs/fuse/virtio_fs.c
+> @@ -32,8 +32,9 @@ static DEFINE_MUTEX(virtio_fs_mutex);
+>  static LIST_HEAD(virtio_fs_instances);
+>
+>  enum {
+> -       VQ_HIPRIO,
+> -       VQ_REQUEST
+> +       VQ_HIPRIO = 0,
+> +       /* TODO add VQ_NOTIFICATION according to the virtio 1.2 spec. */
+> +       VQ_REQUEST = 1,
+>  };
+>
+>  #define VQ_NAME_LEN    24
+> @@ -59,6 +60,7 @@ struct virtio_fs {
+>         struct list_head list;    /* on virtio_fs_instances */
+>         char *tag;
+>         struct virtio_fs_vq *vqs;
+> +       struct virtio_fs_vq * __percpu *vq_proxy;
+>         unsigned int nvqs;               /* number of virtqueues */
+>         unsigned int num_request_queues; /* number of request queues */
+>         struct dax_device *dax_dev;
+> @@ -686,6 +688,7 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
+>         struct virtqueue **vqs;
+>         vq_callback_t **callbacks;
+>         const char **names;
+> +       struct irq_affinity desc = { .pre_vectors = 1, .nr_sets = 1, };
+>         unsigned int i;
+>         int ret = 0;
+>
+> @@ -694,11 +697,16 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
+>         if (fs->num_request_queues == 0)
+>                 return -EINVAL;
+>
+> +       fs->num_request_queues = min_t(unsigned int, nr_cpu_ids,
+> +                                      fs->num_request_queues);
+> +
+>         fs->nvqs = VQ_REQUEST + fs->num_request_queues;
+>         fs->vqs = kcalloc(fs->nvqs, sizeof(fs->vqs[VQ_HIPRIO]), GFP_KERNEL);
+>         if (!fs->vqs)
+>                 return -ENOMEM;
+>
+> +       pr_debug("virtio-fs: number of vqs: %d\n", fs->nvqs);
+> +
+>         vqs = kmalloc_array(fs->nvqs, sizeof(vqs[VQ_HIPRIO]), GFP_KERNEL);
+>         callbacks = kmalloc_array(fs->nvqs, sizeof(callbacks[VQ_HIPRIO]),
+>                                         GFP_KERNEL);
+> @@ -723,12 +731,26 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
+>                 names[i] = fs->vqs[i].name;
+>         }
+>
+> -       ret = virtio_find_vqs(vdev, fs->nvqs, vqs, callbacks, names, NULL);
+> +       ret = virtio_find_vqs(vdev, fs->nvqs, vqs, callbacks, names, &desc);
+>         if (ret < 0)
+>                 goto out;
+>
+> -       for (i = 0; i < fs->nvqs; i++)
+> +       fs->vq_proxy = alloc_percpu(struct virtio_fs_vq *);
+> +       for (i = 0; i < fs->nvqs; i++) {
+> +               const struct cpumask *mask;
+> +               unsigned int cpu;
+> +
+>                 fs->vqs[i].vq = vqs[i];
+> +               if (i == VQ_HIPRIO)
+> +                       continue;
+> +
+> +               mask = vdev->config->get_vq_affinity(vdev, i);
+> +               for_each_cpu(cpu, mask) {
+> +                       struct virtio_fs_vq **cpu_vq = per_cpu_ptr(fs->vq_proxy, cpu);
+> +                       *cpu_vq = &fs->vqs[i];
+> +                       pr_debug("virtio-fs: map cpu %d to vq%d\n", cpu, i);
+> +               }
+> +       }
+>
+>         virtio_fs_start_all_queues(fs);
+>  out:
+> @@ -875,8 +897,6 @@ static int virtio_fs_probe(struct virtio_device *vdev)
+>         if (ret < 0)
+>                 goto out;
+>
+> -       /* TODO vq affinity */
+> -
+>         ret = virtio_fs_setup_dax(vdev, fs);
+>         if (ret < 0)
+>                 goto out_vqs;
+> @@ -926,6 +946,7 @@ static void virtio_fs_remove(struct virtio_device *vdev)
+>         virtio_fs_stop_all_queues(fs);
+>         virtio_fs_drain_all_queues_locked(fs);
+>         virtio_reset_device(vdev);
+> +       free_percpu(fs->vq_proxy);
+>         virtio_fs_cleanup_vqs(vdev);
+>
+>         vdev->priv = NULL;
+> @@ -1223,7 +1244,6 @@ static int virtio_fs_enqueue_req(struct virtio_fs_vq *fsvq,
+>  static void virtio_fs_wake_pending_and_unlock(struct fuse_iqueue *fiq)
+>  __releases(fiq->lock)
+>  {
+> -       unsigned int queue_id = VQ_REQUEST; /* TODO multiqueue */
+>         struct virtio_fs *fs;
+>         struct fuse_req *req;
+>         struct virtio_fs_vq *fsvq;
+> @@ -1243,7 +1263,8 @@ __releases(fiq->lock)
+>                  req->in.h.nodeid, req->in.h.len,
+>                  fuse_len_args(req->args->out_numargs, req->args->out_args));
+>
+> -       fsvq = &fs->vqs[queue_id];
+> +       fsvq = this_cpu_read(*fs->vq_proxy);
+> +
+>         ret = virtio_fs_enqueue_req(fsvq, req, false);
+>         if (ret < 0) {
+>                 if (ret == -ENOMEM || ret == -ENOSPC) {
+> --
+> 2.20.1
+>
