@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5324F64944F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989C164945D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiLKNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 08:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S230175AbiLKNHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 08:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiLKNEm (ORCPT
+        with ESMTP id S230272AbiLKNHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 08:04:42 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08112E0EE;
-        Sun, 11 Dec 2022 05:04:35 -0800 (PST)
+        Sun, 11 Dec 2022 08:07:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FE811178;
+        Sun, 11 Dec 2022 05:07:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2392CCE0B3C;
-        Sun, 11 Dec 2022 13:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583E3C433EF;
-        Sun, 11 Dec 2022 13:04:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64C7CB80AC6;
+        Sun, 11 Dec 2022 13:07:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FA4C433D2;
+        Sun, 11 Dec 2022 13:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670763872;
-        bh=rjulAWcB0oewyoruaQq0t/DRG1FGCBitINMFcj8ZIA8=;
+        s=k20201202; t=1670764020;
+        bh=zlEEnDEYnGZC8VDXKbRLr8RsO6R1qwR+5PT7aelj26I=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g5o50Y7macok3FyLB64HZwwbZ0nNmAIsrM5vxMTe5Kh3j2lTKPWfyT/DPi/bwfTa2
-         E1B7wjTTzHyFG0NdgjW3l0yNwdUqijl559AwMVooJtLCp8XzzImzKFm9BLpOq/z6IC
-         ng7YsjJJNvpwyW9YyXxrg49wxHpOCwoEiqQ/XLkRpLSwuB0sFMxD7d5+3nQlSzEpox
-         9p2y2BnTS/LHqWLJVPxLqGEXhF/M4dJCS+oHOKhp9oTVBxu9S5ZBr83n6O5pn30313
-         ytR584F7STiCQg753JUaVLa21MqZ09EgS5YJU/HasLGNw70Lh4zyyGJmj6A5iJNu/I
-         1r7hPyUfHhr3Q==
-Date:   Sun, 11 Dec 2022 13:17:27 +0000
+        b=Q7PHIb/JYq4vvmARmt9XhYN6Oi/mPw8cbE4/yNGB0x6SjAMg0zeOK4wt3il7WJL/s
+         dyuOeuUm7eQA8lA1Iyxn1yMej738KnrpoYQMjG/BKOd9I9hwpXDXVRV3CIM+dZ3547
+         o6kgKBu1O1jINsGB/yevapnSxJlwbCWcSzs5JNltOvYP/kdGnM/NH1o8jJW76kiBXz
+         ZCBJtzR8yFIyEiQfhex8CkfikJdaVZwPcMYOq7r6TcI5BoJAmR01A2cc4gRS5cXKtz
+         d+K4Lb4M0L6UD8R5oZRCOkMkLjxg7GUSjSUPBF2CYi/8TQ3MQd9aRtP3qsksRrVQel
+         YFUBPp4rx8S7w==
+Date:   Sun, 11 Dec 2022 13:19:54 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         Lars-Peter Clausen <lars@metafoo.de>,
         Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 03/11] iio: light: tsl2563: Configure INT in one
- place
-Message-ID: <20221211131727.24ac49d2@jic23-huawei>
-In-Reply-To: <20221207190348.9347-3-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 04/11] iio: light: tsl2563: Make use of the macros
+ from bits.h
+Message-ID: <20221211131954.6cfceef9@jic23-huawei>
+In-Reply-To: <20221207190348.9347-4-andriy.shevchenko@linux.intel.com>
 References: <20221207190348.9347-1-andriy.shevchenko@linux.intel.com>
-        <20221207190348.9347-3-andriy.shevchenko@linux.intel.com>
+        <20221207190348.9347-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,39 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  7 Dec 2022 21:03:40 +0200
+On Wed,  7 Dec 2022 21:03:41 +0200
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> Introduce tsl2563_configure_irq() to configure INT in one place.
-> 
-> While at it, make use of TSL2563_INT_LEVEL and newly introduced
-> TSL2563_INT_MASK.
+> Make use of BIT() and GENMASK() where it makes sense.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > Tested-by: Ferry Toth <ftoth@exalondelft.nl>
-Trivial note on a further improvement inline.
+Hohum.  I did look to see if there was a GENMASK() patch before
+the comment on previous one, but apparently my eyes skipped
+this one! Ignore me as this is exactly what I was suggesting.
 
-LGTM
-> ---
->  drivers/iio/light/tsl2563.c | 42 ++++++++++++++++++++++---------------
->  1 file changed, 25 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/iio/light/tsl2563.c b/drivers/iio/light/tsl2563.c
-> index d836c15ba777..d071805239ef 100644
-> --- a/drivers/iio/light/tsl2563.c
-> +++ b/drivers/iio/light/tsl2563.c
-> @@ -69,6 +69,7 @@
->  
->  #define TSL2563_INT_DISABLED	0x00
->  #define TSL2563_INT_LEVEL	0x10
-> +#define TSL2563_INT_MASK	0x30
-
-Better to use GENMASK etc, but given age of driver I'm not surprised no one
-has made the conversion to that and FIELD_GET/ FIELD_PREP.
-
-Nice follow up if anyone is bored enough ;)
-
-
->  #define TSL2563_INT_PERSIST(n)	((n) & 0x0F)
->  
-
+J
