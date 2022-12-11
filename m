@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F066491C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CE86491C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiLKCOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 21:14:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S229815AbiLKCPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 21:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLKCOv (ORCPT
+        with ESMTP id S229821AbiLKCPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 21:14:51 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F912AB7;
-        Sat, 10 Dec 2022 18:14:50 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NV7Xf0wWqzJnsN;
-        Sun, 11 Dec 2022 10:11:14 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 11 Dec 2022 10:14:48 +0800
-Message-ID: <d2dd457e-ee9a-bdee-1efc-fe358d8f49a9@huawei.com>
-Date:   Sun, 11 Dec 2022 10:14:47 +0800
+        Sat, 10 Dec 2022 21:15:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E512ACA
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 18:15:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1273660CF8
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F25DC433EF;
+        Sun, 11 Dec 2022 02:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670724903;
+        bh=ysAWWkD442+3tVYIkKxhWHOsZpRBubaUkwLhnkAAAYc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IIlqhXNusQqvl22+XFC0s3Np6aKYzFBRoGuHE5NwURogeUzQ5veuM4fu1ipRUGNn5
+         RLPyEqaWuqO3+aGqyxTLpLkcls43TEkL+Efnet+K0isXC/O/ZoRspy9zatJv5ZV9zs
+         fXrzh60O4IlF/NOMyFWhMopJyFSc5fXwt+sh+KRCPKoZmp8ZNz0NiUdkGOMt8eNdtZ
+         I0eEyMnGEKqoaeev0lGYyr9cqz7ts2TGUUiXCvWjvoDnqgnWKXY6yFvdVIjQE5TA5n
+         hEBp0owxKemEI99ZFjhppwx0Auopxo1lSEMsL76VRP2LAl4qbQh6fMX1rpvlfyKhW6
+         2vDy7vvGavaIA==
+Message-ID: <05a1dff7-ae67-9804-0556-ded5341d200b@kernel.org>
+Date:   Sun, 11 Dec 2022 10:15:01 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] of: overlay: fix null pointer dereferencing in
- find_dup_cset_node_entry() and find_dup_cset_prop()
-To:     Rob Herring <robh@kernel.org>
-CC:     <frowand.list@gmail.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221206083657.3202856-1-ruanjinjie@huawei.com>
- <20221209205900.GA3808024-robh@kernel.org>
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] f2fs: remove F2FS_SET_FEATURE() and F2FS_CLEAR_FEATURE()
+ macro
 Content-Language: en-US
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-In-Reply-To: <20221209205900.GA3808024-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221124033708.10580-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221124033708.10580-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.254]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,55 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/24 11:37, Yangtao Li wrote:
+> F2FS_SET_FEATURE() and F2FS_CLEAR_FEATURE() have never
+> been used since they were introduced by this commit
+> 76f105a2dbcd("f2fs: add feature facility in superblock").
+> 
+> So let's remove them. BTW, convert f2fs_sb_has_##name to return bool.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-On 2022/12/10 4:59, Rob Herring wrote:
-> On Tue, Dec 06, 2022 at 04:36:57PM +0800, ruanjinjie wrote:
->> when kmalloc() fail to allocate memory in kasprintf(), fn_1 or fn_2 will
->> be NULL, strcmp() will cause null pointer dereference.
->>
->> Fixes: 2fe0e8769df9 ("of: overlay: check prevents multiple fragments touching same property")
->> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
->> ---
->>  drivers/of/overlay.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
->> index bd8ff4df723d..49c066b51148 100644
->> --- a/drivers/of/overlay.c
->> +++ b/drivers/of/overlay.c
->> @@ -545,6 +545,11 @@ static int find_dup_cset_node_entry(struct overlay_changeset *ovcs,
->>  
->>  		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
->>  		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
->> +		if (!fn_1 || !fn_2) {
->> +			kfree(fn_1);
->> +			kfree(fn_2);
->> +			return -ENOMEM;
->> +		}
->>  		node_path_match = !strcmp(fn_1, fn_2);
-> 
-> We don't actually care what the return code is, so just change this to:
-> 
-> node_path_match = !fn_1 || !fn_2 || !strcmp(fn_1, fn_2);
-Thank you very much!I'll give the v2 patch soon.
-> 
->>  		kfree(fn_1);
->>  		kfree(fn_2);
->> @@ -580,6 +585,11 @@ static int find_dup_cset_prop(struct overlay_changeset *ovcs,
->>  
->>  		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
->>  		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
->> +		if (!fn_1 || !fn_2) {
->> +			kfree(fn_1);
->> +			kfree(fn_2);
->> +			return -ENOMEM;
->> +		}
->>  		node_path_match = !strcmp(fn_1, fn_2);
->>  		kfree(fn_1);
->>  		kfree(fn_2);
->> -- 
->> 2.25.1
->>
->>
-> 
+Thanks,
