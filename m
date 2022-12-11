@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FC1649670
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 22:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E70464967F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 22:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiLKVPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 16:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S230338AbiLKVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 16:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLKVPv (ORCPT
+        with ESMTP id S229471AbiLKVbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 16:15:51 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6571BC14
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 13:15:50 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id v71so11506997ybv.6
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 13:15:50 -0800 (PST)
+        Sun, 11 Dec 2022 16:31:22 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC178BC99;
+        Sun, 11 Dec 2022 13:31:19 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so3671253wma.1;
+        Sun, 11 Dec 2022 13:31:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFQd2ZnrXp1T0JoyUefLP6nDZag4evJK9N5dazk18fU=;
-        b=wUdqoYlyaKxIWUBvCMPDSIChKgDgE1KOVUk42j26ASJkgys9n7xG8kVi/V4256vbi3
-         N9BGIUvbvk37YfurXzg7clbcHi/h3PRKdOPOFfxot7h+7k9n2RC24DP83wCaQ4aJ9SfU
-         9QEQvXslOHkyRNfiK7G1CBgC4bwd1OlInXQ3NbXkmC6lrNoVtpcBvm8zwRvgbNZ04P13
-         zhPwH/0yBzVhLtq6aDGHiX71JC5PqeJEVf16OFSD0HSr05zWbdVeiPM1JSLiRrzkmLfh
-         GIkesUBgZR13PlHCfZa+1OGuIo015VsJmDdSkkbX0xGcxlCgZj9B8A4ztKUHrLug0can
-         Zj0A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5FG9XFAhH1aAKNSCD7KXenAoQ7QCTJVpi7jZDxdnhI0=;
+        b=OC9FRQ5bdKmv3sGgoo1ZJg56K0vI4WY55htBKLsFGzk9o84vSEI5/l7nQi1LQ8Y9DI
+         h9uxsFWD7cqUr7Mq/8K4p+o4GN6cu7f5w2Uztm1feVVXrXD7ikwr/+KyoFvWfWaq+IPm
+         VVy4rkih1SoVMvYIwF/E/ID551LMhkPf2CutaMfzrefL+sGeuU24EB2sgCU2vLzAWCyQ
+         0rEHv+/E8UFMF1kbbRg976lsWYQ0fpLkADUr7jAbaZ5Nsg0Lbg4jgTnwomURdModQfpN
+         oJphnSwkiX7U3EqmpQX89N65d0HJmWfU+BnjS7+yDopegOF3zkclfr+jxbYLVni8NGk3
+         CFBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZFQd2ZnrXp1T0JoyUefLP6nDZag4evJK9N5dazk18fU=;
-        b=QdUDyAG7gkSMgDJ0cdxLvAfHi+hQwQ6jJ9b9hZ2TD2XNYcOuUIQpnhAMlHPjaXqcgN
-         nR7A1SMcaU43lf5NuaoZnYCn0+PzOU91revBDAFTFyatOep3P1f2aIBYCNimIc8+x/Tl
-         MZRVothMuZJl0UONRAIfEByc/VUxptVJ1w89HrJlY3CrndkKwsz5EvFZlFeFwWY6aHed
-         fRLG/MUBhHFzdhO3a/zRx4YnxU/s5Btu7HNch5xdkoft45Dzt5Jkw3ex4gIHqKZSsbA6
-         f32X2wr0HxuEp1t5si/A4vZLHH3zuUJbpXEOUtwIi4z4WzlOa1ygXNf8rq5nKr3ieYrh
-         z5QA==
-X-Gm-Message-State: ANoB5pkSMR3NFghxTbWxjbbN6+gHvvCPKunXxeqmutoPtbK+NyQEf+LM
-        wUvdojO1j0bIGjGtwmL/9WJxGzyX7WwS06HcTWPyHA==
-X-Google-Smtp-Source: AA0mqf7/yPAsEdTsuK45OapbMO521RJhp7EwRCRhTkL9E1VmUicXued1+pR1WsrqpEiKMJku6tC1USuWdxXKO5sPxXE=
-X-Received: by 2002:a25:384a:0:b0:710:a8a6:d45 with SMTP id
- f71-20020a25384a000000b00710a8a60d45mr3055491yba.152.1670793349879; Sun, 11
- Dec 2022 13:15:49 -0800 (PST)
+        bh=5FG9XFAhH1aAKNSCD7KXenAoQ7QCTJVpi7jZDxdnhI0=;
+        b=7oxMFvtpLa1hZ6PrQ0XnLzhwnBv0Cyg+z75XJH0+ZkXduSN1bzFzAiTePxr0ruP6m3
+         4MWSMZIYsQljpV90IfSi/sflzDTr8e96xJRJmuor74QMsO6EO4qEh8yqhCpbJWr8UHhq
+         cWhdqiwvSoVTE9ALeBljd1VhOKLbazGBl0+sJesVw3N57ABJJn2jFY+13tgn1O4W0Z+/
+         42CFKvX9TUak+rDjCbUU4QhrEKosCMgt9ZAquVH63nZJxOaKRqH1iWRATPkWuMuL7mOZ
+         5xCA/Ap/V1VG015bqMcYCqWGUHH8UJnI00pwAbXfuSEoRQzqC5DAJsmUw2dh1HZlzB9h
+         k6xw==
+X-Gm-Message-State: ANoB5pl/1eoRF98Fvkl7jiqJO2ulE7QNpI6/EhT1OTATV1V7VnFyady3
+        /FKTi7fg+jmARyp6vOomgIaFd9GkNR0=
+X-Google-Smtp-Source: AA0mqf7WUdx4Cm7Ae0JDat+14OBRjlMLKUwnBQpLWULqMx/qMiOpgVxSMm05AG8y3yz4qJxmL4/HbA==
+X-Received: by 2002:a05:600c:991:b0:3cf:aa48:23d4 with SMTP id w17-20020a05600c099100b003cfaa4823d4mr10965839wmp.25.1670794278133;
+        Sun, 11 Dec 2022 13:31:18 -0800 (PST)
+Received: from localhost.localdomain (host-95-247-100-134.retail.telecomitalia.it. [95.247.100.134])
+        by smtp.gmail.com with ESMTPSA id m127-20020a1c2685000000b003d1d5a83b2esm6866350wmm.35.2022.12.11.13.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 13:31:17 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Fabio M . De Francesco" <fmdrefrancesco@gmail.com>
+Subject: [PATCH 0/3] fs/ufs: replace kmap() with kmap_local_page()
+Date:   Sun, 11 Dec 2022 22:31:08 +0100
+Message-Id: <20221211213111.30085-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221210115704.97614-1-krzysztof.kozlowski@linaro.org>
- <20221210115704.97614-4-krzysztof.kozlowski@linaro.org> <f1aa7f4c-35e4-47d2-2443-8271175dc5af@linaro.org>
- <61b4b894-2c49-881f-c2eb-107e8e558232@linaro.org>
-In-Reply-To: <61b4b894-2c49-881f-c2eb-107e8e558232@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 11 Dec 2022 23:15:39 +0200
-Message-ID: <CAA8EJpqZiJd9=T8rdj65RZ2b5_OTai_a7MOektVB2gH8hGKdQg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8250: move sound and codec nodes
- out of soc
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022 at 22:13, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/12/2022 13:31, Konrad Dybcio wrote:
-> >
-> >
-> > On 10.12.2022 12:57, Krzysztof Kozlowski wrote:
-> >> The sound and codec nodes are not a property of a soc, but rather board
-> >> as it describes the sound configuration.
-> > * in this case, there exist SoC-internal codecs
->
-> wcd9380 is not SoC internal, so to which codec you refer to? Sound node
-> is for sound configuration, not codec, and sound configuration is board
-> specific.
+kmap() is being deprecated in favor of kmap_local_page().
 
-The platform has several macro 'codec's, which are SoC-internal
-devices. On the other hand, these devices also have bus addresses.
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
->
-> >
-> >  It also does not have unit
-> >> address:
-> >>
-> >>   sm8250-hdk.dtb: soc@0: sound: {} should not be valid under {'type': 'object'}
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
+Since its use in fs/ufs is safe everywhere, it should be preferred.
+
+Therefore, replace kmap() with kmap_local_page() in fs/ufs. kunmap_local()
+requires the mapping address, so return that address from ufs_get_page()
+to be used in ufs_put_page().
+
+This series could have not been ever made because nothing prevented the
+previous patch from working properly but Al Viro made a long series of
+very appreciated comments about how many unnecessary and redundant lines
+of code I could have removed. He could see things I was entirely unable
+to notice. Furthermore, he also provided solutions and details about how
+I could decompose a single patch into a small series of three
+independent units.[1][2][3]
+
+I want to thank him so much for the patience, kindness and the time he
+decided to spend to provide those analysis and write three messages full
+of interesting insights. I hope to have not misunderstood too many
+things, however I'm pretty sure that I made many mistakes due to my
+scarce knowledge of filesystem and, above all, lack of experience :-)
+
+I decided to get rid of the previous numbers and start from scratch
+(i.e., version 1) because this series has too little to share with the
+design of the previous patch.[4]
+
+[1] https://lore.kernel.org/lkml/Y4E++JERgUMoqfjG@ZenIV/
+[2] https://lore.kernel.org/lkml/Y4FG0O7VWTTng5yh@ZenIV/
+[3] https://lore.kernel.org/lkml/Y4ONIFJatIGsVNpf@ZenIV/
+[4] https://lore.kernel.org/lkml/20221016163855.8173-1-fmdefrancesco@gmail.com/
+
+Cc: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Fabio M. De Francesco <fmdrefrancesco@gmail.com>
+
+Fabio M. De Francesco (3):
+  fs/ufs: Use the offset_in_page() helper
+  fs/ufs: Change the signature of ufs_get_page()
+  fs/ufs: Replace kmap() with kmap_local_page()
+
+ fs/ufs/dir.c | 140 +++++++++++++++++++++++++++------------------------
+ 1 file changed, 73 insertions(+), 67 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.38.1
+
