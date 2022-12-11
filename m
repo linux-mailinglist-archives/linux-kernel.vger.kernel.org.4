@@ -2,55 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CCD6491DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116096491E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLKC12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 21:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S229888AbiLKC2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 21:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLKC1Z (ORCPT
+        with ESMTP id S229560AbiLKC2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 21:27:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7383ADEDB
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 18:27:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 175CDB80966
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9B4C433EF;
-        Sun, 11 Dec 2022 02:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670725641;
-        bh=Kz4hLtbGrjd7gtG9dlPx4Fp0vpjG79m3yjTtXj56pBw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gr8MD30huWtiIQpUoOpTNyOlPWzTeYL9uu7K8Exaavzkq84e/0ZVuTnbP5KcUdqPZ
-         yXnRLpv3Z0kYruFOrC5gk6Ig29x9s9kvyyo6QsbqKoAGkqQOlCugCHgTJltFTggXyZ
-         PDvuBzBQ/ZTUgxYG5FwVMzojwxnT58YJl3rebEikFROFRKgpwoLoUYrJrAAni8qurb
-         F3FgVGkYr9TSqaCzYbTpMUqsETGAdqoZ6YgsVQEakaVVw0yiAyF7FFTcaxsOWMQs6n
-         Z5wXSVfjQ2p2gYHSMuLjf3Xq9VkCLXtkSW3pkWKPTGBgGn//n7It+Cie9lBuw4iIzV
-         eRTOGQarRIGCQ==
-Message-ID: <3f2c81f8-7946-d2e0-8768-6f0b03282944@kernel.org>
-Date:   Sun, 11 Dec 2022 10:27:18 +0800
+        Sat, 10 Dec 2022 21:28:32 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DD010546;
+        Sat, 10 Dec 2022 18:28:31 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id m18so20049459eji.5;
+        Sat, 10 Dec 2022 18:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kz8UCTQ9WHAf5JhkPjYAXVzTT4HzgSv8RTOSjH8wUj4=;
+        b=K9G0WDjvIfRxiA8xrSmt44yBpBQVe0AdlIRTD1yh8vaEmcgFncS9IkxTNR3Rg1kLve
+         o3Walf+HtOmGONYALr1A1TDnL9VcsNLakuRdAqwnUPIMm7rdUxXJBYSe9+LPQ/1OIw/G
+         Tw1NWUs/8qnCRX6/wuE9OXTvHpJfLruu7uXaSZwtOBuCebyAbO9E4TgvHLH2RMOSo+qX
+         P/Ir6AZZO6T5RAn+uAHuoHkV934xUAX0oBXZr5xyZFuYAiQruvWoQcGX1BXLZl+AllN+
+         pfsDXS7nEF1stgJAhKktNlzJgmI/3E9CsMbBRywaMqsiN2qiz29Hy/6OwR+xUVw1KUrX
+         qWuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kz8UCTQ9WHAf5JhkPjYAXVzTT4HzgSv8RTOSjH8wUj4=;
+        b=tv126fXhMCNPl4ZZCIRbG79S4m+jHw8CZ5TSS62pI3gberKnkA+1CUOHQwmI0PtM9B
+         cFgjS28ZNvzZvdWKC8jJjKpjTZh3P2YLuGTzRMKcZ3EBSEIVzfp2ijGmKGiLIgSX8gc/
+         CvD/3zUesWfo9+J9U8TL03PAIRQuOCQwbTVc/ySSHwrSm8lRPlOMHYIBurhyCLIqZm2B
+         2Y23Owur+nhvnjzukSOArL+8pbluuU8WZmfw4jU5pei4w2FBEO8s2kvKcOmsZ9Jqgdof
+         BPr68duhxfphGw44GsNWDdMwnoXWItjvbgmIFHHIScPrDmDkJEomTxHPpHUG/hUfP4qt
+         a8ZQ==
+X-Gm-Message-State: ANoB5pk8RqNNn9L8PykGcI1a4lBf0TG4cSIYeqcW54epXXOIrIHt0PNq
+        bTjy0X4oCv3suMCxeDNqCfVqADbI6N5q9r2Iczc=
+X-Google-Smtp-Source: AA0mqf5prpvAqhvSogkAQlNu7wWUWpyU4sAQFN1xjbIalUKERm86mEBlmrSum2+sDjBmVH64S0nFkDoFm4KaRT2hoQA=
+X-Received: by 2002:a17:906:4351:b0:78d:513d:f447 with SMTP id
+ z17-20020a170906435100b0078d513df447mr70015362ejm.708.1670725709381; Sat, 10
+ Dec 2022 18:28:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] f2fs: don't call f2fs_issue_discard_timeout() when
- discard_cmd_cnt is 0 in f2fs_put_super()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20221202045841.9888-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221202045841.9888-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221207172434.435893-1-roberto.sassu@huaweicloud.com> <20221207172434.435893-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221207172434.435893-3-roberto.sassu@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 10 Dec 2022 18:28:18 -0800
+Message-ID: <CAADnVQKhWEtqAkMnWR8Twpc6uPo_MWnAf68R-xeM=YVqxkLOyQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 2/7] bpf: Mark ALU32 operations in bpf_reg_state structure
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +86,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/2 12:58, Yangtao Li wrote:
-> No need to call f2fs_issue_discard_timeout() in f2fs_put_super,
-> when no discard command requires issue. Since the caller of
-> f2fs_issue_discard_timeout() usually judges the number of discard
-> commands before using it. Let's move this logic to
-> f2fs_issue_discard_timeout().
-> 
-> By the way, use f2fs_realtime_discard_enable to simplify the code.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   fs/f2fs/segment.c | 6 ++++--
->   fs/f2fs/super.c   | 8 ++------
->   2 files changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 9486ca49ecb1..d5f150a08285 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -1655,6 +1655,9 @@ bool f2fs_issue_discard_timeout(struct f2fs_sb_info *sbi)
->   	struct discard_policy dpolicy;
->   	bool dropped;
->   
-> +	if (!atomic_read(&dcc->discard_cmd_cnt))
-> +		return false;
-> +
->   	__init_discard_policy(sbi, &dpolicy, DPOLICY_UMOUNT,
->   					dcc->discard_granularity);
->   	__issue_discard_cmd(sbi, &dpolicy);
-> @@ -2110,8 +2113,7 @@ static void destroy_discard_cmd_control(struct f2fs_sb_info *sbi)
->   	 * Recovery can cache discard commands, so in error path of
->   	 * fill_super(), it needs to give a chance to handle them.
->   	 */
-> -	if (unlikely(atomic_read(&dcc->discard_cmd_cnt)))
-> -		f2fs_issue_discard_timeout(sbi);
-> +	f2fs_issue_discard_timeout(sbi);
->   
->   	kfree(dcc);
->   	SM_I(sbi)->dcc_info = NULL;
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 79bf1faf4161..aa1cadfd34a5 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -1576,8 +1576,7 @@ static void f2fs_put_super(struct super_block *sb)
->   	/* be sure to wait for any on-going discard commands */
->   	dropped = f2fs_issue_discard_timeout(sbi);
->   
-> -	if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
-> -					!sbi->discard_blks && !dropped) {
-> +	if (f2fs_realtime_discard_enable(sbi) && !sbi->discard_blks && !dropped) {
+On Wed, Dec 7, 2022 at 9:25 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> BPF LSM needs a reliable source of information to determine if the return
+> value given by eBPF programs is acceptable or not. At the moment, choosing
+> either the 64 bit or the 32 bit one does not seem to be an option
+> (selftests fail).
+>
+> If we choose the 64 bit one, the following happens.
+>
+>       14:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
+>       15:       74 00 00 00 15 00 00 00 w0 >>= 21
+>       16:       54 00 00 00 01 00 00 00 w0 &= 1
+>       17:       04 00 00 00 ff ff ff ff w0 += -1
+>
+> This is the last part of test_deny_namespace. After #16, the register
+> values are:
+>
+> smin_value = 0x0, smax_value = 0x1,
+> s32_min_value = 0x0, s32_max_value = 0x1,
+>
+> After #17, they become:
+>
+> smin_value = 0x0, smax_value = 0xffffffff,
+> s32_min_value = 0xffffffff, s32_max_value = 0x0
+>
+> where only the 32 bit values are correct.
+>
+> If we choose the 32 bit ones, the following happens.
+>
+> 0000000000000000 <check_access>:
+>        0:       79 12 00 00 00 00 00 00 r2 = *(u64 *)(r1 + 0)
+>        1:       79 10 08 00 00 00 00 00 r0 = *(u64 *)(r1 + 8)
+>        2:       67 00 00 00 3e 00 00 00 r0 <<= 62
+>        3:       c7 00 00 00 3f 00 00 00 r0 s>>= 63
+>
+> This is part of test_libbpf_get_fd_by_id_opts (no_alu32 version). In this
+> case, 64 bit register values should be used (for the 32 bit ones, there is
+> no precise information from the verifier).
+>
+> As the examples above suggest that which register values to use depends on
+> the specific case, mark ALU32 operations in bpf_reg_state structure, so
+> that BPF LSM can choose the proper ones.
 
-static inline bool f2fs_realtime_discard_enable(struct f2fs_sb_info *sbi)
-{
-	return (test_opt(sbi, DISCARD) && f2fs_hw_support_discard(sbi)) ||
-					f2fs_hw_should_discard(sbi);
-}
+I have a hard time understanding what is the problem you're
+trying to solve and what is the proposed fix.
 
-It looks the logic is changed?
-
-Thanks,
-
-
->   		struct cp_control cpc = {
->   			.reason = CP_UMOUNT | CP_TRIMMED,
->   		};
-> @@ -2225,7 +2224,6 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
->   	bool no_discard = !test_opt(sbi, DISCARD);
->   	bool no_compress_cache = !test_opt(sbi, COMPRESS_CACHE);
->   	bool block_unit_discard = f2fs_block_unit_discard(sbi);
-> -	struct discard_cmd_control *dcc;
->   #ifdef CONFIG_QUOTA
->   	int i, j;
->   #endif
-> @@ -2406,10 +2404,8 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
->   				goto restore_flush;
->   			need_stop_discard = true;
->   		} else {
-> -			dcc = SM_I(sbi)->dcc_info;
->   			f2fs_stop_discard_thread(sbi);
-> -			if (atomic_read(&dcc->discard_cmd_cnt))
-> -				f2fs_issue_discard_timeout(sbi);
-> +			f2fs_issue_discard_timeout(sbi);
->   			need_restart_discard = true;
->   		}
->   	}
+The patch is trying to remember the bitness of the last
+operation, but what for?
+The registers are 64-bit. There are 32-bit operations,
+but they always update the upper 32-bits of the register.
+reg_bounds_sync() updates 32 and 64 bit bounds regardless
+whether the previous operation was on 32 or 64 bit.
+It seems you're trying to hack around something that breaks
+patch 3 which also looks fishy.
+Please explain the problem first with a concrete example.
