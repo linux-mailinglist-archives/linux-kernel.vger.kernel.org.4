@@ -2,189 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283E4649268
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 06:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E8264926F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 06:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiLKFHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 00:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S229897AbiLKFR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 00:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiLKFHw (ORCPT
+        with ESMTP id S229796AbiLKFR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 00:07:52 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F5C60CB
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 21:07:46 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id t17so20503812eju.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 21:07:46 -0800 (PST)
+        Sun, 11 Dec 2022 00:17:26 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE9613E3F
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 21:17:25 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id 124so6452808pfy.0
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 21:17:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3smjL67ZlC6I1ImsgT+M5cNz43BaAKWvn4syPW0naF4=;
-        b=UmVz6bp3LrEASYgslUjlKnRUsPHUsInzfj9HVry6RvQw+YbMjfwtIWOPfRMaxMUl82
-         QvGihB2yc0iPkskgYL/ygMgr6v387C9hkStROcvSwbx7yo9NwbghqO1PduFFdin+YggA
-         4y/th/MlVZXb4aV9GUSo+k3kr/5BKEPwODqvE=
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0kPiXJlVEAGiE46bEmtCKOJ4JxdjDvz4UZE+PugYkgI=;
+        b=zD/O2nzY7tL6eshwIf3CeY/YAQIm1xVj5/Js/pKlVUvQWsGxQvosSXAL5bONw8IRja
+         NA3S79/dHcWpJuvuy9trw6RuKm57YDQCUNFpPvtYLZhGO3nfFMIvpKzeGx8mjTPJk5gq
+         hw+7ezvQrKhSUi9CIBPtmx5dqGx8b4Zr7z+xZLP2OUafjrWtcGD8PRS4P8yU7dKvr6Jv
+         UbbqVz0qPUqc4J5QhHhE7EjNOtQ744qnzQYQZf3qc8NljImI96wFoAZ++URfZ7JtOOme
+         i8w/sViehDGjCh8JEOb2IPC1RIyIsa1SCr8haVzrurKIBxrloDk0D0MMtViqlg2ivnDO
+         D2tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3smjL67ZlC6I1ImsgT+M5cNz43BaAKWvn4syPW0naF4=;
-        b=2l+m6mHdprEbXNCHzuSoY2BC6IuvElufr+RKFlek8XIOzbfv0a1vdqeTqas41/XyEA
-         dx5UBf+N3iuuAOYPfQFac/TLu8EreoZnnsjkP8OVUJkZpXr1wEZSC1arbxQ1kzW5PT5X
-         QqApDsS4KE1Lr/2ZUE6h50/V5QW/z8roE924OBg3OhA6INBK+mUXBlBfoSEAInKipxOL
-         lnhjCuEcE3zy2PMTAhd2m8Wj5WixdnYNDJx/4Hnw0mRS3E9X5pqu8RpX2Rsm60ph7C9q
-         UTzjx0/23vdXTngMP4C1Yhz6ew2cb1fDyX6+Bho/Gu8b3psLPvoC0+V4G15hOkdPAbh3
-         hCbg==
-X-Gm-Message-State: ANoB5pkJ5lC9sCSpgT1OLIfuxOXXTkmiu4cY3/4EH22kAFXuGy0uytnW
-        GwO08+wp2OlqCBT6UsdxE1R+2Q451ClPGWGX+C+lAA==
-X-Google-Smtp-Source: AA0mqf6fPE5O0mCZTUODpGCizhgNoMdh275lG1mAByh+v95utgEq1fVYUIQQJJWQjzQTXFz60AybY+4LxNX8e+VSMj0=
-X-Received: by 2002:a17:906:3993:b0:7ad:f5a9:ece3 with SMTP id
- h19-20020a170906399300b007adf5a9ece3mr80375060eje.635.1670735264515; Sat, 10
- Dec 2022 21:07:44 -0800 (PST)
+        bh=0kPiXJlVEAGiE46bEmtCKOJ4JxdjDvz4UZE+PugYkgI=;
+        b=Ol/qCAjqKegDOWQyT/Fy+X18798N8pABx/alJnLloBgempch2pUP98XJF1MK0XPFey
+         Eqvk5fve7OYcJ7tUiCKzwkDjnuJ7Lu+8U+55HOZ1PIu2aCOufmrVzf2pZJS3bSLa2K0p
+         8z+c0U1KED6yvQnsMf3gvpB1WUl5ZXikmuVvKMLSFWj5R5YaK3HZQjKBCkfwZFfweW7l
+         yii72aJ56RI41w3RAPZpjqZg1QqZV6QImRDpSk51rdFv+/DkmMnEvmFh1KH+A28L27ej
+         /vpvS3i6nTNCFJePQnd7onX9tTkfMD5HqfPu6PMpE6SJr9UqocsxSsAXLGOxR1ZeRylV
+         tb6g==
+X-Gm-Message-State: ANoB5pneW/7gxk0orNuxdGUlFq5lswLGxWx/V2jwrBukmPwnUhJ/wEvb
+        DlL9cqlXrd0lt5EwMJ7clJxwvA==
+X-Google-Smtp-Source: AA0mqf6ROckMAbfbisK6rGjhVdzEf/yVRLrsZe5jClX/LxHWmHcqbWN4KyQJGM1sOsD4rukXuxv6tA==
+X-Received: by 2002:aa7:904e:0:b0:56b:a2f8:1d0f with SMTP id n14-20020aa7904e000000b0056ba2f81d0fmr9918822pfo.0.1670735845341;
+        Sat, 10 Dec 2022 21:17:25 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id f125-20020a623883000000b00575d90636dcsm3463684pfa.6.2022.12.10.21.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 21:17:25 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH 0/3] KVM: arm64: Normalize cache configuration
+Date:   Sun, 11 Dec 2022 14:16:57 +0900
+Message-Id: <20221211051700.275761-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221210041646.3587757-1-lixiaoyan@google.com> <20221210041646.3587757-2-lixiaoyan@google.com>
-In-Reply-To: <20221210041646.3587757-2-lixiaoyan@google.com>
-From:   Michael Chan <michael.chan@broadcom.com>
-Date:   Sat, 10 Dec 2022 21:07:32 -0800
-Message-ID: <CACKFLim=PVOwineA4zOHZjeXeacUCD8ME1SysasSotCLMtAVBQ@mail.gmail.com>
-Subject: Re: [RFC net-next v6 2/2] bnxt: Use generic HBH removal helper in tx path
-To:     Coco Li <lixiaoyan@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fa665705ef865dd5"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000fa665705ef865dd5
-Content-Type: text/plain; charset="UTF-8"
+Before this change, the cache configuration of the physical CPU was
+exposed to vcpus. This is problematic because the cache configuration a
+vcpu sees varies when it migrates between vcpus with different cache
+configurations.
 
-On Fri, Dec 9, 2022 at 8:16 PM Coco Li <lixiaoyan@google.com> wrote:
->
-> Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-> for IPv6 traffic. See patch series:
-> 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
->
-> This reduces the number of packets traversing the networking stack and
-> should usually improves performance. However, it also inserts a
-> temporary Hop-by-hop IPv6 extension header.
->
-> Using the HBH header removal method in the previous patch, the extra header
-> be removed in bnxt drivers to allow it to send big TCP packets (bigger
-> TSO packets) as well.
->
-> Tested:
-> Compiled locally
->
-> To further test functional correctness, update the GSO/GRO limit on the
-> physical NIC:
->
-> ip link set eth0 gso_max_size 181000
-> ip link set eth0 gro_max_size 181000
->
-> Note that if there are bonding or ipvan devices on top of the physical
-> NIC, their GSO sizes need to be updated as well.
->
-> Then, IPv6/TCP packets with sizes larger than 64k can be observed.
->
-> Signed-off-by: Coco Li <lixiaoyan@google.com>
+Fabricate cache configuration from arm64_ftr_reg_ctrel0.sys_val, which
+holds the CTR_EL0 value the userspace sees regardless of which physical
+CPU it resides on.
 
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Tested-by: Michael Chan <michael.chan@broadcom.com>
+HCR_TID2 is now always set as it is troublesome to detect the difference
+of cache configurations among physical CPUs.
 
-Thanks.
+CSSELR_EL1 is now held in the memory instead of the corresponding
+phyisccal register as the fabricated cache configuration may have a
+cache level which does not exist in the physical CPU, and setting the
+physical CSSELR_EL1 for the level results in an UNKNOWN behavior.
 
---000000000000fa665705ef865dd5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+CLIDR_EL1 and CCSIDR_EL1 are now writable from the userspace so that
+the VMM can restore the values saved with the old kernel.
 
-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
-OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
-/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
-L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
-kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
-5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
-hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
-E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEN0ppPElqHBqx3I+jlOhVuRwCJ9GYxW
-fXF0U7UXHduRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIx
-MTA1MDc0NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAiBikd8JqZToLq/A+IXPnKZKcofWjxrQFpDwcWeiQdwpifIqwi
-dnhnh1qzdWqmPmS5IBWnfMJyOJkRXbcao/mOE6e8EADTmndQhsT/A49a8d1sD4iMAcXc70txPS95
-LKyXbg2w+6Kh7m6dxBvUJz5X0gVJEmjfcQ6GV71eM1ksmA6rUeNTnR99fsyrJ/n/DKBK+AwqELam
-OmTqO/y+DQs8jadAZ1cQgoGvPIj7pFM00bXOMD7QTmgPHkz52vAdlt329+y7NJlFkw/JGOv8Cdrs
-4SbkawvJCrliXghVFirKAel7LdkntbDX1skwr5/YwkeGxuNMIE2Xl5dIUSMJY+uc
---000000000000fa665705ef865dd5--
+Akihiko Odaki (3):
+  arm64/sysreg: Add CCSIDR2_EL1
+  arm64/cache: Move CLIDR macro definitions
+  KVM: arm64: Normalize cache configuration
+
+ arch/arm64/include/asm/cache.h             |   6 +
+ arch/arm64/include/asm/kvm_arm.h           |   3 +-
+ arch/arm64/include/asm/kvm_emulate.h       |   4 -
+ arch/arm64/include/asm/kvm_host.h          |   6 +-
+ arch/arm64/kernel/cacheinfo.c              |   5 -
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h |   2 -
+ arch/arm64/kvm/reset.c                     |   1 +
+ arch/arm64/kvm/sys_regs.c                  | 232 ++++++++++++---------
+ arch/arm64/tools/sysreg                    |   5 +
+ 9 files changed, 153 insertions(+), 111 deletions(-)
+
+-- 
+2.38.1
+
