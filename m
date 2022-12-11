@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D9F649461
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4393C649477
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 14:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiLKNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 08:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
+        id S230162AbiLKNd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 08:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiLKNNV (ORCPT
+        with ESMTP id S229845AbiLKNd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 08:13:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA65A194;
-        Sun, 11 Dec 2022 05:13:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44058B80AC6;
-        Sun, 11 Dec 2022 13:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B0FC433D2;
-        Sun, 11 Dec 2022 13:13:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670764396;
-        bh=S4HS9lp0u5jUl5N2a6hCMvc/CwN3DsY0N2OH614zOoQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=I2NfcdLlw+vADc0TuShPmdp8R3d9sH84IZOV5IZV4Y/TVorpu2LueFtSHJBOfgvw0
-         8qEEFCONMenEHj+tMPF6qdFIzyfoVoDtmtTdDB+b2hIVuKUq2shyik2pK40xCfC/Zv
-         pu5lhXM1F3rqNGZjOWtlv1iqTnkXNpke5W/Emxxr3DAS7U0cXq/MHeT8xxVFDM6n9c
-         9R93K4CZrKP6pbMSIu9/DvxyDnKGur8CTxcfHVAG49E3a0BxCKYJwUAzHWyurYit2f
-         UpDinex3p+nGO0W76SUAnvQSLWr6wd/an7qHZF8E6fAjifu93sEnpKaHczZaDWalu5
-         II8mSaOAqoIfQ==
-Date:   Sun, 11 Dec 2022 13:26:11 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 01/11] iio: light: tsl2563: Do not hardcode interrupt
- trigger type
-Message-ID: <20221211132611.0ab2f29e@jic23-huawei>
-In-Reply-To: <20221207190348.9347-1-andriy.shevchenko@linux.intel.com>
-References: <20221207190348.9347-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Sun, 11 Dec 2022 08:33:26 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4621226F0;
+        Sun, 11 Dec 2022 05:33:25 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id r7-20020a1c4407000000b003d1e906ca23so1846447wma.3;
+        Sun, 11 Dec 2022 05:33:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JM4eZS6DGEGN3Cnizf1+pzBydRrfLEZ8uE7yRxZjfug=;
+        b=M/bPEku703yfebe0G/w9NQJej7hferrKeBULGoDdzpNnTt9NagdDR4RvaHhTRwH8a5
+         mW++uu1KFz0V4hAwPsHNeI5FIHr0SJKUADokG6Zz5eYbFJDCTQwbi+rHc+jzXEg7jA1P
+         2ZavUU/7qEvmwFcRzQ3PgEcr3meFJC+dkjJMaYlFSuDjKRhRXyvFxdF8+BbU3yds2gC5
+         UFuOQkL54eJOKVBdgZa6+nrRcPeckbtRxipK6DkdKucm0AoN3Vd3Q9D+hmsEEQCRtZD2
+         DgtlbP1VzJgm9LDD01GTvMXjjqzk3IEpSylDGb9aCeWqxy2LL1guq947Xiz1++GlrwZb
+         Si9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JM4eZS6DGEGN3Cnizf1+pzBydRrfLEZ8uE7yRxZjfug=;
+        b=IKgKag0mqx3MBw63OSmoYpCNkUPFYfZVhULnqe9ojnVspeiO3GOfxYuC4MrWnPfRd+
+         abXSxUb5Tk0BQ332ReGAolIE8SVn/GVnPRGEu4v3ibGj6dPnMWvFCUxL4/OfxLM1h3DM
+         NR1xh4awMBN+Poe388OqK0TclnY7+5hwKdQX9XpzeBpWTCWcaQPQr3Ga7UF4lVsILokj
+         cKOrRxGegcUsIIq+g02R4wZ1eRbBXkfE4CA5dsLdLJZVpQRYLrUlPUs8bpF3+rt3S9Oy
+         y+ZOwLiJou4NvQzz7BoyYc6wQcSeqeN285HE9aW/bJFn5z9i3Ocoa2gdaQ6JuDRwgv29
+         I44w==
+X-Gm-Message-State: ANoB5pk6KNRPsfsceoU4dra0v5DXd+aOnkGdXCoC2dvdl+S+gKEkTS5S
+        NHBaJtZ2tVQdpTtg2UU5g/UWh2jYBUUwRQ==
+X-Google-Smtp-Source: AA0mqf51xLqGjUmb0nGSAreiMIifJSFrNKimMQeqSk6JWjsdw1ZL4ChTc5j6YdjFtFWJSJvrg1ffqA==
+X-Received: by 2002:a05:600c:3ac3:b0:3d2:148b:4a26 with SMTP id d3-20020a05600c3ac300b003d2148b4a26mr5283666wms.32.1670765603606;
+        Sun, 11 Dec 2022 05:33:23 -0800 (PST)
+Received: from ?IPV6:2a01:c22:a870:9400:1cc5:98f1:2977:d1ef? (dynamic-2a01-0c22-a870-9400-1cc5-98f1-2977-d1ef.c22.pool.telefonica.de. [2a01:c22:a870:9400:1cc5:98f1:2977:d1ef])
+        by smtp.googlemail.com with ESMTPSA id l41-20020a05600c1d2900b003c6b874a0dfsm7405690wms.14.2022.12.11.05.33.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 05:33:23 -0800 (PST)
+Message-ID: <ce1a70db-1b0b-ac9e-5829-8110b2ddbbd5@googlemail.com>
+Date:   Sun, 11 Dec 2022 14:33:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US
+To:     linux-acpi@vger.kernel.org
+Cc:     ofenfisch@googlemail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org
+From:   Erik Schumacher <ofenfisch@googlemail.com>
+Subject: [PATCH] ACPI: resource: do IRQ override on XMG Core 15
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  7 Dec 2022 21:03:38 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+The Schenker XMG CORE 15 (M22) is Ryzen-6 based and needs IRQ overriding
+for the keyboard to work. Adding an entry for this laptop to the
+override_table makes the internal keyboard functional again.
 
-> From: Ferry Toth <ftoth@exalondelft.nl>
-> 
-> Instead of hardcoding IRQ trigger type to IRQF_TRIGGER_RAISING,
-> let's respect the settings specified in the firmware description.
-> To be compatible with the older firmware descriptions, if trigger
-> type is not set up there, we'll set it to default (raising edge).
-> 
-> Fixes: 388be4883952 ("staging:iio: tsl2563 abi fixes and interrupt handling")
-> Fixes: bdab1001738f ("staging:iio:light:tsl2563 remove old style event registration.")
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Erik Schumacher <ofenfisch@googlemail.com>
+---
+ drivers/acpi/resource.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Andy, would have preferred a cover letter, so I had an obvious place
-to reply to the whole series...
-
-Mostly I'm amazed anyone still has one of these devices (I have one but
-it's on a break out board for the stargate2/imote2 pxa27x platform that we
-dropped support for last year - I hadn't booted it for a few years)
-- I can probably bodge it onto something else but I can't say it was
-high on my todo list ;)  So nice to know that someone still cares about
-this.
-
-So I'm curious Ferry, what device has one of these?
-
-Whole series applied to the togreg branch of iio.git though note I'll only
-push this out as testing for now because I'll want to rebase that tree
-after rc1 is available.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/light/tsl2563.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/light/tsl2563.c b/drivers/iio/light/tsl2563.c
-> index d0e42b73203a..71302ae864d9 100644
-> --- a/drivers/iio/light/tsl2563.c
-> +++ b/drivers/iio/light/tsl2563.c
-> @@ -704,6 +704,7 @@ static int tsl2563_probe(struct i2c_client *client)
->  	struct iio_dev *indio_dev;
->  	struct tsl2563_chip *chip;
->  	struct tsl2563_platform_data *pdata = client->dev.platform_data;
-> +	unsigned long irq_flags;
->  	int err = 0;
->  	u8 id = 0;
->  
-> @@ -759,10 +760,15 @@ static int tsl2563_probe(struct i2c_client *client)
->  		indio_dev->info = &tsl2563_info_no_irq;
->  
->  	if (client->irq) {
-> +		irq_flags = irq_get_trigger_type(client->irq);
-> +		if (irq_flags == IRQF_TRIGGER_NONE)
-> +			irq_flags = IRQF_TRIGGER_RISING;
-> +		irq_flags |= IRQF_ONESHOT;
-> +
->  		err = devm_request_threaded_irq(&client->dev, client->irq,
->  					   NULL,
->  					   &tsl2563_event_handler,
-> -					   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> +					   irq_flags,
->  					   "tsl2563_event",
->  					   indio_dev);
->  		if (err) {
-
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index f27914aed..037d1aa10 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -446,6 +446,17 @@ static const struct dmi_system_id lenovo_82ra[] = {
+ 	{ }
+ };
+ 
++static const struct dmi_system_id schenker_gm_rg[] = {
++	{
++		.ident = "XMG CORE 15 (M22)",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
++			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
++		},
++	},
++	{ }
++};
++
+ struct irq_override_cmp {
+ 	const struct dmi_system_id *system;
+ 	unsigned char irq;
+@@ -460,6 +471,7 @@ static const struct irq_override_cmp override_table[] = {
+ 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ 	{ lenovo_82ra, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+ 	{ lenovo_82ra, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
++	{ schenker_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ };
+ 
+ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+-- 
+2.38.1
