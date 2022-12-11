@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1106493E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 12:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB2E6493E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 12:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiLKLYr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 11 Dec 2022 06:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
+        id S230216AbiLKLc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 06:32:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiLKLYp (ORCPT
+        with ESMTP id S229960AbiLKLcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 06:24:45 -0500
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAD711440;
-        Sun, 11 Dec 2022 03:24:41 -0800 (PST)
-Received: by mail-pj1-f54.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so9370360pjj.4;
-        Sun, 11 Dec 2022 03:24:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Xx+VWxVfF6d2N/d4R2hoVV6iriRHfZEzJeKkWHHuls=;
-        b=j8LO1ajlYhPsMrZDgDq6NS51jOxg3v6HmV0XVXRAhYaUhoSC3CfzsjJxV+LIq7mjvs
-         pIMTgObYyIIw8Bcd38cJ6HvEAE3Bz8A1Coc1ASqAxyb3kzU/20gpe4v4Y3cl1tvS9+/8
-         XPstrZokH84bL80zf+ShgyLJR70K0l65L1nVpAzb1FTrnBVoO6xs7ckZII24L17du90q
-         nNF5ysOfpunm2LNNcWW5T8lOl6aercakaEcfrgYWqxbc/3yG/Aj1aV18rfsSKglvR6bq
-         NnE4Ns3cyYxiZfHFC7LPKZXI7wefz5euwebEXC+YNKmTMbr+y2dFaQ9pA7KQN5PJdnZd
-         dbtA==
-X-Gm-Message-State: ANoB5pmcV+P3Zfxesi/QakW3W8GqYkmhd5/ktgoSSyDgA85tWDrdfa4T
-        LcP1YCPqv9BC9eVDwoouy+HoBQojOi708lew4Cc=
-X-Google-Smtp-Source: AA0mqf7917HIQYWFeNnOyEafaz/S972MlQdTp3NpmD0V6S1fYYRsBhjT6lTYnLAGxwP5yz/efHKAu9kgdkXf12fWnos=
-X-Received: by 2002:a17:90b:3c4d:b0:221:4b1c:3b29 with SMTP id
- pm13-20020a17090b3c4d00b002214b1c3b29mr126610pjb.92.1670757880938; Sun, 11
- Dec 2022 03:24:40 -0800 (PST)
+        Sun, 11 Dec 2022 06:32:55 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E78BC3B;
+        Sun, 11 Dec 2022 03:32:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LC4w5TQb+qnsn84K9tIiy6j9WGBF4Nr7PFZvJNYeVsQ=; b=Af4S3atyPpFDdv0H6xz3dvStnP
+        oKPoXxnx3s8aPEwEkGNnZ14V3EtfpCbB8hMHkI92mJOQovMDm/c99fHh3xjN7uBlVy1+iZloNmo+R
+        OtSg4o6s5GmxxkgDo2gnXB4c5EZL9IpzQ2S0wtkBcRqh9pN7o/fzD+/SM/aPoEYlQJqX2U5rTLcZU
+        UxxvD3BhIRKJMvspQonmXs6Rax/0pKIvMCmndwHMNqGVNtLmxKSI3wU3DeVOvwBKbrz6yRlJL3bIO
+        2v/5GGcFQjtBdV49v9osQNJcOcq0Bg4uzjuuf8U7nhH77K710XR+U7AiRHfGpfzPaa88CyuFupANV
+        SDnrVMMg==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1p4KZW-001I4U-CT; Sun, 11 Dec 2022 12:32:42 +0100
+Message-ID: <fb978a9e-43af-865a-00c6-d98499414ec5@igalia.com>
+Date:   Sun, 11 Dec 2022 08:32:35 -0300
 MIME-Version: 1.0
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
- <20221210090157.793547-1-mailhol.vincent@wanadoo.fr> <20221210090157.793547-2-mailhol.vincent@wanadoo.fr>
- <Y5Rmp66zvlwykRLq@hovoldconsulting.com>
-In-Reply-To: <Y5Rmp66zvlwykRLq@hovoldconsulting.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 11 Dec 2022 20:24:29 +0900
-Message-ID: <CAMZ6RqJoCEW9+Z+LD1W9CORE=RUvH9tLn163mkY5Dsct5juYUA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] can: ems_usb: ems_usb_disconnect(): fix NULL
- pointer dereference
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        =?UTF-8?Q?Christoph_M=C3=B6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] Documentation: gpu: vc4: add blank line separator before
+ KUnit code block
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        kernel test robot <lkp@intel.com>
+References: <202212102116.A10vg3jG-lkp@intel.com>
+ <20221211053051.18125-1-bagasdotme@gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221211053051.18125-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 10 déc. 2022 à 20:02, Johan Hovold <johan@kernel.org> wrote:
-> On Sat, Dec 10, 2022 at 06:01:49PM +0900, Vincent Mailhol wrote:
-> > ems_usb sets the driver's priv data to NULL before waiting for the
-> > completion of outsdanding urbs. This can results in NULL pointer
-> > dereference, c.f. [1] and [2].
->
-> Please stop making hand-wavy claims like this. There is no risk for a
-> NULL-pointer deference here, and if you think otherwise you need to
-> explain how that can happen in detail for each driver.
+I believe Maxime fixed this issue on [1], but it hasn't been yet merged
+into drm-misc-next.
 
-Understood.
+[1]
+https://lore.kernel.org/dri-devel/20221208094727.2848310-1-maxime@cerno.tech/
 
-*My* mistake comes from this message from Alan [1]:
+Best Regards,
+- Maíra Canal
 
-| But if a driver does make the call, it should be careful to
-| ensure that the call happens _after_ the driver is finished
-| using the interface-data pointer.  For example, after all
-| outstanding URBs have completed, if the completion handlers
-| will need to call usb_get_intfdata().
-
-I did not pay enough attention to the "if the completion handlers will
-need to call usb_get_intfdata()" part and jumped into the incorrect
-conclusion that any use of usb_set_intfdata(intf, NULL) before URB
-completion was erroneous.
-
-My deep apologies for all the noise. Please forget this series and one
-more time, thank you for your patience.
-
-[1] https://lore.kernel.org/linux-usb/Y4OD70GD4KnoRk0k@rowland.harvard.edu/
+On 12/11/22 02:30, Bagas Sanjaya wrote:
+> kernel test robot reports htmldocs warning:
+> 
+> Documentation/gpu/vc4.rst:65: WARNING: Unexpected indentation.
+> 
+> The warning is due to missing blank line separator between KUnit mock
+> driver sentence and its code block.
+> 
+> Add the separator to fix the warning.
+> 
+> Link: https://lore.kernel.org/linux-doc/202212102116.A10vg3jG-lkp@intel.com/
+> Fixes: 5304c8e6010012 ("Documentation: gpu: vc4: Add KUnit Tests Section")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/gpu/vc4.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/gpu/vc4.rst b/Documentation/gpu/vc4.rst
+> index a2375f1584e6d9..ec920c4f5bb322 100644
+> --- a/Documentation/gpu/vc4.rst
+> +++ b/Documentation/gpu/vc4.rst
+> @@ -62,6 +62,7 @@ integration tests.
+>  
+>  These tests are using a mock driver and can be ran using the
+>  command::
+> +
+>  	./tools/testing/kunit/kunit.py run \
+>  		--kunitconfig=drivers/gpu/drm/vc4/tests/.kunitconfig \
+>  		--cross_compile aarch64-linux-gnu- --arch arm64
+> 
+> base-commit: 612e241fb4bcd98d8ff9da7a795abb86b8ccfe38
