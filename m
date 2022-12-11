@@ -2,178 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01992649209
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314D664920F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 03:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiLKCrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 21:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S229901AbiLKCw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 21:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiLKCrQ (ORCPT
+        with ESMTP id S229830AbiLKCwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 21:47:16 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561D013F17;
-        Sat, 10 Dec 2022 18:47:15 -0800 (PST)
+        Sat, 10 Dec 2022 21:52:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06F913F27;
+        Sat, 10 Dec 2022 18:52:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7D107CE010F;
-        Sun, 11 Dec 2022 02:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B0CC433D2;
-        Sun, 11 Dec 2022 02:47:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F72360D39;
+        Sun, 11 Dec 2022 02:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E86FC433EF;
+        Sun, 11 Dec 2022 02:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670726831;
-        bh=a85+YHrkUTxTxO4/UXl+D9uSuSdZ9mM7ecjBPKZ65EE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FEfOlQhlGESTUpVvnRkhqPGlEuKXXeyr2VLqvxnoFZ+g8EgEsita1hF9RMyAGPUu5
-         73Ej4ZZJ2/F+iZjXDUyCczg7FW06Eh3zZkhRmaZhxECzADJL75P5tF+nhdy/LZBEX4
-         ZXdl5pGJxevAAXxwFTwvrh68owCZ5/qYR6rKQFDnG9U7OH9ufrc+1L2g5g2gJy10gy
-         J8kquE4kqm9kU6C7m9jWVTYkuwShYFfzd+Ub18OCXbdA3sBUaVvZKF2lwHsdOvVNxy
-         DHR5uW2yMW0VEnFw+kFVclSiHr5mRjdHWoaow4CNBMbIW06lJCOiRF4ujII8oHUmP/
-         OgqfCO1ytvbSA==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        s=k20201202; t=1670727142;
+        bh=rlKZwK4Kj1fXsPuO+MKRZgsrKdoPPkaovawTnxF2v9A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gWPF8u48O67+JbK7s4pT1emnY6txtEG37xTU/4QNsWfmg9cg4oBF7HAtdSIdgzB/z
+         OLTF5u8hy2dNJw9Liopf/GjC2QXwOcqU8CE1Wl7RkzPVkTBe2p5f3LeZ+1Mdzdho4V
+         UVd7ZdWeJjtfBtZ5M2VgpbYdkjlSXy76u+IgV7d49H6H4cZVIPSrlE1qxvXgU8J/tX
+         yqIjREuC08ueh+Qt6RXe/YrotxMSg3oXR1X7ca4TBNolskrXluYcanrauT52Go/ttW
+         NTeQpVSJuWylX9d78paDwog5YF2nD7k3eQnsbcT6UsWmFcm54icPXWMfcRqV8zgvQJ
+         8y23ArxGsuptg==
+Date:   Sun, 11 Dec 2022 11:52:18 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, x86@kernel.org
-Subject: [PATCH] kbuild: add test-{ge,gt,le,lt} macros
-Date:   Sun, 11 Dec 2022 11:46:47 +0900
-Message-Id: <20221211024647.2614394-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-Id: <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
+In-Reply-To: <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206233947.4c27cc9d@gandalf.local.home>
+        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
+        <20221207074806.6f869be2@gandalf.local.home>
+        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GNU Make 4.4 introduced $(intcmp ...), which is useful to compare two
-integers without forking a new process.
+Hi Alexei,
 
-Add test-{ge,gt,le,lt} macros, which work more efficiently with GNU
-Make >= 4.4. For older Make versions, they fall back to the 'test'
-shell command.
+On Wed, 7 Dec 2022 20:36:28 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-The first two parameters to $(intcmp ...) must not be empty. To avoid
-the syntax error, I appended '0' to them. Fortunately, '00' is treated
-as '0'. This is needed because CONFIG options may expand to an empty
-string when the kernel configuration is not included.
+> Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
+> And that happens all the time on lkml. Somebody reports a bug and kernel devs
+> jump on the poor person:
+> "Can you repro without taint?",
+> "Can you repro with upstream kernel?"
+> This is discouraging.
+> The 'taint' concept makes it easier for kernel devs to ignore bug reports
+> and push back on the reporter.
+> Do it few times and people stop reporting bugs.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
----
+That seems off topic for me. You seems complained against the taint flag
+itself.
 
-Changes in v3:
-  - Use $(intcmp ...) instead of playing with $(sort ...)
+> Say, this particular bug in rethook was found by one of our BPF CI developers.
+> They're not very familiar with the kernel, but they can see plenty of 'rethook'
+> references in the stack trace, lookup MAINTAINER file and ping Massami,
+> but to the question "can you repro without taint?" they can only say NO,
+> because this is how our CI works. So they will keep silence and the bug will be lost.
 
- Makefile                  |  2 +-
- arch/riscv/Makefile       |  2 +-
- arch/x86/Makefile         |  2 +-
- scripts/Kbuild.include    | 16 ++++++++++++++++
- scripts/Makefile.compiler |  4 ++--
- 5 files changed, 21 insertions(+), 5 deletions(-)
+BTW, this sounds like the BPF CI system design issue. If user is NOT easily
+identifying what test caused the issue (e.g. what tests ran on the system
+until the bug was found), the CI system is totally useless, because after
+finding a problem, it must be investigated to solve the problem.
 
-diff --git a/Makefile b/Makefile
-index fbd9ff4a61e7..8801cac4d3d5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -993,7 +993,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
- # Check for frame size exceeding threshold during prolog/epilog insertion
- # when using lld < 13.0.0.
- ifneq ($(CONFIG_FRAME_WARN),0)
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
- KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
- endif
- endif
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 0d13b597cb55..faf2c2177094 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -37,7 +37,7 @@ else
- endif
- 
- ifeq ($(CONFIG_LD_IS_LLD),y)
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
- 	KBUILD_CFLAGS += -mno-relax
- 	KBUILD_AFLAGS += -mno-relax
- ifndef CONFIG_AS_IS_LLVM
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 415a5d138de4..e72c7a49cd59 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -211,7 +211,7 @@ endif
- KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
- 
- ifdef CONFIG_LTO_CLANG
--ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-+ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
- KBUILD_LDFLAGS	+= -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
- endif
- endif
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index cbe28744637b..5019bc1e38e4 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -11,6 +11,22 @@ space   := $(empty) $(empty)
- space_escape := _-_SPACE_-_
- pound := \#
- 
-+###
-+# Comparison macros.
-+# Usage: $(call test-lt, $(CONFIG_LLD_VERSION), 150000)
-+#
-+# Use $(intcmp ...) if supported. (Make >= 4.4)
-+# Otherwise, fall back to the 'test' shell command.
-+ifeq ($(intcmp 1,0,,,y),y)
-+test-le = $(intcmp $(strip $1)0, $(strip $2)0,y,y,)
-+test-lt = $(intcmp $(strip $1)0, $(strip $2)0,y,,)
-+else
-+test-le = $(shell test $(strip $1)0 -le $(strip $2)0 && echo y)
-+test-lt = $(shell test $(strip $1)0 -lt $(strip $2)0 && echo y)
-+endif
-+test-ge = $(call test-le, $2, $1)
-+test-gt = $(call test-lt, $2, $1)
-+
- ###
- # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
- dot-target = $(dir $@).$(notdir $@)
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 20d353dcabfb..3d8adfd34af1 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -63,11 +63,11 @@ cc-disable-warning = $(call try-run,\
- 
- # gcc-min-version
- # Usage: cflags-$(call gcc-min-version, 70100) += -foo
--gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
-+gcc-min-version = $(call test-ge, $(CONFIG_GCC_VERSION), $1)
- 
- # clang-min-version
- # Usage: cflags-$(call clang-min-version, 110000) += -foo
--clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION)0 -ge $(1)0 ] && echo y)
-+clang-min-version = $(call test-ge, $(CONFIG_CLANG_VERSION), $1)
- 
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+Without investigation, how would you usually fix the bug??
+
+> That's not the only reason why I'm against generalizing 'taint'.
+> Tainting because HW is misbehaving makes sense, but tainting because
+> of OoO module or because of live-patching does not.
+> It becomes an excuse that people abuse.
+
+yeah, it is possible to be abused. but that is the problem who
+abuse it.
+
+> Right now syzbot is finding all sorts of bugs. Most of the time syzbot
+> turns error injection on to find those allocation issues.
+> If syzbot reports will start coming as tainted there will be even less
+> attention to them. That will not be good.
+
+Hmm, what kind of error injection does syzbot do? I would like to know
+how it is used. For example, does that use only a specify set of
+injection points, or use all existing points?
+
+If the latter, I feel safer because syzbot ensures the current all
+ALLOW_ERROR_INJECTION() functions will work with error injection. If not,
+we need to consider removing the ALLOW_ERROR_INJECTION() from the
+function which is not tested well (or add this taint flag.)
+
+Documentation/fault-injection/fault-injection.rst has no explanation
+about ALLOW_ERROR_INJECTION(), but obviously the ALLOW_ERROR_INJECTION()
+marked functions and its caller MUST be designed safely against the
+error injection. e.g.
+
+- It must return an error code. (so EI_ETYPE_NONE must be removed)
+- Caller must check the return value always.
+  (but I thought this was the reason why we need this test framework...)
+- It should not run any 'effective' code before checking an error.
+  For example, increment counter, call other functions etc.
+  (this means it can return without any side-effect)
+
+Anything else?
+
+[...]
+> All these years we've been working on improving bpf introspection and
+> debuggability. Today crash dumps look like this:
+>   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
+>   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
+>   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+>   __bpf_prog_run include/linux/filter.h:600 [inline]
+>   bpf_prog_run include/linux/filter.h:607 [inline]
+> 
+> The 2nd from the top is a bpf prog. The rest are kernel functions.
+> bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
+>          ^^ is a prog tag   ^^ name of bpf prog
+> 
+> If you do 'bpftool prog show' you can see both tag and name. 
+> 'bpftool prog dump jited'
+> dumps x86 code mixed with source line text.
+> Often enough +0x2b offset will have some C code right next to it.
+
+This is good, but this only works when the vmcore is dumped and
+on the stack. My concern about the function error injection is
+that makes some side effects, which can cause a problem afterwards
+(this means after unloading the bpf prog)
+
+> 
+> One can monitor all prog load/unload via perf or via audit.
+
+Ah, audit is helpful :), because we can dig the log what was loaded
+before crash.
+
+
+Thank you,
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
