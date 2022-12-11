@@ -2,125 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2627A649539
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 18:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D1864953E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 18:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiLKRRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 12:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S230152AbiLKRV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 12:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiLKRRL (ORCPT
+        with ESMTP id S229896AbiLKRVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 12:17:11 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75AEE0C1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 09:17:10 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id f18so9760824wrj.5
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 09:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=25obtB31DDlgLRXlLw15qHeqkAUXlEcFvDhBX+iWq9A=;
-        b=bUDUSB5wUoV2dFpy9KiRRKokkq2yJk2aJvYPoiMGSGge+qi4f2NMDPDTTFaMmRIzAq
-         VAxjfIFI6S2TV7UEZbPtzZFt027JqZkwynQRx9RHWEYHo/ejplJFTqp98OBkhRc3pyXu
-         uQIfGyZw11i76XJfyUXxtef/Y5LBiBxI/XAc81YtBjWphnV9w5RpHOxbgCQABsZoJQih
-         O/w949UMVwQAV5bdAqJYuGV3VTZFJQic6Qo6HgVD4gCYHgqNHIuri4TI9C6edLZbKb4C
-         OpdN54vLLoeTUvY8phACXgACOwbd2pk3PiK9BvD9ZmNCjrdhCpsB1E6Px+MIPN5e4mjS
-         6AHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=25obtB31DDlgLRXlLw15qHeqkAUXlEcFvDhBX+iWq9A=;
-        b=BR31xhbpvPb5alve/373sqwgsGbo6b0GVqRbmTfqbxwUZ7xdx8Rkt7NPTxBxiCf9WT
-         FzKuwxXI5LVI+Yyqgl6JzCC2Kva901Xo9+18gHEmx8KCeF212oPEDmXgXLX+h48lUH9/
-         q8ve5B6C1YOiPHc0xW9LlKwGJsRwm62ROiyP2Ah6OgKxdrYIQaid/n+HsN+MvlvL5T1L
-         nptggT28C9uGqC5k7uDwlvu9AVNqqP23xDebaHIMyiiqfjS7UrbyXILD9UoneqAbII/w
-         0VWfT4THFWt2DN7+BmE28zrpCjuMqXlpTH0ae83aFPd5OVq8vqjeZrKQkmdMwgKyLTBi
-         Eq2w==
-X-Gm-Message-State: ANoB5pmencfoqVmRTMn3fY2ar65RxF501YztAQNhfNduSC7hjf3QUAPo
-        s3ruYfZH5R6ptwz45LqxusVeWZYggNsHKbt7grM=
-X-Google-Smtp-Source: AA0mqf7XEtWgrGuuHxu9pbCGz/rwhjJocgJpm28JalIGing9H5aWE7aCJffPecJndQhq17NleTTj5tEOLbUYRJ/fmzo=
-X-Received: by 2002:a05:6000:705:b0:248:443:2e99 with SMTP id
- bs5-20020a056000070500b0024804432e99mr456084wrb.52.1670779029191; Sun, 11 Dec
- 2022 09:17:09 -0800 (PST)
+        Sun, 11 Dec 2022 12:21:24 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5C7639C;
+        Sun, 11 Dec 2022 09:21:23 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 16CF06CF;
+        Sun, 11 Dec 2022 18:21:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670779281;
+        bh=GQITscUfDelSKXTWWpCgAccOEEO3vF3bCemt5iO+e9Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EvJ5eq8xqcM7SnKFkG72XTT8rUWizent4y27ieLTWOzQ88ZZlFkztOMAJBm20RWmI
+         0WDK4T0XmtKoOeJut1H3eUv0E2n1j5foyxDSv9VmI/lhR3LGTnZ6/W2egPb9+XlHvH
+         ictbYZaw0VsVOsmDuva4FCzI8aFTLD7JdexQMk08=
+Date:   Sun, 11 Dec 2022 19:21:19 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v5 3/8] dt-bindings: media: add bindings for TI DS90UB913
+Message-ID: <Y5YRj8emzJsB1BgK@pendragon.ideasonboard.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-4-tomi.valkeinen@ideasonboard.com>
+ <Y5YPpGVJxAhkNJmC@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Sender: customagenttony@gmail.com
-Received: by 2002:a5d:5984:0:0:0:0:0 with HTTP; Sun, 11 Dec 2022 09:17:08
- -0800 (PST)
-From:   Mrs Aisha Gaddafi <aishagaddafiaisha20@gmail.com>
-Date:   Sun, 11 Dec 2022 09:17:08 -0800
-X-Google-Sender-Auth: Fkl9BcCdvil9CjWnKbuyYi2r26g
-Message-ID: <CAAV183S77Qp-1qOrg=vaxS7PAWeP80tVAiSG3YejQoMFJyrR3A@mail.gmail.com>
-Subject: Greetings from Aisha Gaddafi,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
-        MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:433 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafiaisha20[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.6 MILLION_USD BODY: Talks about millions of dollars
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y5YPpGVJxAhkNJmC@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I want to use this access to open a mutual communication with you
-seeking your acceptance towards investing in your country under your
-management as my partner, My name is Aisha  Gaddafi and presently
-living in Oman, i am a Widow and single Mother with three Children,
-the only biological Daughter of late Libyan President (Late Colonel
-Muammar Gaddafi) and presently i am under political asylum protection
-by the Omani Government.
+I missed one issue.
 
-I have funds worth " Seven Million Five Hundred Thousand United State
-Dollars" $7.500.000.00 US Dollars which I want to entrust to you for
-investment projects in your country. If you are willing to handle this
-project on my behalf, kindly reply urgent to enable me provide you
-more details to start the transfer process, I shall appreciate your
-urgent response through my private email address below:
+On Sun, Dec 11, 2022 at 07:13:10PM +0200, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> Thank you for the patch.
+> 
+> On Thu, Dec 08, 2022 at 12:40:01PM +0200, Tomi Valkeinen wrote:
+> > Add DT bindings for TI DS90UB913 FPDLink-3 Serializer.
+> > 
+> > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> > ---
+> >  .../bindings/media/i2c/ti,ds90ub913.yaml      | 121 ++++++++++++++++++
+> >  1 file changed, 121 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+> > new file mode 100644
+> > index 000000000000..3a5b34c6bb64
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+> > @@ -0,0 +1,121 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub913.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Texas Instruments DS90UB913 FPD-Link 3 Serializer
+> 
+> I think TI consistently writes it "FPD-Link III". If you rename it,
+> please do so through the whole series.
+> 
+> > +
+> > +maintainers:
+> > +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> > +
+> > +description:
+> > +  The TI DS90UB913 is an FPD-Link 3 video serializer for parallel video.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - ti,ds90ub913a-q1
+> 
+> Is the -q1 suffix needed, are there other variants ?
+> 
+> > +
+> > +  '#gpio-cells':
+> > +    const: 2
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +    description:
+> > +      Reference clock connected to the CLKIN pin.
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: clkin
+> > +
+> > +  '#clock-cells':
+> > +    const: 0
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description: CSI-2 input port
 
-aishagaddafiaisha20@gmail.com
+This should be "Parallel input port".
 
-You can know more through the BBC news links below:
+> > +
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: /schemas/media/video-interfaces.yaml#
+> > +            unevaluatedProperties: false
 
-http://www.bbc.com/news/world-africa-19966059
+Should at least the bus-width property be mandatory, as the device
+supports both 10- and 12-bit inputs ?
 
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        unevaluatedProperties: false
+> > +        description: FPD-Link 3 output port
+> 
+> I'd add
+> 
+>     required:
+>       - port@0
+>       - port@1
+> 
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> 
+> > +
+> > +  i2c:
+> > +    $ref: /schemas/i2c/i2c-controller.yaml#
+> > +    unevaluatedProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - '#gpio-cells'
+> > +  - gpio-controller
+> > +  - '#clock-cells'
+> > +  - ports
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +
+> > +    serializer {
+> > +      compatible = "ti,ds90ub913a-q1";
+> > +
+> > +      gpio-controller;
+> > +      #gpio-cells = <2>;
+> > +
+> > +      clocks = <&clk_cam_48M>;
+> > +      clock-names = "clkin";
+> > +
+> > +      #clock-cells = <0>;
+> > +
+> > +      ports {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        port@0 {
+> > +          reg = <0>;
+> > +          ub913_in: endpoint {
+> > +            remote-endpoint = <&sensor_out>;
+> > +          };
+> > +        };
+> > +
+> > +        port@1 {
+> > +          reg = <1>;
+> > +          endpoint {
+> > +            remote-endpoint = <&deser_fpd_in>;
+> > +          };
+> > +        };
+> > +      };
+> > +
+> > +      i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        sensor@48 {
+> > +          compatible = "aptina,mt9v111";
+> > +          reg = <0x48>;
+> > +
+> > +          clocks = <&fixed_clock>;
+> > +
+> > +          port {
+> > +            sensor_out: endpoint {
+> > +              remote-endpoint = <&ub913_in>;
+> > +            };
+> > +          };
+> > +        };
+> > +      };
+> > +    };
+> > +...
 
-Thanks
-Yours Truly Aisha
+-- 
+Regards,
+
+Laurent Pinchart
