@@ -2,204 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CEE6493B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 11:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7756493A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 11:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiLKKmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 05:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S230001AbiLKKjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 05:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiLKKkW (ORCPT
+        with ESMTP id S229475AbiLKKjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 05:40:22 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84EEF598
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:40:13 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so9336692pjm.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 02:40:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cxkF/mYZx6aj+5Ygz21Fb/S0r5K5GOn3gye9ZMP6pug=;
-        b=pVDqthDQYAAmqfvohGeBDA6PQFeGvJNmli/YkLcZ431HN8Ltsw2yY8zpe2wJ0aYdCj
-         Mpa56EttuvuBEW2ho2V2KXkt5eY+6ODXvs2yngSQVU5RBiVuTMBjzRTtaBE8CSyOnpMd
-         UVs+JzwE08nqtsm/YG82fmBy0KkD5mp45yCKMiEkEPhNsffihOX/lxVFxEWmWXCdjsUE
-         vJBmh10Hnsc0nvpkZPqMDavk1l/bn1bJwwqf1l9RpZYgOCf6URKo0LiNNeCq6LAtcuqL
-         v60GduQODF4uXkMTH6flUS4nQwZSnUL8/qxv8Dv77EftGPg7RyUOBqLt/y6lp1/ZWG9I
-         e/7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cxkF/mYZx6aj+5Ygz21Fb/S0r5K5GOn3gye9ZMP6pug=;
-        b=5oJLt8oM3d+l+0zIc8Rh0WwUAZF7GE/zxSMGVk7t1akpnt+LD/kJTsFAS3CiequhH3
-         WkGoldksSZ8Mbpb3LAAn3aAuNGINrkN3UutRBHh3A14cKdlbcXqVNTtzaFHal8q614Rv
-         QuTnV//1cIuWhfyZCX7+T7nRccQPqbdS16Lurl27k+XmL+lg6WExIo2f8mJqpoMz/M+h
-         HZ1gjV3hGaPI+yc9ZEx/rl1NmuWH0bejpu7hQNAbgej3YdYJP0xCytDN7m3KX7wiE0ar
-         p8tj0kxBC+UAcFJarddTPeF83NilCHotKkn8x2Aq+UrO4CDTPu9TKxE+Zd87v9Uq6ln1
-         c5hg==
-X-Gm-Message-State: ANoB5plJGOpBsccS2Al8rhqzjiGHkKjEy1PvRiLGvVdoAEU+17+0v03z
-        Glhy1gbU/BtQE97rK+AH1tewDA==
-X-Google-Smtp-Source: AA0mqf4z1GfStNxQ59ePQ30tIOFm8Kt0e0ZJTLUg5mX25td3XFEAGOPMujpRJbjsNCBYxNodBXos3g==
-X-Received: by 2002:a17:902:e8d0:b0:187:3921:2b1c with SMTP id v16-20020a170902e8d000b0018739212b1cmr12699959plg.55.1670755213357;
-        Sun, 11 Dec 2022 02:40:13 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001897a8b537asm4151651plb.221.2022.12.11.02.40.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 02:40:12 -0800 (PST)
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-To:     Vivek Goyal <vgoyal@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: [PATCH] virtiofs: enable multiple request queues
-Date:   Sun, 11 Dec 2022 18:38:57 +0800
-Message-Id: <20221211103857.25805-1-zhangjiachen.jaycee@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 11 Dec 2022 05:39:35 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E815E2DE9;
+        Sun, 11 Dec 2022 02:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670755174; x=1702291174;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E5Y+TsxdMupDg9ElYz3t/Ii0i1MvGNzoq73DRBTVz4Q=;
+  b=hcHit28tevH6QeYsK+RT7bTcsq7/nCHVyaTzV7wRyOzStnbGli5T5yZj
+   vaFzfr+FO7+y4dkyFVC8NYqMnxTfFJuWuQ7KBGVHXDT6SWRiFd3jyeST3
+   fKDWZzKV3BVHvFgfzcnnuhqAMMaNZ7do528MeoTpb1esu9ugDHhAtomyO
+   s0WJAAiC1hIWZtSsN9L9wfjNCaZoo6/p+lkukV53OIhkUkLjY6WimEWyX
+   K0UCXxzmSSzlmr3kVClA0cRttGg5DTU6+5IGQuBkLhDRz14/mXT3SIZEP
+   2NQyXLgQHWfff+1ZlkU7Qqreu+B1P1iwc252tpM55k3tS4XiSYJfR5Q6T
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="379899589"
+X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
+   d="scan'208";a="379899589"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 02:39:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="754575414"
+X-IronPort-AV: E=Sophos;i="5.96,236,1665471600"; 
+   d="scan'208";a="754575414"
+Received: from dratzker-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.214.1])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 02:39:29 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 0/8] intel-m10-bmc: Split BMC to core and SPI parts & add PMCI+N6000 support
+Date:   Sun, 11 Dec 2022 12:39:05 +0200
+Message-Id: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support virtio-fs multiple virtqueues and distribute requests across the
-multiqueue complex automatically based on the IRQ affinity.
+Hi all,
 
-This commit is based on Connor's patch in the virtio-fs mailing-list,
-and additionally intergates cpu-to-vq map into struct virtio_fs so that
-this virtio-fs multi-queue feature can fit into multiple virtio-fs mounts.
+Here are the patches for MAX 10 BMC core/SPI interface split and
+addition of the PMCI interface. There are a few supporting rearrangement
+patches prior to the actual split. In this version, the indirect register
+access became part of the BMC PMCI module.
 
-Link: https://www.mail-archive.com/virtio-fs@redhat.com/msg03320.html
-Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
-Cc: Connor Kuehl <ckuehl@redhat.com>
-Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
----
- fs/fuse/virtio_fs.c | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+The current downside of the split is that there's not that much code
+remaining in the core part when all the type specific definitions are
+moved to the file with the relevant interface.
 
-diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-index 4d8d4f16c727..410968dede0c 100644
---- a/fs/fuse/virtio_fs.c
-+++ b/fs/fuse/virtio_fs.c
-@@ -32,8 +32,9 @@ static DEFINE_MUTEX(virtio_fs_mutex);
- static LIST_HEAD(virtio_fs_instances);
- 
- enum {
--	VQ_HIPRIO,
--	VQ_REQUEST
-+	VQ_HIPRIO = 0,
-+	/* TODO add VQ_NOTIFICATION according to the virtio 1.2 spec. */
-+	VQ_REQUEST = 1,
- };
- 
- #define VQ_NAME_LEN	24
-@@ -59,6 +60,7 @@ struct virtio_fs {
- 	struct list_head list;    /* on virtio_fs_instances */
- 	char *tag;
- 	struct virtio_fs_vq *vqs;
-+	struct virtio_fs_vq * __percpu *vq_proxy;
- 	unsigned int nvqs;               /* number of virtqueues */
- 	unsigned int num_request_queues; /* number of request queues */
- 	struct dax_device *dax_dev;
-@@ -686,6 +688,7 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
- 	struct virtqueue **vqs;
- 	vq_callback_t **callbacks;
- 	const char **names;
-+	struct irq_affinity desc = { .pre_vectors = 1, .nr_sets = 1, };
- 	unsigned int i;
- 	int ret = 0;
- 
-@@ -694,11 +697,16 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
- 	if (fs->num_request_queues == 0)
- 		return -EINVAL;
- 
-+	fs->num_request_queues = min_t(unsigned int, nr_cpu_ids,
-+				       fs->num_request_queues);
-+
- 	fs->nvqs = VQ_REQUEST + fs->num_request_queues;
- 	fs->vqs = kcalloc(fs->nvqs, sizeof(fs->vqs[VQ_HIPRIO]), GFP_KERNEL);
- 	if (!fs->vqs)
- 		return -ENOMEM;
- 
-+	pr_debug("virtio-fs: number of vqs: %d\n", fs->nvqs);
-+
- 	vqs = kmalloc_array(fs->nvqs, sizeof(vqs[VQ_HIPRIO]), GFP_KERNEL);
- 	callbacks = kmalloc_array(fs->nvqs, sizeof(callbacks[VQ_HIPRIO]),
- 					GFP_KERNEL);
-@@ -723,12 +731,26 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
- 		names[i] = fs->vqs[i].name;
- 	}
- 
--	ret = virtio_find_vqs(vdev, fs->nvqs, vqs, callbacks, names, NULL);
-+	ret = virtio_find_vqs(vdev, fs->nvqs, vqs, callbacks, names, &desc);
- 	if (ret < 0)
- 		goto out;
- 
--	for (i = 0; i < fs->nvqs; i++)
-+	fs->vq_proxy = alloc_percpu(struct virtio_fs_vq *);
-+	for (i = 0; i < fs->nvqs; i++) {
-+		const struct cpumask *mask;
-+		unsigned int cpu;
-+
- 		fs->vqs[i].vq = vqs[i];
-+		if (i == VQ_HIPRIO)
-+			continue;
-+
-+		mask = vdev->config->get_vq_affinity(vdev, i);
-+		for_each_cpu(cpu, mask) {
-+			struct virtio_fs_vq **cpu_vq = per_cpu_ptr(fs->vq_proxy, cpu);
-+			*cpu_vq = &fs->vqs[i];
-+			pr_debug("virtio-fs: map cpu %d to vq%d\n", cpu, i);
-+		}
-+	}
- 
- 	virtio_fs_start_all_queues(fs);
- out:
-@@ -875,8 +897,6 @@ static int virtio_fs_probe(struct virtio_device *vdev)
- 	if (ret < 0)
- 		goto out;
- 
--	/* TODO vq affinity */
--
- 	ret = virtio_fs_setup_dax(vdev, fs);
- 	if (ret < 0)
- 		goto out_vqs;
-@@ -926,6 +946,7 @@ static void virtio_fs_remove(struct virtio_device *vdev)
- 	virtio_fs_stop_all_queues(fs);
- 	virtio_fs_drain_all_queues_locked(fs);
- 	virtio_reset_device(vdev);
-+	free_percpu(fs->vq_proxy);
- 	virtio_fs_cleanup_vqs(vdev);
- 
- 	vdev->priv = NULL;
-@@ -1223,7 +1244,6 @@ static int virtio_fs_enqueue_req(struct virtio_fs_vq *fsvq,
- static void virtio_fs_wake_pending_and_unlock(struct fuse_iqueue *fiq)
- __releases(fiq->lock)
- {
--	unsigned int queue_id = VQ_REQUEST; /* TODO multiqueue */
- 	struct virtio_fs *fs;
- 	struct fuse_req *req;
- 	struct virtio_fs_vq *fsvq;
-@@ -1243,7 +1263,8 @@ __releases(fiq->lock)
- 		 req->in.h.nodeid, req->in.h.len,
- 		 fuse_len_args(req->args->out_numargs, req->args->out_args));
- 
--	fsvq = &fs->vqs[queue_id];
-+	fsvq = this_cpu_read(*fs->vq_proxy);
-+
- 	ret = virtio_fs_enqueue_req(fsvq, req, false);
- 	if (ret < 0) {
- 		if (ret == -ENOMEM || ret == -ENOSPC) {
+The patch set is based on top of the "fpga: m10bmc-sec: Fix probe
+rollback" and commit dfd10332596e ("fpga: m10bmc-sec: Fix kconfig
+dependencies") to avoid triggering conflicts.
+
+v4:
+- Use board type for naming defines & structs
+- Set .reg_read/write and call devm_regmap_init() directly
+- Rename indirect_bus_*() funcs to indirect_*()
+- Move indirect code into intel-m10-bmc-pmci so funcs can be static
+- Drop module licence  GPL v2 - GPL change
+
+v3:
+- Move regmap indirect into BMC PMCI module
+        - Get rid of "generalization" of cmd offsets and values, back to v1 #defines
+        - Tweak Kconfig & Makefile
+        - Rename intel-m10-bmc-pmci to intel-m10-bmc-pmci-main
+- Rework sec update read/write paths
+        - Sec update driver code effectively uses the SPI side code from v2
+        - Rename m10bmc_sec_write() to m10bmc_sec_fw_write()
+        - Rename flash_ops to flash_bulk_ops and make them optional
+        - Move flash MUX and flash_mutex handling into sec update driver
+        - Prevent simultaneous flash bulk write & read using flash_mutex
+        - Keep M10BMC_STAGING_BASE in header (now used in the sec update code)
+- Rebased on top of leak fix "fpga: m10bmc-sec: Fix probe rollback"
+
+v2:
+- Drop type from mfd side, the platform info takes care of differentation
+- Explain introducing ->info to struct m10bmc in commit message (belongs logically there)
+- Intro PMCI better
+- Improve naming
+        - Rename M10BMC_PMCI_FLASH_CTRL to M10BMC_PMCI_FLASH_MUX_CTRL
+        - Use m10bmc_pmci/M10BMC_PMCI prefix consistently
+        - Use M10BMC_SPI prefix for SPI related defines
+        - Newly added stuff gets m10bmc_spi prefix
+- Removed dev from struct m10bmc_pmci_device
+- Rename "n_offset" variable to "offset" in PMCI flash ops
+- Always issue idle command in regmap indirect to clear RD/WR/ACK bits
+- Handle stride misaligned sizes in flash read/write ops
+
+
+Ilpo Järvinen (8):
+  mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+  mfd: intel-m10-bmc: Rename the local variables
+  mfd: intel-m10-bmc: Split into core and spi specific parts
+  mfd: intel-m10-bmc: Support multiple CSR register layouts
+  fpga: intel-m10-bmc: Rework flash read/write
+  mfd: intel-m10-bmc: Downscope SPI defines & prefix with M10BMC_N3000
+  mfd: intel-m10-bmc: Add PMCI driver
+  fpga: m10bmc-sec: Add support for N6000
+
+ .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
+ MAINTAINERS                                   |   2 +-
+ drivers/fpga/Kconfig                          |   2 +-
+ drivers/fpga/intel-m10-bmc-sec-update.c       | 273 ++++++++----
+ drivers/hwmon/Kconfig                         |   2 +-
+ drivers/mfd/Kconfig                           |  32 +-
+ drivers/mfd/Makefile                          |   5 +-
+ drivers/mfd/intel-m10-bmc-core.c              | 133 ++++++
+ drivers/mfd/intel-m10-bmc-pmci.c              | 397 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc-spi.c               | 205 +++++++++
+ drivers/mfd/intel-m10-bmc.c                   | 238 -----------
+ include/linux/mfd/intel-m10-bmc.h             | 108 +++--
+ 12 files changed, 1021 insertions(+), 384 deletions(-)
+ create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+ create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+ delete mode 100644 drivers/mfd/intel-m10-bmc.c
+
 -- 
-2.20.1
+2.30.2
 
