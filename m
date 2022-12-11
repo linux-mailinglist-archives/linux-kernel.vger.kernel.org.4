@@ -2,211 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E7F64922E
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 04:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F5C649243
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Dec 2022 04:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLKDLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Dec 2022 22:11:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S229784AbiLKD1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Dec 2022 22:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLKDLR (ORCPT
+        with ESMTP id S229538AbiLKD1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Dec 2022 22:11:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C50A10FD2;
-        Sat, 10 Dec 2022 19:11:15 -0800 (PST)
+        Sat, 10 Dec 2022 22:27:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3237CC3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Dec 2022 19:27:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56E7DB8085D;
-        Sun, 11 Dec 2022 03:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B50E5C433EF;
-        Sun, 11 Dec 2022 03:11:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE53260D27
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 03:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86343C433EF;
+        Sun, 11 Dec 2022 03:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670728272;
-        bh=y6YN1xorqFcEkOtQF4dW8ivbVjRCnyP1cx4XYgFc950=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aJsAimixltAg2cIsAs7NpzfJxVKzVk/ty2U+C2NvRw1K+7W5hBdfomjF8fjYGCml5
-         Nh8YRhVF5+LFF+KRDr6/9lMhgZgALxB5lIN5mfvmaNmHcQstMdp/6RuZzflTCGlpZq
-         Pzsvdmvgsgk7zVkbe51MkKAccjU4uF+MMgE9X1de3SUI+L5zJUGCGzbWCHQSgOrf2N
-         h0z3VMPqvrCs1af+YLqSbos0wd5HvDsw/xrwVEgMgPlatQAQTire7rQYLMPTGbodvl
-         lI/GOQCVxng4p94+YnaooVHdcAj/eEWQ4uHP+qJQNiNmgJZgLsPPTOo7upNbziP8ng
-         kvDKqPa2lJ5IQ==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH] kbuild: use .NOTINTERMEDIATE for future GNU Make versions
-Date:   Sun, 11 Dec 2022 12:10:59 +0900
-Message-Id: <20221211031059.2623781-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1670729255;
+        bh=SLRW9XaslzwlpQy6leJBYpMTuYIaNwDRf33UV6+Ao14=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=idDjc3uCqWJjnZF16XCZDJO66hS7lkkDiIcGq6/UKMwWocZcnfuiSaKLZkDMKJYlI
+         4g/U0GeRdgDdQ32dXwkTOZ1ZC34UeGWlAQGu9maCWgA9eK/nzySbCVrLWM8a76pWVf
+         wyrfKKFWmgDC2mvbP0rAylq8FsZGYZGXShJN9ljuP7e7tFoFSaWaFm/GGN1KDpl9OW
+         C2IcsmI2F+8zk7v8v3KQPtp4rgAIREN3H64ano+Fep86knUPDQipY5X9iJrUpTrwbX
+         fRFKDdOQUGPnCMq7CyN3rgsTHbaVS5xmnKOtKr492jtj2j0sMVbnITkTfKFJrd5euu
+         0FF+YLliePkhA==
+Date:   Sun, 11 Dec 2022 12:27:31 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mark.rutland@arm.com, will@kernel.org, rostedt@goodmis.org,
+        samitolvanen@google.com, keescook@chromium.org, mhiramat@kernel.org
+Subject: Re: [PATCH] ftrace: Allow WITH_ARGS flavour of graph tracer with
+ shadow call stack
+Message-Id: <20221211122731.f909ac15e227675229f03ecf@kernel.org>
+In-Reply-To: <20221209143402.3332369-1-ardb@kernel.org>
+References: <20221209143402.3332369-1-ardb@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In Kbuild, some files are generated by chains of pattern/implicit rules.
-For example, *.dtb.o files in drivers/of/unittest-data/Makefile are
-generated by the chain of 3 pattern rules, like this:
+On Fri,  9 Dec 2022 15:34:02 +0100
+Ard Biesheuvel <ardb@kernel.org> wrote:
 
-  %.dts  ->  %.dtb  ->  %.dtb.S  ->  %.dtb.o
+> The recent switch on arm64 from DYNAMIC_FTRACE_WITH_REGS to
+> DYNAMIC_FTRACE_WITH_ARGS failed to take into account that we currently
+> require the former in order to allow the function graph tracer to be
+> enabled in combination with shadow call stacks. This means that this is
+> no longer permitted at all, in spite of the fact that either flavour of
+> ftrace works perfectly fine in this combination.
+> 
+> Given that arm64 is the only arch that implements shadow call stacks in
+> the first place, let's update the condition to just reflect the arm64
+> change. When other architectures adopt shadow call stack support, this
+> can be revisited if needed.
 
-Here, %.dts is the real source, %.dtb.o is the final target.
-%.dtb and %.dtb.S are called "intermediate files".
+This brings a question. Is the SCS safe if kretprobe(rethook) is enabled?
+it also changes the stack entry after a calling function.
 
-As GNU Make manual [1] says, intermediate files are treated differently
-in two ways:
+Thank you,
 
- (a) The first difference is what happens if the intermediate file does
-   not exist. If an ordinary file 'b' does not exist, and make considers
-   a target that depends on 'b', it invariably creates 'b' and then
-   updates the target from 'b'. But if 'b' is an intermediate file, then
-   make can leave well enough alone: it won't create 'b' unless one of
-   its prerequisites is out of date. This means the target depending
-   on 'b' won't be rebuilt either, unless there is some other reason
-   to update that target: for example the target doesn't exist or a
-   different prerequisite is newer than the target.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  arch/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 072a1b39e3afd0d1..683f365b5e31c856 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -635,7 +635,7 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
+>  config SHADOW_CALL_STACK
+>  	bool "Shadow Call Stack"
+>  	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+> -	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+> +	depends on DYNAMIC_FTRACE_WITH_ARGS || !FUNCTION_GRAPH_TRACER
+>  	help
+>  	  This option enables the compiler's Shadow Call Stack, which
+>  	  uses a shadow stack to protect function return addresses from
+> -- 
+> 2.35.1
+> 
 
- (b) The second difference is that if make does create 'b' in order to
-   update something else, it deletes 'b' later on after it is no longer
-   needed. Therefore, an intermediate file which did not exist before
-   make also does not exist after make. make reports the deletion to
-   you by printing a 'rm' command showing which file it is deleting.
 
-Actually, (b) is problematic for Kbuild because most of the build rules
-depend on FORCE and the if_changed* macros really determine if the
-target should be updated. So, all missing files, whether they are
-intermediate or not, are always rebuilt.
-
-To see why (b) is a problem, delete ".SECONDARY:" from
-scripts/Kbuild.include, and repeat this command:
-
-  $ make allmodconfig drivers/of/unittest-data/
-
-The intermediate files will be deleted, which results in rebuilding
-intermediate and final objects in the next run of make.
-
-In the old days, people suppressed (b) in inconsistent ways.
-As commit 54a702f70589 ("kbuild: mark $(targets) as .SECONDARY and
-remove .PRECIOUS markers") noted, you should not use .PRECIOUS because
-.PRECIOUS has the following behavior (c), which is not likely what you
-want.
-
- (c) If make is killed or interrupted during the execution of their
-   recipes, the target is not deleted. Also, the target is not deleted
-   on error even if .DELETE_ON_ERROR is specified.
-
-.SECONDARY is a much better way to disable (b), but a small problem
-is that .SECONDARY enables (a), which gives a side-effect to $?;
-prerequisites marked as .SECONDARY do not appear in $?. This is a
-drawback for Kbuild.
-
-I thought it was a bug and opened a bug report. As Paul, the GNU Make
-maintainer, concluded in [2], this is not a bug.
-
-A good news is that, GNU Make 4.4 added the perfect solution,
-.NOTINTERMEDIATE, which cancels both (a) and (b).
-
-For clarificaton, my understanding of .INTERMEDIATE, .SECONDARY,
-.PRECIOUS and .NOTINTERMEDIATE are as follows:
-
-                        (a)         (b)         (c)
-  .INTERMEDIATE        enable      enable      disable
-  .SECONDARY           enable      disable     disable
-  .PRECIOUS            disable     disable     enable
-  .NOTINTERMEDIATE     disable     disable     disable
-
-However, GNU Make 4.4 has a bug for the global .NOTINTERMEDIATE. [3]
-It was fixed by commit 6164608900ad ("[SV 63417] Ensure global
-.NOTINTERMEDIATE disables all intermediates"), and will be available
-in the next release of GNU Make.
-
-The following is the gain for .NOTINTERMEDIATE:
-
-  [Current Make]
-
-      $ make allnoconfig vmlinux
-          [ full build ]
-      $ rm include/linux/device.h
-      $ make vmlinux
-        CALL    scripts/checksyscalls.sh
-
-  Make does not notice the removal of <linux/device.h>.
-
-  [Future Make]
-
-      $ make-latest allnoconfig vmlinux
-          [ full build ]
-      $ rm include/linux/device.h
-      $ make-latest vmlinux
-        CC      arch/x86/kernel/asm-offsets.s
-      In file included from ./include/linux/writeback.h:13,
-                       from ./include/linux/memcontrol.h:22,
-                       from ./include/linux/swap.h:9,
-                       from ./include/linux/suspend.h:5,
-                       from arch/x86/kernel/asm-offsets.c:13:
-      ./include/linux/blk_types.h:11:10: fatal error: linux/device.h: No such file or directory
-         11 | #include <linux/device.h>
-            |          ^~~~~~~~~~~~~~~~
-      compilation terminated.
-      make-latest[1]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1
-      make-latest: *** [Makefile:1282: prepare0] Error 2
-
-  Make notices the removal of <linux/device.h>, and rebuilds objects
-  that depended on <linux/device.h>. There exists a source file that
-  includes <linux/device.h>, and it raises an error.
-
-To see detailed background information, refer to commit 2d3b1b8f0da7
-("kbuild: drop $(wildcard $^) check in if_changed* for faster rebuild").
-
-[1]: https://www.gnu.org/software/make/manual/make.html#Chained-Rules
-[2]: https://savannah.gnu.org/bugs/?55532
-[3]: https://savannah.gnu.org/bugs/?63417
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Kbuild.include | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index abdc269a51da..555c68788d09 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -185,9 +185,6 @@ endif
- make-cmd = $(call escsq,$(subst $(pound),$$(pound),$(subst $$,$$$$,$(cmd_$(1)))))
- 
- # Find any prerequisites that are newer than target or that do not exist.
--# (This is not true for now; $? should contain any non-existent prerequisites,
--# but it does not work as expected when .SECONDARY is present. This seems a bug
--# of GNU Make.)
- # PHONY targets skipped in both cases.
- newer-prereqs = $(filter-out $(PHONY),$?)
- 
-@@ -263,4 +260,14 @@ endif
- .DELETE_ON_ERROR:
- 
- # do not delete intermediate files automatically
-+#
-+# .NOTINTERMEDIATE is more correct, but only available on newer Make versions.
-+# Make 4.4 introduced .NOTINTERMEDIATE, and it appears in .FEATURES, but the
-+# global .NOTINTERMEDIATE does not work. We can use it on Make > 4.4.
-+# Use .SECONDARY for older Make versions, but "newer-prereq" cannot detect
-+# deleted files.
-+ifneq ($(and $(filter notintermediate, $(.FEATURES)),$(filter-out 4.4,$(MAKE_VERSION))),)
-+.NOTINTERMEDIATE:
-+else
- .SECONDARY:
-+endif
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
