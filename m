@@ -2,118 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CFF64A583
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AC064A588
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbiLLRGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S232908AbiLLRGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiLLRGM (ORCPT
+        with ESMTP id S232848AbiLLRGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:06:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D35A263C;
-        Mon, 12 Dec 2022 09:06:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBE94B80DB0;
-        Mon, 12 Dec 2022 17:06:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A492C433D2;
-        Mon, 12 Dec 2022 17:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670864764;
-        bh=XTRsuIYAEgT1gquTzsuV5sUHTMNWmSiPqFHKWQsG3ek=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=G83ic7eb0L1iw75wMI0w9TqHE5sg2mBtd0vfxemt8JMbw49dLPbuKotbUpOJAHoRw
-         hUZzqmt4BNBE3dF8hFyBTSZebIWYtEIZgELKBvPL+jY6Z+r9qPiYRlwdcfyhM0cg4D
-         I5GYLciugHNkI6BZwTTtVlAyUj2kaeefOS6xdvP2VTkQeOaHR31KqT5u3B5kZOV11O
-         CUYtD4ia00dPx1b8xkisZJDunIBTKaff9MMvw0A1E0dOLj6BS1p1FlyBNMywPfUQG1
-         pqTbh/N4y3avsIQpWJUHJ+lQmL9eUa9JquoBAQNPQNDv0a3wZ8+IOf/DCiN1Est8L9
-         RBtqHVfaxeyIQ==
-Message-ID: <2de81c537335da895bafcd9f50a239c439fb0439.camel@kernel.org>
-Subject: Re: [PATCH 0/3 v2] NFS: NFSD: Allow crossing mounts when
- re-exporting
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Richard Weinberger <richard@nod.at>, linux-nfs@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        chuck.lever@oracle.com, anna@kernel.org,
-        trond.myklebust@hammerspace.com, viro@zeniv.linux.org.uk,
-        raven@themaw.net, chris.chilvers@appsbroker.com,
-        david.young@appsbroker.com, luis.turcitu@appsbroker.com,
-        david@sigma-star.at, benmaynard@google.com
-Date:   Mon, 12 Dec 2022 12:06:01 -0500
-In-Reply-To: <20221207084309.8499-1-richard@nod.at>
-References: <20221207084309.8499-1-richard@nod.at>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Mon, 12 Dec 2022 12:06:18 -0500
+Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386D926E4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:06:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1670864777;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sMPzjY9YCDiCSf18nv+XYdrNotL4tPcjoEGZ13RJQys=;
+  b=EJm/AeVbjpUAPNTcydgPeRlpOp6LmePfkaepbQ8z5BEM6DGoyZgF21x6
+   4yzRZX3tj1b37gmjymERE6py6Iph+a8ugYuyf54+VBvQYHeYQaq8zqr6t
+   Vu2g/074JEkft0yojXFp0KVxF3W3ivaIa3WTHifJ/uwJkN7+/aH+By0tt
+   g=;
+Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 4.0
+X-MesageID: 87954350
+X-Ironport-Server: esa2.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.83
+X-Policy: $RELAYED
+IronPort-Data: A9a23:rm/1iKBo8za6zBVW//7jw5YqxClBgxIJ4kV8jS/XYbTApGx33mNSz
+ jQaWWiDa/aNZzT9KIh3aI/g/RxT75+DzNZmQQY4rX1jcSlH+JHPbTi7wuUcHAvJd5GeExg3h
+ yk6QoOdRCzhZiaE/n9BCpC48T8nk/nNHuCnYAL9EngZbRd+Tys8gg5Ulec8g4p56fC0GArIs
+ t7pyyHlEAbNNwVcbyRFtcpvlDs15K6o4WlB5ARkDRx2lAS2e0c9Xcp3yZ6ZdxMUcqEMdsamS
+ uDKyq2O/2+x13/B3fv8z94X2mVTKlLjFVDmZkh+AsBOsTAbzsAG6Y4pNeJ0VKtio27hc+ada
+ jl6ncfYpQ8BZsUgkQmGOvVSO3kW0aZuoNcrLZUj2CA6IoKvn3bEmp1T4E8K0YIw0eRRIUhgp
+ PsiBTlVVkGPpPnu8Ym+Vbw57igjBJGD0II3v3hhyXfSDOo8QICFSKLPjTNa9G5u3IYUR6+YP
+ pdHL2o0BPjDS0Qn1lM/MJ8k2s2pgmLyWzZZtEiUtew85G27IAlZgOe8bYaOJ4TiqcN9mHyyl
+ H7/wk/FMhhdCfC2yWre0W29mbqa9c/8cN1LT+DpnhJwu3WI3XAaAhASUVq9oNG6h1S4VtYZL
+ FYbkgIpqaUx70WtQsPKQwyjoHWEsxgfXPJdC+Q/rgqKz8L88wufQ2QJUDNFQNgnr9MtAywn0
+ EeTmNHkDiApt6eaIVqZ97GJvXaxNDITIGsqeyAJV00G7sPlrYV1iQjAJv5hH7SylcbdAizrz
+ naBqy1WulkIpZdVjePhpwmB2m/y4MiSJuIo2unJdkmnyCNQSt+iXaGhsWCK4dVbdLeiS0bU6
+ RDohPOixOwJCJiMkgmET+MMAKyl6p65DdHMvbJ8N8J/rmrwohZPaagVuWgjfxkxbq7obBezO
+ CfuVRVtCIi/1ZdARYt+eMqPBssj1sAM/vy1B6mPPrKijnWcHTJrHR2Ch2bKhAgBc2B2y8nT3
+ Kt3lu7yZUv28Yw9kFKLqx41iNfHPBwWy2LJXozcxB+6y7eYb3P9Ye5bbwPRPrtksvPf8FS9H
+ zNj2yyikkU3bQEDSnOPrd57wa4ichDX+qwaW+QIL7Xec2KK6UkqCuPLwKNJRmCWt/09qws8x
+ VnkAhUw4AOm1RX6xfCiNigLhEXHAcwu8hrW/EUEYT6V5pTUSdz/tPtOK8VsI+hPGS4K5accc
+ sTpsv6oWpxnIgkrMRxHBXUhhOSOrCiWuD8=
+IronPort-HdrOrdr: A9a23:FB7TDqp+xM8KxmKDlMMcfy0aV5rzeYIsimQD101hICG9JPbo8f
+ xGUs516faUskdzZJhOo7u90cW7K080lqQU3WByB9mftVLdyQyVxehZhOPfKlvbdhEWndQ96U
+ 4PScRDIey1N1Rgksbx7C6/DZINxNGG9YqshevY0h5WPGVXgw4L1XYBNu42eHcGITWvpPACZf
+ ih2vY=
+X-IronPort-AV: E=Sophos;i="5.96,239,1665460800"; 
+   d="scan'208";a="87954350"
+From:   Per Bilse <per.bilse@citrix.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Per Bilse <per.bilse@citrix.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>
+Subject: [PATCH v2] drivers/xen/hypervisor: Expose Xen SIF flags to userspace
+Date:   Mon, 12 Dec 2022 17:06:05 +0000
+Message-ID: <20221212170605.28192-1-per.bilse@citrix.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 09:43 +0100, Richard Weinberger wrote:
-> Currently when re-exporting a NFS share the NFS cross mount feature does
-> not work [0].
-> This patch series outlines an approach to address the problem.
->=20
-> Crossing mounts does not work for two reasons:
->=20
-> 1. As soon the NFS client (on the re-exporting server) sees a different
-> filesystem id, it installs an automount. That way the other filesystem
-> will be mounted automatically when someone enters the directory.
-> But the cross mount logic of KNFS does not know about automount.
-> This patch series addresses the problem and teach both KNFSD
-> and the exportfs logic of NFS to deal with automount.
->=20
-> 2. When KNFSD detects crossing of a mount point, it asks rpc.mountd to in=
-stall
-> a new export for the target mount point. Beside of authentication rpc.mou=
-ntd
-> also has to find a filesystem id for the new export. Is the to be exporte=
-d
-> filesystem a NFS share, rpc.mountd cannot derive a filesystem id from it =
-and
-> refuses to export. In the logs you'll see errors such as:
->=20
-> mountd: Cannot export /srv/nfs/vol0, possibly unsupported filesystem or f=
-sid=3D required
->=20
-> To deal with that I've changed rpc.mountd to use generate and store fsids=
- [1].
-> Since the kernel side of my changes did change for a long time I decided =
-to
-> try upstreaming it first.
-> A 3rd iteration of my rpc.mountd will happen soon.
->=20
-> [0] https://marc.info/?l=3Dlinux-nfs&m=3D161653016627277&w=3D2
-> [1] https://lore.kernel.org/linux-nfs/20220217131531.2890-1-richard@nod.a=
-t/
->=20
-> Changes since v1:
-> https://lore.kernel.org/linux-nfs/20221117191151.14262-1-richard@nod.at/
->=20
-> - Use LOOKUP_AUTOMOUNT only when NFSEXP_CROSSMOUNT is set (Jeff Layton)
->=20
-> Richard Weinberger (3):
->   NFSD: Teach nfsd_mountpoint() auto mounts
->   fs: namei: Allow follow_down() to uncover auto mounts
->   NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
->=20
->  fs/namei.c            | 6 +++---
->  fs/nfs/export.c       | 2 +-
->  fs/nfsd/vfs.c         | 8 ++++++--
->  include/linux/namei.h | 2 +-
->  4 files changed, 11 insertions(+), 7 deletions(-)
->=20
+/proc/xen is a legacy pseudo filesystem which predates Xen support
+getting merged into Linux.  It has largely been replaced with more
+normal locations for data (/sys/hypervisor/ for info, /dev/xen/ for
+user devices).  We want to compile xenfs support out of the dom0 kernel.
 
-This set looks reasonable to me.
+There is one item which only exists in /proc/xen, namely
+/proc/xen/capabilities with "control_d" being the signal of "you're in
+the control domain".  This ultimately comes from the SIF flags provided
+at VM start.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+This patch exposes all SIF flags in /sys/hypervisor/start_flags/ as
+boolean files, one for each bit, returning '1' if set, '0' otherwise.
+Two known flags, 'privileged' and 'initdomain', are explicitly named,
+and all remaining flags can be accessed via generically named files,
+as suggested by Andrew Cooper.
+
+Signed-off-by: Per Bilse <per.bilse@citrix.com>
+---
+v2: minor fix to layout, incorporate suggestions from Juergen Gross
+---
+ Documentation/ABI/stable/sysfs-hypervisor-xen | 13 ++++
+ drivers/xen/sys-hypervisor.c                  | 69 +++++++++++++++++--
+ 2 files changed, 78 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/ABI/stable/sysfs-hypervisor-xen b/Documentation/ABI/stable/sysfs-hypervisor-xen
+index 748593c64568..dbc5eccce8ea 100644
+--- a/Documentation/ABI/stable/sysfs-hypervisor-xen
++++ b/Documentation/ABI/stable/sysfs-hypervisor-xen
+@@ -120,3 +120,16 @@ Contact:	xen-devel@lists.xenproject.org
+ Description:	If running under Xen:
+ 		The Xen version is in the format <major>.<minor><extra>
+ 		This is the <minor> part of it.
++
++What:		/sys/hypervisor/start_flags/*
++Date:		December 2022
++KernelVersion:	6.1.0
++Contact:	xen-devel@lists.xenproject.org
++Description:	If running under Xen:
++		All bits in Xen's start-flags are represented as
++		boolean files, returning '1' if set, '0' otherwise.
++		This takes the place of the defunct /proc/xen/capabilities,
++		which would contain "control_d" on dom0, and be empty
++		otherwise.  This flag is now exposed as "initdomain" in
++		addition to the "privileged" flag; all other possible flags
++		are accessible as "unknownXX".
+diff --git a/drivers/xen/sys-hypervisor.c b/drivers/xen/sys-hypervisor.c
+index fcb0792f090e..f5460b34ae6f 100644
+--- a/drivers/xen/sys-hypervisor.c
++++ b/drivers/xen/sys-hypervisor.c
+@@ -31,7 +31,10 @@ struct hyp_sysfs_attr {
+ 	struct attribute attr;
+ 	ssize_t (*show)(struct hyp_sysfs_attr *, char *);
+ 	ssize_t (*store)(struct hyp_sysfs_attr *, const char *, size_t);
+-	void *hyp_attr_data;
++	union {
++		void *hyp_attr_data;
++		unsigned long hyp_attr_value;
++	};
+ };
+ 
+ static ssize_t type_show(struct hyp_sysfs_attr *attr, char *buffer)
+@@ -399,6 +402,60 @@ static int __init xen_sysfs_properties_init(void)
+ 	return sysfs_create_group(hypervisor_kobj, &xen_properties_group);
+ }
+ 
++#define FLAG_UNAME "unknown"
++#define FLAG_UNAME_FMT FLAG_UNAME "%02u"
++#define FLAG_UNAME_MAX sizeof(FLAG_UNAME "XX")
++#define FLAG_COUNT (sizeof(xen_start_flags) * BITS_PER_BYTE)
++static_assert(sizeof(xen_start_flags) 
++		<= sizeof_field(struct hyp_sysfs_attr, hyp_attr_value));
++
++static ssize_t flag_show(struct hyp_sysfs_attr *attr, char *buffer)
++{
++	char *p = buffer;
++
++	*p++ = '0' + ((xen_start_flags & attr->hyp_attr_value) != 0);
++	*p++ = '\n';
++	return p - buffer; 
++}
++
++#define FLAG_NODE(flag, node)				\
++	[ilog2(flag)] = {				\
++		.attr = { .name = #node, .mode = 0444 },\
++		.show = flag_show,			\
++		.hyp_attr_value = flag			\
++	}
++
++/*
++ * Add new, known flags here.  No other changes are required, but
++ * note that each known flag wastes one entry in flag_unames[].
++ * The code/complexity machinations to avoid this isn't worth it
++ * for a few entries, but keep it in mind.
++ */
++static struct hyp_sysfs_attr flag_attrs[FLAG_COUNT] = {
++	FLAG_NODE(SIF_PRIVILEGED, privileged),
++	FLAG_NODE(SIF_INITDOMAIN, initdomain)
++};
++static struct attribute_group xen_flags_group = {
++	.name = "start_flags",
++	.attrs = (struct attribute *[FLAG_COUNT + 1]){}
++};
++static char flag_unames[FLAG_COUNT][FLAG_UNAME_MAX];
++
++static int __init xen_sysfs_flags_init(void)
++{
++	for (unsigned fnum = 0; fnum != FLAG_COUNT; fnum++) {
++		if (likely(flag_attrs[fnum].attr.name == NULL)) {
++			sprintf(flag_unames[fnum], FLAG_UNAME_FMT, fnum);
++			flag_attrs[fnum].attr.name = flag_unames[fnum];
++			flag_attrs[fnum].attr.mode = 0444;
++			flag_attrs[fnum].show = flag_show;
++			flag_attrs[fnum].hyp_attr_value = 1 << fnum;
++		}
++		xen_flags_group.attrs[fnum] = &flag_attrs[fnum].attr;
++	}
++	return sysfs_create_group(hypervisor_kobj, &xen_flags_group);
++}
++
+ #ifdef CONFIG_XEN_HAVE_VPMU
+ struct pmu_mode {
+ 	const char *name;
+@@ -539,18 +596,22 @@ static int __init hyper_sysfs_init(void)
+ 	ret = xen_sysfs_properties_init();
+ 	if (ret)
+ 		goto prop_out;
++	ret = xen_sysfs_flags_init();
++	if (ret)
++		goto flags_out;
+ #ifdef CONFIG_XEN_HAVE_VPMU
+ 	if (xen_initial_domain()) {
+ 		ret = xen_sysfs_pmu_init();
+ 		if (ret) {
+-			sysfs_remove_group(hypervisor_kobj,
+-					   &xen_properties_group);
+-			goto prop_out;
++			sysfs_remove_group(hypervisor_kobj, &xen_flags_group);
++			goto flags_out;
+ 		}
+ 	}
+ #endif
+ 	goto out;
+ 
++flags_out:
++	sysfs_remove_group(hypervisor_kobj, &xen_properties_group);
+ prop_out:
+ 	sysfs_remove_file(hypervisor_kobj, &uuid_attr.attr);
+ uuid_out:
+-- 
+2.31.1
+
