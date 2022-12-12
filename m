@@ -2,106 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BE9649EB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BE9649EB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232255AbiLLMde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S232185AbiLLMdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiLLMdH (ORCPT
+        with ESMTP id S232169AbiLLMdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:33:07 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B4ECD1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:33:05 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d15so2309817pls.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+8uGGe5vOHJy+eJbczvZUafBVT7vGqMpKgjkjdLPuI=;
-        b=tcqTn2obQf6CbBT4rNITkZLHWBYQLrodivwc8sWIEM+ZtA8FvvSKHEO3iImOl2evuH
-         fd6gl+Kn6aU7TmqewmevTq5xzUuVks6WM5BE12+V2FA80OLRBs/dATSgK5jieZarWOk4
-         xv9gyA7iG18WMx+A+J/f/uOMeMIOGQk5Qf0qWwJhFFeDEP0m3MS+I+e1x1pVQwNYezzu
-         k8eG9TeW03WbwjF1b+UNoNrsnz9g3W0Eq6xlXW91UTVhuezYcW27GRZK5gJg/QVNcJbG
-         4xeg4P1bxeRiAmUgelLqB34waeS9h+S1DRAt05jAV6mS9gJMMYBNhKEnYS+hJvRhFKg1
-         ipfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f+8uGGe5vOHJy+eJbczvZUafBVT7vGqMpKgjkjdLPuI=;
-        b=nfYGdey9y/lJ0JfcCx4fSg00PNN8y2n0J4hXFyLiqQGCLbgObnVkxffym3YPgrel9l
-         cOQNXQosOpLmueulPZxjyuaC3r8qFiS2wRbpW6PHU8T7vn/Z1mzGMlvofHGw2f2UINHh
-         iqEyvaesJAPkujypDBzApRQkUL5jbeWibjpj8rdonQ0uSq81A57pv/Y4RX8W9VY8+GSW
-         GNzbOlwejhm23fP/VOJpg2hlzNQyjkUad3HqIrIT2tHnRnlkvz/CY46GpyeRQ27ldvI/
-         xyElVfAAb5kSSQml1DfsPM1EvriecL7sFYJhxTTsRfdJQxK28SoW0xTmaaHRCgRWWbFr
-         5oBQ==
-X-Gm-Message-State: ANoB5pld+4ujMDl+qCs08ASVN7vsF5UUJpSyXdh1uON36HikDGBKXI01
-        ijNc0sQgrNE6OQpBbGS0NTRicQ==
-X-Google-Smtp-Source: AA0mqf7FMWv/CA6ZPCGa6ZPJawKAr286zXvKMBRS2JLCv2L6CjK/v5BrjHAo75w2b8d92mtAThm/XA==
-X-Received: by 2002:a17:903:2412:b0:188:f47f:ac06 with SMTP id e18-20020a170903241200b00188f47fac06mr14926109plo.19.1670848385329;
-        Mon, 12 Dec 2022 04:33:05 -0800 (PST)
-Received: from devtp.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id jw1-20020a170903278100b001869ba04c83sm6219987plb.245.2022.12.12.04.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 04:33:05 -0800 (PST)
-From:   wuqiang <wuqiang.matt@bytedance.com>
-To:     mhiramat@kernel.org, davem@davemloft.net,
-        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com,
-        rostedt@goodmis.org, peterz@infradead.org,
-        akpm@linux-foundation.org, sander@svanheule.net,
-        ebiggers@google.com, dan.j.williams@intel.com, jpoimboe@kernel.org
-Cc:     linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com,
-        wuqiang <wuqiang.matt@bytedance.com>
-Subject: [PATCH v7 5/5] MAINTAINERS: objpool added
-Date:   Mon, 12 Dec 2022 20:31:53 +0800
-Message-Id: <20221212123153.190888-6-wuqiang.matt@bytedance.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221212123153.190888-1-wuqiang.matt@bytedance.com>
-References: <20221212123153.190888-1-wuqiang.matt@bytedance.com>
+        Mon, 12 Dec 2022 07:33:01 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8910FCB;
+        Mon, 12 Dec 2022 04:32:51 -0800 (PST)
+Received: from p57b7793f.dip0.t-ipconnect.de ([87.183.121.63] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1p4hyl-00033o-D8; Mon, 12 Dec 2022 13:32:19 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
+Date:   Mon, 12 Dec 2022 13:32:17 +0100
+Message-ID: <8194084.DvuYhMxLoT@phil>
+In-Reply-To: <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ojbpool, a scalable and lockless ring-array based object pool, was
-introduced to replace the original freelist (a LIFO queue based on
-singly linked list) to improve kretprobe scalability.
+Am Montag, 12. Dezember 2022, 12:55:00 CET schrieb Prabhakar:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Introduce ALTERNATIVE_3() macro.
+> 
+> A vendor wants to replace an old_content, but another vendor has used
+> ALTERNATIVE_2() to patch its customized content at the same location.
+> In this case, this vendor can use macro ALTERNATIVE_3() and then replace
+> ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
+> 
+> While at it update comment above ALTERNATIVE_2() macro and make it generic
+> so that the comment holds good for any new addition of ALTERNATIVE_X()
+> macros.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 886d3f69ee64..9584aa440eb9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14914,6 +14914,13 @@ F:	include/linux/objagg.h
- F:	lib/objagg.c
- F:	lib/test_objagg.c
- 
-+OBJPOOL
-+M:	Matt Wu <wuqiang.matt@bytedance.com>
-+S:	Supported
-+F:	include/linux/objpool.h
-+F:	lib/objpool.c
-+F:	lib/test_objpool.c
-+
- OBJTOOL
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Peter Zijlstra <peterz@infradead.org>
--- 
-2.34.1
+> ---
+> v4->v5
+> * Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
+> * Updated comment for ALTERNATIVE_x() as suggested by Heiko
+> 
+> RFC v3 -> v4
+> * New patch
+> ---
+>  arch/riscv/include/asm/alternative-macros.h | 46 ++++++++++++++++++---
+>  1 file changed, 41 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
+> index 7226e2462584..a5b4691520da 100644
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -50,8 +50,17 @@
+>  	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+>  .endm
+>  
+> +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
+> +				new_c_2, vendor_id_2, errata_id_2, enable_2,	\
+> +				new_c_3, vendor_id_3, errata_id_3, enable_3
+> +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,	\
+> +                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
+> +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
+> +.endm
+> +
+>  #define __ALTERNATIVE_CFG(...)		ALTERNATIVE_CFG __VA_ARGS__
+>  #define __ALTERNATIVE_CFG_2(...)	ALTERNATIVE_CFG_2 __VA_ARGS__
+> +#define __ALTERNATIVE_CFG_3(...)	ALTERNATIVE_CFG_3 __VA_ARGS__
+>  
+>  #else /* !__ASSEMBLY__ */
+>  
+> @@ -98,6 +107,13 @@
+>  	__ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)	\
+>  	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+>  
+> +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
+> +				   new_c_2, vendor_id_2, errata_id_2, enable_2,	\
+> +				   new_c_3, vendor_id_3, errata_id_3, enable_3)	\
+> +	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
+> +                                   new_c_2, vendor_id_2, errata_id_2, enable_2)	\
+> +	ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
+> +
+>  #endif /* __ASSEMBLY__ */
+>  
+>  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k)	\
+> @@ -108,6 +124,13 @@
+>  	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
+>  				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
+>  
+> +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
+> +				  new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
+> +				  new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
+> +	__ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
+> +				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),	\
+> +				   new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
+> +
+>  #else /* CONFIG_RISCV_ALTERNATIVE */
+>  #ifdef __ASSEMBLY__
+>  
+> @@ -152,15 +175,28 @@
+>  	_ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
+>  
+>  /*
+> - * A vendor wants to replace an old_content, but another vendor has used
+> - * ALTERNATIVE() to patch its customized content at the same location. In
+> - * this case, this vendor can create a new macro ALTERNATIVE_2() based
+> - * on the following sample code and then replace ALTERNATIVE() with
+> - * ALTERNATIVE_2() to append its customized content.
+> + * ALTERNATIVE_x macros allow providing multiple replacement options
+> + * for an ALTERNATIVE code section. This is helpful if multiple
+> + * implementation variants for the same functionality exist for
+> + * different cpu cores.
+> + *
+> + * Usage:
+> + *   ALTERNATIVE_x(old_content,
+> + *      new_content1, vendor_id1, errata_id1, CONFIG_k1,
+> + *      new_content2, vendor_id2, errata_id2, CONFIG_k2,
+> + *      ...
+> + *      new_contentx, vendor_idx, errata_idx, CONFIG_kx)
+>   */
+>  #define ALTERNATIVE_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
+>  				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)		\
+>  	_ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
+>  					new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)
+>  
+> +#define ALTERNATIVE_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
+> +				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
+> +				   new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
+> +       _ALTERNATIVE_CFG_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
+> +                                       new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,	\
+> +                                       new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)
+> +
+>  #endif
+> 
+
+
+
 
