@@ -2,299 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A42F64A9A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1310E64A992
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbiLLVjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S233232AbiLLVeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiLLVjh (ORCPT
+        with ESMTP id S231708AbiLLVeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:39:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7BB252
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:39:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B216BB80E72
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:39:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D04FC433A4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:39:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670881173;
-        bh=B9gTkTNlu/xQ+gB/j1rIPXB65DL5r+u8wRXwz/iJixY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PEz+9eJqQCOZMmvPrfo3VEo9OqHglPy+y4STHULwpRMn7eY1bpiLC9nr9TdZSfRcj
-         g3zSayKgK1kQ7eZiorebU8CpCUmamAKhW7nGigXPpQS0v/JkFWiA3ZqwEhPVCGe/ZZ
-         uNwlC5Qo5oopzMicYd3nQVkn4ctKWkXehrdJERS+/FZxYa7fcCweX3q8xnZseL1RZR
-         hEKRGmzehkoahb6XH4lPq57Ww8liyVrQfB6+Jdr5b7IYQxv9dETPHq+EpaD4HIbVSp
-         FtU6Fx3tqDHiVR6mc4Wg+JJ3jpCVL9ko5ccIJr2Ah0VDxTfoENLHfL1tvR4B7x59sz
-         Jvt7Wh5aPUQnQ==
-Received: by mail-ej1-f50.google.com with SMTP id t17so31698069eju.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:39:33 -0800 (PST)
-X-Gm-Message-State: ANoB5pk3/rtvdlAGYqRh2OAC994tMZzP6Ctopr0djB1Zt+z7PSp0ZMmJ
-        xOjdrt90fF3SOANwlGjbjM6ylAAZkPzVW5IjNgWP8w==
-X-Google-Smtp-Source: AA0mqf4pEiHn8wvEY7FGeZ/vxLAgQXyNYTFZTRNKh5w9Scz4NmKDAzYpHFJWjsPMNUGKWXrn6dx1ZsyiRsxCcx9QdUg=
-X-Received: by 2002:a17:906:48d6:b0:7c1:b67:6a28 with SMTP id
- d22-20020a17090648d600b007c10b676a28mr9538124ejt.2.1670881171311; Mon, 12 Dec
- 2022 13:39:31 -0800 (PST)
-MIME-Version: 1.0
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
- <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
- <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
- <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
- <20221206233947.4c27cc9d@gandalf.local.home> <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
- <20221207074806.6f869be2@gandalf.local.home> <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
- <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org> <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
- <20221212001431.ac84a6320cff8d5fa8aa943e@kernel.org>
-In-Reply-To: <20221212001431.ac84a6320cff8d5fa8aa943e@kernel.org>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 12 Dec 2022 22:39:20 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5WAgh17_+CxKQjzk-611ua3tyHGhWS6Hj3TM4rt7jDWg@mail.gmail.com>
-Message-ID: <CACYkzJ5WAgh17_+CxKQjzk-611ua3tyHGhWS6Hj3TM4rt7jDWg@mail.gmail.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Mon, 12 Dec 2022 16:34:00 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063B63EA;
+        Mon, 12 Dec 2022 13:33:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670880839; x=1702416839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6g+nJ9xvo8cwu5PEAdWzY2kdOBYFu9N983QpNMGg6Cc=;
+  b=ImX9lxUrf8h/2o7KZdbZKEdBlzJ6ddA/i76WlgI3iqwlQSHxzYde6Pnz
+   lbsfE0fcsJF2C6nb/U1zXotAYos5/4GLwBMFbuwXQT/1H3dtBW4vAPrjN
+   g2SG8kBlxAtWNPwbO+pPwJuRI7po0OJRcPJu3R0OaBK/RpOqQAfkIVU3B
+   4mRdkisEDGtuSlKoPOymQYO/p/7OZ6iRWx5xC4AuoPXntbrUvJfKOIqNT
+   jkmRvVqDtC9DJc90cB1qs41UiOzM3dKrgI1jIVa2HxvFXCTPg+Xphm+Pa
+   MlYOn9ZR+w2ONNrbw1kQ/MUH42Cc9VKJL/SGDPPt2+YRVDm6nauIYCXTe
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319111292"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="319111292"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 13:33:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="626049352"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="626049352"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga006.jf.intel.com with ESMTP; 12 Dec 2022 13:33:48 -0800
+Date:   Mon, 12 Dec 2022 13:41:52 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 06/22] sched/fair: Collect load-balancing stats for
+ IPC classes
+Message-ID: <20221212214152.GF27353@ranerica-svr.sc.intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-7-ricardo.neri-calderon@linux.intel.com>
+ <71a0f27d-68e0-f118-c117-bae48f5f1996@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71a0f27d-68e0-f118-c117-bae48f5f1996@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 4:14 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> On Sun, 11 Dec 2022 08:49:01 +0100
-> KP Singh <kpsingh@kernel.org> wrote:
->
-> > On Sun, Dec 11, 2022 at 3:52 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > Hi Alexei,
-> > >
-> > > On Wed, 7 Dec 2022 20:36:28 -0800
-> > > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > > Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
-> > > > And that happens all the time on lkml. Somebody reports a bug and kernel devs
-> > > > jump on the poor person:
-> > > > "Can you repro without taint?",
-> > > > "Can you repro with upstream kernel?"
-> > > > This is discouraging.
-> > > > The 'taint' concept makes it easier for kernel devs to ignore bug reports
-> > > > and push back on the reporter.
-> > > > Do it few times and people stop reporting bugs.
-> > >
-> > > That seems off topic for me. You seems complained against the taint flag
-> > > itself.
-> >
-> > The series is about adding a taint for, so discussing the user
-> > experience, when someone reports a "tainted crash" seems reasonable to
-> > me and not off topic.
-> >
-> > >
-> > > > Say, this particular bug in rethook was found by one of our BPF CI developers.
-> > > > They're not very familiar with the kernel, but they can see plenty of 'rethook'
-> > > > references in the stack trace, lookup MAINTAINER file and ping Massami,
-> > > > but to the question "can you repro without taint?" they can only say NO,
-> > > > because this is how our CI works. So they will keep silence and the bug will be lost.
-> > >
-> > > BTW, this sounds like the BPF CI system design issue. If user is NOT easily
-> > > identifying what test caused the issue (e.g. what tests ran on the system
-> > > until the bug was found), the CI system is totally useless, because after
-> > > finding a problem, it must be investigated to solve the problem.
-> > >
-> > > Without investigation, how would you usually fix the bug??
-> >
-> > Masami, this seems accusational and counter productive, it was never
-> > said that issues can be solved without investigation.
->
-> Let me apologies about my misunderstanding.
+On Wed, Dec 07, 2022 at 06:00:32PM +0100, Dietmar Eggemann wrote:
+> On 28/11/2022 14:20, Ricardo Neri wrote:
+> 
+> [...]
+> 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 224107278471..3a1d6c50a19b 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -9100,6 +9100,57 @@ group_type group_classify(unsigned int imbalance_pct,
+> >  	return group_has_spare;
+> >  }
+> >  
+> > +struct sg_lb_ipcc_stats {
+> > +	int min_score;	/* Min(score(rq->curr->ipcc)) */
+> > +	int min_ipcc;	/* Min(rq->curr->ipcc) */
+> > +	long sum_score; /* Sum(score(rq->curr->ipcc)) */
+> > +};
+> 
+> Wouldn't it be cleaner to put `min_score`, `min_ipcc` and `sum_score`
+> into `struct sg_lb_stats` next to `ipcc_score_{after, before}` under the
+> same #ifdef CONFIG_IPC_CLASSES?
 
-e-mail is hard, I am glad this is already progressing constructively
-and we are making things better.
+Yes, that is a good observation. I initially wanted to hide these
+intermediate and only expose the end result ipcc_score_{after, before} to
+struct sg_lb_stats. I agree, it would look cleaner as you suggest.
+> 
+> Looks like those IPCC stats would only be needed in the specific
+> condition under which update_sg_lb_stats_scores() is called?
 
->
-> >
-> > The BPF CI does find issues, the BPF reviewers and maintainers
-> > regularly fix bugs using it. Alexei's point here is that a taint does
-> > not help in solving the problem, rather deter some people from even
-> > looking at it. (not BPF people, but other maintainers [distro, kernel]
-> > who would ask for a reproduction without a taint).
->
-> Hmm, that is a problem. Some taint flag should be useful hints
-> for finding the error patterns.
+True.
 
-the boolean information contained in taints is not helpful, stuff like
-audit logs / crash dumps / bpftool reports are much more helpful.
->
-> > Let's take a step back and focus on solving debuggability and
-> > introspection as we clearly have some perception issues about taints
-> > in the community. (distro maintainers, users) before we go and add
-> > more taints.
->
-> Agreed.
->
-> > > > That's not the only reason why I'm against generalizing 'taint'.
-> > > > Tainting because HW is misbehaving makes sense, but tainting because
-> > > > of OoO module or because of live-patching does not.
-> > > > It becomes an excuse that people abuse.
-> > >
-> > > yeah, it is possible to be abused. but that is the problem who
-> > > abuse it.
-> >
-> > I am sorry, but it's our responsibility as developers to design
-> > features so that users don't face arduous pushbacks.
->
-> Sorry if I confuse you. I meant that taint flag abusing. :(
+> 
+> > +#ifdef CONFIG_IPC_CLASSES
+> > +static void init_rq_ipcc_stats(struct sg_lb_ipcc_stats *sgcs)
+> > +{
+> > +	*sgcs = (struct sg_lb_ipcc_stats) {
+> > +		.min_score = INT_MAX,
+> > +	};
+> > +}
+> > +
+> > +/** Called only if cpu_of(@rq) is not idle and has tasks running. */
+> > +static void update_sg_lb_ipcc_stats(struct sg_lb_ipcc_stats *sgcs,
+> > +				    struct rq *rq)
+> > +{
+> > +	struct task_struct *curr;
+> > +	unsigned short ipcc;
+> > +	int score;
+> > +
+> > +	if (!sched_ipcc_enabled())
+> > +		return;
+> > +
+> > +	curr = rcu_dereference(rq->curr);
+> > +	if (!curr || (curr->flags & PF_EXITING) || is_idle_task(curr))
+> 
+> So the Idle task is excluded but RT, DL, (Stopper) tasks are not. Looks
+> weird if non-CFS tasks could influence CFS load-balancing.
+> AFAICS, RT and DL tasks could have p->ipcc != IPC_CLASS_UNCLASSIFIED?
 
-Again no worries, but we need to make sure that the taint flag is not
-abused, and if it is being abused, limit the damage somewhere.
-
->
-> >
-> > > > Right now syzbot is finding all sorts of bugs. Most of the time syzbot
-> > > > turns error injection on to find those allocation issues.
-> > > > If syzbot reports will start coming as tainted there will be even less
-> > > > attention to them. That will not be good.
-> > >
-> > > Hmm, what kind of error injection does syzbot do? I would like to know
-> > > how it is used. For example, does that use only a specify set of
-> > > injection points, or use all existing points?
-> > >
-> > > If the latter, I feel safer because syzbot ensures the current all
-> > > ALLOW_ERROR_INJECTION() functions will work with error injection. If not,
-> > > we need to consider removing the ALLOW_ERROR_INJECTION() from the
-> > > function which is not tested well (or add this taint flag.)
-> > >
-> > > Documentation/fault-injection/fault-injection.rst has no explanation
-> > > about ALLOW_ERROR_INJECTION(), but obviously the ALLOW_ERROR_INJECTION()
-> > > marked functions and its caller MUST be designed safely against the
-> > > error injection. e.g.
-> > >
-> > > - It must return an error code. (so EI_ETYPE_NONE must be removed)
-> >
-> > This is already the case with BPF, the modify return trampolines
-> > further limits the error injection to functions that return errors.
->
-> OK, so I also should remove it from FEI.
->
-> >
-> > > - Caller must check the return value always.
-> > >   (but I thought this was the reason why we need this test framework...)
-> > > - It should not run any 'effective' code before checking an error.
-> > >   For example, increment counter, call other functions etc.
-> > >   (this means it can return without any side-effect)
-> >
-> > This is the case with modify_return trampolines in BPF which avoid
-> > side effects and limit the attachment surface further and avoiding
-> > side effects is a design goal. If we missed anything, let's fix that.
-> >
-> > https://lwn.net/Articles/813724/
->
-> Yeah, if BPF tests already tested all ALLOW_ERROR_INJECTION() functions,
-> it may be checked already. I think we just need adding the above
-> explanation on the document, so that the people who will add additional
-> ALLOW_ERROR_INJECTION() on a function, can understand the limitation.
->
-> >
-> > >
-> > > Anything else?
-> > >
-> > > [...]
-> > > > All these years we've been working on improving bpf introspection and
-> > > > debuggability. Today crash dumps look like this:
-> > > >   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
-> > > >   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
-> > > >   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
-> > > >   __bpf_prog_run include/linux/filter.h:600 [inline]
-> > > >   bpf_prog_run include/linux/filter.h:607 [inline]
-> > > >
-> > > > The 2nd from the top is a bpf prog. The rest are kernel functions.
-> > > > bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
-> > > >          ^^ is a prog tag   ^^ name of bpf prog
-> > > >
-> > > > If you do 'bpftool prog show' you can see both tag and name.
-> > > > 'bpftool prog dump jited'
-> > > > dumps x86 code mixed with source line text.
-> > > > Often enough +0x2b offset will have some C code right next to it.
-> > >
-> > > This is good, but this only works when the vmcore is dumped and
-> > > on the stack. My concern about the function error injection is
-> > > that makes some side effects, which can cause a problem afterwards
-> > > (this means after unloading the bpf prog)
-> >
-> > I think careful choices need to be made on when error injection is
-> > allowed so that these situations don't occur. (as you mentioned in
-> > your comment). [1]. If a BPF program is unloaded, there is no error
-> > injection any more, let's ensure that we design the error injection
-> > allow list and the BPF logic to ensure this cannot happen.
->
-> OK. Actually, I trust the BPF logic itself will be handle this
-> correctly. I just concerned that some people who don't know much
-> (because it is not carefully documented) might add ALLOW_ERROR_INJECTION()
-> to a function which is not injectable by design. Thus I thought the
-> taint flag can help.
-
-We should definitely carefully review any new ALLOW_ERROR_INJECTION
-functions, that's the real value add.
-
-> But if those are always Cc'd to bpf@vger and it will be tested by BPF
-> CI, I'm OK for that.
->
-> > > > One can monitor all prog load/unload via perf or via audit.
-> >
-> > I would like us to focus on debuggability as it helps both the
-> > maintainers and the user. And I see a few things that need to be done:
-> >
-> > 1. Revisit what is allowed for error injection in the kernel and if
-> > they can cause any subtle issues. My initial take is that functions
-> > that are directly called from syscall path should generally be okay.
-> > But let's check them for the patterns you mentioned.
->
-> Yeah, I agree that syscall entries should be safe.
->
-> > 2. If it helps, add the list of BPF modify return programs to stack
-> > traces. Although this is really needed if we don't do [1] properly.
->
-> Would you mean a list of enabled BPF programs in Oops code? If so,
-> I also want to add enabled FEI list on it.
->
-> > 3. Check if anything needs to be improved in the verification logic
-> > for modify return trampolines.
->
-> I think BPF logic itself is safe. But the targeted function itself
-> or the caller may not be designed for such error injection.
-> I think this is my fault that I have not documented about
-> ALLOW_ERROR_INJECTION() well. Sorry about that.
-
-We aim to be blameless and constructive :)
-
-Thanks again for sending the patches!
-
-Cheers,
-- KP
-
->
-> Thank you,
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Agreed. Perhaps I can also check for !(task_is_realtime()), which see
+seems to cover all these cases.
+> 
+> [...]
