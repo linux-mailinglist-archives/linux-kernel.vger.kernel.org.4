@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B22C64A70D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD3964A716
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbiLLSZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        id S232963AbiLLS1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiLLSY4 (ORCPT
+        with ESMTP id S233187AbiLLS1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:24:56 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE11181C;
-        Mon, 12 Dec 2022 10:24:54 -0800 (PST)
-Received: (Authenticated sender: m@thi.eu.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 424E31BF208;
-        Mon, 12 Dec 2022 18:24:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mathieu.digital;
-        s=gm1; t=1670869493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V0ZgHua4dC/bgmtoYbtA31MvvXVVR4TJMj2l4TZnxys=;
-        b=QWaaXatkqAJJXDt6Icf6xIhnJueAOXWemY5s7Qk3OAetyIxgM3msSMNxdASzRdlzbeBSTA
-        mPPcpoQFddvUJpnaYEb5agoBdvJGDy32TI0SoswkE7pJA61TRsKMTnGxSUp0tZGjqcatPc
-        ZHCXE0Lwh5vWKa4CZpJitN3zW2GGjdrkK7qsmA2tQYQzH6jC34cPOVjLmtnUq2q/tyLRpj
-        S6n6ICHaFZpzeA7w0TdrasG+mcJZLSFzDs39ugUbAlXLphg8fZ7Xw6Fk77nozPwtfboVoK
-        5e+wjflGNWoF/gNPzXxCRlUFgSzXUof31qP0DVzRx9yS/ZrYtog8W8vTJsWatA==
-Received: by paranoid-android.localdomain (Postfix, from userid 1000)
-        id 6FBFB40090F40; Mon, 12 Dec 2022 19:24:50 +0100 (CET)
-Date:   Mon, 12 Dec 2022 19:24:50 +0100
-From:   Mathieu Chouquet-Stringer <me@mathieu.digital>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: Intermittent boot failure after 6492fed7d8c9 (v6.0-rc1)
-Message-ID: <Y5dx8pskqpaQU8kk@paranoid-android>
-Mail-Followup-To: Mathieu Chouquet-Stringer <me@mathieu.digital>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-References: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
- <CAJZ5v0j9JyDZupNnQUsTUVv0WapGjK7b5S-4ewZ8-b=HOret2Q@mail.gmail.com>
- <20221010174526.3yi7nziokwwpr63s@techsingularity.net>
- <CAJZ5v0je1dS4xSG46r64s8G5sJHjiziX92GBaKXaxueTim3wJA@mail.gmail.com>
- <20221011092050.gnh3dr5iqdvvrgs5@techsingularity.net>
+        Mon, 12 Dec 2022 13:27:00 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8516FD3C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:26:58 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id o136so364104vka.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:26:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEeQjfOgxbzzuaCvVlasz+hixVSsIOY5Hq7uOvYrjTw=;
+        b=G/lMCGnwSgD2+sFVg10enKajkr8vBOrkI8HGGYzC+7tFr+yNjLAXYB+AROvSybglDN
+         L2S66nnGmj59HcxJFOg5xBV5CTxSOE76KQUQkMiaajTd6cAZRHZ0c0oqz59kck42LTCT
+         obxUBb4la276ogjOC/Vg6+xoJSO2uChD5M/mM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xEeQjfOgxbzzuaCvVlasz+hixVSsIOY5Hq7uOvYrjTw=;
+        b=fuHOh9HKkg5eACWp4DW5q3nowcU1Xfyrf9/0INgyA6ol/pJpojpJnhah210elqcC7f
+         xghH1yOFHimcDzqxRlT5SoHivm2iCHMK+kymMZNZ5D68TovkXPiqPHoCPwP0XS4UYq1q
+         kYuNhOdaH4pMh6x3PE0fQ2gNn0F2NQm91rcDsH0GkxjcKUCobcDpcD0qXrjPgt6vUM5q
+         anJuWPE7fIuAZ4di2SHgnc3wbxV0r3x79m5L6FiV835qH0Fpi2K+N5rFmY3IuknehwoI
+         R/U+Q6pNkKCtbneiQacz8QeG045VgttaEBdX63af6YdITw4qqP5zthKad1lzG+dy4Ams
+         6kMg==
+X-Gm-Message-State: ANoB5pnh6rvfBEyjDtvDcJulu3xwA114oyiaQeUZKaQ0ynKNr/9UW3je
+        SmcpGOgNoq0rOECtdXoiHb4jjJo+YgAbk/Uz
+X-Google-Smtp-Source: AA0mqf4orucDyY7RYQy955z0swBsAcoV/Hyfjnl6mhPrGTCIUIHRXKqi8gIbcgLauz7OB7ukgMhVyQ==
+X-Received: by 2002:a1f:4343:0:b0:3bd:90ef:d63f with SMTP id q64-20020a1f4343000000b003bd90efd63fmr7592108vka.15.1670869617346;
+        Mon, 12 Dec 2022 10:26:57 -0800 (PST)
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
+        by smtp.gmail.com with ESMTPSA id dt26-20020a05620a479a00b006fbf88667bcsm6252985qkb.77.2022.12.12.10.26.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 10:26:56 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id a16so9701120qtw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:26:56 -0800 (PST)
+X-Received: by 2002:a05:622a:5a87:b0:3a5:47de:a214 with SMTP id
+ fz7-20020a05622a5a8700b003a547dea214mr70877944qtb.304.1670869616205; Mon, 12
+ Dec 2022 10:26:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011092050.gnh3dr5iqdvvrgs5@techsingularity.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com> <02be69ef-cfae-4455-a428-f95517d374cb@app.fastmail.com>
+In-Reply-To: <02be69ef-cfae-4455-a428-f95517d374cb@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 10:26:40 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgy2kMzPGturhFGethpnzWBX8Guzna98tSOorNpM0ZEEQ@mail.gmail.com>
+Message-ID: <CAHk-=wgy2kMzPGturhFGethpnzWBX8Guzna98tSOorNpM0ZEEQ@mail.gmail.com>
+Subject: Re: [GIT PULL 4/4] SoC: DT changes for 6.2
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	Hello Rafael,
+On Fri, Dec 9, 2022 at 9:23 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+>  - The Apple T6000 (M1 Pro), T6001 (M1 Max) and T6002 (M2 Ultra)
+>    chips now have initial support.
 
-On Tue, Oct 11, 2022 at 10:20:50AM +0100, Mel Gorman wrote:
-> On Mon, Oct 10, 2022 at 08:29:05PM +0200, Rafael J. Wysocki wrote:
-> > > That's less than the previous 5/10 failures but I
-> > > cannot be certain it helped without running a lot more boot tests. The
-> > > failure happens in the same function as before.
-> > 
-> > I've overlooked the fact that acpi_install_fixed_event_handler()
-> > enables the event on success, so it is a bug to call it when the
-> > handler is not ready.
-> > 
-> > It should help to only enable the event after running cmos_do_probe()
-> > where the driver data pointer is set, so please try the attached
-> > patch.
+That T6002 is M1 Ultra, not M2 Ultra.
 
-I'm hitting this issue on the 6.0 stable releases (aka 6.0.y) and
-looking at the stable tree I see this hasn't been merged... I just got
-bitten by this on 6.0.12.
-
-Greg, if Rafael agrees, I think you should apply 4919d3eb2ec0 and
-0782b66ed2fb to the 6.0.y tree.
-
-Thank you in advance.
-
-Cheers,
-
--- 
-Mathieu Chouquet-Stringer                             me@mathieu.digital
-            The sun itself sees not till heaven clears.
-	             -- William Shakespeare --
+                Linus
