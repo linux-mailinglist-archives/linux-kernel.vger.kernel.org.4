@@ -2,105 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8284964A665
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D8D64A66A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbiLLSAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S232575AbiLLSCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiLLSAA (ORCPT
+        with ESMTP id S231971AbiLLSCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:00:00 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B467117F;
-        Mon, 12 Dec 2022 09:59:59 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 17so5430187pll.0;
-        Mon, 12 Dec 2022 09:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=24rOvFknhlRu6gQO8oxJrJr21V/VC9EdwDQ4AnkVwBM=;
-        b=pkS/8Bu0i9UuotMZgHuyLeKd8Th87c3Mw9wDu4iL8isyPURINKMymGy/YH85mfizKg
-         RXxWpQ2TszOjM+cnzzrVF65mNs60DxOGjbWknSLcD4p9bINYfK9CKHqBd+ZyYXN5nG53
-         PzSk7NCHvgwtlxM62KpZR+b63LP3Ntxm6UykA+p1E3slWkm7VkzfWvrWlikx+ItL/BTw
-         JTUTEaEPgittaoh9CpeHmU/OAlGv9+6GgZzA0ytyp3KubuONTQmLP8LqnmU7IOqgfktq
-         l7Tz5FM01LpIc0R+cwcv97Qc0lLq5tMxmh9ebRBPZQccGzZrD/2j60D0cLCW+gwzrDpX
-         YgIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=24rOvFknhlRu6gQO8oxJrJr21V/VC9EdwDQ4AnkVwBM=;
-        b=RpE4RpcN9A75kDaPP3d5FtbgX3PxWI04BYVTvee5sy/agnWjO2ew/QOEc0yvopztoB
-         Q+1LBblobSNlKsz337riqauw1ZPZEZ/ttUemSvZqPdwvmkmmEA8TU07GthSW5kwXufuI
-         MKyTpI2zFO+FfgyN5W1BXhNmty0a4qxfq/Pu7wVz6BbYzskl7BLX9jd0gvYMoj1Xr1N9
-         IYfdcFnVYfVSVr5EcMB6PwHiZJwUk4BPkvUKZA2Qgdly6VR5ltqnpidGHPFoZ4e5JGGr
-         m9F2tHAgwshIWRePm4zw6GA/p3sAbbhs7OUEl2iPDymJUukVV5KaNYkWYO9w82zIwW8v
-         nbAw==
-X-Gm-Message-State: ANoB5pnfiUn8MiikMpaqeCay0p9mOqYrHWKACNIpKOT2cLeHROEr9Tvq
-        mRiiJNCNOQ1wsHgCWvk5XQw=
-X-Google-Smtp-Source: AA0mqf46c2PPn8MT3BCKXZKlchoYDM9q5e/HzNPpBH9stvA4CNitWVCNYG0Y4gXm/GyQbsLKz4jxWA==
-X-Received: by 2002:a17:902:bc83:b0:185:441e:2240 with SMTP id bb3-20020a170902bc8300b00185441e2240mr16169984plb.59.1670867998874;
-        Mon, 12 Dec 2022 09:59:58 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:9159])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902e9c600b0018725c2fc46sm6640646plk.303.2022.12.12.09.59.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 09:59:58 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 07:59:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 06/31] sched: Add sched_class->switching_to() and expose
- check_class_changing/changed()
-Message-ID: <Y5dsHKJlVmTfedFb@slm.duckdns.org>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-7-tj@kernel.org>
- <Y5cQXTDhfvk2LIWU@hirez.programming.kicks-ass.net>
+        Mon, 12 Dec 2022 13:02:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E5A3BC;
+        Mon, 12 Dec 2022 10:02:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFDD4611A1;
+        Mon, 12 Dec 2022 18:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEFAC433D2;
+        Mon, 12 Dec 2022 18:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670868158;
+        bh=3GKIRZb4uU1EeNPMEs5V6EixOSqw1dZwgmBOv4XdRgw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=i6rk80ZEyDNj+joL4OYR2+K9v7vTmuT2b63ZLfuv2XwVdKCwdiJosYWDTR7+NYS8h
+         b7xBIKNU+Beg8JNxVNNBTWgxDqueLSBcZ7TI/U86wc8KSfqQJdmM9e4vjYsNIWff54
+         gDaeD1YBSvAKKVx6aMvKD73xRqYPFg/XBD4EKICCiUDyqJ97HMSWT1nlyUbXYPdFA4
+         6yBiFhnn99rF35C7nn4E3GvjqUaZMI2sseB72DXg//n+bQ7jaKLSATkOHV7xzwm++W
+         RdVDDFAecxgyNQlZP0+QEQSsPKyzhB2wxDLOaGKfsk4fqRrIl0LQVfmBzk7+xMsmpT
+         HtXjrKwg2qWzA==
+Message-ID: <c5e95e043a1c79244fb6b3c4bc59f15fe1e9d5f4.camel@kernel.org>
+Subject: Re: [PATCH 2/2 v3] ceph: add ceph_lock_info support for file_lock
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Ilya Dryomov <idryomov@gmail.com>, xiubli@redhat.com
+Cc:     ceph-devel@vger.kernel.org, lhenriques@suse.de,
+        mchangir@redhat.com, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+Date:   Mon, 12 Dec 2022 13:02:36 -0500
+In-Reply-To: <CAOi1vP-dhH-Z9_dgGLLkqwoZ5di1Bp4o+5zeJRgRHddU=X1AwQ@mail.gmail.com>
+References: <20221118020642.472484-1-xiubli@redhat.com>
+         <20221118020642.472484-3-xiubli@redhat.com>
+         <CAOi1vP-dhH-Z9_dgGLLkqwoZ5di1Bp4o+5zeJRgRHddU=X1AwQ@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5cQXTDhfvk2LIWU@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:28:29PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 29, 2022 at 10:22:48PM -1000, Tejun Heo wrote:
-> > When a task switches to a new sched_class, the prev and new classes are
-> > notified through ->switched_from() and ->switched_to(), respectively, after
-> > the switching is done. However, a new sched_class needs to prepare the task
-> > state before it is enqueued on the new class for the first time.
-> 
-> How and why isn't sched_fork() sufficient?
+On Mon, 2022-12-12 at 18:56 +0100, Ilya Dryomov wrote:
+> On Fri, Nov 18, 2022 at 3:07 AM <xiubli@redhat.com> wrote:
+> >=20
+> > From: Xiubo Li <xiubli@redhat.com>
+> >=20
+> > When ceph releasing the file_lock it will try to get the inode pointer
+> > from the fl->fl_file, which the memory could already be released by
+> > another thread in filp_close(). Because in VFS layer the fl->fl_file
+> > doesn't increase the file's reference counter.
+> >=20
+> > Will switch to use ceph dedicate lock info to track the inode.
+> >=20
+> > And in ceph_fl_release_lock() we should skip all the operations if
+> > the fl->fl_u.ceph_fl.fl_inode is not set, which should come from
+> > the request file_lock. And we will set fl->fl_u.ceph_fl.fl_inode when
+> > inserting it to the inode lock list, which is when copying the lock.
+> >=20
+> > Cc: stable@vger.kernel.org
+> > Cc: Jeff Layton <jlayton@kernel.org>
+> > URL: https://tracker.ceph.com/issues/57986
+> > Signed-off-by: Xiubo Li <xiubli@redhat.com>
+> > ---
+> >  fs/ceph/locks.c                 | 20 ++++++++++++++++++--
+> >  include/linux/ceph/ceph_fs_fl.h | 17 +++++++++++++++++
+> >  include/linux/fs.h              |  2 ++
+> >  3 files changed, 37 insertions(+), 2 deletions(-)
+> >  create mode 100644 include/linux/ceph/ceph_fs_fl.h
+> >=20
+> > diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
+> > index b191426bf880..621f38f10a88 100644
+> > --- a/fs/ceph/locks.c
+> > +++ b/fs/ceph/locks.c
+> > @@ -34,18 +34,34 @@ static void ceph_fl_copy_lock(struct file_lock *dst=
+, struct file_lock *src)
+> >  {
+> >         struct inode *inode =3D file_inode(dst->fl_file);
+> >         atomic_inc(&ceph_inode(inode)->i_filelock_ref);
+> > +       dst->fl_u.ceph_fl.fl_inode =3D igrab(inode);
+> >  }
+> >=20
+> > +/*
+> > + * Do not use the 'fl->fl_file' in release function, which
+> > + * is possibly already released by another thread.
+> > + */
+> >  static void ceph_fl_release_lock(struct file_lock *fl)
+> >  {
+> > -       struct inode *inode =3D file_inode(fl->fl_file);
+> > -       struct ceph_inode_info *ci =3D ceph_inode(inode);
+> > +       struct inode *inode =3D fl->fl_u.ceph_fl.fl_inode;
+> > +       struct ceph_inode_info *ci;
+> > +
+> > +       /*
+> > +        * If inode is NULL it should be a request file_lock,
+> > +        * nothing we can do.
+> > +        */
+> > +       if (!inode)
+> > +               return;
+> > +
+> > +       ci =3D ceph_inode(inode);
+> >         if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+> >                 /* clear error when all locks are released */
+> >                 spin_lock(&ci->i_ceph_lock);
+> >                 ci->i_ceph_flags &=3D ~CEPH_I_ERROR_FILELOCK;
+> >                 spin_unlock(&ci->i_ceph_lock);
+> >         }
+> > +       fl->fl_u.ceph_fl.fl_inode =3D NULL;
+> > +       iput(inode);
+> >  }
+> >=20
+> >  static const struct file_lock_operations ceph_fl_lock_ops =3D {
+> > diff --git a/include/linux/ceph/ceph_fs_fl.h b/include/linux/ceph/ceph_=
+fs_fl.h
+> > new file mode 100644
+> > index 000000000000..ad1cf96329f9
+> > --- /dev/null
+> > +++ b/include/linux/ceph/ceph_fs_fl.h
+> > @@ -0,0 +1,17 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * ceph_fs_fl.h - Ceph lock info
+> > + *
+> > + * LGPL2
+> > + */
+> > +
+> > +#ifndef CEPH_FS_FL_H
+> > +#define CEPH_FS_FL_H
+> > +
+> > +#include <linux/fs.h>
+> > +
+> > +struct ceph_lock_info {
+> > +       struct inode *fl_inode;
+> > +};
+> > +
+> > +#endif
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index d6cb42b7e91c..2b03d5e375d7 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -1066,6 +1066,7 @@ bool opens_in_grace(struct net *);
+> >=20
+> >  /* that will die - we need it for nfs_lock_info */
+> >  #include <linux/nfs_fs_i.h>
+> > +#include <linux/ceph/ceph_fs_fl.h>
+> >=20
+> >  /*
+> >   * struct file_lock represents a generic "file lock". It's used to rep=
+resent
+> > @@ -1119,6 +1120,7 @@ struct file_lock {
+> >                         int state;              /* state of grant or er=
+ror if -ve */
+> >                         unsigned int    debug_id;
+> >                 } afs;
+> > +               struct ceph_lock_info   ceph_fl;
+>=20
+> Hi Xiubo and Jeff,
+>=20
+> Xiubo, instead of defining struct ceph_lock_info and including
+> a CephFS-specific header file in linux/fs.h, I think we should repeat
+> what was done for AFS -- particularly given that ceph_lock_info ends up
+> being a dummy type that isn't mentioned anywhere else.
+>=20
+> Jeff, could you please ack this with your file locking hat on?
+>=20
 
-sched_ext has callbacks which allow the BPF scheduler to keep track of
-relevant task states (like priority and cpumask). Those callbacks aren't
-called while a task isn't on sched_ext. When a task comes back to SCX, we
-wanna tell the BPF scheduler the up-to-date state before the task gets
-enqueued, so the need for a hook which is called before the switching is
-committed.
+ACK. I think that would be cleaner.
 
-Thanks.
-
--- 
-tejun
+Thanks
+--=20
+Jeff Layton <jlayton@kernel.org>
