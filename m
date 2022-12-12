@@ -2,163 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7E66497B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB6C6497BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiLLBlc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 11 Dec 2022 20:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S231171AbiLLBp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 20:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLLBl3 (ORCPT
+        with ESMTP id S229475AbiLLBp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 20:41:29 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA9D4BCA3;
-        Sun, 11 Dec 2022 17:41:28 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BC1akreF025606, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BC1akreF025606
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 12 Dec 2022 09:36:46 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Mon, 12 Dec 2022 09:37:34 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 12 Dec 2022 09:37:34 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Mon, 12 Dec 2022 09:37:34 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Li Zetao <lizetao1@huawei.com>
-CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linville@tuxdriver.com" <linville@tuxdriver.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: RE: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
-Thread-Topic: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
- _rtl8812ae_phy_set_txpower_limit()
-Thread-Index: AQHZDcmQLIWDqWxK5UWgWwHLimkfx65pd+XggAAAmuA=
-Date:   Mon, 12 Dec 2022 01:37:34 +0000
-Message-ID: <58dbf9a4aa57417bb40cbabc8ae9cd17@realtek.com>
-References: <66c119cc4e184a36d525a07f2fbd092348839610.camel@realtek.com>
- <20221212023540.1540147-1-lizetao1@huawei.com> 
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/11_=3F=3F_10:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 11 Dec 2022 20:45:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AFCD2C3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:44:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670809467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C6lnvE9j+zbJeeVsnn0eGEObFI9vcSZBxmPcZEEAOdw=;
+        b=HJ7c5b9Y460/85r3uY64oMbjCg1dTitNOMIJQv80QcWiBXSzI1v4j6Uohy/tOl0nw9GjuH
+        SesSZ8T7nr6YaYHvsZylxvKPamQjCdivrz/buFTFcozmdaAduhvu4lEp6xBWO4sq9m8DAx
+        YUMW4K5PfkcszkVddW3k3nZo/wm+BuM=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-621-AQojn-_9MbSzdc-o0KDzGg-1; Sun, 11 Dec 2022 20:44:22 -0500
+X-MC-Unique: AQojn-_9MbSzdc-o0KDzGg-1
+Received: by mail-pl1-f199.google.com with SMTP id jc4-20020a17090325c400b00189ceee4049so9223597plb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:44:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C6lnvE9j+zbJeeVsnn0eGEObFI9vcSZBxmPcZEEAOdw=;
+        b=WZuBtcYGtS3a1mp+c/kV9GuPAphYmGugUBQOL9hziy0aWehFKg40jfZ+PldmEZeAiY
+         OjLVUzcsr0V3IgndPjJolbouleDoCo7Ipr+LPndWHA7R7YOdEiACUsZB7VKIvnDYmRSa
+         hrtOarecgV9Sm2a+xdmQOLo1UlTaCXePQnXmsfotEbQggs29X0F934oB5I9UzbaLyz4t
+         DYEAKg9lvVA2L+hF08I5eGAq/uTKjTHP0Sne75B3YXr6VCxAHfXLsM13jgmzVvy/hqPl
+         gnq8DdiOxDXx1B7+sZt2YGy4jj/cNTUeqiYPdqto0ITPH2WYhn1ilFtHYaU50oW8kmVO
+         XgRg==
+X-Gm-Message-State: ANoB5pnBjCwGmNiWsv3zeiBpOJv33DEgVPNzF8XFxKiQdpl/guttMyUO
+        MqHwbTLq+d06JV4NBbf9W8LJmoKEX7+b/+Uom4xEWexjAEF97Zt4w/ZnWIWT20mRKsQewCljFJy
+        wmMS1ro7/ihLiax4jSpEWBc7e
+X-Received: by 2002:a05:6a00:a07:b0:573:3de7:89a with SMTP id p7-20020a056a000a0700b005733de7089amr20821147pfh.4.1670809461637;
+        Sun, 11 Dec 2022 17:44:21 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6WmgTNapO/j5cpu+TsVxeXtT+pLntMUrL+qqkyMeZrI53KprTGtIWNbMFh4D8WW2Q1TPvngQ==
+X-Received: by 2002:a05:6a00:a07:b0:573:3de7:89a with SMTP id p7-20020a056a000a0700b005733de7089amr20821133pfh.4.1670809461318;
+        Sun, 11 Dec 2022 17:44:21 -0800 (PST)
+Received: from ?IPV6:2403:580e:4b40:0:7968:2232:4db8:a45e? (2403-580e-4b40--7968-2232-4db8-a45e.ip6.aussiebb.net. [2403:580e:4b40:0:7968:2232:4db8:a45e])
+        by smtp.gmail.com with ESMTPSA id g28-20020aa79ddc000000b00573769811d6sm4534577pfq.44.2022.12.11.17.44.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 17:44:20 -0800 (PST)
+Message-ID: <669b0d70-6c56-272c-f6bc-586a2b720baa@redhat.com>
+Date:   Mon, 12 Dec 2022 09:44:15 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 1/5] pid: replace pidmap_lock with xarray lock
+To:     Brian Foster <bfoster@redhat.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     onestero@redhat.com, willy@infradead.org, ebiederm@redhat.com
+References: <20221202171620.509140-1-bfoster@redhat.com>
+ <20221202171620.509140-2-bfoster@redhat.com>
+Content-Language: en-US
+From:   Ian Kent <ikent@redhat.com>
+In-Reply-To: <20221202171620.509140-2-bfoster@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/12/22 01:16, Brian Foster wrote:
+> As a first step to changing the struct pid tracking code from the
+> idr over to the xarray, replace the custom pidmap_lock spinlock with
+> the internal lock associated with the underlying xarray. This is
+> effectively equivalent to using idr_lock() and friends, but since
+> the goal is to disentangle from the idr, move directly to the
+> underlying xarray api.
+>
+> Signed-off-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Brian Foster <bfoster@redhat.com>
 
+The xa array switch looks simpler than I expected, looks good.
 
-> -----Original Message-----
-> From: Ping-Ke Shih
-> Sent: Monday, December 12, 2022 9:35 AM
-> To: 'Li Zetao' <lizetao1@huawei.com>
-> Cc: Larry.Finger@lwfinger.net; davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> kvalo@kernel.org; linux-kernel@vger.kernel.org; linux-wireless@vger.kernel.org; linville@tuxdriver.com;
-> netdev@vger.kernel.org; pabeni@redhat.com
-> Subject: RE: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
-> _rtl8812ae_phy_set_txpower_limit()
-> 
-> 
-> 
-> > -----Original Message-----
-> > From: Li Zetao <lizetao1@huawei.com>
-> > Sent: Monday, December 12, 2022 10:36 AM
-> > To: Ping-Ke Shih <pkshih@realtek.com>
-> > Cc: Larry.Finger@lwfinger.net; davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > kvalo@kernel.org; linux-kernel@vger.kernel.org; linux-wireless@vger.kernel.org;
-> linville@tuxdriver.com;
-> > lizetao1@huawei.com; netdev@vger.kernel.org; pabeni@redhat.com
-> > Subject: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
-> _rtl8812ae_phy_set_txpower_limit()
+Reviewed-by: Ian Kent <raven@themaw.net>
 
-Oops. Subject prefix should be "wifi: rtlwifi: ...".
-
-If it isn't hard to you, please fix it, and add my acked-by along with v4.
-
-> >
-> > There is a global-out-of-bounds reported by KASAN:
-> >
-> >   BUG: KASAN: global-out-of-bounds in
-> >   _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
-> >   Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
-> >
-> >   CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
-> >   6.1.0-rc8+ #144 e15588508517267d37
-> >   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-> >   Call Trace:
-> >    <TASK>
-> >    ...
-> >    kasan_report+0xbb/0x1c0
-> >    _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
-> >    rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
-> >    rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
-> >    ...
-> >    </TASK>
-> >
-> > The root cause of the problem is that the comparison order of
-> > "prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
-> > _rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
-> > strings from tail to head, which causes the problem. In the
-> > _rtl8812ae_phy_set_txpower_limit(), it was originally intended to meet
-> > this requirement by carefully designing the comparison order.
-> > For example, "pregulation" and "pbandwidth" are compared in order of
-> > length from small to large, first is 3 and last is 4. However, the
-> > comparison order of "prate_section" dose not obey such order requirement,
-> > therefore when "prate_section" is "HT", when comparing from tail to head,
-> > it will lead to access out of bounds in _rtl8812ae_eq_n_byte(). As
-> > mentioned above, the _rtl8812ae_eq_n_byte() has the same function as
-> > strcmp(), so just strcmp() is enough.
-> >
-> > Fix it by removing _rtl8812ae_eq_n_byte() and use strcmp() barely.
-> > Although it can be fixed by adjusting the comparison order of
-> > "prate_section", this may cause the value of "rate_section" to not be
-> > from 0 to 5. In addition, commit "21e4b0726dc6" not only moved driver
-> > from staging to regular tree, but also added setting txpower limit
-> > function during the driver config phase, so the problem was introduced
-> > by this commit.
-> >
-> > Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
-> > Signed-off-by: Li Zetao <lizetao1@huawei.com>
-> 
-> Thanks for your fix.
-> 
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
-> 
-> > ---
-> > v1 -> v2: delete the third parameter of _rtl8812ae_eq_n_byte() and use
-> > strcmp to replace loop comparison.
-> > v2 -> v3: remove _rtl8812ae_eq_n_byte() and use strcmp() barely.
-> >
-> >  .../wireless/realtek/rtlwifi/rtl8821ae/phy.c  | 52 +++++++------------
-> >  1 file changed, 20 insertions(+), 32 deletions(-)
-> >
-> 
-> [...]
+> ---
+>   kernel/pid.c | 79 ++++++++++++++++++++++++++--------------------------
+>   1 file changed, 40 insertions(+), 39 deletions(-)
+>
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index 3fbc5e46b721..3622f8b13143 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -86,22 +86,6 @@ struct pid_namespace init_pid_ns = {
+>   };
+>   EXPORT_SYMBOL_GPL(init_pid_ns);
+>   
+> -/*
+> - * Note: disable interrupts while the pidmap_lock is held as an
+> - * interrupt might come in and do read_lock(&tasklist_lock).
+> - *
+> - * If we don't disable interrupts there is a nasty deadlock between
+> - * detach_pid()->free_pid() and another cpu that does
+> - * spin_lock(&pidmap_lock) followed by an interrupt routine that does
+> - * read_lock(&tasklist_lock);
+> - *
+> - * After we clean up the tasklist_lock and know there are no
+> - * irq handlers that take it we can leave the interrupts enabled.
+> - * For now it is easier to be safe than to prove it can't happen.
+> - */
+> -
+> -static  __cacheline_aligned_in_smp DEFINE_SPINLOCK(pidmap_lock);
+> -
+>   void put_pid(struct pid *pid)
+>   {
+>   	struct pid_namespace *ns;
+> @@ -129,10 +113,11 @@ void free_pid(struct pid *pid)
+>   	int i;
+>   	unsigned long flags;
+>   
+> -	spin_lock_irqsave(&pidmap_lock, flags);
+>   	for (i = 0; i <= pid->level; i++) {
+>   		struct upid *upid = pid->numbers + i;
+>   		struct pid_namespace *ns = upid->ns;
+> +
+> +		xa_lock_irqsave(&ns->idr.idr_rt, flags);
+>   		switch (--ns->pid_allocated) {
+>   		case 2:
+>   		case 1:
+> @@ -150,8 +135,8 @@ void free_pid(struct pid *pid)
+>   		}
+>   
+>   		idr_remove(&ns->idr, upid->nr);
+> +		xa_unlock_irqrestore(&ns->idr.idr_rt, flags);
+>   	}
+> -	spin_unlock_irqrestore(&pidmap_lock, flags);
+>   
+>   	call_rcu(&pid->rcu, delayed_put_pid);
+>   }
+> @@ -206,7 +191,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>   		}
+>   
+>   		idr_preload(GFP_KERNEL);
+> -		spin_lock_irq(&pidmap_lock);
+> +		xa_lock_irq(&tmp->idr.idr_rt);
+>   
+>   		if (tid) {
+>   			nr = idr_alloc(&tmp->idr, NULL, tid,
+> @@ -233,7 +218,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>   			nr = idr_alloc_cyclic(&tmp->idr, NULL, pid_min,
+>   					      pid_max, GFP_ATOMIC);
+>   		}
+> -		spin_unlock_irq(&pidmap_lock);
+> +		xa_unlock_irq(&tmp->idr.idr_rt);
+>   		idr_preload_end();
+>   
+>   		if (nr < 0) {
+> @@ -266,34 +251,38 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>   	INIT_HLIST_HEAD(&pid->inodes);
+>   
+>   	upid = pid->numbers + ns->level;
+> -	spin_lock_irq(&pidmap_lock);
+> -	if (!(ns->pid_allocated & PIDNS_ADDING))
+> -		goto out_unlock;
+>   	for ( ; upid >= pid->numbers; --upid) {
+> +		tmp = upid->ns;
+> +
+> +		xa_lock_irq(&tmp->idr.idr_rt);
+> +		if (tmp == ns && !(tmp->pid_allocated & PIDNS_ADDING)) {
+> +			xa_unlock_irq(&tmp->idr.idr_rt);
+> +			put_pid_ns(ns);
+> +			goto out_free;
+> +		}
+> +
+>   		/* Make the PID visible to find_pid_ns. */
+> -		idr_replace(&upid->ns->idr, pid, upid->nr);
+> -		upid->ns->pid_allocated++;
+> +		idr_replace(&tmp->idr, pid, upid->nr);
+> +		tmp->pid_allocated++;
+> +		xa_unlock_irq(&tmp->idr.idr_rt);
+>   	}
+> -	spin_unlock_irq(&pidmap_lock);
+>   
+>   	return pid;
+>   
+> -out_unlock:
+> -	spin_unlock_irq(&pidmap_lock);
+> -	put_pid_ns(ns);
+> -
+>   out_free:
+> -	spin_lock_irq(&pidmap_lock);
+>   	while (++i <= ns->level) {
+>   		upid = pid->numbers + i;
+> -		idr_remove(&upid->ns->idr, upid->nr);
+> -	}
+> +		tmp = upid->ns;
+>   
+> -	/* On failure to allocate the first pid, reset the state */
+> -	if (ns->pid_allocated == PIDNS_ADDING)
+> -		idr_set_cursor(&ns->idr, 0);
+> +		xa_lock_irq(&tmp->idr.idr_rt);
+>   
+> -	spin_unlock_irq(&pidmap_lock);
+> +		/* On failure to allocate the first pid, reset the state */
+> +		if (tmp == ns && tmp->pid_allocated == PIDNS_ADDING)
+> +			idr_set_cursor(&ns->idr, 0);
+> +
+> +		idr_remove(&tmp->idr, upid->nr);
+> +		xa_unlock_irq(&tmp->idr.idr_rt);
+> +	}
+>   
+>   	kmem_cache_free(ns->pid_cachep, pid);
+>   	return ERR_PTR(retval);
+> @@ -301,9 +290,9 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>   
+>   void disable_pid_allocation(struct pid_namespace *ns)
+>   {
+> -	spin_lock_irq(&pidmap_lock);
+> +	xa_lock_irq(&ns->idr.idr_rt);
+>   	ns->pid_allocated &= ~PIDNS_ADDING;
+> -	spin_unlock_irq(&pidmap_lock);
+> +	xa_unlock_irq(&ns->idr.idr_rt);
+>   }
+>   
+>   struct pid *find_pid_ns(int nr, struct pid_namespace *ns)
+> @@ -647,6 +636,18 @@ SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+>   	return fd;
+>   }
+>   
+> +/*
+> + * Note: disable interrupts while the xarray lock is held as an interrupt might
+> + * come in and do read_lock(&tasklist_lock).
+> + *
+> + * If we don't disable interrupts there is a nasty deadlock between
+> + * detach_pid()->free_pid() and another cpu that does xa_lock() followed by an
+> + * interrupt routine that does read_lock(&tasklist_lock);
+> + *
+> + * After we clean up the tasklist_lock and know there are no irq handlers that
+> + * take it we can leave the interrupts enabled.  For now it is easier to be safe
+> + * than to prove it can't happen.
+> + */
+>   void __init pid_idr_init(void)
+>   {
+>   	/* Verify no one has done anything silly: */
 
