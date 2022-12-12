@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F2564A945
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7325264A94D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbiLLVLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S233689AbiLLVMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiLLVLO (ORCPT
+        with ESMTP id S233880AbiLLVMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:11:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB2E186EA;
-        Mon, 12 Dec 2022 13:11:13 -0800 (PST)
+        Mon, 12 Dec 2022 16:12:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE541A209;
+        Mon, 12 Dec 2022 13:11:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7BBA61232;
-        Mon, 12 Dec 2022 21:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 46F0BC433AE;
-        Mon, 12 Dec 2022 21:11:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2355D6116F;
+        Mon, 12 Dec 2022 21:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87FBBC433D2;
+        Mon, 12 Dec 2022 21:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670879473;
-        bh=9blLkkOjD8Bcolq83bGySvku3ewQgjiu1BEhR8H2mhw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=U0WmhgbMIZKLNIJlMTAWwLuufl6VdVpoRe8WreIDrGT1SUZw/IrSWP6obZ7wrRnyJ
-         GTW6N/8ErSM99JRYwfCoN1f0QTXxU0ASY+y+uIaiEqYYwweOX/hU/u6zKnTWA/wOi0
-         hmbCEARST6V4yXpRmbIfL6jGfFO980ypho6OHCZtBXEYXeADhXzWXMvSvvXDftiEX/
-         ic/b6Ge1Mim/JjrxC9vbWOSCqMh5zCpu1xHdRdM1Jss2RdiDV2glc81il9NRAP8mX/
-         lzDPDclVMpplQ9O9orReK+MgK2DeGxCWBxgKGgBTZ5TAzTD6/pg8BWg75IzJt6FU0O
-         K4qFODhVI6V5g==
+        s=k20201202; t=1670879501;
+        bh=MtCCjj01J7FLmolQrzuF+Ufx9SocZDkA8hVoYgrCi3c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=hu16aVEeK6xRciBOQr1ct03dDArDNHNjVK4ZQS/cfIb45PJPmwj8B4qyASQKjtuIf
+         LE3dAh6og2y2YCO1iCk0we8engixdBbAOrBwfhsrAh14n8rGGxk2C4pYfqzohHWukN
+         d2uKdb0CsVW5/wQvbCwdEeURPvNi8j1N3nfhJ0Qwx6cySzorLw8YkPzokbu7yzoB4l
+         cb8bRA/oxZLYczo+IpqhYbQlRBJAfEUd/qTT7J+Q7oRG+V7dC/sXcutGGPiE/wK3Nz
+         VudQf8/OdVHM/c8dkSd+y9hK6YKmyAfUWSoinxB6GAYTBGtFoesv7SVgqprcm8bDoz
+         Gi+JhtYsGg3aQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33733C00448;
-        Mon, 12 Dec 2022 21:11:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/2] Update Joakim Zhang entries
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167087947320.28989.16734382104361853007.git-patchwork-notify@kernel.org>
-Date:   Mon, 12 Dec 2022 21:11:13 +0000
-References: <20221209220519.1542872-1-f.fainelli@gmail.com>
-In-Reply-To: <20221209220519.1542872-1-f.fainelli@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, tglx@linutronix.de, maz@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, linux-imx@nxp.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, xiaoning.wang@nxp.com,
-        wei.fang@nxp.com, shenwei.wang@nxp.com
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7679EC00448;
+        Mon, 12 Dec 2022 21:11:41 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS changes for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221212100149.GA4565@alpha.franken.de>
+References: <20221212100149.GA4565@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221212100149.GA4565@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.2
+X-PR-Tracked-Commit-Id: 4c587a982603d7e7e751b4925809a1512099a690
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5977aa66c47f8e9629e88f1e983951a09801ccef
+Message-Id: <167087950147.1809.7693803035715396995.pr-tracker-bot@kernel.org>
+Date:   Mon, 12 Dec 2022 21:11:41 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,31 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+The pull request you sent on Mon, 12 Dec 2022 11:01:49 +0100:
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.2
 
-On Fri,  9 Dec 2022 14:05:17 -0800 you wrote:
-> Shawn, since you are the i.MX maintainer I added you and the NXP Linux
-> Team as the de-facto maintainers for those entries, however there may be
-> other people to list, thanks!
-> 
-> Changes in v2:
-> 
-> - update the maintainers entry per Clark Wang's recommendations
-> 
-> [...]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5977aa66c47f8e9629e88f1e983951a09801ccef
 
-Here is the summary with links:
-  - [net,v2,1/2] MAINTAINERS: Update NXP FEC maintainer
-    https://git.kernel.org/netdev/net/c/4e81462a45ce
-  - [net,v2,2/2] dt-bindings: FEC/i.MX DWMAC and INTMUX maintainer
-    https://git.kernel.org/netdev/net/c/fb21cad28489
+Thank you!
 
-You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+https://korg.docs.kernel.org/prtracker.html
