@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D205649E3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA64649E3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbiLLLzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S231896AbiLLLzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiLLLzf (ORCPT
+        with ESMTP id S231779AbiLLLzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Dec 2022 06:55:35 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81789C35;
-        Mon, 12 Dec 2022 03:55:32 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id bg10so5078607wmb.1;
-        Mon, 12 Dec 2022 03:55:32 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90641F599;
+        Mon, 12 Dec 2022 03:55:33 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so4942687wmh.0;
+        Mon, 12 Dec 2022 03:55:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WpXOFyKc/JZvQOWHQWc0AJS8A/69Ui8DKNz8njSVnfU=;
-        b=BJ0Dsjc/SFk5h+zyozkC2I4LnZ37r72za6ZXGBwb7D1To2ZeM1nYZW2wsXUMBJYio0
-         9homQsaxjhwiwUhxzP8KE2uzxGw5O9e4OEaHc23dKcqN3QDZ3b1RypX523NtbTssg/YI
-         aY6ZHSZNKbzbs58UdBwvr5TMENriTjcjLTor/MD/otq+Goe63ci4c71cQUjZpqWbvjUC
-         mZLEmw/tuooCxGDmrDL7p32eX7U4DeY+pIW9sk+GT7x8V2yZCH41vUX8zqds1aseOAaf
-         UbCC22tz3LtgBwzlaiw/x78gfnk8JnGI4ALNgAGhpjJEuyxrYNFvRpV6R9QuVjJR5zPG
-         Lh4Q==
+        bh=ORVxgTEs6JpzOw6GBN9FhxtQ86wPto0+KjD/hzl5+jc=;
+        b=FhUIaooykKXtLBANwPAkCAIuxGKX2dKoYk3gCD5ZA0y3/EFZdEdTjn8HhzvpzthRg6
+         qN9LHky8jlcgciO/gPa79iLFZWkW/aoXcW9Yx+eZ1c97tTNaKV9ZHl9hw+dtlEp+S1u1
+         NN/RncC3w3ETjog4XIgSCNpoNJjLzfTNnzqPog3hTycCYsbfL++b4+ub5hPmqJDOW/r3
+         2WDmyDff9uSuRzrn5JJ7P4AMqs5pElbIR6FRRPODehzq/8yFM4sOTfgxZvDZpGLBeIQ8
+         gIvOH4P4BXdIMTNaC4op/XgEyf8V4tfFUOdFCXrce4LPlT2Khb6VpklTLtLEBSBDE6Hf
+         PkUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WpXOFyKc/JZvQOWHQWc0AJS8A/69Ui8DKNz8njSVnfU=;
-        b=MOEm9gW+Yf7zJ1js02xZeADWRY5DpX9lhdOGbbvCQcisihuxY9CQdaRh2YLjgs6nkB
-         kKIcGpvLqnoQOYW95BWL+0qSi6rf5AXsY1pEy0EcXvi7gKL7E/f3Nq7QjvC3tR1RKtH4
-         5Rd9kBJUhm+HYdwh5t5/NoqfWpR4Z7AxNLAvQk54IEZwmf6q5dfu4arUvEr3bZ2vKvBp
-         9Shbkg2DZdNyagtxfBB3sgb61tESiYf1OOR2JwGkC7U85wtjpDGkQ65XPlt9QU6H3ROo
-         bwBkrx7XzVROoAD6xELyjdVoJ4rMXHOhWZhGEo14HLD/LLaFRIiCXutXTxbisx6NlGoh
-         tqdw==
-X-Gm-Message-State: ANoB5pn81+8I6iVxpISvyCaeaxUnk3HwdwcXALBXj8cCjE8p1dkZLx2n
-        Vb7Rm7b0/PomLQaMmqFQNvE=
-X-Google-Smtp-Source: AA0mqf7qYn9J61IyJLyX4K5SxOQpe03ZYZQLW5WHgLCT7YNjAC0PhK9oniKbi712c+6s3Y3Nju7v1Q==
-X-Received: by 2002:a1c:cc1a:0:b0:3cf:5583:8b3f with SMTP id h26-20020a1ccc1a000000b003cf55838b3fmr12615303wmb.20.1670846130885;
-        Mon, 12 Dec 2022 03:55:30 -0800 (PST)
+        bh=ORVxgTEs6JpzOw6GBN9FhxtQ86wPto0+KjD/hzl5+jc=;
+        b=wQZZSkqzmUQhWILcCxjDoC7H9IOXXuMLbrzri1cyflKUL7pV7fiMxnQNFF5CJSDGtS
+         KA7/uI4Nv6IIJqds+bdxcAlktvWdOgGTeE0M4nvBoB4+anLJKBCgb6z1GZ6p48gjdVvP
+         7hV/Oxxe+q7TKJePu7D6I2Y0OFdMdoG4bW9HcgQ5MontIFbdvE+V5ZUhwh4zTE3QUDfQ
+         dF39+KdnDcQwIRzBMyy+OkS+peOipmDcAzthveG/lS8A4a3XOFgj3vm4edIX80vZbaJI
+         Wsvb4PBjEVJ8/N7Vkb/rHlBJp51XWnjC71uxqXH6h0Dawemu/WvmFRnQ5qn0qEn6SMVm
+         7VQw==
+X-Gm-Message-State: ANoB5pnhhBKAcFmoDo8lpWhFPuz5yN6CIz3AyUZZyeIhQ47/u2fhuEQ1
+        m/gKp/mmuW2oKLcI4IJH7BQ=
+X-Google-Smtp-Source: AA0mqf55PhJ6NtCNpEMUlsz4dl16CkPXK2qmYSKBVunL6TyfYUkcG/BLYguDKslRg3csPq/Cl6K6mQ==
+X-Received: by 2002:a05:600c:3c96:b0:3cf:8d51:1622 with SMTP id bg22-20020a05600c3c9600b003cf8d511622mr12247840wmb.1.1670846132114;
+        Mon, 12 Dec 2022 03:55:32 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2501:c701:1484:ef11:b25c:4612])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b003b4cba4ef71sm9793820wmq.41.2022.12.12.03.55.29
+        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b003b4cba4ef71sm9793820wmq.41.2022.12.12.03.55.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 03:55:30 -0800 (PST)
+        Mon, 12 Dec 2022 03:55:31 -0800 (PST)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -73,9 +73,9 @@ Cc:     Jisheng Zhang <jszhang@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
-Date:   Mon, 12 Dec 2022 11:55:00 +0000
-Message-Id: <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v5 2/6] riscv: asm: vendorid_list: Add Andes Technology to the vendors list
+Date:   Mon, 12 Dec 2022 11:55:01 +0000
+Message-Id: <20221212115505.36770-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -93,113 +93,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Introduce ALTERNATIVE_3() macro.
-
-A vendor wants to replace an old_content, but another vendor has used
-ALTERNATIVE_2() to patch its customized content at the same location.
-In this case, this vendor can use macro ALTERNATIVE_3() and then replace
-ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
-
-While at it update comment above ALTERNATIVE_2() macro and make it generic
-so that the comment holds good for any new addition of ALTERNATIVE_X()
-macros.
+Add Andes Technology to the vendors list.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
-v4->v5
-* Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
-* Updated comment for ALTERNATIVE_x() as suggested by Heiko
+v4 -> v5
+* Included RB tags
 
 RFC v3 -> v4
 * New patch
 ---
- arch/riscv/include/asm/alternative-macros.h | 46 ++++++++++++++++++---
- 1 file changed, 41 insertions(+), 5 deletions(-)
+ arch/riscv/include/asm/vendorid_list.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-index 7226e2462584..a5b4691520da 100644
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -50,8 +50,17 @@
- 	ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
- .endm
+diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
+index cb89af3f0704..e55407ace0c3 100644
+--- a/arch/riscv/include/asm/vendorid_list.h
++++ b/arch/riscv/include/asm/vendorid_list.h
+@@ -5,6 +5,7 @@
+ #ifndef ASM_VENDOR_LIST_H
+ #define ASM_VENDOR_LIST_H
  
-+.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
-+				new_c_2, vendor_id_2, errata_id_2, enable_2,	\
-+				new_c_3, vendor_id_3, errata_id_3, enable_3
-+       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,	\
-+                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
-+       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
-+.endm
-+
- #define __ALTERNATIVE_CFG(...)		ALTERNATIVE_CFG __VA_ARGS__
- #define __ALTERNATIVE_CFG_2(...)	ALTERNATIVE_CFG_2 __VA_ARGS__
-+#define __ALTERNATIVE_CFG_3(...)	ALTERNATIVE_CFG_3 __VA_ARGS__
++#define ANDESTECH_VENDOR_ID	0x31e
+ #define SIFIVE_VENDOR_ID	0x489
+ #define THEAD_VENDOR_ID		0x5b7
  
- #else /* !__ASSEMBLY__ */
- 
-@@ -98,6 +107,13 @@
- 	__ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)	\
- 	ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
- 
-+#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
-+				   new_c_2, vendor_id_2, errata_id_2, enable_2,	\
-+				   new_c_3, vendor_id_3, errata_id_3, enable_3)	\
-+	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,	\
-+                                   new_c_2, vendor_id_2, errata_id_2, enable_2)	\
-+	ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
-+
- #endif /* __ASSEMBLY__ */
- 
- #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k)	\
-@@ -108,6 +124,13 @@
- 	__ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
- 				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
- 
-+#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
-+				  new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
-+				  new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
-+	__ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),	\
-+				   new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),	\
-+				   new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
-+
- #else /* CONFIG_RISCV_ALTERNATIVE */
- #ifdef __ASSEMBLY__
- 
-@@ -152,15 +175,28 @@
- 	_ALTERNATIVE_CFG(old_content, new_content, vendor_id, errata_id, CONFIG_k)
- 
- /*
-- * A vendor wants to replace an old_content, but another vendor has used
-- * ALTERNATIVE() to patch its customized content at the same location. In
-- * this case, this vendor can create a new macro ALTERNATIVE_2() based
-- * on the following sample code and then replace ALTERNATIVE() with
-- * ALTERNATIVE_2() to append its customized content.
-+ * ALTERNATIVE_x macros allow providing multiple replacement options
-+ * for an ALTERNATIVE code section. This is helpful if multiple
-+ * implementation variants for the same functionality exist for
-+ * different cpu cores.
-+ *
-+ * Usage:
-+ *   ALTERNATIVE_x(old_content,
-+ *      new_content1, vendor_id1, errata_id1, CONFIG_k1,
-+ *      new_content2, vendor_id2, errata_id2, CONFIG_k2,
-+ *      ...
-+ *      new_contentx, vendor_idx, errata_idx, CONFIG_kx)
-  */
- #define ALTERNATIVE_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
- 				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)		\
- 	_ALTERNATIVE_CFG_2(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
- 					new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2)
- 
-+#define ALTERNATIVE_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,		\
-+				   new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,		\
-+				   new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)		\
-+       _ALTERNATIVE_CFG_3(old_content, new_content_1, vendor_id_1, errata_id_1, CONFIG_k_1,	\
-+                                       new_content_2, vendor_id_2, errata_id_2, CONFIG_k_2,	\
-+                                       new_content_3, vendor_id_3, errata_id_3, CONFIG_k_3)
-+
- #endif
 -- 
 2.25.1
 
