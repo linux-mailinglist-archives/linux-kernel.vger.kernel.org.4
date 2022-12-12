@@ -2,118 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FBF64A63B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2165564A636
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbiLLRuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S232684AbiLLRuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232706AbiLLRuv (ORCPT
+        with ESMTP id S232100AbiLLRuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:50:51 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB3F592
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:50:50 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id p8so652315lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:50:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wvsMVvtThL8gMv7LQ3fpmievE9cnCujmolAZoIZFwM0=;
-        b=p7hlMr7wM3wyuA9xtFlMfUZP4AXHjSiNRsW14oK0LRr8bGQ7wMzch9VO83Cl6nSrlo
-         sLVcnRMsi6l7+x6uxr0I2uwvRvTAjItkiYxSBTNOS45zuoRMRhynjnNeFpboAwdsV2N1
-         eaD2TT7VByDxJqP71GAwWwc4b0nbZqYjw40s04lDRyETX5hVzyhiIsd0jIVfXyKKnSYj
-         OtGg535FPBztb1Tq92x7ir3gpuV2mor9kQsGLgV7rBdEuEpU4t3O3XafJD06ibu1BMTi
-         1dVKdONoBxtusBQPtFzVR78DTHDFK6Tqs7mytgM+/hlqwu+565pTulNWNvj41egQjWLr
-         N1xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wvsMVvtThL8gMv7LQ3fpmievE9cnCujmolAZoIZFwM0=;
-        b=x/iNbEN708d16ToMZTTUfsBpFiLRR2q1oz1LxpRp3J+mkMglWwWeiucRuJU690a77w
-         VIwDc+omRcNgwAUKPyq/CPmsGWFcMtakFk8//ZJalpwZVEqeTaH7xbdRMcLA5bcIanWy
-         R2jrZx7aPykcGfvzG4h3187sCG/9VX3Ioq26KI2zkdon96t6Kgc4p7PmLPWS3wf5UORX
-         wy81I/FR3JZaKA8xWzXrBktj/ac9M+YbhSd5NHDGCfWZje4pu4+ovWyH1whlULpDji6L
-         fv8P0hdKWq3CmxpXt/gdkKYqlegkXR5b7mwOeCUMDccM1LYgYW2oXJtjkzx3UeEu4pIB
-         JUyA==
-X-Gm-Message-State: ANoB5pmRZUCHsA/WtbeZHtpvqYq9axbLsGkscrhHgACiSg4DZ1noHgBj
-        sxk+uXC1JCt9RiFiqrl+ootA1A==
-X-Google-Smtp-Source: AA0mqf5yozzf2suKwfpmYDJ9vwovvz+x2ktVmjITNkA6+gE4JaNy2k72UkVw3K+6fJbUSI7duKqHmg==
-X-Received: by 2002:a05:6512:21b:b0:4b5:5098:e6f7 with SMTP id a27-20020a056512021b00b004b55098e6f7mr3642514lfo.68.1670867448686;
-        Mon, 12 Dec 2022 09:50:48 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac25506000000b004b53eb60e3csm44094lfk.256.2022.12.12.09.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 09:50:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: allow "timer" as node name
-Date:   Mon, 12 Dec 2022 18:49:33 +0100
-Message-Id: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 12 Dec 2022 12:50:03 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44802BB9;
+        Mon, 12 Dec 2022 09:50:02 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCGkQKh028589;
+        Mon, 12 Dec 2022 17:49:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FQ/6lTyzpPWte9JtTBRaMG+LrtODMsTmst64lvQGnHc=;
+ b=PqmQlOPlFdC6m5x3UbHIGMfoOIqpRaXdyYzj1vRVn2Lg+ey/LITk9grsR5vTtLf14rx8
+ BvoJVwTPc9/bo91k1oiGN2+lKZpWkX5ZjbsuajT4MBorzN2Mko5kVD1pyyKxvD4CQECk
+ NrqBem9UTOgEE1Vb+DIHZM3/FfEj7dYXxDYSDIzeKixIn8dCafoWRxqfnXw+Ap4NCkwA
+ Vdbslq8qEiUKKZ0tB1sPiMcz7jyNcIvB32Ti2a5C4d5dBJxZptZpl5kQM9OMO5tDPgWA
+ 1gfZK0TqfhFKvQBQb8UcRSJeEcgmDmZ1GBhFTWMMUtFpQ9M/wpHa4UZfoWi9SP/7WKN5 6w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3me83sg6fh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 17:49:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCHnnOH013750
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 17:49:49 GMT
+Received: from [10.216.43.29] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
+ 2022 09:49:43 -0800
+Message-ID: <1be71e47-fba3-4795-6950-de3229961215@quicinc.com>
+Date:   Mon, 12 Dec 2022 23:19:40 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v7 4/6] clk: qcom: gpucc-sc7280: Add cx collapse reset
+ support
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Ulf Hansson <ulf.hansson@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        <krzysztof.kozlowski@linaro.org>, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221005143618.v7.4.I5e64ff4b77bb9079eb2edeea8a02585c9e76778f@changeid>
+ <CAPDyKFp8ynYSyMc+gXWuW8dC1j07X+8k3omsKKnLA_u+4X-vvA@mail.gmail.com>
+ <76812eb1-ef4a-48b3-7b7a-231adc8c7c36@quicinc.com>
+ <20221208210929.capfm7jaltxvgpvq@builder.lan>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20221208210929.capfm7jaltxvgpvq@builder.lan>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 6k1emu0vcrTAQxsOXaRZ37Xmbmw3ybeD
+X-Proofpoint-ORIG-GUID: 6k1emu0vcrTAQxsOXaRZ37Xmbmw3ybeD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212120161
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some SoCs the watchdog device is actually mixed with timer, e.g.
-the qcom,msm-timer on older Qualcomm SoCs where this is actually one
-hardware block responsible for both system timer and watchdog.
+On 12/9/2022 2:39 AM, Bjorn Andersson wrote:
+> On Thu, Dec 08, 2022 at 08:54:39PM +0530, Akhil P Oommen wrote:
+>> On 12/7/2022 9:16 PM, Ulf Hansson wrote:
+>>> On Wed, 5 Oct 2022 at 11:08, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>>>> Allow a consumer driver to poll for cx gdsc collapse through Reset
+>>>> framework.
+>>> Would you mind extending this commit message, to allow us to better
+>>> understand what part is really the consumer part.
+>> Sure. I can do that.
+>>> I was expecting the consumer part to be the GPU (adreno) driver, but I
+>>> may have failed to understand correctly. It would be nice to see an
+>>> example of a typical sequence, where the reset is being
+>>> asserted/deasserted, from the consumer point of view. Would you mind
+>>> explaining this a bit more?
+>> https://elixir.bootlin.com/linux/v6.1-rc8/source/drivers/gpu/drm/msm/adreno/a6xx_gpu.c#L1309
+>> You are correct. The consumer is adreno gpu driver. When there is a gpu fault, these sequences are followed:
+>> 1. drop pm_runtime_put() for gpu device which will drops its vote on 'cx' genpd. line: 1306
+>> 2. At this point, there could be vote from either smmu driver (smmu is under same power domain too) or from other subsystems (tz/hyp).
+> Can you confirm that this is happening completely independent of what
+> the kernel does?
+Yes, it is independent.
+>
+>> 3. So we call into gdsc driver through reset interface to poll the gdsc register to ensure it collapsed at least once. Line: 1309
+> I other words, if we engineered 1. such that it would wait in
+> gdsc_disable() until the condition for 3. is reached, that should work
+> for you? (Obviously depending on the ability for us to engineer this...)
+Yes, it will work.
 
-Allow calling such device nodes as "timer".
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-See also:
-https://lore.kernel.org/linux-arm-msm/20221212163532.142533-1-krzysztof.kozlowski@linaro.org/T/#t
-
-which causes warnings:
-
-qcom-msm8960-cdp.dtb: timer@200a000: $nodename:0: 'timer@200a000' does not match '^watchdog(@.*|-[0-9a-f])?$'
-  From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
----
- Documentation/devicetree/bindings/watchdog/watchdog.yaml | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-index e3dfb02f0ca5..b1daefec86af 100644
---- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
-@@ -14,9 +14,14 @@ description: |
-   This document describes generic bindings which can be used to
-   describe watchdog devices in a device tree.
- 
-+select:
-+  properties:
-+    $nodename:
-+      pattern: "^watchdog(@.*|-[0-9a-f])?$"
-+
- properties:
-   $nodename:
--    pattern: "^watchdog(@.*|-[0-9a-f])?$"
-+    pattern: "^(timer|watchdog)(@.*|-[0-9a-f])?$"
- 
-   timeout-sec:
-     description:
--- 
-2.34.1
+-Akhil.
+>
+> Regards,
+> Bjorn
+>
+>> 4. Then we turn ON gpu. line:1314.
+>>
+>> -Akhil.
+>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>> Kind regards
+>>> Uffe
+>>>
+>>>> ---
+>>>>
+>>>> (no changes since v3)
+>>>>
+>>>> Changes in v3:
+>>>> - Convert 'struct qcom_reset_ops cx_gdsc_reset' to 'static const' (Krzysztof)
+>>>>
+>>>> Changes in v2:
+>>>> - Minor update to use the updated custom reset ops implementation
+>>>>
+>>>>  drivers/clk/qcom/gpucc-sc7280.c | 10 ++++++++++
+>>>>  1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/drivers/clk/qcom/gpucc-sc7280.c b/drivers/clk/qcom/gpucc-sc7280.c
+>>>> index 9a832f2..fece3f4 100644
+>>>> --- a/drivers/clk/qcom/gpucc-sc7280.c
+>>>> +++ b/drivers/clk/qcom/gpucc-sc7280.c
+>>>> @@ -433,12 +433,22 @@ static const struct regmap_config gpu_cc_sc7280_regmap_config = {
+>>>>         .fast_io = true,
+>>>>  };
+>>>>
+>>>> +static const struct qcom_reset_ops cx_gdsc_reset = {
+>>>> +       .reset = gdsc_wait_for_collapse,
+>>>> +};
+>>>> +
+>>>> +static const struct qcom_reset_map gpucc_sc7280_resets[] = {
+>>>> +       [GPU_CX_COLLAPSE] = { .ops = &cx_gdsc_reset, .priv = &cx_gdsc },
+>>>> +};
+>>>> +
+>>>>  static const struct qcom_cc_desc gpu_cc_sc7280_desc = {
+>>>>         .config = &gpu_cc_sc7280_regmap_config,
+>>>>         .clks = gpu_cc_sc7280_clocks,
+>>>>         .num_clks = ARRAY_SIZE(gpu_cc_sc7280_clocks),
+>>>>         .gdscs = gpu_cc_sc7180_gdscs,
+>>>>         .num_gdscs = ARRAY_SIZE(gpu_cc_sc7180_gdscs),
+>>>> +       .resets = gpucc_sc7280_resets,
+>>>> +       .num_resets = ARRAY_SIZE(gpucc_sc7280_resets),
+>>>>  };
+>>>>
+>>>>  static const struct of_device_id gpu_cc_sc7280_match_table[] = {
+>>>> --
+>>>> 2.7.4
+>>>>
 
