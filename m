@@ -2,154 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43AC64A622
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6742B64A650
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbiLLRpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S232768AbiLLRyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiLLRpr (ORCPT
+        with ESMTP id S229958AbiLLRyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:45:47 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D731BE0A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:45:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670867146; x=1702403146;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xCkzJ4K2HE5S3gU9cvzJIXZ+LOdlig3Oj+NPYSxJXRI=;
-  b=mN7SwK2XJOM19FQK2S3VfaApyJAO6rVZh47M4+lLToYXWtaNINfrTmrK
-   37qVLvS10Y0yCg5MrEFh/T12MZoKDWjick5XTVHSyF52CxWDv6SokBt6z
-   h9EFVzydDoJF3uKRGnUA8X47Mli+zcudcNDX+alHvqqu4PY/7mdwRiGn8
-   0I8W70U/Ksf39A+oWrP4IZWqOD7lEpRQJ12+2hNZlSgndtvX5yZln5hT5
-   EmMKmQ2Op7XI15xMc75whUmge4P+ltRsSOm3VBmemXCSEsWLxAxpIcZX7
-   SNq9/YnMDbr7AmFcf1FuMR4HRC0dEKXBC39tLg/oKb2aHfWvgMHvAXWJC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="404168928"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="404168928"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 09:45:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="711765026"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="711765026"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2022 09:45:38 -0800
-Date:   Mon, 12 Dec 2022 09:53:45 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
- local sched group
-Message-ID: <20221212175345.GA27353@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
- <76e23104-a8c0-a5fc-b8c6-27de79df2372@arm.com>
+        Mon, 12 Dec 2022 12:54:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA22BBB1;
+        Mon, 12 Dec 2022 09:54:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E14EB80DE3;
+        Mon, 12 Dec 2022 17:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03284C433D2;
+        Mon, 12 Dec 2022 17:54:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670867651;
+        bh=bY7EznKOlvKF57kav1/EOPRkTTovAkvgGO10ZJYhYcQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NEporkZyXqNlMag6C+Ps4PX6ja8kKKVrOxDL6x7PvrW29OHC5W7xSZmu9SXEhpBDY
+         r1u0NtAsgcxkxPcQGQjTp4P081cKY5afiq3hBpyqb8ksluhHUS5it/MZoiatczV6JH
+         ErPOt/bfTUkHCttuiZxR8DlXZ1p2iBR1iFmUONW/rnl3CRTN/Xym7Q/ukReNxEOkBz
+         agZsF0SFjFWHfrcnfKp4uW7qiDrRYv7ZSPw/I/MO5A+rLqbj5QVp2tGHlePHBBrWHd
+         2jow0BX/dlgEayePuD8xDV4UPierEokD1T+CIpif0qvZJIIHKb7v8eCOnKD+rhSP6j
+         +rOk2OjxV9xEg==
+Received: by mail-ua1-f47.google.com with SMTP id n9so3390356uao.13;
+        Mon, 12 Dec 2022 09:54:10 -0800 (PST)
+X-Gm-Message-State: ANoB5pmr8+DrwN2OmCxKyMaTxt4A5sXh/Npx/EsNSZz9QB5m0aDV9Ob5
+        OaR3+GRiUwjWjREdMQv/ceBOoECXAZz0MSaWRw==
+X-Google-Smtp-Source: AA0mqf573L42dMXtmZJVUUuskEYLV16yalBiJSgkJa1EEtoeIRtYyXQ3qTxa95wj6G+9q09neTNW9b+h3tdGkRXlLMY=
+X-Received: by 2002:ab0:3a96:0:b0:419:678:cf31 with SMTP id
+ r22-20020ab03a96000000b004190678cf31mr35543884uaw.63.1670867649788; Mon, 12
+ Dec 2022 09:54:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <76e23104-a8c0-a5fc-b8c6-27de79df2372@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212143102.175065-1-alexghiti@rivosinc.com>
+In-Reply-To: <20221212143102.175065-1-alexghiti@rivosinc.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 12 Dec 2022 11:53:58 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJz4uf+956oC4BfZGdjb+rfAZqduexLw3=D5HHjtyBC+g@mail.gmail.com>
+Message-ID: <CAL_JsqJz4uf+956oC4BfZGdjb+rfAZqduexLw3=D5HHjtyBC+g@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 06:22:41PM +0100, Dietmar Eggemann wrote:
-> On 22/11/2022 21:35, Ricardo Neri wrote:
-> > When balancing load between two physical cores, an idle destination CPU can
-> > help another core only if all of its SMT siblings are also idle. Otherwise,
-> > there is not increase in throughput. It does not matter whether the other
-> > core is composed of SMT siblings.
-> > 
-> > Simply check if there are any tasks running on the local group and the
-> > other core has exactly one busy CPU before proceeding. Let
-> > find_busiest_group() handle the case of more than one busy CPU. This is
-> > true for SMT2, SMT4, SMT8, etc.
-> 
-> [...]
+On Mon, Dec 12, 2022 at 8:31 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>
+> During the early page table creation, we used to set the mapping for
+> PAGE_OFFSET to the kernel load address: but the kernel load address is
+> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> PAGE_OFFSET is).
+>
+> But actually we don't have to establish this mapping (ie set va_pa_offset)
+> that early in the boot process because:
+>
+> - first, setup_vm installs a temporary kernel mapping and among other
+>   things, discovers the system memory,
+> - then, setup_vm_final creates the final kernel mapping and takes
+>   advantage of the discovered system memory to create the linear
+>   mapping.
+>
+> During the first phase, we don't know the start of the system memory and
+> then until the second phase is finished, we can't use the linear mapping at
+> all and phys_to_virt/virt_to_phys translations must not be used because it
+> would result in a different translation from the 'real' one once the final
+> mapping is installed.
+>
+> So here we simply delay the initialization of va_pa_offset to after the
+> system memory discovery. But to make sure noone uses the linear mapping
+> before, we add some guard in the DEBUG_VIRTUAL config.
+>
+> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+> in a better TLB utilization.
+>
+> Note that we rely on the firmware to protect itself using PMP.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>
+> v2:
+> - Add a comment on why RISCV64 does not need to set initrd_start/end that
+>   early in the boot process, as asked by Rob
+>
+> Note that this patch is rebased on top of:
+> [PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
+>
+>  arch/riscv/include/asm/page.h | 16 ++++++++++++++++
+>  arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
+>  arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
+>  drivers/of/fdt.c              |  7 ++++++-
+>  4 files changed, 57 insertions(+), 7 deletions(-)
 
-Thank you very much for your feedback, Dietmar!
+[...]
 
-> 
-> > Changes since v1:
-> >  * Reworded commit message and inline comments for clarity.
-> >  * Stated that this changeset does not impact STM4 or SMT8.
-> > ---
-> >  kernel/sched/fair.c | 29 +++++++++--------------------
-> >  1 file changed, 9 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index e4a0b8bd941c..18c672ff39ef 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -8900,12 +8900,10 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
-> >  				    struct sched_group *sg)
-> 
-> I'm not sure why you change asym_smt_can_pull_tasks() together with
-> removing SD_ASYM_PACKING from SMT level (patch 5/7)?
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index 7b571a631639..012554445054 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -895,8 +895,13 @@ static void __early_init_dt_declare_initrd(unsigned long start,
+>          * enabled since __va() is called too early. ARM64 does make use
+>          * of phys_initrd_start/phys_initrd_size so we can skip this
+>          * conversion.
+> +        * On RISCV64, the usage of __va() before the linear mapping exists
+> +        * is wrong and RISCV64 rightly calls reserve_initrd_mem after it is
+> +        * available where it actually resets the translation that is done
+> +        * here and re-computes it.
 
-In x86 we have SD_ASYM_PACKING at the MC, CLS* and, before my patches, SMT
-sched domains.
+No, I want a single comment that covers both cases (and the next arch
+we add here). Something like this:
 
-> 
-> update_sg_lb_stats()
-> 
->   ... && env->sd->flags & SD_ASYM_PACKING && .. && sched_asym()
->                                                    ^^^^^^^^^^^^
->     sched_asym()
-> 
->       if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
->           (group->flags & SD_SHARE_CPUCAPACITY))
->         return asym_smt_can_pull_tasks()
->                ^^^^^^^^^^^^^^^^^^^^^^^^^
-> 
-> So x86 won't have a sched domain with SD_SHARE_CPUCAPACITY and
-> SD_ASYM_PACKING anymore. So sched_asym() would call sched_asym_prefer()
-> directly on MC. What do I miss here?
+__va() is not yet available this early on some platforms. In that
+case, the platform uses phys_initrd_start/phys_initrd_size instead and
+does the VA conversion itself.
 
-asym_smt_can_pull_tasks() is used above the SMT level *and* when either the
-local or sg sched groups are composed of CPUs that are SMT siblings.
-
-In fact, asym_smt_can_pull_tasks() can only be called above the SMT level.
-This is because the flags of a sched_group in a sched_domain are equal to
-the flags of the child sched_domain. Since SMT is the lowest sched_domain,
-its groups' flags are 0.
-
-sched_asym() calls sched_asym_prefer() directly if balancing at the
-SMT level and, at higher domains, if the child domain is not SMT.
-
-This meets the requirement of Power7, where SMT siblings have different
-priorities; and of x86, where physical cores have different priorities.
-
-Thanks and BR,
-Ricardo
-
-* The target of these patches is Intel hybrid processors, on which cluster
-  scheduling is disabled - cabdc3a8475b ("sched,x86: Don't use cluster
-  topology for x86 hybrid CPUs"). Also, I have not observed topologies in
-  which CPUs of the same cluster have different priorities.
-
-  We are also looking into re-enabling cluster scheduling on hybrid
-  topologies.
+Rob
