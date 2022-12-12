@@ -2,221 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96056497C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F526497D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiLLBxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 20:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S231209AbiLLB7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 20:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiLLBxM (ORCPT
+        with ESMTP id S230363AbiLLB7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 20:53:12 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0766D60F1;
-        Sun, 11 Dec 2022 17:53:09 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 12 Dec 2022 10:53:09 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 676B12059054;
-        Mon, 12 Dec 2022 10:53:09 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Dec 2022 10:53:09 +0900
-Received: from [10.212.158.28] (unknown [10.212.158.28])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id D19EFA855F;
-        Mon, 12 Dec 2022 10:53:08 +0900 (JST)
-Message-ID: <9724cb77-5175-acd6-c62e-0d3567222c01@socionext.com>
-Date:   Mon, 12 Dec 2022 10:53:07 +0900
+        Sun, 11 Dec 2022 20:59:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED277654
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670810325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6g3xEHXieH9G9pXYF7oUeGJEYp7M2m+YZ1AfoAjJ2Mg=;
+        b=PGlQ0mRK+aunD33Nb+K91U6aI/56sScfTt0DlGCZdEp7UB/QshiRsWmrxujJKOXqI6MzlG
+        Eh5w0ILNe8Wr/ZcGG9ANHjG5dpBjEwklt/npNklT2D00HoesfY+HLXcNJG++HysAsSjBJm
+        srBVmmN+exBzdDhPW5phwL669oylFQs=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-222-neoe6EZFOMaB54toxLN-SQ-1; Sun, 11 Dec 2022 20:58:43 -0500
+X-MC-Unique: neoe6EZFOMaB54toxLN-SQ-1
+Received: by mail-pg1-f198.google.com with SMTP id 38-20020a630b26000000b004773803dda1so6622545pgl.17
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:58:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6g3xEHXieH9G9pXYF7oUeGJEYp7M2m+YZ1AfoAjJ2Mg=;
+        b=Fxiy8nE3UiZk7tzioHvao4p3rLYRdHu7g6CpwlhZfPUdC/b0UfdMkEck230oSAaRRs
+         lvJ5gjI80RqND2CmUtZIuXscN3xEq/0eiHmHigp9a9gDeSDusiZ5TBnSgrJeYAeF1i5M
+         7ZY6GwOKSMpWTMQOqNyykI0pl8NlR8uKAzAOJ+3VEYleaWjMu49XuPNsUI/6mnOn0QMX
+         WDOKgLwjmKldbvNB6XbnrqSjbCgLDYHFfCX3azN4Z3GHzv2/3fMgn0Tfhl9u2KxeV1Vq
+         GRV59iwXUrns9tXG6PTBBpk1ZCnpb741d0S07YHvA7wtCqeNDkCDVAz8sQVBsBf6zoG/
+         HSXw==
+X-Gm-Message-State: ANoB5pnrjyT8tQX2c0ZYNB3QeB20B/sp9vfurSWO9/LQszWrWeNbx+l6
+        A34CSzg/7pt0v80Sdm0L8/zY4frHWQZCA3qxcusSuk/MeK45jA09tEczF2GzhUznlqTpcBLraxj
+        64Lad7ij41zujzIldk6MB/V4M
+X-Received: by 2002:aa7:9616:0:b0:573:1d31:2b79 with SMTP id q22-20020aa79616000000b005731d312b79mr14102262pfg.28.1670810322554;
+        Sun, 11 Dec 2022 17:58:42 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5kpqcD/WARrHkSIyJuhGn5/Ao4JFQbn2+IfehjkSLF7UQUmqJdeZNAvwwXgMyNj1fztp1sQg==
+X-Received: by 2002:aa7:9616:0:b0:573:1d31:2b79 with SMTP id q22-20020aa79616000000b005731d312b79mr14102248pfg.28.1670810322262;
+        Sun, 11 Dec 2022 17:58:42 -0800 (PST)
+Received: from ?IPV6:2403:580e:4b40:0:7968:2232:4db8:a45e? (2403-580e-4b40--7968-2232-4db8-a45e.ip6.aussiebb.net. [2403:580e:4b40:0:7968:2232:4db8:a45e])
+        by smtp.gmail.com with ESMTPSA id 13-20020a62170d000000b00574de4a2fc7sm4527776pfx.205.2022.12.11.17.58.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 17:58:41 -0800 (PST)
+Message-ID: <4a283c76-9609-7e66-bcf8-61d6ee2e8b06@redhat.com>
+Date:   Mon, 12 Dec 2022 09:58:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: mmc: Convert Fujitsu SDHCI to DT schema
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 5/5] procfs: use efficient tgid pid search on root
+ readdir
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209171621.3351220-1-robh@kernel.org>
- <CAL_JsqL-FVy1SK1ZTVoPaxDG0-7_PtcZZHFWJt8+aaGWFFBwaA@mail.gmail.com>
- <CAMj1kXFJ+779S93dO3BzKKnEw=dBnbtzS+-yboFfj35ASnheJA@mail.gmail.com>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <CAMj1kXFJ+779S93dO3BzKKnEw=dBnbtzS+-yboFfj35ASnheJA@mail.gmail.com>
+To:     Brian Foster <bfoster@redhat.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     onestero@redhat.com, willy@infradead.org, ebiederm@redhat.com
+References: <20221202171620.509140-1-bfoster@redhat.com>
+ <20221202171620.509140-6-bfoster@redhat.com>
+From:   Ian Kent <ikent@redhat.com>
+In-Reply-To: <20221202171620.509140-6-bfoster@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 3/12/22 01:16, Brian Foster wrote:
+> find_ge_pid() walks every allocated id and checks every associated
+> pid in the namespace for a link to a PIDTYPE_TGID task. If the pid
+> namespace contains processes with large numbers of threads, this
+> search doesn't scale and can notably increase getdents() syscall
+> latency.
+>
+> For example, on a mostly idle 2.4GHz Intel Xeon running Fedora on
+> 5.19.0-rc2, 'strace -T xfs_io -c readdir /proc' shows the following:
+>
+>    getdents64(... /* 814 entries */, 32768) = 20624 <0.000568>
+>
+> With the addition of a dummy (i.e. idle) process running that
+> creates an additional 100k threads, that latency increases to:
+>
+>    getdents64(... /* 815 entries */, 32768) = 20656 <0.011315>
+>
+> While this may not be noticeable to users in one off /proc scans or
+> simple usage of ps or top, we have users that report problems caused
+> by this latency increase in these sort of scaled environments with
+> custom tooling that makes heavier use of task monitoring.
+>
+> Optimize the tgid task scanning in proc_pid_readdir() by using the
+> more efficient find_get_tgid_task() helper. This significantly
+> improves readdir() latency when the pid namespace is populated with
+> processes with very large thread counts. For example, the above 100k
+> idle task test against a patched kernel now results in the
+> following:
+>
+> Idle:
+>    getdents64(... /* 861 entries */, 32768) = 21048 <0.000670>
+>
+> "" + 100k threads:
+>    getdents64(... /* 862 entries */, 32768) = 21096 <0.000959>
+>
+> ... which is a much smaller latency hit after the high thread count
+> task is started.
 
-On 2022/12/10 3:44, Ard Biesheuvel wrote:
- > cc Jassi and Masahisa
- >
- > On Fri, 9 Dec 2022 at 19:42, Rob Herring <robh@kernel.org> wrote:
- >>
- >> On Fri, Dec 9, 2022 at 11:16 AM Rob Herring <robh@kernel.org> wrote:
- >>>
- >>> Convert the Fujitsu SDHCI binding to DT schema format.
- >>>
- >>> The interrupts were not documented. The driver only uses the first
- >>> interrupt, but the DT and example have 2 interrupts. The 2nd one is
- >>> unknown. "dma-coherent" was also not documented, but is used.
- >>>
- >>> The "socionext,synquacer-sdhci" compatible was not documented, but it is
- >>> compatible with "fujitsu,mb86s70-sdhci-3.0.yaml" and is in use (in
- >>> u-boot Synquacer dts).
- >>>
- >>> Signed-off-by: Rob Herring <robh@kernel.org>
- >>> ---
- >>>   .../mmc/fujitsu,mb86s70-sdhci-3.0.yaml        | 67 +++++++++++++++++++
- >>>   .../devicetree/bindings/mmc/sdhci-fujitsu.txt | 32 ---------
- >>>   2 files changed, 67 insertions(+), 32 deletions(-)
- >>>   create mode 100644 Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
- >>>   delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
- >>>
- >>> diff --git a/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml 
-b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
- >>> new file mode 100644
- >>> index 000000000000..0218a6ce4b2f
- >>> --- /dev/null
- >>> +++ b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
- >>> @@ -0,0 +1,67 @@
- >>> +# SPDX-License-Identifier: GPL-2.0-only
- >>> +%YAML 1.2
- >>> +---
- >>> +$id: http://devicetree.org/schemas/mmc/fujitsu,mb86s70-sdhci-3.0.yaml#
- >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
- >>> +
- >>> +title: Fujitsu SDHCI controller
- >>> +
- >>> +maintainers:
- >>> +  - Vincent Yang <Vincent.Yang@tw.fujitsu.com>
- >>
- >> Bounces. Any other volunteers?
- >>
- >>> +
- >>> +allOf:
- >>> +  - $ref: mmc-controller.yaml#
- >>> +
- >>> +properties:
- >>> +  compatible:
- >>> +    oneOf:
- >>> +      - items:
- >>> +          - const: socionext,synquacer-sdhci
- >>> +          - const: fujitsu,mb86s70-sdhci-3.0
- >>> +      - const: fujitsu,mb86s70-sdhci-3.0
- >>> +
- >>> +  reg:
- >>> +    maxItems: 1
- >>> +
- >>> +  clocks:
- >>> +    items:
- >>> +      - description: Core clock
- >>> +      - description: Interface clock
- >>> +
- >>> +  clock-names:
- >>> +    items:
- >>> +      - const: core
- >>> +      - const: iface
- >>> +
- >>> +  dma-coherent: true
- >>> +
- >>> +  interrupts:
- >>> +    maxItems: 2
- >>> +
- >>> +  fujitsu,cmd-dat-delay-select:
- >>> +    type: boolean
- >>> +    description: Indicating that the host requires the CMD_DAT_DELAY control
- >>> +      to be enabled.
- >>> +
- >>> +required:
- >>> +  - compatible
- >>> +  - reg
- >>> +  - clocks
- >>> +  - clock-names
- >>> +  - interrupts
- >>> +
- >>> +unevaluatedProperties: false
- >>> +
- >>> +examples:
- >>> +  - |
- >>> +    mmc@36600000 {
- >>> +        compatible = "fujitsu,mb86s70-sdhci-3.0";
- >>> +        reg = <0x36600000 0x1000>;
- >>> +        interrupts = <0 172 0x4>,
- >>> +               <0 173 0x4>;
- >>> +        bus-width = <4>;
- >>> +        vqmmc-supply = <&vccq_sdhci1>;
- >>> +        clocks = <&clock 2 2 0>, <&clock 2 3 0>;
- >>> +        clock-names = "core", "iface";
- >>> +    };
- >>> +...
- >>> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt 
-b/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
- >>> deleted file mode 100644
- >>> index 3ee9263adf73..000000000000
- >>> --- a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
- >>> +++ /dev/null
- >>> @@ -1,32 +0,0 @@
- >>> -* Fujitsu SDHCI controller
- >>> -
- >>> -This file documents differences between the core properties in mmc.txt
- >>> -and the properties used by the sdhci_f_sdh30 driver.
- >>> -
- >>> -Required properties:
- >>> -- compatible: "fujitsu,mb86s70-sdhci-3.0"
- >>> -- clocks: Must contain an entry for each entry in clock-names. It is a
- >>> -  list of phandles and clock-specifier pairs.
- >>> -  See ../clocks/clock-bindings.txt for details.
- >>> -- clock-names: Should contain the following two entries:
- >>> -       "iface" - clock used for sdhci interface
- >>> -       "core"  - core clock for sdhci controller
- >>> -
- >>> -Optional properties:
- >>> -- vqmmc-supply: phandle to the regulator device tree node, mentioned
- >>> -  as the VCCQ/VDD_IO supply in the eMMC/SD specs.
- >>> -- fujitsu,cmd-dat-delay-select: boolean property indicating that this host
- >>> -  requires the CMD_DAT_DELAY control to be enabled.
- >>> -
- >>> -Example:
- >>> -
- >>> -       sdhci1: mmc@36600000 {
- >>> -               compatible = "fujitsu,mb86s70-sdhci-3.0";
- >>> -               reg = <0 0x36600000 0x1000>;
- >>> -               interrupts = <0 172 0x4>,
- >>> -                            <0 173 0x4>;
- >>> -               bus-width = <4>;
- >>> -               vqmmc-supply = <&vccq_sdhci1>;
- >>> -               clocks = <&clock 2 2 0>, <&clock 2 3 0>;
- >>> -               clock-names = "iface", "core";
- >>> -       };
- >>> --
- >>> 2.35.1
- >>>
 
-I converted this dt-bindings as follows.
+This may not sound like much but in the environment where it
 
-- [PATCH v2 1/6] dt-bindings: mmc: Convert sdhci-fujitsu to JSON schema
-   https://marc.info/?l=linux-mmc&m=166815383930945
+was reported it makes quite a difference.
 
-- [PATCH v2 3/6] dt-bindings: sdhci-fujitsu: Add compatible string for F_SDH30_E51
-   https://marc.info/?l=linux-mmc&m=166815384730959
 
-And this series has already merged by Ulf.
-https://marc.info/?l=linux-mmc&m=166861511322498
+The thing is that the scenario above sounds totally unreal
 
-Could you check it and update some diffs?
+but apparently it isn't and even if it was think about
 
-Thank you,
+many thread group leaders each with even a moderately large
 
----
-Best Regards
-Kunihiko Hayashi
+number of threads and the observed overhead problem becomes
+
+clear.
+
+
+>
+> Signed-off-by: Brian Foster <bfoster@redhat.com>
+
+
+Reviewed-by: Ian Kent <raven@themaw.net>
+
+
+Ian
+
+> ---
+>   fs/proc/base.c | 17 +----------------
+>   1 file changed, 1 insertion(+), 16 deletions(-)
+>
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index 9e479d7d202b..ac34b6bb7249 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -3475,24 +3475,9 @@ struct tgid_iter {
+>   };
+>   static struct tgid_iter next_tgid(struct pid_namespace *ns, struct tgid_iter iter)
+>   {
+> -	struct pid *pid;
+> -
+>   	if (iter.task)
+>   		put_task_struct(iter.task);
+> -	rcu_read_lock();
+> -retry:
+> -	iter.task = NULL;
+> -	pid = find_ge_pid(iter.tgid, ns);
+> -	if (pid) {
+> -		iter.tgid = pid_nr_ns(pid, ns);
+> -		iter.task = pid_task(pid, PIDTYPE_TGID);
+> -		if (!iter.task) {
+> -			iter.tgid += 1;
+> -			goto retry;
+> -		}
+> -		get_task_struct(iter.task);
+> -	}
+> -	rcu_read_unlock();
+> +	iter.task = find_get_tgid_task(&iter.tgid, ns);
+>   	return iter;
+>   }
+>   
 
