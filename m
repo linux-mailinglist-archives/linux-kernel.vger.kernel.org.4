@@ -2,104 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9614E649C5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DA3649C65
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbiLLKkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        id S232145AbiLLKlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiLLKj3 (ORCPT
+        with ESMTP id S231948AbiLLKkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:39:29 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1D5BF47
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:32:56 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id ja17so1970575wmb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:32:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A6kPRPV4RSaQS320NWjFIwrJBMe2FQYgaSD/56hIzMA=;
-        b=FjTA8Kw0a3RXQT9qPGY38Ql3DMUIOcWDLl2net91bCjqnfUZHM+ROCCjATm084Konf
-         ZPQcQ8xTF81WNIYcHwoRJfn6C/T8zU8HGDIuvAnEHrjlfZFuYEaAT7NxtdqUQrCPLAe6
-         biMkclXJvldxx03Rc0AC0vS5zrlTkYKuTGGrV++oFNOoHop5uvgZuh56qnmcDFdkY7Kx
-         DV5a6Xs0ZdlyiEY5dkBZb8h0asRwLHZrAdpFGeWJP1qYSynl2wPU+qml2rd6LV06K7o7
-         WcpbpT6mMIjdiS5k7EvzjoBJPiy4IojgrcyYjwiShROcpHmEJV8zCNhjpoVryYnSw5EO
-         uKjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6kPRPV4RSaQS320NWjFIwrJBMe2FQYgaSD/56hIzMA=;
-        b=FVrD+bWDSKjuQgDrwVFnUgEH5909LNSWeNMQEiqasD0auteIdgjZb7T/4U8/GN+Njc
-         bWCSNTBcvjG0DfYmbuy9C4EqbYEKXf94MsGs2M6lbkFV6X8v5csHhhOAOh0PnWUL+qUU
-         jycMm0npo5Lu5C1CYt0jvGQb27/IstWmqFUqfUuZVFzKu34ErWwOlh05c++RXh0jci67
-         bWklNnfsjd5N2RAeOjBFmebLLgOKAo9nhUCEoezRATswBdYPqFrMNXD3dPlknpW1I7wT
-         t2zHADk9Qp4Xl+ifd0YV1PBGL0KqF40gNfHsqiBlj+afAkOVpLhB/hk1IhqbqPk96BoF
-         GMnQ==
-X-Gm-Message-State: ANoB5pmd9c/YhvHk7BpYA7kQRp26vMPZyiz253nUxu7NeVYHKK+f48LN
-        cFAn7NdndmPhtsaLI9xC7OwqQUYcxrumPtD1
-X-Google-Smtp-Source: AA0mqf6QjC1E8Jn6zjPyx68xLKAjqXSAZD4pkfe0eByryq7PjTt1JnzdKMRfkhg6j0e2xMTkmoVtpg==
-X-Received: by 2002:a05:600c:1c21:b0:3d0:6ef9:9f2c with SMTP id j33-20020a05600c1c2100b003d06ef99f2cmr12014492wms.16.1670841175027;
-        Mon, 12 Dec 2022 02:32:55 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a05600c4f8800b003d1e90717ccsm9666314wmq.30.2022.12.12.02.32.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 02:32:54 -0800 (PST)
-Message-ID: <b5c1b07d-1b18-72d4-d173-3c9830387139@linaro.org>
-Date:   Mon, 12 Dec 2022 10:32:53 +0000
+        Mon, 12 Dec 2022 05:40:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19FDB4A9;
+        Mon, 12 Dec 2022 02:34:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DFB560F40;
+        Mon, 12 Dec 2022 10:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A48CC433EF;
+        Mon, 12 Dec 2022 10:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670841288;
+        bh=d83TxHN9oztaLU1gt+Fi+GU5ce7VMeB1SwmpA2UXsIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GlRg1ZklbUlADjU40uhGLTH3HINyulcwz3kNsqM/HYCxmZCRM6Jx3jUjosf0boNG3
+         ayQS4y0Wc7kZYzrCdJJ0eCLvvUhi5tuNTO1Meq6q68JQtoMaNPvUnGWfEkbjrudG1T
+         fIRxRe63FSpKVTMkKLvTj+XfmliO3DvB0gu6rFggrCvvuiCWaWv/5xxSfZ1uliB6ZJ
+         W1kzTJg1dqvegeugr3N7MY+B18fJs41GMwGIORqjOlL1xpyefIaoDOjWRE6Aqk5FjS
+         V5H7d2bZMkwJYw1i+b4QPgSRlzY59TXpO5Kjr/5C/sROJjN874lVg/+4AMPutJrs55
+         jWcu52z8fvaiQ==
+Message-ID: <e257526b-6199-6ff4-8eae-59a8dc8377a2@kernel.org>
+Date:   Mon, 12 Dec 2022 18:34:45 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] nvmem: brcm_nvram: Add check for kzalloc
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] f2fs: add support for counting the average time of
+ submit discard cmd
 Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     linux-kernel@vger.kernel.org
-References: <20221212033915.12674-1-jiasheng@iscas.ac.cn>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221212033915.12674-1-jiasheng@iscas.ac.cn>
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+References: <20221129041524.81235-1-frank.li@vivo.com>
+ <20221129041524.81235-2-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221129041524.81235-2-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/29 12:15, Yangtao Li wrote:
+> This patch adds support for counting the average time of submit discard
+> command, and we can see its value in debugfs.
 
+How about enabling this only when CONFIG_DEBUG_FS is on?
 
-On 12/12/2022 03:39, Jiasheng Jiang wrote:
-> Add the check for the return value of kzalloc in order to avoid
-> NULL pointer dereference.
++Cc block mailing list
+
+Not sure block layer has similar stats? if it hasn't, can such stat
+be accounted in block layer, and then all filesystem can be benefited.
+
+Thanks,
+
 > 
-> Fixes: 6e977eaa8280 ("nvmem: brcm_nvram: parse NVRAM content into NVMEM cells")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-
-Applied thanks,
-
---srini
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->   drivers/nvmem/brcm_nvram.c | 3 +++
->   1 file changed, 3 insertions(+)
+>   fs/f2fs/debug.c   |  7 +++++--
+>   fs/f2fs/f2fs.h    |  5 +++++
+>   fs/f2fs/segment.c | 18 ++++++++++++++++--
+>   3 files changed, 26 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
-> index 4441daa20965..7bd65fc2942e 100644
-> --- a/drivers/nvmem/brcm_nvram.c
-> +++ b/drivers/nvmem/brcm_nvram.c
-> @@ -97,6 +97,9 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
->   	len = le32_to_cpu(header.len);
->   
->   	data = kzalloc(len, GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
+> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+> index 733b1bd37404..eed3edfc5faf 100644
+> --- a/fs/f2fs/debug.c
+> +++ b/fs/f2fs/debug.c
+> @@ -109,6 +109,9 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+>   			llist_empty(&SM_I(sbi)->fcc_info->issue_list);
+>   	}
+>   	if (SM_I(sbi)->dcc_info) {
+> +		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
 > +
->   	memcpy_fromio(data, priv->base, len);
->   	data[len - 1] = '\0';
+> +		si->discard_avg = dcc->discard_time_avg;
+>   		si->nr_discarded =
+>   			atomic_read(&SM_I(sbi)->dcc_info->issued_discard);
+>   		si->nr_discarding =
+> @@ -510,8 +513,8 @@ static int stat_show(struct seq_file *s, void *v)
+>   			   si->nr_wb_cp_data, si->nr_wb_data,
+>   			   si->nr_flushing, si->nr_flushed,
+>   			   si->flush_list_empty);
+> -		seq_printf(s, "Discard: (%4d %4d)) cmd: %4d undiscard:%4u\n",
+> -			   si->nr_discarding, si->nr_discarded,
+> +		seq_printf(s, "Discard: (%4d %4d, avg:%4lldns)) cmd: %4d undiscard:%4u\n",
+> +			   si->nr_discarding, si->nr_discarded, ktime_to_us(si->discard_avg),
+>   			   si->nr_discard_cmd, si->undiscard_blks);
+>   		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
+>   			   si->aw_cnt, si->max_aw_cnt);
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index eb8c27c4e5fc..5a99759d10ac 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -370,6 +370,8 @@ struct discard_cmd {
+>   	int error;			/* bio error */
+>   	spinlock_t lock;		/* for state/bio_ref updating */
+>   	unsigned short bio_ref;		/* bio reference count */
+> +	struct discard_cmd_control *dcc; /* global discard cmd control */
+> +	ktime_t submit_start;		/* submit start time */
+>   };
 >   
+>   enum {
+> @@ -414,6 +416,8 @@ struct discard_cmd_control {
+>   	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
+>   	unsigned int undiscard_blks;		/* # of undiscard blocks */
+>   	unsigned int next_pos;			/* next discard position */
+> +	spinlock_t discard_time_lock;	/* for discard time statistics */
+> +	ktime_t discard_time_avg;		/* issued discard cmd avg time */
+>   	atomic_t issued_discard;		/* # of issued discard */
+>   	atomic_t queued_discard;		/* # of queued discard */
+>   	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
+> @@ -3882,6 +3886,7 @@ struct f2fs_stat_info {
+>   	int nr_dio_read, nr_dio_write;
+>   	unsigned int io_skip_bggc, other_skip_bggc;
+>   	int nr_flushing, nr_flushed, flush_list_empty;
+> +	ktime_t	discard_avg;
+>   	int nr_discarding, nr_discarded;
+>   	int nr_discard_cmd;
+>   	unsigned int undiscard_blks;
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 9486ca49ecb1..bc96b1afb308 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -931,6 +931,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
+>   	list_add_tail(&dc->list, pend_list);
+>   	spin_lock_init(&dc->lock);
+>   	dc->bio_ref = 0;
+> +	dc->dcc = dcc;
+>   	atomic_inc(&dcc->discard_cmd_cnt);
+>   	dcc->undiscard_blks += len;
+>   
+> @@ -1000,9 +1001,13 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
+>   static void f2fs_submit_discard_endio(struct bio *bio)
+>   {
+>   	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
+> +	struct discard_cmd_control *dcc = dc->dcc;
+>   	unsigned long flags;
+> +	ktime_t submit_time;
+> +	int nr_discarded;
+>   
+>   	spin_lock_irqsave(&dc->lock, flags);
+> +	submit_time = ktime_sub(ktime_get(), dc->submit_start);
+>   	if (!dc->error)
+>   		dc->error = blk_status_to_errno(bio->bi_status);
+>   	dc->bio_ref--;
+> @@ -1012,6 +1017,14 @@ static void f2fs_submit_discard_endio(struct bio *bio)
+>   	}
+>   	spin_unlock_irqrestore(&dc->lock, flags);
+>   	bio_put(bio);
+> +
+> +	spin_lock_irqsave(&dcc->discard_time_lock, flags);
+> +	nr_discarded = atomic_read(&dcc->issued_discard);
+> +	dcc->discard_time_avg = div_u64(ktime_add(nr_discarded * dcc->discard_time_avg,
+> +										submit_time),
+> +									nr_discarded + 1);
+> +	atomic_inc(&dcc->issued_discard);
+> +	spin_unlock_irqrestore(&dcc->discard_time_lock, flags);
+>   }
+>   
+>   static void __check_sit_bitmap(struct f2fs_sb_info *sbi,
+> @@ -1160,6 +1173,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   		 * right away
+>   		 */
+>   		spin_lock_irqsave(&dc->lock, flags);
+> +		dc->submit_start = ktime_get();
+>   		if (last)
+>   			dc->state = D_SUBMIT;
+>   		else
+> @@ -1179,8 +1193,6 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   		bio->bi_opf |= flag;
+>   		submit_bio(bio);
+>   
+> -		atomic_inc(&dcc->issued_discard);
+> -
+>   		f2fs_update_iostat(sbi, NULL, FS_DISCARD, 1);
+>   
+>   		lstart += len;
+> @@ -2070,9 +2082,11 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+>   	INIT_LIST_HEAD(&dcc->wait_list);
+>   	INIT_LIST_HEAD(&dcc->fstrim_list);
+>   	mutex_init(&dcc->cmd_lock);
+> +	spin_lock_init(&dcc->discard_time_lock);
+>   	atomic_set(&dcc->issued_discard, 0);
+>   	atomic_set(&dcc->queued_discard, 0);
+>   	atomic_set(&dcc->discard_cmd_cnt, 0);
+> +	dcc->discard_time_avg = 0;
+>   	dcc->nr_discards = 0;
+>   	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
+>   	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
