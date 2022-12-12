@@ -2,62 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F49C64A430
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ADF64A434
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiLLPcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S232364AbiLLPdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiLLPcs (ORCPT
+        with ESMTP id S231462AbiLLPdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:32:48 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9163E10C1;
-        Mon, 12 Dec 2022 07:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670859166; x=1702395166;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nbBXjiWrVqp5rwGJtIFbpqvO7wCxphK+HIpxFcHMkiA=;
-  b=UrjBKY6xoE+2ScAD7zneQLqrSbRTnq9Mi3eQYm9troBjK4GIEdpFs+vq
-   JpGpVsAsXx6l9BVi6aOdkgexYRuVKdHHe0qWtuY3OBdAYPqupA2eNoowK
-   cgjvpkpFeBSup6Wr6l8vUYLt+5YETQoyj6sZn6pNFm1rL1BRL+wqyZjX7
-   KNy3NhHj1U48mUqrVDeozIa4TTnlRG6f07DYMEkp0vPYTcLWQ8wkwqZyb
-   lQp6AlTyJaio3LcVvjwXqr2nr/kRa1Q410hg3M3rFmyNr9uCDhrO2wRzG
-   +g+19y1AlvM7sDERY37owHslNrXJ5x0PmXoIEihUTnQrP58y+dQZrIzxF
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="404135157"
-X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
-   d="scan'208";a="404135157"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 07:32:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="790533498"
-X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
-   d="scan'208";a="790533498"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.8.194]) ([10.212.8.194])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 07:32:44 -0800
-Message-ID: <4ea86d83-610a-9a14-fda8-e25bd9d4addb@intel.com>
-Date:   Mon, 12 Dec 2022 08:32:43 -0700
+        Mon, 12 Dec 2022 10:33:16 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 630A3DF61
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:33:14 -0800 (PST)
+Received: (qmail 855217 invoked by uid 1000); 12 Dec 2022 10:33:13 -0500
+Date:   Mon, 12 Dec 2022 10:33:13 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: fix misleading usb_set_intfdata() kernel doc
+Message-ID: <Y5dJufR1NCzUMvEv@rowland.harvard.edu>
+References: <20221212152035.31806-1-johan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH] dmaengine: idxd: Remove the unused function
- set_completion_address()
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        fenghua.yu@intel.com
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20221212033514.5831-1-jiapeng.chong@linux.alibaba.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221212033514.5831-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212152035.31806-1-johan@kernel.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +39,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/11/2022 8:35 PM, Jiapeng Chong wrote:
-> The function set_completion_address is defined in the dma.c file, but not
-> called elsewhere, so remove this unused function.
+On Mon, Dec 12, 2022 at 04:20:35PM +0100, Johan Hovold wrote:
+> The struct device driver-data pointer is used for any data that a driver
+> may need in various callbacks while bound to the device. For
+> convenience, subsystems typically provide wrappers such as
+> usb_set_intfdata() of the generic accessor functions for use in bus
+> callbacks.
 > 
-> drivers/dma/idxd/dma.c:66:20: warning: unused function 'set_completion_address'.
+> There is generally no longer any need for a driver to clear the pointer,
+> but since commit 0998d0631001 ("device-core: Ensure drvdata = NULL when
+> no driver is bound") the driver-data pointer is set to NULL by driver
+> core post unbind anyway.
 > 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3416
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-Acked-by: Dave Jiang <dave.jiang@intel.com>
-Thanks for the cleanup
+> For historical reasons, USB core also clears this pointer when an
+> explicitly claimed interface is released.
+> 
+> Due to a misunderstanding, a misleading kernel doc comment for
+> usb_set_intfdata() was recently added which claimed that the driver data
+> pointer must not be cleared during disconnect before "all actions [are]
+> completed", which is both imprecise and incorrect.
+> 
+> Specifically, drivers like cdc-acm which claim additional interfaces use
+> the driver-data pointer as a flag which is cleared when the first
+> interface is unbound. As long as a driver does not do something odd like
+> dereference the pointer in, for example, completion callbacks, this can
+> be done at any time during disconnect. And in any case this is no
+> different than for any other resource, like the driver data itself,
+> which may be freed by the disconnect callback.
+> 
+> Note that the comment actually also claimed that the interface itself
+> was somehow being set to NULL by driver core.
+> 
+> Fix the kernel doc by removing incorrect, overly specific and misleading
+> details and adding a comment about why some drivers do clear the
+> driver-data pointer.
+> 
+> Fixes: 27ef17849779 ("usb: add usb_set_intfdata() documentation")
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 > ---
->   drivers/dma/idxd/dma.c | 6 ------
->   1 file changed, 6 deletions(-)
 > 
-> diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
-> index e0874cb4721c..eb35ca313684 100644
-> --- a/drivers/dma/idxd/dma.c
-> +++ b/drivers/dma/idxd/dma.c
-> @@ -63,12 +63,6 @@ static void op_flag_setup(unsigned long flags, u32 *desc_flags)
->   		*desc_flags |= IDXD_OP_FLAG_RCI;
->   }
->   
-> -static inline void set_completion_address(struct idxd_desc *desc,
-> -					  u64 *compl_addr)
-> -{
-> -		*compl_addr = desc->compl_dma;
-> -}
-> -
->   static inline void idxd_prep_desc_common(struct idxd_wq *wq,
->   					 struct dsa_hw_desc *hw, char opcode,
->   					 u64 addr_f1, u64 addr_f2, u64 len,
+> Changes in v2
+>  - fix up rather than drop the comment
+> 
+> 
+>  include/linux/usb.h | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index b47371d44d1b..8a32e17f826e 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -267,16 +267,15 @@ static inline void *usb_get_intfdata(struct usb_interface *intf)
+>  }
+>  
+>  /**
+> - * usb_set_intfdata() - associate driver-specific data with the interface
+> - * @intf: the usb interface
+> - * @data: pointer to the device priv structure or %NULL
+> + * usb_set_intfdata() - associate driver-specific data with an interface
+> + * @intf: USB interface
+> + * @data: driver data
+>   *
+> - * Drivers should use this function in their probe() to associate their
+> - * driver-specific data with the usb interface.
+> + * Drivers can use this function in their probe() callbacks to associate
+> + * driver-specific data with an interface.
+>   *
+> - * When disconnecting, the core will take care of setting @intf back to %NULL,
+> - * so no actions are needed on the driver side. The interface should not be set
+> - * to %NULL before all actions completed (e.g. no outsanding URB remaining).
+> + * Note that there is generally no need to clear the driver-data pointer even
+> + * if some drivers do so for historical or implementation-specific reasons.
+
+I would add (bikeshedding, I realize -- rephrase to suit yourself):
+
+	This is because the USB core always clears the pointer after 
+	unbinding a driver from the interface.
+
+Apart from that:
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>   */
+>  static inline void usb_set_intfdata(struct usb_interface *intf, void *data)
+>  {
+> -- 
+> 2.37.4
+> 
