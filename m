@@ -2,199 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16F6649D3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8F1649DFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbiLLLKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S232103AbiLLLfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiLLLJa (ORCPT
+        with ESMTP id S232081AbiLLLc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:09:30 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCAD219C;
-        Mon, 12 Dec 2022 03:03:05 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1p4ga1-0002nt-SE; Mon, 12 Dec 2022 12:02:42 +0100
-Date:   Mon, 12 Dec 2022 11:02:33 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
- init/do_mounts.c
-Message-ID: <Y5cKSRmZ45OJq6Qq@makrotopia.org>
-References: <cover.1668644705.git.daniel@makrotopia.org>
- <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
- <Y3XM62P7CaeKXFsz@infradead.org>
- <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
- <Y3zCdJr5dKsADsnM@infradead.org>
- <Y5NpsmN/npnG8lxY@makrotopia.org>
- <Y5buTVuu0pfqBQh+@infradead.org>
+        Mon, 12 Dec 2022 06:32:56 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C963FC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:31:59 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id c7so1123229qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=06SKk3+Ze86qUIQMQYOS544icdjYuuKxQBSYDhiuvtQ=;
+        b=gA8s/mVH5bAQ+8OyUd2TRqibki/tYQvHDdM9WtPLZwkWOKi+HgQlMcCthHBVeIuHyt
+         9z7PVHiVcmINs0ZU7SHj22QmA5hr6WjbIVPTrLvoxJjLRebJXE1ARa19r5LXH7te7HzP
+         4uLi7LS43CBvcU4j8+oZeDA2oKoLmfVaAEirbId7A/0DNoHamSXJ16gcYjuGeSbzgKdn
+         fQQbQEpFzrJQPQNguMowb78OA6J+CB/JCmobR6Tlvo5EyJwExeDYroDrMerjw8ItU2Ss
+         P/dnFUByTNCtxqkUVv65UOUDg+KsiAmUoH1GFtQOvaEuC/jpZVEySYlWFWL6/LbZOUiS
+         iKDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=06SKk3+Ze86qUIQMQYOS544icdjYuuKxQBSYDhiuvtQ=;
+        b=E3wAom5c2YaVVtnsiECVCDdxKvz63XUh2i/yLkNSGSrg/YNSzRrUSc024pSbkhs/NO
+         Xp5/ozLUK8XaXSOsNdO0GzAEbMWE2FL7FTJ5Ipak8KWoLmB3J2NCZd5u2v9dRJ9DRKrv
+         7i1+TLO2j4CQemNHRytZXF48DitXQetqP9sY8/iJHX7MZhVQ4ay4z/TMlUIa7gZ3AnKA
+         fakVPDL175CTioMCAqGUCzUNTJhRgDl/ymKaSLOKGilXMnGQX0QAJpStblVrQG04HVXP
+         wzwYuFB06hqHjPJQs2l1RM8MzRkrmtIqhbjoeOCwHToPmAzNiBaDK2+HY7zRkbnBgSaY
+         TCbA==
+X-Gm-Message-State: ANoB5plwvHtbjHV5M4kYhXAKigcRgZvMvCCkxxdRPWoZt1pHPGMpHjai
+        UAH0QdjuNGvPiXMkqzDI+TI=
+X-Google-Smtp-Source: AA0mqf4P+n6Eu+i1LUXXipacAkxdDMEL288rmmWudwwNWxPNFSgf3UL4WUrJMBQYi6awf7zYDfAXnA==
+X-Received: by 2002:a05:622a:1b92:b0:3a5:1dcb:d231 with SMTP id bp18-20020a05622a1b9200b003a51dcbd231mr29265394qtb.59.1670844718854;
+        Mon, 12 Dec 2022 03:31:58 -0800 (PST)
+Received: from MBP ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id d12-20020ac8118c000000b0039492d503cdsm5595104qtj.51.2022.12.12.03.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 03:31:58 -0800 (PST)
+References: <20221115140233.21981-1-schspa@gmail.com>
+ <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
+        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] umh: fix UAF when the process is being killed
+Date:   Mon, 12 Dec 2022 19:04:29 +0800
+In-reply-to: <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+Message-ID: <m2bko8c0yh.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5buTVuu0pfqBQh+@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 01:03:09AM -0800, Christoph Hellwig wrote:
-> On Fri, Dec 09, 2022 at 05:00:34PM +0000, Daniel Golle wrote:
-> > It doesn't need to be literally the PARTNAME uevent, just any way to
-> > communicate the names of mapped subimages to userspace.
-> > 
-> > My understanding by now is that there is no way around introducing a
-> > new device_type and then mitigate the unwanted side effects by
-> > follow-up changes, ie. make it possible to use that new device_type
-> > when specifying the rootfs= cmdline variable (currently only disks and
-> > partitions are considered there).
-> > 
-> > Or give up on the idea that uImage.FIT subimages mapped by the new
-> > driver can be identified by userspace by poking uevent from sysfs and
-> > just rely on convention and ordering.
-> 
-> To be honest I'm still really confused by the patch set.  What is
-> the problem with simply using an initramfs, which is the way to
-> deal with any non-trivial init issue for about 20 years now, predated
-> by the somewhat more awkware initrd...
 
-The thing is that there isn't anything extraordinarily complex here,
-just dynamically partitioning a block device based on a well-known
-format.
+Luis Chamberlain <mcgrof@kernel.org> writes:
 
-> 
-> > Needing an initramfs, even if it boils down to just one statically
-> > compile executable, is a massive bloat and complication when building
-> > embedded device firmware and none of the over 1580 devices currently
-> > supported by OpenWrt need an intermediate initramfs to mount their
-> > on-flash squashfs rootfs (some, however, already use this uImage.FIT
-> > partition parser, and not needing a downstream patch for that would be
-> > nice).
-> 
-> You can always build the initrams into the kernel image, I don't
-> see how that is bloat.
+> On Mon, Dec 05, 2022 at 07:38:21PM +0800, Schspa Shi wrote:
+>> 
+>> Schspa Shi <schspa@gmail.com> writes:
+>> 
+>> > When the process is killed, wait_for_completion_state will return with
+>> > -ERESTARTSYS, and the completion variable in the stack will be freed.
+>
+> There is no free'ing here, it's just not availabel anymore, which is
+> different.
+>
 
-Using initramfs implies that we would need a 2nd copy of the standard C
-library and libfdt, both alone will already occupy more than just a
-single 64kB block of flash. I understand that from the point of view of
-classic x86 servers or even embedded devices with eMMC this seems
-negligible. However, keep in mind that a huge number of existing
-devices and also new designs of embedded devices often boot from just a
-few megabytes of NOR flash, and there every byte counts.
+No, the whole thread stack will be freed when the process died. There
+will be some cases where it will be released. It will be more accurate
+to modify it to be unavailable.
 
-> 
-> > Carrying the read-only squashfs filesystem inside the uImage.FIT
-> > structure has the advantage of being agnostic regarding the
-> > storage-type (NOR/mtdblockX, NAND/ubiblockX, MMC/mmcblkXpY) and allows
-> > the bootloader to validate the filesystem hash before starting the
-> > kernel, ie. ensuring integrity of the firmware as-a-whole which
-> > includes the root filesystem.
-> 
-> What is the point of the uImage.FIT?
+>> > If the user-mode thread is complete at the same time, there will be a UAF.
+>> >
+>> > Please refer to the following scenarios.
+>> >             T1                                  T2
+>> > ------------------------------------------------------------------
+>> > call_usermodehelper_exec
+>> >                                    call_usermodehelper_exec_async
+>> >                                    << do something >>
+>> >                                    umh_complete(sub_info);
+>> >                                    comp = xchg(&sub_info->complete, NULL);
+>> >                                    /* we got the completion */
+>> >                                    << context switch >>
 
-It is the format used by Das U-Boot, which is by far the most common
-bootloader found on small embedded devices running Linux.
-Is is already used by Das U-Boot to validate and load kernel,
-devicetree, initramfs, ... to RAM before launching Linux.
-I've included a link to the documentation[1] which gives insights
-regarding the motivation to create such a format.
+The sub_info->complete will be set to NULL.
 
-> Why can't you use a sane format?
+>> >
+>> >     << Being killed >>
+>> > 	retval = wait_for_completion_state(sub_info->complete, state);
+>> > 	if (!retval)
+>> > 		goto wait_done;
+>> >
+>> > 	if (wait & UMH_KILLABLE) {
+>> > 		/* umh_complete() will see NULL and free sub_info */
+>> > 		if (xchg(&sub_info->complete, NULL))
+>> > 			goto unlock;
+>> >         << we can't got the completion >>
+>
+> I'm sorry I don't understand what you tried to say here, we can't got?
+>
 
-Define "sane format". :) And tell that to the people over at Das U-Boot
-please. I'm just trying to make best use of the status-quo which is
-that uImage.FIT is the de-facto standard to boot Linux on small
-embedded devices.
+In this scenario, the sub_info->complete will be NULL, at the
+call_usermodehelper_exec_async, and we will go to the unlock branch here.
 
-> Or at least not use it on top of partitions, which is just
-> braindead.
+>> > 	}
+>> > 	....
+>> > unlock:
+>> > 	helper_unlock();
+>> > 	return retval;
+>> > }
+>> >
+>> > /**
+>> >  * the completion variable in stack is end of life cycle.
+>> >  * and maybe freed due to process is recycled.
+>> >  */
+>> >                                    --------UAF here----------
+>> >                                    if (comp)
+>> >                                        complete(comp);
+>> >
+>> > To fix it, we can put the completion variable in the subprocess_info
+>> > variable.
+>> >
+>> > Reported-by: syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com
+>> > Reported-by: syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com
+>> > Reported-by: syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+>> >
+>> > Signed-off-by: Schspa Shi <schspa@gmail.com>
+>> > ---
+>> >  include/linux/umh.h | 1 +
+>> >  kernel/umh.c        | 6 +++---
+>> >  2 files changed, 4 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/include/linux/umh.h b/include/linux/umh.h
+>> > index 5d1f6129b847..801f7efbc825 100644
+>> > --- a/include/linux/umh.h
+>> > +++ b/include/linux/umh.h
+>> > @@ -20,6 +20,7 @@ struct file;
+>> >  struct subprocess_info {
+>> >  	struct work_struct work;
+>> >  	struct completion *complete;
+>> > +	struct completion done;
+>> >  	const char *path;
+>> >  	char **argv;
+>> >  	char **envp;
+>> > diff --git a/kernel/umh.c b/kernel/umh.c
+>> > index 850631518665..3ed39956c777 100644
+>> > --- a/kernel/umh.c
+>> > +++ b/kernel/umh.c
+>> > @@ -380,6 +380,7 @@ struct subprocess_info *call_usermodehelper_setup(const char *path, char **argv,
+>> >  	sub_info->cleanup = cleanup;
+>> >  	sub_info->init = init;
+>> >  	sub_info->data = data;
+>> > +	init_completion(&sub_info->done);
+>> >    out:
+>> >  	return sub_info;
+>> >  }
+>> > @@ -405,7 +406,6 @@ EXPORT_SYMBOL(call_usermodehelper_setup);
+>> >  int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>> >  {
+>> >  	unsigned int state = TASK_UNINTERRUPTIBLE;
+>> > -	DECLARE_COMPLETION_ONSTACK(done);
+>> >  	int retval = 0;
+>> >  
+>> >  	if (!sub_info->path) {
+>> > @@ -431,7 +431,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>> >  	 * This makes it possible to use umh_complete to free
+>> >  	 * the data structure in case of UMH_NO_WAIT.
+>> >  	 */
+>> > -	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &done;
+>> > +	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &sub_info->done;
+>> >  	sub_info->wait = wait;
+>> >  
+>> >  	queue_work(system_unbound_wq, &sub_info->work);
+>> > @@ -444,7 +444,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>> >  	if (wait & UMH_FREEZABLE)
+>> >  		state |= TASK_FREEZABLE;
+>> >  
+>> > -	retval = wait_for_completion_state(&done, state);
+>> > +	retval = wait_for_completion_state(sub_info->complete, state);
+>> >  	if (!retval)
+>> >  		goto wait_done;
+>> 
+>> Hi Luis Chamberlain:
+>> 
+>> Could you help to review this patch? I'm not sure why we define the
+>> amount of completion here on the stack. But this UAF can be fixed by
+>> moving the completion variable to the heap.
+>
+> It would seem to me that if this is an issue other areas would have
+> similar races as well, so I was hard pressed about the approach / fix.
+>
 
-In fact, that's only one out of three possible uses in which parsing
-the contained sub-image boundaries can be useful:
- * On devices with NOR flash uImage.FIT is stored in an MTD partition,
-   hence the uImage.FIT partition parser (or small stackable block
-   driver) would then operate on top of /dev/mtdblockX.
+I think other modules will have similar bugs, but this is a limitation
+on the use of the DECLARE_COMPLETION_ONSTACK macro, and it has been
+specifically stated in the completion's documentation.
 
- * On devices with NAND flash uImage.FIT is stored in a UBI volume,
-   hence in this case /dev/ubiblockX needs to be processed.
+There is the description from completion's documentation:
 
- * On devices with block storage (like eMMC or SD card) the image is
-   stored on a (GPT) partition (/dev/mmcblkXpY).
+Note that when using completion objects as local variables you must be
+acutely aware of the short life time of the function stack: the function
+must not return to a calling context until all activities (such as waiting
+threads) have ceased and the completion object is completely unused.
 
-Generally speaking, when it comes to storing the rootfs (typically
-squashfs), this can be solved in two ways:
- a) keep the rootfs inside the uImage.FIT structure (to be then dealt
-    with by this patch series)
+> Wouldn't something like this be a bit more explicit about ensuring
+> we don't let the work item race beyond?
+>
+> diff --git a/kernel/umh.c b/kernel/umh.c
+> index 850631518665..55fc698115a7 100644
+> --- a/kernel/umh.c
+> +++ b/kernel/umh.c
+> @@ -447,6 +447,8 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>  	retval = wait_for_completion_state(&done, state);
+>  	if (!retval)
+>  		goto wait_done;
+> +	else if (retval == -ERESTARTSYS)
+> +		cancel_work_sync(&sub_info->work);
+>
 
- b) store the rootfs on an additional partition or volume:
-    - additional GPT partition on block devices
-    - additional MTD partition on devices with NOR flash
-    - additional UBI volume on devices with NAND flash
+I think this modification will make UMH_KILLABLE useless, we have to
+wait for this task to complete, even if it is killed.
 
-Now lets look at the consequences of each approach:
+>  	if (wait & UMH_KILLABLE) {
+>  		/* umh_complete() will see NULL and free sub_info */
 
-I.
-It is often a requirement that the bootloader shall decide about the
-integrity of the firmware before starting it (ie. verify hashes of
-kernel, dtb, **and rootfs**). In case of approch b) this will have to
-be implemented in a custom, platform-specific way; many vendors do
-things like this, resulting in huge variety of different, customs ways
-which let the bootloader validate the rootfs. As a huge majority of
-devices actually use Das U-Boot which already supports validating
-uImage.FIT content, this becomes a no-brainer when using approach a).
 
-II.
-Updating the firmware in case of approach a) being used is very simple:
-Just write the whole image to a storage volume. In case of approach b)
-an archive or tarball has to be used, allowing kernel.uImage and rootfs
-to each be written to different storage volumes. And for the special
-case of NOR flash, developers came up with a complete out-of-tree
-subsystem handling only the splitting of MTD partitions in the various
-ways used by vendor-modified bootloaders [2].
-
-III.
-Approach a) allows the very same uImage.FIT binary to be read by the
-bootloader, used as firmware-upgrade format within Linux userland and
-also serve as a recovery image format which can be loaded e.g. via TFTP
-and stored by the bootloader. Approach b) will require different
-formats for firmware upgrades (eg. a tarball) and storage on-disk,
-depending on the platform and type of storage media. And when it comes
-to bootloader-level recovery via TFTP, one would have to implement
-extraction of that tarball **by the bootloader** or use yet another
-format.
-
-IV.
-When it comes to devices allowing to boot from different media,
-approach a) allows using the exact same firmware image independently of
-the storage media used for booting. When using approach b), different
-firmware images have to be provided **for the same device**, depending
-on whether a block device, NAND/UBI or NOR/MTD is used for booting.
-The BananaPi BPi-R64 and more recent BananaPi BPi-R3 boards are good
-examples for boards which allow booting of different media, and are
-already using uImage.FIT as a unified format.
-
-I hope this explains my motivation. Please ask should there by any
-doubts or if any of my explainations above are not clear.
-
-> Who actually came up with this amazingly convoluted and
-> annoying scheme and why?
-
-This may answer your question:
-[1]: https://source.denx.de/u-boot/u-boot/-/blob/master/doc/uImage.FIT/howto.txt
-
-[2]: https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/generic/files/drivers/mtd/mtdsplit
+-- 
+BRs
+Schspa Shi
