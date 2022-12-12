@@ -2,226 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E363864A3E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B4C64A3E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiLLPBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S232470AbiLLPDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbiLLPBO (ORCPT
+        with ESMTP id S231953AbiLLPDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:01:14 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7157D11829;
-        Mon, 12 Dec 2022 07:01:12 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCBSa0V027425;
-        Mon, 12 Dec 2022 15:01:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=s+ZErhGp9bZxI8C5QmN4cSgS/TS+P71At378mJe/veU=;
- b=m5GSVIQHg+ZLCJl3mCCGnkaAXUJWaDVNBGhHUdAxT4Z/bPpCP7asd1tH7NQ8ZREJviP2
- KNuFNEqcP70ZaaJEaLmDLzMxicgbvurwfvCIM8EbaZUROnDm+MOaHNuk1m0B1eKUgiWf
- Xbqo6GFEiJO9+ncUq9K6PfkbWsk5gU/4NrneeYu3y3sj2wVqK7BqBEI8zjlF8HieQGRw
- ypHLLh2FINVMc01fgMpxSb4H8Ifq4k057r/zlCZHH2OwpAD9YMMiZ63Br2nupTgsJA1I
- uIsDrKD4n42hSWDSPnxUNGNwnLHagxswBlyhUWIbPS5CxQ9QVZPfFTc4oUJwVtmyp82N /g== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mcjb94a7s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 15:01:07 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCF15jl005341
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 15:01:06 GMT
-Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 12 Dec 2022 07:01:02 -0800
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <andersson@kernel.org>, <johan@kernel.org>
-CC:     <bmasney@redhat.com>, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-Date:   Mon, 12 Dec 2022 20:30:45 +0530
-Message-ID: <20221212150045.4252-1-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 12 Dec 2022 10:03:08 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F0D13CC3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:03:07 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 18E98320096C;
+        Mon, 12 Dec 2022 10:03:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 12 Dec 2022 10:03:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670857385; x=1670943785; bh=+CpXX8ix7k
+        82jmDw1nqAMg5CCW8sIBQI4jIZJeEyI2s=; b=hMqTNI2YoDdj8qMuqQMZU5X0+u
+        QfNbVuXc0PpydR2jwiq65wYmAHSlmrfAMsXXogFuaKstLcUV2XDqDTOiBTRwCr4l
+        bRSAhd+BkxuPdHjNXeLN04d0cgkfve7gFkmXnZQlrRS9HddR15ZXLq5uBUvtVpLT
+        Kv08xTpVxiFNMWi6zcJW6z9Tgv4+sXdRRJQFIakKBE1n5ibEzJ3GcVeBRP7C2fiN
+        XRgHNu+CavIazWYyugp6GXoxVVxUwjhOYUutgGqC/GaZkTNgCIsYJSZY+QzvkXMQ
+        ULrJB8eRe+Rmz7yWNY3uiEXdaRI/8KtQXLVMpkpWmFrCooYAsYL5nlU9NOZA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1670857385; x=1670943785; bh=+CpXX8ix7k82jmDw1nqAMg5CCW8sIBQI4jI
+        ZJeEyI2s=; b=NSh60PpcgpOdNtajtNTZci/2MnW4JO6a7Ab8BmmsUhZAhqg142Z
+        qj5HLeJ2fQW+IWX45BIwAEACm0ZwlNRm4L5QZMswwhgYTNAfwLXrCVF4g7KkVQGh
+        m//j3J3kf0XrXukq7jHGWHUweRSdlpdq8IpOXpx5sK8a5MSc92ImTitKKUXHW+GU
+        wJfYt7zJnS3ar5CIXVrP4uQnMvF4A+HFHn0O5JHNWrzjp8AYkOLRmh/IfhNTk2pH
+        mTS3N8qe96l1a/aOeCKnmOufOEVFPaZ8IZ8l5gVPTqNBqPO59qSgKAqxcYAO42kw
+        Lqf99dT2imE0Kbe/nhFsEj6z2CH0xqlxi/w==
+X-ME-Sender: <xms:p0KXY9L7jVGRecdtV1BsrpGHX5RZIuAq_hOo3KnAkW-F-kpVN7bJsw>
+    <xme:p0KXY5IAQdMyZFucVMcC_XOmwJvVmH-WeZ-oIRxqQhgT6aRBkA8wxa6X43Uwe8ZbA
+    APkFDtbcN6mekLqEXU>
+X-ME-Received: <xmr:p0KXY1vCKHMWIABoHo5LTf47XWWrg3P8E4jTJdnb6Lf-IuRJbDPVUXLFTRXFl7ate8lDa_XRW89uIvIFgnEX9x9ZTREHL5Fs-W-Y4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgdegkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefmlhgruhhsucfl
+    vghnshgvnhcuoehithhssehirhhrvghlvghvrghnthdrughkqeenucggtffrrghtthgvrh
+    hnpeehkeevvdelueejteeffeevgfeiueegleduhedtheeltdefteegkeejkeehffekteen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepihhtshesihhrrhgvlhgvvhgrnhhtrdgukh
+X-ME-Proxy: <xmx:p0KXY-buvwHA7HSMp70Id30aucwRcPklGX2Ugr7oOUWQ3b4BHN2fYQ>
+    <xmx:p0KXY0YgpxuXYlP-PuMUkjnPElIt0fYiLVlexQOyxxk9sd8FSGzGaw>
+    <xmx:p0KXYyA-luIp-6PvRcC9QBWwv44OjB9gpdc2fnxBl0piEvyZTt2zOA>
+    <xmx:qUKXY07TExrqh8sQZz13bgtJRr4tnaMNOz21G5Xqc1qWmNKZ7-e8wg>
+Feedback-ID: idc91472f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 12 Dec 2022 10:03:01 -0500 (EST)
+From:   Klaus Jensen <its@irrelevant.dk>
+To:     linux-nvme@lists.infradead.org
+Cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-kernel@vger.kernel.org, Klaus Jensen <its@irrelevant.dk>,
+        Klaus Jensen <k.jensen@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] nvme-pci: fix doorbell buffer value endianness
+Date:   Mon, 12 Dec 2022 16:02:43 +0100
+Message-Id: <20221212150243.41283-1-its@irrelevant.dk>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1971; i=k.jensen@samsung.com; h=from:subject; bh=pxJNDl8z/idTl/CswBiokgDVOX6TDTlQcOByQIFgEs8=; b=owJ4nAFtAZL+kA0DAAoBTeGvMW1PDekByyZiAGOXMchwq1RBbre4jil8uMe7uh7Elh6G4BXztt+w Ocm9dCjel4kBMwQAAQoAHRYhBFIoM6p14tzmokdmwE3hrzFtTw3pBQJjlzHIAAoJEE3hrzFtTw3pXW YH/1255wB1gfHisAM9eUIme2xEgthZVQugLOJyBqXCq5FJa+/oVw6273qSuBBffp008C4tlkUfgAB8 TjgD1tN1vgALVrHKmoIGCMebymjxrSH9EU93HYFXPRq0RGADgnWiOMo6Ucbg/M5SYOHJ1iDgQIB19l vCjLwDGyinwepk2KQrQCmf82ELy8lPLKQuP1E4AqXltCUFGT9ehTSnsKL9kO6qWcIERNG1oCLsph/y ZVI2USj35vR/8qiwIlJ5nNGZ7zrQ3g9KJVcRrlM04WYVHHLnBim0ul/uu0lKS5EKi40ETH2kpn1jle /PfqvfJUWdzYeBj0xWbVVm9k3dM/AUteAm6Khn
+X-Developer-Key: i=k.jensen@samsung.com; a=openpgp; fpr=DDCA4D9C9EF931CC3468427263D56FC5E55DA838
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: F1HSG6CHEEyz17_UT045Di2q08S1LRy5
-X-Proofpoint-ORIG-GUID: F1HSG6CHEEyz17_UT045Di2q08S1LRy5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212120137
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the pcie2a, pcie2a_phy, and respective tlmm
-nodes that are needed to get pcie 2a controller
-enabled on Qdrive3.
+From: Klaus Jensen <k.jensen@samsung.com>
 
-This patch enables 4GB 64bit memory space for
-PCIE_2A to have BAR allocations of 64bit pref mem
-needed on this Qdrive3 platform with dual SoCs
-for root port and switch NT-EP. Hence this ranges
-property is overridden in sa8540p-ride.dts only.
+When using shadow doorbells, the event index and the doorbell values are
+written to host memory. Prior to this patch, the values written would
+erroneously be written in host endianness. This causes trouble on
+big-endian platforms. Fix this by adding missing endian conversions.
 
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+This issue was noticed by Guenter while testing various big-endian
+platforms under QEMU[1]. A similar fix required for hw/nvme in QEMU is
+up for review as well[2].
+
+  [1]: https://lore.kernel.org/qemu-devel/20221209110022.GA3396194@roeck-us.net/
+  [2]: https://lore.kernel.org/qemu-devel/20221212114409.34972-4-its@irrelevant.dk/
+
+Fixes: f9f38e33389c ("nvme: improve performance for virtual NVMe devices")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Klaus Jensen <k.jensen@samsung.com>
 ---
-Changes since v2:
-- Discard below patch as v3 is merged in qcom tree
-  [v4] arm64: dts: qcom: sa8540p-ride: enable PCIe support
-  https://lore.kernel.org/all/20221206161916.315640-1-bmasney@redhat.com/
-- Move tlmm PINCTRL to the end and add R-b (Brian)
+ drivers/nvme/host/pci.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Changes since v1:
-- Fix ranges property indentation (Konrad)
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 96 +++++++++++++++++------
- 1 file changed, 71 insertions(+), 25 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 6c547f1b13dc..19b411175202 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -146,6 +146,27 @@ vreg_l8g: ldo8 {
- 	};
- };
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index f005e8569266..d12d4c3cb6d0 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -347,7 +347,7 @@ static bool nvme_dbbuf_update_and_check_event(u16 value, u32 *dbbuf_db,
+ 					      volatile u32 *dbbuf_ei)
+ {
+ 	if (dbbuf_db) {
+-		u16 old_value;
++		u16 old_value, event_idx;
  
-+&pcie2a {
-+	ranges = <0x01000000 0x0 0x3c200000 0x0 0x3c200000 0x0 0x100000>,
-+		 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>,
-+		 <0x03000000 0x5 0x00000000 0x5 0x00000000 0x1 0x00000000>;
-+
-+	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
-+	wake-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie2a_default>;
-+
-+	status = "okay";
-+};
-+
-+&pcie2a_phy {
-+	vdda-phy-supply = <&vreg_l11a>;
-+	vdda-pll-supply = <&vreg_l3a>;
-+
-+	status = "okay";
-+};
-+
- &pcie3a {
- 	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
- 		 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
-@@ -186,31 +207,6 @@ &remoteproc_nsp1 {
- 	status = "okay";
- };
+ 		/*
+ 		 * Ensure that the queue is written before updating
+@@ -355,8 +355,8 @@ static bool nvme_dbbuf_update_and_check_event(u16 value, u32 *dbbuf_db,
+ 		 */
+ 		wmb();
  
--&tlmm {
--	pcie3a_default: pcie3a-default-state {
--		perst-pins {
--			pins = "gpio151";
--			function = "gpio";
--			drive-strength = <2>;
--			bias-pull-down;
--		};
--
--		clkreq-pins {
--			pins = "gpio150";
--			function = "pcie3a_clkreq";
--			drive-strength = <2>;
--			bias-pull-up;
--		};
--
--		wake-pins {
--			pins = "gpio56";
--			function = "gpio";
--			drive-strength = <2>;
--			bias-pull-up;
--		};
--	};
--};
--
- &ufs_mem_hc {
- 	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
+-		old_value = *dbbuf_db;
+-		*dbbuf_db = value;
++		old_value = le32_to_cpu(*dbbuf_db);
++		*dbbuf_db = cpu_to_le32(value);
  
-@@ -268,3 +264,52 @@ &usb_2_qmpphy0 {
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
+ 		/*
+ 		 * Ensure that the doorbell is updated before reading the event
+@@ -366,7 +366,9 @@ static bool nvme_dbbuf_update_and_check_event(u16 value, u32 *dbbuf_db,
+ 		 */
+ 		mb();
+ 
+-		if (!nvme_dbbuf_need_event(*dbbuf_ei, value, old_value))
++		event_idx = le32_to_cpu(*dbbuf_ei);
 +
-+/* PINCTRL */
-+
-+&tlmm {
-+	pcie2a_default: pcie2a-default-state {
-+		perst-pins {
-+			pins = "gpio143";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+
-+		clkreq-pins {
-+			pins = "gpio142";
-+			function = "pcie2a_clkreq";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+
-+		wake-pins {
-+			pins = "gpio145";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	pcie3a_default: pcie3a-default-state {
-+		perst-pins {
-+			pins = "gpio151";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+
-+		clkreq-pins {
-+			pins = "gpio150";
-+			function = "pcie3a_clkreq";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+
-+		wake-pins {
-+			pins = "gpio56";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+};
++		if (!nvme_dbbuf_need_event(event_idx, value, old_value))
+ 			return false;
+ 	}
+ 
 -- 
-2.38.0
+2.38.1
 
