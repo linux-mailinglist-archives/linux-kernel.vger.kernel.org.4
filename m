@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E2464AA72
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3356564AA74
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233868AbiLLWlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S232724AbiLLWll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiLLWl2 (ORCPT
+        with ESMTP id S233869AbiLLWle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:41:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FABA1AF;
-        Mon, 12 Dec 2022 14:41:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA24AB80E9B;
-        Mon, 12 Dec 2022 22:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDB2C433EF;
-        Mon, 12 Dec 2022 22:41:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kJ9Impaj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670884877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0RlIYFMtptV14Ll/IQC4NgcykON3vMQcNKFWJ1LIFHI=;
-        b=kJ9ImpajbUAEiUFcN6L+GPxuHJM4NteyFTK34DyZkQCw0N7mOFT3Yp+VOC1QL8J512rkLS
-        viMbxoqSjW+OrMkmJObeYiAawkMaAwiZO+u0iTyReL8ReVYGQpd6GQrgq4hEX6BIB3nPW4
-        Rpw3UA91kuOpy52I8noTMdpXSWSuk9g=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 757bcc63 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 12 Dec 2022 22:41:17 +0000 (UTC)
-Date:   Mon, 12 Dec 2022 15:41:15 -0700
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Amit Klein <aksecurity@gmail.com>
-Cc:     Yonghong Song <yhs@meta.com>, david.keisarschm@mail.huji.ac.il,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ilay.bahat1@gmail.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 2/5] Replace invocation of weak PRNG in kernel/bpf/core.c
-Message-ID: <Y5euC6+f5604XT1y@zx2c4.com>
-References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
- <7c16cafe96c47ff5234fbb980df9d3e3d48a0296.1670778652.git.david.keisarschm@mail.huji.ac.il>
- <01ade45b-8ca6-d584-199b-a06778038356@meta.com>
- <CANEQ_+KDR+kC=hYhTtNeQuSTp+-Dg0tRx-9MzJKQ2zH++fBGyQ@mail.gmail.com>
+        Mon, 12 Dec 2022 17:41:34 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D933DF41
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:41:31 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id gh17so32066715ejb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SqygdlW0rQpciWh8EWAHVXf1mOFoeCzEUMhXZ9vVKLw=;
+        b=K/KWqvbj6DqEu5FQEWyELyGPCPM7j28nR1dlQgOsz33jZtKvbf38aPJZimcRICR6Ow
+         dwpSL62MQHFB49yTds5rML2y6lBNF+qAxQMrzGhGi+JividVruGjeMaG1OK0Y9x2ru/E
+         mOa2ictsM8r/IyubOuUMeJGGOpEVTjIEdlsxaq7Dl5Src9LNxUfanLkoyHYkuj8xWSBx
+         wEXNLlgT/GAkF92QWSVF/kwTD6vZkEDpADEhzmGJdV0nEmJ/HReV9Lerjq1r32BFGcjw
+         /24yM+oPdWCXGYHyXzMJSdOEtIoTT2Izcz2aRxQXeqPWhkumz4sB0wUdjsu094A3xkyj
+         bSxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SqygdlW0rQpciWh8EWAHVXf1mOFoeCzEUMhXZ9vVKLw=;
+        b=RS3C3gLRDv0MkVoPhhkBhD3+LE7vbIXRZ1efmJxV+2U5RPoyvdzO2kE2/G0OIu3dTq
+         BrGq5qDXhf4XsaoA/H7DZ3gKu+52Z4LOBonicSpRIOw1jkNWZoKx+gH0eXe2Qbf8BBjs
+         GmwVwbef4yddGjcD46aZonRJ4oxy5nmTfalFlaiM1N2oAzQULrY3eJwTt/zpSpwmdPe2
+         btXbQf9zNWUMqbckzUE/1NK2b10BbDqJMHNryBWdh9TkRRVZtn6xDwI836m5Zplcw68f
+         ScrJDalePFUHDcaovTXcwexSlQg8vqbYLvKGNQmygqRBq6wC6zhNeVAjEA/uVApXslpV
+         75OQ==
+X-Gm-Message-State: ANoB5pmf6MAJg6S0rgwjTyIfYTyVED+p7OCkGYOlX9ce8OELCWnzc+QF
+        h+cZjHvc6+2lGltzQigA8vF6Xw==
+X-Google-Smtp-Source: AA0mqf6ohqUuW54TtlaZvv5FmpQcplLc85SLKSLWjxdY1OjldWbUbNDG6WGF5XnQGVSywyPYWN9ryg==
+X-Received: by 2002:a17:907:2e01:b0:7c1:4785:d650 with SMTP id ig1-20020a1709072e0100b007c14785d650mr11176129ejc.26.1670884890059;
+        Mon, 12 Dec 2022 14:41:30 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id m24-20020a1709066d1800b007c0d64c1886sm3791149ejr.33.2022.12.12.14.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 14:41:29 -0800 (PST)
+Message-ID: <9009b652-a422-7cef-ecf5-ab5ef5706892@linaro.org>
+Date:   Mon, 12 Dec 2022 23:41:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANEQ_+KDR+kC=hYhTtNeQuSTp+-Dg0tRx-9MzJKQ2zH++fBGyQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 12/19] x86/apic: Use irq_domain_create_hierarchy()
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-13-johan+linaro@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221209140150.1453-13-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:35:24AM +0200, Amit Klein wrote:
-> On Mon, Dec 12, 2022 at 8:03 PM Yonghong Song <yhs@meta.com> wrote:
-> >
-> >
-> >
-> > On 12/11/22 2:16 PM, david.keisarschm@mail.huji.ac.il wrote:
-> > > From: David <david.keisarschm@mail.huji.ac.il>
-> > >
-> > > We changed the invocation of
-> > >   prandom_u32_state to get_random_u32.
-> > >   We deleted the maintained state,
-> > >   which was a CPU-variable,
-> > >   since get_random_u32 maintains its own CPU-variable.
-> > >   We also deleted the state initializer,
-> > >   since it is not needed anymore.
-> > >
-> > > Signed-off-by: David <david.keisarschm@mail.huji.ac.il>
-> > > ---
-> > >   include/linux/bpf.h   |  1 -
-> > >   kernel/bpf/core.c     | 13 +------------
-> > >   kernel/bpf/verifier.c |  2 --
-> > >   net/core/filter.c     |  1 -
-> > >   4 files changed, 1 insertion(+), 16 deletions(-)
-> > >
-> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> [...]
-> > Please see the discussion here.
-> > https://lore.kernel.org/bpf/87edtctz8t.fsf@toke.dk/
-> > There is a performance concern with the above change.
-> >
+On 9/12/22 15:01, Johan Hovold wrote:
+> Use the irq_domain_create_hierarchy() helper to create the hierarchical
+> domain, which both serves as documentation and avoids poking at
+> irqdomain internals.
 > 
-> I see. How about using (in this instance only!) the SipHash-based
-> solution which was the basis for prandom_u32() starting with commit
-> c51f8f88d705 (v5.10-rc1) up until commit d4150779e60f (v5.19-rc1)?
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   arch/x86/platform/uv/uv_irq.c | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
 
-Stop with this pseudo cryptographic garbage. Stop pushing this
-everywhere. It was a hassle to undo this crap the first time around. The
-last thing we need is to add it back.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-Plus, there's no need for it either. I'll revisit the bpf patch if/when
-it makes sense to do performance-wise.
-
-Jason
