@@ -2,222 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF6E64A3B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A951B64A3BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiLLOuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S232426AbiLLOuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiLLOtx (ORCPT
+        with ESMTP id S232290AbiLLOuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:49:53 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D6D13D33
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:49:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=Xh19w+wqYZm5Os/v/KfZys8SNBRBfUUmtMhDm02shFA=; b=rjnEBWmD6vjPJsg0ppsOZfvyd5
-        OFPAxw48sRQyyDUtDMG/IoCS1SBEF0Zxvbl+UPclq+Zw+LB/wWgjCVkbrMzSKg1eBi70ss1x6/+gr
-        WlBrqLcNAXNOPcR9evD2eYUQi7Q5h5vTUkPLPlSILRp1nKU+KdIzInU3q1zRyf0iMTIEsSUsAdjFn
-        a6+J6OpZW9YXfkZyOx6iwxHoHII4/Lu1Fi4uAZKN32D8na/i+dUwKIyu1zO8gj4XOFOaWyhNqNyUr
-        QjkHCWLr0KFcPXSRy9CFBJtMXMoa/FY8wA7//5Ys8MWOwxC7MT7NakJUIinTM9AYuJOl+KIr8E+d9
-        JCboq33g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4k7p-00B9Qj-EU; Mon, 12 Dec 2022 14:49:49 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH v2] sched: Make const-safe
-Date:   Mon, 12 Dec 2022 14:49:46 +0000
-Message-Id: <20221212144946.2657785-1-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
+        Mon, 12 Dec 2022 09:50:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A057013D17
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:50:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD626111E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BF4C433D2;
+        Mon, 12 Dec 2022 14:50:08 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 09:50:06 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] tracing: Fix infinite loop in tracing_read_pipe on
+ overflowed print_trace_line
+Message-ID: <20221212095006.52b6cce0@gandalf.local.home>
+In-Reply-To: <46733774-295a-ade9-497d-6e73c6c468de@huawei.com>
+References: <20221129113009.182425-1-yangjihong1@huawei.com>
+        <46733774-295a-ade9-497d-6e73c6c468de@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With a modified container_of() that preserves constness, the compiler
-finds some pointers which should have been marked as const.  task_of()
-also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
-that cfs_rq_of() can take a const argument.  No change to generated code.
+On Mon, 12 Dec 2022 10:57:08 +0800
+Yang Jihong <yangjihong1@huawei.com> wrote:
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
-v2: Also update the !FAIR_GROUP_SCHED case
+> Hello,
+> 
+> PING.
+> 
+> Are there any other problems with this patch?
 
- kernel/sched/core.c  |  8 +++++---
- kernel/sched/fair.c  | 16 +++++++++-------
- kernel/sched/sched.h | 22 ++++++++++------------
- 3 files changed, 24 insertions(+), 22 deletions(-)
+Thanks for the ping, I'll take a look at it. It somehow got lost in the
+noise of other patches :-/
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 25b582b6ee5f..853188cb6c84 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -152,7 +152,7 @@ __read_mostly int scheduler_running;
- DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
- 
- /* kernel prio, less is more */
--static inline int __task_prio(struct task_struct *p)
-+static inline int __task_prio(const struct task_struct *p)
- {
- 	if (p->sched_class == &stop_sched_class) /* trumps deadline */
- 		return -2;
-@@ -174,7 +174,8 @@ static inline int __task_prio(struct task_struct *p)
-  */
- 
- /* real prio, less is less */
--static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
-+static inline bool prio_less(const struct task_struct *a,
-+			     const struct task_struct *b, bool in_fi)
- {
- 
- 	int pa = __task_prio(a), pb = __task_prio(b);
-@@ -194,7 +195,8 @@ static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool
- 	return false;
- }
- 
--static inline bool __sched_core_less(struct task_struct *a, struct task_struct *b)
-+static inline bool __sched_core_less(const struct task_struct *a,
-+				     const struct task_struct *b)
- {
- 	if (a->core_cookie < b->core_cookie)
- 		return true;
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index c36aa54ae071..855470310903 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -468,7 +468,7 @@ is_same_group(struct sched_entity *se, struct sched_entity *pse)
- 	return NULL;
- }
- 
--static inline struct sched_entity *parent_entity(struct sched_entity *se)
-+static inline struct sched_entity *parent_entity(const struct sched_entity *se)
- {
- 	return se->parent;
- }
-@@ -595,8 +595,8 @@ static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
- 	return min_vruntime;
- }
- 
--static inline bool entity_before(struct sched_entity *a,
--				struct sched_entity *b)
-+static inline bool entity_before(const struct sched_entity *a,
-+				 const struct sched_entity *b)
- {
- 	return (s64)(a->vruntime - b->vruntime) < 0;
- }
-@@ -11728,7 +11728,8 @@ static inline void task_tick_core(struct rq *rq, struct task_struct *curr)
- /*
-  * se_fi_update - Update the cfs_rq->min_vruntime_fi in a CFS hierarchy if needed.
-  */
--static void se_fi_update(struct sched_entity *se, unsigned int fi_seq, bool forceidle)
-+static void se_fi_update(const struct sched_entity *se, unsigned int fi_seq,
-+			 bool forceidle)
- {
- 	for_each_sched_entity(se) {
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
-@@ -11753,11 +11754,12 @@ void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
- 	se_fi_update(se, rq->core->core_forceidle_seq, in_fi);
- }
- 
--bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
-+bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
-+			bool in_fi)
- {
- 	struct rq *rq = task_rq(a);
--	struct sched_entity *sea = &a->se;
--	struct sched_entity *seb = &b->se;
-+	const struct sched_entity *sea = &a->se;
-+	const struct sched_entity *seb = &b->se;
- 	struct cfs_rq *cfs_rqa;
- 	struct cfs_rq *cfs_rqb;
- 	s64 delta;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 771f8ddb7053..cdf9f248e5bd 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -248,7 +248,7 @@ static inline void update_avg(u64 *avg, u64 sample)
- 
- #define SCHED_DL_FLAGS (SCHED_FLAG_RECLAIM | SCHED_FLAG_DL_OVERRUN | SCHED_FLAG_SUGOV)
- 
--static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
-+static inline bool dl_entity_is_special(const struct sched_dl_entity *dl_se)
- {
- #ifdef CONFIG_CPU_FREQ_GOV_SCHEDUTIL
- 	return unlikely(dl_se->flags & SCHED_FLAG_SUGOV);
-@@ -260,8 +260,8 @@ static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
- /*
-  * Tells if entity @a should preempt entity @b.
-  */
--static inline bool
--dl_entity_preempt(struct sched_dl_entity *a, struct sched_dl_entity *b)
-+static inline bool dl_entity_preempt(const struct sched_dl_entity *a,
-+				     const struct sched_dl_entity *b)
- {
- 	return dl_entity_is_special(a) ||
- 	       dl_time_before(a->deadline, b->deadline);
-@@ -1236,7 +1236,8 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
- 	return &rq->__lock;
- }
- 
--bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool fi);
-+bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
-+			bool fi);
- 
- /*
-  * Helpers to check if the CPU's core cookie matches with the task's cookie
-@@ -1415,7 +1416,7 @@ static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)
- }
- 
- /* runqueue on which this entity is (to be) queued */
--static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)
-+static inline struct cfs_rq *cfs_rq_of(const struct sched_entity *se)
- {
- 	return se->cfs_rq;
- }
-@@ -1428,19 +1429,16 @@ static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)
- 
- #else
- 
--static inline struct task_struct *task_of(struct sched_entity *se)
--{
--	return container_of(se, struct task_struct, se);
--}
-+#define task_of(_se)	container_of(_se, struct task_struct, se)
- 
--static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)
-+static inline struct cfs_rq *task_cfs_rq(const struct task_struct *p)
- {
- 	return &task_rq(p)->cfs;
- }
- 
--static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)
-+static inline struct cfs_rq *cfs_rq_of(const struct sched_entity *se)
- {
--	struct task_struct *p = task_of(se);
-+	const struct task_struct *p = task_of(se);
- 	struct rq *rq = task_rq(p);
- 
- 	return &rq->cfs;
--- 
-2.35.1
-
+-- Steve
