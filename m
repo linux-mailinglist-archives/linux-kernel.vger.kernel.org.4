@@ -2,108 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38D6649EF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D992E649EF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiLLMkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S232200AbiLLMkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbiLLMjy (ORCPT
+        with ESMTP id S231395AbiLLMj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:39:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2848955AE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:38:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2BA1B80D20
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:38:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10685C433EF;
-        Mon, 12 Dec 2022 12:38:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670848721;
-        bh=hVzoOsyhwS9evjgtcwkNyUUi5Ga7nvRZ83iWkuubvr4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cjliJuA9RtYf4AvLwNw9qsB8Sbzrx1Q/eDqyJh6qUnVpcBn7rdf5w5kcTBmuRxuzm
-         rOf5nlY6Ef8Vr5GioJ2JHqPtqqIrmq+AfB27xAlgol1eNXN6V1m2a5rthDAy5Y4rMo
-         p0fXPN7YxcJXzD43KIKFbT6j44whIaU49Etn7pV8f6GkA9thkFkEcMb/j7/6mvcA3W
-         6XrzXDjgDNUgAPkYC2t5l9gzTuNhDtwzqp1rpthxhv3ntc/Yc56YvzJ7fZAkydDToA
-         /mQAtXLI9KFRxVjI+choL4MrXDulpbzwfC55uGai9jHpXlLNj5WzWPOvid67Ae94/j
-         130NHknOVWE4A==
-Message-ID: <f1aba391-e694-714e-18d8-116e8db9345d@kernel.org>
-Date:   Mon, 12 Dec 2022 20:38:37 +0800
+        Mon, 12 Dec 2022 07:39:58 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50965BF8;
+        Mon, 12 Dec 2022 04:39:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rLXBe+RoHHYl7BUjTTeJDA6gZEGVC+/pTWgMAlBA1S4=; b=J0AoCLpmjG6UMI8hnybVDquDR9
+        CLP+X1/PN/aDhfMjCwCdizgYEgKoCY1dp1sWnD2eAknVSlVyjIgqa1SbMuSBKKSoblPQffDPexdMd
+        OOFTBtBiY31IrPBprLvrcssDcQYiSoR69EmvTSP3VGc4nMhLUM8rtv0FaXNeLtGEm88Y5eAIJgBjV
+        OuRWqN++SVdf6emWLHdHY11sKJSo6HKPMhDl1HJds6dvDaNvKECtqAGc4Uo15+cCFOYaDvcbihuK/
+        Cy6qFHDfxp/riPbOrMzYNDctl+pvU3q0SQCwpnkKrgp/RlEoGWpKWVikOQTxU7xJxptJ0X9ntobV3
+        A607eBZA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4i5I-009mDa-Tx; Mon, 12 Dec 2022 12:39:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 637CD300299;
+        Mon, 12 Dec 2022 13:39:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 45CEA20248CFF; Mon, 12 Dec 2022 13:39:04 +0100 (CET)
+Date:   Mon, 12 Dec 2022 13:39:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 28/31] sched_ext: Add
+ Documentation/scheduler/sched-ext.rst
+Message-ID: <Y5cg6FgDnYkVES0R@hirez.programming.kicks-ass.net>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-29-tj@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] f2fs: don't set FI_COMPRESS_RELEASED if file is not
- compressed
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, zhoudan8 <zhuqiandann@gmail.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, zhoudan8 <zhoudan8@xiaomi.com>
-References: <20221208050808.2448146-1-zhoudan8@xiaomi.com>
- <Y5OYYJYx9G2LbRmc@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y5OYYJYx9G2LbRmc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130082313.3241517-29-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/10 4:19, Jaegeuk Kim wrote:
-> On 12/08, zhoudan8 wrote:
->> In compress_mode=user, f2fs_release_compress_blocks()
->>   does not verify whether it has been compressed and
->>   sets FI_COMPRESS_RELEASED directly. which will lead to
->> return -EINVAL after calling compress.
->> To fix it,let's do not set FI_COMPRESS_RELEASED if file
->> is not compressed.
-> 
-> Do you mean you want to avoid EINVAL on a file having FI_COMPRESS_RELEASED
-> with zero i_compr_blokcs?
-> 
-> I think the current logic is giving the error on a released file already.
+On Tue, Nov 29, 2022 at 10:23:10PM -1000, Tejun Heo wrote:
 
-IMO, if i_compr_blocks is zero, it's better to return -EINVAL in
-f2fs_release_compress_blocks(), as there will be no benefit after the conversion.
-
-Thanks,
-
-> 
->>
->> Signed-off-by: zhoudan8 <zhoudan8@xiaomi.com>
->> ---
->>   fs/f2fs/file.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->> index 82cda1258227..f32910077df6 100644
->> --- a/fs/f2fs/file.c
->> +++ b/fs/f2fs/file.c
->> @@ -3451,14 +3451,13 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
->>   	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
->>   	if (ret)
->>   		goto out;
->> -
->> -	set_inode_flag(inode, FI_COMPRESS_RELEASED);
->>   	inode->i_ctime = current_time(inode);
->>   	f2fs_mark_inode_dirty_sync(inode, true);
->>   
->>   	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
->>   		goto out;
->>   
->> +	set_inode_flag(inode, FI_COMPRESS_RELEASED);
->>   	f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
->>   	filemap_invalidate_lock(inode->i_mapping);
->>   
->> -- 
->> 2.38.1
+If you expect me to read this, please as to provide something readable,
+not markup gibberish.
