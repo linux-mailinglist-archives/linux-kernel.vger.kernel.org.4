@@ -2,193 +2,590 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE77649958
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADBE64995C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiLLHHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S231431AbiLLHKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiLLHGn (ORCPT
+        with ESMTP id S231588AbiLLHK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:06:43 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6CC62DC;
-        Sun, 11 Dec 2022 23:06:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670828802; x=1702364802;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e20KYSDx0gudrTcPlQTPfjNIP2TmZc7a7eiy51TELvE=;
-  b=eBIvPH42RSKzHBiSZGEXVX47JgcPKIMF5D1CRjYb1Y9uK5bonzaVR4j2
-   Whtp4w3Xw1ZKul83l2ysayU7rdKuXO3CLaleySGaCf5GYvJh96A6g3hqv
-   OI5P0nL1QjwcZhXn/CT6+ouv9YSD8yc5x4mX6VdVer6zNBo6BfHTvVSlB
-   5JsC1LyRpJQZ6WZFkQJ8+tBTFFJ4EGU9rt2ogFMcQJwHwvtmtqBWHWTxs
-   FNa5DJN0OD6n5ziVoA5jRiVbUTXKVFtV+pXVPBs4JKmcRexGfqHq9TVLF
-   KQQQGjc29eKJatF1dI1I5qd+dYjxHNHNK5/9TB6N2jfNaxvWGvTAZoWkw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="317811880"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="317811880"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 23:06:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="641643120"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="641643120"
-Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.168.6])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 23:06:41 -0800
-From:   ira.weiny@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
-Subject: [PATCH V4 9/9] cxl/test: Simulate event log overflow
-Date:   Sun, 11 Dec 2022 23:06:27 -0800
-Message-Id: <20221212070627.1372402-10-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221212070627.1372402-1-ira.weiny@intel.com>
-References: <20221212070627.1372402-1-ira.weiny@intel.com>
+        Mon, 12 Dec 2022 02:10:29 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BACDDF4B;
+        Sun, 11 Dec 2022 23:09:23 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 02BC380B3;
+        Mon, 12 Dec 2022 07:09:22 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 09:09:20 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-omap@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial
+ controllers to enable runtime PM
+Message-ID: <Y5bToLirsgA5NK/j@atomide.com>
+References: <20221207124305.49943-1-tony@atomide.com>
+ <7f105ff9-cdc3-f98e-2557-812361faa94@linux.intel.com>
+ <Y5G5Udw6FAEFdAYi@atomide.com>
+ <3c87186b-336f-6884-a2c-6ee3c9d70@linux.intel.com>
+ <Y5HG2okzlqX+xfWv@atomide.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5HG2okzlqX+xfWv@atomide.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+Hi Ilpo,
 
-Log overflow is marked by a separate trace message.
+* Tony Lindgren <tony@atomide.com> [221208 11:13]:
+> * Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> [221208 10:48]:
+> > With the other patch on top of this, yes, I did see uninitialized 
+> > port->port_dev already in serial_core_add_one_port()->uart_configure_port().
+> > While that could be solved by removing the pm_runtime_*() calls from 
+> > there, I think it's a generic problem because after 
+> > serial_core_add_one_port() the port can have anything happening on it, no?
+> 
+> OK. Sounds like it should get sorted out by moving the call to
+> serial_core_add_one_port() to happen after the devices are created.
 
-Simulate a log with lots of messages and flag overflow until space is
-cleared.
+Can you give a try with the patch below and see if it works for you?
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Regards,
 
----
-Changes from V3:
-	Dan
-		Move code to mem.c
----
- tools/testing/cxl/test/mem.c | 50 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 49 insertions(+), 1 deletion(-)
+Tony
 
-diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 73db722a8879..b2327a8de4a6 100644
---- a/tools/testing/cxl/test/mem.c
-+++ b/tools/testing/cxl/test/mem.c
-@@ -78,6 +78,8 @@ struct mock_event_log {
- 	u16 clear_idx;
- 	u16 cur_idx;
- 	u16 nr_events;
-+	u16 nr_overflow;
-+	u16 overflow_reset;
- 	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
+8< --------------------
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -995,6 +995,7 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 		if (uart->port.dev)
+ 			uart_remove_one_port(&serial8250_reg, &uart->port);
+ 
++		uart->port.ctrl_id	= up->port.ctrl_id;
+ 		uart->port.iobase       = up->port.iobase;
+ 		uart->port.membase      = up->port.membase;
+ 		uart->port.irq          = up->port.irq;
+diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+--- a/drivers/tty/serial/Makefile
++++ b/drivers/tty/serial/Makefile
+@@ -3,7 +3,7 @@
+ # Makefile for the kernel serial device drivers.
+ #
+ 
+-obj-$(CONFIG_SERIAL_CORE) += serial_core.o
++obj-$(CONFIG_SERIAL_CORE) += serial_core.o serial_ctrl.o serial_port.o
+ 
+ obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
+ obj-$(CONFIG_SERIAL_EARLYCON_ARM_SEMIHOST) += earlycon-arm-semihost.o
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -16,6 +16,8 @@
+ #include <linux/console.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/device.h>
+@@ -30,6 +32,8 @@
+ #include <linux/irq.h>
+ #include <linux/uaccess.h>
+ 
++#include "serial_ctrl.h"
++
+ /*
+  * This is used to lock changes in serial line configuration.
+  */
+@@ -136,9 +140,31 @@ static void __uart_start(struct tty_struct *tty)
+ {
+ 	struct uart_state *state = tty->driver_data;
+ 	struct uart_port *port = state->uart_port;
++	struct device *port_dev;
++	int err;
++
++	if (!port || uart_tx_stopped(port))
++		return;
+ 
+-	if (port && !uart_tx_stopped(port))
++	port_dev = port->port_dev;
++
++	err = pm_runtime_get(port_dev);
++	if (err < 0) {
++		/* Something went wrong, attempt to start TX anyways */
+ 		port->ops->start_tx(port);
++		pm_runtime_put_noidle(port_dev);
++		return;
++	}
++
++	/*
++	 * Start TX if enabled, and kick runtime PM. Otherwise we must
++	 * wait for a retry. See also serial_port.c for runtime PM
++	 * autosuspend timeout.
++	 */
++	if (pm_runtime_active(port_dev))
++		port->ops->start_tx(port);
++	pm_runtime_mark_last_busy(port_dev);
++	pm_runtime_put_autosuspend(port_dev);
+ }
+ 
+ static void uart_start(struct tty_struct *tty)
+@@ -3035,7 +3061,7 @@ static const struct attribute_group tty_dev_attr_group = {
  };
  
-@@ -116,6 +118,7 @@ static void event_reset_log(struct mock_event_log *log)
+ /**
+- * uart_add_one_port - attach a driver-defined port structure
++ * serial_core_add_one_port - attach a driver-defined port structure
+  * @drv: pointer to the uart low level driver structure for this port
+  * @uport: uart port structure to use for this port.
+  *
+@@ -3045,7 +3071,7 @@ static const struct attribute_group tty_dev_attr_group = {
+  * core driver. The main purpose is to allow the low level uart drivers to
+  * expand uart_port, rather than having yet more levels of structures.
+  */
+-int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
++static int serial_core_add_one_port(struct uart_driver *drv, struct uart_port *uport)
  {
- 	log->cur_idx = 0;
- 	log->clear_idx = 0;
-+	log->nr_overflow = log->overflow_reset;
+ 	struct uart_state *state;
+ 	struct tty_port *port;
+@@ -3135,10 +3161,9 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 
+ 	return ret;
  }
+-EXPORT_SYMBOL(uart_add_one_port);
  
- /* Handle can never be 0 use 1 based indexing for handle */
-@@ -147,8 +150,12 @@ static void mes_add_event(struct mock_event_store *mes,
- 		return;
- 
- 	log = &mes->mock_logs[log_type];
--	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
-+
-+	if ((log->nr_events + 1) > CXL_TEST_EVENT_CNT_MAX) {
-+		log->nr_overflow++;
-+		log->overflow_reset = log->nr_overflow;
- 		return;
-+	}
- 
- 	log->events[log->nr_events] = event;
- 	log->nr_events++;
-@@ -159,6 +166,7 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
+ /**
+- * uart_remove_one_port - detach a driver defined port structure
++ * serial_core_remove_one_port - detach a driver defined port structure
+  * @drv: pointer to the uart low level driver structure for this port
+  * @uport: uart port structure for this port
+  *
+@@ -3147,7 +3172,8 @@ EXPORT_SYMBOL(uart_add_one_port);
+  * This unhooks (and hangs up) the specified port structure from the core
+  * driver. No further calls will be made to the low-level code for this port.
+  */
+-int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
++static int serial_core_remove_one_port(struct uart_driver *drv,
++				       struct uart_port *uport)
  {
- 	struct cxl_get_event_payload *pl;
- 	struct mock_event_log *log;
-+	u16 nr_overflow;
- 	u8 log_type;
- 	int i;
+ 	struct uart_state *state = drv->state + uport->line;
+ 	struct tty_port *port = &state->port;
+@@ -3204,6 +3230,8 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 	 * Indicate that there isn't a port here anymore.
+ 	 */
+ 	uport->type = PORT_UNKNOWN;
++	uport->port_dev = NULL;
++	uport->ctrl_id = -ENODEV;
  
-@@ -191,6 +199,19 @@ static int mock_get_event(struct cxl_dev_state *cxlds,
- 	if (!event_log_empty(log))
- 		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
+ 	mutex_lock(&port->mutex);
+ 	WARN_ON(atomic_dec_return(&state->refcount) < 0);
+@@ -3215,7 +3243,6 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
  
-+	if (log->nr_overflow) {
-+		u64 ns;
+ 	return ret;
+ }
+-EXPORT_SYMBOL(uart_remove_one_port);
+ 
+ /**
+  * uart_match_port - are the two ports equivalent?
+@@ -3250,6 +3277,154 @@ bool uart_match_port(const struct uart_port *port1,
+ }
+ EXPORT_SYMBOL(uart_match_port);
+ 
++/*
++ * Find a registered serial core controller device if one exists. Returns
++ * the first device matching the ctrl_id. Caller must hold port_mutex.
++ */
++static struct device *serial_core_ctrl_find(struct uart_driver *drv,
++					    struct device *phys_dev,
++					    int ctrl_id)
++{
++	struct uart_state *state;
++	int i;
 +
-+		pl->flags |= CXL_GET_EVENT_FLAG_OVERFLOW;
-+		pl->overflow_err_count = cpu_to_le16(nr_overflow);
-+		ns = ktime_get_real_ns();
-+		ns -= 5000000000; /* 5s ago */
-+		pl->first_overflow_timestamp = cpu_to_le64(ns);
-+		ns = ktime_get_real_ns();
-+		ns -= 1000000000; /* 1s ago */
-+		pl->last_overflow_timestamp = cpu_to_le64(ns);
++	if (ctrl_id < 0)
++		return NULL;
++
++	lockdep_assert_held(&port_mutex);
++
++	for (i = 0; i < drv->nr; i++) {
++		state = drv->state + i;
++		if (!state->uart_port || !state->uart_port->port_dev)
++			continue;
++
++		if (state->uart_port->dev == phys_dev &&
++		    state->uart_port->ctrl_id == ctrl_id)
++			return state->uart_port->port_dev->parent;
 +	}
 +
- 	return 0;
- }
- 
-@@ -231,6 +252,9 @@ static int mock_clear_event(struct cxl_dev_state *cxlds,
- 		}
- 	}
- 
-+	if (log->nr_overflow)
-+		log->nr_overflow = 0;
++	return NULL;
++}
 +
- 	/* Clear events */
- 	log->clear_idx += pl->nr_recs;
- 	return 0;
-@@ -353,6 +377,30 @@ static void cxl_mock_add_event_logs(struct mock_event_store *mes)
- 		      (struct cxl_event_record_raw *)&mem_module);
- 	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
- 
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &maint_needed);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&dram);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&gen_media);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&mem_module);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL,
-+		      (struct cxl_event_record_raw *)&dram);
-+	/* Overflow this log */
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes_add_event(mes, CXL_EVENT_TYPE_FAIL, &hardware_replace);
-+	mes->ev_status |= CXLDEV_EVENT_STATUS_FAIL;
++static struct platform_device *serial_core_device_add(struct uart_port *port,
++						      const char *name,
++						      struct device *parent_dev,
++						      void *pdata,
++						      int pdata_size)
++{
++	struct platform_device_info pinfo = {};
 +
- 	mes_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
- 	mes_add_event(mes, CXL_EVENT_TYPE_FATAL,
- 		      (struct cxl_event_record_raw *)&dram);
++	pinfo.name = name;
++	pinfo.id = PLATFORM_DEVID_AUTO;
++	pinfo.parent = parent_dev;
++	pinfo.data = pdata;
++	pinfo.size_data = pdata_size;
++
++	return platform_device_register_full(&pinfo);
++}
++
++static struct device *serial_core_ctrl_device_add(struct uart_port *port)
++{
++	struct platform_device *pdev;
++
++	pdev = serial_core_device_add(port, "serial-ctrl", port->dev, NULL, 0);
++	if (IS_ERR(pdev))
++		return NULL;
++
++	return &pdev->dev;
++}
++
++static int serial_core_port_device_add(struct device *ctrl_dev, struct uart_port *port)
++{
++	struct serial_port_platdata pdata = {};
++	struct platform_device *pdev;
++
++	pdata.port = port;
++
++	pdev = serial_core_device_add(port, "serial-port", ctrl_dev, &pdata,
++				      sizeof(pdata));
++	if (IS_ERR(pdev))
++		return PTR_ERR(pdev);
++
++	port->port_dev = &pdev->dev;
++
++	return 0;
++}
++
++/*
++ * Initialize a serial core port device, and a controller device if needed.
++ */
++int serial_core_register_port(struct uart_driver *drv, struct uart_port *port)
++{
++	struct platform_device *ctrl_pdev = NULL;
++	struct device *ctrl_dev;
++	int ret;
++
++	mutex_lock(&port_mutex);
++
++	/* Inititalize a serial core controller device if needed */
++	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
++	if (!ctrl_dev) {
++		ctrl_dev = serial_core_ctrl_device_add(port);
++		if (!ctrl_dev) {
++			ret = -ENODEV;
++			goto err_unlock;
++		}
++		ctrl_pdev = to_platform_device(ctrl_dev);
++	}
++
++	/* Initialize a serial core port device */
++	ret = serial_core_port_device_add(ctrl_dev, port);
++	if (ret)
++		goto err_unregister_ctrl_dev;
++
++	mutex_unlock(&port_mutex);
++
++	ret = serial_core_add_one_port(drv, port);
++	if (ret)
++		goto err_unregister_port_dev;
++
++	return 0;
++
++err_unregister_port_dev:
++	mutex_lock(&port_mutex);
++	platform_device_unregister(to_platform_device(port->port_dev));
++
++err_unregister_ctrl_dev:
++	platform_device_unregister(ctrl_pdev);
++
++err_unlock:
++	mutex_unlock(&port_mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_NS(serial_core_register_port, SERIAL_CORE);
++
++/*
++ * Removes a serial core port device, and the related serial core controller
++ * device if the last instance.
++ */
++void serial_core_unregister_port(struct uart_driver *drv, struct uart_port *port)
++{
++	struct device *phys_dev = port->dev;
++	struct device *port_dev = port->port_dev;
++	struct device *ctrl_dev = port_dev->parent;
++	int ctrl_id = port->ctrl_id;
++
++	serial_core_remove_one_port(drv, port);
++
++	mutex_lock(&port_mutex);
++
++	platform_device_unregister(to_platform_device(port_dev));
++
++	/* Drop the serial core controller device if no ports are using it */
++	if (!serial_core_ctrl_find(drv, phys_dev, ctrl_id))
++		platform_device_unregister(to_platform_device(ctrl_dev));
++
++	mutex_unlock(&port_mutex);
++}
++EXPORT_SYMBOL_NS(serial_core_unregister_port, SERIAL_CORE);
++
+ /**
+  * uart_handle_dcd_change - handle a change of carrier detect state
+  * @uport: uart_port structure for the open port
+diff --git a/drivers/tty/serial/serial_ctrl.c b/drivers/tty/serial/serial_ctrl.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_ctrl.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * Serial core controller driver
++ *
++ * This driver manages the serial core controller struct device instances.
++ * The serial core controller devices are children of the physical serial
++ * port device.
++ */
++
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/serial_core.h>
++
++#include "serial_ctrl.h"
++
++static int serial_ctrl_probe(struct platform_device *pdev)
++{
++	pm_runtime_enable(&pdev->dev);
++
++	return 0;
++}
++
++static int serial_ctrl_remove(struct platform_device *pdev)
++{
++	pm_runtime_disable(&pdev->dev);
++
++	return 0;
++}
++
++static struct platform_driver serial_ctrl_driver = {
++	.driver = {
++		.name = "serial-ctrl",
++		.suppress_bind_attrs = true,
++	},
++	.probe = serial_ctrl_probe,
++	.remove = serial_ctrl_remove,
++};
++module_platform_driver(serial_ctrl_driver);
++
++/*
++ * Serial core controller device init functions. Note that the physical
++ * serial port device driver may not have completed probe at this point.
++ */
++int serial_ctrl_register_port(struct uart_driver *drv, struct uart_port *port)
++{
++	return serial_core_register_port(drv, port);
++}
++EXPORT_SYMBOL_NS(serial_ctrl_register_port, SERIAL_CORE);
++
++void serial_ctrl_unregister_port(struct uart_driver *drv, struct uart_port *port)
++{
++	serial_core_unregister_port(drv, port);
++}
++EXPORT_SYMBOL_NS(serial_ctrl_unregister_port, SERIAL_CORE);
++
++MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
++MODULE_DESCRIPTION("Serial core controller driver");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(SERIAL_CORE);
+diff --git a/drivers/tty/serial/serial_ctrl.h b/drivers/tty/serial/serial_ctrl.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_ctrl.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++/* Serial core controller data. Serial port device drivers do not need this. */
++
++struct uart_driver;
++struct uart_port;
++
++/**
++ * struct serial_port_platdata - Serial port platform data
++ * @state: serial port state
++ *
++ * Used by serial_core and serial_port only. Allocated on uart_add_one_port(),
++ * and freed on uart_remove_one_port().
++ */
++struct serial_port_platdata {
++	struct uart_port *port;
++};
++
++extern int serial_ctrl_register_port(struct uart_driver *drv, struct uart_port *port);
++extern void serial_ctrl_unregister_port(struct uart_driver *drv, struct uart_port *port);
++extern int serial_core_register_port(struct uart_driver *drv, struct uart_port *port);
++extern void serial_core_unregister_port(struct uart_driver *drv, struct uart_port *port);
+diff --git a/drivers/tty/serial/serial_port.c b/drivers/tty/serial/serial_port.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_port.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * Serial core port device driver
++ */
++
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
++#include <linux/serial_core.h>
++
++#include "serial_ctrl.h"
++
++#define SERIAL_PORT_AUTOSUSPEND_DELAY_MS	500
++
++struct serial_port_data {
++	struct uart_port *port;
++};
++
++/* Only considers pending TX for now. Caller must take care of locking */
++static int __serial_port_busy(struct uart_port *port)
++{
++	return !uart_tx_stopped(port) &&
++		uart_circ_chars_pending(&port->state->xmit);
++}
++
++static int serial_port_runtime_resume(struct device *dev)
++{
++	struct serial_port_data *ddata = dev_get_drvdata(dev);
++	struct uart_port *port = ddata->port;
++	unsigned long flags;
++
++	/* Flush any pending TX for the port */
++	spin_lock_irqsave(&port->lock, flags);
++	if (__serial_port_busy(port))
++		port->ops->start_tx(port);
++	spin_unlock_irqrestore(&port->lock, flags);
++	pm_runtime_mark_last_busy(dev);
++
++	return 0;
++}
++
++static DEFINE_RUNTIME_DEV_PM_OPS(serial_port_pm, NULL,
++				 serial_port_runtime_resume,
++				 NULL);
++
++static int serial_port_probe(struct platform_device *pdev)
++{
++	struct serial_port_platdata *pd = dev_get_platdata(&pdev->dev);
++	struct device *dev = &pdev->dev;
++	struct serial_port_data *ddata;
++
++	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
++	if (!ddata)
++		return -ENOMEM;
++
++	ddata->port = pd->port;
++	platform_set_drvdata(pdev, ddata);
++
++	pm_runtime_enable(dev);
++	pm_runtime_set_autosuspend_delay(dev, SERIAL_PORT_AUTOSUSPEND_DELAY_MS);
++	pm_runtime_use_autosuspend(dev);
++
++	return 0;
++}
++
++static int serial_port_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++
++	pm_runtime_dont_use_autosuspend(dev);
++	pm_runtime_disable(dev);
++
++	return 0;
++}
++
++static struct platform_driver serial_port_driver = {
++	.driver = {
++		.name = "serial-port",
++		.suppress_bind_attrs = true,
++		.pm = pm_ptr(&serial_port_pm),
++	},
++	.probe = serial_port_probe,
++	.remove = serial_port_remove,
++};
++module_platform_driver(serial_port_driver);
++
++/*
++ * Serial core port device init functions. Note that the physical serial
++ * port device driver may not have completed probe at this point.
++ */
++int uart_add_one_port(struct uart_driver *drv, struct uart_port *port)
++{
++	return serial_ctrl_register_port(drv, port);
++}
++EXPORT_SYMBOL(uart_add_one_port);
++
++int uart_remove_one_port(struct uart_driver *drv, struct uart_port *port)
++{
++	serial_ctrl_unregister_port(drv, port);
++
++	return 0;
++}
++EXPORT_SYMBOL(uart_remove_one_port);
++
++MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
++MODULE_DESCRIPTION("Serial controller port driver");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(SERIAL_CORE);
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -458,6 +458,7 @@ struct uart_port {
+ 						struct serial_rs485 *rs485);
+ 	int			(*iso7816_config)(struct uart_port *,
+ 						  struct serial_iso7816 *iso7816);
++	int			ctrl_id;		/* optional serial core controller id */
+ 	unsigned int		irq;			/* irq number */
+ 	unsigned long		irqflags;		/* irq flags  */
+ 	unsigned int		uartclk;		/* base uart clock */
+@@ -563,7 +564,8 @@ struct uart_port {
+ 	unsigned int		minor;
+ 	resource_size_t		mapbase;		/* for ioremap */
+ 	resource_size_t		mapsize;
+-	struct device		*dev;			/* parent device */
++	struct device		*dev;			/* serial port physical parent device */
++	struct device		*port_dev;		/* serial core port device */
+ 
+ 	unsigned long		sysrq;			/* sysrq timeout */
+ 	unsigned int		sysrq_ch;		/* char for sysrq */
 -- 
-2.37.2
-
+2.38.1
