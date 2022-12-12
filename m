@@ -2,171 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F42A64A3B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF6E64A3B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiLLOtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S229780AbiLLOuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiLLOtc (ORCPT
+        with ESMTP id S232361AbiLLOtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:49:32 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F213D02;
-        Mon, 12 Dec 2022 06:49:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j1tMzTSeiVn8dDsiH+leGXPR0JOSOVI1d17fMyoRVozXXYQprKW8GCmgaN/RSbS2nYVYpOE+BHFIkT9WVpCA6emj76o9w5t7F8fz97vyplaAcB5+JvMzca7JBzuPEK7nS62XvrjtyFNcCZR/7iodgehWN4sslFzbBwJ5yC3lui1/EbdNuCXKUVuWhS0rxzi555UYm7BlbpdKiYHQDyoo5I1C1pl+lXizyoSR+Y5FjaxVy8xhTBTglUvubsNzSH7nPJ8Fr0Q8h3FRqBHydJFgrYkDaDZeGSp/h4cgWjkfLVg3MjW52jPSm//fzGBqvXFUPvotdLDJY+WxiHjSHYes5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+UVND6nMICg84qUkr/FXv9fXh4J9CCfjx3I7HFJ7H6w=;
- b=YzZvYng54kPLpPn7VTHs4N6y6PDIR/Q6DcnwN7/TUdMEnMQW1GOQKHlbSVTr4fcMp3nxhOJzF0Jk0mL53gZJCMKeuohOOzDkmeiYRtWSRYwn9tWRia/XcoyIWvlWbo+Yi7O7PUBJRcRIQuNtL/zEG2WdjT+CZfsFix6mtvR3eLuU3WTSyJxjBN+cNphRhQCySZ25G0UumFGZgqmT87DVYk0q97siAyJlJ0UvFC+2Ls1WGuJpNs0nth8F6xR4Uo4x3OD73VY+nY4Zneonf4oXjp9c5uFfltvmnfVTxM7YvWIiZQzXtUU7gGqGNLtODs2CZRiGyZ0q6AngbmjvgkWJ7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+UVND6nMICg84qUkr/FXv9fXh4J9CCfjx3I7HFJ7H6w=;
- b=gPwQLrHFitWd0MlDfaw1I1G79mZwPg1aoM/+PpTNIxV84V0iDQRmjrXwH9rLnxRObiCQqtPNQzg2H9W546xu3MkLP3hkHW8zIUafAKRE83m4uyeA8W9ZdtXQ/bHJvDqgkFlGdkVKv7Xzh74a0biS8GPgOkpMtiqEDFTntVcP3qmnXOIPxMfsKWCMwpzI3NbvAGWVkMKTfArXpN1qiY3KlipII7R3TngkwqtFk5MDyi2tMNt0Gj0bZNPVMaD0OiqCk1GxTxdCKxpfpI51S37zP5jmW08Bcos4g078OzTf/dM7Cj6fnr8USn60MW1dP+bqRpbOzcdnDNu4A6KbInYxMw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19)
- by MW4PR12MB7360.namprd12.prod.outlook.com (2603:10b6:303:22b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 14:49:30 +0000
-Received: from DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::3fb9:3266:7937:44fc]) by DM4PR12MB5040.namprd12.prod.outlook.com
- ([fe80::3fb9:3266:7937:44fc%8]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 14:49:30 +0000
-Message-ID: <588a8c42-b597-1c9b-f7d3-2ac10ead7ac2@nvidia.com>
-Date:   Mon, 12 Dec 2022 16:49:19 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Lei Rao <lei.rao@intel.com>,
-        kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
-        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com,
-        Oren Duer <oren@nvidia.com>
-References: <Y4+U3VR2LeEh2S7B@ziepe.ca> <20221207075415.GB2283@lst.de>
- <Y5CWVu08abcOuEQH@ziepe.ca> <20221207135203.GA22803@lst.de>
- <Y5CsH5PqMYAWYatw@ziepe.ca> <20221207163857.GB2010@lst.de>
- <Y5DOAKArjyfb6Mcz@ziepe.ca> <20221207183333.GA7049@lst.de>
- <Y5DyorZJPdtN5WcX@ziepe.ca> <b2ade627-0abb-08a0-c28b-2bf8eb8e4973@nvidia.com>
- <20221212075541.GC11162@lst.de>
-From:   Max Gurtovoy <mgurtovoy@nvidia.com>
-In-Reply-To: <20221212075541.GC11162@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0120.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::13) To DM4PR12MB5040.namprd12.prod.outlook.com
- (2603:10b6:5:38b::19)
+        Mon, 12 Dec 2022 09:49:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D6D13D33
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=Xh19w+wqYZm5Os/v/KfZys8SNBRBfUUmtMhDm02shFA=; b=rjnEBWmD6vjPJsg0ppsOZfvyd5
+        OFPAxw48sRQyyDUtDMG/IoCS1SBEF0Zxvbl+UPclq+Zw+LB/wWgjCVkbrMzSKg1eBi70ss1x6/+gr
+        WlBrqLcNAXNOPcR9evD2eYUQi7Q5h5vTUkPLPlSILRp1nKU+KdIzInU3q1zRyf0iMTIEsSUsAdjFn
+        a6+J6OpZW9YXfkZyOx6iwxHoHII4/Lu1Fi4uAZKN32D8na/i+dUwKIyu1zO8gj4XOFOaWyhNqNyUr
+        QjkHCWLr0KFcPXSRy9CFBJtMXMoa/FY8wA7//5Ys8MWOwxC7MT7NakJUIinTM9AYuJOl+KIr8E+d9
+        JCboq33g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4k7p-00B9Qj-EU; Mon, 12 Dec 2022 14:49:49 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [PATCH v2] sched: Make const-safe
+Date:   Mon, 12 Dec 2022 14:49:46 +0000
+Message-Id: <20221212144946.2657785-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5040:EE_|MW4PR12MB7360:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14675c9c-def5-4fec-8bf5-08dadc5012b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: myolgMUUOodi5FLGwHOisMtdY06B1HWqDM7C2hK25NBcG1HZbFOXIiHYp325wWAVB8SjKgm9daWyh/dziAAqGaBWsE6sge5FyJrd71kQfrVMWtyXHIePkJrQVS7zDTn4El4a+Ig8mF6EUgymPiUBgbN8JQ66kYLMcOtgOaHcsLIzgV0fXB5HTHARX6OryMxZDWQjLlKeIWWPXsY6e0udcN5IK6/SFbbyXoSLMmhl/LR85/CKISsi/AfnGWDsRwHop3y51t3vLiI7CeYW14KP6A3D5rc/qmmjLmHomMkMCetOI7yIYHk2EZLSV4OY7/MltVE+6dN9suw69pPZBfE+eUs5+ICBy6QUff7y0qOdhQ6L0leRKiUTYNtEGahiDie498x6yLYryykIgnGimtuhfQ1j34j+3o77Hw6p1Ui8fA9PxCQ8IE8zN7LVNMx3usAbdJ/NDP/9Q4nnXyhwqOB7J6c0gjL+VJmSG93p9EKvfgyqc5L15g3QdsQJq8Q9dziWeGgU53rbldhwWlnkj+2Gnuiw6K40DE6Xd33tSkVJBBV/Bm2tfbDxOsmIfBCFMdkByl39oZpIPk0+mPlUtRad4UW77u0otsvtqoD/mxjewKSTdz+aeLD4vy5POHsCODeWpj3d9UwHnjIJLYqjTQUpmL3BzNMVwCvxcRd1I78kd0JGmOQl3ws5TZdxc0MyEDC57IRNspAavcRbJERVAvXqSKABb4vJtliim29ShUIypicnAnQAaucVyXMt7gz5rFv0uMlaszgZsGoCWJLJ43pCNA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5040.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199015)(31686004)(38100700002)(2906002)(478600001)(66476007)(7416002)(5660300002)(6666004)(31696002)(66556008)(53546011)(107886003)(41300700001)(36756003)(4326008)(8676002)(26005)(6506007)(8936002)(86362001)(6512007)(186003)(6486002)(83380400001)(316002)(54906003)(6916009)(2616005)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TTRmbkdHajllUnRVcWxXK2FiRkZ2ZkMrMkdaUXNnUGdxS2prZWFzRnZibWlt?=
- =?utf-8?B?QW1aRVAyME9vOGpDbXdkOGZwY2I5REpSN3NYZCs3VGpPVzU1QXlubVhLTHFi?=
- =?utf-8?B?RGdaK1pTYnFGZy9Dc3o2dFZ0dDZlR1ZvYVF1RXIzaDQzZTU0Q2U5NHFla3RG?=
- =?utf-8?B?Q0VEZUNHaDBBSFAvWFA5OEJEQ2dQNmtPNFNFeGREOWNJUUV6U2ljMXUvZ3Rn?=
- =?utf-8?B?R0VoVkwxMHNhcGZhRkRUbWZWMGlFR28wQVVsc0lCZ1dqZGxYeWQ3SHl1dFcv?=
- =?utf-8?B?M3dqQVZ0K0pXL2l6ZzdPbDVvblVudE9KTytGeis4UHFzUldpcWRGTnFab2t3?=
- =?utf-8?B?OU5GMkF0Q1F0ajM4Y3ZUOXhPY2xrd05OYURrZ1Zqb2xEb3FiZGpjYUh3cktN?=
- =?utf-8?B?a2lPZ05KZEJSdTg2cFExZlZZN2tXMG9Vc200cXFUTC9VR2V2b1REUW1sek1v?=
- =?utf-8?B?aWhreFRKdVNqL0M0dFgzei81dXVGM2NoRnRna3dFNnh3YnFtRm4vQnhuc0xJ?=
- =?utf-8?B?R1d6ZnNkeWhMc2srL1FlejU5d1g3eU9BTEpvVTc4dENyaDZjZXFCVStuVjZz?=
- =?utf-8?B?QlQxWEdaTlRJUkFPUEtjNDRURHp6OFJIUnJwTGUzeS9UQ0p0WkZZZEdaTGVr?=
- =?utf-8?B?NUFuNEQ1cGloMCt5NDJwR3p6NTMyTDRJbDNEV1dqaTg2ZFYvZ21hTnd6cTMw?=
- =?utf-8?B?NS9VUFNoNFBoYkZPVFlhU3lFUkphZ2lCYVpHNFJkTnpSUXZmOFE1cUlSUG9V?=
- =?utf-8?B?WkRaNEdPcWZ4Q0EyRXhSU2tQaENuZUtpMzQ4N2hHWUZaRm1ZMUNaSEpQbHpN?=
- =?utf-8?B?ZGNUUjJNN3dOZ0pDRFRreVdkcVUrUHh0U3ZLQU9YL2xtOGpDNWN3K2xqQkgz?=
- =?utf-8?B?SVB1UmY3SkI1M3ZQbnJXeEM1OXFMN2FMaTdRV2hEWDVtKzdCMVpPSmsrMElM?=
- =?utf-8?B?M3hydTQ2OFFOY09STUdkY1c0M0kzMVU3RzNlOHV4Wjc1MU1NTkJDYzU5Zmpw?=
- =?utf-8?B?MWRYckRBWHZKWXZTa2owQlgxNEVmcEw5WTRVUkNuYWM5MzJ1Sm03VU1wTURp?=
- =?utf-8?B?eU5JMGVjUGl0ZTUxcktwYXlIUEppZjd1R09XRDJybDBPMHhqcFFiWUF0NFFk?=
- =?utf-8?B?ZG93U0V6UU13T0k3UFpTT2Q3bFdwSzQ1YTB1c203b25aOGdBYlFVMUE5Y2ZT?=
- =?utf-8?B?SWhNdlYvSlUvQ2hEbHBzZ3owVTBwRElacXlVQkVkNHBZQ0dzendCaE1hcHk2?=
- =?utf-8?B?YnZmTlBidjIydWhPSFVCcWNucjZIYy9qRjZTc0ZEb2FQbE5DWG1JOWdTMmV2?=
- =?utf-8?B?NEpuNUJvd1JCVG9wbEd5ZEpJc0pEWkttYkc5ZmozVG1qcmtuME5lQzhjbWVN?=
- =?utf-8?B?S1dQSHExSlI3a3FaMGh6bkFwUWJHaDFSWGFZeU8weHB5YTZJYkptUktqSUx1?=
- =?utf-8?B?T0MrK201UWVtYjY3Vm9DbHZnVjFzM1JDaERMRTczMkZVSTVaeG1JYXlOdVRZ?=
- =?utf-8?B?eWFnSFBCMlpIZ2lzd2NPeG5WYlBkOU0vbmtsZUdkaXdvNU5sQkFMb3RJVUhz?=
- =?utf-8?B?ejhiT3dURjNDUkgrbHo3VG9Xd2JYZWdxRnc2MFVjVGdTeSt0bkpKclVlNGRj?=
- =?utf-8?B?SFI2OWVOVXZXelpGcHFCVGhleTA0MVNuWTI3NnMwdElLa3JFUGRpVktOMWNF?=
- =?utf-8?B?QlpyYzRGV2JhbW9SZXNDRzhUKzRPZmt1ZytlZDUxeUpkQXQrYmY2Vi9MOTRj?=
- =?utf-8?B?dkZFa3NpVWNNeGNiNkJCZi8zdFdJdUIvTXh3d3VDaGZVa1F0S29ueVlVR1ZE?=
- =?utf-8?B?QThPWlc2QlY1bzFZVlhhOUNUT3I5dGN1TjR3VDBqNUtoNnZRWmozeWpYSjV1?=
- =?utf-8?B?cW9ubU9ZZ2haajg2Z3JGVUVzSXhOYUNJelp4TW1lK0xZTlBRd2VmUW05S09Y?=
- =?utf-8?B?emVvTzhkN0tPQUw5dENJWEcxd2NkKzVienQwaTNtd2Jib1FXWTYwNlBiVU02?=
- =?utf-8?B?VURQdmZoTnpkTzNXODBDbERSeVhrVmpaVEJxYUNIcEZSR0ZpTy9XbmhKekhP?=
- =?utf-8?B?cVpjNS9aSnBJZ1VEQTBkZ2liTHRrRGtBVjIzeGlYdmlFN05nZkE3NXBLekcy?=
- =?utf-8?Q?T26g9vWYv7I9kKQQlpQsI/uZ8?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14675c9c-def5-4fec-8bf5-08dadc5012b5
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5040.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 14:49:29.8540
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eh1zXKoL8+d6Pl3x1IudSa4lf5l2edjrv2MBPBes+pT4jIsxviGvyDMmuBsHszDHGOCb3xvTMX8DZcoRNJPGUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7360
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With a modified container_of() that preserves constness, the compiler
+finds some pointers which should have been marked as const.  task_of()
+also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
+that cfs_rq_of() can take a const argument.  No change to generated code.
 
-On 12/12/2022 9:55 AM, Christoph Hellwig wrote:
-> On Sun, Dec 11, 2022 at 01:39:37PM +0200, Max Gurtovoy wrote:
->> 1. Need to define a concept of a "virtual subsystem". A primary controller
->> will be able to create a virtual subsystem. Inside this subsystem the
->> primary controller will be the master ("the controlling") of the migration
->> process. It will also be able to add secondary controllers to this virtual
->> subsystem and assign "virtual controller ID" to it.
->> something like:
->> - nvme virtual_subsys_create --dev=/dev/nvme1 --virtual_nqn="my_v_nqn_1"
->> --dev_vcid = 1
->> - nvme virtual_subsys_add --dev=/dev/nvme1 --virtual_nqn="my_v_nqn_1"
->> --secondary_dev=/dev/nvme2 --secondary_dev_vcid=20
-> Yes. Note that there is a bit more state than just the NQN.  You also
-> need at least a serial number, and also probably a different vendor
-> ID (the PCI vendor ID that is also mirror in Identify Controller and
-> the IEEE OUI), and new unique namespace identifier.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+v2: Also update the !FAIR_GROUP_SCHED case
 
-Yes for sure there is more bits we should consider.
+ kernel/sched/core.c  |  8 +++++---
+ kernel/sched/fair.c  | 16 +++++++++-------
+ kernel/sched/sched.h | 22 ++++++++++------------
+ 3 files changed, 24 insertions(+), 22 deletions(-)
 
-I wanted to describe the high level.
-
-I think that we can maybe say the when a secondary function is moved to 
-a virtual subsystem its feature set of the virtual ctrl is narrowed to 
-mandatory NVMe features set.
-And we'll provide an API to set/extend it's feature set to a maximum of 
-the feature set that the original ctrl of the secondary function had.
-Then the sys admin will configure the virtual ctrl in both src/dst hosts.
-
-The high level idea is to have a programmable way to set the features of 
-a virtual controller inside a virtual subsystem that is also programmable.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 25b582b6ee5f..853188cb6c84 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -152,7 +152,7 @@ __read_mostly int scheduler_running;
+ DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
+ 
+ /* kernel prio, less is more */
+-static inline int __task_prio(struct task_struct *p)
++static inline int __task_prio(const struct task_struct *p)
+ {
+ 	if (p->sched_class == &stop_sched_class) /* trumps deadline */
+ 		return -2;
+@@ -174,7 +174,8 @@ static inline int __task_prio(struct task_struct *p)
+  */
+ 
+ /* real prio, less is less */
+-static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
++static inline bool prio_less(const struct task_struct *a,
++			     const struct task_struct *b, bool in_fi)
+ {
+ 
+ 	int pa = __task_prio(a), pb = __task_prio(b);
+@@ -194,7 +195,8 @@ static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool
+ 	return false;
+ }
+ 
+-static inline bool __sched_core_less(struct task_struct *a, struct task_struct *b)
++static inline bool __sched_core_less(const struct task_struct *a,
++				     const struct task_struct *b)
+ {
+ 	if (a->core_cookie < b->core_cookie)
+ 		return true;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c36aa54ae071..855470310903 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -468,7 +468,7 @@ is_same_group(struct sched_entity *se, struct sched_entity *pse)
+ 	return NULL;
+ }
+ 
+-static inline struct sched_entity *parent_entity(struct sched_entity *se)
++static inline struct sched_entity *parent_entity(const struct sched_entity *se)
+ {
+ 	return se->parent;
+ }
+@@ -595,8 +595,8 @@ static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
+ 	return min_vruntime;
+ }
+ 
+-static inline bool entity_before(struct sched_entity *a,
+-				struct sched_entity *b)
++static inline bool entity_before(const struct sched_entity *a,
++				 const struct sched_entity *b)
+ {
+ 	return (s64)(a->vruntime - b->vruntime) < 0;
+ }
+@@ -11728,7 +11728,8 @@ static inline void task_tick_core(struct rq *rq, struct task_struct *curr)
+ /*
+  * se_fi_update - Update the cfs_rq->min_vruntime_fi in a CFS hierarchy if needed.
+  */
+-static void se_fi_update(struct sched_entity *se, unsigned int fi_seq, bool forceidle)
++static void se_fi_update(const struct sched_entity *se, unsigned int fi_seq,
++			 bool forceidle)
+ {
+ 	for_each_sched_entity(se) {
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+@@ -11753,11 +11754,12 @@ void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+ 	se_fi_update(se, rq->core->core_forceidle_seq, in_fi);
+ }
+ 
+-bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
++bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
++			bool in_fi)
+ {
+ 	struct rq *rq = task_rq(a);
+-	struct sched_entity *sea = &a->se;
+-	struct sched_entity *seb = &b->se;
++	const struct sched_entity *sea = &a->se;
++	const struct sched_entity *seb = &b->se;
+ 	struct cfs_rq *cfs_rqa;
+ 	struct cfs_rq *cfs_rqb;
+ 	s64 delta;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 771f8ddb7053..cdf9f248e5bd 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -248,7 +248,7 @@ static inline void update_avg(u64 *avg, u64 sample)
+ 
+ #define SCHED_DL_FLAGS (SCHED_FLAG_RECLAIM | SCHED_FLAG_DL_OVERRUN | SCHED_FLAG_SUGOV)
+ 
+-static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
++static inline bool dl_entity_is_special(const struct sched_dl_entity *dl_se)
+ {
+ #ifdef CONFIG_CPU_FREQ_GOV_SCHEDUTIL
+ 	return unlikely(dl_se->flags & SCHED_FLAG_SUGOV);
+@@ -260,8 +260,8 @@ static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
+ /*
+  * Tells if entity @a should preempt entity @b.
+  */
+-static inline bool
+-dl_entity_preempt(struct sched_dl_entity *a, struct sched_dl_entity *b)
++static inline bool dl_entity_preempt(const struct sched_dl_entity *a,
++				     const struct sched_dl_entity *b)
+ {
+ 	return dl_entity_is_special(a) ||
+ 	       dl_time_before(a->deadline, b->deadline);
+@@ -1236,7 +1236,8 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
+ 	return &rq->__lock;
+ }
+ 
+-bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool fi);
++bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
++			bool fi);
+ 
+ /*
+  * Helpers to check if the CPU's core cookie matches with the task's cookie
+@@ -1415,7 +1416,7 @@ static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)
+ }
+ 
+ /* runqueue on which this entity is (to be) queued */
+-static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)
++static inline struct cfs_rq *cfs_rq_of(const struct sched_entity *se)
+ {
+ 	return se->cfs_rq;
+ }
+@@ -1428,19 +1429,16 @@ static inline struct cfs_rq *group_cfs_rq(struct sched_entity *grp)
+ 
+ #else
+ 
+-static inline struct task_struct *task_of(struct sched_entity *se)
+-{
+-	return container_of(se, struct task_struct, se);
+-}
++#define task_of(_se)	container_of(_se, struct task_struct, se)
+ 
+-static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)
++static inline struct cfs_rq *task_cfs_rq(const struct task_struct *p)
+ {
+ 	return &task_rq(p)->cfs;
+ }
+ 
+-static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)
++static inline struct cfs_rq *cfs_rq_of(const struct sched_entity *se)
+ {
+-	struct task_struct *p = task_of(se);
++	const struct task_struct *p = task_of(se);
+ 	struct rq *rq = task_rq(p);
+ 
+ 	return &rq->cfs;
+-- 
+2.35.1
 
