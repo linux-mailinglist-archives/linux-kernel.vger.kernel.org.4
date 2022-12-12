@@ -2,71 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF366498C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 06:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744F96498CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbiLLF6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 00:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S229906AbiLLGCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 01:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiLLF61 (ORCPT
+        with ESMTP id S231197AbiLLGB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 00:58:27 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FB41130;
-        Sun, 11 Dec 2022 21:58:25 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=0;PH=DS;RN=11;SR=0;TI=SMTPD_---0VX1lmfb_1670824695;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VX1lmfb_1670824695)
-          by smtp.aliyun-inc.com;
-          Mon, 12 Dec 2022 13:58:23 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     shshaikh@marvell.com
-Cc:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] qlcnic: Clean up some inconsistent indenting
-Date:   Mon, 12 Dec 2022 13:58:13 +0800
-Message-Id: <20221212055813.91154-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Mon, 12 Dec 2022 01:01:56 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF755F53
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:01:55 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id jn7so10979784plb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CtZbo9Uwr6mAiSS4K9joB67mf1cSBtb5VzmSLOnn2BA=;
+        b=feGDuEqDfW7doSqcTAYoSzv+D7I72/VtlAP9SODJ0tmxCS82qjFyPUpdAUHMt6tMy8
+         kmKjYZcnuQw23DqrQxUbYDreyr0qKhDF30tJKb/H0zThXZXWmOdMNQqL+8vtCjTVrzpf
+         /+fDjiuHjCPjmd6qXQyQvxaqXqIOtoqrw4lF9nR1hBuCJcFBdaGPTCUEYir4n35JnuUg
+         ZQvXxBiVf73Zyj8nGG3yzL5mwNzSVlGHCNuTbiQTxO2sltAjyFdzQbXSKyV3taP/Ohy7
+         z4aauu+sNzrZJWy9nZaH7UonI8WKyvnnfrr55oqzhZQek7MK5UZvLx4HHDaSlSUS8Djw
+         ahWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CtZbo9Uwr6mAiSS4K9joB67mf1cSBtb5VzmSLOnn2BA=;
+        b=1VeUrA192xExsJwiTmTJMFR/aaAef50qeJGTsd6XyUfO5Rj8iM13YQu3DsixuKoPrW
+         gxq25M2v3aZRKubyWOEZKiPbE3fmSYsNz1xKPeZ5B2e4TTCHeiRh1KTzFxzBYQ0KSriI
+         ul9CNsXuoRP5zZN5pn/RFs8vX27KMt4J9YWmULY2QCrlyf0c5tvmaSyUGZiT3FlDjRt2
+         /d7T5O4kgLU0fhtKh7sYI/NcUAEct5OEQzNcmPSY0eb8XojCuqmPGKDr2wslozYqcdiD
+         ckllpaPlWr6IExcG/8cwz2gxn8y8ziTyzXhoonHIqpmLSc0I1v6Yl7Kr0p6W5G4CIeIY
+         dYHg==
+X-Gm-Message-State: ANoB5plmvVDQYwQjaQZdIonFfyOXuDixfZ5dVNfO+98tmfjxyG3v0J+w
+        UeYVL8jJp0ilBmEFNL7WXaUw4w==
+X-Google-Smtp-Source: AA0mqf5+eaVtJ2ibhZx/7OHXPEfud2Yg6uvPqQP6gHqOu8YKIq3xFBm7jDraoJAlecduL321ZZVFxw==
+X-Received: by 2002:a17:902:e311:b0:189:dc9e:cef3 with SMTP id q17-20020a170902e31100b00189dc9ecef3mr13725691plc.16.1670824915071;
+        Sun, 11 Dec 2022 22:01:55 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id e14-20020a17090301ce00b0017fe9b038fdsm5344579plh.14.2022.12.11.22.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 22:01:54 -0800 (PST)
+Date:   Mon, 12 Dec 2022 11:31:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: spear: drop 0x from unit address
+Message-ID: <20221212060151.p7ziztnxny42pi4n@vireshk-i7>
+References: <20221210113347.63939-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210113347.63939-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+On 10-12-22, 12:33, Krzysztof Kozlowski wrote:
+> By coding style, unit address should not start with 0x.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/spear300.dtsi | 2 +-
+>  arch/arm/boot/dts/spear310.dtsi | 2 +-
+>  arch/arm/boot/dts/spear320.dtsi | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/spear300.dtsi b/arch/arm/boot/dts/spear300.dtsi
+> index b39bd5a22627..f1135e887f7b 100644
+> --- a/arch/arm/boot/dts/spear300.dtsi
+> +++ b/arch/arm/boot/dts/spear300.dtsi
+> @@ -46,7 +46,7 @@ sdhci@70000000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		shirq: interrupt-controller@0x50000000 {
+> +		shirq: interrupt-controller@50000000 {
+>  			compatible = "st,spear300-shirq";
+>  			reg = <0x50000000 0x1000>;
+>  			interrupts = <28>;
+> diff --git a/arch/arm/boot/dts/spear310.dtsi b/arch/arm/boot/dts/spear310.dtsi
+> index 77570833d46b..ce08d8820940 100644
+> --- a/arch/arm/boot/dts/spear310.dtsi
+> +++ b/arch/arm/boot/dts/spear310.dtsi
+> @@ -34,7 +34,7 @@ fsmc: flash@44000000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		shirq: interrupt-controller@0xb4000000 {
+> +		shirq: interrupt-controller@b4000000 {
+>  			compatible = "st,spear310-shirq";
+>  			reg = <0xb4000000 0x1000>;
+>  			interrupts = <28 29 30 1>;
+> diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
+> index b12474446a48..56f141297ea3 100644
+> --- a/arch/arm/boot/dts/spear320.dtsi
+> +++ b/arch/arm/boot/dts/spear320.dtsi
+> @@ -49,7 +49,7 @@ sdhci@70000000 {
+>  			status = "disabled";
+>  		};
+>  
+> -		shirq: interrupt-controller@0xb3000000 {
+> +		shirq: interrupt-controller@b3000000 {
+>  			compatible = "st,spear320-shirq";
+>  			reg = <0xb3000000 0x1000>;
+>  			interrupts = <30 28 29 1>;
 
-drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c:714 qlcnic_validate_ring_count() warn: inconsistent indenting.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3419
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
-index 1ee491f78c6b..c1436e1554de 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ethtool.c
-@@ -711,7 +711,7 @@ static int qlcnic_validate_ring_count(struct qlcnic_adapter *adapter,
- 		}
- 	}
- 
--	 if (tx_ring != 0) {
-+	if (tx_ring != 0) {
- 		if (tx_ring > adapter->max_tx_rings) {
- 			netdev_err(adapter->netdev,
- 				   "Invalid ring count, Tx ring count %d should not be greater than max %d driver Tx rings.\n",
 -- 
-2.20.1.7.g153144c
-
+viresh
