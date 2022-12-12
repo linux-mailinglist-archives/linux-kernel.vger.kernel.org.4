@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560F164A631
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FBF64A63B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbiLLRtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
+        id S232714AbiLLRuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiLLRth (ORCPT
+        with ESMTP id S232706AbiLLRuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:49:37 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F2DD5D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:36 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id k185so12018099vsc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:36 -0800 (PST)
+        Mon, 12 Dec 2022 12:50:51 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCB3F592
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:50:50 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id p8so652315lfu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:50:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MOjULHTt7nLPet/vxlEOzclUsoaCmUAkQsVZp1GujxA=;
-        b=OVPooWVg0d9eqFjdwIu/t1V+VaF6fmj9sRArWnJcXCR5LHGnqYfUMDxcAYw14Ks7El
-         isxqxVZcOXaBHdyQU1fHFyM4paxtwqnKCsjBR/WvsfJ7GNUC/NBHvGL0UcfHOQtmkUbP
-         TlYxu0IQerIMtvqwAggp7KAuZ6PeSnUcPfb7c=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wvsMVvtThL8gMv7LQ3fpmievE9cnCujmolAZoIZFwM0=;
+        b=p7hlMr7wM3wyuA9xtFlMfUZP4AXHjSiNRsW14oK0LRr8bGQ7wMzch9VO83Cl6nSrlo
+         sLVcnRMsi6l7+x6uxr0I2uwvRvTAjItkiYxSBTNOS45zuoRMRhynjnNeFpboAwdsV2N1
+         eaD2TT7VByDxJqP71GAwWwc4b0nbZqYjw40s04lDRyETX5hVzyhiIsd0jIVfXyKKnSYj
+         OtGg535FPBztb1Tq92x7ir3gpuV2mor9kQsGLgV7rBdEuEpU4t3O3XafJD06ibu1BMTi
+         1dVKdONoBxtusBQPtFzVR78DTHDFK6Tqs7mytgM+/hlqwu+565pTulNWNvj41egQjWLr
+         N1xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MOjULHTt7nLPet/vxlEOzclUsoaCmUAkQsVZp1GujxA=;
-        b=Pbddvhx1dgNekdxlZ5xNTUZ528Frnn71QMGJ08cdMchKwBkUKSyEVRJvxolr+ySzAt
-         ZPAhweHM3+ejvdnl5BxeH0i42Cou3Ep/b4UVlhba03tpT5RV/hlzaHK8sMgZ0HH03ydI
-         kSRHbkK0vdBQI7Y1g/03ePywr55EA42NCTCmR1eB2wsyAwFQwsEHZkSUuyA5pO6m3DQ6
-         YHwmU7yhp4fjUbFIWFbrfEC+9pWuDhow0I/Iyabo2pLEseR73gKO8qNWkdplk/fopDfI
-         JOou0RWi4qdyyNxI8LwSOzJJBCA/OQK5OF0HTXbVhmUiJU4Ms4tWxRcYZucmZYpkoj+/
-         +X0Q==
-X-Gm-Message-State: ANoB5plmQJq93AQkJo0oh0ZtUl+RGKtPcdTH98POn+Wu5fJnNtb3s2Jz
-        duVbwLO5uDdsSbCqjjPf0fhoqbb0EfEQJqLf
-X-Google-Smtp-Source: AA0mqf6vChL5SUBMQBhyS9TNr7I0C4u23CR6/WqEb9agZXxCLk0Vuuzx30XCpnhIAD5yq4laODjEhw==
-X-Received: by 2002:a67:f854:0:b0:3b2:a92d:a1ed with SMTP id b20-20020a67f854000000b003b2a92da1edmr7902867vsp.30.1670867374801;
-        Mon, 12 Dec 2022 09:49:34 -0800 (PST)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
-        by smtp.gmail.com with ESMTPSA id v5-20020a05620a440500b006f474e6a715sm6199471qkp.131.2022.12.12.09.49.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 09:49:34 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id c7so2072546qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:34 -0800 (PST)
-X-Received: by 2002:a05:622a:1745:b0:3a6:8b84:47ce with SMTP id
- l5-20020a05622a174500b003a68b8447cemr33321945qtk.678.1670867373893; Mon, 12
- Dec 2022 09:49:33 -0800 (PST)
+        bh=wvsMVvtThL8gMv7LQ3fpmievE9cnCujmolAZoIZFwM0=;
+        b=x/iNbEN708d16ToMZTTUfsBpFiLRR2q1oz1LxpRp3J+mkMglWwWeiucRuJU690a77w
+         VIwDc+omRcNgwAUKPyq/CPmsGWFcMtakFk8//ZJalpwZVEqeTaH7xbdRMcLA5bcIanWy
+         R2jrZx7aPykcGfvzG4h3187sCG/9VX3Ioq26KI2zkdon96t6Kgc4p7PmLPWS3wf5UORX
+         wy81I/FR3JZaKA8xWzXrBktj/ac9M+YbhSd5NHDGCfWZje4pu4+ovWyH1whlULpDji6L
+         fv8P0hdKWq3CmxpXt/gdkKYqlegkXR5b7mwOeCUMDccM1LYgYW2oXJtjkzx3UeEu4pIB
+         JUyA==
+X-Gm-Message-State: ANoB5pmRZUCHsA/WtbeZHtpvqYq9axbLsGkscrhHgACiSg4DZ1noHgBj
+        sxk+uXC1JCt9RiFiqrl+ootA1A==
+X-Google-Smtp-Source: AA0mqf5yozzf2suKwfpmYDJ9vwovvz+x2ktVmjITNkA6+gE4JaNy2k72UkVw3K+6fJbUSI7duKqHmg==
+X-Received: by 2002:a05:6512:21b:b0:4b5:5098:e6f7 with SMTP id a27-20020a056512021b00b004b55098e6f7mr3642514lfo.68.1670867448686;
+        Mon, 12 Dec 2022 09:50:48 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac25506000000b004b53eb60e3csm44094lfk.256.2022.12.12.09.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 09:50:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: allow "timer" as node name
+Date:   Mon, 12 Dec 2022 18:49:33 +0100
+Message-Id: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <b7ece19c-e50e-0709-7be1-2945883d155b@monstr.eu>
-In-Reply-To: <b7ece19c-e50e-0709-7be1-2945883d155b@monstr.eu>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Dec 2022 09:49:18 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiuqbgRZcotVf93Db4+gcPz8yAhW0mMfNZbEkM66rNB3Q@mail.gmail.com>
-Message-ID: <CAHk-=wiuqbgRZcotVf93Db4+gcPz8yAhW0mMfNZbEkM66rNB3Q@mail.gmail.com>
-Subject: Re: [GIT PULL] arch/microblaze patches for 6.2-rc1
-To:     Michal Simek <monstr@monstr.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 2:07 AM Michal Simek <monstr@monstr.eu> wrote:
->
-> Microblaze patches for 6.2-rc1
->
-> - Cleanup PCI support
+On some SoCs the watchdog device is actually mixed with timer, e.g.
+the qcom,msm-timer on older Qualcomm SoCs where this is actually one
+hardware block responsible for both system timer and watchdog.
 
-That tag looks normal in the email, but it's actually nastily encoded.
-When I fetched it, I did this:
+Allow calling such device nodes as "timer".
 
-     git cat-file tag FETCH_HEAD | hexdump -c
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-and it shows
+---
 
-...
-0000080   9   3   5   4   6       +   0   1   0   0  \n  \n   M   i   c
-0000090   r   o   b   l   a   z   e 302 240   p   a   t   c   h   e   s
-00000a0 302 240   f   o   r 302 240   6   .   2   -   r   c   1  \n  \n
-00000b0   -       C   l   e   a   n   u   p       P   C   I       s   u
-00000c0   p   p   o   r   t  \n   -   -   -   -   -   B   E   G   I   N
-...
+See also:
+https://lore.kernel.org/linux-arm-msm/20221212163532.142533-1-krzysztof.kozlowski@linaro.org/T/#t
 
-Note how the "spaces" between "Microblaze", "patches", "for" and "6.2"
-are not actually regular space characters, but \xc2\a0, which is utf-8
-encoding for unicode character A0 ("no-break space").
+which causes warnings:
 
-Please don't do that.  I have my editor show odd characters as hex
-codes (I don't want any hidden information), which is why I noticed,
-and I'm not sure why/how you did it.
+qcom-msm8960-cdp.dtb: timer@200a000: $nodename:0: 'timer@200a000' does not match '^watchdog(@.*|-[0-9a-f])?$'
+  From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+---
+ Documentation/devicetree/bindings/watchdog/watchdog.yaml | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-               Linus
+diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+index e3dfb02f0ca5..b1daefec86af 100644
+--- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
++++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+@@ -14,9 +14,14 @@ description: |
+   This document describes generic bindings which can be used to
+   describe watchdog devices in a device tree.
+ 
++select:
++  properties:
++    $nodename:
++      pattern: "^watchdog(@.*|-[0-9a-f])?$"
++
+ properties:
+   $nodename:
+-    pattern: "^watchdog(@.*|-[0-9a-f])?$"
++    pattern: "^(timer|watchdog)(@.*|-[0-9a-f])?$"
+ 
+   timeout-sec:
+     description:
+-- 
+2.34.1
+
