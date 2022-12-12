@@ -2,127 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E9C64A0A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6E264A0AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbiLLN2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
+        id S232457AbiLLN2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiLLN16 (ORCPT
+        with ESMTP id S232432AbiLLN2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:27:58 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2089.outbound.protection.outlook.com [40.107.8.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD9F9FF3;
-        Mon, 12 Dec 2022 05:27:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kdyeypch4WbXaKx3UpKoza6sJICxhvXpBnWH0/l07gCDB6vfR9sLpfqvn9d7hzaIavO+3luIKctAMsyWIHNaCeWrqn3l70sGOC+VFN8tqhnX6qxJoGFvBi2Tq4IvUv7rzuNl/9s0gjLsk1Desqb7MRw2iADUp8SsOagOKghwQPa2yuB6Jtn0FQsEPGLe4h8eQHmGxVzmUxcjGeZk76u2fs2IkriVIdxWzLCnK17R+m89tUb+RIjU4RSDJsH35tAkMGi+Hkd4yIHxQgjXNmfMjED3xhlu/j19eGWaeC6p0uZs/Lj4f8K4jW62B9U3slMP0Ab6naEvJXOacPomYGr18A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QgEpnqc6pfC1foiCPNA2zswpnZcKH0GBwDuDZYaEylw=;
- b=VSdfctGRaqjgTiXHkMTK9XnFUEGzlSxw6O0yygAVGa091CdLYBLbiv9dPhJJL0SV16aLOBkpZ4xVpOzPDNaAmbJRJYlPZRUSyRhbo0lIZDou4syNk7fLFPNqv4efU2sheFXcPxBnWFde8UMKVqOctwiRE9JAmwnBjBfc0DHze0nQ9GN4sCHgW2XLOPN+37l1bjNPnAvDzPYFVBxATHP4PEIRDHv7aFrk2V05W4GLjcRIGSiT+1mrG5rQzcpqRXItyJjIeDvEgNI4bm1+JlkNdyBdWXfhYYfKTuW6H2jLufOm+YJOJ2UjnYbotQVBrT+UK6n3LItqvCtnIF2QweWjXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QgEpnqc6pfC1foiCPNA2zswpnZcKH0GBwDuDZYaEylw=;
- b=AZzbZueX/3UNlHBkYR7SBcl219COXNgCmwyDN0DUfVeG+L+wMGcawKTiHtnUKpXr7PRfM5YNc/3Uz8437O9fc2s0hkgt+0uR2RLFrE0hHzjhaE8psyTdExTqhVyBQhuR/5lm6IdRpazj0FMWWLolR2/NNyiJkbcg+wdeZsyGW/jhoVFIotsptiWstKwtfVt5C+Sxel1bjt1l4RCLw4OBeK5D6cNWCgviad/3FFHMl+2TT7WgMRV6rV9RvA3UwKVXPDyV7biJg2lnTKtillWm7IHTEZwpJyKZNPVVQ4yG+Krh7AtgoBbKiEvmSwEgDa5dOXZ1Foe7YOA8GYKUT7i6Lg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DBAPR04MB7383.eurprd04.prod.outlook.com (2603:10a6:10:1b3::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Mon, 12 Dec
- 2022 13:27:48 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::ae59:a542:9cbc:5b3%9]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 13:27:48 +0000
-Message-ID: <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
-Date:   Mon, 12 Dec 2022 14:27:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
- <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FRYP281CA0013.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::23)
- To VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+        Mon, 12 Dec 2022 08:28:18 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25123F08;
+        Mon, 12 Dec 2022 05:28:16 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id s186so11185603oia.5;
+        Mon, 12 Dec 2022 05:28:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjFXPlGZowJgMV8nnTYwn9x6IUXRk0DZC30EumVqm7c=;
+        b=HRC75xduVh0IxwE/vLNwnveLZ1A3QU3pyoIUFjphBfVHojaCrrRpaeiFAn7+/7D05u
+         H56yE69W1Wz/S1BOMFN2GrCic1JXFQPSLotEjyAc257sup3qZ2xWTWT8DHsPAqdAFQrP
+         FX35skfIhAkliIZ1RU6F11amUliD/PTyuRYxXWSED1Z21EzSF5qVAXB5S/PY4/FuBN95
+         f51xmAkkkfCZBJTk8I1yAbrEAaqBB7i24Hxo2m6QSc3tHlNAIYRTY2/rXBXpLMwiA6M1
+         LeXevrWDsKRswp0RGH1dNm6XkqGa3GWQQEgZYQQD4v5hCL+a+iq3kB3KLijkHS9p4JV3
+         F0Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjFXPlGZowJgMV8nnTYwn9x6IUXRk0DZC30EumVqm7c=;
+        b=mH9ZQfcYgzQihB0m5CTJlgdFyrFNGavJonh8EQat0qWqLpKfnNZpnfRxOXjZjjsSP3
+         d5/eVUTPFkvIq0hdwjMikj++70sb3ECqoNrMn29drWTz8v/HDyQRgqyJHtf48OLi6O+h
+         s9JsDzLE2PIIFLEcnYveVBvprVk6vEK1tTGmVqINBXaDe1CA9N4MHeWqn7WBLOzHwJGR
+         b9c23hZgHI7aI+hsQvmBcy04h/RKadk7VLq/oUC1sC0iIscC9viVY/iOeoatN/4C5d1s
+         PD6UkIkf2+7Pqu88f5u9ivMeHGfbiUiz0975junlCGIZbyZAvnbAmu1OazPe778zciYS
+         Gz7A==
+X-Gm-Message-State: ANoB5pkxjRpk3Wi19s3XD4D1D60nl06VlzX4Exhdv3EGeZ0nKSt7ddIq
+        RjkjRMCJ+lzDDZ68JZ6vrmsTATWDEvg=
+X-Google-Smtp-Source: AA0mqf5K5koWOxiO/t5jVIFTyPF9c8rqgKYnn6kO1/19sjuCv7d8ttB9kS3bCOLK24duqMp9FXngGw==
+X-Received: by 2002:a05:6808:199f:b0:35e:a4fa:ede6 with SMTP id bj31-20020a056808199f00b0035ea4faede6mr189983oib.40.1670851695345;
+        Mon, 12 Dec 2022 05:28:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h10-20020a05683040ca00b00670679748f9sm4129037otu.49.2022.12.12.05.28.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 05:28:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v6.2-rc1
+Date:   Mon, 12 Dec 2022 05:28:13 -0800
+Message-Id: <20221212132813.3627306-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBAPR04MB7383:EE_
-X-MS-Office365-Filtering-Correlation-Id: f999afce-202d-4b6b-2587-08dadc44a97c
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7WRc1rEARCCk4MD3cxCdyfMnaQqwXfK0Jp2FCtO1C1tzKgKrTnHxwodl+WLt608MXDI7CZMWK35B+OjLTPc4IxKeM+/24R/4qbW2RkkgQa5dwSdBVzNvDRvMs88YszvpGT3rdmusWGNuWtAleJVsOd8qgCstQXVYd4QkwwqYMgefz01c1Oi683wV/MiZpbkknGkO2KvoYluQ69aMrnG5wbVuc8Z1PZSZB2wKPBFDbSBAcoX/+/IdEBmdEy7a3NaqLr3E15LbN6PpH+7+Y9Hg0I/TB96NP+JeA5/nVUyRCcGhl56KbS2qvmQCgxV8O73EEPrYylu+cXPWx1cwR5jEBDORGnohsrZzhzwKDy0rwLTApuNj1B0zWRavPOX/HTzfRm5plJ8biPooySi8u97VV82oqn9pjhIOC9hWJoq6vfGOsQFwlsyo+RQPaNa09EJ/dytKPL0HKEd/xK67H5SsXtMlVxbdYAtUidUQx74UcIU5yUc5l8DpJL/gaGZ0CMV8sIRXYU2oBHaKrH/Xrf2ChwCTYpFqSlPyp2WpSHMqQ4LFKbZ7fKyzB1RRDjj/sGKx+Ges44v4k/hDTEwsmWKBgLW1x1dLtGkpgWBX6torYWg+bHiPp6RwwRXUHnt9BWLXt/JMWPenjyup84AptGiKr6BktYO9pMZzJhTVEinFlY4Ak9vQ6oMoZlLp/ZZFaEjUR7DRlJRKcJld/ejqrRpXky1eNcG+q9cg7CHaIZnOIAc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(366004)(376002)(39850400004)(396003)(451199015)(36756003)(8676002)(38100700002)(2906002)(110136005)(66946007)(54906003)(66556008)(316002)(66476007)(86362001)(31696002)(6506007)(6486002)(53546011)(66899015)(31686004)(478600001)(2616005)(8936002)(5660300002)(4326008)(6512007)(41300700001)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REx1dFBGUDB1VDI2SlpKd3dlcjZVMTRLNkRwOTg2NitTQWFaQzY4clVnRXdN?=
- =?utf-8?B?Vk1FRWRtQ0ZicDNOVUhldVQ0MWdPMGZiM1M4ODhjQTd2V01Xa3phV2wxMzJP?=
- =?utf-8?B?cW5BNjFxLzAxWHBVL2JKRmx4WEIyOWxzVEVLMnpQcFdjY2pPMlBjYmRUT1ZT?=
- =?utf-8?B?NnRlb3RVU2ZJZ1E1bzlqYzBRWG1hdTQ3N3dOUk8wWUxhdFVBRm5pcG1OU0Vu?=
- =?utf-8?B?QmpmTGlSRGVFQWdtTUE2OXBmZ0poR0U5T2VaY2JzZUF6YzRqSXExNDc2RE94?=
- =?utf-8?B?VVVVRUxkNkVTQjlDeXZ3MXpBRHRURDhvTXFwYUJiamo2NU5JcDhvcW1JOE5w?=
- =?utf-8?B?ODc5KzlTRm9lek53bnlWNDN1N1BpMzJCdGYrWGVFT2hWcVF4UkRpSlV0K3Ji?=
- =?utf-8?B?RDR2V01hY2hwRWNoNVBwSU9oaE1KNnRLUnFEQlRMeU5abUZOcCsvZzVHSHF4?=
- =?utf-8?B?MVNoUU43ZW5iMlBXTGFxUGptSmdhdHd0U1M3SyswZEdURmdBc0l4MVpuei84?=
- =?utf-8?B?VTdZNEhhVmZkTCtObWxuK0ljWjZYQTRsOENkUCtwWGJMK3p3T053N0F0dmIz?=
- =?utf-8?B?Y2M3SHBBWlloakViVnZ0Rkhrcmt3T3dVdkNoVitKby9qRU5VWVdVcTN0eDZo?=
- =?utf-8?B?ekpvQjFMb2dEY3NTUW5zenZuejZSOXU5K2VCd0NNb1N2SmI5MWFMN3N2c2tt?=
- =?utf-8?B?UUhqYlJWb3BKRGNwYmdrVURUU1pWeHJKRnVkaFdTUUhqZ1pwTElWb0VBOEFI?=
- =?utf-8?B?T21QRm9uS3dUTWdtcDRtaGJYS2ovZzd3UW9FNi8wU25vMlkwMUk1SEM1L3ph?=
- =?utf-8?B?anUwemdTNjZtQVYvSWt6S3RuWTVSdTg4Y2RrR0F1Q3V6blNieXlVWWxZa1M2?=
- =?utf-8?B?U0VvcHpJZXMzcC9CMm95amRGeWxITE5YZFNGWmNoenRNQWJDL0RnSXpXbUtK?=
- =?utf-8?B?alRSOVlkQUlXa0xJYzhCZXlIcEYwTThPdW0xbEpPQ1Z6UWpmSUJlUnpRSS8v?=
- =?utf-8?B?Vk5ONzdtQkVzUkdtYmQ0OUUzRzZYdUtsaHhzaVZ0UDFKbzNUZzlEZ3U1Mi83?=
- =?utf-8?B?UVhBMWkyMzhZTEd5TDlML0V0NTNFNWphMldOS0VFRTN5QjRwNDJHWkxRVVJo?=
- =?utf-8?B?eGNwTUptanNpQ1gvVHFjN25BUXo4R1ZIZXBaOUJDS2IyWksrMVltVmFVR2Nk?=
- =?utf-8?B?WUpreHlrcDNVYlJmOTdQeHVoOG5udzI3SHJGU1p2UGptOHN3OHBBUjNZTUpi?=
- =?utf-8?B?U2xhTnFwc1gwRlYwVjkyandnVWxBOWxlOG53MjBVSEtaZTU0WUY0OWJhT09x?=
- =?utf-8?B?NTNyVk1KS2xBQjhhVmNZbmNSNTQxY1pkWGd6SzAvWHN2ZjQyK1l3RXVMbnlI?=
- =?utf-8?B?OFpXalZzMmQyMm9Da3RGUm8yS0Fvdks0dDJnaU84eXRDd2tidVoreVpTU1lZ?=
- =?utf-8?B?NktuVW1BVmZMSk03SGoxWWp4QytSRFllaWMvbFB1Sk5PQnFhdVNEV09zbDEz?=
- =?utf-8?B?MXVWRmZUTDVVeGEybFpuYkpXbFk4dHVqNGJCR0IxUXBiVlMyZm9BOGpFdmZa?=
- =?utf-8?B?dWQ2M2FqM0dJeFdYaFZ2QjFWaTRrMTFDUzN3SG56MFpxNjQ3ekoyNGxxN201?=
- =?utf-8?B?eW9qZTJ0eXJOdml0cmNlOFNvZlVzR0ozMkxYSm9tNllxREVDaEcvditldlN2?=
- =?utf-8?B?cG1EUDB3SGg3bzI1RkZGdkpidHB4VDdRMUJpK05US0VxY0hYbVFNOXJlaTlo?=
- =?utf-8?B?SWpYWnA5aXFkQjU5eEZiZTc5cWNjSmhwMjRyY1VWVnlTWit4eWVIdWN3ZHZT?=
- =?utf-8?B?MTJ5cDhsM0xleXY0TmhkSzZsZ2NVVmR2bVloRTh4L1hkcmEwT1VVdFkvbGI3?=
- =?utf-8?B?azFsakRaazZuTDFZS25xeGE0WUl4TCs3aDVwVjJ0aFBNd0UvZWRheW9uaVdJ?=
- =?utf-8?B?L1ZRT3d1dTNzWDdmdlF3RjNCYlY2M3BjMkRkcGRJbXUzYy9NbVZSRk04bG1p?=
- =?utf-8?B?R1dmQXNYc2FDNXp2b3plZ1JiVlM2c0V2TVI3UG41UkJieGI0cmRCWUhkQXN6?=
- =?utf-8?B?ZTlVYXdPdFJ3SWJlb2lXSk1kM2p1MGl2K2t1SVRJdFR1ZTBESU1PcHpqU01C?=
- =?utf-8?B?SVlpbDUrN2dlNWVFMkRpdzlMbTYreUhpT2IwOUZCQnJzTkkvSXBBd0xGcDlB?=
- =?utf-8?Q?LpCwp1+iCIxHdSfMxRVGDZt3/e56SvvyeucI/w5cvNXu?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f999afce-202d-4b6b-2587-08dadc44a97c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 13:27:48.6968
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G0M80SFh2CqzYqJVnC7lup/Qu2HG/yuoiHNgODCXAG3gkLI2gVFcgY5XalNgjaPyQ312E4umGFdO/2l5xgeB2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7383
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,50 +71,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
+Please pull hwmon fixes for Linux v6.2-rc1 from signed tag:
 
-On 12.12.22 14:14, Johan Hovold wrote:
-> On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v6.2-rc1
 
->> 1. that the function exists and its purpose
-> 
-> That should be apparent from the function name (and implementation).
-> 
->> 2. its parameters
-> 
-> Apparent from the prototype.
-> 
-> But sure, it would not show up in generated documentation (like many
-> other functions).
+Thanks,
+Guenter
+------
 
-purpose, yes. existence, no.
+The following changes since commit 76dcd734eca23168cb008912c0f69ff408905235:
 
-> it seems. Not sure how much value there is in that, though.
+  Linux 6.1-rc8 (2022-12-04 14:48:12 -0800)
 
-I am afraid there is no consensus answer to that question.
-  
-> And in this case there was also no kernel doc for usb_get_intfdata()
-> which is equally self documenting. Why add redundant docs for only one
-> of these functions?
+are available in the Git repository at:
 
-Because knowing that one of them exists makes the other much more
-obvious.
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v6.2-rc1
 
-> I'd rather drop this particular documentation which was added due to a
-> misunderstanding then go down the rabbit hole of adding mindless kernel
-> doc to every helper we have.
+for you to fetch changes up to 364ffd2537c44cb6914ff5669153f4a86fffad29:
 
-Yes, but those are not the alternatives.
-Removing the perfectly good part of the kerneldoc is a needless regression,
-albeit a minor one.
+  hwmon: (emc2305) fix pwm never being able to set lower (2022-12-06 14:45:19 -0800)
 
-> Yes. The (device group) attributes are removed by driver core before
-> ->remove() is called, otherwise you'd have an even bigger issue with the
-> driver data itself which is typically deallocated before the pointer is
+----------------------------------------------------------------
+hwmon updates for v6.2 merge window
 
-So what happens if user space calls read() or write() on an existing fd?
-Sorry, but this is an issue we need to be sure about.
+New drivers
 
-	Regards
-		Oliver
+- Driver for OneXPlayer mini AMD sensors
 
+- Ampere's Altra smpro-hwmon driver
+
+New chip and attribute support in existing drivers
+
+- nct6775: Support for ASUS CROSSHAIR VIII/TUF/ProArt B550M
+
+- pmbus/ltc2978: Support for LTC7132
+
+- aquacomputer_d5next: Support for temperature sensor offsets
+  and flow sensor pulses
+
+- coretemp: Support for dynamic ttarget and tjmax
+
+Improvements
+
+- Use devm_regulator_get_enable() where appropriate
+
+- Use sysfs_emit() instead of scnprintf()
+
+- Remove some useless #include <linux/hwmon-vid.h>
+
+- Include <linux/kstrtox.h> when appropriate
+
+- Use simple i2c probe
+
+- it87: Check for a valid chip before using force_id, and new
+  new module parameter to ignore ACPI resource conflicts
+
+- jc42: Use regmap, and restore min/max/critical temperatures on resume
+
+- Add reporting power good and status to PMBus based regulators
+
+Last minute fixes
+
+- emc2305: Fix probing of emc2301/2/3, and fix setting pwm values
+  manually if THERMAL is enabled
+
+Various other minor fixes and improvements
+
+----------------------------------------------------------------
+Ahmad Khalifa (2):
+      hwmon: (it87) Add param to ignore ACPI resource conflicts
+      hwmon: (it87) Check for a valid chip before using force_id
+
+Aleksa Savic (3):
+      hwmon: (aquacomputer_d5next) Add support for temperature sensor offsets
+      hwmon: (aquacomputer_d5next) Clear up macros and comments
+      hwmon: (aquacomputer_d5next) Add support for Quadro flow sensor pulses
+
+Armin Wolf (1):
+      hwmon: (dell-smm) Move error message to make probing silent
+
+Christophe JAILLET (3):
+      hwmon: Include <linux/kstrtox.h> when appropriate
+      hwmon: Remove some useless #include <linux/hwmon-vid.h>
+      hwmon: (gsc-hwmon) Switch to flexible array to simplify code
+
+Colin Ian King (1):
+      hwmon: (fschmd) Make const arrays static const
+
+Denis Pauk (1):
+      hwmon: (nct6775) add ASUS CROSSHAIR VIII/TUF/ProArt B550M
+
+Felix Nieuwenhuizen (1):
+      hwmon: (pmbus/ltc2978) add support for LTC7132
+
+Frank Crawford (1):
+      hwmon: (it87) Add DMI table for future extensions
+
+Jeremy Kerr (1):
+      hwmon: (occ) OCC sensors aren't arch-specific
+
+Joaquín Ignacio Aramendía (3):
+      hwmon: add OneXPlayer mini AMD sensors driver
+      hwmon: (oxp-sensors) Add AOK ZOE and Mini PRO
+      hwmon: (oxp-sensors) Fix pwm reading
+
+Martin Blumenstingl (3):
+      hwmon: (jc42) Convert register access and caching to regmap/regcache
+      hwmon: (jc42) Restore the min/max/critical temperatures on resume
+      hwmon: (jc42) Consistently use bit and bitfield macros in the driver
+
+Matti Vaittinen (2):
+      hwmon: (lm90) simplify using devm_regulator_get_enable()
+      hwmon: (adm1177) simplify using devm_regulator_get_enable()
+
+Nathan Chancellor (1):
+      hwmon: (smpro-hwmon) Improve switch statments in smpro_is_visible()
+
+Patrick Rudolph (2):
+      hwmon: (pmbus) Add power good support
+      hwmon: (pmbus/core) Implement regulator get_status
+
+Quan Nguyen (3):
+      hwmon: Add Ampere's Altra smpro-hwmon driver
+      docs: hwmon: (smpro-hwmon) Add documentation
+      docs: hwmon: (smpro-hwmon) Improve grammar and formatting
+
+Stephen Kitt (1):
+      hwmon: use simple i2c probe
+
+Xingjiang Qiao (2):
+      hwmon: (emc2305) fix unable to probe emc2301/2/3
+      hwmon: (emc2305) fix pwm never being able to set lower
+
+Yang Yingliang (1):
+      hwmon: (jc42) Fix missing unlock on error in jc42_write()
+
+Zhang Rui (4):
+      hwmon: (coretemp) Remove obsolete temp_data->valid
+      hwmon: (coretemp) rearrange tjmax handing code
+      hwmon: (coretemp) Add support for dynamic tjmax
+      hwmon: (coretemp) Add support for dynamic ttarget
+
+ye xingchen (1):
+      hwmon: use sysfs_emit() to instead of scnprintf()
+
+ Documentation/hwmon/aquacomputer_d5next.rst |   4 +-
+ Documentation/hwmon/index.rst               |   2 +
+ Documentation/hwmon/oxp-sensors.rst         |  44 +++
+ Documentation/hwmon/smpro-hwmon.rst         | 102 ++++++
+ MAINTAINERS                                 |   6 +
+ drivers/hwmon/Kconfig                       |  20 ++
+ drivers/hwmon/Makefile                      |   2 +
+ drivers/hwmon/adm1177.c                     |  27 +-
+ drivers/hwmon/aht10.c                       |   5 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 233 ++++++++++----
+ drivers/hwmon/atxp1.c                       |   1 +
+ drivers/hwmon/coretemp.c                    | 242 +++++++++------
+ drivers/hwmon/dell-smm-hwmon.c              |   3 +-
+ drivers/hwmon/ds1621.c                      |   2 +-
+ drivers/hwmon/emc2305.c                     |  48 +--
+ drivers/hwmon/fschmd.c                      |   4 +-
+ drivers/hwmon/gpio-fan.c                    |   1 +
+ drivers/hwmon/gsc-hwmon.c                   |   6 +-
+ drivers/hwmon/hwmon.c                       |   1 +
+ drivers/hwmon/it87.c                        |  90 ++++--
+ drivers/hwmon/jc42.c                        | 273 +++++++++-------
+ drivers/hwmon/lm73.c                        |   6 +-
+ drivers/hwmon/lm90.c                        |  21 +-
+ drivers/hwmon/ltc2992.c                     |   4 +-
+ drivers/hwmon/max127.c                      |   5 +-
+ drivers/hwmon/mr75203.c                     |   1 +
+ drivers/hwmon/nct6775-platform.c            |   7 +
+ drivers/hwmon/occ/Kconfig                   |   2 -
+ drivers/hwmon/oxp-sensors.c                 | 284 +++++++++++++++++
+ drivers/hwmon/pcf8591.c                     |   1 +
+ drivers/hwmon/pmbus/ltc2978.c               |  17 +-
+ drivers/hwmon/pmbus/pmbus_core.c            |  52 +++-
+ drivers/hwmon/pmbus/q54sj108a2.c            |   1 +
+ drivers/hwmon/sbrmi.c                       |   5 +-
+ drivers/hwmon/sbtsi_temp.c                  |   5 +-
+ drivers/hwmon/sht3x.c                       |  12 +-
+ drivers/hwmon/sht4x.c                       |   5 +-
+ drivers/hwmon/smpro-hwmon.c                 | 466 ++++++++++++++++++++++++++++
+ drivers/hwmon/vt8231.c                      |   1 -
+ drivers/hwmon/w83l786ng.c                   |   1 -
+ include/linux/hwmon-sysfs.h                 |   1 +
+ include/linux/platform_data/gsc_hwmon.h     |   5 +-
+ 42 files changed, 1611 insertions(+), 407 deletions(-)
+ create mode 100644 Documentation/hwmon/oxp-sensors.rst
+ create mode 100644 Documentation/hwmon/smpro-hwmon.rst
+ create mode 100644 drivers/hwmon/oxp-sensors.c
+ create mode 100644 drivers/hwmon/smpro-hwmon.c
