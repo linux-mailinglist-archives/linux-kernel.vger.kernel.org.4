@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622C664A165
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3F164A1EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbiLLNjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        id S232990AbiLLNrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiLLNjd (ORCPT
+        with ESMTP id S233072AbiLLNq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:39:33 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD0F14D32
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:38:27 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id z26so725742lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:38:27 -0800 (PST)
+        Mon, 12 Dec 2022 08:46:57 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E0210CD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:46:56 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id j16so8931883qtv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:46:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5XaoqYPcstX2vkS44Es/ogTcUNI1GuvolK6Dv6wUJUc=;
-        b=XUqT3au53d6d9bBUS18grnSa04NrSeqJ4CBP9J4zSz/1Vx16d96vKWk7qC1sVh3joL
-         MRPrfwWh/rglFXrc03Q+iPTN1LF8Lio+LDYO5VFbLXIbzwEu6ustI0HEj7absedxAOsA
-         N81YDd/29+Ms2kleUnVxPiNoPdmxdVm/ODh0i+rfyni8UVnzo0nX//2c94vLCs36qlTm
-         qKkFYiEch8OOKxGijjWeLwtGoM3SylCvN4oPS0QBFl9XnagVwhiGYKXRHvbylVGuk6qF
-         d6ZmjYiPu6t+CXpDfsEQNvWrtxEv1PxY9LQRfBPb29nxQjmSl9OU9vl7D8iatdgjwr6+
-         M7Xw==
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJ9NU84AyBpwNvLFrjU87/BmZh36mcxF5lGPBeo1Qqo=;
+        b=bWjGbjhf4h0GI7JCLZ1ckeejDx5cupyKwYhtiNyfmnNR/njvuPTu3c0xARoCruAOyq
+         H1ZUX68s6YPZy1ykE9LwjleJXskqTp93AGH+PQa4K6Be/oHWsI1G9O/Go4oOOeAKC/83
+         et2PMsHAjumlpYPI9VW8lbFR9w3g4mN1bY7JU0U0Vdm0lhXlcuk6sxRD3EfzbYP7IX6B
+         5IdY91HBiz+fyee/ev2fn2ftZnpPAnukVg67lr/rU7UB3okmaPqRtH6Kf7c0OqTJPbJQ
+         /DLW845zkxFCPv9wmSqpCYoA4wkYMFZDKGWnbHGHoA4v0vK89oQuLLaGKQm1sQPLqQZs
+         7/zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XaoqYPcstX2vkS44Es/ogTcUNI1GuvolK6Dv6wUJUc=;
-        b=zxDLp3SbtZVoyz7fzD/O6O9TpiX4byB6C6eSUH4KQ+eBz8YTVp3AbGHA0NZuLckJQW
-         tRlCzx4mjueGUrVXhNIRmxYjHlFS2GOfS7Z7s2VgWu8PoLx+CSN1P5To+uy4e1XmMxqh
-         3J3S6/xI9fkv4BP7FGLreJw0d/glXqaI7IXShOL22oC7yJJrE6Fu1zeAaMWiKlWikbyL
-         d1+ZN5OJO3ljScEXgt0WETDckS1bmyxaOV1mURYQknHbN5pFY4PDGt48r/LqnWLL425c
-         /BPprv3lfUlEhVLALVjjtA8g47gOmHn4BI9ZMJp5Jid+7tp/MUXid0t9ZF1FWDZXKz9d
-         m8Iw==
-X-Gm-Message-State: ANoB5pl6yqP4u4kI9hxD32B1VM8+blroUW5HOjeIEL2AS44VO0nsnjsN
-        y6aRIG9AgdfEFejVhevmq7IkucPRsKV1iiob
-X-Google-Smtp-Source: AA0mqf6/hxsy5FnJXs6wytAFIbgsQrbKOzve15vDPnggvJsgQcFq2I3Nap9smAPQG7jiiyHD5+mV0A==
-X-Received: by 2002:a05:6512:21b:b0:4b5:5098:e6f7 with SMTP id a27-20020a056512021b00b004b55098e6f7mr3451086lfo.68.1670852305496;
-        Mon, 12 Dec 2022 05:38:25 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512358600b00499b27a329esm1632967lfr.300.2022.12.12.05.38.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 05:38:25 -0800 (PST)
-Message-ID: <20fcf298-7d91-0458-489d-4fb65cdff380@linaro.org>
-Date:   Mon, 12 Dec 2022 14:38:23 +0100
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cJ9NU84AyBpwNvLFrjU87/BmZh36mcxF5lGPBeo1Qqo=;
+        b=uii39muv/E4/xg4qBcSSk+4nFsm9JDWHZU9NP7Pf7V4dnlLQaWHwnnHr2K3Kb0jVea
+         FalcwV14HO6DjE3ZN5ZpFYAoZ9wxLPujdXUW6soE5TcGTDkgxVOeCJIo+BubxqY2tH1F
+         TTYfY2WobnUiAacHBEDAz+90p3xalUFCkItV0vgOqsbCV6X9EJp8gtEgCQn722STJSbO
+         euA6jxfxshHmHOMPNN60Oa/x4o07tS5Tmvwb1p0/G5Ft++6IsvRhw0kc7WUybmhsJnRG
+         OBYcUwFgZBn0GiyyBApFFZZOxXnY6y96DCHkZQnZBz9EC27HvzHS44ooTtOGzRz7hx+G
+         Q2mw==
+X-Gm-Message-State: ANoB5pnfrA1qU2nZr597y2VJcBmMt2m0Uv9KblPSlBhlem+jL3NZr5J+
+        va76d7yR9cszC0zfQjnj6vQ=
+X-Google-Smtp-Source: AA0mqf4Ef3l6l8EYiD0ypqo1Jwccdu8LIu7fefnogQnJmk1eLqyCiNJ83t5OcdL9kalU1vqRuqgrvg==
+X-Received: by 2002:a05:622a:98c:b0:3a8:10c1:4ba with SMTP id bw12-20020a05622a098c00b003a810c104bamr10343465qtb.14.1670852815190;
+        Mon, 12 Dec 2022 05:46:55 -0800 (PST)
+Received: from MBP ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac87590000000b003a6934255dasm5828625qtq.46.2022.12.12.05.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 05:46:54 -0800 (PST)
+References: <20221115140233.21981-1-schspa@gmail.com>
+ <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+ <m2bko8c0yh.fsf@gmail.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Schspa Shi <schspa@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
+        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] umh: fix UAF when the process is being killed
+Date:   Mon, 12 Dec 2022 21:38:31 +0800
+In-reply-to: <m2bko8c0yh.fsf@gmail.com>
+Message-ID: <m2pmcoag55.fsf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: rename AOSS QMP node to pmu
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221212133303.39610-1-krzysztof.kozlowski@linaro.org>
- <20221212133303.39610-4-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221212133303.39610-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,153 +80,203 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Schspa Shi <schspa@gmail.com> writes:
 
-On 12.12.2022 14:33, Krzysztof Kozlowski wrote:
-> The Always On Subsystem (AOSS) QMP is not a power domain controller
-> since commit 135780456218 ("arm64: dts: qcom: sc7180: Use QMP property
-> to control load state") and few others.  In fact, it was never a power
-> domain controller but rather control of power state of remote
-> processors.  This power state control is know handled differently, thus
-> the AOSS QMP nodes do not have power-domain-cells:
-> 
->   sc7280-idp.dtb: power-controller@c300000: '#power-domain-cells' is a required property
->   From schema: Documentation/devicetree/bindings/power/power-domain.yaml
-> 
-> AOSS QMP is an interface to the actuall AOSS subsystem responsible for
-> some of power management functions, thus let's call the nodes as "pmu" -
-> Power Management Unit.
-power-management@ is used on apple and rockchip and pmu is very
-ambiguous (power management or performance measurement unit).
+> Luis Chamberlain <mcgrof@kernel.org> writes:
+>
+>> On Mon, Dec 05, 2022 at 07:38:21PM +0800, Schspa Shi wrote:
+>>> 
+>>> Schspa Shi <schspa@gmail.com> writes:
+>>> 
+>>> > When the process is killed, wait_for_completion_state will return with
+>>> > -ERESTARTSYS, and the completion variable in the stack will be freed.
+>>
+>> There is no free'ing here, it's just not availabel anymore, which is
+>> different.
+>>
+>
+> No, the whole thread stack will be freed when the process died. There
+> will be some cases where it will be released. It will be more accurate
+> to modify it to be unavailable.
+>
+>>> > If the user-mode thread is complete at the same time, there will be a UAF.
+>>> >
+>>> > Please refer to the following scenarios.
+>>> >             T1                                  T2
+>>> > ------------------------------------------------------------------
+>>> > call_usermodehelper_exec
+>>> >                                    call_usermodehelper_exec_async
+>>> >                                    << do something >>
+>>> >                                    umh_complete(sub_info);
+>>> >                                    comp = xchg(&sub_info->complete, NULL);
+>>> >                                    /* we got the completion */
+>>> >                                    << context switch >>
+>
+> The sub_info->complete will be set to NULL.
+>
+>>> >
+>>> >     << Being killed >>
+>>> > 	retval = wait_for_completion_state(sub_info->complete, state);
+>>> > 	if (!retval)
+>>> > 		goto wait_done;
+>>> >
+>>> > 	if (wait & UMH_KILLABLE) {
+>>> > 		/* umh_complete() will see NULL and free sub_info */
+>>> > 		if (xchg(&sub_info->complete, NULL))
+>>> > 			goto unlock;
+>>> >         << we can't got the completion >>
+>>
+>> I'm sorry I don't understand what you tried to say here, we can't got?
+>>
+>
+> In this scenario, the sub_info->complete will be NULL, at the
+> call_usermodehelper_exec_async, and we will go to the unlock branch here.
+>
+>>> > 	}
+>>> > 	....
+>>> > unlock:
+>>> > 	helper_unlock();
+>>> > 	return retval;
+>>> > }
+>>> >
+>>> > /**
+>>> >  * the completion variable in stack is end of life cycle.
+>>> >  * and maybe freed due to process is recycled.
+>>> >  */
+>>> >                                    --------UAF here----------
+>>> >                                    if (comp)
+>>> >                                        complete(comp);
+>>> >
+>>> > To fix it, we can put the completion variable in the subprocess_info
+>>> > variable.
+>>> >
+>>> > Reported-by: syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com
+>>> > Reported-by: syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com
+>>> > Reported-by: syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+>>> >
+>>> > Signed-off-by: Schspa Shi <schspa@gmail.com>
+>>> > ---
+>>> >  include/linux/umh.h | 1 +
+>>> >  kernel/umh.c        | 6 +++---
+>>> >  2 files changed, 4 insertions(+), 3 deletions(-)
+>>> >
+>>> > diff --git a/include/linux/umh.h b/include/linux/umh.h
+>>> > index 5d1f6129b847..801f7efbc825 100644
+>>> > --- a/include/linux/umh.h
+>>> > +++ b/include/linux/umh.h
+>>> > @@ -20,6 +20,7 @@ struct file;
+>>> >  struct subprocess_info {
+>>> >  	struct work_struct work;
+>>> >  	struct completion *complete;
+>>> > +	struct completion done;
+>>> >  	const char *path;
+>>> >  	char **argv;
+>>> >  	char **envp;
+>>> > diff --git a/kernel/umh.c b/kernel/umh.c
+>>> > index 850631518665..3ed39956c777 100644
+>>> > --- a/kernel/umh.c
+>>> > +++ b/kernel/umh.c
+>>> > @@ -380,6 +380,7 @@ struct subprocess_info *call_usermodehelper_setup(const char *path, char **argv,
+>>> >  	sub_info->cleanup = cleanup;
+>>> >  	sub_info->init = init;
+>>> >  	sub_info->data = data;
+>>> > +	init_completion(&sub_info->done);
+>>> >    out:
+>>> >  	return sub_info;
+>>> >  }
+>>> > @@ -405,7 +406,6 @@ EXPORT_SYMBOL(call_usermodehelper_setup);
+>>> >  int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>> >  {
+>>> >  	unsigned int state = TASK_UNINTERRUPTIBLE;
+>>> > -	DECLARE_COMPLETION_ONSTACK(done);
+>>> >  	int retval = 0;
+>>> >  
+>>> >  	if (!sub_info->path) {
+>>> > @@ -431,7 +431,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>> >  	 * This makes it possible to use umh_complete to free
+>>> >  	 * the data structure in case of UMH_NO_WAIT.
+>>> >  	 */
+>>> > -	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &done;
+>>> > +	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &sub_info->done;
+>>> >  	sub_info->wait = wait;
+>>> >  
+>>> >  	queue_work(system_unbound_wq, &sub_info->work);
+>>> > @@ -444,7 +444,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>> >  	if (wait & UMH_FREEZABLE)
+>>> >  		state |= TASK_FREEZABLE;
+>>> >  
+>>> > -	retval = wait_for_completion_state(&done, state);
+>>> > +	retval = wait_for_completion_state(sub_info->complete, state);
+>>> >  	if (!retval)
+>>> >  		goto wait_done;
+>>> 
+>>> Hi Luis Chamberlain:
+>>> 
+>>> Could you help to review this patch? I'm not sure why we define the
+>>> amount of completion here on the stack. But this UAF can be fixed by
+>>> moving the completion variable to the heap.
+>>
+>> It would seem to me that if this is an issue other areas would have
+>> similar races as well, so I was hard pressed about the approach / fix.
+>>
+>
+> I think other modules will have similar bugs, but this is a limitation
+> on the use of the DECLARE_COMPLETION_ONSTACK macro, and it has been
+> specifically stated in the completion's documentation.
+>
+> There is the description from completion's documentation:
+>
+> Note that when using completion objects as local variables you must be
+> acutely aware of the short life time of the function stack: the function
+> must not return to a calling context until all activities (such as waiting
+> threads) have ceased and the completion object is completely unused.
+>
+>> Wouldn't something like this be a bit more explicit about ensuring
+>> we don't let the work item race beyond?
+>>
+>> diff --git a/kernel/umh.c b/kernel/umh.c
+>> index 850631518665..55fc698115a7 100644
+>> --- a/kernel/umh.c
+>> +++ b/kernel/umh.c
+>> @@ -447,6 +447,8 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>  	retval = wait_for_completion_state(&done, state);
+>>  	if (!retval)
+>>  		goto wait_done;
+>> +	else if (retval == -ERESTARTSYS)
+>> +		cancel_work_sync(&sub_info->work);
+>>
+>
+> I think this modification will make UMH_KILLABLE useless, we have to
+> wait for this task to complete, even if it is killed.
+>
+>>  	if (wait & UMH_KILLABLE) {
+>>  		/* umh_complete() will see NULL and free sub_info */
 
-Konrad
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
->  arch/arm64/boot/dts/qcom/sdm845.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sm6350.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sm8150.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sm8350.dtsi   | 2 +-
->  arch/arm64/boot/dts/qcom/sm8450.dtsi   | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 906fb9343bcc..7e781570b2c6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -3248,7 +3248,7 @@ aoss_reset: reset-controller@c2a0000 {
->  			#reset-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sc7180-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts = <GIC_SPI 389 IRQ_TYPE_EDGE_RISING>;
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 7c24c2129800..b08ddeb7bcec 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -4257,7 +4257,7 @@ aoss_reset: reset-controller@c2a0000 {
->  			#reset-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sc7280-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 3cb4ca6c53eb..e04f1f751881 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1921,7 +1921,7 @@ tsens1: thermal-sensor@c265000 {
->  			#thermal-sensor-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sc8280xp-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP IRQ_TYPE_EDGE_RISING>;
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 5f1f7cb52c90..2e15a003825e 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -4965,7 +4965,7 @@ aoss_reset: reset-controller@c2a0000 {
->  			#reset-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sdm845-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts = <GIC_SPI 389 IRQ_TYPE_EDGE_RISING>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> index 0f01ff4feb55..bb20fed0f4f0 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -1273,7 +1273,7 @@ tsens1: thermal-sensor@c265000 {
->  			#thermal-sensor-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sm6350-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x1000>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index d1b64280ab0b..ad6902b13a71 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -3589,7 +3589,7 @@ pdc: interrupt-controller@b220000 {
->  			interrupt-controller;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sm8150-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0x0 0x0c300000 0x0 0x400>;
->  			interrupts = <GIC_SPI 389 IRQ_TYPE_EDGE_RISING>;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index fbbbae29e0c2..6faf13ed90c1 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -3741,7 +3741,7 @@ tsens1: thermal-sensor@c265000 {
->  			#thermal-sensor-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sm8250-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index 49db223a0777..519e436aeab9 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -1717,7 +1717,7 @@ tsens1: thermal-sensor@c265000 {
->  			#thermal-sensor-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sm8350-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index e0d30dadbf8b..234fe6549fe0 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2453,7 +2453,7 @@ tsens1: thermal-sensor@c265000 {
->  			#thermal-sensor-cells = <1>;
->  		};
->  
-> -		aoss_qmp: power-controller@c300000 {
-> +		aoss_qmp: pmu@c300000 {
->  			compatible = "qcom,sm8450-aoss-qmp", "qcom,aoss-qmp";
->  			reg = <0 0x0c300000 0 0x400>;
->  			interrupts-extended = <&ipcc IPCC_CLIENT_AOP IPCC_MPROC_SIGNAL_GLINK_QMP
+Hi Luis Chamberlain:
+
+I checked the code from __kthread_create_on_node, and we can fix this
+with the following change too.
+
+I'd like to upload a V2 patch with the new solution if you prefer the
+following way.
+
+diff --git a/kernel/umh.c b/kernel/umh.c
+index 850631518665..8023f11fcfc0 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+                /* umh_complete() will see NULL and free sub_info */
+                if (xchg(&sub_info->complete, NULL))
+                        goto unlock;
++               /*
++                * kthreadd (or new kernel thread) will call complete()
++                * shortly.
++                */
++               wait_for_completion(&done);
+        }
+
+ wait_done:
+
+-- 
+BRs
+Schspa Shi
