@@ -2,77 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C88649F0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AAC649F0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiLLMqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
+        id S232294AbiLLMrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbiLLMqj (ORCPT
+        with ESMTP id S231462AbiLLMrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:46:39 -0500
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495A011C3A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:46:39 -0800 (PST)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-3b10392c064so144225407b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iaQPhI8N4H6dyN/+L2S22G2Ev8to2HE/AsRBdgvtEyc=;
-        b=kORaJQSEcYjMwiOBEgAbeAf6SoAF/BdJ1QQ6nE5Z9RcuYBuGm8pmLJjhxZjw8+sHzH
-         AxvXN60J9fdjvqDm4dpnwi2MMY682tFDpABSuVxeL3U6ImLQCuET4Vl0QhVojgeo3Xsj
-         DLkj7babFdWm27sE0Oep3xUaweG4D5Co+XtUGi4xNqV1dul66tXnWu2Bo6fYG62PFa4H
-         xj3FNV8JUMAUpHeoFrmB0He+adItjPT2LwKbaue2OJrlRZkMCEknfnlf5NIkwifMiu1I
-         PRoAPLH30wwzjEpB7nH8ZUbO5auzzdJsppJqKC1lMh+etlGmLI9ymcmeJF9gnYx15aB1
-         Yl6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iaQPhI8N4H6dyN/+L2S22G2Ev8to2HE/AsRBdgvtEyc=;
-        b=GXztg5K8mMd6tN2yFc0kHBwQe8ScFmLbSzwUt3ybJZ0LxUD3fNRGeirPiXFtCqdekj
-         up61gGjEm8gKi4NL9akpwmn53nvcGjLpe7RHIkjqhmXvC2iO+J6XMzY79/nTHjkI9vt0
-         8PD/0qrFdfvm36vmleFxzfJDbWuaaEDuYqTwqS1LSaIdpKQRJxCmeDYh0RxO75oO6y/C
-         ptVTSAyqNJ0FkVsE8zMaKvEsMtHjo4j3z2h0t3cbiO2myVf3N2T1c/3i6qtVPaSaRmku
-         XNgTUJcjbiNikmJ69J9el5yPztgC/NtwDAytp7R4fLrIq7V2MkFBjFFELo7vslhaVWtS
-         oXHA==
-X-Gm-Message-State: ANoB5pnsmrQ8v24bMNTIZMuf94nhMcM30tw4WiCeZU4iytnpocqn34OG
-        /jr4eKSTOJXvp+6vNO8FK0UFg7dH4D7FRV7yIZc=
-X-Google-Smtp-Source: AA0mqf7azZSR3fkZxGUKlzHNReV15Nh6Buyr/2Q/lxksgFv5TRh7Aga2UybwT52+emU2iAYjikob/lxvICFKUo4AtUw=
-X-Received: by 2002:a81:574f:0:b0:3cf:57d1:e770 with SMTP id
- l76-20020a81574f000000b003cf57d1e770mr40272658ywb.289.1670849198453; Mon, 12
- Dec 2022 04:46:38 -0800 (PST)
+        Mon, 12 Dec 2022 07:47:31 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF212084;
+        Mon, 12 Dec 2022 04:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bnDEDv4cCUbLu4jOeJkF2nvePqKhVNSO7r0+B2yW+J8=; b=zblTOoSnDU5imG7LtfiCwQMBeB
+        JjNa1ISzUmSc5+FkwIYHtnKWvBNgnCybwImEB+b4ExzFYJNHH+01/646BHZU0wROeW/Ohs1nLGgxn
+        tAjQTUpGnm2Y0/jU5fV0bdfMe/QzFUYh6HKyEScNqBQvimGBiaLxSFKLEREWOgaatkkIHaxHvYnjm
+        fkmHHWkvqblz/3J8wGb29mYKR4BYXIxUfaAKRVA7donhMa/tJ4aIAAQKt2TNGHT6vXxd111thUTaJ
+        5jkubZauSdYrVGIpxCHblw9aVO43YOM4wOFk94ETOpu1T09fsPeB9KtHMjHe7CFvMLhLBFDsX3WTH
+        rYFxV6QQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35676)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p4iD9-0005a5-LJ; Mon, 12 Dec 2022 12:47:11 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p4iD7-0005Vm-Bu; Mon, 12 Dec 2022 12:47:09 +0000
+Date:   Mon, 12 Dec 2022 12:47:09 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, sergiu.moga@microchip.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] net: phylink: init phydev on phylink_resume()
+Message-ID: <Y5cizXwsEnJ3fX0y@shell.armlinux.org.uk>
+References: <20221212112845.73290-1-claudiu.beznea@microchip.com>
+ <20221212112845.73290-2-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7983:b0:3df:5688:6324 with HTTP; Mon, 12 Dec 2022
- 04:46:38 -0800 (PST)
-Reply-To: mdm223664@gmail.com
-From:   "Dr. Woo Nam" <woonam115@gmail.com>
-Date:   Mon, 12 Dec 2022 04:46:38 -0800
-Message-ID: <CAGdtzSbJYXAF_fKgmoAp0do=1AibZUFAgnjKt-CZR7c+=PbrNA@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212112845.73290-2-claudiu.beznea@microchip.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-I tried e-mailing you more than twice but my email bounced back
-failure, Note this, soonest you receive this email revert to me before
-I deliver the message it's importunate, pressing, crucial. Await your
-response.
+On Mon, Dec 12, 2022 at 01:28:44PM +0200, Claudiu Beznea wrote:
+> There are scenarios where PHY power is cut off on system suspend.
+> There are also MAC drivers which handles themselves the PHY on
+> suspend/resume path. For such drivers the
+> struct phy_device::mac_managed_phy is set to true and thus the
+> mdio_bus_phy_suspend()/mdio_bus_phy_resume() wouldn't do the
+> proper PHY suspend/resume. For such scenarios call phy_init_hw()
+> from phylink_resume().
+> 
+> Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+> 
+> Hi, Russel,
+> 
+> I let phy_init_hw() to execute for all devices. I can restrict it only
+> for PHYs that has struct phy_device::mac_managed_phy = true.
+> 
+> Please let me know what you think.
 
-Best regards
-Dr. Woo Nam
+I think it would be better to only do this in the path where we call
+phy_start() - if we do it in the WoL path (where the PHY remains
+running), then there is no phy_start() call, so phy_init_hw() could
+result in the PHY not working after a suspend/resume event.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
