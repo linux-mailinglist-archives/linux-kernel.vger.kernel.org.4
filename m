@@ -2,197 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3D6649E88
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59136649E8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiLLMRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S232002AbiLLMTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiLLMRE (ORCPT
+        with ESMTP id S229452AbiLLMTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:17:04 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D01D4C;
-        Mon, 12 Dec 2022 04:17:03 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id cf42so18259896lfb.1;
-        Mon, 12 Dec 2022 04:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sLoVQdA43+DAdLnOXjusrfGfaOuKpLXuC0KL/7/HUtg=;
-        b=bDB0NPkQZdALht8DdxM4T7Baja7XRm9jOcFTq48a2qzmRngDoCI1a+Q6n5GYZiEOSC
-         GIeoAnk5SUS5Wv1OOcLA+lHlR8cCWOLDGAANgKO3XAFhiqaCJAhZf/w06TqIOzDVBlw+
-         /tWyW0ZabTn9zMJjeunhgq0CGWBV6tJbpMw4ybR0P/RHalLDwQvmo2dyJsU0DiL7HJqn
-         bG4ZS+n1Qe9d277e1MfrBYPYF38NNuvV9FaOIj5V1lvyiM1kGqwV948xjDgOTYkv8eW5
-         qoLr2uvUMm1El/nC9r/96yhstN51b83vqiH3zuryeQ5qeqndiV6EoxEONqufFK1RYblq
-         +ZsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sLoVQdA43+DAdLnOXjusrfGfaOuKpLXuC0KL/7/HUtg=;
-        b=dcm19Xg7/wXXZNxwNMpmLXXKDu35BsUkZJFmxM82lEva+LefTzgLxmCDKIJqcmriu7
-         2xhQDs8V7Gqhu69miQVbFHMDxT+lgpku9sx4cgJ+n4q91oxRnxzZnW7fPIcmzgjY7O0f
-         AA5MM9M27l6k6sd1cczZWWiYkVfDJL3CJlPJHYGdL5FwbF+8QLSdi5d1Vsky4Ft1amuu
-         JUlPt4hf4aYb/e6Y4AKJQi/m7Muh+q8+caPDGZYCsCootxICNnJ26iVwzL6HSWmjE62f
-         lL6fFgFQqoRkdqaqygBxpOx0pUGyj5MpbiOR5Tzxj+h1cd15TWuTSd7HYV4a84V1OR8+
-         iX4w==
-X-Gm-Message-State: ANoB5pmayy8LKSFGOg/1BhS/3ycPTxIB6EmsNVZmco+rGyEXm6NKHBS4
-        br6rNmH3mZdcGsN09WB7pps=
-X-Google-Smtp-Source: AA0mqf7srrqLiokCn07h7tnuEgkMDFOQrdo9vI7b4FR3FOOkfExlDf/xLDw1nFhxJvi2+werjdCpPA==
-X-Received: by 2002:a05:6512:750:b0:4a4:68b7:d649 with SMTP id c16-20020a056512075000b004a468b7d649mr3548078lfs.48.1670847421751;
-        Mon, 12 Dec 2022 04:17:01 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id u9-20020ac25bc9000000b004b561202ea2sm1630017lfn.182.2022.12.12.04.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 04:17:01 -0800 (PST)
-Date:   Mon, 12 Dec 2022 15:16:59 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: dw: select SS0 when gpio cs is used
-Message-ID: <20221212121659.cc3ts54ztwmmzwol@mobilestation>
-References: <20221202094859.7869-1-edmund.berenson@emlix.com>
- <20221209114625.32ww2laxfr72uqnb@mobilestation>
- <20221209121354.fcpwh54khx4y5g7q@emlix.com>
+        Mon, 12 Dec 2022 07:19:43 -0500
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7855FCE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:19:41 -0800 (PST)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4NW10947WVzMpvRQ;
+        Mon, 12 Dec 2022 13:19:37 +0100 (CET)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4NW1090nXrzMptmf;
+        Mon, 12 Dec 2022 13:19:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1670847577;
+        bh=+8HUJm/3k6xDNGEdfLjboNwcxufcrgs95IkLGAAQ9tk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XK3Fjhx7apuP7njgW4dejqn1MfR71/tIm+/tTpwCvjpcmeUQ0hzY+Cv4gXJdSStQ7
+         sKwPm80lhTBqduWFRlkQ3X6JVJFBwQ1vhxMvpM4aceeMeCSdzYquWjsZNYJJlCQsCN
+         ph3NHtvWlIz911FOlumYSZf6L3Do/eh12AZyKurs=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] Landlock updates for v6.2
+Date:   Mon, 12 Dec 2022 13:19:18 +0100
+Message-Id: <20221212121918.1315195-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209121354.fcpwh54khx4y5g7q@emlix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:13:54PM +0100, Edmund Berenson wrote:
-> Hi Serge,
-> 
-> On Fri, Dec 09, 2022 at 02:46:25PM +0300, Serge Semin wrote:
-> > Hello Edmund
-> > 
-> > On Fri, Dec 02, 2022 at 10:48:59AM +0100, Edmund Berenson wrote:
-> > > SER register contains only 4-bit bit-field for enabling 4 SPI chip selects.
-> > > If gpio cs are used the cs number may be >= 4. To ensure we do not write
-> > > outside of the valid area, we choose SS0 in case of gpio cs to start
-> > > spi transfer.
-> > 
-> > Next time please don't forget to add me to the whole series Cc-list. I
-> > am missing the patch #2 in my inbox.
-> > 
-> I am sorry, I probably made some mistake when sending the mail.
-> I forwarded you patch 2 as well.
-> > > 
-> > > Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> > > Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> > > Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> > > ---
-> > >  drivers/spi/spi-dw-core.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > > index 99edddf9958b..57c9e384d6d4 100644
-> > > --- a/drivers/spi/spi-dw-core.c
-> > > +++ b/drivers/spi/spi-dw-core.c
-> > > @@ -94,6 +94,10 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
-> > >  {
-> > >  	struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
-> > >  	bool cs_high = !!(spi->mode & SPI_CS_HIGH);
-> > > +	u8 enable_cs = 0;
-> > > +
-> > > +	if (!spi->cs_gpiod)
-> > > +		enable_cs = spi->chip_select;
-> > >  
-> > >  	/*
-> > >  	 * DW SPI controller demands any native CS being set in order to
-> > > @@ -103,7 +107,7 @@ void dw_spi_set_cs(struct spi_device *spi, bool enable)
-> > >  	 * support active-high or active-low CS level.
-> > >  	 */
-> > >  	if (cs_high == enable)
-> > 
-> > > -		dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
-> > > +		dw_writel(dws, DW_SPI_SER, BIT(enable_cs));
-> > 
-> > No, it's not that easy. By applying this patch we'll get a regression
-> > for the platforms which make use of both the GPIO-based and native
-> > chip-selects. Consider the next platform setup:
-> >  +--------------+
-> >  | SoC X        |
-> >  |              |    +-------------+
-> >  |   DW SSI CS0-+----+ SPI-slave 0 |
-> >  |              |    +-------------+
-> >  |              |    +-------------+
-> >  |        GPIOn-+----+ SPI-slave 1 |
-> >  |              |    +-------------+
-> >  +--------------+
-> > 
-> > If we apply this patch then the communications targeted to the
-> > SPI-slave 1 will also reach the SPI-slave 0 device, which isn't what
-> > we'd want.
-> > 
-> > That's why currently the DW SSI driver activates the native CS line
-> > with the corresponding ID irrespective whether it is a GPIO-based
-> > CS or a native one.
+Hi Linus,
 
-> Okay that is actually true... but we will have to guard against CS>4 as only two
-> bits are reserved for cs in the register.
+This PR adds file truncation support to Landlock, contributed by
+Günther Noack:
+https://lore.kernel.org/r/20221018182216.301684-1-gnoack3000@gmail.com
+Please pull this Landlock changes for v6.2-rc1 .  These 12 commits
+merged cleanly with your tree, and have been successfully tested in the
+latest linux-next releases for more than a month.
 
-Firstly note that DW SSI can be synthesized with having up to 16
-slaves. The number of available native chip-selects is normally
-defined by the "num-cs" DT-property. (Though the DT-bindings
-incorrectly set the upper limit to 4 slaves only.)
+As described by Günther, the goal of these patches is to work towards a
+more complete coverage of file system operations that are restrictable
+with Landlock.  The known set of currently unsupported file system
+operations in Landlock is described here:
+https://www.kernel.org/doc/html/v6.1/userspace-api/landlock.html#filesystem-flags
+Out of the operations listed there, truncate is the only one that
+modifies file contents, so these patches should make it possible to
+prevent the direct modification of file contents with Landlock.
 
-Secondly if you want to have a sanity check of the specific slave ID
-then I'd suggest to use the dw_spi_setup() method for that. Just add
-the conditional statement like "if (spi->chip_select >= dws->num_cs)
-return -EINVAL" in there. Note this modification will solidify the
-semantic of having less than num_cs chip-selects.
+The new LANDLOCK_ACCESS_FS_TRUNCATE access right covers both the
+truncate(2) and ftruncate(2) families of syscalls, as well as open(2)
+with the O_TRUNC flag.  This includes usages of creat() in the case
+where existing regular files are overwritten.
 
-Thirdly also note the number of native chip-selects is auto-detectable
-by writing FFs to the SER register. So we can avoid defaulting the
-num_cs to 4 in the spi-dw-mmio.c driver and try to auto-detect the
-number of chip-selects (the dw_spi_hw_init() method is the best
-candidate for that procedure), if no "num-cs" property was specified.
+Additionally, this patch set introduces a new Landlock security blob
+associated with opened files, to track the available Landlock access
+rights at the time of opening the file. This is in line with Unix's
+general approach of checking the read and write permissions during
+open(), and associating this previously checked authorization with the
+opened file.  An ongoing patch documents this use case:
+https://lore.kernel.org/r/20221209193813.972012-1-mic@digikod.net
 
-> If both gpio and native cs are used at least one native cs
-> has to be empty otherwise we will have at least one double activation.
-> I am not sure if there is a "clean" way to determine which native cs is unused
-> inside the driver. Do you think it would be an acceptable workaround to
-> add an entry to the device tree like native-gpio cs?
+In order to treat truncate(2) and ftruncate(2) calls differently in an
+LSM hook, we split apart the existing security_path_truncate hook into
+security_path_truncate (for truncation by path) and
+security_file_truncate (for truncation of previously opened files).
 
-Currently the DW SSI driver implies having a native CS behind each
-GPIO-based chip-select. It is used to activate the communications.
-That semantic is implicitly advertised to the SPI subsystem core by
-setting the SPI_MASTER_GPIO_SS flag.
+Test coverage for security/landlock is 94.7% of 835 lines according to
+gcc/gcov-12, and it was 94.6% of 809 lines before this series.
 
-Before thinking of a best way to implement what you suggest I need to
-ask: Do you really need to have the extended number of CSs support? Do
-you have any practical need in that? If you don't, then I would
-suggest to leave things as is. (The suggested sanity check might be
-useful though.) If you do, then we'll need to come up with a algo,
-which would imply detecting the GPIO-based chip-selects in the
-controller probe procedure and using one of their native counterpart
-(for instance the very last one or very first one) to activate either
-all the GPIO-based CS transfer exceeding the number of available
-native chip-selects, or just all the GPIO-based communications.
+syzkaller has been updated accordingly:
+https://github.com/google/syzkaller/pull/3423
+Such patched instance (tailored to Landlock) has been running for
+months, covering all the new truncate-related code.
 
--Serge(y)
+Regards,
+ Mickaël
 
-> > 
-> > -Serge(y)
-> > 
-> > >  	else
-> > >  		dw_writel(dws, DW_SPI_SER, 0);
-> > >  }
-> > > -- 
-> > > 2.37.4
-> > > 
+--
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git tags/landlock-6.2-rc1
+
+for you to fetch changes up to f6e53fb2d7bd70547ba53232415976cb70ad6d97:
+
+  samples/landlock: Document best-effort approach for LANDLOCK_ACCESS_FS_REFER (2022-11-07 20:49:50 +0100)
+
+----------------------------------------------------------------
+Landlock updates for v6.2-rc1
+
+----------------------------------------------------------------
+Günther Noack (12):
+      security: Create file_truncate hook from path_truncate hook
+      landlock: Refactor check_access_path_dual() into is_access_to_paths_allowed()
+      landlock: Document init_layer_masks() helper
+      landlock: Support file truncation
+      selftests/landlock: Test file truncation support
+      selftests/landlock: Test open() and ftruncate() in multiple scenarios
+      selftests/landlock: Locally define __maybe_unused
+      selftests/landlock: Test FD passing from restricted to unrestricted processes
+      selftests/landlock: Test ftruncate on FDs created by memfd_create(2)
+      samples/landlock: Extend sample tool to support LANDLOCK_ACCESS_FS_TRUNCATE
+      landlock: Document Landlock's file truncation support
+      samples/landlock: Document best-effort approach for LANDLOCK_ACCESS_FS_REFER
+
+ Documentation/userspace-api/landlock.rst     |  67 +++-
+ fs/namei.c                                   |   2 +-
+ fs/open.c                                    |   2 +-
+ include/linux/lsm_hook_defs.h                |   1 +
+ include/linux/lsm_hooks.h                    |  10 +-
+ include/linux/security.h                     |   6 +
+ include/uapi/linux/landlock.h                |  21 +-
+ samples/landlock/sandboxer.c                 |  29 +-
+ security/apparmor/lsm.c                      |   6 +
+ security/landlock/fs.c                       | 206 +++++++++---
+ security/landlock/fs.h                       |  24 ++
+ security/landlock/limits.h                   |   2 +-
+ security/landlock/setup.c                    |   1 +
+ security/landlock/syscalls.c                 |   2 +-
+ security/security.c                          |  16 +-
+ security/tomoyo/tomoyo.c                     |  13 +
+ tools/testing/selftests/landlock/base_test.c |  38 +--
+ tools/testing/selftests/landlock/common.h    |  85 ++++-
+ tools/testing/selftests/landlock/fs_test.c   | 468 ++++++++++++++++++++++++++-
+ 19 files changed, 878 insertions(+), 121 deletions(-)
