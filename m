@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE0A649CDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A14649CDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiLLKo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        id S232225AbiLLKoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiLLKlS (ORCPT
+        with ESMTP id S232098AbiLLKlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:41:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE7FAF0;
-        Mon, 12 Dec 2022 02:36:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E58D060F75;
-        Mon, 12 Dec 2022 10:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F300C433D2;
-        Mon, 12 Dec 2022 10:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670841391;
-        bh=ge5RUukD9XT75lLSEX4INDIWUIQdr5aLW7fIKhgF9ss=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FspwTdjqmGMlB+YSD53nAyQ39MN2k1IJJMIKeEDOonc/h2fRJHQlbj1sWfONgqDfv
-         IN3K9zTU8fRTf+IkMy8PULEFwnXJ5/Rv/R+SoPSS8hukKs2MMziDypG6aE6o4i19os
-         TAfv4tSo9inCwvGOIgQ80GeeY94sGbrBxtnpJoEIFIdRjjwnYfHfzndkqw8C4DF3kn
-         sM/CABlC2HsZk7f6Mu9WV1A3C/mWUJDMRqYynrxOTIzy2CkEZfEg7aPIId1EcnvTbD
-         SxK15cYwZEglhuU+2sItA/rx3C9WmCUEVEgV7zX9ww3mNK/bPFzc2uwMTLiBVturpu
-         L5Hc7x/9NX2mw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 7/7] net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
-Date:   Mon, 12 Dec 2022 05:36:15 -0500
-Message-Id: <20221212103616.300049-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221212103616.300049-1-sashal@kernel.org>
-References: <20221212103616.300049-1-sashal@kernel.org>
+        Mon, 12 Dec 2022 05:41:17 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F4A9F037
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:36:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 952741FB;
+        Mon, 12 Dec 2022 02:37:08 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.40.60])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2723F5A1;
+        Mon, 12 Dec 2022 02:36:26 -0800 (PST)
+Date:   Mon, 12 Dec 2022 10:36:23 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, will@kernel.org,
+        samitolvanen@google.com, keescook@chromium.org, mhiramat@kernel.org
+Subject: Re: [PATCH] ftrace: Allow WITH_ARGS flavour of graph tracer with
+ shadow call stack
+Message-ID: <Y5cEJ55sEvs0QsNF@FVFF77S0Q05N>
+References: <20221209143402.3332369-1-ardb@kernel.org>
+ <Y5NI2TKtGbDKyt53@FVFF77S0Q05N>
+ <20221209165139.37d033ee@gandalf.local.home>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209165139.37d033ee@gandalf.local.home>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+On Fri, Dec 09, 2022 at 04:51:39PM -0500, Steven Rostedt wrote:
+> On Fri, 9 Dec 2022 14:40:25 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> > On Fri, Dec 09, 2022 at 03:34:02PM +0100, Ard Biesheuvel wrote:
+> > > The recent switch on arm64 from DYNAMIC_FTRACE_WITH_REGS to
+> > > DYNAMIC_FTRACE_WITH_ARGS failed to take into account that we currently
+> > > require the former in order to allow the function graph tracer to be
+> > > enabled in combination with shadow call stacks. This means that this is
+> > > no longer permitted at all, in spite of the fact that either flavour of
+> > > ftrace works perfectly fine in this combination.
+> > > 
+> > > Given that arm64 is the only arch that implements shadow call stacks in
+> > > the first place, let's update the condition to just reflect the arm64
+> > > change. When other architectures adopt shadow call stack support, this
+> > > can be revisited if needed.
+> > > 
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>  
+> > 
+> > My bad; sorry about this, and thanks for the fix!
+> > 
+> > Acked-by: Mark Rutland <mark.rutland@arm.com>
+> > 
+> > We should probably also add:
+> > 
+> > Fixes: 26299b3f6ba26bfc ("ftrace: arm64: move from REGS to ARGS")
+> 
+> Actually, I believe it is:
+> 
+> Fixes: ddc9863e9e90 ("scs: Disable when function graph tracing is enabled")
 
-[ Upstream commit 31d929de5a112ee1b977a89c57de74710894bbbf ]
+Ah; it's slightly more subtle since these were on different branches that got
+merged. Either's correct in its own branch, and the merge is where things went
+wrong.
 
-When the name_assign_type attribute was introduced (commit
-685343fc3ba6, "net: add name_assign_type netdev attribute"), the
-loopback device was explicitly mentioned as one which would make use
-of NET_NAME_PREDICTABLE:
+I think the overall least confusing thing is to bite the bullet and list both
+REGS and ARGS, i.e.
 
-    The name_assign_type attribute gives hints where the interface name of a
-    given net-device comes from. These values are currently defined:
-...
-      NET_NAME_PREDICTABLE:
-        The ifname has been assigned by the kernel in a predictable way
-        that is guaranteed to avoid reuse and always be the same for a
-        given device. Examples include statically created devices like
-        the loopback device [...]
+  depends on DYNAMIC_FTRACE_WITH_ARGS || DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
 
-Switch to that so that reading /sys/class/net/lo/name_assign_type
-produces something sensible instead of returning -EINVAL.
+... and for the fixes tag have:
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/loopback.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Fixes: ddc9863e9e90 ("scs: Disable when function graph tracing is enabled")
 
-diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
-index a1c77cc00416..498e5c8013ef 100644
---- a/drivers/net/loopback.c
-+++ b/drivers/net/loopback.c
-@@ -208,7 +208,7 @@ static __net_init int loopback_net_init(struct net *net)
- 	int err;
- 
- 	err = -ENOMEM;
--	dev = alloc_netdev(0, "lo", NET_NAME_UNKNOWN, loopback_setup);
-+	dev = alloc_netdev(0, "lo", NET_NAME_PREDICTABLE, loopback_setup);
- 	if (!dev)
- 		goto out;
- 
--- 
-2.35.1
+That way the commit is correct regardless of the REGS -> ARGS conversion, and
+will work if backported independently.
 
+Thanks,
+Mark.
