@@ -2,84 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ADA649B6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDE3649B71
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiLLJuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S231816AbiLLJuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiLLJuD (ORCPT
+        with ESMTP id S231773AbiLLJuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:50:03 -0500
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDA2DE8B;
-        Mon, 12 Dec 2022 01:50:01 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAAXH_NA+ZZj5q2tBg--.62925S2;
-        Mon, 12 Dec 2022 17:49:52 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     agross@kernel.org, konrad.dybcio@somainline.org,
-        srinivas.kandagatla@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] slimbus: qcom-ngd: Add check for platform_driver_register
-Date:   Mon, 12 Dec 2022 17:49:50 +0800
-Message-Id: <20221212094950.23050-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Dec 2022 04:50:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFEBA195;
+        Mon, 12 Dec 2022 01:50:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09252B80BA4;
+        Mon, 12 Dec 2022 09:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD6C3C433F1;
+        Mon, 12 Dec 2022 09:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670838614;
+        bh=KnsL4KWSHtWzanbpgeKsKtos90grrMjVEnvc3TFDe6o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Sh6VbmrEFHrscHu/5kbMWudzQAokWDjW6dRNvQiUb8Z+smEKY7lHmDvLaW1E5HsPK
+         Vf4b9uCtCsnDtWEyEVgQU0KET8SiGuaIkNI9O/gDL3DumjF5zcabRKBV6oZc9Irgcz
+         6lKHGWod6/imPY1y+yFbxEs2dV52TriJr6YYjID7V8pqypn6/KoiQr3mTE091QN6MD
+         WADPXm3qMpVKyh0l+nTnLEQjJ3iABv9CPf2fH3U+6mGIxK8uKShFwmEjpaWseF+yAr
+         tMuiQfiWW3k75G6ERWJWAZ2rR/DhUt9u/j5B70oqlu2O6Xwh6eK30oE99vbjynIUWg
+         KRw7NcdD1Eo0w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A35A1C41612;
+        Mon, 12 Dec 2022 09:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAAXH_NA+ZZj5q2tBg--.62925S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFW3tFyUuw4rXFWfGF4DArb_yoWfAwcEkr
-        yS9F9FyrsxCrnIvFnFqF43Z34IyF98WFs5uw4jvry3trWxJF1DXr4Yvr4UCF4UCrWUtw17
-        J3s0yrWfAryxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU4BT5UUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: farsync: Fix kmemleak when rmmods farsync
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167083861466.6188.11052191900852417459.git-patchwork-notify@kernel.org>
+Date:   Mon, 12 Dec 2022 09:50:14 +0000
+References: <20221208120540.3758720-1-lizetao1@huawei.com>
+In-Reply-To: <20221208120540.3758720-1-lizetao1@huawei.com>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     kevin.curtis@farsite.co.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the check for the return value of platform_driver_register
-in order to catch the exception.
+Hello:
 
-Fixes: 917809e2280b ("slimbus: ngd: Add qcom SLIMBus NGD driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/slimbus/qcom-ngd-ctrl.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index 76c5e446d243..c16fc9e6d1c6 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1590,7 +1590,10 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
- 		goto err_pdr_lookup;
- 	}
- 
--	platform_driver_register(&qcom_slim_ngd_driver);
-+	ret = platform_driver_register(&qcom_slim_ngd_driver);
-+	if (ret < 0)
-+		goto err_pdr_lookup;
-+
- 	return of_qcom_slim_ngd_register(dev, ctrl);
- 
- err_pdr_alloc:
+On Thu, 8 Dec 2022 20:05:40 +0800 you wrote:
+> There are two memory leaks reported by kmemleak:
+> 
+>   unreferenced object 0xffff888114b20200 (size 128):
+>     comm "modprobe", pid 4846, jiffies 4295146524 (age 401.345s)
+>     hex dump (first 32 bytes):
+>       e0 62 57 09 81 88 ff ff e0 62 57 09 81 88 ff ff  .bW......bW.....
+>       01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+>       [<ffffffff83d35c78>] __hw_addr_add_ex+0x198/0x6c0
+>       [<ffffffff83d3989d>] dev_addr_init+0x13d/0x230
+>       [<ffffffff83d1063d>] alloc_netdev_mqs+0x10d/0xe50
+>       [<ffffffff82b4a06e>] alloc_hdlcdev+0x2e/0x80
+>       [<ffffffffa016a741>] fst_add_one+0x601/0x10e0 [farsync]
+>       ...
+> 
+> [...]
+
+Here is the summary with links:
+  - net: farsync: Fix kmemleak when rmmods farsync
+    https://git.kernel.org/netdev/net/c/2f623aaf9f31
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
