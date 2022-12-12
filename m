@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF499649D8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437A9649D84
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbiLLL2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S231938AbiLLLY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiLLL2v (ORCPT
+        with ESMTP id S231802AbiLLLX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:28:51 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F6231E;
-        Mon, 12 Dec 2022 03:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aPCq5QjQ7nVUQw50mTEY6sEu3k3UNBF5jPLWNgYPtCo=; b=VCOxZarE3hZ5ss5LXGp/ijHe1b
-        /ntM61IKrd0dlYLrD3IGZ8OXhAtkYj9dZMNWZhAArywAgtrbb2KpCN3Wqp3zhzS8+vbsKEb+D2RpC
-        O/vg1NBlFWQfmUl5jy8/NrHgbbhlk8spZ+B5heH5Q6kXhkxgzgLJk9YeggwhcL3FwZcbbU1vH5O0v
-        IifRdNjkPZ2YlcFdtmchRz6Igd6pRCJd35BWocTIvogTMTpXf89l58aAdC4ddEzc1+Z1czngaoKvA
-        Oq6mL24LGP1rrvwrssX4LE+yGVY2Bzmdg3dbhFPzKCduh0AN/aWTRnFyY0l/WHDDv0wNLA4AaLEbv
-        PAn6ZPIQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4gz0-009lF1-F9; Mon, 12 Dec 2022 11:28:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6354300293;
-        Mon, 12 Dec 2022 12:28:29 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C910E20B2B4EA; Mon, 12 Dec 2022 12:28:29 +0100 (CET)
-Date:   Mon, 12 Dec 2022 12:28:29 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 06/31] sched: Add sched_class->switching_to() and expose
- check_class_changing/changed()
-Message-ID: <Y5cQXTDhfvk2LIWU@hirez.programming.kicks-ass.net>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-7-tj@kernel.org>
+        Mon, 12 Dec 2022 06:23:58 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2768C2B;
+        Mon, 12 Dec 2022 03:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670844213; x=1702380213;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qE3rGYPHT42eUSwMS/SUMBxIsdKWa8DJkE2Olb7Y7K8=;
+  b=Lyvf+Z7TlxJjd2LE3+HGv4uaaW5H2ba2nfOK22RKzheYX3wzwlLsr1Dp
+   Q92octGv1cvUTCypCVnz4EHApnNxENo1M62aIJy8SE5LD5Py8cYymfycB
+   xmMQ4PFUIVFTtcqDnn4/KHaUwLm2TiHNm8jYvgkbbWv+ZTBJUZLEg0uX4
+   ljkbgHcBWwy76wwVg95NQkxhHWrQWCxgxU2TvupmvLWDJ+qD8/JkNHmpp
+   Ao6Vt0MQpdwgI+S/NqxMVUkNnSxsApaQ+z2fXXRt4oYbe7VnfuLuKPJBv
+   HbMzHRnThZtWUlpDw5esxn/mAfF/DyfNL188N8ltqaWclWI3lo/EEEieF
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="127662327"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2022 04:23:32 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 12 Dec 2022 04:23:32 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 04:23:29 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <andrew@lunn.ch>, <hkallweit1@gmail.com>
+CC:     <sergiu.moga@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v2 0/2] net: macb: fix connectivity after resume
+Date:   Mon, 12 Dec 2022 13:28:43 +0200
+Message-ID: <20221212112845.73290-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130082313.3241517-7-tj@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:22:48PM -1000, Tejun Heo wrote:
-> When a task switches to a new sched_class, the prev and new classes are
-> notified through ->switched_from() and ->switched_to(), respectively, after
-> the switching is done. However, a new sched_class needs to prepare the task
-> state before it is enqueued on the new class for the first time.
+Hi,
 
-How and why isn't sched_fork() sufficient?
+This series fixes connectivity on SAMA7G5 with KSZ9131 ethernet PHY.
+Driver fix is in patch 2/2. Patch 1/2 is a prerequisite.
+
+Thank you,
+Claudiu Beznea
+
+Changes in v2:
+- patch 1 has been updated to call phy_init_hw() on phylink_resume()
+- patch 2 is new; the previous one was only calling phy_init_hw()
+
+Claudiu Beznea (2):
+  net: phylink: init phydev on phylink_resume()
+  net: macb: use phylink_suspend()/phylink_resume()
+
+ drivers/net/ethernet/cadence/macb_main.c | 17 +++++++----------
+ drivers/net/phy/phylink.c                |  6 ++++++
+ 2 files changed, 13 insertions(+), 10 deletions(-)
+
+-- 
+2.34.1
+
