@@ -2,93 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5763A64AA17
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FAB64AA12
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiLLWRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
+        id S233714AbiLLWRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiLLWRq (ORCPT
+        with ESMTP id S233643AbiLLWQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:17:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFDC1ADA7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670883409;
+        Mon, 12 Dec 2022 17:16:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF771ADA5;
+        Mon, 12 Dec 2022 14:16:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23317B80E81;
+        Mon, 12 Dec 2022 22:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291EBC433F1;
+        Mon, 12 Dec 2022 22:16:47 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q+Rfj5ew"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1670883405;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8jEJGlD5zSDTeu+llNmFOn5ERqJjpd9o8G/piU1li3s=;
-        b=K9m0r0dmaYxqLqrpXmr8X/ZIhGKOoCiHYTE2UxTGsYI+CQtTDWSR3FYHmdWLiwMqlJsRKZ
-        NuHaWeC2mPuu03zBYn3mC5bZYZ9Y8Dg8d8zUNQmSme4j5AzapiRy1ZGzWAchv+MraAgtlt
-        gT4aCO5nwb5KtjP3pZaMru5aHbLFJCc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-n_HS5SIrPuyy6RT0CSoQag-1; Mon, 12 Dec 2022 17:16:44 -0500
-X-MC-Unique: n_HS5SIrPuyy6RT0CSoQag-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 62A631C05192;
-        Mon, 12 Dec 2022 22:16:43 +0000 (UTC)
-Received: from [10.22.11.98] (unknown [10.22.11.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BFD8CC15BA0;
-        Mon, 12 Dec 2022 22:16:42 +0000 (UTC)
-Message-ID: <b60f19c9-1e40-d621-dae5-f42bf99d6e90@redhat.com>
-Date:   Mon, 12 Dec 2022 17:16:38 -0500
+        bh=7KeoIAPwed+d+SzN4UkTZwHoxhIIXfI6f+Yf3pSqxKA=;
+        b=Q+Rfj5ewra5XXnQpyA7n+18Qu2K2ZugC7OkRrwFah5fQMsg8ftMud2ZGE9HZa2tJEhIMSX
+        F82tmd3j74afr/gIeQuIMtlDng477nNYzda8gL+fY7cbSOiBoCi2uAL2Vs3Yj76atFQiVg
+        +pyicwHyodR7MdlR7e1bpzIRmfbFGek=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c9e2c4e0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 12 Dec 2022 22:16:44 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 15:16:43 -0700
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] non-MM commits for 6.2-rc1
+Message-ID: <Y5eoS/UfBhovR70j@zx2c4.com>
+References: <20221212134425.b20b80955e5e8a4a36ce1b9a@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block v2 1/3] bdi, blk-cgroup: Fix potential UAF of blkcg
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
-        Yi Zhang <yi.zhang@redhat.com>
-References: <20221211222058.2946830-1-longman@redhat.com>
- <20221211222058.2946830-2-longman@redhat.com>
- <Y5enmzQM7BIiEv9n@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y5enmzQM7BIiEv9n@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221212134425.b20b80955e5e8a4a36ce1b9a@linux-foundation.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 12, 2022 at 01:44:25PM -0800, Andrew Morton wrote:
+>       wifi: rt2x00: use explicitly signed or unsigned types
 
-On 12/12/22 17:13, Tejun Heo wrote:
-> On Sun, Dec 11, 2022 at 05:20:56PM -0500, Waiman Long wrote:
->>   static void blkcg_destroy_blkgs(struct blkcg *blkcg)
->>   {
->> +	/*
->> +	 * blkcg_destroy_blkgs() shouldn't be called with all the blkcg
->> +	 * references gone.
->> +	 */
->> +	if (WARN_ON_ONCE(!css_tryget(&blkcg->css)))
->> +		return;
-> Wouldn't it make more sense to use percpu_ref_is_zero()? It's not like the
-> obtained extra reference does anything, right?
+Why is this part of your PULL? This was a netdev/wireless tree fix which
+was in 6.1-rc5. Kalle wrote that he took it on 21 Oct 2022 in:
+https://lore.kernel.org/all/166633563389.6242.13987912613257140089.kvalo@kernel.org/
 
-Yes, that makes sense. Will incorporate the change in the next version.
-
-Thanks,
-Longman
-
+Jason
