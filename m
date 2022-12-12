@@ -2,206 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DA3649C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3324E649CEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbiLLKlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S232306AbiLLKpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiLLKkl (ORCPT
+        with ESMTP id S232149AbiLLKll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:40:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19FDB4A9;
-        Mon, 12 Dec 2022 02:34:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DFB560F40;
-        Mon, 12 Dec 2022 10:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A48CC433EF;
-        Mon, 12 Dec 2022 10:34:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670841288;
-        bh=d83TxHN9oztaLU1gt+Fi+GU5ce7VMeB1SwmpA2UXsIQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GlRg1ZklbUlADjU40uhGLTH3HINyulcwz3kNsqM/HYCxmZCRM6Jx3jUjosf0boNG3
-         ayQS4y0Wc7kZYzrCdJJ0eCLvvUhi5tuNTO1Meq6q68JQtoMaNPvUnGWfEkbjrudG1T
-         fIRxRe63FSpKVTMkKLvTj+XfmliO3DvB0gu6rFggrCvvuiCWaWv/5xxSfZ1uliB6ZJ
-         W1kzTJg1dqvegeugr3N7MY+B18fJs41GMwGIORqjOlL1xpyefIaoDOjWRE6Aqk5FjS
-         V5H7d2bZMkwJYw1i+b4QPgSRlzY59TXpO5Kjr/5C/sROJjN874lVg/+4AMPutJrs55
-         jWcu52z8fvaiQ==
-Message-ID: <e257526b-6199-6ff4-8eae-59a8dc8377a2@kernel.org>
-Date:   Mon, 12 Dec 2022 18:34:45 +0800
+        Mon, 12 Dec 2022 05:41:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92F62E6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:35:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670841300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KFD4bXF9HfKCTB2bqwvpTx8dBPmnhTdXw6WlgJmCRVE=;
+        b=KKucQ/Bu1/lv68mwDOoBIY0ErKwJz5aWWGszCMisnn4XqtI7lpbX3ffgf1h10KJRU8Mq4n
+        Ql1vggxmsQk18NWTyXCCeafaRFLGeOrnyVdVhzS68Q6Io8GktMWjEC2yIQ839yZLViP/MS
+        6VrEyYStWngn2ieUj9pcU8omh0ecUKo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-169-y6UFkkqyOquK5bJOzEgwlQ-1; Mon, 12 Dec 2022 05:34:59 -0500
+X-MC-Unique: y6UFkkqyOquK5bJOzEgwlQ-1
+Received: by mail-wm1-f70.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso3165491wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:34:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFD4bXF9HfKCTB2bqwvpTx8dBPmnhTdXw6WlgJmCRVE=;
+        b=RjvnSA6ClEjCF4VuYD78r7r6kEyG4V8vLNqLnYQJqr3gzZA8d43WyxvCdtQaiXSy9w
+         d4QO6Cb/bDrNkkT9+ML2BvBwyqwWiz+TSWGx1C+kdW4ZcJqNXYIHmnY6f7p0+g+th/p9
+         G7gplC1x2yJttPn6tw14AAnMq/hhAEISEkcO340Nh+Mx2xKMKLpccz7Z3EAhFTX2JXni
+         ZWRru+FT4Q5mnLGDCRw7qVzesFWyLaX7Q5Lvc79E3CLgOuJEnFa1lsog3stEWcWLvmAL
+         8UL2NkZ2Fp9SV+qiTaGehdCvzszfTUbqT6ECsoXQL0enDrWH+6uQdcCkTJWCKrYNAbIJ
+         MbEA==
+X-Gm-Message-State: ANoB5pm1jTkH1htYn+Gae2vsq98IBVtcUi4G+zhRFC9AnCKXoJ1Pnn/3
+        i6GZ0bm8m5nenQuTYTm76ISCotrEACmUjiLvKfhfMjgkP9nsfjVBwhCRQvje+pZ3CxlITnuOGxc
+        JvoGc81hlM21Vhm+SmFfedlkr
+X-Received: by 2002:a5d:4888:0:b0:232:be5d:5ecc with SMTP id g8-20020a5d4888000000b00232be5d5eccmr9224036wrq.35.1670841298283;
+        Mon, 12 Dec 2022 02:34:58 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7wvWIVuOKysZf5Mx8cCdDopdcGEnGqjatRwKG8EB36UeyRpqDFxHDI9VsIf8PVP5iD55AkPA==
+X-Received: by 2002:a5d:4888:0:b0:232:be5d:5ecc with SMTP id g8-20020a5d4888000000b00232be5d5eccmr9224016wrq.35.1670841298004;
+        Mon, 12 Dec 2022 02:34:58 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id bn1-20020a056000060100b00242269c8b8esm8603207wrb.25.2022.12.12.02.34.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 02:34:57 -0800 (PST)
+Message-ID: <322454c7-0a3b-e055-2405-f485fa149e7a@redhat.com>
+Date:   Mon, 12 Dec 2022 11:34:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 2/2] f2fs: add support for counting the average time of
- submit discard cmd
+Subject: Re: [PATCH v2 4/7] KVM: selftests: Correctly initialize the VA space
+ for TTBR0_EL1
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20221129041524.81235-1-frank.li@vivo.com>
- <20221129041524.81235-2-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221129041524.81235-2-frank.li@vivo.com>
+To:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209015307.1781352-1-oliver.upton@linux.dev>
+ <20221209015307.1781352-5-oliver.upton@linux.dev>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221209015307.1781352-5-oliver.upton@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/29 12:15, Yangtao Li wrote:
-> This patch adds support for counting the average time of submit discard
-> command, and we can see its value in debugfs.
-
-How about enabling this only when CONFIG_DEBUG_FS is on?
-
-+Cc block mailing list
-
-Not sure block layer has similar stats? if it hasn't, can such stat
-be accounted in block layer, and then all filesystem can be benefited.
-
-Thanks,
-
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   fs/f2fs/debug.c   |  7 +++++--
->   fs/f2fs/f2fs.h    |  5 +++++
->   fs/f2fs/segment.c | 18 ++++++++++++++++--
->   3 files changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-> index 733b1bd37404..eed3edfc5faf 100644
-> --- a/fs/f2fs/debug.c
-> +++ b/fs/f2fs/debug.c
-> @@ -109,6 +109,9 @@ static void update_general_status(struct f2fs_sb_info *sbi)
->   			llist_empty(&SM_I(sbi)->fcc_info->issue_list);
->   	}
->   	if (SM_I(sbi)->dcc_info) {
-> +		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+On 12/9/22 02:53, Oliver Upton wrote:
+> @@ -268,17 +305,17 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
+>   #ifdef __aarch64__
+>   	if (vm->pa_bits != 40)
+>   		vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
 > +
-> +		si->discard_avg = dcc->discard_time_avg;
->   		si->nr_discarded =
->   			atomic_read(&SM_I(sbi)->dcc_info->issued_discard);
->   		si->nr_discarding =
-> @@ -510,8 +513,8 @@ static int stat_show(struct seq_file *s, void *v)
->   			   si->nr_wb_cp_data, si->nr_wb_data,
->   			   si->nr_flushing, si->nr_flushed,
->   			   si->flush_list_empty);
-> -		seq_printf(s, "Discard: (%4d %4d)) cmd: %4d undiscard:%4u\n",
-> -			   si->nr_discarding, si->nr_discarded,
-> +		seq_printf(s, "Discard: (%4d %4d, avg:%4lldns)) cmd: %4d undiscard:%4u\n",
-> +			   si->nr_discarding, si->nr_discarded, ktime_to_us(si->discard_avg),
->   			   si->nr_discard_cmd, si->undiscard_blks);
->   		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
->   			   si->aw_cnt, si->max_aw_cnt);
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index eb8c27c4e5fc..5a99759d10ac 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -370,6 +370,8 @@ struct discard_cmd {
->   	int error;			/* bio error */
->   	spinlock_t lock;		/* for state/bio_ref updating */
->   	unsigned short bio_ref;		/* bio reference count */
-> +	struct discard_cmd_control *dcc; /* global discard cmd control */
-> +	ktime_t submit_start;		/* submit start time */
->   };
+> +	/* selftests use TTBR0 only, meaning there is a single VA region. */
+> +	vm->has_split_va_space = false;
+> +#else
+> +	vm->has_split_va_space = true;
+>   #endif
 >   
->   enum {
-> @@ -414,6 +416,8 @@ struct discard_cmd_control {
->   	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
->   	unsigned int undiscard_blks;		/* # of undiscard blocks */
->   	unsigned int next_pos;			/* next discard position */
-> +	spinlock_t discard_time_lock;	/* for discard time statistics */
-> +	ktime_t discard_time_avg;		/* issued discard cmd avg time */
->   	atomic_t issued_discard;		/* # of issued discard */
->   	atomic_t queued_discard;		/* # of queued discard */
->   	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
-> @@ -3882,6 +3886,7 @@ struct f2fs_stat_info {
->   	int nr_dio_read, nr_dio_write;
->   	unsigned int io_skip_bggc, other_skip_bggc;
->   	int nr_flushing, nr_flushed, flush_list_empty;
-> +	ktime_t	discard_avg;
->   	int nr_discarding, nr_discarded;
->   	int nr_discard_cmd;
->   	unsigned int undiscard_blks;
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index 9486ca49ecb1..bc96b1afb308 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -931,6 +931,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
->   	list_add_tail(&dc->list, pend_list);
->   	spin_lock_init(&dc->lock);
->   	dc->bio_ref = 0;
-> +	dc->dcc = dcc;
->   	atomic_inc(&dcc->discard_cmd_cnt);
->   	dcc->undiscard_blks += len;
->   
-> @@ -1000,9 +1001,13 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
->   static void f2fs_submit_discard_endio(struct bio *bio)
->   {
->   	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
-> +	struct discard_cmd_control *dcc = dc->dcc;
->   	unsigned long flags;
-> +	ktime_t submit_time;
-> +	int nr_discarded;
->   
->   	spin_lock_irqsave(&dc->lock, flags);
-> +	submit_time = ktime_sub(ktime_get(), dc->submit_start);
->   	if (!dc->error)
->   		dc->error = blk_status_to_errno(bio->bi_status);
->   	dc->bio_ref--;
-> @@ -1012,6 +1017,14 @@ static void f2fs_submit_discard_endio(struct bio *bio)
->   	}
->   	spin_unlock_irqrestore(&dc->lock, flags);
->   	bio_put(bio);
-> +
-> +	spin_lock_irqsave(&dcc->discard_time_lock, flags);
-> +	nr_discarded = atomic_read(&dcc->issued_discard);
-> +	dcc->discard_time_avg = div_u64(ktime_add(nr_discarded * dcc->discard_time_avg,
-> +										submit_time),
-> +									nr_discarded + 1);
-> +	atomic_inc(&dcc->issued_discard);
-> +	spin_unlock_irqrestore(&dcc->discard_time_lock, flags);
->   }
->   
->   static void __check_sit_bitmap(struct f2fs_sb_info *sbi,
-> @@ -1160,6 +1173,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->   		 * right away
->   		 */
->   		spin_lock_irqsave(&dc->lock, flags);
-> +		dc->submit_start = ktime_get();
->   		if (last)
->   			dc->state = D_SUBMIT;
->   		else
-> @@ -1179,8 +1193,6 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->   		bio->bi_opf |= flag;
->   		submit_bio(bio);
->   
-> -		atomic_inc(&dcc->issued_discard);
-> -
->   		f2fs_update_iostat(sbi, NULL, FS_DISCARD, 1);
->   
->   		lstart += len;
-> @@ -2070,9 +2082,11 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->   	INIT_LIST_HEAD(&dcc->wait_list);
->   	INIT_LIST_HEAD(&dcc->fstrim_list);
->   	mutex_init(&dcc->cmd_lock);
-> +	spin_lock_init(&dcc->discard_time_lock);
->   	atomic_set(&dcc->issued_discard, 0);
->   	atomic_set(&dcc->queued_discard, 0);
->   	atomic_set(&dcc->discard_cmd_cnt, 0);
-> +	dcc->discard_time_avg = 0;
->   	dcc->nr_discards = 0;
->   	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
->   	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+
+Even though there happens to be already a suitable #ifdef, I don't
+really like them and don't think there should be a new bool unless
+something else uses it.
+
+However, the new comment is very useful, so I added it to kvm_util.c as
+follows:
+
+/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 759a45540108..56d5ea949cbb 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -186,6 +186,15 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+  	       "Missing new mode params?");
+  
++/*
++ * Initializes vm->vpages_valid to match the canonical VA space of the
++ * architecture.
++ *
++ * The default implementation is valid for architectures which split the
++ * range addressed by a single page table into a low and high region
++ * based on the MSB of the VA. On architectures with this behavior
++ * the VA region spans [0, 2^(va_bits - 1)), [-(2^(va_bits - 1), -1].
++ */
+  __weak void vm_vaddr_populate_bitmap(struct kvm_vm *vm)
+  {
+  	sparsebit_set_num(vm->vpages_valid,
+
