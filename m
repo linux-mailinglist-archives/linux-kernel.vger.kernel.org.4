@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A003764A6CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9675A64A6D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbiLLSTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S233035AbiLLSUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbiLLSSc (ORCPT
+        with ESMTP id S233199AbiLLSUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:18:32 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA54564FA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:17:48 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso776067pjh.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:17:48 -0800 (PST)
+        Mon, 12 Dec 2022 13:20:04 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84336DE95
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:20:01 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id s9so9416020qtx.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XfBCuHWgnrIe/5OMSe2eafxHk9m0+iUqWGzU1q4pcw=;
-        b=tRLnMlGNbWqak0IhpZeIcaT92eR/QSxIDiaqE7ut2xpn8x9+vjHmhT0arBBvb3owLE
-         XLFb8uyJ5gcIHd62g5lqR1vStvTJ/8APasZq12//rN5aAo8OHi0kKzbHnDkI9ZW7Br8q
-         /KY1oyvtGX9i5qkqfLYm0fsPYxgZwaG7UIvUoivMeGYgnew+3BVWI3bJ/rQl8U70ooKu
-         FN7+/1ixBRhws5N8Jmoqdxdp10SpKHL1pUg72pDYNz5vsIdQGDN+4vyOhYGGLc7ZaKpV
-         uaPkzgdgXgIEM6pwS0pDiAj1RnE4PXoVhKRVb7uMWWP2IZD3s6+nfw7/bVJA/pFVeqOt
-         HQfg==
+        bh=onP/KvRHakbT+PgkNr+XHNC9YqsG/EczL6JiFabOL0U=;
+        b=JNuH2HF8bPkdPJns9Frb/3hAu3RMH8AcPZSEHf2cYAzl573JYWDHKuLTUN6kTk/bk2
+         28tJ7PF1hgzIxkq2dZd60fbM0WqtEb/LZVKdYBwuPk+G9ixslL/tLfsqY4afPuSGZ2uB
+         j9r6MScd1LukX820XYEHD2XbCUUdgvxVKO5PU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+XfBCuHWgnrIe/5OMSe2eafxHk9m0+iUqWGzU1q4pcw=;
-        b=tJg8Zj5ei63kuBSDA3cY7pEtNOAClGRR7uYsxmlAtYn3oyw3Cbx0gdECcX8sxyZ+P6
-         7miCW68kx7ljDYJPHAAQZpLr+Sh72y3YzWYJTteKGvFTgZ1b6XPVKLf9MKT5dBUlsTyI
-         LltY7W/m4+fyicbPlc3RdAKMjmv+ErWVkxDwXP8aXK6CeY5vA0pzV4CDUFxgnvS9+/r2
-         hDiHzQPsU2GRysy/0btBt0RTzCfGLKvLuBDR2f4czRhe0OsaktcMnCUxy3zrBqpnELc2
-         9TA1nukSjSFGWoQehHgnEgO/6Ci7qtAKimwvZZGv+oP0Ij4YjojfLS4oxsg6QMDq4nRN
-         Q/hQ==
-X-Gm-Message-State: ANoB5plQgpZcI/zcCIv7aaZ3P065VRqCCScY40Fnya9jQZSbnxFeEM4G
-        8bruhhiUDTJxEApYRLezwTjOKM0q2fhDrvolT1CmXw==
-X-Google-Smtp-Source: AA0mqf49NCkD8G3vHLdJs+G80XOK9ewfS0ZTS5V4bZllHeoQUxrz4XOJZhVR5mt2uNfGOQx4qqFHvtagC3cYqvbstKE=
-X-Received: by 2002:a17:90b:118e:b0:219:d5a6:400 with SMTP id
- gk14-20020a17090b118e00b00219d5a60400mr20573025pjb.44.1670869067972; Mon, 12
- Dec 2022 10:17:47 -0800 (PST)
+        bh=onP/KvRHakbT+PgkNr+XHNC9YqsG/EczL6JiFabOL0U=;
+        b=u+iMe2SnBNSm2aKxzS6WsamKZTkb6WkdLu970Tp899VHORWqXa4u5vDT64k7oNfjmT
+         uIPdYdjBdkysSp2tI70NrbiGFLkoSsCqaxQvKrUyi1tuyoKOzw1TAByTL5gDeDoA2ah3
+         VQzFDnfebkI4uCKjB9IfzQ+82SnrtRc8lcNGa8H+3FHehmixXI2mD8CJKwU9viORUJzj
+         pH8ODs4jJa5I2P0NT+bA1zeEfH2u6cvR77h2DFkx/gacppywXlYOS3eEQwI7yutvZ0Jg
+         VTVSN+qJf3N/I/GCU4eExXJcq8G7cB86IDRx0yZlD50FJWMOI6o9QRvK1uzZMeVy+QfB
+         OYmg==
+X-Gm-Message-State: ANoB5pk1FYf+oJOjt6CutZKMjszHgJCgafXJT1u+JO+QjwFLOuPQxFOz
+        GQKG10NODK41r7+g0NxsUxmfhljr6ZYxGp8d
+X-Google-Smtp-Source: AA0mqf6/AXyS0qzv1xuS6T7yovfd4J5AYy2OlkGqd49ko4M0wiB6di+6nYSuJK9wG50VEsT83dgo3A==
+X-Received: by 2002:a05:622a:989:b0:3a8:1315:49b9 with SMTP id bw9-20020a05622a098900b003a8131549b9mr9662083qtb.31.1670869200180;
+        Mon, 12 Dec 2022 10:20:00 -0800 (PST)
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com. [209.85.219.50])
+        by smtp.gmail.com with ESMTPSA id bp19-20020a05622a1b9300b003a81029654csm3423885qtb.31.2022.12.12.10.19.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 10:19:59 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id i12so8780317qvs.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:19:59 -0800 (PST)
+X-Received: by 2002:a05:6214:390c:b0:4c7:7282:5817 with SMTP id
+ nh12-20020a056214390c00b004c772825817mr14226201qvb.94.1670869199034; Mon, 12
+ Dec 2022 10:19:59 -0800 (PST)
 MIME-Version: 1.0
-References: <Y4r/iuqyLG4MOK4d@chenyu5-mobl1> <3A5DA66F-4330-4FC4-9229-998CF98F663E@joelfernandes.org>
- <Y42uH5fglluWYOm7@chenyu5-mobl1> <CAKfTPtA61DDk-VbNDvAycp8Et5fTwaOS=Q3559rBF7QDHDpJfQ@mail.gmail.com>
- <CABk29Nuc+VVOpAwFsbBo+OppayszebT29Hadc8qK-xeyZpY6NQ@mail.gmail.com>
- <Y5CiN010QAwklahh@chenyu5-mobl1> <e0b20fe3-6528-41ca-f53f-d78e76cd122a@huawei.com>
- <Y5c7oTIRIQYYkdW1@chenyu5-mobl1>
-In-Reply-To: <Y5c7oTIRIQYYkdW1@chenyu5-mobl1>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 12 Dec 2022 10:17:35 -0800
-Message-ID: <CABk29NvsBbqop20Z8-mdnZpto+Znc_+93OK9dsVMcimsSOf1xQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] sched/fair: Introduce short duration task check
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Yicong Yang <yangyicong@huawei.com>, yangyicong@hisilicon.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
+References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com> <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
+In-Reply-To: <07ecf411-70a8-4c15-b3ba-378072c14a02@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 10:19:43 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg6u5hV6+O=C-UYkHZATN1b0kQYmoNaJ-EL8eQVBHQRjA@mail.gmail.com>
+Message-ID: <CAHk-=wg6u5hV6+O=C-UYkHZATN1b0kQYmoNaJ-EL8eQVBHQRjA@mail.gmail.com>
+Subject: Re: [GIT PULL 3/4] SoC driver updates for 6.2
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,15 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> BTW, I've changed the threshold to (sysctl_sched_min_granularity / 8) in my next
-> version, as this is the value that fit my previous test case and also not to break
-> the case Josh mentioned.
+On Fri, Dec 9, 2022 at 9:21 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+>                            While this remains
+> Arm centric for the most part, the branch now also contains updates to
+> risc-v and loongarch specific code in drivers/soc/.
 
-Do you mean a hardcoded value of some number of micros, or literally
-sched_min_granularity / 8? I don't think the latter is necessary, and
-indeed can lead to weirdness if min_gran is too small or too large. I
-don't think the concept of what a short duration task is should
-expand/contract with min_gran.
+Yeah, I'll continue to call your series "ARM SoC updates" for now,
+even if they technically do contain some other architecture updates
+too.
 
-Best,
-Josh
+Maybe some day the other parts end up being noticeable enough that
+I'll follow your lead and just call it "SoC".
+
+              Linus
