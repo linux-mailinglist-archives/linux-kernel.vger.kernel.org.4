@@ -2,43 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778E264A92C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD86C64A935
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiLLVFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S233039AbiLLVGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiLLVEk (ORCPT
+        with ESMTP id S232939AbiLLVGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:04:40 -0500
-Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860DB192AC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:03:13 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 4px6pWxRHfRXa4px6p0kgM; Mon, 12 Dec 2022 22:03:10 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 12 Dec 2022 22:03:10 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jacob Keller <jacob.e.keller@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH net] genetlink: Fix an error handling path in ctrl_dumppolicy_start()
-Date:   Mon, 12 Dec 2022 22:03:06 +0100
-Message-Id: <7186dae6d951495f6918c45f8250e6407d71e88f.1670878949.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 12 Dec 2022 16:06:20 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EB6101
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:06:19 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id 67-20020a621946000000b00575f8210320so627168pfz.10
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWaneeqryBcsAibeUpKRK42zErCwxGtVc4ofyyE72VA=;
+        b=iiWQpPuS8bWorh2jY+GSNXDDTP/zWKGKu1g1aADANQb/ront41FGJrPwGEj68n7oTH
+         JhLcefPChU+DBSf2eitc6qktGBJiykCzFlFheFQzAFHq70qjy9RzppsKWe8Dfnxug0zb
+         Q70m9u3uwa7SLcJteyOUz8XU2FUlLoA43iPv+mmQbKtdVYqNvB8eEU+SXnuoaPXL2gAA
+         OsmvYR+38wi7kUJLbbH5jiWoUIZcCK0U+wYlnvmuzm7BEri1PuYsZEh4F2BPf6h56Hzp
+         k6XF9LkHKgoGIe5yEiQbrINaKmhnNn24a1Io2T9K0dn29gAD0I9+Y2uFyE5U5/AA3BK4
+         lsLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWaneeqryBcsAibeUpKRK42zErCwxGtVc4ofyyE72VA=;
+        b=X8+/InheQXpE5MsNzOTdb80nV9pgglam35kyIgltBmnG4maBtRKaCGrMZxbyhiJNk2
+         fov2rklNtAkhxCa29YiLI35ZgffnE3Lnij/TFefEPxOTem0p8AtG9nAj09/AP183b/dr
+         AEsEi1Ty2O6hweovyBsstHsNJcQWrmdMyrzV3x7OkGPb1kHH7mehAWxzrFI4h7Pm/6nE
+         UJ2pHE3FNvIb2R1A1SQeecexV41k0wdxWKOJC04i9L4QlGbWJTah93ROgCZ4VKZqujJX
+         xIQdR/ILkZn9wiBh5JcqZTjxLdGrG1zHguefLA6Zk27J4PLIE7eXqH3JsYcAMrJiJmqG
+         mihg==
+X-Gm-Message-State: ANoB5plqUYXLt8Tlk39H3yNi/yASu1oDgzX6XtuuIPvl0BgQbd47VS+e
+        B4tscxXD+hxVEdKTQvdQz94XuRrA
+X-Google-Smtp-Source: AA0mqf61TWGE3RV1QXljruCCMvtFtyrrtg1uTsEuaU+YxacSMmfGKi7aD7kEbD/zTJXdj0TabOoKiPtG
+X-Received: from posk.svl.corp.google.com ([2620:15c:2d4:203:669:babb:2ed:33de])
+ (user=posk job=sendgmr) by 2002:a05:6a00:26e3:b0:576:1b46:3ff6 with SMTP id
+ p35-20020a056a0026e300b005761b463ff6mr35339034pfw.1.1670879178937; Mon, 12
+ Dec 2022 13:06:18 -0800 (PST)
+Date:   Mon, 12 Dec 2022 13:05:47 -0800
+In-Reply-To: <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+Mime-Version: 1.0
+References: <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221212210547.1105894-1-posk@google.com>
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example scheduler
+From:   Peter Oskolkov <posk@google.com>
+To:     peterz@infradead.org
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        brho@google.com, bristot@redhat.com, bsegall@google.com,
+        daniel@iogearbox.net, derkling@google.com,
+        dietmar.eggemann@arm.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, dvernet@meta.com, haoluo@google.com,
+        joshdon@google.com, juri.lelli@redhat.com, kernel-team@meta.com,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        mgorman@suse.de, mingo@redhat.com, pjt@google.com,
+        riel@surriel.com, rostedt@goodmis.org, tj@kernel.org,
+        torvalds@linux-foundation.org, vincent.guittot@linaro.org,
+        vschneid@redhat.com, posk@posk.io
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,41 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If this memory allocation fails, some resources need to be freed.
-Add the missing goto to the error handling path.
+Peter Zijlstra wrote:
 
-Fixes: b502b3185cd6 ("genetlink: use iterator in the op to policy map dumping")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is speculative.
+> I long for the UMCG patches -- that
+> at least was somewhat sane and trivially composes, unlike all this
+> madness.
 
-This function is a callback and I don't know how the core works and handles
-such situation, so review with care!
+A surprise, to be sure, but a welcome one!
 
-More-over, should this kmalloc() be a kzalloc()?
-genl_op_iter_init() below does not initialize all fields, be they are maybe
-set correctly before uses.
----
- net/netlink/genetlink.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+We are in the process of finalizing UMCG internally, and I plan
+to post the patches here once all reviews/testing and some preliminary
+rollouts are done.
 
-diff --git a/net/netlink/genetlink.c b/net/netlink/genetlink.c
-index 600993c80050..7b9f04bd85a2 100644
---- a/net/netlink/genetlink.c
-+++ b/net/netlink/genetlink.c
-@@ -1451,8 +1451,10 @@ static int ctrl_dumppolicy_start(struct netlink_callback *cb)
- 	}
- 
- 	ctx->op_iter = kmalloc(sizeof(*ctx->op_iter), GFP_KERNEL);
--	if (!ctx->op_iter)
--		return -ENOMEM;
-+	if (!ctx->op_iter) {
-+		err = -ENOMEM;
-+		goto err_free_state;
-+	}
- 
- 	genl_op_iter_init(rt, ctx->op_iter);
- 	ctx->dump_map = genl_op_iter_next(ctx->op_iter);
--- 
-2.34.1
-
+Thanks,
+Peter
