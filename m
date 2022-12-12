@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E67564ABC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E393D64ABC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiLLXrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 18:47:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
+        id S234038AbiLLXtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 18:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiLLXr1 (ORCPT
+        with ESMTP id S233957AbiLLXsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 18:47:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD911CB01;
-        Mon, 12 Dec 2022 15:47:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE8F8611C2;
-        Mon, 12 Dec 2022 23:47:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B40AC433EF;
-        Mon, 12 Dec 2022 23:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670888845;
-        bh=J2zDtlm/ALtvFqZGZbzpV/1roC/oaCDFbTYkcBWFjao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GlKr5knLODLMCPriZ4DhxaSM7p9TnhDc7WBNutZUOhsO2CTFN6WFxTpNK4Vn9dGVI
-         0YsprihGpgL2Otpt/BLFU3FiJuvcyUtDxlFhy8dGmUaVPe1NyOvD5C4gb2rzpAhIAD
-         lA6RBH+fSw8PkFx8TidrYn/YFqXmNrqh1mxeeV0r+wgerhDwbKZoEvTfmuqhIUXbzS
-         UCv9//P+T+Ql7yWVRtyAkV2GvfhDanesR1tQJpqfAbQzE7LhbCS8YxqGtgUIWaABxi
-         4ZmReZXB3p7lye2JGOLjZXWprKZJp/Z+jKiFQZieyz1jLixOkKYOjwQr/PxL9tRahC
-         y2qXPKHl+j8xQ==
-Date:   Mon, 12 Dec 2022 15:47:23 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>, <ceggers@arri.de>
-Subject: Re: [Patch net-next v4 00/13] net: dsa: microchip: add PTP support
- for KSZ9563/KSZ8563 and LAN937x
-Message-ID: <20221212154723.4a7cebcf@kernel.org>
-In-Reply-To: <20221212102639.24415-1-arun.ramadoss@microchip.com>
-References: <20221212102639.24415-1-arun.ramadoss@microchip.com>
+        Mon, 12 Dec 2022 18:48:20 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC60618340;
+        Mon, 12 Dec 2022 15:47:56 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F049720004;
+        Mon, 12 Dec 2022 23:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670888872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AGtfQjLte51Ra95Qt9Ehjvv/TTAURJR9cA+jiCJJjQ4=;
+        b=FQwtGQrGgppgLpq+FqN66h5uX22r9cdtUbvS76mGD+Jk2ExGYGJoMO5HyHgSrnlWNeHrfc
+        QIqaf/DVK1W9WyzupvdrKAxaFv/oQt5yI5zYA4ajAX/Qb2lXkc7gm82LEqUDuMZUz+Xolg
+        Fykt4m6cxNnK8/YswKltcfOTNRa1uYCmt5DZDwSGxRy6+BBx2lYzya9FpShqAbfEMRP52y
+        RXHO+7nRHLzakgUkO62w4XMHGHypVUCBPrrpR4eTYa1zugMDnvMEVxDTK8Dyouep6hkONf
+        G9uMYtDADmgzLYHlbt/wemjxlz2XYtvdYmTGEJRwpy4k3UoN0HTuHTCrshwcUw==
+Date:   Tue, 13 Dec 2022 00:47:51 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+Message-ID: <167088884105.311452.6765041987681570335.b4-ty@bootlin.com>
+References: <20221124154359.039be06c@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124154359.039be06c@endymion.delvare>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 15:56:26 +0530 Arun Ramadoss wrote:
-> KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
-> protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
-> implementation has been made common for the KSZ switches.  KSZ9563 does not
-> support two step timestamping but LAN937x supports both.  Tested the 1step &
-> 2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
+On Thu, 24 Nov 2022 15:43:59 +0100, Jean Delvare wrote:
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
 > 
-> This patch series is based on the Christian Eggers PTP support for KSZ9563.
-> Applied the Christian patch and updated as per the latest refactoring of KSZ
-> series code. The features added on top are PTP packet Interrupt
-> implementation based on nested handler, LAN937x two step timestamping and
-> programmable per_out pins.
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
+> 
+> [...]
 
-The merge window has now begun, this set is rather large and Linus said
-that he will be particularly strict about applying patches late:
+Applied, thanks!
 
-https://lore.kernel.org/all/CAHk-=wj_HcgFZNyZHTLJ7qC2613zphKDtLh6ndciwopZRfH0aQ@mail.gmail.com/
+[1/1] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
+      commit: 28e93c214af6af9f5a8d5d4d0de0e36668708a4b
 
-So let's defer this for after 6.2-rc1 is cut. Feed free to switch to
-RFC postings if you want to keep revising the set and make review
-progress during the merge window.
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
