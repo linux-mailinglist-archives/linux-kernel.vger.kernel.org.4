@@ -2,159 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816B264A49D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEE564A4A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiLLQNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S232680AbiLLQPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbiLLQNC (ORCPT
+        with ESMTP id S232628AbiLLQPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:13:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AB7101B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:13:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ED0AB80D93
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B3FC433EF;
-        Mon, 12 Dec 2022 16:12:57 +0000 (UTC)
-Date:   Mon, 12 Dec 2022 11:12:56 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [for-next][PATCH 02/11] tracing: Add __cpumask to denote a
- trace event field that is a cpumask_t
-Message-ID: <20221212111256.3cf68f3e@gandalf.local.home>
-In-Reply-To: <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
-References: <20221124145019.782980678@goodmis.org>
-        <20221124145045.743308431@goodmis.org>
-        <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 12 Dec 2022 11:15:20 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2C1262E;
+        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so339444pjp.1;
+        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HS57fphfFTIlMzwugZ21RzL6OQ71Fiy4HloGefZfE88=;
+        b=PqssKBggY+VkFwF/yUyJov7nLggm1wBUnLrq6/DIltCxHAhU63PNf1/q6m5OQ01sy+
+         /4ueqZ1GXg8mUoxDQjbCiyXhH3HusdMI/8CcdohKk5UVChLAwErMEBPqOHu7lGz7LHDF
+         e609s/byD/3BH0ARoEYeWpoKLf9Gx+JEWx4MP+4RMZcVMSYBgYBQ00XfJkMePwm6KWgn
+         eDG7UIGWQKTj685W18OvYYOXJWekX5oP83AmI+4IIFNNDUb+plrwCyoEtQSvn6ye6JrE
+         cC6agR/FQLZ9/Bk5YzSjJqTQNv+BhS+p4sTXsN5LFxnsszM8RGI9LyfZK8OYGlhLt5CB
+         YbPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HS57fphfFTIlMzwugZ21RzL6OQ71Fiy4HloGefZfE88=;
+        b=XL2BxKJ+E/sJB7HvgdI5ChJwDDrVaYZSey4fOxuQ2SUe+AYlsx9hwhfXIv+1Ev0/uP
+         TE6dzIBkyQVk16a65Y2ty6UmsghhXsKILmLyc+Ub0Rv87/8zGODtorw9b2P4TfyiYb45
+         Uh8eMMg6kEEiNCJ6k84E5XDZ7/CPR79viQdn1KBqWDzwVT7hbaKQJOzgKf/r5U1M7/Xd
+         SeZzytolBpiTVFHj+FDh01QB+xEycIP6lDRJan9LYbbVnrZIQfRTGmCGBS4uF95vBzoK
+         hBb02EfhtA73LixqC9rSN32JY2SvdW09JW7B75Kt7G9PcWr3qEQv+LkF+xrX7oU/5Z8+
+         Qllw==
+X-Gm-Message-State: ANoB5pnX6CNQHbKitlIRtIQVNecKcCBeJN6RWP2LEV+B9ZoC03Mot4Kv
+        UY2rNlXqSwBpaOd/zjmhsPk=
+X-Google-Smtp-Source: AA0mqf5uMvp0937uVwVDwegtQ/2ptKx8MdHduS5AA3tUNPLVj6h9At9b0V4aHGCCiXR3sZqdP1i8CQ==
+X-Received: by 2002:a05:6a20:8b27:b0:ad:a09c:5734 with SMTP id l39-20020a056a208b2700b000ada09c5734mr3944892pzh.44.1670861719391;
+        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
+Received: from localhost ([1.83.247.150])
+        by smtp.gmail.com with ESMTPSA id w13-20020aa79a0d000000b0057709fd0fccsm5991989pfj.153.2022.12.12.08.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 08:15:18 -0800 (PST)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     xiyou.wangcong@gmail.com
+Cc:     18801353760@163.com, cong.wang@bytedance.com, davem@davemloft.net,
+        dvyukov@google.com, edumazet@google.com, jhs@mojatatu.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Subject: Re: [PATCH v3] net: sched: fix memory leak in tcindex_set_parms
+Date:   Tue, 13 Dec 2022 00:14:06 +0800
+Message-Id: <20221212161406.10137-1-yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Y5T6Mrb7cs6o/BqS@pop-os.localdomain>
+References: <Y5T6Mrb7cs6o/BqS@pop-os.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 14:53:27 +0000
-Douglas Raillard <douglas.raillard@arm.com> wrote:
+On Sun, 11 Dec 2022 at 05:29, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+>
+> On Mon, Dec 05, 2022 at 11:19:56PM +0800, Hawkins Jiawei wrote:
+> > To be more specific, the simplified logic about original
+> > tcindex_set_parms() is as below:
+> >
+> > static int
+> > tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
+> >                 u32 handle, struct tcindex_data *p,
+> >                 struct tcindex_filter_result *r, struct nlattr **tb,
+> >                 struct nlattr *est, u32 flags, struct netlink_ext_ack *extack)
+> > {
+> >       ...
+> >       if (p->perfect) {
+> >               int i;
+> >
+> >               if (tcindex_alloc_perfect_hash(net, cp) < 0)
+> >                       goto errout;
+> >               cp->alloc_hash = cp->hash;
+> >               for (i = 0; i < min(cp->hash, p->hash); i++)
+> >                       cp->perfect[i].res = p->perfect[i].res;
+> >               balloc = 1;
+> >       }
+> >       cp->h = p->h;
+> >
+> >       ...
+> >
+> >       if (cp->perfect)
+> >               r = cp->perfect + handle;
+>
+> We can reach here if p->perfect is non-NULL.
+>
+> >       else
+> >               r = tcindex_lookup(cp, handle) ? : &new_filter_result;
+> >
+> >       if (old_r && old_r != r) {
+> >               err = tcindex_filter_result_init(old_r, cp, net);
+> >               if (err < 0) {
+> >                       kfree(f);
+> >                       goto errout_alloc;
+> >               }
+> >       }
+> >       ...
+> > }
+> >
+> > - cp's h field is directly copied from p's h field
+> >
+> > - if `old_r` is retrieved from struct tcindex_filter, in other word,
+> > is retrieved from p's h field. Then the `r` should get the same value
+> > from `tcindex_loopup(cp, handle)`.
+>
+> See above, 'r' can be 'cp->perfect + handle' which is newly allocated,
+> hence different from 'old_r'.
 
-> On 24-11-2022 14:50, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > The trace events have a __bitmask field that can be used for anything
-> > that requires bitmasks. Although currently it is only used for CPU
-> > masks, it could be used in the future for any type of bitmasks.
-> > 
-> > There is some user space tooling that wants to know if a field is a CPU
-> > mask and not just some random unsigned long bitmask. Introduce
-> > "__cpumask()" helper functions that work the same as the current
-> > __bitmask() helpers but displays in the format file:
-> > 
-> >    field:__data_loc cpumask_t *[] mask;    offset:36;      size:4; signed:0;
+But if `r` is `cp->perfect + handle`, this means `cp->perfect` is not
+NULL. So `p->perfect` should not be NULL, which means `old_r` should be
+`p->perfect + handle`, according to tcindex_lookup(). This is not
+correct with the assumption that `old_r` is retrieved from p's h field.
 
-The current parsing tools break the above into:
+>
+> >
+> > - so `old_r == r` is true, code will never uses tcindex_filter_result_init()
+> > to clear the old_r in such case.
+>
+> Not always.
+>
+> >
+> > So I think this patch still can fix this memory leak caused by
+> > tcindex_filter_result_init(), But maybe I need to improve my
+> > commit message.
+> >
+>
+> I think your patch may introduce other memory leaks and 'old_r' may
+> be left as obsoleted too.
 
- "field:" "__data_loc" <some-type> "[]" <var-name> ";" "offset:"
- <offset> ";" "size:" "<size>" ";" "signed:" <signed> ";"
+I still think this patch should not introduce any memory leaks.
 
-Where the <some-type> really can be anything, and in lots of cases, it is.
-Thus its only a hint for the tooling, and has never been limited to what
-they are.
+* If the `old_r` is not NULL, it should have only two source according
+to the tcindex_lookup() - `old_r` is retrieved from `p->perfect`; or
+`old_r` is retrieved from `p->h`. And if `old_r` is retrieved from `p->h`,
+this means `p->perfect` is NULL.
 
-> > 
-> > Instead of:
-> > 
-> >    field:__data_loc unsigned long[] mask;  offset:32;      size:4; signed:0;
-> > 
-> > The main difference is the type. Instead of "unsigned long" it is
-> > "cpumask_t *". Note, this type field needs to be a real type in the
-> > __dynamic_array() logic that both __cpumask and__bitmask use, but the
-> > comparison field requires it to be a scalar type whereas cpumask_t is a
-> > structure (non-scalar). But everything works when making it a pointer.  
 
-The above is for the kernel to build.
+* If the `old_r` is retrieved from `p->perfect`, kernel uses
+tcindex_alloc_perfect_hash() to newly allocate the filter results.
+And `r` should be `cp->perfect + handle`, which is newly allocated.
 
-> 
-> How is tooling expected to distinguish between a real dynamic array of pointers
-> from a type that is using dynamic arrays as an "implementation detail"
-> with a broken type description ? Any reasonable
-> interpretation of that type by the consuming tool will be broken
-> unless it specifically knows about __data_loc cpumask*[].
+So `r != old_r` in this situation, but kernel will clears the `old_r`
+at tc_filter_wq workqueue in tcindex_partial_destroy_work(), by
+destroying the p->perfect. So here kernel doesn't need
+tcindex_filter_result_init() to clear the old filter result, and
+there is no memory leak.
 
-I'm curious to what the tool does differently with the above. What tool are
-you using? Does it just give up on how to print it?
 
-> However, the set of types using that trick is unbounded so forward
-> compatibilty is impossible to ensure. On top of that, an actual
-> dynamic array of cpumask pointers becomes impossible to represent.
+* If the `old_r` is retrieved from `p->h`, then `p->perfect` is NULL
+discussed above. Considering that `cp->h` is directly copied from
+`p->h`, `r` should get the same value as `old_r` from tcindex_lookup().
 
-I never thought about a user case where we print out an array of cpumask
-pointers.
+So `r == old_r`, it will ignore the part that kernel uses
+tcindex_filter_result_init() to clear the old filter result. So removing
+this part of code should have no effect in this situation.
 
-> 
-> You might object that if the tool does not know about cpumask,
-> it does not matter "how it breaks" as the display will be useless anyway,
-> but that is not true. A parsing library might just parse up to
-> its knowledge limit and return the most elaborate it can for a given field.
-> It's acceptable for that representation to not be elaborated with the full
-> semantic expected by the end user, but it should not return
-> something that is lying on its nature. For example, it would be sane for
-> the user to assert the size of an array of pointers to be a multiple
-> of a pointer size. cpumask is currently an array of unsigned long but there is
-> nothing preventing a similar type to be based on an array of u8.
-> Such a type would also have different endianness handling and the resulting buffer
-> would be garbage.
-> 
-> 
-> To fix that issue, I propose to expose the following to userspace:
-> 1. The binary representation type (unsigned long[] in cpumask case).
-> 2. An (ordered list of) semantic type that may or may not be the same as 1.
-> 
-> Type (1) can be used to guarantee correct handling of endianness and a reasonable
-> default display, while (2) allows any sort of fancy interpretation, all that while preserving
-> forward compatibility. For cpumask, this would give:
-> 1. unsigned long []
-> 2. bitmask, cpumask
-> 
-> A consumer could know about bitmask as they are likely used in multiple places,
-> but not about cpumask specifically (e.g. assuming cpumask is a type recently introduced).
-> Displaying as a list of bits set in the mask would already allow proper formatting, and
-> knowing it's actually a cpumask can allow fancier behaviors.
-> 
->  From an event format perspective, this could preserve reasonable backward compat
-> by simply adding another property:
-> 
->    field:__data_loc unsigned long[] mask;    offset:36;      size:4; signed:0; semantic_type:bitmask,cpumask;
-> 
-> By default, "semantic_type" would simply have the same value as the normal type.
 
-The problem with the above is that it adds a new field, and I have to check
-if that doesn't break existing tooling.
 
-Another possibility is that I can add parsing to the format that is exposed
-to user space and simply s/__cpumask *[]/__cpumask[]/
+It seems that whether `old_r` is retrived from `p->h` or `p->perfect`,
+it is okay to directly deleting the part that kernel uses
+tcindex_filter_result_init() to clear the old filter result, without any
+memory leak. But this can fix the memory leak caused by
+tcindex_filter_result_init().
 
-Which will get rid of the pointer array of cpu masks.
+As for `old_r` may be left as obsoleted, do you mean `old_r` becomes
+unused(set but not used)? I think we can directly removing `old_r`.
 
-> 
-> This applies to any type, not just dynamic arrays.
-> 
-
-Let me know if the above does break existing user space and I'll revert it.
-
--- Steve
-
+>
+> Thanks.
