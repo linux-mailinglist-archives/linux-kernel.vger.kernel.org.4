@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A951B64A3BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0CC64A3C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiLLOuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S232273AbiLLOwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232290AbiLLOuK (ORCPT
+        with ESMTP id S232019AbiLLOwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:50:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A057013D17
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:50:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 12 Dec 2022 09:52:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BD313D04;
+        Mon, 12 Dec 2022 06:52:29 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD626111E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BF4C433D2;
-        Mon, 12 Dec 2022 14:50:08 +0000 (UTC)
-Date:   Mon, 12 Dec 2022 09:50:06 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-Message-ID: <20221212095006.52b6cce0@gandalf.local.home>
-In-Reply-To: <46733774-295a-ade9-497d-6e73c6c468de@huawei.com>
-References: <20221129113009.182425-1-yangjihong1@huawei.com>
-        <46733774-295a-ade9-497d-6e73c6c468de@huawei.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 88DF61EC064D;
+        Mon, 12 Dec 2022 15:52:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670856748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=zfXUdHJ29N/jAo1dQw/z1PUYABKq+SOS5oOUr53H5HI=;
+        b=mq9iEIObycZ9wU1KnjMMx6wmlqBaCWyP6v4pzDqgPqGYNATbDf9pdQNREMLoIKIjoybCjo
+        3IOHw156imHFmZQEgU7+ZLDtSKYFye43Cj6HOOE25KVcBbe0yXNyGHgAVmAWC9fyySTRGO
+        VBVWzlnRQpOT3Vh9cCdQd1wG2nJjRbI=
+Date:   Mon, 12 Dec 2022 15:52:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] EDAC updates for v6.2
+Message-ID: <Y5dAJyR9meVleZTm@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,16 +48,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 10:57:08 +0800
-Yang Jihong <yangjihong1@huawei.com> wrote:
+Hi Linus,
 
-> Hello,
-> 
-> PING.
-> 
-> Are there any other problems with this patch?
+please pull the pile of EDAC updates for 6.2.
 
-Thanks for the ping, I'll take a look at it. It somehow got lost in the
-noise of other patches :-/
+Thx.
 
--- Steve
+---
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_6.2
+
+for you to fetch changes up to 3919430fe93bcfad5e34cdbb4d81cd17b3bbd27a:
+
+  Merge branches 'edac-ghes' and 'edac-misc' into edac-updates-for-v6.2 (2022-12-12 15:40:03 +0100)
+
+----------------------------------------------------------------
+- Make ghes_edac a simple module like the rest of the EDAC drivers and
+drop this forced built-in only configuration by disentangling it from
+GHES. Work by Jia He.
+
+- The usual small cleanups and improvements all over EDAC land
+
+----------------------------------------------------------------
+Ard Biesheuvel (1):
+      apei/ghes: Use xchg_release() for updating new cache slot instead of cmpxchg()
+
+Aristeu Rozanski (1):
+      EDAC/i5000: Mark as BROKEN
+
+Borislav Petkov (1):
+      MAINTAINERS: Make Mauro EDAC reviewer
+
+Borislav Petkov (AMD) (1):
+      Merge branches 'edac-ghes' and 'edac-misc' into edac-updates-for-v6.2
+
+Chen Zhang (1):
+      EDAC/i5400: Fix typo in comment: vaious -> various
+
+Jia He (6):
+      efi/cper: Export several helpers for ghes_edac to use
+      EDAC/ghes: Add a notifier for reporting memory errors
+      EDAC/ghes: Prepare to make ghes_edac a proper module
+      EDAC/ghes: Make ghes_edac a proper module
+      EDAC: Check for GHES preference in the chipset-specific EDAC drivers
+      EDAC/igen6: Return the correct error type when not the MC owner
+
+Manivannan Sadhasivam (1):
+      MAINTAINERS: Make Manivannan Sadhasivam the maintainer of qcom_edac
+
+Yang Yingliang (1):
+      EDAC/i10nm: fix refcount leak in pci_get_dev_wrapper()
+
+Yazen Ghannam (1):
+      EDAC/mc_sysfs: Increase legacy channel support to 12
+
+ MAINTAINERS                    |   5 +-
+ drivers/acpi/apei/ghes.c       | 126 +++++++++++++++++++++++++++++++----------
+ drivers/edac/Kconfig           |   5 +-
+ drivers/edac/amd64_edac.c      |   3 +
+ drivers/edac/armada_xp_edac.c  |   3 +
+ drivers/edac/edac_mc_sysfs.c   |  24 ++++++++
+ drivers/edac/edac_module.h     |   1 +
+ drivers/edac/ghes_edac.c       |  90 +++++++++++++++++------------
+ drivers/edac/i10nm_base.c      |   6 +-
+ drivers/edac/i5400_edac.c      |   3 +-
+ drivers/edac/igen6_edac.c      |   5 +-
+ drivers/edac/layerscape_edac.c |   3 +
+ drivers/edac/pnd2_edac.c       |   3 +
+ drivers/edac/sb_edac.c         |   3 +
+ drivers/edac/skx_base.c        |   3 +
+ drivers/edac/thunderx_edac.c   |   3 +
+ drivers/edac/xgene_edac.c      |   3 +
+ drivers/firmware/efi/cper.c    |   3 +
+ include/acpi/ghes.h            |  34 +++--------
+ 19 files changed, 227 insertions(+), 99 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
