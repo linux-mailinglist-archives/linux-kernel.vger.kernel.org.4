@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD24C649AB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AAF649AAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiLLJIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:08:25 -0500
+        id S231586AbiLLJIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:08:22 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbiLLJIV (ORCPT
+        with ESMTP id S231202AbiLLJIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:08:21 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17477B1B;
-        Mon, 12 Dec 2022 01:08:20 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NVwb538bmz9xFH5;
-        Mon, 12 Dec 2022 17:01:05 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDnbwth75ZjYBEIAA--.129S2;
-        Mon, 12 Dec 2022 10:07:55 +0100 (CET)
-Message-ID: <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
-Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Mon, 12 Dec 2022 10:07:38 +0100
-In-Reply-To: <Y5OGr59A9wo86rYY@sol.localdomain>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
-         <Y5OGr59A9wo86rYY@sol.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 12 Dec 2022 04:08:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66BF1D7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:08:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 921FBB80AD7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E674C433D2;
+        Mon, 12 Dec 2022 09:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670836097;
+        bh=z5HqcNfQJi1MaenD9RiDHiFMXvNXPXoJXEhKMYHhZY4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=InVOrkT1F1aLJT+4NIgtTnatQBkkM198K5TAlHCJ8DXZyGYDgCMCcXDT0eXeJz3c2
+         OhCJHYPme4sbb5dZ565a7cKK1qaCiXEYnJXWXdWME12pIlCCH/ACPMXWctIjtXW60f
+         IuquRiVR6GDD+fIAHNt6VCVJTZdv9i9JOkl/eqcqPqxoBMDPgSI2SrFb2+v/4ERFVd
+         FwO3vmlhycWZHL/qgN6p9nBfu58Pq619zffjzAZeRkpY32bmPFV9B/0vIzup6X1FPT
+         8XEuC6uh+1O9G054kGOYlyrFGYScTrFqJ6xZb4ApBVv5sbXNDxSuv7Ammblp9CCKKA
+         nqMt4EAnyZwyw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p4enG-00C3aO-WF;
+        Mon, 12 Dec 2022 09:08:15 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     kvmarm@lists.linux.dev, James Clark <james.clark@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH 0/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
+Date:   Mon, 12 Dec 2022 09:08:11 +0000
+Message-Id: <167083608669.635334.13408416430959494147.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221209164446.1972014-1-james.clark@arm.com>
+References: <20221209164446.1972014-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDnbwth75ZjYBEIAA--.129S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy3uw1rGrWUZryxKrWfKrg_yoW8XF4Upw
-        43Zr4DtrWDWrW8Cw1xua4xt3yFg3yYyFWUGa40k345urn8Wr9YkrykWayI9FWUtrykWrs2
-        vrWUWan8Zr9xAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4KGBgABsw
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kvmarm@lists.linux.dev, james.clark@arm.com, catalin.marinas@arm.com, linux-kernel@vger.kernel.org, will@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-09 at 11:04 -0800, Eric Biggers wrote:
-> On Fri, Dec 09, 2022 at 04:06:33PM +0100, Roberto Sassu wrote:
-> > +	/* key is used to store the sig and digest too. */
-> > +	key = kmalloc(key_max_len, GFP_KERNEL);
-> >  	if (!key)
-> >  		goto error_free_req;
+On Fri, 9 Dec 2022 16:44:45 +0000, James Clark wrote:
+> We noticed qemu failing to run because of an assert on our CI. I don't see the issue anymore with
+> this fix.
 > 
-> Maybe just call this 'buf', as the key is just one of the purposes the buffer is
-> used for now.
-
-Yes, better.
-
-> > +	/* Cannot use one scatterlist. The first needs to be s->s_size long. */
-> > +	sg_set_buf(&src_sg[0], key, sig->s_size);
-> > +	sg_set_buf(&src_sg[1], key + sig->s_size, sig->digest_size);
-> >  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
-> >  				   sig->digest_size);
+> Applies to kvmarm/next (753d734f3f34)
 > 
-> AFAIK, none of the crypto APIs that operate on 'scatterlist' are supposed to
-> care how the data is divided up into scatterlist elements.  So it sounds like
-> there is another bug that needs to be fixed.  It should be fixed, not worked
-> around.
+> Thanks
+> 
+> [...]
 
-The problem is a misalignment between req->src_len (set to sig->s_size
-by akcipher_request_set_crypt()) and the length of the scatterlist (if
-we set the latter to sig->s_size + sig->digest_size).
+Applied to fixes, thanks!
 
-When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
-argument, and the latter allocates the MPI according to that. However,
-it does parsing depending on the length of the scatterlist.
+[1/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
+      commit: aff234839f8b80ac101e6c2f14d0e44b236efa48
 
-If there are two scatterlists, it is not a problem, there is no
-misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
-one, mpi_read_raw_from_sgl() parses all data there.
+Cheers,
 
-Roberto
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
 
