@@ -2,168 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DC7649E96
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A08649E91
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiLLMWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S231266AbiLLMVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiLLMWE (ORCPT
+        with ESMTP id S229452AbiLLMVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:22:04 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0B210FF8;
-        Mon, 12 Dec 2022 04:22:03 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BC6mGOd001381;
-        Mon, 12 Dec 2022 12:21:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=3XkvgNx5sTLY+I2azRwSZJ5pkzu7ohIy979ecHKzVSk=;
- b=fbak5wwS7xQ3auEB1el4uRct9K9nJ33BMoLBOgmRyioPjjVD51tig8VytJC25craPwCQ
- Uyhay+19+mIDz8Uw1R5yqjRg6QSNNTYUmR3+LbD8/pOb7ar0Ch9NmK4JUGdgi+i49KQt
- OfQ1If49h1bEPrBASKnGkPSg89yLWW4cuSFAPTq84zIM4W0vlZ19fhxm+9FThB7grdWe
- IMhMAupRk3K69ing+/yWKfaKroGOKOhXt8Vk9SuIR6f8CKujAlmkh9o/FY7ad0w8QZy5
- cT/v19fx8Q/l8Kv4sm0OO8LV8g0xy5khJUsn/5yKWDeQqtd0gaNcm0y76EG4eijW0VBk UQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mch30m565-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 12:21:58 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCCLvEd017647
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 12:21:57 GMT
-Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 12 Dec 2022 04:21:53 -0800
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <andersson@kernel.org>, <johan@kernel.org>
-CC:     <bmasney@redhat.com>, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-Date:   Mon, 12 Dec 2022 17:50:59 +0530
-Message-ID: <20221212122058.597-1-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 12 Dec 2022 07:21:32 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A2964EB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:21:31 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id g10so11875574plo.11
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:21:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BcAXeIHfkMK9KXq9ftGmJ8WUeCsNRonPesUxZB6zPLw=;
+        b=q1os7l5fQQrL4oJv26hp6jcpO+N+CbETyzz+5akCRldnOkaXXxnRteRq1IZULQwt+c
+         1POQqWJC8TkNILQ+n26MFX6SxRuFgfvpxSiQifOLk5hat+lJUjaIvLOofjEoU0Hob/zq
+         ExRGFvbT+wJsST7Nv0eW4crBzmwgY/HryE3OrHf2zSnK1rnxN+bVh3LwKTlHrQrgmZDB
+         QNqMalMf/ZgJuFA+GsjPm9gt1FIyaucdAjOQWYZFJBhjk/eqECnDBd/8cOpJqMbO93LY
+         OOoGMo1qn1ElRhYh1yCVSY6SX8roC9jECzwGpvIeao6C3Eu2pBXJa4B9ILW+s5z9NWBd
+         r18A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BcAXeIHfkMK9KXq9ftGmJ8WUeCsNRonPesUxZB6zPLw=;
+        b=1nQCYKGHNGl2jXK8zA20/9GkIwvlu0WdpkiAqc6au/U9PqDgUL8o9PZDv5Sa6KgUp9
+         jOUUe5xMN4TWgbbFuZjBH4E9j0v6P9F93e+7B/nPeHLd2nIza4ybjVmSLj/s4q/FHw07
+         nq3R1VgS9GjtK3vTokKRETopb60rZHayXiXXeSshT2LTQGB9SEc9xT/WhtpLKVe7AeKC
+         EzL2hQ+/CW6WS7CXpxSfLhyuKC7zmMqgJZIcJPbIibSqXazptouG9iwgJThpwDg4Mkyr
+         L3UDqD55gymwWz9uBS03HNnBhkPxoBVmN+Q2PJKzqn418QzPxljdblhqUJc32xvwivRx
+         1QFw==
+X-Gm-Message-State: ANoB5pmcey4w8ZqBb2eeig2pVu1+QrHCJWlMWo2rCVD9fvgQyQ/pMKni
+        GH7+tTxyjyUvurWp+4BMnwE=
+X-Google-Smtp-Source: AA0mqf7kyIG8mVVfnKhyWnMxqTyfdu0OUZOEIX6skITpEGLG5oR1+P2LXCbqtxizE7PqzGQSKC32cA==
+X-Received: by 2002:a17:902:8688:b0:189:89e0:4077 with SMTP id g8-20020a170902868800b0018989e04077mr16291429plo.55.1670847690686;
+        Mon, 12 Dec 2022 04:21:30 -0800 (PST)
+Received: from mi-ThinkStation-K ([43.224.245.228])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b001895b2d48a1sm6199469plm.253.2022.12.12.04.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 04:21:30 -0800 (PST)
+Date:   Mon, 12 Dec 2022 20:21:09 +0800
+From:   zhoudan <zhuqiandann@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, zhoudan8@xiaomi.com
+Subject: Re: [PATCH] f2fs: don't set FI_COMPRESS_RELEASED if file is not
+ compressed
+Message-ID: <20221212122109.GA714122@mi-ThinkStation-K>
+References: <20221208050808.2448146-1-zhoudan8@xiaomi.com>
+ <Y5OYYJYx9G2LbRmc@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: td3KUA4tTdibcTH039d7S_m1ZXgYf2If
-X-Proofpoint-GUID: td3KUA4tTdibcTH039d7S_m1ZXgYf2If
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 phishscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212120114
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5OYYJYx9G2LbRmc@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the pcie2a, pcie2a_phy, and respective tlmm
-nodes that are needed to get pcie 2a controller
-enabled on Qdrive3.
+Maybe I'm not describing it clearly enough, but I think there is 
+something wrong with the logic here.The 'f2fs_release_compress_blocks'
+method does not determine if the file is compressed, but simply adds 
+the FI_COMPRESS_RELEASED flag. 
+In particular, in the current Android system, when the application is 
+installed, the release interface is called by default to release the 
+storage marked as compressed,  without checking whether the file is 
+actually compressed. In this case, when compress_mode is set to user, 
+calling the compress interface returns ENVAL and the file cannot be 
+compressed.
+So I think the implementation of release needs to be modified, and 
+only set FI_COMPRESS_RELEASED when it's really compressed and the 
+storage is released.
 
-This patch enables 4GB 64bit memory space for
-PCIE_2A to have BAR allocations of 64bit pref mem
-needed on this Qdrive3 platform with dual SoCs
-for root port and switch NT-EP. Hence this ranges
-property is overridden in sa8540p-ride.dts only.
-
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
----
-Changes since v1:
-- Fix ranges property indentation (Konrad)
-
-This patch depends on below patch series for vreg_l11a.
-
-[v4] arm64: dts: qcom: sa8540p-ride: enable PCIe support
-https://lore.kernel.org/all/20221206161916.315640-1-bmasney@redhat.com/
-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 44 +++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index bb4afd3a9632..7ce104fea4f8 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -146,6 +146,27 @@ vreg_l8g: ldo8 {
- 	};
- };
- 
-+&pcie2a {
-+	ranges = <0x01000000 0x0 0x3c200000 0x0 0x3c200000 0x0 0x100000>,
-+		 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>,
-+		 <0x03000000 0x5 0x00000000 0x5 0x00000000 0x1 0x00000000>;
-+
-+	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
-+	wake-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie2a_default>;
-+
-+	status = "okay";
-+};
-+
-+&pcie2a_phy {
-+	vdda-phy-supply = <&vreg_l11a>;
-+	vdda-pll-supply = <&vreg_l3a>;
-+
-+	status = "okay";
-+};
-+
- &pcie3a {
- 	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
- 	         <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
-@@ -247,6 +268,29 @@ &xo_board_clk {
- /* PINCTRL */
- 
- &tlmm {
-+	pcie2a_default: pcie2a-default-state {
-+		perst-pins {
-+			pins = "gpio143";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+
-+		clkreq-pins {
-+			pins = "gpio142";
-+			function = "pcie2a_clkreq";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+
-+		wake-pins {
-+			pins = "gpio145";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
- 	pcie3a_default: pcie3a-default-state {
- 		perst-pins {
- 			pins = "gpio151";
--- 
-2.38.0
-
+On Fri, Dec 09, 2022 at 12:19:44PM -0800, Jaegeuk Kim wrote:
+> On 12/08, zhoudan8 wrote:
+> > In compress_mode=user, f2fs_release_compress_blocks()
+> >  does not verify whether it has been compressed and
+> >  sets FI_COMPRESS_RELEASED directly. which will lead to
+> > return -EINVAL after calling compress.
+> > To fix it,let's do not set FI_COMPRESS_RELEASED if file
+> > is not compressed.
+> 
+> Do you mean you want to avoid EINVAL on a file having FI_COMPRESS_RELEASED
+> with zero i_compr_blokcs?
+> 
+> I think the current logic is giving the error on a released file already.
+> 
+> > 
+> > Signed-off-by: zhoudan8 <zhoudan8@xiaomi.com>
+> > ---
+> >  fs/f2fs/file.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index 82cda1258227..f32910077df6 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -3451,14 +3451,13 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+> >  	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+> >  	if (ret)
+> >  		goto out;
+> > -
+> > -	set_inode_flag(inode, FI_COMPRESS_RELEASED);
+> >  	inode->i_ctime = current_time(inode);
+> >  	f2fs_mark_inode_dirty_sync(inode, true);
+> >  
+> >  	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
+> >  		goto out;
+> >  
+> > +	set_inode_flag(inode, FI_COMPRESS_RELEASED);
+> >  	f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+> >  	filemap_invalidate_lock(inode->i_mapping);
+> >  
+> > -- 
+> > 2.38.1
