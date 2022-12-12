@@ -2,66 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C85F64A41A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BAC64A41C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiLLPZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S232490AbiLLPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiLLPZC (ORCPT
+        with ESMTP id S231757AbiLLPZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:25:02 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C1EDF57;
-        Mon, 12 Dec 2022 07:25:01 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id u19so10429731ejm.8;
-        Mon, 12 Dec 2022 07:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9AHrQ7N3nRBE+WOLy0Bq5g+V2hYQvIG1OHCO+pLERp0=;
-        b=RmHTBIvkXbdmJ5ksl/eZVByvCarZ8CgvdstcoD39FvhfidCefGaPFxvPUURIX0sGhb
-         TvWQyJXIDLwBVEg2XhH7AkMb/1q0XKQNBQoXxHHhSNobRK5sWwKSsAJrxiNBcoGEGVmP
-         kwaPucHYXKh1m3LhUWSFcnFKh5oPJ1lKnlimVtpDllvumhNurl1O7rHgOWcz/4UplkcO
-         HvwUPefHOi7uL2I0qfTLQs/Nq7B/kSZfUx42FvMhGirjlBue1fY6oJKHWTOp5lXv9YQC
-         Cbcae0nlcsRV4cpAp+eNcunMAiVRD4Glih6kcuc8kcN3e+uKVy/QNz7tV7Zikfo21jAo
-         7qNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9AHrQ7N3nRBE+WOLy0Bq5g+V2hYQvIG1OHCO+pLERp0=;
-        b=PDLIcHre0YZWKIdwCpgkrPsnSxBRzShuFjei0ynh4uEhc/J87NLKqy6WQCDh5AU4T5
-         3LIutxV3dpqRvkC5B9MJoUO1G+etjEmib5ou6k0NcUjIGbFxdnaLZ6fKPjB//2KSzufs
-         1IbOz3Fb1B+9QJ4ihCS6QgwljmubcXSLFyDXOEV0LffnJ3HUtczFrHRtbuq+4MAhYAdL
-         xh3GGmB1EOUztNu6RqRymsdyM/49j480WxXv9aqHEjZCryzkGp+T1bfTJ7CkNSyw0b2p
-         Q6WwxQU4gPPylOs6NmByS/yXiBFZZRNAwnNJ8xCjI6sxaOqba4EQnwD0vSCdSveTD0ap
-         ZmGg==
-X-Gm-Message-State: ANoB5plnZLU0bRtwESxPp2yi6YP2Cf7aqP6hxFKctgrZi2f8OqIZdeTD
-        do6yriIC3iCkKAdwAbNPtm28gCMvi7JrIeO5yk8=
-X-Google-Smtp-Source: AA0mqf7/wKhq/6iI8G8EHKUiD1UUAqFrx/VfnmYqMJ7pXyvsjQVJtsH/1M1e5/xQ95l1TBFCuhhiNPDCgWk8nQ4YGo8=
-X-Received: by 2002:a17:906:4bc4:b0:78d:6325:356 with SMTP id
- x4-20020a1709064bc400b0078d63250356mr79921777ejv.6.1670858699756; Mon, 12 Dec
- 2022 07:24:59 -0800 (PST)
+        Mon, 12 Dec 2022 10:25:27 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A732FADA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:25:26 -0800 (PST)
+Received: (qmail 854837 invoked by uid 1000); 12 Dec 2022 10:25:25 -0500
+Date:   Mon, 12 Dec 2022 10:25:25 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
+Message-ID: <Y5dH5RqY2yOK1bVj@rowland.harvard.edu>
+References: <20221211120626.12210-1-johan@kernel.org>
+ <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
+ <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
+ <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
+ <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
+ <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
+ <Y5cvPulXceujfZv6@hovoldconsulting.com>
+ <b1a5874b-8028-db14-e2ac-ebe3967559a5@suse.com>
+ <Y5c3WWKyohzkspnw@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20221205210354.11846-1-andrew.smirnov@gmail.com>
- <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com> <CAHQ1cqGaL5v4PARTZU6_0tfSCz3=9b1THz-D-Bg1G64hBV+_Wg@mail.gmail.com>
-In-Reply-To: <CAHQ1cqGaL5v4PARTZU6_0tfSCz3=9b1THz-D-Bg1G64hBV+_Wg@mail.gmail.com>
-From:   David Rheinsberg <david.rheinsberg@gmail.com>
-Date:   Mon, 12 Dec 2022 16:24:48 +0100
-Message-ID: <CADyDSO5wBWKoWCO668cgPrZrCo9SfsJ0XqfCEbgRU3WErReibQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Handling of non-numbered feature reports by hidraw
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5c3WWKyohzkspnw@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,54 +47,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Mon, Dec 12, 2022 at 03:14:49PM +0100, Johan Hovold wrote:
+> On Mon, Dec 12, 2022 at 03:04:50PM +0100, Oliver Neukum wrote:
+> > 
+> > 
+> > On 12.12.22 14:40, Johan Hovold wrote:
+> > > On Mon, Dec 12, 2022 at 02:27:46PM +0100, Oliver Neukum wrote:
+> > >> On 12.12.22 14:14, Johan Hovold wrote:
+> > >>> On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
+> > > 
+> > >>> And in this case there was also no kernel doc for usb_get_intfdata()
+> > >>> which is equally self documenting. Why add redundant docs for only one
+> > >>> of these functions?
+> > >>
+> > >> Because knowing that one of them exists makes the other much more
+> > >> obvious.
+> > > 
+> > > I doubt anyone finds out about this function by reading generated kernel
+> > > documentation. You look at a driver, grep the function and look at the
+> > > single-line implementation.
+> > 
+> > Look, we cannot solve the issue whether kerneldoc is a good idea
+> > in general here. If you want to open that can of worms on lkml,
+> > by all means. go for it.
+> > But failing that, silently eliminating it is just not nice.
+> 
+> It was just added. It's mostly misleading and incorrect. Hence revert,
+> rather than put the burden of adding proper documentation on the person
+> calling out the misunderstanding (which has already led to a series of
+> bogus patches).
+> 
+> > > But it was never perfectly good. It claims that a driver "should" use it,
+> > > when it may not need to (think simple driver using devres) and talks
+> > 
+> > If you are presented with an interface something needs to be done
+> > specific to that interface.
+> 
+> I'm not sure what you're saying here.
+> 
+> > > about driver core resetting the pointer which is irrelevant.
+> > 
+> > But correct and topical. I am not arguing what people should or should
+> > mot know.
+> 
+> The comment is also misleading as it signals that this is something you
+> need to care about.
+> 
+> > If you just remove the last sentence, all will be well. And if you
+> > insist replace "should" with "can".
+> 
+> Since you insist, I'll just rewrite the whole thing.
 
-On Thu, 8 Dec 2022 at 21:59, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
->
-> On Thu, Dec 8, 2022 at 7:46 AM David Rheinsberg
-> <david.rheinsberg@gmail.com> wrote:
-> >
-> > Hi
-> >
-> > On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> > > I'm working on a firmware of a device that exposes a HID interface via
-> > > USB and/or BLE and uses, among other things, non-numbered feature
-> > > reports. Included in this series are two paches I had to create in
-> > > order for hidraw devices created for aforementioned subsystems to
-> > > behave in the same way when exerciesd by the same test tool.
-> > >
-> > > I don't know if the patches are acceptable as-is WRT to not breaking
-> > > existing userspace, hence the RFC tag.
-> >
-> > Can you elaborate why you remove the special handling from USBHID but
-> > add it to UHID? They both operate logically on the same level, so
-> > shouldn't we simply adjust uhid to include the report-id in buf[0]?
-> >
-> > Also, you override buf[0] in UHID, so I wonder what UHID currently
-> > returns there?
-> >
-> > IOW, can you elaborate a bit what the current behavior of each of the
-> > involved modules is, and what behavior you would expect? This would
-> > allow to better understand what you are trying to achieve. The more
-> > context you can give, the easier it is to understand what happens
-> > there.
-> >
->
-> Sorry it's not very clear, so the difference between the cases is that
-> in the case of UHID the report ID ends up being included as a part of
-> "SET_FEATURE", so BlueZ checks UHID_DEV_NUMBERED_FEATURE_REPORTS,
-> which is not set (correctly) and tries to send the whole payload. This
-> ends up as a maxlen + 1 (extra byte) write to a property that is
-> maxlen long, which gets rejected by device's BLE stack.
->
-> In the case of USBHID the problem happens in "GET_FEATURE" path. When
-> userspace reads the expected data back it gets an extra 0 prepended to
-> the payload, so all of the actual payload has an offset of 1. This
-> doesn't happen with UHID, which I think is the correct behavior here.
->
-> Hopefully that explains the difference, let me know if something is unclear
+You're both missing the main point, which is that the USB core clears 
+intfdata after a driver is unbound.  As a consequence, drivers don't 
+need to worry about clearing intfdata themselves -- a fact which is 
+_not_ easily apparent from the implementation.  This would be a useful 
+thing to mention in the kerneldoc, as it may help prevent lots of 
+drivers from making unnecessary function calls (like the ones that 
+Vincent recently removed).
 
-Yes, thanks, I completely missed that. Lets continue discussion on the patches.
+Of course, this doesn't mean that drivers can't clear intfdata if they 
+want to, for example, if they use it as an internal flag.  But 
+developers shouldn't feel that they _need_ to clear it as a sort of 
+hygienic measure.
 
-Thanks!
-David
+IMO it's worthwhile keeping the kerneldoc (but correcting it) so that it 
+can get this point across.
+
+Alan Stern
