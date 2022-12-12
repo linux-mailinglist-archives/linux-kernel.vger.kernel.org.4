@@ -2,149 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A936D64A40E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C1B64A413
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiLLPXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S231974AbiLLPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiLLPX0 (ORCPT
+        with ESMTP id S229600AbiLLPXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:23:26 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C092DEC6;
-        Mon, 12 Dec 2022 07:23:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=d438kEu4qOLcbFU0URbQJriH5Y4n1xPR4eyQliRbNVg=; b=s74zTubE3Doqlg41fuRrBNF/o1
-        JP/4EJXdvCTx2Omjp//leDXooDFHx4iKbMNAy6UjIt6OULjw8OVYLeNQdMg42MP9yNsmtbyJLkEua
-        k7ucGTq5RCmeeS4yosZJCD6kq+OuEgZ99PwhWMe+vqNe19XtIFmTmjqswt1wn71mcOnE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p4kdn-00562d-DZ; Mon, 12 Dec 2022 16:22:51 +0100
-Date:   Mon, 12 Dec 2022 16:22:51 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v6 net-next 3/5] drivers/net/phy: add connection between
- ethtool and phylib for PLCA
-Message-ID: <Y5dHS8jJkxS+aS/Q@lunn.ch>
-References: <cover.1670712151.git.piergiorgio.beruto@gmail.com>
- <75cb0eab15e62fc350e86ba9e5b0af72ea45b484.1670712151.git.piergiorgio.beruto@gmail.com>
- <Y5XL2fqXSRmDgkUQ@shell.armlinux.org.uk>
- <Y5Ypc5fDP3Cbi+RZ@gvm01>
- <Y5Y+xu4Rk6ptCERg@shell.armlinux.org.uk>
+        Mon, 12 Dec 2022 10:23:54 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410F4DF6F;
+        Mon, 12 Dec 2022 07:23:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id d20so13407889edn.0;
+        Mon, 12 Dec 2022 07:23:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ChHITi8TFnxzMUCCvh0ICYLsFw/8Il2tsX12Z2NSXOo=;
+        b=PSDAmMe+hWxRzmwceoDRF6ubxXRO1ox1EuLxysgOKbWBdQr9gaSeKoosyuP4EOl95S
+         Mg2iou5kEt/OXY3m3ZQWr16AX/TDzcXd2GDbVlW8CKXbCNpMjRWWYwOC+Ey3lEmvEFcK
+         gRtDYbm+gp+59Kwn1zmR1KQ0fsQXTDUboM0ZwcnOci0zOgIx57VgLtvIxjrgqLa+wT9b
+         LY3tef4KLMGfj3kkCmZkdGPz1eqxF4rXsMXJ7687Djhs69adb7zKT1FYoOCZbuwou4dM
+         1t/9j7PTzVqWZru1XM8UZe968tEpKbSfVH6YDsLNRSQGviMbeG2rYJul3dFIJgcroIfo
+         x28A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ChHITi8TFnxzMUCCvh0ICYLsFw/8Il2tsX12Z2NSXOo=;
+        b=bHbJxfkFNyPY7VukKNfKuXvy5JUjqKjm78m8vC0XJP2hyYj5+CSS2wUKrl3Q9mlr7g
+         tBtPHn85ClD9jEi8zmVvPdjKfMcwTiVq8iyMEhgbjDkS9QoyEGrW4fONzsK94ZiOgDP/
+         6FJSARAaqhGwoajfieepRO4mMZr6qn04ypYNVXYRFZIqYP9vmdKjrkmWOKh/hi/IgTW+
+         UI+U0mxEzL38eJIW2QkXQKNrszrutWZeNPbeq/hE0zY+MvliPMxu/nwtZn2jYYGUveet
+         wtovXYuQpGtrWWBRg4h1DnoYb60rzEqdGaVh892wDf4M18apBy2nu4KFf0EVUwWMM7ZM
+         ACHw==
+X-Gm-Message-State: ANoB5pm4ovn2UqJwHMC2QIL6Rhqvmie0Gt/r4dMfttvex1/X97bULFoJ
+        pM7bfTxukkIslEEzIhGRAWY76RG6oxg9rCAytZRjPmu9k/4=
+X-Google-Smtp-Source: AA0mqf5P7C8N2DcUDQeXuyNiXnMsH4ADDboDkylr8vx9skN4uB2SpAZ43Rrc0sB5PdkBcHMdWpuOxrSuuInEB73/wBk=
+X-Received: by 2002:a05:6402:35d6:b0:46d:e6b2:1ebd with SMTP id
+ z22-20020a05640235d600b0046de6b21ebdmr968810edc.179.1670858631850; Mon, 12
+ Dec 2022 07:23:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5Y+xu4Rk6ptCERg@shell.armlinux.org.uk>
+References: <20221205210354.11846-1-andrew.smirnov@gmail.com> <20221205210354.11846-2-andrew.smirnov@gmail.com>
+In-Reply-To: <20221205210354.11846-2-andrew.smirnov@gmail.com>
+From:   David Rheinsberg <david.rheinsberg@gmail.com>
+Date:   Mon, 12 Dec 2022 16:23:40 +0100
+Message-ID: <CADyDSO6EBuKNZFTvuuhS9VM+dy8t8HOcHyodiQR8o_uXd8gXww@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] HID: uhid: Don't send the report ID if it's zero
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 08:34:14PM +0000, Russell King (Oracle) wrote:
-> On Sun, Dec 11, 2022 at 08:03:15PM +0100, Piergiorgio Beruto wrote:
-> > On Sun, Dec 11, 2022 at 12:23:53PM +0000, Russell King (Oracle) wrote:
-> > > On Sat, Dec 10, 2022 at 11:46:39PM +0100, Piergiorgio Beruto wrote:
-> > > > This patch adds the required connection between netlink ethtool and
-> > > > phylib to resolve PLCA get/set config and get status messages.
-> > > > 
-> > > > Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-> > > > ---
-> > > >  drivers/net/phy/phy.c        | 175 +++++++++++++++++++++++++++++++++++
-> > > >  drivers/net/phy/phy_device.c |   3 +
-> > > >  include/linux/phy.h          |   7 ++
-> > > >  3 files changed, 185 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-> > > > index e5b6cb1a77f9..40d90ed2f0fb 100644
-> > > > --- a/drivers/net/phy/phy.c
-> > > > +++ b/drivers/net/phy/phy.c
-> > > > @@ -543,6 +543,181 @@ int phy_ethtool_get_stats(struct phy_device *phydev,
-> > > >  }
-> > > >  EXPORT_SYMBOL(phy_ethtool_get_stats);
-> > > >  
-> > > > +/**
-> > > > + * phy_ethtool_get_plca_cfg - Get PLCA RS configuration
-> > > > + *
-> > > 
-> > > You shouldn't have an empty line in the comment here
-> > I was trying to follow the style of this file. All other functions start
-> > like this, including an empty line. Do you want me to:
-> > a) follow your indication and leave all other functions as they are?
-> > b) Change all functions docs to follow your suggestion?
-> > c) leave it as-is?
-> > 
-> > Please, advise.
-> 
-> Please see Documentation/doc-guide/kernel-doc.rst
-> 
-> "Function parameters
-> ~~~~~~~~~~~~~~~~~~~
-> 
-> Each function argument should be described in order, immediately following
-> the short function description.  Do not leave a blank line between the
-> function description and the arguments, nor between the arguments."
-> 
-> Note the last sentence - there should _not_ be a blank line, so please
-> follow this for new submissions. I don't think we care enough to fix
-> what's already there though.
-> 
-> > 
-> > > 
-> > > > + * @phydev: the phy_device struct
-> > > > + * @plca_cfg: where to store the retrieved configuration
-> > > 
-> > > Maybe have an empty line, followed by a bit of text describing what this
-> > > function does and the return codes it generates?
-> > Again, I was trying to follow the style of the docs in this file.
-> > Do you still want me to add a description here?
-> 
-> Convention is a blank line - as illustrated by the general format
-> in the documentation file I refer to above.
-> 
-> > 
-> > > 
-> > > > + */
-> > > > +int phy_ethtool_get_plca_cfg(struct phy_device *phydev,
-> > > > +			     struct phy_plca_cfg *plca_cfg)
-> > > > +{
-> > > > +	int ret;
-> > > > +
-> > > > +	if (!phydev->drv) {
-> > > > +		ret = -EIO;
-> > > > +		goto out;
-> > > > +	}
-> > > > +
-> > > > +	if (!phydev->drv->get_plca_cfg) {
-> > > > +		ret = -EOPNOTSUPP;
-> > Once more, all other functions in this file take the mutex -after-
-> > checking for phydev->drv and checking the specific function. Therefore,
-> > I assumed that was a safe thing to do. If not, should we fix all of
-> > these functions in this file?
-> 
-> This is a review comment I've made already, but you seem to have ignored
-> it. Please ensure that new contributions are safe. Yes, existing code
-> may not be, and that's something we should fix, but your contribution
-> should at least be safer than the existing code.
+Hi
 
-I have a patch ready for fixing the cable test examples of performing
-the test before taking the lock. I was going to post it to net-next in
-a couple of weeks time. Or do you think it should be to net?
+On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+>
+> Report ID of zero is a special case handling ID-less reports and in
+> that case we should omit report ID from the payload being sent to the
+> backend.
+>
+> Without this change UHID_DEV_NUMBERED_{FEATURE,OUTPUT}_REPORTS doesn't
+> represent a semantical difference.
+>
+> Cc: David Rheinsberg <david.rheinsberg@gmail.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> ---
+>  drivers/hid/uhid.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/hid/uhid.c b/drivers/hid/uhid.c
+> index 2a918aeb0af1..7551120215e8 100644
+> --- a/drivers/hid/uhid.c
+> +++ b/drivers/hid/uhid.c
+> @@ -273,11 +273,11 @@ static int uhid_hid_get_report(struct hid_device *hid, unsigned char rnum,
+>  }
+>
+>  static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
+> -                              const u8 *buf, size_t count, u8 rtype)
+> +                              u8 *buf, size_t count, u8 rtype)
+>  {
+>         struct uhid_device *uhid = hid->driver_data;
+>         struct uhid_event *ev;
+> -       int ret;
+> +       int ret, skipped_report_id = 0;
+>
+>         if (!READ_ONCE(uhid->running) || count > UHID_DATA_MAX)
+>                 return -EIO;
+> @@ -286,6 +286,15 @@ static int uhid_hid_set_report(struct hid_device *hid, unsigned char rnum,
+>         if (!ev)
+>                 return -ENOMEM;
+>
+> +       /* Byte 0 is the report number. Report data starts at byte 1.*/
+> +       buf[0] = rnum;
+> +       if (buf[0] == 0x0) {
+> +               /* Don't send the Report ID */
+> +               buf++;
+> +               count--;
+> +               skipped_report_id = 1;
+> +       }
+> +
 
-	Andrew
+In HID core, the buffer is filled by a call to hid_output_report() in
+__hid_request(). And hid_output_report() only writes the ID if it is
+non-zero. So your patch looks like it is duplicating this logic? In
+which scenario is the report-ID not skipped exactly?
+
+Regardless, if you want to mess with the buffer, you should do that
+after the memcpy(). I don't see why we should mess with the buffer
+from HID core, when we have our own, anyway.
+
+David
