@@ -2,242 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAF664AA5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20AD64AA5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbiLLWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S233835AbiLLWfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:35:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiLLWf1 (ORCPT
+        with ESMTP id S233825AbiLLWff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:35:27 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C465113F5E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:35:26 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id f139so15278114yba.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:35:26 -0800 (PST)
+        Mon, 12 Dec 2022 17:35:35 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AE93886;
+        Mon, 12 Dec 2022 14:35:35 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id s7so13616303plk.5;
+        Mon, 12 Dec 2022 14:35:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IpAeK55ZtLsOItOVOsZUW0VX0dmUGZuhAd/spodi2Go=;
-        b=t14B1twGGRg6SASEJ+ZLGhHuryfaHLhvHJZJifSYAGZy7SktUGgGzYTV4SMEtrr2F+
-         NtAzSMIt9OgezFwIGrt5tvSLxJ664bJKgh7QHEpd9DSKH+TibYunqdwkeoNB70HdtaC+
-         u3wF5OQ3i1B71t8u/ghJ1uxJc4G7oo6GVUpDcKo2KBURmuyEDvvMkQgZyhzxbVvXxlX0
-         r1n0D258M0NkEx9Si+rocmFToLwfkEAIVegzKll09XNS7xODgko0a+pvEqvWtJf0CYYM
-         y2LR/qumoXQUQ4BY9gQ1KC1OlXq5qTTWEufUmBCTjL+Ijj8z3uWKmDPLG14ABDPisIxZ
-         rCvA==
+        bh=mzGWl9NbNab0/cvXriuWvS+/VwjtyPgYG+89ik87v1k=;
+        b=qlgEfpnoW8gJaCNB4KKrm5dS038kcOmt4a+SMi7A5RD91MfAizfibgXKh/Df/62W49
+         Z0tAegm03FedMwxkEMBzD/W1FA5iMe+BGxxQcvUkpizGjQzGNrABVNWfuFNS2lgardw1
+         zzaQdZhF2yXPiq3ELIOeDrskuRA48MyhiFrHhm2pXW73Y1l7i44QIKYUiVQ9XM4cCOCm
+         SszlmtTP6ETnaymJwbROhI1Pz2KmrIXY+9vOBrlP0zWk2c14+1S5k5Hn1f5OT85z8uME
+         r/2Axv3QJCr11+eFFNvSXEAXkMEas9cxUIuYKM15iblMeUKL+9SKtsTOvE49ecu5Jc1s
+         XjQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IpAeK55ZtLsOItOVOsZUW0VX0dmUGZuhAd/spodi2Go=;
-        b=znplgTqsKpfBOYhh7d+c2f+yt5qEQtkyzO8F6Hd8O19GtwhknosI/7/JXu4J+0wPnM
-         7EA4NARjEBGdhbkVqHgM7Vicaf86Ar1H2EYT43NhH20BJjn350ZPENGvbODdJtmjJI1H
-         lD1URJrjrtQqvyR7xgSnip2s1JwT2bVo6ZyEQPGoRBtJEdH/7pK8ITh5yQuJqwht+JpO
-         YfKPxRX5VTM/v1lrcpF8wF+VvPODMWQI2lbYkfO4fMWajkoP2PvZ7NGa9s5NQBm8cFtd
-         b+tDZkaDPMTB5+KWP46pq5MjrGMLitmT2n1BorNojW0WILcJsMldRWZ+plMCvvwlfWUt
-         UecQ==
-X-Gm-Message-State: ANoB5pkjv+1c2yf3MHx9BeX/iFvlSpr2LiFKUBp33Xrjqp0E8RzHqwnW
-        tJBlV5/TPsX1+ZoBDyPkGzPhWZ5fg9Gypp/LFrGknQ==
-X-Google-Smtp-Source: AA0mqf6vQuxCOzGUSvZb2kDX2AlckUYquLDzfG7G1uiKoRmVPaZPcfA52u7eXv04oPAKviSZIokhuxUkroshPyUJ3hc=
-X-Received: by 2002:a25:384a:0:b0:710:a8a6:d45 with SMTP id
- f71-20020a25384a000000b00710a8a60d45mr3558285yba.152.1670884525944; Mon, 12
- Dec 2022 14:35:25 -0800 (PST)
+        bh=mzGWl9NbNab0/cvXriuWvS+/VwjtyPgYG+89ik87v1k=;
+        b=ns+eRXy6on2sBP+zlxHdEIBLyE1c8F6Un8Zd6oWSs/bhxroCFEX/COTORQNg4aKIw8
+         HJ8KkEYsPHAqy67+icP+4YMmUbUpV81HbQZUPK84F579F1J/iJC74ytP0RZk9EYK3GjD
+         gamKkmZoLa5xioCC4VwmNEU4SnfHIwMmSaen/uKM10dkRINsBx5S74GOubymYc0v9xYv
+         5KIxasyu4BvO7FgHod/jw+UX4Y7soOe4WFzIe7Lrl6fCzt+KgTN0VK/fqx0PpYufJtOo
+         6ooNfq9tCTBpBdz7PQPO5m56IXI18COx+z5YCBgB0VQxqy0OwsK5kfcowW6ogBvNuwlc
+         rAIg==
+X-Gm-Message-State: ANoB5pmyf5+A3aBbj0oKdIMDF8P19jQKiLrlFlfL1zVFrImNKjzCv7zx
+        MH4nUSDvnAqKwlGAQMmexOaeBAit4UZWTV/4dQE=
+X-Google-Smtp-Source: AA0mqf5AQvhfFF0eknZ3EkeuoiFDWyTCzTrWUL7QtzqX7Wu/L0Laykp9ma9U3vKOsByuEUeIs+p8jBIL5D/LnsePgHk=
+X-Received: by 2002:a17:90b:3d89:b0:219:ef00:9ffe with SMTP id
+ pq9-20020a17090b3d8900b00219ef009ffemr67918pjb.106.1670884534849; Mon, 12 Dec
+ 2022 14:35:34 -0800 (PST)
 MIME-Version: 1.0
-References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
- <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
- <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org> <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
- <be1411e8-1d07-7643-977c-a306016fd660@linaro.org> <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
- <e53844b7-601b-f355-302b-cc871962a446@linaro.org> <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
-In-Reply-To: <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 13 Dec 2022 00:35:14 +0200
-Message-ID: <CAA8EJpr5RYyQa7xu1_xJ0F-dn-H9aOf0KE-CDgDCwnZu3HPgXg@mail.gmail.com>
-Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, airlied@gmail.com,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
+ <7c16cafe96c47ff5234fbb980df9d3e3d48a0296.1670778652.git.david.keisarschm@mail.huji.ac.il>
+ <01ade45b-8ca6-d584-199b-a06778038356@meta.com>
+In-Reply-To: <01ade45b-8ca6-d584-199b-a06778038356@meta.com>
+From:   Amit Klein <aksecurity@gmail.com>
+Date:   Tue, 13 Dec 2022 00:35:24 +0200
+Message-ID: <CANEQ_+KDR+kC=hYhTtNeQuSTp+-Dg0tRx-9MzJKQ2zH++fBGyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/5] Replace invocation of weak PRNG in kernel/bpf/core.c
+To:     Yonghong Song <yhs@meta.com>
+Cc:     david.keisarschm@mail.huji.ac.il,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ilay.bahat1@gmail.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 at 19:51, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+On Mon, Dec 12, 2022 at 8:03 PM Yonghong Song <yhs@meta.com> wrote:
 >
 >
-> On 12/8/2022 4:35 PM, Dmitry Baryshkov wrote:
-> > On 09/12/2022 02:22, Kuogee Hsieh wrote:
-> >>
-> >> On 12/8/2022 4:11 PM, Dmitry Baryshkov wrote:
-> >>> On 09/12/2022 01:38, Kuogee Hsieh wrote:
-> >>>>
-> >>>> On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
-> >>>>> On 09/12/2022 00:36, Kuogee Hsieh wrote:
-> >>>>>> Add both data-lanes and link-frequencies property into endpoint
-> >>>>>>
-> >>>>>> Changes in v7:
-> >>>>>> -- split yaml out of dtsi patch
-> >>>>>> -- link-frequencies from link rate to symbol rate
-> >>>>>> -- deprecation of old data-lanes property
-> >>>>>>
-> >>>>>> Changes in v8:
-> >>>>>> -- correct Bjorn mail address to kernel.org
-> >>>>>>
-> >>>>>> Changes in v10:
-> >>>>>> -- add menu item to data-lanes and link-frequecnis
-> >>>>>>
-> >>>>>> Changes in v11:
-> >>>>>> -- add endpoint property at port@1
-> >>>>>>
-> >>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
-> >>>>>
-> >>>>> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencies
-> >>>>> property
-> >>>>> .git/rebase-apply/patch:47: trailing whitespace.
-> >>>>>
-> >>>>> .git/rebase-apply/patch:51: trailing whitespace.
-> >>>>>
-> >>>>>
-> >>>>> Also the dt_binding_check fails with an error for this schema. And
-> >>>>> after fixing the error in the schema I faced an example validation
-> >>>>> error. Did you check that the schema is correct and that the
-> >>>>> example validates against the schema?
-> >>>>
-> >>>> yes, but i run "make dt_binding_check
-> >>>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml"
-> >>>> at mu v5.15 branch since
-> >>>
-> >>> I wouldn't ask you to post the log here. But I don't think that
-> >>> either of the errors that I see here is related to 5.15 vs 6.1-rc.
-> >>>
-> >>> In fact after applying this patch against 5.15 I saw the expected
-> >>> failure:
-> >>>
-> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
-> >>> properties:required: ['port@0', 'port@1'] is not of type 'object',
-> >>> 'boolean'
-> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
-> >>> properties: 'required' should not be valid under {'$ref':
-> >>> '#/definitions/json-schema-prop-names'}
-> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
-> >>> ignoring, error in schema: properties: required
-> >>>
-> >>>>
-> >>>> "make dt_binding_check" does not work at msm-next branch.
-> >>>
-> >>> I went ahead and just checked.
-> >>>
-> >>> `make dt_binding_check DT_SCHEMA_FILES=display/msm`  works cleanly
-> >>> in msm-next and reports a single example-related warning in
-> >>> msm-next-lumag. I pushed a patch to fix that warning (wich can
-> >>> hopefully be picked up by Abhinav into msm-fixes). So you can assume
-> >>> that both these branches have consistent error-free display/msm
-> >>> schemas.
-> >>>
-> >> I have clean msm-next branch (without my data-lines yaml patch
-> >> applied) and run "make dt_binding_check
-> >> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml",
-> >> then I saw below error messages.
-> >>
-> >> Have you run into this problem?
+>
+> On 12/11/22 2:16 PM, david.keisarschm@mail.huji.ac.il wrote:
+> > From: David <david.keisarschm@mail.huji.ac.il>
 > >
-> > No.
->
-> Did you do anything to fix "older dtschema instance"?
-
-I did not since I hadn't had such a problem. I can refer again to the
-steps I provided you beforehand. The email was sent 6 days ago. No
-answer from your side since that time.
-
-> I had run  "pip3 install dtschema --upgrade" and still not work.
-
-Can you please post a full log of this command?
-
->
-> D you know how to fix this problem?
->
-> Thanks,
->
-> kuogee
->
-> sort: -:2: disorder: 2022.1
-> ERROR: dtschema minimum version is v2022.3
-> make[2]: *** [check_dtschema_version] Error 1
-> make[1]: *** [dt_binding_check] Error 2
-> make: *** [__sub-make] Error 2
-
-Please add the output of:
-
-which dt-validate
-dt-validate -V
-
-And also a full log of your failing kernel build.
-
-
-
-> I had run "pip3 install dtschema --upgrade" according Rob Herring response.
-> but it still shows same problem.
-> Please let know how can I fix this problem.
->
+> > We changed the invocation of
+> >   prandom_u32_state to get_random_u32.
+> >   We deleted the maintained state,
+> >   which was a CPU-variable,
+> >   since get_random_u32 maintains its own CPU-variable.
+> >   We also deleted the state initializer,
+> >   since it is not needed anymore.
 > >
-> >>
-> >>    HOSTCC  scripts/basic/fixdep
-> >>    HOSTCC  scripts/dtc/dtc.o
-> >>    HOSTCC  scripts/dtc/flattree.o
-> >>    HOSTCC  scripts/dtc/fstree.o
-> >>    HOSTCC  scripts/dtc/data.o
-> >>    HOSTCC  scripts/dtc/livetree.o
-> >>    HOSTCC  scripts/dtc/treesource.o
-> >>    HOSTCC  scripts/dtc/srcpos.o
-> >>    HOSTCC  scripts/dtc/checks.o
-> >>    HOSTCC  scripts/dtc/util.o
-> >>    LEX     scripts/dtc/dtc-lexer.lex.c
-> >>    HOSTCC  scripts/dtc/dtc-lexer.lex.o
-> >>    HOSTCC  scripts/dtc/dtc-parser.tab.o
-> >>    HOSTLD  scripts/dtc/dtc
-> >> sort: -:2: disorder: 2022.1
-> >> ERROR: dtschema minimum version is v2022.3
-> >> make[2]: *** [check_dtschema_version] Error 1
-> >> make[1]: *** [dt_binding_check] Error 2
-> >> make: *** [__sub-make] Error 2
+> > Signed-off-by: David <david.keisarschm@mail.huji.ac.il>
+> > ---
+> >   include/linux/bpf.h   |  1 -
+> >   kernel/bpf/core.c     | 13 +------------
+> >   kernel/bpf/verifier.c |  2 --
+> >   net/core/filter.c     |  1 -
+> >   4 files changed, 1 insertion(+), 16 deletions(-)
 > >
-> > This means that somewhere in your path you have an older dtschema
-> > instance.
-> >
-> > When you sent me a question regarding this error, I asked for the
-> > additional info. You provided none. Instead you went on sending the
-> > untested patch that doesn't work.
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+[...]
+> Please see the discussion here.
+> https://lore.kernel.org/bpf/87edtctz8t.fsf@toke.dk/
+> There is a performance concern with the above change.
 >
-> since i can not test it on msm-next so that I did test it at my v5-15
-> branch.
 
-Wrong.
+I see. How about using (in this instance only!) the SipHash-based
+solution which was the basis for prandom_u32() starting with commit
+c51f8f88d705 (v5.10-rc1) up until commit d4150779e60f (v5.19-rc1)?
+Copying the relevant snippets (minus comments, for brevity) from
+/lib/random32.c and /include/linux/prandom.h from that era (the 32
+random bits are generated by prandom_u32() at the bottom; I didn't
+bother with initialization, and I don't know if the per_cpu logic is
+needed here, or perhaps some other kind of locking, if any):
 
->
-> besides, i think i have to sent the whole series patches include this
-> one to address your new comments on other patch.
->
-> is this correct?
 
-No. Please fix your system first, validate your patches and send them
-afterwards. You can not expect others to do your job.
+#define PRND_SIPROUND(v0, v1, v2, v3) ( \
+v0 += v1, v1 = rol32(v1, 5), v2 += v3, v3 = rol32(v3, 8), \
+v1 ^= v0, v0 = rol32(v0, 16), v3 ^= v2, \
+v0 += v3, v3 = rol32(v3, 7), v2 += v1, v1 = rol32(v1, 13), \
+v3 ^= v0, v1 ^= v2, v2 = rol32(v2, 16) \
 
---
-With best wishes
-Dmitry
+)
+
+struct siprand_state {
+    unsigned long v0;
+    unsigned long v1;
+    unsigned long v2;
+    unsigned long v3;
+};
+
+static DEFINE_PER_CPU(struct siprand_state, net_rand_state)
+__latent_entropy;   // do we actually need this? -AK
+
+static inline u32 siprand_u32(struct siprand_state *s)
+{
+    unsigned long v0 = s->v0, v1 = s->v1, v2 = s->v2, v3 = s->v3;
+
+    PRND_SIPROUND(v0, v1, v2, v3);
+    PRND_SIPROUND(v0, v1, v2, v3);
+    s->v0 = v0;  s->v1 = v1;  s->v2 = v2;  s->v3 = v3;
+    return v1 + v3;
+}
+
+
+u32 prandom_u32(void)
+{
+    struct siprand_state *state = get_cpu_ptr(&net_rand_state);
+    u32 res = siprand_u32(state);
+
+    trace_prandom_u32(res);
+    put_cpu_ptr(&net_rand_state);
+    return res;
+}
+EXPORT_SYMBOL(prandom_u32);
