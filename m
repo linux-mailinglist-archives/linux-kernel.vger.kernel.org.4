@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B009649B1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72230649B1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiLLJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S231415AbiLLJ1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiLLJ0j (ORCPT
+        with ESMTP id S231376AbiLLJ1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:26:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45E9FC9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:25:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670837131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JyfgukxH8Bj5hg68NAqVbpkGDDDowiV1dBqHPtCnSU=;
-        b=PTcS22OeoLpUoxtT8vsG6Hopy+44QTFAa0Uv9j2VFM5+gJnK6MjmuRkr+pxfjui/r/WvMC
-        Tfq/QRkemtA0aPVzgrWvPSLudVDxnbkBVsvhAxi2+5UK7/qGzePhRb9tJ5YPaPMGqRQn5g
-        VOz+BsvQ570C++Jub3qk8jU27K+VU4E=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-505-o032NFYcONe2QrOjBX8ilQ-1; Mon, 12 Dec 2022 04:25:30 -0500
-X-MC-Unique: o032NFYcONe2QrOjBX8ilQ-1
-Received: by mail-qk1-f198.google.com with SMTP id i21-20020a05620a405500b006fb25ba3e00so13359767qko.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:25:30 -0800 (PST)
+        Mon, 12 Dec 2022 04:27:11 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5907D111F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:27:10 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id f18so11397027wrj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n14Qp7bvZz4xqyR48Rh0IbAbnDSJAzA4A7nydUQ+ajg=;
+        b=Z950nXBBkoH+Pf5+RcXPRfyTg9W7VPejvg0QaFLA3zpPx4767eSRVXW+GAM7vxw3cl
+         LZKmtENuwEjZimXtE6Wor+k6iTCytH/sJObsD32xm/+YBOT77KB06vunlRY58OwANC1Y
+         2tJn7Z31qFqqUCvtys73ZVKP8zgTxV6buC/1zq+MB9L8+hZ7mqo12/jYXvSnVgHtTCtI
+         +xJpFEePXQGVSQq8plaIk5TJhU1UatdEYQLeZQa2AmITTCjIikDJoVQy48X6l+DfyBf8
+         mvIf1TXbqDArbAE1Q8XBAzsICso1BDvyGT5o2+wGZw69r94gkjfRgHMUoaIvWhJAQWyt
+         NrNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0JyfgukxH8Bj5hg68NAqVbpkGDDDowiV1dBqHPtCnSU=;
-        b=eMM1Cink5VQyUr9vNyIeUJb4vuIoGCjgNYMiHiYzHqhB0pvgf9ClTpr7gQDhAm+P9t
-         vX/+lkn02KFDStpk6OsNn2Xe1705bcymZxYKZjhHcjfb2rZwqfp+8Ns58+P3JYIzXgF4
-         v0tYZEG973gHVlAE/D0eAUugwaYrpj7kvIRni6S/lpMLTJku+KkXTBT7BrJ3UO9XNQFH
-         z3XX2hcNzf1jb7hic6gdKJ+0VOH7GUnr+san25T6Buh5JogJa/HD9RAIL0qOKdWRIVpm
-         qYpjKo2Z1n9wULKjIQRjdOFTQTyw1ohWXpLqBhIH/Ni7O1Q6k8MJk06iAyQHfeLemJ8P
-         5ziw==
-X-Gm-Message-State: ANoB5plBvtI6k7h38sZ2lHItRUWT2Tz7P0q0eaEWjEvoDyvfpiukzEw7
-        PW/I8+Jmiu4GFA7tCds5vipz7Ytw+mYMjUvpKqrAmBhLrmjYV++O2gtKfkSbn7GRyfXN833QGPy
-        MiJwFzZ9LkSgT3+y2jwy9CH/7
-X-Received: by 2002:a05:6214:e6c:b0:4c7:7257:68a2 with SMTP id jz12-20020a0562140e6c00b004c7725768a2mr28389042qvb.15.1670837129719;
-        Mon, 12 Dec 2022 01:25:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4lascigSsPr+SAq9gF053iSTVg49y6qJ3To4iG3pwTTJT3W+tds28QF20QeElvO/N/q72GZg==
-X-Received: by 2002:a05:6214:e6c:b0:4c7:7257:68a2 with SMTP id jz12-20020a0562140e6c00b004c7725768a2mr28389027qvb.15.1670837129491;
-        Mon, 12 Dec 2022 01:25:29 -0800 (PST)
-Received: from redhat.com ([185.199.102.21])
-        by smtp.gmail.com with ESMTPSA id bs33-20020a05620a472100b006b61b2cb1d2sm5556345qkb.46.2022.12.12.01.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 01:25:29 -0800 (PST)
-Date:   Mon, 12 Dec 2022 04:25:22 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] virtio-net: correctly enable callback during
- start_xmit
-Message-ID: <20221212042144-mutt-send-email-mst@kernel.org>
-References: <20221212091029.54390-1-jasowang@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n14Qp7bvZz4xqyR48Rh0IbAbnDSJAzA4A7nydUQ+ajg=;
+        b=beESFhmmsue7c7wVVZFNI8dxDb6Y25ewf/VJlzpfLoqRHhVUqmDBVoDVNCJZz7YbZb
+         9TwqOVE52R91S6n5fMxlV27Y85fIT3rtANxalQNd5SacjwRFRYLdVsKENJL0DcuYYY53
+         z0e98kyk3/fsD/SdIoiNO31EvoeI3MiT4AWwbvz0u8g0KvN66li1p47ykRecn5NzNR8R
+         yh6GutGvgPC4or9M4ko98KTDl+lii30ptRS6j5RsNvg0Nb/kmNFPH3cjjDOA/Lb9rTQm
+         fCEH+zaZJxY5E38SR3tvQNOlJYIxYVdBMT/ATr/Yqi8NAoL7hJAKkX8OL28o5ZdGSu2k
+         Em6Q==
+X-Gm-Message-State: ANoB5pkzs6d7x6XPTqrDTSATkEEKpmAE0LT99jtyNwnXApXMEsuRvNpN
+        O+Zbsu7uK4l4XeY7BHhOpxBO1oMIMqynWUZ/eKijbLiWY+g=
+X-Google-Smtp-Source: AA0mqf7r9EvDGMb7nvUqMat+P4oTPtDVJSLM1basa08arMRiBc4Asz+PivJ/16mS3hAwzygnsqH1CU+dVoisCsl4SGI=
+X-Received: by 2002:adf:ebc7:0:b0:242:359d:ea96 with SMTP id
+ v7-20020adfebc7000000b00242359dea96mr19934622wrn.35.1670837228828; Mon, 12
+ Dec 2022 01:27:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212091029.54390-1-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
+ <Y5bI9ZbjpzNFpk/8@slm.duckdns.org> <CAJhGHyA=qGtktv6BPavo5HRrDkcORqpkD3C7nhnxyFtt8WNJMg@mail.gmail.com>
+In-Reply-To: <CAJhGHyA=qGtktv6BPavo5HRrDkcORqpkD3C7nhnxyFtt8WNJMg@mail.gmail.com>
+From:   richard clark <richard.xnu.clark@gmail.com>
+Date:   Mon, 12 Dec 2022 17:26:57 +0800
+Message-ID: <CAJNi4rMYkOM5S7-TAPRdTFVEOcvXTQY-13TrgQBzAYRVNMNW1w@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Prevent a new work item from queueing into a
+ destruction wq
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,54 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
-> Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> virtqueue callback via the following statement:
-> 
->         do {
->            ......
-> 	} while (use_napi && kick &&
->                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> 
-> This will cause a missing call to virtqueue_enable_cb_delayed() when
-> kick is false. Fixing this by removing the checking of the kick from
-> the condition to make sure callback is enabled correctly.
-> 
-> Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
-> The patch is needed for -stable.
+On Mon, Dec 12, 2022 at 2:48 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>
+> On Mon, Dec 12, 2022 at 2:23 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Mon, Dec 12, 2022 at 02:18:36PM +0800, Richard Clark wrote:
+> > > Currently the __WQ_DRAINING is used to prevent a new work item from queueing
+> > > to a draining workqueue, but this flag will be cleared before the end of a
+> > > RCU grace period. Because the workqueue instance is actually freed after
+> > > the RCU grace period, this fact results in an opening window in which a new
+> > > work item can be queued into a destorying workqueue and be scheduled
+> > > consequently, for instance, the below code snippet demos this accident:
+> >
+> > I mean, this is just use-after-free. The same scenario can happen with
+> > non-RCU frees or if there happens to be an RCU grace period inbetween. I'm
+> > not sure what's being protected here.
+>
+> I think it is a kind of debugging facility with no overhead in the
+> fast path.
 
-stable rules don't allow for theoretical fixes. Was a problem observed?
+Agree...
 
-> ---
->  drivers/net/virtio_net.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 86e52454b5b5..44d7daf0267b 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
->  
->  		free_old_xmit_skbs(sq, false);
->  
-> -	} while (use_napi && kick &&
-> -	       unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> +	} while (use_napi &&
-> +		 unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+>
+> It is indeed the caller's responsibility not to do use-after-free.
+>
+> For non-RCU free, the freed workqueue's state can be arbitrary soon and
+> the caller might get a complaint. And if there are some kinds of debugging
+> facilities for freed memory, the system can notice the problem earlier.
+
+This case will trigger a noticeable kernel BUG
+
+>
+> But now is RCU free for the workqueue, and the workqueue has nothing
+> different between before and after destroy_workqueue() unless the
+> grace period ends and the memory-allocation subsystem takes charge of
+> the memory.
 >
 
-A bit more explanation pls.  kick simply means !netdev_xmit_more -
-if it's false we know there will be another packet, then transmissing
-that packet will invoke virtqueue_enable_cb_delayed. No?
+    destroy_workqueue(wq0);
+    schedule_timeout_interruptible(msecs_to_jiffies(1000));
+    queue_work_on(1, wq0, &w0);
 
+Sleep 1s to guarantee the RCU grace period completes, then the same
+result with non-RCU free
 
+Thanks
 
-
-  
->  	/* timestamp packet in software */
->  	skb_tx_timestamp(skb);
-> -- 
-> 2.25.1
-
+>
+>
+> Thanks
+> Lai
