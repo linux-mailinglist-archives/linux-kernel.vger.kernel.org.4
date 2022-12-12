@@ -2,180 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80E564A9AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D90764A9A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiLLVo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S233462AbiLLVoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbiLLVoy (ORCPT
+        with ESMTP id S233477AbiLLVob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:44:54 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9F13E35;
-        Mon, 12 Dec 2022 13:44:53 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCKhp1C023462;
-        Mon, 12 Dec 2022 21:44:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Sa/IMRCUcp/NqiNJFzuydVhh4vOLra4e/tBGYGanhFw=;
- b=Fe/eb6Kn9AZQ/kGL6ODzsA50b2vllLCRVzEIyxNAkVI+Ni0TSCTIuLRqtYmOIh3bVEKK
- cUb0ng/pn2r6hWsQFj7frCW2Hssq27Qxm1QCsvkVBdiPV5UorqwISKIog1PTvmUEJxb2
- 2nTeD8lX6ierMjWsywrPMmZlX1sdlmF7vFH7HypALrwT9DEuZxD8aYoHVh9MhONVlcL1
- mHOrifEn7ekXiBDdbtZz32k7ryEOF/oyl3F1QCmgjQNA4wcmR8N2/zT5zE+x1ggX7Q83
- PeNIL5eEoVOA7QFIS3Ju88ORJkUyvBrG8JZDnDuZrEi5LQM/fPfyfflzHZHeZpIZpNQe 4g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mebk7178j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 21:44:27 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BCLUNjE015744;
-        Mon, 12 Dec 2022 21:44:26 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mebk7178c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 21:44:26 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.16.1.2) with ESMTP id 2BCKMvBP019461;
-        Mon, 12 Dec 2022 21:44:25 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3mchr6k9e5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Dec 2022 21:44:25 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BCLiOfk37552482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Dec 2022 21:44:24 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 369795805A;
-        Mon, 12 Dec 2022 21:44:24 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 696735804E;
-        Mon, 12 Dec 2022 21:44:22 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.60.25])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Dec 2022 21:44:22 +0000 (GMT)
-Message-ID: <d9060f9765e59b5fd46c9f7c6a8682a29e712120.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 00/10] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Coiby Xu <coxu@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "noodles@fb.com" <noodles@fb.com>, "tiwai@suse.de" <tiwai@suse.de>,
-        "bp@suse.de" <bp@suse.de>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Mon, 12 Dec 2022 16:44:22 -0500
-In-Reply-To: <5AF81A9E-C4E7-4BEB-86E1-4D2DB613FBF1@oracle.com>
-References: <20221207171238.2945307-1-eric.snowberg@oracle.com>
-         <20221209102612.wa3oftpqupzplx6h@Rk>
-         <5AF81A9E-C4E7-4BEB-86E1-4D2DB613FBF1@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YIa0V5D9cmF90M6ofJtbgv6Ib7eypmZi
-X-Proofpoint-ORIG-GUID: hycEuVe5LoG_BQbYT14ivtjmP1FHOjyX
+        Mon, 12 Dec 2022 16:44:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA73513E35;
+        Mon, 12 Dec 2022 13:44:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8306EB80CCA;
+        Mon, 12 Dec 2022 21:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1D6C433EF;
+        Mon, 12 Dec 2022 21:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1670881466;
+        bh=aq83rbzGvHma+lAf/GnhBTYFP26IXcg67Dwi7SYgaAM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VOygyCzZX0m/3et257MPeRXQ1QVH2rwG25U+m2zk6ZOOQ2cevwZ0Ixb+Zpgqpxc+x
+         9d3XATOko4vEBrfBKu1eCz7J37UZALJ6wmKofXfbJLYXXYx/pimSkLPIIfaw2EWzoz
+         c7C3T0XSbapp3gMYDk4XQ+zQ8cm01zcH6KDnGX44=
+Date:   Mon, 12 Dec 2022 13:44:25 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] non-MM commits for 6.2-rc1
+Message-Id: <20221212134425.b20b80955e5e8a4a36ce1b9a@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=837 lowpriorityscore=0 phishscore=0 clxscore=1011 mlxscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212120187
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric, Coiby,
 
-On Fri, 2022-12-09 at 15:44 +0000, Eric Snowberg wrote:
-> > On Dec 9, 2022, at 3:26 AM, Coiby Xu <coxu@redhat.com> wrote:
-> > 
-> > Thanks for your work! The patch set looks good to me except for the
-> > requirement of an intermediate CA certificate should be vouched for by a
-> > root CA certificate before it can vouch for other certificates. What if
-> > users only want to enroll an intermediate CA certificate into the MOK?
-> 
-> This question would need to be answered by the maintainers.  The intermediate 
-> requirement was based on my understanding of previous discussions requiring
-> there be a way to validate root of trust all the way back to the root CA.
+Linus, please merge this cycle's batch on non-MM updates, thanks.
 
-That definitely did not come from me.  My requirement all along has
-been to support a single self-signed CA certificate for the end
-user/customer use case, so that they could create and load their own
-public key, signed by that CA, onto the trusted IMA/EVM keyrings.
+I'll get the MM tree over tomorrow, hopefully.  David went and broke it
+as it was being loaded into Santa's sleigh but Sidhartha has some glue.
+(https://lkml.kernel.org/r/62ca3baf-4220-e69f-2218-3b4a157e88f0@oracle.com)
 
-> 
-> > If this requirement could be dropped, the code could be simplified and
-> > some issues could be resolved automatically,
-> 
-> Agreed. I will make sure the issue below is resolved one way or the other,
-> once we have an agreement on the requirements. 
 
-I totally agree with Coiby that there is no need for intermediate CA
-certificates be vouched for by a root CA certificate.  In fact the
-closer the CA certificate is to the leaf code signing certificate, the
-better.  As much as possible we want to limit the CA keys being loaded
-onto the machine keyring to those that are absolutely required.
+The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
 
-thanks,
+  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
 
-Mimi
+are available in the Git repository at:
 
-> 
-> > 1. "[PATCH v2 03/10] KEYS: X.509: Parse Basic
-> >   a root_ca filed to a certificate to indicate the subject of the
-> >   certificate is a CA. The name root_ca implies it's also a root CA. But
-> >   according to [1], both an intermediate and root CA will have
-> >   root_ca=True. For example, the intermediate certificate of
-> >   https://www.kernel.org/ has "Certificate Authority=Yes" in the basic
-> >   constraints. Btw, a root CA certificate by definition is self-signed,
-> >   so the following code in "[PATCH v2 05/10] KEYS: Introduce a CA
-> >   endorsed flag" looks a bit strange to me,
-> >    if (cert->kcs_set && cert->self_signed && cert->root_ca)
-> >        prep->payload_flags |= KEY_ALLOC_PECA;
-> > 
-> > 2. Since an intermediate CA certificate also has root_ca=True,
-> >   "[PATCH v2 07/10] KEYS: X.509: Flag Intermediate CA certs as
-> >   endorsed" won't work as intended i.e. this following else branch
-> >   will never be reached,
-> >   else if (!cert->self_signed && !cert->root_ca)
-> >           prep->payload_flags |= KEY_MAYBE_PECA;
-> > 
-> > 3. I see nowhere public_key->key_is_ca is set to true for an intermediate
-> >   CA certificate after it gains the KEY_ALLOC_PECA flag. So it will fail
-> >   restrict_link_by_ca even if the KEY_MAYBE_PECA flag is added.
-> > 
-> > [1] https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.9
-> 
-> Thanks for reviewing the series.
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-nonmm-stable-2022-12-12
 
+for you to fetch changes up to 12b677f2c697d61e5ddbcb6c1650050a39392f54:
+
+  ipc: fix memory leak in init_mqueue_fs() (2022-12-11 19:30:20 -0800)
+
+----------------------------------------------------------------
+Non-MM patches for 6.2-rc1.
+
+- A ptrace API cleanup series from Sergey Shtylyov
+
+- Fixes and cleanups for kexec from ye xingchen
+
+- nilfs2 updates from Ryusuke Konishi
+
+- squashfs feature work from Xiaoming Ni: permit configuration of the
+  filesystem's compression concurrency from the mount command line.
+
+- A series from Akinobu Mita which addresses bound checking errors when
+  writing to debugfs files.
+
+- A series from Yang Yingliang to address rapido memory leaks
+
+- A series from Zheng Yejian to address possible overflow errors in
+  encode_comp_t().
+
+- And a whole shower of singleton patches all over the place.
+
+----------------------------------------------------------------
+Aditya Garg (1):
+      hfsplus: fix bug causing custom uid and gid being unable to be assigned with mount
+
+Akinobu Mita (3):
+      libfs: add DEFINE_SIMPLE_ATTRIBUTE_SIGNED for signed value
+      lib/notifier-error-inject: fix error when writing -errno to debugfs file
+      debugfs: fix error when writing negative value to atomic_t debugfs file
+
+Alexey Asemov (1):
+      ocfs2: always read both high and low parts of dinode link count
+
+Alexey Dobriyan (2):
+      proc: give /proc/cmdline size
+      proc: fixup uptime selftest
+
+Anders Roxell (1):
+      kernel: kcsan: kcsan_test: build without structleak plugin
+
+Andy Shevchenko (1):
+      panic: use str_enabled_disabled() helper
+
+Baokun Li (1):
+      squashfs: fix null-ptr-deref in squashfs_fill_super
+
+Bjorn Helgaas (2):
+      checkpatch: add warning for non-lore mailing list URLs
+      ia64: remove unused __SLOW_DOWN_IO and SLOW_DOWN_IO definitions
+
+Bo Liu (1):
+      fat (exportfs): fix some kernel-doc warnings
+
+Cai Xinchen (1):
+      rapidio: devices: fix missing put_device in mport_cdev_open
+
+Chen Lifu (1):
+      ARM: kexec: make machine_crash_nonpanic_core() static
+
+Christophe JAILLET (1):
+      io-mapping: move some code within the include guarded section
+
+Colin Ian King (2):
+      lib/oid_registry.c: remove redundant assignment to variable num
+      scripts/spelling.txt: add more spellings to spelling.txt
+
+Gaosheng Cui (2):
+      ia64/kprobes: remove orphan declarations from arch/ia64/include/asm/kprobes.h
+      lib/fonts: fix undefined behavior in bit shift for get_default_font
+
+Gavrilov Ilia (1):
+      relay: fix type mismatch when allocating memory in relay_create_buf()
+
+Iskren Chernev (1):
+      mailmap: update email for Iskren Chernev
+
+Ivan Babrou (1):
+      proc: report open files as size in stat() for /proc/pid/fd
+
+Jason A. Donenfeld (3):
+      minmax: sanity check constant bounds when clamping
+      minmax: clamp more efficiently by avoiding extra comparison
+      wifi: rt2x00: use explicitly signed or unsigned types
+
+Jianglei Nie (1):
+      proc/vmcore: fix potential memory leak in vmcore_init()
+
+Joseph Qi (3):
+      ocfs2/cluster: use bitmap API instead of hand-writing it
+      ocfs2: use bitmap API in fill_node_map
+      ocfs2/dlm: use bitmap API instead of hand-writing it
+
+Li Chen (1):
+      kexec: replace crash_mem_range with range
+
+Li Zetao (1):
+      ocfs2: fix memory leak in ocfs2_mount_volume()
+
+Liao Chang (1):
+      checkpatch: add check for array allocator family argument order
+
+Masahiro Yamada (1):
+      linux/init.h: include <linux/build_bug.h> and <linux/stringify.h>
+
+Oleksandr Natalenko (1):
+      core_pattern: add CPU specifier
+
+Palmer Dabbelt (1):
+      MAINTAINERS: git://github -> https://github.com for linux-test-project
+
+Rong Tao (2):
+      lib/radix-tree.c: fix uninitialized variable compilation warning
+      kcov: fix spelling typos in comments
+
+Ryusuke Konishi (2):
+      nilfs2: fix shift-out-of-bounds/overflow in nilfs_sb2_bad_offset()
+      nilfs2: fix shift-out-of-bounds due to too large exponent of block size
+
+Sergey Shtylyov (13):
+      arc: ptrace: user_regset_copyin_ignore() always returns 0
+      arm: ptrace: user_regset_copyin_ignore() always returns 0
+      arm64: ptrace: user_regset_copyin_ignore() always returns 0
+      hexagon: ptrace: user_regset_copyin_ignore() always returns 0
+      ia64: ptrace: user_regset_copyin_ignore() always returns 0
+      mips: ptrace: user_regset_copyin_ignore() always returns 0
+      nios2: ptrace: user_regset_copyin_ignore() always returns 0
+      openrisc: ptrace: user_regset_copyin_ignore() always returns 0
+      parisc: ptrace: user_regset_copyin_ignore() always returns 0
+      powerpc: ptrace: user_regset_copyin_ignore() always returns 0
+      sh: ptrace: user_regset_copyin_ignore() always returns 0
+      sparc: ptrace: user_regset_copyin_ignore() always returns 0
+      regset: make user_regset_copyin_ignore() *void*
+
+Shang XiaoJing (1):
+      ocfs2: fix memory leak in ocfs2_stack_glue_init()
+
+Stanislaw Gruszka (1):
+      scripts: checkpatch: allow "case" macros
+
+Stephen Brennan (1):
+      vmcoreinfo: warn if we exceed vmcoreinfo data size
+
+Tetsuo Handa (1):
+      rapidio/tsi721: replace flush_scheduled_work() with flush_work()
+
+Uros Bizjak (2):
+      llist: avoid extra memory read in llist_add_batch
+      sched/fair: use try_cmpxchg in task_numa_work
+
+Wang Weiyang (1):
+      rapidio: fix possible UAF when kfifo_alloc() fails
+
+XU pengfei (1):
+      initramfs: remove unnecessary (void*) conversion
+
+Xiaoming Ni (2):
+      squashfs: add the mount parameter theads=<single|multi|percpu>
+      squashfs: allows users to configure the number of decompression threads
+
+Xiongfeng Wang (1):
+      tools/accounting/procacct: remove some unused variables
+
+Xu Panda (1):
+      relay: use strscpy() is more robust and safer
+
+Yang Yingliang (2):
+      rapidio: fix possible name leaks when rio_add_device() fails
+      rapidio: rio: fix possible name leak in rio_register_mport()
+
+YueHaibing (1):
+      selftests: cgroup: fix unsigned comparison with less than zero
+
+Yury Norov (1):
+      cpumask: limit visibility of FORCE_NR_CPUS
+
+Zhang Qilong (1):
+      eventfd: change int to __u64 in eventfd_signal() ifndef CONFIG_EVENTFD
+
+ZhangPeng (2):
+      hfs: fix OOB Read in __hfs_brec_find
+      hfs: Fix OOB Write in hfs_asc2mac
+
+Zhao Gongyi (1):
+      selftests/vm: add local_config.h and local_config.mk to .gitignore
+
+Zheng Yejian (2):
+      acct: fix accuracy loss for input value of encode_comp_t()
+      acct: fix potential integer overflow in encode_comp_t()
+
+Zhengchao Shao (1):
+      ipc: fix memory leak in init_mqueue_fs()
+
+wuchi (1):
+      lib/debugobjects: fix stat count and optimize debug_objects_mem_init
+
+ye xingchen (2):
+      kexec: remove the unneeded result variable
+      ia64: replace IS_ERR() with IS_ERR_VALUE()
+
+ .mailmap                                          |   1 +
+ Documentation/admin-guide/sysctl/kernel.rst       |   1 +
+ Documentation/fault-injection/fault-injection.rst |  10 +--
+ Documentation/filesystems/proc.rst                |  17 ++++
+ MAINTAINERS                                       |   2 +-
+ arch/arc/kernel/ptrace.c                          |   2 +-
+ arch/arm/kernel/machine_kexec.c                   |   2 +-
+ arch/arm/kernel/ptrace.c                          |   8 +-
+ arch/arm64/kernel/ptrace.c                        |  16 +---
+ arch/hexagon/kernel/ptrace.c                      |   7 +-
+ arch/ia64/include/asm/io.h                        |   4 -
+ arch/ia64/include/asm/kprobes.h                   |   2 -
+ arch/ia64/kernel/ptrace.c                         |  20 ++---
+ arch/ia64/kernel/sys_ia64.c                       |   6 +-
+ arch/mips/kernel/ptrace.c                         |   9 +-
+ arch/nios2/kernel/ptrace.c                        |   6 +-
+ arch/openrisc/kernel/ptrace.c                     |   8 +-
+ arch/parisc/kernel/ptrace.c                       |  15 ++--
+ arch/powerpc/kernel/ptrace/ptrace-tm.c            |  10 +--
+ arch/powerpc/kernel/ptrace/ptrace-view.c          |  15 ++--
+ arch/powerpc/kexec/file_load_64.c                 |   2 +-
+ arch/powerpc/kexec/ranges.c                       |   8 +-
+ arch/sh/kernel/ptrace_32.c                        |   8 +-
+ arch/sparc/kernel/ptrace_32.c                     |   9 +-
+ arch/sparc/kernel/ptrace_64.c                     |  23 +++--
+ drivers/net/wireless/ralink/rt2x00/rt2400pci.c    |   8 +-
+ drivers/net/wireless/ralink/rt2x00/rt2400pci.h    |   2 +-
+ drivers/net/wireless/ralink/rt2x00/rt2500pci.c    |   8 +-
+ drivers/net/wireless/ralink/rt2x00/rt2500pci.h    |   2 +-
+ drivers/net/wireless/ralink/rt2x00/rt2500usb.c    |   8 +-
+ drivers/net/wireless/ralink/rt2x00/rt2500usb.h    |   2 +-
+ drivers/net/wireless/ralink/rt2x00/rt2800lib.c    |  60 ++++++-------
+ drivers/net/wireless/ralink/rt2x00/rt2800lib.h    |   8 +-
+ drivers/net/wireless/ralink/rt2x00/rt2x00usb.c    |   6 +-
+ drivers/net/wireless/ralink/rt2x00/rt61pci.c      |   4 +-
+ drivers/net/wireless/ralink/rt2x00/rt61pci.h      |   2 +-
+ drivers/net/wireless/ralink/rt2x00/rt73usb.c      |   4 +-
+ drivers/net/wireless/ralink/rt2x00/rt73usb.h      |   2 +-
+ drivers/rapidio/devices/rio_mport_cdev.c          |  15 ++--
+ drivers/rapidio/devices/tsi721.c                  |   3 +-
+ drivers/rapidio/rio-scan.c                        |   8 +-
+ drivers/rapidio/rio.c                             |   9 +-
+ fs/coredump.c                                     |   5 ++
+ fs/debugfs/file.c                                 |  28 ++++--
+ fs/fat/nfs.c                                      |   4 +-
+ fs/hfs/inode.c                                    |   2 +
+ fs/hfs/trans.c                                    |   2 +-
+ fs/hfsplus/hfsplus_fs.h                           |   2 +
+ fs/hfsplus/inode.c                                |   4 +-
+ fs/hfsplus/options.c                              |   4 +
+ fs/libfs.c                                        |  22 ++++-
+ fs/nilfs2/the_nilfs.c                             |  73 ++++++++++++++--
+ fs/ocfs2/cluster/heartbeat.c                      |  38 ++++----
+ fs/ocfs2/cluster/heartbeat.h                      |   2 +-
+ fs/ocfs2/cluster/netdebug.c                       |   2 +-
+ fs/ocfs2/cluster/nodemanager.c                    |   2 +-
+ fs/ocfs2/cluster/tcp.c                            |   6 +-
+ fs/ocfs2/dlm/dlmcommon.h                          |   2 +-
+ fs/ocfs2/dlm/dlmdomain.c                          |  19 ++--
+ fs/ocfs2/dlm/dlmmaster.c                          |  30 +++----
+ fs/ocfs2/dlm/dlmrecovery.c                        |   2 +-
+ fs/ocfs2/journal.c                                |   2 +-
+ fs/ocfs2/journal.h                                |   1 +
+ fs/ocfs2/ocfs2.h                                  |   3 +-
+ fs/ocfs2/stack_o2cb.c                             |   6 +-
+ fs/ocfs2/stackglue.c                              |   8 +-
+ fs/ocfs2/super.c                                  |   5 +-
+ fs/proc/cmdline.c                                 |   6 +-
+ fs/proc/fd.c                                      |  45 ++++++++++
+ fs/proc/vmcore.c                                  |   1 +
+ fs/squashfs/Kconfig                               |  51 +++++++++--
+ fs/squashfs/block.c                               |   2 +-
+ fs/squashfs/decompressor.c                        |   2 +-
+ fs/squashfs/decompressor_multi.c                  |  20 +++--
+ fs/squashfs/decompressor_multi_percpu.c           |  23 +++--
+ fs/squashfs/decompressor_single.c                 |  15 +++-
+ fs/squashfs/squashfs.h                            |  23 +++--
+ fs/squashfs/squashfs_fs_sb.h                      |   4 +-
+ fs/squashfs/super.c                               | 100 +++++++++++++++++++++-
+ include/linux/coredump.h                          |   1 +
+ include/linux/debugfs.h                           |  19 +++-
+ include/linux/eventfd.h                           |   2 +-
+ include/linux/fs.h                                |  12 ++-
+ include/linux/init.h                              |   3 +
+ include/linux/io-mapping.h                        |   4 +-
+ include/linux/kcov.h                              |   2 +-
+ include/linux/kexec.h                             |   7 +-
+ include/linux/minmax.h                            |  26 +++++-
+ include/linux/regset.h                            |  15 ++--
+ init/initramfs.c                                  |   2 +-
+ init/main.c                                       |   7 +-
+ ipc/mqueue.c                                      |   6 +-
+ kernel/acct.c                                     |   6 +-
+ kernel/crash_core.c                               |   3 +
+ kernel/kcsan/Makefile                             |   1 +
+ kernel/kexec_core.c                               |  10 +--
+ kernel/kexec_file.c                               |   2 +-
+ kernel/panic.c                                    |   5 +-
+ kernel/relay.c                                    |   8 +-
+ kernel/sched/fair.c                               |   2 +-
+ lib/Kconfig                                       |   4 +-
+ lib/debugobjects.c                                |  10 +++
+ lib/fonts/fonts.c                                 |   4 +-
+ lib/llist.c                                       |   4 +-
+ lib/notifier-error-inject.c                       |   2 +-
+ lib/oid_registry.c                                |   1 -
+ lib/radix-tree.c                                  |   2 +-
+ scripts/checkpatch.pl                             |  20 ++++-
+ scripts/spelling.txt                              |  33 ++++++-
+ tools/accounting/procacct.c                       |   7 +-
+ tools/testing/selftests/cgroup/cgroup_util.c      |   5 +-
+ tools/testing/selftests/proc/proc-uptime-002.c    |   3 +-
+ tools/testing/selftests/vm/.gitignore             |   2 +
+ 113 files changed, 808 insertions(+), 360 deletions(-)
 
