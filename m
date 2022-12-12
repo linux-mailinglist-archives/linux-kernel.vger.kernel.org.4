@@ -2,192 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEE564A4A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610ED64A4A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbiLLQPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S232700AbiLLQQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbiLLQPU (ORCPT
+        with ESMTP id S232688AbiLLQQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:15:20 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F2C1262E;
-        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so339444pjp.1;
-        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
+        Mon, 12 Dec 2022 11:16:13 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936111A23
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:16:12 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1443a16b71cso8923318fac.13
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:16:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HS57fphfFTIlMzwugZ21RzL6OQ71Fiy4HloGefZfE88=;
-        b=PqssKBggY+VkFwF/yUyJov7nLggm1wBUnLrq6/DIltCxHAhU63PNf1/q6m5OQ01sy+
-         /4ueqZ1GXg8mUoxDQjbCiyXhH3HusdMI/8CcdohKk5UVChLAwErMEBPqOHu7lGz7LHDF
-         e609s/byD/3BH0ARoEYeWpoKLf9Gx+JEWx4MP+4RMZcVMSYBgYBQ00XfJkMePwm6KWgn
-         eDG7UIGWQKTj685W18OvYYOXJWekX5oP83AmI+4IIFNNDUb+plrwCyoEtQSvn6ye6JrE
-         cC6agR/FQLZ9/Bk5YzSjJqTQNv+BhS+p4sTXsN5LFxnsszM8RGI9LyfZK8OYGlhLt5CB
-         YbPw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QwyU+vog2X8+88FLCitziFDJsiNyNVqviVu4YNxzWhA=;
+        b=fvsojd5uPuW1sVKC2t09PmNc9dUArcYdabQpt/0gpPl44SKQTVZAHf6tnYHW5q65Ch
+         pgK7uV9ZqVBGN9ableCg9wBPxNPcb3Dd9UZBoHjEoswlMdjnA591zi047/wf28vmo7oM
+         n7aDK8UR7Gz8qhW+Z2rNjGaEUo7MPdaFp4JutCd5Sk+PIPWlTUsTlV9cvdmuEkl1Z7sy
+         ZiAvmrUpTdGOdk4sInfoBGPtKNsP6krjHIx2fi/YILoztKOnjMcF/1B+cglyYuXO4HHV
+         PiSidEwEBe+h+xv7HKpRcjoB77iT4aqU83+/VvCSG4wGdh8aLBPZC1t+pon+6z0UUWWJ
+         +rMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HS57fphfFTIlMzwugZ21RzL6OQ71Fiy4HloGefZfE88=;
-        b=XL2BxKJ+E/sJB7HvgdI5ChJwDDrVaYZSey4fOxuQ2SUe+AYlsx9hwhfXIv+1Ev0/uP
-         TE6dzIBkyQVk16a65Y2ty6UmsghhXsKILmLyc+Ub0Rv87/8zGODtorw9b2P4TfyiYb45
-         Uh8eMMg6kEEiNCJ6k84E5XDZ7/CPR79viQdn1KBqWDzwVT7hbaKQJOzgKf/r5U1M7/Xd
-         SeZzytolBpiTVFHj+FDh01QB+xEycIP6lDRJan9LYbbVnrZIQfRTGmCGBS4uF95vBzoK
-         hBb02EfhtA73LixqC9rSN32JY2SvdW09JW7B75Kt7G9PcWr3qEQv+LkF+xrX7oU/5Z8+
-         Qllw==
-X-Gm-Message-State: ANoB5pnX6CNQHbKitlIRtIQVNecKcCBeJN6RWP2LEV+B9ZoC03Mot4Kv
-        UY2rNlXqSwBpaOd/zjmhsPk=
-X-Google-Smtp-Source: AA0mqf5uMvp0937uVwVDwegtQ/2ptKx8MdHduS5AA3tUNPLVj6h9At9b0V4aHGCCiXR3sZqdP1i8CQ==
-X-Received: by 2002:a05:6a20:8b27:b0:ad:a09c:5734 with SMTP id l39-20020a056a208b2700b000ada09c5734mr3944892pzh.44.1670861719391;
-        Mon, 12 Dec 2022 08:15:19 -0800 (PST)
-Received: from localhost ([1.83.247.150])
-        by smtp.gmail.com with ESMTPSA id w13-20020aa79a0d000000b0057709fd0fccsm5991989pfj.153.2022.12.12.08.15.17
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwyU+vog2X8+88FLCitziFDJsiNyNVqviVu4YNxzWhA=;
+        b=q+RRkLlqbetX3v5nZ5y4ifLl0YmPh1O4Z0m6JWVM4VxGT7oknwmtzyykN5KO/nBKk4
+         M71OcjPnj/NxOJn6g5jG2hLDp2BMFxswazd+mSSaddfbpoVoMBe2MFJWE+uoSZyvPHCI
+         f+CLJuKvroRo7pH5Uc0HU913j5ElRedLYvAPW7hj3ZiFOMA2qi41a0AXPwglokZTUf7v
+         ycwsGap/mVNdbES69cAe2vXSVPDygBelCSvpKsroTp/U9/zaWNkeZzaBNOHk4TMvFo9T
+         0h7qjbV7NLwG4TfAYi85/3jC4CGL81/frVHiA/ZsyeLIete7OI+rBHmpGB60puq0DXTv
+         pk5g==
+X-Gm-Message-State: ANoB5pl23AbRNCLLZhIpKL/I+5VOoZJtmo6qkzZOp85rCV7Qtzxpvzfj
+        AGnAsn+zypX4hyw8yuW1ZRMD
+X-Google-Smtp-Source: AA0mqf4jECA6+WrYPxmdo3NUAL8rdtdjiwMHPdw5qDGbK/O81VmLwSgVRLdL5QKtH6Zx5cDoQDomsg==
+X-Received: by 2002:a05:6358:bb9b:b0:e0:23fa:d4c3 with SMTP id df27-20020a056358bb9b00b000e023fad4c3mr1216964rwb.31.1670861771531;
+        Mon, 12 Dec 2022 08:16:11 -0800 (PST)
+Received: from thinkpad ([103.197.115.108])
+        by smtp.gmail.com with ESMTPSA id mp20-20020a17090b191400b00218ae9916c4sm5668820pjb.35.2022.12.12.08.16.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 08:15:18 -0800 (PST)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     xiyou.wangcong@gmail.com
-Cc:     18801353760@163.com, cong.wang@bytedance.com, davem@davemloft.net,
-        dvyukov@google.com, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
-Subject: Re: [PATCH v3] net: sched: fix memory leak in tcindex_set_parms
-Date:   Tue, 13 Dec 2022 00:14:06 +0800
-Message-Id: <20221212161406.10137-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <Y5T6Mrb7cs6o/BqS@pop-os.localdomain>
-References: <Y5T6Mrb7cs6o/BqS@pop-os.localdomain>
+        Mon, 12 Dec 2022 08:16:10 -0800 (PST)
+Date:   Mon, 12 Dec 2022 21:46:04 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com
+Subject: Re: [PATCH v2 13/13] qcom: llcc/edac: Support polling mode for ECC
+ handling
+Message-ID: <20221212161604.GE20655@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-14-manivannan.sadhasivam@linaro.org>
+ <COZYL8MWN97H.MROQ391BGA09@otso>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <COZYL8MWN97H.MROQ391BGA09@otso>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022 at 05:29, Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> On Mon, Dec 05, 2022 at 11:19:56PM +0800, Hawkins Jiawei wrote:
-> > To be more specific, the simplified logic about original
-> > tcindex_set_parms() is as below:
+On Mon, Dec 12, 2022 at 04:53:49PM +0100, Luca Weiss wrote:
+> Hi Manivannan,
+> 
+> On Mon Dec 12, 2022 at 1:33 PM CET, Manivannan Sadhasivam wrote:
+> > Not all Qcom platforms support IRQ mode for ECC handling. For those
+> > platforms, the current EDAC driver will not be probed due to missing ECC
+> > IRQ in devicetree.
 > >
-> > static int
-> > tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-> >                 u32 handle, struct tcindex_data *p,
-> >                 struct tcindex_filter_result *r, struct nlattr **tb,
-> >                 struct nlattr *est, u32 flags, struct netlink_ext_ack *extack)
-> > {
-> >       ...
-> >       if (p->perfect) {
-> >               int i;
+> > So add support for polling mode so that the EDAC driver can be used on all
+> > Qcom platforms supporting LLCC.
 > >
-> >               if (tcindex_alloc_perfect_hash(net, cp) < 0)
-> >                       goto errout;
-> >               cp->alloc_hash = cp->hash;
-> >               for (i = 0; i < min(cp->hash, p->hash); i++)
-> >                       cp->perfect[i].res = p->perfect[i].res;
-> >               balloc = 1;
-> >       }
-> >       cp->h = p->h;
+> > The polling delay of 5000ms is chosed based on Qcom downstream/vendor
+> > driver.
+> 
+> I think it does work for me on SM6350, I get this in dmesg:
+> 
+> [    0.054608] EDAC MC: Ver: 3.0.0
+> [    0.273913] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (POLLED)
+> 
+> What I've noticed though is that the 5000ms poll you defined in the
+> driver doesn't seem to be reflected at runtime? Or am I looking at
+> different things?
+> 
+> / # cat /sys/devices/system/edac/qcom-llcc/poll_msec 
+> 1000
+> 
+
+Oops... Looks like the interval is hardcoded in edac_device driver:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/edac/edac_device.c#n449
+
+This clearly needs to be fixed. Will do so in next version.
+
+Thanks a lot for testing the series. I will also consider this as your t-b tag
+for SM6350 and driver patches.
+
+Thanks,
+Mani
+
+> Regards
+> Luca
+> 
 > >
-> >       ...
+> > Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/edac/qcom_edac.c     | 37 +++++++++++++++++++++++++-----------
+> >  drivers/soc/qcom/llcc-qcom.c | 13 ++++++-------
+> >  2 files changed, 32 insertions(+), 18 deletions(-)
 > >
-> >       if (cp->perfect)
-> >               r = cp->perfect + handle;
->
-> We can reach here if p->perfect is non-NULL.
->
-> >       else
-> >               r = tcindex_lookup(cp, handle) ? : &new_filter_result;
-> >
-> >       if (old_r && old_r != r) {
-> >               err = tcindex_filter_result_init(old_r, cp, net);
-> >               if (err < 0) {
-> >                       kfree(f);
-> >                       goto errout_alloc;
-> >               }
-> >       }
-> >       ...
-> > }
-> >
-> > - cp's h field is directly copied from p's h field
-> >
-> > - if `old_r` is retrieved from struct tcindex_filter, in other word,
-> > is retrieved from p's h field. Then the `r` should get the same value
-> > from `tcindex_loopup(cp, handle)`.
->
-> See above, 'r' can be 'cp->perfect + handle' which is newly allocated,
-> hence different from 'old_r'.
+> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> > index 5be93577fc03..f7afb5375293 100644
+> > --- a/drivers/edac/qcom_edac.c
+> > +++ b/drivers/edac/qcom_edac.c
+> > @@ -76,6 +76,8 @@
+> >  #define DRP0_INTERRUPT_ENABLE           BIT(6)
+> >  #define SB_DB_DRP_INTERRUPT_ENABLE      0x3
+> >  
+> > +#define ECC_POLL_MSEC			5000
+> > +
+> >  enum {
+> >  	LLCC_DRAM_CE = 0,
+> >  	LLCC_DRAM_UE,
+> > @@ -283,8 +285,7 @@ dump_syn_reg(struct edac_device_ctl_info *edev_ctl, int err_type, u32 bank)
+> >  	return ret;
+> >  }
+> >  
+> > -static irqreturn_t
+> > -llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> > +static irqreturn_t llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> >  {
+> >  	struct edac_device_ctl_info *edac_dev_ctl = edev_ctl;
+> >  	struct llcc_drv_data *drv = edac_dev_ctl->pvt_info;
+> > @@ -328,6 +329,11 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> >  	return irq_rc;
+> >  }
+> >  
+> > +static void llcc_ecc_check(struct edac_device_ctl_info *edev_ctl)
+> > +{
+> > +	llcc_ecc_irq_handler(0, edev_ctl);
+> > +}
+> > +
+> >  static int qcom_llcc_edac_probe(struct platform_device *pdev)
+> >  {
+> >  	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
+> > @@ -356,22 +362,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
+> >  	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
+> >  	edev_ctl->pvt_info = llcc_driv_data;
+> >  
+> > +	/* Check if LLCC driver has passed ECC IRQ */
+> > +	ecc_irq = llcc_driv_data->ecc_irq;
+> > +	if (ecc_irq > 0) {
+> > +		/* Use interrupt mode if IRQ is available */
+> > +		edac_op_state = EDAC_OPSTATE_INT;
+> > +	} else {
+> > +		/* Fall back to polling mode otherwise */
+> > +		edac_op_state = EDAC_OPSTATE_POLL;
+> > +		edev_ctl->poll_msec = ECC_POLL_MSEC;
+> > +		edev_ctl->edac_check = llcc_ecc_check;
+> > +	}
+> > +
+> >  	rc = edac_device_add_device(edev_ctl);
+> >  	if (rc)
+> >  		goto out_mem;
+> >  
+> >  	platform_set_drvdata(pdev, edev_ctl);
+> >  
+> > -	/* Request for ecc irq */
+> > -	ecc_irq = llcc_driv_data->ecc_irq;
+> > -	if (ecc_irq < 0) {
+> > -		rc = -ENODEV;
+> > -		goto out_dev;
+> > -	}
+> > -	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+> > +	/* Request ECC IRQ if available */
+> > +	if (ecc_irq > 0) {
+> > +		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+> >  			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+> > -	if (rc)
+> > -		goto out_dev;
+> > +		if (rc)
+> > +			goto out_dev;
+> > +	}
+> >  
+> >  	return rc;
+> >  
+> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> > index a29f22dad7fa..e044e6756415 100644
+> > --- a/drivers/soc/qcom/llcc-qcom.c
+> > +++ b/drivers/soc/qcom/llcc-qcom.c
+> > @@ -1011,13 +1011,12 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+> >  		goto err;
+> >  
+> >  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
+> > -	if (drv_data->ecc_irq >= 0) {
+> > -		llcc_edac = platform_device_register_data(&pdev->dev,
+> > -						"qcom_llcc_edac", -1, drv_data,
+> > -						sizeof(*drv_data));
+> > -		if (IS_ERR(llcc_edac))
+> > -			dev_err(dev, "Failed to register llcc edac driver\n");
+> > -	}
+> > +
+> > +	llcc_edac = platform_device_register_data(&pdev->dev,
+> > +					"qcom_llcc_edac", -1, drv_data,
+> > +					sizeof(*drv_data));
+> > +	if (IS_ERR(llcc_edac))
+> > +		dev_err(dev, "Failed to register llcc edac driver\n");
+> >  
+> >  	return 0;
+> >  err:
+> > -- 
+> > 2.25.1
+> 
 
-But if `r` is `cp->perfect + handle`, this means `cp->perfect` is not
-NULL. So `p->perfect` should not be NULL, which means `old_r` should be
-`p->perfect + handle`, according to tcindex_lookup(). This is not
-correct with the assumption that `old_r` is retrieved from p's h field.
-
->
-> >
-> > - so `old_r == r` is true, code will never uses tcindex_filter_result_init()
-> > to clear the old_r in such case.
->
-> Not always.
->
-> >
-> > So I think this patch still can fix this memory leak caused by
-> > tcindex_filter_result_init(), But maybe I need to improve my
-> > commit message.
-> >
->
-> I think your patch may introduce other memory leaks and 'old_r' may
-> be left as obsoleted too.
-
-I still think this patch should not introduce any memory leaks.
-
-* If the `old_r` is not NULL, it should have only two source according
-to the tcindex_lookup() - `old_r` is retrieved from `p->perfect`; or
-`old_r` is retrieved from `p->h`. And if `old_r` is retrieved from `p->h`,
-this means `p->perfect` is NULL.
-
-
-* If the `old_r` is retrieved from `p->perfect`, kernel uses
-tcindex_alloc_perfect_hash() to newly allocate the filter results.
-And `r` should be `cp->perfect + handle`, which is newly allocated.
-
-So `r != old_r` in this situation, but kernel will clears the `old_r`
-at tc_filter_wq workqueue in tcindex_partial_destroy_work(), by
-destroying the p->perfect. So here kernel doesn't need
-tcindex_filter_result_init() to clear the old filter result, and
-there is no memory leak.
-
-
-* If the `old_r` is retrieved from `p->h`, then `p->perfect` is NULL
-discussed above. Considering that `cp->h` is directly copied from
-`p->h`, `r` should get the same value as `old_r` from tcindex_lookup().
-
-So `r == old_r`, it will ignore the part that kernel uses
-tcindex_filter_result_init() to clear the old filter result. So removing
-this part of code should have no effect in this situation.
-
-
-
-It seems that whether `old_r` is retrived from `p->h` or `p->perfect`,
-it is okay to directly deleting the part that kernel uses
-tcindex_filter_result_init() to clear the old filter result, without any
-memory leak. But this can fix the memory leak caused by
-tcindex_filter_result_init().
-
-As for `old_r` may be left as obsoleted, do you mean `old_r` becomes
-unused(set but not used)? I think we can directly removing `old_r`.
-
->
-> Thanks.
+-- 
+மணிவண்ணன் சதாசிவம்
