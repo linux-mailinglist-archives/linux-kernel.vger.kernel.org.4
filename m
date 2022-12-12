@@ -2,64 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FF564A5A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB7A64A5A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbiLLRM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S232911AbiLLRNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiLLRMy (ORCPT
+        with ESMTP id S232801AbiLLRNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:12:54 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E433912610;
-        Mon, 12 Dec 2022 09:12:53 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1322d768ba7so9171891fac.5;
-        Mon, 12 Dec 2022 09:12:53 -0800 (PST)
+        Mon, 12 Dec 2022 12:13:36 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ECA12759;
+        Mon, 12 Dec 2022 09:13:35 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-144b21f5e5fso9145210fac.12;
+        Mon, 12 Dec 2022 09:13:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SvFA20U6Mkz3QyBDOAMdECYf/B+92PGnyWsHrRN56bM=;
-        b=Ajdw+g76tnd7vfnVcUT5dynukV4yKDiluamQFK7wnDvuUE3FB1VbMYtv7kK3qSvtPX
-         sYceFynAPUk3TroxAI9ufOi4WGKuvrrhuIpSkVIEwo1QEGwfiEhnLlrQgMokmgZ2ak0C
-         YlBWOg+MNYo8Aige0q/AcXFDFHkAxldh6XGi/SMBSDg1+ZGoTqE81NxPp/hAQiDVW+Lk
-         2dE3bbqAscDLthgcWkPZifI6sVK/gnY21EPXj6preQ2cSukaColxzdH9nkQtruvW1wT1
-         VGy0kZlwdSWmPNy7Wn6w83XbYrRhNNxB+Mb716CfseInS3CJK0fJeTeX6xGWeI0kEbUK
-         mkcg==
-X-Gm-Message-State: ANoB5pmBl+MCGJfXp+5SSdfMvseq95YJ9fUNwA6Su26Y9MQVq2biH62h
-        2FNYzFqr9Am7/K6vuPnFkA==
-X-Google-Smtp-Source: AA0mqf6nsnie5WDBxmo74YMu9eXA7ZT9hMxxT11E1vCXQPpQV4RlWJz3ZGoeFZP2o95aGpTZ7Lolzw==
-X-Received: by 2002:a05:6870:3b19:b0:148:2c02:5322 with SMTP id gh25-20020a0568703b1900b001482c025322mr4246505oab.26.1670865173196;
-        Mon, 12 Dec 2022 09:12:53 -0800 (PST)
+        bh=AGUdmy+g/qTasB/RYlCtkR0cf44cupB5Kch7orL6C8k=;
+        b=KPMawPKOn7178HUm02T17nvqcMDHKcmyW2QsRoR5jA3EaXm3U9Wjw6HHRp/LvkBHxT
+         9WW8yfH3GQ1Zr/r712R6WhUhRv5Gbb1H+HO6V6SGCaAJNoHmqL1hYli1xXabKwi5DMO0
+         YFlzJXICm8Xucl7hV2e2yP5XyPKHPYBeub+k+NFuavzNnOnw6fzEzPK79ERviRUmb+K8
+         UnEm3e9fljo/GPkqnL5CayP/wnF4bRWnl9mKouXELHwab2zHQSukCSnNWLCdoVZFDp07
+         6LZ1KstNAdNOo6wIaMyxFjYHRV57+ZTr9iikkggvIjkQcPxyrUScZdau2KmP8R6mBjBi
+         +odA==
+X-Gm-Message-State: ANoB5plPNdKKYPCTUCpuZGnUXXM17eSzbGBEXFhvED+hS94UP6cGgD9H
+        24JwndaxclrYMxMek9QPWg==
+X-Google-Smtp-Source: AA0mqf4TgLSi1nA9lDe/di5Hok12V+737QACa0Nu2l7rV/UJ4b97Gx0ku7i4xI0Vm0f3uz83kDKy1A==
+X-Received: by 2002:a05:6870:9123:b0:144:d2bd:f6ac with SMTP id o35-20020a056870912300b00144d2bdf6acmr9120964oae.43.1670865215081;
+        Mon, 12 Dec 2022 09:13:35 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w20-20020a4ad034000000b004a0b424f99dsm103772oor.43.2022.12.12.09.12.52
+        by smtp.gmail.com with ESMTPSA id ba35-20020a056870c5a300b0013b9ee734dcsm155255oab.35.2022.12.12.09.13.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 09:12:52 -0800 (PST)
-Received: (nullmailer pid 1146475 invoked by uid 1000);
-        Mon, 12 Dec 2022 17:12:51 -0000
-Date:   Mon, 12 Dec 2022 11:12:51 -0600
+        Mon, 12 Dec 2022 09:13:34 -0800 (PST)
+Received: (nullmailer pid 1147754 invoked by uid 1000);
+        Mon, 12 Dec 2022 17:13:33 -0000
+Date:   Mon, 12 Dec 2022 11:13:33 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?utf-8?B?77+9?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        ", Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: dt-bindings: silabs,si470x: Convert to DT schema
-Message-ID: <167086517001.1146391.18433456059392851926.robh@kernel.org>
-References: <20221209175926.335227-1-krzysztof.kozlowski@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        ", Eric Dumazet" <edumazet@google.com>,
+        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, Marek Vasut <marex@denx.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-mediatek@lists.infradead.org,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        George McCollister <george.mccollister@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com,
+        =?UTF-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>
+Subject: Re: [PATCH v5 net-next 01/10] dt-bindings: dsa: sync with maintainers
+Message-ID: <167086521259.1147694.13128574954492521303.robh@kernel.org>
+References: <20221210033033.662553-1-colin.foster@in-advantage.com>
+ <20221210033033.662553-2-colin.foster@in-advantage.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221209175926.335227-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221210033033.662553-2-colin.foster@in-advantage.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,17 +91,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 09 Dec 2022 18:59:26 +0100, Krzysztof Kozlowski wrote:
-> Convert the Silicon Labs Si470x FM Radio Receiver bindings to DT schema.
+On Fri, 09 Dec 2022 19:30:24 -0800, Colin Foster wrote:
+> The MAINTAINERS file has Andrew Lunn, Florian Fainelli, and Vladimir Oltean
+> listed as the maintainers for generic dsa bindings. Update dsa.yaml and
+> dsa-port.yaml accordingly.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> 
 > ---
->  .../devicetree/bindings/media/si470x.txt      | 26 ----------
->  .../bindings/media/silabs,si470x.yaml         | 48 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 49 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/si470x.txt
->  create mode 100644 Documentation/devicetree/bindings/media/silabs,si470x.yaml
+> 
+> v5
+>   * New patch
+> 
+> ---
+>  Documentation/devicetree/bindings/net/dsa/dsa-port.yaml | 2 +-
+>  Documentation/devicetree/bindings/net/dsa/dsa.yaml      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
