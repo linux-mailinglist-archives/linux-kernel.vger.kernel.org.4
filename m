@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBC864ABD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A1964ABD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiLLXyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 18:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S232611AbiLLXy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 18:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233562AbiLLXyU (ORCPT
+        with ESMTP id S229944AbiLLXyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 18:54:20 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C135417886;
-        Mon, 12 Dec 2022 15:54:19 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id g7so10522254qts.1;
-        Mon, 12 Dec 2022 15:54:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=noGFwDjUHBLfUSIIxv927Be+1JlbaOUfDbfux21yM8Q=;
-        b=NboE11xuiihF4dSLCFJwN985SvkF9ZEZo4Bg/o3oDML0+eZe7JlGjKDIhEMrpQuJkm
-         79v9J+M4D1rXx+2e7bH+8bWddDAJd/h1OHKPugCxo90f4ZKxRnJS32XntOEEcOtJFWeC
-         IDj1feNBIVqS4NPGOGsHKS2jiw4uFmwuVUVwotzW8e0Lxo7qSZq8s0kw4qZlbVZWij+d
-         wgcBpg9WuSQqJHy/7KwrB9yOZUxKhxRNr0qNbTN2ddFJzyU2GqqSg1OcOLCD/odFwNjQ
-         PJh0ImNZ23JZmyg9uXkCY6WBilu9Tf0/a85EctnLKWCgo+vEvOWRUjQj4EXdo/NZ9gZY
-         a6Sw==
-X-Gm-Message-State: ANoB5pkBj7cx+de5wuTZHUxw/UKTPyVE8GrnOg86V9ELdb8Yf6om9gzx
-        gBJM9k0ZKiTqkLDgky0f9X/CE7dMAfxdwt8r
-X-Google-Smtp-Source: AA0mqf4BGMAglophcO5ZNIdtUqjG8vAsrapRhP/B9bf5ovqpHX75MbowHSMJB7pdKLpOnXvOkw1Yqw==
-X-Received: by 2002:a05:622a:11c3:b0:3a7:f424:3ef9 with SMTP id n3-20020a05622a11c300b003a7f4243ef9mr32212052qtk.13.1670889258382;
-        Mon, 12 Dec 2022 15:54:18 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:6a51])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05620a112d00b006f87d28ea3asm6489672qkk.54.2022.12.12.15.54.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 15:54:18 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next] bpf/selftests: Use parent instead of last_wakee in task kfunc test
-Date:   Mon, 12 Dec 2022 17:53:44 -0600
-Message-Id: <20221212235344.1563280-1-void@manifault.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 12 Dec 2022 18:54:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA57140D3;
+        Mon, 12 Dec 2022 15:54:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E018B80B2C;
+        Mon, 12 Dec 2022 23:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF96C433D2;
+        Mon, 12 Dec 2022 23:54:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670889292;
+        bh=EQI1hoJMPabVIHQBPHFzOMrKRsKT5Z+Qah7oVktxWic=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LNb/D1nL9BAgP20Att8CRTX2e5I4va83O94y/5tpTfON6Ebt91I7kKYutQhzN/Rx4
+         d6fShKGQG9DjuC8UhtQKtdHer/07fZjF+JQmAv+LZpjltlPBj3waGKDBTmtgI66woP
+         bJta9AQx3Q0BE40C7I0bgbPLZlo8dtDNDoPvUb+8hTkDBypx5UruP1PhlLlSEtJLCv
+         h0Wgqm/iqwFEGriMmNcMHcWQeuOqHgc1uqokNuXY9ff+cZOLxSA6318kBH2V+vXcDG
+         uNNUGWPIYkkb6Ak86aAvJfVFkUyH8ui2t0RZlHCJL3NvjanTCQAzA/wU9K4/RySgEz
+         JBGi3/qZla9sg==
+Date:   Mon, 12 Dec 2022 15:54:50 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, andersson@kernel.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+Subject: Re: [PATCH net-next 2/2] net: ipa: add IPA v4.7 support
+Message-ID: <20221212155450.34fdae6b@kernel.org>
+In-Reply-To: <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
+References: <20221208211529.757669-1-elder@linaro.org>
+        <20221208211529.757669-3-elder@linaro.org>
+        <47b2fb29-1c2e-db6e-b14f-6dfe90341825@linaro.org>
+        <fa6d342e-0cfe-b870-b044-b0af476e3905@linaro.org>
+        <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fe147956fca4 ("bpf/selftests: Add selftests for new task kfuncs")
-added a negative selftest called task_kfunc_acquire_trusted_walked which
-ensures that a BPF program that gets a struct task_struct * pointer from
-walking a struct is properly rejected by the verifier if it tries to
-pass that pointer to a task kfunc. In order to do this, it uses
-task->last_wakee, but unfortunately that's not defined on UP builds.
-Just use task->parent instead.
+On Sat, 10 Dec 2022 10:31:14 +0100 Konrad Dybcio wrote:
+> >> which in total gives us 0x146a8000-0x146aafff =20
+> >=20
+> > Can you tell me where you found this information? =20
+> [1], [2]
+>=20
+> >  =20
+> >> That would also mean all of your writes are kind of skewed, unless
+> >> you already applied some offsets to them. =20
+> >=20
+> > This region is used by the modem, but must be set up
+> > by the AP.
+> >  =20
+> >> (IMEM on 6350 starts at 0x14680000 and is 0x2e000 long, as per
+> >> the bootloader memory map) =20
+> >=20
+> > On SM7250 (sorry, I don't know about 7225, or 6350 for that matter),
+> > the IMEM starts at 0x14680000 and has length 0x2c000.=C2=A0 However that
+> > memory is used by multiple entities.=C2=A0 The portion set aside for IPA
+> > starts at 0x146a9000 and has size 0x2000.
+> >  =20
+> Not sure how 7250 relates to 6350, but I don't think there's much
+> overlap..
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: fe147956fca4 ("bpf/selftests: Add selftests for new task kfuncs")
-Signed-off-by: David Vernet <void@manifault.com>
----
- tools/testing/selftests/bpf/progs/task_kfunc_failure.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-index 87fa1db9d9b5..60508c20041f 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-@@ -73,7 +73,7 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 cl
- 	struct task_struct *acquired;
- 
- 	/* Can't invoke bpf_task_acquire() on a trusted pointer obtained from walking a struct. */
--	acquired = bpf_task_acquire(task->last_wakee);
-+	acquired = bpf_task_acquire(task->parent);
- 	bpf_task_release(acquired);
- 
- 	return 0;
--- 
-2.38.1
-
+Dunno if Alex is online, and the patches seem harmless so let me apply
+as is so that they make 6.2, and we can follow up with corrections.
