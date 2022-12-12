@@ -2,73 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECAA64AA95
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8439C64AA9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbiLLWqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S231364AbiLLWrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:47:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234022AbiLLWqb (ORCPT
+        with ESMTP id S234061AbiLLWrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:46:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BE610F0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:46:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E83B561257
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:46:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59709C43392;
-        Mon, 12 Dec 2022 22:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670885189;
-        bh=v4+mLi5Eu4CKnzC72rEvZRJCIcOIM7NvYMggB3juDZg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gzZjVy7nS5u1VWixDRl8uO3LtJlc0txlykjmpExYia9gdAaxl+oT5t9T/WcHWc6eZ
-         fiLKuqdk+9R4ipif2KJchKrs/aS7T4A5xHCuiJT3b0EsoYXYoiSs/Vt31DfLQkMMu0
-         MDWpFYef12qIGIHnjT7NGpzVdR0WSkmjGozZV8hU7qD8MJvSFGh30X22r1xDFn4MoL
-         xjLV+m4HWEhKhCQrGuS92Y69Z/hh0Lx4tQpojs3YCCTedoburBi5FozlnF0XCp3dIW
-         tXKzxIhaMbgfUU/ZVB9NkbktHxRdH7qlxHmKDKLWC7iU9Undl+95OjMjaoB10jVkQ9
-         PDiupa2Oub/wA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3E609C00448;
-        Mon, 12 Dec 2022 22:46:29 +0000 (UTC)
-Subject: Re: [GIT PULL] x86/cache for 6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221212191523.553233-1-dave.hansen@linux.intel.com>
-References: <20221212191523.553233-1-dave.hansen@linux.intel.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221212191523.553233-1-dave.hansen@linux.intel.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cache_for_6.2
-X-PR-Tracked-Commit-Id: 97fa21f65c3eb5bbab9b4734bed37fd624cddd86
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 287f037db5b46de5a86e4bdfbf02e0206ca877bf
-Message-Id: <167088518924.6748.13026392646317500217.pr-tracker-bot@kernel.org>
-Date:   Mon, 12 Dec 2022 22:46:29 +0000
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 17:47:04 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5698D58;
+        Mon, 12 Dec 2022 14:47:03 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so1505676pjr.3;
+        Mon, 12 Dec 2022 14:47:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KyDNT2eNBKDwDp3YS++zsmDaZPh+lT+qP+XmfmgfjRU=;
+        b=qGwobmmsTzDi+AcZz6YWYAE2B12GSkxeI6CkpycbgEYFQw2TYC8UNccsGr1D26F1aT
+         R/0CJH5i07PemNyr4rIKf+aR71eP/JeFy06RtFunSDqRJXkUV3nGJNEvoRb296r5URAB
+         akQXHYqG4U7ThdegZO3XF2/Fo13szTy1gv8PZjQER0RGpUdeEKJjxSlBj1CHFuVYJu5F
+         yFlFJ3GoC7lx+Y+c75ndJ9vA8p4KGBf7dtXyCFPq4kdB8Q5w/5qqfIl/nd9EFGCEbREz
+         EWW+AzgCWYm6nCmIj5i+IoCII9jVQdcJdha2DVxFQtFUjNMVxfkZBX3FzJvNKQvaatFC
+         QGLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyDNT2eNBKDwDp3YS++zsmDaZPh+lT+qP+XmfmgfjRU=;
+        b=ncUbs9xnkdhBoGggqqLgy35SC7S8Bqc4RooUgbPrStJEjAauEibBYRd/WkbTkBZcwS
+         yHdDnWMGhwvVTwFjp2RKeGsjILbCZebs/YMtvhVtNbMXeH9WwSANwEQOoSnaPvXkkUdh
+         bgTCZpGYqm0B+5kAM4w2vtwyr+1IZSGS+Y2RGcV/0caBe1rGtHkEvif1122fnK2WacmQ
+         IQljTA17OlEMLiyY5pWDx0O4P2zYuxd8lWMTvGkbfB4ZhFADzsATrMaVkGwtRvhj1h4x
+         +Bk51fyCKgQo1tJdlRDbUlkgmtmvzU62JdvD9VDr2LvsRBuImM9ULYqkd+fyOsU6Viec
+         ACiA==
+X-Gm-Message-State: ANoB5pnhz2wgVS4pp35JkbYSSCWL7qtig6NlG7cEKHIBqHJB4Vl2Xy68
+        fzTP8rkVBlbI0moxbLGa6Ks=
+X-Google-Smtp-Source: AA0mqf7eKyi17/emc2cU4C7lquMKZa/sgyh5h0olmxOmcf2hQk2E1P6q9QNA4Bv3KTT44hAQPuvfYA==
+X-Received: by 2002:a05:6a21:8cc7:b0:a2:c45f:f0fc with SMTP id ta7-20020a056a218cc700b000a2c45ff0fcmr23054714pzb.27.1670885223213;
+        Mon, 12 Dec 2022 14:47:03 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id e9-20020a63ae49000000b0046b1dabf9a8sm1196878pgp.70.2022.12.12.14.46.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 14:47:02 -0800 (PST)
+Message-ID: <e335bee0-6042-c484-7dbe-4486c14c7ecd@gmail.com>
+Date:   Mon, 12 Dec 2022 14:46:56 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 000/106] 5.10.159-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221212130924.863767275@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221212130924.863767275@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 12 Dec 2022 11:15:23 -0800:
+On 12/12/22 05:09, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.159 release.
+> There are 106 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.159-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cache_for_6.2
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/287f037db5b46de5a86e4bdfbf02e0206ca877bf
-
-Thank you!
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Florian
+
