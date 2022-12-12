@@ -2,126 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BADD6497F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792DD649801
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiLLCgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 21:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S230447AbiLLCnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 21:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiLLCgw (ORCPT
+        with ESMTP id S230353AbiLLCnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 21:36:52 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65ABC97
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 18:36:51 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NVlyp5XB3zqSPQ;
-        Mon, 12 Dec 2022 10:32:34 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 12 Dec 2022 10:36:49 +0800
-Subject: Re: [PATCH -next v2] mm: hwposion: support recovery from
- ksm_might_need_to_copy()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20221209021525.196276-1-wangkefeng.wang@huawei.com>
- <20221209072801.193221-1-wangkefeng.wang@huawei.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <342f4d3f-7347-1615-7d63-cbdef4872629@huawei.com>
-Date:   Mon, 12 Dec 2022 10:36:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 11 Dec 2022 21:43:20 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830A455B1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 18:43:19 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso4298600ilj.17
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 18:43:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G7BOL+ZTNbULcSjar0lySG+iFFzHm84g4wkN6XQPfCo=;
+        b=XwStK1zMY0uoFUjmpDf+Ok6HF0CW+2Kayk2d1Z32xVlw5x0qWPke1N9nB7Ge7fGRp+
+         KqTwvnzjrBr9GLl5fJFdNAchv5MLgmr4U0oNWG7vCu/vvv41yd7CdKZvlaTaTmuLIvIL
+         iNEU8gmGoW6xLN4FA4/M9d7QBR6VjSM09g2KJZKp2M6MtAlqtHb61r3a0vO1hmsEuEZy
+         L+0PU5XYAZHe92zB3k64GbG1nsgGCEY4yvv6e1I/WirE66lzULXtAFDOAeGBsguEBwIL
+         xKx5FPyjQyE07w5fWf+OIEwc1tgLTGL0qhUVK19Ncp8QwyxNJp3wieXw8VZ6GSzK6Ory
+         q4GA==
+X-Gm-Message-State: ANoB5plK0+tFrpHzdvuNod8HMjjvjL7TRv6OR/9gyDLdSZ1YQFRI9uOk
+        t0fIoo13coiBzOuAz9opE+b//Z2S4rBIVmUKCUG5Tg4h/fFC
+X-Google-Smtp-Source: AA0mqf53mfHc7iZBRIwtaNcQbqKdtM7HjnyVtlY4gKC+fy21t01Xm/CgmK2/9W7gzKkU6NVD3i6Bxa+G+mw0U1wFngbRA9iHfHID
 MIME-Version: 1.0
-In-Reply-To: <20221209072801.193221-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d251:0:b0:302:fdb0:a1fc with SMTP id
+ v17-20020a92d251000000b00302fdb0a1fcmr27108552ilg.283.1670812998913; Sun, 11
+ Dec 2022 18:43:18 -0800 (PST)
+Date:   Sun, 11 Dec 2022 18:43:18 -0800
+In-Reply-To: <20221212020158.2902-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000049586705ef987729@google.com>
+Subject: Re: [syzbot] kernel stack overflow in sock_close
+From:   syzbot <syzbot+09329bd987ebca21bced@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/9 15:28, Kefeng Wang wrote:
-> When the kernel copy a page from ksm_might_need_to_copy(), but runs
-> into an uncorrectable error, it will crash since poisoned page is
-> consumed by kernel, this is similar to Copy-on-write poison recovery,
-> When an error is detected during the page copy, return VM_FAULT_HWPOISON,
-> which help us to avoid system crash. Note, memory failure on a KSM
-> page will be skipped, but still call memory_failure_queue() to be
-> consistent with general memory failure process.
+Hello,
 
-Thanks for your patch.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-> v2: fix type error
-> 
->  mm/ksm.c      | 8 ++++++--
->  mm/memory.c   | 3 +++
->  mm/swapfile.c | 2 +-
->  3 files changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index dd02780c387f..83e2f74ae7da 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
->  		new_page = NULL;
->  	}
->  	if (new_page) {
-> -		copy_user_highpage(new_page, page, address, vma);
-> -
-> +		if (copy_mc_user_highpage(new_page, page, address, vma)) {
-> +			put_page(new_page);
-> +			new_page = ERR_PTR(-EHWPOISON);
-> +			memory_failure_queue(page_to_pfn(page), 0);
-> +			return new_page;
-> +		}
->  		SetPageDirty(new_page);
->  		__SetPageUptodate(new_page);
->  		__SetPageLocked(new_page);
-> diff --git a/mm/memory.c b/mm/memory.c
-> index aad226daf41b..5b2c137dfb2a 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  		if (unlikely(!page)) {
->  			ret = VM_FAULT_OOM;
->  			goto out_page;
-> +		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
-> +			ret = VM_FAULT_HWPOISON;
-> +			goto out_page;
->  		}
->  		folio = page_folio(page);
->  
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 908a529bca12..d479811bc311 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1767,7 +1767,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  
->  	swapcache = page;
->  	page = ksm_might_need_to_copy(page, vma, addr);
-> -	if (unlikely(!page))
-> +	if (IS_ERR_OR_NULL(page))
+Reported-and-tested-by: syzbot+09329bd987ebca21bced@syzkaller.appspotmail.com
 
-IMHO, it might be better to install a hwpoison entry here. Or later swapoff ops will trigger
-the uncorrectable error again?
+Tested on:
 
-Thanks,
-Miaohe Lin
+commit:         830b3c68 Linux 6.1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=140d36b7880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=738c28d3ea17d420
+dashboard link: https://syzkaller.appspot.com/bug?extid=09329bd987ebca21bced
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=153c5f2f880000
 
+Note: testing is done by a robot and is best-effort only.
