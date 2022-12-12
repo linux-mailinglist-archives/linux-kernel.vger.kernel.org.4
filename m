@@ -2,123 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B664A85F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714E764A860
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiLLUFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
+        id S233420AbiLLUFf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Dec 2022 15:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiLLUFA (ORCPT
+        with ESMTP id S233418AbiLLUFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:05:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB1178AA;
-        Mon, 12 Dec 2022 12:04:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CA8DB80E02;
-        Mon, 12 Dec 2022 20:04:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703B9C433D2;
-        Mon, 12 Dec 2022 20:04:55 +0000 (UTC)
-Date:   Mon, 12 Dec 2022 15:04:53 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Douglas Raillard <douglas.raillard@arm.com>
-Subject: [PATCH v2] tracing: Remove pointer (asterisk) from cpumask_t field
-Message-ID: <20221212150453.1df47ddf@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 12 Dec 2022 15:05:11 -0500
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572F51789C;
+        Mon, 12 Dec 2022 12:05:10 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id i187-20020a1c3bc4000000b003d21f02fbaaso715635wma.4;
+        Mon, 12 Dec 2022 12:05:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tC47u5ABuoEhubGgg4/9VNrEDUcZI85O5fBH9REajDA=;
+        b=iEPoscHd5fvbKadhR315VfbgvCWHCtTMs8h8qn8FXE6ZIkxjGXO/kRzF+nSO9A7PTs
+         JlFQPxpRlMPEBXouEdywyZ6T5215dDU8M1SMn0jaBIhQDTZQstjjaU5I24qZS4D7mZhj
+         po6MRtAOJm7/5dHefHckfl9A3x43nZ8YdxmDP3YQxHBX077mMRlc6/RfZNq5j70mxJwa
+         kVzt02RqyqwIDCcVKAqoecFXy4iqyW2qJCGSYUT4Cf5JTUo1+VsszOuHo0Vgj8z7Y6e6
+         ZmVEFNFjKnWCxDhnz6maZUc2XoOYbNgUOOIJPc/oNcvQKNTF7FOaKCqj83GcOCjjryCG
+         GrSA==
+X-Gm-Message-State: ANoB5pnGrPmXmhj9CxlCobKM1dNVlPQF5EC1eb4cCxYwnIJIeJXE4oeZ
+        LRd9FEbj7/kvGRNDeqeh7JcRIpPmtZtIiY0c3G4=
+X-Google-Smtp-Source: AA0mqf7MiW707fes7g9Q5aQzK1ML4tYsEM7LkIbboMUaR5/C23/d3G5PSVlEEIOTPC5a1CVCgpcs01dvbxXLAxI0UOM=
+X-Received: by 2002:a05:600c:3052:b0:3d1:cae5:efe9 with SMTP id
+ n18-20020a05600c305200b003d1cae5efe9mr10986wmh.158.1670875508712; Mon, 12 Dec
+ 2022 12:05:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209190727.759804-1-namhyung@kernel.org> <20221209190727.759804-2-namhyung@kernel.org>
+ <Y5eEJd/AhSzUfILO@kernel.org> <Y5eEbxVOHaUPw9UI@kernel.org> <Y5eE3Udv03uM4zhQ@kernel.org>
+In-Reply-To: <Y5eE3Udv03uM4zhQ@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 12 Dec 2022 12:04:56 -0800
+Message-ID: <CAM9d7ch2nNS_m_3f5J+M9GJ8=GimG1Y7Yqve=Loy1hhjnEvnag@mail.gmail.com>
+Subject: Re: [PATCH 1/4] perf lock contention: Add lock_data.h for common data
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Hi Arnaldo,
 
-To differentiate between long arrays and cpumasks, the __cpumask() field
-was created. Part of the TRACE_EVENT() macros test if the type is signed
-or not by using the is_signed_type() macro. The __cpumask() field used the
-__dynamic_array() helper but because cpumask_t is a structure, it could
-not be used in the is_signed_type() macro as that would fail to build, so
-instead it passed in the pointer to cpumask_t.
+On Mon, Dec 12, 2022 at 11:45 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Mon, Dec 12, 2022 at 04:43:43PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Dec 12, 2022 at 04:42:30PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Fri, Dec 09, 2022 at 11:07:24AM -0800, Namhyung Kim escreveu:
+> > > > Accessing BPF maps should use the same data types.  Add bpf_skel/lock_data.h
+> > > > to define the common data structures.  No functional changes.
+> > >
+> > > You forgot to update one of the stack_id users, that field got renamed:
+> > >
+> > > util/bpf_skel/lock_contention.bpf.c:144:6: error: no member named 'stack_id' in 'struct contention_key'
+> > >         key.stack_id = pelem->stack_id;
+> > >         ~~~ ^
+> > > 1 error generated.
+> > > make[2]: *** [Makefile.perf:1075: /tmp/build/perf/util/bpf_skel/.tmp/lock_contention.bpf.o] Error 1
+> > > make[1]: *** [Makefile.perf:236: sub-make] Error 2
+> > > make: *** [Makefile:113: install-bin] Error 2
+> > > make: Leaving directory '/var/home/acme/git/perf/tools/perf'
 
-Unfortunately, that creates in the format file:
+Oops, right.
 
-  field:__data_loc cpumask_t *[] mask;    offset:36;      size:4; signed:0;
+> > >
+> > >  Performance counter stats for 'make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf -C tools/perf install-bin':
+> > >
+> > >      7,005,216,342      cycles:u
+> > >     11,851,225,594      instructions:u                   #    1.69  insn per cycle
+> > >
+> > >        3.168945139 seconds time elapsed
+> > >
+> > >        1.730964000 seconds user
+> > >        1.578932000 seconds sys
+> > >
+> > >
+> > > ⬢[acme@toolbox perf]$ git log --oneline -4
+> > > f6e7a5f1db49dc8e (HEAD) perf lock contention: Add lock_data.h for common data
+> > > 5d9b55713c5c037f perf python: Account for multiple words in CC
+> > > d9078bf3f3320457 perf off_cpu: Fix a typo in BTF tracepoint name, it should be 'btf_trace_sched_switch'
+> > > 3b7ea76f0f7844f5 perf test: Update event group check for support of uncore event
+> > > ⬢[acme@toolbox perf]$
+> > >
+> > > After some point it builds.
+> > >
+> > > I'm fixing this to keep it bisectable.
+> >
+> > I folded this:
+> >
+> > diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > index 0f63cc28ccbabd21..64fd1e040ac86e58 100644
+> > --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> > @@ -141,7 +141,7 @@ int contention_end(u64 *ctx)
+> >
+> >       duration = bpf_ktime_get_ns() - pelem->timestamp;
+> >
+> > -     key.stack_id = pelem->stack_id;
+> > +     key.stack_or_task_id = pelem->stack_id;
+> >       data = bpf_map_lookup_elem(&lock_stat, &key);
+> >       if (!data) {
+> >               struct contention_data first = {
 
-Which looks like an array of pointers to cpumask_t and not a cpumask_t
-type, which is misleading to user space parsers.
+Thanks for fixing this.
 
-Instead, create another helper called __dynamic_array_sign() that can be
-used directly by the __cpumaks() field macro where it passes in an
-unsigned value to avoid using the is_signed_type() and have the
-__dynamic_array() macro call it by passing it the is_signed_type() on the
-type.
+>
+>
+> And then fixed up this:
+>
+> Could not apply 3d4947c7bd10beba... perf lock contention: Implement -t/--threads option for BPF
+> ⬢[acme@toolbox perf]$
+> ⬢[acme@toolbox perf]$
+> ⬢[acme@toolbox perf]$ git diff
+> diff --cc tools/perf/util/bpf_skel/lock_contention.bpf.c
+> index 64fd1e040ac86e58,cd405adcd252b82d..0000000000000000
+> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> @@@ -141,7 -168,13 +168,17 @@@ int contention_end(u64 *ctx
+>
+>         duration = bpf_ktime_get_ns() - pelem->timestamp;
+>
+> ++<<<<<<< HEAD
+>  +      key.stack_or_task_id = pelem->stack_id;
+> ++=======
+> +       if (aggr_mode == LOCK_AGGR_CALLER) {
+> +               key.stack_or_task_id = pelem->stack_id;
+> +       } else {
+> +               key.stack_or_task_id = pid;
+> +               update_task_data(pid);
+> +       }
+> +
+> ++>>>>>>> 3d4947c7bd10beba (perf lock contention: Implement -t/--threads option for BPF)
 
-This now produces:
+Sure, it looks good to me.
 
-  field:__data_loc cpumask_t[] mask;    offset:36;      size:4; signed:0;
-
-Which is the correct type of the field.
-
-Link: https://lore.kernel.org/lkml/6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com/
-
-Fixes: 8230f27b1ccc ("tracing: Add __cpumask to denote a trace event field that is a cpumask_t")
-Reported-by: Douglas Raillard <douglas.raillard@arm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v1: https://lore.kernel.org/linux-trace-kernel/20221212130352.606d7ce2@gandalf.local.home
-
- - Passed in (_type, item, len) and not (_type, _item, _len) to
-   __dynamic_array_sign() from __dynamic_array(). Fixed it.
-
- include/trace/stages/stage4_event_fields.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/stages/stage4_event_fields.h b/include/trace/stages/stage4_event_fields.h
-index f2990d22313c..a4e2403cf53e 100644
---- a/include/trace/stages/stage4_event_fields.h
-+++ b/include/trace/stages/stage4_event_fields.h
-@@ -28,11 +28,15 @@
- 	.size = sizeof(_type[_len]), .align = ALIGN_STRUCTFIELD(_type),	\
- 	.is_signed = is_signed_type(_type), .filter_type = FILTER_OTHER },
- 
--#undef __dynamic_array
--#define __dynamic_array(_type, _item, _len) {				\
-+#undef __dynamic_array_sign
-+#define __dynamic_array_sign(_type, _item, _len, _sign) {		\
- 	.type = "__data_loc " #_type "[]", .name = #_item,		\
- 	.size = 4, .align = 4,						\
--	.is_signed = is_signed_type(_type), .filter_type = FILTER_OTHER },
-+	.is_signed = _sign, .filter_type = FILTER_OTHER },
-+
-+#undef __dynamic_array
-+#define __dynamic_array(_type, _item, _len)				\
-+	__dynamic_array_sign(_type, _item, _len, is_signed_type(_type))
- 
- #undef __string
- #define __string(item, src) __dynamic_array(char, item, -1)
-@@ -47,7 +51,7 @@
- #define __bitmask(item, nr_bits) __dynamic_array(unsigned long, item, -1)
- 
- #undef __cpumask
--#define __cpumask(item) __dynamic_array(cpumask_t *, item, -1)
-+#define __cpumask(item) __dynamic_array_sign(cpumask_t, item, -1, 0)
- 
- #undef __sockaddr
- #define __sockaddr(field, len) __dynamic_array(u8, field, len)
--- 
-2.35.1
-
+Thanks,
+Namhyung
