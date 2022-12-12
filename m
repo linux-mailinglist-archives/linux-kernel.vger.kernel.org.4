@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589FF64A021
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B7464A21E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiLLNVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S233144AbiLLNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiLLNUg (ORCPT
+        with ESMTP id S233009AbiLLNtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:20:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987943B2;
-        Mon, 12 Dec 2022 05:20:34 -0800 (PST)
+        Mon, 12 Dec 2022 08:49:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2042BD8;
+        Mon, 12 Dec 2022 05:49:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41F1DB80D3B;
-        Mon, 12 Dec 2022 13:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4094DC433EF;
-        Mon, 12 Dec 2022 13:20:31 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9AC23CE0F42;
+        Mon, 12 Dec 2022 13:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6590C433D2;
+        Mon, 12 Dec 2022 13:48:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670851231;
-        bh=cIuO/YK/sb4kZMZnmwltYrqPmSY3b9FWO4Mq+D1ixJA=;
+        s=korg; t=1670852938;
+        bh=BuJk6UyNnNCckqSDUSKJw6gF+0b074c/0qtS4svMH1U=;
         h=From:To:Cc:Subject:Date:From;
-        b=u34wWpBjfdEyyeWLRSaSQCykUfyw/l6DV3khVJlAQr8QxxvsPTfJ0PtS0dFaNd2rp
-         DOzJHnwgMSrbWWqvst7LnaXcw/FW1gAxT/TEiZw6dWCMh27oCbGflJ4ug8dEcF9ds2
-         EnBqcUtX4njo2G9CIUMGIDwXl7h87KCso/B6KWMM=
+        b=njaBzt9/7HUEhLUTtEeD6EijOf0rTsiIgn87WwObCzj57y51ow+5mYF3e7eUMznU+
+         MAKisB4WG5WfmEOxi1/cP3l7o9aELAne4DpSbvSHm0qJMetehJiJ/vLfou0bQsNIV1
+         SSA6RSd7+YrZd23t7fzHTl8bJFD+w71yAFUgqXrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,21 +38,20 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.4 00/67] 5.4.227-rc1 review
-Date:   Mon, 12 Dec 2022 14:16:35 +0100
-Message-Id: <20221212130917.599345531@linuxfoundation.org>
+Subject: [PATCH 4.19 00/49] 4.19.269-rc1 review
+Date:   Mon, 12 Dec 2022 14:18:38 +0100
+Message-Id: <20221212130913.666185567@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.227-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.269-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Branch: linux-4.19.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.227-rc1
+X-KernelTest-Version: 4.19.269-rc1
 X-KernelTest-Deadline: 2022-12-14T13:09+00:00
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,8 +62,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.227 release.
-There are 67 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.19.269 release.
+There are 49 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -72,9 +71,9 @@ Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.227-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.269-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 and the diffstat can be found below.
 
 thanks,
@@ -85,7 +84,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.227-rc1
+    Linux 4.19.269-rc1
 
 Frank Jungclaus <frank.jungclaus@esd.eu>
     can: esd_usb: Allow REC and TEC to return to zero
@@ -105,12 +104,6 @@ Juergen Gross <jgross@suse.com>
 Zhang Changzhong <zhangchangzhong@huawei.com>
     ethernet: aeroflex: fix potential skb leak in greth_init_rings()
 
-Ido Schimmel <idosch@nvidia.com>
-    ipv4: Fix incorrect route flushing when table ID 0 is used
-
-Ido Schimmel <idosch@nvidia.com>
-    ipv4: Fix incorrect route flushing when source address is deleted
-
 YueHaibing <yuehaibing@huawei.com>
     tipc: Fix potential OOB in tipc_link_proto_rcv()
 
@@ -119,9 +112,6 @@ Liu Jian <liujian56@huawei.com>
 
 Liu Jian <liujian56@huawei.com>
     net: hisilicon: Fix potential use-after-free in hisi_femac_rx()
-
-Yongqiang Liu <liuyongqiang13@huawei.com>
-    net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
 
 Jisheng Zhang <jszhang@kernel.org>
     net: stmmac: fix "snps,axi-config" node property parsing
@@ -159,17 +149,11 @@ Wei Yongjun <weiyongjun1@huawei.com>
 Zhengchao Shao <shaozhengchao@huawei.com>
     selftests: rtnetlink: correct xfrm policy rule in kci_test_ipsec_offload
 
-Artem Chernyshev <artem.chernyshev@red-soft.ru>
-    net: dsa: ksz: Check return value
-
 Chen Zhongjin <chenzhongjin@huawei.com>
     Bluetooth: Fix not cleanup led when bt_init fails
 
 Wang ShaoBo <bobo.shaobowang@huawei.com>
     Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    af_unix: Get user_ns from in_skb in unix_diag_get_exact().
 
 Akihiko Odaki <akihiko.odaki@daynix.com>
     igb: Allocate MSI-X vector when testing
@@ -180,20 +164,11 @@ Akihiko Odaki <akihiko.odaki@daynix.com>
 Xiongfeng Wang <wangxiongfeng2@huawei.com>
     gpio: amd8111: Fix PCI device reference count leak
 
-Qiqi Zhang <eddy.zhang@rock-chips.com>
-    drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
-
 Hauke Mehrtens <hauke@hauke-m.de>
     ca8210: Fix crash by zero initializing data
 
 Ziyang Xuan <william.xuanziyang@huawei.com>
     ieee802154: cc2520: Fix error return code in cc2520_hw_init()
-
-Baolin Wang <baolin.wang@linux.alibaba.com>
-    mm/hugetlb: fix races when looking up a CONT-PTE/PMD size hugetlb page
-
-Oliver Hartkopp <socketcan@hartkopp.net>
-    can: af_can: fix NULL pointer dereference in can_rcv_filter
 
 ZhangPeng <zhangpeng362@huawei.com>
     HID: core: fix shift-out-of-bounds in hid_report_raw_event
@@ -201,17 +176,8 @@ ZhangPeng <zhangpeng362@huawei.com>
 Anastasia Belova <abelova@astralinux.ru>
     HID: hid-lg4ff: Add check for empty lbuf
 
-Ankit Patel <anpatel@nvidia.com>
-    HID: usbhid: Add ALWAYS_POLL quirk for some mice
-
-Rob Clark <robdclark@chromium.org>
-    drm/shmem-helper: Remove errant put in error path
-
 Thomas Huth <thuth@redhat.com>
     KVM: s390: vsie: Fix the initialization of the epoch extension (epdx) field
-
-John Starks <jostarks@microsoft.com>
-    mm/gup: fix gup_pud_range() for dax
 
 Tejun Heo <tj@kernel.org>
     memcg: fix possible use-after-free in memcg_write_event_control()
@@ -219,8 +185,8 @@ Tejun Heo <tj@kernel.org>
 Hans Verkuil <hverkuil-cisco@xs4all.nl>
     media: v4l2-dv-timings.c: fix too strict blanking sanity checks
 
-Rafał Miłecki <rafal@milecki.pl>
-    Revert "net: dsa: b53: Fix valid setting for MDB entries"
+Connor Shu <Connor.Shu@ibm.com>
+    rcutorture: Automatically create initrd directory
 
 Juergen Gross <jgross@suse.com>
     xen/netback: don't call kfree_skb() with interrupts disabled
@@ -230,15 +196,6 @@ Juergen Gross <jgross@suse.com>
 
 Ross Lagerwall <ross.lagerwall@citrix.com>
     xen/netback: Ensure protocol headers don't fall in the non-linear area
-
-Jann Horn <jannh@google.com>
-    mm/khugepaged: invoke MMU notifiers in shmem/file collapse paths
-
-Jann Horn <jannh@google.com>
-    mm/khugepaged: fix GUP-fast interaction by sending IPI
-
-Jann Horn <jannh@google.com>
-    mm/khugepaged: take the right locks for page table retraction
 
 Davide Tronchin <davide.tronchin.94@gmail.com>
     net: usb: qmi_wwan: add u-blox 0x1342 composition
@@ -255,14 +212,8 @@ Andreas Kemnade <andreas@kemnade.info>
 Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
     ASoC: soc-pcm: Add NULL check in BE reparenting
 
-Filipe Manana <fdmanana@suse.com>
-    btrfs: send: avoid unaligned encoded writes when attempting to clone range
-
 Kees Cook <keescook@chromium.org>
     ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-
-Konrad Dybcio <konrad.dybcio@linaro.org>
-    regulator: slg51000: Wait after asserting CS pin
 
 GUO Zihua <guozihua@huawei.com>
     9p/fd: Use P9_HDRSZ for header size
@@ -277,99 +228,74 @@ Tomislav Novak <tnovak@fb.com>
     ARM: 9251/1: perf: Fix stacktraces for tracepoint events in THUMB2 kernels
 
 Johan Jonker <jbx6244@gmail.com>
-    ARM: dts: rockchip: rk3188: fix lcdc1-rgb24 node name
-
-Johan Jonker <jbx6244@gmail.com>
     ARM: dts: rockchip: fix ir-receiver node names
 
 Sebastian Reichel <sebastian.reichel@collabora.com>
     arm: dts: rockchip: fix node name for hym8563 rtc
-
-FUKAUMI Naoki <naoki@radxa.com>
-    arm64: dts: rockchip: keep I2S1 disabled for GPIO function on ROCK Pi 4 series
 
 
 -------------
 
 Diffstat:
 
- Makefile                                           |    4 +-
- arch/arm/boot/dts/rk3036-evb.dts                   |    2 +-
- arch/arm/boot/dts/rk3188-radxarock.dts             |    2 +-
- arch/arm/boot/dts/rk3188.dtsi                      |    3 +-
- arch/arm/boot/dts/rk3288-evb-act8846.dts           |    2 +-
- arch/arm/boot/dts/rk3288-firefly.dtsi              |    2 +-
- arch/arm/boot/dts/rk3288-miqi.dts                  |    2 +-
- arch/arm/boot/dts/rk3288-rock2-square.dts          |    2 +-
- arch/arm/boot/dts/rk3xxx.dtsi                      |    7 +
- arch/arm/include/asm/perf_event.h                  |    2 +-
- arch/arm/include/asm/pgtable-nommu.h               |    6 -
- arch/arm/include/asm/pgtable.h                     |   16 +-
- arch/arm/mm/nommu.c                                |   19 +
- arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts  |    1 -
- arch/s390/kvm/vsie.c                               |    4 +-
- drivers/gpio/gpio-amd8111.c                        |    4 +
- drivers/gpu/drm/bridge/ti-sn65dsi86.c              |    4 +-
- drivers/gpu/drm/drm_gem_shmem_helper.c             |    4 +-
- drivers/hid/hid-core.c                             |    3 +
- drivers/hid/hid-ids.h                              |    3 +
- drivers/hid/hid-lg4ff.c                            |    6 +
- drivers/hid/hid-quirks.c                           |    3 +
- drivers/media/v4l2-core/v4l2-dv-timings.c          |   20 +-
- drivers/net/can/usb/esd_usb2.c                     |    6 +
- drivers/net/dsa/b53/b53_common.c                   |    1 +
- drivers/net/ethernet/aeroflex/greth.c              |    1 +
- drivers/net/ethernet/cavium/thunder/nicvf_main.c   |    4 +-
- drivers/net/ethernet/hisilicon/hisi_femac.c        |    2 +-
- drivers/net/ethernet/hisilicon/hix5hd2_gmac.c      |    2 +-
- drivers/net/ethernet/intel/e1000e/netdev.c         |    4 +-
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |    6 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c        |   19 +-
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |    2 +
- drivers/net/ethernet/intel/igb/igb_ethtool.c       |    2 +
- drivers/net/ethernet/marvell/mvneta.c              |    2 +-
- drivers/net/ethernet/microchip/encx24j600-regmap.c |    4 +-
- .../net/ethernet/stmicro/stmmac/stmmac_platform.c  |    8 +-
- drivers/net/ieee802154/ca8210.c                    |    2 +-
- drivers/net/ieee802154/cc2520.c                    |    2 +-
- drivers/net/plip/plip.c                            |    4 +-
- drivers/net/usb/qmi_wwan.c                         |    1 +
- drivers/net/xen-netback/common.h                   |   14 +-
- drivers/net/xen-netback/interface.c                |   22 +-
- drivers/net/xen-netback/netback.c                  |  229 +--
- drivers/net/xen-netback/rx.c                       |   10 +-
- drivers/net/xen-netfront.c                         |    6 +
- drivers/nvme/host/core.c                           |    8 +-
- drivers/regulator/slg51000-regulator.c             |    2 +
- drivers/regulator/twl6030-regulator.c              |   15 +-
- drivers/video/fbdev/core/fbcon.c                   |    2 +-
- fs/btrfs/send.c                                    |   24 +-
- include/asm-generic/tlb.h                          |    4 +
- include/linux/cgroup.h                             |    1 +
- include/linux/hugetlb.h                            |    6 +-
- kernel/cgroup/cgroup-internal.h                    |    1 -
- mm/gup.c                                           |   15 +-
- mm/hugetlb.c                                       |   28 +-
- mm/khugepaged.c                                    |   47 +-
- mm/memcontrol.c                                    |   15 +-
- mm/mmu_gather.c                                    |    5 +
- net/9p/trans_fd.c                                  |    6 +-
- net/9p/trans_xen.c                                 |    9 +
- net/bluetooth/6lowpan.c                            |    1 +
- net/bluetooth/af_bluetooth.c                       |    4 +-
- net/can/af_can.c                                   |    4 +-
- net/dsa/tag_ksz.c                                  |    3 +-
- net/ipv4/fib_frontend.c                            |    3 +
- net/ipv4/fib_semantics.c                           |    1 +
- net/ipv6/ip6_output.c                              |    5 +
- net/mac802154/iface.c                              |    1 +
- net/nfc/nci/ntf.c                                  |    6 +
- net/tipc/link.c                                    |    4 +-
- net/unix/diag.c                                    |   20 +-
- sound/core/seq/seq_memory.c                        |   11 +-
- sound/soc/soc-pcm.c                                |    2 +
- tools/testing/selftests/net/fib_tests.sh           | 1727 --------------------
- tools/testing/selftests/net/rtnetlink.sh           |    2 +-
- 77 files changed, 476 insertions(+), 1980 deletions(-)
+ Makefile                                           |   4 +-
+ arch/arm/boot/dts/rk3036-evb.dts                   |   2 +-
+ arch/arm/boot/dts/rk3188-radxarock.dts             |   2 +-
+ arch/arm/boot/dts/rk3188.dtsi                      |   1 -
+ arch/arm/boot/dts/rk3288-evb-act8846.dts           |   2 +-
+ arch/arm/boot/dts/rk3288-firefly.dtsi              |   2 +-
+ arch/arm/boot/dts/rk3288-miqi.dts                  |   2 +-
+ arch/arm/boot/dts/rk3288-rock2-square.dts          |   2 +-
+ arch/arm/boot/dts/rk3xxx.dtsi                      |   7 +
+ arch/arm/include/asm/perf_event.h                  |   2 +-
+ arch/arm/include/asm/pgtable-nommu.h               |   6 -
+ arch/arm/include/asm/pgtable.h                     |  16 +-
+ arch/arm/mm/nommu.c                                |  19 ++
+ arch/s390/kvm/vsie.c                               |   4 +-
+ drivers/gpio/gpio-amd8111.c                        |   4 +
+ drivers/hid/hid-core.c                             |   3 +
+ drivers/hid/hid-lg4ff.c                            |   6 +
+ drivers/media/v4l2-core/v4l2-dv-timings.c          |  20 +-
+ drivers/net/can/usb/esd_usb2.c                     |   6 +
+ drivers/net/ethernet/aeroflex/greth.c              |   1 +
+ drivers/net/ethernet/hisilicon/hisi_femac.c        |   2 +-
+ drivers/net/ethernet/hisilicon/hix5hd2_gmac.c      |   2 +-
+ drivers/net/ethernet/intel/e1000e/netdev.c         |   4 +-
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |   6 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |  19 +-
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |   2 +
+ drivers/net/ethernet/intel/igb/igb_ethtool.c       |   2 +
+ drivers/net/ethernet/marvell/mvneta.c              |   2 +-
+ drivers/net/ethernet/microchip/encx24j600-regmap.c |   4 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_platform.c  |   8 +-
+ drivers/net/ieee802154/ca8210.c                    |   2 +-
+ drivers/net/ieee802154/cc2520.c                    |   2 +-
+ drivers/net/plip/plip.c                            |   4 +-
+ drivers/net/usb/qmi_wwan.c                         |   1 +
+ drivers/net/xen-netback/common.h                   |  14 +-
+ drivers/net/xen-netback/interface.c                |  22 +-
+ drivers/net/xen-netback/netback.c                  | 229 ++++++++++++---------
+ drivers/net/xen-netback/rx.c                       |  10 +-
+ drivers/net/xen-netfront.c                         |   6 +
+ drivers/nvme/host/core.c                           |   8 +-
+ drivers/regulator/twl6030-regulator.c              |  15 +-
+ drivers/video/fbdev/core/fbcon.c                   |   2 +-
+ include/linux/cgroup.h                             |   1 +
+ kernel/cgroup/cgroup-internal.h                    |   1 -
+ mm/memcontrol.c                                    |  15 +-
+ net/9p/trans_fd.c                                  |   6 +-
+ net/9p/trans_xen.c                                 |   9 +
+ net/bluetooth/6lowpan.c                            |   1 +
+ net/bluetooth/af_bluetooth.c                       |   4 +-
+ net/ipv6/ip6_output.c                              |   5 +
+ net/mac802154/iface.c                              |   1 +
+ net/nfc/nci/ntf.c                                  |   6 +
+ net/tipc/link.c                                    |   4 +-
+ sound/core/seq/seq_memory.c                        |  11 +-
+ sound/soc/soc-pcm.c                                |   2 +
+ tools/testing/selftests/net/rtnetlink.sh           |   2 +-
+ tools/testing/selftests/rcutorture/bin/kvm.sh      |   8 +
+ tools/testing/selftests/rcutorture/bin/mkinitrd.sh |  60 ++++++
+ 58 files changed, 404 insertions(+), 209 deletions(-)
 
 
