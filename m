@@ -2,193 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83245649F28
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C98649F30
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiLLMyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S232416AbiLLM7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiLLMyU (ORCPT
+        with ESMTP id S230113AbiLLM7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:54:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5848411C3A;
-        Mon, 12 Dec 2022 04:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NrJN3HB6BI8k1eR97eek+yZFQ38Fc65bnwKa0BSmECU=; b=BU9W4je0TLGA/InMMAsdjDiNgj
-        bJO+HpizPTenwbqPE/qPWiD4tpv/QKQNsfhd8LoE+MmoiHktSB3kX+uEPMZz/im5hJMRenvtTMRDp
-        K3QckLi4Ztzug4rYwdQjVB1cu0nEfEjyZxW2HDrDkTlVzFt57D+JqrZm7Xqq+pIg2SFQVUzKjTXq6
-        qv4g5w80TxZnZSdlNnJnWgNqKPcBW2Jfp5VVhOJFtgAJFU/gn7psO1QsQwMlU2xs8PxgdJb5zOIGy
-        ny8030yitpq5PT6T5222lOanVkQPT5O+C4oxQtyPRt+rHcUVry2a08fMinCPh0mFTWFV4ZrLlOCaI
-        YYugyY2g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4iJp-00B3ES-QC; Mon, 12 Dec 2022 12:54:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 235AD300299;
-        Mon, 12 Dec 2022 13:53:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 024FA200FB979; Mon, 12 Dec 2022 13:53:55 +0100 (CET)
-Date:   Mon, 12 Dec 2022 13:53:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
-Message-ID: <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-15-tj@kernel.org>
+        Mon, 12 Dec 2022 07:59:13 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAED9C2A;
+        Mon, 12 Dec 2022 04:59:12 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d7so11973203pll.9;
+        Mon, 12 Dec 2022 04:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fqd7rV/LIZQRhBND1wfi4ZK3s862aHDRSXa+Hfs3x/0=;
+        b=d2mgt4Cm3rJ0WcxSsZxqXfIUEu+wiv6uIRONxo/jNgTpK6sDFgWpgj9F1xUHLYj168
+         c+KZZ3anW7HFmcjRNy1H991RyOD58xofnivxlE0WyBFp5R92LEwWB188uSTAmcO8SL0X
+         Uz6frgZlmo/ekNLv5DqDImjtlKyLTtTIyAvMzHKLRw/YwKmQtElGir7VkPOp6OnyDe+M
+         kqhqFynH3NeBGyhN/kUzpR2G5syuw+oiHQKRMdLKipn8E5fL1REcN5DjCyqoOmcA1Iwg
+         BauZ0WtBIbXAmmURP5+DX7EO+UFuvAVJsi/hbn1+/2iqpOCXTnGtiGogYjns1SofZGTN
+         F4Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fqd7rV/LIZQRhBND1wfi4ZK3s862aHDRSXa+Hfs3x/0=;
+        b=jcIetMcvGY/xRjEWI67/oB2ruP/rzWF+awgrfnLcbsmOJkQ3LcAVqlLrPuY51eyRdg
+         us2LSJ9+5hRUkO9E6NfIfm/ZN8XSmbCR8l34TajZU7u6b/au2QixwZL1G27twPJ+SK0a
+         4sI8opWUiZ0aqajD5vi4XBM360t6JUbsbv9NcgbVAh+7G1VUDbZtvjy2HPNsem5Ozsox
+         /u/vjaM0crvZ2AKXwHhCvQNvwdPvPSbjlq7kyFWFrnBqj/XoSq3f2CdQT18E8w8nR7dP
+         7T3YYVq1n4OFNQCziJGlKwe45y0WHcCEF5sIN71OjgSXoarCT3Q+lEuqvLUHdP4KyR0D
+         CNDw==
+X-Gm-Message-State: ANoB5pnxpxn261StDrWW17RVgCc+ZGhX+2LNnk9EaxnEGNYrdYTVBvg/
+        9o3wmcjqW1OZUS2vKnH07s4=
+X-Google-Smtp-Source: AA0mqf77GZIw7gQFedXZs86HhHJyGeXNzAanu5XUe83msXQOsjZh99qJsuAVkWNAlkekTtkUrbqqcw==
+X-Received: by 2002:a17:903:324c:b0:189:d0fa:231b with SMTP id ji12-20020a170903324c00b00189d0fa231bmr17227594plb.67.1670849952078;
+        Mon, 12 Dec 2022 04:59:12 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id jc3-20020a17090325c300b00186f608c543sm6273927plb.304.2022.12.12.04.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 04:59:11 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH RFC 0/8] KVM: x86/pmu: Enable Fixed Counter3 and Topdown Perf Metrics
+Date:   Mon, 12 Dec 2022 20:58:36 +0800
+Message-Id: <20221212125844.41157-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130082313.3241517-15-tj@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 10:22:56PM -1000, Tejun Heo wrote:
+Hi,
 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index d06ada2341cb..cfbfc47692eb 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -131,6 +131,7 @@
->  	*(__dl_sched_class)			\
->  	*(__rt_sched_class)			\
->  	*(__fair_sched_class)			\
-> +	*(__ext_sched_class)			\
->  	*(__idle_sched_class)			\
->  	__sched_class_lowest = .;
->  
+The Ice Lake core PMU provides built-in support for Top-down u-arch
+Analysis (TMA) method level 1 metrics. These metrics are always available
+to cross-validate performance observations, freeing general purpose
+counters to count other events in high counter utilization scenarios.
+For more details about the method, refer to Top-Down Analysis Method
+chapter (Appendix B.1) of the Intel® 64 and IA-32 Architectures
+Optimization Reference Manual. (SDM 19.3.9.3 Performance Metrics)
 
-> @@ -9654,8 +9675,13 @@ void __init sched_init(void)
->  	int i;
->  
->  	/* Make sure the linker didn't screw up */
-> -	BUG_ON(&idle_sched_class != &fair_sched_class + 1 ||
-> -	       &fair_sched_class != &rt_sched_class + 1 ||
-> +#ifdef CONFIG_SCHED_CLASS_EXT
-> +	BUG_ON(&idle_sched_class != &ext_sched_class + 1 ||
-> +	       &ext_sched_class != &fair_sched_class + 1);
-> +#else
-> +	BUG_ON(&idle_sched_class != &fair_sched_class + 1);
-> +#endif
-> +	BUG_ON(&fair_sched_class != &rt_sched_class + 1 ||
->  	       &rt_sched_class   != &dl_sched_class + 1);
->  #ifdef CONFIG_SMP
->  	BUG_ON(&dl_sched_class != &stop_sched_class + 1);
+This patchset enables Intel Guest Topdow for KVM-based guests. Its basic
+enabling framework remains unchanged, a perf_metric msr is introduced,
+a group (rather than one) of perf_events is created in KVM by binding to
+fiexed counter3 to obtain hardware resources, and the guest value of
+perf_metric msr is assembled based on the count of grouped perf_events.
 
-Perhaps the saner way to write this is:
+On KVM, patches 0004/5/6 may be reviewd independently if KVM only
+enable fixed counter3 as normal slot event for count and sampling. 
+Patch 7 updates the infrastructure for creating grouped events in KVM,
+and patch 8 uses group events to emulate guest MSR_PERF_METRICS.
 
-#ifdef CONFIG_SMP
-	BUG_ON(!sched_class_above(&stop_sched_class, &dl_sched_class));
-#endif
-	BUG_ON(!sched_class_above(&dl_sched_class, &rt_sched_class));
-	BUG_ON(!sched_class_above(&rt_sched_class, &fair_sched_class));
-	BUG_ON(!sched_class_above(&fair_sched_class, &idle_sched_class));
-#ifdef CONFIG_...
-	BUG_ON(!sched_class_above(&fair_sched_class, &ext_sched_class));
-	BUG_ON(!sched_class_above(&ext_sched_class, &idle_sched_class));
-#endif
+On Perf, Patches 0001-0003 are awaiting review for tip/perf/core, and
+could be accepted separately if they make sense. TBH, I don't think our
+perf/core is fully prepared to support kernel space grouped counters,
+considering comments around perf_enable_diasable(). But after much
+exploration on my part, this is probably the most promising way to get
+KVM to create slots plus metrics events. If the addition of *group_leader
+messes things up, please shout at me on your needs.
 
-> +static inline const struct sched_class *next_active_class(const struct sched_class *class)
-> +{
-> +	class++;
-> +	if (!scx_enabled() && class == &ext_sched_class)
-> +		class++;
-> +	return class;
-> +}
-> +
-> +#define for_active_class_range(class, _from, _to)				\
-> +	for (class = (_from); class != (_to); class = next_active_class(class))
-> +
-> +#define for_each_active_class(class)						\
-> +	for_active_class_range(class, __sched_class_highest, __sched_class_lowest)
-> +
-> +/*
-> + * SCX requires a balance() call before every pick_next_task() call including
-> + * when waking up from idle.
-> + */
-> +#define for_balance_class_range(class, prev_class, end_class)			\
-> +	for_active_class_range(class, (prev_class) > &ext_sched_class ?		\
-> +			       &ext_sched_class : (prev_class), (end_class))
-> +
+More details in each commit messages may answer code-related questions.
 
-This seems quite insane; why not simply make the ext methods effective
-no-ops? Both balance and pick explicitly support that already, no?
+A classic perf tool usage on a linux guest is as follows:
+$ perf stat --topdown --td-level=1 -I1000 --no-metric-only sleep 1
+#           time             counts unit events
+     1.000548528         34,505,682      slots
+     1.000548528         14,208,222      topdown-retiring                 #     41.5% Retiring
+     1.000548528          1,623,796      topdown-bad-spec                 #      4.7% Bad Speculation
+     1.000548528         14,614,171      topdown-fe-bound                 #     42.7% Frontend Bound
+     1.000548528          3,788,859      topdown-be-bound                 #     11.1% Backend Bound
 
-> @@ -5800,10 +5812,13 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
->  	 * We can terminate the balance pass as soon as we know there is
->  	 * a runnable task of @class priority or higher.
->  	 */
-> -	for_class_range(class, prev->sched_class, &idle_sched_class) {
-> +	for_balance_class_range(class, prev->sched_class, &idle_sched_class) {
->  		if (class->balance(rq, prev, rf))
->  			break;
->  	}
-> +#else
-> +	/* SCX needs the balance call even in UP, call it explicitly */
+Related KUT will follow if there are no obstructive negative comments.
 
-This, *WHY* !?!
+Nit, pre-patches includes:
+https://lore.kernel.org/kvm/20221207071506.15733-2-likexu@tencent.com/
+https://lore.kernel.org/kvm/20221205122048.16023-1-likexu@tencent.com/
 
-> +	balance_scx_on_up(rq, prev, rf);
->  #endif
->  
->  	put_prev_task(rq, prev);
-> @@ -5818,6 +5833,9 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->  	const struct sched_class *class;
->  	struct task_struct *p;
->  
-> +	if (scx_enabled())
-> +		goto restart;
-> +
->  	/*
->  	 * Optimization: we know that if all tasks are in the fair class we can
->  	 * call that function directly, but only if the @prev task wasn't of a
-> @@ -5843,7 +5861,7 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->  restart:
->  	put_prev_task_balance(rq, prev, rf);
->  
-> -	for_each_class(class) {
-> +	for_each_active_class(class) {
->  		p = class->pick_next_task(rq);
->  		if (p)
->  			return p;
-> @@ -5876,7 +5894,7 @@ static inline struct task_struct *pick_task(struct rq *rq)
->  	const struct sched_class *class;
->  	struct task_struct *p;
->  
-> -	for_each_class(class) {
-> +	for_each_active_class(class) {
->  		p = class->pick_task(rq);
->  		if (p)
->  			return p;
+Please feel free to comment and share your feedback.
 
+Thanks,
 
-But this.. afaict that means that:
+Like Xu (8):
+  perf/core: Add *group_leader to perf_event_create_kernel_counter()
+  perf: x86/core: Expose the available number of the Topdown metrics
+  perf: x86/core: Snyc PERF_METRICS bit together with fixed counter3
+  KVM: x86/pmu: Add Intel CPUID-hinted Topdown Slots event
+  KVM: x86/pmu: Add kernel-defined slots event to enable Fixed Counter3
+  KVM: x86/pmu: properly use INTEL_PMC_FIXED_RDPMC_BASE macro
+  KVM: x86/pmu: Use flex *event arrays to implement grouped events
+  KVM: x86/pmu: Add MSR_PERF_METRICS MSR emulation to enable Topdown
 
- - the whole EXT thing is incompatible with SCHED_CORE
- - the whole EXT thing can be trivially starved by the presence of a
-   single CFS/BATCH/IDLE task.
+ arch/arm64/kvm/pmu-emul.c                 |   4 +-
+ arch/x86/events/core.c                    |   1 +
+ arch/x86/events/intel/core.c              |   3 +
+ arch/x86/include/asm/kvm_host.h           |  14 +-
+ arch/x86/include/asm/msr-index.h          |   1 +
+ arch/x86/include/asm/perf_event.h         |   1 +
+ arch/x86/kernel/cpu/resctrl/pseudo_lock.c |   4 +-
+ arch/x86/kvm/pmu.c                        | 149 ++++++++++++++++++++--
+ arch/x86/kvm/pmu.h                        |  31 +++--
+ arch/x86/kvm/svm/pmu.c                    |   1 +
+ arch/x86/kvm/vmx/pmu_intel.c              |  53 +++++++-
+ arch/x86/kvm/vmx/vmx.c                    |   3 +
+ arch/x86/kvm/x86.c                        |   9 +-
+ include/linux/perf_event.h                |   1 +
+ kernel/events/core.c                      |   4 +-
+ kernel/events/hw_breakpoint.c             |   4 +-
+ kernel/events/hw_breakpoint_test.c        |   2 +-
+ kernel/watchdog_hld.c                     |   2 +-
+ 18 files changed, 239 insertions(+), 48 deletions(-)
 
-Both seems like deal breakers.
+-- 
+2.38.2
+
