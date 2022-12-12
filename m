@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5C464A6D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B4B64A6D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiLLSVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S231929AbiLLSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbiLLSV2 (ORCPT
+        with ESMTP id S232954AbiLLSU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:21:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70651E31
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670869229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wKvRIO4qKG6iczskSWCLDSh7tBhagcatV42gi39S0ik=;
-        b=ORjBJehjUqVHN0RVsBfMogCCW7Pcxm2zKVMHPdBgfwOnYCaXCOlTmpD97pxzVdRnqIfdXf
-        jS7e48osNbmPqcVQOeWXUY9bmU3+saWvV+bDD9HRMiDHDY9P5CuRiIreNCgVcEuirZg3IG
-        Yz7SMqcfFZx093G7iWYRd3L+PBK9tqE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-Ftdw1M7zMmqS-nsNq-Icvw-1; Mon, 12 Dec 2022 13:20:23 -0500
-X-MC-Unique: Ftdw1M7zMmqS-nsNq-Icvw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 12 Dec 2022 13:20:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E422D63;
+        Mon, 12 Dec 2022 10:20:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77B1F29324A1;
-        Mon, 12 Dec 2022 18:20:23 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.193.144])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CC09CC15BAD;
-        Mon, 12 Dec 2022 18:20:21 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH mm-stable] mm/gup_test: free memory allocated via kvcalloc() using kvfree()
-Date:   Mon, 12 Dec 2022 19:20:18 +0100
-Message-Id: <20221212182018.264900-1-david@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E78C6119E;
+        Mon, 12 Dec 2022 18:20:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEA9C433F0;
+        Mon, 12 Dec 2022 18:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670869254;
+        bh=RI5+SmWe0surB49db6NNG2NfZSAFADSc0Xo9XZxiKX4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g4gbQQAbRE3Nm3l+JyzsTz0j7xSgqKAC1TH31CsKuuPT7wLxtd/oDe2w2ICHUMbAW
+         q7/dJjGe+zBiWWzA3//M7ontpFXzmyM2aYJfx3t42zznwc0ZA+2sHSVaeM4/oh6VXV
+         FOAHZB7ZlWFaaqn1niriFi8ReSBrv2pHc9DWr9HY=
+Date:   Mon, 12 Dec 2022 19:20:51 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH hid v12 05/15] HID: bpf jmp table: simplify the logic of
+ cleaning up programs
+Message-ID: <Y5dxAz3QTQnaB71Q@kroah.com>
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-6-benjamin.tissoires@redhat.com>
+ <CAO-hwJ+fYvpD5zbDNq-f-gUEVpxsrdJ7K-ceNd37nLxzBxYL+g@mail.gmail.com>
+ <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have to free via kvfree(), not via kfree().
+On Mon, Dec 12, 2022 at 09:52:03AM -0800, Yonghong Song wrote:
+> 
+> 
+> On 12/12/22 9:02 AM, Benjamin Tissoires wrote:
+> > On Thu, Nov 3, 2022 at 4:58 PM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > > 
+> > > Kind of a hack, but works for now:
+> > > 
+> > > Instead of listening for any close of eBPF program, we now
+> > > decrement the refcount when we insert it in our internal
+> > > map of fd progs.
+> > > 
+> > > This is safe to do because:
+> > > - we listen to any call of destructor of programs
+> > > - when a program is being destroyed, we disable it by removing
+> > >    it from any RCU list used by any HID device (so it will never
+> > >    be called)
+> > > - we then trigger a job to cleanup the prog fd map, but we overwrite
+> > >    the removal of the elements to not do anything on the programs, just
+> > >    remove the allocated space
+> > > 
+> > > This is better than previously because we can remove the map of known
+> > > programs and their usage count. We now rely on the refcount of
+> > > bpf, which has greater chances of being accurate.
+> > > 
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > 
+> > > ---
+> > 
+> > So... I am a little bit embarrassed, but it turns out that this hack
+> > is not safe enough.
+> > 
+> > If I compile the kernel with LLVM=1, the function
+> > bpf_prog_put_deferred() is optimized in a weird way: if we are not in
+> > irq, the function is inlined into __bpf_prog_put(), but if we are, the
+> > function is still kept around as it is called in a scheduled work
+> > item.
+> > 
+> > This is something I completely overlooked: I assume that if the
+> > function would be inlined, the HID entrypoint BPF preloaded object
+> > would not be able to bind, thus deactivating HID-BPF safely. But if a
+> > function can be both inlined and not inlined, then I have no
+> > guarantees that my cleanup call will be called. Meaning that a HID
+> > device might believe there is still a bpf function to call. And things
+> > will get messy, with kernel crashes and others.
+> 
+> You should not rely fentry to a static function. This is unstable
+> as compiler could inline it if that static function is called
+> directly. You could attach to a global function if it is not
+> compiled with lto.
 
-Fixes: c77369b437f9 ("mm/gup_test: start/stop/read functionality for PIN LONGTERM test")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/gup_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But now that the kernel does support LTO, how can you be sure this will
+always work properly?  The code author does not know if LTO will kick in
+and optimize this away or not, that's the linker's job.
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index 33f431e0da60..8ae7307a1bb6 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -214,7 +214,7 @@ static inline void pin_longterm_test_stop(void)
- 		if (pin_longterm_test_nr_pages)
- 			unpin_user_pages(pin_longterm_test_pages,
- 					 pin_longterm_test_nr_pages);
--		kfree(pin_longterm_test_pages);
-+		kvfree(pin_longterm_test_pages);
- 		pin_longterm_test_pages = NULL;
- 		pin_longterm_test_nr_pages = 0;
- 	}
-@@ -255,7 +255,7 @@ static inline int pin_longterm_test_start(unsigned long arg)
- 	fast = !!(args.flags & PIN_LONGTERM_TEST_FLAG_USE_FAST);
- 
- 	if (!fast && mmap_read_lock_killable(current->mm)) {
--		kfree(pages);
-+		kvfree(pages);
- 		return -EINTR;
- 	}
- 
--- 
-2.38.1
+thanks,
 
+greg k-h
