@@ -2,218 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5F06497C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C126497C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiLLBuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 20:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S231191AbiLLBwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 20:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiLLBuO (ORCPT
+        with ESMTP id S230386AbiLLBwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 20:50:14 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA99D102;
-        Sun, 11 Dec 2022 17:50:12 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 12 Dec 2022 10:50:11 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 05D672076261;
-        Mon, 12 Dec 2022 10:50:11 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 12 Dec 2022 10:50:11 +0900
-Received: from [10.212.158.28] (unknown [10.212.158.28])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 24366A855D;
-        Mon, 12 Dec 2022 10:50:10 +0900 (JST)
-Message-ID: <5a57cc4b-17e8-5983-d6ac-9ed825619641@socionext.com>
-Date:   Mon, 12 Dec 2022 10:50:09 +0900
+        Sun, 11 Dec 2022 20:52:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE78D2E1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:51:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670809874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=60f4Xv2PrgnMPYC6/emmrTXGIgNiLNjayDFVJUFJfss=;
+        b=WqQBJKCb8sRRKMRhsFcuSbwOIc9rCNL8ExIM9fRf4vwRvnHHuIS3fGxWzAXBMRWUPgSAxd
+        00WcDwpP0ERxIZ3lxab7/fZBoBNp6SnKw8GbBE0UbxeQFIg6t+2HVNaMFxrtPHOQ/gMXqS
+        wWYSwFTz0DYJVsNkQdL/urev3DXsEj8=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-607-8-fojafLN7KyCOi7kPJxSQ-1; Sun, 11 Dec 2022 20:51:13 -0500
+X-MC-Unique: 8-fojafLN7KyCOi7kPJxSQ-1
+Received: by mail-pf1-f197.google.com with SMTP id f14-20020a056a0022ce00b005782e3b4704so2782037pfj.4
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:51:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=60f4Xv2PrgnMPYC6/emmrTXGIgNiLNjayDFVJUFJfss=;
+        b=qgnEugz3I4I4m05Hg524TWsxMOPQxgjquASxTiWPZlFstRI1aAfJ7rgoN9uGO45o8L
+         7zO6rU0+Eveht+VdR6sPlkq5OxDjIlmUQ/gmVkHyR2c/k4FmD0TNhdi+QpB8+oAokoT6
+         Qnpo8ZVoPX1FUh5hTgJLoGv0MT9++gJegVJRz24CdAgW/568d3/pUE0Ht7/DJBIh63KS
+         KB/fgnBwtCPotMWX2N2Qt7y6lmMotiOM/y45sP8kshu44FpcO2ylMETb/rVqeNWJboyW
+         9WEc4MokeyKZ3OiIAbTrackW2yqdPhXq2cQ10i2uTkJQnPJvw7Dt345Zz7e5CgIfo1qh
+         1WkQ==
+X-Gm-Message-State: ANoB5pl1Mb6fv/RXl59bKJubtXm7Kuyi4flFjthriijJPb/LoW6t8TB1
+        d7+f67+Lsi+LyhupfjYgpY5cq72yN9pwxYO+YE/oD76Cwouaa3VfSUIS+DamajVBCVE+dtMWaq0
+        jCfH/F28zKTO4fceYbFFIxktW
+X-Received: by 2002:a05:6a00:10cd:b0:56c:3e38:bf0e with SMTP id d13-20020a056a0010cd00b0056c3e38bf0emr18440779pfu.11.1670809872445;
+        Sun, 11 Dec 2022 17:51:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf587NRhM6OVheRY/MbptuX/ZhFOPnacgTDgDlB18t7/QTrM6a6ECUroMCCqMDEs2WFOy2CMaQ==
+X-Received: by 2002:a05:6a00:10cd:b0:56c:3e38:bf0e with SMTP id d13-20020a056a0010cd00b0056c3e38bf0emr18440762pfu.11.1670809872160;
+        Sun, 11 Dec 2022 17:51:12 -0800 (PST)
+Received: from ?IPV6:2403:580e:4b40:0:7968:2232:4db8:a45e? (2403-580e-4b40--7968-2232-4db8-a45e.ip6.aussiebb.net. [2403:580e:4b40:0:7968:2232:4db8:a45e])
+        by smtp.gmail.com with ESMTPSA id c7-20020aa79527000000b0057255b82bd1sm4513759pfp.217.2022.12.11.17.51.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Dec 2022 17:51:11 -0800 (PST)
+Message-ID: <89b892c0-7dd9-3a98-99c8-6db83c5a7200@redhat.com>
+Date:   Mon, 12 Dec 2022 09:51:06 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: mmc: Convert Fujitsu SDHCI to DT schema
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 4/5] pid: mark pids associated with group leader tasks
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209171621.3351220-1-robh@kernel.org>
- <CAL_JsqL-FVy1SK1ZTVoPaxDG0-7_PtcZZHFWJt8+aaGWFFBwaA@mail.gmail.com>
- <CAMj1kXFJ+779S93dO3BzKKnEw=dBnbtzS+-yboFfj35ASnheJA@mail.gmail.com>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <CAMj1kXFJ+779S93dO3BzKKnEw=dBnbtzS+-yboFfj35ASnheJA@mail.gmail.com>
+To:     Brian Foster <bfoster@redhat.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     onestero@redhat.com, willy@infradead.org, ebiederm@redhat.com
+References: <20221202171620.509140-1-bfoster@redhat.com>
+ <20221202171620.509140-5-bfoster@redhat.com>
+From:   Ian Kent <ikent@redhat.com>
+In-Reply-To: <20221202171620.509140-5-bfoster@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 3/12/22 01:16, Brian Foster wrote:
+> Searching the pid_namespace for group leader tasks is a fairly
+> inefficient operation. Listing the root directory of a procfs mount
+> performs a linear scan of allocated pids, checking each entry for an
+> associated PIDTYPE_TGID task to determine whether to populate a
+> directory entry. This can cause a significant increase in readdir()
+> syscall latency when run in namespaces that might have one or more
+> processes with significant thread counts.
+>
+> To facilitate improved TGID pid searches, mark the ids of pid
+> entries that are likely to have an associated PIDTYPE_TGID task. To
+> keep the code simple and avoid having to maintain synchronization
+> between mark state and post-fork pid-task association changes, the
+> mark is applied to all pids allocated for tasks cloned without
+> CLONE_THREAD.
+>
+> This means that it is possible for a pid to remain marked in the
+> xarray after being disassociated from the group leader task. For
+> example, a process that does a setsid() followed by fork() and
+> exit() (to daemonize) will remain associated with the original pid
+> for the session, but link with the child pid as the group leader.
+> OTOH, the only place other than fork() where a tgid association
+> occurs is in the exec() path, which kills all other tasks in the
+> group and associates the current task with the preexisting leader
+> pid. Therefore, the semantics of the mark are that false positives
+> (marked pids without PIDTYPE_TGID tasks) are possible, but false
+> negatives (unmarked pids without PIDTYPE_TGID tasks) should never
+> occur.
+>
+> This is an effective optimization because false negatives are fairly
+> uncommon and don't add overhead (i.e. we already have to check
+> pid_task() for marked entries), but still filters out thread pids
+> that are guaranteed not to have TGID task association.
+>
+> Mark entries in the pid allocation path when the caller specifies
+> that the pid associates with a new thread group. Since false
+> negatives are not allowed, warn in the event that a PIDTYPE_TGID
+> task is ever attached to an unmarked pid. Finally, create a helper
+> to implement the task search based on the mark semantics defined
+> above (based on search logic currently implemented by next_tgid() in
+> procfs).
 
-On 2022/12/10 3:44, Ard Biesheuvel wrote:
-> cc Jassi and Masahisa
-> 
-> On Fri, 9 Dec 2022 at 19:42, Rob Herring <robh@kernel.org> wrote:
->>
->> On Fri, Dec 9, 2022 at 11:16 AM Rob Herring <robh@kernel.org> wrote:
->>>
->>> Convert the Fujitsu SDHCI binding to DT schema format.
->>>
->>> The interrupts were not documented. The driver only uses the first
->>> interrupt, but the DT and example have 2 interrupts. The 2nd one is
->>> unknown. "dma-coherent" was also not documented, but is used.
->>>
->>> The "socionext,synquacer-sdhci" compatible was not documented, but it is
->>> compatible with "fujitsu,mb86s70-sdhci-3.0.yaml" and is in use (in
->>> u-boot Synquacer dts).
->>>
->>> Signed-off-by: Rob Herring <robh@kernel.org>
->>> ---
->>>   .../mmc/fujitsu,mb86s70-sdhci-3.0.yaml        | 67 +++++++++++++++++++
->>>   .../devicetree/bindings/mmc/sdhci-fujitsu.txt | 32 ---------
->>>   2 files changed, 67 insertions(+), 32 deletions(-)
->>>   create mode 100644 Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
->>>   delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
->>> new file mode 100644
->>> index 000000000000..0218a6ce4b2f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
->>> @@ -0,0 +1,67 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/mmc/fujitsu,mb86s70-sdhci-3.0.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Fujitsu SDHCI controller
->>> +
->>> +maintainers:
->>> +  - Vincent Yang <Vincent.Yang@tw.fujitsu.com>
->>
->> Bounces. Any other volunteers?
->>
->>> +
->>> +allOf:
->>> +  - $ref: mmc-controller.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - const: socionext,synquacer-sdhci
->>> +          - const: fujitsu,mb86s70-sdhci-3.0
->>> +      - const: fujitsu,mb86s70-sdhci-3.0
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    items:
->>> +      - description: Core clock
->>> +      - description: Interface clock
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: core
->>> +      - const: iface
->>> +
->>> +  dma-coherent: true
->>> +
->>> +  interrupts:
->>> +    maxItems: 2
->>> +
->>> +  fujitsu,cmd-dat-delay-select:
->>> +    type: boolean
->>> +    description: Indicating that the host requires the CMD_DAT_DELAY control
->>> +      to be enabled.
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - clocks
->>> +  - clock-names
->>> +  - interrupts
->>> +
->>> +unevaluatedProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    mmc@36600000 {
->>> +        compatible = "fujitsu,mb86s70-sdhci-3.0";
->>> +        reg = <0x36600000 0x1000>;
->>> +        interrupts = <0 172 0x4>,
->>> +               <0 173 0x4>;
->>> +        bus-width = <4>;
->>> +        vqmmc-supply = <&vccq_sdhci1>;
->>> +        clocks = <&clock 2 2 0>, <&clock 2 3 0>;
->>> +        clock-names = "core", "iface";
->>> +    };
->>> +...
->>> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt b/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
->>> deleted file mode 100644
->>> index 3ee9263adf73..000000000000
->>> --- a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
->>> +++ /dev/null
->>> @@ -1,32 +0,0 @@
->>> -* Fujitsu SDHCI controller
->>> -
->>> -This file documents differences between the core properties in mmc.txt
->>> -and the properties used by the sdhci_f_sdh30 driver.
->>> -
->>> -Required properties:
->>> -- compatible: "fujitsu,mb86s70-sdhci-3.0"
->>> -- clocks: Must contain an entry for each entry in clock-names. It is a
->>> -  list of phandles and clock-specifier pairs.
->>> -  See ../clocks/clock-bindings.txt for details.
->>> -- clock-names: Should contain the following two entries:
->>> -       "iface" - clock used for sdhci interface
->>> -       "core"  - core clock for sdhci controller
->>> -
->>> -Optional properties:
->>> -- vqmmc-supply: phandle to the regulator device tree node, mentioned
->>> -  as the VCCQ/VDD_IO supply in the eMMC/SD specs.
->>> -- fujitsu,cmd-dat-delay-select: boolean property indicating that this host
->>> -  requires the CMD_DAT_DELAY control to be enabled.
->>> -
->>> -Example:
->>> -
->>> -       sdhci1: mmc@36600000 {
->>> -               compatible = "fujitsu,mb86s70-sdhci-3.0";
->>> -               reg = <0 0x36600000 0x1000>;
->>> -               interrupts = <0 172 0x4>,
->>> -                            <0 173 0x4>;
->>> -               bus-width = <4>;
->>> -               vqmmc-supply = <&vccq_sdhci1>;
->>> -               clocks = <&clock 2 2 0>, <&clock 2 3 0>;
->>> -               clock-names = "iface", "core";
->>> -       };
->>> --
->>> 2.35.1
->>>
+Yes, the tricky bit, but the analysis sounds thorough so it
 
-I converted this dt-bindings as follows.
+should work for all cases ...
 
-- [PATCH v2 1/6] dt-bindings: mmc: Convert sdhci-fujitsu to JSON schema
-   https://marc.info/?l=linux-mmc&m=166815383930945
 
-- [PATCH v2 3/6] dt-bindings: sdhci-fujitsu: Add compatible string for F_SDH30_E51
-   https://marc.info/?l=linux-mmc&m=166815384730959
+>
+> Signed-off-by: Brian Foster <bfoster@redhat.com>
 
-And this series has already merged by Ulf.
-https://marc.info/?l=linux-mmc&m=166861511322498
 
-Could you check it and update some diffs?
+Reviewed-by: Ian Kent <raven@themaw.net>
 
-Thank you,
+> ---
+>   include/linux/pid.h |  3 ++-
+>   kernel/fork.c       |  2 +-
+>   kernel/pid.c        | 44 +++++++++++++++++++++++++++++++++++++++++++-
+>   3 files changed, 46 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/pid.h b/include/linux/pid.h
+> index 343abf22092e..64caf21be256 100644
+> --- a/include/linux/pid.h
+> +++ b/include/linux/pid.h
+> @@ -132,9 +132,10 @@ extern struct pid *find_vpid(int nr);
+>    */
+>   extern struct pid *find_get_pid(int nr);
+>   extern struct pid *find_ge_pid(int nr, struct pid_namespace *);
+> +struct task_struct *find_get_tgid_task(int *id, struct pid_namespace *);
+>   
+>   extern struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+> -			     size_t set_tid_size);
+> +			     size_t set_tid_size, bool group_leader);
+>   extern void free_pid(struct pid *pid);
+>   extern void disable_pid_allocation(struct pid_namespace *ns);
+>   
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 08969f5aa38d..1cf2644c642e 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -2267,7 +2267,7 @@ static __latent_entropy struct task_struct *copy_process(
+>   
+>   	if (pid != &init_struct_pid) {
+>   		pid = alloc_pid(p->nsproxy->pid_ns_for_children, args->set_tid,
+> -				args->set_tid_size);
+> +				args->set_tid_size, !(clone_flags & CLONE_THREAD));
+>   		if (IS_ERR(pid)) {
+>   			retval = PTR_ERR(pid);
+>   			goto bad_fork_cleanup_thread;
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index 53db06f9882d..d65f74c6186c 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -66,6 +66,9 @@ int pid_max = PID_MAX_DEFAULT;
+>   int pid_max_min = RESERVED_PIDS + 1;
+>   int pid_max_max = PID_MAX_LIMIT;
+>   
+> +/* MARK_0 used by XA_FREE_MARK */
+> +#define TGID_MARK	XA_MARK_1
+> +
+>   struct pid_namespace init_pid_ns = {
+>   	.ns.count = REFCOUNT_INIT(2),
+>   	.xa = XARRAY_INIT(init_pid_ns.xa, PID_XA_FLAGS),
+> @@ -137,7 +140,7 @@ void free_pid(struct pid *pid)
+>   }
+>   
+>   struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+> -		      size_t set_tid_size)
+> +		      size_t set_tid_size, bool group_leader)
+>   {
+>   	struct pid *pid;
+>   	enum pid_type type;
+> @@ -257,6 +260,8 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>   
+>   		/* Make the PID visible to find_pid_ns. */
+>   		__xa_store(&tmp->xa, upid->nr, pid, 0);
+> +		if (group_leader)
+> +			__xa_set_mark(&tmp->xa, upid->nr, TGID_MARK);
+>   		tmp->pid_allocated++;
+>   		xa_unlock_irq(&tmp->xa);
+>   	}
+> @@ -314,6 +319,11 @@ static struct pid **task_pid_ptr(struct task_struct *task, enum pid_type type)
+>   void attach_pid(struct task_struct *task, enum pid_type type)
+>   {
+>   	struct pid *pid = *task_pid_ptr(task, type);
+> +	struct pid_namespace *pid_ns = ns_of_pid(pid);
+> +	pid_t pid_nr = pid_nr_ns(pid, pid_ns);
+> +
+> +	WARN_ON(type == PIDTYPE_TGID &&
+> +		!xa_get_mark(&pid_ns->xa, pid_nr, TGID_MARK));
+>   	hlist_add_head_rcu(&task->pid_links[type], &pid->tasks[type]);
+>   }
+>   
+> @@ -506,6 +516,38 @@ struct pid *find_ge_pid(int nr, struct pid_namespace *ns)
+>   }
+>   EXPORT_SYMBOL_GPL(find_ge_pid);
+>   
+> +/*
+> + * Used by proc to find the first thread group leader task with an id greater
+> + * than or equal to *id.
+> + *
+> + * Use the xarray mark as a hint to find the next best pid. The mark does not
+> + * guarantee a linked group leader task exists, so retry until a suitable entry
+> + * is found.
+> + */
+> +struct task_struct *find_get_tgid_task(int *id, struct pid_namespace *ns)
+> +{
+> +	struct pid *pid;
+> +	struct task_struct *t;
+> +	unsigned long nr = *id;
+> +
+> +	rcu_read_lock();
+> +	do {
+> +		pid = xa_find(&ns->xa, &nr, ULONG_MAX, TGID_MARK);
+> +		if (!pid) {
+> +			rcu_read_unlock();
+> +			return NULL;
+> +		}
+> +		t = pid_task(pid, PIDTYPE_TGID);
+> +		nr++;
+> +	} while (!t);
+> +
+> +	*id = pid_nr_ns(pid, ns);
+> +	get_task_struct(t);
+> +	rcu_read_unlock();
+> +
+> +	return t;
+> +}
+> +
+>   struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
+>   {
+>   	struct fd f;
 
----
-Best Regards
-Kunihiko Hayashi
