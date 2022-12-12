@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C90C864A88B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D1F64A88F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiLLUOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        id S233338AbiLLUPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiLLUNu (ORCPT
+        with ESMTP id S233446AbiLLUPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:13:50 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF78F18E0A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:13:02 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE2981EC069C;
-        Mon, 12 Dec 2022 21:12:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670875980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=cqJgmQMYmHFf0BNUVp+gstAYUNpjVNWOBmUyvP0UhuA=;
-        b=UmgA2yqMFwQCXQ6P6siSbvRL3QhpBPjsRidEoU9EL2mKGxJD9xRgKxJyAs7zWdVdWaOWLa
-        YaElk8Gl+Q1vnEo1OHICtNRERmtFARn0cvfiFnIZRa1YmST1yjBGoyZRF65HZullcqhaJs
-        UJ4JXoRediQUto+1YyIQd1Vf6VYq69U=
-Date:   Mon, 12 Dec 2022 21:12:59 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/alternatives for v6.2
-Message-ID: <Y5eLSzV52mf/NySl@zn.tnic>
+        Mon, 12 Dec 2022 15:15:11 -0500
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5601B183B2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:14:22 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 4pBqpxCjtuZP64pBqpJBAT; Mon, 12 Dec 2022 21:14:20 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 12 Dec 2022 21:14:20 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-btrfs@vger.kernel.org
+Subject: [PATCH] btrfs: Fix an error handling path in btrfs_rename()
+Date:   Mon, 12 Dec 2022 21:14:17 +0100
+Message-Id: <943f0f360f221da954f5dd7f16e366d0e294ae72.1670876024.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+If new_whiteout_inode() fails, some resources need to be freed.
+Add the missing goto to the error handling path.
 
-please pull a single alternatives patching fix for modules, for 6.2.
-
-Thx.
-
+Fixes: ab3c5c18e8fa ("btrfs: setup qstr from dentrys using fscrypt helper")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
+ fs/btrfs/inode.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
-
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_alternatives_for_v6.2
-
-for you to fetch changes up to be84d8ed3f04e9154a3a55e29a27dcd416f05b31:
-
-  x86/alternative: Consistently patch SMP locks in vmlinux and modules (2022-11-22 15:16:16 +0100)
-
-----------------------------------------------------------------
-- Have alternatives patch the same sections in modules as in vmlinux
-
-----------------------------------------------------------------
-Julian Pidancet (1):
-      x86/alternative: Consistently patch SMP locks in vmlinux and modules
-
- arch/x86/kernel/module.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 8bcad9940154..2ead7b1bdbaf 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -9377,8 +9377,10 @@ static int btrfs_rename(struct user_namespace *mnt_userns,
+ 
+ 	if (flags & RENAME_WHITEOUT) {
+ 		whiteout_args.inode = new_whiteout_inode(mnt_userns, old_dir);
+-		if (!whiteout_args.inode)
+-			return -ENOMEM;
++		if (!whiteout_args.inode) {
++			ret = -ENOMEM;
++			goto out_fscrypt_names;
++		}
+ 		ret = btrfs_new_inode_prepare(&whiteout_args, &trans_num_items);
+ 		if (ret)
+ 			goto out_whiteout_inode;
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
