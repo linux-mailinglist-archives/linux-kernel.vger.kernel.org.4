@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB77664AA6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E2464AA72
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiLLWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S233868AbiLLWlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiLLWkj (ORCPT
+        with ESMTP id S233517AbiLLWl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:40:39 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B3B255;
-        Mon, 12 Dec 2022 14:40:37 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1638109pjd.0;
-        Mon, 12 Dec 2022 14:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NPDIXZNKcYo1HDMoRq9WdF0H3wxdPBhSwXt2rQdX8Hk=;
-        b=T2+mjUOnvMC6+SflvTfeyWtuCJGJy3r5riUOCGBFfGCcjwxEGIy88D1g3qOknp/kpu
-         r44QvUgQpK7IfygXGopoHH1Aqbi/nw2i4MQqJwBE0lCXzalcJcAW1XuiZk/FGFJxgiZw
-         TyeR/sUnOZE0e7jeZhBYzXFCMMScwKqXqgJ8pfVbW72SncqkteKT1wIGEAox7BOx78pH
-         63kxkkSdWKIK4rJV+FaikdslcCef/vtpSxfob2P3xVWgugrM/WmIIqY360cPU55tMyRB
-         cARaPspT5prnBLkezhBY9EE2WTXRTBgFrQZGgtY/jicSHR3pu+WJA3shdhCsQAysAnrt
-         sDXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NPDIXZNKcYo1HDMoRq9WdF0H3wxdPBhSwXt2rQdX8Hk=;
-        b=s6MzWKPNLxvCG6jYukLBeaZeHTYfKodf8YslBU1rtgv/H2hoES4w6FELyzkvgwNjyh
-         jlQGiE73oXShZtmQ0TMfbSQPWqI3lPgsRN5/GHii/oEiAYNWAVpOE+Q6jSHYyPDL0LYy
-         jke97veKRS8YuIZa/ufKKeLFkInfAY6EyMK3Ii8InSUfryXe+k2u/jBnp/WaJeRdt9mR
-         lRurPM1V8Z0IFED4bofVfCoPn/njIyihWWzrKHmirR9vvl0+Bm1nCmJBct/uefsKv/Ws
-         jFP0WpQEIlt6P6FWs6QqETdPUDv8ZerrCTg2aloAC4/BUooDfL/Se78WZQHljyeSUcce
-         9P4A==
-X-Gm-Message-State: ANoB5pnQqmv8pmwTaWhxiI39Se/ynwde9jrG/N5qwQXekHLnxt0CQY+V
-        9mrCT1OP6zNtXzqFJXmKlq4=
-X-Google-Smtp-Source: AA0mqf70xXX6MfhmFO/sZGl4MU+BzHo5ca+dRi//o50aclQl+kNKmpHaUSzIaWZ9VEnAYiXg0pzlXQ==
-X-Received: by 2002:a05:6a21:2d07:b0:9e:9685:f15e with SMTP id tw7-20020a056a212d0700b0009e9685f15emr23337003pzb.0.1670884836974;
-        Mon, 12 Dec 2022 14:40:36 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id j28-20020a63231c000000b0047063eb4098sm5648360pgj.37.2022.12.12.14.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 14:40:36 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 12:40:35 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] blk-throtl: Introduce sync queue for write ios
-Message-ID: <Y5et48VryiKgL/eD@slm.duckdns.org>
-References: <20221206163826.10700-1-hanjinke.666@bytedance.com>
+        Mon, 12 Dec 2022 17:41:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FABA1AF;
+        Mon, 12 Dec 2022 14:41:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA24AB80E9B;
+        Mon, 12 Dec 2022 22:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDB2C433EF;
+        Mon, 12 Dec 2022 22:41:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kJ9Impaj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1670884877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0RlIYFMtptV14Ll/IQC4NgcykON3vMQcNKFWJ1LIFHI=;
+        b=kJ9ImpajbUAEiUFcN6L+GPxuHJM4NteyFTK34DyZkQCw0N7mOFT3Yp+VOC1QL8J512rkLS
+        viMbxoqSjW+OrMkmJObeYiAawkMaAwiZO+u0iTyReL8ReVYGQpd6GQrgq4hEX6BIB3nPW4
+        Rpw3UA91kuOpy52I8noTMdpXSWSuk9g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 757bcc63 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 12 Dec 2022 22:41:17 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 15:41:15 -0700
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Amit Klein <aksecurity@gmail.com>
+Cc:     Yonghong Song <yhs@meta.com>, david.keisarschm@mail.huji.ac.il,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ilay.bahat1@gmail.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 2/5] Replace invocation of weak PRNG in kernel/bpf/core.c
+Message-ID: <Y5euC6+f5604XT1y@zx2c4.com>
+References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
+ <7c16cafe96c47ff5234fbb980df9d3e3d48a0296.1670778652.git.david.keisarschm@mail.huji.ac.il>
+ <01ade45b-8ca6-d584-199b-a06778038356@meta.com>
+ <CANEQ_+KDR+kC=hYhTtNeQuSTp+-Dg0tRx-9MzJKQ2zH++fBGyQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221206163826.10700-1-hanjinke.666@bytedance.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CANEQ_+KDR+kC=hYhTtNeQuSTp+-Dg0tRx-9MzJKQ2zH++fBGyQ@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 12:38:26AM +0800, Jinke Han wrote:
-> From: Jinke Han <hanjinke.666@bytedance.com>
+On Tue, Dec 13, 2022 at 12:35:24AM +0200, Amit Klein wrote:
+> On Mon, Dec 12, 2022 at 8:03 PM Yonghong Song <yhs@meta.com> wrote:
+> >
+> >
+> >
+> > On 12/11/22 2:16 PM, david.keisarschm@mail.huji.ac.il wrote:
+> > > From: David <david.keisarschm@mail.huji.ac.il>
+> > >
+> > > We changed the invocation of
+> > >   prandom_u32_state to get_random_u32.
+> > >   We deleted the maintained state,
+> > >   which was a CPU-variable,
+> > >   since get_random_u32 maintains its own CPU-variable.
+> > >   We also deleted the state initializer,
+> > >   since it is not needed anymore.
+> > >
+> > > Signed-off-by: David <david.keisarschm@mail.huji.ac.il>
+> > > ---
+> > >   include/linux/bpf.h   |  1 -
+> > >   kernel/bpf/core.c     | 13 +------------
+> > >   kernel/bpf/verifier.c |  2 --
+> > >   net/core/filter.c     |  1 -
+> > >   4 files changed, 1 insertion(+), 16 deletions(-)
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> [...]
+> > Please see the discussion here.
+> > https://lore.kernel.org/bpf/87edtctz8t.fsf@toke.dk/
+> > There is a performance concern with the above change.
+> >
 > 
-> Now we don't distinguish sync write ios from normal buffer write ios
-> in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-> until write completion soon after it submit. So it's reasonable for sync
-> io to complete as soon as possible.
-> 
-> In our test, fio writes a 100g file in sequential 4k blocksize in
-> a container with low bps limit configured (wbps=10M). More than 1200
-> ios were throttled in blk-throtl queue and the avarage throtle time
-> of each io is 140s. At the same time, the operation of saving a small
-> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-> the sync ios of fsync will be blocked by a huge amount of buffer write
-> ios ahead. This is also a priority inversion problem within one cgroup.
-> In the database scene, things got really bad with blk-throtle enabled
-> as fsync is called very often.
-> 
-> This patch introduces a independent sync queue for write ios and gives
-> a huge priority to sync write ios. I think it's a nice respond to the
-> semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO gains the same
-> priority as they are important to fs. This may avoid some potential
-> priority inversion problems.
+> I see. How about using (in this instance only!) the SipHash-based
+> solution which was the basis for prandom_u32() starting with commit
+> c51f8f88d705 (v5.10-rc1) up until commit d4150779e60f (v5.19-rc1)?
 
-I think the idea makes sense but wonder whether the implementation would be
-cleaner / simpler if the sq->queued[] are indexed by SYNC, ASYNC and the
-sync writes are queued in the sync queue together with reads.
+Stop with this pseudo cryptographic garbage. Stop pushing this
+everywhere. It was a hassle to undo this crap the first time around. The
+last thing we need is to add it back.
 
-Thanks.
+Plus, there's no need for it either. I'll revisit the bpf patch if/when
+it makes sense to do performance-wise.
 
--- 
-tejun
+Jason
