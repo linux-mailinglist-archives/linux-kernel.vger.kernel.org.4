@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC5F64A4E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5808264A524
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbiLLQgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S232902AbiLLQj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiLLQgX (ORCPT
+        with ESMTP id S232194AbiLLQis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:36:23 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD263B7D8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:35:52 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id 1so325875lfz.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:35:52 -0800 (PST)
+        Mon, 12 Dec 2022 11:38:48 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DB416589
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:37:08 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id c17so13623555edj.13
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:37:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WMYpvtSfwDxCzfIHZhIbSDEbFJT+TaF8mIcLpnMfQgc=;
-        b=fkSp9mEjEyRJN3vrbKnBDL5ZekTLuhkdrkTe1tfnE521dXSUN+gmnrYNgPKczX8cua
-         UlJ2FwOj/jAG/t1Bf5mma7Mpp2Uh2ThRyGocdkTRkIJx1jbH1dvx/S+9h6zto4MskboM
-         p5/ejxfzP9jd4jiN996y36irO17Zre6wctFuGRj2QK1T5L7866u/rDZLu+sxsNTGMubY
-         oa7aA76KLfF5waevK2XFeQyxkaBpKbTHLcmvzOx50o040Ya+NyJRVEoahqIyxz1//eee
-         qDF/KxZKOjHk2m108Loyl1I2WMBMPLlWN+MF/9pxhpVZHDOpQBJLZrFghUJbPEjn6XiN
-         6oiQ==
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=lIFXcScE+1mmzH1SBNLfPzmU2yyZ22FDa7zo6/O0Bw9aIOxDeXxYkEVfus52JWuhda
+         4ouELocZnEhmnwFppolEYq4c3c7RHYAqD4pax4M3unQDLONiM/9+ejXSM9E2FE+Z0v02
+         plxbNMhSLCExfq6g58BwEJLatQLzpt/xLWOhKWfMwSgaHbhPuPfGnoShEU2Q/8V0GhBe
+         I8mO/6POKEHTvHhiQrSmT3i/DlcfyH1o4pAMtSuNXvNoHj+mOy3GKKCsRTSQGVPFd3Z7
+         AQYI0FN6wamo3RnZf0VXDCwVvMRjPWjYDkKYXDeP5o/vQIFIn9FanCQzU/XNFNQHrfWF
+         2geA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WMYpvtSfwDxCzfIHZhIbSDEbFJT+TaF8mIcLpnMfQgc=;
-        b=OqnNZ3MI8feStHj9hmg9F8InHwlmm9Yauo3ATY3kewImJXVkVkeLKbm7F8qZunUriL
-         uy+tngLGGtf/P4jBeJllzfCJ9jjkYmCq/zefi96OtNp9ZzX+BkXBL0DuW/4ztFMgZ+Ec
-         I03LsHpLlh/8aSD9agGo+flAoLrl8kCZh5ZCkNfhMyRcT2YGffmy6If7kqbeFTFeqGYw
-         G258C1JeLkUacwSHHuij6WYlpVtVHc6EuF58NlJvcL3m0ctKJHar6UoTYrnJRPPLkCrb
-         gMFRoDmcsk+2VTieAO7h2GsimzLY6SaKzTDQumQJAs7/hyw4x/eFf7L67Jh9nXn/oyOp
-         XpwQ==
-X-Gm-Message-State: ANoB5pnUfe8fJGgO2qGCkkabgUxU7O3xrOY3dRimH3xHG5cr1OfQe3nM
-        jXvvdoAY/j+iiT9mTJsOEKZF7g==
-X-Google-Smtp-Source: AA0mqf4jCUK8D/Vr3CV5Nu+ZW3eZtFyKsscqyKq8yK3XYfClYd3U2dbOYJETJ90iL2S/I0F4itWELA==
-X-Received: by 2002:a05:6512:ea5:b0:4b5:a207:8d73 with SMTP id bi37-20020a0565120ea500b004b5a2078d73mr5418067lfb.52.1670862951011;
-        Mon, 12 Dec 2022 08:35:51 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25b10000000b004acff58a951sm29209lfn.133.2022.12.12.08.35.50
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=q5iommO/t7cJBJcqcmeAbKx0lzsJzkrgTiSCV1tCqnIDw6ckqnVc4wCNGn8+CuhlgY
+         dcW6bUIu9d1j753By/kfYOA5Px98O9zmiEBb6QdDStbNJ7WqWSSgfOypB+1mM5KwC266
+         8DguvRN5efGAcFIiEUYN2K3NXTwi2T6aTDfWEPA5GvWBYoNsrNJKxPWL5tkzI3DkozAk
+         m/yRA5rdFhF00I+9twubMYjBJu8Rm4VDuptBPQWyRMJ64Wjfq8EAQH1Kjjh03jiNycAv
+         x7x14jwE3elQq1A5uM3PGkEFRF0v2oZ4PVhsWRAlcBc9g/2UefApykh6Gk7Au4JbkXDs
+         7bIg==
+X-Gm-Message-State: ANoB5pn6iojrVEzVgOo0EpPo66sZ05zM7DUagjBZKeEyakazNt4CfKsw
+        bqI1ju4NRWIG5tsgWOdtZv6vhg==
+X-Google-Smtp-Source: AA0mqf5ppTTyM6N0bPOAfBX//eKXVRPakyRimeYdkY/8NocUbAvjnOSiYLmQOcD2W7tmhBu2XO410g==
+X-Received: by 2002:a05:6402:702:b0:46f:68d0:76 with SMTP id w2-20020a056402070200b0046f68d00076mr10093614edx.34.1670863020790;
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+Received: from prec5560.. ([2001:bf7:830:a7a8:ff97:7d8d:1f2e:ffaa])
+        by smtp.gmail.com with ESMTPSA id m15-20020a50930f000000b00463597d2c25sm4051979eda.74.2022.12.12.08.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 08:35:50 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 12/12] ARM: dts: qcom: msm8960: add qcom,kpss-wdt-mdm9615
-Date:   Mon, 12 Dec 2022 17:35:32 +0100
-Message-Id: <20221212163532.142533-12-krzysztof.kozlowski@linaro.org>
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Grant Likely <grant.likely@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-actions@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-input@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-serial@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-staging@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-mtd@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-fbdev@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Date:   Mon, 12 Dec 2022 17:36:51 +0100
+Message-Id: <167086288411.3041259.17824406556561546642.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -77,27 +99,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add specific compatible to timer/watchdog device node.
+On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+> 
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
+> 
+> [...]
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Applied, thanks!
 
-diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index a6331e5ebe09..536bd7b50762 100644
---- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-+++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -79,7 +79,8 @@ intc: interrupt-controller@2000000 {
- 		};
- 
- 		timer@200a000 {
--			compatible = "qcom,kpss-timer", "qcom,msm-timer";
-+			compatible = "qcom,kpss-wdt-mdm9615", "qcom,kpss-timer",
-+				     "qcom,msm-timer";
- 			interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
- 				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
- 				     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>;
--- 
-2.34.1
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
+
+
+[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
+          commit: 1c546894ff82f8b7c070998c03f9b15a3499f326
+[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
+          commit: d6b522e9bbb0cca1aeae4ef6188800534794836f
+[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
+          commit: 0f6548807fa77e87bbc37964c6b1ed9ba6e1155d
+
+
+
+rob
 
