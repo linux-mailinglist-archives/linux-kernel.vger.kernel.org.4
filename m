@@ -2,150 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3614364A8E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5902C64A90D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiLLUte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S232790AbiLLU7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLLUtc (ORCPT
+        with ESMTP id S229638AbiLLU7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:49:32 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925CA1057A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:49:31 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v8so14884523edi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:49:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=45jhvye7rjPdF2QoJZQM1/16j/qti5bhbagOzYCEDeA=;
-        b=D183ykkoG7Vfv8r9MQu/pRlJ6PM8KQceZcmeMzXN4qYYcjRubwI18McsWgKh649P/z
-         5PBwgRwjqI2oSAc78js9fibch5QpSPvyJXNe2wBk1ZYfIVkPuzm99CeKpuQvOz6kC+lc
-         GFPH2wrxOR0Ol39BtBY5V9lWxF+VrUUyt5YdhPzys4SW9WyhT/EuSjfBA6B4t1hDQ8it
-         Q0t0fH1Ik7Le3/hvc9RyH9spv4n/QIwn3w56/2WQimNo7Gy2xUYNVuNma5CjBfcqKrOn
-         TFaLlP8famH/MrjWyvaa2+vo2Wvtv6+Y35RCGSWTuQ7+FUspiT8fy6hA6DcdBv1T8WU5
-         pEhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=45jhvye7rjPdF2QoJZQM1/16j/qti5bhbagOzYCEDeA=;
-        b=oPUJ6albaL0qQ/Zp9AqD/aaTSVbsSBBiSMen4UOr+MbrjbOQyOaQoj/SlRZem0fEL8
-         Y3MCkELDtn52np1+4VbqSgxIEkzxGEq14YlknGbEACLBx78gjTuAYgqHk4WNwyxhEhgD
-         StUn1oh+fKfAV0GgEL6I3I9iF4BavWMhuta+MfmSOzA3RDidgXUIR+ruRI3IAc6uNQiT
-         FkwWFal36XN2OVqYdy1AJYdELJHy0q7M/cjz2/up0fLhkX7enOZ92IHEa3E9pL2sBFrm
-         JsCxvzOVwuGMQ1U4N3Tx8HrcItVWzjDAHjj0MRx+Iamrsjnt4Tbp4oy0+IJkF22yJA1S
-         qNIw==
-X-Gm-Message-State: ANoB5plK5Jso2R0BwuSRBDwZVusRfFL14rJlEZ1Co1o8orsNnlMWW82h
-        L89ZmiFh2Ci1woqsIn2IhgAVDIChhOY=
-X-Google-Smtp-Source: AA0mqf4ysWAFu0AP6vtGUawShsukq9vAT+6e4Odvd/9lQJPGhuZlcV0XZkxvpucU5P5n2ts21DU9PQ==
-X-Received: by 2002:a50:ee8b:0:b0:46c:b25a:6d7f with SMTP id f11-20020a50ee8b000000b0046cb25a6d7fmr15504062edr.8.1670878170216;
-        Mon, 12 Dec 2022 12:49:30 -0800 (PST)
-Received: from gmail.com (1F2EF155.nat.pool.telekom.hu. [31.46.241.85])
-        by smtp.gmail.com with ESMTPSA id o7-20020a17090608c700b0078d9cd0d2d6sm3770060eje.11.2022.12.12.12.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:49:29 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 12 Dec 2022 21:49:27 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: [GIT PULL] scheduler changes for v6.2
-Message-ID: <Y5eT13pECzbv96Uu@gmail.com>
+        Mon, 12 Dec 2022 15:59:14 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF8A183B6;
+        Mon, 12 Dec 2022 12:59:07 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.98.187]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mleo0-1odmn242ug-00imxM; Mon, 12 Dec 2022 21:57:47 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 770693C1BA; Mon, 12 Dec 2022 21:57:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1670878658; bh=qnQ4b4OQQYBi41zkGd5uOCUPLtZ3tfRTJtk/z24yVwk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=4x5ahCDLnX1Nwswko43mNTdERhxKyMuflqrcHjLjKRvKaeLkFF/p80sxO1Leyq3vE
+         SgfxTSm+ivpt3Ilu3P5k+ScZ9gLFNObyr7D/iamJou6F57djITqC4AiietPvAb4Np3
+         tSvtnIjNRvuVhDLdwGqgJM1IZrqJwzl6wBgsXZHs=
+Date:   Mon, 12 Dec 2022 21:57:38 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to
+ install_headers
+Message-ID: <Y5eVwlId2A2/pN40@fjasle.eu>
+References: <20221202045743.2639466-1-irogers@google.com>
+ <20221202045743.2639466-4-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202045743.2639466-4-irogers@google.com>
+X-Provags-ID: V03:K1:3GmCeNNSVVdhmJX5HMTzbhSdxI6R4yUF6tJQCtwPq/TnqvO5APk
+ /+xEZtzMC83be00kVnu0kgC6dao9my0lKfrnr1YkOYOcQvaLg8Xb4nj0q1VtsXhowaQ/C3M
+ Lp+WOdtyKO9zX/bGvpytzbjN50dCkbTyUfajmSLE/HnaMQ+J62EhxWaNErXiXf4p0QSZUJd
+ LZC/vbAoFLWwVn81ixpTA==
+UI-OutboundReport: notjunk:1;M01:P0:n+AMtI/h5nQ=;uzd76xvlXBHZvc/0DeTuUmklTpb
+ 8FO3mEpw3fol4NJq85+yLNJrcHHP1fKpUs1QXjlcBU6IKe/E12GRsJ5d+HiHz4pjkQbVszauo
+ AJji12/4UPffp8K42/ei4zyYLFdHZ7kHOXGLri9P7NsnAu+SkSqvXkDX5c0zMx8hd26vk3UZQ
+ yPSLWSyd2GqEVSXagA9LdzMIjUFRmMdvQd5KN+ZvCItUd5B1FDQgT1ZnXUMoJO+yldMJORKxl
+ 6+LznW8Ix/4zQpxm99RZ2l/+D+DyWDTK2TXUtrheXC5aKMC83h/jzFUiuj67/sWXKiOMa6ih9
+ TA5nuTZjGq/J2YH/ztOBhk9XwW0YayQ3INKYlMD67JlY6MYYkym42b9AFUrA2qikNRhdLxGZI
+ 8G5Wy2yR+OLGhxJzdYwID48Hm1iPWCvAz24qtfrlBIIQRtANxOb5qAbWS/lYk6VeSEamOd4y9
+ ImkhLJ75hMsePDFLKx+pCmz1A9Qv5sL/NHtQkfDOqmoubAoLRXD2vlg5vbOARHg5gRzGIFbaQ
+ YItcecrqtpPFk0Yuz8wxVV5/VIec8ypTY0tWruX5nsSUKWUZ+V/nLdieu++oT3BShJ05Dr6eY
+ ozO0UGFk5161umJ0GpuSidNQ9PlVS8meDmaAUA+gsMT6q9dQu4up3ivjFUicK4D8/7lpZCc7J
+ PK0/aRD3OF5Qr6zMczu8CicEUcxrLXexa55HsKAmCw==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
+> Compute the headers to be installed from their source headers and make
+> each have its own build target to install it. Using dependencies
+> avoids headers being reinstalled and getting a new timestamp which
+> then causes files that depend on the header to be rebuilt.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+> index 9a316d8b89df..b87213263a5e 100644
+> --- a/tools/lib/subcmd/Makefile
+> +++ b/tools/lib/subcmd/Makefile
+> @@ -89,10 +89,10 @@ define do_install_mkdir
+>  endef
+>  
+>  define do_install
+> -	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
+> -		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
+> +	if [ ! -d '$2' ]; then             \
+> +		$(INSTALL) -d -m 755 '$2'; \
+>  	fi;                                             \
+> -	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
+> +	$(INSTALL) $1 $(if $3,-m $3,) '$2'
 
-Please pull the latest scheduler tree from:
+What about using '$(INSTALL) -D ...' instead of the if-mkdir-block above?
+(E.g. as in tools/debugging/Makefile.)
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-core-2022-12-12
+Kind regards,
+Nicolas
 
-   # HEAD: d6962c4fe8f96f7d384d6489b6b5ab5bf3e35991 sched: Clear ttwu_pending after enqueue_task()
+>  endef
+>  
+>  install_lib: $(LIBFILE)
+> @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
+>  		$(call do_install_mkdir,$(libdir_SQ)); \
+>  		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
+>  
+> -install_headers:
+> -	$(call QUIET_INSTALL, libsubcmd_headers) \
+> -		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
+> -		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
+> +HDRS := exec-cmd.h help.h pager.h parse-options.h run-command.h
+> +INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/subcmd
+> +INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
+> +
+> +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
+> +	$(call QUIET_INSTALL, $@) \
+> +		$(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
+> +
+> +install_headers: $(INSTALL_HDRS)
+> +	$(call QUIET_INSTALL, libsubcmd_headers)
+>  
+>  install: install_lib install_headers
+>  
+> -- 
+> 2.39.0.rc0.267.gcb52ba06e7-goog
 
-Scheduler changes for v6.2:
-
- - Implement persistent user-requested affinity: introduce affinity_context::user_mask
-   and unconditionally preserve the user-requested CPU affinity masks, for long-lived
-   tasks to better interact with cpusets & CPU hotplug events over longer timespans,
-   without destroying the original affinity intent if the underlying topology changes.
-
- - Uclamp updates: fix relationship between uclamp and fits_capacity()
-
- - PSI fixes
-
- - Misc fixes & updates.
-
- Thanks,
-
-	Ingo
-
------------------->
-Chengming Zhou (2):
-      sched/psi: Fix avgs_work re-arm in psi_avgs_work()
-      sched/psi: Use task->psi_flags to clear in CPU migration
-
-Hao Lee (1):
-      sched/psi: Fix possible missing or delayed pending event
-
-Pierre Gondois (1):
-      sched/fair: Check if prev_cpu has highest spare cap in feec()
-
-Qais Yousef (9):
-      sched/uclamp: Fix relationship between uclamp and migration margin
-      sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
-      sched/uclamp: Fix fits_capacity() check in feec()
-      sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
-      sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
-      sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
-      sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
-      sched/fair: Detect capacity inversion
-      sched/fair: Consider capacity inversion in util_fits_cpu()
-
-Suren Baghdasaryan (1):
-      sched/psi: Stop relying on timer_pending() for poll_work rescheduling
-
-Tianchen Ding (1):
-      sched: Clear ttwu_pending after enqueue_task()
-
-Waiman Long (5):
-      sched: Add __releases annotations to affine_move_task()
-      sched: Introduce affinity_context
-      sched: Always preserve the user requested cpumask
-      sched: Enforce user requested affinity
-      sched: Always clear user_cpus_ptr in do_set_cpus_allowed()
-
-
- include/linux/psi_types.h |   4 +
- include/linux/sched.h     |   3 -
- kernel/sched/core.c       | 259 ++++++++++++++++++++++++---------------
- kernel/sched/deadline.c   |   7 +-
- kernel/sched/fair.c       | 303 ++++++++++++++++++++++++++++++++++++++++------
- kernel/sched/psi.c        | 100 ++++++++++++---
- kernel/sched/sched.h      |  92 ++++++++++++--
- kernel/sched/stats.h      |  22 +---
- 8 files changed, 607 insertions(+), 183 deletions(-)
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
