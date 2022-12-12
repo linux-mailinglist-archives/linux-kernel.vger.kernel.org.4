@@ -2,167 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E1D64A7F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 20:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C71C64A801
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 20:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiLLTKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 14:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S233098AbiLLTPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 14:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLLTKx (ORCPT
+        with ESMTP id S232988AbiLLTPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 14:10:53 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2138.outbound.protection.outlook.com [40.107.94.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F356D4E;
-        Mon, 12 Dec 2022 11:10:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9OdGgETwceeGFjPeH3BIKg6WWxuZg/Qd5mXI/tRfu8jKRiFTnJzLBWkHIsrQfPFAWsshTkSR2AXf8iB/LU3dWx1I7JidbnidyvOhowl59VnKT+Qe8MEdJYcD97JRZhsAcTp58QNfBS9B5Xt4687Kk8BJ17NAq4TVw+TwvyqRjAVJyQjnTIo9YyyU+8KPHHcqylOC1Ze5Nd5O4H0HTerlA31fhwKI1F4FuTC+4xfL2RA9MX/+KYylmAgyEz2Pd/UFoQWZe2rMzunokaMlObU0AUrOXXFeMHSvjMcQZBVYwvLgT6ulOY5NBeC/dItijaamBj/vqmwVVoubQPzKP8qsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=laoqCG3NzLU7+g81j/0p8ZiJzc3CKqCasu0h4qKRH08=;
- b=kGeDhV2aLeEn6pydHJvW+P+SBdBaD38+ic0vDyNj9SKB0IIjAK4oD8UjP9TtK/mvZPMUz4+jBM7gtQazqvaXKIKiMANo5uoMt6MQdk1X53NazczT4k6kB0HMGWZXnWY+8c5cNXadl3fMR5k25qvRs3T3wKe3TQWYmFyQVCrDP7PdIfUGnaBv3GQDfaz+dodpEAsWeEva3BPbUaP186EBKg3YzJ4KrZInPiYP3FjNqPomsTLYqFjaWl7kptTPoC+Pv5D6Ns3qJAUuTFhUwHME3utDYu4qZwJZA7iGA8BIdG7v6S/eFySX1q/xFvg0UW2+nhGb69Cy+MYw4KRwbNIjYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=laoqCG3NzLU7+g81j/0p8ZiJzc3CKqCasu0h4qKRH08=;
- b=d7Nks47JwSS+ys1jyQYcs0XHHzdrJb1mR2lrDHBfdk6wfJJ6wE82AiS1Egx7FtWRlbQFOPJYkC03Fb6FD5p1vphJbpWAWlhYuGtMwqI5mOmna672SGZ5g8wZTbMs1/baZUU8f9qiHNZ1qkCg3C9d+rywY+LYzFIUQhyLML1ToVM=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by SJ0PR21MB1293.namprd21.prod.outlook.com (2603:10b6:a03:3e5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.1; Mon, 12 Dec
- 2022 19:10:49 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817%7]) with mapi id 15.20.5944.001; Mon, 12 Dec 2022
- 19:10:49 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Topic: [PATCH v2 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Index: AQHZCdO5oF6MXqWJVEq1rq5J7Jhdia5qe3MggAAotfA=
-Date:   Mon, 12 Dec 2022 19:10:49 +0000
-Message-ID: <SA1PR21MB1335DAC0BCE28CC5306D8019BFE29@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
- <20221207003325.21503-6-decui@microsoft.com>
- <BYAPR21MB16880DC440AF1E9FF8DD6FBAD7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB16880DC440AF1E9FF8DD6FBAD7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8dbf0f0c-bea9-4e95-9714-924839bc110d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-12T16:34:06Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|SJ0PR21MB1293:EE_
-x-ms-office365-filtering-correlation-id: 4711bd37-1631-4fc4-ae4e-08dadc749479
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SGck/d/AdyoyKlV6lYzk9Si41dkuJmZdMz/C7m5Un6+lZt59F84VehveZdUbCnWwuMXI69TP9C+IXKNigAYP+BXpryQms0xkHHWfHay0gTiWj5goLBIC+Z4E9dfOKipYgFwUhlcH9xTuFxotqUODBjnpKqmW4QF1+NoUUvExQ3wCF6rV9heBIHKtfcCLDa0Nc+FjsvQJPlS6LFOreZJEVm586fGzeWCcV967p3vtSJK6rgiGKnD7FF45ZO+NfyRPtCD902uSJrhgGG/CaNpZXhrGel5zTOk3k0FKRozq2Rt6BAd3TvLExrPtXAzw78DU/GLuI5645E7WMw1ErUMWMedj+SfJcwvTOeHaNw1S2bDBlkiAFiQxgnAT3rLac/EQsedpFcplnEevxaTY35LEYBxexQFvI1NX55r6vUWM4hADmCSdUuU1LM6NKy+xlLWRFS11KmYx3I0Tn0LZamwW2oq+Xv1O5Q+r5uBYZWo5d00FMJPO8L1k9BaaWdY7tCmo0rxz+ovRcn/BpOc2cy4gtMoZnqMlwDeLAfwWN/MHaXFChb6EVFbBQDegvEbmSMn18wqxQotQPnQOPdCYkfU3ixTfK9Rfv8Amcm+BpUigfYs5KLCHoHiSkuCjOjx7m8/f9guIY9FNrflW81FuDZZ0wXPm5NBOYwLG9AlS6O7YREnmlY6uX+oowp31w6BjKPB2+YZnZGLrQTcXNKtTqCcouvOTCX1izqM1ujSJpSCAZ1PqHn6cPuOZGE3tQlF2Jbd0zP+U8FEurOKLwPcoGkgOlw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199015)(7416002)(4744005)(2906002)(8990500004)(66476007)(4326008)(66556008)(64756008)(66446008)(8676002)(41300700001)(316002)(71200400001)(66946007)(8936002)(76116006)(10290500003)(110136005)(6506007)(7696005)(186003)(33656002)(55016003)(38100700002)(83380400001)(478600001)(9686003)(26005)(82950400001)(82960400001)(122000001)(38070700005)(921005)(52536014)(5660300002)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?W5XVfO6UYHlXh6ear9FxrzqF6gDixAHw1VxhTVyrc+j5NeIFcVRJ5lhdKev7?=
- =?us-ascii?Q?85uj9eBMjgL5Sc7LLU3ExK7u3VhqXYOh5EbhpkFCB9tbWJxEV/VG057t/gKb?=
- =?us-ascii?Q?5VT5eL43Z6vEllIt7FXOK2jJxpvxHJf6zHPSOQvqCOCXzEc2G8JwMgB1+ViD?=
- =?us-ascii?Q?P0WQOpR5GEvyeA5Ihi3fd9h3cy/YTBwNDosfMcCyNu83rZPgudaFACE1gCk0?=
- =?us-ascii?Q?DKKuhw4udDpzGeO7eiD4+YwgTJ7G097f33cMssNtFKfDdSOcnqJcqiMaJLnr?=
- =?us-ascii?Q?/FfhZuuTI/eXkXFKwW2lTjxu7fZ5U517DEOIdGzzS6r69k67Um1Q5RxBfD4Z?=
- =?us-ascii?Q?fxgdnekypFDjmCLzNX+F/CKAmGgjrrS7efqQOXi6yZkgEESK53PvwahNBKHT?=
- =?us-ascii?Q?pR+Ojow3dsEr98yKmH3dgXWq2eF7xWp2Ze/V8A5XFz9zMSFBaGdxuEpUj0z1?=
- =?us-ascii?Q?3yyqc6qYO9gXGqAQP975N0YSSH4O1xq4yFDUDDGk2PeUUc3cufDhoSz9804S?=
- =?us-ascii?Q?8WV4/5HexUtQOnrrxh9eG5izM/Gf2aD7OKszAeFdeYPQPNdf//EZII+2JsDl?=
- =?us-ascii?Q?Ho8cFY6hMNP8vs5JHzrDCarR6Nx8KS4bL0kviqDvCBjkArI3noJPGMd9K1Ac?=
- =?us-ascii?Q?sNLxBQ0jqmKySXI+aNLGqJBSDN5zxboOMWMDXq/YJ0s2VFPQEktDeFe51/l1?=
- =?us-ascii?Q?6kgAs70ZhTkhrkkwp0dVQxAKTEjcdQmCuFaTIf/MnRZFbcvrMOydoCzgPeVo?=
- =?us-ascii?Q?X6Sso+LK2myM6yZyPgw/K6kB7El82W+Mw8H15SL9iivtu7z8lg5sTefZzun2?=
- =?us-ascii?Q?xI+DjLsuXRRY7a/jTwltx97vc0RJnA0C6WTtauFqWXNHjAY+knla/iNc5mmE?=
- =?us-ascii?Q?PbfzCO+S/Q0nr7m2i1kKiXeS5lCPv0nbQdLzAK6k+s+B3pCF+04n2hXgspG+?=
- =?us-ascii?Q?1JSEaQDIGQpm/G2P1n6gbUsVtUe+dpRYFLWxRsQRBkWWgTgUsxSzraLOt7kG?=
- =?us-ascii?Q?ymS4MqLN7o2fBsh6oHV3nVcKyJtw2bRHNOL29DQfREqFJBaV/QIjgzOfGK1S?=
- =?us-ascii?Q?6Mna2ocOvl+vSKkpZXjI6tvrjn5xmAmCwTBXFi4IIk7UDqY4B/s0XI1gp03z?=
- =?us-ascii?Q?9c6KgaTBSKQ081pQzxIwd5CJQ2tg8t7sKRferRX4Yd79Cpna2CBScwD7Nudn?=
- =?us-ascii?Q?CAjN1+gmZGhGzLm3W6Vo5obwUie+q7XpaeZWqANfa6GQ3vsj6uoMqweOszkm?=
- =?us-ascii?Q?52YtxfGzoRDlWTI87r8r0BtIhXmia3CSCCoDVXdJSJeWnOtqKqb3cON/udW1?=
- =?us-ascii?Q?azbAimD7nkq0d58yTxT4AKHlvnLVhR5Ugnn8EXJ3ZpAUZguHauE4C02z6I8e?=
- =?us-ascii?Q?AZM89sr/zmhgxwBSiban2mxw7AT0pnwI2+95ykP5Sy4sJ2uQ7PPDy4JZRx4W?=
- =?us-ascii?Q?si3+bm+MQUzb55u2CNab85fL3OsQXLPzQpQx1SOxtz7qq1tSH2CNsatyKi6y?=
- =?us-ascii?Q?sterJ7vgd7tsBN50Yu5qmhTTjjayCscLeMLwcXK1JI2UkSb6emHGYTeNc24S?=
- =?us-ascii?Q?gTugZq2E4mybgkIPyJuw7Lo16n2bcUmel3J1ZQXI?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 12 Dec 2022 14:15:31 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C434DEDC;
+        Mon, 12 Dec 2022 11:15:29 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 65so581934pfx.9;
+        Mon, 12 Dec 2022 11:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xkM+afTsz5CqxyM8zs9D+iGsBZPiJzEAQMC/u5lyTL0=;
+        b=nw6aRHz51wqaynmeH7AmMW3V+PrnQ7b13g7pdbT/3q/sYZ6zf4XwtfYCZ1rpiCiYqH
+         pI4I/LqRIb5iTeb4DR9bwnqEWbh0bvxLhQnFn8DDCpiX7obMqaaacq4ZoujxXeeAtIpD
+         iP7+Suj0lV5uFqedHjnmOEzupb/AZwifYl82gFtBMlsiuJNR2DjNQj/2WGXWaCy/Kups
+         algKTyoa3OMcY7nFxh1KVtC2ohQx1eUS2udKylCSa7afpl0T2bCptskCXIT4SX0TNFr/
+         w/+oa1x9pbOn//nzx0oIMuN1NiDR8cz9CT8LQu4zlDddjaJ0U19JkVnLzOrpPVnwvYqe
+         zExQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xkM+afTsz5CqxyM8zs9D+iGsBZPiJzEAQMC/u5lyTL0=;
+        b=4r6lNz464UAfkkZakqe8v6iTN6CKM9pQiM3k/+oPROnhVVgQYNTz8ZDGsU1BsgtZot
+         NBRLAUiNGOyTXcLv04jsxUsVBtYbPwuFPi/g2CCQxyFDyMI0oAwr+oSBBoD3xUpqCA2h
+         CMkWJj1ZykoioBKGNvsqlKa20AgiEAMLHGBCqk6+KS7nbGMubGr6Hr36vx4rLDf6YsDG
+         CtLi37Go+xl5AEeoNcQCWRpZaogi5uKzFuI22vqElHiaDpRAaLIDGPAtb/razX7VhmRq
+         NulDL3DZbxPmwrApftR9dfp4BquOsob4zjc3LGs+3eo7QwrrJR5f1p2q6CZFZ7pcYg3w
+         1COw==
+X-Gm-Message-State: ANoB5plEv238t9H4tHtjbokPI1pzXfLKyYK2rA4C3P3BbtayAEVia/GN
+        nVFggK181EsIN9+4uq6p6HtgoiXefMM=
+X-Google-Smtp-Source: AA0mqf6xHmaysAxy1tMtGrFaKJFTa1JaRWPfex9MBQgoDXluY4qrM4PveChIIQzp53ZYM19xWdXpBg==
+X-Received: by 2002:a05:6a00:1c9c:b0:577:3126:704b with SMTP id y28-20020a056a001c9c00b005773126704bmr18893111pfw.17.1670872528763;
+        Mon, 12 Dec 2022 11:15:28 -0800 (PST)
+Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2c6b])
+        by smtp.googlemail.com with ESMTPSA id u24-20020a62d458000000b00574345ee12csm6149470pfl.23.2022.12.12.11.15.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 11:15:28 -0800 (PST)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     chao@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        fengnanchang@gmail.com, linux-fsdevel@vger.kernel.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [RFC PATCH] f2fs: Convert f2fs_write_cache_pages() to use filemap_get_folios_tag()
+Date:   Mon, 12 Dec 2022 11:13:18 -0800
+Message-Id: <20221212191317.9730-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <0a95ba7b-9335-ce03-0f47-5d9f4cce988f@kernel.org>
+References: <0a95ba7b-9335-ce03-0f47-5d9f4cce988f@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4711bd37-1631-4fc4-ae4e-08dadc749479
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 19:10:49.1509
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GVX08TmKzFKTuMdpXhPLumGrcvSvrNsNls9mu48gVVMyNXjJpAEktajb6E+hyZvyH4svJPkXi+7fNXs+DXAcfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1293
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
-> Sent: Monday, December 12, 2022 8:39 AM
-> > [...]
-> > A TDX guest uses the GHCI call rather than hv_hypercall_pg.
-> >
-> > In hv_do_hypercall(), Hyper-V requires that the input/output addresses
-> > must have the cc_mask.
->=20
-> Is it a requirement that the input/output addresses refer to guest memory
-> pages that have marked as shared/decrypted?  For example, I don't see
+Converted the function to use a folio_batch instead of pagevec. This is in
+preparation for the removal of find_get_pages_range_tag().
 
-Yes.=20
+Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
+of pagevec. This does NOT support large folios. The function currently
+only utilizes folios of size 1 so this shouldn't cause any issues right
+now.
 
-> any code to mark the hyperv_pcpu_input_arg page as shared/decrypted.
-> Do the use cases for the hyperv_pcpu_input_arg page just not occur in a
-> TDX VM?
+This version of the patch limits the number of pages fetched to
+F2FS_ONSTACK_PAGES. If that ever happens, update the start index here
+since filemap_get_folios_tag() updates the index to be after the last
+found folio, not necessarily the last used page.
 
-I missed this when sending v2, and I realized this when testing DDA.
-Will get this fixed in v3.
+Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+---
 
-BTW, I noticed Tianyu posted a similar patch:
-[RFC PATCH V2 10/18] drivers: hv: Decrypt percpu hvcall input arg page in s=
-ev-snp enlightened guest
+Let me know if you prefer this version and I'll include it in v5
+of the patch series when I rebase it after the merge window.
+
+---
+ fs/f2fs/data.c | 86 ++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 59 insertions(+), 27 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index a71e818cd67b..1703e353f0e0 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2939,6 +2939,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 	int ret = 0;
+ 	int done = 0, retry = 0;
+ 	struct page *pages[F2FS_ONSTACK_PAGES];
++	struct folio_batch fbatch;
+ 	struct f2fs_sb_info *sbi = F2FS_M_SB(mapping);
+ 	struct bio *bio = NULL;
+ 	sector_t last_block;
+@@ -2959,6 +2960,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 		.private = NULL,
+ 	};
+ #endif
++	int nr_folios, p, idx;
+ 	int nr_pages;
+ 	pgoff_t index;
+ 	pgoff_t end;		/* Inclusive */
+@@ -2969,6 +2971,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 	int submitted = 0;
+ 	int i;
+ 
++	folio_batch_init(&fbatch);
++
+ 	if (get_dirty_pages(mapping->host) <=
+ 				SM_I(F2FS_M_SB(mapping))->min_hot_blocks)
+ 		set_inode_flag(mapping->host, FI_HOT_DATA);
+@@ -2994,13 +2998,38 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 		tag_pages_for_writeback(mapping, index, end);
+ 	done_index = index;
+ 	while (!done && !retry && (index <= end)) {
+-		nr_pages = find_get_pages_range_tag(mapping, &index, end,
+-				tag, F2FS_ONSTACK_PAGES, pages);
+-		if (nr_pages == 0)
++		nr_pages = 0;
++again:
++		nr_folios = filemap_get_folios_tag(mapping, &index, end,
++				tag, &fbatch);
++		if (nr_folios == 0) {
++			if (nr_pages)
++				goto write;
+ 			break;
++		}
+ 
++		for (i = 0; i < nr_folios; i++) {
++			struct folio* folio = fbatch.folios[i];
++
++			idx = 0;
++			p = folio_nr_pages(folio);
++add_more:
++			pages[nr_pages] = folio_page(folio,idx);
++			folio_ref_inc(folio);
++			if (++nr_pages == F2FS_ONSTACK_PAGES) {
++				index = folio->index + idx + 1;
++				folio_batch_release(&fbatch);
++				goto write;
++			}
++			if (++idx < p)
++				goto add_more;
++		}
++		folio_batch_release(&fbatch);
++		goto again;
++write:
+ 		for (i = 0; i < nr_pages; i++) {
+ 			struct page *page = pages[i];
++			struct folio *folio = page_folio(page);
+ 			bool need_readd;
+ readd:
+ 			need_readd = false;
+@@ -3017,7 +3046,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 				}
+ 
+ 				if (!f2fs_cluster_can_merge_page(&cc,
+-								page->index)) {
++								folio->index)) {
+ 					ret = f2fs_write_multi_pages(&cc,
+ 						&submitted, wbc, io_type);
+ 					if (!ret)
+@@ -3026,27 +3055,28 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 				}
+ 
+ 				if (unlikely(f2fs_cp_error(sbi)))
+-					goto lock_page;
++					goto lock_folio;
+ 
+ 				if (!f2fs_cluster_is_empty(&cc))
+-					goto lock_page;
++					goto lock_folio;
+ 
+ 				if (f2fs_all_cluster_page_ready(&cc,
+ 					pages, i, nr_pages, true))
+-					goto lock_page;
++					goto lock_folio;
+ 
+ 				ret2 = f2fs_prepare_compress_overwrite(
+ 							inode, &pagep,
+-							page->index, &fsdata);
++							folio->index, &fsdata);
+ 				if (ret2 < 0) {
+ 					ret = ret2;
+ 					done = 1;
+ 					break;
+ 				} else if (ret2 &&
+ 					(!f2fs_compress_write_end(inode,
+-						fsdata, page->index, 1) ||
++						fsdata, folio->index, 1) ||
+ 					 !f2fs_all_cluster_page_ready(&cc,
+-						pages, i, nr_pages, false))) {
++						pages, i, nr_pages,
++						false))) {
+ 					retry = 1;
+ 					break;
+ 				}
+@@ -3059,46 +3089,47 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 				break;
+ 			}
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+-lock_page:
++lock_folio:
+ #endif
+-			done_index = page->index;
++			done_index = folio->index;
+ retry_write:
+-			lock_page(page);
++			folio_lock(folio);
+ 
+-			if (unlikely(page->mapping != mapping)) {
++			if (unlikely(folio->mapping != mapping)) {
+ continue_unlock:
+-				unlock_page(page);
++				folio_unlock(folio);
+ 				continue;
+ 			}
+ 
+-			if (!PageDirty(page)) {
++			if (!folio_test_dirty(folio)) {
+ 				/* someone wrote it for us */
+ 				goto continue_unlock;
+ 			}
+ 
+-			if (PageWriteback(page)) {
++			if (folio_test_writeback(folio)) {
+ 				if (wbc->sync_mode != WB_SYNC_NONE)
+-					f2fs_wait_on_page_writeback(page,
++					f2fs_wait_on_page_writeback(
++							&folio->page,
+ 							DATA, true, true);
+ 				else
+ 					goto continue_unlock;
+ 			}
+ 
+-			if (!clear_page_dirty_for_io(page))
++			if (!folio_clear_dirty_for_io(folio))
+ 				goto continue_unlock;
+ 
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+ 			if (f2fs_compressed_file(inode)) {
+-				get_page(page);
+-				f2fs_compress_ctx_add_page(&cc, page);
++				folio_get(folio);
++				f2fs_compress_ctx_add_page(&cc, &folio->page);
+ 				continue;
+ 			}
+ #endif
+-			ret = f2fs_write_single_data_page(page, &submitted,
+-					&bio, &last_block, wbc, io_type,
+-					0, true);
++			ret = f2fs_write_single_data_page(&folio->page,
++					&submitted, &bio, &last_block,
++					wbc, io_type, 0, true);
+ 			if (ret == AOP_WRITEPAGE_ACTIVATE)
+-				unlock_page(page);
++				folio_unlock(folio);
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+ result:
+ #endif
+@@ -3122,7 +3153,8 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 					}
+ 					goto next;
+ 				}
+-				done_index = page->index + 1;
++				done_index = folio->index +
++					folio_nr_pages(folio);
+ 				done = 1;
+ 				break;
+ 			}
+@@ -3136,7 +3168,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 			if (need_readd)
+ 				goto readd;
+ 		}
+-		release_pages(pages, nr_pages);
++		release_pages(pages,nr_pages);
+ 		cond_resched();
+ 	}
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+-- 
+2.38.1
 
