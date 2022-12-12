@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791F464A9B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D5464A9B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiLLVrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S232157AbiLLVtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiLLVrD (ORCPT
+        with ESMTP id S233641AbiLLVtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:47:03 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8711C192A4;
-        Mon, 12 Dec 2022 13:47:02 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c13so872065pfp.5;
-        Mon, 12 Dec 2022 13:47:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6qiAQ7WTwZr4dVTtMKJayehUb8HIRKe6ZlI8Mkp+Y78=;
-        b=bQdgiHkGAhLziF8YrE6lY1CbCjAd+Q93tt3s7B8OuQurw+fBLJSpXapeoQaWoGZaCu
-         pW23g/hLxu3YE+Ri3icoxByE0NpQbPuYRKm0O44+zvDAKNWI4dZPRINx9W16HsUoSdCB
-         mDygSc6MDZPTYGJWHfRTLiZugJJLsljMh9rjcxrw5rIm3xd4N2+rOrwUJVhkj4WFAt9O
-         ps7VSjNuawEnABvIeNBm++nfKVPatwvO+Yt/cH+xxUCqdqlwTio2ARN+cmMZ3TnCRgL8
-         HMNsEYRtDBw2k4+p9EeEBSbg9SZxYykoFL4ShGXYiCZ683mFThj8DLxwmff6vHfGqwzS
-         q1uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6qiAQ7WTwZr4dVTtMKJayehUb8HIRKe6ZlI8Mkp+Y78=;
-        b=LJpHuVbzmpDI31qWHHKvkR7wWWLgpHMBkZu7chjcMt4xULpJVSIGXwfevS6ptZkUyi
-         44HXF4JW53DeHRdK4Y+XFscTWzN0PYVetDtwD3+jynGuTdQH5ksw1vOMm8KFx4AQnQWd
-         O4rfTYtoKe5eajmYzpMwwNqscnNRdqCAUlWWHIl+J6u9IKNZgdD4S1FO0BeOAvg+KP74
-         ivs2CZNPL9R5gKzLF61ZUty/cZGOgp2xKrVtLH3cf4LwWBFPB+xVBPrOAbycdtTy4ORv
-         VsRAieBWHq98GhO5QduIZmR7/8DNK7wRHwqNOsmAOEnhJPtlqpgQeZSSmHsyoQC80dfX
-         HunQ==
-X-Gm-Message-State: ANoB5plY+PXTXqR9WyqOjYPsa3ipjKVSn9NQWmgL4C7S2BFvWhA4wUgs
-        uNFVZ5MLmAYWT1Oj7R4wDIc=
-X-Google-Smtp-Source: AA0mqf6FYZFa62ntzOFykUefdpR0zUL84rPMRalzLreyTNxWJpv2jD0oJuR8N24+bpAwNeG7dA7ydg==
-X-Received: by 2002:a05:6a00:1411:b0:574:a541:574a with SMTP id l17-20020a056a00141100b00574a541574amr20784128pfu.0.1670881621860;
-        Mon, 12 Dec 2022 13:47:01 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id o24-20020aa79798000000b005745eb7eccasm6236062pfp.112.2022.12.12.13.47.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 13:47:01 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 11:46:59 -1000
-From:   'Tejun Heo' <tj@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: Re: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
- prints
-Message-ID: <Y5ehU524daymEKgf@slm.duckdns.org>
-References: <20221031114520.10518-1-jirislaby@kernel.org>
- <Y1++fLJXkeZgtXR2@infradead.org>
- <Y2AMcSPAJpj6obSA@slm.duckdns.org>
- <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
- <Y2FNa4bGhJoevRKT@slm.duckdns.org>
- <2b975ee3117e45aaa7882203cf9a4db8@AcuMS.aculab.com>
- <Y2Kaghnu/sPvl0+g@slm.duckdns.org>
- <Y2KePvYRRMOrqzOe@slm.duckdns.org>
- <320c939e-a3f0-1b1e-77e4-f3ecca00465d@kernel.org>
+        Mon, 12 Dec 2022 16:49:08 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F419C16;
+        Mon, 12 Dec 2022 13:48:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWFd104sXz4xGH;
+        Tue, 13 Dec 2022 08:48:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670881733;
+        bh=N21RLy9QQq1yj++ku2PB1VcKF4Qd6PIqKZAaLSeuXhY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fFxW63bUuh7fKI4+GRbbNxaxKhE/WXigxahyIrKwXupgMvJbxjxgSQH4ivHCWyrUx
+         u5lyawbL/PdihjVh7tFFus9yc23wECOgrN2oO3C3tNi9WRi8mzuic4qnL8vayOt7hQ
+         eXBiDceodpQwlUl/lLgyxjg2fpwnnjTY8rPKrMfywYaPG+wR+ljicah9G/V44jVnqN
+         wf4E2YHedmqCrXrwXpX3rw/3zYi+56iE6obIevIz8vtGIB/OFvQS4batK6QbHhYXf1
+         ZiTWDYOwqxVMDZdYGE73z/jCey0dH8E2vyLvdncy4/PzSiIeP/i05kiGaIRBj0Rqc7
+         jNolnpavf0/hw==
+Date:   Tue, 13 Dec 2022 08:48:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the thermal tree
+Message-ID: <20221213084838.33d6678c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <320c939e-a3f0-1b1e-77e4-f3ecca00465d@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/W9MaaymC+0LDeNpSFJBs1xh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 01:14:31PM +0100, Jiri Slaby wrote:
-> > If so, my suggestion is just sticking with the old behavior until we switch
-> > to --std=g2x and then make one time adjustment at that point.
-> 
-> So is the enum split OK under these circumstances?
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oh man, it's kinda crazy that the compiler is changing in a way that the
-same piece of code can't be compiled the same way across two adjoining
-versions of the same compiler. But, yeah, if that's what gcc is gonna do and
-splitting enums is the only way to be okay across the compiler versions,
-there isn't any other choice we can make.
+Hi all,
 
-Thanks.
+Commit
 
--- 
-tejun
+  c64c9a768c09 ("Revert "thermal/sysfs: Remove unnecessary check in trip_po=
+int_hyst_show()"")
+
+is missing a Signed-off-by from its author and committer.
+
+Reverts are commits (and change the code) and so need Signed-off-by tags.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXobYACgkQAVBC80lX
+0Gy4UAf/RpgnEUE8aYYqO0yRww+pA0qq8Obg78c7qaAmpTGRF+YWWw4ISD9NyNZk
+b0eC6CmWenZPBQW3zHUhuSYmdsPrxwbP+duHILeQ0t1MTLu8fjkqzio2/biU3m6v
+W/IEB34dD8PS8PU6Phdo0+9w6uHhJ92SjLwTgxzTzy3P/787pAZ8SzVzT0jktskY
+za/ei1Gin7o0nFN/mq0WAHtnfNOKqsD2dtaS1r8ciMOfefcBdAIwvWu+mbxWomMF
+iSRBPpbnzayWrMJRdh0WdAAozPX0ApgpPOM78j7v6P3+oBGB/GrmTqqI6GrkB74c
+Rn3TpSutCMi5VWDNpVAULDEd444a4A==
+=cYh5
+-----END PGP SIGNATURE-----
+
+--Sig_/W9MaaymC+0LDeNpSFJBs1xh--
