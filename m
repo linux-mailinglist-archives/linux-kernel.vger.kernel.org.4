@@ -2,122 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4681764977C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 01:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C014649791
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiLLAxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 19:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S230381AbiLLBA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 20:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiLLAxm (ORCPT
+        with ESMTP id S229475AbiLLBAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 19:53:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0146358;
-        Sun, 11 Dec 2022 16:53:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sun, 11 Dec 2022 20:00:24 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E67BC33;
+        Sun, 11 Dec 2022 17:00:23 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BBK2Bh3006548;
+        Mon, 12 Dec 2022 00:59:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=xJR2nbIWi2OvOl6AvyZ2UM0XQ9Daq6jNfoBWR6S6JaQ=;
+ b=ErzKdh9KAZwx7wejt8gD2q0Ma4S2ZRoQBmgb26KOhVqpRSuONMhzKAkAFCCLRdogV40w
+ oXLnXX8kHz3hFgSCN7QYsW3qLKAIGwwOF/XfiiqEslESABxusAmKxJ2LwBvJ0iP+K/9+
+ iI2ZEsQA01kNATXx7TEY6wcpHl3FpAaO51hboAyJLKpXtxfAYygmBS7UOXy23TVkl/eH
+ Nvsa/TESnyY0ldHZVDM9ohuf1CsEAjo+RcrTXPGmkooO6GTHJVC9T5+S1EWMwiEkuqaT
+ GKoY/bw8HnGh4/CWTphtRt1SYd75Gb9x2A6HrWmX+nt7MocYmId7iQ2YmECszPpkNJVh iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3md421301h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 00:59:05 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BC0wW3u002588;
+        Mon, 12 Dec 2022 00:59:04 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3md4213015-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 00:59:04 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BBNDcFA028390;
+        Mon, 12 Dec 2022 00:59:02 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mchr61w7j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 00:59:02 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BC0x0ZH41026032
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Dec 2022 00:59:00 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7879C20043;
+        Mon, 12 Dec 2022 00:59:00 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE30C20040;
+        Mon, 12 Dec 2022 00:58:59 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Dec 2022 00:58:59 +0000 (GMT)
+Received: from [9.192.255.228] (unknown [9.192.255.228])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEC58B80AEE;
-        Mon, 12 Dec 2022 00:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1A2C433D2;
-        Mon, 12 Dec 2022 00:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670806418;
-        bh=zm4aJyjGzVp87mDC05UMOQbOPxEO6O7rDswDiqb3MR8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JObeRmUvvpff5wl94IbAyRZ7+ijQK1w13OSZmWOJ/NgwgpuRzNX5ZvNUWv2cR0uzl
-         Zua8E5KKuWPU9tFFGQrK20/z/gSoSQaWTCQgshvj0MFFFUZtsD+HMk8sSWmR2Vdajz
-         ryee+Oz+uCImsYZ8AAGB9CSzoJoQolBVoe95U5gL1xuCWyX9yKEI7bK+DZZSqM5Oh5
-         Wz5AjLKAAQG2aSBJ3Z/pLG5pEFSlJk3YvMLZftqxwBiXAQ0fV/bgNZq5MJhr4vV8vi
-         82fgzRyL6iiOvRyvzmF/6ndBanu0laWReDALXRtsWMRmD9X2y6LbG2Z2MYLcg6msZd
-         YcxzdAf+cqsYA==
-Date:   Mon, 12 Dec 2022 09:53:33 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-Message-Id: <20221212095333.01599330d97de6c7ddc3eebe@kernel.org>
-In-Reply-To: <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
-        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
-        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
-        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
-        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
-        <20221206233947.4c27cc9d@gandalf.local.home>
-        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-        <20221207074806.6f869be2@gandalf.local.home>
-        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
-        <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org>
-        <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id E900B602EF;
+        Mon, 12 Dec 2022 11:58:56 +1100 (AEDT)
+Message-ID: <deda857ccc949f920ae3b7eca753d41b76acceda.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
+ fwsecurityfs
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Nayna <nayna@linux.vnet.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Date:   Mon, 12 Dec 2022 11:58:56 +1100
+In-Reply-To: <6f2a4a5f-ab5b-8c1b-47d5-d4e6dca5fc3a@linux.vnet.ibm.com>
+References: <20221106210744.603240-1-nayna@linux.ibm.com>
+         <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
+         <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
+         <20221119114234.nnfxsqx4zxiku2h6@riteshh-domain>
+         <d3e8df29-d9b0-5e8e-4a53-d191762fe7f2@linux.vnet.ibm.com>
+         <a2752fdf-c89f-6f57-956e-ad035d32aec6@linux.vnet.ibm.com>
+         <Y35C9O27J29bUDjA@kroah.com>
+         <6f2a4a5f-ab5b-8c1b-47d5-d4e6dca5fc3a@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HNXLB6tPj93LDuXtj2ObhDK_-4Cie0yq
+X-Proofpoint-GUID: Fp2TTvT7JoTQaaqS3UEUpIvBegOspgGa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-10_10,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ spamscore=0 clxscore=1011 bulkscore=0 mlxlogscore=732 impostorscore=0
+ phishscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212120003
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 2022-11-23 at 13:57 -0500, Nayna wrote:
+>=20
+> Given there are no other exploiters for fwsecurityfs and there should
+> be=20
+> no platform-specific fs, would modifying sysfs now to let userspace=20
+> create files cleanly be the way forward? Or, if we should strongly=20
+> consider securityfs, which would result in updating securityfs to
+> allow=20
+> userspace creation of files and then expose variables via a more=20
+> platform-specific directory /sys/kernel/security/pks? We want to pick
+> the best available option and would find some hints on direction
+> helpful=20
+> before we develop the next patch.
 
-On Sun, 11 Dec 2022 08:49:01 +0100
-KP Singh <kpsingh@kernel.org> wrote:
+Ping - it would be helpful for us to know your thoughts on this.
 
-> 1. Revisit what is allowed for error injection in the kernel and if
-> they can cause any subtle issues. My initial take is that functions
-> that are directly called from syscall path should generally be okay.
-> But let's check them for the patterns you mentioned.
-> 2. If it helps, add the list of BPF modify return programs to stack
-> traces. Although this is really needed if we don't do [1] properly.
-> 3. Check if anything needs to be improved in the verification logic
-> for modify return trampolines.
 
-Hmm, I found that bpf might not check the acceptable error type of
-each ALLOW_ERROR_INJECTION().
+Andrew
 
-Except for EI_ETYPE_NONE, we have 4 types of the error.
-
-        EI_ETYPE_NULL,          /* Return NULL if failure */
-        EI_ETYPE_ERRNO,         /* Return -ERRNO if failure */
-        EI_ETYPE_ERRNO_NULL,    /* Return -ERRNO or NULL if failure */
-        EI_ETYPE_TRUE,          /* Return true if failure */
-
-These specifies that what return value will be treated as an error
-by the caller.
-
-If bpf trampoline only expect that the function will return -errno
-in error cases, bpf should check the error type as below.
-
-etype = get_injectable_error_type(addr);
-if (etype != EI_ETYPE_ERRNO && etype != EI_ETYPE_ERRNO_NULL)
-	/* reject it */
-
-If bpf can handle any case, it still need to verify that the user
-bpf prog specifies correct return value for each type.
-See adjust_error_retval()@kernel/fail_function.c for the available
-return values.
-
-Thank you,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
