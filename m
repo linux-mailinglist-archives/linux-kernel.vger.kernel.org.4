@@ -2,118 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B5C649932
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B301F649935
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiLLHFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S231418AbiLLHGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiLLHFh (ORCPT
+        with ESMTP id S230427AbiLLHGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:05:37 -0500
-Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB319384;
-        Sun, 11 Dec 2022 23:05:35 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 1B6211E80D9E;
-        Mon, 12 Dec 2022 15:00:59 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TFNPOjJsgLJx; Mon, 12 Dec 2022 15:00:56 +0800 (CST)
-Received: from [172.30.38.124] (unknown [180.167.10.98])
-        (Authenticated sender: liqiong@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id D415A1E80D9B;
-        Mon, 12 Dec 2022 15:00:55 +0800 (CST)
-Subject: Re: [PATCH] ipvs: initialize 'ret' variable in do_ip_vs_set_ctl()
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Dan Carpenter <error27@gmail.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
-References: <20221202032511.1435-1-liqiong@nfschina.com>
- <Y4nORiViTw0XlU2a@kadam> <9bc0af1a-3cf0-de4e-7073-0f7895b7f6eb@nfschina.com>
- <Y4nSu7D5T2jDkXGK@kadam> <7758482-42e8-9057-b568-3980858267f@ssi.bg>
-From:   liqiong <liqiong@nfschina.com>
-Message-ID: <272315c8-5e3b-e8ca-3c7f-68eccd0f2430@nfschina.com>
-Date:   Mon, 12 Dec 2022 15:05:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        Mon, 12 Dec 2022 02:06:18 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913492658;
+        Sun, 11 Dec 2022 23:06:17 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p4ctE-00035Q-2R; Mon, 12 Dec 2022 08:06:16 +0100
+Message-ID: <beedcb6f-5d72-da1b-993a-36de38a144c1@leemhuis.info>
+Date:   Mon, 12 Dec 2022 08:06:15 +0100
 MIME-Version: 1.0
-In-Reply-To: <7758482-42e8-9057-b568-3980858267f@ssi.bg>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/2] fsdax,xfs: fix warning messages #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <da90b96d-ef1e-4827-b983-15d103a3a1ef@leemhuis.info>
+In-Reply-To: <da90b96d-ef1e-4827-b983-15d103a3a1ef@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670828777;b560bec2;
+X-HE-SMSGID: 1p4ctE-00035Q-2R
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30.11.22 11:30, Thorsten Leemhuis wrote:
+> [Note: this mail is primarily send for documentation purposes and/or for
+> regzbot, my Linux kernel regression tracking bot. That's why I removed
+> most or all folks from the list of recipients, but left any that looked
+> like a mailing lists. These mails usually contain '#forregzbot' in the
+> subject, to make them easy to spot and filter out.]
+> 
+> On 24.11.22 15:54, Shiyang Ruan wrote:
+>> Many testcases failed in dax+reflink mode with warning message in dmesg.
+>> This also effects dax+noreflink mode if we run the test after a
+>> dax+reflink test.  So, the most urgent thing is solving the warning
+>> messages.
+> 
+> Darrick in https://lore.kernel.org/all/Y4bZGvP8Ozp+4De%2F@magnolia/
+> wrote "dax and reflink are totally broken on 6.1". Hence, add this to
+> the tracking to be sure it's not forgotten.
+> 
+> #regzbot ^introduced 35fcd75af3ed
+> #regzbot title xfs/dax/reflink are totally broken on 6.1
+> #regzbot ignore-activity
 
+#regzbot inconclusive complex issue; fixes with backports apparently
+planed to be merged for 6.2
 
-在 2022年12月02日 19:26, Julian Anastasov 写道:
-> 	Hello,
->
-> On Fri, 2 Dec 2022, Dan Carpenter wrote:
->
->> On Fri, Dec 02, 2022 at 06:18:37PM +0800, liqiong wrote:
->>>
->>> 在 2022年12月02日 18:07, Dan Carpenter 写道:
->>>> On Fri, Dec 02, 2022 at 11:25:11AM +0800, Li Qiong wrote:
->>>>> The 'ret' should need to be initialized to 0, in case
->>>>> return a uninitialized value because no default process
->>>>> for "switch (cmd)".
->>>>>
->>>>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
->>>> If this is a real bug, then it needs a fixes tag.  The fixes tag helps
->>>> us know whether to back port or not and it also helps in reviewing the
->>>> patch.  Also get_maintainer.pl will CC the person who introduced the
->>>> bug so they can review it.  They are normally the best person to review
->>>> their own code.
->>>>
->>>> Here it would be:
->>>> Fixes: c5a8a8498eed ("ipvs: Fix uninit-value in do_ip_vs_set_ctl()")
->>>>
->>>> Which is strange...  Also it suggest that the correct value is -EINVAL
->>>> and not 0.
->>>>
->>>> The thing about uninitialized variable bugs is that Smatch and Clang
->>>> both warn about them so they tend to get reported pretty quick.
->>>> Apparently neither Nathan nor I sent forwarded this static checker
->>>> warning.  :/
->>>>
->>>> regards,
->>>> dan carpenter
->>> It is not a real bug,   I  use tool (eg: smatch, sparse) to audit the
->>> code,  got this warning and check it, found may be a real problem.
->> Yeah.  If it is a false positive just ignore it, do not bother to
->> silence wrong static checker warnings.
->>
->> The code in question here is:
->>
->> 	if (len != set_arglen[CMDID(cmd)]) {
->>
->> The only time that condition can be true is for the cases in the switch
->> statement.  So Peilin's patch is correct.
->>
->> Smatch is bad at understanding arrays so Smatch cannot parse the if
->> statement above as a human reader can.
-> 	Yes, no bug in current code. But it is better to return the 
-> default switch case with -EINVAL (not 0), in case new commands are added.
-> Such patch should target net-next, it is just for compilers/tools
-> that do not look into set_arglen[].
->
-> Regards
->
-> --
-> Julian Anastasov <ja@ssi.bg>
-Thanks, I will send a v2 patch.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
