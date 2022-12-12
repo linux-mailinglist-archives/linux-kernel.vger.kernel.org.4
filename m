@@ -2,210 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17BC64A641
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30E564A644
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbiLLRvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
+        id S232827AbiLLRwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbiLLRvr (ORCPT
+        with ESMTP id S232706AbiLLRvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:51:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB4BF01F;
-        Mon, 12 Dec 2022 09:51:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670867507; x=1702403507;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=vf6HCrLBOUnsAZvCFsneO4Q1H1UgIVjlvf8KRduxLoY=;
-  b=PK+v/Ko73zNIaiIXo1Hq4TiNYBn7VBKnp5o3nm8pXLAIFr3fal6x6y4p
-   eOWR08NgUx8az5L5e5/upA9f7CPDq+PMZ/W01eKrTL6kPQPPKklsHDCcf
-   p+1YSlW5ZISBThb7Cx8uItlWcQKSTF15TASmJ1VygTqLuNEasPu2VLbYE
-   nimPXYE4amNHnLpsukD2sdAyDFJcwCPsXaxfLy6Wi9Zo9M4AmQErH3j48
-   0hTsXBdYfx77SAd7KmJQdU2LyWT0Srs9WfXj4T8eCzNEQEAlAuwNoyJTU
-   XjwBrCJvauJEZ1Nf90lQlRka4SeAf2ojIv11rR/3pZHHVALg9NOSGQlKJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="317949700"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="317949700"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 09:51:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="716885204"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="716885204"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Dec 2022 09:51:46 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 12 Dec 2022 09:51:46 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 12 Dec 2022 09:51:45 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 09:51:45 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 12 Dec 2022 09:51:45 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TOJtHWn4Y9d/pJShb2A5ZBdlDVqm4oMd8yqYxr0tJcVz/Ym/iIE6xCHL8oaa9q/0sKnqMlDwrVBYwPh7BeKru8Mb+WRZCKM4532kpnddCOnnQMp9R5aCVqyth2OTWhZofpRRhwYNSiwPCSdYILhFgjtRbc8OSV6xvhcZP3BDudPEms0blbJpFLnYOuerWvFqoqXKIDpXXHrJPJv9BNmKARYKVlmLZjeGYHS8UpppJmuOMvn6WTUnjcaA4u4txqHT/Vxuk74jRz6n4qqDN89o5xm4U4MKlpAK93SmujP3g4gbb/W9EY15myop3x9e46C3LgPASLOILJ72CDtYmKl2kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T1NZYzTcz5Zo0k7aKPj6RpNSceTgjStZWtpIL9no2AI=;
- b=Xy57GHwUii23XBKkUIpaVetyeBYvFSFK9U6Jet3LXZxRWkM53EFsaCDwrApkKa/QddTL2Lxn4mnCTLpBc5vUDJYdce5eWzSjmcXjsfV+qzX0yD4Gd1PMWMzJGLQifJ055wloE85X59oYSjIbe2jizidrE7VX8Zy5PB2n2FWjbWg0EvxFOr/u3+qwnj8/tQlSkZsWeflfka/wTeFcEUhK5n+r3i5c/Y+Pjazg/+HZqA2RCwgHBwq0QedJwyWSHR9fUMHHP5jnyj/4y7nd7SphvlpgBdvd/Hdl9IURFivHvWByZkOR/CU/ayIdqSsF2LP37l/29h7jOnUj5e/El3EWYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com (2603:10b6:805:ba::28)
- by LV2PR11MB5975.namprd11.prod.outlook.com (2603:10b6:408:17d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 17:51:37 +0000
-Received: from SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::933:90f8:7128:f1c5]) by SN6PR11MB3229.namprd11.prod.outlook.com
- ([fe80::933:90f8:7128:f1c5%5]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 17:51:37 +0000
-Message-ID: <9942e904-6f96-5ff5-34d6-7756add65c0a@intel.com>
-Date:   Mon, 12 Dec 2022 09:51:35 -0800
+        Mon, 12 Dec 2022 12:51:51 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3BDF582;
+        Mon, 12 Dec 2022 09:51:49 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCEnoLe022710;
+        Mon, 12 Dec 2022 17:51:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vX19RixNXtE5JzIcwAaYuGfkWjixcyt3CqvWW6bxrsg=;
+ b=eDZi9K7Bu0C3QoQaPrEuA5UVNbz9NgupTaAuY20YsC+Q6kAzhnUr/GQvzQ1Gt8orX7/6
+ wBMDPhYGlEREx+T6yijnOM38SqRKy2fwDQN/hxHFGTAmfL4mCScCS/nP682lKIQmGGLp
+ 1LSGl/o5aIJiuUEikRI2tpHyQnRT7aSVCgscQ9A/07UTzT1mf+ebRkt6LXhKD0hruW05
+ ZPAz718H4tdlIPVvYrvbH1F9O0/A3bZIiFbpFTWR6ajPNBFhfzb4hOynM82Sbrl8XzhV
+ AFOpW+4GFtZ02xN+mlQXULYqYcJPQ0QnPpUO4mmSNyMu/WPSBWrhJEFHvJfEWWsVcQXR Zw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3me09g9fh6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 17:51:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCHpdrZ016805
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 17:51:39 GMT
+Received: from [10.110.7.185] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
+ 2022 09:51:37 -0800
+Message-ID: <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
+Date:   Mon, 12 Dec 2022 09:51:37 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH] i40e (gcc13): synchronize allocate/free functions return
- type & values
-To:     Jiri Slaby <jirislaby@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-CC:     "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>,
-        Jan Sokolowski <jan.sokolowski@intel.com>,
-        <jesse.brandeburg@intel.com>, <linux-kernel@vger.kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>
-References: <20221031114456.10482-1-jirislaby@kernel.org>
- <20221102204110.26a6f021@kernel.org>
- <bf584d22-8aca-3867-5e3a-489d62a61929@kernel.org>
- <003bc385-dc14-12ba-d3d6-53de3712a5dc@intel.com>
- <20221104114730.42294e1c@kernel.org>
- <eb9c26db-d265-33c1-5c25-daf9f06f91d4@intel.com>
- <5fb6ba13-3300-917a-4e7b-e8b7a1e71e45@kernel.org>
+Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
 Content-Language: en-US
-From:   Tony Nguyen <anthony.l.nguyen@intel.com>
-In-Reply-To: <5fb6ba13-3300-917a-4e7b-e8b7a1e71e45@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <airlied@gmail.com>
+CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+ <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
+ <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
+ <be1411e8-1d07-7643-977c-a306016fd660@linaro.org>
+ <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+ <e53844b7-601b-f355-302b-cc871962a446@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <e53844b7-601b-f355-302b-cc871962a446@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0115.namprd05.prod.outlook.com
- (2603:10b6:a03:334::30) To SN6PR11MB3229.namprd11.prod.outlook.com
- (2603:10b6:805:ba::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3229:EE_|LV2PR11MB5975:EE_
-X-MS-Office365-Filtering-Correlation-Id: 742431d6-161a-4ffb-9e4f-08dadc698453
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zBCNWV4QV3f2JLoOXdJ/JZVpA6Tx2wgnfJOPIRQEDddw8XQFrTs2+Nn8Cn/++ukTeAQpUsoVJoZ3G0xzDgWSjCVRxh07UpmvTg1xqnxq4tWY3XhuybmCPqJykrZTQCHc3yTWLYWBMxi1G4V8yxVVgLS1YTRXITgFRUL9IMTctDiIHaUt7V9hafGGwia9ilRlPV/LFkFAoGaH7JiSIKzO3f6fdiFUBvPLBEdk6pPfYRuLrg98NuDBsWzS3G4fiMm+GItU08hR2Zjj4MgqdSDIQ+1B9SvElRPZd80Ib+luHJc+1GzFUWs+yZBcikm/hcYU/UCcdV/6WlT1ruZRSmpvnAROYEEu4Dy4VfEDVbaZTQ1QgpCofRchr1Wu0DH5Uae29VE2qU7xQa5Vx74Q+BM8ilqby6IyWVJn7BWwoPIAS/ikSKfiYrtiFpbyddHS/7n8WTR9ddX9bTzge2DrkYzHMzg68x6PkCEg9xD88GYh6LTjhASzdofHomtXpeU7uAoINgSGNHeBcQUWsy+yHjUkTjrqxksF7gswcmzMLq0mNP22WYgTofLsHXbqry6XzYufjvoJ8C1AmXu5FFFrT9dTXpgf42pzxcKN6gdIzdAg0/gcK6frVxklGX5JfsUzLkGfLIjhxBmGUtDJkzE4EVe9CGflROa9kPWJELXpam9tRjZDp42aHNDk5AJ/ZMfftQjbKaI3vtFY3734LTqTKCaa/qLSekC5PlApr6xs3pUSd6p5O/pQMxKnq3U6fOnpRcCcTV0mQ9eH97DHzxUCEM/Bcw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3229.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(136003)(366004)(39860400002)(396003)(451199015)(966005)(6506007)(316002)(54906003)(478600001)(110136005)(6486002)(8936002)(2906002)(2616005)(66946007)(66556008)(66476007)(4326008)(8676002)(41300700001)(186003)(83380400001)(5660300002)(31686004)(53546011)(36756003)(38100700002)(86362001)(82960400001)(6512007)(31696002)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXBMOHR4RG5VRUt3eTVmSkdBWWkzZXFjeWY5eXBmS2ExL3FKbmY3SnR5VGU3?=
- =?utf-8?B?ZkYvUm1aOWJ6dkI4RS92ZDU2UjBTblRXYzBTQzNjZU5odE9NbW9mbTlrM3NH?=
- =?utf-8?B?YldSa29wK0pVTjZub3BCSU9ZY0hmYUtEMWI4cjJUbUc0Nk93a1RXZk1Jd0pJ?=
- =?utf-8?B?WUs4RkhXa0FmSHg1a2V0TDJNTjREdGJBN3JHZS9McjlCOHdndFB3L0c0eEpS?=
- =?utf-8?B?UGtSMmp2U2dZT0ZSaHUvTUljazBiMEZKeDBpWGphS3dtMktoblUwZGdINXJq?=
- =?utf-8?B?R0VyOGFmcE9hd0RDa0xjVnhGaGl2YWM0c1FhTjRqODJkV1BIZC84ZFI1Y2lN?=
- =?utf-8?B?dFlxNDIzLzBINlNwcDBoWDhHTkdMZ0sxMnhJRGJBKzdrRVNQTnhHclNvQTQy?=
- =?utf-8?B?U3NIWlQ5NDE0b0UxejRYVUVnWGRqT01mTlBJRm55L2VTYU1DUUpiaFo1d3dH?=
- =?utf-8?B?c0JoNHBjV2RLTml4bDBwL0NJaUlod2tGYUUvZWIzdXA4U3NCYUh3ZnBOUDFR?=
- =?utf-8?B?TnI4VWE5OXRoZWZ3V0pJMHFoTnErRUh2MCtVdEJrTEE5anp0NkRQNnQxdVF0?=
- =?utf-8?B?ajJjNGNReksyTkM0QUZKY2xsZCtMTEdHYnVNVlZvM1RZZ0JVbWpZMFJubWRQ?=
- =?utf-8?B?d2l0VHZMWTRvbFJFMHVPUU5qY0FjRXBSTXRLUHVTRFJwMkFyNXp0ZVJ6QXdr?=
- =?utf-8?B?bUhvS0x6OXFwWjFrNXZoSHN4Z0JENXNUWkg2ZE5vUFhtajNGSE14T3dTTEZF?=
- =?utf-8?B?MHM5VUh2UjA5amluSEo0M0hNQ0RqQ3VrY2VSb3QwbG55Y216LzVQbkV1SGFM?=
- =?utf-8?B?akRGdWt0azNQaFY5aVM4VkhGc0p3NWVGVlZpUStuZENYRStvVTg4U0lNRWNI?=
- =?utf-8?B?WVAyYjM0d3J6VVlXb2l3VGhSV1RMajBZTzRVUnBUUXhiUDZ6cmVOTHdoT1Y3?=
- =?utf-8?B?cGhJbk5WU2s0VEUxdlpLS2ZsMjhiY0FBTE9kNkJreFFCSmE2MTdXdnRNdjEv?=
- =?utf-8?B?akFMRWx5bjZ2NWR5K2s1anJnZnJHbXE5aXpHZHRaZ0JjVlBOM1g2NTJIbElO?=
- =?utf-8?B?ckc4d3hEVDRJQnZXZlJZYlFhK3lFdUtSaWc4VDI0UjhkVFRGNFhhcnBoTG9Q?=
- =?utf-8?B?czBVU3B3ZkkzL2ttTmdoa0dFa2VxajV3WHVFTVJteFBPUVBFTm5mdSt3Z0NV?=
- =?utf-8?B?dzQyZWU3a3BiQktMeFNkdHI1QkRNQ2xhRkRCUGdmaVdVUzBjbFBzNytyRStv?=
- =?utf-8?B?MXJ1ZmRXdFY2SjNhMm5GdW9hWlpnVFpCWFVhRWJGYTg2bGQ0Ukp2Nm0yUnli?=
- =?utf-8?B?T1RSSEJvU0dDYkhMZ1VMaFNsMytsc0pLalNtUXVtcWltc3hOSzl4Vm04WG03?=
- =?utf-8?B?QnZjcWdXMU9aVUtXUWNBenRFSVUxdTdEMDRhU21LMzBGWDhXN2ZiU0NHVnhF?=
- =?utf-8?B?c0VXa2JudmdoRlQ4bXpoZHdlMFo1ZDhHUWN4UFl4L0szZ1pua0xTUG5tMisv?=
- =?utf-8?B?czlickpURU50d1JkTFRjNS9zNk1qY00vSVZKcFpMamYrZlpraEYrUk83V29Q?=
- =?utf-8?B?aVRYVEpwZGZOQmlpMGx1bTlWSEtOU0JDZlMzdkVFRnlpdUFZN3RUMzRjbWJG?=
- =?utf-8?B?cjlWckt0dTFGamVSVVFkcmZMcng2Zy9mczAvWnJaTG1TajN2ckR3aklpUDMr?=
- =?utf-8?B?VmZhWHdxR1FiaGhNSEJLdjgxc1Jvb1lua0h5TlFWN2RRZ0Rha25XWDk0NlA3?=
- =?utf-8?B?d0pvTml5Y2o0NDY0VHl2R2NKcU5EZTJ0dGRzbEVzOTdmU1d0d2NIOGdkVmUw?=
- =?utf-8?B?WXFmMXg2MS9td2pHcldwdHp0c1dNbzRDUTlCakE5Y2JFZVYzcWFyMWg0K0RV?=
- =?utf-8?B?Q25rY3JjeEg0eWVmUmpQZXloM3M5bUFFQnF6Y0w4UEp1SkRBOTc1b0Q3U2J5?=
- =?utf-8?B?eE9oZ1luQm9qRnZZdXVxdVAyMlJGQjM1NndkclpVNlVFN2YwSmpTazJQRlJv?=
- =?utf-8?B?V3NzZjc1cmZUWUVGZ1JXZVNTakVqdVNpTzV6YWd5Ri8wYW9LODN0SEFCcnJv?=
- =?utf-8?B?NmJOK3RaR2IyR0F3bXVWWFFJQlJuSW1LemhiQy9hMHpDbU1YMXlxTlZsSGlP?=
- =?utf-8?B?L2pTZklYRWh0dHdYT0g3VmluRG9oeDVLMDBaemppY2g5ZFErbFUxK3F0bElT?=
- =?utf-8?B?RlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 742431d6-161a-4ffb-9e4f-08dadc698453
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR11MB3229.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 17:51:37.7658
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5Q3KHxHLR2Yj7JuohoTgwsvaVb2GHuomLinkffrygMT4TQv41mBFu1Jr+nBw/caMiqsZ/vtSVljbcQJhvgbFXli54GRouVnRc9FQlMEeXjI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB5975
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QrhoEHetR2ye-nVKglRGVqESAFaIt6LU
+X-Proofpoint-GUID: QrhoEHetR2ye-nVKglRGVqESAFaIt6LU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ bulkscore=0 phishscore=0 adultscore=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212120161
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2022 3:55 AM, Jiri Slaby wrote:
-> On 04. 11. 22, 21:28, Tony Nguyen wrote:
+
+On 12/8/2022 4:35 PM, Dmitry Baryshkov wrote:
+> On 09/12/2022 02:22, Kuogee Hsieh wrote:
 >>
->>
->> On 11/4/2022 11:47 AM, Jakub Kicinski wrote:
->>> On Fri, 4 Nov 2022 11:33:07 -0700 Tony Nguyen wrote:
->>>> As Jiri mentioned, this is propagated up throughout the driver. We 
->>>> could
->>>> change this function to return int but all the callers would then need
->>>> to convert these errors to i40e_status to propagate. This doesn't 
->>>> really
->>>> gain much other than having this function return int. To adjust the
->>>> entire call chain is going to take more work. As this is resolving a
->>>> valid warning and returning what is currently expected, what are your
->>>> thoughts on taking this now to resolve the issue and our i40e team will
->>>> take the work on to convert the functions to use the standard errnos?
+>> On 12/8/2022 4:11 PM, Dmitry Baryshkov wrote:
+>>> On 09/12/2022 01:38, Kuogee Hsieh wrote:
+>>>>
+>>>> On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
+>>>>> On 09/12/2022 00:36, Kuogee Hsieh wrote:
+>>>>>> Add both data-lanes and link-frequencies property into endpoint
+>>>>>>
+>>>>>> Changes in v7:
+>>>>>> -- split yaml out of dtsi patch
+>>>>>> -- link-frequencies from link rate to symbol rate
+>>>>>> -- deprecation of old data-lanes property
+>>>>>>
+>>>>>> Changes in v8:
+>>>>>> -- correct Bjorn mail address to kernel.org
+>>>>>>
+>>>>>> Changes in v10:
+>>>>>> -- add menu item to data-lanes and link-frequecnis
+>>>>>>
+>>>>>> Changes in v11:
+>>>>>> -- add endpoint property at port@1
+>>>>>>
+>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+>>>>>
+>>>>> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencies 
+>>>>> property
+>>>>> .git/rebase-apply/patch:47: trailing whitespace.
+>>>>>
+>>>>> .git/rebase-apply/patch:51: trailing whitespace.
+>>>>>
+>>>>>
+>>>>> Also the dt_binding_check fails with an error for this schema. And 
+>>>>> after fixing the error in the schema I faced an example validation 
+>>>>> error. Did you check that the schema is correct and that the 
+>>>>> example validates against the schema?
+>>>>
+>>>> yes, but i run "make dt_binding_check 
+>>>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml" 
+>>>> at mu v5.15 branch since
 >>>
->>> My thoughts on your OS abstraction layers should be pretty evident.
->>> If anything I'd like to be more vigilant about less flagrant cases.
+>>> I wouldn't ask you to post the log here. But I don't think that 
+>>> either of the errors that I see here is related to 5.15 vs 6.1-rc.
 >>>
->>> I don't think this is particularly difficult, let's patch it up
->>> best we can without letting the "status" usage grow.
+>>> In fact after applying this patch against 5.15 I saw the expected 
+>>> failure:
+>>>
+>>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>>> properties:required: ['port@0', 'port@1'] is not of type 'object', 
+>>> 'boolean'
+>>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>>> properties: 'required' should not be valid under {'$ref': 
+>>> '#/definitions/json-schema-prop-names'}
+>>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml: 
+>>> ignoring, error in schema: properties: required
+>>>
+>>>>
+>>>> "make dt_binding_check" does not work at msm-next branch.
+>>>
+>>> I went ahead and just checked.
+>>>
+>>> `make dt_binding_check DT_SCHEMA_FILES=display/msm`  works cleanly 
+>>> in msm-next and reports a single example-related warning in 
+>>> msm-next-lumag. I pushed a patch to fix that warning (wich can 
+>>> hopefully be picked up by Abhinav into msm-fixes). So you can assume 
+>>> that both these branches have consistent error-free display/msm 
+>>> schemas.
+>>>
+>> I have clean msm-next branch (without my data-lines yaml patch 
+>> applied) and run "make dt_binding_check 
+>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml", 
+>> then I saw below error messages.
 >>
->> Ok thanks will do.
-> 
-> Just heads-up: have you managed to remove the abstraction yet?
+>> Have you run into this problem?
+>
+> No.
+
+Did you do anything to fix "older dtschema instance"?
+
+I had run "pip3 install dtschema --upgrade" according Rob Herring response.
+but it still shows same problem.
+Please let know how can I fix this problem.
+
+>
+>>
+>>    HOSTCC  scripts/basic/fixdep
+>>    HOSTCC  scripts/dtc/dtc.o
+>>    HOSTCC  scripts/dtc/flattree.o
+>>    HOSTCC  scripts/dtc/fstree.o
+>>    HOSTCC  scripts/dtc/data.o
+>>    HOSTCC  scripts/dtc/livetree.o
+>>    HOSTCC  scripts/dtc/treesource.o
+>>    HOSTCC  scripts/dtc/srcpos.o
+>>    HOSTCC  scripts/dtc/checks.o
+>>    HOSTCC  scripts/dtc/util.o
+>>    LEX     scripts/dtc/dtc-lexer.lex.c
+>>    HOSTCC  scripts/dtc/dtc-lexer.lex.o
+>>    HOSTCC  scripts/dtc/dtc-parser.tab.o
+>>    HOSTLD  scripts/dtc/dtc
+>> sort: -:2: disorder: 2022.1
+>> ERROR: dtschema minimum version is v2022.3
+>> make[2]: *** [check_dtschema_version] Error 1
+>> make[1]: *** [dt_binding_check] Error 2
+>> make: *** [__sub-make] Error 2
+>
+> This means that somewhere in your path you have an older dtschema 
+> instance.
+>
+> When you sent me a question regarding this error, I asked for the 
+> additional info. You provided none. Instead you went on sending the 
+> untested patch that doesn't work.
+
+since i can not test it on msm-next so that I did test it at my v5-15 
+branch.
+
+besides, i think i have to sent the whole series patches include this 
+one to address your new comments on other patch.
+
+is this correct?
 
 
-Hi Jiri,
-
-It's being worked on: 
-https://lore.kernel.org/intel-wired-lan/20221207144800.1257060-1-jan.sokolowski@intel.com/
-
-Thanks,
-Tony
+>
+>>
+>>>>
+>>>> But I did not check trainiling whitespace this time.
+>>>>
+>>>>>
+>>>>>> ---
+>>>>>>   .../bindings/display/msm/dp-controller.yaml        | 27 
+>>>>>> ++++++++++++++++++++++
+>>>>>>   1 file changed, 27 insertions(+)
+>>>>>>
+>>>>>> diff --git 
+>>>>>> a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml 
+>>>>>> b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>>> index f2515af..2a7fdef8 100644
+>>>>>> --- 
+>>>>>> a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>>> +++ 
+>>>>>> b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>>>> @@ -81,6 +81,7 @@ properties:
+>>>>>>       data-lanes:
+>>>>>>       $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>>>> +    deprecated: true
+>>>>>>       minItems: 1
+>>>>>>       maxItems: 4
+>>>>>>       items:
+>>>>>> @@ -96,6 +97,7 @@ properties:
+>>>>>>       ports:
+>>>>>>       $ref: /schemas/graph.yaml#/properties/ports
+>>>>>> +
+>>>>>>       properties:
+>>>>>>         port@0:
+>>>>>>           $ref: /schemas/graph.yaml#/properties/port
+>>>>>> @@ -105,6 +107,29 @@ properties:
+>>>>>>           $ref: /schemas/graph.yaml#/properties/port
+>>>>>>           description: Output endpoint of the controller
+>>>>>>   +        properties:
+>>>>>> +          endpoint:
+>>>>>> +            $ref: /schemas/media/video-interfaces.yaml#
+>>>>>> +
+>>>>>> +            properties:
+>>>>>> +              remote-endpoint: true
+>>>>>
+>>>>> PLease add empty lines between the property definitions
+>>>>>
+>>>>>> +              data-lanes:
+>>>>>> +                $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>>>
+>>>>> This is already a part of video-interfaces, so you don't need $ref
+>>>>>
+>>>>>> +                minItems: 1
+>>>>>> +                maxItems: 4
+>>>>>> +                items:
+>>>>>> +                  maximum: 3
+>>>>>
+>>>>> enum: [0, 1, 2, 3]
+>>>>>
+>>>>>> +              link-frequencies:
+>>>>>> +                $ref: /schemas/types.yaml#/definitions/uint64-array
+>>>>>> +                minItems: 1
+>>>>>> +                maxItems: 4
+>>>>>> +                items:
+>>>>>> +                  maximum: 8100000000
+>>>>>
+>>>>> I think we can have enum here too.
+>>>>>
+>>>>>> +
+>>>>>> +  required:
+>>>>>> +    - port@0
+>>>>>> +    - port@1
+>>>>>> +
+>>>>>>   required:
+>>>>>>     - compatible
+>>>>>>     - reg
+>>>>>> @@ -193,6 +218,8 @@ examples:
+>>>>>>                   reg = <1>;
+>>>>>>                   endpoint {
+>>>>>>                       remote-endpoint = <&typec>;
+>>>>>> +                    data-lanes = <0 1>;
+>>>>>> +                    link-frequencies = /bits/ 64 <1620000000 
+>>>>>> 2700000000 5400000000 8100000000>;
+>>>>>>                   };
+>>>>>>               };
+>>>>>>           };
+>>>>>
+>>>
+>
