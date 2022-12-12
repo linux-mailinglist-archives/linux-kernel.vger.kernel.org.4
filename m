@@ -2,150 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F902649D26
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836BE649D10
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiLLLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S232114AbiLLLHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbiLLLHO (ORCPT
+        with ESMTP id S232006AbiLLLHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:07:14 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4C511A1B;
-        Mon, 12 Dec 2022 02:54:43 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BCAsa0B007740;
-        Mon, 12 Dec 2022 04:54:36 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1670842476;
-        bh=lSeG+4HQ3gyOii17ukc7PlcSnkdUoIsNZqiqck3q650=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KoPEPG/tnwm0WVfTVa96ve2FT5tDrYG0Lonc2BZwv43YD1JYLP5V+r95Lg9wEPh/P
-         9gaAJNVXF8lWmVXDoln5Ag/e7+43hyquDqAHzx5Ei2yDhflnfpvQJIbZWBUzOHZ+06
-         JNkNIpVt5rdA//VE6Mf0uS72MQPumvccFmNpy+jA=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BCAsaHT026467
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 12 Dec 2022 04:54:36 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 12
- Dec 2022 04:54:36 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 12 Dec 2022 04:54:36 -0600
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BCAsJVL035634;
-        Mon, 12 Dec 2022 04:54:34 -0600
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 5/5] dmaengine: ti: k3-udma: Add support for BCDMA CSI RX
-Date:   Mon, 12 Dec 2022 16:24:16 +0530
-Message-ID: <20221212105416.3628442-6-vigneshr@ti.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221212105416.3628442-1-vigneshr@ti.com>
-References: <20221212105416.3628442-1-vigneshr@ti.com>
+        Mon, 12 Dec 2022 06:07:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D3E11A0E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:54:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 47AFF3380E;
+        Mon, 12 Dec 2022 10:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670842469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jz7Lips898H9fEO8FHmnp/U+76VwTMZfI3iV22huR7g=;
+        b=NPhcr4mM7jngyRfUkBlHonm+HGcTi0wz/1yZ/4z9opH+ikoBkU+eMJD5LcKrtJWEJ4kuRf
+        8wlEC2fB9ooi/Y4TL1B6T2Cuzm6uZHe2EoSSUjlkUUvHFK9IEETO0fFBYk3gAhlLFldx33
+        +L31eHsss/i+cwP6azCY7+7Zc3kd0uM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670842469;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jz7Lips898H9fEO8FHmnp/U+76VwTMZfI3iV22huR7g=;
+        b=O3k2kmLtaN98bHfuHywbtpiQfgfDvFKe3xdnCl/j7OeVZVogmPjrbyQWR6aW8L9zdbKTyp
+        next6oVtHfsYK9BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 15B7F13456;
+        Mon, 12 Dec 2022 10:54:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OPiABGUIl2MiUQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 12 Dec 2022 10:54:29 +0000
+Message-ID: <f318ccc3-eb03-e359-cb6f-157d0b4aed31@suse.cz>
+Date:   Mon, 12 Dec 2022 11:54:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 10/12] mm, slub: remove percpu slabs with CONFIG_SLUB_TINY
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, Baoquan He <bhe@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        Dennis Zhou <dennis@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-11-vbabka@suse.cz> <Y4NEkF8DI1uXFRv4@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y4NEkF8DI1uXFRv4@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BCDMA CSI RX present on AM62Ax SoC is a dedicated DMA for servicing
-Camera Serial Interface (CSI) IP. Add support for the same.
+On 11/27/22 12:05, Hyeonggon Yoo wrote:
+> On Mon, Nov 21, 2022 at 06:12:00PM +0100, Vlastimil Babka wrote:
+>> SLUB gets most of its scalability by percpu slabs. However for
+>> CONFIG_SLUB_TINY the goal is minimal memory overhead, not scalability.
+>> Thus, #ifdef out the whole kmem_cache_cpu percpu structure and
+>> associated code. Additionally to the slab page savings, this reduces
+>> percpu allocator usage, and code size.
+> 
+> [+Cc Dennis]
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- drivers/dma/ti/k3-udma.c | 37 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
++To: Baoquan also.
 
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index c1005d17b42e..1d3d1b387b96 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -135,6 +135,7 @@ struct udma_match_data {
- 	u32 flags;
- 	u32 statictr_z_mask;
- 	u8 burst_size[3];
-+	struct udma_soc_data *soc_data;
- };
- 
- struct udma_soc_data {
-@@ -4295,6 +4296,25 @@ static struct udma_match_data j721e_mcu_data = {
- 	},
- };
- 
-+static struct udma_soc_data am62a_dmss_csi_soc_data = {
-+	.oes = {
-+		.bcdma_rchan_data = 0xe00,
-+		.bcdma_rchan_ring = 0x1000,
-+	},
-+};
-+
-+static struct udma_match_data am62a_bcdma_csirx_data = {
-+	.type = DMA_TYPE_BCDMA,
-+	.psil_base = 0x3100,
-+	.enable_memcpy_support = false,
-+	.burst_size = {
-+		TI_SCI_RM_UDMAP_CHAN_BURST_SIZE_64_BYTES, /* Normal Channels */
-+		0, /* No H Channels */
-+		0, /* No UH Channels */
-+	},
-+	.soc_data = &am62a_dmss_csi_soc_data,
-+};
-+
- static struct udma_match_data am64_bcdma_data = {
- 	.type = DMA_TYPE_BCDMA,
- 	.psil_base = 0x2000, /* for tchan and rchan, not applicable to bchan */
-@@ -4344,6 +4364,10 @@ static const struct of_device_id udma_of_match[] = {
- 		.compatible = "ti,am64-dmss-pktdma",
- 		.data = &am64_pktdma_data,
- 	},
-+	{
-+		.compatible = "ti,am62a-dmss-bcdma-csirx",
-+		.data = &am62a_bcdma_csirx_data,
-+	},
- 	{ /* Sentinel */ },
- };
- 
-@@ -5274,12 +5298,15 @@ static int udma_probe(struct platform_device *pdev)
- 	}
- 	ud->match_data = match->data;
- 
--	soc = soc_device_match(k3_soc_devices);
--	if (!soc) {
--		dev_err(dev, "No compatible SoC found\n");
--		return -ENODEV;
-+	ud->soc_data = ud->match_data->soc_data;
-+	if (!ud->soc_data) {
-+		soc = soc_device_match(k3_soc_devices);
-+		if (!soc) {
-+			dev_err(dev, "No compatible SoC found\n");
-+			return -ENODEV;
-+		}
-+		ud->soc_data = soc->data;
- 	}
--	ud->soc_data = soc->data;
- 
- 	ret = udma_get_mmrs(pdev, ud);
- 	if (ret)
--- 
-2.38.1
+> Wondering if we can reduce (or zero) early reservation of percpu area
+> when #if !defined(CONFIG_SLUB) || defined(CONFIG_SLUB_TINY)?
+
+Good point. I've sent a PR as it was [1], but (if merged) we can still
+improve that during RC series, if it means more memory saved thanks to less
+percpu usage with CONFIG_SLUB_TINY.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/tag/?h=slab-for-6.2-rc1
+
+>> This change builds on recent commit c7323a5ad078 ("mm/slub: restrict
+>> sysfs validation to debug caches and make it safe"), as caches with
+>> enabled debugging also avoid percpu slabs and all allocations and
+>> freeing ends up working with the partial list. With a bit more
+>> refactoring by the preceding patches, use the same code paths with
+>> CONFIG_SLUB_TINY.
+>> 
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> 
 
