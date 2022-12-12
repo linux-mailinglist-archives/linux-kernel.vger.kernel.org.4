@@ -2,216 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE49649B27
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16693649B2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiLLJ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S231838AbiLLJcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiLLJ3U (ORCPT
+        with ESMTP id S229740AbiLLJca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:29:20 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40C7E05;
-        Mon, 12 Dec 2022 01:29:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670837297; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mBWd13yG1YrtEsMFwDnYexpnES9Qx4y5RO9fYvg04eCPJwMGHXU1sGJoVwVcpGvsWkN/DK4SxtFz61m1yXB8UjeWbPh8UdYwCcmYgRcEZKtUf+/hG6kKVvajsvX3O3cmf6ZQZwmKePP7XXU8fDuE0irYyJNC9FWOgZCj2bUP/t0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670837297; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=+NiYbpQ61V0IWmDEj33HiUlIc9JpdcOdwbfOwK7rNM8=; 
-        b=iBv6mdzXcJaditRxO69venXFwRrLiZLAYo1jta0xq2Wf9Zjhsz8Bd9ZcGaolUbfhV3TLlPN+5EoTia/MM8a+e0ji9o1vVc/r9HxA+7jiYgON5vs9FqyL/UBnVzJ2KffSieN8Zh1nwzsEm+F4xpZiXRmk3i2E3v3fqz5q1OI/dD0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670837297;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=+NiYbpQ61V0IWmDEj33HiUlIc9JpdcOdwbfOwK7rNM8=;
-        b=iLipqTgNQhtK8mAPaVTfRkGgzQVfg1N8GVKxiy1+XFiTkqNlHCvH1bXMN+SG3+HE
-        fYfXeQd3OPD0ODRHljY2HlrmS63d186Sm3h7TaUTISOCEpKYaVq8ZlC90qBDVps0y4t
-        KkjMRsuagFvtVu4s+ZBG5fZ/0yxcaxPbJYx/VVRY=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1670837294654318.4242339559728; Mon, 12 Dec 2022 01:28:14 -0800 (PST)
-Message-ID: <c1e40b58-4459-2929-64f3-3e20f36f6947@arinc9.com>
-Date:   Mon, 12 Dec 2022 12:28:06 +0300
+        Mon, 12 Dec 2022 04:32:30 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6C725A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:32:28 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 466D510000B;
+        Mon, 12 Dec 2022 09:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670837547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bYQ5J4t/p17mqDvlhyzsxzTLD89yLXwIRu5VnMMXcf0=;
+        b=XnZ5te8FvBR6twq5GyYLp5rlcQDFPX9W7E9WER03E44Nj4jLQtZYBV5eZcMUAF9YkK5y/T
+        AoaET+haTaLdlz3GH+5MERRDSJR9VMVIu0+yJ5HDuSCQNRvqNxugCFcDvK7LeU479fDwvv
+        lTVU7Rf5aA9/2gocSqHmYnOi+seFp2TjzrdGSdthLZKLCSpe58WzbcZ6ulSCc+L/U6Y9af
+        mR5ecFKiN19rjcwf4VgoUa5G2iCYot9xG6nxgNkFyBClSCs2nwsX2aO+PmwCG0ze82m8WO
+        L5RyEFpzKMH9PtX6Upm1tFn6yFZp1D/GfvDY+IZKV/hdYkjBSiN1R1jnga1s5g==
+Date:   Mon, 12 Dec 2022 10:32:21 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mtd@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Michael Walle <michael@walle.cc>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] mtd: Changes for 6.2
+Message-ID: <20221212103221.19de8d3d@xps-13>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 net-next 04/10] dt-bindings: net: dsa: utilize base
- definitions for standard dsa switches
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>,
-        Rob Herring <robh@kernel.org>
-References: <20221210033033.662553-1-colin.foster@in-advantage.com>
- <20221210033033.662553-5-colin.foster@in-advantage.com>
- <1df417b5-a924-33d4-a302-eb526f7124b4@arinc9.com> <Y5TJw+zcEDf2ItZ5@euler>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <Y5TJw+zcEDf2ItZ5@euler>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.12.2022 21:02, Colin Foster wrote:
-> Hi Arınç,
-> On Sat, Dec 10, 2022 at 07:24:42PM +0300, Arınç ÜNAL wrote:
->> On 10.12.2022 06:30, Colin Foster wrote:
->>> DSA a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
->>> @@ -58,4 +58,26 @@ oneOf:
->>>    additionalProperties: true
->>> +$defs:
->>> +  ethernet-ports:
->>> +    description: A DSA switch without any extra port properties
->>> +    $ref: '#/'
->>> +
->>> +    patternProperties:
->>> +      "^(ethernet-)?ports$":
->>> +        type: object
->>> +        additionalProperties: false
->>> +
->>> +        properties:
->>> +          '#address-cells':
->>> +            const: 1
->>> +          '#size-cells':
->>> +            const: 0
->>> +
->>> +        patternProperties:
->>> +          "^(ethernet-)?port@[0-9]+$":
->>> +            description: Ethernet switch ports
->>> +            $ref: dsa-port.yaml#
->>> +            unevaluatedProperties: false
->>
->> I've got moderate experience in json-schema but shouldn't you put 'type:
->> object' here like you did for "^(ethernet-)?ports$"?
-> 
-> I can't say for sure, but adding "type: object" here and removing it
-> from mediatek,mt7530.yaml still causes the same issue I mention below.
-> 
-> Rob's initial suggestion for this patch set (which was basically the
-> entire implementation... many thanks again Rob) can be found here:
-> https://lore.kernel.org/netdev/20221104200212.GA2315642-robh@kernel.org/
-> 
->  From what I can tell, the omission of "type: object" here was
-> intentional. At the very least, it doesn't seem to have any effect on
-> warnings.
-> 
->>
->>> +
->>>    ...
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> index 73b774eadd0b..748ef9983ce2 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
->>> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->>>    title: Hirschmann Hellcreek TSN Switch Device Tree Bindings
->>>    allOf:
->>> -  - $ref: dsa.yaml#
->>> +  - $ref: dsa.yaml#/$defs/ethernet-ports
->>>    maintainers:
->>>      - Andrew Lunn <andrew@lunn.ch>
->>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> index f2e9ff3f580b..20312f5d1944 100644
->>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> @@ -157,9 +157,6 @@ patternProperties:
->>>        patternProperties:
->>>          "^(ethernet-)?port@[0-9]+$":
->>>            type: object
->>
->> This line was being removed on the previous version. Must be related to
->> above.
-> 
-> Without the 'object' type here, I get the following warning:
-> 
-> Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: patternProperties:^(ethernet-)?ports$:patternProperties:^(ethernet-)?port@[0-9]+$: 'anyOf' conditional failed, one must be fixed:
->          'type' is a required property
->          '$ref' is a required property
->          hint: node schemas must have a type or $ref
->          from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-> ./Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml
->    SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-> /home/colin/src/work/linux_vsc/linux-imx/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml: ignoring, error in schema: patternProperties: ^(ethernet-)?ports$: patternProperties: ^(ethernet-)?port@[0-9]+$
-> 
-> 
-> I'm testing this now and I'm noticing something is going on with the
-> "ref: dsa-port.yaml"
-> 
-> 
-> Everything seems to work fine (in that I don't see any warnings) when I
-> have this diff:
-> 
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index 20312f5d1944..db0122020f98 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yam
-> @@ -156,8 +156,7 @@ patternProperties:
-> 
->       patternProperties:
->         "^(ethernet-)?port@[0-9]+$":
-> -        type: object
-> -
-> +        $ref: dsa-port.yaml#
->           properties:
->             reg:
->               description:
-> @@ -165,7 +164,6 @@ patternProperties:
->                 for user ports.
-> 
->           allOf:
-> -          - $ref: dsa-port.yaml#
->             - if:
->                 required: [ ethernet ]
->               then:
-> 
-> 
-> 
-> This one has me [still] scratching my head...
+Hello Linus,
 
-Right there with you. In addition to this, having or deleting type 
-object on/from "^(ethernet-)?ports$" and "^(ethernet-)?port@[0-9]+$" on 
-dsa.yaml doesn't cause any warnings (checked with make dt_binding_check 
-DT_SCHEMA_FILES=net/dsa) which makes me question why it's there in the 
-first place.
+Here is the MTD PR for 6.2-rc1.
 
-Arınç
+Thanks,
+Miqu=C3=A8l
+
+The following changes since commit
+30a0b95b1335e12efef89dd78518ed3e4a71a763:
+
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
+  tags/mtd/for-6.2
+
+for you to fetch changes up to a34506e08db7ccce160a259e4b00b1e307486c59:
+
+  Merge tag 'spi-nor/for-6.2' into mtd/next (2022-12-05 15:40:59 +0100)
+
+----------------------------------------------------------------
+MTD core changes:
+* Fix refcount error in del_mtd_device()
+* Fix possible resource leak in init_mtd()
+* Set ROOT_DEV for partitions marked as rootfs in DT
+* Describe marking rootfs partitions in the bindings
+* Fix device name leak when register device failed in add_mtd_device()
+* Try to find OF node for every MTD partition
+* simplify (a bit) code find partition-matching dynamic OF node
+
+MTD driver changes:
+* pxa2xx-flash maps: fix memory leak in probe
+* BCM parser: refer to ARCH_BCMBCA instead of ARCH_BCM4908
+* lpddr2_nvm: Fix possible null-ptr-deref
+* inftlcore: fix repeated words in comments
+* lart: remove driver
+* tplink:
+  - Add TP-Link SafeLoader partitions table parser and bindings
+  - Describe TP-Link SafeLoader parser
+  - Describe TP-Link SafeLoader dynamic subpartitions
+* mtdoops:
+  - Panic caused mtdoops to call mtdoops_erase function immediately
+  - Add mtdoops_erase function and move mtdoops_inc_counter to after it
+  - Change printk() to counterpart pr_ functions
+
+MTD binding cleanup:
+* Fixed-partitions: Fix 'sercomm,scpart-id' schema
+* Standardize the style in the examples
+* Drop object types when referencing other files
+* Argue in favor of keeping additionalProperties set to true
+* NVMEM-cells:
+  - Inherit from MTD partitions
+  - Drop range property from example
+* Partitions:
+  - Change qcom,smem-part partition type
+  - Constrain the list of parsers
+* Physmap: Reuse the generic definitions
+* SPI-NOR: Drop common properties
+* Sunxi-nand: Add an example to validate the bindings
+* Onenand: Mention the expected node name
+* Ingenic: Mark partitions in the controller node as deprecated
+* NAND:
+  - Standardize the child node name
+  - Drop common properties already defined in generic files
+  - nand-chip.yaml should reference mtd.yaml
+* Remove useless file about partitions
+* Clarify all partition subnodes
+
+SPI NOR core changes:
+* Add support for flash reset using the dt reset-gpios property.
+* Update hwcaps.mask to include 8D-8D-8D read and page program ops
+  when xSPI profile 1.0 table is defined.
+* Bypass zero erase size in spi_nor_find_best_erase_type().
+* Fix select_uniform_erase to skip 0 erase size
+* Add generic flash driver. If a flash is not found in the flash_info
+  array, fall back to the generic flash driver which is described solely
+  by the flash's SFDP tables.
+* Fix the number of bytes for the dummy cycles in
+  spi_nor_spimem_check_readop().
+* Introduce SPI_NOR_QUAD_PP flag, as PP_1_1_4 is not SFDP discoverable.
+
+SPI NOR manufacturer drivers changes:
+* Spansion:
+  - use PARSE_SFDP for s28hs512t,
+  - add support for s28hl512t, s28hl01gt, and s28hs01gt.
+* Gigadevice: Replace default_init() with post_bfpt() for gd25q256.
+* Micron - ST: Enable locking for mt25qu256a.
+* Winbond: Add support for W25Q512NW-IQ.
+* ISSI: Use PARSE_SFDP and SPI_NOR_QUAD_PP.
+
+Raw NAND core changes:
+* Drop obsolete dependencies on COMPILE_TEST
+* MAINTAINERS: rectify entry for MESON NAND controller bindings
+* Drop EXPORT_SYMBOL_GPL for nanddev_erase()
+
+Raw NAND driver changes:
+* marvell: Enable NFC/DEVBUS arbiter
+* gpmi: Use pm_runtime_resume_and_get instead of pm_runtime_get_sync
+* mpc5121: Replace NO_IRQ by 0
+* lpc32xx_{slc,mlc}:
+  - Switch to using pm_ptr()
+  - Switch to using gpiod API
+* lpc32xx_mlc: Switch to using pm_ptr()
+* cadence: Support 64-bit slave dma interface
+* rockchip: Describe rk3128-nfc in the bindings
+* brcmnand: Update interrupts description in the bindings
+
+SPI-NAND driver changes:
+* winbond:
+  - Add Winbond W25N02KV flash support
+  - Fix flash identification
+
+----------------------------------------------------------------
+Alexander Sverdlin (1):
+      mtd: spi-nor: Check for zero erase size in
+spi_nor_find_best_erase_type()
+
+Allen-KH Cheng (1):
+      mtd: spi-nor: Fix the number of bytes for the dummy cycles
+
+Arnd Bergmann (1):
+      mtd: remove lart flash driver
+
+Christophe Leroy (1):
+      mtd: rawnand: mpc5121: Replace NO_IRQ by 0
+
+Dan Carpenter (1):
+      mtd: parsers: tplink_safeloader: fix uninitialized variable bug
+
+Dario Binacchi (1):
+      mtd: nand: drop EXPORT_SYMBOL_GPL for nanddev_erase()
+
+Dmitry Torokhov (2):
+      mtd: rawnand: lpc32xx_mlc: switch to using gpiod API
+      mtd: rawnand: lpc32xx_slc: switch to using gpiod API
+
+Eliav Farber (1):
+      mtd: spi-nor: micron-st: Enable locking for mt25qu256a
+
+Gaosheng Cui (1):
+      mtd: core: fix possible resource leak in init_mtd()
+
+Geert Uytterhoeven (2):
+      mtd: rawnand: lpc32xx_mlc: Switch to using pm_ptr()
+      mtd: rawnand: lpc32xx_slc: Switch to using pm_ptr()
+
+Hamish Martin (1):
+      mtd: rawnand: marvell: Enable NFC/DEVBUS arbiter
+
+Hui Tang (1):
+      mtd: lpddr2_nvm: Fix possible null-ptr-deref
+
+Jae Hyun Yoo (1):
+      mtd: spi-nor: winbond: add support for W25Q512NW-IQ
+
+Jean Delvare (1):
+      mtd: rawnand: Drop obsolete dependencies on COMPILE_TEST
+
+Jilin Yuan (1):
+      mtd: inftlcore: fix repeated words in comments
+
+Johan Jonker (1):
+      dt-bindings: mtd: rockchip: add rockchip,rk3128-nfc
+
+Jonathan Neusch=C3=A4fer (1):
+      mtd: spi-nor: Fix formatting in spi_nor_read_raw() kerneldoc
+comment
+
+Lukas Bulwahn (2):
+      MAINTAINERS: rectify entry for MESON NAND controller bindings
+      mtd: parsers: refer to ARCH_BCMBCA instead of ARCH_BCM4908
+
+Michael Walle (7):
+      mtd: spi-nor: hide jedec_id sysfs attribute if not present
+      mtd: spi-nor: sysfs: hide manufacturer if it is not set
+      mtd: spi-nor: remember full JEDEC flash ID
+      mtd: spi-nor: move function declaration out of sfdp.h
+      mtd: spi-nor: fix select_uniform_erase to skip 0 erase size
+      mtd: spi-nor: add generic flash driver
+      mtd: spi-nor: sysfs: print JEDEC ID for generic flash driver
+
+Mikhail Kshevetskiy (2):
+      mtd: spinand: winbond: fix flash identification
+      mtd: spinand: winbond: add Winbond W25N02KV flash support
+
+Miquel Raynal (19):
+      dt-bindings: mtd: Clarify all partition subnodes
+      dt-bindings: mtd: Remove useless file about partitions
+      dt-bindings: mtd: nand-chip: Reference mtd.yaml
+      dt-bindings: mtd: nand: Drop common properties already defined in
+generic files dt-bindings: mtd: nand: Standardize the child node name
+      dt-bindings: mtd: ingenic: Mark partitions in the controller node
+as deprecated dt-bindings: mtd: onenand: Mention the expected node name
+      dt-bindings: mtd: sunxi-nand: Add an example to validate the
+bindings dt-bindings: mtd: spi-nor: Drop common properties
+      dt-bindings: mtd: physmap: Reuse the generic definitions
+      dt-bindings: mtd: partitions: Constrain the list of parsers
+      dt-bindings: mtd: partitions: Change qcom,smem-part partition type
+      dt-bindings: mtd: nvmem-cells: Drop range property from example
+      dt-bindings: mtd: nvmem-cells: Inherit from MTD partitions
+      dt-bindings: mtd: Argue in favor of keeping additionalProperties
+set to true dt-bindings: mtd: Drop object types when referencing other
+files dt-bindings: mtd: Standardize the style in the examples
+      Merge tag 'nand/for-6.2' into mtd/next
+      Merge tag 'spi-nor/for-6.2' into mtd/next
+
+Rafa=C5=82 Mi=C5=82ecki (8):
+      mtd: core: simplify (a bit) code find partition-matching dynamic
+OF node mtd: core: try to find OF node for every MTD partition
+      dt-bindings: mtd: partitions: add TP-Link SafeLoader layout
+      mtd: parsers: add TP-Link SafeLoader partitions table parser
+      dt-bindings: mtd: partitions: support marking rootfs partition
+      mtd: core: set ROOT_DEV for partitions marked as rootfs in DT
+      dt-bindings: mtd: brcm,brcmnand: update interrupts description
+      dt-bindings: mtd: partitions: allow SafeLoader dynamic
+subpartitions
+
+Ray Zhang (3):
+      mtd: mtdoops: change printk() to counterpart pr_ functions
+      mtd: mtdoops: add mtdoops_erase function and move
+mtdoops_inc_counter to after it mtd: mtdoops: panic caused mtdoops to
+call mtdoops_erase function immediately
+
+Rob Herring (1):
+      dt-bindings: mtd: fixed-partitions: Fix 'sercomm,scpart-id' schema
+
+Sai Krishna Potthuri (2):
+      dt-bindings: mtd: spi-nor: Add reset-gpios property
+      mtd: spi-nor: Add support for flash reset
+
+Shang XiaoJing (1):
+      mtd: core: Fix refcount error in del_mtd_device()
+
+Sudip Mukherjee (2):
+      mtd: spi-nor: issi: is25wp256: Init flash based on SFDP
+      mtd: spi-nor: add SFDP fixups for Quad Page Program
+
+Takahiro Kuwano (4):
+      mtd: spi-nor: sfdp: Update params->hwcaps.mask at xSPI profile
+1.0 table parse mtd: spi-nor: spansion: Remove NO_SFDP_FLAGS from
+s28hs512t info mtd: spi-nor: spansion: Rename s28hs512t prefix
+      mtd: spi-nor: spansion: Add s28hl512t, s28hl01gt, and s28hs01gt
+info
+
+Tudor Ambarus (3):
+      mtd: spi-nor: spansion: Replace hardcoded values for
+addr_nbytes/addr_mode_nbytes mtd: spi-nor: micron-st.c: Replace
+hardcoded values for addr_nbytes/addr_mode_nbytes mtd: spi-nor: core:
+Add an error message when failing to exit the 4-byte address mode
+
+Valentin Korenblit (1):
+      mtd: rawnand: cadence: support 64-bit slave dma interface
+
+Yaliang Wang (1):
+      mtd: spi-nor: gigadevice: gd25q256: replace gd25q256_default_init
+with gd25q256_post_bfpt
+
+Zhang Qilong (1):
+      mtd: rawnand: gpmi: using pm_runtime_resume_and_get instead of
+pm_runtime_get_sync
+
+Zhang Xiaoxu (1):
+      mtd: Fix device name leak when register device failed in
+add_mtd_device()
+
+Zheng Yongjun (1):
+      mtd: maps: pxa2xx-flash: fix memory leak in probe
+
+ Documentation/ABI/testing/sysfs-bus-spi-devices-spi-nor |   6 +
+ .../bindings/mtd/allwinner,sun4i-a10-nand.yaml          |  34 +-
+ .../devicetree/bindings/mtd/arasan,nand-controller.yaml |   5 +-
+ .../devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml    |  30 +-
+ Documentation/devicetree/bindings/mtd/atmel-nand.txt    |   6 +-
+ .../devicetree/bindings/mtd/brcm,brcmnand.yaml          |  96 ++--
+ Documentation/devicetree/bindings/mtd/denali,nand.yaml  |   2 +-
+ Documentation/devicetree/bindings/mtd/ingenic,nand.yaml | 116 ++--
+ .../devicetree/bindings/mtd/intel,lgm-ebunand.yaml      |  48 +-
+ .../devicetree/bindings/mtd/jedec,spi-nor.yaml          |  20 +-
+ Documentation/devicetree/bindings/mtd/lpc32xx-mlc.txt   |   2 +-
+ Documentation/devicetree/bindings/mtd/lpc32xx-slc.txt   |   2 +-
+ .../devicetree/bindings/mtd/microchip,mchp48l640.yaml   |  14 +-
+ Documentation/devicetree/bindings/mtd/mtd-physmap.yaml  |   7 +-
+ Documentation/devicetree/bindings/mtd/mtd.yaml          |  24 +-
+ Documentation/devicetree/bindings/mtd/mtk-nand.txt      |   2 +-
+ Documentation/devicetree/bindings/mtd/nand-chip.yaml    |   4 +
+ .../devicetree/bindings/mtd/nand-controller.yaml        |   2 +-
+ Documentation/devicetree/bindings/mtd/partition.txt     |  33 --
+ .../bindings/mtd/partitions/arm,arm-firmware-suite.yaml |   2 +
+ .../mtd/partitions/brcm,bcm4908-partitions.yaml         |   2 +
+ .../mtd/partitions/brcm,bcm947xx-cfe-partitions.yaml    |   2 +
+ .../bindings/mtd/partitions/fixed-partitions.yaml       |  30 +-
+ .../bindings/mtd/partitions/linksys,ns-partitions.yaml  |   2 +
+ .../devicetree/bindings/mtd/partitions/nvmem-cells.yaml |   4 +-
+ .../devicetree/bindings/mtd/partitions/partition.yaml   |   5 +
+ .../devicetree/bindings/mtd/partitions/partitions.yaml  |  41 ++
+ .../bindings/mtd/partitions/qcom,smem-part.yaml         |  32 +-
+ .../devicetree/bindings/mtd/partitions/redboot-fis.yaml |   6 +
+ .../mtd/partitions/tplink,safeloader-partitions.yaml    |  57 ++
+ Documentation/devicetree/bindings/mtd/qcom,nandc.yaml   | 117 ++--
+ .../bindings/mtd/rockchip,nand-controller.yaml          |   4 +-
+ .../devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml     |  47 +-
+ .../devicetree/bindings/mtd/ti,am654-hbmc.yaml          |  36 +-
+ .../devicetree/bindings/mtd/ti,gpmc-onenand.yaml        |   3 +
+ MAINTAINERS                                             |   2 +-
+ drivers/mtd/devices/Kconfig                             |   8 -
+ drivers/mtd/devices/Makefile                            |   1 -
+ drivers/mtd/devices/lart.c                              | 682
+ ----------------------- drivers/mtd/inftlcore.c
+          |   2 +- drivers/mtd/lpddr/lpddr2_nvm.c
+    |   2 + drivers/mtd/maps/pxa2xx-flash.c                         |
+ 2 + drivers/mtd/mtdcore.c                                   |  55 +-
+ drivers/mtd/mtdoops.c                                   | 109 ++--
+ drivers/mtd/nand/core.c                                 |   3 +-
+ drivers/mtd/nand/raw/Kconfig                            |   6 +-
+ drivers/mtd/nand/raw/cadence-nand-controller.c          |  70 ++-
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c              |  12 +-
+ drivers/mtd/nand/raw/lpc32xx_mlc.c                      |  46 +-
+ drivers/mtd/nand/raw/lpc32xx_slc.c                      |  43 +-
+ drivers/mtd/nand/raw/marvell_nand.c                     |   4 +-
+ drivers/mtd/nand/raw/mpc5121_nfc.c                      |   2 +-
+ drivers/mtd/nand/spi/winbond.c                          |  79 ++-
+ drivers/mtd/parsers/Kconfig                             |  19 +-
+ drivers/mtd/parsers/Makefile                            |   1 +
+ drivers/mtd/parsers/tplink_safeloader.c                 | 150 +++++
+ drivers/mtd/spi-nor/core.c                              |  85 ++-
+ drivers/mtd/spi-nor/core.h                              |   5 +
+ drivers/mtd/spi-nor/debugfs.c                           |   2 +-
+ drivers/mtd/spi-nor/gigadevice.c                        |  24 +-
+ drivers/mtd/spi-nor/issi.c                              |   5 +-
+ drivers/mtd/spi-nor/micron-st.c                         |  12 +-
+ drivers/mtd/spi-nor/sfdp.c                              |  37 +-
+ drivers/mtd/spi-nor/sfdp.h                              |   2 -
+ drivers/mtd/spi-nor/spansion.c                          |  61 +-
+ drivers/mtd/spi-nor/sysfs.c                             |  20 +-
+ drivers/mtd/spi-nor/winbond.c                           |   3 +
+ include/linux/mtd/nand.h                                |   1 -
+ include/linux/mtd/spi-nor.h                             |   3 +
+ 69 files changed, 1149 insertions(+), 1252 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/partition.txt
+ create mode 100644
+ Documentation/devicetree/bindings/mtd/partitions/partitions.yaml
+ create mode 100644
+ Documentation/devicetree/bindings/mtd/partitions/tplink,safeloader-partiti=
+ons.yaml
+ delete mode 100644 drivers/mtd/devices/lart.c create mode 100644
+ drivers/mtd/parsers/tplink_safeloader.c
