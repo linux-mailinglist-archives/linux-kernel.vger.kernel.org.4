@@ -2,155 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7395664A86B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798EE64A872
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiLLUJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
+        id S233064AbiLLUKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiLLUI6 (ORCPT
+        with ESMTP id S229629AbiLLUKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:08:58 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F1175AE;
-        Mon, 12 Dec 2022 12:08:53 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id co23so13382111wrb.4;
-        Mon, 12 Dec 2022 12:08:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBYX0Bgct53uW6OYZnLeYHLy/9+c4kuah33Xo7h5GMc=;
-        b=MVl5ZiJTcKmUY1/MYMx9OVoFugiZCKG6Ah+BAinij8e0fX5ra7K78mqtzyLq94FWsA
-         In14DzMhzoiX2ZkEKYnOxCKVmOXg4w0HqKCmjztjwAXkGd7LmaZ55iJ2aokxhHoCZWBs
-         MeKLtTggXzJFLK22L3FQR+T9FLg4tndpSIXd/fVlQWzk/iXC7RPoKU5RYSJLxOXact+L
-         z0q/lyEpw3noibsLuXSBpOdQm79ep0K2S8ApF8Zfxy7m2PXKx+Y8pvOW/WM/2r5VR8K7
-         Y+KQZEYAriGwBWIQTq9/Js9p6bLMXRvOLa1kOVtMXFzcINS+sYqqxr6ksMfFiqsRey7w
-         Ei2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SBYX0Bgct53uW6OYZnLeYHLy/9+c4kuah33Xo7h5GMc=;
-        b=OGmMZdeWZIkpIa2w/8P8MpcIyGSsKJ4hFitXgDMrvWLbE/vSSlPcGSXhoS8poTqlsq
-         hXGGxo1rhg4/ktYN/EHJAGH6bgtd/04Ng4vwK1sI70JvnCzEIfXARu3rdJfFzYJduwEt
-         z799Q2NUZigXVNTeTUV5A83Z85zS1erHBRZVbxLq5FbBk0+GSogFOsjtpdV5Sw6/yz25
-         1viuV7tro8gQWLQqkM/lSWTcKqkpIStJN9RCh/fv2p9XlO+iCYvD1TFzmOfpdRJM65aj
-         DwPDZx6EfgTpm41TWQJ/t6dG5GbUwUgOH1MmgJWxlGkeU5jBAsOPQ4nnkWtZQY5Nc8wh
-         bsZQ==
-X-Gm-Message-State: ANoB5pnUqLJhJwLUU46WZzjxKSiBzJ0PoD95ghLRXb/V7O3V68cBAOnv
-        uYoxdG/r4NWNPVCkJmP0PhU=
-X-Google-Smtp-Source: AA0mqf7mkN6VaKEXNOipzgBKrRs07XriztMXV512rHubp1p0SIIhGRx3Jlc3O4VZszf/5HOLKLHdIQ==
-X-Received: by 2002:a05:6000:38e:b0:242:2390:15a with SMTP id u14-20020a056000038e00b002422390015amr16877183wrf.71.1670875731570;
-        Mon, 12 Dec 2022 12:08:51 -0800 (PST)
-Received: from suse.localnet (host-79-41-27-125.retail.telecomitalia.it. [79.41.27.125])
-        by smtp.gmail.com with ESMTPSA id h17-20020a5d4fd1000000b0024246991121sm9527080wrw.116.2022.12.12.12.08.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:08:50 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/3] fs/ufs: Change the signature of ufs_get_page()
-Date:   Mon, 12 Dec 2022 21:08:49 +0100
-Message-ID: <8194794.NyiUUSuA9g@suse>
-In-Reply-To: <Y5Zc0qZ3+zsI74OZ@ZenIV>
-References: <20221211213111.30085-1-fmdefrancesco@gmail.com>
- <20221211213111.30085-3-fmdefrancesco@gmail.com> <Y5Zc0qZ3+zsI74OZ@ZenIV>
+        Mon, 12 Dec 2022 15:10:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A9C1759E;
+        Mon, 12 Dec 2022 12:10:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 114C1B80DF3;
+        Mon, 12 Dec 2022 20:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED96C433F0;
+        Mon, 12 Dec 2022 20:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670875838;
+        bh=xjPNwIng7u1uKDxLjTcDpGgKuppTqeqW9PKsY49SEQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QJYomxaA99ir8eHhjqRgawYsNX4ylOTi/afgmFMvA1bTfcpGHfTO+IQvVvbUqnVEG
+         Qe7J4AKGgcAMBRmJpN9wF6PBzk831ktzMixJuaMzmc0D9jDAJrXdJH+agnvdYdpgT9
+         xwnpSOPZKkoUy+tz3Qh7VXE5BqLyfNMMG5c6mKkhlvH/DZhWQ/VsZDRG0X38rOqmwH
+         1bjbmPS/O0ms4mt5Z3NQriIGLHbpsVDU0Hzr3gEnjgK7TIWJZZgQ+VxrooqGLpzOCf
+         OCvM4ePltH6b/oQk1YAqKISuQnmxTn8GZKaG37pkQt8sq2CmmKYSTtK6nXUxhJ5oB2
+         3EMpbVZRL6rww==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 297A740483; Mon, 12 Dec 2022 17:10:36 -0300 (-03)
+Date:   Mon, 12 Dec 2022 17:10:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 4/4] tools lib traceevent: Remove libtraceevent
+Message-ID: <Y5eKvNYbRvhzRdKZ@kernel.org>
+References: <20221130062935.2219247-1-irogers@google.com>
+ <20221130062935.2219247-5-irogers@google.com>
+ <Y5eGj4CuQKjr2I6h@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5eGj4CuQKjr2I6h@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On domenica 11 dicembre 2022 23:42:26 CET Al Viro wrote:
-> On Sun, Dec 11, 2022 at 10:31:10PM +0100, Fabio M. De Francesco wrote:
-> >  out_put:
-> >  	ufs_put_page(page);
-> > 
-> > -out:
-> > -	return err;
-> > 
-> >  out_unlock:
-> >  	unlock_page(page);
-> >  	goto out_put;
+Em Mon, Dec 12, 2022 at 04:52:47PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Nov 29, 2022 at 10:29:35PM -0800, Ian Rogers escreveu:
+> > libtraceevent is now out-of-date and it is better to depend on the
+> > system version. Remove this code that is no longer depended upon by
+> > any builds.
 > 
-> Something strange has happened, all right - look at the situation
-> after that patch.  You've got
 > 
-> out_put:
-> 	ufs_put_page(page);
-> out_unlock:
-> 	unlock_page(page);
-> 	goto out_put;
 > 
-> Which is obviously bogus.
+> Thanks, applied and Added Steven's Acked-by.
 
-I finally could go back to this small series and while working to fix the 
-errors that yesterday you had found out I think I saw what happened...
+Had to add this to keep 'make perf-tar-src-pkg' working:
 
-Are you talking about ufs_add_link, right?
-
-If so, you wrote what follows at point 14 of one of your emails:
-
------
-
-14) ufs_add_link() - similar adjustment to new calling conventions
-for ufs_get_page().  Uses of page_addr: fed to ufs_put_page() (same as
-in ufs_find_entry() kaddr is guaranteed to point into the same page and
-thus can be used instead) and calculation of position in directory, same
-as we'd seen in ufs_set_link().  The latter becomes page_offset(page) +
-offset_in_page(de), killing page_addr off.  BTW, we get
-                kaddr = ufs_get_page(dir, n, &page);
-                err = PTR_ERR(kaddr);
-                if (IS_ERR(kaddr))
-                        goto out;
-with out: being just 'return err;', which suggests
-                kaddr = ufs_get_page(dir, n, &page);
-                if (IS_ERR(kaddr))
-                        return ERR_PTR(kaddr);
-instead (and that was the only goto out; so the label can be removed).
-The value stored in err in case !IS_ERR(kaddr) is (thankfully) never
-used - would've been a bug otherwise.  So this is an equivalent 
-transformation.
-
------
-
-Did you notice "so the label can be removed"?
-I must have misinterpreted what you wrote there. Did I?
-
-I removed the "out" label, according to what it seemed to me the correct way 
-to interpret your words.
-
-However at that moment I didn't see the endless loop at the end of the 
-function. Then I "fixed" (sigh!) it in 3/3 by terminating that endless loop
-with a "return 0". 
-
-However that was another mistake because after "got_it:" label we have "err = 
-ufs_commit_chunk(page, pos, rec_len);". 
-
-To summarize: I can delete _only_ the label and leave the "return err;" in the 
-block after the "out_put:" label. 
-
-Am I looking at it correctly now?
-
-Thanks,
-
-Fabio
-
-
+diff --git a/tools/perf/MANIFEST b/tools/perf/MANIFEST
+index c8e8e05b4ff1f56f..1da7f4b91b4f8af5 100644
+--- a/tools/perf/MANIFEST
++++ b/tools/perf/MANIFEST
+@@ -3,7 +3,6 @@ tools/arch
+ tools/scripts
+ tools/build
+ tools/include
+-tools/lib/traceevent
+ tools/lib/api
+ tools/lib/bpf
+ tools/lib/subcmd
