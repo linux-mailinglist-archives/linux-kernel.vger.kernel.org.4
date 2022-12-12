@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B666764A34C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7E864A35E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232391AbiLLO3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S231883AbiLLObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiLLO3R (ORCPT
+        with ESMTP id S231462AbiLLObB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:29:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921DC12D06;
-        Mon, 12 Dec 2022 06:29:15 -0800 (PST)
+        Mon, 12 Dec 2022 09:31:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E7D12ABB;
+        Mon, 12 Dec 2022 06:31:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA6EB80D8B;
-        Mon, 12 Dec 2022 14:29:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C71C433D2;
-        Mon, 12 Dec 2022 14:29:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670855352;
-        bh=Rus4CdOiiPn7zFAosG9gmqEHn/vU+rdHuj+PuYGnEXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PAmAzWWkhYpob2WNGn5P3l87YkLVt2J+gDnA5q/PAfUReD/3Y5Vfjmc1YYMg6jC9P
-         5XtNdReR5EbdW6ySCZZALPLA1rfxWksQNIIcp6tLuWJXyuK205G5KrEtlT6nN8WRmL
-         JdoDFb8bS1qXi/eVjlTIjt0TnPGii1Zmrn9bH053ZbO4EGWlr7XlUKZOmb3zHQHht8
-         gxZr0BfBNHuYM5dQw82FJTt+qXG47m1khF+auqnwwvKOYdM3gOGN1BZ1aohHFWsLc0
-         0x2BdSUFsBoekH48ZIviTY0edLXP/AUtlUgaYTOFA+KQ93wsoNIyEoo/84u2kkIeRX
-         fPWG7s6x4m6JQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4joF-0007Mc-B7; Mon, 12 Dec 2022 15:29:36 +0100
-Date:   Mon, 12 Dec 2022 15:29:35 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
-Message-ID: <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-20-johan+linaro@kernel.org>
- <87mt7sbtf9.ffs@tglx>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D416D60FF4;
+        Mon, 12 Dec 2022 14:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBACC433D2;
+        Mon, 12 Dec 2022 14:30:57 +0000 (UTC)
+Message-ID: <481d69d1-e073-1b77-e222-3b317c1a6d0f@xs4all.nl>
+Date:   Mon, 12 Dec 2022 15:30:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt7sbtf9.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v11 4/6] media: chips-media: wave5: Add TODO file
+Content-Language: en-US
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-media@vger.kernel.org, Nas Chung <nas.chung@chipsnmedia.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com, nicolas.dufresne@collabora.com,
+        linux-kernel@vger.kernel.org
+References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
+ <20221207121350.66217-5-sebastian.fricke@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20221207121350.66217-5-sebastian.fricke@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,35 +50,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 03:14:34PM +0100, Thomas Gleixner wrote:
-> On Fri, Dec 09 2022 at 15:01, Johan Hovold wrote:
-> > The IRQ domain structures are currently protected by the global
-> > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
-> > which may potentially speed up parallel probing somewhat.
-> >
-> > Note that the domain lock of the root domain (innermost domain) must be
-> > used for hierarchical domains. For non-hierarchical domain (as for root
-> > domains), the new root pointer is set to the domain itself so that
-> > domain->root->mutex can be used in shared code paths.
-> >
-> > Also note that hierarchical domains should be constructed using
-> > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
-> > poking at irqdomain internals.
+On 07/12/2022 13:13, Sebastian Fricke wrote:
+> From: Nas Chung <nas.chung@chipsnmedia.com>
 > 
-> While I agree in principle, this change really makes me nervous.
+> Add a TODO file with remaining elements to be improved/added.
 > 
-> Any fail in setting up domain->root correctly, e.g. by not using
-> irq_domain_create_hierarchy(), cannot be detected and creates nasty to
-> debug race conditions.
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+> Signed-off-by: Nas Chung <nas.chung@chipsnmedia.com>
+> ---
+>  drivers/media/platform/chips-media/wave5/TODO | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>  create mode 100644 drivers/media/platform/chips-media/wave5/TODO
 > 
-> So we need some debug mechanism which allows to validate that
-> domain->root is set up correctly when domain->parent != NULL.
+> diff --git a/drivers/media/platform/chips-media/wave5/TODO b/drivers/media/platform/chips-media/wave5/TODO
+> new file mode 100644
+> index 000000000000..2164fd071a56
+> --- /dev/null
+> +++ b/drivers/media/platform/chips-media/wave5/TODO
+> @@ -0,0 +1,18 @@
+> +* Handle interrupts better
+> +
+> +Currently the interrupt handling uses an unusual design employing a kfifo to
+> +transfer irq status to irq thread. This was done as a work around for dropped
+> +interrupts seen with IRQF_ONESHOT based handling.
+> +
+> +This needs further investigation and fixing properly, with the aid of
+> +C&M.
+> +
+> +* power management handling - add (runtime_)suspen/resume cb where the clock is enabled
+> +
+> +* revise logic of wave5_vpu_(dec/enc)_register_framebuffer
+> +
+> +* check if the  normal kernel endianness/__swab32 routines are sufficient. (instead of the ones
+> +  implemented in the driver)
+> +
+> +* Adjust STREAMON routine for the stateful decoder to adhere to the API, which
+> +  declares that STREAMON can be called before source buffers have been queued.
 
-Lockdep will catch that due to the
+A TODO file doesn't belong in a non-staging driver.
 
-	lockdep_assert_held(&domain->root->mutex);
+So either it should remain in staging if this is serious enough (and I'm a bit
+worried about the last item here!), or it should be documented in comments in
+the driver in the appropriate places.
 
-I added to irq_domain_set_mapping() and which is is called for each
-(inner) domain in a hierarchy when allocating an IRQ.
+Note that the "revise logic" item doesn't explain the reason why that should be
+done.
 
-Johan
+Regards,
+
+	Hans
