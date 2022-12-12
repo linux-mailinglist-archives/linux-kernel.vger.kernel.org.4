@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4951964A85C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE2364A85E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233409AbiLLUED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S233013AbiLLUEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiLLUEA (ORCPT
+        with ESMTP id S232128AbiLLUEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:04:00 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BFD1788A;
-        Mon, 12 Dec 2022 12:03:59 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 21so688651pfw.4;
-        Mon, 12 Dec 2022 12:03:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QxiD9QOWm22ozh4cTtuGcvlN+TVb9Fc8vBBhLu2C8CM=;
-        b=aCUTOAHu/xmm8z9cyKediliIPVmUzLeCJEMjJhv7iONzRgrgWaQAYxmDwiwP6GwFvd
-         hEPkAFqbmYYHm3abENgM/UlBrKOcKBzwbn+gTg56JPRj6c3YRupUDWaWst5YQWkV+USa
-         fV3CBrAevzb7fval2VL4gt2C2jaPTDRQoQRuf99HDLl7o2rYmUC+YZ8n+QcuRcztxxpD
-         DAwoqrviplWG8HzDSTSHfI/lzThCaaC2P9EFGGU1xLYVAcnqzI/SsyekwSk/RXz0v6QU
-         j19Zu6Y701NNU+R26N4SGJIRDFpOw5TuT/uR806juxtNkywIVt+7ZbV1+Y8S0zdsChbJ
-         /DMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QxiD9QOWm22ozh4cTtuGcvlN+TVb9Fc8vBBhLu2C8CM=;
-        b=h0LQF7nJSsYhQ4tl192qXGIlZ5zyRcbHWW5XNnpRTQCP/5cX3XySdqmuMAU2kTLdLs
-         BXqbx3aVJZ7loZ+kIVXCLv0YOicxGTuVo+kAWUN0kZTrgxOHhRS7Z5H7NxVS680dRjD2
-         uQLhnPGLjXK1m5nbspJy5dCEOfge1qWBRDgNyUKzc++vieaKG5EP4hu/JY4lSNnoozGs
-         rhhNLIwncl51TeRg+O1mlXo9q94HyxRZRVzQXLLgbozKcaazMogB353Bk7vo2Ar5pbKc
-         IMCBh/vt43U3SSXCwQjEtJKCdGDz30VB+ZafFVjf6kszFM8pdeoTfT/c6d4XATga3atq
-         sf1w==
-X-Gm-Message-State: ANoB5pkTe1AIEZX/T93d6jl2ghZgHpaDHGZHODDng8XfLPkJQBEvxQUh
-        gkG2peFQ9epYG0uY0CwAGEM=
-X-Google-Smtp-Source: AA0mqf41NVpaFY3aBkPGYrmRoRRgSVyDmbszFNRlsOkFgmmqfsO8Uema71lbsjpkFRMwn1M7y7Z+Gg==
-X-Received: by 2002:a05:6a00:1f0f:b0:56c:881d:b128 with SMTP id be15-20020a056a001f0f00b0056c881db128mr15894319pfb.22.1670875438318;
-        Mon, 12 Dec 2022 12:03:58 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa795af000000b00576670cc170sm6347939pfk.93.2022.12.12.12.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:03:57 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 10:03:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
-Message-ID: <Y5eJLAO09yd7j1xF@slm.duckdns.org>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-15-tj@kernel.org>
- <Y5cfD137arVsOdj7@hirez.programming.kicks-ass.net>
+        Mon, 12 Dec 2022 15:04:41 -0500
+Received: from forward501p.mail.yandex.net (forward501p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48F1789C;
+        Mon, 12 Dec 2022 12:04:38 -0800 (PST)
+Received: from iva2-656890eaceb5.qloud-c.yandex.net (iva2-656890eaceb5.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:6902:0:640:6568:90ea])
+        by forward501p.mail.yandex.net (Yandex) with ESMTP id BA3756212297;
+        Mon, 12 Dec 2022 23:04:36 +0300 (MSK)
+Received: by iva2-656890eaceb5.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id X4kblwWYm0U1-7cv5hKKb;
+        Mon, 12 Dec 2022 23:04:35 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1670875475;
+        bh=6SX0EynK6RIvhWjb2zjmvtqkipLIeeuKvC/PeivrWbM=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=mfNLCXyt4oCqEnDyNiripWetTOfJ6jG4zd5B0QXGviMyfrUWLIpJxMH9i8gLoiAG2
+         FA5BkgR2hkUl5Lj2CxiuuhUCVlMpyX3SQNnINVg60A88HFCxAJStop4CvdKTp9QfeD
+         UNE1bhr+bO6ajec7MVNRJm1VKDkseVJdnTFj05s4=
+Authentication-Results: iva2-656890eaceb5.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <011e1128-8b57-8edd-9854-7c4dd6a37291@yandex.ru>
+Date:   Tue, 13 Dec 2022 01:04:32 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5cfD137arVsOdj7@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: strange behavior with sigreturn() to 32bit
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, linux-x86_64@vger.kernel.org,
+        luto@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Al Viro <viro@ZenIV.linux.org.uk>
+References: <85ca9ae1-d319-ee77-4a71-bc9c7874f2cb@yandex.ru>
+ <87iligo1n1.fsf@email.froward.int.ebiederm.org>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <87iligo1n1.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Eric,
 
-On Mon, Dec 12, 2022 at 01:31:11PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 29, 2022 at 10:22:56PM -1000, Tejun Heo wrote:
-> > @@ -11242,3 +11268,38 @@ void call_trace_sched_update_nr_running(struct rq *rq, int count)
-> >  {
-> >          trace_sched_update_nr_running_tp(rq, count);
-> >  }
-> > +
-> > +#ifdef CONFIG_SCHED_CLASS_EXT
-> > +void sched_deq_and_put_task(struct task_struct *p, int queue_flags,
-> > +			    struct sched_enq_and_set_ctx *ctx)
-> > +{
-> > +	struct rq *rq = task_rq(p);
-> > +
-> > +	lockdep_assert_rq_held(rq);
-> > +
-> > +	*ctx = (struct sched_enq_and_set_ctx){
-> > +		.p = p,
-> > +		.queue_flags = queue_flags | DEQUEUE_NOCLOCK,
-> > +		.queued = task_on_rq_queued(p),
-> > +		.running = task_current(rq, p),
-> > +	};
-> > +
-> > +	update_rq_clock(rq);
-> > +	if (ctx->queued)
-> > +		dequeue_task(rq, p, queue_flags);
-> > +	if (ctx->running)
-> > +		put_prev_task(rq, p);
-> > +}
-> > +
-> > +void sched_enq_and_set_task(struct sched_enq_and_set_ctx *ctx)
-> > +{
-> > +	struct rq *rq = task_rq(ctx->p);
-> > +
-> > +	lockdep_assert_rq_held(rq);
-> > +
-> > +	if (ctx->queued)
-> > +		enqueue_task(rq, ctx->p, ctx->queue_flags);
-> > +	if (ctx->running)
-> > +		set_next_task(rq, ctx->p);
-> > +}
-> > +#endif	/* CONFIG_SCHED_CLASS_EXT */
-> 
-> So no. Like the whole __setscheduler_prio() thing, this doesn't make
-> sense outside of the core code, policy/class code should never need to
-> do this.
+13.12.2022 00:36, Eric W. Biederman пишет:
+> Stas,
+>
+> in your github report you mention that you believe this is a regression
+> https://github.com/dosemu2/dosemu2/pull/1830.
+>
+> Can you tell us the last kernel this worked on?
 
-Continuing from the __setscheduler_prio() discussion, the need arises from
-the fact that whether a task is on SCX or CFS changes depending on whether
-the BPF scheduler is loaded or not - e.g. when the BPF scheduler gets
-disabled, all tasks that were on it need to be moved back into CFS. There
-are different ways to implement this but it needs to be solved somehow.
+The only thing I actually think is a
+regression, is the return of 0 as an error
+code for GPF. I am pretty sure it used
+to work, because I was reporting the
+zeroed-out err code to @amluto and
+he fixed it. But that was something like
+5 years ago. These days @amluto seems
+to be inactive, does anyone know what
+have happened? He was always providing
+a very quick help in the past (and well,
+he wrote all that 64-32 switching code
+in sigreturn for us).
+Other problems I've found, are likely not
+a regressions. I.e. I never tried such
+tests under gdb before and I never tried
+to set high dword of RIP to non-zero.
+In fact, reliable err code is what I care
+most. If things can't be fixed under gdb
+or if I should always clear high part of
+RIP before switching to 32bit segment -
+fine. But zero error code is bad.
 
-> Also: https://lkml.kernel.org/r/20220330162228.GH14330@worktop.programming.kicks-ass.net
 
-Yeah, it'd be nice to encapsulate this sequence. The FOR_CHANGE_GUARD naming
-throws me off a bit tho as it's not really a loop. Wouldn't it be better to
-call it CHANGE_GUARD_BLOCK or sth?
+>    Which kernel you tested
+> that this fails on?
 
-Thanks.
+5.19.0-26-generic from ubuntu.
 
--- 
-tejun
+
+>    It would be awesome if you could bisect this to the
+> commit that is broken but at least knowing kernel's you have tried that
+> work and don't work would be very useful.
+
+Perhaps I'll look into setting up the test
+env under qemu if everything else fails.
+
+> Dosemu is old enough that anything it has down historically that no
+> longer works certainly counts as a regression and should be fixed.
+dosemu2 nowadays is using Andy's sigreturn
+new code, which is now about 10 years old.
+Historic dosemu afaik is not using anything
+like that, switching to 32bit by hands with iret.
