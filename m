@@ -2,110 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C282649BA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C666E649BB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiLLKGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S231833AbiLLKJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiLLKGX (ORCPT
+        with ESMTP id S231370AbiLLKJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:06:23 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C0829E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:06:22 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id cf42so17723249lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:06:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxHwpzdAgeysBPjazrb8MZAklpvcch7q79EoiQSklm4=;
-        b=a/cqR3OmFlwQ2CdWLT4/9k8uaKshPkOmZbfG58+OuOX46knLAG7cQEu2GCEwRyPqEs
-         y/hD4vUys0tprqY3OHNqDXo7pdF4W9IOwifvY+6SIB9TvrQWqas14voG4g4kXszGsOvA
-         NXtqYPzKGddJg0cs9et+X09UEkCyx+/dWT4W2GNM0wrmvOoP28wTJMLQNVnDyxgT076S
-         I6L9kDhnyEsTfpFw6PLHrFYzHEXpNx+Mf9F3PFJFgKtz7I60mQqetqkr8qkQaRX/wj2w
-         PI/avCbXLGjhbVdybY4qsfoAh38TItwsuK7GO61nal47ZsRU0eOnsY1bDwBvpL9ym8hy
-         2tRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AxHwpzdAgeysBPjazrb8MZAklpvcch7q79EoiQSklm4=;
-        b=xU6aqm+D5Zn9LTHdZ2xgZdLci8RldAM5NrjlJ7vyn4VFcnw2wrXu3+YzdA78eb9VAn
-         vS3SpXeGV13mGgJnD606jGmCh08iNOMT8CitkKJunCMil7XtRPjyqv6oP6CYwxHWzLK8
-         dp6ZFDI4MuIf0WGeHiCwf4XOA4XlvRHLuQMKJeROmXZQmheVgikxXgBPTaab+UVzlRnL
-         96U+JwFnSJCUhmOXmrVB+1yb88Lx1xfk6zle7SbAfxqVbiCc+Hwos5kV0fYgK5rPGwyy
-         FZ2K54hNt5+0UX2nkD5hI7ezna9ie8Zpp0o3PPati7cG0tJC0L5qXl4CaTECQEQq4FSK
-         e0xQ==
-X-Gm-Message-State: ANoB5pkZoY/fgIsB0UkxCxL4otX3/jGOzOYm8XvIuElAUOmr5NSLqd5n
-        81afbxLmnO0tcNNJ9VOMPji/FA==
-X-Google-Smtp-Source: AA0mqf5CzScTMQIXPiYPV2YD594XKdZ5k3C8WvM0e52jzUu7K/7Aeq2ynaYjH+BhVeHCMGpOTa6GRA==
-X-Received: by 2002:a05:6512:358d:b0:4b5:6c00:429b with SMTP id m13-20020a056512358d00b004b56c00429bmr3733559lfr.26.1670839580725;
-        Mon, 12 Dec 2022 02:06:20 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id o27-20020ac25e3b000000b00498fc3d4cfdsm1586330lfg.189.2022.12.12.02.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 02:06:20 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/arm-smmu-qcom: Add SM8150 DPU compatible
-Date:   Mon, 12 Dec 2022 11:06:16 +0100
-Message-Id: <20221212100617.18190-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Mon, 12 Dec 2022 05:09:02 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D4C2D9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:09:01 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670839739;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=H9vo2DtiADdIfw1vXZpWgFmc8ynuZRSwE8Yti4cc1KU=;
+        b=4ursBoKgY5M2zpBTlvUvjffA8ut5xn9fUk4NNo7worF8CgCDvv6nyVMIxyB8bZ92rERVUj
+        S3fXXECcVKKXID7gFgMMyB4vC2GZAICiFIFlC64FZ9SvgoX5lFbh12Lmb06OHQot8xrI5m
+        mnbR+4P/WBKJpAqSoqSLi8oQsMKUvnoM6R/4ejKGcPTcRCExn56ddchRaq6K/5aHsVPCZV
+        JgNZ+xdLPoYYk5lIp3awSuZtbeafw1N3R0zFtZxK4+Cu1pKM5y/behEqOR7c8sSw+OzoJ9
+        cgrPRStnmkjdgRS1QCdNPjx1O+y9/w+9XW5mfovGmNdolXXNxZknJboIjHgq7Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670839739;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=H9vo2DtiADdIfw1vXZpWgFmc8ynuZRSwE8Yti4cc1KU=;
+        b=KeZcX3StaZyq33WfX7OqhlQekf2bOg/Aes99MF0lKoE59nKGjO8/RuYx5Syqh+MEBTAEwb
+        9uDyLxjEVtkOWNBw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [GIT pull] x86/urgent for v6.2-rc1
+Message-ID: <167083907785.564878.11381307641454805335.tglx@xen13.tec.linutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 12 Dec 2022 11:08:59 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+Linus,
 
-Add the SM8150 DPU compatible to clients compatible list, as it also
-needs the workarounds.
+please pull the latest x86/urgent branch from:
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-Depends on the binding here:
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2022-=
+12-12
 
-[1] https://lore.kernel.org/linux-arm-msm/20221212093315.11390-1-konrad.dybcio@linaro.org/T/#t
+up to:  45be2ad007a9: x86/vdso: Conditionally export __vdso_sgx_enter_enclave=
+()
 
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+Three small x86 fixes which did not make it into 6.1:
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index 6610f5d2877d..cd74c1efcfde 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -255,6 +255,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
- 	{ .compatible = "qcom,sdm845-mss-pil" },
- 	{ .compatible = "qcom,sm6350-mdss" },
- 	{ .compatible = "qcom,sm6375-mdss" },
-+	{ .compatible = "qcom,sm8150-mdss" },
- 	{ .compatible = "qcom,sm8250-mdss" },
- 	{ }
- };
--- 
-2.38.1
+  - Remove a superfluous noinline which prevents GCC-7.3 to optimize a stub
+    function away.
+
+  - Allow uprobes on REP NOP and do not treat them like word-sized branch
+    instructions.
+
+  - Make the VDSO symbol export of __vdso_sgx_enter_enclave() depend on
+    CONFIG_X86_SGX to prevent build fails with newer LLVM versions which
+    rightfully detect that there is no function behind the symbol.
+
+Thanks,
+
+	tglx
+
+------------------>
+Miaohe Lin (1):
+      x86/alternative: Remove noinline from __ibt_endbr_seal[_end]() stubs
+
+Nathan Chancellor (1):
+      x86/vdso: Conditionally export __vdso_sgx_enter_enclave()
+
+Oleg Nesterov (1):
+      uprobes/x86: Allow to probe a NOP instruction with 0x66 prefix
+
+
+ arch/x86/entry/vdso/vdso.lds.S | 2 ++
+ arch/x86/kernel/alternative.c  | 2 +-
+ arch/x86/kernel/uprobes.c      | 4 +++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
+index 4bf48462fca7..e8c60ae7a7c8 100644
+--- a/arch/x86/entry/vdso/vdso.lds.S
++++ b/arch/x86/entry/vdso/vdso.lds.S
+@@ -27,7 +27,9 @@ VERSION {
+ 		__vdso_time;
+ 		clock_getres;
+ 		__vdso_clock_getres;
++#ifdef CONFIG_X86_SGX
+ 		__vdso_sgx_enter_enclave;
++#endif
+ 	local: *;
+ 	};
+ }
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5cadcea035e0..beaf9fc44e2f 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -624,7 +624,7 @@ void __init_or_module noinline apply_ibt_endbr(s32 *start=
+, s32 *end)
+=20
+ #else
+=20
+-void __init_or_module noinline apply_ibt_endbr(s32 *start, s32 *end) { }
++void __init_or_module apply_ibt_endbr(s32 *start, s32 *end) { }
+=20
+ #endif /* CONFIG_X86_KERNEL_IBT */
+=20
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index b63cf8f7745e..6c07f6daaa22 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -722,8 +722,9 @@ static int branch_setup_xol_ops(struct arch_uprobe *aupro=
+be, struct insn *insn)
+ 	switch (opc1) {
+ 	case 0xeb:	/* jmp 8 */
+ 	case 0xe9:	/* jmp 32 */
+-	case 0x90:	/* prefix* + nop; same as jmp with .offs =3D 0 */
+ 		break;
++	case 0x90:	/* prefix* + nop; same as jmp with .offs =3D 0 */
++		goto setup;
+=20
+ 	case 0xe8:	/* call relative */
+ 		branch_clear_offset(auprobe, insn);
+@@ -753,6 +754,7 @@ static int branch_setup_xol_ops(struct arch_uprobe *aupro=
+be, struct insn *insn)
+ 			return -ENOTSUPP;
+ 	}
+=20
++setup:
+ 	auprobe->branch.opc1 =3D opc1;
+ 	auprobe->branch.ilen =3D insn->length;
+ 	auprobe->branch.offs =3D insn->immediate.value;
 
