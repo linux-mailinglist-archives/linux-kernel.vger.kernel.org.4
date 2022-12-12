@@ -2,135 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0CC64A3C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F31964A3C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiLLOwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S232214AbiLLOxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiLLOwb (ORCPT
+        with ESMTP id S232019AbiLLOxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:52:31 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BD313D04;
-        Mon, 12 Dec 2022 06:52:29 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 88DF61EC064D;
-        Mon, 12 Dec 2022 15:52:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670856748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=zfXUdHJ29N/jAo1dQw/z1PUYABKq+SOS5oOUr53H5HI=;
-        b=mq9iEIObycZ9wU1KnjMMx6wmlqBaCWyP6v4pzDqgPqGYNATbDf9pdQNREMLoIKIjoybCjo
-        3IOHw156imHFmZQEgU7+ZLDtSKYFye43Cj6HOOE25KVcBbe0yXNyGHgAVmAWC9fyySTRGO
-        VBVWzlnRQpOT3Vh9cCdQd1wG2nJjRbI=
-Date:   Mon, 12 Dec 2022 15:52:23 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-edac <linux-edac@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] EDAC updates for v6.2
-Message-ID: <Y5dAJyR9meVleZTm@zn.tnic>
+        Mon, 12 Dec 2022 09:53:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7A0B337
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:53:30 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F154B1FB;
+        Mon, 12 Dec 2022 06:54:10 -0800 (PST)
+Received: from [192.168.89.251] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52E73F71E;
+        Mon, 12 Dec 2022 06:53:28 -0800 (PST)
+Message-ID: <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
+Date:   Mon, 12 Dec 2022 14:53:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [for-next][PATCH 02/11] tracing: Add __cpumask to denote a trace
+ event field that is a cpumask_t
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        douglas.raillard@arm.com
+References: <20221124145019.782980678@goodmis.org>
+ <20221124145045.743308431@goodmis.org>
+Content-Language: en-US
+From:   Douglas Raillard <douglas.raillard@arm.com>
+In-Reply-To: <20221124145045.743308431@goodmis.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 24-11-2022 14:50, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> The trace events have a __bitmask field that can be used for anything
+> that requires bitmasks. Although currently it is only used for CPU
+> masks, it could be used in the future for any type of bitmasks.
+> 
+> There is some user space tooling that wants to know if a field is a CPU
+> mask and not just some random unsigned long bitmask. Introduce
+> "__cpumask()" helper functions that work the same as the current
+> __bitmask() helpers but displays in the format file:
+> 
+>    field:__data_loc cpumask_t *[] mask;    offset:36;      size:4; signed:0;
+> 
+> Instead of:
+> 
+>    field:__data_loc unsigned long[] mask;  offset:32;      size:4; signed:0;
+> 
+> The main difference is the type. Instead of "unsigned long" it is
+> "cpumask_t *". Note, this type field needs to be a real type in the
+> __dynamic_array() logic that both __cpumask and__bitmask use, but the
+> comparison field requires it to be a scalar type whereas cpumask_t is a
+> structure (non-scalar). But everything works when making it a pointer.
 
-please pull the pile of EDAC updates for 6.2.
+How is tooling expected to distinguish between a real dynamic array of pointers
+from a type that is using dynamic arrays as an "implementation detail"
+with a broken type description ? Any reasonable
+interpretation of that type by the consuming tool will be broken
+unless it specifically knows about __data_loc cpumask*[].
+However, the set of types using that trick is unbounded so forward
+compatibilty is impossible to ensure. On top of that, an actual
+dynamic array of cpumask pointers becomes impossible to represent.
 
-Thx.
+You might object that if the tool does not know about cpumask,
+it does not matter "how it breaks" as the display will be useless anyway,
+but that is not true. A parsing library might just parse up to
+its knowledge limit and return the most elaborate it can for a given field.
+It's acceptable for that representation to not be elaborated with the full
+semantic expected by the end user, but it should not return
+something that is lying on its nature. For example, it would be sane for
+the user to assert the size of an array of pointers to be a multiple
+of a pointer size. cpumask is currently an array of unsigned long but there is
+nothing preventing a similar type to be based on an array of u8.
+Such a type would also have different endianness handling and the resulting buffer
+would be garbage.
 
----
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+To fix that issue, I propose to expose the following to userspace:
+1. The binary representation type (unsigned long[] in cpumask case).
+2. An (ordered list of) semantic type that may or may not be the same as 1.
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Type (1) can be used to guarantee correct handling of endianness and a reasonable
+default display, while (2) allows any sort of fancy interpretation, all that while preserving
+forward compatibility. For cpumask, this would give:
+1. unsigned long []
+2. bitmask, cpumask
 
-are available in the Git repository at:
+A consumer could know about bitmask as they are likely used in multiple places,
+but not about cpumask specifically (e.g. assuming cpumask is a type recently introduced).
+Displaying as a list of bits set in the mask would already allow proper formatting, and
+knowing it's actually a cpumask can allow fancier behaviors.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_6.2
+ From an event format perspective, this could preserve reasonable backward compat
+by simply adding another property:
 
-for you to fetch changes up to 3919430fe93bcfad5e34cdbb4d81cd17b3bbd27a:
+   field:__data_loc unsigned long[] mask;    offset:36;      size:4; signed:0; semantic_type:bitmask,cpumask;
 
-  Merge branches 'edac-ghes' and 'edac-misc' into edac-updates-for-v6.2 (2022-12-12 15:40:03 +0100)
+By default, "semantic_type" would simply have the same value as the normal type.
 
-----------------------------------------------------------------
-- Make ghes_edac a simple module like the rest of the EDAC drivers and
-drop this forced built-in only configuration by disentangling it from
-GHES. Work by Jia He.
+This applies to any type, not just dynamic arrays.
 
-- The usual small cleanups and improvements all over EDAC land
+Thanks,
 
-----------------------------------------------------------------
-Ard Biesheuvel (1):
-      apei/ghes: Use xchg_release() for updating new cache slot instead of cmpxchg()
+Douglas
+    
 
-Aristeu Rozanski (1):
-      EDAC/i5000: Mark as BROKEN
-
-Borislav Petkov (1):
-      MAINTAINERS: Make Mauro EDAC reviewer
-
-Borislav Petkov (AMD) (1):
-      Merge branches 'edac-ghes' and 'edac-misc' into edac-updates-for-v6.2
-
-Chen Zhang (1):
-      EDAC/i5400: Fix typo in comment: vaious -> various
-
-Jia He (6):
-      efi/cper: Export several helpers for ghes_edac to use
-      EDAC/ghes: Add a notifier for reporting memory errors
-      EDAC/ghes: Prepare to make ghes_edac a proper module
-      EDAC/ghes: Make ghes_edac a proper module
-      EDAC: Check for GHES preference in the chipset-specific EDAC drivers
-      EDAC/igen6: Return the correct error type when not the MC owner
-
-Manivannan Sadhasivam (1):
-      MAINTAINERS: Make Manivannan Sadhasivam the maintainer of qcom_edac
-
-Yang Yingliang (1):
-      EDAC/i10nm: fix refcount leak in pci_get_dev_wrapper()
-
-Yazen Ghannam (1):
-      EDAC/mc_sysfs: Increase legacy channel support to 12
-
- MAINTAINERS                    |   5 +-
- drivers/acpi/apei/ghes.c       | 126 +++++++++++++++++++++++++++++++----------
- drivers/edac/Kconfig           |   5 +-
- drivers/edac/amd64_edac.c      |   3 +
- drivers/edac/armada_xp_edac.c  |   3 +
- drivers/edac/edac_mc_sysfs.c   |  24 ++++++++
- drivers/edac/edac_module.h     |   1 +
- drivers/edac/ghes_edac.c       |  90 +++++++++++++++++------------
- drivers/edac/i10nm_base.c      |   6 +-
- drivers/edac/i5400_edac.c      |   3 +-
- drivers/edac/igen6_edac.c      |   5 +-
- drivers/edac/layerscape_edac.c |   3 +
- drivers/edac/pnd2_edac.c       |   3 +
- drivers/edac/sb_edac.c         |   3 +
- drivers/edac/skx_base.c        |   3 +
- drivers/edac/thunderx_edac.c   |   3 +
- drivers/edac/xgene_edac.c      |   3 +
- drivers/firmware/efi/cper.c    |   3 +
- include/acpi/ghes.h            |  34 +++--------
- 19 files changed, 227 insertions(+), 99 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
