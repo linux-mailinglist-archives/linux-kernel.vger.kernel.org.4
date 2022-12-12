@@ -2,202 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B9A64A8C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E24E64A8C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbiLLUfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
+        id S233524AbiLLUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:36:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233572AbiLLUfL (ORCPT
+        with ESMTP id S232180AbiLLUgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:35:11 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8D917E0C;
-        Mon, 12 Dec 2022 12:35:10 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id fc4so31229471ejc.12;
-        Mon, 12 Dec 2022 12:35:09 -0800 (PST)
+        Mon, 12 Dec 2022 15:36:10 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7A1583C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:36:09 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id o127so15181899yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:36:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=4MmC51vNneBDxR+Ol6/nI/pLRgVHDMLqs6SDquGm7SU=;
-        b=GDz9LCcLvFDGFSfek/PatM+Iqvh4yizsaGyLAKghgvnDws86vA4AalauFzKEuBP4LD
-         ruHMk3BQGl7ucvvDhu/Xqsqpfg+dAHPXcP4TjzdW9wFPXklMZS5r0t4+WxodQzKgk8Lc
-         QmNm/++Mr8o3szSkLywm1JytqiNv/NeR6NE1npaeTcWwRWWLYsv891/DIwKTK4yzgdcS
-         diDY0lABQfOlyKYN94Ba3T0IPPfX7IgRnyMfD2TCO3afTTKcGcWwmi+0cFhBgA87MHlG
-         skLJYTDtqTn81XrPVEEVsOJ9sfjn/m9jX4+Mmnj5j/jUulHWV7sKLZ1AczY7NeO8AtHS
-         ItaA==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0dMhDUB72BePilNkVmMSswDSENS33OIY/8tXTH/slg4=;
+        b=VALgahziLcR9p427xDFh1XxBekhCCtrDl4pBjEfh2MFdUvdlxk6GmUnHANnlKBxTrq
+         UT2EJEOf+QZIwY5MuwEjMscuR9z06NdCkEQncgSDpjrXp3hodLWtoTvAQo3JNaJUsPt3
+         lfYRLgGZ8KnvKH951J1tZjKRSfbqoE7yPNDlP82ryW3mfqy4zkaKfMIJ1Fjs+JKSZqbG
+         0kuUD1v4dVYyOuKPIoeYIMU4cpd4WdNZVeQrmJamCWNsBo64DfF/zelPwOqeJJNn0bO+
+         ctjT6VTGvrPnF52wSj/K/IO0R1SHWMMZqwYEOncDltQghSuOHXndtIPoXWet6EuzajJs
+         1VSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4MmC51vNneBDxR+Ol6/nI/pLRgVHDMLqs6SDquGm7SU=;
-        b=QGUlF8m9169B+CGaaDRhjg/0C/k6disx/RmwXwg1dxdHISUrNGkERyyh3T+AZv3Ua1
-         VevaVsrS35fakV3iv3YP1UOjO+zTtoVcSo9/NsfRg4I7L5M6Vn50nASlyM3Jqe2ARCWi
-         grfLlHBud6uFb68PBnSSkKmCNx8+IByVGns+kCPTvTraWHzoYHL/eluiyaSBUItrzJYQ
-         iU/lAha1Y3YJpKONdlyQR2TDmACGbLXR7evdmEDumeI0FlKgB7jEptDd+EXyTMe5ihAE
-         1XKBeeKqMzhQb8XYx3Ie+jW4I/StzzIEqs8IMzR5ugdDSmTo8q2AvY8kSsOHel9/t6s8
-         x9Fw==
-X-Gm-Message-State: ANoB5pm/cm73hY/0Vwh3WCb1GFLrDx6j4Nz67MOhB5P6SQNFHGN50w05
-        7PmUpowq5j1GywraN8ucfPQ=
-X-Google-Smtp-Source: AA0mqf4zAEoojMVYRqRR9QZUpqN+3hXQDVbkNf5ZA8xF6pemxIFOBZC7KwM2fh9jHS3/oVgTjuXsjg==
-X-Received: by 2002:a17:906:7b50:b0:7c1:65d1:c4ca with SMTP id n16-20020a1709067b5000b007c165d1c4camr7093556ejo.33.1670877308493;
-        Mon, 12 Dec 2022 12:35:08 -0800 (PST)
-Received: from gmail.com (1F2EF155.nat.pool.telekom.hu. [31.46.241.85])
-        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b007c0985aa6b0sm3662598ejb.191.2022.12.12.12.35.07
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0dMhDUB72BePilNkVmMSswDSENS33OIY/8tXTH/slg4=;
+        b=Q2/TECAhX0z1wo9IbQJAerFZCPxa2fXNUQmdRKqH6+Z44pwNx0nuUhUbHqXDVM6Aja
+         Q9v9SQVIcz5duPSb0yglzZWi01xSTxQy9Hn1g+cx/9X2L4MlNEESKlCOkbTAtnHfj/ZQ
+         sWfDLXSW/t5IBRQAd44118KYMuHSX8Ue5ZnHFn/9mn3WLbcJ+Tc1wU6xFqlf+qTXbGip
+         m9dPw4zdUedFPy12Uic9q/blvlVLOFOtc/M+xWhMBB7YfCEFw2PfTq7Y2OSedIcCDkP3
+         zXYWzoFx9UU8yXB44qTE47ijr28BA2AhaMX5sAQvorbOqPqK4u4MRBa1BmwSyd8Hqxej
+         WD8A==
+X-Gm-Message-State: ANoB5pnZvxv0B6VANtH5u0mdVXQfz2O9HTr6l8G+aNHGEvCmVcffH9nR
+        WJfQORNmX7hr/HquirS+Lltszw==
+X-Google-Smtp-Source: AA0mqf6h644TKANgzkwZdoDdLgr7HeNuK8OcwsM2S18P04rc7i6iDBJNXLk38X3w9fCLS4GfX/1vZA==
+X-Received: by 2002:a25:5906:0:b0:6f9:c559:d531 with SMTP id n6-20020a255906000000b006f9c559d531mr16917809ybb.35.1670877368205;
+        Mon, 12 Dec 2022 12:36:08 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id bj17-20020a05620a191100b006b95b0a714esm6485115qkb.17.2022.12.12.12.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:35:07 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 12 Dec 2022 21:35:05 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mon, 12 Dec 2022 12:36:07 -0800 (PST)
+Date:   Mon, 12 Dec 2022 12:35:57 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        Alex Shi <alex.shi@linux.alibaba.com>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        "Chen, Rong A" <rong.a.chen@intel.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        "Huang, Ying" <ying.huang@intel.com>, Jann Horn <jannh@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        =?ISO-8859-15?Q?Mika_Penttil=E4?= <mika.penttila@nextfour.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [GIT PULL] perf event updates for v6.2
-Message-ID: <Y5eQeR2tpZ/Bos49@gmail.com>
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, Gavin Shan <gshan@redhat.com>,
+        Zhenyu Zhang <zhenyzha@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 5.10 001/106] mm/mlock: remove lru_lock on
+ TestClearPageMlocked
+In-Reply-To: <20221212130924.929782499@linuxfoundation.org>
+Message-ID: <8ad6ed6-5f7c-f1cd-8693-caf88bfca73a@google.com>
+References: <20221212130924.863767275@linuxfoundation.org> <20221212130924.929782499@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1463760895-100399986-1670877367=:4310"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Please pull the latest perf/core git tree from:
+---1463760895-100399986-1670877367=:4310
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf-core-2022-12-12
+On Mon, 12 Dec 2022, Greg Kroah-Hartman wrote:
 
-   # HEAD: 17b8d847b92d815d1638f0de154654081d66b281 perf/x86/intel/uncore: Fix reference count leak in __uncore_imc_init_box()
+> From: Alex Shi <alex.shi@linux.alibaba.com>
+>=20
+> [ Upstream commit 3db19aa39bac33f2e850fa1ddd67be29b192e51f ]
+>=20
+> In the func munlock_vma_page, comments mentained lru_lock needed for
+> serialization with split_huge_pages.  But the page must be PageLocked as
+> well as pages in split_huge_page series funcs.  Thus the PageLocked is
+> enough to serialize both funcs.
+>=20
+> Further more, Hugh Dickins pointed: before splitting in
+> split_huge_page_to_list, the page was unmap_page() to remove pmd/ptes
+> which protect the page from munlock.  Thus, no needs to guard
+> __split_huge_page_tail for mlock clean, just keep the lru_lock there for
+> isolation purpose.
+>=20
+> LKP found a preempt issue on __mod_zone_page_state which need change to
+> mod_zone_page_state.  Thanks!
+>=20
+> Link: https://lkml.kernel.org/r/1604566549-62481-13-git-send-email-alex.s=
+hi@linux.alibaba.com
+> Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
+> Acked-by: Hugh Dickins <hughd@google.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Alexander Duyck <alexander.duyck@gmail.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Andrey Ryabinin <aryabinin@virtuozzo.com>
+> Cc: "Chen, Rong A" <rong.a.chen@intel.com>
+> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Cc: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+> Cc: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
+> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Mika Penttil=C3=A4 <mika.penttila@nextfour.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+> Cc: Wei Yang <richard.weiyang@gmail.com>
+> Cc: Yang Shi <yang.shi@linux.alibaba.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Stable-dep-of: 829ae0f81ce0 ("mm: migrate: fix THP's mapcount on isolatio=
+n")
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-[ Conflict heads-up: there's going to be a trivial conflict in 
-  kernel/events/core.c when pulling this into your v6.1+ tree. ]
+NAK from me to patches 001 through 007 here: 001 through 006 are a
+risky subset of patches and followups to a per-memcg per-node lru_lock
+series from Alex Shi, which made subtle changes to locking, memcg
+charging, lru management, page migration etc.
 
-Perf events updates for v6.2:
+The whole series could be backported to 5.10 (I did so myself for
+internal usage), but cherry-picking parts of it into 5.10-stable is
+misguided and contrary to stable principles.
 
- - Thoroughly rewrite the data structures that implement perf task context handling,
-   with the goal of fixing various quirks and unfeatures both in already merged,
-   and in upcoming proposed code.
+Maybe there is in fact nothing wrong with the selection made:
+but then give linux-mm guys two or three weeks to review and
+test and give the thumbs up to that selection.
 
-   The old data structure is the per task and per cpu perf_event_contexts:
+Much easier, quicker and safer would be to adjust 007 (I presume
+the reason behind 001 through 006) to fit the 5.10-stable tree:
+I can do that myself if you ask, but not until later this week.
 
-         task_struct::perf_events_ctxp[] <-> perf_event_context <-> perf_cpu_context
-              ^                                 |    ^     |           ^
-              `---------------------------------'    |     `--> pmu ---'
-                                                     v           ^
-                                                perf_event ------'
+Hugh
 
-   In this new design this is replaced with a single task context and
-   a single CPU context, plus intermediate data-structures:
-
-         task_struct::perf_event_ctxp -> perf_event_context <- perf_cpu_context
-              ^                           |   ^ ^
-              `---------------------------'   | |
-                                              | |    perf_cpu_pmu_context <--.
-                                              | `----.    ^                  |
-                                              |      |    |                  |
-                                              |      v    v                  |
-                                              | ,--> perf_event_pmu_context  |
-                                              | |                            |
-                                              | |                            |
-                                              v v                            |
-                                         perf_event ---> pmu ----------------'
-
-   [ See commit bd2756811766 for more details. ]
-
-   This rewrite was developed by Peter Zijlstra and Ravi Bangoria.
-
- - Optimize perf_tp_event()
-
- - Update the Intel uncore PMU driver, extending it with UPI topology discovery
-   on various hardware models.
-
- - Misc fixes & cleanups
-
- Thanks,
-
-	Ingo
-
------------------->
-Alexander Antonov (11):
-      perf/x86/intel/uncore: Generalize IIO topology support
-      perf/x86/intel/uncore: Introduce UPI topology type
-      perf/x86/intel/uncore: Clear attr_update properly
-      perf/x86/intel/uncore: Disable I/O stacks to PMU mapping on ICX-D
-      perf/x86/intel/uncore: Generalize get_topology() for SKX PMUs
-      perf/x86/intel/uncore: Enable UPI topology discovery for Skylake Server
-      perf/x86/intel/uncore: Get UPI NodeID and GroupID
-      perf/x86/intel/uncore: Enable UPI topology discovery for Icelake Server
-      perf/x86/intel/uncore: Enable UPI topology discovery for Sapphire Rapids
-      perf/x86/intel/uncore: Update sysfs-devices-mapping file
-      perf/x86/intel/uncore: Make set_mapping() procedure void
-
-Chen Zhongjin (1):
-      perf: Fix possible memleak in pmu_dev_alloc()
-
-Colin Ian King (1):
-      perf: Remove unused pointer task_ctx
-
-Gaosheng Cui (1):
-      perf: Fix IS_ERR() vs NULL check in inherit_event()
-
-Peter Zijlstra (2):
-      perf: Rewrite core context handling
-      perf: Fix function pointer case
-
-Rafael Mendonca (1):
-      perf/x86: Remove unused variable 'cpu_type'
-
-Ravi Bangoria (3):
-      perf: Optimize perf_tp_event()
-      perf/amd/ibs: Make IBS a core pmu
-      perf/core: Don't allow grouping events from different hw pmus
-
-Shaokun Zhang (1):
-      perf/x86/amd: Remove the repeated declaration
-
-Xiongfeng Wang (4):
-      perf/x86/intel/uncore: Fix reference count leak in sad_cfg_iio_topology()
-      perf/x86/intel/uncore: Fix reference count leak in hswep_has_limit_sbox()
-      perf/x86/intel/uncore: Fix reference count leak in snr_uncore_mmio_map()
-      perf/x86/intel/uncore: Fix reference count leak in __uncore_imc_init_box()
-
-
- Documentation/ABI/testing/sysfs-devices-mapping |   30 +-
- arch/arm64/kernel/perf_event.c                  |   18 +-
- arch/powerpc/perf/core-book3s.c                 |    8 +-
- arch/s390/kernel/perf_pai_crypto.c              |    2 +-
- arch/s390/kernel/perf_pai_ext.c                 |    2 +-
- arch/x86/events/amd/brs.c                       |    2 +-
- arch/x86/events/amd/ibs.c                       |    4 +-
- arch/x86/events/amd/lbr.c                       |    6 +-
- arch/x86/events/core.c                          |   48 +-
- arch/x86/events/intel/core.c                    |   23 +-
- arch/x86/events/intel/ds.c                      |    4 +-
- arch/x86/events/intel/lbr.c                     |   30 +-
- arch/x86/events/intel/uncore.h                  |   24 +-
- arch/x86/events/intel/uncore_snb.c              |    3 +
- arch/x86/events/intel/uncore_snbep.c            |  495 +++++-
- arch/x86/events/perf_event.h                    |   31 +-
- drivers/perf/arm_pmu.c                          |   16 +-
- include/linux/perf/arm_pmu.h                    |    2 +-
- include/linux/perf_event.h                      |  125 +-
- include/linux/sched.h                           |    2 +-
- kernel/events/core.c                            | 2120 ++++++++++++-----------
- 21 files changed, 1765 insertions(+), 1230 deletions(-)
+> ---
+>  mm/mlock.c | 26 +++++---------------------
+>  1 file changed, 5 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 884b1216da6a..796c726a0407 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -187,40 +187,24 @@ static void __munlock_isolation_failed(struct page =
+*page)
+>  unsigned int munlock_vma_page(struct page *page)
+>  {
+>  =09int nr_pages;
+> -=09pg_data_t *pgdat =3D page_pgdat(page);
+> =20
+>  =09/* For try_to_munlock() and to serialize with page migration */
+>  =09BUG_ON(!PageLocked(page));
+> -
+>  =09VM_BUG_ON_PAGE(PageTail(page), page);
+> =20
+> -=09/*
+> -=09 * Serialize with any parallel __split_huge_page_refcount() which
+> -=09 * might otherwise copy PageMlocked to part of the tail pages before
+> -=09 * we clear it in the head page. It also stabilizes thp_nr_pages().
+> -=09 */
+> -=09spin_lock_irq(&pgdat->lru_lock);
+> -
+>  =09if (!TestClearPageMlocked(page)) {
+>  =09=09/* Potentially, PTE-mapped THP: do not skip the rest PTEs */
+> -=09=09nr_pages =3D 1;
+> -=09=09goto unlock_out;
+> +=09=09return 0;
+>  =09}
+> =20
+>  =09nr_pages =3D thp_nr_pages(page);
+> -=09__mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+> +=09mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+> =20
+> -=09if (__munlock_isolate_lru_page(page, true)) {
+> -=09=09spin_unlock_irq(&pgdat->lru_lock);
+> +=09if (!isolate_lru_page(page))
+>  =09=09__munlock_isolated_page(page);
+> -=09=09goto out;
+> -=09}
+> -=09__munlock_isolation_failed(page);
+> -
+> -unlock_out:
+> -=09spin_unlock_irq(&pgdat->lru_lock);
+> +=09else
+> +=09=09__munlock_isolation_failed(page);
+> =20
+> -out:
+>  =09return nr_pages - 1;
+>  }
+> =20
+> --=20
+> 2.35.1
+>=20
+>=20
+>=20
+>=20
+---1463760895-100399986-1670877367=:4310--
