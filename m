@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF72E64A730
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D6964A732
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbiLLSfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S233565AbiLLShF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiLLSex (ORCPT
+        with ESMTP id S233527AbiLLSg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:34:53 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC2E12746;
-        Mon, 12 Dec 2022 10:34:49 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id d2so8777579qvp.12;
-        Mon, 12 Dec 2022 10:34:49 -0800 (PST)
+        Mon, 12 Dec 2022 13:36:58 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1736D11C08;
+        Mon, 12 Dec 2022 10:36:57 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s5so14214823edc.12;
+        Mon, 12 Dec 2022 10:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rN9HrhJGorMhLAYh3gvbHLJnLxFvXe7WSHGYbddfpHI=;
+        b=NymybZQFWQLZb9uiHzpqjMtEA1Vp4tW3h5P8FCpncxIgO2C0Q3zCKkbE+X0JsbfO+w
+         D8YvnOxmDoQdHDRPc5Gij9pgSPdER59XrBYW1Otx0uidH+5fkot5UwivF25CqfCdqlmd
+         r3J4t/iKeR7M8wJE4ECtFK6m3cszTX02dte+PtO4c01fWHVK0wQ98lVGhbG5iOy2/4AC
+         bUbZphVo3Rz7znO93tqBLsFNJ6iVOHyaDa1X9k2V73It45+e0JnI97l3VuwZ7chu+P8l
+         Q602wezTpNpyvTDVcRDZTjGMd1tZnC78ZzPWoNEeg+G4M2wYa7TAJcurq/55YE1A0X8D
+         ZN6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fs2Cn6MInWO2Vp6jIz3bcJBYYCuM+2I3Q8E3W6mSSyg=;
-        b=Psz7tDWuxUW004804H2lGxtgTn+fYPKbU0UjpIHSVS3Ek8EgICKe/Vb+2auFVQVeG2
-         z56nuE0WJhljpJwe8TkjaYXmEQVsRYqioqP4XD7oJBembBQfzEgCYeCUoP2dgp5wL6o2
-         BHXQffl8XjX7XKxyw2rIgvFpBxVFLYOLGRi79zhFoQm21UXk/FaPMyVMEQJ7H+3vka3k
-         Zv0lYcr3uXSX5gthSnCAYjiqS97Qx4O6dpUaxFtrkYqLcGAX+T8O5sMS8+gFNtcUqALn
-         j7fZrZ/V0Z0xfEBdOTg/WSqfHJM+eN0LHXEMZlgZWYhamTNOLkWy7XA3koaERWT9/49c
-         AG3Q==
-X-Gm-Message-State: ANoB5pmuJYZ1GfjP7QZH/yM+jsxZ9/qYtiimWwVHzGwHbuHK//8DzvMy
-        MfIXA59qugprw6mkrbbm6cJPoSHHBTQszI5z5NDY/ASv
-X-Google-Smtp-Source: AA0mqf68esnfpSOaYXkl8w5uWtikQbvdjF80wVqyN0PehN87AzTDTMO6p1Li2IYRnU/SCaZyXRGBFCBiM5aFD2lCAJ8=
-X-Received: by 2002:a0c:facd:0:b0:4de:83db:b846 with SMTP id
- p13-20020a0cfacd000000b004de83dbb846mr254614qvo.119.1670870088624; Mon, 12
- Dec 2022 10:34:48 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rN9HrhJGorMhLAYh3gvbHLJnLxFvXe7WSHGYbddfpHI=;
+        b=BMRPw+x+azOxLMDG6lO1CvnsGk0oeW1A1B8TjUt2DDGHdjxehuBhEDre/eysblXp1I
+         iXDuZC+HYkl+qk1Ys5Dq99gZA6uYXbI/bfJc6lJf6c1VWh2yvXMJQ90SoLc6KWVemB02
+         kXrl9qu9sqJWpjJ2BwyrMg+0XU/77K3ky2IkM6UhjnupsODQU5JYDVFM55leO9FwisSZ
+         unZ+8dx47cFgem+IOboRgNvFbnF1etzbcoQL0L7zuvfxwNJiKK/gAobszpSiAQSpa/sD
+         NInho6ru3c5MwNbLWFFhgGYHDC1y7ZcumXVp//PL8qZZDz9vUgOncg6jeTK2DpMkx+jb
+         qwXg==
+X-Gm-Message-State: ANoB5pmkeIskq6nu29JBOqJgY1jtqKK8skXbrY4o2cxEwExyl6hWSYtY
+        VZvOTewcR2ZuT0pvwvFZK/g=
+X-Google-Smtp-Source: AA0mqf5vZA4IW7ixO6CVHL2IhOHlX1IzMN/2jZiuTrhAue4NogpmnwJfif/fMhTYF5zUhKBV/cl/hA==
+X-Received: by 2002:a05:6402:1107:b0:468:3d69:ac85 with SMTP id u7-20020a056402110700b004683d69ac85mr14056162edv.27.1670870215530;
+        Mon, 12 Dec 2022 10:36:55 -0800 (PST)
+Received: from skbuf ([188.27.185.63])
+        by smtp.gmail.com with ESMTPSA id e8-20020a056402148800b0046c5dda6b32sm4089730edv.31.2022.12.12.10.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 10:36:55 -0800 (PST)
+Date:   Mon, 12 Dec 2022 20:36:52 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jerry.Ray@microchip.com
+Cc:     andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jbe@pengutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk
+Subject: Re: [PATCH net-next v5 5/6] dsa: lan9303: Determine CPU port based
+ on dsa_switch ptr
+Message-ID: <20221212183652.7wtzgcvtjgwsqwbr@skbuf>
+References: <20221209224713.19980-1-jerry.ray@microchip.com>
+ <20221209224713.19980-6-jerry.ray@microchip.com>
+ <20221211224608.rdlcuqg4d37f7z66@skbuf>
+ <MWHPR11MB1693284A37657C11F91ADFD0EFE29@MWHPR11MB1693.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221010141630.zfzi7mk7zvnmclzy@techsingularity.net>
- <CAJZ5v0j9JyDZupNnQUsTUVv0WapGjK7b5S-4ewZ8-b=HOret2Q@mail.gmail.com>
- <20221010174526.3yi7nziokwwpr63s@techsingularity.net> <CAJZ5v0je1dS4xSG46r64s8G5sJHjiziX92GBaKXaxueTim3wJA@mail.gmail.com>
- <20221011092050.gnh3dr5iqdvvrgs5@techsingularity.net> <Y5dx8pskqpaQU8kk@paranoid-android>
-In-Reply-To: <Y5dx8pskqpaQU8kk@paranoid-android>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Dec 2022 19:34:37 +0100
-Message-ID: <CAJZ5v0iJGJ3AU+CLEgA3XTvdb-7xiyKOzzGEEsSO-xc0br_dQw@mail.gmail.com>
-Subject: Re: Intermittent boot failure after 6492fed7d8c9 (v6.0-rc1)
-To:     Mathieu Chouquet-Stringer <me@mathieu.digital>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-rtc@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR11MB1693284A37657C11F91ADFD0EFE29@MWHPR11MB1693.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 7:25 PM Mathieu Chouquet-Stringer
-<me@mathieu.digital> wrote:
->
->         Hello Rafael,
->
-> On Tue, Oct 11, 2022 at 10:20:50AM +0100, Mel Gorman wrote:
-> > On Mon, Oct 10, 2022 at 08:29:05PM +0200, Rafael J. Wysocki wrote:
-> > > > That's less than the previous 5/10 failures but I
-> > > > cannot be certain it helped without running a lot more boot tests. The
-> > > > failure happens in the same function as before.
-> > >
-> > > I've overlooked the fact that acpi_install_fixed_event_handler()
-> > > enables the event on success, so it is a bug to call it when the
-> > > handler is not ready.
-> > >
-> > > It should help to only enable the event after running cmos_do_probe()
-> > > where the driver data pointer is set, so please try the attached
-> > > patch.
->
-> I'm hitting this issue on the 6.0 stable releases (aka 6.0.y) and
-> looking at the stable tree I see this hasn't been merged... I just got
-> bitten by this on 6.0.12.
->
-> Greg, if Rafael agrees, I think you should apply 4919d3eb2ec0 and
-> 0782b66ed2fb to the 6.0.y tree.
+On Mon, Dec 12, 2022 at 05:42:01PM +0000, Jerry.Ray@microchip.com wrote:
+> > It looks like there is potentially more code to unlock than this simple
+> > API change, which is something you could look at.
+> 
+> I understand your point. The LAN9303 is very flexible, supporting an I2C
+> method for managing the switch and allowing the xMII to operate as either
+> MAC or PHY.
+> 
+> The original driver was written targeting the primary configuration most
+> widely used by our customers. The host CPU has an xMII interface and the
+> MDIO bus is used for control. Adding in the flexibility to support other
+> configurations is something I will investigate as I expand the driver to
+> support LAN9353/LAN9354/LAN9355 devices. Adding the
+> private->info->supports_mii[] as was done in the ksz drivers is the most
+> likely approach. I see this as a separate patch series.  Would you agree?
+> 
+> I will hardcode for port 0 at this point rather than looking at CPU port.
 
-This is fine with me, please send an inclusion request to Greg and the
-"stable" list.
+Yes, I think that would be ok. Thanks for at least not baking in any
+more assumptions in the driver that already exist.
