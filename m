@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF7A649FB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0F2649F7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiLLNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
+        id S232102AbiLLNKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiLLNNs (ORCPT
+        with ESMTP id S230040AbiLLNKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:13:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F10C32;
-        Mon, 12 Dec 2022 05:13:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D807E61041;
-        Mon, 12 Dec 2022 13:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462E6C433EF;
-        Mon, 12 Dec 2022 13:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670850825;
-        bh=xBqcSjH2ykKNHWeS29A6f/ABA0xmeApYpT4bmdclxwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R/ERXN2/FU0xWK5RR25PGcd4u+2BATn9Om5ykZH2mdUaKLp81N+Up+nCBiri4/pRz
-         05BDA/XgSrQ55Un8f7xPpaj8cXMKVLMOVTMzB3Cm4NC0fxwTdvgso4C1oxMPSN9v7I
-         m8Q7i6CjFmUIinyNLUulk1w/DBmI3Kb1ydvkBtZiFGqMr0/Hq3oBrGxH+azrRVV5cJ
-         x7SGIZ2L8aBpT/vrELq/LLog749yIbWIVAXDJe+yv0p1ZyukNIu5PnOL0up+ftrC1G
-         hbR65/TPkEMXnOK10HGGFLIVGxUg4g0QWgd1Zs5PFBpc7Nlu/YAYnxgAgXGM3b4J2y
-         uVLN0jsOLzMBw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4idD-0006NU-Jw; Mon, 12 Dec 2022 14:14:08 +0100
-Date:   Mon, 12 Dec 2022 14:14:07 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
+        Mon, 12 Dec 2022 08:10:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306626421;
+        Mon, 12 Dec 2022 05:10:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670850617; x=1702386617;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=e//N1Ul0zdozGL+xk16ZGECF6oEtAqvvXdxDSJ4w5mg=;
+  b=j+eLlVrgn/5BYXUAF2cGU674R+Um00xOXVlat0Cxw0NILbh3g1rEbeow
+   7lVWinwjGR0D9cwV+cI9imqb7YCVcunr11x58oWOB3tIOv8FKRKNmdlRw
+   OX0D6gZgmrglFUCBs5u/ZdK9VDdRaLt0zUIJr4i6ORlpkFh/JnyCvOLNe
+   4GgNu+RUjonZY4qdj5sjuPcSO5D52jfBsJ+FqSXYVHIg+B3JlAmgblLq8
+   7SLm94rcg0SjowwS9S/DRIDkPEolZeWty+q2e55n5qyvSpYRFFOC6CAS1
+   TrMM72QvhT3VXxlv5y+i0NsdzJIw/Ki9WeZL4rO6VgMjd6jdh49srt008
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="187716827"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2022 06:10:15 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 12 Dec 2022 06:10:15 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 06:10:12 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/4] ASoC: microchip: power saving features and cleanups
+Date:   Mon, 12 Dec 2022 15:15:31 +0200
+Message-ID: <20221212131535.76111-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 12.12.22 11:31, Johan Hovold wrote:
-> > On Mon, Dec 12, 2022 at 11:19:00AM +0100, Oliver Neukum wrote:
-> >> On 11.12.22 13:06, Johan Hovold wrote:
-> >>
-> >>> Due to a misunderstanding, a redundant and misleading kernel doc comment
-> >>> for usb_set_intfdata() was recently added which claimed that the driver
-> >>> data pointer must not be cleared during disconnect before "all actions
-> >>> [are] completed", which is both imprecise and incorrect.
-> >>
-> >> OK, but is that a reason to remove all kerneldoc? Kerneldoc is generally
-> >> a good thing. And if a pointer is NULLed by driver core, that will need
-> >> to be in it. IMHO you'd better just remove the questionable part of the
-> >> kerneldoc.
-> > 
-> > Yeah, I started off with just rewriting the kernel doc and removing the
-> > obviously incorrect bits, but then there is essentially nothing left of
-> > the documentation.
-> 
-> 1. that the function exists and its purpose
+Hi,
 
-That should be apparent from the function name (and implementation).
+The following series adds runtime PM and suspend to RAM features for
+mchp-pdmc driver.
 
-> 2. its parameters
+Along with it 2 cleanup patches were added:
+- patch 1/4: use vendor,device.yaml file format for Microchip AT91 ASoC
+  bindings
+- patch 4/4: use FIELD_PREP() in mchp-spdiftx.c
 
-Apparent from the prototype.
+Thank you,
+Claudiu Beznea
 
-But sure, it would not show up in generated documentation (like many
-other functions).
- 
-> most kerneldoc isn't exactly a great revelation. Nevertheless it
-> serves a purpose.
+Claudiu Beznea (4):
+  ASoC: dt-bindings: microchip: use proper naming syntax
+  ASoC: mchp-pdmc: use runtime pm for clock power saving
+  ASoC: mchp-pdmc: add support for suspend to RAM
+  ASoC: mchp-spdiftx: use FIELD_PREP() where possible
 
-Yeah, we have a lot of
+ ...cc.yaml => microchip,sama7g5-i2s-mcc.yaml} |   0
+ ...,pdmc.yaml => microchip,sama7g5-pdmc.yaml} |   0
+ ...rx.yaml => microchip,sama7g5-spdifrx.yaml} |   0
+ ...tx.yaml => microchip,sama7g5-spdiftx.yaml} |   0
+ sound/soc/atmel/mchp-pdmc.c                   | 145 ++++++++++++------
+ sound/soc/atmel/mchp-spdiftx.c                |   8 +-
+ 6 files changed, 101 insertions(+), 52 deletions(-)
+ rename Documentation/devicetree/bindings/sound/{mchp,i2s-mcc.yaml => microchip,sama7g5-i2s-mcc.yaml} (100%)
+ rename Documentation/devicetree/bindings/sound/{microchip,pdmc.yaml => microchip,sama7g5-pdmc.yaml} (100%)
+ rename Documentation/devicetree/bindings/sound/{mchp,spdifrx.yaml => microchip,sama7g5-spdifrx.yaml} (100%)
+ rename Documentation/devicetree/bindings/sound/{mchp,spdiftx.yaml => microchip,sama7g5-spdiftx.yaml} (100%)
 
-	/**
-	 * set_x_to_y() - set x to y
-	 * @x: the x
-	 * @y: the y
-	 */
+-- 
+2.34.1
 
-it seems. Not sure how much value there is in that, though.
-
-And in this case there was also no kernel doc for usb_get_intfdata()
-which is equally self documenting. Why add redundant docs for only one
-of these functions?
-
-I'd rather drop this particular documentation which was added due to a
-misunderstanding then go down the rabbit hole of adding mindless kernel
-doc to every helper we have.
-
-> > A driver does not need to care that the pointer is cleared by driver
-> > core after the driver is unbound. The driver is gone.
-> 
-> Is that true even with respect to sysfs?
-
-Yes. The (device group) attributes are removed by driver core before
-->remove() is called, otherwise you'd have an even bigger issue with the
-driver data itself which is typically deallocated before the pointer is
-cleared.
-
-Johan
