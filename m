@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A1964ABD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1876464ABD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiLLXy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 18:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S233744AbiLLXzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 18:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiLLXyz (ORCPT
+        with ESMTP id S229944AbiLLXz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 18:54:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA57140D3;
-        Mon, 12 Dec 2022 15:54:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E018B80B2C;
-        Mon, 12 Dec 2022 23:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF96C433D2;
-        Mon, 12 Dec 2022 23:54:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670889292;
-        bh=EQI1hoJMPabVIHQBPHFzOMrKRsKT5Z+Qah7oVktxWic=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LNb/D1nL9BAgP20Att8CRTX2e5I4va83O94y/5tpTfON6Ebt91I7kKYutQhzN/Rx4
-         d6fShKGQG9DjuC8UhtQKtdHer/07fZjF+JQmAv+LZpjltlPBj3waGKDBTmtgI66woP
-         bJta9AQx3Q0BE40C7I0bgbPLZlo8dtDNDoPvUb+8hTkDBypx5UruP1PhlLlSEtJLCv
-         h0Wgqm/iqwFEGriMmNcMHcWQeuOqHgc1uqokNuXY9ff+cZOLxSA6318kBH2V+vXcDG
-         uNNUGWPIYkkb6Ak86aAvJfVFkUyH8ui2t0RZlHCJL3NvjanTCQAzA/wU9K4/RySgEz
-         JBGi3/qZla9sg==
-Date:   Mon, 12 Dec 2022 15:54:50 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, andersson@kernel.org,
-        agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, elder@kernel.org,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-Subject: Re: [PATCH net-next 2/2] net: ipa: add IPA v4.7 support
-Message-ID: <20221212155450.34fdae6b@kernel.org>
-In-Reply-To: <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
-References: <20221208211529.757669-1-elder@linaro.org>
-        <20221208211529.757669-3-elder@linaro.org>
-        <47b2fb29-1c2e-db6e-b14f-6dfe90341825@linaro.org>
-        <fa6d342e-0cfe-b870-b044-b0af476e3905@linaro.org>
-        <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
+        Mon, 12 Dec 2022 18:55:27 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448514D16;
+        Mon, 12 Dec 2022 15:55:26 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB5BA240005;
+        Mon, 12 Dec 2022 23:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670889325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ePabqc+7cC0/UaZKrAYhyBgYRi0kbDxozWzURzMwUw=;
+        b=mmv5VaQMh/vMpCRGByESBoQX2M3D239kNVz4lI1tZgEP+rsEbp+Wiq0ejw7ZrpuyFMZsQ9
+        xNCa1B+RWYZzFAdewbD8yK+JqfiMtqSjSjRHPBtnTfid9nKyPslIO9SxB8XmnMxprjJqmh
+        wLHQRMqdcJAH52szUixa/36HCGBYsHl5gZCEJq5BlVqM+/GoN2P9FUgzvgnsuADpnjKnkp
+        aZE41hbIYr6FsLJQCUF1e42y2C0LbBAi5loOVQRVdumJPwRza6QSl27Hihw74BJ2eDgL/y
+        taR/zZNVaKGblP8CbfotOOQ1pWrYidvWv9j1oHxKz15NvEUURqH58rvh91lYZg==
+Date:   Tue, 13 Dec 2022 00:55:24 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     a.zummo@towertech.it, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH linux-next] rtc: ds1307: use sysfs_emit() to instead of
+ scnprintf()
+Message-ID: <167088930337.313278.11105022204603125591.b4-ty@bootlin.com>
+References: <202212051134455911470@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212051134455911470@zte.com.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Dec 2022 10:31:14 +0100 Konrad Dybcio wrote:
-> >> which in total gives us 0x146a8000-0x146aafff =20
-> >=20
-> > Can you tell me where you found this information? =20
-> [1], [2]
->=20
-> >  =20
-> >> That would also mean all of your writes are kind of skewed, unless
-> >> you already applied some offsets to them. =20
-> >=20
-> > This region is used by the modem, but must be set up
-> > by the AP.
-> >  =20
-> >> (IMEM on 6350 starts at 0x14680000 and is 0x2e000 long, as per
-> >> the bootloader memory map) =20
-> >=20
-> > On SM7250 (sorry, I don't know about 7225, or 6350 for that matter),
-> > the IMEM starts at 0x14680000 and has length 0x2c000.=C2=A0 However that
-> > memory is used by multiple entities.=C2=A0 The portion set aside for IPA
-> > starts at 0x146a9000 and has size 0x2000.
-> >  =20
-> Not sure how 7250 relates to 6350, but I don't think there's much
-> overlap..
+On Mon, 5 Dec 2022 11:34:45 +0800 (CST), ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+> 
+> 
+> [...]
 
-Dunno if Alex is online, and the patches seem harmless so let me apply
-as is so that they make 6.2, and we can follow up with corrections.
+Applied, thanks!
+
+[1/1] rtc: ds1307: use sysfs_emit() to instead of scnprintf()
+      commit: 20ff2be9cf5c1951e5a14e570129cf118039a25a
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
