@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1381064AA6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB77664AA6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbiLLWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S233859AbiLLWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiLLWiN (ORCPT
+        with ESMTP id S233783AbiLLWkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:38:13 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B7A1BE83
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:38:07 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id bj12so31981402ejb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:38:07 -0800 (PST)
+        Mon, 12 Dec 2022 17:40:39 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B3B255;
+        Mon, 12 Dec 2022 14:40:37 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1638109pjd.0;
+        Mon, 12 Dec 2022 14:40:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tAU+Svl02vX8P7C+MvgoPJ/IkIPy/8R6crVlp3CtZS8=;
-        b=KGbKqMw+k5ARwMUansd6r1EL2LzqciOBulHoy6yf41F90IYGcGFq2fo6JSKsveD8Gv
-         GzC4CedyieGFaA2IJ7lL+jP/n9zzG6p0UVUR6ty07FvOh0JYo8/6OnL5GOpdsCAZsif8
-         eprfDra+wCxStqyUvOvf1KSX/aUCORjWtHpSNQfsvVrhOXfbP2yqkFP+n9qCxxETFKdr
-         Hh9Euc537yTD4WLG1EfbJgQmdv313Nd7YUqS1NF8Zb2x+Vot/XOKfcT4ZxCeVmym9BLi
-         zLceBvm6XnZQ6OgNtg9/wnk60R+OenAHJYZ2W0ho4UGM0hbctReykpqB8Ow95zDEH8bs
-         vNDw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NPDIXZNKcYo1HDMoRq9WdF0H3wxdPBhSwXt2rQdX8Hk=;
+        b=T2+mjUOnvMC6+SflvTfeyWtuCJGJy3r5riUOCGBFfGCcjwxEGIy88D1g3qOknp/kpu
+         r44QvUgQpK7IfygXGopoHH1Aqbi/nw2i4MQqJwBE0lCXzalcJcAW1XuiZk/FGFJxgiZw
+         TyeR/sUnOZE0e7jeZhBYzXFCMMScwKqXqgJ8pfVbW72SncqkteKT1wIGEAox7BOx78pH
+         63kxkkSdWKIK4rJV+FaikdslcCef/vtpSxfob2P3xVWgugrM/WmIIqY360cPU55tMyRB
+         cARaPspT5prnBLkezhBY9EE2WTXRTBgFrQZGgtY/jicSHR3pu+WJA3shdhCsQAysAnrt
+         sDXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAU+Svl02vX8P7C+MvgoPJ/IkIPy/8R6crVlp3CtZS8=;
-        b=3iT82GroEAz9439JC9LN+ySnRaGmbNU3s4cOJFINWFQn3h/k18NSM7M8Gudy6Cnmbp
-         +Bt3SV6q2wYjTnRNfZ38F2sSGE947Nb0A8uH/KoxVQYRLuhKp9ET/gGOH3k/SV8NBgCL
-         TelrYsGNLB6dO5Isrt2FNegX3kJSNqGSjaPgWwALOiY68fL4+1IOfbdXo4K/S/lHQkq3
-         hqa1m+Yn/mbvZF6dPMN4/5cJADk8x4cyybmMftEYCLTuAyyILe0bjA+hrN0yQjKNdd6l
-         6TZO5osN263MiMb2gNKLeHExrEaxl0Tyy7mugctiSJMcLoMOnlcuTCKlXDeOB0Xqb+tu
-         SDCg==
-X-Gm-Message-State: ANoB5pnSyBschWKhc3cLaGA67ihK3ulJR551aP41w93xbOyU3gqUm7sh
-        uP61DXsYkwWR/GUjN+cCTQ0+xw==
-X-Google-Smtp-Source: AA0mqf42ULY+6d0wnAzTFhb/eBomHkD8Nig4sQrm4QH5BJOGl8XIARVkK9sNCSwpg4G65BLCZem+EA==
-X-Received: by 2002:a17:906:2449:b0:7c0:f44d:984 with SMTP id a9-20020a170906244900b007c0f44d0984mr20711517ejb.74.1670884681663;
-        Mon, 12 Dec 2022 14:38:01 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id h24-20020a170906829800b007c10ad73927sm3773445ejx.28.2022.12.12.14.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 14:38:01 -0800 (PST)
-Message-ID: <9564ce71-ef11-2333-26f7-b0581c294d9b@linaro.org>
-Date:   Mon, 12 Dec 2022 23:37:59 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NPDIXZNKcYo1HDMoRq9WdF0H3wxdPBhSwXt2rQdX8Hk=;
+        b=s6MzWKPNLxvCG6jYukLBeaZeHTYfKodf8YslBU1rtgv/H2hoES4w6FELyzkvgwNjyh
+         jlQGiE73oXShZtmQ0TMfbSQPWqI3lPgsRN5/GHii/oEiAYNWAVpOE+Q6jSHYyPDL0LYy
+         jke97veKRS8YuIZa/ufKKeLFkInfAY6EyMK3Ii8InSUfryXe+k2u/jBnp/WaJeRdt9mR
+         lRurPM1V8Z0IFED4bofVfCoPn/njIyihWWzrKHmirR9vvl0+Bm1nCmJBct/uefsKv/Ws
+         jFP0WpQEIlt6P6FWs6QqETdPUDv8ZerrCTg2aloAC4/BUooDfL/Se78WZQHljyeSUcce
+         9P4A==
+X-Gm-Message-State: ANoB5pnQqmv8pmwTaWhxiI39Se/ynwde9jrG/N5qwQXekHLnxt0CQY+V
+        9mrCT1OP6zNtXzqFJXmKlq4=
+X-Google-Smtp-Source: AA0mqf70xXX6MfhmFO/sZGl4MU+BzHo5ca+dRi//o50aclQl+kNKmpHaUSzIaWZ9VEnAYiXg0pzlXQ==
+X-Received: by 2002:a05:6a21:2d07:b0:9e:9685:f15e with SMTP id tw7-20020a056a212d0700b0009e9685f15emr23337003pzb.0.1670884836974;
+        Mon, 12 Dec 2022 14:40:36 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id j28-20020a63231c000000b0047063eb4098sm5648360pgj.37.2022.12.12.14.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 14:40:36 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 12:40:35 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jinke Han <hanjinke.666@bytedance.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] blk-throtl: Introduce sync queue for write ios
+Message-ID: <Y5et48VryiKgL/eD@slm.duckdns.org>
+References: <20221206163826.10700-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH v3 11/19] x86/ioapic: Use irq_domain_create_hierarchy()
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-12-johan+linaro@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221209140150.1453-12-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206163826.10700-1-hanjinke.666@bytedance.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 15:01, Johan Hovold wrote:
-> Use the irq_domain_create_hierarchy() helper to create the hierarchical
-> domain, which both serves as documentation and avoids poking at
-> irqdomain internals.
+On Wed, Dec 07, 2022 at 12:38:26AM +0800, Jinke Han wrote:
+> From: Jinke Han <hanjinke.666@bytedance.com>
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   arch/x86/kernel/apic/io_apic.c | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
+> Now we don't distinguish sync write ios from normal buffer write ios
+> in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
+> until write completion soon after it submit. So it's reasonable for sync
+> io to complete as soon as possible.
+> 
+> In our test, fio writes a 100g file in sequential 4k blocksize in
+> a container with low bps limit configured (wbps=10M). More than 1200
+> ios were throttled in blk-throtl queue and the avarage throtle time
+> of each io is 140s. At the same time, the operation of saving a small
+> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
+> the sync ios of fsync will be blocked by a huge amount of buffer write
+> ios ahead. This is also a priority inversion problem within one cgroup.
+> In the database scene, things got really bad with blk-throtle enabled
+> as fsync is called very often.
+> 
+> This patch introduces a independent sync queue for write ios and gives
+> a huge priority to sync write ios. I think it's a nice respond to the
+> semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO gains the same
+> priority as they are important to fs. This may avoid some potential
+> priority inversion problems.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+I think the idea makes sense but wonder whether the implementation would be
+cleaner / simpler if the sq->queued[] are indexed by SYNC, ASYNC and the
+sync writes are queued in the sync queue together with reads.
 
+Thanks.
+
+-- 
+tejun
