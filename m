@@ -2,76 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B301F649935
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C80D1649941
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiLLHGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S231429AbiLLHGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiLLHGS (ORCPT
+        with ESMTP id S231428AbiLLHGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:06:18 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913492658;
-        Sun, 11 Dec 2022 23:06:17 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p4ctE-00035Q-2R; Mon, 12 Dec 2022 08:06:16 +0100
-Message-ID: <beedcb6f-5d72-da1b-993a-36de38a144c1@leemhuis.info>
-Date:   Mon, 12 Dec 2022 08:06:15 +0100
+        Mon, 12 Dec 2022 02:06:33 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88D62647;
+        Sun, 11 Dec 2022 23:06:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670828792; x=1702364792;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nEaXrgycA1rsCThHCMjC1JksaZH43yXXU6+fyhJL6Ls=;
+  b=lxVddOnqErk9TVSDUJ7I+CYjraNOgFbQ4esN0UOq/AnDxFcQkhOTZ/qe
+   TQY8Q1uEesCexERLSdH90Z3wPvEfDyxV1eIoARva4yd8xPSKHQ/841+Q5
+   Vu+6K0A1B8b6Ih6G9mzQJEZvhD2B9o2780Krn2Bv9uCNdQqpRsuNDosU+
+   V3eA2wo/tskNTlHiqqEn7+rLx5e+wLb0OPSDvWiClFlMlW0G9haDYvjS/
+   jQ0b9dCYqwjDCaWn2xg7giiUE2ADbDfeN4Hc6hpauYBmJMvS1aWIiBXk8
+   nLBhrY1M4nEpUTH/cQAY9tV9G3BmSUdtAVEoceeiCKNMKGkKySrjWpLlt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="317811819"
+X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
+   d="scan'208";a="317811819"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 23:06:30 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="641643030"
+X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
+   d="scan'208";a="641643030"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.168.6])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 23:06:29 -0800
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: [PATCH V4 0/9] CXL: Process event logs
+Date:   Sun, 11 Dec 2022 23:06:18 -0800
+Message-Id: <20221212070627.1372402-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/2] fsdax,xfs: fix warning messages #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
- <da90b96d-ef1e-4827-b983-15d103a3a1ef@leemhuis.info>
-In-Reply-To: <da90b96d-ef1e-4827-b983-15d103a3a1ef@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670828777;b560bec2;
-X-HE-SMSGID: 1p4ctE-00035Q-2R
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.11.22 11:30, Thorsten Leemhuis wrote:
-> [Note: this mail is primarily send for documentation purposes and/or for
-> regzbot, my Linux kernel regression tracking bot. That's why I removed
-> most or all folks from the list of recipients, but left any that looked
-> like a mailing lists. These mails usually contain '#forregzbot' in the
-> subject, to make them easy to spot and filter out.]
-> 
-> On 24.11.22 15:54, Shiyang Ruan wrote:
->> Many testcases failed in dax+reflink mode with warning message in dmesg.
->> This also effects dax+noreflink mode if we run the test after a
->> dax+reflink test.  So, the most urgent thing is solving the warning
->> messages.
-> 
-> Darrick in https://lore.kernel.org/all/Y4bZGvP8Ozp+4De%2F@magnolia/
-> wrote "dax and reflink are totally broken on 6.1". Hence, add this to
-> the tracking to be sure it's not forgotten.
-> 
-> #regzbot ^introduced 35fcd75af3ed
-> #regzbot title xfs/dax/reflink are totally broken on 6.1
-> #regzbot ignore-activity
+From: Ira Weiny <ira.weiny@intel.com>
 
-#regzbot inconclusive complex issue; fixes with backports apparently
-planed to be merged for 6.2
+This code has been tested with a newer qemu which allows for more events to be
+returned at a time as well an additional QMP event and interrupt injection.
+Those patches will follow once they have been cleaned up.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+The series is now in 3 parts:
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+	1) Base functionality including interrupts
+	2) Tracing specific events (Dynamic Capacity Event Record is defered)
+	3) cxl-test infrastructure for basic tests
+
+Changes from V3
+	Feedback from Dan
+	Spit out ACPI changes for Bjorn
+
+- Link to v3: https://lore.kernel.org/all/20221208052115.800170-1-ira.weiny@intel.com/
+
+
+Davidlohr Bueso (1):
+  cxl/mem: Wire up event interrupts
+
+Ira Weiny (8):
+  PCI/CXL: Export native CXL error reporting control
+  cxl/mem: Read, trace, and clear events on driver load
+  cxl/mem: Trace General Media Event Record
+  cxl/mem: Trace DRAM Event Record
+  cxl/mem: Trace Memory Module Event Record
+  cxl/test: Add generic mock events
+  cxl/test: Add specific events
+  cxl/test: Simulate event log overflow
+
+ drivers/acpi/pci_root.c       |   3 +
+ drivers/cxl/core/mbox.c       | 186 +++++++++++++
+ drivers/cxl/core/trace.h      | 479 ++++++++++++++++++++++++++++++++++
+ drivers/cxl/cxl.h             |  16 ++
+ drivers/cxl/cxlmem.h          | 171 ++++++++++++
+ drivers/cxl/cxlpci.h          |   6 +
+ drivers/cxl/pci.c             | 236 +++++++++++++++++
+ drivers/pci/probe.c           |   1 +
+ include/linux/pci.h           |   1 +
+ tools/testing/cxl/test/Kbuild |   2 +-
+ tools/testing/cxl/test/mem.c  | 352 +++++++++++++++++++++++++
+ 11 files changed, 1452 insertions(+), 1 deletion(-)
+
+
+base-commit: acb704099642bc822ef2aed223a0b8db1f7ea76e
+-- 
+2.37.2
+
