@@ -2,261 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2EB64A361
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF1964A36E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiLLObT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S231607AbiLLOdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiLLObI (ORCPT
+        with ESMTP id S230315AbiLLOds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:31:08 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15BFE12D08
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:31:06 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h11so12250665wrw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:31:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9bjSaY0dKPU8rRmLG4CBmPCq2fIXi0xyi4TtR3RdYl0=;
-        b=Mn9j3vPjJawT1NzX8GEXtEEehu7HPVzgFDXBPpGcJscM2WIuoB0+59SYDB/Wanl0XO
-         XYBbZl+iXE4I7+LiPLWTqcSidC20qLv4zqT9xbd0Ut7XfUCujklQ/MZKI8qHfLZkMfCD
-         t52g0IA+6gRU+p0ngE49sE3KgSF6sUeresTThc20MiHMzT7K+PrYMhtQqVtQ2mZOVkuV
-         3E/m5ZKuQoBXfOmymwAFP94Nj/E32q67jh87RAWSV8FO37y7PvR9nGqpkc8aWsdy4UWM
-         bJyeZPoUHCKMeHNBQpODGOkkG3+jTVHvzbqv0t8IAtnS6fbpZ/Gqk+10hPP9otUmXplS
-         mNRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9bjSaY0dKPU8rRmLG4CBmPCq2fIXi0xyi4TtR3RdYl0=;
-        b=F4v84vHnPeDqq1HJV2MSUxOmJCmcZz1L7A06XA3xBqHI/me6nEn8Sec5du4XD5NA9F
-         zQDrF6y9IALUSanvofuXQvFSGEZ5lv/YpqVRK2Uu23r0PvXQYVheN0BhfLJfRtipwus3
-         qG6Z20X+XNhEKf0vkDo2wZNoiW1Vm57TzaVB6E1u1KRyMzqK8dvINCAGVSSNXaN1hpVx
-         FhUFaLC2EAFxQKLOasvrSSc9JhPGt4YQrflAJU0TFo7f9ta7u5YKXE3nuJL87Sb3aTng
-         s0AweC4IwGUu6rsU2geFUoeo5j0+IaTiOq6NwYMJd7GnwiVdxPSLp3cHlapEWIwQQ9VZ
-         IWwA==
-X-Gm-Message-State: ANoB5pnn4gYUyH6PLnEONLARtdiq2ki/b9laRKByg1IYBYvZbR43VU/F
-        wKjrqslJd2MW30vp6nl8AETohg==
-X-Google-Smtp-Source: AA0mqf6is7skwt1eIjtz1whXl+4EWNYW5O1NDnvHFCNOSEPzPBtn7Ez4dHtMxelDNz8/S15bfCZtkw==
-X-Received: by 2002:a05:6000:1f1c:b0:24f:dbcd:7714 with SMTP id bv28-20020a0560001f1c00b0024fdbcd7714mr2115792wrb.50.1670855464551;
-        Mon, 12 Dec 2022 06:31:04 -0800 (PST)
-Received: from alex-rivos.ba.rivosinc.com (lfbn-gre-1-201-46.w90-112.abo.wanadoo.fr. [90.112.163.46])
-        by smtp.gmail.com with ESMTPSA id l11-20020a5d526b000000b002422202fa7fsm8978069wrc.39.2022.12.12.06.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 06:31:04 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v2] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Mon, 12 Dec 2022 15:31:02 +0100
-Message-Id: <20221212143102.175065-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        Mon, 12 Dec 2022 09:33:48 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F4011A1A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 06:33:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670855627; x=1702391627;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=M31HwumFCX/+bsv5jiTYGwZAw9JC4OM9ej4ZlLVCAaA=;
+  b=cpyeeEb+J7zRNEQKnhn8O55XdUCr+1kMIYxY1p/vIsIk5T0w6h7uYsDS
+   kEnlGf5KoJQuqJzL+D7ghM7A+xi/YGQ7qNtxQA2USuOEU9qAIQ/w1qm7T
+   dhFwHl32EYYNZapPFWcWEVAvLV/3QpJYXIO1UeOdGYg1ysTAJNu1/sK4u
+   OB8hrsI5aUdKtOSUDsUDTfDbs/m9cz9c0ZBxz/yx8hZe3MZwoaqQjQ2Nn
+   klFtzHu27GXxOKpfVuYTfM1zPBMCxNsK2kPDXVfyhXydJdJdoi7OJLHdx
+   ruFz1xZsHajo7cgkHN1pM14iVT6XH4S3wq9dnzCjasTEPAREDYsyAJm42
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="380074582"
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="380074582"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 06:33:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="790512467"
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="790512467"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Dec 2022 06:33:36 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 12 Dec 2022 06:33:35 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 12 Dec 2022 06:33:35 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 06:33:35 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 12 Dec 2022 06:33:35 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KTZC9tLddZ+hmYhxxFr8ZuCtRxcYnPvQ/YZRGs7dVveERVMZtcHw93g2h+GwjgsfTsJ0tye3CmPVDrV0WjaEZ6rESMBfqYB9llJNXSOLWuyLQ/o+Ricw+Nl/4+x5GJVq2/u+e9nk+Ci0k54hHdm5fwWcC86J1RrELt2OitIlk2JGTCKsiAC/uH2I1bP838YERJV65LW3zStjZeTn0F8jNRsgMfuwOZHJkyGH8lRTnEm0qeFsrr9WEA5MM3tORz4Z51Cw0Z0H4jjpgKCXIR4DzO/Q7DxfZ1kS1kgraRS+ETwhcf0OUiNoTx1YI5t7/S7smu9erbwWUmPW4A19YGhXHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EcO4t1gErIivGJXu+15KbWZ+ZgQkb4tPODc8zRQkq10=;
+ b=R7hJ8pcDM17mVNDJWU+Omq6JkRAH+HpzQudAMWo8+O8WLanqx492AfWveqAI7lh9xCmrsmkT1p1BsMC+903j/rnQJeZA7w1dTfyJNaa+6Vp7p5FAYpnSsHwEZJYqkUnM3KFUlqX7iT98VBQ5S8kbRGTRW+NeRyUP128bn3Y1soQLNXNH/XZfYtF9jKCR+3RbtsTG9A5iJodRnkLMaX/Tvxv5g/Dq2V9MLWIZPYXEjJOpMoQAN/jvXcY+0xWmenmp8mA6egwz+Co+rUEUw5oONVyEPGsdobQ2RAa7LfWzUSw/IY35dMWvc7QumpapzqjMP4tlO0SRwS/mVIhPGksMVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by SA1PR11MB6872.namprd11.prod.outlook.com (2603:10b6:806:2b2::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
+ 2022 14:33:33 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::828c:e5f0:6f82:63b7]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::828c:e5f0:6f82:63b7%7]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
+ 14:33:33 +0000
+Date:   Mon, 12 Dec 2022 22:33:05 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     <yangyicong@hisilicon.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Tim Chen" <tim.c.chen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Juri Lelli" <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        "Tianchen Ding" <dtcccc@linux.alibaba.com>,
+        <linux-kernel@vger.kernel.org>, Josh Don <joshdon@google.com>
+Subject: Re: [PATCH v3 1/2] sched/fair: Introduce short duration task check
+Message-ID: <Y5c7oTIRIQYYkdW1@chenyu5-mobl1>
+References: <Y4r/iuqyLG4MOK4d@chenyu5-mobl1>
+ <3A5DA66F-4330-4FC4-9229-998CF98F663E@joelfernandes.org>
+ <Y42uH5fglluWYOm7@chenyu5-mobl1>
+ <CAKfTPtA61DDk-VbNDvAycp8Et5fTwaOS=Q3559rBF7QDHDpJfQ@mail.gmail.com>
+ <CABk29Nuc+VVOpAwFsbBo+OppayszebT29Hadc8qK-xeyZpY6NQ@mail.gmail.com>
+ <Y5CiN010QAwklahh@chenyu5-mobl1>
+ <e0b20fe3-6528-41ca-f53f-d78e76cd122a@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <e0b20fe3-6528-41ca-f53f-d78e76cd122a@huawei.com>
+X-ClientProxiedBy: SI2PR02CA0038.apcprd02.prod.outlook.com
+ (2603:1096:4:196::22) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|SA1PR11MB6872:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fb74156-9ff7-4344-176f-08dadc4dd888
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r/Znvh9H/Z9EON62CWVLla1mEikwkMxjdCf4pP5YvyaYOxmLAxmWCxFqfev8oIGOyRxPPg6ok/MpoGwNaEs2kii4Hu8F9qralAXcuM/up1b+ldS7YG/rqhrER28OLCNacte8+gkXjZFNFg0yhw6aDLyV2qGqBkdbSjEbJtd7Goy8KFQYFySWdVw4jpb7C1Iz7TcQRbMOmuJJdst4vAGRYLFWXJpyawkaupD27qbblzneOjiIZANt2D00pI8N4d50yg0ud1a8iQsLTn5RTyXrKf22XtrAbplebbFKuV5UbnbwWikjl+ajVCr83ALn6Nhnaq0COIO73EmRS0q2s/dZjm1NItjlfAp3iFEl9yFNp/daSQwg9BZdOa1jTsED1NqOI/kalYCRzTJJNmzsPO10jxg/PiQC7mz06G9Q/vbCrk9k+knzKeVIwtB2RHQOg9sRmra6vlUlM/ckD6wTEwoHDqN0A1w3twAicikb3oUb8F0sPeEEdhJEU9Dkf+dRdEXZcD5kivxLsp1Bq3W9rf1i5j5HwwMLRfH8mxu7EFHanEFkSxWikQZj8FVqvWFnGucxnCkZvuM6/TaoJPiIo8lAJC80RaaBUWWz0yodxKuHxQor2lRGoTIj69aZpU7ZYXxXtuSSbFczy5omm36pGU4bfQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199015)(66476007)(2906002)(86362001)(6916009)(4001150100001)(54906003)(83380400001)(5660300002)(7416002)(4326008)(8936002)(38100700002)(316002)(66556008)(8676002)(66946007)(41300700001)(9686003)(33716001)(6486002)(6506007)(53546011)(186003)(6512007)(82960400001)(478600001)(26005)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WpkidtiDLf8J+U3zIrK3Pk8+8Os1Zo1O869c0m66JBLGb8L/sMJ7XBfsec38?=
+ =?us-ascii?Q?PoEcB873fSNTes+uWUKDveBpidDVMP4kw+IgHtc2M28i54bVLK9QQ9PnY9j2?=
+ =?us-ascii?Q?e7wwd54L96xUIse+ZTE72hJOHeARNAsdaJYvGgmw4vb5j6w5kiP2TRp299YR?=
+ =?us-ascii?Q?l/9ajV1mb5YAYjQPNrJhq+iHvyDYQXJlLwYjg1xEGcv59OYO48zZNFi+5sBr?=
+ =?us-ascii?Q?ahV3fpTfQmj5jXtYgqdTGvKWoNGDvW8Z956WD0D0WHCivTbyO5nyZJ6mmDqT?=
+ =?us-ascii?Q?fDYwgLyprle0M3WzJUn7R2foQNn6n8kxagJcf5R4/OOGmRRlhixn7d1X4Hfo?=
+ =?us-ascii?Q?lRN8dmKtuRsTUMhTsVHqlRUzDwWKIz4erV8ykLyRBRy6mtt4nvnHOCO8UcFn?=
+ =?us-ascii?Q?C3w4bFGAgkrTbTu1bbY2QcGE63i2/JubVzsn+RNWsTmMw950ouc7UY/nnnuu?=
+ =?us-ascii?Q?kU46z8OJFbgPoB7xay+mPWyT8Ok5Ot08F+nUe8OY538QPoH2R9uGLoq2BVHZ?=
+ =?us-ascii?Q?WZuAvMDaEKIhW/Hm4eXekqp15s//ciuXusmrr0AknKmb0vSXy2WMIYLkr4T4?=
+ =?us-ascii?Q?eIVGXogf/cSaJsfLOmaZJrE5q1wD8W0j57sC0rs5iTtRvedF8Yd67LU6+t7T?=
+ =?us-ascii?Q?2SgtqjqqQYWJzAxBk2v5S27XakbLe6uzM3A62aGp36FeOrM6PGiHOEEuc8Yx?=
+ =?us-ascii?Q?ro+D+MBuVOHdFThN6ms5L6cs9JVyfV+YTjsYOIIL6TsVKRqcfyd6FhFfzPo+?=
+ =?us-ascii?Q?4MVNKyV2ru/mS718H/Fq8UDYX7hicdkrNr3vz1g6yyBxZ4BQ72w5SHhlbylW?=
+ =?us-ascii?Q?Tej7Lskl9HrtzuRZL/uKGVOtUZm9LkAPhcVFDf+ryWMSOr4j6bU7DzvYFywu?=
+ =?us-ascii?Q?34Bz+dXSH774hsg7xy6kbv4vIvGZo4yL00Dp/NbRee/CKUjSm/Z1+C77gH3l?=
+ =?us-ascii?Q?4DfP8IpK12LtN5//TFwBlOtvL0rkRoahnCmfqgorvyOkt7GX1eFMi+K7kYYs?=
+ =?us-ascii?Q?CvHZI/q5LEyPlxWTgNu6HHz8bfz8F991j9+FcO6BTobGvEJ8X2P4nJm/lfZJ?=
+ =?us-ascii?Q?c3GzWtcF10ZpmkHoJ1Q9utx7RpOIpvwzpvHoA2LQeRkt6eRvB4Dyuu/TVb6V?=
+ =?us-ascii?Q?QHo2oUMxo1J0/VBZowjanegZHUwWHuO12MWlJogibcR/MLZzjGAasKZUKCN8?=
+ =?us-ascii?Q?ibgA9IlfGoJQKvi8PJcUR8q+26MR4wG9opvc6SX+c1o6UpsLHFD2eu6+Zwsc?=
+ =?us-ascii?Q?1wyKLbUFo4adtLHPD9GkYWYZUW+TNDUO6h01SxmX8hpRGKji9F+Q/KwUcDt6?=
+ =?us-ascii?Q?/78JAb8HOJ/ke9IMMazG/mZwdb3X5I7wnL2f/cj53Bg8Dx+0/x8YD5q3vJ4d?=
+ =?us-ascii?Q?Q4nMTqSDRR9VaF6sOGBZb9WqUQZsHKb5vAFm2CjsQ7OpNeckWyRnpy/W0UkG?=
+ =?us-ascii?Q?sk4EkvbfiCQagv3y7d0v8t+F1AC0dnvD/ZvI1+2ZTbd4B4xiSOz6mZ/9k7KE?=
+ =?us-ascii?Q?8lHK0ZGEL4xXlt3Eojz0MUEEGLLhI1sq4VG0uxil1S6u4m1xWCDF/DZHoWAR?=
+ =?us-ascii?Q?QY1J1H2vxSU2ySyLdPjgsTtKmLxXRvlhKzaCaXaw?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fb74156-9ff7-4344-176f-08dadc4dd888
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 14:33:33.3032
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N4W6ghviyiHEbkV8rZZkXnoxqJ1xsxt1bn0NRK5qX+l4H5zQVn4NkIek9dPo1ylohZ5vskIbxNa1dsxNpLZ0Ew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6872
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the early page table creation, we used to set the mapping for
-PAGE_OFFSET to the kernel load address: but the kernel load address is
-always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-PAGE_OFFSET is).
+On 2022-12-12 at 19:22:48 +0800, Yicong Yang wrote:
+> On 2022/12/7 22:24, Chen Yu wrote:
+> > Hi Josh,
+> > On 2022-12-06 at 18:23:47 -0800, Josh Don wrote:
+> >>> We don't want to add more dedicated knobs. So using
+> >>> sysctl_sched_min_granularity as you are doing in this patch looks ok
+> >>
+> >> If not a knob, then maybe at least a smaller hardcoded value? Several
+> >> milliseconds seems like too long for this optimization; the
+> >> opportunity cost of not doing the idle search likely doesn't make
+> >> sense if the waker is going to be active for several additional
+> >> milliseconds. I would have guessed something on the order of 100us.
+> >>
+> >> Chen, what is the run duration of tasks in your ping pong example?
+> > OK, I'll measure the duration of all the tests and summarize the data later.
+> > 
+> 
+> If we decide to use sysctl_sched_min_granularity as the threshold of a short
+> task, can we also export p->se.dur_avg (somewhere like /proc/[pid]/sched)?
+> It may be helpful to choose a proper value for sysctl_sched_min_granularity.
+This looks reasonable, I can add one in next version.
+BTW, I've changed the threshold to (sysctl_sched_min_granularity / 8) in my next
+version, as this is the value that fit my previous test case and also not to break
+the case Josh mentioned. Also I've changed the place where dur_avg is updated from
+put_prev_task() to dequeue_task(), which could fix an issue in v3. Will send v4
+out after the test finished.
 
-But actually we don't have to establish this mapping (ie set va_pa_offset)
-that early in the boot process because:
-
-- first, setup_vm installs a temporary kernel mapping and among other
-  things, discovers the system memory,
-- then, setup_vm_final creates the final kernel mapping and takes
-  advantage of the discovered system memory to create the linear
-  mapping.
-
-During the first phase, we don't know the start of the system memory and
-then until the second phase is finished, we can't use the linear mapping at
-all and phys_to_virt/virt_to_phys translations must not be used because it
-would result in a different translation from the 'real' one once the final
-mapping is installed.
-
-So here we simply delay the initialization of va_pa_offset to after the
-system memory discovery. But to make sure noone uses the linear mapping
-before, we add some guard in the DEBUG_VIRTUAL config.
-
-Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-in a better TLB utilization.
-
-Note that we rely on the firmware to protect itself using PMP.
-
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
-
-v2:
-- Add a comment on why RISCV64 does not need to set initrd_start/end that
-  early in the boot process, as asked by Rob
-
-Note that this patch is rebased on top of:
-[PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-
- arch/riscv/include/asm/page.h | 16 ++++++++++++++++
- arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              |  7 ++++++-
- 4 files changed, 57 insertions(+), 7 deletions(-)
-
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index ac70b0fd9a9a..f3af526a149f 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
- #define PTE_FMT "%08lx"
- #endif
- 
-+#ifdef CONFIG_64BIT
-+/*
-+ * We override this value as its generic definition uses __pa too early in
-+ * the boot process (before kernel_map.va_pa_offset is set).
-+ */
-+#define MIN_MEMBLOCK_ADDR      0
-+#endif
-+
- #ifdef CONFIG_MMU
- extern unsigned long riscv_pfn_base;
- #define ARCH_PFN_OFFSET		(riscv_pfn_base)
-@@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
- #define is_linear_mapping(x)	\
- 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-+#else
-+void *linear_mapping_pa_to_va(unsigned long x);
-+#endif
- #define kernel_mapping_pa_to_va(y)	({						\
- 	unsigned long _y = y;								\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-@@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
- 	})
- #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
-+#else
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x);
-+#endif
- #define kernel_mapping_va_to_pa(y) ({						\
- 	unsigned long _y = y;							\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 1b76d3fe4e26..58bcf395efdc 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
- 	phys_ram_end = memblock_end_of_DRAM();
- 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
- 		phys_ram_base = memblock_start_of_DRAM();
-+
-+	/*
-+	 * Any use of __va/__pa before this point is wrong as we did not know the
-+	 * start of DRAM before.
-+	 */
-+	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
-+	riscv_pfn_base = PFN_DOWN(phys_ram_base);
-+
- 	/*
- 	 * memblock allocator is not aware of the fact that last 4K bytes of
- 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-@@ -672,9 +680,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
- 
- static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- {
--	/* Upgrade to PMD_SIZE mappings whenever possible */
--	base &= PMD_SIZE - 1;
--	if (!base && size >= PMD_SIZE)
-+	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
-+		return PGDIR_SIZE;
-+
-+	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
-+		return P4D_SIZE;
-+
-+	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
-+		return PUD_SIZE;
-+
-+	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
- 		return PMD_SIZE;
- 
- 	return PAGE_SIZE;
-@@ -983,11 +998,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	set_satp_mode();
- #endif
- 
--	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
-+	kernel_map.va_pa_offset = 0UL;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
--
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
- 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
-diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
-index 19cf25a74ee2..5ae4bd166e25 100644
---- a/arch/riscv/mm/physaddr.c
-+++ b/arch/riscv/mm/physaddr.c
-@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
- 	return __va_to_pa_nodebug(x);
- }
- EXPORT_SYMBOL(__phys_addr_symbol);
-+
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((unsigned long)(x) - kernel_map.va_pa_offset);
-+}
-+EXPORT_SYMBOL(linear_mapping_va_to_pa);
-+
-+void *linear_mapping_pa_to_va(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
-+}
-+EXPORT_SYMBOL(linear_mapping_pa_to_va);
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 7b571a631639..012554445054 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -895,8 +895,13 @@ static void __early_init_dt_declare_initrd(unsigned long start,
- 	 * enabled since __va() is called too early. ARM64 does make use
- 	 * of phys_initrd_start/phys_initrd_size so we can skip this
- 	 * conversion.
-+	 * On RISCV64, the usage of __va() before the linear mapping exists
-+	 * is wrong and RISCV64 rightly calls reserve_initrd_mem after it is
-+	 * available where it actually resets the translation that is done
-+	 * here and re-computes it.
- 	 */
--	if (!IS_ENABLED(CONFIG_ARM64)) {
-+	if (!IS_ENABLED(CONFIG_ARM64) &&
-+	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
- 		initrd_start = (unsigned long)__va(start);
- 		initrd_end = (unsigned long)__va(end);
- 		initrd_below_start_ok = 1;
--- 
-2.37.2
-
+thanks,
+Chenyu
+> 
+> Thanks.
