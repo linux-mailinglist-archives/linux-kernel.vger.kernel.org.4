@@ -2,105 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1BB6497EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAF96497F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiLLCTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 21:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
+        id S231280AbiLLCad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 21:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiLLCTD (ORCPT
+        with ESMTP id S229506AbiLLCaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 21:19:03 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C30BA19C;
-        Sun, 11 Dec 2022 18:17:09 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id k79so7556827pfd.7;
-        Sun, 11 Dec 2022 18:17:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YKJdj9MYIrMqKZ09JyoypXDwxECd7m2PMnqlCqw5ReU=;
-        b=KKGKvbg/FvnJ4bhjjj9hRMSt87AU4EfzVCnXHJClOg5qRyqa9A6dxZsyUwWu3BwR7f
-         QwgInr7/U1eEJJNaeTTiqAkv+EFyBZ+gNM15fZD7dk8xhPaI7vDO5L9i5Yh/tw3h5as5
-         DH1N9nrY16I8uVfj1X1T0vIbMAe7bdGakvhQOG2yfqjIInqPaCOFDrWrVFlrtoJBrzor
-         Ijv2zTlHp279U7pKsAmQmb0JBFrBSgXX7BevhwWdOxQ6F75NAzUGrcxu33wVXr+XwPfo
-         4fsNeioqefA7+5NHZvfWES8dG9+K3kNFFFzt41RV+YJbBtOPZhMACihyqfO+DgxLdUCd
-         AXgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YKJdj9MYIrMqKZ09JyoypXDwxECd7m2PMnqlCqw5ReU=;
-        b=uGbFcrt3RySZcvBxdvhbboOSzeQWmOIWmSXfvQiQxPVLB4PrinqNA82q/cPDE2EB9B
-         Es01ljDJWvgVHkqLyC2qJJErjUIjoAde15m2iR7EcQINR98M2oQMvXAAfg4ibWS7YoXx
-         nR8T6dVMQApcmgu+/+v3Aqn8IebGSZ01MljUBu1Bne+tnPuf5kfa7JSoroPCE35ZlHr9
-         ubYidZI4VtcwzmCRb5vq3zHDPRp8BrX9UeokAmKajspMyXtslvpghX5PIMH06n1vZZNI
-         B0eLIZfZ3Yk4SbDvg6R11hMWfXcvQED8RVPhBvLE/OpM4TIQnrTkliogDYdqP/jtLc+X
-         hvHA==
-X-Gm-Message-State: ANoB5plZ6rpM/8aqSqrjOvIFjP65NG7cdE2pIULvYxacFD/DelE31fGM
-        bN5CsrPstebKSebaS9zrsAhAo1HUUcGEoQ==
-X-Google-Smtp-Source: AA0mqf4HCAvtNIMbRxxr6JOgNHeMg0RPE07QYW7S8giGoZA3ht2N7Ptb3BZEwoNhB09u4sKDvRXgBQ==
-X-Received: by 2002:a05:6a00:182a:b0:577:daa0:eb68 with SMTP id y42-20020a056a00182a00b00577daa0eb68mr15588789pfa.25.1670811428393;
-        Sun, 11 Dec 2022 18:17:08 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:53a9])
-        by smtp.gmail.com with ESMTPSA id i25-20020aa796f9000000b00571f66721aesm4572837pfq.42.2022.12.11.18.17.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 18:17:08 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 11 Dec 2022 16:17:06 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        joshdon@google.com, brho@google.com, pjt@google.com,
-        derkling@google.com, haoluo@google.com, dvernet@meta.com,
-        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH] sched_ext: use msecs_to_jiffies consistently
-Message-ID: <Y5aPImWzkhIY0CuR@slm.duckdns.org>
-References: <alpine.DEB.2.22.394.2212112334020.29296@hadrien>
+        Sun, 11 Dec 2022 21:30:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF1265A6
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 18:30:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A7CFB80B3C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF5F4C433EF;
+        Mon, 12 Dec 2022 02:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670812227;
+        bh=SUajL3u9pLdX2ZmC9K7q3rHAyWiQVdNPsqS1Q0dx42E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QZ3Gx85966ze7370Cn6IZhv2zQtO5zzclXUAkMMeMbYJsiSe+nnAqqz4lA6r8NquP
+         yFms1ecqwuMU7c9czAXHgVQtf+e0YYOEy99hkZ78X/Uc8wc82/t61gYt4qPbe435VL
+         /3kDU2WZzqzE9GoFFQbDPmoA8kP9MP3XCWiEsXX/ofhQjt+wpugcSN7uBpEpCQTQEB
+         DQUwyGke5/dCEyL1j+65Ajkg/Esy0bUP7xMFYqBN0yEOq6gLPlBSOyfp5VM4vjRJQ/
+         ZW7A+kSRRylEygwb6vx5CvFyCnVo2I24KMEBPVnR7CMODnn1oCJnnLce/PADKLpSEj
+         cX9+sOz+WLkDw==
+Date:   Mon, 12 Dec 2022 10:30:23 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
+        tzungbi@kernel.org, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev
+Subject: [GIT,PULL] chrome-platform changes for v6.2
+Message-ID: <Y5aSPxsxWqmkstFb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZfTIS9a9xhGZ53AG"
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2212112334020.29296@hadrien>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 11:43:30PM +0100, Julia Lawall wrote:
-> The watchdog's timeout is processed by msecs_to_jiffies when it is
-> checked, but not when the delay for running the watchdog is set.  The
-> watchdog will thus run at a time that is later than that time at which it
-> is checked that it has run, and the scheduler aborts.
-> 
-> Add the needed calls to msecs_to_jiffies.
-> 
-> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
-> 
-> ---
-> 
-> Another solution would be to use jiffies everywhere.
 
-Yeah, that was how David Vernet implemented it in the first place and I
-insisted on using non-jiffies unit, which clearly seems like a mistake. I
-think the right thing to do here is using jiffies for everything.
+--ZfTIS9a9xhGZ53AG
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+Linus,
 
--- 
-tejun
+Please pull chrome-platform updates for v6.2.
+
+Thanks,
+TzungBi
+
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git=
+ tags/tag-chrome-platform-for-v6.2
+
+for you to fetch changes up to 9a8aadcf0b459c1257b9477fd6402e1d5952ae07:
+
+  platform/chrome: cros_ec_typec: zero out stale pointers (2022-12-08 09:44=
+:48 +0800)
+
+----------------------------------------------------------------
+chrome platform changes for 6.2
+
+* New drivers
+
+  - Driver cros_hps_i2c for ChromeOS human presence sensor.
+
+* Cleanups
+
+  - Add missing property in dt-binding example.
+  - Update the availability of properties in dt-binding.
+  - Separate dt-binding for ChromeOS fingerprint sensor.
+
+* Improvements
+
+  - Set PROBE_PREFER_ASYNCHRONOUS for some drivers for shortening boot time.
+
+* Fixes
+
+  - Fix an use-after-free in cros_ec_typec.
+
+* Minor fixes and cleanups
+
+----------------------------------------------------------------
+Brian Norris (6):
+      platform/chrome: cros_ec_lpc: Move mec_init to device probe
+      platform/chrome: cros_ec_lpc: Mark PROBE_PREFER_ASYNCHRONOUS
+      platform/chrome: cros_ec_debugfs: Set PROBE_PREFER_ASYNCHRONOUS
+      platform/chrome: cros_ec_lightbar: Set PROBE_PREFER_ASYNCHRONOUS
+      platform/chrome: cros_ec_spi: Set PROBE_PREFER_ASYNCHRONOUS
+      platform/chrome: cros_ec_lpc: Force synchronous probe
+
+Christophe JAILLET (1):
+      platform/chrome: Use kstrtobool() instead of strtobool()
+
+Dan Callaghan (2):
+      platform/chrome: add a driver for HPS
+      platform/chrome: cros_hps_i2c: make remove callback return void
+
+Stephen Boyd (2):
+      dt-bindings: cros-ec: Reorganize and enforce property availability
+      dt-bindings: cros-ec: Add ChromeOS fingerprint binding
+
+Tzung-Bi Shih (1):
+      platform/chrome: cros_ec_lpc_mec: remove cros_ec_lpc_mec_destroy()
+
+Uwe Kleine-K=F6nig (1):
+      platform/chrome: cros_ec: Convert to i2c's .probe_new()
+
+Victor Ding (1):
+      platform/chrome: cros_ec_typec: zero out stale pointers
+
+Yuan Can (1):
+      platform/chrome: cros_usbpd_notify: Fix error handling in cros_usbpd_=
+notify_init()
+
+ .../bindings/chrome/google,cros-ec-typec.yaml      |   1 +
+ .../chrome/google,cros-kbd-led-backlight.yaml      |   1 +
+ .../bindings/extcon/extcon-usbc-cros-ec.yaml       |   1 +
+ .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml    |   1 +
+ .../devicetree/bindings/mfd/google,cros-ec.yaml    | 103 +++++++++++--
+ .../bindings/pwm/google,cros-ec-pwm.yaml           |   1 +
+ .../regulator/google,cros-ec-regulator.yaml        |   1 +
+ .../bindings/sound/google,cros-ec-codec.yaml       |   1 +
+ MAINTAINERS                                        |   6 +
+ drivers/platform/chrome/Kconfig                    |  10 ++
+ drivers/platform/chrome/Makefile                   |   1 +
+ drivers/platform/chrome/cros_ec_debugfs.c          |   1 +
+ drivers/platform/chrome/cros_ec_i2c.c              |   5 +-
+ drivers/platform/chrome/cros_ec_lightbar.c         |   4 +-
+ drivers/platform/chrome/cros_ec_lpc.c              |  15 +-
+ drivers/platform/chrome/cros_ec_lpc_mec.c          |   6 -
+ drivers/platform/chrome/cros_ec_lpc_mec.h          |   7 -
+ drivers/platform/chrome/cros_ec_spi.c              |   1 +
+ drivers/platform/chrome/cros_ec_typec.c            |   3 +
+ drivers/platform/chrome/cros_hps_i2c.c             | 160 +++++++++++++++++=
+++++
+ drivers/platform/chrome/cros_usbpd_notify.c        |   6 +-
+ drivers/platform/chrome/wilco_ec/core.c            |   5 -
+ 22 files changed, 298 insertions(+), 42 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_hps_i2c.c
+
+--ZfTIS9a9xhGZ53AG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQS0yQeDP3cjLyifNRUrxTEGBto89AUCY5aSPwAKCRArxTEGBto8
+9EoJAQDwIAVLDk14JZHuXIgm6oSXyMgxu2lca5sv9cbettScSwEAjXtnAI/rab6Y
+zDgH3+pRqBIuoctzfP54vP9dUQ6u9Ak=
+=fKDd
+-----END PGP SIGNATURE-----
+
+--ZfTIS9a9xhGZ53AG--
