@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E6C64A62B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560F164A631
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiLLRrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S232657AbiLLRtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiLLRrZ (ORCPT
+        with ESMTP id S232100AbiLLRth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:47:25 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F311013F45;
-        Mon, 12 Dec 2022 09:47:23 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 17so5391641pll.0;
-        Mon, 12 Dec 2022 09:47:23 -0800 (PST)
+        Mon, 12 Dec 2022 12:49:37 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F2DD5D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:36 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id k185so12018099vsc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/KIRaN3WDqmUUaVTW9iHZr2+iJnqBAu9ZpvcFSzezwk=;
-        b=Spn2yU4s03YU4KB7Cu6/Z7pSfm1ajmNiJQBOnZeeVN05NmjaByr8rJW/Jw6lq1qftL
-         mNggN1kjtKStCP+SRLpx/fMTD5WuEMe3Vyen2kf4KAbNe330+TfLFjHH4jXXwCIHBzU4
-         m/iK3Yv8iRKoNq/zQ2H6zO4YH4Aksf0sKCITeOBaYl9E6JQ4MD363X3ik37owpNYmkuw
-         +sjtCLo3V/X94d6XyZ3VXw6DpmsNM1i9beEh9X3+bXf4YkVVvyyRQK38M/jZpBByy3jb
-         ULWbZ+Kbm/mZM3WCI9+2z08RZHwTtfrqj9N4r7ZsEnSiUYdWODN/f/iQfi4OgQP38tVJ
-         0aBA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MOjULHTt7nLPet/vxlEOzclUsoaCmUAkQsVZp1GujxA=;
+        b=OVPooWVg0d9eqFjdwIu/t1V+VaF6fmj9sRArWnJcXCR5LHGnqYfUMDxcAYw14Ks7El
+         isxqxVZcOXaBHdyQU1fHFyM4paxtwqnKCsjBR/WvsfJ7GNUC/NBHvGL0UcfHOQtmkUbP
+         TlYxu0IQerIMtvqwAggp7KAuZ6PeSnUcPfb7c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/KIRaN3WDqmUUaVTW9iHZr2+iJnqBAu9ZpvcFSzezwk=;
-        b=IH1WqNlks4t6Z2P6GyhpNEXGEvXnTm8iUZp2DUHGaG3JxLMOFkmWWfk5sbeF/wvudp
-         /7sGLvoqzux84AfULfJawQdCDcasP9iSjFFsO3Tc5MqhMlwPCSe46PIuahT41oUtkAQr
-         4AgFmzZQu4efEqN77nXetvjLd2yHnM82Ek60sPJeSDrMQ4iX4JtOV5hHVpIY3ebhRZtF
-         BhIy17E1KooiyFIIIkwKlYV9voMcoIlGYg+p16nqvXg1MABjGbTYrTsGbzQql9nwTW58
-         G0hWjthn/dHEJiw6x2iXpWfZFHSTwZphmooaTyhWGOmqYXrlDDiMeYN56HmYUt9MNjxu
-         gzUg==
-X-Gm-Message-State: ANoB5pmRFnBIRk9omZU5O0D6PVXumY359IXhoqzESgWoYNsS1BQSFXSc
-        AbHpvS3hz5ECmiyG2z97Yko=
-X-Google-Smtp-Source: AA0mqf5xxuWgOaHIdN3scLmRqly7RT8hB0qT/H62AfRpB24zxpIZ8cryvYmGAcXp4nYVppd3kvejww==
-X-Received: by 2002:a17:902:dac3:b0:189:62f7:e5fc with SMTP id q3-20020a170902dac300b0018962f7e5fcmr22471235plx.14.1670867243287;
-        Mon, 12 Dec 2022 09:47:23 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:9159])
-        by smtp.gmail.com with ESMTPSA id jf15-20020a170903268f00b00189f69c1aa0sm6650577plb.270.2022.12.12.09.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 09:47:22 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 07:47:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
-        pjt@google.com, derkling@google.com, haoluo@google.com,
-        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
-        riel@surriel.com, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 08/31] sched: Expose css_tg() and __setscheduler_prio()
- in kernel/sched/sched.h
-Message-ID: <Y5dpKXSnZ8ut3bwG@slm.duckdns.org>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <20221130082313.3241517-9-tj@kernel.org>
- <Y5cVZzcfqQ7nAm4p@hirez.programming.kicks-ass.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MOjULHTt7nLPet/vxlEOzclUsoaCmUAkQsVZp1GujxA=;
+        b=Pbddvhx1dgNekdxlZ5xNTUZ528Frnn71QMGJ08cdMchKwBkUKSyEVRJvxolr+ySzAt
+         ZPAhweHM3+ejvdnl5BxeH0i42Cou3Ep/b4UVlhba03tpT5RV/hlzaHK8sMgZ0HH03ydI
+         kSRHbkK0vdBQI7Y1g/03ePywr55EA42NCTCmR1eB2wsyAwFQwsEHZkSUuyA5pO6m3DQ6
+         YHwmU7yhp4fjUbFIWFbrfEC+9pWuDhow0I/Iyabo2pLEseR73gKO8qNWkdplk/fopDfI
+         JOou0RWi4qdyyNxI8LwSOzJJBCA/OQK5OF0HTXbVhmUiJU4Ms4tWxRcYZucmZYpkoj+/
+         +X0Q==
+X-Gm-Message-State: ANoB5plmQJq93AQkJo0oh0ZtUl+RGKtPcdTH98POn+Wu5fJnNtb3s2Jz
+        duVbwLO5uDdsSbCqjjPf0fhoqbb0EfEQJqLf
+X-Google-Smtp-Source: AA0mqf6vChL5SUBMQBhyS9TNr7I0C4u23CR6/WqEb9agZXxCLk0Vuuzx30XCpnhIAD5yq4laODjEhw==
+X-Received: by 2002:a67:f854:0:b0:3b2:a92d:a1ed with SMTP id b20-20020a67f854000000b003b2a92da1edmr7902867vsp.30.1670867374801;
+        Mon, 12 Dec 2022 09:49:34 -0800 (PST)
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
+        by smtp.gmail.com with ESMTPSA id v5-20020a05620a440500b006f474e6a715sm6199471qkp.131.2022.12.12.09.49.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 09:49:34 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id c7so2072546qtw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:49:34 -0800 (PST)
+X-Received: by 2002:a05:622a:1745:b0:3a6:8b84:47ce with SMTP id
+ l5-20020a05622a174500b003a68b8447cemr33321945qtk.678.1670867373893; Mon, 12
+ Dec 2022 09:49:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5cVZzcfqQ7nAm4p@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <b7ece19c-e50e-0709-7be1-2945883d155b@monstr.eu>
+In-Reply-To: <b7ece19c-e50e-0709-7be1-2945883d155b@monstr.eu>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 09:49:18 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiuqbgRZcotVf93Db4+gcPz8yAhW0mMfNZbEkM66rNB3Q@mail.gmail.com>
+Message-ID: <CAHk-=wiuqbgRZcotVf93Db4+gcPz8yAhW0mMfNZbEkM66rNB3Q@mail.gmail.com>
+Subject: Re: [GIT PULL] arch/microblaze patches for 6.2-rc1
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:49:59PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 29, 2022 at 10:22:50PM -1000, Tejun Heo wrote:
-> > These will be used by a new sched_class.
-> 
-> Uhhh.. wtf does a policy need __setscheduler_prio() for?
+On Thu, Dec 8, 2022 at 2:07 AM Michal Simek <monstr@monstr.eu> wrote:
+>
+> Microblaze patches for 6.2-rc1
+>
+> - Cleanup PCI support
 
-Whether a task is on sched_ext or not is determined by a few factors - the
-chosen sched class of the task, whether the BPF scheduler is loaded and
-whether it's using scx_bpf_switch_all(). That selection logic is implemented
-in __setscheduler_prio(). When the BPF scheduler gets initialized and
-exited, the selection changes and sched_ext needs to walk the tasks
-reapplying the selection logic, so the export.
+That tag looks normal in the email, but it's actually nastily encoded.
+When I fetched it, I did this:
 
-This ties together with the sched_enq_and_set_task() that you replied to in
-another thread. Imma continue there.
+     git cat-file tag FETCH_HEAD | hexdump -c
 
--- 
-tejun
+and it shows
+
+...
+0000080   9   3   5   4   6       +   0   1   0   0  \n  \n   M   i   c
+0000090   r   o   b   l   a   z   e 302 240   p   a   t   c   h   e   s
+00000a0 302 240   f   o   r 302 240   6   .   2   -   r   c   1  \n  \n
+00000b0   -       C   l   e   a   n   u   p       P   C   I       s   u
+00000c0   p   p   o   r   t  \n   -   -   -   -   -   B   E   G   I   N
+...
+
+Note how the "spaces" between "Microblaze", "patches", "for" and "6.2"
+are not actually regular space characters, but \xc2\a0, which is utf-8
+encoding for unicode character A0 ("no-break space").
+
+Please don't do that.  I have my editor show odd characters as hex
+codes (I don't want any hidden information), which is why I noticed,
+and I'm not sure why/how you did it.
+
+               Linus
