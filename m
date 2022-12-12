@@ -2,244 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CE6649A3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233A0649A3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiLLInX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 03:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S231628AbiLLInh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 03:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiLLInV (ORCPT
+        with ESMTP id S231624AbiLLInc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:43:21 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4758E635C;
-        Mon, 12 Dec 2022 00:43:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670834600; x=1702370600;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fTnA3rhn0hS+bPRFffbtWjdNDZffwVX6s1BIs3HUKuQ=;
-  b=PujLxoJ3RlGV14+Jj/IH2cNw4obz0rRn0l49U9Q/1C6+O9iGIZA40DNp
-   od95WGfv5Xg+Ukd/Xru4FKZXz0PR+xls3g/uIwJUAXWadUS6srQVVAoh0
-   43QP5BS0E+x8P7iaxNf34aj53JbMPaw5PVRdERQ6CeCaOBudDjndK/hgq
-   xrFLBjeptXwS4xGTPPGBZjHxgEgt0cm3uyysgAMze9w6Wnx1w7k9DwD8o
-   M3VeaiMeMI9Gu1Msl0btfLmkfkA4eVaWAyqeApu+zHnHsu3aYgtJ0/N3x
-   5ds/coQ2DBdCmfDbzM3kADHDxcmnza+nPU0LvG0vTfqKDETq8hMqlobG2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="318944022"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="318944022"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 00:43:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="772519076"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="772519076"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.57.252])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 00:43:16 -0800
-Message-ID: <44f642bc-8810-80d9-368a-15994de7f50d@intel.com>
-Date:   Mon, 12 Dec 2022 10:42:36 +0200
+        Mon, 12 Dec 2022 03:43:32 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC49DFDD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 00:43:31 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id a19so11792655ljk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 00:43:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KcizEOAflU8nL3kXDkXvERIMTQxYo9ZlA1993PIR43A=;
+        b=bB1VcnYtUe9V6xbUT9waAkiZAjNCQiFR0pU8qanqXML/mkXovOAXogEfdpJXYO9yfZ
+         gG/Wvx+YJaf6K+Lx9G/Np87XaiKd3HhgncAtY+hEgnygKHNM9JWNjNf+D4W3HRSjFkYv
+         KB0ftkAMJvwQ/0PfWm1BbCugZjnlBURin8p38kFTknRtf2n5CO5Dwd8Nfu7TCEm3zAaM
+         NiIJgdK96tV+OgahCgvZ4KN8TTMnwuBKUot58h0KveWfoIkJv4WTLRyNxh3QbLT49ugi
+         FugY2xWM0Uw8UwLMdXjyudSvv1EWXnrY3aXu79DXwxszeHFrA9DnxAIfMKxoNbZT+GmX
+         8M0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KcizEOAflU8nL3kXDkXvERIMTQxYo9ZlA1993PIR43A=;
+        b=W24TEvKy5LRG9Q8AosPqEc8myj59QRHZcLOjSS4ZQ23d7CgRsBfC6wzHbqxWsfALS8
+         1viT4OIoaRUZV8VDx5HeMXOoekZAa1u1tHY8WLNdcKAtMxRgC2cnJPzThNw2/3sD+LnO
+         Ag9UCWeStyewU9BTKmNfTWexIhEY0xKY80ZxGruH4dFJ1Pl0BuGbfNt5dgbxWtvJBjPs
+         XS2/G/qQ4bW/B1YPDdUarUGhKl1ZNf22QD8DPDCks5AXujO3peoxid0qsdgLoh/jonES
+         S1ul6CHcFvFyDTT5UHCX5OPT9aClakTcf/wmLsfV+BeRB4Hs28HjbNHWMsZ9oDELRHqM
+         P0FA==
+X-Gm-Message-State: ANoB5pl08awRCD3JlD7EV1Vuh+/rrEmTbesn2A+P596rSeS8k/1Kdhjr
+        tgar5PKtJDa2EumVZ0BzMxeNtw==
+X-Google-Smtp-Source: AA0mqf6h4tMG1fuGOvuR3GJh1I8TgOiGxwOhtz5fpxW1qpsQHIN4joxUpGs4G2Q8CGupezfhU/wshw==
+X-Received: by 2002:a05:651c:1a2c:b0:277:85f:db68 with SMTP id by44-20020a05651c1a2c00b00277085fdb68mr5599896ljb.51.1670834609525;
+        Mon, 12 Dec 2022 00:43:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id h26-20020a2eb0fa000000b0026fbac7468bsm1098322ljl.103.2022.12.12.00.43.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 00:43:29 -0800 (PST)
+Message-ID: <06e56601-9e4e-1de8-6b83-5d8c3ab86b0c@linaro.org>
+Date:   Mon, 12 Dec 2022 09:43:28 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8250: move sound and codec nodes
+ out of soc
 Content-Language: en-US
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
- <20221205105931.410686-4-vadym.kochan@plvision.eu>
- <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
- <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
- <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
- <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
- <69dd8714-4be1-6b1b-fa07-04c790a6c6fc@intel.com>
- <VI1P190MB0317DADE7450282444BFED32951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <VI1P190MB0317DADE7450282444BFED32951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+References: <20221210115704.97614-1-krzysztof.kozlowski@linaro.org>
+ <20221210115704.97614-4-krzysztof.kozlowski@linaro.org>
+ <f1aa7f4c-35e4-47d2-2443-8271175dc5af@linaro.org>
+ <61b4b894-2c49-881f-c2eb-107e8e558232@linaro.org>
+ <CAA8EJpqZiJd9=T8rdj65RZ2b5_OTai_a7MOektVB2gH8hGKdQg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAA8EJpqZiJd9=T8rdj65RZ2b5_OTai_a7MOektVB2gH8hGKdQg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 15:27, Vadym Kochan wrote:
-> On Fri, 9 Dec 2022 14:13:06 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
->> On 9/12/22 14:10, Vadym Kochan wrote:
->>> Hi Adrian,
->>>
->>> On Fri, 9 Dec 2022 13:53:58 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>> On 9/12/22 13:39, Vadym Kochan wrote:
->>>>> Hi Adrian,
->>>>>
->>>>> On Fri, 9 Dec 2022 09:23:05 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>>> On 5/12/22 12:59, Vadym Kochan wrote:
->>>>>>> There is a limitation on AC5 SoC that mmc controller
->>>>>>> can't have DMA access over 2G memory, so use SDMA with
->>>>>>> a bounce buffer. Swiotlb can't help because on arm64 arch
->>>>>>> it reserves memblock's at the end of the memory.
->>>>>>>
->>>>>>> Additionally set mask to 34 bit since on AC5 SoC RAM starts
->>>>>>> at 0x2_00000000.
->>>>>>
->>>>>> Can you explain more about how a 34-bit DMA mask works when
->>>>>> SDMA only supports 32-bit addresses?
->>>>>>
->>>>>
->>>>> So, after I set
->>>>>
->>>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
->>>>>
->>>>> then sdhc core sets mask to 32 bit, but then dma_map fails to map
->>>>> bounce buffer because the base address is higher than 32bit - 0x2_00000000,
->>>>> and 34bit mask fixed it.
->>>>
->>>> What happens if the bounce buffer gets mapped in the range
->>>> 0x1_00000000 to 0x1_ffffffff ?
->>>>
->>>
->>> From my understanding, on the AC5 SoC RAM starts at 0x2_00000000 so the bounce
->>> buffer can be mapped in the range 0x2_00000000..0x2_ffffffff
+On 11/12/2022 22:15, Dmitry Baryshkov wrote:
+> On Sun, 11 Dec 2022 at 22:13, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> Right but I guess I meant what about 0x3_00000000..0x3_ffffffff ?
->> Isn't that also in DMA_BIT_MASK(34)
+>> On 10/12/2022 13:31, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 10.12.2022 12:57, Krzysztof Kozlowski wrote:
+>>>> The sound and codec nodes are not a property of a soc, but rather board
+>>>> as it describes the sound configuration.
+>>> * in this case, there exist SoC-internal codecs
+>>
+>> wcd9380 is not SoC internal, so to which codec you refer to? Sound node
+>> is for sound configuration, not codec, and sound configuration is board
+>> specific.
 > 
-> Yes, you are right.
+> The platform has several macro 'codec's, which are SoC-internal
+> devices. On the other hand, these devices also have bus addresses.
 
-So it would fail in that case?  Is it possible to use devicetree
-reserved memory or some such, to set aside 64k for the bounce
-buffer DMA mapping?
+Ah, so Konrad refers to "codec nodes" being a bit generic because we
+have them also as part of SoC? These TX/VA macro are named codecs but
+these are not really audio codecs - they receive already digital signal,
+AFAIK. They are more like audio mixers and controllers. The codec in
+traditional meaning is only the wcd9380 on the board. I'll rephrase the
+commit msg to be clearer here.
 
-> 
->>
->>>
->>>>>
->>>>>>>
->>>>>>> Co-developed-by: Elad Nachman <enachman@marvell.com>
->>>>>>> Signed-off-by: Elad Nachman <enachman@marvell.com>
->>>>>>> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
->>>>>>> ---
->>>>>>>  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
->>>>>>>  drivers/mmc/host/sdhci-xenon.h |  3 ++-
->>>>>>>  2 files changed, 40 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
->>>>>>> index 08e838400b52..5f3db0425674 100644
->>>>>>> --- a/drivers/mmc/host/sdhci-xenon.c
->>>>>>> +++ b/drivers/mmc/host/sdhci-xenon.c
->>>>>>> @@ -13,7 +13,9 @@
->>>>>>>  
->>>>>>>  #include <linux/acpi.h>
->>>>>>>  #include <linux/delay.h>
->>>>>>> +#include <linux/dma-mapping.h>
->>>>>>>  #include <linux/ktime.h>
->>>>>>> +#include <linux/mm.h>
->>>>>>>  #include <linux/module.h>
->>>>>>>  #include <linux/of.h>
->>>>>>>  #include <linux/pm.h>
->>>>>>> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
->>>>>>>  		return pltfm_host->clock;
->>>>>>>  }
->>>>>>>  
->>>>>>> +static int xenon_set_dma_mask(struct sdhci_host *host)
->>>>>>> +{
->>>>>>> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->>>>>>> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
->>>>>>> +	struct mmc_host *mmc = host->mmc;
->>>>>>> +	struct device *dev = mmc_dev(mmc);
->>>>>>> +
->>>>>>> +	if (priv->hw_version == XENON_AC5) {
->>>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
->>>>>>> +
->>>>>>> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
->>>>>>> +	}
->>>>>>> +
->>>>>>> +	return sdhci_set_dma_mask(host);
->>>>>>> +}
->>>>>>> +
->>>>>>>  static const struct sdhci_ops sdhci_xenon_ops = {
->>>>>>>  	.voltage_switch		= xenon_voltage_switch,
->>>>>>>  	.set_clock		= sdhci_set_clock,
->>>>>>> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
->>>>>>>  	.reset			= xenon_reset,
->>>>>>>  	.set_uhs_signaling	= xenon_set_uhs_signaling,
->>>>>>>  	.get_max_clock		= xenon_get_max_clock,
->>>>>>> +	.set_dma_mask		= xenon_set_dma_mask,
->>>>>>>  };
->>>>>>>  
->>>>>>>  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
->>>>>>> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
->>>>>>>  	xenon_disable_sdhc(host, sdhc_id);
->>>>>>>  }
->>>>>>>  
->>>>>>> +static int xenon_ac5_probe(struct sdhci_host *host)
->>>>>>> +{
->>>>>>> +	struct sysinfo si;
->>>>>>> +
->>>>>>> +	si_meminfo(&si);
->>>>>>> +
->>>>>>> +	if ((si.totalram * si.mem_unit) > SZ_2G)
->>>>>>> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
->>>>>>> +
->>>>>>> +	return 0;
->>>>>>> +}
->>>>>>> +
->>>>>>>  static int xenon_probe(struct platform_device *pdev)
->>>>>>>  {
->>>>>>>  	struct sdhci_pltfm_host *pltfm_host;
->>>>>>> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
->>>>>>>  		}
->>>>>>>  	}
->>>>>>>  
->>>>>>> +	if (priv->hw_version == XENON_AC5) {
->>>>>>> +		err = xenon_ac5_probe(host);
->>>>>>> +		if (err)
->>>>>>> +			goto err_clk_axi;
->>>>>>> +	}
->>>>>>> +
->>>>>>>  	err = mmc_of_parse(host->mmc);
->>>>>>>  	if (err)
->>>>>>>  		goto err_clk_axi;
->>>>>>> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
->>>>>>>  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
->>>>>>>  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
->>>>>>>  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
->>>>>>> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
->>>>>>>  	{}
->>>>>>>  };
->>>>>>>  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
->>>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
->>>>>>> index 3e9c6c908a79..0460d97aad26 100644
->>>>>>> --- a/drivers/mmc/host/sdhci-xenon.h
->>>>>>> +++ b/drivers/mmc/host/sdhci-xenon.h
->>>>>>> @@ -57,7 +57,8 @@ enum xenon_variant {
->>>>>>>  	XENON_A3700,
->>>>>>>  	XENON_AP806,
->>>>>>>  	XENON_AP807,
->>>>>>> -	XENON_CP110
->>>>>>> +	XENON_CP110,
->>>>>>> +	XENON_AC5
->>>>>>>  };
->>>>>>>  
->>>>>>>  struct xenon_priv {
->>>>>>
->>>>>
->>>>> Regards,
->>>>
->>
+
+Best regards,
+Krzysztof
 
