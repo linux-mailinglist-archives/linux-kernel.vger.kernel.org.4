@@ -2,145 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8F9649DF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F247649DF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiLLLdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S232274AbiLLLez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbiLLLbo (ORCPT
+        with ESMTP id S232037AbiLLLc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:31:44 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2D59FC4;
-        Mon, 12 Dec 2022 03:31:36 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id v8so12417989edi.3;
-        Mon, 12 Dec 2022 03:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GaUp9wpaHX4T197Lz/YFuxi7l7MWe8RjmPVNiLiDGvU=;
-        b=cyG9Hj9qZPMRgNPRhE2mTWEuM+HUr031mF7Bz1hggNfN7eDtybfPw5+EPAV1O8i2P2
-         Aj2VeNDE4JHLz1awWsSMbGXA6HlblORSfhpWEWtb1tHjIZd1U0t1iHGTFfljzkxPbhqb
-         DrQYKVNWuaFqp1R9rNTdFPhJijPmnQgzhH1inMyPOXIcG483YL9dUla52dkIYHsPSbOc
-         0Ubb0lKyDU5RdX6f3NX4+HXsdc3wglGOrDIUOxq2PBBDvFf2sFaDatWkRBpw7usbCnru
-         sTEhZw1YTSTOWxquFdcANGoAc6/EPs1luKgNE1p5P+09UVqL7UjZqPPRsrZ2prQsje0W
-         vRFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GaUp9wpaHX4T197Lz/YFuxi7l7MWe8RjmPVNiLiDGvU=;
-        b=7vkfCa1zA1/CFDJIwIlVj/ZzmteQnMntaRJW5fMw+3wGRbbARjBT0rIzl661gqQnCa
-         ihqiO4pDUbzkJjRcOgDbGm1P8XydM4AkiAaZr4Se/iHmDgBmZZQD9f1AKhtxuDjBX7V/
-         kCsjcp2jinuETKgzXxn6x8D1+dwqtz6MXzV5z4RldismjajgA50phqGavAI5VC+I9EO/
-         YZ6NggFb6tScIBJ5D/2G++LtdNb2bOpwcNkzYnaW2B1AZ5TqZw9Yweenqzi4EjmTdA9T
-         kWpCkPZMoH5QDTIN5EYOsukww8yVojwuBSLvV2hkbYtdIB/HBhYztJKHsY7n2zeTOaOw
-         SxCg==
-X-Gm-Message-State: ANoB5pnGDqpWKrVJU5CG0nny44ErT9NvgcrK5QfhapDOfEk15w08k5WT
-        IoSYxPlvy8LusYtc6EOVK7n/MUfchRnsSbGaVpE=
-X-Google-Smtp-Source: AA0mqf4szr6Bqoo+l9xbuEKcH6JR4c6Eku3BjVxrW+RtU1cBELBFqTXigvaBCM4inOcxM6o7/mQaBktcx2OK8rAXZio=
-X-Received: by 2002:a05:6402:24a2:b0:470:14c7:5bf5 with SMTP id
- q34-20020a05640224a200b0047014c75bf5mr23369eda.399.1670844694484; Mon, 12 Dec
- 2022 03:31:34 -0800 (PST)
+        Mon, 12 Dec 2022 06:32:56 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83296465;
+        Mon, 12 Dec 2022 03:32:05 -0800 (PST)
+Received: from localhost (89-26-75-29.goll.dyn.salzburg-online.at [89.26.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57A09660159C;
+        Mon, 12 Dec 2022 11:32:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670844724;
+        bh=aWtV/a5hztwYfZNOagzoZHV/7aXlFJiz7TQAx67yg6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WxWvTwU5Bjp8OxfxVPnSlPtQpUL9vTnj7PD+8/wEFANQ+vVFr+G2nzIkWQCOmMy3r
+         lxsLBtXZfT+VhDj8xCSQn6BR0JTrCDj1TIC0qTJJZ8sVGxI05N8PX02AaiP24FV8wh
+         c0wG4XGF6BafjpXkMwy7fCvf1Arfd0yuJhshfQwy4WsMwRUjxTDChqAMV6Tv6omt3F
+         OfTpnKcfZ277rOVr4WYz4UjIgGfK5meCqnmOPwcUEKvT84sDMAg5PjQxhE9zC7sgYC
+         qVr1pay6JvsXhEOAkaezkncoRuD/CdTSpWvKgfR+gRz25/uvJlB85Et7ZZGtR12Qro
+         wgvvqm1PSp0SQ==
+Date:   Mon, 12 Dec 2022 12:32:01 +0100
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@collabora.com, bob.beckett@collabora.com,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
+        nas.chung@chipsnmedia.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 5/6] dt-bindings: media: wave5: add yaml devicetree
+ bindings
+Message-ID: <20221212113201.lyn33mzg5ausnh46@basti-XPS-13-9310>
+References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
+ <20221207121350.66217-6-sebastian.fricke@collabora.com>
+ <48d60bd0-4de1-4a5e-eca1-1f8a9303cce0@linaro.org>
+ <20221207150925.frotwpm3ukwwlnig@basti-XPS-13-9310>
+ <30166f9d-ebfa-ed8b-c08b-ff8e2599161f@linaro.org>
 MIME-Version: 1.0
-References: <20221205051937.3897001-1-shravan.chippa@microchip.com>
-In-Reply-To: <20221205051937.3897001-1-shravan.chippa@microchip.com>
-From:   shravan kumar <shravanmicrochip@gmail.com>
-Date:   Mon, 12 Dec 2022 17:01:23 +0530
-Message-ID: <CAOPdzVbvW_MP02ZUw=uyLuLFCjmq4WZO+GLo9b0SPX5+3f4j4w@mail.gmail.com>
-Subject: Re: [PATCH v6 0/5] media: i2c: imx334: support lower bandwidth mode
-To:     shravan kumar <shravan.chippa@microchip.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <30166f9d-ebfa-ed8b-c08b-ff8e2599161f@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A gentle ping!
-In the meanwhile the kernel test robot also reported a warning.
-"drivers/media/i2c/imx334.c:767:15: warning: unused variable 'i' ", I
-will fix this warning.
+Hey Krzysztof,
 
+On 07.12.2022 16:27, Krzysztof Kozlowski wrote:
+>On 07/12/2022 16:09, Sebastian Fricke wrote:
+>> Hello Krzysztof,
+>>
+>> On 07.12.2022 13:31, Krzysztof Kozlowski wrote:
+>>> On 07/12/2022 13:13, Sebastian Fricke wrote:
+>>>> From: Robert Beckett <bob.beckett@collabora.com>
+>>>>
+>>>> Add bindings for the wave5 chips&media codec driver
+>>>>
+>>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>>>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+>>>> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+>>>
+>>> What's happening with this patch? Where is the changelog?
+>>
+>> The changelog is located in the cover letter.
+>> https://lore.kernel.org/linux-media/20221207121350.66217-1-sebastian.fricke@collabora.com/
+>
+>
+>Which you did not sent to us... so? How does it help us?
 
-On Mon, Dec 5, 2022 at 10:53 AM shravan kumar
-<shravan.chippa@microchip.com> wrote:
+I completely agree, I simply forgot to add the devicetree@vger.kernel.org mail to the list of receivers.
+
 >
-> From: Shravan Chippa <shravan.chippa@microchip.com>
+>>
+>>> Why it is v11 and first time I see it?
+>>
+>> You actually replied to V10:
+>> https://lore.kernel.org/linux-media/20221023085341.s23qinjuw4qls3dn@basti-XPS-13-9310/
+>>
+>>> And why it is v11 with basic mistakes and lack of testing?!?
+>>> I would assume that v11 was already seen and tested...
+>>
+>> Sorry I don't have a lot of experience with dt-bindings, thank you for
+>> highlighting the issues, I will correct them. And I forgot to build the
+>> documentation during my testing runs.
+>> I took over the patch set from another contributor and as no one
+>> complained about the dt-bindings for the last 10 versions, I concentrated
+>> my energy on other problems.
 >
-> Hi
+>Because they were never sent to maintainers...
 >
-> This patch series is for imx334 sensor driver support for lower bandwidth
+>>
+>>>
+>>>
+>>>> ---
+>>>>  .../devicetree/bindings/cnm,wave5.yml         | 72 +++++++++++++++++++
+>>>>  1 file changed, 72 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/cnm,wave5.yml
+>>>
+>>> Wrong directory. It wasn't here at all before, so I am really confused
+>>> how this could happen.
+>>
+>> Thanks for the highlight.
+>>
+>> I will move it to:
+>> Documentation/devicetree/bindings/media/cnm,wave5.yml
+>>
+>>>
+>>> Subject: drop redundant pieces: yaml, devicetree and bindings.
+>>
+>> I call it:
+>>
+>> dt-bindings: media: chips-media: add wave5 bindings
+>>
+>> in V12
+>>
+>And the rest questions? Lack of response means agreement, which is fine,
+>so in v12 questionable parts will be removed?
+
+Yes, I will completely rework this part, thus I try to take all of your
+highlights into consideration.
+
 >
-> Some platforms may not be capable of supporting the bandwidth
-> required for 12 bit or 3840x2160@60 resolutions.
->
-> Add support for dynamically selecting 10 bit and 1920x1080@30
-> resolutions while leaving the existing configuration as default
->
-> V5 -> V6
-> -Drop the dt-binding patch
-> -Optimize the code to avoid duplicating the lines
-> -Added proper mutex while imx334_mbus_codes array
-> -Modified Function __v4l2_ctrl_modify_range arguments as per the review commants
-> -Added hblank dummy set ctrl
-> -Removed Redundant comment
-> -corrected code alignment
-> -All commit msgs are re-written
->
-> V4 -> V5
-> -Added 5 more patchs as per the review comments witch has below updates
-> -Updated 1782000000Mbps link frequency for 3840x2160@60 as per the mode
-> values
-> -Updated 1782000000Mbps link frequency in dt-bindings also
-> -Updated 3840x2160@60 mode array with default(reset) values
->
-> -Updated hblank __v4l2_ctrl_s_ctrl() to __v4l2_ctrl_modify_range()
-> Suggested-by: Jacopo Mondi <jacopo@jmondi.org>
->
-> -Current mode update only when we try to set V4L2_SUBDEV_FORMAT_ACTIVE
-> -Added link frequency (891000000Mbps) and pixel rate (74250000) to
-> 1920x1080@30 mode
-> Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
->
-> -Updated commit message
->
-> V3 -> V4
-> - Make the 12 bit and 3840x2160 as default
-> - Set bus code SRGGB12 if set format fails
->
-> V2 -> V3
-> - Fixed the warning reported by kernel test robot
->
-> V1 -> V2
-> - Addressed the review comment given by Jacopo Mondi,
->   Which has bug in imx334_enum_frame_size() loop function,
-> - Renamed array codes[] to imx334_mbus_codes[]
->
->
-> Shravan Chippa (5):
->   media: i2c: imx334: modify link frequency as for the configureation
->   media: i2c: imx334: replace __v4l2_ctrl_s_ctrl to
->     __v4l2_ctrl_modify_range
->   media: i2c: imx334: add missing reset values for mode 3840x2160_regs[]
->   media: i2c: imx334: support lower bandwidth mode
->   media: i2c: imx334: update pixel and link frequency
->
->  drivers/media/i2c/imx334.c | 338 ++++++++++++++++++++++++++++++++++---
->  1 file changed, 310 insertions(+), 28 deletions(-)
->
-> --
-> 2.34.1
->
+>Best regards,
+>Krzysztof
+
+Sincerely,
+Sebastian Fricke
