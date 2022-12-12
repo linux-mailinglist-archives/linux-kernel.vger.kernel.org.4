@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B4B64A6D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5443264A700
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 19:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiLLSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 13:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S232648AbiLLSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 13:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiLLSU5 (ORCPT
+        with ESMTP id S229629AbiLLSYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 13:20:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E422D63;
-        Mon, 12 Dec 2022 10:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E78C6119E;
-        Mon, 12 Dec 2022 18:20:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEA9C433F0;
-        Mon, 12 Dec 2022 18:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670869254;
-        bh=RI5+SmWe0surB49db6NNG2NfZSAFADSc0Xo9XZxiKX4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g4gbQQAbRE3Nm3l+JyzsTz0j7xSgqKAC1TH31CsKuuPT7wLxtd/oDe2w2ICHUMbAW
-         q7/dJjGe+zBiWWzA3//M7ontpFXzmyM2aYJfx3t42zznwc0ZA+2sHSVaeM4/oh6VXV
-         FOAHZB7ZlWFaaqn1niriFi8ReSBrv2pHc9DWr9HY=
-Date:   Mon, 12 Dec 2022 19:20:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH hid v12 05/15] HID: bpf jmp table: simplify the logic of
- cleaning up programs
-Message-ID: <Y5dxAz3QTQnaB71Q@kroah.com>
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
- <20221103155756.687789-6-benjamin.tissoires@redhat.com>
- <CAO-hwJ+fYvpD5zbDNq-f-gUEVpxsrdJ7K-ceNd37nLxzBxYL+g@mail.gmail.com>
- <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com>
+        Mon, 12 Dec 2022 13:24:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF2EE38
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:23:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670869405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Tx9zUylKBDfFBr3UTAZ+7it8/woVWVXeZHnqYTyyfFg=;
+        b=R1RYSJwWnvcaF26y0mV3y0YVVvQ182ttP2domOps7mQYLRlV8wkdFl4auyTiVUqy+wh+mH
+        O9XHsuIWpB83Ud/uzpytUsyZNy1Qb/StPa+5knWwePQ7FNOLNm/+Su0/JZcB880wqLkMsF
+        IhOadLCnu3YruHrD6fXuBzDLphbaaHM=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-549-yafpvYVpO6mDXegUAWHIJg-1; Mon, 12 Dec 2022 13:23:23 -0500
+X-MC-Unique: yafpvYVpO6mDXegUAWHIJg-1
+Received: by mail-qv1-f72.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so12482896qvb.20
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 10:23:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tx9zUylKBDfFBr3UTAZ+7it8/woVWVXeZHnqYTyyfFg=;
+        b=Fi9kXevvc+hspm9klTGsf4Z3uSaZ5Q77JLvglun/8fS8BUV1gFbguremId5Yn6vyfN
+         oS/G2Cpp2EhahmMN1Z+yAjo+l7o7Ii5htaxt78uOvBr9f6XFSZmCT39lXY+r0fWGIW9N
+         yCMQMCo6v6tjXMPjtbv5xU1uYPMK/ohetcgm1e6K4KxkNZG3zuWiwV6Oj2hWRclFNzQK
+         8oG0KC67m9eBLPTGOs11p97t0T2nWCYyd66xyl5JSL6p5dyNjMDdkmGShAeF9vQuZrvs
+         jl2Y4s6j0WKyoNDFm5Bmw83w8bR7DZ9FJk+ARnm8TMzWc0YSTBFnNJ0Z6DZSpPp0AtVX
+         0CcQ==
+X-Gm-Message-State: ANoB5pkMY1u6YcKDGGRGikkAVSIGJcs40ixTOY2Immr9dcGn8We7X0gf
+        tc0MOJ13T0OwL31+tWj2Z+roDIGt//1IV6sSPxiilX+NdGmVAWaEV+Fn2awRdk54r/nIQjB4xOg
+        ED6AnEEsiOZ/nuXqsRZoI9P8A
+X-Received: by 2002:a05:622a:40d:b0:3a6:9cfa:d6a with SMTP id n13-20020a05622a040d00b003a69cfa0d6amr34143906qtx.30.1670869403163;
+        Mon, 12 Dec 2022 10:23:23 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf68yCfVvT7yzOgIFVasf/aQAthqe8C5fxTiuJLYFSRNww7CRo4RPR7WgE0z5yI/hHFsRNgkEQ==
+X-Received: by 2002:a05:622a:40d:b0:3a6:9cfa:d6a with SMTP id n13-20020a05622a040d00b003a69cfa0d6amr34143873qtx.30.1670869402946;
+        Mon, 12 Dec 2022 10:23:22 -0800 (PST)
+Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id 3-20020ac85643000000b003a816011d51sm1998185qtt.38.2022.12.12.10.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 10:23:22 -0800 (PST)
+From:   Brian Masney <bmasney@redhat.com>
+To:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
+Subject: [PATCH 0/4] arm64: dts: qcom: sc8280xp: add i2c and spi nodes
+Date:   Mon, 12 Dec 2022 13:23:10 -0500
+Message-Id: <20221212182314.1902632-1-bmasney@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 09:52:03AM -0800, Yonghong Song wrote:
-> 
-> 
-> On 12/12/22 9:02 AM, Benjamin Tissoires wrote:
-> > On Thu, Nov 3, 2022 at 4:58 PM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > > 
-> > > Kind of a hack, but works for now:
-> > > 
-> > > Instead of listening for any close of eBPF program, we now
-> > > decrement the refcount when we insert it in our internal
-> > > map of fd progs.
-> > > 
-> > > This is safe to do because:
-> > > - we listen to any call of destructor of programs
-> > > - when a program is being destroyed, we disable it by removing
-> > >    it from any RCU list used by any HID device (so it will never
-> > >    be called)
-> > > - we then trigger a job to cleanup the prog fd map, but we overwrite
-> > >    the removal of the elements to not do anything on the programs, just
-> > >    remove the allocated space
-> > > 
-> > > This is better than previously because we can remove the map of known
-> > > programs and their usage count. We now rely on the refcount of
-> > > bpf, which has greater chances of being accurate.
-> > > 
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > 
-> > > ---
-> > 
-> > So... I am a little bit embarrassed, but it turns out that this hack
-> > is not safe enough.
-> > 
-> > If I compile the kernel with LLVM=1, the function
-> > bpf_prog_put_deferred() is optimized in a weird way: if we are not in
-> > irq, the function is inlined into __bpf_prog_put(), but if we are, the
-> > function is still kept around as it is called in a scheduled work
-> > item.
-> > 
-> > This is something I completely overlooked: I assume that if the
-> > function would be inlined, the HID entrypoint BPF preloaded object
-> > would not be able to bind, thus deactivating HID-BPF safely. But if a
-> > function can be both inlined and not inlined, then I have no
-> > guarantees that my cleanup call will be called. Meaning that a HID
-> > device might believe there is still a bpf function to call. And things
-> > will get messy, with kernel crashes and others.
-> 
-> You should not rely fentry to a static function. This is unstable
-> as compiler could inline it if that static function is called
-> directly. You could attach to a global function if it is not
-> compiled with lto.
+This patch series adds the i2c and spi nodes that are missing on the
+sc8280xp platform.
 
-But now that the kernel does support LTO, how can you be sure this will
-always work properly?  The code author does not know if LTO will kick in
-and optimize this away or not, that's the linker's job.
+Note that this series needs to be applied on top of:
+[PATCH v3] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
+https://lore.kernel.org/lkml/20221212150045.4252-1-quic_shazhuss@quicinc.com/
 
-thanks,
+Brian Masney (4):
+  arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
+  arm64: dts: qcom: sc8280xp: add missing i2c nodes
+  arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and qup2_i2c18 nodes
+  arm64: dts: qcom: sc8280xp: add missing spi nodes
 
-greg k-h
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  46 ++
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |   6 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   6 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 738 +++++++++++++++++-
+ 4 files changed, 789 insertions(+), 7 deletions(-)
+
+-- 
+2.38.1
+
