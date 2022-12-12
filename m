@@ -2,181 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E3764ABCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7E064ABCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiLLXv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 18:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
+        id S233732AbiLLXxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 18:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233732AbiLLXvS (ORCPT
+        with ESMTP id S231481AbiLLXxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 18:51:18 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4F42DD0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 15:51:17 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCGwohc029986;
-        Mon, 12 Dec 2022 23:50:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=biOqnAf8u9QpTsKfc12CDhDuHfniThUky2Q/bg777/Q=;
- b=nFIg3U2unl/lzhfcMHpM6Z3JBMKSo3XkdNCaWDcCn4szXGa9PT+fJgk3sGs9iacCxI6j
- xhD+rt1tg/XOJnl78WLU7w5QMS+/n0wkz1D3b3JuJslZxwHeR2CzxNWer2UBXJ6ap0sI
- c1hLXIRcrX/uwptOkao6bbfTHQrjIG/neXiVS6rIy1EAUmpV4YDzO07SuCzK/LK6aVJz
- 4oCGM7mWQr68Pyc6gQ6lfw30MEylnReau2gHut+Fj22UQcgT4FdR/M242+XOTNHRGXko
- jlOhJc5wcP054Vk/ybiwvRpiwXYNBSVI+YrrdI2CUoAphstnQdv9KvG24JYNXVJkzJMB zA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mcj0944s8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Dec 2022 23:50:56 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BCMcYWK018645;
-        Mon, 12 Dec 2022 23:50:55 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3mcgjbc4u3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Dec 2022 23:50:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NWCEdT6HyA/5UjRNaGxtK5wHvSsboZe+JEu03dSjog4zcynzbcpEi26YWelXFVH0d1RA5g3ytiybw5xAYOpzV4if4MKX3nViy82fzQFPNxCY4a5a8tK/lgOfC+pxD/H+aMwARGIrqy0sGTy2PTIf1Gcg+yYEErUcYQDxdAXkQnNlSGvFwA6RglJp9FdrAPv3JXdhidf9pKlUJ7ngDbyoyKKDohJ2WLHLXxFsu3KVjWdw+QW9MBjXnMdY7pb+xRUffCYDRiCG7ObFxSlO0whQSdm9VONIOeuso/Ar+cbP0XCC+3XarjAz6sgJnihoGhluE72gTYUnp7WtZ9jAJlDlrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=biOqnAf8u9QpTsKfc12CDhDuHfniThUky2Q/bg777/Q=;
- b=N9RBN9mVMStaGXoLuH6/gAuXR5H+BXq4M2l30AOCQ+Pvt/kUeny+bQ9etPyI0ErBfU6YcxH2YTsDsQI3SXzSEyNfIwlTBE8OG1hUX1UHlnEWro3NlLeX5jooN6+A9sMyTaei2DH1MytJdEqphRo/nogTvPKH17xOhPtMXupGJAo2J4VhV6KS30vH5grvrlduzDFhEMRsy9b3H+fk2CIKCzWxG4UfyWHappyy2miKds9DsYyqWnputOQKljMjuMapyebZNefDTqeHdRWulsbZzo/w4laTEnvwujcpYUc5+N/B+LlxFMS7zOJyIAY7hObSK/kwlqMFJKX9oU7zrJ9XCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=biOqnAf8u9QpTsKfc12CDhDuHfniThUky2Q/bg777/Q=;
- b=w89JpxMBSyd20h2TAN+G2x16sIvlDETi/dgeJao11VOkmf2d5IrAdZ47MqphWVCfB5VNcHWENScWy3/J3gEgMIIgDwKq1EhiZquIpuX/vZ0oS2wJMpYPkb3OsKBQzhxumP9+XtITp/WZPpf3jRO5qRRk8YU0qwsU6++48GytwPk=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by DS0PR10MB7271.namprd10.prod.outlook.com (2603:10b6:8:f6::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.19; Mon, 12 Dec 2022 23:50:53 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721%5]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 23:50:53 +0000
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
+        Mon, 12 Dec 2022 18:53:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28916243
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 15:53:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E47E611EC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1292FC433EF;
+        Mon, 12 Dec 2022 23:53:31 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 18:53:30 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Douglas Raillard <douglas.raillard@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH 2/2] hugetlb: update vma flag check for hugetlb vma lock
-Date:   Mon, 12 Dec 2022 15:50:42 -0800
-Message-Id: <20221212235042.178355-2-mike.kravetz@oracle.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221212235042.178355-1-mike.kravetz@oracle.com>
-References: <20221212235042.178355-1-mike.kravetz@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0107.namprd04.prod.outlook.com
- (2603:10b6:303:83::22) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Valentin Schneider <vschneid@redhat.com>
+Subject: Re: [for-next][PATCH 02/11] tracing: Add __cpumask to denote a
+ trace event field that is a cpumask_t
+Message-ID: <20221212185330.639bf491@gandalf.local.home>
+In-Reply-To: <8448372a-6911-e920-b630-15af850adcae@arm.com>
+References: <20221124145019.782980678@goodmis.org>
+        <20221124145045.743308431@goodmis.org>
+        <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
+        <20221212111256.3cf68f3e@gandalf.local.home>
+        <8448372a-6911-e920-b630-15af850adcae@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DS0PR10MB7271:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9cedd2ee-c82b-410a-bbc4-08dadc9bb433
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R5Xi1mk6Uc72myMH+IyMdhZHL83xilDtSjkd4IdhAdtgS1QfpUm11DJrZgQ2Ig1EvuyddQTSh6tj/PH9qM760FcXU8g8ZKJKd5KXfwGZy+pTNI6v/nnN6CTuwsasNU5K9ZhL0tNI00UDZTVf8pm1ydLPUntdWJrHhymeWOdZy74a1Rn1AN1ojFUkSOBHPd6vi/BKYhimhT5QCComiMNalRG6O15Oc/iZYT5TUjhnSHGwErTosCzazWzfbqM28U/M/G1b2ut7EFpp40Gah6Htnt0lj5X1YX3fnoKWw2Nm5zeBV9boxw4vsonN927/uRlKGvcukwtpqxOZeckS5sC4kmUX8k7zyNdDx0g54HbXzHfRwJz0NBcwYYJlC87GhJdO6Qr0uAkgBbPiwKWphr9I9yUgb2VjClKNkfMT7gdWEMVeVlIZci9G0EsexyfMfUKIfY054Up9nIjOaA/oD3SLpzr9Dk2il036z+ncYGbSB/LTBnxMI/wXDYZFYf0uWWgm4qmeJm9IrEeNxrFOVfum7FVjVo1HYOV2LgpPxeS3bYA5CbRPqsd6tD0svCeOuh+MBpGJKZ7wxv+l4R4xNwkrSapqV3/fs0euKWLRfof1EfhTqVLtlnAdpYuxC3b+pSG9KI8JLAWdJMfpq2x0GwieaA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199015)(6486002)(478600001)(6666004)(107886003)(2906002)(6506007)(86362001)(36756003)(44832011)(8936002)(26005)(186003)(2616005)(1076003)(38100700002)(6512007)(7416002)(4326008)(83380400001)(41300700001)(5660300002)(54906003)(8676002)(66556008)(66946007)(66476007)(4744005)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EmJBN/e8cIhToFlsATEaCUaCA7DQbQLAWrGk+HQ/B3pfVhF73uzjAyNO+AuZ?=
- =?us-ascii?Q?Kf5HU3rxPl1JRxyEsHrktmTM7DcuDThp+Yxpvt9ebftu5yc0PP1DEACUjo4I?=
- =?us-ascii?Q?KYvtUk8r/eWMMdhqAp/plZ5PPVUoiFIFnzbMxsnS9e4TOpe2S9ETY8d81BWD?=
- =?us-ascii?Q?C5TvwPomzLhK43RIkG05WF4WRErNZcKKu/yoKGtpJrhMpTroedkXQLWo0+9g?=
- =?us-ascii?Q?bwrqGYr3C047gMUB6fLl3T7uiMwBHeodUBcypwpREPDqsy/nE0X5jG/+V9Nl?=
- =?us-ascii?Q?9tDje80uvuVe44aI0kzrbBDQKqFHnfehGNzcgvQV1U8AX8HbyQxaXRPHIhwJ?=
- =?us-ascii?Q?augGRBrIM2bYHRbzMxOZmZBp+JnbT0lvAFMabnxCpF3/eTME4zv51EbTyMNS?=
- =?us-ascii?Q?se0DgTgvyz94LXFLFVeeAZYtxvE40cbDpOy/hbA2nxMwcV5n9UOfOgdEdL5c?=
- =?us-ascii?Q?cAOH8S4ATdN8AP026ESOOKOd9oI0PFla+M4Jkgo2PqUTRYW6bsazevFrhHR3?=
- =?us-ascii?Q?rsBwBQNF8+Vk7OEw8RpURYIPw0QuKRtu9ncwJ3dQRydBtWmLc9/Gg3r1Pd2q?=
- =?us-ascii?Q?QGbK+nJHDsIVBPYyPVYNEJqCIfOEC37UpWYeAh/I+fEIYgvMJphp847vof1N?=
- =?us-ascii?Q?1E2XSVovMBgtABjRDYu0JHhF3qnXc8vY4359lXEEQnl378UX3w8/y2Uc2jN3?=
- =?us-ascii?Q?TZqxvvwKUkoRtPee8kYkUTxvyESl6Rrqlwep6QKLvuMtcZRkCprHqLUAqRzI?=
- =?us-ascii?Q?+wMUJ6NMpTWOFs3lK6zzAIxKV/v18dsOTT0nshft0NF134jK3GoA1tBYh8Z4?=
- =?us-ascii?Q?YhG1zaGau/OS353xIXSOkSxKWbnUGtnBdiOgs/FLFkfUI5x7CxxK4kN+lJ8E?=
- =?us-ascii?Q?NYBhGkSX7AS6IJQ4ayo6fctONHoMQniMyBzDyKexa549iwRVv26rmdYJDRdS?=
- =?us-ascii?Q?eIJ5SYWB+wD4rDTz60KqRVnfHPfTM9cUeLsmxsMMEMQGcHKh7QmfxN7n9l+O?=
- =?us-ascii?Q?C3O4+dxb2PngRS8ZHqZGz5g3MUlHtrddP3F+ZGLvnqiNL82ebnztg1xXmheT?=
- =?us-ascii?Q?aDOE+wVjLaWB0rV7bYrggwl52iJA5DInKFqPaZwzOJd/OMbn8PuQ4OFdcKEW?=
- =?us-ascii?Q?I5oVkJGYJuQGYviX89d0YRwa3DnOCy28Z3Axqr4KWib9r98OEpQEIqXqLqMW?=
- =?us-ascii?Q?5FGzn8xDJkIDfxmMOFNGQUo/fCTyPGQyKxOa9Qf1zHHjWkMKYzCmGN3T5fO5?=
- =?us-ascii?Q?2zAez2VT7gvMZnNsIbiQLUcvq2QwUEkrMYbwwbYlIh9MgiR3kITLVVD3XA11?=
- =?us-ascii?Q?zsGbjFDfLMZ7h4R4VoQrb+xA3jbPsL6cVG0UgHyTYIIESKuYwbQ2cHrT+Az0?=
- =?us-ascii?Q?FkeKLoluZlRNiNJSTAr1BlYe18q1pSsJacMcAUg6KO4PWZE9guTUBryYEV8G?=
- =?us-ascii?Q?tpYboBuuw+79stdsEORtc/NIr1Df5hBJfK3sjrFl4SxaeVl18ecCZ9venNUm?=
- =?us-ascii?Q?8O1eF9C5wv3XeKUY2orJHCcm9OrEH22osx+iVPt3PzDC+yyu3xKiLmzRkMDi?=
- =?us-ascii?Q?PUwk88u3v2ZwBHMWhdVRjvxFr/K3k2fx6VpXACPhBbH1H04La91OisvVd6fB?=
- =?us-ascii?Q?/A=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cedd2ee-c82b-410a-bbc4-08dadc9bb433
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 23:50:52.8614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bTTmYjYwyEJwcnk6FPwSrWUPUhZQ1RYrV0PN/vQ1cCsRVe/qocqpcXu8ghxq2K9XR8N4sOJx0NQCIltvsm6mdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7271
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212120205
-X-Proofpoint-ORIG-GUID: 2wgPm6sAfMmVLjL4Vcu0V40uidWdFKrN
-X-Proofpoint-GUID: 2wgPm6sAfMmVLjL4Vcu0V40uidWdFKrN
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check for whether a hugetlb vma lock exists partially depends on
-the vma's flags.  Currently, it checks for either VM_MAYSHARE or
-VM_SHARED.  The reason both flags are used is because VM_MAYSHARE was
-previously cleared in hugetlb vmas as they are tore down.  This is no
-longer the case, and only the VM_MAYSHARE check is required.
+On Mon, 12 Dec 2022 22:19:17 +0000
+Douglas Raillard <douglas.raillard@arm.com> wrote:
 
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- mm/hugetlb.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> >>>     field:__data_loc cpumask_t *[] mask;    offset:36;      size:4; signed:0;  
+> > 
+> > The current parsing tools break the above into:
+> > 
+> >   "field:" "__data_loc" <some-type> "[]" <var-name> ";" "offset:"
+> >   <offset> ";" "size:" "<size>" ";" "signed:" <signed> ";"
+> > 
+> > Where the <some-type> really can be anything, and in lots of cases, it is.
+> > Thus its only a hint for the tooling, and has never been limited to what
+> > they are.  
+> 
+> While we are having a look at that, what is the exact format of "<some-type>" ?
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 9c251faeb6f5..985881f9e8cc 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -260,8 +260,7 @@ static inline struct hugepage_subpool *subpool_vma(struct vm_area_struct *vma)
-  */
- static bool __vma_shareable_lock(struct vm_area_struct *vma)
- {
--	return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
--		vma->vm_private_data;
-+	return vma->vm_flags & VM_MAYSHARE && vma->vm_private_data;
- }
- 
- void hugetlb_vma_lock_read(struct vm_area_struct *vma)
--- 
-2.38.1
+It's literally anything that the kernel excepts and can be in a kernel
+structure. As the macro in the kernel defines both the internal structure
+and what gets printed in the field. This is why the parsing tooling never
+was very strict on <some-type> because a lot of times its something that it
+does not recognize. Any new type added in a trace event will show up here.
 
+
+> > 
+> > The above is for the kernel to build.  
+> 
+> That was my understanding that the comparison issue is related to in-kernel filtering ?
+> If that's the case, I completely agree that the type kernel code sees does not _have_
+> to be the same thing that is exposed to userspace if that simplifies the problem.
+
+Yes, and note the patch I sent out to fix this.
+
+> 
+> >>
+> >> How is tooling expected to distinguish between a real dynamic array of pointers
+> >> from a type that is using dynamic arrays as an "implementation detail"
+> >> with a broken type description ? Any reasonable
+> >> interpretation of that type by the consuming tool will be broken
+> >> unless it specifically knows about __data_loc cpumask*[].  
+> > 
+> > I'm curious to what the tool does differently with the above. What tool are
+> > you using? Does it just give up on how to print it?  
+> 
+> I'm implementing the Rust libtraceevent/libtracecmd prototype. The use case I'm trying
+
+Duh! Of course. This is what we discussed at the tracing summit. I just now
+noticed your name ;-)
+
+> to address in my first draft is:
+> 
+> * a parser for trace.dat exposing a stable API that does not need to be updated every day.
+> * A serde backend using that parser
+> * Any "fancy" type (i.e. that is not a basic scalar type or string) is handled by
+>    the consumer of the deserializer. This means the backend must be able to fallback
+>    on providing sensible raw data that can be processed by the user.
+
+That third part may be difficult with the above issue I mentioned.
+
+Just do:
+
+ git grep '__field(' | cut -d',' -f1 | cut -d'(' -f2 | sed -e 's/[    ]*//'
+ | sort -u
+
+to see what's in the kernel.
+
+
+> 
+> In a more general way, I'm trying to structure the code so that the generic trace.dat parsing
+> lib will be able to handle opaque types by returning a sensibly-typed buffer to the caller. The
+> caller then decodes it the way it wants. This would apply equally well to a C API.
+> 
+> That is especially important for user-defined fancy types, e.g. in a kernel module. We cannot
+> reasonably expect users to modify the parsing library itself when they could handle the
+> decoding on their side with an annotation and a custom decoder [1].
+> 
+> Beyond that, any tool that reads the trace and pretty prints it is bound to provide
+> broken printing for these types: there will be a date T1 where a new fancy type is introduced
+> in the trace. Until date T2 when the tool gets explicit support for the type, it will
+> display the thing as an array of pointers. Interpreting a bitmask as an array of pointer makes
+> no sense for anyone (machine or human). It so happens that unsigned long == ptr size so it
+> kind of makes sense for cpumask, but an opaque type might internally be u8[], in which case,
+> printing as void* [] is meaningless. It would likely be better to display a placeholder
+> or a plain u8[]. The "semantic_type" field property proposal is an improvement of that.
+
+Note, I put much more effort into the offset, size and sign than the type.
+But is this only for the arrays that you have these restrictions, or any
+field type?
+
+> 
+> 
+> > )  
+> >> However, the set of types using that trick is unbounded so forward
+> >> compatibilty is impossible to ensure. On top of that, an actual
+> >> dynamic array of cpumask pointers becomes impossible to represent.  
+> > 
+> > I never thought about a user case where we print out an array of cpumask
+> > pointers.  
+> 
+> That case (array of pointer) might be a bit far fetched but kernel already contains
+> weird stuff such as pointers to opaque struct, I suppose as a way of giving a unique
+> ID to something. The solution we settle on for cpumask should be applicable to any opaque
+> type present and future so baking such limitations in the foundations of the event system
+> does not sound like a terribly good idea.
+
+The above should be moot by now, as my new patch removes the "*" pointer.
+
+> 
+> After reflecting on how the caller of the deserializer can process opaque data, I came
+> to the conclusion that it will have to know the underlying type (unsigned long[]) and
+> ask for an enum such as:
+> 
+> enum UnsignedLongArray {
+> 	Bit32(Vec<u32>),
+> 	Bit64(Vec<u64>),
+> }
+> 
+> When asked for UnsignedLongArray, the serde backend will use the ABI info from the trace
+> to select the appropriate variant.
+> 
+> >   
+> >>
+> >> You might object that if the tool does not know about cpumask,
+> >> it does not matter "how it breaks" as the display will be useless anyway,
+> >> but that is not true. A parsing library might just parse up to
+> >> its knowledge limit and return the most elaborate it can for a given field.
+> >> It's acceptable for that representation to not be elaborated with the full
+> >> semantic expected by the end user, but it should not return
+> >> something that is lying on its nature. For example, it would be sane for
+> >> the user to assert the size of an array of pointers to be a multiple
+> >> of a pointer size. cpumask is currently an array of unsigned long but there is
+> >> nothing preventing a similar type to be based on an array of u8.
+> >> Such a type would also have different endianness handling and the resulting buffer
+> >> would be garbage.
+> >>
+> >>
+> >> To fix that issue, I propose to expose the following to userspace:
+> >> 1. The binary representation type (unsigned long[] in cpumask case).
+> >> 2. An (ordered list of) semantic type that may or may not be the same as 1.
+> >>
+> >> Type (1) can be used to guarantee correct handling of endianness and a reasonable
+> >> default display, while (2) allows any sort of fancy interpretation, all that while preserving
+> >> forward compatibility. For cpumask, this would give:
+> >> 1. unsigned long []
+> >> 2. bitmask, cpumask
+> >>
+> >> A consumer could know about bitmask as they are likely used in multiple places,
+> >> but not about cpumask specifically (e.g. assuming cpumask is a type recently introduced).
+> >> Displaying as a list of bits set in the mask would already allow proper formatting, and
+> >> knowing it's actually a cpumask can allow fancier behaviors.
+> >>
+> >>   From an event format perspective, this could preserve reasonable backward compat
+> >> by simply adding another property:
+> >>
+> >>     field:__data_loc unsigned long[] mask;    offset:36;      size:4; signed:0; semantic_type:bitmask,cpumask;
+> >>
+> >> By default, "semantic_type" would simply have the same value as the normal type.  
+> > 
+> > The problem with the above is that it adds a new field, and I have to check
+> > if that doesn't break existing tooling.  
+> 
+> Yes, I was hesitating to propose that as well. I think it would be reasonable to allow for this
+> sort of extension in man trace.dat in the future but maybe that's something for version 8.
+> In my implementation I parse that to a map anyway, so unknown properties will simply be ignored.
+> 
+> > Another possibility is that I can add parsing to the format that is exposed
+> > to user space and simply s/__cpumask *[]/__cpumask[]/
+> > 
+> > Which will get rid of the pointer array of cpu masks.  
+> 
+> My main concern is if the item size info becomes available in the future as a field property,
+> we won't be able to make dynamic arrays of opaque types if the array notation is
+> already taken for single items.
+
+I believe we already have opaque type arrays.
+
+And the current libtraceevent allows for plugins that will override the
+print-fmt parsing to allow for the plugin to know how to parse it properly.
+
+
+> 
+> So really ideally we want "__data_loc cpumask" and not "__data_loc cpumask[]", as the latter is an
+> array of cpumasks, and the former a single one. Or maybe something like "__data_loc SINGLE_cpumask[]".
+
+The [] just means that the size is not defined, and that current tools will
+parse it correctly, even if it does not know what cpumask is.
+
+An array of cpumask_t is redundant, as it really becomes one bigger
+cpumask_t.
+
+
+> That format would still be parseable by current userspace tools as an opaque type since SINGLE_cpumask
+> is a valid C identifier.
+> 
+> Beyond extensibility, it would make __data_loc inconsistent:
+> * for basic types like u32, it's completely expected to be an actual array.
+> * but for opaque types, it's expected to be a single item and not an array at all.
+> 
+> >   
+> >>
+> >> This applies to any type, not just dynamic arrays.
+> >>  
+> > 
+> > Let me know if the above does break existing user space and I'll revert it.  
+> 
+> I could experiment with trace-cmd but I'm not familiar with everything out there decoding that.
+> The parser I'm working on is 1.5 week old and unreleased so no change would be an issue as long
+> as it's possible to distinguish new formats from old ones (to process old traces).
+> 
+
+[ /me goes and does some testing ...]
+
+Actually, the cpumask[] fails to parse regardless it seems, so I'm free to
+change this anyway I want and still not cause regressions.
+
+This means I can make it this:
+
+  field:__data_loc cpumask_t mask;    offset:36;      size:4; signed:0;
+
+
+and it should not cause any regression, as it already fails as this is new
+anyway.
+
+I get this from the sample module:
+
+    event-sample-861   [000]    99.584942: foo_bar:              [FAILED TO PARSE] foo=hello bar=3 list=ARRAY[01, 00, 00, 00, 02, 00, 00, 00, 03, 00, 00, 00] str=Frodo cpus=ARRAY[ff, 00, 00, 00, 00, 00, 00, 00] cpum=ARRAY[ff, 00, 00, 00, 00, 00, 00, 00] vstr=iter=3
+
+-- Steve
