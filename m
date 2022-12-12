@@ -2,77 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAC664A9A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3060364A9A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiLLVn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S233408AbiLLVoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLLVny (ORCPT
+        with ESMTP id S233396AbiLLVoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:43:54 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12F913CCA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:43:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 54A23CE1177
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:43:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BE1C433F1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670881430;
-        bh=cEIYgBCk1jS2CNgVDh3B0JExa8+XC/aNPD8hEMVh3es=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GKkfNM8626cQ1r/eXVnIHYg8cv+wJm9dQrh0MC4gWydIEdzhgVm9lZrzlZvXbHoQY
-         8/hs+syeFz2deFZunRNLsghite3pILkWglx6M69aFOa8DnEAm0slbpoX05rRuBL+8n
-         P31MqOe/IxCecZw3hlQ/Mxhnh+5Qt1e1ZX3/I/cp1vsLXhcDKPNZkDSBg8Go6pfxXO
-         wwD8f3hXxF6pfzsFJeN/gP1nIU6zX2MsIwFxrW+OsgafpFpxdPg/SprW2AbkTlkIXq
-         HF8Oc2tI+njzdXG1EGVRpU25oJ3wznPla7Q3xV/J1VgmFDMv18qHNnrCb3F8vHw0eu
-         zxF5fqspavO2Q==
-Received: by mail-ej1-f51.google.com with SMTP id fc4so31630643ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:43:50 -0800 (PST)
-X-Gm-Message-State: ANoB5pl7xdzwSCmRtIepq9cxuvZSmjLwqYXc8X0IuZ9cXfMHRrFDGEku
-        rhbKTHZGP5hiWYKhsW0k3D/j0aLuMtimlT+Q01/xxA==
-X-Google-Smtp-Source: AA0mqf7LEsNKArTwMWs9R9Mcrt4pnu+mxjZL757j0/V1mmWQShIkjYAgHdHWjoBIlNB0BM6pbB+7EEshSMWO/siB7OQ=
-X-Received: by 2002:a17:906:402:b0:7a6:fc0f:6fe6 with SMTP id
- d2-20020a170906040200b007a6fc0f6fe6mr77481275eja.694.1670881428767; Mon, 12
- Dec 2022 13:43:48 -0800 (PST)
+        Mon, 12 Dec 2022 16:44:12 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDE0186FE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:44:05 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qad-0008FE-GY; Mon, 12 Dec 2022 22:43:59 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qab-0046cQ-Lm; Mon, 12 Dec 2022 22:43:58 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p4qab-004bJI-Lk; Mon, 12 Dec 2022 22:43:57 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] mfd: twl4030-power: Drop empty platform remove function
+Date:   Mon, 12 Dec 2022 22:43:52 +0100
+Message-Id: <20221212214352.3776110-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
- <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
- <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
- <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
- <20221206233947.4c27cc9d@gandalf.local.home> <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
- <20221207074806.6f869be2@gandalf.local.home> <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
- <20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org> <CACYkzJ72-hJweZoFN_YN8u3NOmp5x82M2xA-ZKBi5ubt6yrzZA@mail.gmail.com>
- <20221211120226.11c97578@rorschach.local.home>
-In-Reply-To: <20221211120226.11c97578@rorschach.local.home>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 12 Dec 2022 22:43:37 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ6xpapuN9attJzNaX3iuhLjH2bB4uBgGUNrZvwTWV9Yew@mail.gmail.com>
-Message-ID: <CACYkzJ6xpapuN9attJzNaX3iuhLjH2bB4uBgGUNrZvwTWV9Yew@mail.gmail.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1001; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=BzmOHIPwX22OuQ0j7QceFIwmWa5znnV1hu65LFP3ox8=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjl6CU7iVyCxC00llipkoCqDHfxObd2aeCr4wzYNnN S3SyVyOJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5eglAAKCRDB/BR4rcrsCQw1B/ 4iJxyAr7se/ctq384UOztRz2h46yEE/E2oujGbtCZEKWJ56kh0POCPpF2c5rUO2QLx2P4ksU9II+BN PKCxJ4mUQ56FwiCHRIyU4Rz5nmyjgMrFum/fET93OhsFfynqlfEQqYPcIOvI/EP2do2ISu1ePybcB6 xD9Uob6ulDQLB8Rglmx4uDxcuAkj6YIyAO0dqglYHG33VtwJkmFah04Ju+iPeoocW38fgBvuxac1BJ 7ZF8hrXULDPYYWVIZnDMTS1/gdV1kh6xoJlgwJ574JOtonlr44jqdoDiyakY7nxma8Q2UK9mM3pKrp H+q6eLs4eFWs1sLkNCRYkXRWzAM/bL
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,45 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 6:02 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Sun, 11 Dec 2022 08:49:01 +0100
-> KP Singh <kpsingh@kernel.org> wrote:
->
-> > Let's take a step back and focus on solving debuggability and
-> > introspection as we clearly have some perception issues about taints
-> > in the community. (distro maintainers, users) before we go and add
-> > more taints.
->
-> Note, you will likely get the same push back if the dump includes bpf
-> programs known to change the return of a function that may be involved
-> with the bug report. That is, if a crash is reported to code I
-> maintain, and I see that the bug report includes a list of BPF programs
-> that can modify the return of a function, and one of those functions
-> could affect the place that crashed, I'd push back and ask if the crash
-> could be done without that BPF program loaded, regardless of taints.
->
+A remove callback just returning 0 is equivalent to no remove callback
+at all. So drop the useless function.
 
-I think this is already better as it gives the recipient of the stack
-trace more information to ask more questions and see if the BPF
-programs are relevant to the stack trace and engage further.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/mfd/twl4030-power.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> I agree that a taint is just a hint and it can include something that
-> caused the bug or it may not. I would like to see more details in how
-> the crashed kernel was configured. That includes loaded BPF programs
-> (just like we include loaded modules). And if any BPF program modifies
-> a core function (outside of syscall returns) I'd be a bit suspect of
-> what happened.
+diff --git a/drivers/mfd/twl4030-power.c b/drivers/mfd/twl4030-power.c
+index 6b36932263ba..e35b0f788c50 100644
+--- a/drivers/mfd/twl4030-power.c
++++ b/drivers/mfd/twl4030-power.c
+@@ -953,18 +953,12 @@ static int twl4030_power_probe(struct platform_device *pdev)
+ 	return err;
+ }
+ 
+-static int twl4030_power_remove(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-
+ static struct platform_driver twl4030_power_driver = {
+ 	.driver = {
+ 		.name	= "twl4030_power",
+ 		.of_match_table = of_match_ptr(twl4030_power_of_match),
+ 	},
+ 	.probe		= twl4030_power_probe,
+-	.remove		= twl4030_power_remove,
+ };
+ 
+ module_platform_driver(twl4030_power_driver);
 
-Agreed.
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.38.1
 
->
-> I also agree that if a function that checks error paths fails, it
-> should be fixed, but knowing that the error path was caused by fault
-> injection will prevent the wasted effort that most developers will go
-> through to find out why the error path was hit in the first place.
-
-Agreed.
-
->
-> -- Steve
