@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F11664A64D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43AC64A622
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232922AbiLLRxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:53:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S232131AbiLLRpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiLLRxT (ORCPT
+        with ESMTP id S229600AbiLLRpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:53:19 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8B32624
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:53:17 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221212175313euoutp0281fcd2f5ae5154a535de31a97734c4e1~wHTk_MYDc2403824038euoutp02o
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:53:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221212175313euoutp0281fcd2f5ae5154a535de31a97734c4e1~wHTk_MYDc2403824038euoutp02o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1670867593;
-        bh=o0Z0aMTgUWzlfuyhDqGfM/F4VpBiWulTa2DHCXRG1Lo=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=ul9HJZkrgqqacFdmWveiwWrNAwAs3VHOJ55vhCf8gcPf/0V+CQotJ9t1Y8QykGu74
-         7zCHUx/Mf907ttcrtTwdvfFovYndg8vCu7/8vbubeZbF58JdsYEOzJ9VEJbDp+Dsn/
-         x45R5pnN7rlTy9G24N0fKKfhCZ0G5t9ve/UYmjBs=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20221212175313eucas1p2e4342c5fd8c3048ec674d08031f25d36~wHTkwzxSu1618016180eucas1p2W;
-        Mon, 12 Dec 2022 17:53:13 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 0B.7E.09549.98A67936; Mon, 12
-        Dec 2022 17:53:13 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221212175312eucas1p22ba1a31d4809be0ffa8715438b174281~wHTkUj29V2462424624eucas1p2d;
-        Mon, 12 Dec 2022 17:53:12 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221212175312eusmtrp19e2e59144ccaefc97a8a9cac41a3cdf5~wHTkUBzCm0242602426eusmtrp1N;
-        Mon, 12 Dec 2022 17:53:12 +0000 (GMT)
-X-AuditID: cbfec7f5-f5dff7000000254d-f9-63976a89baa1
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id F2.6E.08916.88A67936; Mon, 12
-        Dec 2022 17:53:12 +0000 (GMT)
-Received: from [106.120.9.77] (unknown [106.120.9.77]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221212175312eusmtip1f3e54b606dd8e9182209fc236ca81be3~wHTj3ps-T0885208852eusmtip13;
-        Mon, 12 Dec 2022 17:53:12 +0000 (GMT)
-Message-ID: <c1d10d21-f3ca-7633-8b65-5d3916cfa648@samsung.com>
-Date:   Mon, 12 Dec 2022 18:52:51 +0100
+        Mon, 12 Dec 2022 12:45:47 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D731BE0A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:45:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670867146; x=1702403146;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xCkzJ4K2HE5S3gU9cvzJIXZ+LOdlig3Oj+NPYSxJXRI=;
+  b=mN7SwK2XJOM19FQK2S3VfaApyJAO6rVZh47M4+lLToYXWtaNINfrTmrK
+   37qVLvS10Y0yCg5MrEFh/T12MZoKDWjick5XTVHSyF52CxWDv6SokBt6z
+   h9EFVzydDoJF3uKRGnUA8X47Mli+zcudcNDX+alHvqqu4PY/7mdwRiGn8
+   0I8W70U/Ksf39A+oWrP4IZWqOD7lEpRQJ12+2hNZlSgndtvX5yZln5hT5
+   EmMKmQ2Op7XI15xMc75whUmge4P+ltRsSOm3VBmemXCSEsWLxAxpIcZX7
+   SNq9/YnMDbr7AmFcf1FuMR4HRC0dEKXBC39tLg/oKb2aHfWvgMHvAXWJC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="404168928"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="404168928"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 09:45:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="711765026"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="711765026"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Dec 2022 09:45:38 -0800
+Date:   Mon, 12 Dec 2022 09:53:45 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
+ local sched group
+Message-ID: <20221212175345.GA27353@ranerica-svr.sc.intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
+ <76e23104-a8c0-a5fc-b8c6-27de79df2372@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.4.2
-Subject: Re: [PATCH] drivers/firmware_loader: remove list entry before
- deallocation
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, russell.h.weight@intel.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ming.lei@canonical.com, tiwai@suse.de
-Content-Language: en-US
-From:   =?UTF-8?Q?Micha=c5=82_Lach?= <michal.lach@samsung.com>
-In-Reply-To: <Y5bEYfQOMyA4XQEW@bombadil.infradead.org>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRmVeSWpSXmKPExsWy7djPc7qdWdOTDX5/4bJoXryezeLyrjls
-        FjcmPGW02PXwO7vF3C9TmS2WzlzBbPFy8xsmB3aPWQ29bB6L97xk8ti0qpPNY//cNewem09X
-        e3zeJBfAFsVlk5Kak1mWWqRvl8CV0bHrEEvBNZ6K64ePMDUwfuHsYuTkkBAwkeicOZEFxBYS
-        WMEoceYSRxcjF5D9hVHi+M6/LBDOZ0aJFat2MsF0TLy2iA2iYzmjxKFZbBBFrxkl5nR3gyV4
-        BewkJi95zwpiswioSsy+PJkZIi4ocXLmE7B1ogJREk0XfoLZwgKhEhvedzGC2CICGhL7JvQy
-        gQxlFpjGKPGn9TRYEbOAuMStJ/PBrmATsJF4M+8LWJxTwEziyIKHUDXyEs1bZzODNEsIPOGQ
-        eHDrLgvE2S4SnyecZoewhSVeHd8CZctInJ7cA1VTLHHnyXw2CLtG4tvvDmYI21pi1dYbQHEO
-        oAWaEut36UOEHSVm3/3HDBKWEOCTuPFWEOIEPolJ26ZDhXklOtqEIKpVJf43foJaKi2xd+Uh
-        5gmMSrOQQmUWkidnIXlmFsLeBYwsqxjFU0uLc9NTi43zUsv1ihNzi0vz0vWS83M3MQIT0el/
-        x7/uYFzx6qPeIUYmDsZDjBIczEoivKoa05KFeFMSK6tSi/Lji0pzUosPMUpzsCiJ866Y0pEs
-        JJCeWJKanZpakFoEk2Xi4JRqYJo259WrO6ZJPZLT6isLlfv9qx3CXubIn5ybblcuFV4TbHzk
-        RrPV/5WvnlyMWnaaLWZ552WdgHdBP998vuTrfL7zkOXndU0/NLsvVzRzlPC7y2oI6s/18ttW
-        8l7J4/4sB+svdjkxAb9seQ+nKLid/G/5pft1r2kYiwe/xtHW9Bsn1k260jnzT8PGaalfzI4K
-        OvlorPujalIZ07s98MCmMh4vdpE6xp4LZ9psdn1kX3Ty3bufFSoeNglav45cXiLkfIHdvXQV
-        87IGt3O/n29X/Vvjv9OZScvOSkDm0vRlKibaMjs36Fk9vbPzwYUovthlR91Z7s+d+1ViSWBb
-        R/8Rdf0ktbtL/sge+MibVHCzSomlOCPRUIu5qDgRABjDTMmzAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsVy+t/xu7odWdOTDTbe07RoXryezeLyrjls
-        FjcmPGW02PXwO7vF3C9TmS2WzlzBbPFy8xsmB3aPWQ29bB6L97xk8ti0qpPNY//cNewem09X
-        e3zeJBfAFqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRv
-        l6CX0bHrEEvBNZ6K64ePMDUwfuHsYuTkkBAwkZh4bRFbFyMXh5DAUkaJIwc6mLoYOYAS0hJd
-        86QhaoQl/lzrgqp5ySix99YaFpAEr4CdxOQl71lBbBYBVYnZlyczQ8QFJU7OfAJWIyoQJXHz
-        /EMmEFtYIFRiw/suRhBbREBDYt+EXiaQocwC0xglbr56wA6xYQ/QhhsLwTqYBcQlbj2ZD2az
-        CdhIvJn3BWwqp4CZxJEFD1lALmUWUJdYP08IolxeonnrbOYJjEKzkNwxC8mkWQgds5B0LGBk
-        WcUoklpanJueW2yoV5yYW1yal66XnJ+7iREYe9uO/dy8g3Heq496hxiZOBgPMUpwMCuJ8Kpq
-        TEsW4k1JrKxKLcqPLyrNSS0+xGgKDIuJzFKiyfnA6M8riTc0MzA1NDGzNDC1NDNWEuf1LOhI
-        FBJITyxJzU5NLUgtgulj4uCUamASUGJYpXJToW52W8Osv6IpOzzD3np9zF2u55Fj0yt4Nt5E
-        LEjATPTB04YT0lvNjhzQiVRdsSTXrij0K1eo7K8zu/wz/9g0rEze/vJkvOzeNobJ68I5P54M
-        v3fIanJPXudRi4f550/59sTqsnB/1Dr8Y64a8+z1/Uz7My44r54lzFv45fb2Zn350wvXHpE0
-        y1bY054yR5RBS/2EQvZ8vtBFv4T7d0YmxSt8FVmtp/1uQ35y+teUNj5bm8hbWUsfd293/aa7
-        eQlHi15XLffSC5GnZ5+Ma1WrmqfYIjejV/lioVvZM4cnXuEXFyQlxJaK3Gfq3Br/O05PudvS
-        64XiihjbFdZdBRV+G/effmD/RImlOCPRUIu5qDgRAHitMoxGAwAA
-X-CMS-MailID: 20221212175312eucas1p22ba1a31d4809be0ffa8715438b174281
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9
-References: <CGME20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9@eucas1p2.samsung.com>
-        <20221123111455.94972-1-michal.lach@samsung.com>
-        <Y5bEYfQOMyA4XQEW@bombadil.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <76e23104-a8c0-a5fc-b8c6-27de79df2372@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 07:04, Luis Chamberlain wrote:
-> Hey Michal! Thanks for your patch! I have a few doubts though!
-
-:-)
-
-> To account for not having to deal with specific drivers we have the
-> Linux kernel selftests. And so you can test the firmware loader with all
-> sorts of crazy situations which any driver could use and try to see
-> if you can re-recreate the issue.
+On Tue, Dec 06, 2022 at 06:22:41PM +0100, Dietmar Eggemann wrote:
+> On 22/11/2022 21:35, Ricardo Neri wrote:
+> > When balancing load between two physical cores, an idle destination CPU can
+> > help another core only if all of its SMT siblings are also idle. Otherwise,
+> > there is not increase in throughput. It does not matter whether the other
+> > core is composed of SMT siblings.
+> > 
+> > Simply check if there are any tasks running on the local group and the
+> > other core has exactly one busy CPU before proceeding. Let
+> > find_busiest_group() handle the case of more than one busy CPU. This is
+> > true for SMT2, SMT4, SMT8, etc.
 > 
-> The kernel selftests driver for the firmware loader is in
-> lib/test_firmware.c and you can use thetools/testing/selftests/firmware/fw_run_tests.sh
-> to run all the tests. To test the firmware fallback alone you can use
-> just fw_fallback.sh.
+> [...]
+
+Thank you very much for your feedback, Dietmar!
+
 > 
-> If you want to just virtualize this and you can also use kdevops [0] and
-> enable the firmware loader selftest and use:;
+> > Changes since v1:
+> >  * Reworded commit message and inline comments for clarity.
+> >  * Stated that this changeset does not impact STM4 or SMT8.
+> > ---
+> >  kernel/sched/fair.c | 29 +++++++++--------------------
+> >  1 file changed, 9 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index e4a0b8bd941c..18c672ff39ef 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -8900,12 +8900,10 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+> >  				    struct sched_group *sg)
 > 
-> make menuconfig          #  enable selftests and just the firmware test
-> make linux               #  build linux, pick linux-next
-> make selftests
-> make selftests-firmware
+> I'm not sure why you change asym_smt_can_pull_tasks() together with
+> removing SD_ASYM_PACKING from SMT level (patch 5/7)?
+
+In x86 we have SD_ASYM_PACKING at the MC, CLS* and, before my patches, SMT
+sched domains.
+
 > 
-> But this may be something more you can use later once you get your flow
-> going. Just compiling the kernel and running the selftest manually with
-> fw_fallback.sh should suffice.
+> update_sg_lb_stats()
+> 
+>   ... && env->sd->flags & SD_ASYM_PACKING && .. && sched_asym()
+>                                                    ^^^^^^^^^^^^
+>     sched_asym()
+> 
+>       if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
+>           (group->flags & SD_SHARE_CPUCAPACITY))
+>         return asym_smt_can_pull_tasks()
+>                ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> So x86 won't have a sched domain with SD_SHARE_CPUCAPACITY and
+> SD_ASYM_PACKING anymore. So sched_asym() would call sched_asym_prefer()
+> directly on MC. What do I miss here?
 
-Thanks a lot, I had no idea that there is something like this.
+asym_smt_can_pull_tasks() is used above the SMT level *and* when either the
+local or sg sched groups are composed of CPUs that are SMT siblings.
 
-> OK so this proves the bug can happen but I'd like to see the full trace
-> and the exact kernel version showing that this can happen on a recent
-> kernel. Without that I'm not seeing how this can trigger yet.
+In fact, asym_smt_can_pull_tasks() can only be called above the SMT level.
+This is because the flags of a sched_group in a sched_domain are equal to
+the flags of the child sched_domain. Since SMT is the lowest sched_domain,
+its groups' flags are 0.
 
-Unfortunately I cannot provide a trace. The kernel version was 5.15.41 (-stable).
+sched_asym() calls sched_asym_prefer() directly if balancing at the
+SMT level and, at higher domains, if the child domain is not SMT.
 
-Keeping that in mind, I will try to reproduce this behaviour with in-tree
-code and provide proof.
+This meets the requirement of Power7, where SMT siblings have different
+priorities; and of x86, where physical cores have different priorities.
 
-With regards,
-Michał
+Thanks and BR,
+Ricardo
+
+* The target of these patches is Intel hybrid processors, on which cluster
+  scheduling is disabled - cabdc3a8475b ("sched,x86: Don't use cluster
+  topology for x86 hybrid CPUs"). Also, I have not observed topologies in
+  which CPUs of the same cluster have different priorities.
+
+  We are also looking into re-enabling cluster scheduling on hybrid
+  topologies.
