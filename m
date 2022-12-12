@@ -2,20 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438FF6497B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7E66497B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiLLBj3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 11 Dec 2022 20:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        id S231151AbiLLBlc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 11 Dec 2022 20:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLLBj1 (ORCPT
+        with ESMTP id S229475AbiLLBl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 20:39:27 -0500
+        Sun, 11 Dec 2022 20:41:29 -0500
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B5A4B1EF;
-        Sun, 11 Dec 2022 17:39:25 -0800 (PST)
-Authenticated-By: 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA9D4BCA3;
+        Sun, 11 Dec 2022 17:41:28 -0800 (PST)
 X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BC1akreF025606, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
         by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BC1akreF025606
@@ -67,7 +66,7 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
