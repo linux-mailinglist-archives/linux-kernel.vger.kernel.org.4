@@ -2,172 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5698E649862
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 05:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B06649866
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 05:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiLLEWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 23:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S229994AbiLLEft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 23:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbiLLEV7 (ORCPT
+        with ESMTP id S230493AbiLLEfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 23:21:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8F3B1D6;
-        Sun, 11 Dec 2022 20:21:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670818915; x=1702354915;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=IkJ6Gx5UnrfhuZJH2Jp5crgX7Bgzr6K8Waaq0MXkwz4=;
-  b=C0OZ61gYcu3938YedClY/Nvl2xjw6q2aZiNWY3eClbkTv4ewMBt1hwOv
-   7IMkOULDSwfFoQ0zKGPRcnnFPPBfu3b1lYIaBqI4issXibHA6Zo/FSgvm
-   p572bxxvD6EeZvSVsFbphiKCvvVUmC3r/FO8EsKIUHsdia60DzvklBu/q
-   cvVODo/tNqaLc/tMPklbCO23DcTtT4sURW84PWKBQCXgJvI5nH3oZDxfz
-   Fx8qYmGweXXqS0m5rMgBWn93RhSWMlwTWFg2ZxtX9DV6KfF0POnbubJWR
-   dIfy2y36/FcRduEkj8IL+BEukbYyKxOfyyLJPOECg9d8b4WbQh7JEKwuy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="319621459"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="319621459"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2022 20:21:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="641612910"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="641612910"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 11 Dec 2022 20:21:39 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 11 Dec 2022 20:21:38 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 11 Dec 2022 20:21:38 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 11 Dec 2022 20:21:38 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 11 Dec 2022 20:21:37 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FEz8jboeMSiu8VdZ9QQmBtbyBE/qc5PKFrc2/cJ7aKKI/REH9mC6YKzv308XgBnCPIlGhf4QqLDSIy06eYnKxnpZ45tryeeA7vFIq3MymPimYOcdfzdYINjJVN6OFiGp/0PIBll609jJUcui41FjCFwuNwCxISEj5Puq5v2+fXGSnx5M8M8QxCoyTkgZg7d0ggphYklart6iBmEnInR/dcbqsPw83u5q8cIbomI/8CwH5X8Bs4JWbfIncbQ1XAKYd1qRi+8oFjuhFQwFcKs2BRTJlFjwo9oCcSmKNVbI0LS4JAT44Lwt8gswZfyJs0/PuLRgrSJW6C3FkfdQbXmUkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6WrFYnjs8qTIiILSGHAsLIQsJ2CLOrSdl21DWgfR4ak=;
- b=RmUmT4wBl8XGkmKXgW5DM5lHPiD/HJxaT3+GtLeh0narASx2UxtGBW4vNs+oRQckE1M9d7w9NTphxsO3uusERCe9UkqYwT+tXUNERYCaD63q/0nGR+2qEUNoj+FTyAr+0lmijKFGCFBogFIXHXLlQ5wE4xd6hxsWY/IaydSmvKWFsWM5qvR2ulpfdM5KBfbNC89kzNsdr7iuD8JEZgjZQVHGNzKzkxVD6cEuYMbXT5N78zyT4oP7eEBIYrAKs6v8HkKgdHisdhxoFM8LslB0lyVPInhWV/G76+vyBsallsJ6+oyg2Z9zsc2juKXRh3f05SshmlDAoXtt8dyIFHHqdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BL1PR11MB5317.namprd11.prod.outlook.com (2603:10b6:208:309::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 04:21:34 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::5236:c530:cc10:68f]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::5236:c530:cc10:68f%5]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 04:21:34 +0000
-Date:   Sun, 11 Dec 2022 20:21:23 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V3 8/8] cxl/test: Simulate event log overflow
-Message-ID: <Y5asQ5d1TYRC9sHd@iweiny-mobl>
-References: <20221208052115.800170-1-ira.weiny@intel.com>
- <20221208052115.800170-9-ira.weiny@intel.com>
- <6393bc47d518d_579c129475@dwillia2-xfh.jf.intel.com.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6393bc47d518d_579c129475@dwillia2-xfh.jf.intel.com.notmuch>
-X-ClientProxiedBy: SJ0PR13CA0027.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::32) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Sun, 11 Dec 2022 23:35:46 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722C9BC99
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 20:35:44 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x66so7722607pfx.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 20:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ubgo7B2+sy1HQSSzjXtpMX+QA+9UIpAKmb6lUXH7fV4=;
+        b=bUy4NC2EE9Hd0Yew69molOYgha4K8GdQtbN1gUbvTM20ZASrtm9he23PDxafSQn1x+
+         2bE3mITxwOR1DYKsXCb2EEXL8uRIdOXM4byenmSFTnyMOAI2B1sA1SbcO0Hc89/+6Irk
+         0/Vk0jLh7x5Ofxx2y3gdlWJl9xwzzw8g+ky4/EZFFs5R75HiDHJIMs5zbBv3kt2cc4FR
+         Wb4SxnBwi41fqVjj8T7pXFoJhk+kZBfxCb42nEzuuJnD4D41rxsjl+SnE094kBNRuL0L
+         gEx8COQygtP9TKGXV4UDGlRDf1U4KgkDbzPsmCOMS6Vix+rh5g4avZpnnWEtN85kCUGz
+         JY+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ubgo7B2+sy1HQSSzjXtpMX+QA+9UIpAKmb6lUXH7fV4=;
+        b=Tuv6qzDoxRjtqbj3IW1TwHc9LtwUCinR371g0texLqlidPJXFdstrF02//BRH8PFrr
+         yxKf1UctTTDJqtf1CC3onWs9z3NSQkLLYe0Vm24j3ao00VkX9eMWx3irL7F8MGOowcFc
+         2MCzTVAZcw0N0BGrV6V3hYyNCOZFqsYImIQAsiB4w8ElD8wuEZrzAwMVJh4M42XzxoE4
+         qNyQ8lqHle0bq2suv7/OPCLioaZT3xfh7nEd9PIY1VM89BYkPXbM2U82QQtyB+O9B0oS
+         CaMvHE0W1VllyrQxPHjUVvUEnL3WIZE2lHqB85Vy2gkNiuGuqHiuOiNX3LxCRofdib0k
+         OvWA==
+X-Gm-Message-State: ANoB5pnV5f4Yhtbtlkmx+WK9iRuoypyz+xBXfjZYAo2iQB+uiKMuD74V
+        /WfLhl+obeC+VrcuPQUgEPjdNQ==
+X-Google-Smtp-Source: AA0mqf6SSBQtH/L98ZX2bU+pEyZfzgZyEAyYA4+rW1zsOXG/8HMJ847J4oQwQ5FWKdUkPo+LypdS4A==
+X-Received: by 2002:a05:6a00:368f:b0:56c:375e:17e0 with SMTP id dw15-20020a056a00368f00b0056c375e17e0mr15821017pfb.8.1670819743492;
+        Sun, 11 Dec 2022 20:35:43 -0800 (PST)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id w185-20020a6262c2000000b00577adb71f92sm4671025pfb.219.2022.12.11.20.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 20:35:42 -0800 (PST)
+Date:   Mon, 12 Dec 2022 04:35:39 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nagareddy Reddy <nspreddy@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [RFC PATCH v4 0/2] Deprecate BUG() in pte_list_remove() in
+ shadow mmu
+Message-ID: <Y5avm5VXpRt263wQ@google.com>
+References: <20221129191237.31447-1-mizhang@google.com>
+ <Y5Oob6mSJKGoDBnt@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL1PR11MB5317:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8582c441-aa30-4789-9004-08dadbf85981
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QjlZmRL+cQGMkG6UHdM88BoFNELNDm4s3Kyn6+pifHhBCxOo+4qnHjzsmRgg7eBteIq3TshxFLKHqkjr6jvtHVCzNXi/TjMRDt03CQYMNfaJlZ92t1r5uMtr/DV/cGPIskcbDF3GE6B/AD4Ywxh/LX7Yvcm3lSDa0uN8CX93MIxpCRjF5W2Ibmgjqp2n16PdEn50wri7Z3nwGJcjdkrRdpce+KVX+qIBGOIioh9GJNUajdQGvJFPYyS2m3EMcrLVNFuqSwl0Iys4ppld4KfmZp9kBJO4NzZOGAPFH3uKOp2nhaa3ET7/ypTS8AB01TqilHOC3k5gUGcmwkBM3eI/VTymALWz/JcknEqk+pKyVMtLu14y+KfrT7skFuk4FpE1J6fze34idOTJaAtxpZDekSCsg41AXiM1pNiHSJbyatlb28m6UekcGlZTIKTJhTA2StJifKsNvRUci4sl3r9vPiPL00wKzjp2dgAmnS+PWX4YIS38+qX1Z2O1UQMVoaKYZXneJnx7azyEpLeNhkeN2HLwpmCbZcZLzmp0PdKvcOrDRqVdpYsJBmxSMGIksNAOQckrNCDmXGg1/xcun2cwRtGJbqJGVvXSwqF6E8mrAV0TY4WW5uEXAP5DHtU7CmZQ4pdN0/j9ySnxj2pLTp6/aQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(136003)(39860400002)(376002)(346002)(451199015)(478600001)(6666004)(6486002)(33716001)(26005)(6506007)(9686003)(6512007)(186003)(83380400001)(6636002)(316002)(5660300002)(4744005)(2906002)(54906003)(66946007)(4326008)(8676002)(66556008)(66476007)(8936002)(6862004)(86362001)(44832011)(41300700001)(38100700002)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VRDPO13P9+u/z4GY7QuRv5ZkDzEHrDD1oRgqp03NVIv8289HOiWfIWMkMCO1?=
- =?us-ascii?Q?kxmf07pePWKuhxKUF5Ol17BjbMJmCP996CCVSHtOO0qCYepba4lcFVvdPdmk?=
- =?us-ascii?Q?cCdtc5nBEjRscl4lSzsuTKBjk8BlwZQ7CKtOG0o76oEk7LtV7sTaM1OYtbg/?=
- =?us-ascii?Q?OsqMihqo3TPRFHQHr16/dkgWeK6CzfLHq9QfcTfslM9d4mEf4gfHxT19u9fo?=
- =?us-ascii?Q?4QCP1vZhEmmVfblnoDjw2mdsfYhkV6ZCTi7dbAgKq54axmPonKMUrz6N/g0u?=
- =?us-ascii?Q?SyYK5baQXsa/QS4f92GCfiSZweu1JEHsEX1WUZsjKvlvzwzvwhyPcTC8o0/L?=
- =?us-ascii?Q?YSqRM7nN/Us5p7wb7gj68GO9dH1fPQd6wYkyTPdrFmIq5pFc26zjjpg8BUJb?=
- =?us-ascii?Q?WtPoThGF2IW6HQMQ2zLzQVfG3i2b4tBpkzfxdvIdmnBLVk1kTU6TeqEf3M/X?=
- =?us-ascii?Q?qBk06DuYZeocawF3EM6pfZHRDytRo5b6+ORFV6jN4Dd620ndpQLuLFcKc30G?=
- =?us-ascii?Q?2CbGaQ6yiKirpMuqv2xLmD8k+2loqVvigkqfK5GsaCAlBdXB39L8mYtpcusB?=
- =?us-ascii?Q?F3KqUWbPO/cDWV4KiI9XjbTsOnd7vdcOEdHdaLfrfxjNbZvPjdn+kGmpV5pI?=
- =?us-ascii?Q?T6eAyvul0/Y877fKA2jcrzPeJpcoGu4ogL2Pj1iSjXOt3rwS7vpCV4L/GZfE?=
- =?us-ascii?Q?xADm3oLcQIviLExL752i9k/UYjXGHCKFObJ/lsWzBaGzjN6hm7AOicmINYJQ?=
- =?us-ascii?Q?ffBCSGxmo5B+crJmUqffuV5eigEKZuxu6ksXSiHpKBM2zDoWBCSYtUOVjLyX?=
- =?us-ascii?Q?+QSGT7woiQnLbuLs3IzgaDm4fbWZmPEoNKmfLgTa3pNAqEht3gm4FajvnuZU?=
- =?us-ascii?Q?YttWa8qqDH+BLoLmZ1hHps2DevS5qGTwQi/k7LLDI35Ii5/GtE8EIXe7wJKQ?=
- =?us-ascii?Q?6h4YKpS7laogPV49UEbTbnTPK5pJL3kdKfTHn/XoL8POlEJ4oFGg5R1TGk1W?=
- =?us-ascii?Q?UtMQllGhCuQeA3Dw2bAnLFIvvRTwg8cpYssrnYTLld8AbqSOhkSX2mVmKokJ?=
- =?us-ascii?Q?SJ14KRf4wpmcuTZdkWNyECsrMrJhs9Z+1jD5LVkEvuqZ2KmcxG3AiO32j6sU?=
- =?us-ascii?Q?M98SYRPeZ4OIYyTgYkQNQ6i5BvO125EC0OgV99QG6lclyhjP/CIuT5ZWxz26?=
- =?us-ascii?Q?bFRs/ujPWVvZ8oKlS588YfI7pq+FACM3oc/DAqmAUaNYfzYiF7mo7vfgMb6n?=
- =?us-ascii?Q?K9SNSi177HOwMElpmSn5szgG747waNpNt2M2Wy/REdQwUlLZO2Dtox8ZDuOx?=
- =?us-ascii?Q?/BdiiZ6ULxNVvUCKNrQ7tOiOv3zylcfQU5gaMgOI9p8Vtw8++8tpZdv8y8nC?=
- =?us-ascii?Q?6zTv9O3ffIKmBjHWSFvUsoyZ6HbrRNQgpbN1cJhb0MJqw5yR1e5aE3VPPa2L?=
- =?us-ascii?Q?dYf9SNfvK9z+AdweJGKqREGxitvUU5pnJUSqU+7gJJ39TKH+JEFeVziYhU2p?=
- =?us-ascii?Q?U56Wl7phi3GTniuCwpRNiOsrBGgrtHleZ92uKZaIMcpCzeFp0HccAiLxyfsR?=
- =?us-ascii?Q?yMSJO8RifIN45is7vneXHmjKPpsiFaZXELLiqe5G?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8582c441-aa30-4789-9004-08dadbf85981
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 04:21:33.9205
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NL/O7R48liwx7aXbaX6oms/j6c34Fj+XiEPVAtBMSbHjPvAF1a9/BhWJCT7Wh3Aqh+Y/P/nz4OjUhvnn1IFM/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5317
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5Oob6mSJKGoDBnt@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 02:52:55PM -0800, Dan Williams wrote:
-> ira.weiny@ wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
+On Fri, Dec 09, 2022, David Matlack wrote:
+> On Tue, Nov 29, 2022 at 07:12:35PM +0000, Mingwei Zhang wrote:
+> > Deprecate BUG() in pte_list_remove() in shadow mmu to avoid crashing a
+> > physical machine. There are several reasons and motivations to do so:
 > > 
-> > Log overflow is marked by a separate trace message.
+> > MMU bug is difficult to discover due to various racing conditions and
+> > corner cases and thus it extremely hard to debug. The situation gets much
+> > worse when it triggers the shutdown of a host. Host machine crash might
+> > eliminates everything including the potential clues for debugging.
 > > 
-> > Simulate a log with lots of messages and flag overflow until space is
-> > cleared.
+> > From cloud computing service perspective, BUG() or BUG_ON() is probably no
+> > longer appropriate as the host reliability is top priority. Crashing the
+> > physical machine is almost never a good option as it eliminates innocent
+> > VMs and cause service outage in a larger scope. Even worse, if attacker can
+> > reliably triggers this code by diverting the control flow or corrupting the
+> > memory, then this becomes vm-of-death attack. This is a huge attack vector
+> > to cloud providers, as the death of one single host machine is not the end
+> > of the story. Without manual interferences, a failed cloud job may be
+> > dispatched to other hosts and continue host crashes until all of them are
+> > dead.
 > 
-> This and patch 7 look good to me after addressing the move to mem.c.
+> My only concern with using KVM_BUG() is whether the machine can keep
+> running correctly after this warning has been hit. In other words, are
+> we sure the damage is contained to just this VM?
 > 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> If, for example, the KVM_BUG() was triggered by a use-after-free, then
+> there might be corrupted memory floating around in the machine.
+> 
 
-Thanks!
-Ira
+David,
+
+Your concern is quite reasonable. But given that both rmap and spte are
+pointers/data structures managed by individual VMs, i.e., none of them
+are global pointers, use-after-free is unlikely happening on cross-VM
+cases. Even if there is, then shuting down those corrupted VMs is feasible
+here, since pte_list_remove() basically does the checking.
+> What are some instances where we've seen these BUG_ON()s get triggered?
+> For those instances, would it actually be safe to just kill the current
+> VM and keep the rest of the machine running?
+> 
+> > 
+> > For the above reason, we propose the replacement of BUG() in
+> > pte_list_remove() with KVM_BUG() to crash just the VM itself.
+> 
+> How did you test this series?
+
+I used a simple test case to test the series:
+
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 0f6455072055..d4b993b26b96 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -701,7 +701,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+ 		if (fault->nx_huge_page_workaround_enabled)
+ 			disallowed_hugepage_adjust(fault, *it.sptep, it.level);
+
+-		base_gfn = fault->gfn & ~(KVM_PAGES_PER_HPAGE(it.level) - 1);
++		base_gfn = fault->gfn & ~(KVM_PAGES_PER_HPAGE(it.level) - 1) - 1;
+ 		if (it.level == fault->goal_level)
+ 			break;
+
+On the testing machine, I launched a L1 VM and a L2 VM within it. The L2
+will trigger the above bug in shadow MMU and I got the following error
+in L0 kernel dmesg as shown below. L1 and L2 hangs with high CPU usage
+for a while and after a couple of seconds, the L1 VM dies properly. The
+machine is still alive and subsequent VM operations are all good
+(launch/kill).
+
+[ 1678.043378] ------------[ cut here ]------------
+[ 1678.043381] gfn mismatch under direct page 1041bf (expected 10437e, got 1043be)
+[ 1678.043386] WARNING: CPU: 4 PID: 23430 at arch/x86/kvm/mmu/mmu.c:737 kvm_mmu_page_set_translation+0x131/0x140
+[ 1678.043395] Modules linked in: kvm_intel vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
+[ 1678.043404] CPU: 4 PID: 23430 Comm: VCPU-7 Tainted: G S         O       6.1.0-smp-DEV #5
+[ 1678.043406] Hardware name: Google LLC Indus/Indus_QC_02, BIOS 30.12.6 02/14/2022
+[ 1678.043407] RIP: 0010:kvm_mmu_page_set_translation+0x131/0x140
+[ 1678.043411] Code: 0f 44 e0 4c 8b 6b 28 48 89 df 44 89 f6 e8 b7 fb ff ff 48 c7 c7 1b 5a 2f 82 4c 89 e6 4c 89 ea 48 89 c1 4d 89 f8 e8 9f 39 0c 00 <0f> 0b eb ac 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48
+[ 1678.043413] RSP: 0018:ffff88811ba87918 EFLAGS: 00010246
+[ 1678.043415] RAX: 1bdd851636664d00 RBX: ffff888118602e60 RCX: 0000000000000027
+[ 1678.043416] RDX: 0000000000000002 RSI: c0000000ffff7fff RDI: ffff8897e0320488
+[ 1678.043417] RBP: ffff88811ba87940 R08: 0000000000000000 R09: ffffffff82b2e6f0
+[ 1678.043418] R10: 00000000ffff7fff R11: 0000000000000000 R12: ffffffff822e89da
+[ 1678.043419] R13: 00000000001041bf R14: 00000000000001bf R15: 00000000001043be
+[ 1678.043421] FS:  00007fee198ec700(0000) GS:ffff8897e0300000(0000) knlGS:0000000000000000
+[ 1678.043422] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1678.043424] CR2: 0000000000000000 CR3: 0000001857c34005 CR4: 00000000003726e0
+[ 1678.043425] Call Trace:
+[ 1678.043426]  <TASK>
+[ 1678.043428]  __rmap_add+0x8a/0x270
+[ 1678.043432]  mmu_set_spte+0x250/0x340
+[ 1678.043435]  ept_fetch+0x8ad/0xc00
+[ 1678.043437]  ept_page_fault+0x265/0x2f0
+[ 1678.043440]  kvm_mmu_page_fault+0xfa/0x2d0
+[ 1678.043443]  handle_ept_violation+0x135/0x2e0 [kvm_intel]
+[ 1678.043455]  ? handle_desc+0x20/0x20 [kvm_intel]
+[ 1678.043462]  __vmx_handle_exit+0x1c3/0x480 [kvm_intel]
+[ 1678.043468]  vmx_handle_exit+0x12/0x40 [kvm_intel]
+[ 1678.043474]  vcpu_enter_guest+0xbb3/0xf80
+[ 1678.043477]  ? complete_fast_pio_in+0xcc/0x160
+[ 1678.043480]  kvm_arch_vcpu_ioctl_run+0x3b0/0x770
+[ 1678.043481]  kvm_vcpu_ioctl+0x52d/0x610
+[ 1678.043486]  ? kvm_on_user_return+0x46/0xd0
+[ 1678.043489]  __se_sys_ioctl+0x77/0xc0
+[ 1678.043492]  __x64_sys_ioctl+0x1d/0x20
+[ 1678.043493]  do_syscall_64+0x3d/0x80
+[ 1678.043497]  ? sysvec_apic_timer_interrupt+0x49/0x90
+[ 1678.043499]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[ 1678.043501] RIP: 0033:0x7fee3ebf0347
+[ 1678.043503] Code: 5d c3 cc 48 8b 05 f9 2f 07 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 cc cc cc cc cc cc cc cc cc cc b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c9 2f 07 00 f7 d8 64 89 01 48
+[ 1678.043505] RSP: 002b:00007fee198e8998 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[ 1678.043507] RAX: ffffffffffffffda RBX: 0000555308e7e4d0 RCX: 00007fee3ebf0347
+[ 1678.043507] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 00000000000000b0
+[ 1678.043508] RBP: 00007fee198e89c0 R08: 000055530943d920 R09: 00000000000003fa
+[ 1678.043509] R10: 0000555307349b00 R11: 0000000000000246 R12: 00000000000000b0
+[ 1678.043510] R13: 00005574c1a1de88 R14: 00007fee198e8a27 R15: 0000000000000000
+[ 1678.043511]  </TASK>
+[ 1678.043512] ---[ end trace 0000000000000000 ]---
+[ 5313.657064] ------------[ cut here ]------------
+[ 5313.657067] no rmap for 0000000071a2f138 (many->many)
+[ 5313.657071] WARNING: CPU: 43 PID: 23398 at arch/x86/kvm/mmu/mmu.c:983 pte_list_remove+0x17a/0x190
+[ 5313.657080] Modules linked in: kvm_intel vfat fat i2c_mux_pca954x i2c_mux spidev cdc_acm xhci_pci xhci_hcd sha3_generic gq(O)
+[ 5313.657088] CPU: 43 PID: 23398 Comm: kvm-nx-lpage-re Tainted: G S      W  O       6.1.0-smp-DEV #5
+[ 5313.657090] Hardware name: Google LLC Indus/Indus_QC_02, BIOS 30.12.6 02/14/2022
+[ 5313.657092] RIP: 0010:pte_list_remove+0x17a/0x190
+[ 5313.657095] Code: cf e4 01 01 48 c7 c7 4d 3c 32 82 e8 70 5e 0c 00 0f 0b e9 0a ff ff ff c6 05 d4 cf e4 01 01 48 c7 c7 9e de 33 82 e8 56 5e 0c 00 <0f> 0b 84 db 75 c8 e9 ec fe ff ff 66 66 2e 0f 1f 84 00 00 00 00 00
+[ 5313.657097] RSP: 0018:ffff88986d5d3c30 EFLAGS: 00010246
+[ 5313.657099] RAX: 1ebf71ba511d3100 RBX: 0000000000000000 RCX: 0000000000000027
+[ 5313.657101] RDX: 0000000000000002 RSI: c0000000ffff7fff RDI: ffff88afdf3e0488
+[ 5313.657102] RBP: ffff88986d5d3c40 R08: 0000000000000000 R09: ffffffff82b2e6f0
+[ 5313.657104] R10: 00000000ffff7fff R11: 40000000ffff8a28 R12: 0000000000000000
+[ 5313.657105] R13: ffff888118602000 R14: ffffc90020e1e000 R15: ffff88815df33030
+[ 5313.657106] FS:  0000000000000000(0000) GS:ffff88afdf3c0000(0000) knlGS:0000000000000000
+[ 5313.657107] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 5313.657109] CR2: 000017c92b50f1b8 CR3: 000000006f40a001 CR4: 00000000003726e0
+[ 5313.657110] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 5313.657111] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 5313.657112] Call Trace:
+[ 5313.657113]  <TASK>
+[ 5313.657114]  drop_spte+0x175/0x180
+[ 5313.657117]  mmu_page_zap_pte+0xfd/0x130
+[ 5313.657119]  __kvm_mmu_prepare_zap_page+0x290/0x6e0
+[ 5313.657122]  ? newidle_balance+0x228/0x3b0
+[ 5313.657126]  kvm_nx_huge_page_recovery_worker+0x266/0x360
+[ 5313.657129]  kvm_vm_worker_thread+0x93/0x150
+[ 5313.657134]  ? kvm_mmu_post_init_vm+0x40/0x40
+[ 5313.657136]  ? kvm_vm_create_worker_thread+0x120/0x120
+[ 5313.657139]  kthread+0x10d/0x120
+[ 5313.657141]  ? kthread_blkcg+0x30/0x30
+[ 5313.657142]  ret_from_fork+0x1f/0x30
+[ 5313.657156]  </TASK>
+[ 5313.657156] ---[ end trace 0000000000000000 ]---
