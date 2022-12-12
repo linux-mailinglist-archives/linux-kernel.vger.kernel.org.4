@@ -2,122 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C659564A46E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B34964A475
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbiLLPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S232615AbiLLPxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiLLPwW (ORCPT
+        with ESMTP id S232488AbiLLPxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:52:22 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2B23763E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:52:21 -0800 (PST)
-Received: (qmail 856042 invoked by uid 1000); 12 Dec 2022 10:52:20 -0500
-Date:   Mon, 12 Dec 2022 10:52:20 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
-        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
-Message-ID: <Y5dONG9X8ULOtAwO@rowland.harvard.edu>
-References: <0000000000002fc8dc05ef267a9f@google.com>
- <Y49h3MX8iXEO/na+@rowland.harvard.edu>
- <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
- <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
- <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e60fa70-15f5-e438-cb49-d3d2281bc975@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 10:53:52 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B864AE48
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:53:51 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id kw15so29128299ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sU26h7ISGDjyHbgt2m+/ybACjVhO2GW4px5ta3RiyaE=;
+        b=36SO6GMz7L4vPlYlmziJri1BXEmxrk9bMJFdxWwfMpKw+n4X/jkbFndih2YeTWTIS3
+         jlYRQrOMtG+doRt7bI/dquqhUjgv8zrSGpor9dW9N4SPiWv+uje5+f5Ue51gBR2kcpbX
+         AZkbP829krC+hiJS6BVC2OMVdIDN2zRdk91lVUEuUXR4FjlqkpTnNrLlyjyetPcYZZlj
+         kjW6HGGXLFox1QFJ1Q27QUwO0mm/kxEcbocXir1Ilp0Jq/nnC904Qg/igWQz/pazRjLJ
+         lBoOIxq+ikg5ozXHChl01vIbq3EgBpKezsWoxHYo4bngJa2pXmva1PW5kdFZ9erkAaxF
+         +Ycw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sU26h7ISGDjyHbgt2m+/ybACjVhO2GW4px5ta3RiyaE=;
+        b=IVJBCtaFMVWNaUprLiSLORevXft5U9DdWAofnHpkNQwuOZ7m0t4PHYiijNVrrHzwZy
+         OICptTIcwA1pRMd6s4tUd1Z1JxjVUcSXQU6Ti2SHKZ0IwWGmBO79L8XJ2Uc9AwO1wj0U
+         e9Uc1Hz45Bxd1jtJ4eadyOEMuIAycTAlAqsc2y7t6LL/1wt6WugUEdcTYgA7RxBqeXeb
+         UwnCMhlZhX52iVRQEXGI1GAmPt04ZVwA8HWnATjf+8g7XhRHkBYXRpPs+8ooEvJLkwpD
+         BXduQ4JPslwuOEIauKB4bLo/DXA582exn4VG22RoNjUHJZkeeqqk4/GU0bpKJ5x1CwvX
+         3RyA==
+X-Gm-Message-State: ANoB5ploRSPbjEDCY5Ck79398xiFuyHR1TJMrmgRHtIJnd8uYZSmTwtN
+        92U8ZjipXq9SSTR/aZGKFO7leg==
+X-Google-Smtp-Source: AA0mqf5Zg1Ozrr8THrUoCfJfV68huVE0hUW60bMLlSIO9EryWHWHUJALQtR8QgmPEWYlZQ4WefDHZA==
+X-Received: by 2002:a17:907:d049:b0:7c1:5467:39af with SMTP id vb9-20020a170907d04900b007c1546739afmr8795295ejc.37.1670860429931;
+        Mon, 12 Dec 2022 07:53:49 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170906300d00b00741a251d9e8sm3487278ejz.171.2022.12.12.07.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 07:53:49 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 12 Dec 2022 16:53:49 +0100
+Message-Id: <COZYL8MWN97H.MROQ391BGA09@otso>
+Cc:     <quic_saipraka@quicinc.com>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
+        <linux-edac@vger.kernel.org>, <quic_ppareek@quicinc.com>
+Subject: Re: [PATCH v2 13/13] qcom: llcc/edac: Support polling mode for ECC
+ handling
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+X-Mailer: aerc 0.13.0
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-14-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221212123311.146261-14-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 01:29:24PM +0100, Oliver Neukum wrote:
-> 
-> 
-> On 08.12.22 18:40, Alan Stern wrote:
-> > On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
-> > > On 06.12.22 16:38, Alan Stern wrote:
-> 
-> > It's hard to tell what's really going on.  Looking at
-> > xpad_stop_output(), you see that it doesn't do anything if xpad->type is
-> > XTYPE_UNKNOWN.  Is that what happened here?
-> 
-> The output anchor in xpad was used. So I have to answer that in the negative.
-> > I can't figure out where the underlying race is.  Maybe it's not
-> > directly connected with anchors after all.
-> > 
-> > > As far as I can tell the order we decrease use_count is correct. But:
-> > > 
-> > > 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
-> > > 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
-> > > 
-> > > Do we need to guarantee memory ordering here?
-> > 
-> > I don't think we need to do anything more.  usb_kill_urb() is careful to
-> > wait for completion handlers to finish, and we already have
-> 
-> By checking use_count
-> 
-> > smp_mb__after_atomic() barriers in the appropriate places to ensure
-> > proper memory ordering.
-> 
-> Do we? Looking at __usb_hcd_giveback_urb():
-> 
->         usb_unanchor_urb(urb);
-> 
-> This is an implicit memory barrier
-> 
->         if (likely(status == 0))
->                 usb_led_activity(USB_LED_EVENT_HOST);
-> 
->         /* pass ownership to the completion handler */
->         urb->status = status;
->         /*
->          * This function can be called in task context inside another remote
->          * coverage collection section, but kcov doesn't support that kind of
->          * recursion yet. Only collect coverage in softirq context for now.
->          */
->         kcov_remote_start_usb_softirq((u64)urb->dev->bus->busnum);
->         urb->complete(urb);
->         kcov_remote_stop_softirq();
-> 
->         usb_anchor_resume_wakeups(anchor);
->         atomic_dec(&urb->use_count);
->         /*
->          * Order the write of urb->use_count above before the read
->          * of urb->reject below.  Pairs with the memory barriers in
->          * usb_kill_urb() and usb_poison_urb().
->          */
->         smp_mb__after_atomic();
-> 
-> That is the latest time use_count can go to zero.
-> But what is the earliest time the CPU could reorder setting use_count to zero?
-> Try as I might the last certain memory barrier I can find in this function
-> is usb_unanchor_urb().
-> That means another CPU can complete usb_kill_urb() before usb_anchor_resume_wakeups()
-> runs.
-> 
->         usb_anchor_resume_wakeups(anchor);
-> 
-> I think we need a memory barrier here, too.
-> 
->         atomic_dec(&urb->use_count);
+Hi Manivannan,
 
-Okay, how about if this is changed to atomic_dec_return?  That puts a 
-full memory barrier both before and after the atomic decrement, so as a 
-bonus we could remove the smp_mb__after_atomic call.
+On Mon Dec 12, 2022 at 1:33 PM CET, Manivannan Sadhasivam wrote:
+> Not all Qcom platforms support IRQ mode for ECC handling. For those
+> platforms, the current EDAC driver will not be probed due to missing ECC
+> IRQ in devicetree.
+>
+> So add support for polling mode so that the EDAC driver can be used on al=
+l
+> Qcom platforms supporting LLCC.
+>
+> The polling delay of 5000ms is chosed based on Qcom downstream/vendor
+> driver.
 
-Alan Stern
+I think it does work for me on SM6350, I get this in dmesg:
+
+[    0.054608] EDAC MC: Ver: 3.0.0
+[    0.273913] EDAC DEVICE0: Giving out device to module qcom_llcc_edac con=
+troller llcc: DEV qcom_llcc_edac (POLLED)
+
+What I've noticed though is that the 5000ms poll you defined in the
+driver doesn't seem to be reflected at runtime? Or am I looking at
+different things?
+
+/ # cat /sys/devices/system/edac/qcom-llcc/poll_msec=20
+1000
+
+Regards
+Luca
+
+>
+> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/edac/qcom_edac.c     | 37 +++++++++++++++++++++++++-----------
+>  drivers/soc/qcom/llcc-qcom.c | 13 ++++++-------
+>  2 files changed, 32 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> index 5be93577fc03..f7afb5375293 100644
+> --- a/drivers/edac/qcom_edac.c
+> +++ b/drivers/edac/qcom_edac.c
+> @@ -76,6 +76,8 @@
+>  #define DRP0_INTERRUPT_ENABLE           BIT(6)
+>  #define SB_DB_DRP_INTERRUPT_ENABLE      0x3
+> =20
+> +#define ECC_POLL_MSEC			5000
+> +
+>  enum {
+>  	LLCC_DRAM_CE =3D 0,
+>  	LLCC_DRAM_UE,
+> @@ -283,8 +285,7 @@ dump_syn_reg(struct edac_device_ctl_info *edev_ctl, i=
+nt err_type, u32 bank)
+>  	return ret;
+>  }
+> =20
+> -static irqreturn_t
+> -llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> +static irqreturn_t llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>  {
+>  	struct edac_device_ctl_info *edac_dev_ctl =3D edev_ctl;
+>  	struct llcc_drv_data *drv =3D edac_dev_ctl->pvt_info;
+> @@ -328,6 +329,11 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+>  	return irq_rc;
+>  }
+> =20
+> +static void llcc_ecc_check(struct edac_device_ctl_info *edev_ctl)
+> +{
+> +	llcc_ecc_irq_handler(0, edev_ctl);
+> +}
+> +
+>  static int qcom_llcc_edac_probe(struct platform_device *pdev)
+>  {
+>  	struct llcc_drv_data *llcc_driv_data =3D pdev->dev.platform_data;
+> @@ -356,22 +362,31 @@ static int qcom_llcc_edac_probe(struct platform_dev=
+ice *pdev)
+>  	edev_ctl->panic_on_ue =3D LLCC_ERP_PANIC_ON_UE;
+>  	edev_ctl->pvt_info =3D llcc_driv_data;
+> =20
+> +	/* Check if LLCC driver has passed ECC IRQ */
+> +	ecc_irq =3D llcc_driv_data->ecc_irq;
+> +	if (ecc_irq > 0) {
+> +		/* Use interrupt mode if IRQ is available */
+> +		edac_op_state =3D EDAC_OPSTATE_INT;
+> +	} else {
+> +		/* Fall back to polling mode otherwise */
+> +		edac_op_state =3D EDAC_OPSTATE_POLL;
+> +		edev_ctl->poll_msec =3D ECC_POLL_MSEC;
+> +		edev_ctl->edac_check =3D llcc_ecc_check;
+> +	}
+> +
+>  	rc =3D edac_device_add_device(edev_ctl);
+>  	if (rc)
+>  		goto out_mem;
+> =20
+>  	platform_set_drvdata(pdev, edev_ctl);
+> =20
+> -	/* Request for ecc irq */
+> -	ecc_irq =3D llcc_driv_data->ecc_irq;
+> -	if (ecc_irq < 0) {
+> -		rc =3D -ENODEV;
+> -		goto out_dev;
+> -	}
+> -	rc =3D devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+> +	/* Request ECC IRQ if available */
+> +	if (ecc_irq > 0) {
+> +		rc =3D devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
+>  			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
+> -	if (rc)
+> -		goto out_dev;
+> +		if (rc)
+> +			goto out_dev;
+> +	}
+> =20
+>  	return rc;
+> =20
+> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> index a29f22dad7fa..e044e6756415 100644
+> --- a/drivers/soc/qcom/llcc-qcom.c
+> +++ b/drivers/soc/qcom/llcc-qcom.c
+> @@ -1011,13 +1011,12 @@ static int qcom_llcc_probe(struct platform_device=
+ *pdev)
+>  		goto err;
+> =20
+>  	drv_data->ecc_irq =3D platform_get_irq_optional(pdev, 0);
+> -	if (drv_data->ecc_irq >=3D 0) {
+> -		llcc_edac =3D platform_device_register_data(&pdev->dev,
+> -						"qcom_llcc_edac", -1, drv_data,
+> -						sizeof(*drv_data));
+> -		if (IS_ERR(llcc_edac))
+> -			dev_err(dev, "Failed to register llcc edac driver\n");
+> -	}
+> +
+> +	llcc_edac =3D platform_device_register_data(&pdev->dev,
+> +					"qcom_llcc_edac", -1, drv_data,
+> +					sizeof(*drv_data));
+> +	if (IS_ERR(llcc_edac))
+> +		dev_err(dev, "Failed to register llcc edac driver\n");
+> =20
+>  	return 0;
+>  err:
+> --=20
+> 2.25.1
+
