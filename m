@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C722649C10
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5E6649C1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbiLLK0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S229496AbiLLK1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiLLK0R (ORCPT
+        with ESMTP id S232096AbiLLK1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:26:17 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADFAFD1E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:26:14 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id f18so11555652wrj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l879BTu/5FIA2goMiwpSyg0RiCbHZeU5mD7R/xhw8bw=;
-        b=yW2MyZalUc/SpObXMNTqeAocoV8ESWARha0NEbcxQn0kvvy7O4NPpGf3YBJ9qad1s0
-         VDK9Deol0Go5qBJtuxblNnbrAINeo9Bx/bAuTxZ5HJFBuFa5iPfYzvNInlDVQHN4r7h3
-         S4yec+JLVfWEPOd6Lda4XJPvVZdSS2g2FXmY98HxEl7+G2LA7d0/TP+yo1/Gw9/gFse8
-         8vQBwhzD8/BYh4v+V1KHJ0TvdQMDp3NTYXSMAtnTFqJh7nzV74IN/xupxMaq7vVrDLHX
-         7iVEK19lEI1iT6uCNAF1aV01ddWtDZdomACZ7gRmtt6/f4RjrCxsPWSSOIMcdycDaoUt
-         NXZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l879BTu/5FIA2goMiwpSyg0RiCbHZeU5mD7R/xhw8bw=;
-        b=PTJ/DAypgN1ZVOlSNI76dKx+SZ8fUAkRIHePhi6Ecx9Xe5vbQCgKrGNkXX7rBoxhFM
-         kJBI/U2nPD07qptt5+Jy/AWnMfBpi+yUObmKFJ+2YzyxLmrAngxHgDDqOOWV2/ArCPKO
-         6UFQa0UQTJQf2gl8BLYyGvPfsNyTxzIuMmff1VKy8G1fJYasgg0P+/pXj4jhDENlGpqG
-         nAYb9v8jAVwC4pMrc1MN7Hgc1jL4ibX11otqu2RdXZMUNYMNS+WxgKfUEw1aQfbXXJ1j
-         2FrzOxb/nfU8BDVCCyO5KJCA5xh1azEDmUxF5E+0peA34Mo2QhoZWqSNAMfz43GfHHRt
-         SIIQ==
-X-Gm-Message-State: ANoB5pmO8/w5/8nXmFXyft1MUkY+8jR4NXZLT1AKzxpYj36rXB1qazsW
-        QGI/7nEGyLvldro/RznyCabYCtOMiAjtA30R
-X-Google-Smtp-Source: AA0mqf5KrtnfirbxeovkqOmIygQa6AoENqfsXGTkQpDsvRN/QXqRL9nx2Ve64S6iGXcP+QimZftwZw==
-X-Received: by 2002:a5d:5d0b:0:b0:23a:5a31:29f5 with SMTP id ch11-20020a5d5d0b000000b0023a5a3129f5mr11257752wrb.23.1670840773405;
-        Mon, 12 Dec 2022 02:26:13 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id y7-20020a5d6147000000b00226dba960b4sm8493877wrt.3.2022.12.12.02.26.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 02:26:12 -0800 (PST)
-Message-ID: <0b5ca79c-5d8c-5720-cd14-cfa4697b628d@linaro.org>
-Date:   Mon, 12 Dec 2022 10:26:11 +0000
+        Mon, 12 Dec 2022 05:27:00 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA950EE00;
+        Mon, 12 Dec 2022 02:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670840820; x=1702376820;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MS8IQF0S76W87IbQOiSpOjNpbBs1JPrFvn9mu9UOhWg=;
+  b=LbzVgg2cjHpsbJtRS/jnVJBZWmlAsb4Eb8c1yOzJeRZv+Ni+kKJVKxDD
+   Gg3lfLmO0QJY5isAM6E42omfRoVFKsMJEhchPKrHJ53QrraBIY97VzTpF
+   +fKNnvPxyHh8gZK8yMC5hD4v5VgGX4X51+IhfAcoN75l74EeAHhkGz2oi
+   97HceoolV706KlOsZixo1DjBNYOkoc6dG1Hcn5ZcbByEvjC2CHtXSy0c9
+   LdRUYS2HR3agwAt1uUPWUQMaWQ3MiMvUHWSt+svIkVQ0Ku4Vhwrn3TvHg
+   co5PqxFFquijjBQIiWVjWWK5r3g4yNyZlR+JP13lhICE2dxNdCH7xYY2v
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="192683469"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2022 03:26:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 12 Dec 2022 03:26:58 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 03:26:53 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <richardcochran@gmail.com>, <ceggers@arri.de>
+Subject: [Patch net-next v4 00/13] net: dsa: microchip: add PTP support for KSZ9563/KSZ8563 and LAN937x
+Date:   Mon, 12 Dec 2022 15:56:26 +0530
+Message-ID: <20221212102639.24415-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] slimbus: qcom-ngd: Add check for platform_driver_register
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, agross@kernel.org,
-        konrad.dybcio@somainline.org
-Cc:     linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20221212094950.23050-1-jiasheng@iscas.ac.cn>
-Content-Language: en-US
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221212094950.23050-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
+protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
+implementation has been made common for the KSZ switches.  KSZ9563 does not
+support two step timestamping but LAN937x supports both.  Tested the 1step &
+2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
+
+This patch series is based on the Christian Eggers PTP support for KSZ9563.
+Applied the Christian patch and updated as per the latest refactoring of KSZ
+series code. The features added on top are PTP packet Interrupt
+implementation based on nested handler, LAN937x two step timestamping and
+programmable per_out pins.
+
+Link: https://www.spinics.net/lists/netdev/msg705531.html
+
+Patch v3 -> v4
+- removed IRQF_TRIGGER_FALLING from the request_threaded_irq of ptp msg
+- addressed review comments on patch 10 periodic output
+- added sign off in patch 6 & 9
+- reverted to set PTP_1STEP bit for lan937x which is missed during v3 regression
+
+Patch v2-> v3
+- used port_rxtstamp for reconstructing the absolute timestamp instead of
+tagger function pointer.
+- Reverted to setting of 802.1As bit.
+
+Patch v1 -> v2
+- GPIO perout enable bit is different for LAN937x and KSZ9x. Added new patch
+for configuring LAN937x programmable pins.
+- PTP enabled in hardware based on both tx and rx timestamping of all the user
+ports.
+- Replaced setting of 802.1AS bit with P2P bit in PTP_MSG_CONF1 register.
+
+RFC v2 -> Patch v1
+- Changed the patch author based on past patch submission
+- Changed the commit message prefix as net: dsa: microchip: ptp
+Individual patch changes are listed in correspondig commits.
+
+RFC v1 -> v2
+- Added the p2p1step timestamping and conditional execution of 2 step for
+  LAN937x only.
+- Added the periodic output support
+
+Arun Ramadoss (5):
+  net: dsa: microchip: ptp: add 4 bytes in tail tag when ptp enabled
+  net: dsa: microchip: ptp: enable interrupt for timestamping
+  net: dsa: microchip: ptp: add support for perout programmable pins
+  net: dsa: microchip: ptp: lan937x: add 2 step timestamping
+  net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
+
+Christian Eggers (8):
+  net: dsa: microchip: ptp: add the posix clock support
+  net: dsa: microchip: ptp: Initial hardware time stamping support
+  net: dsa: microchip: ptp: manipulating absolute time using ptp hw
+    clock
+  net: ptp: add helper for one-step P2P clocks
+  net: dsa: microchip: ptp: add packet reception timestamping
+  net: dsa: microchip: ptp: add packet transmission timestamping
+  net: dsa: microchip: ptp: move pdelay_rsp correction field to tail tag
+  net: dsa: microchip: ptp: add periodic output signal
+
+ MAINTAINERS                             |    1 +
+ drivers/net/dsa/microchip/Kconfig       |   11 +
+ drivers/net/dsa/microchip/Makefile      |    5 +
+ drivers/net/dsa/microchip/ksz_common.c  |   44 +-
+ drivers/net/dsa/microchip/ksz_common.h  |   48 +
+ drivers/net/dsa/microchip/ksz_ptp.c     | 1187 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_ptp.h     |   86 ++
+ drivers/net/dsa/microchip/ksz_ptp_reg.h |  142 +++
+ include/linux/dsa/ksz_common.h          |   53 +
+ include/linux/ptp_classify.h            |   71 ++
+ net/dsa/tag_ksz.c                       |  213 +++-
+ 11 files changed, 1843 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.c
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.h
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp_reg.h
+ create mode 100644 include/linux/dsa/ksz_common.h
 
 
-On 12/12/2022 09:49, Jiasheng Jiang wrote:
-> Add the check for the return value of platform_driver_register
-> in order to catch the exception.
-> 
-> Fixes: 917809e2280b ("slimbus: ngd: Add qcom SLIMBus NGD driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+base-commit: 6d534ee057b62ca9332b988619323ee99c7847c1
+-- 
+2.36.1
 
-Applied thanks,
-
---srini
-> ---
->   drivers/slimbus/qcom-ngd-ctrl.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-> index 76c5e446d243..c16fc9e6d1c6 100644
-> --- a/drivers/slimbus/qcom-ngd-ctrl.c
-> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
-> @@ -1590,7 +1590,10 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
->   		goto err_pdr_lookup;
->   	}
->   
-> -	platform_driver_register(&qcom_slim_ngd_driver);
-> +	ret = platform_driver_register(&qcom_slim_ngd_driver);
-> +	if (ret < 0)
-> +		goto err_pdr_lookup; > +
->   	return of_qcom_slim_ngd_register(dev, ctrl);
->   
->   err_pdr_alloc:
