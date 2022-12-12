@@ -2,316 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8164649E0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F156649E12
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbiLLLkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
+        id S231392AbiLLLkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbiLLLjr (ORCPT
+        with ESMTP id S232317AbiLLLkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:39:47 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2137.outbound.protection.outlook.com [40.107.7.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6965C13FBF;
-        Mon, 12 Dec 2022 03:34:55 -0800 (PST)
+        Mon, 12 Dec 2022 06:40:15 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F7C1162;
+        Mon, 12 Dec 2022 03:35:25 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BC9WFbF027375;
+        Mon, 12 Dec 2022 11:35:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=qcppdkim1;
+ bh=l0NfOg0dl2bu5SEEEFrxtRE2WPJBOm7iq1kloE3CUig=;
+ b=ah6wUmiG/ZkzkQn8MQFESI/3gg05gP4ZB2DkUmHfTu84zYl5pJHLnMTXsdtRe8Tleqh2
+ 1Dwp2TT9w8ETRo9XN00BHoVwwj2w/qDsW7gcgzsw+K35Qlm97BbkyxUgfmwI/2A1kYMj
+ wGM6h8jExx/yjd3WZZ7uXBU9RTMwKq66FdGSjkwAmHoKxsZdZbDMtCdPXJa7tyGvDsKK
+ JhA8OEMw+i756SjSZGYwYwMBdsOv65jIbU2yEdcTkIn4fSEmBnKANTNfsgppWFhZBs6b
+ HioedWWJTn4mtRyQt/F77Tmcj61kuBG2r47P05Wxvm9F9Pcp5asLQ+1zR4L5EtySohJp gg== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mcjvnutym-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 11:35:19 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aYBHHA0ekOuU/7/imN1iKVk+jXBi0Bb83Rfs/pnCSgGTsNxJkvqtOIs6B+rEPd+dOwouCgfFmKlXp3cIwQPEBe7IYQismtDP+yAl4DikHxVXky5qRwCR2iIMBN4XLKxFQqjEjG9huGmfr2no9FJCz2JGUr+YVaSZNpkRoYSBzeXsULnRchS2VUa3OT0VIoOJyBzYuvhjugvpxDbCEl1uGvgi/YnPSTSBvEijILLfxBwPALfK8mDva7n8WVYHGi2NvvSl9hKUV710KPef72rtbSrPVHTMMI6Dh1Ji/H/x5/BRAwm1UXIVpy/PrY6nn/VRmNnHRhrzpL4cMp5k/n3mUg==
+ b=bxwkBx91jD3YfC89m4E9ncB4gunvcMjrZIrQH5ZiMV3LCo5Ydiy5FvHNCSGmMvlnPL6TA6I3bVfgc3pbXn6Ma9hhJ4UTRITvu3Xebjh0e+AY+0QKI7eeft+MwS08pDdIBcMw/6ZYfMHYM2IcQBb1xC1PUCV7MB5LtMZx9krHGuWlapwcMHZ3Q7eFqMrej+jnVS7fb8zgDAU3JBJptQlzAJl69xuhmZhOKlE4ku2c7eZnaCp3XimA7Xw8CHs8peY6x7dEaOkOFwLaXmD669WfcvAZ9JNBpY2bNeIs5H2jtEivCz4cYJTzrzjDlR2cGmHwJRM+Ki30QgnmdU000OFUvA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MShXleVe0LY5//x9pDMcpRh1tkvfQZWJBMjIxEuHUCo=;
- b=OtwYQeIGDEKY0mPlaf4hU+Sk1sZFGu4k7mmOFfeTDua3A1qRolqu2y7mfXgys4B0ATUY84yA9lmWsu3IBZipe7ZVW4hXstq7LcMg+ygk8atPBC3tG27t4wOkexVt15ERjkuiY0p6jAsYWPRYxZne0YDTzIET6BZRG0wqZPXiyxWr5WrsCYVoaNTSvYFiv7vCqJ+CmCzt4wCNSgoTI5HuCJvEzJyd4CIJ8BnRyNiUUv45RQry96u9Cl0Y/gDOrWj1UkRskaxxo8sjcR+vYBF5Du/Az6Q2eQtmfQUiJA0FtGLNcCAxtFCakGv8FwqgMr84GxfLwWmtNu0GNvCLN1NjxA==
+ bh=l0NfOg0dl2bu5SEEEFrxtRE2WPJBOm7iq1kloE3CUig=;
+ b=EGccUkSvW58+2ZHLjK6Bxzqj8OWpq2i86beu3UxkkrxyMY26VxKiYgcEf3m7rLs9OOPyiS2q2m1XdjbPuLknXTpL+XBzLpoar4TEhi3kw5OhJDd0gizOnVwJIkD+HyFX8WInGCtcuSWZ3exMIHr6qqCU2Q58WNM8mQjpWyJFVqpe5taRbiQNT9eA86l5jWhxyq+80/YSI3QnW56SzzS4SONbht+lOc0neilabpuTzp0hOVUaY4EsEiiQnJomHCtGeHRpKUb6LwFT0t+h1+moUH0RfZ6QM3dk8fxZr4X41ifO8iAWF+CiJ0snWofZLpDjioeGn/NzHj8MHfdgBHdr9Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MShXleVe0LY5//x9pDMcpRh1tkvfQZWJBMjIxEuHUCo=;
- b=L51EzWwjfNWgRkzGM8aX9q6x9Cdg+wM0Q7fd6GgQfZKuG72KIQ+w6nn+8Suc9+BOrZG8eWOuUPu4WXDtGnUEBwBUttw1TqO/QbUiT6T1pnX9OonA27hc5/pjmTSOFVYpHCLpRB0mqXWWLvdV7wBOW+KpVsdhEhgW/J/8vnx5MBQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by AM7P190MB0744.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:11d::9) with
+ smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
+ header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
+Received: from BN0PR02MB8142.namprd02.prod.outlook.com (2603:10b6:408:16a::19)
+ by DS0PR02MB9221.namprd02.prod.outlook.com (2603:10b6:8:13e::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 11:34:02 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a%3]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 11:34:02 +0000
-Date:   Mon, 12 Dec 2022 13:34:00 +0200
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <44f642bc-8810-80d9-368a-15994de7f50d@intel.com>
-References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
-        <20221205105931.410686-4-vadym.kochan@plvision.eu>
-        <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
-        <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-        <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
-        <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-        <69dd8714-4be1-6b1b-fa07-04c790a6c6fc@intel.com>
-        <VI1P190MB0317DADE7450282444BFED32951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-        <44f642bc-8810-80d9-368a-15994de7f50d@intel.com>
-Content-Type: text/plain
-X-ClientProxiedBy: FR0P281CA0070.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:49::20) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:802:38::26)
-Message-ID: <VI1P190MB03171A8F65844DB789D85B0495E29@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ 2022 11:35:16 +0000
+Received: from BN0PR02MB8142.namprd02.prod.outlook.com
+ ([fe80::881:65fa:f52a:480f]) by BN0PR02MB8142.namprd02.prod.outlook.com
+ ([fe80::881:65fa:f52a:480f%3]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
+ 11:35:15 +0000
+From:   Kalyan Thota <kalyant@qti.qualcomm.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@chromium.org" <robdclark@chromium.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+Subject: RE: [v10] drm/msm/disp/dpu1: add support for dspp sub block flush in
+ sc7280
+Thread-Topic: [v10] drm/msm/disp/dpu1: add support for dspp sub block flush in
+ sc7280
+Thread-Index: AQHZCjvG/FWn27I6WESw0GNNpbh1v65idk8AgAFPmmA=
+Date:   Mon, 12 Dec 2022 11:35:15 +0000
+Message-ID: <BN0PR02MB81425C5E341E0FF1C374A3A496E29@BN0PR02MB8142.namprd02.prod.outlook.com>
+References: <1670417963-19426-1-git-send-email-quic_kalyant@quicinc.com>
+ <20221207140832.6r2kznoulfek7yye@SoMainline.org>
+In-Reply-To: <20221207140832.6r2kznoulfek7yye@SoMainline.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR02MB8142:EE_|DS0PR02MB9221:EE_
+x-ms-office365-filtering-correlation-id: 25f8fc2c-5b38-45e8-e069-08dadc34f085
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +X1dt9aLY9L8WNA/26MOyyvPziOcVPIZ7zoH3X/bD3JbhNzxSZq+0ygovhB/yKheD87KyX6Q7C8v18Hl7LnSDNAqoGbyePC9f/cPYP+gqiN+WD20IiB8eXciABo01IRnaJ/zns7ehzdCsQ/f8gq7v5K6btoWMrQX9fTuIuvaKX1KmzOmSGSbumBgk+RIQzWq8+Rg1F40tP0VBP71kIlZPn9leqdZ9ySkOA/sut295QC1kY/Az9/StxPxKDdyDBj4acklf+lbWO9JjAjHMRqDxarRgrg7NiqeHCrZj1dzwOn0bNY8ORXStQFbASRamh/Mq2JUiM2XWLuOAnZ7Ily2/HamuP3sDekN7prbil+cOUyQ/GJsWfhi2TNCajaO+mP7Eu6o+CIEXz2/rKK0ycLHKZA055yf1NBgiknjnC6/G/8lFonDLnoBXtn/WtwI/9pU0xpp0IbcsKJX4V334f2zJJEk8F1WcmJX0cMlr1FllaYdlEBq/Jkp79CyIQVvqjEcRyFfpFulc7XWqUclhXqSKGBy0e6STAurCsFOStYU8ekkxNaalw1IrnmOr9GGx+2RE3U9TiK7dASIjxxX7UEkkbBLyHr9sIHiOOzLT5LjyjdBfp9vX04BsENrRn7V0aGGKl/tQZ+SFL94u8sGvTOU7en7sxY//aL/NO8k1alot5RUNPa2H55j53UskxrLF6RFb2BAnQtsmiP2oemW76cgag==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB8142.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199015)(66476007)(2906002)(33656002)(83380400001)(54906003)(86362001)(5660300002)(7416002)(52536014)(4326008)(8936002)(55016003)(122000001)(38100700002)(316002)(66556008)(38070700005)(76116006)(8676002)(66946007)(41300700001)(66446008)(64756008)(9686003)(107886003)(110136005)(186003)(6506007)(7696005)(478600001)(26005)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cHeWi7vK6XvcAk7m+QAjHmzSTUska//w4CPkVLIpgcWi+JIyW4Xqv+rNK7oC?=
+ =?us-ascii?Q?Gw47M+9KUgJz290URYBo83lyxJsZFalNf9aazRDcba8ozgR1ZyqpthyRdEj+?=
+ =?us-ascii?Q?PsjP52m7m7rcDv1mcbq7k9muWt8DQe7+fwzPaEYPHAgEaCPE3mKl/O6QVTQt?=
+ =?us-ascii?Q?GNdIz+CSmC+bx/My+Nzluz5f9hEyNfcnsuInltya5+wl4cSpEroeYQgMBdFv?=
+ =?us-ascii?Q?zL3ZvUrpuXdg3Hwv6UvQMqvNc08pAukaf6sIiEINpRPF67IP9fbluLjiKALy?=
+ =?us-ascii?Q?58nB69hmunIKnYMRxxH/HOtxSfPKRwwicm738s1RswTSJDY0lPZjKSl+P0Qb?=
+ =?us-ascii?Q?onmppohCau7/U5y0y1BQFK/LACFFeC2DDXumUa1HP86cHNU+75XsguxFfz2v?=
+ =?us-ascii?Q?Zgr3Kb0tHFMHMZy4sRh/8ahBj2BWp2iWq546ivMy+Ypzppzh4WMRvwbYRfFr?=
+ =?us-ascii?Q?dbJbnozeH6D9ryy+HoPGE/Wc1R9ThRyIxCHBQikj3vhaaSjv8JgheE9Aqw2d?=
+ =?us-ascii?Q?rbFnrguLTDbgutzELE114f5KQqEMAEfx51540c6vu3etQo6GB8RGW/Xsjj1b?=
+ =?us-ascii?Q?KGKTVryCw2isn4vgNEKFZBHilLVCPJ8VUCS1P4OTPrdV2wQeueN4Mcrr7bD+?=
+ =?us-ascii?Q?vgMDM1zMT16W5KfxsiM/AdNxF+omSRGAfyHOFhV8j1DlsOdKinkrFz4ky5ic?=
+ =?us-ascii?Q?zdYpqlAiYRytXgh70Tja1MixhvTUVzMFXpUN9RussN3vG1w9oO76lNgbpX/M?=
+ =?us-ascii?Q?FM9niYT9oLsyJTiHd2azKWvOk/Ok7RhlGHJY7rprrovOuxT0Ii318e9ZyoRo?=
+ =?us-ascii?Q?flNkxNGGsJwxMV7/q8a4pU5NWiycgtLtBNw14jIu1yDd9YM3GbXTSU2M1q75?=
+ =?us-ascii?Q?r/mwElcpIsf0WWfy6B4ocQ4R/ikYUtBzR8oMaNMzD3GJ+g9Bb/7Bj+wgb7IW?=
+ =?us-ascii?Q?gX14xPhg/tGNJkMmwOiUh/IH5p/DLJHerV7usuIke5xAxRobcGScW1oABs73?=
+ =?us-ascii?Q?QGIOZB+TNInvjFfDLjmHrumGhvej1YfCY4Ck+Zk9pKJ+CnaVlc1332VSakn4?=
+ =?us-ascii?Q?yZGx9sdkVw8y5hlk9CpYicTfIDoiTK6b7TMxQpjYl1V8iNM5oqCpZwPCeLMj?=
+ =?us-ascii?Q?xoYWuOA3M6rH7f91A+b23JK1Al1KohZun+N4LDBfvOzIG/+d3B2vWvXw+Pbo?=
+ =?us-ascii?Q?IJLYe1WcJhautlBerNhzmtuYYTlHUnhBCeEpOsMQ7McRyJ8IZVAiwaUHSvIH?=
+ =?us-ascii?Q?nscw1R4v2t5BuD8bKFEiNaSRYyHi+QDbIN6PzYuv20L1U+FA1jlIHU50lPcd?=
+ =?us-ascii?Q?1GwVq76yaulF7gzhV5D+/nwMjbjOxoN+fUj6OX1hWgM9QCL8WJs81yrjpCBX?=
+ =?us-ascii?Q?qJdUqG5SlQbEbVHtRFv9KeVr3kxWezt2a5PjKwpJzvTpFq/nJYxr7imspUnt?=
+ =?us-ascii?Q?eRddVzUgeR9TxXQ5PLMxXI6Y2wSkPMoqOCTwHK24a2pS2/LzMPIP+0PM/57M?=
+ =?us-ascii?Q?dUnSRyu93vPbeRy4g2vbB7YhLEMuRTD7qJy50srGezXd5SDowp5xEOmf8OjQ?=
+ =?us-ascii?Q?M9edebw0+3YwYAKYetsMDGxJoW/gX29FGrMvqivRaWpM4XCOZk7+CELVOgmA?=
+ =?us-ascii?Q?bw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|AM7P190MB0744:EE_
-X-MS-Office365-Filtering-Correlation-Id: baf913eb-7ab7-4611-da30-08dadc34c478
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KA+0ltXBJ5gUzoq0VFOS6GsE897UKlKqqOGDO+VEyYaTh4aZNpIojzqPQ1Aqnax9b34YLoBV+Pkdlgq/y6H37lXKNXh+ZhCo2bt/rS0vPYexQIyxuz49mEbQdhZtGqifEcyJl/Sbrc31rXPzKDtk5i/YaTvkS7ML1boBsAprd+lcau4Hdn+51rpvilfFZM+QiulxZcTvjTGcVLpo2hOFmcWPuYfIsyEYBBpyV6hqp1lyKXI+vXgxXgMkMtGG66Cwv7Y0dLd3lIf/I7OUJWmRraL5wC8r1TMaG1IJQe3WBZmZz4hO2Dme5mrhjnME9t1GJxD1CA2iFvtneIXuMNIaOQcQgFElNs+mQac6r/vDcQ70gRx1As34gFNpxykSOHNiF+U/n/G0myUTWVho2DoQShSazbrqvxph40YJZZwMgrP54R7tdm8EXi36XztSt5gDnoZvyVfXt6FnAE7YXvuz6/CYm1Bwopc1/ngh1rLYAlOPvZ/f/UpBgbhE95QAx6/+gXLJzsh/oOih1L/jG26jg5xaStC6tyThcLyXLMG9cBN6Ti+Koq2IiLH7k0JcQTU9obujMybGsi6fphHVPMNOoTW/wxn0+kcJ9+O6d/KregSvH8VC5iTebfMxSGSjhpVoMrfAtmNp5xz/UJEp7UkbfylBa78tT9BdGJERYGYJK4OmvydffZBaO6ya8HnfW4hOsI+DGqiY0v1xvfkkknciqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39830400003)(136003)(376002)(366004)(346002)(396003)(451199015)(41300700001)(5660300002)(52536014)(8936002)(7416002)(2906002)(44832011)(83380400001)(186003)(8676002)(478600001)(4326008)(66476007)(38350700002)(66556008)(38100700002)(66946007)(6506007)(110136005)(316002)(7696005)(54906003)(9686003)(55016003)(26005)(53546011)(33656002)(86362001)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v5MXvEvYost4+tuV8SwvBdMHW+bsEz7sGFHfnZHmXWzpLMhcHo4mzXxEkFeI?=
- =?us-ascii?Q?/EC9HvEsHI43NSI23B5ljdjwW6BjH4zmss/VMXkaBbmQEsxSA4h1VXt9kcxj?=
- =?us-ascii?Q?UlvXP7+nCEMo/Amj89aikDBUIBME/Jqf8zQ6jJgvPV97AyKx6vhRjVAC0xXk?=
- =?us-ascii?Q?hE7ZKXvsw4yk94AQfaQ4Pio1dpThHoOGUK+3oMAFRF21GwxTQHfBbPwijlUk?=
- =?us-ascii?Q?OEyuy9mu2o+6s5nRcjK6HcVAIVXdDSyFqEoepGIDqpAEpN9dto6L/+UIYXKz?=
- =?us-ascii?Q?hiFaDB8NoM0G5c9nXJWyKQajbOvR9Vf7pPCecHEphcepYoRXFzLO32r9taWg?=
- =?us-ascii?Q?qDt8YyjOa25sItwbKo4AlC07Ga1V2RHjHEOvLO3BeCf2LbqBOKYCkEAV9AjI?=
- =?us-ascii?Q?cHJH7T/+7dHXqituPc5NoGMHl6fNfWJaWeFGmWGmf381QRAoF/kRJSedrufI?=
- =?us-ascii?Q?9iI4S13FbRmrsIpl1Tlj6zvgAFuYV5GIWF7nvhSpvAi1Fh81nsA7849rZfF/?=
- =?us-ascii?Q?6xE9BSC79du7ZPHRMYGFUDEkN64vn+oGhrsE59m620rLt4UcIPjEqXbMq9uQ?=
- =?us-ascii?Q?gFrfUcSZ9gGgADcCq4DGk7X2Y9JZWxwb3JiksUdtr+FGBbYIBC027IdMEF2K?=
- =?us-ascii?Q?HZtku/pDPObH2kTKlRcywc+M0mnoIjas3tSfyDQ7FAj3n0m7qU1JLOL2iCx2?=
- =?us-ascii?Q?CyzEZF6vt9SVOqd3v7GCdbUt6YNkp5vAMr+69ZutOLIGiVx3eNFFl+1Q/oKo?=
- =?us-ascii?Q?X1N61LNodpwlqA2vH8cSMi2wsIno7fQPXc/q/v0BOrce7MCsa/9zlow7Bemf?=
- =?us-ascii?Q?vfr/AedDKgOO4M9QwRDtim8KyCIcq0Q+aGMhfhFAPlm0eWIhRQrRa0zP/9V2?=
- =?us-ascii?Q?xOuKaF9o4gkH9lEUluSzjWJF6ENoIKf/j+XfHSuX9wLKF3N4E6gOaudolxev?=
- =?us-ascii?Q?PjSHTVWGZmxuIwpkA23ZYGvC72chwlYIiPiEBqgnvbQzURSjWEQ7MmBxLx4b?=
- =?us-ascii?Q?1f63hbhvgUx1uR2dIRYabr7VI/0hOSgq7CTGoPOMm5mK8Sr3xKc+lyufOKpH?=
- =?us-ascii?Q?vYDeDUQrYlT63z+FAO8Th1TlwZhzim6jYonYtNxr2g8AikRVxLE5i5ZKUKX9?=
- =?us-ascii?Q?EJF2lQ1W1O8lLW1loW+Cje485/TOk0maUXu5sP22/mHWGsE1v6W66tRZAyD7?=
- =?us-ascii?Q?RKkDFF/dRBxSPhbbtYEb51AmodebbSqsqI1llFsll+SJpkwRXxAhjOQkxUkZ?=
- =?us-ascii?Q?DLvQpwhirDv1KZ3rhZYJsfglsHvPVN3kFD6dFTJUbzWmlAm53RMpWwuEV8d9?=
- =?us-ascii?Q?I+DgMN45Iagn4hd493MDhIGbDOA96TGmdUlVn39ZLy2OjJFbySJts4pmmFiq?=
- =?us-ascii?Q?TTRnetmJwUHmSMokKxBTLrwYMxvzqO5mXV/j+tj16Em5TLD+bAcMIa2naEAR?=
- =?us-ascii?Q?FkQDmQkXygs96scn6NWRQE9v34U63v4kZUrawtU/jXCzEREZaTvfFcX9OfZY?=
- =?us-ascii?Q?MFeteSZayw7VJaFd743QihSoO2qCsqgcU3aqOPzSdyLGvq5yxZoXV70Vxq/G?=
- =?us-ascii?Q?6fPfc+iPhvC7/ITUYYcg72XGbzTxXH7LV4rztKioh/rgsRAhF0Ym2gtmCpz8?=
- =?us-ascii?Q?1g=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: baf913eb-7ab7-4611-da30-08dadc34c478
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-OriginatorOrg: qti.qualcomm.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 11:34:02.0573
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB8142.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25f8fc2c-5b38-45e8-e069-08dadc34f085
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 11:35:15.7593
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: evNk9dMjrJVDw30Eax53Ji570AVOcYrOUBlKwPwbVggWJ7oZ443Xm5VPi22WCiOf4rNX0dyU4g6fZIw4rk4xbIqdiM6eZ8AE02edw7uNCH4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7P190MB0744
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8NlW+3LcKYPaK1K5P6duX8tdgcJMxtFpTrGN8DQkZG/XTQu+V3ynmqW24wmV8xQ64l2957ZXndYoVRptzvEI4eHR/5Ad7DWmvid4fTpfSeI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR02MB9221
+X-Proofpoint-GUID: R8cR_R3m-2wz_qGULe5z9qi8Z-53EcYG
+X-Proofpoint-ORIG-GUID: R8cR_R3m-2wz_qGULe5z9qi8Z-53EcYG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 clxscore=1011 adultscore=0 suspectscore=0
+ malwarescore=0 impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212120107
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
 
-On Mon, 12 Dec 2022 10:42:36 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> On 9/12/22 15:27, Vadym Kochan wrote:
-> > On Fri, 9 Dec 2022 14:13:06 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >> On 9/12/22 14:10, Vadym Kochan wrote:
-> >>> Hi Adrian,
-> >>>
-> >>> On Fri, 9 Dec 2022 13:53:58 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>> On 9/12/22 13:39, Vadym Kochan wrote:
-> >>>>> Hi Adrian,
-> >>>>>
-> >>>>> On Fri, 9 Dec 2022 09:23:05 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>>>>> On 5/12/22 12:59, Vadym Kochan wrote:
-> >>>>>>> There is a limitation on AC5 SoC that mmc controller
-> >>>>>>> can't have DMA access over 2G memory, so use SDMA with
-> >>>>>>> a bounce buffer. Swiotlb can't help because on arm64 arch
-> >>>>>>> it reserves memblock's at the end of the memory.
-> >>>>>>>
-> >>>>>>> Additionally set mask to 34 bit since on AC5 SoC RAM starts
-> >>>>>>> at 0x2_00000000.
-> >>>>>>
-> >>>>>> Can you explain more about how a 34-bit DMA mask works when
-> >>>>>> SDMA only supports 32-bit addresses?
-> >>>>>>
-> >>>>>
-> >>>>> So, after I set
-> >>>>>
-> >>>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-> >>>>>
-> >>>>> then sdhc core sets mask to 32 bit, but then dma_map fails to map
-> >>>>> bounce buffer because the base address is higher than 32bit - 0x2_00000000,
-> >>>>> and 34bit mask fixed it.
-> >>>>
-> >>>> What happens if the bounce buffer gets mapped in the range
-> >>>> 0x1_00000000 to 0x1_ffffffff ?
-> >>>>
-> >>>
-> >>> From my understanding, on the AC5 SoC RAM starts at 0x2_00000000 so the bounce
-> >>> buffer can be mapped in the range 0x2_00000000..0x2_ffffffff
-> >>
-> >> Right but I guess I meant what about 0x3_00000000..0x3_ffffffff ?
-> >> Isn't that also in DMA_BIT_MASK(34)
-> > 
-> > Yes, you are right.
-> 
-> So it would fail in that case?  Is it possible to use devicetree
-> reserved memory or some such, to set aside 64k for the bounce
-> buffer DMA mapping?
-> 
 
-The main restriction is that only lower 2GB can be used for DMA.
+>-----Original Message-----
+>From: Marijn Suijten <marijn.suijten@somainline.org>
+>Sent: Wednesday, December 7, 2022 7:39 PM
+>To: Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>
+>Cc: dri-devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+>freedreno@lists.freedesktop.org; devicetree@vger.kernel.org; linux-
+>kernel@vger.kernel.org; robdclark@chromium.org; dianders@chromium.org;
+>swboyd@chromium.org; Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>;
+>dmitry.baryshkov@linaro.org; Abhinav Kumar (QUIC)
+><quic_abhinavk@quicinc.com>
+>Subject: Re: [v10] drm/msm/disp/dpu1: add support for dspp sub block flush=
+ in
+>sc7280
+>
+>WARNING: This email originated from outside of Qualcomm. Please be wary of
+>any links or attachments, and do not enable macros.
+>
+>On 2022-12-07 04:59:23, Kalyan Thota wrote:
+>> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+>> allows individual sub blocks to be flushed in coordination with master
+>> flush control.
+>>
+>> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+>>
+>> This change adds necessary support for the above design.
+>>
+>> Changes in v1:
+>> - Few nits (Doug, Dmitry)
+>> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+>>
+>> Changes in v2:
+>> - Move the address offset to flush macro (Dmitry)
+>> - Seperate ops for the sub block flush (Dmitry)
+>>
+>> Changes in v3:
+>> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+>>
+>> Changes in v4:
+>> - Use shorter version for unsigned int (Stephen)
+>>
+>> Changes in v5:
+>> - Spurious patch please ignore.
+>>
+>> Changes in v6:
+>> - Add SOB tag (Doug, Dmitry)
+>>
+>> Changes in v7:
+>> - Cache flush mask per dspp (Dmitry)
+>> - Few nits (Marijn)
+>>
+>> Changes in v8:
+>> - Few nits (Marijn)
+>>
+>> Changes in v9:
+>> - use DSPP enum while accessing flush mask to make it readable
+>> (Dmitry)
+>> - Few nits (Dmitry)
+>>
+>> Changes in v10:
+>> - fix white spaces in a seperate patch (Dmitry)
+>>
+>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+>> ---
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 ++-
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 44
+>++++++++++++++++++++++++--
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  5 ++-
+>>  5 files changed, 55 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> index 601d687..4170fbe 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> @@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct
+>> drm_crtc *crtc)
+>>
+>>               /* stage config flush mask */
+>>               ctl->ops.update_pending_flush_dspp(ctl,
+>> -                     mixer[i].hw_dspp->idx);
+>> +                     mixer[i].hw_dspp->idx, DPU_DSPP_PCC);
+>>       }
+>>  }
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 27f029f..0eecb2f 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -65,7 +65,10 @@
+>>       (PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
+>>
+>>  #define CTL_SC7280_MASK \
+>> -     (BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) |
+>BIT(DPU_CTL_VM_CFG))
+>> +     (BIT(DPU_CTL_ACTIVE_CFG) | \
+>> +      BIT(DPU_CTL_FETCH_ACTIVE) | \
+>> +      BIT(DPU_CTL_VM_CFG) | \
+>> +      BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+>>
+>>  #define MERGE_3D_SM8150_MASK (0)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> index 38aa38a..126ee37 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -161,10 +161,12 @@ enum {
+>>   * DSPP sub-blocks
+>>   * @DPU_DSPP_PCC             Panel color correction block
+>>   * @DPU_DSPP_GC              Gamma correction block
+>> + * @DPU_DSPP_IGC             Inverse gamma correction block
+>>   */
+>>  enum {
+>>       DPU_DSPP_PCC =3D 0x1,
+>>       DPU_DSPP_GC,
+>> +     DPU_DSPP_IGC,
+>>       DPU_DSPP_MAX
+>>  };
+>>
+>> @@ -191,6 +193,7 @@ enum {
+>>   * @DPU_CTL_SPLIT_DISPLAY:   CTL supports video mode split display
+>>   * @DPU_CTL_FETCH_ACTIVE:    Active CTL for fetch HW (SSPPs)
+>>   * @DPU_CTL_VM_CFG:          CTL config to support multiple VMs
+>> + * @DPU_CTL_DSPP_BLOCK_FLUSH  CTL config to support dspp sub-block
+>> + flush
+>
+>The above uses tabs, why does this use spaces?
+>
+>>   * @DPU_CTL_MAX
+>>   */
+>>  enum {
+>> @@ -198,6 +201,7 @@ enum {
+>>       DPU_CTL_ACTIVE_CFG,
+>>       DPU_CTL_FETCH_ACTIVE,
+>>       DPU_CTL_VM_CFG,
+>> +     DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
+>>       DPU_CTL_MAX
+>>  };
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> index a35ecb6..e801be1 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> @@ -33,6 +33,7 @@
+>>  #define   CTL_INTF_FLUSH                0x110
+>>  #define   CTL_INTF_MASTER               0x134
+>>  #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
+>> +#define   CTL_DSPP_n_FLUSH(n)           ((0x13C) + ((n) * 4))
+>>
+>>  #define CTL_MIXER_BORDER_OUT            BIT(24)
+>>  #define CTL_FLUSH_MASK_CTL              BIT(17)
+>> @@ -113,6 +114,9 @@ static inline void
+>dpu_hw_ctl_clear_pending_flush(struct dpu_hw_ctl *ctx)
+>>       trace_dpu_hw_ctl_clear_pending_flush(ctx->pending_flush_mask,
+>>                                    dpu_hw_ctl_get_flush_register(ctx));
+>>       ctx->pending_flush_mask =3D 0x0;
+>> +
+>> +     memset(ctx->pending_dspp_flush_mask, 0,
+>> +             sizeof(ctx->pending_dspp_flush_mask));
+>>  }
+>>
+>>  static inline void dpu_hw_ctl_update_pending_flush(struct dpu_hw_ctl
+>> *ctx, @@ -130,6 +134,8 @@ static u32
+>> dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
+>>
+>>  static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl
+>> *ctx)  {
+>> +     int dspp;
+>> +
+>>       if (ctx->pending_flush_mask & BIT(MERGE_3D_IDX))
+>>               DPU_REG_WRITE(&ctx->hw, CTL_MERGE_3D_FLUSH,
+>>                               ctx->pending_merge_3d_flush_mask);
+>> @@ -140,6 +146,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(stru=
+ct
+>dpu_hw_ctl *ctx)
+>>               DPU_REG_WRITE(&ctx->hw, CTL_WB_FLUSH,
+>>                               ctx->pending_wb_flush_mask);
+>>
+>> +     for(dspp =3D DSPP_0; dspp < DSPP_MAX; dspp++)
+>
+>Space between for and (?
+>
+>> +             if (ctx->pending_dspp_flush_mask[dspp - DSPP_0])
+>> +                     DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(dspp - DS=
+PP_0),
+>> +                             ctx->pending_dspp_flush_mask[dspp -
+>> + DSPP_0]);
+>
+>Shouldn't this loop as a whole check if _any_ DSPP flush is requested via
+>`pending_flush_mask & BIT(29)`?  The other flushes don't check the per-blo=
+ck
+>mask value either (and could write zero that way) but only base this check=
+ on the
+>presence of a global flush mask for that block.
+>
+BIT(29) enables dspp flush only from DPU rev 7.x.x where hierarchal flush i=
+s introduced. For other targets that supports CTL_ACTIVE, it's a NOP.
+With the check "pending_flush_mask & BIT(29)", unintended DSPP registers fo=
+r that CTL path will be programmed to "0" which is not correct IMO.
+Secondly "pending_flush_mask & BIT(29)" although will not be true for DPU 6=
+.x.x versions but can be confusing w.r.t code readability.
+Let me know your thoughts.
 
-I already did send solution based on reserved memory, I can send it again in context of this series.
-Also what about the solution which Linus suggested ?
-
-[cut]
-
-Let's just create a new quirk:
-
-SDHCI_QUIRK_31BIT_DMA_ROOF
-
-Define the semantics such that this will allow DMA for buffers that are below
-the 31st bit, but does not have the semantics to limit scatter-gather buffers to
-be 32-bit aligned.
-
-[/cut]
-
-Thanks,
-
-> > 
-> >>
-> >>>
-> >>>>>
-> >>>>>>>
-> >>>>>>> Co-developed-by: Elad Nachman <enachman@marvell.com>
-> >>>>>>> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> >>>>>>> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> >>>>>>> ---
-> >>>>>>>  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
-> >>>>>>>  drivers/mmc/host/sdhci-xenon.h |  3 ++-
-> >>>>>>>  2 files changed, 40 insertions(+), 1 deletion(-)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-> >>>>>>> index 08e838400b52..5f3db0425674 100644
-> >>>>>>> --- a/drivers/mmc/host/sdhci-xenon.c
-> >>>>>>> +++ b/drivers/mmc/host/sdhci-xenon.c
-> >>>>>>> @@ -13,7 +13,9 @@
-> >>>>>>>  
-> >>>>>>>  #include <linux/acpi.h>
-> >>>>>>>  #include <linux/delay.h>
-> >>>>>>> +#include <linux/dma-mapping.h>
-> >>>>>>>  #include <linux/ktime.h>
-> >>>>>>> +#include <linux/mm.h>
-> >>>>>>>  #include <linux/module.h>
-> >>>>>>>  #include <linux/of.h>
-> >>>>>>>  #include <linux/pm.h>
-> >>>>>>> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
-> >>>>>>>  		return pltfm_host->clock;
-> >>>>>>>  }
-> >>>>>>>  
-> >>>>>>> +static int xenon_set_dma_mask(struct sdhci_host *host)
-> >>>>>>> +{
-> >>>>>>> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> >>>>>>> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
-> >>>>>>> +	struct mmc_host *mmc = host->mmc;
-> >>>>>>> +	struct device *dev = mmc_dev(mmc);
-> >>>>>>> +
-> >>>>>>> +	if (priv->hw_version == XENON_AC5) {
-> >>>>>>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-> >>>>>>> +
-> >>>>>>> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
-> >>>>>>> +	}
-> >>>>>>> +
-> >>>>>>> +	return sdhci_set_dma_mask(host);
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>>  static const struct sdhci_ops sdhci_xenon_ops = {
-> >>>>>>>  	.voltage_switch		= xenon_voltage_switch,
-> >>>>>>>  	.set_clock		= sdhci_set_clock,
-> >>>>>>> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
-> >>>>>>>  	.reset			= xenon_reset,
-> >>>>>>>  	.set_uhs_signaling	= xenon_set_uhs_signaling,
-> >>>>>>>  	.get_max_clock		= xenon_get_max_clock,
-> >>>>>>> +	.set_dma_mask		= xenon_set_dma_mask,
-> >>>>>>>  };
-> >>>>>>>  
-> >>>>>>>  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
-> >>>>>>> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
-> >>>>>>>  	xenon_disable_sdhc(host, sdhc_id);
-> >>>>>>>  }
-> >>>>>>>  
-> >>>>>>> +static int xenon_ac5_probe(struct sdhci_host *host)
-> >>>>>>> +{
-> >>>>>>> +	struct sysinfo si;
-> >>>>>>> +
-> >>>>>>> +	si_meminfo(&si);
-> >>>>>>> +
-> >>>>>>> +	if ((si.totalram * si.mem_unit) > SZ_2G)
-> >>>>>>> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
-> >>>>>>> +
-> >>>>>>> +	return 0;
-> >>>>>>> +}
-> >>>>>>> +
-> >>>>>>>  static int xenon_probe(struct platform_device *pdev)
-> >>>>>>>  {
-> >>>>>>>  	struct sdhci_pltfm_host *pltfm_host;
-> >>>>>>> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
-> >>>>>>>  		}
-> >>>>>>>  	}
-> >>>>>>>  
-> >>>>>>> +	if (priv->hw_version == XENON_AC5) {
-> >>>>>>> +		err = xenon_ac5_probe(host);
-> >>>>>>> +		if (err)
-> >>>>>>> +			goto err_clk_axi;
-> >>>>>>> +	}
-> >>>>>>> +
-> >>>>>>>  	err = mmc_of_parse(host->mmc);
-> >>>>>>>  	if (err)
-> >>>>>>>  		goto err_clk_axi;
-> >>>>>>> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
-> >>>>>>>  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
-> >>>>>>>  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
-> >>>>>>>  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
-> >>>>>>> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
-> >>>>>>>  	{}
-> >>>>>>>  };
-> >>>>>>>  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
-> >>>>>>> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
-> >>>>>>> index 3e9c6c908a79..0460d97aad26 100644
-> >>>>>>> --- a/drivers/mmc/host/sdhci-xenon.h
-> >>>>>>> +++ b/drivers/mmc/host/sdhci-xenon.h
-> >>>>>>> @@ -57,7 +57,8 @@ enum xenon_variant {
-> >>>>>>>  	XENON_A3700,
-> >>>>>>>  	XENON_AP806,
-> >>>>>>>  	XENON_AP807,
-> >>>>>>> -	XENON_CP110
-> >>>>>>> +	XENON_CP110,
-> >>>>>>> +	XENON_AC5
-> >>>>>>>  };
-> >>>>>>>  
-> >>>>>>>  struct xenon_priv {
-> >>>>>>
-> >>>>>
-> >>>>> Regards,
-> >>>>
-> >>
-> 
+>> +
+>>       DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);  }
+>>
+>> @@ -287,8 +298,9 @@ static void
+>> dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,  }
+>>
+>>  static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx=
+,
+>> -     enum dpu_dspp dspp)
+>> +     enum dpu_dspp dspp, u32 dspp_sub_blk)
+>>  {
+>> +
+>
+>Empty line needed for?
+>
+>>       switch (dspp) {
+>>       case DSPP_0:
+>>               ctx->pending_flush_mask |=3D BIT(13); @@ -307,6 +319,30 @@
+>> static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+>>       }
+>>  }
+>>
+>> +static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
+>> +     struct dpu_hw_ctl *ctx, enum dpu_dspp dspp, u32 dspp_sub_blk) {
+>> +
+>
+>And here?
+>
+>> +     if (dspp >=3D DSPP_MAX)
+>> +             return;
+>> +
+>> +     switch (dspp_sub_blk) {
+>> +     case DPU_DSPP_IGC:
+>> +             ctx->pending_dspp_flush_mask[dspp - DSPP_0] |=3D BIT(2);
+>> +             break;
+>> +     case DPU_DSPP_PCC:
+>> +             ctx->pending_dspp_flush_mask[dspp - DSPP_0] |=3D BIT(4);
+>> +             break;
+>> +     case DPU_DSPP_GC:
+>> +             ctx->pending_dspp_flush_mask[dspp - DSPP_0] |=3D BIT(5);
+>> +             break;
+>> +     default:
+>> +             return;
+>> +     }
+>> +
+>> +     ctx->pending_flush_mask |=3D BIT(29);
+>
+>Can/should we define an _IDX for this, like is done with MERGE_3D_IDX,
+>DSC_IDX, INTF_IDX and WB_IDX?
+>
+>> +}
+>> +
+>>  static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32
+>> timeout_us)  {
+>>       struct dpu_hw_blk_reg_map *c =3D &ctx->hw; @@ -675,7 +711,11 @@
+>> static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>>       ops->setup_blendstage =3D dpu_hw_ctl_setup_blendstage;
+>>       ops->update_pending_flush_sspp =3D
+>dpu_hw_ctl_update_pending_flush_sspp;
+>>       ops->update_pending_flush_mixer =3D
+>dpu_hw_ctl_update_pending_flush_mixer;
+>> -     ops->update_pending_flush_dspp =3D
+>dpu_hw_ctl_update_pending_flush_dspp;
+>> +     if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+>> +             ops->update_pending_flush_dspp =3D
+>dpu_hw_ctl_update_pending_flush_dspp_subblocks;
+>> +     else
+>> +             ops->update_pending_flush_dspp =3D
+>> + dpu_hw_ctl_update_pending_flush_dspp;
+>> +
+>>       if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
+>>               ops->set_active_pipes =3D
+>> dpu_hw_ctl_set_fetch_pipe_active;  }; diff --git
+>> a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> index 96c012e..78611a8 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> @@ -152,9 +152,11 @@ struct dpu_hw_ctl_ops {
+>>        * No effect on hardware
+>>        * @ctx       : ctl path ctx pointer
+>>        * @blk       : DSPP block index
+>> +      * @dspp_sub_blk : DSPP sub-block index
+>>        */
+>>       void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
+>> -             enum dpu_dspp blk);
+>> +             enum dpu_dspp blk, u32 dspp_sub_blk);
+>> +
+>>       /**
+>>        * Write the value of the pending_flush_mask to hardware
+>>        * @ctx       : ctl path ctx pointer
+>> @@ -242,6 +244,7 @@ struct dpu_hw_ctl {
+>>       u32 pending_intf_flush_mask;
+>>       u32 pending_wb_flush_mask;
+>>       u32 pending_merge_3d_flush_mask;
+>> +     u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
+>>
+>>       /* ops */
+>>       struct dpu_hw_ctl_ops ops;
+>> --
+>> 2.7.4
+>>
