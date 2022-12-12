@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D756499BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799D76499BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbiLLHuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
+        id S231330AbiLLHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiLLHuw (ORCPT
+        with ESMTP id S230427AbiLLHv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:50:52 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80559B86B;
-        Sun, 11 Dec 2022 23:50:51 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B334168AA6; Mon, 12 Dec 2022 08:50:46 +0100 (CET)
-Date:   Mon, 12 Dec 2022 08:50:46 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@lst.de>, Lei Rao <lei.rao@intel.com>,
-        kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
-        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <20221212075046.GB11162@lst.de>
-References: <20221206165503.GA8677@lst.de> <Y4+U3VR2LeEh2S7B@ziepe.ca> <20221207075415.GB2283@lst.de> <Y5CWVu08abcOuEQH@ziepe.ca> <20221207135203.GA22803@lst.de> <Y5CsH5PqMYAWYatw@ziepe.ca> <20221207163857.GB2010@lst.de> <Y5DOAKArjyfb6Mcz@ziepe.ca> <20221207183333.GA7049@lst.de> <Y5DyorZJPdtN5WcX@ziepe.ca>
+        Mon, 12 Dec 2022 02:51:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540C5B86B;
+        Sun, 11 Dec 2022 23:51:24 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670831481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R/b1PEiCv1fKzGOxSbiyZDN0HigW/1OSYfLKLOqVpx0=;
+        b=A+bB8E2vvc9wH5nBPnOfRvzsuOmo8YLVrfpEkRY/Y1UU8n/LROf5FE9OgCV3AbYiIsqgUe
+        Y1MBqpFp5qPoL5uIplUrEhPendybXGWyHXW+5PVyfta7HnCKh/BOOQAS2ZzQ/gR7zzBx9Z
+        a1phKjPd68JtJK6hUbIKn24CO5nfd9h0GaujfOCql84PTUDbmPwiE6Buq+YqJw8X//+WAA
+        sVv8/PE2Lh3ZNZIc7XhT+pQ4Z4c1LAz03px2YUCjWQcLW4Iivu2MC6wmrXWcJUv7avV0qC
+        vX0GsZ+Z2N6U4lTVh8KT0+cMORdUPPgddMR9QTOcJkzBMUQiHg2Y+9Lh7p8CyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670831481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R/b1PEiCv1fKzGOxSbiyZDN0HigW/1OSYfLKLOqVpx0=;
+        b=fkBD4w8mCeUebYSbNeQAEZiKPII2aGaB6deOItFKlIwrAdc0TG+AJu3jR3ToVmUFFDw4Ta
+        HtfebAc/G83RbSBg==
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v5 net-next 01/10] dt-bindings: dsa: sync with maintainers
+In-Reply-To: <20221211225823.nde77nlfriok4q6x@skbuf>
+References: <20221210033033.662553-1-colin.foster@in-advantage.com>
+ <20221210033033.662553-2-colin.foster@in-advantage.com>
+ <87o7sbh896.fsf@kurt> <20221211225823.nde77nlfriok4q6x@skbuf>
+Date:   Mon, 12 Dec 2022 08:51:19 +0100
+Message-ID: <87mt7tt5zc.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5DyorZJPdtN5WcX@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:08:02PM -0400, Jason Gunthorpe wrote:
-> However hisilicon managed to do their implementation without this, or
-> rather you could say their "controlling function" is a single MMIO BAR
-> page in their PCI VF and their "controlled function" is the rest of
-> the PCI VF.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Eww.  So you need to carefully filter the BAR and can't actually do
-any DMA at all?  I'm not sure that is actually practical, especially
-not for something with a lot of state.
+On Mon Dec 12 2022, Vladimir Oltean wrote:
+> On Sat, Dec 10, 2022 at 11:18:29AM +0100, Kurt Kanzenbach wrote:
+>> You can update the hellcreek binding as well. Thanks.
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcr=
+eek.yaml b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.y=
+aml
+>> index 73b774eadd0b..1d7dab31457d 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml
+>> @@ -12,7 +12,7 @@ allOf:
+>>  maintainers:
+>>    - Andrew Lunn <andrew@lunn.ch>
+>>    - Florian Fainelli <f.fainelli@gmail.com>
+>> -  - Vivien Didelot <vivien.didelot@gmail.com>
+>> +  - Vladimir Oltean <olteanv@gmail.com>
+>>    - Kurt Kanzenbach <kurt@linutronix.de>
+>>=20=20
+>>  description:
+>
+> Good observation. If there are no other comments on this patch series
+> (which otherwise looks reasonable to me), I suppose that could be
+> accomplished via a parallel patch as well? The diff you're proposing
+> does not seem to conflict with something else that Colin is touching in
+> this patch set.
 
-> If the kernel knows this information then we can find a way for the
-> vfio_device to have pointers to both controlling and controlled
-> objects. I have a suggestion below.
+Sure, it shouldn't conflict. I'll send a patch to update this
+separately.
 
-So now we need to write a vfio shim for every function even if there
-is absolutely nothing special about that function?  Migrating really
-is the controlling functions behavior, and writing a new vfio bit
-for every controlled thing just does not scale.
+Thanks,
+Kurt
 
-> I see it differently, the VFIO driver *is* the live migration
-> driver. Look at all the drivers that have come through and they are
-> 99% live migration code.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Yes, and that's the problem, because they are associated with the
-controlled function, and now we have a communication problem between
-that vfio driver binding to the controlled function and the drive
-that actually controlls live migration that is associated with the
-controlling function.  In other words: you've created a giant mess.
+-----BEGIN PGP SIGNATURE-----
 
-> Excepting quirks and bugs sounds nice, except we actually can't ignore
-> them.
-
-I'm not proposing to ignore them.  But they should not be needed most
-of the time.
-
-> For instance how do I trap FLR like mlx5 must do if the
-> drivers/live_migration code cannot intercept the FLR VFIO ioctl?
-> 
-> How do I mangle and share the BAR like hisilicon does?
-> 
-> Which is really why this is in VFIO in the first place. It actually is
-> coupled in practice, if not in theory.
-
-So you've created a long term userspace API around working around
-around buggy and/or misdesigned early designs and now want to force
-it down everyones throat?
-
-Can we please take a step back and think about how things should work,
-and only then think how to work around weirdo devices that do strange
-things as a second step? 
-
-> If we accept that drivers/vfio can be the "live migration subsystem"
-> then lets go all the way and have the controlling driver to call
-> vfio_device_group_register() to create the VFIO char device for the
-> controlled function.
-
-While creating the VFs from the PF driver makes a lot more sense,
-remember that vfio is absolutely not the only use case for VFs.
-There are plenty use cases where you want to use them with the normal
-kernel driver as well.  So the interface to create VFs needs a now
-to decide if it should be vfio exported, or use the normal kernel
-binding.
-
-> This solves the "sanely discover" problem because of course the
-> controlling function driver knows what the controlled function is and
-> it can acquire both functions before it calls
-> vfio_device_group_register().
-
-Yes.
-
-> This is actually what I want to do anyhow for SIOV-like functions and
-> VFIO. Doing it for PCI VFs (or related PFs) is very nice symmetry. I
-> really dislike that our current SRIOV model in Linux forces the VF to
-> instantly exist without a chance for the controlling driver to
-> provision it.
-
-For SIOV you have no other choice anyway.  But I agree that it is
-the right thing to do for VFIO.  Now the next step is to control
-live migration from the controlling function, so that for most sane
-devices the controlled device does not need all the pointless
-boilerplate of its own vfio driver.
-
-> I'd really like to get away from VFIO having to do all this crazy
-> sysfs crap to activate its driver. I think there is a lot of appeal to
-> having, say, a nvmecli command that just commands the controlling
-> driver to provision a function, enable live migration, configure it
-> and then make it visible via VFIO. The same API regardless if the
-> underlying controlled function technology is PF/VF/SIOV.
-
-Yes.
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmOW3XcTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzguuMD/92WZk+2aqc2j0T+MK9KJHhGJ1tCGkp
+XuowkXMdvKL85HUq/E4MD8Sek6H8QtzHw8tKFTkku2Vhszo2bV6cr65bajQGVmr/
+uCwP5WqsHXzbjWiZcv4f+0/yZ2/Pvif0DMNHvGsI+GvZurrwvZLZdQBvQ/tw0CyC
+/6S78qGSxcB15Fwyd/My0oS04qLr1yYG9rZTuV8mQiGwTPu+1iv8lAQNarMWhRx+
+a9rE7roZqUDO7OeBfNmz4gzHPTkadG9jUCpy3U9YQOq8k+rdLmuEN6kt+Mh/DFVv
+QgX8b0/hCVt0io9vq3Z1wrkM8xXuQ+54z1Yq/E0VJ6+RnngnkmSUwGso5/JLI+p4
++g1BCFw6MciOaEtinHKYZTjUQ++KakbaS4TiYlnNuW4HIEJ8EGOad1PJzBNuvd7g
+9Hc+xx8DiRwjzZ54ME4OfsKIvb461+uZvpNgTg/A/QVtz+TweTFEa7zXagGxgshs
+mNotZdRcqAMIUrX+4pvuf5iLV98eTK7QLvIorPhPhfnLRTNKewXuxyC/iUDsDtf5
+c/iJPpOalSER1hDHakNs35E0I1OHgK4VxbbTpiJGv0NS7h6JzoTJ7dMnluBSnSPe
+7hUmGbffICETV4LW+Qv0BznRKWBwJEdhfTccr+V2EJEsNmAVQYLcv7mrg3P/Ew+J
+U6K/Q1zEc+X79A==
+=xWGZ
+-----END PGP SIGNATURE-----
+--=-=-=--
