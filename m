@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5486A6497E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74616497EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 03:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbiLLCLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 21:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S231304AbiLLCTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 21:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbiLLCLg (ORCPT
+        with ESMTP id S231424AbiLLCRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 21:11:36 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD10A449
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 18:11:35 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NVlTS4MS1zRpy3;
-        Mon, 12 Dec 2022 10:10:36 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 12 Dec 2022 10:11:33 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <akinobu.mita@gmail.com>, <akpm@linux-foundation.org>,
-        <nathan@kernel.org>, <peterz@infradead.org>,
-        <keescook@chromium.org>, <ndesaulniers@google.com>,
-        <jpoimboe@kernel.org>, <dan.j.williams@intel.com>,
-        <ojeda@kernel.org>, <isabbasso@riseup.net>, <vbabka@suse.cz>,
-        <linux@rasmusvillemoes.dk>
-CC:     <linux-kernel@vger.kernel.org>, <weiyongjun1@huawei.com>
-Subject: [PATCH -next v2 4/4] fault-injection: make stacktrace filter works as expected
-Date:   Mon, 12 Dec 2022 10:11:16 +0800
-Message-ID: <1670811076-38625-5-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1670811076-38625-1-git-send-email-wangyufen@huawei.com>
-References: <1670811076-38625-1-git-send-email-wangyufen@huawei.com>
+        Sun, 11 Dec 2022 21:17:12 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8874E028;
+        Sun, 11 Dec 2022 18:16:01 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d15so993973pls.6;
+        Sun, 11 Dec 2022 18:16:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jAKAUWj36dYtyzUMLUez/vupRra0SMgKco51r7USvlA=;
+        b=f3CotKsR5Vj3EPyn6fNaI9SpNCkkIxLE07NV2LJ9S7h1zVc8z4QlcYy7BIH1bpKESp
+         yU7tZQTel+aQ4jx1zznjt7OdVSC6/76hXuwwUA+wswJO21uLP9vZ7KtYOpbCqoV8Uhi7
+         f6P5r21KVTJZ/PuZP+OkXW+jv23xV3zhAtIGdo35gCi2naqRez8Fj/SfB9J+iKCgns5W
+         IwTcf+vswVrMtyTpVgsCdSOOc5nLsvsMeIafoaXcd7/s2gDc9pZSDIHwPaPaMToYD3kb
+         jOc03lRnZMIIOfRJjt0M88ZrUAwUdJsOlPXe246WbwPJHYoSR2bk5rsKYcc9FXdXE96O
+         51yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jAKAUWj36dYtyzUMLUez/vupRra0SMgKco51r7USvlA=;
+        b=I/5Tq7JAdomyW8/2N7GH4U1hcBlm2PeojxpUjHhO/aife6/nV5lAJNrMjOqTyj7ngJ
+         I8R7sz0wNSx5x4zkWZj89eOxeLRAdyZiEASdQ3bCrU3+iebJsLL94A0tec8X8fq8fKZR
+         U7iWHgMjiEogne+hO/c/0euHeWOhN5TPoaRMJwFW+92zEr8hMp5IfXklvimzWMMmOVOp
+         3nUC69T+DR4I4N/xHXudYMhV6l24N2HjiiSaheSHbtSp5AQnPtbfw11QyeTY9FcRq7kJ
+         btjwXw9EDUG1o7j+h31vbt+ZtinjkcXVud73AoMkq6fEbM+aHHObbKrSVMnMpylSBrze
+         AdvA==
+X-Gm-Message-State: ANoB5plARGH8/4PhJPZdKSC5+SKdek4Il942UyXVBLwzd1UvqOLtE2Ur
+        X+I8e8WDZpghRjfVLBECxTQ=
+X-Google-Smtp-Source: AA0mqf5KlA/xmF39o6XENkP+o5OqLxh1LQX3i6P5gCXdJzJmHGorMYNDvNVlTUjOvIy4T0SOuwGZ0w==
+X-Received: by 2002:a17:90a:e409:b0:219:1a4e:349d with SMTP id hv9-20020a17090ae40900b002191a4e349dmr16368256pjb.44.1670811361024;
+        Sun, 11 Dec 2022 18:16:01 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:53a9])
+        by smtp.gmail.com with ESMTPSA id pl6-20020a17090b268600b00213c7cf21c0sm4266238pjb.5.2022.12.11.18.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 18:16:00 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 11 Dec 2022 16:15:59 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y5aO3y23uoQFCazr@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <alpine.DEB.2.22.394.2212112331150.29296@hadrien>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2212112331150.29296@hadrien>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+Hello, Julia.
 
-stacktrace filter is checked after others, such as fail-nth,
-interval and probability. This make it doesn't work well as
-expected.
+On Sun, Dec 11, 2022 at 11:33:50PM +0100, Julia Lawall wrote:
+> > diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+> > new file mode 100644
+> > index 000000000000..f42464d66de4
+> > --- /dev/null
+> > +++ b/kernel/sched/ext.c
+> > @@ -0,0 +1,2780 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
+> > + * Copyright (c) 2022 Tejun Heo <tj@kernel.org>
+> > + * Copyright (c) 2022 David Vernet <dvernet@meta.com>
+> > + */
+> > +#define SCX_OP_IDX(op)		(offsetof(struct sched_ext_ops, op) / sizeof(void (*)(void)))
+> > +
+> > +enum scx_internal_consts {
+> > +	SCX_NR_ONLINE_OPS	 = SCX_OP_IDX(init),
+> > +	SCX_DSP_DFL_MAX_BATCH	 = 32,
+> 
+> This definition of SCX_DSP_DFL_MAX_BATCH makes the dispatch queue have size
+> 32.  The example central policy thus aborts if more than 32 tasks are woken
+> up at once.
 
-Fix to running stacktrace filter before other filters. It will
-speed up fault inject testing for driver modules.
+Yeah, scx_exampl_central needs to either set ops.dispatch_max_batch higher
+according to number of CPUs or flush and exit the loop and retry when
+scx_bpf_dispatch_nr_slots() reaches zero. Will update.
 
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- lib/fault-inject.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Thanks.
 
-diff --git a/lib/fault-inject.c b/lib/fault-inject.c
-index d7819ca..6cff320 100644
---- a/lib/fault-inject.c
-+++ b/lib/fault-inject.c
-@@ -102,10 +102,16 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
- 
- bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
- {
-+	bool stack_checked = false;
-+
- 	if (in_task()) {
- 		unsigned int fail_nth = READ_ONCE(current->fail_nth);
- 
- 		if (fail_nth) {
-+			if (!fail_stacktrace(attr))
-+				return false;
-+
-+			stack_checked = true;
- 			fail_nth--;
- 			WRITE_ONCE(current->fail_nth, fail_nth);
- 			if (!fail_nth)
-@@ -125,6 +131,9 @@ bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
- 	if (atomic_read(&attr->times) == 0)
- 		return false;
- 
-+	if (!stack_checked && !fail_stacktrace(attr))
-+		return false;
-+
- 	if (atomic_read(&attr->space) > size) {
- 		atomic_sub(size, &attr->space);
- 		return false;
-@@ -139,9 +148,6 @@ bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
- 	if (attr->probability <= get_random_u32_below(100))
- 		return false;
- 
--	if (!fail_stacktrace(attr))
--		return false;
--
- fail:
- 	if (!(flags & FAULT_NOWARN))
- 		fail_dump(attr);
 -- 
-1.8.3.1
-
+tejun
