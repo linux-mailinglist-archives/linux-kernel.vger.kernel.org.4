@@ -2,386 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19594649B3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D790C649B4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiLLJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S229740AbiLLJfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbiLLJdZ (ORCPT
+        with ESMTP id S231906AbiLLJfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:33:25 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062B6321
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:33:24 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id f16so11866959ljc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lkk2WhKqzkLPYIxZXiaL3+NGa6SKWtBvEv9fea1/izs=;
-        b=SvL0rqtd6VAKtuogNOA5E2fbL9BFpJnGFaL/wflC8lssTrzBJzkZAIVsK3OQZfOBX1
-         JH0sis7a722JYEsR8PxCzSeq7PNyU7Q79ELz1BOHdASjvLXwDT5mp/eRXjpwORx86QyG
-         xPaGaj90Kdpraq1HzgCoQRzLk88aFRFYUfibv+md9V5BJkMdo60b8IwlF/f7gpk0fdGv
-         sPUmcVcCHPhrSXi0xto4w0bnTq4gXp3Ms+la7zOFFO4IZNAAMPe1sG9ESgAvyPWm8Kyr
-         HyJMeSncuNhiSjxFNfFw6FgOX/KlKdjxbo60Xq8SrTbTJ8z4nopz4fEARacuQZr7hRZr
-         8MKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lkk2WhKqzkLPYIxZXiaL3+NGa6SKWtBvEv9fea1/izs=;
-        b=x4NJDKeW4LNFdoMNkGRfMqWSaaCiwR6ZTmE6BG0mKDdq7wQljou/gm4p7iwphqcfRz
-         SILtA5n5seSSacSYoupQkPfuzGjyNXup+GOp+er9AvuVcFGdhjup5kP1nCXt+ic6dnVX
-         AheWYNAKIg/SFq91/FNoSntyffg/rg0olu2sib2Q5o50gWGY8uwNSlFcA0fpm+G2Z6vJ
-         Hh2aTh/80Uu8VInxIJzMpOe4f65SB5DmNyhj/NPJJtGqrWiTVvyk1sSBIhOHY4q+cU3Z
-         tuQ6cnEW3tc1mmwVIuUQcNZAM8KMf+9lCLc0lVfjcJ6+6/wkIo5tFBTpor5BA6GfaQKS
-         V9Pw==
-X-Gm-Message-State: ANoB5pl5PcsN+cDyEaI411EqjWrjwfgMMMmdbFDm6OZm5ZHnBjNq0wpT
-        ifVigFAJ+0PmdCpp+xM52uhPFA==
-X-Google-Smtp-Source: AA0mqf5veminiJT3qyipaaLDS59YXUnA59jFUpVX7Z5dlBZhBVWjagRmj46x3RaAuSN+Rp93s2gs7Q==
-X-Received: by 2002:a2e:860a:0:b0:27a:3224:f066 with SMTP id a10-20020a2e860a000000b0027a3224f066mr3571880lji.34.1670837603609;
-        Mon, 12 Dec 2022 01:33:23 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id y2-20020a05651c106200b002770fb5722fsm1155081ljm.123.2022.12.12.01.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 01:33:23 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: sm8150: Wire up MDSS
-Date:   Mon, 12 Dec 2022 10:33:14 +0100
-Message-Id: <20221212093315.11390-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221212093315.11390-1-konrad.dybcio@linaro.org>
-References: <20221212093315.11390-1-konrad.dybcio@linaro.org>
+        Mon, 12 Dec 2022 04:35:17 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 061BA7647
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:35:14 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxRPDR9ZZjh_wEAA--.11481S3;
+        Mon, 12 Dec 2022 17:35:13 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFfR9ZZjlU0sAA--.24307S3;
+        Mon, 12 Dec 2022 17:35:13 +0800 (CST)
+Subject: Re: [PATCH v10 0/4] Add kprobe and kretprobe support for LoongArch
+To:     Hengqi Chen <chenhengqi@outlook.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <1670575981-14389-1-git-send-email-yangtiezhu@loongson.cn>
+ <SY4P282MB3518614999070D8FD19D14DFC0E29@SY4P282MB3518.AUSP282.PROD.OUTLOOK.COM>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <987d1061-bad8-9566-5177-148a87179d0d@loongson.cn>
+Date:   Mon, 12 Dec 2022 17:35:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <SY4P282MB3518614999070D8FD19D14DFC0E29@SY4P282MB3518.AUSP282.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxmFfR9ZZjlU0sAA--.24307S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZryDWr4fJw13AF1ktF4rAFb_yoW5tFW5pF
+        ZrZFn5KrWrWr13Aryaq3s09r1ftw18Gr47K3W7JrWFy3W7Zw15ZrWxKrZxWa4xG3yYqr1S
+        qF1rXFWag3W7J37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04
+        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add required nodes for MDSS and hook up provided clocks in DISPCC.
-This setup is almost identical to 8[23]50.
+Hi, Hengqi
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 271 ++++++++++++++++++++++++++-
- 1 file changed, 267 insertions(+), 4 deletions(-)
+On 2022/12/12 下午4:41, Hengqi Chen wrote:
+> Hi, Tiezhu:
+> 
+> I tested this patchset from BPF side, failed with EINVAL:
+> 
+>      $ cat /sys/kernel/tracing/error_log
+>      [  262.299093] trace_kprobe: error: Failed to register probe event
+>        Command: p:kprobes/libbpf_4609_inet_bind_0x0_0 inet_bind+0x0
+> 
+This is because KPROBE_ON_FTRACE is not yet supported. Trace Event 
+cannot be used now.
+We will support it soon, if you want to test it by install 
+kprobe_example.ko as jeff did.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index ff04397777f4..c0c1e781eb43 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -9,6 +9,7 @@
- #include <dt-bindings/power/qcom-rpmpd.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8150.h>
- #include <dt-bindings/clock/qcom,gcc-sm8150.h>
- #include <dt-bindings/clock/qcom,gpucc-sm8150.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
-@@ -3579,14 +3580,276 @@ camnoc_virt: interconnect@ac00000 {
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-+		mdss: mdss@ae00000 {
-+			compatible = "qcom,sm8150-mdss";
-+			reg = <0 0x0ae00000 0 0x1000>;
-+			reg-names = "mdss";
-+
-+			interconnects = <&mmss_noc MASTER_MDP_PORT0 &mc_virt SLAVE_EBI_CH0>,
-+					<&mmss_noc MASTER_MDP_PORT1 &mc_virt SLAVE_EBI_CH0>;
-+			interconnect-names = "mdp0-mem", "mdp1-mem";
-+
-+			power-domains = <&dispcc MDSS_GDSC>;
-+
-+			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_DISP_HF_AXI_CLK>,
-+				 <&gcc GCC_DISP_SF_AXI_CLK>,
-+				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-+			clock-names = "iface", "bus", "nrt_bus", "core";
-+
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+
-+			iommus = <&apps_smmu 0x800 0x420>;
-+
-+			status = "disabled";
-+
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			mdss_mdp: display-controller@ae01000 {
-+				compatible = "qcom,sm8150-dpu";
-+				reg = <0 0x0ae01000 0 0x8f000>,
-+				      <0 0x0aeb0000 0 0x2008>;
-+				reg-names = "mdp", "vbif";
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>,
-+					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-+					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				clock-names = "iface", "bus", "core", "vsync";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				assigned-clock-rates = <19200000>;
-+
-+				operating-points-v2 = <&mdp_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <0>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						dpu_intf1_out: endpoint {
-+							remote-endpoint = <&mdss_dsi0_in>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						dpu_intf2_out: endpoint {
-+							remote-endpoint = <&mdss_dsi1_in>;
-+						};
-+					};
-+				};
-+
-+				mdp_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-171428571 {
-+						opp-hz = /bits/ 64 <171428571>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
-+
-+					opp-300000000 {
-+						opp-hz = /bits/ 64 <300000000>;
-+						required-opps = <&rpmhpd_opp_svs>;
-+					};
-+
-+					opp-345000000 {
-+						opp-hz = /bits/ 64 <345000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+
-+					opp-460000000 {
-+						opp-hz = /bits/ 64 <460000000>;
-+						required-opps = <&rpmhpd_opp_nom>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0: dsi@ae94000 {
-+				compatible = "qcom,mdss-dsi-ctrl";
-+				reg = <0 0x0ae94000 0 0x400>;
-+				reg-names = "dsi_ctrl";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <4>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>;
-+				clock-names = "byte",
-+					      "byte_intf",
-+					      "pixel",
-+					      "core",
-+					      "iface",
-+					      "bus";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-+				assigned-clock-parents = <&mdss_dsi0_phy 0>,
-+							 <&mdss_dsi0_phy 1>;
-+
-+				operating-points-v2 = <&dsi_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
-+
-+				phys = <&mdss_dsi0_phy>;
-+
-+				status = "disabled";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dsi0_in: endpoint {
-+							remote-endpoint = <&dpu_intf1_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dsi0_out: endpoint {
-+						};
-+					};
-+				};
-+
-+				dsi_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-187500000 {
-+						opp-hz = /bits/ 64 <187500000>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
-+
-+					opp-300000000 {
-+						opp-hz = /bits/ 64 <300000000>;
-+						required-opps = <&rpmhpd_opp_svs>;
-+					};
-+
-+					opp-358000000 {
-+						opp-hz = /bits/ 64 <358000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0_phy: phy@ae94400 {
-+				compatible = "qcom,dsi-phy-7nm";
-+				reg = <0 0x0ae94400 0 0x200>,
-+				      <0 0x0ae94600 0 0x280>,
-+				      <0 0x0ae94900 0 0x260>;
-+				reg-names = "dsi_phy",
-+					    "dsi_phy_lane",
-+					    "dsi_pll";
-+
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&rpmhcc RPMH_CXO_CLK>;
-+				clock-names = "iface", "ref";
-+
-+				status = "disabled";
-+			};
-+
-+			mdss_dsi1: dsi@ae96000 {
-+				compatible = "qcom,mdss-dsi-ctrl";
-+				reg = <0 0x0ae96000 0 0x400>;
-+				reg-names = "dsi_ctrl";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <5>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_PCLK1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ESC1_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>;
-+				clock-names = "byte",
-+					      "byte_intf",
-+					      "pixel",
-+					      "core",
-+					      "iface",
-+					      "bus";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_PCLK1_CLK_SRC>;
-+				assigned-clock-parents = <&mdss_dsi1_phy 0>,
-+							 <&mdss_dsi1_phy 1>;
-+
-+				operating-points-v2 = <&dsi_opp_table>;
-+				power-domains = <&rpmhpd SM8150_MMCX>;
-+
-+				phys = <&mdss_dsi1_phy>;
-+
-+				status = "disabled";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dsi1_in: endpoint {
-+							remote-endpoint = <&dpu_intf2_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dsi1_out: endpoint {
-+						};
-+					};
-+				};
-+			};
-+
-+			mdss_dsi1_phy: phy@ae96400 {
-+				compatible = "qcom,dsi-phy-7nm";
-+				reg = <0 0x0ae96400 0 0x200>,
-+				      <0 0x0ae96600 0 0x280>,
-+				      <0 0x0ae96900 0 0x260>;
-+				reg-names = "dsi_phy",
-+					    "dsi_phy_lane",
-+					    "dsi_pll";
-+
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&rpmhcc RPMH_CXO_CLK>;
-+				clock-names = "iface", "ref";
-+
-+				status = "disabled";
-+			};
-+		};
-+
- 		dispcc: clock-controller@af00000 {
- 			compatible = "qcom,sm8150-dispcc";
- 			reg = <0 0x0af00000 0 0x10000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
--				 <0>,
--				 <0>,
--				 <0>,
--				 <0>,
-+				 <&mdss_dsi0_phy 0>,
-+				 <&mdss_dsi0_phy 1>,
-+				 <&mdss_dsi1_phy 0>,
-+				 <&mdss_dsi1_phy 1>,
- 				 <0>,
- 				 <0>;
- 			clock-names = "bi_tcxo",
--- 
-2.38.1
+Thanks
+-Qing                                                ^
+> --
+> Hengqi
+> 
+> On 2022/12/9 16:52, Tiezhu Yang wrote:
+>> v10:
+>>    -- Remove sign_extend() based on the latest code
+>>    -- Rename insns_are_not_supported() to insns_not_supported()
+>>    -- Rename insns_are_not_simulated() to insns_not_simulated()
+>>    -- Set KPROBE_HIT_SSDONE if cur->post_handler is not NULL
+>>    -- Enable preemption for KPROBE_REENTER in kprobe_fault_handler()
+>>
+>> v9:
+>>    -- Rename sign_extended() to sign_extend()
+>>    -- Modify kprobe_fault_handler() to handle all of kprobe_status
+>>
+>> v8:
+>>    -- Put "regs->csr_prmd &= ~CSR_PRMD_PIE;" ahead to save one line
+>>    -- Add code comment of preempt_disable()
+>>    -- Put kprobe_page_fault() in __do_page_fault()
+>>    -- Modify the check condition of break insn in kprobe_breakpoint_handler()
+>>
+>> v7:
+>>    -- Remove stop_machine_cpuslocked() related code
+>>
+>> v6:
+>>    -- Add a new patch to redefine larch_insn_patch_text() with
+>>       stop_machine_cpuslocked()
+>>    -- Modify kprobe_breakpoint_handler() to consider the original
+>>       insn is break and return the correct value
+>>    -- Modify do_bp() to refresh bcode when original insn is break
+>>
+>> v5:
+>>    -- Rebase on the latest code
+>>    -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
+>>
+>> v4:
+>>    -- Remove kprobe_exceptions_notify() in kprobes.c
+>>    -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
+>>       in do_bp()
+>>
+>> v3:
+>>    -- Rebase on the latest code
+>>    -- Check the alignment of PC in simu_branch() and simu_pc()
+>>    -- Add ibar in flush_insn_slot()
+>>    -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+>>    -- Add preempt_disable() and preempt_enable_no_resched()
+>>    -- Remove r0 save/restore and do some minor changes
+>>       in kprobes_trampoline.S
+>>    -- Do not enable CONFIG_KPROBES by default
+>>
+>> v2:
+>>    -- Split simu_branch() and simu_pc() into a single patch
+>>    -- Call kprobe_page_fault() in do_page_fault()
+>>    -- Add kprobes_trampoline.S for kretprobe
+>>
+>> Tiezhu Yang (4):
+>>    LoongArch: Simulate branch and PC instructions
+>>    LoongArch: Add kprobe support
+>>    LoongArch: Add kretprobe support
+>>    samples/kprobes: Add LoongArch support
+>>
+>>   arch/loongarch/Kconfig                     |   2 +
+>>   arch/loongarch/include/asm/inst.h          |  20 ++
+>>   arch/loongarch/include/asm/kprobes.h       |  59 +++++
+>>   arch/loongarch/include/asm/ptrace.h        |   1 +
+>>   arch/loongarch/kernel/Makefile             |   2 +
+>>   arch/loongarch/kernel/inst.c               | 123 ++++++++++
+>>   arch/loongarch/kernel/kprobes.c            | 364 +++++++++++++++++++++++++++++
+>>   arch/loongarch/kernel/kprobes_trampoline.S |  96 ++++++++
+>>   arch/loongarch/kernel/traps.c              |  13 +-
+>>   arch/loongarch/mm/fault.c                  |   3 +
+>>   samples/kprobes/kprobe_example.c           |   8 +
+>>   11 files changed, 687 insertions(+), 4 deletions(-)
+>>   create mode 100644 arch/loongarch/include/asm/kprobes.h
+>>   create mode 100644 arch/loongarch/kernel/kprobes.c
+>>   create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+>>
 
