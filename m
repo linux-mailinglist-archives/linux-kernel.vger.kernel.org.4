@@ -2,138 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E093D64A148
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A954864A153
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbiLLNhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S232924AbiLLNih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiLLNhY (ORCPT
+        with ESMTP id S232816AbiLLNhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:37:24 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6381D13F85
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:36:47 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id d123so5729266iof.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XRZwufW4/TiQTPauxmRLaTVOjEccKG9/fVgaRUTLj+0=;
-        b=MqRhgEcXTVFoc4N7S8UoYGpAVKTYM2zCdOMhFM3so+edfmoNfYDbvH7tirZz4M54mB
-         SExkIUUeecG8cm7Xpw9sRHOeVPXL16NXkwCb70wQGbpfu+DKw9slhx0d1v1jB/RLO9Gx
-         y8U+SN+y7Y4ECjUfcoIeV88E2LzuNESTif3Fp6kHjcCdmw1XR9gn4D9V2Qowm1rXwHps
-         Taw+HRAP0WOmQWdZkwT4BhQpv18Cox2+8fISOzvBPrInoGwBT63AuYOiFeAjZ+XTyq45
-         +89JstzlqDEJFilFThrLiBjsvg0Qdk8YFLIV3c6/ZUQe7Z7RLEb1zteKrXaM2ElzSoVj
-         txdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XRZwufW4/TiQTPauxmRLaTVOjEccKG9/fVgaRUTLj+0=;
-        b=nEoeBTdYi3woPE/74lNWNkR8Pu5T3iDocMo8CU4/tCYyUEb9F6SzCFUnHHZ6mhEIj2
-         72oDEljfBqytYDU8iuv3+kYD2oFT44cVnI8Gs4SPLwEWnr0rzXwsuAlB/3QhX8nMsbt2
-         u8zOl9XUoseynIAbzjImNw6uhmgPSbIaI1JP+ORr6THBz9KoDRkp1E9ccv/5BjIpC767
-         +CJlUxpW6ZdHn2GiXNEpDJubjYRPMhAOUs6hhlclpd5grT5EuqMaTYNGkpTzs7NSR31P
-         9u0KLdfBGdylGWrafthzKwomErT//0smMEvqzzLVEOs93LjlOZx6VOD29/tzMdNfx5OM
-         fEcA==
-X-Gm-Message-State: ANoB5pmBhy0KT2fCFWTF5lHlU2yS3luHUricy7UKfNBClcZHgRZSIBWc
-        +87ReKEDsue4ahRF10wUE9Bl2Q==
-X-Google-Smtp-Source: AA0mqf7t/qdmBJ+Ad+GNoBEw4td1qt/j5dny1satmJ7JanznE6G08OkgCfgm2W1D2H6cGm/qGHO5XA==
-X-Received: by 2002:a05:6602:22d5:b0:6e0:7dd:59ac with SMTP id e21-20020a05660222d500b006e007dd59acmr10090839ioe.14.1670852206665;
-        Mon, 12 Dec 2022 05:36:46 -0800 (PST)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id k1-20020a0566022a4100b006bb57cfcb88sm4025040iov.44.2022.12.12.05.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 05:36:46 -0800 (PST)
-Message-ID: <b98e8a7b-0610-6fd2-1b51-5feca73f79ef@linaro.org>
-Date:   Mon, 12 Dec 2022 07:36:45 -0600
+        Mon, 12 Dec 2022 08:37:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B2713F5E;
+        Mon, 12 Dec 2022 05:37:22 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E0AE034400;
+        Mon, 12 Dec 2022 13:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670852240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TKypSIdcoy898mpfc6Pyz2EaNFcY/Huodk8xnbTMnYQ=;
+        b=iv4WXAmUUsF9MEuqV9UTmGO3gDR1uLGqo14V9kGfMr8ercXgZk278W8LX74/t815E/JazT
+        wHZ4HABWaX4BECQkKoAwVxNvzAKeIBTMwEDSnF3bkZjzZb97i4iFyBxyogPBWNpzWjTkap
+        g/gRv0ofCgoJaTpxQqq883RAT3P9FPQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670852240;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TKypSIdcoy898mpfc6Pyz2EaNFcY/Huodk8xnbTMnYQ=;
+        b=9QLw9/yLYpmbeyE3E/1UeSFFVSzcjUfyfuE03TQ30GvyyeTdAB0cHSD5NJiYyjPTRX3Viy
+        mrnYZllBvrUAvSBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D34F213456;
+        Mon, 12 Dec 2022 13:37:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6eaLM5Aul2MYJgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 12 Dec 2022 13:37:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 57449A0728; Mon, 12 Dec 2022 14:37:20 +0100 (CET)
+Date:   Mon, 12 Dec 2022 14:37:20 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     viro@zeniv.linux.org.uk, tytso@mit.edu, jack@suse.cz,
+        axboe@kernel.dk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] writeback: remove obsolete macro EXPIRE_DIRTY_ATIME
+Message-ID: <20221212133720.xvnmz4nsfwknwqr4@quack3>
+References: <20221210101042.2012931-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v2] net: ipa: Remove redundant dev_err()
-Content-Language: en-US
-To:     Kang Minchul <tegongkang@gmail.com>, Alex Elder <elder@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221212071854.766878-1-tegongkang@gmail.com>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20221212071854.766878-1-tegongkang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210101042.2012931-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 1:18 AM, Kang Minchul wrote:
-> Function dev_err() is redundant because platform_get_irq_byname()
-> already prints an error.
+On Sat 10-12-22 18:10:42, Miaohe Lin wrote:
+> EXPIRE_DIRTY_ATIME is not used anymore. Remove it.
 > 
-> Also, platform_get_irq_byname() can't return 0 so ret <= 0
-> should be ret < 0.
-> 
-> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Now that I've looked at this closely, it's not clear what
-version of the code you are basing your patch on.
+Sure. Thanks! Feel free to add:
 
-The current version of net-next/master, as well as the
-current linus/master, do not include the message you
-are removing.  This patch removed the message more than
-a year ago:
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-   91306d1d131ee net: ipa: Remove useless error message
-
-So at least the portion of your patch that removes the
-message is unnecessary.
-
-Meanwhile, it seems there is no need to check for a 0
-return from platform_get_irq_byname(), but there is
-no harm in doing so.
-
-If you would like to send version 3 of this patch, which
-would return what platform_get_irq_byname() returns if it
-is less than 0 in gsi_irq_init(), I would be OK with that.
-
-But please it on net-next/master.
-
-Thanks.
-
-					-Alex
+								Honza
 
 > ---
-> Changes in v2:
->    - Annotate patch with net-next.
->    - Remove unnecessary comparison with zero.
+>  fs/fs-writeback.c | 2 --
+>  1 file changed, 2 deletions(-)
 > 
->   drivers/net/ipa/gsi.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 9958d4020771..6bad645ac36f 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -1345,8 +1345,6 @@ static bool inode_dirtied_after(struct inode *inode, unsigned long t)
+>  	return ret;
+>  }
+>  
+> -#define EXPIRE_DIRTY_ATIME 0x0001
+> -
+>  /*
+>   * Move expired (dirtied before dirtied_before) dirty inodes from
+>   * @delaying_queue to @dispatch_queue.
+> -- 
+> 2.27.0
 > 
-> diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-> index 55226b264e3c..a4f19f7f188e 100644
-> --- a/drivers/net/ipa/gsi.c
-> +++ b/drivers/net/ipa/gsi.c
-> @@ -1967,11 +1967,8 @@ int gsi_init(struct gsi *gsi, struct platform_device *pdev, bool prefetch,
->   
->   	/* Get the GSI IRQ and request for it to wake the system */
->   	ret = platform_get_irq_byname(pdev, "gsi");
-> -	if (ret <= 0) {
-> -		dev_err(gsi->dev,
-> -			"DT error %d getting \"gsi\" IRQ property\n", ret);
-> +	if (ret < 0)
->   		return ret ? : -EINVAL;
-> -	}
->   	irq = ret;
->   
->   	ret = request_irq(irq, gsi_isr, 0, "gsi", gsi);
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
