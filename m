@@ -2,142 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575BF649C2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4C8649C3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLLKa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S232041AbiLLKe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiLLK3Z (ORCPT
+        with ESMTP id S232033AbiLLKdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:29:25 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655BFFCC6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:28:05 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 12 Dec 2022 05:33:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0A011A2D;
+        Mon, 12 Dec 2022 02:29:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NVyWN4fhFz4xTy;
-        Mon, 12 Dec 2022 21:28:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1670840881;
-        bh=iOvAsyw5BbmnxwQJWCoQVJ7Qpts5NGtp1mjbOwPl9Pg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XGTT9Io5lJrouaUapoGccZjqVvP63HUU+8cuD1JOO04YPe7TAGGuQxbZEn98btcpy
-         KKlii8U7xORf/BO1SDIXhhyzV2ej7+zs2+pSnqBm6h1I80Y7bclZFYGR9S7trKNIt6
-         fakfl7hGLoQfYwBs/qFuAwomSpYoWW/YFj/ANCjlrekKQuXSwYia0E4ayLugvzQs2v
-         mrsUEra066DNNUp8Ork/nieJ/JBeVg2h7e1vcVdbmGecL5nuLASmuafAlLXK524i3/
-         JY4EFv7iFiL+hCobRj9NYBxpZ6BnOiVIFRIMWzooekv7RtKBHZrfXBbKXPcAEuiCLM
-         b+XnzC8c+fibg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v1 5/5] powerpc/64e: Fix build failure with GCC 12
- (unrecognized opcode: `wrteei')
-In-Reply-To: <101320ce-8f0c-d4d8-9d73-7f231d651f4e@csgroup.eu>
-References: <8abab4888da69ff78b73a56f64d9678a7bf684e9.1657549153.git.christophe.leroy@csgroup.eu>
- <77255a5a957967723b84d0356d9e5fb21569f4e8.1657549153.git.christophe.leroy@csgroup.eu>
- <20221211173232.7hvgnadyr7wrdm2f@pali>
- <101320ce-8f0c-d4d8-9d73-7f231d651f4e@csgroup.eu>
-Date:   Mon, 12 Dec 2022 21:27:59 +1100
-Message-ID: <87edt4kjbk.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48426B80CA7;
+        Mon, 12 Dec 2022 10:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001F4C433EF;
+        Mon, 12 Dec 2022 10:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670840980;
+        bh=pd20HLGXJB+83WJGfVgnB4t8xEpwduo8hUzg5RGBfFY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DApaj4KGdmw4jxceFBw2m0HnkTg1ZzcQn3dgzC6MIOnywBEdvqB6Lijeyhs8cPkPu
+         sTfD1+DNsewxzFvnJ6RjHB+7lRzmhCAdNr3xNKpzwJ6tGK1cRLyPsR0hqY8cIZLuY8
+         j+MJWUNQ7hNy5srYJjfO2WhiRxxXsAe6PCja74HI9HnRvoGOyfV3l0ygwVIdJv01D/
+         h5ucUWSJviu3MBZ8mL0WxUdnPki6ZeKbmzM4DVy8w7SRtZynJgVLy//qVtNZYb1ZvQ
+         C6WXS7245xiz4B+K7U1iprPpcB2sqEP1rfog7Dm7PWxIqSKn2lt0a/tjLo6fY6Zxx2
+         qcUSm5JgCE07A==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     mika.westerberg@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Martin Liska <mliska@suse.cz>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2] thunderbolt (gcc13): synchronize tb_port_is_clx_enabled()'s 2nd param
+Date:   Mon, 12 Dec 2022 11:29:36 +0100
+Message-Id: <20221212102936.23074-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 11/12/2022 =C3=A0 18:32, Pali Roh=C3=A1r a =C3=A9crit=C2=A0:
->> On Monday 11 July 2022 16:19:33 Christophe Leroy wrote:
->>> With GCC 12, corenet64_smp_defconfig leads to the following build error=
-s:
->>>
->>>    CC      arch/powerpc/kernel/irq.o
->>> {standard input}: Assembler messages:
->>> {standard input}:3616: Error: unrecognized opcode: `wrteei'
->>> {standard input}:5689: Error: unrecognized opcode: `wrteei'
->>>    CC      arch/powerpc/kernel/pmc.o
->>> {standard input}: Assembler messages:
->>> {standard input}:42: Error: unrecognized opcode: `mfpmr'
->>> {standard input}:53: Error: unrecognized opcode: `mtpmr'
->>>    CC      arch/powerpc/kernel/io.o
->>> {standard input}: Assembler messages:
->>> {standard input}:376: Error: unrecognized opcode: `mbar'
->>> ...
->>>    CC      arch/powerpc/mm/nohash/book3e_hugetlbpage.o
->>> {standard input}: Assembler messages:
->>> {standard input}:291: Error: unrecognized opcode: `tlbsx'
->>> {standard input}:482: Error: unrecognized opcode: `tlbwe'
->>> {standard input}:608: Error: unrecognized opcode: `lbarx'
->>> {standard input}:608: Error: unrecognized opcode: `stbcx.'
->>>
->>> -mpcu=3Dpowerpc64 cannot be used anymore for book3e, it must be a booke=
- CPU.
->>>
->>> But then we get:
->>>
->>>    CC      arch/powerpc/lib/xor_vmx.o
->>> cc1: error: AltiVec not supported in this target
->>>
->>> Altivec is not supported with -mcpu=3De5500 so don't allow selection
->>> of altivec when e5500 is selected.
->>>
->>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>> ---
->>>   arch/powerpc/Makefile                  | 8 +-------
->>>   arch/powerpc/platforms/Kconfig.cputype | 8 ++++----
->>>   2 files changed, 5 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
->>> index d54e1fe03551..02742facf895 100644
->>> --- a/arch/powerpc/Makefile
->>> +++ b/arch/powerpc/Makefile
->>> @@ -168,13 +168,7 @@ endif
->>>   CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=3D $(call cc-option,-mcpu=3D$(CONF=
-IG_TARGET_CPU))
->>>   AFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=3D $(call cc-option,-mcpu=3D$(CONF=
-IG_TARGET_CPU))
->>>=20=20=20
->>> -# Altivec option not allowed with e500mc64 in GCC.
->>> -ifdef CONFIG_ALTIVEC
->>> -E5500_CPU :=3D -mcpu=3Dpowerpc64
->>> -else
->>> -E5500_CPU :=3D $(call cc-option,-mcpu=3De500mc64,-mcpu=3Dpowerpc64)
->>> -endif
->>> -CFLAGS-$(CONFIG_E5500_CPU) +=3D $(E5500_CPU)
->>> +CFLAGS-$(CONFIG_E5500_CPU) +=3D $(call cc-option,-mcpu=3De500mc64,-mcp=
-u=3Dpowerpc64)
->>>   CFLAGS-$(CONFIG_E6500_CPU) +=3D $(call cc-option,-mcpu=3De6500,$(E550=
-0_CPU))
->>=20
->> Hello! I think that there is an issue. After removal of E5500_CPU
->> variable few line above, it cannot be used in CFLAGS-$(CONFIG_E6500_CPU)
->> assignment, because it is empty.
->>=20
->
-> Ah yes, you are right.
->
-> It should be fixed by=20
-> https://github.com/linuxppc/linux/commit/f2636eaac7dee1d7d096cc115ff4f511=
-1b0c508c
->
-> Michael, I see the patch is in next-test. Can you add:
->
-> Fixes: d6b551b8f90c ("powerpc/64e: Fix build failure with GCC 12=20
-> (unrecognized opcode: `wrteei')")
+tb_port_is_clx_enabled() generates a valid warning with gcc-13:
+  drivers/thunderbolt/switch.c:1286:6: error: conflicting types for 'tb_port_is_clx_enabled' due to enum/integer mismatch; have 'bool(struct tb_port *, unsigned int)' ...
+  drivers/thunderbolt/tb.h:1050:6: note: previous declaration of 'tb_port_is_clx_enabled' with type 'bool(struct tb_port *, enum tb_clx)' ...
 
-Yep, will do.
+I.e. the type of the 2nd parameter of tb_port_is_clx_enabled() in the
+declaration is unsigned int, while the definition spells enum tb_clx.
+Synchronize them to the former as the parameter is in fact a mask of the
+enum values.
 
-cheers
+Cc: Martin Liska <mliska@suse.cz>
+Cc: Andreas Noever <andreas.noever@gmail.com>
+Cc: Michael Jamet <michael.jamet@intel.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
+
+Notes:
+    [v2] switch to uint instead of to enum
+
+ drivers/thunderbolt/tb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index f9786976f5ec..6c4a26b1c37c 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1047,7 +1047,7 @@ void tb_port_lane_bonding_disable(struct tb_port *port);
+ int tb_port_wait_for_link_width(struct tb_port *port, int width,
+ 				int timeout_msec);
+ int tb_port_update_credits(struct tb_port *port);
+-bool tb_port_is_clx_enabled(struct tb_port *port, enum tb_clx clx);
++bool tb_port_is_clx_enabled(struct tb_port *port, unsigned int clx);
+ 
+ int tb_switch_find_vse_cap(struct tb_switch *sw, enum tb_switch_vse_cap vsec);
+ int tb_switch_find_cap(struct tb_switch *sw, enum tb_switch_cap cap);
+-- 
+2.38.1
+
