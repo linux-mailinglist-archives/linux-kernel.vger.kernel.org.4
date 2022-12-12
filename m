@@ -2,153 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A005764A658
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BCC64A65D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbiLLR42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S232876AbiLLR5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiLLR40 (ORCPT
+        with ESMTP id S232991AbiLLR5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:56:26 -0500
-Received: from CO1PR02CU001-vft-obe.outbound.protection.outlook.com (mail-westus2azon11021017.outbound.protection.outlook.com [52.101.47.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ABAF582;
-        Mon, 12 Dec 2022 09:56:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cOAdA2MPI72AGsmcCpHPsTsUTbZiFfV22OcUNkRMU5XrikvBJbQs+k/6ageEoUOIND8cYo+RCcqTqRy60hyn+vKpd0V5OERodSGXjMOzrmHwR0I6HEs/zTCz/X6ceKCFzmA7XDFTHGgEFHvbwEzmHCyRKld+r4cvJ0QVDc8eR/HHyeYuyj46JSCiwiRFKgMFvHpb0W4vKMyncOdcqVtYjMOQ4O+G+QJFV/HTxxE7iguaTqN7XB9gnYj8Z/pdj4tdW4aav7RE753vqL3gwWmy7jbNYpsPdEs7zDvevi5ZGHnabEWKgXOA5u7fxSfndPV2SC5l8hFGjwrHYnRaP+fEVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=toqGopddtErDssBF0Ptg2pVOu4MBlWNW2oLFykUcgmw=;
- b=jEMK3P3UIHur3u5Sd3c5TyiktOzaFqqnWIuZNxJ48sVhJQ2WhF5Mx2xohuhLA11TT7c3eCZnfhCaRTuZ6bWwOnmy8tEvno88pCIEz2xgPSsatMCUD+1VJ1p8RBYYWOsSQmDbkOCuRDZo//IcE4jviHwosOTLh/hUoxmt12akQMg/NDKGXZbm3Wu9RDP/URF+ajXqQ8g2W0etU+JqHKi6NfuqbOwsz2iIJ3TgHtA7HYb+2OUj4j1wdwMO2FJZejLQASA9o/wBfIGkViD1MlsduIE+7LZ/qF/fdthpwZpeDNDlwhnFb5LUCdr+QZi+XkdFwSHO59yZzNkuqzixlM9m/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=toqGopddtErDssBF0Ptg2pVOu4MBlWNW2oLFykUcgmw=;
- b=cCp6JqwPAWERv0BY3QKeJOR/bwoAqPwE8RDZjXJrH9s9PDXDBs9PcZR5Rk2vKFvHwwitnxBQ2fbh2Kxv6RBfvobXvUec6FM7Oxqr/WzrPqdmK0wyIhR7MjUUvEdAjcSI+J+nphs3UWAV5Wzap/lAY103LjeZITB41nYsuUAw5Oo=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by SJ0PR21MB2056.namprd21.prod.outlook.com (2603:10b6:a03:395::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.2; Mon, 12 Dec
- 2022 17:56:18 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%8]) with mapi id 15.20.5944.002; Mon, 12 Dec 2022
- 17:56:18 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V2 02/18] x86/hyperv: Add sev-snp enlightened guest
- specific config
-Thread-Topic: [RFC PATCH V2 02/18] x86/hyperv: Add sev-snp enlightened guest
- specific config
-Thread-Index: AQHY+8mZf+1Iyx0OH0GDW+MmqmAne65qpz9g
-Date:   Mon, 12 Dec 2022 17:56:18 +0000
-Message-ID: <BYAPR21MB168814EC5FA61976B69158B7D7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-3-ltykernel@gmail.com>
-In-Reply-To: <20221119034633.1728632-3-ltykernel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=206f8b0a-ef16-45d8-a90b-3e452e789463;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-12T17:30:21Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SJ0PR21MB2056:EE_
-x-ms-office365-filtering-correlation-id: f2611294-4396-42da-9253-08dadc6a2bb0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KfxAieJfIEiDwNLekq+7h8jEzWEVintCB8XflpdwmdP6NHSDCLcnx9mJvuyIzHFnSeVT+MAD+qaWkuMmXbFq127zeytMc+Zcp7QyZPPZQvX9GGYVVN3lnKqC4yl20rlFISGPH114yPMVo3S6IshoFngB5GnGJZrBMJtCzv8AnpPMPMPm8MQ0gHJjTM8PqatU+C+52SDocz8AgXGPgBu80C0afMDt0Hsbcj/QnD033v+9blVTCVA3NDF8rashEsx5zkwM75btIXzT2//1lfHaVxNaQCM2Z2HHOHmtZ5wdq3zjjUy3KLC9i4YmJ6Uzj4Yo43y8Xrw3ycoFmsNZvQewnKtS5OfAH/mpxdsxcwSiBOjOm+TsO1PYM4SPceY5NFakpKu/fO7EuhnCtyjHo1hg1UoJWJYSTGeogDV45ZTiJyz/3Ai8mRsiPe5SI6e3/91lezEi8YvJCFx61OkJ/akD/BefAMwoJ5lfaWSd/Vg3V2I0xKEFEtse2QJsqaAvFynBorZNmEjeSDtQ7aKFr5Pm0jCmmUQOC1FJqnepyz/BRdc66hi/nzHxl/jRlx3GHrEC2Hb1fv68/awOrW/UlV0QSDmicozGul5GOZ/hrBLdzFpIXXIR0hwq6Y5/k/bjmQjTKGmoT3UNi3BQoVdKpIoryhLl6CfjAQ9nF+NwQlvnMJC5HWhXBDyeyFTG3vbDAayULSpGWv/fpBpwcZ15TK/vcsC8QXPiSVA8HObI2BX3dCCA+d2AGnxmtflDbVwrc/n7OkdNkck5FPukcD+1joIQqA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(64756008)(2906002)(8990500004)(66446008)(76116006)(4326008)(66946007)(66476007)(921005)(38070700005)(8676002)(5660300002)(7406005)(7416002)(66556008)(41300700001)(82960400001)(110136005)(54906003)(316002)(82950400001)(478600001)(52536014)(71200400001)(10290500003)(8936002)(55016003)(26005)(9686003)(186003)(83380400001)(86362001)(38100700002)(33656002)(6506007)(7696005)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uA55p/tiHZv/IVsnepAnH4dr34+IMhdnp2qqcn2stFXXhP71IQLj54aoBHpH?=
- =?us-ascii?Q?2vO7VdFyNvFnOiMIiIpgWQB7wYOXuLjQnkgqBsVK+CRkVygPyLgVJOtrHVbe?=
- =?us-ascii?Q?/C48Mcsoa+iUyjkfV7ZJMfHGA4Hswd5a5pYG9ZxoM/IteytpmlVHmndANbWN?=
- =?us-ascii?Q?jd5yNkdXcPx2x1+97vtk0uXcwz7JFdYB17A6GD/Hri9tiUHqxjMAFSkqBDm0?=
- =?us-ascii?Q?pPUlkThatthkrUBq4R/yqO9i1ORj0oEguiGxJMxKOdglsdfnslGtWJXytcgy?=
- =?us-ascii?Q?vJnm8XxorkSWqZycK0ju1If1IleCk5E64kAlc90THwiOtyM/Lw835YYOQS+R?=
- =?us-ascii?Q?hiq4heUtf84haauRLlVZpKHIjGmO7WpwRl9rEGVFRaq4ND7blO8W7zUULg2M?=
- =?us-ascii?Q?Duom1rvjL1aHOYG1473yYQMmVfBUoIpNE2XNGAYxalD43X0IW9KW5+erpSyt?=
- =?us-ascii?Q?Jmpea4iE+ICYXJl81+KJgrZduufrfFEY/OHcUBLNKuK+LM/kHh9FD7Sdhtwu?=
- =?us-ascii?Q?1yY1NWALOVWidrepDlJqsawSJrsJn+LWHuyJmqE5il2wI198r7p8S5RpiRM0?=
- =?us-ascii?Q?sCO7czB2TT7xawFmOZbI4MFOfc/tZaii37idam6+9eg0iJEJTYhFX2IJ2PbP?=
- =?us-ascii?Q?F7VAHA47R6f9QImpRBNYV1tSNs4RMPTzxVDxUGcS8eYXTWko2oTNqIZUeWLA?=
- =?us-ascii?Q?t4+6TtBMp3JOd/I5FaFQ44nQpfm+t8UbWTX6adKJ0ReM4HGuzNMkSSiAFn1j?=
- =?us-ascii?Q?V5i9D1NWIct5Ar94pvX86CXvMV7ILA4I7oY9CcoYOiuXDxgDr9czWuWJtbAN?=
- =?us-ascii?Q?G/XMjNa7NDtllhSREEc4fDSGOkBjKc0416UmtOhMEWaBJlsiloXot3bz/Byx?=
- =?us-ascii?Q?Zeu78SU/8amH+6TqAXmhOqFXMEMA5dfc8zrQfiGWIqAZUG0IKHb8w9RkpggI?=
- =?us-ascii?Q?FSjdQFH0Dd8LLniFg4goz2m/uBQSJjvkEhCVECUYJ22SaqS+x2p+DBbO1Uyf?=
- =?us-ascii?Q?VLChZL2DnM3m9J2fz0jjZrnAywGoPFBsj6tKWyEx2fwdNFr/8DS4kweBhSnA?=
- =?us-ascii?Q?otEK1ponU3N/dxQ507etiN8W8mfB7bWMD8xUUx+C1XF7GifGS0HH1HKXywb4?=
- =?us-ascii?Q?72j1bV/vMHz/uI8qOZDGTtQ2KjNqifqI5dtMALgjgOa0kytSlwJVDkRbnXQg?=
- =?us-ascii?Q?0OWcXhFQYhuz4ER73Szyks/Yd1rT2uiIjRE1tdxrUWsOnVfJLUsw+3pj99bw?=
- =?us-ascii?Q?TGJDvARmmhAHQkPLRx22NdXFTuG5fF0RnNnoIp/IJ+pEBftPXTa5szISTiMD?=
- =?us-ascii?Q?EoiuzBsXP7HkUdCOE7n9tWOphNXDlXuz91clvbwCVt5hTipBKOmBS2vYIyjj?=
- =?us-ascii?Q?zbtc7+/D86bTEdvX9tckiC7mQ9VXyZDBIF/CTvNGst6ZyUt92gbheZzOve2H?=
- =?us-ascii?Q?o8y65eUn9RNG5sO3ZYJlKUTuMDNhfsJvk4wvbqEWnPsGQ/vtZeqklI/mv5Z8?=
- =?us-ascii?Q?Ia3H1X92lE95GRHek9XVllCxFCN4ppZfua7KHmlwLQh6k6R6I8/78qUGYU9e?=
- =?us-ascii?Q?VWn0WjnM1J45E4J/yF/PzUVaz6SCQq16+iMtpYx0aPPNVZ4/rZNDj1jqjvn+?=
- =?us-ascii?Q?qg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 12 Dec 2022 12:57:08 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718206415;
+        Mon, 12 Dec 2022 09:57:06 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id qk9so30140539ejc.3;
+        Mon, 12 Dec 2022 09:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GeX6QG8bAXPsmOO88LgQ/PI9pedX5OeuJ8nmc7sUT7s=;
+        b=ZWV48V7VzwltAnTDMELXcIUUWNDwAEj7eSzSn5ULUETh9htM3YAdqSI1+dyr7qz7xJ
+         Hpdyc/vCtA90XgEDgUqGCOM/lxBr0lpYDavWp+5EzdbJF2MeoVJWNH5160vsdbSteX4/
+         /G3fACqTZ/fCOIr22dE19idCSlJw+V1b+i1n9C4bdSsUMrUtMR/01fL4NUUZc84fQ2ZB
+         HiY0HbkzlexVbzfxDIOf98pe3KNWJxBQxvr/xmGkuoui0pmVXJKFiilGcRbhvK7YfNDF
+         UojTc0nTXfBmOV0EG8K2OuJZDqhRwhGG1gf576/r/XMsh+dryiOJcKEX0pEvHixJccqF
+         WaXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GeX6QG8bAXPsmOO88LgQ/PI9pedX5OeuJ8nmc7sUT7s=;
+        b=4cTmLgeN4Ls4oUv8fyHGA24KiB0KjISYYciarkZv4DG08UAsyKzgDjMZxH7pRK0Nhz
+         imwJPjCmDOlBMfuJbZnXGkw4wklMP0xYKmeSmeLshaLMS8M3S7sBcWgYxWgEMcHRdFnn
+         L947IBZ1uCBlW23R1ytGNJ4etL2eLvMZLnjcHMpLFJY9H9VkT1XOR4p97m0Ruo5x/mgk
+         u1hrM2pJXDy+mMkfopVL2gU+BVXE3crEm99ldFVHINw6Kcq9AEmZdYsRcyRjS9viDjJP
+         j1cxmHhr33ttYAZ+3+c1m6LYgNdcaR/RzkVCZent3FL8wqzGwA6o0ju3xIRgQNJ5eKbl
+         3ueQ==
+X-Gm-Message-State: ANoB5pkSm+S86EYOtgVHXiIk9MzpTd8wPCmExF3yKBkoqOVKtJUin2xh
+        k0gB5sjwQ8NVcts8lUtpOefIPGB8TlcuUdCT4HY=
+X-Google-Smtp-Source: AA0mqf5I3w7S7w2Vr/1wAWhzOoI3K1rjiBf0HCbWIXNS/Mktpf+a+5iGQ1I3i4fA/3XYNAlsijvWxFibMeCjGfpK6IE=
+X-Received: by 2002:a17:906:28db:b0:7c1:4a75:a3a7 with SMTP id
+ p27-20020a17090628db00b007c14a75a3a7mr850236ejd.171.1670867824936; Mon, 12
+ Dec 2022 09:57:04 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2611294-4396-42da-9253-08dadc6a2bb0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 17:56:18.3826
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Xz+RVEaa3mms5Q56TP+iZkoHcAxK0FKZ/l9weqrO1mFnl3lhMdmJ+IJnvib3yN5gIq03uDvogfQxk+dxPngQX4DfEFfSoTMiTNAKsu6/x7E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB2056
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+References: <20221118020642.472484-1-xiubli@redhat.com> <20221118020642.472484-3-xiubli@redhat.com>
+In-Reply-To: <20221118020642.472484-3-xiubli@redhat.com>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 12 Dec 2022 18:56:52 +0100
+Message-ID: <CAOi1vP-dhH-Z9_dgGLLkqwoZ5di1Bp4o+5zeJRgRHddU=X1AwQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2 v3] ceph: add ceph_lock_info support for file_lock
+To:     xiubli@redhat.com
+Cc:     ceph-devel@vger.kernel.org, jlayton@kernel.org, lhenriques@suse.de,
+        mchangir@redhat.com, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,172 +69,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Friday, November 18, 2022 7:46=
- PM
->=20
-> Introduce static key isolation_type_en_snp for enlightened
-> guest check and add some specific options in ms_hyperv_init_
-> platform().
->=20
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+On Fri, Nov 18, 2022 at 3:07 AM <xiubli@redhat.com> wrote:
+>
+> From: Xiubo Li <xiubli@redhat.com>
+>
+> When ceph releasing the file_lock it will try to get the inode pointer
+> from the fl->fl_file, which the memory could already be released by
+> another thread in filp_close(). Because in VFS layer the fl->fl_file
+> doesn't increase the file's reference counter.
+>
+> Will switch to use ceph dedicate lock info to track the inode.
+>
+> And in ceph_fl_release_lock() we should skip all the operations if
+> the fl->fl_u.ceph_fl.fl_inode is not set, which should come from
+> the request file_lock. And we will set fl->fl_u.ceph_fl.fl_inode when
+> inserting it to the inode lock list, which is when copying the lock.
+>
+> Cc: stable@vger.kernel.org
+> Cc: Jeff Layton <jlayton@kernel.org>
+> URL: https://tracker.ceph.com/issues/57986
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
 > ---
->  arch/x86/hyperv/ivm.c           | 12 +++++++++++-
->  arch/x86/include/asm/mshyperv.h |  2 ++
->  arch/x86/kernel/cpu/mshyperv.c  | 29 ++++++++++++++++++++++++-----
->  drivers/hv/hv_common.c          |  7 +++++++
->  4 files changed, 44 insertions(+), 6 deletions(-)
->=20
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index 1dbcbd9da74d..e9c30dad3419 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -259,10 +259,20 @@ bool hv_is_isolation_supported(void)
+>  fs/ceph/locks.c                 | 20 ++++++++++++++++++--
+>  include/linux/ceph/ceph_fs_fl.h | 17 +++++++++++++++++
+>  include/linux/fs.h              |  2 ++
+>  3 files changed, 37 insertions(+), 2 deletions(-)
+>  create mode 100644 include/linux/ceph/ceph_fs_fl.h
+>
+> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
+> index b191426bf880..621f38f10a88 100644
+> --- a/fs/ceph/locks.c
+> +++ b/fs/ceph/locks.c
+> @@ -34,18 +34,34 @@ static void ceph_fl_copy_lock(struct file_lock *dst, struct file_lock *src)
+>  {
+>         struct inode *inode = file_inode(dst->fl_file);
+>         atomic_inc(&ceph_inode(inode)->i_filelock_ref);
+> +       dst->fl_u.ceph_fl.fl_inode = igrab(inode);
 >  }
->=20
->  DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-> +DEFINE_STATIC_KEY_FALSE(isolation_type_en_snp);
-> +
+>
 > +/*
-> + * hv_isolation_type_en_snp - Check system runs in the AMD SEV-SNP based
-> + * isolation enlightened VM.
+> + * Do not use the 'fl->fl_file' in release function, which
+> + * is possibly already released by another thread.
 > + */
-> +bool hv_isolation_type_en_snp(void)
-> +{
-> +	return static_branch_unlikely(&isolation_type_en_snp);
-> +}
->=20
+>  static void ceph_fl_release_lock(struct file_lock *fl)
+>  {
+> -       struct inode *inode = file_inode(fl->fl_file);
+> -       struct ceph_inode_info *ci = ceph_inode(inode);
+> +       struct inode *inode = fl->fl_u.ceph_fl.fl_inode;
+> +       struct ceph_inode_info *ci;
+> +
+> +       /*
+> +        * If inode is NULL it should be a request file_lock,
+> +        * nothing we can do.
+> +        */
+> +       if (!inode)
+> +               return;
+> +
+> +       ci = ceph_inode(inode);
+>         if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+>                 /* clear error when all locks are released */
+>                 spin_lock(&ci->i_ceph_lock);
+>                 ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
+>                 spin_unlock(&ci->i_ceph_lock);
+>         }
+> +       fl->fl_u.ceph_fl.fl_inode = NULL;
+> +       iput(inode);
+>  }
+>
+>  static const struct file_lock_operations ceph_fl_lock_ops = {
+> diff --git a/include/linux/ceph/ceph_fs_fl.h b/include/linux/ceph/ceph_fs_fl.h
+> new file mode 100644
+> index 000000000000..ad1cf96329f9
+> --- /dev/null
+> +++ b/include/linux/ceph/ceph_fs_fl.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * ceph_fs_fl.h - Ceph lock info
+> + *
+> + * LGPL2
+> + */
+> +
+> +#ifndef CEPH_FS_FL_H
+> +#define CEPH_FS_FL_H
+> +
+> +#include <linux/fs.h>
+> +
+> +struct ceph_lock_info {
+> +       struct inode *fl_inode;
+> +};
+> +
+> +#endif
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index d6cb42b7e91c..2b03d5e375d7 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -1066,6 +1066,7 @@ bool opens_in_grace(struct net *);
+>
+>  /* that will die - we need it for nfs_lock_info */
+>  #include <linux/nfs_fs_i.h>
+> +#include <linux/ceph/ceph_fs_fl.h>
+>
 >  /*
->   * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-> - * isolation VM.
-> + * isolation VM with vTOM support.
->   */
->  bool hv_isolation_type_snp(void)
->  {
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index 61f0c206bff0..9b8c3f638845 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -14,6 +14,7 @@
->  union hv_ghcb;
->=20
->  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-> +DECLARE_STATIC_KEY_FALSE(isolation_type_en_snp);
->=20
->  typedef int (*hyperv_fill_flush_list_func)(
->  		struct hv_guest_mapping_flush_list *flush,
-> @@ -32,6 +33,7 @@ extern u64 hv_current_partition_id;
->=20
->  extern union hv_ghcb * __percpu *hv_ghcb_pg;
->=20
-> +extern bool hv_isolation_type_en_snp(void);
+>   * struct file_lock represents a generic "file lock". It's used to represent
+> @@ -1119,6 +1120,7 @@ struct file_lock {
+>                         int state;              /* state of grant or error if -ve */
+>                         unsigned int    debug_id;
+>                 } afs;
+> +               struct ceph_lock_info   ceph_fl;
 
-This file also has a declaration for hv_isolation_type_snp().  I
-think this new declaration is near the beginning of this file so
-that it can be referenced by hv_do_hypercall() and related
-functions in Patch 6 of this series.  So maybe move the
-declaration of hv_isolation_type_snp() up so it is adjacent
-to this one?  It would make sense for the two to be together.
+Hi Xiubo and Jeff,
 
->  int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
->  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
->  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 831613959a92..2ea4f21c6172 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -273,6 +273,21 @@ static void __init ms_hyperv_init_platform(void)
->  	ms_hyperv.misc_features =3D cpuid_edx(HYPERV_CPUID_FEATURES);
->  	ms_hyperv.hints    =3D cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
->=20
-> +	/*
-> +	 * Add custom configuration for SEV-SNP Enlightened guest
-> +	 */
-> +	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +		ms_hyperv.features |=3D HV_ACCESS_FREQUENCY_MSRS;
-> +		ms_hyperv.misc_features |=3D HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
-> +		ms_hyperv.misc_features &=3D ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
-> +		ms_hyperv.hints |=3D HV_DEPRECATING_AEOI_RECOMMENDED;
-> +		ms_hyperv.hints |=3D HV_X64_APIC_ACCESS_RECOMMENDED;
-> +		ms_hyperv.hints |=3D HV_X64_CLUSTER_IPI_RECOMMENDED;
-> +	}
-> +
-> +	pr_info("Hyper-V: enlightment features 0x%x, hints 0x%x, misc 0x%x\n",
-> +		ms_hyperv.features, ms_hyperv.hints, ms_hyperv.misc_features);
-> +
+Xiubo, instead of defining struct ceph_lock_info and including
+a CephFS-specific header file in linux/fs.h, I think we should repeat
+what was done for AFS -- particularly given that ceph_lock_info ends up
+being a dummy type that isn't mentioned anywhere else.
 
-What's the reason for this additional call to pr_info()?  There's a call to=
- pr_info()
-a couple of lines below that displays the same information, and a little bi=
-t more.
-It seems like the above call should be deleted, as I think we should try to=
- be as
-consistent as possible in the output.
+Jeff, could you please ack this with your file locking hat on?
 
->  	hv_max_functions_eax =3D cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTION=
-S);
->=20
->  	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc=
- 0x%x\n",
-> @@ -328,18 +343,22 @@ static void __init ms_hyperv_init_platform(void)
->  		ms_hyperv.shared_gpa_boundary =3D
->  			BIT_ULL(ms_hyperv.shared_gpa_boundary_bits);
->=20
-> -		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
-> -			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
-> -
-> -		if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_SNP) {
-> +		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +			static_branch_enable(&isolation_type_en_snp);
-> +		} else if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_SNP) {
->  			static_branch_enable(&isolation_type_snp);
->  #ifdef CONFIG_SWIOTLB
->  			swiotlb_unencrypted_base =3D ms_hyperv.shared_gpa_boundary;
->  #endif
->  		}
-> +
-> +		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
-> +			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
-> +
+Thanks,
 
-Is there a reason for moving this pr_info() down a few lines?  I can't see =
-that the
-intervening code changes any of the settings that are displayed, so it shou=
-ld be
-good in the original location.  Just trying to minimize changes that don't =
-add value ...
-
->  		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
->  		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-> -			if (hv_get_isolation_type() !=3D HV_ISOLATION_TYPE_NONE)
-> +			if (hv_get_isolation_type() !=3D HV_ISOLATION_TYPE_NONE
-> +			    && !cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
->  				cc_set_vendor(CC_VENDOR_HYPERV);
->  		}
->  	}
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index ae68298c0dca..2c6602571c47 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -268,6 +268,13 @@ bool __weak hv_isolation_type_snp(void)
->  }
->  EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
->=20
-> +bool __weak hv_isolation_type_en_snp(void)
-> +{
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_isolation_type_en_snp);
-> +
-> +
-
-Nit: One blank line is sufficient.  Don't need to add two.
-
->  void __weak hv_setup_vmbus_handler(void (*handler)(void))
->  {
->  }
-> --
-> 2.25.1
-
+                Ilya
