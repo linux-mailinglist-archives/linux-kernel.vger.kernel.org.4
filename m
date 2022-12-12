@@ -2,95 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C086499DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4256499E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiLLIH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 03:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S231493AbiLLIJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 03:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiLLIH0 (ORCPT
+        with ESMTP id S230079AbiLLIJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:07:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A0CF64;
-        Mon, 12 Dec 2022 00:07:25 -0800 (PST)
-Received: from [192.168.15.130] (unknown [194.152.46.36])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06F956602C04;
-        Mon, 12 Dec 2022 08:07:22 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670832443;
-        bh=7jZrcS12eovJk4yTr33qb2JRyO2HH5tfG3QVcOFRV8M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MblcTWhM2ljhtpIQ2hdDwhvcE80egkRIbneeI2QiqCW3LC5Rmhuz8Z96QcQtPvuS3
-         6nysNSWrcRL68COfkybBYadNgQpgNNwbNz9oCJU/DKF1BaUlecFT6AHsei/UclMNEQ
-         XqlcUodv7oSLBRz5rWT4CF2fQ6hX+kxH5hWN65QrV5ysk4/nJ3aNXZE6NVZXReO0fL
-         lDTAC7Lk3a2qi6JxhhVl5mdd+t7LOzqJbIvtqH//6sWEhIhMbr3d76ppsnnqhaTiOl
-         ZUifgC/pzyIY00oq4mt7sYNigpy4Lutq6c6dw73zFAWYV5UrEhA6SADHgsA17ir+oG
-         Z2RLykZPtt/RA==
-Message-ID: <91368ea6-5517-bd6c-3428-3871a9ad4d14@collabora.com>
-Date:   Mon, 12 Dec 2022 09:07:19 +0100
+        Mon, 12 Dec 2022 03:09:53 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5704BCA9;
+        Mon, 12 Dec 2022 00:09:52 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 24CC067373; Mon, 12 Dec 2022 09:09:48 +0100 (CET)
+Date:   Mon, 12 Dec 2022 09:09:47 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Max Gurtovoy <mgurtovoy@nvidia.com>
+Cc:     "Rao, Lei" <lei.rao@intel.com>, Christoph Hellwig <hch@lst.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, kbusch@kernel.org,
+        axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
+        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com,
+        Oren Duer <oren@nvidia.com>
+Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
+Message-ID: <20221212080947.GA11892@lst.de>
+References: <20221206130901.GB24358@lst.de> <Y49JNvdmRPNWw26q@ziepe.ca> <20221206140002.GB27689@lst.de> <Y49PqoAhZOeraLVa@ziepe.ca> <20221206143126.GB30297@lst.de> <Y49WNo7XWZ2aFfds@ziepe.ca> <20221206150131.GA32365@lst.de> <9bc8e614-a687-e419-f9fd-e3177cfb41dd@nvidia.com> <cf88c2ec-bdd6-1df3-6c77-64a17dc3eb86@intel.com> <d4aeda5c-d7bb-4427-5157-fb7530dfd1fb@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] usb: gadget: u_ether: remove obnoxious warning messages
-To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209172853.2138941-1-alvin@pqrs.dk>
-Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20221209172853.2138941-1-alvin@pqrs.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4aeda5c-d7bb-4427-5157-fb7530dfd1fb@nvidia.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 9.12.2022 o 18:28, Alvin Šipraga pisze:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
-> 
-> There is really no need for the driver to unconditionally emit warnings
-> like this on every usage:
-> 
-> [    6.967283] using random self ethernet address
-> [    6.967294] using random host ethernet address
-> 
-> Since this is normal behaviour, just remove the messages altogether.
-> > Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Sun, Dec 11, 2022 at 04:51:02PM +0200, Max Gurtovoy wrote:
+> I don't think that medium migration should be part of the SPEC. We can 
+> specify it's out of scope.
 
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+This is the main item in the TPAR in the technical working group,
+with SQ/CQ state beeing the other one.  So instead of arguing here
+I'd suggest you all get involved in the working group ASAP.
 
-> ---
->   drivers/usb/gadget/function/u_ether.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index 8f12f3f8f6ee..3fdc913ef262 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -845,13 +845,11 @@ struct net_device *gether_setup_name_default(const char *netname)
->   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
->   
->   	eth_random_addr(dev->dev_mac);
-> -	pr_warn("using random %s ethernet address\n", "self");
->   
->   	/* by default we always have a random MAC address */
->   	net->addr_assign_type = NET_ADDR_RANDOM;
->   
->   	eth_random_addr(dev->host_mac);
-> -	pr_warn("using random %s ethernet address\n", "host");
->   
->   	net->netdev_ops = &eth_netdev_ops;
->   
+> All the idea of live migration is to have a short downtime and I don't 
+> think we can guarantee short downtime if we need to copy few terabytes 
+> throw the networking.
 
+You can.  Look at the existing qemu code for live migration for
+image based storage, the same concepts also work for hardware offloads.
+
+> If the media copy is taking few seconds, there is no need to do live 
+> migration of few milisecs downtime. Just do regular migration of a VM.
+
+The point is of course to not do the data migration during the downtime,
+but to track newly written LBAs after the start of the copy proces.
+Again look at qemu for how this has been done for years in software.
