@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B7464A21E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97FD64A267
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiLLNt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:49:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S233221AbiLLNyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiLLNtV (ORCPT
+        with ESMTP id S233216AbiLLNxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:49:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2042BD8;
-        Mon, 12 Dec 2022 05:49:02 -0800 (PST)
+        Mon, 12 Dec 2022 08:53:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0811409D;
+        Mon, 12 Dec 2022 05:53:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9AC23CE0F42;
-        Mon, 12 Dec 2022 13:49:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6590C433D2;
-        Mon, 12 Dec 2022 13:48:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20A4FB80B78;
+        Mon, 12 Dec 2022 13:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC86DC433EF;
+        Mon, 12 Dec 2022 13:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670852938;
-        bh=BuJk6UyNnNCckqSDUSKJw6gF+0b074c/0qtS4svMH1U=;
+        s=korg; t=1670853184;
+        bh=abWR9w4s/m1awHtBkl1Sptqqh0WafL4SMCjMmPhpvUs=;
         h=From:To:Cc:Subject:Date:From;
-        b=njaBzt9/7HUEhLUTtEeD6EijOf0rTsiIgn87WwObCzj57y51ow+5mYF3e7eUMznU+
-         MAKisB4WG5WfmEOxi1/cP3l7o9aELAne4DpSbvSHm0qJMetehJiJ/vLfou0bQsNIV1
-         SSA6RSd7+YrZd23t7fzHTl8bJFD+w71yAFUgqXrM=
+        b=d1d7utcHbAU7z+8+Y4Lqie+K8g3u0wHCxnZVeU5n3KtA54Tq7yzeepcjUAzPWjAK9
+         k+jd8Oy/+Rd/pCErWeTlKirKBcQ8blO6iy/eZsqB8FOXrH+P6N0725zecvnYWcFbCF
+         AVcpwOa2jO43Bt3xgPuRl4Vk2BQX87BnzcpI2Lw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,19 +38,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.19 00/49] 4.19.269-rc1 review
-Date:   Mon, 12 Dec 2022 14:18:38 +0100
-Message-Id: <20221212130913.666185567@linuxfoundation.org>
+Subject: [PATCH 4.14 00/38] 4.14.302-rc1 review
+Date:   Mon, 12 Dec 2022 14:19:01 +0100
+Message-Id: <20221212130912.069170932@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.269-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.302-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Branch: linux-4.14.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.269-rc1
+X-KernelTest-Version: 4.14.302-rc1
 X-KernelTest-Deadline: 2022-12-14T13:09+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,8 +62,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.269 release.
-There are 49 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.14.302 release.
+There are 38 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -71,9 +71,9 @@ Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.269-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.302-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
 and the diffstat can be found below.
 
 thanks,
@@ -84,10 +84,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.269-rc1
-
-Frank Jungclaus <frank.jungclaus@esd.eu>
-    can: esd_usb: Allow REC and TEC to return to zero
+    Linux 4.14.302-rc1
 
 Dan Carpenter <error27@gmail.com>
     net: mvneta: Fix an out of bounds check
@@ -116,26 +113,11 @@ Liu Jian <liujian56@huawei.com>
 Jisheng Zhang <jszhang@kernel.org>
     net: stmmac: fix "snps,axi-config" node property parsing
 
-Pankaj Raghav <p.raghav@samsung.com>
-    nvme initialize core quirks before calling nvme_init_subsystem
-
 Kees Cook <keescook@chromium.org>
     NFC: nci: Bounds check struct nfc_target arrays
 
-Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
-    i40e: Disallow ip4 and ip6 l4_4_bytes
-
-Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
-    i40e: Fix for VF MAC address 0
-
-Michal Jaron <michalx.jaron@intel.com>
-    i40e: Fix not setting default xps_cpus after reset
-
 Dan Carpenter <error27@gmail.com>
     net: mvneta: Prevent out of bounds read in mvneta_config_rss()
-
-Lin Liu <lin.liu@citrix.com>
-    xen-netfront: Fix NULL sring after live migration
 
 Valentina Goncharenko <goncharenko.vp@ispras.ru>
     net: encx24j600: Fix invalid logic in reading of MISTAT register
@@ -145,12 +127,6 @@ Valentina Goncharenko <goncharenko.vp@ispras.ru>
 
 Wei Yongjun <weiyongjun1@huawei.com>
     mac802154: fix missing INIT_LIST_HEAD in ieee802154_if_add()
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    selftests: rtnetlink: correct xfrm policy rule in kci_test_ipsec_offload
-
-Chen Zhongjin <chenzhongjin@huawei.com>
-    Bluetooth: Fix not cleanup led when bt_init fails
 
 Wang ShaoBo <bobo.shaobowang@huawei.com>
     Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
@@ -200,12 +176,6 @@ Ross Lagerwall <ross.lagerwall@citrix.com>
 Davide Tronchin <davide.tronchin.94@gmail.com>
     net: usb: qmi_wwan: add u-blox 0x1342 composition
 
-Dominique Martinet <asmadeus@codewreck.org>
-    9p/xen: check logical size for buffer size
-
-Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-    fbcon: Use kzalloc() in fbcon_prepare_logo()
-
 Andreas Kemnade <andreas@kemnade.info>
     regulator: twl6030: fix get status of twl6032 regulators
 
@@ -214,9 +184,6 @@ Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 
 Kees Cook <keescook@chromium.org>
     ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-
-GUO Zihua <guozihua@huawei.com>
-    9p/fd: Use P9_HDRSZ for header size
 
 Johan Jonker <jbx6244@gmail.com>
     ARM: dts: rockchip: disable arm_global_timer on rk3066 and rk3188
@@ -256,14 +223,10 @@ Diffstat:
  drivers/hid/hid-core.c                             |   3 +
  drivers/hid/hid-lg4ff.c                            |   6 +
  drivers/media/v4l2-core/v4l2-dv-timings.c          |  20 +-
- drivers/net/can/usb/esd_usb2.c                     |   6 +
  drivers/net/ethernet/aeroflex/greth.c              |   1 +
  drivers/net/ethernet/hisilicon/hisi_femac.c        |   2 +-
  drivers/net/ethernet/hisilicon/hix5hd2_gmac.c      |   2 +-
  drivers/net/ethernet/intel/e1000e/netdev.c         |   4 +-
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |   6 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c        |  19 +-
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |   2 +
  drivers/net/ethernet/intel/igb/igb_ethtool.c       |   2 +
  drivers/net/ethernet/marvell/mvneta.c              |   2 +-
  drivers/net/ethernet/microchip/encx24j600-regmap.c |   4 +-
@@ -276,26 +239,19 @@ Diffstat:
  drivers/net/xen-netback/interface.c                |  22 +-
  drivers/net/xen-netback/netback.c                  | 229 ++++++++++++---------
  drivers/net/xen-netback/rx.c                       |  10 +-
- drivers/net/xen-netfront.c                         |   6 +
- drivers/nvme/host/core.c                           |   8 +-
  drivers/regulator/twl6030-regulator.c              |  15 +-
- drivers/video/fbdev/core/fbcon.c                   |   2 +-
  include/linux/cgroup.h                             |   1 +
  kernel/cgroup/cgroup-internal.h                    |   1 -
  mm/memcontrol.c                                    |  15 +-
- net/9p/trans_fd.c                                  |   6 +-
- net/9p/trans_xen.c                                 |   9 +
  net/bluetooth/6lowpan.c                            |   1 +
- net/bluetooth/af_bluetooth.c                       |   4 +-
  net/ipv6/ip6_output.c                              |   5 +
  net/mac802154/iface.c                              |   1 +
  net/nfc/nci/ntf.c                                  |   6 +
  net/tipc/link.c                                    |   4 +-
  sound/core/seq/seq_memory.c                        |  11 +-
  sound/soc/soc-pcm.c                                |   2 +
- tools/testing/selftests/net/rtnetlink.sh           |   2 +-
  tools/testing/selftests/rcutorture/bin/kvm.sh      |   8 +
  tools/testing/selftests/rcutorture/bin/mkinitrd.sh |  60 ++++++
- 58 files changed, 404 insertions(+), 209 deletions(-)
+ 47 files changed, 350 insertions(+), 193 deletions(-)
 
 
