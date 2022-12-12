@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D54A4649AA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD24C649AB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiLLJHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S231584AbiLLJIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiLLJHB (ORCPT
+        with ESMTP id S231371AbiLLJIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:07:01 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A0CA467
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:07:00 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p8so17426397lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTVaySmzPKYHeit0z3XOO6b0j/OVHVNITW2ljPEYuJg=;
-        b=rKHpQg7qY7PA1P7H/4qyRs10t72UcTp/d38Mda8LHJxeG8FPkFOpUhDaSA3uVO6j7E
-         iKf6z1zvWI+uUKXAFVkOk1SiySaGoIDeNmw+eEbLXN/8HM1An+GhtNkgKTVlouB4EhWA
-         +PyofCFP/zluDIg3Zz2flzytYFwywTclHvw7wTwb1AKu0bbhqGiDTDKOQditRQ5Pts5a
-         MEyyCdmsCRMz/yzrB4W3+bJWjXTSWwPp6n5DI5QtPVk634u4VseNADvhCI3/DnwtK2MP
-         C0b4kAX/3aRHVJLVa4NzzEs9zYo4d48xI/5snAkD1ZowUQ7NujvoGxWaX7QwazunMgez
-         JmnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTVaySmzPKYHeit0z3XOO6b0j/OVHVNITW2ljPEYuJg=;
-        b=NAiq2kBJCdOMtkFV269+rOnUUtG7vsUwu+FKvJPQ/VqdRAf5qeim59HSVW9735KWlO
-         d61XI8emIY0Wsb87mLAfAmN2O7XV3cdbcMSUXUDTbN8czvN/dUFUmKKwaY+gFdE5NlD2
-         qTRteXvqkxBMFQNc/9qpmSr6sdFoaTJftSxz0VKp/7qOZeJg77Fulub9sT+RmFKJmNm1
-         PcQRMQ4BfNThgKODvs7M4zqOGQdFA7JGTGpUI4mW6tEHp7VRtyPQth7ZT2+m5JFGxCQN
-         s1JtPuH+iVKit2E5UGvup/afwkZeQJK7UAtZ12qdUva4t3/DGG4+pPaJg/Z66iMb3HtL
-         xh+w==
-X-Gm-Message-State: ANoB5pm6/pkh9RdirN7jxdgqcvebK3cRIqF+b1JIAMsg3WFVpf60i54m
-        iIIfA1nF5J1erFtYcvafQJSx9w==
-X-Google-Smtp-Source: AA0mqf7Q/Yj0CNJXu/1Q+sRvAVGSq6rOUCAKTbqvslIcFL0Hd0eqipGLowU+mtoxIZKETMXKLU0tag==
-X-Received: by 2002:a19:a41a:0:b0:4b5:8fee:1d71 with SMTP id q26-20020a19a41a000000b004b58fee1d71mr3269047lfc.64.1670836018898;
-        Mon, 12 Dec 2022 01:06:58 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id y20-20020a05651c021400b002797d6bb516sm1151042ljn.20.2022.12.12.01.06.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 01:06:58 -0800 (PST)
-Message-ID: <3234174d-e778-7c66-d7bd-8860e4eb6361@linaro.org>
-Date:   Mon, 12 Dec 2022 10:06:56 +0100
+        Mon, 12 Dec 2022 04:08:21 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17477B1B;
+        Mon, 12 Dec 2022 01:08:20 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NVwb538bmz9xFH5;
+        Mon, 12 Dec 2022 17:01:05 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDnbwth75ZjYBEIAA--.129S2;
+        Mon, 12 Dec 2022 10:07:55 +0100 (CET)
+Message-ID: <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
+Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
+ public_key_verify_signature()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Mon, 12 Dec 2022 10:07:38 +0100
+In-Reply-To: <Y5OGr59A9wo86rYY@sol.localdomain>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+         <Y5OGr59A9wo86rYY@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 MPSS
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221210135807.10688-1-konrad.dybcio@linaro.org>
- <34e5b0c4-3ca8-5008-46cc-38c60f69cd95@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <34e5b0c4-3ca8-5008-46cc-38c60f69cd95@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: LxC2BwDnbwth75ZjYBEIAA--.129S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFy3uw1rGrWUZryxKrWfKrg_yoW8XF4Upw
+        43Zr4DtrWDWrW8Cw1xua4xt3yFg3yYyFWUGa40k345urn8Wr9YkrykWayI9FWUtrykWrs2
+        vrWUWan8Zr9xAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAEBF1jj4KGBgABsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-12-09 at 11:04 -0800, Eric Biggers wrote:
+> On Fri, Dec 09, 2022 at 04:06:33PM +0100, Roberto Sassu wrote:
+> > +	/* key is used to store the sig and digest too. */
+> > +	key = kmalloc(key_max_len, GFP_KERNEL);
+> >  	if (!key)
+> >  		goto error_free_req;
+> 
+> Maybe just call this 'buf', as the key is just one of the purposes the buffer is
+> used for now.
 
+Yes, better.
 
-On 11.12.2022 21:25, Krzysztof Kozlowski wrote:
-> On 10/12/2022 14:58, Konrad Dybcio wrote:
->> Add entries for SM6375 MPSS. Unlike most other modems, this one only
->> expects a single (cx) power domain.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> index a9219c7c8349..434d34578fc5 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
->> @@ -42,6 +42,7 @@ properties:
->>        - qcom,sm6350-mpss-pas
->>        - qcom,sm6375-adsp-pas
->>        - qcom,sm6375-cdsp-pas
+> > +	/* Cannot use one scatterlist. The first needs to be s->s_size long. */
+> > +	sg_set_buf(&src_sg[0], key, sig->s_size);
+> > +	sg_set_buf(&src_sg[1], key + sig->s_size, sig->digest_size);
+> >  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
+> >  				   sig->digest_size);
 > 
-> There is no such entry... Do you base on some other patchset?
-Yep, this one [1].. I thought it was merged, as Bjorn pulled in the
-DT part (which stated dependency on [1])..
+> AFAIK, none of the crypto APIs that operate on 'scatterlist' are supposed to
+> care how the data is divided up into scatterlist elements.  So it sounds like
+> there is another bug that needs to be fixed.  It should be fixed, not worked
+> around.
 
-Konrad
+The problem is a misalignment between req->src_len (set to sig->s_size
+by akcipher_request_set_crypt()) and the length of the scatterlist (if
+we set the latter to sig->s_size + sig->digest_size).
 
-[1] https://lore.kernel.org/linux-arm-msm/20221109170822.58281-1-konrad.dybcio@linaro.org/
-> 
->> +      - qcom,sm6375-mpss-pas
-> 
-> I propose to rebase it on my series:
-> https://lore.kernel.org/all/20221124184333.133911-1-krzysztof.kozlowski@linaro.org/
-> 
-> and then either add it as new file or maybe it will fit to one of the
-> device schemas.
-> 
-> Best regards,
-> Krzysztof
-> 
+When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
+argument, and the latter allocates the MPI according to that. However,
+it does parsing depending on the length of the scatterlist.
+
+If there are two scatterlists, it is not a problem, there is no
+misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
+one, mpi_read_raw_from_sgl() parses all data there.
+
+Roberto
+
