@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282F649D4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000FB649D5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiLLLQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S232031AbiLLLRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiLLLQS (ORCPT
+        with ESMTP id S231916AbiLLLQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Dec 2022 06:16:18 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8620C31E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:49 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id g7so17960943lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:49 -0800 (PST)
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F87AB56
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:51 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id 1so17954522lfz.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qQIYVXEjJEJ0OT39Qk1zAHhbsycQaa2GSSPi8Gc4rAA=;
-        b=ZpVP3WTKicT0uaaQ9/7achRS1ZAapQV0S1DPWe7tPuL0e4+XnknJuDg/ZiiPMrGpCf
-         HzRVMUCGOUBkqQAX6gJ2z1h+qrkasxrXMHNXLAsBsnWblRIHyI+3r1RGlLVQ74FL16wE
-         3xuBTEEoLYwr+67XZz6xBkBz+NSnoSEmzqCjD0tJT1YMLs11O3HBLMolPG8o8Cazh1OW
-         tHqCNbBOnomkwESSyIfe+W8QFjBynzv9I6SV9YCi+SJuLAeMcCMW2MnlF0kUV+LOU46K
-         nG/idFYhdMUka+0X8BFBQhjNrcu/Ddol8Op6ziX5y5NAONHniku/fS8oRLZetWuAeM4q
-         4oQg==
+        bh=X861dj5mvMIOcy/s40LZfm9fx6V/ezqUYT7sBt18gBc=;
+        b=aQgWoMUKkTRvRmW/K8iKlw9r7MO/aj2CSNHZDURkdxOIDhNpXg7Iu9C01xsjKUPgXJ
+         wj/lBe22iNClrGNGImhDNeNHhaUva55Fqg1Ib1T//zSpj0Jt1CgErBJlMAsK9LNwIH0W
+         z573p6FoUM1yNkyiRZl2+UAeHTBgxKN1itA4Y2E3fmpqpxR5VWL2P38C8n38klebDOxR
+         jVvEvqjMJmaFrjY9IyqUMKvBmontSsQMNPrWn3SK9WQzK5PAXqRZNa4nPIjSP30h2+Qg
+         Ikl6vvgSMm1KFd7y7cLSgt5NURNyjKDmRm3vATo6J8YJauXtQLUeeMkIpKx+tVqATYHv
+         m8QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qQIYVXEjJEJ0OT39Qk1zAHhbsycQaa2GSSPi8Gc4rAA=;
-        b=B1z20ABw1SL/nXTaP/TFUExTTIDryyl72Hd8yiwe8654DHLS5sfl8L7sCRX2fahrsF
-         IS7BDTkTw2MrzR2r9iGcDwW9Bz/FWZQVZa3I1xD42IqxEM0SN1GYbw+Ki1eNmQv0VPVH
-         2wWnJ0iyJ5MlOXyjfft5GdTQ6lbxdUEKy1KLad11+3SeyMkn87YibTPYG1LvLYpUTIG9
-         H1DIvbx77/EhesaCvri5I74rkF29rOPZJ1EYhvcUzXsnxVfLXES3C5TS+qRQbY0TglYE
-         bny93Zqq00PXUIjK6qjim+C/5rSHgK1kzQBNphp3Bgv6YJ2HEZUxEuvaRii4O1VPEF2x
-         dP/w==
-X-Gm-Message-State: ANoB5pknBpKn3fwaLwT6yZikm77ljMUjVFgOMMJUPBXrlT6PgtDOLBG4
-        T7K5GXoTcGgSAlc0e5GspL7A7w==
-X-Google-Smtp-Source: AA0mqf6aPcb7R8C5IszTOPEnsK8wMaGFb7TkZnf0uR1fNjOGPHEdqgWtRBKtmdhf5xeehU3dUzwlKQ==
-X-Received: by 2002:ac2:414c:0:b0:4a4:68b8:c2dd with SMTP id c12-20020ac2414c000000b004a468b8c2ddmr4010406lfi.52.1670843447919;
-        Mon, 12 Dec 2022 03:10:47 -0800 (PST)
+        bh=X861dj5mvMIOcy/s40LZfm9fx6V/ezqUYT7sBt18gBc=;
+        b=hRMvVgacf0ywh9agHVk1Zm6eU/efG7rC2n5qoB9zijMaLOsvvHEJnMZ8rBLiyPPhuY
+         +SXsVv1A45+xW8QamMC3oNxUdjWZvYoRvnOA6fuO195sFJxsBTLJkG4a9zA2lo7JSXgX
+         pit8Y30UmClFgDAN5moKE7ct1px97exPu9CuSUIUSp+lKgDWjnnVRerEh1rgi7GfRe24
+         o57lKWulT4LdUqTfJqZ4VqsXKzZz8UN0VNIMAtRiVskT3GC9fjejQngZo/cwzEpK1AsL
+         ySCqe0/hcYS6z1ahGizCjer1PbYBqZslL5UE5FPOjmM2913mgnhBwEJD31acxzOMqBMl
+         3qvA==
+X-Gm-Message-State: ANoB5pk/JeiKdASAkwSJU5L6IzVYC+F5h78keYBCk2tJFk2znvr4Q4AH
+        YRH6TSlVFZZE0FdVk3Jm6IRsHw==
+X-Google-Smtp-Source: AA0mqf410jiIUAh4Q3cRPlLAomso/7bEP81QjYaCom8HEbdVbIdVk+pLYFHAUbdfwV8Wv9k14wqN0Q==
+X-Received: by 2002:ac2:5f4c:0:b0:4b5:7282:868c with SMTP id 12-20020ac25f4c000000b004b57282868cmr3888292lfz.55.1670843449431;
+        Mon, 12 Dec 2022 03:10:49 -0800 (PST)
 Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id b4-20020a056512060400b004b57a810e09sm1599110lfe.288.2022.12.12.03.10.46
+        by smtp.gmail.com with ESMTPSA id b4-20020a056512060400b004b57a810e09sm1599110lfe.288.2022.12.12.03.10.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 03:10:47 -0800 (PST)
+        Mon, 12 Dec 2022 03:10:49 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     marijn.suijten@somainline.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/9] arm64: dts: qcom: msm8996: Use lowercase hex
-Date:   Mon, 12 Dec 2022 12:10:30 +0100
-Message-Id: <20221212111037.98160-3-konrad.dybcio@linaro.org>
+Subject: [PATCH 3/9] arm64: dts: qcom: msm8998: Use lowercase hex
+Date:   Mon, 12 Dec 2022 12:10:31 +0100
+Message-Id: <20221212111037.98160-4-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221212111037.98160-1-konrad.dybcio@linaro.org>
 References: <20221212111037.98160-1-konrad.dybcio@linaro.org>
@@ -80,73 +80,64 @@ style.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts |  4 ++--
- arch/arm64/boot/dts/qcom/msm8996.dtsi              | 12 ++++++------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-index d8734913482f..94310530f7ea 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-@@ -62,14 +62,14 @@ led@0 {
- 			reg = <0>;
- 			chan-name = "button-backlight";
- 			led-cur = /bits/ 8 <0x32>;
--			max-cur = /bits/ 8 <0xC8>;
-+			max-cur = /bits/ 8 <0xc8>;
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index b53c631dd13f..2355fd10d244 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -1478,43 +1478,43 @@ gpu_opp_table: opp-table {
+ 				opp-710000097 {
+ 					opp-hz = /bits/ 64 <710000097>;
+ 					opp-level = <RPM_SMD_LEVEL_TURBO>;
+-					opp-supported-hw = <0xFF>;
++					opp-supported-hw = <0xff>;
+ 				};
  
- 		led@1 {
- 			reg = <0>;
- 			chan-name = "button-backlight1";
- 			led-cur = /bits/ 8 <0x32>;
--			max-cur = /bits/ 8 <0xC8>;
-+			max-cur = /bits/ 8 <0xc8>;
- 		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 616b5b1b1fb0..f429a7b4a568 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1265,23 +1265,23 @@ opp-560000000 {
- 				};
- 				opp-510000000 {
- 					opp-hz = /bits/ 64 <510000000>;
+ 				opp-670000048 {
+ 					opp-hz = /bits/ 64 <670000048>;
+ 					opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
 -					opp-supported-hw = <0xFF>;
 +					opp-supported-hw = <0xff>;
  				};
- 				opp-401800000 {
- 					opp-hz = /bits/ 64 <401800000>;
+ 
+ 				opp-596000097 {
+ 					opp-hz = /bits/ 64 <596000097>;
+ 					opp-level = <RPM_SMD_LEVEL_NOM>;
 -					opp-supported-hw = <0xFF>;
 +					opp-supported-hw = <0xff>;
  				};
- 				opp-315000000 {
- 					opp-hz = /bits/ 64 <315000000>;
+ 
+ 				opp-515000097 {
+ 					opp-hz = /bits/ 64 <515000097>;
+ 					opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
 -					opp-supported-hw = <0xFF>;
 +					opp-supported-hw = <0xff>;
  				};
- 				opp-214000000 {
- 					opp-hz = /bits/ 64 <214000000>;
+ 
+ 				opp-414000000 {
+ 					opp-hz = /bits/ 64 <414000000>;
+ 					opp-level = <RPM_SMD_LEVEL_SVS>;
 -					opp-supported-hw = <0xFF>;
 +					opp-supported-hw = <0xff>;
  				};
- 				opp-133000000 {
- 					opp-hz = /bits/ 64 <133000000>;
+ 
+ 				opp-342000000 {
+ 					opp-hz = /bits/ 64 <342000000>;
+ 					opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
+-					opp-supported-hw = <0xFF>;
++					opp-supported-hw = <0xff>;
+ 				};
+ 
+ 				opp-257000000 {
+ 					opp-hz = /bits/ 64 <257000000>;
+ 					opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
 -					opp-supported-hw = <0xFF>;
 +					opp-supported-hw = <0xff>;
  				};
  			};
- 
-@@ -3386,7 +3386,7 @@ slimbam: dma-controller@9184000 {
- 
- 		slim_msm: slim-ngd@91c0000 {
- 			compatible = "qcom,slim-ngd-v1.5.0";
--			reg = <0x091c0000 0x2C000>;
-+			reg = <0x091c0000 0x2c000>;
- 			interrupts = <0 163 IRQ_TYPE_LEVEL_HIGH>;
- 			dmas = <&slimbam 3>, <&slimbam 4>;
- 			dma-names = "rx", "tx";
+ 		};
 -- 
 2.38.1
 
