@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157F7649F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F233649FC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbiLLNMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S231854AbiLLNOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbiLLNLi (ORCPT
+        with ESMTP id S232582AbiLLNOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:11:38 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E7712A97
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:11:31 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id d14so3300567ilq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gvrl4AgOpffK6XUxCxPp7bpXCu3gynENsW0aGqM5Df8=;
-        b=DrgD9c7AREPKQOblN0GMrGIZC0uSxwypztZcVz2l5QmQo4c6a769cF1HJsF6PwfNu3
-         peSGTkChjCi9uTlK+EJh2B+Ci2ZJxXNXfxytIPfWW8ngOI4Y0hI/z8rigSN09hEpliwx
-         FzNHevXPCTD1wq44/0foJap3Bb6xVK7XN091s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvrl4AgOpffK6XUxCxPp7bpXCu3gynENsW0aGqM5Df8=;
-        b=KR2tlbTsPv3xHNt8chvfHhrWf16ygDiNHEysS1LKijOgCjS2WUckDFJY2GJtcS3kYp
-         IfRb/K0zEDZkWYKHLFDJ5Aor9Ui5vr5tMqMeTODdkDusyNKdNbpKl1dX7bPnfc+Qfr+C
-         dd058ZHZRtooDhoNd+Mv4KVn1JDrUb6lVPDR5m888wUuHWqg+xO6ZXDFmAoS1xJdVjKH
-         GFay2WTR7dhdGFyoySq6oYIxx2MLPoBHgs5ktSTXvETPLJchy7uSy2NrvsFQjt7dSizm
-         AhgBMrS6KAsAUropI/KHkoa/P8wcOfWZ4xHpXBx50FBwgWdWOz3U1SjNxA0LfZ6vd7cx
-         XXPw==
-X-Gm-Message-State: ANoB5pkCqAE/1xPdg873WLl44YWfdg8i6BXfeIcHSJNEMSsku4oKTHKy
-        GpFK3JWUTnWpXAfIldNR0OJUhA==
-X-Google-Smtp-Source: AA0mqf4kRKyrpIH8gZB2TBhWAayXSxMY879hs+s0LqrpRQ5SCl6CKEwHPZ+WuorSjBUx1t498kLJ9g==
-X-Received: by 2002:a05:6e02:58d:b0:303:7270:845e with SMTP id c13-20020a056e02058d00b003037270845emr9515931ils.26.1670850689500;
-        Mon, 12 Dec 2022 05:11:29 -0800 (PST)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id l11-20020a92d94b000000b003024928a9afsm2988694ilq.83.2022.12.12.05.11.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 05:11:28 -0800 (PST)
-Message-ID: <3d13301c-c3fa-5a59-d4b6-cb45bf3fa18c@ieee.org>
-Date:   Mon, 12 Dec 2022 07:11:27 -0600
+        Mon, 12 Dec 2022 08:14:14 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6EA101C7;
+        Mon, 12 Dec 2022 05:14:13 -0800 (PST)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2BCDDvE2032515;
+        Mon, 12 Dec 2022 22:13:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BCDDvE2032515
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1670850838;
+        bh=Qyvr5aZkM+wmdhHKW6aw9JveC938iEMrNt3NYpNMYho=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b5+lBzaQFXLoYKeSphoB86Oodwyjy3b9I8NHzJQNVZFS+/itGfmkNfo+6WSyINJXf
+         qOxsZm/dxLZS7ebxowc1YLekgFybdLtdHsbpR9HBMVw7xln5QsZBqYR0ioRthhzo9Q
+         8m6TILZSxsQORWoE0wtaelTgDrHHT2W9hiwu8PunxSWhtHf5vngzVFDh6bWl7eZ8H0
+         XUL7sSsoyJh2Vp39ZpHt9uxGQMhZfFe3rVvavOwpizOYgPlSeV8nimuzM+S5UTiYqz
+         yJU8M9BQxsrE6XBFgwxDPpbksm8eWxibVXpUM6XHZip6VmNSkNGQTQv9cFWGBh16+e
+         U7Qbgz3noIu8w==
+X-Nifty-SrcIP: [209.85.167.180]
+Received: by mail-oi1-f180.google.com with SMTP id r11so11121028oie.13;
+        Mon, 12 Dec 2022 05:13:57 -0800 (PST)
+X-Gm-Message-State: ANoB5pkhNFi8K/zWXvLZeyVDJVZBLrG3zJpDv8B7ZjaD8WJqptaWkQlK
+        2hqMkONd++DkhCvn6mQG/1Q2hemG4tPkZBqffJA=
+X-Google-Smtp-Source: AA0mqf4I3SXFUfc/eWCj/dtwZNLGGSsqlfdozaJ6EZO9Qm+gTzG9smhalmAJvZK7tGN7or7+K+lH+s4AbNqf02TFKSc=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr37705245oib.194.1670850836790; Mon, 12
+ Dec 2022 05:13:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] net: ipa: Remove redundant dev_err()
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Alex Elder <elder@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221211144722.754398-1-tegongkang@gmail.com>
- <f04435d8-9af3-1fde-c2bf-fadd045b10a1@gmail.com>
-Content-Language: en-US
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <f04435d8-9af3-1fde-c2bf-fadd045b10a1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221207191657.2852229-1-nathan@kernel.org> <20221207191657.2852229-3-nathan@kernel.org>
+In-Reply-To: <20221207191657.2852229-3-nathan@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 12 Dec 2022 22:13:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASoHieMNQTwPw6JVYnn6nBm-aPpOTrXeBPGeQKR-TxaUg@mail.gmail.com>
+Message-ID: <CAK7LNASoHieMNQTwPw6JVYnn6nBm-aPpOTrXeBPGeQKR-TxaUg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] modpost: Include '.text.*' in TEXT_SECTIONS
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,55 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/22 10:34 AM, Heiner Kallweit wrote:
-> On 11.12.2022 15:47, Kang Minchul wrote:
->> Function dev_err() is redundant because platform_get_irq_byname()
->> already prints an error.
->>
->> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
->> ---
->>   drivers/net/ipa/gsi.c | 5 +----
->>   1 file changed, 1 insertion(+), 4 deletions(-)
->>
->> diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
->> index 55226b264e3c..585cfd3f9ec0 100644
->> --- a/drivers/net/ipa/gsi.c
->> +++ b/drivers/net/ipa/gsi.c
->> @@ -1967,11 +1967,8 @@ int gsi_init(struct gsi *gsi, struct platform_device *pdev, bool prefetch,
->>   
->>   	/* Get the GSI IRQ and request for it to wake the system */
->>   	ret = platform_get_irq_byname(pdev, "gsi");
->> -	if (ret <= 0) {
->> -		dev_err(gsi->dev,
->> -			"DT error %d getting \"gsi\" IRQ property\n", ret);
->> +	if (ret <= 0)
-> 
-> According to the function description it can't return 0.
+On Thu, Dec 8, 2022 at 4:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Commit 6c730bfc894f ("modpost: handle -ffunction-sections") added
+> ".text.*" to the OTHER_TEXT_SECTIONS macro to fix certain section
+> mismatch warnings. Unfortunately, this makes it impossible for modpost
+> to warn about section mismatchs with LTO, which implies
 
-That's great!  I explicitly checked for 0 because at the
-time I couldn't *prove* that 0 was an invalid return, and
-there was nothing obvious in the function saying so.  I
-*thought* it was invalid but lacked the guidance in the
-code to know for sure.
+"mismatches"
+Other than the typo, this patch looks good to me.
 
-Here is the commit that fixed that:
-   a85a6c86c25be driver core: platform: Clarify that IRQ 0 is invalid
+It was just 1/2 was difficult for me to understand.
 
-And it turns out that this particular block of code got
-moved but not modified after that comment commit:
-   0b8d676108451 net: ipa: request GSI IRQ later
 
-Anyway, I'm very pleased this can be simplified.
 
-					-Alex
 
-> You can further simplify the code.
-> And you patch should be annotated net-next.
-> 
->>   		return ret ? : -EINVAL;
->> -	}
->>   	irq = ret;
->>   
->>   	ret = request_irq(irq, gsi_isr, 0, "gsi", gsi);
-> 
+> '-ffunction-sections', as all functions are put in their own
+> '.text.<func_name>' sections, which may still reference functions in
+> sections they are not supposed to, such as __init.
+>
+> Fix this by moving ".text.*" into TEXT_SECTIONS, so that configurations
+> with '-ffunction-sections' will see warnings about mismatched sections.
+>
+> Link: https://lore.kernel.org/Y39kI3MOtVI5BAnV@google.com/
+> Reported-by: Vincent Donnefort <vdonnefort@google.com>
+> Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Tested-by: Vincent Donnefort <vdonnefort@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/mod/modpost.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 2c80da0220c3..c861beabc128 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -823,10 +823,10 @@ static void check_section(const char *modname, struct elf_info *elf,
+>  #define ALL_EXIT_SECTIONS EXIT_SECTIONS, ALL_XXXEXIT_SECTIONS
+>
+>  #define DATA_SECTIONS ".data", ".data.rel"
+> -#define TEXT_SECTIONS ".text", ".text.unlikely", ".sched.text", \
+> +#define TEXT_SECTIONS ".text", ".text.*", ".sched.text", \
+>                 ".kprobes.text", ".cpuidle.text", ".noinstr.text"
+>  #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
+> -               ".fixup", ".entry.text", ".exception.text", ".text.*", \
+> +               ".fixup", ".entry.text", ".exception.text", \
+>                 ".coldtext", ".softirqentry.text"
+>
+>  #define INIT_SECTIONS      ".init.*"
+> --
+> 2.38.1
+>
 
+
+-- 
+Best Regards
+Masahiro Yamada
