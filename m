@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB12A64AA8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2DE64AA96
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiLLWp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
+        id S233733AbiLLWqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbiLLWpx (ORCPT
+        with ESMTP id S234020AbiLLWqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:45:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAAB5F85
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:45:52 -0800 (PST)
+        Mon, 12 Dec 2022 17:46:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0457A1C112;
+        Mon, 12 Dec 2022 14:46:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0274C61257
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D8C6C433D2;
-        Mon, 12 Dec 2022 22:45:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51A2BB80E7A;
+        Mon, 12 Dec 2022 22:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2487C433D2;
+        Mon, 12 Dec 2022 22:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670885151;
-        bh=5kq95Pw53HX7zhofjWxC1xDEv7YmHp1EXdZBaOLAUA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VuIhAEq+r2QP+BHcS3AZ7Z3iV5o3qKTRYdrC7afzDKSeUQAFBmwA9jr7fAR6vY4kP
-         w53Haxf0laLHSJsFSJwxSiaMXn8ZlrD0dRaF/Lk6sckD7orHs7V/SL+BvyA2WFbAcS
-         TJ1ysYQwlHtXJJ47OHf5sJcircVOE3HdmHCY0bgZyuBAzl7OCf5sBPkcuRBIbqbaOs
-         mMVHh3w50S6nvUCLcbqCGTWC5u2x045LIWgsEJPfk56vFP5tNWoJncEpIg5Ni4SQXo
-         ZFeqTem0KpafQyuicbKB/uPr2b3UH0uO75c1LbKNjejrNXqzSpjAWfOoU94XGt2Dqy
-         I2lF09RksM74Q==
-Date:   Mon, 12 Dec 2022 14:45:49 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] f2fs: don't call f2fs_issue_discard_timeout() when
- discard_cmd_cnt is 0 in f2fs_put_super()
-Message-ID: <Y5evHVvzGC/8lMfK@google.com>
-References: <974f5013-b6af-a39e-0b0f-2ce86253eaeb@kernel.org>
- <20221212141429.6329-1-frank.li@vivo.com>
- <2f100a4a-592d-f098-b204-efeef58341ee@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f100a4a-592d-f098-b204-efeef58341ee@kernel.org>
+        s=k20201202; t=1670885184;
+        bh=MstQfPbhIAU7j4DKA3OFGf5pW7AaPX/kJtPtU1oAINA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=duJ/O74l5PkZ/768MtkNWpVY9AIK+xovaiy1zKdLSZQHbW3NwNQ0s8RFiev68WktA
+         qQXuJqasT7wIonS+TJU/iXLe015GCKV2HVhl/a94a0GDa37il2RAHV403eHlZ7Vtux
+         VHF/to7MQsoPLKeIpsj+kk+nMno8GuLRy1EEhg4yBUhhLNYfRlLouQ4Go/xkHRSBVi
+         LT4rluBqUwK4Yjib6q4kYRAhjJV8EEQApolXiBvLUIiWGxgeZmoUNwdGfvBHt7q9Fz
+         wAKge3MVXG7aLxP35w3C10asxcYU4clvM3srWGUB5fu4VmBBFGd6Gg7YnRvyfYiKmg
+         +vUbYZ+6DwqgQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFC4CC00448;
+        Mon, 12 Dec 2022 22:46:23 +0000 (UTC)
+Subject: Re: [GIT PULL] Compute Express Link (CXL) for 6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <6395383a608a5_4962d294e9@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <6395383a608a5_4962d294e9@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <6395383a608a5_4962d294e9@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-6.2
+X-PR-Tracked-Commit-Id: f04facfb993de47e2133b2b842d72b97b1c50162
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c1f0fcd85d3d66f002fc1a4986363840fcca766d
+Message-Id: <167088518390.6748.16216442840433238533.pr-tracker-bot@kernel.org>
+Date:   Mon, 12 Dec 2022 22:46:23 +0000
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     torvalds@linux-foundation.org, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,34 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12, Chao Yu wrote:
-> On 2022/12/12 22:14, Yangtao Li wrote:
-> > Hi Chao,
-> > 
-> > > The difference here is, if we use f2fs_realtime_discard_enable() in
-> > > f2fs_put_super(), we will only write checkpoint w/ CP_TRIMMED flag
-> > > when discard option is enable and device supports discard.
-> > 
-> > > But actually, if discard option is disabled, we still needs to give
-> > > put_super() a chance to write checkpoint w/ CP_TRIMMED flag.
-> > 
-> > Why do we still have to set the CP_TRIMMED flag when the discard opt is not set.
-> > Did I miss something?
-> 
-> Hi Yangtao,
-> 
-> I guess it's up to scenario. e.g.
-> 
-> mount w/ nodiscard and use FITRIM to trigger in-batch discard,
-> if we set CP_TRIMMED flag during umount, next time, after mount
-> w/ discard, it doesn't to issue redundant discard.
+The pull request you sent on Sat, 10 Dec 2022 17:54:02 -0800:
 
-If fitrim was called with a range, we can get a wrong FI_TRIMMED flag. Isn't it
-better to get a full discard range after remount even though some are redundant?
+> git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-6.2
 
-> 
-> Thanks,
-> 
-> > 
-> > Thx,
-> > Yangtao
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c1f0fcd85d3d66f002fc1a4986363840fcca766d
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
