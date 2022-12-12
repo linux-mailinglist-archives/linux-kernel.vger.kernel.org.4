@@ -2,111 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44A3649E21
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A90649E29
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbiLLLrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S231799AbiLLLuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbiLLLrS (ORCPT
+        with ESMTP id S229452AbiLLLuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:47:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B0E23D;
-        Mon, 12 Dec 2022 03:47:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7A7F60FD4;
-        Mon, 12 Dec 2022 11:47:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E18C433EF;
-        Mon, 12 Dec 2022 11:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670845637;
-        bh=lWioGeYIzIqesYApk/JLuJOXnJyD7SbY2I0mQPcKIf4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=q2dVmV6WTikcdIc/5QOlHYjekbmceuvLBIbn/4dUN2RrdzUR9NuvOsOv0wuCX7s1w
-         d/yIWo7deyNFS6gFnNcLw2VUtIymGjxptAA2rp3KR10Qs0aAJOb7Fio46OxFaHTmJu
-         wqh6b0toEmp8bdm0rVHZgDdRdVRjuVyfCqtLEpoov1bbjYMcWH05MXb8eWgoHnS67+
-         k2viP/B7jHJIBKzgNMuj58+5bCz1kM92RcH7HsCBUG+MwR206G1lMi1x7vQIF1PoGI
-         dnqKB7pjkb+y0u5ob1RinY8P4T2H90caG1gcEPj9SK9Aaa6ZaL/qc1BBxtu/6D/hUW
-         hi+2lwA2vH4QA==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     Jason@zx2c4.com
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org
-Subject: [PATCH v2] wireguard (gcc13): move ULLs limits away from enum
-Date:   Mon, 12 Dec 2022 12:47:12 +0100
-Message-Id: <20221212114712.11802-1-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Mon, 12 Dec 2022 06:50:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB28865FE;
+        Mon, 12 Dec 2022 03:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mupZhswKfkylzMFVJeC8AXLjnLXa3nZsQoZVhef6zkY=; b=PPBMj/R/Aga9LLznUlxeGoEclT
+        Z0wjBIuaDNJnVaF1hH+hlGDg0Gh1VencdkwL9TB9yHWEL27RaxjrrGR5ZWri3pKmFeVaha2jmwK+p
+        Hlyms/Qe8xP/nmDMYjqexsnmW//NdNl3R/z+VmF2YSBLJXbKLWaPw/2G1t1WVFVtYCt7LoaT6axZN
+        FIWSEgycLz/Mpx0ENO65dUrWyKQnCeMji8bzZsOHhLiAa4Cqy+6H3X8bNjj3IyxgxYSh8LgSld0DQ
+        G3zVY9TgPyKuX6qSdkBV4igIeVrBHx3EWTsDJX4cgLVcQ4C4GnMo1azGk14N81exT9x62U0q1i90H
+        t6xgBj/Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4hJx-00B00K-If; Mon, 12 Dec 2022 11:50:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B03E5300137;
+        Mon, 12 Dec 2022 12:49:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6A98A2024871C; Mon, 12 Dec 2022 12:49:59 +0100 (CET)
+Date:   Mon, 12 Dec 2022 12:49:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 08/31] sched: Expose css_tg() and __setscheduler_prio()
+ in kernel/sched/sched.h
+Message-ID: <Y5cVZzcfqQ7nAm4p@hirez.programming.kicks-ass.net>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-9-tj@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130082313.3241517-9-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since gcc13, each member of an enum has the same type as the enum [1]. And
-that is inherited from its members. Provided these two:
-  REKEY_AFTER_MESSAGES = 1ULL << 60
-  REJECT_AFTER_MESSAGES = U64_MAX - COUNTER_WINDOW_SIZE - 1
-the named type is unsigned long.
+On Tue, Nov 29, 2022 at 10:22:50PM -1000, Tejun Heo wrote:
+> These will be used by a new sched_class.
 
-This generates warnings with gcc-13:
-  error: format '%d' expects argument of type 'int', but argument 6 has type 'long unsigned int'
-
-Define such high values as macros instead of in the enum. Note that
-enums are not guaranteed to hold unsigned longs in any way.
-
-And use BIT_ULL() for REKEY_AFTER_MESSAGES.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
-
-Cc: Martin Liska <mliska@suse.cz>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: wireguard@lists.zx2c4.com
-Cc: netdev@vger.kernel.org
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
-
-Notes:
-    [v2] move the constant out of enum (David)
-
- drivers/net/wireguard/messages.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/wireguard/messages.h b/drivers/net/wireguard/messages.h
-index 208da72673fc..048125bdcd23 100644
---- a/drivers/net/wireguard/messages.h
-+++ b/drivers/net/wireguard/messages.h
-@@ -37,9 +37,10 @@ enum counter_values {
- 	COUNTER_WINDOW_SIZE = COUNTER_BITS_TOTAL - COUNTER_REDUNDANT_BITS
- };
- 
-+#define REKEY_AFTER_MESSAGES	BIT_ULL(60)
-+#define REJECT_AFTER_MESSAGES	(U64_MAX - COUNTER_WINDOW_SIZE - 1)
-+
- enum limits {
--	REKEY_AFTER_MESSAGES = 1ULL << 60,
--	REJECT_AFTER_MESSAGES = U64_MAX - COUNTER_WINDOW_SIZE - 1,
- 	REKEY_TIMEOUT = 5,
- 	REKEY_TIMEOUT_JITTER_MAX_JIFFIES = HZ / 3,
- 	REKEY_AFTER_TIME = 120,
--- 
-2.38.1
-
+Uhhh.. wtf does a policy need __setscheduler_prio() for?
