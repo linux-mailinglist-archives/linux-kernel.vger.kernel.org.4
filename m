@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F090564AA89
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8137864AA8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiLLWow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S233902AbiLLWpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLLWor (ORCPT
+        with ESMTP id S233738AbiLLWoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:44:47 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC04BF9;
-        Mon, 12 Dec 2022 14:44:47 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d15so4025769pls.6;
-        Mon, 12 Dec 2022 14:44:47 -0800 (PST)
+        Mon, 12 Dec 2022 17:44:55 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72092D55
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:44:54 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id v8so15282578edi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7VOrhnDaJPP4RQqpd0yn3MDNObHRe5gWELFMKh7qM4U=;
-        b=K7K+mAD97aLDIIC1hy4vdLBoNY+c97ZElXwCxgTOIojifLfLg41cVFoKvqLr/yVhk1
-         Xjldnx46lS/tylmHuKBWVwZ4D2U9l+GT8F8s5UI32yHMzoFMkM7mUs9Da4pv87Zjqse+
-         2XJ024MHSpu/PdMqoKQdEYibBrmPF9lU87wV/19tl80ThgAB4NAKl7C78NjLLiURkI2R
-         q6nYnOOfA1EHzCb+N7RDZMNuR64hObK8l7uk/2pBvB20VhAEr1bw+sta4cxC9pmnD0Pm
-         QaFK4ty88+u2jOBWDw5jxivjEMqNbOwhW9on44uPbvbxURNAWHDnSOnjjF4rz4m+f2d/
-         RcUg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R+CITe1Dq7f4WKRY/T035akkJWkeh8xmn+Ptd1Om1dA=;
+        b=X2fEgZ0xL4LsQA56aa6jXEO+YbXbYLVg3ATZOObeAGMsDA0uJQwuoSbTJK2Y6woHg/
+         ougGC4XXsOEfOaqm+Zuxpk/fL2nMoVNfX0+nl48qnOkoJlsI8KhW44KqRvNPGdhAuy45
+         CNVjRsGvqcBi3LInVHCdzz7CCCotlCwmcQGWoOWN7oMHNENNziwydIxCkOHvHrRZquBS
+         lwWNRak//AX2zz8n4Pqgo9p4joMqebzo96lBIFI44d7HCqM3X9Rcn822RJtuhv08g2Ae
+         8I1uuGPcAvpSpkbUMnmK4FjY+NpTZCkvbNxa7BtLjMkqscd92Fiu/9c8KTz5/8ukoiDm
+         BDnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7VOrhnDaJPP4RQqpd0yn3MDNObHRe5gWELFMKh7qM4U=;
-        b=FSc1/fdV1pF0tbANdMiZFNWpG1uSVHNlBCTA3DaYdfuki2eoomnZH5/lsUgLBS9lJC
-         6KCkGCipE+JS7wGUntS+fw37N5CRexqC+CWWRiwdyStIQ4sfkxo0t0FtABhRA68Q9qyy
-         fSOR+908Scsy9S53tWs5tLWq5UzVa5PWSvgRGQyfyBlNKgB862yt8VHPbo2HMQ94yXeu
-         aMxvY5ENBDbk61KAyPr+ikACuKUXvc+ih+mK2n3lXEGmXglRWflttsiuvBoSRrtbiv40
-         8WNWrQPBa7X+iHabt0AHWZukH8/mGwTmzAAVkU1DsH4Utz05OIrc/zWyPLpr60qdQe3j
-         NDUA==
-X-Gm-Message-State: ANoB5pk9b16FGF5Ugd8Foh/fxuAAq5tamt82MnNRuW+GelUO2wDhwuhi
-        MpadQou08C+2tXOl+FuZT2w=
-X-Google-Smtp-Source: AA0mqf7HeEv0d0+GUfis9eEUGo1YJql6GcPjPVYiMZyz1n16fxMybBfGOkj9SzniPi4PflAEuI3YBw==
-X-Received: by 2002:a17:902:bb8b:b0:188:760f:d831 with SMTP id m11-20020a170902bb8b00b00188760fd831mr16961830pls.7.1670885086528;
-        Mon, 12 Dec 2022 14:44:46 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170902f68b00b00188fdae6e0esm6928483plg.44.2022.12.12.14.44.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 14:44:46 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Dec 2022 12:44:44 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, darklight2357@icloud.com,
-        Josef Bacik <josef@toxicpanda.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 2/2 block/for-6.2] blk-iolatency: Make initialization lazy
-Message-ID: <Y5eu3A3TMWRUYd+N@slm.duckdns.org>
-References: <Y5TQ5gm3O4HXrXR3@slm.duckdns.org>
- <Y5TRU2+s379DhUbj@slm.duckdns.org>
- <Y5bsBuwjcbHEjhIw@infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+CITe1Dq7f4WKRY/T035akkJWkeh8xmn+Ptd1Om1dA=;
+        b=fitxj1V5x4LOHKlyeiFIH+EVo6Iwe8+N8JGJ7Cw2mTYXPxwJ+aqwFDOcmOws+p3BqD
+         h7uN5n3iAQE/vhpyw2WGy5yyy3aQwrKz9YDuOA7bKF0H7PeKttfUjKqVUoHKEYH/Jnhq
+         wjBHndGnUN9dJpIYD4DlSRWZ5ortI3xlWfOONEL0gbnt+MvHrkQFwri0zTeOIi6wKOY+
+         ADT7LlqbUWlg+MdzdXJF501BwX7qXL6uERSBySjlvtIb5nLkzV91g39AJnwEc0kVlGGL
+         XWMhb8NG7If3vfAaJkY+oaMfezR7MpUi7PIEuwaDHj178S7H4rLqTMTJaZzO2CA0TWQ9
+         wFWw==
+X-Gm-Message-State: ANoB5pkOYQZAXwUtMh7ddnQ2HblY9CJ0yEFUO42EphqosbubVqqZm+25
+        tk9sMeNoQx6IKMG+8OOmybU9IA==
+X-Google-Smtp-Source: AA0mqf6vJM/hyGG0TuicvbFUjskEdhD6h7q+ADs0cpbgbCYqQ6SMWi5djb5c+UuOU2hXAnNkoTWDxw==
+X-Received: by 2002:a05:6402:2a09:b0:461:a5ac:61e5 with SMTP id ey9-20020a0564022a0900b00461a5ac61e5mr17648705edb.15.1670885093052;
+        Mon, 12 Dec 2022 14:44:53 -0800 (PST)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id f5-20020a05640214c500b00458b41d9460sm4182489edx.92.2022.12.12.14.44.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 14:44:52 -0800 (PST)
+Message-ID: <4a15b419-e543-9ae0-1447-abe5851a33cd@linaro.org>
+Date:   Mon, 12 Dec 2022 23:44:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5bsBuwjcbHEjhIw@infradead.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v3 03/19] irqdomain: Drop leftover brackets
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-4-johan+linaro@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221209140150.1453-4-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Christoph.
-
-On Mon, Dec 12, 2022 at 12:53:26AM -0800, Christoph Hellwig wrote:
-> > +static int blk_iolatency_try_init(char *input)
-> > +{
-> > +	static DEFINE_MUTEX(init_mutex);
-> > +	struct block_device *bdev;
-> > +	int ret = 0;
-> > +
-> > +	bdev = blkcg_conf_open_bdev(&input);
-> > +	if (IS_ERR(bdev))
-> > +		return PTR_ERR(bdev);
+On 9/12/22 15:01, Johan Hovold wrote:
+> Drop some unnecessary brackets that were left in place when the
+> corresponding code was updated.
 > 
-> > +retry:
-> >  	ret = blkg_conf_prep(blkcg, &blkcg_policy_iolatency, buf, &ctx);
-> > +	if (ret == -EOPNOTSUPP) {
-> > +		ret = blk_iolatency_try_init(buf);
-> 
-> It's a little sad to do two block device lookups here (even if it
-> obviously doesn't matter for performance).  I wonder if it would
-> make sense to explicitly support the lazy init pattern
-> in blkg_conf_prep somehow.
-> 
-> Otherwise I'm all for the lazy init.
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   kernel/irq/irqdomain.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
 
-Yeah, I thought about separating out open_bdev from blkg_conf_prep() but the
-added complexity didn't feel very attractive given the usage pattern. Lemme
-take a stab at it. Maybe it won't look too bad.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-Thanks.
-
--- 
-tejun
