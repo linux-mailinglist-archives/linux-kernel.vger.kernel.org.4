@@ -2,84 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9EC649E1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744DB649E1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbiLLLns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S231673AbiLLLp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiLLLnL (ORCPT
+        with ESMTP id S231314AbiLLLp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:43:11 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF50BDEC4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:41:34 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NW0785Sc0zmWfw;
-        Mon, 12 Dec 2022 19:40:36 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 12 Dec 2022 19:41:32 +0800
-Message-ID: <d7a0165c-39f6-87ce-f2ec-1f670541147a@huawei.com>
-Date:   Mon, 12 Dec 2022 19:41:32 +0800
+        Mon, 12 Dec 2022 06:45:56 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9EF20A;
+        Mon, 12 Dec 2022 03:45:55 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BC7gLEm022097;
+        Mon, 12 Dec 2022 11:45:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=9Dx7Im/qaVVIn1kDzXWEbUeo27z30INpqHCiA9IegNQ=;
+ b=ENnIGJ5u4F9B2q0H1JBoY1/fE9l7yWXpEsKesOYfmPgaAiYSdD4YFg+XQRfa7n2e7GIt
+ kmBN85KvkZ7nVqnCJkqgDZ+BYWubJR2CLVx6n/eND7yWfguPlEK1r4Vc83t64faXb30W
+ AKkDaodP4m8rJCmDgCj0EGVIjOz6QbAb3B9Bcjg4b8xm0tYqw/fnbV631A4MjjCbZdC1
+ n6SydAFg5E7+FDBLLpdEaySc5C6vDRc3PIWJ+uyHz7M0eNzwh7BReAGO0t0Dd2nKefyu
+ +sINyvm4n7xSWxNlLvoikEARXJXmo6x2NwxuTLp3H/Pcti+WNl1JQjUFL1pBVNY0vEkb EQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mcj723xrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 11:45:45 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BCBjigR016419
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Dec 2022 11:45:44 GMT
+Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 12 Dec 2022 03:45:40 -0800
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+To:     <andersson@kernel.org>, <johan@kernel.org>
+CC:     <bmasney@redhat.com>, Shazad Hussain <quic_shazhuss@quicinc.com>,
+        "Andy Gross" <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
+Date:   Mon, 12 Dec 2022 17:15:01 +0530
+Message-ID: <20221212114502.1616-1-quic_shazhuss@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH -next v2] mm: hwposion: support recovery from
- ksm_might_need_to_copy()
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20221209021525.196276-1-wangkefeng.wang@huawei.com>
- <20221209072801.193221-1-wangkefeng.wang@huawei.com>
- <342f4d3f-7347-1615-7d63-cbdef4872629@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <342f4d3f-7347-1615-7d63-cbdef4872629@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GFf6ibYlAR1lDAvAy5L0nYw7nbVJ_jK5
+X-Proofpoint-ORIG-GUID: GFf6ibYlAR1lDAvAy5L0nYw7nbVJ_jK5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 adultscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ impostorscore=0 mlxlogscore=938 phishscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212120108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add the pcie2a, pcie2a_phy, and respective tlmm
+nodes that are needed to get pcie 2a controller
+enabled on Qdrive3.
 
-On 2022/12/12 10:36, Miaohe Lin wrote:
-> On 2022/12/9 15:28, Kefeng Wang wrote:
->> When the kernel copy a page from ksm_might_need_to_copy(), but runs
->> into an uncorrectable error, it will crash since poisoned page is
->> consumed by kernel, this is similar to Copy-on-write poison recovery,
->> When an error is detected during the page copy, return VM_FAULT_HWPOISON,
->> which help us to avoid system crash. Note, memory failure on a KSM
->> page will be skipped, but still call memory_failure_queue() to be
->> consistent with general memory failure process.
-...
->   
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 908a529bca12..d479811bc311 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1767,7 +1767,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->   
->   	swapcache = page;
->   	page = ksm_might_need_to_copy(page, vma, addr);
-> -	if (unlikely(!page))
-> +	if (IS_ERR_OR_NULL(page))
-> IMHO, it might be better to install a hwpoison entry here. Or later swapoff ops will trigger
-> the uncorrectable error again?
-Thanks for you suggestion, will do in v3.
-> Thanks,
-> Miaohe Lin
->
+This patch enables 4GB 64bit memory space for
+PCIE_2A to have BAR allocations of 64bit pref mem
+needed on this Qdrive3 platform with dual SoCs
+for root port and switch NT-EP. Hence this ranges
+property is overridden in sa8540p-ride.dts only.
+
+Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+---
+This patch depends on below patch series for vreg_l11a.
+
+[v4] arm64: dts: qcom: sa8540p-ride: enable PCIe support
+https://lore.kernel.org/all/20221206161916.315640-1-bmasney@redhat.com/
+
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 44 +++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index bb4afd3a9632..ed20423ec8ac 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -146,6 +146,27 @@ vreg_l8g: ldo8 {
+ 	};
+ };
+ 
++&pcie2a {
++	ranges = <0x01000000 0x0 0x3c200000 0x0 0x3c200000 0x0 0x100000>,
++			 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>,
++			 <0x03000000 0x5 0x00000000 0x5 0x00000000 0x1 0x00000000>;
++
++	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
++	wake-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie2a_default>;
++
++	status = "okay";
++};
++
++&pcie2a_phy {
++	vdda-phy-supply = <&vreg_l11a>;
++	vdda-pll-supply = <&vreg_l3a>;
++
++	status = "okay";
++};
++
+ &pcie3a {
+ 	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
+ 	         <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
+@@ -247,6 +268,29 @@ &xo_board_clk {
+ /* PINCTRL */
+ 
+ &tlmm {
++	pcie2a_default: pcie2a-default-state {
++		perst-pins {
++			pins = "gpio143";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-down;
++		};
++
++		clkreq-pins {
++			pins = "gpio142";
++			function = "pcie2a_clkreq";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++
++		wake-pins {
++			pins = "gpio145";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++	};
++
+ 	pcie3a_default: pcie3a-default-state {
+ 		perst-pins {
+ 			pins = "gpio151";
+-- 
+2.38.0
+
