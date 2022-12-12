@@ -2,236 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610ED64A4A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADD464A4B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiLLQQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
+        id S232711AbiLLQSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiLLQQN (ORCPT
+        with ESMTP id S232672AbiLLQSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:16:13 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5936111A23
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:16:12 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1443a16b71cso8923318fac.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QwyU+vog2X8+88FLCitziFDJsiNyNVqviVu4YNxzWhA=;
-        b=fvsojd5uPuW1sVKC2t09PmNc9dUArcYdabQpt/0gpPl44SKQTVZAHf6tnYHW5q65Ch
-         pgK7uV9ZqVBGN9ableCg9wBPxNPcb3Dd9UZBoHjEoswlMdjnA591zi047/wf28vmo7oM
-         n7aDK8UR7Gz8qhW+Z2rNjGaEUo7MPdaFp4JutCd5Sk+PIPWlTUsTlV9cvdmuEkl1Z7sy
-         ZiAvmrUpTdGOdk4sInfoBGPtKNsP6krjHIx2fi/YILoztKOnjMcF/1B+cglyYuXO4HHV
-         PiSidEwEBe+h+xv7HKpRcjoB77iT4aqU83+/VvCSG4wGdh8aLBPZC1t+pon+6z0UUWWJ
-         +rMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwyU+vog2X8+88FLCitziFDJsiNyNVqviVu4YNxzWhA=;
-        b=q+RRkLlqbetX3v5nZ5y4ifLl0YmPh1O4Z0m6JWVM4VxGT7oknwmtzyykN5KO/nBKk4
-         M71OcjPnj/NxOJn6g5jG2hLDp2BMFxswazd+mSSaddfbpoVoMBe2MFJWE+uoSZyvPHCI
-         f+CLJuKvroRo7pH5Uc0HU913j5ElRedLYvAPW7hj3ZiFOMA2qi41a0AXPwglokZTUf7v
-         ycwsGap/mVNdbES69cAe2vXSVPDygBelCSvpKsroTp/U9/zaWNkeZzaBNOHk4TMvFo9T
-         0h7qjbV7NLwG4TfAYi85/3jC4CGL81/frVHiA/ZsyeLIete7OI+rBHmpGB60puq0DXTv
-         pk5g==
-X-Gm-Message-State: ANoB5pl23AbRNCLLZhIpKL/I+5VOoZJtmo6qkzZOp85rCV7Qtzxpvzfj
-        AGnAsn+zypX4hyw8yuW1ZRMD
-X-Google-Smtp-Source: AA0mqf4jECA6+WrYPxmdo3NUAL8rdtdjiwMHPdw5qDGbK/O81VmLwSgVRLdL5QKtH6Zx5cDoQDomsg==
-X-Received: by 2002:a05:6358:bb9b:b0:e0:23fa:d4c3 with SMTP id df27-20020a056358bb9b00b000e023fad4c3mr1216964rwb.31.1670861771531;
-        Mon, 12 Dec 2022 08:16:11 -0800 (PST)
-Received: from thinkpad ([103.197.115.108])
-        by smtp.gmail.com with ESMTPSA id mp20-20020a17090b191400b00218ae9916c4sm5668820pjb.35.2022.12.12.08.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 08:16:10 -0800 (PST)
-Date:   Mon, 12 Dec 2022 21:46:04 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com
-Subject: Re: [PATCH v2 13/13] qcom: llcc/edac: Support polling mode for ECC
- handling
-Message-ID: <20221212161604.GE20655@thinkpad>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-14-manivannan.sadhasivam@linaro.org>
- <COZYL8MWN97H.MROQ391BGA09@otso>
+        Mon, 12 Dec 2022 11:18:16 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79B13E28;
+        Mon, 12 Dec 2022 08:18:14 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670861892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xj018pjLW2UkgQnmqILBUEjAhXT9K6CF9xEj+xIiOFE=;
+        b=dKy70Zi3FiVNICZwR1ZmCUEpDQ3v/TY50J/4hvfbOePjz8inPzy3fENnG8eMjkELCHMY8U
+        38zyt11Ffk1cmTWmB6ToWEZTugFnAY0I7ngiTNgllZaM+/f27zmb/uveKuqeVZZtLLbUow
+        LstYVR6VpXbY5gzJ6o+xdFVwAJ7GacdIDVFJjzkpdqszoQeGW9ekwsbN1D4np6IJBnA+xT
+        pjKnMILuN78kgX48D5Bulitb2TWj3LZFduti5L8HN3wQ0lBZZnak79HXBCp0UMxtM7ypeL
+        Q7GZi2E0KgDgV3rqQzfI+t1XG7SPNTWwb6uP+Tgd3EH0S9TO5mmr8mO4QLsFOA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670861892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xj018pjLW2UkgQnmqILBUEjAhXT9K6CF9xEj+xIiOFE=;
+        b=wyzDgR0jttlml3luJKS9Im9oim6JOrsphSFktX57nGApgGMBCUL4+A9pqaB+oEGsO9mRnw
+        m6hOMh+W+d1iIFBw==
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 19/19] irqdomain: Switch to per-domain locking
+In-Reply-To: <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <20221209140150.1453-20-johan+linaro@kernel.org> <87mt7sbtf9.ffs@tglx>
+ <Y5c6z3t+sV/kIMjF@hovoldconsulting.com>
+Date:   Mon, 12 Dec 2022 17:18:11 +0100
+Message-ID: <878rjcbnp8.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <COZYL8MWN97H.MROQ391BGA09@otso>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 04:53:49PM +0100, Luca Weiss wrote:
-> Hi Manivannan,
-> 
-> On Mon Dec 12, 2022 at 1:33 PM CET, Manivannan Sadhasivam wrote:
-> > Not all Qcom platforms support IRQ mode for ECC handling. For those
-> > platforms, the current EDAC driver will not be probed due to missing ECC
-> > IRQ in devicetree.
-> >
-> > So add support for polling mode so that the EDAC driver can be used on all
-> > Qcom platforms supporting LLCC.
-> >
-> > The polling delay of 5000ms is chosed based on Qcom downstream/vendor
-> > driver.
-> 
-> I think it does work for me on SM6350, I get this in dmesg:
-> 
-> [    0.054608] EDAC MC: Ver: 3.0.0
-> [    0.273913] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (POLLED)
-> 
-> What I've noticed though is that the 5000ms poll you defined in the
-> driver doesn't seem to be reflected at runtime? Or am I looking at
-> different things?
-> 
-> / # cat /sys/devices/system/edac/qcom-llcc/poll_msec 
-> 1000
-> 
+On Mon, Dec 12 2022 at 15:29, Johan Hovold wrote:
+> On Mon, Dec 12, 2022 at 03:14:34PM +0100, Thomas Gleixner wrote:
+>> On Fri, Dec 09 2022 at 15:01, Johan Hovold wrote:
+>> > The IRQ domain structures are currently protected by the global
+>> > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
+>> > which may potentially speed up parallel probing somewhat.
+>> >
+>> > Note that the domain lock of the root domain (innermost domain) must be
+>> > used for hierarchical domains. For non-hierarchical domain (as for root
+>> > domains), the new root pointer is set to the domain itself so that
+>> > domain->root->mutex can be used in shared code paths.
+>> >
+>> > Also note that hierarchical domains should be constructed using
+>> > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
+>> > poking at irqdomain internals.
+>> 
+>> While I agree in principle, this change really makes me nervous.
+>> 
+>> Any fail in setting up domain->root correctly, e.g. by not using
+>> irq_domain_create_hierarchy(), cannot be detected and creates nasty to
+>> debug race conditions.
+>> 
+>> So we need some debug mechanism which allows to validate that
+>> domain->root is set up correctly when domain->parent != NULL.
+>
+> Lockdep will catch that due to the
+>
+> 	lockdep_assert_held(&domain->root->mutex);
+>
+> I added to irq_domain_set_mapping() and which is is called for each
+> (inner) domain in a hierarchy when allocating an IRQ.
 
-Oops... Looks like the interval is hardcoded in edac_device driver:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/edac/edac_device.c#n449
+Hmm. Indeed that should do the trick.
 
-This clearly needs to be fixed. Will do so in next version.
-
-Thanks a lot for testing the series. I will also consider this as your t-b tag
-for SM6350 and driver patches.
+Some comments would be appreciated as the rules around domain->root are
+far from obvious.
 
 Thanks,
-Mani
 
-> Regards
-> Luca
-> 
-> >
-> > Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/edac/qcom_edac.c     | 37 +++++++++++++++++++++++++-----------
-> >  drivers/soc/qcom/llcc-qcom.c | 13 ++++++-------
-> >  2 files changed, 32 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-> > index 5be93577fc03..f7afb5375293 100644
-> > --- a/drivers/edac/qcom_edac.c
-> > +++ b/drivers/edac/qcom_edac.c
-> > @@ -76,6 +76,8 @@
-> >  #define DRP0_INTERRUPT_ENABLE           BIT(6)
-> >  #define SB_DB_DRP_INTERRUPT_ENABLE      0x3
-> >  
-> > +#define ECC_POLL_MSEC			5000
-> > +
-> >  enum {
-> >  	LLCC_DRAM_CE = 0,
-> >  	LLCC_DRAM_UE,
-> > @@ -283,8 +285,7 @@ dump_syn_reg(struct edac_device_ctl_info *edev_ctl, int err_type, u32 bank)
-> >  	return ret;
-> >  }
-> >  
-> > -static irqreturn_t
-> > -llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> > +static irqreturn_t llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  {
-> >  	struct edac_device_ctl_info *edac_dev_ctl = edev_ctl;
-> >  	struct llcc_drv_data *drv = edac_dev_ctl->pvt_info;
-> > @@ -328,6 +329,11 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  	return irq_rc;
-> >  }
-> >  
-> > +static void llcc_ecc_check(struct edac_device_ctl_info *edev_ctl)
-> > +{
-> > +	llcc_ecc_irq_handler(0, edev_ctl);
-> > +}
-> > +
-> >  static int qcom_llcc_edac_probe(struct platform_device *pdev)
-> >  {
-> >  	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-> > @@ -356,22 +362,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
-> >  	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
-> >  	edev_ctl->pvt_info = llcc_driv_data;
-> >  
-> > +	/* Check if LLCC driver has passed ECC IRQ */
-> > +	ecc_irq = llcc_driv_data->ecc_irq;
-> > +	if (ecc_irq > 0) {
-> > +		/* Use interrupt mode if IRQ is available */
-> > +		edac_op_state = EDAC_OPSTATE_INT;
-> > +	} else {
-> > +		/* Fall back to polling mode otherwise */
-> > +		edac_op_state = EDAC_OPSTATE_POLL;
-> > +		edev_ctl->poll_msec = ECC_POLL_MSEC;
-> > +		edev_ctl->edac_check = llcc_ecc_check;
-> > +	}
-> > +
-> >  	rc = edac_device_add_device(edev_ctl);
-> >  	if (rc)
-> >  		goto out_mem;
-> >  
-> >  	platform_set_drvdata(pdev, edev_ctl);
-> >  
-> > -	/* Request for ecc irq */
-> > -	ecc_irq = llcc_driv_data->ecc_irq;
-> > -	if (ecc_irq < 0) {
-> > -		rc = -ENODEV;
-> > -		goto out_dev;
-> > -	}
-> > -	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-> > +	/* Request ECC IRQ if available */
-> > +	if (ecc_irq > 0) {
-> > +		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-> >  			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
-> > -	if (rc)
-> > -		goto out_dev;
-> > +		if (rc)
-> > +			goto out_dev;
-> > +	}
-> >  
-> >  	return rc;
-> >  
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index a29f22dad7fa..e044e6756415 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -1011,13 +1011,12 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  		goto err;
-> >  
-> >  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
-> > -	if (drv_data->ecc_irq >= 0) {
-> > -		llcc_edac = platform_device_register_data(&pdev->dev,
-> > -						"qcom_llcc_edac", -1, drv_data,
-> > -						sizeof(*drv_data));
-> > -		if (IS_ERR(llcc_edac))
-> > -			dev_err(dev, "Failed to register llcc edac driver\n");
-> > -	}
-> > +
-> > +	llcc_edac = platform_device_register_data(&pdev->dev,
-> > +					"qcom_llcc_edac", -1, drv_data,
-> > +					sizeof(*drv_data));
-> > +	if (IS_ERR(llcc_edac))
-> > +		dev_err(dev, "Failed to register llcc edac driver\n");
-> >  
-> >  	return 0;
-> >  err:
-> > -- 
-> > 2.25.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+        tglx
