@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3324E649CEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC5649C69
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 11:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbiLLKpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 05:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S231636AbiLLKlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 05:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiLLKll (ORCPT
+        with ESMTP id S231653AbiLLKkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 05:41:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92F62E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670841300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KFD4bXF9HfKCTB2bqwvpTx8dBPmnhTdXw6WlgJmCRVE=;
-        b=KKucQ/Bu1/lv68mwDOoBIY0ErKwJz5aWWGszCMisnn4XqtI7lpbX3ffgf1h10KJRU8Mq4n
-        Ql1vggxmsQk18NWTyXCCeafaRFLGeOrnyVdVhzS68Q6Io8GktMWjEC2yIQ839yZLViP/MS
-        6VrEyYStWngn2ieUj9pcU8omh0ecUKo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-169-y6UFkkqyOquK5bJOzEgwlQ-1; Mon, 12 Dec 2022 05:34:59 -0500
-X-MC-Unique: y6UFkkqyOquK5bJOzEgwlQ-1
-Received: by mail-wm1-f70.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso3165491wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:34:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KFD4bXF9HfKCTB2bqwvpTx8dBPmnhTdXw6WlgJmCRVE=;
-        b=RjvnSA6ClEjCF4VuYD78r7r6kEyG4V8vLNqLnYQJqr3gzZA8d43WyxvCdtQaiXSy9w
-         d4QO6Cb/bDrNkkT9+ML2BvBwyqwWiz+TSWGx1C+kdW4ZcJqNXYIHmnY6f7p0+g+th/p9
-         G7gplC1x2yJttPn6tw14AAnMq/hhAEISEkcO340Nh+Mx2xKMKLpccz7Z3EAhFTX2JXni
-         ZWRru+FT4Q5mnLGDCRw7qVzesFWyLaX7Q5Lvc79E3CLgOuJEnFa1lsog3stEWcWLvmAL
-         8UL2NkZ2Fp9SV+qiTaGehdCvzszfTUbqT6ECsoXQL0enDrWH+6uQdcCkTJWCKrYNAbIJ
-         MbEA==
-X-Gm-Message-State: ANoB5pm1jTkH1htYn+Gae2vsq98IBVtcUi4G+zhRFC9AnCKXoJ1Pnn/3
-        i6GZ0bm8m5nenQuTYTm76ISCotrEACmUjiLvKfhfMjgkP9nsfjVBwhCRQvje+pZ3CxlITnuOGxc
-        JvoGc81hlM21Vhm+SmFfedlkr
-X-Received: by 2002:a5d:4888:0:b0:232:be5d:5ecc with SMTP id g8-20020a5d4888000000b00232be5d5eccmr9224036wrq.35.1670841298283;
-        Mon, 12 Dec 2022 02:34:58 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7wvWIVuOKysZf5Mx8cCdDopdcGEnGqjatRwKG8EB36UeyRpqDFxHDI9VsIf8PVP5iD55AkPA==
-X-Received: by 2002:a5d:4888:0:b0:232:be5d:5ecc with SMTP id g8-20020a5d4888000000b00232be5d5eccmr9224016wrq.35.1670841298004;
-        Mon, 12 Dec 2022 02:34:58 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id bn1-20020a056000060100b00242269c8b8esm8603207wrb.25.2022.12.12.02.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 02:34:57 -0800 (PST)
-Message-ID: <322454c7-0a3b-e055-2405-f485fa149e7a@redhat.com>
-Date:   Mon, 12 Dec 2022 11:34:56 +0100
+        Mon, 12 Dec 2022 05:40:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ECDEE03;
+        Mon, 12 Dec 2022 02:35:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA3A3B80BA6;
+        Mon, 12 Dec 2022 10:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7D1C433D2;
+        Mon, 12 Dec 2022 10:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670841307;
+        bh=yjH8wmZxCoUG84ricBifB0MoW2if5/EMgSiP12K/d10=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IyoDxxyEcSnBbYP3yrmaTybzpQNBRTPrLxHh5+v0Pe4cLWywBSYOLP4OeqL+cv3MW
+         75Pm8nAzzTxht4WXpLD8rTQDLKEXLDa4sb8P47RduifgqdnseawTfPLF52XGWp+4QS
+         6VgrSAYlAdIvAWJRPiWPrbEncUGCfInulHrJRcsACcuA6bniGA/uBnerezYk1MwLR2
+         sljBHPmLkvrqaQWyDv6gYkjRHdnWqlUY/PS9dU82+LqUrvCHBCiwZn0Kxa1Nh5TnQi
+         pSv1o/TMpA9sbT0awGHw5ZXklSaSuaZPwrYwqMraBRQp8cWoNQvEnN6pKSngvl+2be
+         2p7ERIqslj3wg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Rudolf Polzer <rpolzer@google.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 1/7] HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch V 10
+Date:   Mon, 12 Dec 2022 05:34:57 -0500
+Message-Id: <20221212103504.299281-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 4/7] KVM: selftests: Correctly initialize the VA space
- for TTBR0_EL1
-Content-Language: en-US
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Ricardo Koller <ricarkol@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209015307.1781352-1-oliver.upton@linux.dev>
- <20221209015307.1781352-5-oliver.upton@linux.dev>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221209015307.1781352-5-oliver.upton@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/22 02:53, Oliver Upton wrote:
-> @@ -268,17 +305,17 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
->   #ifdef __aarch64__
->   	if (vm->pa_bits != 40)
->   		vm->type = KVM_VM_TYPE_ARM_IPA_SIZE(vm->pa_bits);
-> +
-> +	/* selftests use TTBR0 only, meaning there is a single VA region. */
-> +	vm->has_split_va_space = false;
-> +#else
-> +	vm->has_split_va_space = true;
->   #endif
->   
+From: Hans de Goede <hdegoede@redhat.com>
 
-Even though there happens to be already a suitable #ifdef, I don't
-really like them and don't think there should be a new bool unless
-something else uses it.
+[ Upstream commit 9ad6645a9dce4d0e42daca6ebf32a154401c59d3 ]
 
-However, the new comment is very useful, so I added it to kvm_util.c as
-follows:
+The Acer Aspire Switch V 10 (SW5-017)'s keyboard-dock uses the same
+ITE controller setup as other Acer Switch 2-in-1's.
 
-/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 759a45540108..56d5ea949cbb 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -186,6 +186,15 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
-  _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
-  	       "Missing new mode params?");
-  
-+/*
-+ * Initializes vm->vpages_valid to match the canonical VA space of the
-+ * architecture.
-+ *
-+ * The default implementation is valid for architectures which split the
-+ * range addressed by a single page table into a low and high region
-+ * based on the MSB of the VA. On architectures with this behavior
-+ * the VA region spans [0, 2^(va_bits - 1)), [-(2^(va_bits - 1), -1].
-+ */
-  __weak void vm_vaddr_populate_bitmap(struct kvm_vm *vm)
-  {
-  	sparsebit_set_num(vm->vpages_valid,
+This needs special handling for the wifi on/off toggle hotkey as well as
+to properly report touchpad on/off keypresses.
+
+Add the USB-ids for the SW5-017's keyboard-dock with a quirk setting of
+QUIRK_TOUCHPAD_ON_OFF_REPORT to fix both issues.
+
+Cc: Rudolf Polzer <rpolzer@google.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hid/hid-ids.h | 1 +
+ drivers/hid/hid-ite.c | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 256795ed6247..a5d24633a509 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -1215,6 +1215,7 @@
+ #define USB_DEVICE_ID_SYNAPTICS_DELL_K15A	0x6e21
+ #define USB_DEVICE_ID_SYNAPTICS_ACER_ONE_S1002	0x73f4
+ #define USB_DEVICE_ID_SYNAPTICS_ACER_ONE_S1003	0x73f5
++#define USB_DEVICE_ID_SYNAPTICS_ACER_SWITCH5_017	0x73f6
+ #define USB_DEVICE_ID_SYNAPTICS_ACER_SWITCH5	0x81a7
+ 
+ #define USB_VENDOR_ID_TEXAS_INSTRUMENTS	0x2047
+diff --git a/drivers/hid/hid-ite.c b/drivers/hid/hid-ite.c
+index 430fa4f52ed3..75ebfcf31889 100644
+--- a/drivers/hid/hid-ite.c
++++ b/drivers/hid/hid-ite.c
+@@ -121,6 +121,11 @@ static const struct hid_device_id ite_devices[] = {
+ 		     USB_VENDOR_ID_SYNAPTICS,
+ 		     USB_DEVICE_ID_SYNAPTICS_ACER_ONE_S1003),
+ 	  .driver_data = QUIRK_TOUCHPAD_ON_OFF_REPORT },
++	/* ITE8910 USB kbd ctlr, with Synaptics touchpad connected to it. */
++	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_SYNAPTICS,
++		     USB_DEVICE_ID_SYNAPTICS_ACER_SWITCH5_017),
++	  .driver_data = QUIRK_TOUCHPAD_ON_OFF_REPORT },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(hid, ite_devices);
+-- 
+2.35.1
 
