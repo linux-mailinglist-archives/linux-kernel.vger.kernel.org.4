@@ -2,41 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3908D64A859
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E34464A85A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbiLLUBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S233394AbiLLUCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbiLLUBu (ORCPT
+        with ESMTP id S233412AbiLLUCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:01:50 -0500
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB7517588
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:01:49 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 4ozhpgCRi0H6I4ozhpkHYh; Mon, 12 Dec 2022 21:01:47 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 12 Dec 2022 21:01:47 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chris Mason <chris.mason@oracle.com>,
-        linux-btrfs@vger.kernel.org
-Subject: [PATCH] btrfs: Fix an error handling path in btrfs_defrag_leaves()
-Date:   Mon, 12 Dec 2022 21:01:43 +0100
-Message-Id: <9a1d857866d4768090d7f89869076b7a5a85116b.1670875295.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 12 Dec 2022 15:02:01 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F26D1758D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:01:56 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id x66so688468pfx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:01:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pWlj9/EbHKVaKHZT5V8RMD2Y86vzmO3TVzOVHSD1M3g=;
+        b=jC4zI2wmQYF6SKM9oT//lZJLdRTQYjwx8uCoxzRyclkJ08YpgGRQqGt+g0r1VI9eGQ
+         Q/YYQgPtda17JQPyBmbYAzBtsNJPr/mm/uLgZNBu7DNZEYoVJ5qqom5yTuIJBer4N/jO
+         G/r3HPR5U76F7b+ejorRyVVMsbpBPxxJk2ZefqIyRL7HfzKrBq23coLKH/n3+/AE1ikD
+         q5vkAy8B6PiyCYul4gEukrofImv1TZXMsljSMLi+jyD2uOr5iB6JdAU4GtoXaRWmuGXE
+         6rXXnX+V8LCLhAxUBrQ4W/Ld1el1Etuxu4hqAtUdie80zKX9mzNY0PZhSFK0LAlvyRXN
+         iU3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pWlj9/EbHKVaKHZT5V8RMD2Y86vzmO3TVzOVHSD1M3g=;
+        b=PLnivHveiBB6/HNwyLLoxfoXS9Bgn7zLjd2R21J5gYpNxhrJBkP+Ie1DchqGLNL0e6
+         LQaJyRcPZuYCSS89/d9Kg7PQsSK2oMhbh+Lk+h/Q4c8Fcwlv8D+tk0/Hv7ODpcbrVM4z
+         hnVxk1YrH9ZT25t1jcwiVR4EmB1fiLmq0yJ6xvELvsd416aTgJr8pZIFU4Ef2Auxq1EQ
+         JxNL8P+8VDSXxbxO1RZIoxSQFshftdRMl5zyTaJZQQqf+rDwWZxNqnR+T7lst1iff6dw
+         V2SS76gBrQZlDDLd5eei5JZ3BSMUn+jDf8V+iDYt4K/Su5v20r+lOxZhhD/xikvbxehg
+         CmkQ==
+X-Gm-Message-State: ANoB5pncVbKrr5Bk33g6ZB750+hCk7oOzST8Rc2CcyNEKv6ap+Q34/vA
+        2M9aPlMc1L8o9n8XpUaZaTM=
+X-Google-Smtp-Source: AA0mqf4udGxAJH7IBnh0k5H97MR10twh5aJZ8Ece0XD+YX8GD1Dob56pIzeKFyokjWbIFt8Cwark8w==
+X-Received: by 2002:a05:6a00:1c9f:b0:578:144f:ad59 with SMTP id y31-20020a056a001c9f00b00578144fad59mr11968029pfw.9.1670875315851;
+        Mon, 12 Dec 2022 12:01:55 -0800 (PST)
+Received: from fedora ([2601:644:8002:1c20::2c6b])
+        by smtp.gmail.com with ESMTPSA id q18-20020aa79832000000b00576984617b1sm6215689pfl.60.2022.12.12.12.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 12:01:55 -0800 (PST)
+Date:   Mon, 12 Dec 2022 12:01:53 -0800
+From:   Vishal Moola <vishal.moola@gmail.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: swap: Convert mark_page_lazyfree() to
+ folio_mark_lazyfree()
+Message-ID: <Y5eIsdb+TU6HL9eZ@fedora>
+References: <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+ <20221209020618.190306-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209020618.190306-1-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,41 +74,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All error handling paths end to 'out', except this memory allocation
-failure.
+On Fri, Dec 09, 2022 at 10:06:18AM +0800, Kefeng Wang wrote:
+> mark_page_lazyfree() and the callers are converted to use folio,
+> this rename and make it to take in a folio argument instead of
+> calling page_folio().
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-This is spurious. So branch to the error handling path also in this case.
-It will add a call to:
-	memset(&root->defrag_progress, 0,
-	       sizeof(root->defrag_progress));
+Reviewed-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-Fixes: 6702ed490ca0 ("Btrfs: Add run time btree defrag, and an ioctl to force btree defrag")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is completely speculative.
-
-Review with care !
----
- fs/btrfs/defrag.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/fs/btrfs/defrag.c b/fs/btrfs/defrag.c
-index 0a3c261b69c9..d81b764a7644 100644
---- a/fs/btrfs/defrag.c
-+++ b/fs/btrfs/defrag.c
-@@ -358,8 +358,10 @@ int btrfs_defrag_leaves(struct btrfs_trans_handle *trans,
- 		goto out;
  
- 	path = btrfs_alloc_path();
--	if (!path)
--		return -ENOMEM;
-+	if (!path) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
- 
- 	level = btrfs_header_level(root->node);
- 
--- 
-2.34.1
-
