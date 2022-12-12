@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6204D649F71
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC24649F75
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbiLLNIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S232548AbiLLNJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:09:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiLLNIe (ORCPT
+        with ESMTP id S232174AbiLLNJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:08:34 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A054E65E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:08:32 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3b56782b3f6so144268367b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:08:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VYeWDmjLYcTiLYEYpGdYdeFk+Wlp6dc41MHgDxnHonk=;
-        b=TMVnu4oDVAjwQo2ueybgeBTQaW39HyuM4S/0xkCBZNA9zk/cHROmDWJst9hspswZag
-         QIwXlM0Yb78xudSshA318tgegOZCJLSc27ebupa2J5AFwpmot+icGHKgtGxovMn/ud4M
-         AfLEhbOFco/5T0b6RgquRBFzr3wy5ixwKbGvJk8bC7DojUBbqXgkGPDrU2tasLXQcOLR
-         ntdJkvDsOu1ji7+DFQJoxM4AGllFHdU2jvFmjsV81QkmecaUJaF5sD6KMK+2sOtX+U4L
-         jPueMFT39+2NxCIqboB1xTBwWKHALQlHFwPp3LgZ+L6aTOth7pXuPyKOxQuTXrSk5dpB
-         DoBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VYeWDmjLYcTiLYEYpGdYdeFk+Wlp6dc41MHgDxnHonk=;
-        b=dr5hKQ3pjtfkYEm/78kwi2crn9EzFeAVt0OCjCoYLmq4SCg9/NacTzWiWR1RTL/WXj
-         RK1Op3mXf5kH1oTcaOBfWne3ap4Mzky7cubjKtZznf7hD/IX7+WBSO/sPNyNvLeZhXDx
-         b2d8ZCLnLPdyQ44Z3l4sl7nqeU9fdyWOQxs74Vq1XMyd8n6h3JMh4DV4DrcGhLxvwZyd
-         BrnF6AQA1GlTmgdG9S9D9+yzwQiJ7fHDwo2hC7UJB2ZBR0bZXqBeBeFimeyFE0WHIaVL
-         KCWlm3SceeCkVqkeB18UxcMH7ssVIalSG1IZS2PcBf1reH8uBon8qn89uFaDknzcAUY2
-         wEQg==
-X-Gm-Message-State: ANoB5plB1pdhZUQgDr6EbeMf6hAKhD+Vmyxm30znGB6TLKIzFrkv0rZy
-        V1UMrue775VvG2Ks8nWF421q3Il6KMHBD9gPne5QDQ==
-X-Google-Smtp-Source: AA0mqf4El+CPKJ9CeoLZ+zzTZHIdrpCgYQdXK9NNf5joMEkI0DVQUMGXqvULtsXeAUtOOc4xLFizwJUzwRHGh3pnOLg=
-X-Received: by 2002:a0d:ebc3:0:b0:3d7:b4:9879 with SMTP id u186-20020a0debc3000000b003d700b49879mr38387562ywe.370.1670850511805;
- Mon, 12 Dec 2022 05:08:31 -0800 (PST)
+        Mon, 12 Dec 2022 08:09:02 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FC21276B;
+        Mon, 12 Dec 2022 05:09:00 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BC98JdN023527;
+        Mon, 12 Dec 2022 13:08:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=dxskmic1Yr1+fUcs56ZWXNvxVz9bJt1msmiC1km1d2I=;
+ b=Y9n3VwiQoek16COca9Z+xE4V8FWJX8daNOYz4pjVgqQQ9qcBJ2xsMeJYoUCSZCTZjKHU
+ tYoNKUmjwvBCQyiW7opAqPCp8gKhnYttjrXcVvwLRt8LZEM0ehjNnJfBdzJeeUtI0vzn
+ hw+0B7FOGATOi1YmVHf/4PVVrf1EGvMmDoFSmdMfx/AwzDxXQUfs35zkseoUrw6XPo+c
+ omtjBfW8V6Pf9zeIMwcb2kVNy6qSOCu0E1PRQm7ru47JAm5ErxFqg5XL9QM//hGOxgmB
+ DgtVZrNs76gTyIUwZPhT7E6lNnMAmiOkR9BoCNmO/hjnjIJ+GrdBBJiWtsoI1dTon6t/ Lg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mcj092n3v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Dec 2022 13:08:40 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BCBvkII034709;
+        Mon, 12 Dec 2022 13:08:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mcgj40sj5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Dec 2022 13:08:40 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BCD8dRO038889;
+        Mon, 12 Dec 2022 13:08:39 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3mcgj40shq-1;
+        Mon, 12 Dec 2022 13:08:39 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, harshit.m.mogalapalli@gmail.com,
+        error27@gmail.com, darren.kenny@oracle.com,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brian Gix <brian.gix@intel.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: Fix a buffer overflow in mgmt_mesh_add()
+Date:   Mon, 12 Dec 2022 05:08:28 -0800
+Message-Id: <20221212130828.988528-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221028064141.2171405-1-clabbe@baylibre.com> <Y5clqogvKUjk+KN9@Red>
-In-Reply-To: <Y5clqogvKUjk+KN9@Red>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 12 Dec 2022 14:08:20 +0100
-Message-ID: <CACRpkdYF5Y-qVTzojHNiZtT4PndeUzPOT26NY-WWc49+vBbyyw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: leds: common: add disk write/read and usb-host/usb-gadget
-To:     Corentin LABBE <clabbe@baylibre.com>
-Cc:     pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212120122
+X-Proofpoint-ORIG-GUID: e01joMMkITDIIWfYrGbDlKhSpFsgVQH1
+X-Proofpoint-GUID: e01joMMkITDIIWfYrGbDlKhSpFsgVQH1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 1:59 PM Corentin LABBE <clabbe@baylibre.com> wrote:
-> Le Fri, Oct 28, 2022 at 06:41:40AM +0000, Corentin Labbe a =C3=A9crit :
-> > The triggers enum misses 3 cases used by gemini DT.
-> > usb-host was added via commit 0cfbd328d60f ("usb: Add LED triggers for =
-USB activity")
-> > so we add also as valid trigger usb-gadget which was added along in thi=
-s
-> > commit.
-> >
-> > disk-read/disk-write were added by commit d1ed7c558612 ("leds: Extends =
-disk trigger for reads and writes")
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> >
->
-> Hello Pavel Machek and Lee Jones
->
-> The two patch are reviewed, could you take them to your tree ?
+Smatch Warning:
+net/bluetooth/mgmt_util.c:375 mgmt_mesh_add() error: __memcpy()
+'mesh_tx->param' too small (48 vs 50)
 
-If the subsystem maintainers are too busy to respond, maybe you can propose
-it for merging through the SoC tree? It's a common last way out.
+Analysis:
 
-Yours,
-Linus Walleij
+'mesh_tx->param' is array of size 48. This is the destination.
+u8 param[sizeof(struct mgmt_cp_mesh_send) + 29]; // 19 + 29 = 48.
+
+But in the caller 'mesh_send' we reject only when len > 50.
+len > (MGMT_MESH_SEND_SIZE + 31) // 19 + 31 = 50.
+
+Fixes: b338d91703fa ("Bluetooth: Implement support for Mesh")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+This is based on static analysis, I am unsure if we should put
+an upper bound to len(48) instead.
+
+This limit on length changed between v4 and v5 patches of Commit:
+("Bluetooth: Implement support for Mesh") in function mesh_send()
+
+v4: https://lore.kernel.org/all/20220511155412.740249-2-brian.gix@intel.com/
+v5: https://lore.kernel.org/all/20220720194511.320773-2-brian.gix@intel.com/
+---
+ net/bluetooth/mgmt_util.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/bluetooth/mgmt_util.h b/net/bluetooth/mgmt_util.h
+index 6a8b7e84293d..bdf978605d5a 100644
+--- a/net/bluetooth/mgmt_util.h
++++ b/net/bluetooth/mgmt_util.h
+@@ -27,7 +27,7 @@ struct mgmt_mesh_tx {
+ 	struct sock *sk;
+ 	u8 handle;
+ 	u8 instance;
+-	u8 param[sizeof(struct mgmt_cp_mesh_send) + 29];
++	u8 param[sizeof(struct mgmt_cp_mesh_send) + 31];
+ };
+ 
+ struct mgmt_pending_cmd {
+-- 
+2.38.1
+
