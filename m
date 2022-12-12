@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B31966498EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BB76498F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiLLGXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 01:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S231317AbiLLGYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 01:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiLLGXw (ORCPT
+        with ESMTP id S229697AbiLLGYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 01:23:52 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0A3B845
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:23:51 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id js9so9917245pjb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:23:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=16qjFjVCSByPSmaTuD6/Rn3kPnlB8HVnWQrOiENDUnQ=;
-        b=i9Z0r6NITq9TRj+RUGURJbxiHaklMCriP5vPoXMX1iq0ZiQUewgeuwqnS+moJb1Pxb
-         aKaM5fiqklCwGLtJoqWAlSKTPQML5vV18ez36qWb/FJQKXNlr3ooSmnYxRL3I7sQz2Q5
-         Mqa5Sy5ZB3x5aFnQBy2UL9Kwby2+bmzGxQpf6heIA3AizBdIwqNzh3aN6KQk4dtJthN7
-         0sxax/K5xH3wOkQ7b7o7pFlUCXBBgxiuBBY7bwgx6+fqHSnkoRZxiP+uuF2s1bFu0/9p
-         0FbW4W5JUODSa5Hz2fuorIC/M5sHPmcUHhIRaoc75q1SnTe6rAMeROBlUC6pYlujVNUI
-         ewyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=16qjFjVCSByPSmaTuD6/Rn3kPnlB8HVnWQrOiENDUnQ=;
-        b=iqvEtOPIjZCkML/3neujdi6+1kp7GWybjQnaF63fw4xmI+8CCvfpTudNr8Enr8r9Jb
-         M8/EvTAU1vdfMGnsHC4qkAv9CSLxUfqhfQ8jDcCB3Jw4NY6sB/+v54Kd5T+YCVxLKVE6
-         A87Gjmks++gPXAZl0fwg2mne0jCSAQWmakvus7Yv6dVC8e91vQQ+VSHlccdt8/eupzq4
-         8TTk1vWpHBko5x/QUPZnBd+EEu+m1kUP8mZx7e/f+deAWhR55zVdwM6kox9QwwByEYZv
-         R/Gk71OpdSrlMfy2iy4K0Muj+e6Nyb1V+jr3P/abA92Lty2W/J2Ipqs6UNd/zVpUR4V2
-         JaOA==
-X-Gm-Message-State: ANoB5plJZeMpyPLRALp/h5c0rxirA2QXnXeU9WQNUX7+qktQtduVPsET
-        WgxB1wYg51Ua8xgCKH7cSVV++VzqzxMizQ==
-X-Google-Smtp-Source: AA0mqf7BcvB/V0ijOniyMqhsVQqV3Fi4laAk2txZkZMuFZcjghgl6Ff663EKYGi92pEfcajCcOwbwA==
-X-Received: by 2002:a17:902:930a:b0:188:da5c:152b with SMTP id bc10-20020a170902930a00b00188da5c152bmr14515056plb.9.1670826231221;
-        Sun, 11 Dec 2022 22:23:51 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:9159])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b00189c26719cdsm5375734plg.272.2022.12.11.22.23.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 22:23:50 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 11 Dec 2022 20:23:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Richard Clark <richard.xnu.clark@gmail.com>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] workqueue: Prevent a new work item from queueing into a
- destruction wq
-Message-ID: <Y5bI9ZbjpzNFpk/8@slm.duckdns.org>
-References: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
+        Mon, 12 Dec 2022 01:24:33 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAAFCE1F
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:24:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D084333895;
+        Mon, 12 Dec 2022 06:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670826270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=PDleQvRrvX4MednzmZMOBosn/u+w5VLSU4we6Gr6Rpg=;
+        b=JeOvlfdVQ0v0I9dzki2wi4tBTPrtVnpfK7fhFEf5ZClAg8Gc2aRgtHIna2pcEnPFObuod7
+        R86VxHPkycHHJpEM324Vo3EnvroKux4P7x7kgFVis2Rbi0fa3RHfAxX4DXFokOp8EJs7DK
+        W2dmF+T2I3R0t2KMkA00IxcaVxp+Fcw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8DED13456;
+        Mon, 12 Dec 2022 06:24:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jEviJx7JlmNdVwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 12 Dec 2022 06:24:30 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        sstabellini@kernel.org
+Subject: [GIT PULL] xen: branch for v6.2-rc1
+Date:   Mon, 12 Dec 2022 07:24:30 +0100
+Message-Id: <20221212062430.10263-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 02:18:36PM +0800, Richard Clark wrote:
-> Currently the __WQ_DRAINING is used to prevent a new work item from queueing
-> to a draining workqueue, but this flag will be cleared before the end of a
-> RCU grace period. Because the workqueue instance is actually freed after
-> the RCU grace period, this fact results in an opening window in which a new
-> work item can be queued into a destorying workqueue and be scheduled
-> consequently, for instance, the below code snippet demos this accident:
+Linus,
 
-I mean, this is just use-after-free. The same scenario can happen with
-non-RCU frees or if there happens to be an RCU grace period inbetween. I'm
-not sure what's being protected here.
+Please git pull the following tag:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.2-rc1-tag
+
+xen: branch for v6.2-rc1
+
+It contains:
+
+- 2 small minor fixes
+- a small series fixing memory leaks in error paths
+- a small series adding support for virtio PCI-devices in Xen guests on
+  Arm
+
 
 Thanks.
 
--- 
-tejun
+Juergen
+
+ arch/arm/xen/enlighten.c    |   2 +-
+ arch/x86/xen/smp.c          |  24 +++++-----
+ arch/x86/xen/smp_pv.c       |  12 ++---
+ arch/x86/xen/spinlock.c     |   6 +--
+ drivers/xen/grant-dma-ops.c | 105 ++++++++++++++++++++++++--------------------
+ drivers/xen/privcmd.c       |   2 +-
+ include/xen/arm/xen-ops.h   |   4 +-
+ include/xen/xen-ops.h       |  16 -------
+ include/xen/xen.h           |   4 +-
+ 9 files changed, 84 insertions(+), 91 deletions(-)
+
+Harshit Mogalapalli (1):
+      xen/privcmd: Fix a possible warning in privcmd_ioctl_mmap_resource()
+
+Jani Nikula (1):
+      xen: fix xen.h build for CONFIG_XEN_PVH=y
+
+Oleksandr Tyshchenko (2):
+      xen/virtio: Optimize the setup of "xen-grant-dma" devices
+      xen/virtio: Handle PCI devices which Host controller is described in DT
+
+Xiu Jianfeng (2):
+      x86/xen: Fix memory leak in xen_smp_intr_init{_pv}()
+      x86/xen: Fix memory leak in xen_init_lock_cpu()
