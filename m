@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECA264A21D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EE864A228
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbiLLNtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S233191AbiLLNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbiLLNtN (ORCPT
+        with ESMTP id S233072AbiLLNta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:49:13 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82538E83
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:48:44 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g7so18672181lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:48:44 -0800 (PST)
+        Mon, 12 Dec 2022 08:49:30 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9011812620;
+        Mon, 12 Dec 2022 05:49:21 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso5190276wme.5;
+        Mon, 12 Dec 2022 05:49:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iDMbD/18nuHWQtb1tmVDRwAlv30vkgx0e5NkTsBp0RY=;
-        b=urabBlYUPB74hYC9RPseurYJA663uW/HguXnHNxo9VzHCBR8VTRj9TllPIKUx9W4ON
-         Uze84l7kAUx/9lyz/MJiSZ5Dr1PWukgvR6ubgrofKqWY5DUqOXGPUtAMYUk/L5xeIgLk
-         hnYwTq+7H+vUijes+4LnIgZR+yBBZPW/qNCUG3XjFMwGpHONo7ODjF7Z8f2vlqjRNl3X
-         oSi4hyqkzWjtyNZdhzMKm+cedmpv5tk1QQIks/O/GtZbQUOz6Gp3BoMeA1a0anouNuXE
-         Em7Izq9xE6Yu380EzHJ70OSYY5DlBOBMfJUr74beuIWPPO2+WOxn/4CI+g5JWdPO/tcq
-         X7tg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMzRkMMjSU4aJEZO827x0ihXjxjaMrKMObfU28boQDs=;
+        b=jCu5h2zKA4iyuE40Ez5NWetZAH7PIzKMupyd2HvVqZe6FMX0rVFTes6g2VFr/yvawq
+         HbWRXogz11Y+I47mhmUD4aznRTFoZEOZN6al56/nNlXeqktf+AjCGjpE4el9DtYKKmnQ
+         sklm7vfhpGVN/ONsgrmQhCiHp+i8oOJpHXRMMeYjHEPEvZ39ZPq0giw0MTfNFvDfaK2Q
+         BZi5Xz788a7eOxhKKu6mmoK2VLv5h9EiPGgKloJXzUiR+VSZrcK44VQdN4tuZ2o23jio
+         MS1myL3FeeuSHWqv7ejq1dzEG+jds2q7wsi27EOOrIYUGwBjG/0AGjmkwZg+fx9dO9R/
+         VJhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iDMbD/18nuHWQtb1tmVDRwAlv30vkgx0e5NkTsBp0RY=;
-        b=yCe3uJODqncf8pLJJXeRDEdZT6Ej4w9aHujfM0Bwj4AV4VnFZ/+9Fbi+VcAoiCHOek
-         Efliwh8XQstOxdpciECoVbPdlC0pPhdhHGyPIdpcpNC2McrWz9qcsuaI+XrW0R/QEzqP
-         jL/kST8MEsLCkdjmhDDafyZbwhR8y7UQ03zkhogIQ4Fjwd+r64SJKkMtc9Ki39WgdzOD
-         neaMFVEw8QlTMR8M0d487+bYa1CNb1RcLPgIpIjHRLEArC+qAsJl6aRA0uYw7oPHTFeQ
-         XqgLsYeobrIMmLzkBUtlb12wLQXdGfzrwxj98x1mH7pjhGm0IEiMjiFLeMIVoK1jHXvK
-         B3Cw==
-X-Gm-Message-State: ANoB5pk2djZ8/+TP6V2ktII9SpvWhjJuw4Zc5yONRCinjEu9xG3bKDZ7
-        mLiihi4h9vn64q6yLsqgr6dVmw==
-X-Google-Smtp-Source: AA0mqf7bcBYYJl9MZxH7kjHZRYs7zWOK5eYSERnVAOHv+FaaaWcexvSrRppZZ8gXgo2d3BKpJ6P0+w==
-X-Received: by 2002:a05:6512:3092:b0:4b4:e4a3:4a23 with SMTP id z18-20020a056512309200b004b4e4a34a23mr6290583lfd.20.1670852922910;
-        Mon, 12 Dec 2022 05:48:42 -0800 (PST)
-Received: from [127.0.0.1] ([94.25.229.102])
-        by smtp.gmail.com with ESMTPSA id v9-20020a056512348900b004994c190581sm1646905lfr.123.2022.12.12.05.48.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Dec 2022 05:48:42 -0800 (PST)
-Date:   Mon, 12 Dec 2022 16:48:39 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_6/6=5D_arm64=3A_dts=3A_qcom=3A_sm82?= =?US-ASCII?Q?50=3A_move_sound_and_codec_nodes_out_of_soc?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221212100232.138519-6-krzysztof.kozlowski@linaro.org>
-References: <20221212100232.138519-1-krzysztof.kozlowski@linaro.org> <20221212100232.138519-6-krzysztof.kozlowski@linaro.org>
-Message-ID: <7110E919-E87C-4AF8-BD23-D10251D769AC@linaro.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OMzRkMMjSU4aJEZO827x0ihXjxjaMrKMObfU28boQDs=;
+        b=AhkBudamjPj2rKBketMLLw8b6JheRIpc6ULdSvyBLpnNGiHXB3zhZTZA5CgFHEF9oN
+         X9RzxGyvkL0zofeui919vTEqRdVlyr65RkQtVjjZIx5KP7VLXhsQTzcToz9slNpqU1Ba
+         Rj5to8VDawOs9lV6te+2uG8otwZz/NNDl5yIDiR6PSLNM6KQ0qFpaKX2YzchIHV3EQv2
+         lWJ2njltcauG18TXXLBP+QQNhOEZaRb/LyB/HFVlS/eH51n6wJWSpdxhYWWpymZ9xryE
+         QS0bKpB3yTdNmJXWVj+4YizI0bH/jGzmGi2udzl6nPAKFBwGKwrogY4Qy9SPRm1gTVox
+         0Rew==
+X-Gm-Message-State: ANoB5pnVoc6VhijGJODsWNaKzWJsyTbWUemX/yZYBXloEk45l0U+FZPB
+        uT2HvkXw8S/X8IYRcSKPaDs=
+X-Google-Smtp-Source: AA0mqf6maMa4WcXRcvhdMnv1l/9rgQcRIvpUePdM3Ur1GffCsn7GrZ98YsRPG5i6culYFniArIa9dg==
+X-Received: by 2002:a05:600c:1d02:b0:3cf:d365:1ea3 with SMTP id l2-20020a05600c1d0200b003cfd3651ea3mr12833700wms.12.1670852960150;
+        Mon, 12 Dec 2022 05:49:20 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id j27-20020a05600c1c1b00b003cfaae07f68sm10137258wms.17.2022.12.12.05.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 05:49:19 -0800 (PST)
+Date:   Mon, 12 Dec 2022 16:49:15 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        John Keeping <john@metanate.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "# 5 . 15" <stable@vger.kernel.org>
+Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
+Message-ID: <Y5cxW7xc+pegcbNv@kadam>
+References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,122 +79,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
+> Function pointer ki_complete() expects 'long' as its second
+> argument, but we pass integer from ffs_user_copy_worker. This
+> might cause a CFI failure, as ki_complete is an indirect call
+> with mismatched prototype. Fix this by typecasting the second
+> argument to long.
+> 
+> Cc: <stable@vger.kernel.org> # 5.15
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> 
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 73dc10a7..9c26561 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -835,7 +835,7 @@ static void ffs_user_copy_worker(struct work_struct *work)
+>  		kthread_unuse_mm(io_data->mm);
+>  	}
+>  
+> -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
+> +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
 
+I don't understand this commit at all.  CFI is Control Flow Integrity
+or Common Flash Interface depending on which subsystem we're talking
+about.
 
-On 12 December 2022 13:02:32 GMT+03:00, Krzysztof Kozlowski <krzysztof=2Ek=
-ozlowski@linaro=2Eorg> wrote:
->The sound and on-board WCD9380 codec nodes are not properties of the
->soc, but rather board as it describes the sound configuration=2E  They al=
-so
->does not have unit addresses:
->
->  sm8250-hdk=2Edtb: soc@0: sound: {} should not be valid under {'type': '=
-object'}
->
->Signed-off-by: Krzysztof Kozlowski <krzysztof=2Ekozlowski@linaro=2Eorg>
->Reviewed-by: Konrad Dybcio <konrad=2Edybcio@linaro=2Eorg>
+I really think that Clang needs to be fixed if this really causes an
+issue for Clang.  How on earth are we going to know where to add all
+the casts?
 
-Reviewed-by: Dmitry Baryshkov<dmitry=2Ebaryshkov@linaro=2Eorg>
+The commit message says "this might cause a CFI" failure.  Either it
+does or it doesn't.  Please someone test this so we can know what's
+going on.
 
+Why is it backported to 5.15?  I thought CFI was not going to backported
+that far and I has seen people complaining about CFI backports.
 
->
->---
->
->Changes since v1:
->1=2E Add Rb tag=2E
->2=2E Rephrase commit msg=2E
->---
-> arch/arm64/boot/dts/qcom/sm8250-mtp=2Edts | 40 ++++++++++++-------------
-> arch/arm64/boot/dts/qcom/sm8250=2Edtsi    |  6 ++--
-> 2 files changed, 22 insertions(+), 24 deletions(-)
->
->diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp=2Edts b/arch/arm64/boot/=
-dts/qcom/sm8250-mtp=2Edts
->index 3ed8c84e25b8=2E=2Eb741b7da1afc 100644
->--- a/arch/arm64/boot/dts/qcom/sm8250-mtp=2Edts
->+++ b/arch/arm64/boot/dts/qcom/sm8250-mtp=2Edts
->@@ -27,6 +27,25 @@ chosen {
-> 		stdout-path =3D "serial0:115200n8";
-> 	};
->=20
->+	wcd938x: codec {
->+		compatible =3D "qcom,wcd9380-codec";
->+		#sound-dai-cells =3D <1>;
->+		reset-gpios =3D <&tlmm 32 GPIO_ACTIVE_LOW>;
->+		vdd-buck-supply =3D <&vreg_s4a_1p8>;
->+		vdd-rxtx-supply =3D <&vreg_s4a_1p8>;
->+		vdd-io-supply =3D <&vreg_s4a_1p8>;
->+		vdd-mic-bias-supply =3D <&vreg_bob>;
->+		qcom,micbias1-microvolt =3D <1800000>;
->+		qcom,micbias2-microvolt =3D <1800000>;
->+		qcom,micbias3-microvolt =3D <1800000>;
->+		qcom,micbias4-microvolt =3D <1800000>;
->+		qcom,mbhc-buttons-vthreshold-microvolt =3D <75000 150000 237000 500000=
- 500000 500000 500000 500000>;
->+		qcom,mbhc-headset-vthreshold-microvolt =3D <1700000>;
->+		qcom,mbhc-headphone-vthreshold-microvolt =3D <50000>;
->+		qcom,rx-device =3D <&wcd_rx>;
->+		qcom,tx-device =3D <&wcd_tx>;
->+	};
->+
-> 	thermal-zones {
-> 		camera-thermal {
-> 			polling-delay-passive =3D <0>;
->@@ -631,27 +650,6 @@ &slpi {
-> 	firmware-name =3D "qcom/sm8250/slpi=2Embn";
-> };
->=20
->-&soc {
->-	wcd938x: codec {
->-		compatible =3D "qcom,wcd9380-codec";
->-		#sound-dai-cells =3D <1>;
->-		reset-gpios =3D <&tlmm 32 GPIO_ACTIVE_LOW>;
->-		vdd-buck-supply =3D <&vreg_s4a_1p8>;
->-		vdd-rxtx-supply =3D <&vreg_s4a_1p8>;
->-		vdd-io-supply =3D <&vreg_s4a_1p8>;
->-		vdd-mic-bias-supply =3D <&vreg_bob>;
->-		qcom,micbias1-microvolt =3D <1800000>;
->-		qcom,micbias2-microvolt =3D <1800000>;
->-		qcom,micbias3-microvolt =3D <1800000>;
->-		qcom,micbias4-microvolt =3D <1800000>;
->-		qcom,mbhc-buttons-vthreshold-microvolt =3D <75000 150000 237000 500000=
- 500000 500000 500000 500000>;
->-		qcom,mbhc-headset-vthreshold-microvolt =3D <1700000>;
->-		qcom,mbhc-headphone-vthreshold-microvolt =3D <50000>;
->-		qcom,rx-device =3D <&wcd_rx>;
->-		qcom,tx-device =3D <&wcd_tx>;
->-	};
->-};
->-
-> &sound {
-> 	compatible =3D "qcom,sm8250-sndcard";
-> 	model =3D "SM8250-MTP-WCD9380-WSA8810-VA-DMIC";
->diff --git a/arch/arm64/boot/dts/qcom/sm8250=2Edtsi b/arch/arm64/boot/dts=
-/qcom/sm8250=2Edtsi
->index d517d6a80bdc=2E=2Efbbbae29e0c2 100644
->--- a/arch/arm64/boot/dts/qcom/sm8250=2Edtsi
->+++ b/arch/arm64/boot/dts/qcom/sm8250=2Edtsi
->@@ -2826,9 +2826,6 @@ compute-cb@8 {
-> 			};
-> 		};
->=20
->-		sound: sound {
->-		};
->-
-> 		usb_1_hsphy: phy@88e3000 {
-> 			compatible =3D "qcom,sm8250-usb-hs-phy",
-> 				     "qcom,usb-snps-hs-7nm-phy";
->@@ -4910,6 +4907,9 @@ cpufreq_hw: cpufreq@18591000 {
-> 		};
-> 	};
->=20
->+	sound: sound {
->+	};
->+
-> 	timer {
-> 		compatible =3D "arm,armv8-timer";
-> 		interrupts =3D <GIC_PPI 13
+regards,
+dan carpenter
 
---=20
-With best wishes
-Dmitry
