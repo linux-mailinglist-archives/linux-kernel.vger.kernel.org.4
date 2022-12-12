@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7691C64A4B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C92464A4C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiLLQZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S232276AbiLLQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiLLQZA (ORCPT
+        with ESMTP id S232460AbiLLQbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:25:00 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D9FB48B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qTolJC9fUfjb3pLzxYSP1dBl1foIc1xzVjzAvOAu5Oo=; b=JSx+G5IEaMaHeabCqfyh2vEwKw
-        ftLHw1tCdPxx6RJ4qQV6TEF4qayiik5lnF6rEEpqn0a/P1pZxhwY9vMfbQeulKM8uMX+t18wQiHGM
-        Up77a2zYD1uXpqPunkKfpAVVpJXwDnq78QDQ499ll72LH3e2vdCVkwnhC4+hoYFNY0Ep5hKZ+oulA
-        kN9DvK3uZPuMpmw5NjY8RMAS/COPov7o3mXCsgOViWg3YfF8Ke5dk3QPw6z8ucouVALOv2YfmGibo
-        ULC4uNegvbFzfozPTb4cbtJkFYrRuNDESPg6wkqfOOS6t6/2pS40uDU2O/YJmjyxFixbl2UscW9+f
-        SOH0T6fw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4lbu-00BDpp-Sf; Mon, 12 Dec 2022 16:24:58 +0000
-Date:   Mon, 12 Dec 2022 16:24:58 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        kernel-team@meta.com
-Subject: Re: [PATCH v2 3/4] cachestat: implement cachestat syscall
-Message-ID: <Y5dV2jrZGMvgIZCx@casper.infradead.org>
-References: <20221205175140.1543229-1-nphamcs@gmail.com>
- <20221205175140.1543229-4-nphamcs@gmail.com>
- <Y5UbhBTB2nSMN4UD@ZenIV>
- <CAKEwX=NwUPShF3zud7kn_gyd4BZy8S6xzm6iFuw0eW=o=3A8nw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKEwX=NwUPShF3zud7kn_gyd4BZy8S6xzm6iFuw0eW=o=3A8nw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 11:31:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCAEDECD;
+        Mon, 12 Dec 2022 08:31:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7783A61135;
+        Mon, 12 Dec 2022 16:31:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DFAE9C433D2;
+        Mon, 12 Dec 2022 16:31:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670862667;
+        bh=eqfw8MZLwZQCexJ/EiNRzQkXY1bX7MhxmhWFB3wrvdY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=OP/iqn6n3n47QRdXSXIigr7cU8/mD7UxXREhE6XtJ6Krl7VE/HOQ9DzET7IfMfhAV
+         r+dRCXu5aUCjeBnPp1+/VMTAGs6Kr3CJkl9vVtYg2OPweHmjp5F2bRRcXZHbfX8Jhc
+         eK7wo6e73idv5jD4YNV6yqZayi9IBg+nwbhyPP+K/H3C4uoi9v8co38s7QKwZFVaay
+         WdJOgx0+LVMy5UgFPm/owiNk4nFySr6DMDYKWCa69dPxgQlVdjaPYT2PWYA4uCVQnK
+         owFhA9+P375yNBK76ppLjppL3NJ++VlxvFWVPAcZGslgu+6Km/DvwA8dYGIU+D1pC4
+         uGunder3c2NdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5F78C197B4;
+        Mon, 12 Dec 2022 16:31:07 +0000 (UTC)
+Subject: Re: [GIT PULL] RCU changes for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221203011147.GA1815487@paulmck-ThinkPad-P17-Gen-1>
+References: <20221203011147.GA1815487@paulmck-ThinkPad-P17-Gen-1>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221203011147.GA1815487@paulmck-ThinkPad-P17-Gen-1>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2022.12.02a
+X-PR-Tracked-Commit-Id: 87492c06e68d802852c7ba76b4d3fde50807d72a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1fab45ab6e823f9d7e5bc9520b2aa6564d6d58a7
+Message-Id: <167086266780.18680.5490499760721131979.pr-tracker-bot@kernel.org>
+Date:   Mon, 12 Dec 2022 16:31:07 +0000
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        rcu@vger.kernel.org, kernel-team@meta.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 08:23:31AM -0800, Nhat Pham wrote:
-> > It would be easier to read if you inverted the condition here.
-> 
-> Oh I think I tried
-> 
-> if (!f.file)
->        return -EBADF;
-> 
-> here, but there are some mixing-code-with-decl warnings.
-> If I recall correctly, the problem is with this line:
-> 
-> XA_STATE(xas, &mapping->i_pages, first_index);
-> 
-> which is expanded into a declaration:
-> 
-> #define XA_STATE(name, array, index) \
-> struct xa_state name = __XA_STATE(array, index, 0, 0)
-> 
-> It requires a valid mapping though, which is
-> obtained from f.file:
-> 
-> struct address_space *mapping = f.file->f_mapping;
-> 
-> so it cannot be moved above the if(!f.file) check either...
+The pull request you sent on Fri, 2 Dec 2022 17:11:47 -0800:
 
-Perhaps you're trying to do too much in a single function?
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2022.12.02a
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1fab45ab6e823f9d7e5bc9520b2aa6564d6d58a7
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
