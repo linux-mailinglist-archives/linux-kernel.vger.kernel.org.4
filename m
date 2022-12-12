@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3425D64A457
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4882864A458
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiLLPmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S232564AbiLLPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbiLLPmn (ORCPT
+        with ESMTP id S232558AbiLLPmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:42:43 -0500
+        Mon, 12 Dec 2022 10:42:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C8F1147;
-        Mon, 12 Dec 2022 07:42:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9027BDEBC
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:42:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5811C6112A;
-        Mon, 12 Dec 2022 15:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854C0C433D2;
-        Mon, 12 Dec 2022 15:42:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670859761;
-        bh=vovF8+lwpmqjcYvzWQBwv2dfMuOKmPzkgOcqouX8qGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FTFsxWU2/KmSno5Nw0I1Te9qQe9dolWOvNMd6hQicz124DxVJsXyWlaostfLYiNiK
-         Y7dFcX7IitR3UqSK+KXwuNTGdvuoORAXPITyjTD1yV6EHdsbDMgTYV221Js8FsQ+Oq
-         XRZWaTwGAJEc7pfKFGYkro0/WAjgav5Q/d5MSCA6ANESxx/J2bfBYJ02QkewlcWGyS
-         At/XnGVg8eApjY+u9w1Kn2DCk6dW8gKcweCowINp+5JCUkKABOzX3gCKi4hcASvg5e
-         CtCHzhZ+Ra09gTjhav+Z/O9wMq+JHHLP8wPSSvp5c60DkDMqM6E1UN03f4BdcZS4ve
-         PtSgnAuxig+ng==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 10C0540483; Mon, 12 Dec 2022 12:42:39 -0300 (-03)
-Date:   Mon, 12 Dec 2022 12:42:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E4B26112F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 15:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837E8C433F0;
+        Mon, 12 Dec 2022 15:42:49 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 10:42:46 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Fix a typo in BTF tracepoint name
-Message-ID: <Y5dL77VtV4MZ2AkG@kernel.org>
-References: <20221208182636.524139-1-namhyung@kernel.org>
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [for-next][PATCH 13/25] x86/mm/kmmio: Use
+ rcu_read_lock_sched_notrace()
+Message-ID: <20221212104246.579f9083@gandalf.local.home>
+In-Reply-To: <87wn6wc2t4.ffs@tglx>
+References: <20221210135750.425719934@goodmis.org>
+        <20221210135825.241167123@goodmis.org>
+        <20221210174753.GD4001@paulmck-ThinkPad-P17-Gen-1>
+        <20221210133425.4657985e@gandalf.local.home>
+        <87359mdeg3.ffs@tglx>
+        <20221210185555.7abc4de4@gandalf.local.home>
+        <87wn6wc2t4.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208182636.524139-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Dec 08, 2022 at 10:26:36AM -0800, Namhyung Kim escreveu:
-> In the BTF, tracepoint definitions have the prefix of "btf_trace_".
-> The off-cpu profilier needs to check the signature of sched_switch
-> event using the definition.  But there's a typo (s/bpf/btf/) so it
-> failed always.
+On Mon, 12 Dec 2022 11:51:51 +0100
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Thanks, applied.
+> Right, but please make that part of the series.
 
-- Arnaldo
+I just pushed out a patch to do this.
 
- 
-> Fixes: b36888f71c85 ("perf record: Handle argument change in sched_switch")
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/bpf_off_cpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> index c257813e674e..01f70b8e705a 100644
-> --- a/tools/perf/util/bpf_off_cpu.c
-> +++ b/tools/perf/util/bpf_off_cpu.c
-> @@ -102,7 +102,7 @@ static void check_sched_switch_args(void)
->  	const struct btf_type *t1, *t2, *t3;
->  	u32 type_id;
->  
-> -	type_id = btf__find_by_name_kind(btf, "bpf_trace_sched_switch",
-> +	type_id = btf__find_by_name_kind(btf, "btf_trace_sched_switch",
->  					 BTF_KIND_TYPEDEF);
->  	if ((s32)type_id < 0)
->  		return;
-> -- 
-> 2.39.0.rc1.256.g54fd8350bd-goog
+  https://lore.kernel.org/all/20221212103703.7129cc5d@gandalf.local.home/
 
--- 
+Feel free to ack it.
 
-- Arnaldo
+Thanks,
+
+-- Steve
