@@ -2,241 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3900364A149
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E093D64A148
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbiLLNiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S232894AbiLLNhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiLLNh1 (ORCPT
+        with ESMTP id S232846AbiLLNhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:37:27 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2091.outbound.protection.outlook.com [40.107.255.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E879713E2D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:36:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JlXb+ddUcFwI6xPTmMPo5bgY3Jbh4oKCaqe7vBolyQQKxtNu9R66jYt+toO9rk4Uk9z/e3+JA1Kr7dZM2HqvqyHWEUByoUnAMG1VDs13i3TBNfKp/6/r4HrbvxyWze0nwKNeOv+ppRF+tGoMDIQRi0CmMylnIU+xPYiNg4ytz19URBwC42BIDdr59HlpCeFLckJD08fmSwE5WvhFrJWsQU9m52qeJX80sWC+9XOGTmgCHpqO+/+ZNzEFGaUMzpV2eW1krvhGtpDLRbtiyRJqCqCtLbmY0Vfcr27wlcYnX3b6ZW2UpFMckL2G6BKhZgLh4ZP8OPomL8SZ+8zhW47NDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tdygyRDNpWtdt829Z9vESAE+w0POCjkjBloy7V8cJc0=;
- b=a7j5WqZdbCMgGgBF+UL3J+a4pv02B5eiWU3yPFsKMiPYCec4XjLngv+3beNHfR6rC71oEw5tsdkqGfDv/KQXUEuVAAcUWWjOXtz9GejV/zsbpQi9Uj99DbPmR9m6F7Yn9bOO/b4ZG3/ygfre2OkgjpuloyaTAHwRabSt9vQHLK3PXVEwOxUoqpeheZBYzAFRVoNzWdas3znpMq0zj+bYAVis1eLPFhDamuLOOcauQ1EJ+AE3akd2xuy+KO2yce59h+e14PPPlkSOWWdB8N0kC/ItvLlV2E3p30iimaqd+bw9NpFn1Hs/XYt6E9TrRC2naf6K/Qa6fP9FxCDg9+crxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tdygyRDNpWtdt829Z9vESAE+w0POCjkjBloy7V8cJc0=;
- b=qKME3PYwKUw2jCNaBnXXT2X+mNS5eK1Wc5It2WIbk0vr5Kip9JzboNpMe2XtoR31IEPmb5U76ZhMhARl2ajFo0JFzn3Uh5jePSxfLRRetI/A0b8Par5j7mzDlUNQWAPZJ0NjqVKys3QsVjJ+P2v+lk5QfqS0C+f9bm4Y/UPdecDaM9+A/U8Vd6p/K2t5REPgUo4YmeuA/E1A+vqpimVZrVt4Z1xLLXDuQKAJQfs2nno7I/sLfyqOI3O6OS9qd04aRTB5o5Onkp1wvrflRUjEzSipzQ68+HCQdM3iKwDrfRCCZ6U6UDkNSzgl7YPsXpC2qenSJrLLZhHel1AGH04SRQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6086.apcprd06.prod.outlook.com (2603:1096:101:ee::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 13:36:56 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 13:36:56 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: convert discard_wake and gc_wake to bool type
-Date:   Mon, 12 Dec 2022 21:36:44 +0800
-Message-Id: <20221212133644.1503-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0008.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::14) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Mon, 12 Dec 2022 08:37:24 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6381D13F85
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:36:47 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id d123so5729266iof.6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XRZwufW4/TiQTPauxmRLaTVOjEccKG9/fVgaRUTLj+0=;
+        b=MqRhgEcXTVFoc4N7S8UoYGpAVKTYM2zCdOMhFM3so+edfmoNfYDbvH7tirZz4M54mB
+         SExkIUUeecG8cm7Xpw9sRHOeVPXL16NXkwCb70wQGbpfu+DKw9slhx0d1v1jB/RLO9Gx
+         y8U+SN+y7Y4ECjUfcoIeV88E2LzuNESTif3Fp6kHjcCdmw1XR9gn4D9V2Qowm1rXwHps
+         Taw+HRAP0WOmQWdZkwT4BhQpv18Cox2+8fISOzvBPrInoGwBT63AuYOiFeAjZ+XTyq45
+         +89JstzlqDEJFilFThrLiBjsvg0Qdk8YFLIV3c6/ZUQe7Z7RLEb1zteKrXaM2ElzSoVj
+         txdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XRZwufW4/TiQTPauxmRLaTVOjEccKG9/fVgaRUTLj+0=;
+        b=nEoeBTdYi3woPE/74lNWNkR8Pu5T3iDocMo8CU4/tCYyUEb9F6SzCFUnHHZ6mhEIj2
+         72oDEljfBqytYDU8iuv3+kYD2oFT44cVnI8Gs4SPLwEWnr0rzXwsuAlB/3QhX8nMsbt2
+         u8zOl9XUoseynIAbzjImNw6uhmgPSbIaI1JP+ORr6THBz9KoDRkp1E9ccv/5BjIpC767
+         +CJlUxpW6ZdHn2GiXNEpDJubjYRPMhAOUs6hhlclpd5grT5EuqMaTYNGkpTzs7NSR31P
+         9u0KLdfBGdylGWrafthzKwomErT//0smMEvqzzLVEOs93LjlOZx6VOD29/tzMdNfx5OM
+         fEcA==
+X-Gm-Message-State: ANoB5pmBhy0KT2fCFWTF5lHlU2yS3luHUricy7UKfNBClcZHgRZSIBWc
+        +87ReKEDsue4ahRF10wUE9Bl2Q==
+X-Google-Smtp-Source: AA0mqf7t/qdmBJ+Ad+GNoBEw4td1qt/j5dny1satmJ7JanznE6G08OkgCfgm2W1D2H6cGm/qGHO5XA==
+X-Received: by 2002:a05:6602:22d5:b0:6e0:7dd:59ac with SMTP id e21-20020a05660222d500b006e007dd59acmr10090839ioe.14.1670852206665;
+        Mon, 12 Dec 2022 05:36:46 -0800 (PST)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id k1-20020a0566022a4100b006bb57cfcb88sm4025040iov.44.2022.12.12.05.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 05:36:46 -0800 (PST)
+Message-ID: <b98e8a7b-0610-6fd2-1b51-5feca73f79ef@linaro.org>
+Date:   Mon, 12 Dec 2022 07:36:45 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB6086:EE_
-X-MS-Office365-Filtering-Correlation-Id: ee8260c0-d56a-4eba-1ace-08dadc45eff6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s9yx+QED7bm6gNpzKdc2BgRkLe1+GHeNDBhQCE6XmrNIv+mQwIEgXfID4FniM3+KED4Xt3enjkGtX5PHQTMCPwdo4s2PHeeXmHz2befX8oJlFxbMhiM4NyK+8sp1QkTc4XmBWsNNBOVDpalmlZUv1kPecSducPsvS3xeSDNDKoWSg4siZvURmNT3u0jBMdPdo9/aO9+owhwfNEooTYc77Uy3BpAoSNDFr0F+MGQh/79VNPBpYY1k6i0PyDLI4d+kNNDbjb2ElzXe77mt+YlCdaoEvzVfkGHKkN0XbloDKZjWG+xJ1f1xGSNCdqP+3xHvEP37S/fjhvf0DyVJI86Xr/E+qoqZ/lQboGPhWKuVXmDI+dfSqC0N3T0MaJCkwK5Sc4CyArQ+9qU6PcepifMiLADuzcku/F1Sxklh1scYqgdO0Y2TS6YEbMAqzdV1ye4tH77Lw49keNK5ROzjK3BO1z6GpmmkyQuJ2K9OaNCJBe1BubvEtfAlYvYLgQkDFQJUZTgFEay/4Rff66RT4dSZttR4bCcKD/dxbWd0YkugXlSzs74lmhqVBijVBGLpQjw6FDJh+rGzmxJNEOXY9Jcd+FJmR3oSCHKA8yc7srt3E0amZ7eb6zitjUUpZ1g64TR2GkSP+C3uc3EU2Y/BmkGRJjvHH6c5YfIFH49Q6AaUAVwRHG9OLRVWXbVClhQWraue
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(39860400002)(136003)(346002)(451199015)(2616005)(478600001)(1076003)(6512007)(186003)(26005)(107886003)(52116002)(6666004)(6486002)(38100700002)(38350700002)(6506007)(5660300002)(66476007)(66556008)(66946007)(4326008)(316002)(2906002)(41300700001)(8676002)(83380400001)(8936002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KVRKCi6qVEZTLdV4/8oGtc5xw1eM+caDEU8KOXfZ7qdrJzaDHfM8s3EDgc/I?=
- =?us-ascii?Q?nlTzxDC5i7ZBCd/XTYoMxASvDCcz6LRVMLX2Ag4UGVA/KeIjikVd5CcYJLVi?=
- =?us-ascii?Q?IK+R8FigjBIuDA4ThRqrKbvU4NFQ2ppX8TGc1D0xZwDJQV4W+47gziZy4bVs?=
- =?us-ascii?Q?s+YmVGfw2k1o8ahabudHEvXTn2vGH8mgrKTfcHjJEBHw8f/52ucV7JS6tBJT?=
- =?us-ascii?Q?/KzK1z++Xu+Bzkib+fDWA4CvXbZawe7p2kdnrr49TMQPv35MTVEn70x/4FM5?=
- =?us-ascii?Q?wSvvqDBEgAXxsYPIFqozphoglq3LxLaD3xppr0RY4x8O6IuXTeYxxuqz+z0I?=
- =?us-ascii?Q?looVMK7mXbXxX8Awg2OK/NMJ3qhLbz6pKiZ914t4A8MEn156r6ThfkHkGRgA?=
- =?us-ascii?Q?UI5BmEEZE0WpWN5wPl7PJanwvW03etY/pC0VUl2OWIS+XB4Xt/fl0SlodC9t?=
- =?us-ascii?Q?DB1DMtxC0dvC2YQ8F5uon2XM+jyMNX/jszSp4qrH1CQMkeEC1O63H/Mpgk2F?=
- =?us-ascii?Q?bnC5CiLziltbBC5022gf9I0eIKeQitt2EvR1GKr5kC8h1QTARbkcZAFBHh9f?=
- =?us-ascii?Q?6ToKhGTXitBNgmO7PjkvONsYFErjZR0Y624XuxUIMMnnmI++2Ay86VfiK52G?=
- =?us-ascii?Q?1NGbSsbTy0m/WHFeYMLrdZ5c5sqD28/00WNq9CGvLGYVYBw64Ti+vez6FFMC?=
- =?us-ascii?Q?Dy+FmI4t9IxEizQQRPPfCGeuKAGJZBBJwdaM5wG55spIUDk1mExVzJQopzwH?=
- =?us-ascii?Q?F/AYN2bTvHurXmELlxF+9RBj78hCKD9sD4iAAbdyUkQPIT5FQGgw4wo1xDSQ?=
- =?us-ascii?Q?5lyp0mhqM/+rMSXTpjPSNmqow/79voedqWRssXXi7O7Br0DHzI0AyzJ+A5+j?=
- =?us-ascii?Q?awb2EnrSgj/ESCtH+SOpyEjPVU5Bf72ZYsdNgNmc/TFPIXAcXwpKQU5kToAR?=
- =?us-ascii?Q?F3ZL2gfJW+ZcfVEDPOQcQKEjywFzP7Y+rB60W6FAyF+aG8SLZ3Uizf0Fx0WM?=
- =?us-ascii?Q?MH1yvOSc8Byr32dao6itKbFBy/H3v6sUbSIjwv1HffM0cEyB3vcd4XtvYkTO?=
- =?us-ascii?Q?E0gkz5lJfQDF+v4fhq2SzvyfCLp/bHiMJ3+kAqLBVrDA8EaVU62Jko14K/z2?=
- =?us-ascii?Q?6GxBPuh4QQ0Kr2pVm92MefSQiGOp5/iquepoZV+lzqTBkE7rIV1slXcLLTiT?=
- =?us-ascii?Q?RELFMP/DZzPuRv4sHmU+bsYMw/b+SGHQZ0xgBhwJABrrtigEF3fZrBvy3iFu?=
- =?us-ascii?Q?OTMZFgFwBARBCv10CjqVjB+Z0q0lLc8AoExPbavGOi7CthiYqJBypLmBbf0q?=
- =?us-ascii?Q?AYDhzYA8jNdBSF9keFIVOxuLb1IOZrBqKOBPu+eYXG1z3Wz8rbMG0lfc7gu5?=
- =?us-ascii?Q?pyLDrtp2ju4jAJUWOVgrl9qIqLbAP0K281juyXm4gnjW7TLJIZZ4oM6UMLXU?=
- =?us-ascii?Q?i0I5tHZCWrsQA3as1+Pma5uSuO3MXtL41Li0kMClLIgXus+dH+TMhevN7L/E?=
- =?us-ascii?Q?pAG6AsSRyjq/1pILRD/PSb3HN6nTIALSz6dT3UCNFDAPeJevI6Cmx6c4dSLj?=
- =?us-ascii?Q?nuMe81IRr7G4EvNq1B3YPWdfcF53QfriSEx7rBOV?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee8260c0-d56a-4eba-1ace-08dadc45eff6
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 13:36:56.5596
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PnBUwryc8CZS6et9II5C2aS5hfaHYhOUvzEMlIoYyNUxBCKsWBG1VBIrGrAzrYeFAZb285zaf2jM7ujHjijNpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6086
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v2] net: ipa: Remove redundant dev_err()
+Content-Language: en-US
+To:     Kang Minchul <tegongkang@gmail.com>, Alex Elder <elder@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221212071854.766878-1-tegongkang@gmail.com>
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20221212071854.766878-1-tegongkang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-discard_wake and gc_wake have only two values, 0 or 1.
-So there is no need to use int type to store them.
+On 12/12/22 1:18 AM, Kang Minchul wrote:
+> Function dev_err() is redundant because platform_get_irq_byname()
+> already prints an error.
+> 
+> Also, platform_get_irq_byname() can't return 0 so ret <= 0
+> should be ret < 0.
+> 
+> Signed-off-by: Kang Minchul <tegongkang@gmail.com>
 
-BTW, move discard_wake to the end of the
-discard_cmd_control structure.
+Now that I've looked at this closely, it's not clear what
+version of the code you are basing your patch on.
 
-Before:
+The current version of net-next/master, as well as the
+current linus/master, do not include the message you
+are removing.  This patch removed the message more than
+a year ago:
 
-  - sizeof(struct discard_cmd_control): 8392
+   91306d1d131ee net: ipa: Remove useless error message
 
-After move:
+So at least the portion of your patch that removes the
+message is unnecessary.
 
-  - sizeof(struct discard_cmd_control): 8384
+Meanwhile, it seems there is no need to check for a 0
+return from platform_get_irq_byname(), but there is
+no harm in doing so.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/f2fs.h    | 2 +-
- fs/f2fs/gc.c      | 4 ++--
- fs/f2fs/gc.h      | 2 +-
- fs/f2fs/segment.c | 2 +-
- fs/f2fs/segment.h | 2 +-
- fs/f2fs/sysfs.c   | 4 ++--
- 6 files changed, 8 insertions(+), 8 deletions(-)
+If you would like to send version 3 of this patch, which
+would return what platform_get_irq_byname() returns if it
+is less than 0 in gsi_irq_init(), I would be OK with that.
 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e8953c3dc81a..764041d7b217 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -402,7 +402,6 @@ struct discard_cmd_control {
- 	struct list_head wait_list;		/* store on-flushing entries */
- 	struct list_head fstrim_list;		/* in-flight discard from fstrim */
- 	wait_queue_head_t discard_wait_queue;	/* waiting queue for wake-up */
--	unsigned int discard_wake;		/* to wake up discard thread */
- 	struct mutex cmd_lock;
- 	unsigned int nr_discards;		/* # of discards in the list */
- 	unsigned int max_discards;		/* max. discards to be issued */
-@@ -420,6 +419,7 @@ struct discard_cmd_control {
- 	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
- 	struct rb_root_cached root;		/* root of discard rb-tree */
- 	bool rbtree_check;			/* config for consistence check */
-+	bool discard_wake;			/* to wake up discard thread */
- };
- 
- /* for the list of fsync inodes, used only during recovery */
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index f0c6506d8975..678726e6a6e8 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -57,7 +57,7 @@ static int gc_thread_func(void *data)
- 
- 		/* give it a try one time */
- 		if (gc_th->gc_wake)
--			gc_th->gc_wake = 0;
-+			gc_th->gc_wake = false;
- 
- 		if (try_to_freeze()) {
- 			stat_other_skip_bggc_count(sbi);
-@@ -181,7 +181,7 @@ int f2fs_start_gc_thread(struct f2fs_sb_info *sbi)
- 	gc_th->max_sleep_time = DEF_GC_THREAD_MAX_SLEEP_TIME;
- 	gc_th->no_gc_sleep_time = DEF_GC_THREAD_NOGC_SLEEP_TIME;
- 
--	gc_th->gc_wake = 0;
-+	gc_th->gc_wake = false;
- 
- 	sbi->gc_thread = gc_th;
- 	init_waitqueue_head(&sbi->gc_thread->gc_wait_queue_head);
-diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
-index 19b956c2d697..15bd1d680f67 100644
---- a/fs/f2fs/gc.h
-+++ b/fs/f2fs/gc.h
-@@ -41,7 +41,7 @@ struct f2fs_gc_kthread {
- 	unsigned int no_gc_sleep_time;
- 
- 	/* for changing gc mode */
--	unsigned int gc_wake;
-+	bool gc_wake;
- 
- 	/* for GC_MERGE mount option */
- 	wait_queue_head_t fggc_wq;		/*
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index a9099a754dd2..a85d438e76ea 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1701,7 +1701,7 @@ static int issue_discard_thread(void *data)
- 						dcc->discard_granularity);
- 
- 		if (dcc->discard_wake)
--			dcc->discard_wake = 0;
-+			dcc->discard_wake = false;
- 
- 		/* clean up pending candidates before going to sleep */
- 		if (atomic_read(&dcc->queued_discard))
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 3ad1b7b6fa94..22fac8baf4a4 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -924,6 +924,6 @@ static inline void wake_up_discard_thread(struct f2fs_sb_info *sbi, bool force)
- 	if (!wakeup || !is_idle(sbi, DISCARD_TIME))
- 		return;
- wake_up:
--	dcc->discard_wake = 1;
-+	dcc->discard_wake = true;
- 	wake_up_interruptible_all(&dcc->discard_wait_queue);
- }
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 83a366f3ee80..805b632a3af0 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -511,7 +511,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		} else if (t == 1) {
- 			sbi->gc_mode = GC_URGENT_HIGH;
- 			if (sbi->gc_thread) {
--				sbi->gc_thread->gc_wake = 1;
-+				sbi->gc_thread->gc_wake = true;
- 				wake_up_interruptible_all(
- 					&sbi->gc_thread->gc_wait_queue_head);
- 				wake_up_discard_thread(sbi, true);
-@@ -521,7 +521,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		} else if (t == 3) {
- 			sbi->gc_mode = GC_URGENT_MID;
- 			if (sbi->gc_thread) {
--				sbi->gc_thread->gc_wake = 1;
-+				sbi->gc_thread->gc_wake = true;
- 				wake_up_interruptible_all(
- 					&sbi->gc_thread->gc_wait_queue_head);
- 			}
--- 
-2.25.1
+But please it on net-next/master.
+
+Thanks.
+
+					-Alex
+
+> ---
+> Changes in v2:
+>    - Annotate patch with net-next.
+>    - Remove unnecessary comparison with zero.
+> 
+>   drivers/net/ipa/gsi.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
+> index 55226b264e3c..a4f19f7f188e 100644
+> --- a/drivers/net/ipa/gsi.c
+> +++ b/drivers/net/ipa/gsi.c
+> @@ -1967,11 +1967,8 @@ int gsi_init(struct gsi *gsi, struct platform_device *pdev, bool prefetch,
+>   
+>   	/* Get the GSI IRQ and request for it to wake the system */
+>   	ret = platform_get_irq_byname(pdev, "gsi");
+> -	if (ret <= 0) {
+> -		dev_err(gsi->dev,
+> -			"DT error %d getting \"gsi\" IRQ property\n", ret);
+> +	if (ret < 0)
+>   		return ret ? : -EINVAL;
+> -	}
+>   	irq = ret;
+>   
+>   	ret = request_irq(irq, gsi_isr, 0, "gsi", gsi);
 
