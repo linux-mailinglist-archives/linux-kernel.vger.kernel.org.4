@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D10649A8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBEA649A8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiLLI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 03:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S231714AbiLLJAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiLLI7w (ORCPT
+        with ESMTP id S231690AbiLLJAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:59:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10205A455;
-        Mon, 12 Dec 2022 00:59:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87CB460F36;
-        Mon, 12 Dec 2022 08:59:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7D4C433F0;
-        Mon, 12 Dec 2022 08:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670835591;
-        bh=B2EDXjAKiY1kPZZAXNEN6nKHcQJ8k4xlc9/ZdVF+VZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K/GkJyFmhLL+oB0gt4vKn5gOxBsyWPYuqCCngn8o7hSMxpEQERvpKgNmkAoocZ6dl
-         XeRFX1DPsnaUEbe5gIdsvkplhYb6S2hNbM6GS6lUYl0XkYILkwFH4HvoDxgPiHl6dc
-         1y4Q8tqIkdHLTNY+O4zC33Lsnu4fLUPPUC2mWEBA=
-Date:   Mon, 12 Dec 2022 09:59:48 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     John Stultz <jstultz@google.com>, linux-kernel@vger.kernel.org,
-        Brian Masney <bmasney@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Peter Robinson <pbrobinson@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/4] driver core: Make driver_deferred_probe_timeout a
- static variable
-Message-ID: <Y5bthMXYH1MuD9VY@kroah.com>
-References: <20221116115348.517599-1-javierm@redhat.com>
- <20221116115348.517599-2-javierm@redhat.com>
- <CANDhNCoa+LRu8B4+M+uU4_m2kd=HriO0SyNP=n=XpXwXG2k9LA@mail.gmail.com>
- <549800ec-6da2-64ad-62a6-c8e4a35dc212@redhat.com>
+        Mon, 12 Dec 2022 04:00:11 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007FA6317;
+        Mon, 12 Dec 2022 01:00:10 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so14974126pjr.3;
+        Mon, 12 Dec 2022 01:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NsqQBlG7OALHs9p2W6AkND+AQ3ZkN//jvoUDNbWIbKQ=;
+        b=HufF+lFF8AUfjv0wnsSPAksVvIPcOML/MwkmnCkf8sbfeMw1cDXYkx+HSUcP50C2Qj
+         OUa4ud1lBI7y7tS9+99H0dV5NFXUTs5maiwW8JtVBlAlv7F/k53HIC/cwirz8jBR0Gl3
+         HWnFcPaNfgkHqlooSq/HS6gipH1YnRrx0uYlhEsj5puSiEHbwZ1HJo+IaGHUmiXvprl/
+         WlMt+0l+bCZVpTXQ0mTavNI1Gt4ZdTOj+WHBY+u7XoLXmZaBIu6hfbnczzeOv9Ngl9R6
+         DxFjYGzjB1DDpHnWmGWPMOMWX6iia5BK7XdRmRmmK4Qu3meSiNgyyUfW4IjQsp/H5XGv
+         bQKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NsqQBlG7OALHs9p2W6AkND+AQ3ZkN//jvoUDNbWIbKQ=;
+        b=z5YFsryKKnULLm60gZZ8cYCLd8/xUFLLzige6vV2TprXB49BhgI6r2Px13cgpidUil
+         hzd3YMhmCM64lcibS5dsJ5Hyo60DCJsScPyT9ICnt2JXYn5DTeVND/1qS0Owj0MGBh9m
+         GceAySEtWghBaQeuCCuNkah1T2dNlmM+SzdMG+d3cKFkOpudqB6IUgyikRAS0FbF6RFH
+         pzjXCu5e9tFekY5jk3/no7+MXlvXOMdlsXyDTi7V9Fp/qvuTm60N+UlleDZ7YZuaavb/
+         EG2fGzbG16n0QKO9QlHMXJAvskHd2aqZUmY4S6A0yNH9fgqOeecrLA+etu1AubfFZ5+v
+         lnrg==
+X-Gm-Message-State: ANoB5pl+JRpujkbZEp+sXzxxr/Gh2NaDoRSzFwQRRwZ73yfBzoEfXc+W
+        B1HlLaW5lv/SI4jhI+8iDf3GeMbp9Rw=
+X-Google-Smtp-Source: AA0mqf47Wr/e9SYIYG2MxuyNDOFV4K49MbtuZvm5nmlgo9zP+gGxiuyxLSatXOGLxfIwC/L6y1bgqA==
+X-Received: by 2002:a17:902:7c8a:b0:189:ed86:178b with SMTP id y10-20020a1709027c8a00b00189ed86178bmr18625085pll.64.1670835610242;
+        Mon, 12 Dec 2022 01:00:10 -0800 (PST)
+Received: from localhost ([47.89.225.180])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b00189bf5dc96dsm5771488plh.230.2022.12.12.01.00.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Dec 2022 01:00:09 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: [PATCH] kvm: x86/mmu: Warn on linking when sp->unsync_children
+Date:   Mon, 12 Dec 2022 17:01:06 +0800
+Message-Id: <20221212090106.378206-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <549800ec-6da2-64ad-62a6-c8e4a35dc212@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 09:50:16AM +0100, Javier Martinez Canillas wrote:
-> Hello Greg,
-> 
-> On 11/17/22 20:14, John Stultz wrote:
-> > On Wed, Nov 16, 2022 at 3:54 AM Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
-> >>
-> >> It is not used outside of its compilation unit, so there's no need to
-> >> export this variable.
-> >>
-> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >> ---
-> >>
-> >> (no changes since v1)
-> >>
-> >>  drivers/base/dd.c             | 6 ++----
-> >>  include/linux/device/driver.h | 1 -
-> >>  2 files changed, 2 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> >> index 3dda62503102..040b4060f903 100644
-> >> --- a/drivers/base/dd.c
-> >> +++ b/drivers/base/dd.c
-> >> @@ -257,13 +257,11 @@ static int deferred_devs_show(struct seq_file *s, void *data)
-> >>  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
-> >>
-> >>  #ifdef CONFIG_MODULES
-> >> -int driver_deferred_probe_timeout = 10;
-> >> +static int driver_deferred_probe_timeout = 10;
-> >>  #else
-> >> -int driver_deferred_probe_timeout;
-> >> +static int driver_deferred_probe_timeout;
-> >>  #endif
-> >>
-> >> -EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
-> >> -
-> > 
-> > Yeah, I added the EXPORT for the regulator code to use it in
-> > dca0b44957e5 but that got backed out when setting
-> > driver_deferred_probe_timeout to 30s was reverted, and this bit was
-> > forgotten.
-> > 
-> > Thanks for catching this!
-> > 
-> > Acked-by: John Stultz <jstultz@google.com>
-> >
-> 
-> Could you please pick this patch? Is a fix independent of the other
-> patches in the series and it has already been acked by John.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-It is the middle of the merge window and I can't take anything now until
-after 6.2-rc1 is out.  I also really can't take individual patches out
-of a patch series easily, so please just resend it as a single patch
-when 6.2-rc1 is out.
+Since the commit 65855ed8b034 ("KVM: X86: Synchronize the shadow
+pagetable before link it"), no sp would be linked with
+sp->unsync_children = 1.
 
-thanks,
+So make it WARN if it is the case.
 
-greg k-h
+Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 4d188f056933..15d389370f88 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -2367,7 +2367,16 @@ static void __link_shadow_page(struct kvm *kvm,
+ 
+ 	mmu_page_add_parent_pte(cache, sp, sptep);
+ 
+-	if (sp->unsync_children || sp->unsync)
++	/*
++	 * The non-direct sub-pagetable must be updated before linking.  For
++	 * L1 sp, the pagetable is updated via kvm_sync_page() in
++	 * kvm_mmu_find_shadow_page() without write-protecting the gfn,
++	 * so sp->unsync can be true or false.  For higher level non-direct
++	 * sp, the pagetable is updated/synced via mmu_sync_children() in
++	 * FNAME(fetch)(), so sp->unsync_children can only be false.
++	 * WARN_ON_ONCE() if anything happens unexpectedly.
++	 */
++	if (WARN_ON_ONCE(sp->unsync_children) || sp->unsync)
+ 		mark_unsync(sptep);
+ }
+ 
+-- 
+2.19.1.6.gb485710b
+
