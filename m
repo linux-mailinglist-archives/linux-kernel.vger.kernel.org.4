@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D334164AA30
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8692D64AA39
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbiLLW0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S233484AbiLLW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiLLWZ5 (ORCPT
+        with ESMTP id S233187AbiLLW1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:25:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC521AD87
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:25:55 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4rFA-0004ep-8k; Mon, 12 Dec 2022 23:25:52 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4rF8-00477I-Rm; Mon, 12 Dec 2022 23:25:51 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4rF8-004bof-Ty; Mon, 12 Dec 2022 23:25:50 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 3/3] soc: tegra: cbb: Drop empty platform remove function
-Date:   Mon, 12 Dec 2022 23:25:49 +0100
-Message-Id: <20221212222549.3779846-4-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221212222549.3779846-1-u.kleine-koenig@pengutronix.de>
-References: <20221212222549.3779846-1-u.kleine-koenig@pengutronix.de>
+        Mon, 12 Dec 2022 17:27:24 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D5B1AF19
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:27:22 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 142so9208041pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:27:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=400oaOIiyloicCpX8EtufmJp07eU8qBnM6If/zlJJTc=;
+        b=e/P7FkSscCxR6APwFC13kxSYc/eEU4TdRpDho/1ff/fefcdVNgnatbXTaOBPlT/H2d
+         pWZ617K+ur0lJyX8ZHezAr+couZ8J7mS4GKNVfE2Hl+oBL6LrQ4apf93mQ7pn6GPL2mO
+         joF0TxzL1FWUHhHNnRbTAyKjKH5O0V4kZxBWW+RHHIwxbipGV1sfMf/ITDf0OPudA+9N
+         pNb81TC92Mf75W+nsMcbbKh2S29O24kYpw2teCEIfgYNNvHUPlaV+1FUf7Pt1NUEfwVY
+         xI9VbA8zxCQQBU1GxzQgvFNiPADM9qOwRu0krRhTsiXNXpL8Fuw7GYHAKVKROho7mGDg
+         oKtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=400oaOIiyloicCpX8EtufmJp07eU8qBnM6If/zlJJTc=;
+        b=2iCqtOAY0ZXzU8fI5CQ4Cl/FwSbBWIO3fKTT9Z1Mgy35lPUY7cn8ngdGizBI86D4/g
+         SCN/YiNiRNcf1HbLxRmsL9rcPAs+NfG+bUfX0eazNYVloeR8VWuyWls3WKzPuqpeEmTZ
+         vN1m4gxyrpsIKRarQ0iOOV0Aa0ZElmsjWsWSzzX1dTgILjgRpVEU2YvwUDWLgYrMhT+Z
+         +wIedj3arbJ51bcE+5RLOGqF30/wPchSTgfvQ+1FeMCcTNedlW7suEwZIhKWHDjtjaKW
+         jH4N7MtHTxkW2SzumTBKuxs6K6KBfStiXKbx/ljGI7wAwfB934ohuejBEcAXFUp9YPIu
+         pWXw==
+X-Gm-Message-State: ANoB5pnqqCT0NYhoWCizbrjVsep6na6D5VmVPZ0BThnp6fsJ3cd3tMIx
+        Te8i2T0vUe4AcPeOJtPC5ds=
+X-Google-Smtp-Source: AA0mqf6rtwlJR53yHfqPRsdSWi3k/GcYwywOOLy6NDgDSTWFXdjZEOFnSUOzXmLeVy/9Kl8JMjYXbw==
+X-Received: by 2002:a62:3103:0:b0:576:14a4:b76a with SMTP id x3-20020a623103000000b0057614a4b76amr15930050pfx.34.1670884041723;
+        Mon, 12 Dec 2022 14:27:21 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id z7-20020aa79587000000b005769436a23dsm6257177pfj.218.2022.12.12.14.27.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 14:27:21 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 12:27:20 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     Richard Clark <richard.xnu.clark@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] workqueue: Prevent a new work item from queueing into a
+ destruction wq
+Message-ID: <Y5eqyErNGDD0tbF9@slm.duckdns.org>
+References: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
+ <Y5bI9ZbjpzNFpk/8@slm.duckdns.org>
+ <CAJhGHyA=qGtktv6BPavo5HRrDkcORqpkD3C7nhnxyFtt8WNJMg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1137; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=y71smcDSlNK7gPTiR3iEOCLuDBdlfbnrdjyqfWwTI/o=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjl6pnz3ifx3C0R/Ble0taw1B/viUTPgVfHgrbpybV HXHTJ6+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5eqZwAKCRDB/BR4rcrsCS0sB/ 9St3UDbCfHoLl3o6HI9IQQTovtNGpnBJ3vFhjuU8asQevIAjnbA090XdVSmEDwQbp5NRhN7ThDqUqS +S9SpWIH5Xb6tI0n+zIkOuSaqGvaMRczT5eJZMLY+mqGUv4+S8dnvEuH5zJE9JAndy926kkxG8tiKS BDPdfabKFu3ZPmQLU/lh6mr5w+gltTMR8UZQTT8rydbT1VnYdn8hoepi75zr+oqLE0cF4vctSsm62j fR7l1jEFnzmKf6JUm+1LhvNLYvriSKkZYORCkrEB5SqERPMwd0PJ3EB8c1ZUGEGVtxaul18XlQB+v3 YXg+gDTDzHWR7NREjm048z4YsI2gsg
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJhGHyA=qGtktv6BPavo5HRrDkcORqpkD3C7nhnxyFtt8WNJMg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A remove callback just returning 0 is equivalent to no remove callback
-at all. So drop the useless function.
+On Mon, Dec 12, 2022 at 02:48:25PM +0800, Lai Jiangshan wrote:
+> On Mon, Dec 12, 2022 at 2:23 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Mon, Dec 12, 2022 at 02:18:36PM +0800, Richard Clark wrote:
+> > > Currently the __WQ_DRAINING is used to prevent a new work item from queueing
+> > > to a draining workqueue, but this flag will be cleared before the end of a
+> > > RCU grace period. Because the workqueue instance is actually freed after
+> > > the RCU grace period, this fact results in an opening window in which a new
+> > > work item can be queued into a destorying workqueue and be scheduled
+> > > consequently, for instance, the below code snippet demos this accident:
+> >
+> > I mean, this is just use-after-free. The same scenario can happen with
+> > non-RCU frees or if there happens to be an RCU grace period inbetween. I'm
+> > not sure what's being protected here.
+> 
+> I think it is a kind of debugging facility with no overhead in the
+> fast path.
+> 
+> It is indeed the caller's responsibility not to do use-after-free.
+> 
+> For non-RCU free, the freed workqueue's state can be arbitrary soon and
+> the caller might get a complaint. And if there are some kinds of debugging
+> facilities for freed memory, the system can notice the problem earlier.
+> 
+> But now is RCU free for the workqueue, and the workqueue has nothing
+> different between before and after destroy_workqueue() unless the
+> grace period ends and the memory-allocation subsystem takes charge of
+> the memory.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/soc/tegra/cbb/tegra234-cbb.c | 6 ------
- 1 file changed, 6 deletions(-)
+idk, maybe? It seems kinda out of scope. Richard, can you update the patch
+description and comment so that they clearly state that this is a debug aid
+to help spotting user errors?
 
-diff --git a/drivers/soc/tegra/cbb/tegra234-cbb.c b/drivers/soc/tegra/cbb/tegra234-cbb.c
-index 3528f9e15d5c..3b26dcf9a70c 100644
---- a/drivers/soc/tegra/cbb/tegra234-cbb.c
-+++ b/drivers/soc/tegra/cbb/tegra234-cbb.c
-@@ -1066,11 +1066,6 @@ static int tegra234_cbb_probe(struct platform_device *pdev)
- 	return tegra_cbb_register(&cbb->base);
- }
- 
--static int tegra234_cbb_remove(struct platform_device *pdev)
--{
--	return 0;
--}
--
- static int __maybe_unused tegra234_cbb_resume_noirq(struct device *dev)
- {
- 	struct tegra234_cbb *cbb = dev_get_drvdata(dev);
-@@ -1088,7 +1083,6 @@ static const struct dev_pm_ops tegra234_cbb_pm = {
- 
- static struct platform_driver tegra234_cbb_driver = {
- 	.probe = tegra234_cbb_probe,
--	.remove = tegra234_cbb_remove,
- 	.driver = {
- 		.name = "tegra234-cbb",
- 		.of_match_table = tegra234_cbb_dt_ids,
+Thanks.
+
 -- 
-2.38.1
-
+tejun
