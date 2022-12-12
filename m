@@ -2,159 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6705E64A399
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A22464A3A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiLLOmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S232222AbiLLOnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiLLOl7 (ORCPT
+        with ESMTP id S231481AbiLLOnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:41:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B6E6477;
-        Mon, 12 Dec 2022 06:41:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2ABE7B80A09;
-        Mon, 12 Dec 2022 14:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CE0C433EF;
-        Mon, 12 Dec 2022 14:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670856114;
-        bh=49yiOOZXNHxawLGdF5jaeIemWnDUH+xC0nzErDnYjL4=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=n8xLMOU0bLG+06pQhoH9AbcOhe69C8Zly9RLAQ10uYBXbidwiMeWjZOvalz0iy3SD
-         bheByXSHQ+WLsHN9KFYet/HV67Uj437+Q5xUEZP4ATjRAn0VGj8QOEm04zMRlp8MPe
-         faogHkgm3YP1getVruEGkC4Lh1MR86MRnQJND1kfBzaQRawe5X3zL9S8LmY8RGBwya
-         igwos3kMQ4claGjqRPg/VcBFUMKS3jOOwAnrAvdZ/1hX61RtYcwBA6LW86t7ksM/rc
-         UW0Vnz7D5hGc38jpAX6MiZ31A969eZ+YuzJlUYUOG1or01nYfPtY2cU4bYkDtv/MS3
-         0vUsMTm8qvbCw==
-Message-ID: <0a95ba7b-9335-ce03-0f47-5d9f4cce988f@kernel.org>
-Date:   Mon, 12 Dec 2022 22:41:52 +0800
+        Mon, 12 Dec 2022 09:43:47 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668F06424;
+        Mon, 12 Dec 2022 06:43:46 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670856225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mc//3PLDbSRDt2VwTyd9NngL7trzTV+j6zIM1+K7Tks=;
+        b=q3OL99uE092Nlh5tXBUVTqa/DPFN1PxY+r2Z0hOZyNDVlu6BPBsR4UmfSDtaX9W9YbxMlQ
+        Jn6eZqLbCxXlfvvhQRcGvR/z7me3z5R+YSskUUh6/kLJ2+PGy1soXStLFavf1/+taBIfap
+        XqndSH5Kge4pf+Ze0I91vHXR+ZF9akmzsf31zKhbv7Y3wYVOE4jDwOopu62LTXT5gwqKrd
+        wTEcty6JdvkaLh6GKYfRqI7DROKe/zUxVDrrerNeDJBrMs780QR8vkS3pcXNuNUBZp/RTl
+        4kQroOUv5DBWtuLxGBU2w4wfHwVm4ACpr2RfvNMnLgizaY6zuHmM/gGdz6y2QA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670856225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mc//3PLDbSRDt2VwTyd9NngL7trzTV+j6zIM1+K7Tks=;
+        b=9gQCHhH8BwNCaimjXcwY4KzobwZ0tI10wE/N9lUSET3pYfDLCcfvr1O79wE8CRjubphd7j
+        SwbKST2MIv2kqXAA==
+To:     Manfred Spraul <manfred@colorfullife.com>,
+        "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        1vier1@web.de
+Subject: Re: Invalid locking pattern in
+ Documentation/kernel-hacking/locking.rst?
+In-Reply-To: <be5a4c10-3b69-1c2d-d413-62f79ccc178b@colorfullife.com>
+References: <442ecdf402f8e726f2be4ab19c7299d272e27c0b.camel@siemens.com>
+ <be5a4c10-3b69-1c2d-d413-62f79ccc178b@colorfullife.com>
+Date:   Mon, 12 Dec 2022 15:43:44 +0100
+Message-ID: <87k02wbs2n.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     Vishal Moola <vishal.moola@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        fengnan chang <fengnanchang@gmail.com>,
-        linux-fsdevel@vger.kernel.org
-References: <20221017202451.4951-1-vishal.moola@gmail.com>
- <20221017202451.4951-15-vishal.moola@gmail.com>
- <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org>
- <CAOzc2pweRFtsUj65=U-N-+ASf3cQybwMuABoVB+ciHzD1gKWhQ@mail.gmail.com>
- <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
- <CAOzc2pzp0JEanJTgzSrRt3ziRCrR6rGCjpwJvAD8uCqsHqXnHg@mail.gmail.com>
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [f2fs-dev] [PATCH v3 14/23] f2fs: Convert
- f2fs_write_cache_pages() to use filemap_get_folios_tag()
-In-Reply-To: <CAOzc2pzp0JEanJTgzSrRt3ziRCrR6rGCjpwJvAD8uCqsHqXnHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vishal,
-
-Sorry for the delay reply.
-
-On 2022/12/6 4:34, Vishal Moola wrote:
-> On Tue, Nov 22, 2022 at 6:26 PM Vishal Moola <vishal.moola@gmail.com> wrote:
+On Fri, Dec 09 2022 at 19:47, Manfred Spraul wrote:
+> On 12/9/22 13:23, Sverdlin, Alexander wrote:
+>> the latest version of locking.rst contains the following (since 2005):
 >>
->> On Mon, Nov 14, 2022 at 1:38 PM Vishal Moola <vishal.moola@gmail.com> wrote:
->>>
->>> On Sun, Nov 13, 2022 at 11:02 PM Chao Yu <chao@kernel.org> wrote:
->>>>
->>>> On 2022/10/18 4:24, Vishal Moola (Oracle) wrote:
->>>>> Converted the function to use a folio_batch instead of pagevec. This is in
->>>>> preparation for the removal of find_get_pages_range_tag().
->>>>>
->>>>> Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
->>>>> of pagevec. This does NOT support large folios. The function currently
->>>>
->>>> Vishal,
->>>>
->>>> It looks this patch tries to revert Fengnan's change:
->>>>
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=01fc4b9a6ed8eacb64e5609bab7ac963e1c7e486
->>>>
->>>> How about doing some tests to evaluate its performance effect?
->>>
->>> Yeah I'll play around with it to see how much of a difference it makes.
+>> "Manfred Spraul points out that you can still do this, even if the data
+>> is very occasionally accessed in user context or softirqs/tasklets. The
+>> irq handler doesn't use a lock, and all other accesses are done as so::
 >>
->> I did some testing. Looks like reverting Fengnan's change allows for
->> occasional, but significant, spikes in write latency. I'll work on a variation
->> of the patch that maintains the use of F2FS_ONSTACK_PAGES and send
->> that in the next version of the patch series. Thanks for pointing that out!
-> 
-> Following Matthew's comment, I'm thinking we should go with this patch
-> as is. The numbers between both variations did not have substantial
-> differences with regard to latency.
-> 
-> While the new variant would maintain the use of F2FS_ONSTACK_PAGES,
-> the code becomes messier and would end up limiting the number of
-> folios written back once large folio support is added. This means it would
-> have to be converted down to this version later anyways.
-> 
-> Does leaving this patch as is sound good to you?
-> 
-> For reference, here's what the version continuing to use a page
-> array of size F2FS_ONSTACK_PAGES would change:
-> 
-> +               nr_pages = 0;
-> +again:
-> +               nr_folios = filemap_get_folios_tag(mapping, &index, end,
-> +                               tag, &fbatch);
-> +               if (nr_folios == 0) {
-> +                       if (nr_pages)
-> +                               goto write;
-> +                               goto write;
+>>          spin_lock(&lock);
+>>          disable_irq(irq);
+>> "
+>>
+>> Isn't it "sleeping in atomic" actually because of the sleeping
+>> disable_irq()?
+>
+> Good catch!
+>
+> The documentation of disable_irq() claims that the function is safe to 
+> be called from IRQ context (for careful callers)
+>
+> But it calls synchronize_irq(). And synchronize_irq() claims that the 
+> function can be called only from preemptible code.
+>
+> The change was in 2009:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.1-rc8&id=3aa551c9b4c40018f0e261a178e3d25478dc04a9 
+>
+>
+> @Thomas/@Ingo: What do we want?
+>
+> Declare disable_irq()&synchronize_irq() as safe from irq context only if 
+> no threaded irq handlers are used?
+>
+> Or declare both function as preemptible context only?
 
-Duplicated code.
+The latter.
 
->                          break;
-> +               }
-> 
-> +               for (i = 0; i < nr_folios; i++) {
-> +                       struct folio* folio = fbatch.folios[i];
-> +
-> +                       idx = 0;
-> +                       p = folio_nr_pages(folio);
-> +add_more:
-> +                       pages[nr_pages] = folio_page(folio,idx);
-> +                       folio_ref_inc(folio);
-> +                       if (++nr_pages == F2FS_ONSTACK_PAGES) {
-> +                               index = folio->index + idx + 1;
-> +                               folio_batch_release(&fbatch);
-> +                               goto write;
-> +                       }
-> +                       if (++idx < p)
-> +                               goto add_more;
-> +               }
-> +               folio_batch_release(&fbatch);
-> +               goto again;
-> +write:
+The comment for disable_irq() needs to go away too:
 
-Looks fine to me, can you please send a formal patch?
+ "This function may be called - with care - from IRQ context."
+
+Obviously it can't be called from the interrupt context which it
+tries to disable as it will live-lock on the "in progress" flag.
+
+So that leaves the option to call it from some unrelated interrupt
+context which does not make much sense. In fact, back in the days when
+this comment was added it was still allowed to reenable interrupts in
+the interrupt handler, which obviously opens the window for some other
+interrupt to come in which then tries to disable the one it just
+interrupted. Not an issue anymore, but the synchronize_irq() change to
+handle threaded interrupts made it more or less impossible.
 
 Thanks,
 
-> 
->> How do the remaining f2fs patches in the series look to you?
->> Patch 16/23 f2fs_sync_meta_pages() in particular seems like it may
->> be prone to problems. If there are any changes that need to be made to
->> it I can include those in the next version as well.
-> 
-> Thanks for reviewing the patches so far. I wanted to follow up on asking
-> for review of the last couple of patches.
+        tglx
+
+
+
