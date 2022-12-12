@@ -2,114 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6242C64A9E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BD264A9E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiLLWAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:00:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S233529AbiLLWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbiLLWAk (ORCPT
+        with ESMTP id S229497AbiLLWAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:00:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE6A11831
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:00:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76D37B80E7A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8D7C433F1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670882436;
-        bh=onh7CdjcFHxpf+vLDBDqzBOh5a7yM6UTeLlCroJcPew=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=Vz/m8pQ0sTJ1Ve2IvKM3/wgptu4djHfq8mtQLDCllc4zrnXmoGIoJnWIAQPGzNYF7
-         2oXJRsqlVIEBW85GRr2iGDDWvDr2k1buPLp9ZxKGdUuiMdiRxrqQYZXrzsYfbZl7A0
-         4dJRkKRUKCF+MmeW2kY9lCm0EPeKhnETpD+/KhPs1bv2nexlQCCnj8xMcC5Cpi5+Ud
-         rDchoBpGOqm7NN9dSZQQzF1szWuA+MaxlyueEIyNTWcwepE87DsZPeIHTR2Jxp2JDG
-         XMVwpICwFL9F1vriWJeSOmZnqhxL4/RQL5BjwtrGNBHVefMXQ/get/5LeRre+ijYvq
-         ria/iGWLEf84Q==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id EE5A427C0054;
-        Mon, 12 Dec 2022 17:00:34 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Mon, 12 Dec 2022 17:00:34 -0500
-X-ME-Sender: <xms:gqSXYyPcAyx1mDXsLpkIjIqfeFep8xH7K_WQ_rmVLbiNT5n7jyBKcg>
-    <xme:gqSXYw9Jpsf54TrLgWli-NW2ItbvWDvYFnhSD0StnDZjUW0Waa3LB9vWHazFqPmAH
-    drS4aGM2LwQmr3Tw48>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekgddufedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
-    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:gqSXY5TtpLpZLJzMt_3h6zwbRKvD3fXp0gOxTA75kNF_qaw7LKlwpQ>
-    <xmx:gqSXYyuM_0Yc27h8W_EzkyPppANAl9f73_JplTfrzSc9svTHSrlN9Q>
-    <xmx:gqSXY6cUpZBpYPCWJp0YUyAOMTh3q6jYgVMnT6sCu7P6it78j3neZg>
-    <xmx:gqSXYympgukJ2-zGs_xAnEsL47HzXJjqrezGQgcKEkXXLiIJbLjrRQ>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ACC0A31A0063; Mon, 12 Dec 2022 17:00:34 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <b2896f0c-5e0d-43c9-8ead-487bf1572168@app.fastmail.com>
-In-Reply-To: <85ca9ae1-d319-ee77-4a71-bc9c7874f2cb@yandex.ru>
-References: <85ca9ae1-d319-ee77-4a71-bc9c7874f2cb@yandex.ru>
-Date:   Mon, 12 Dec 2022 13:59:47 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     stsp <stsp2@yandex.ru>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Cc:     linux-x86_64@vger.kernel.org
-Subject: Re: strange behavior with sigreturn() to 32bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 12 Dec 2022 17:00:23 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948701007B;
+        Mon, 12 Dec 2022 14:00:22 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so1485100pjm.2;
+        Mon, 12 Dec 2022 14:00:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pPROv2++iXsCYjxrqkErN/kEU/7ybcYjBebe0YqyUn0=;
+        b=VGeiVpUO66G982s+iqcLVxzYcow6fONQ6sCMHG1mPkB/am1PbtnL87w6vUoLP+urCC
+         N8YsE5p9FVFNEWd+vZRjbdd2gDjthj4kUrWouWdGAEnFM0koYRtPF9C0/su90sOOSYyN
+         0B/6I/zWHEojMpjoTMBQ7GQLKr1uM4hMjc1NuKlBba/xOexC7TVebHql4vy6wEwqZaAR
+         Iut873m+Cva5JjsyYs0nVNWHiJZ/QXAR54q76fh1iyCgMJeZHrSU8SrOPHYyH+94ffAd
+         vjuz/C6zLGc/yGqwZdMNy7OZtkBIl1zsxSzZFHb0dp9hfFwJwZSbf+jqSi1f0vrf4vUa
+         m0dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pPROv2++iXsCYjxrqkErN/kEU/7ybcYjBebe0YqyUn0=;
+        b=1uQX4aYX3a4bk9Tgzg/nHs3i74J2jfbaD1LCCWWXVZwsAooeBk7Qk/UXaIbsmnZj7J
+         yK0y1EwBwYph1jVaReVmXVfucxfCLKcBL6G4SfjGcjC2qcYldkSUgDozaKD8/53dAC0E
+         +Bn5XJJZn70ey4GlKsW10SpSrjibRBRZITQBFQrdKBtyMowtVcStJheir2qof/WA9/lW
+         9POaqWq3iYczERMSJBLmQ5A0NinuGblOSDGBeD6sDJwJsbclmjqSQ7o7yGj5Ljhm1Weh
+         8p3f3hitJ0VjpfEhaZk7qZve7+A+CmOAp+a6dEVhj71TSN0dYR4wcmK4KNxzfsVsfV63
+         aUJA==
+X-Gm-Message-State: ANoB5pl7+f9JYtl5n63CV9JqcdkdJOslXf0H3hYfc3i7veAR8M4utU1Y
+        8pj1dmn+YGuTkNpi5SG2JZc=
+X-Google-Smtp-Source: AA0mqf5nvWlMLAJ0H4XXVBwQULotBr9HnfrYpuM9nuujrhpx0BW3VSNB5ryC/uGn69j0vyL2NfTqIw==
+X-Received: by 2002:a05:6a20:1010:b0:a2:ed21:d820 with SMTP id a16-20020a056a20101000b000a2ed21d820mr27961408pzd.42.1670882421804;
+        Mon, 12 Dec 2022 14:00:21 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id je20-20020a170903265400b00187197c499asm6876607plb.164.2022.12.12.14.00.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 14:00:21 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 12:00:19 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example
+ scheduler
+Message-ID: <Y5ekc7v01cXHX8gc@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-32-tj@kernel.org>
+ <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 10, 2022, at 1:08 AM, stsp wrote:
-> Hi.
->
-> I am playing with 32bit compatibility segments,
-> and I am observing something very strange.
-> To demonstrate the problem, I did the change
-> to the kernel sigreturn test-case, and it is attached.
-> The change just moves the magic value to EAX
-> and calls an interrupt that produces a SIGSEGV.
-> The SIGSEGV handler prints the needed regs.
-> This patch intentionally adds 0x100000000 to
-> the RIP register, because AFAIK the high part
-> or 64bit regs are irrelevant in compatibility mode.
-> Now with high part of RIP non-zero, we see this:
-> $ ./sigreturn_64
-> err=0 trapno=d ax=0 ip=100000003
->
-> OK, obviously our asm code didn't execute -
-> why is so? How does the high part of RIP
-> affect compatibility mode?
-> Then lets start the same example under gdb:
-> Program received signal SIGSEGV, Segmentation fault.
-> 0x0000000000403008 in int31 ()
-> (gdb)
-> Continuing.
-> err=18a trapno=d ax=a5f3 ip=403008
->
-> Wow! Much better now: error code is correct,
-> ax is correct, but ip is invalid.
+Hello,
 
-I generally distrust gdb when mixed modes are involved -- it's fundamentally intensely buggy.  Now maybe you're not hitting the bugs I know of, but still...
+On Mon, Dec 12, 2022 at 03:03:20PM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 29, 2022 at 10:23:13PM -1000, Tejun Heo wrote:
+> > From: Dan Schatzberg <dschatzberg@meta.com>
+> > 
+> > Atropos is a multi-domain BPF / userspace hybrid scheduler where the BPF
+> > part does simple round robin in each domain and the userspace part
+> > calculates the load factor of each domain and tells the BPF part how to load
+> > balance the domains.
+> > 
+> > This scheduler demonstrates dividing scheduling logic between BPF and
+> > userspace and using rust to build the userspace part.
+> 
+> And here I am, speaking neither Rust nor BPF.
 
-Anyway, the behavior I expect (not that I've tested this, but based on my memory of how this is all supposed to work) is that an attempt to return to user mode will fail with #GP because the full value of RIP is compared to the segment limit, which is 2^32-1.  And #GP is 0xd, so your non-gdb outputs look broadly correct...
+I'm not super fluent in rust but do really enjoy whenever I get to do things
+in it. What the language pulls off is actually really neat. It does take
+some getting-used-to tho.
+
+> But really, having seen some of this I long for the UMCG patches -- that
+> at least was somewhat sane and trivially composes, unlike all this
+> madness.
+
+Putting aside lack of familiarity, there are several things which make the
+examples including this one not very readable. e.g. how the loops have to be
+structured in BPF and the inability to seamlessly access the elements of
+certain BPF map types do hamper ergonomics and readability quite a bit. That
+said, there are a lot of new developments in BPF which should improve many
+of these areas, so hopefully things should keep getting better.
+
+Thanks.
+
+-- 
+tejun
