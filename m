@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF89964AA43
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88E764AA47
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiLLWah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S233768AbiLLWbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiLLWab (ORCPT
+        with ESMTP id S233786AbiLLWbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:30:31 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495AD13F9D;
-        Mon, 12 Dec 2022 14:30:30 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id fu10so10369054qtb.0;
-        Mon, 12 Dec 2022 14:30:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wn7Ol+Nii+KRvjkJs021zJvmcVilYQbtbdjjj+CM3ls=;
-        b=HW4KILHHyHX00+spPmp5NLS15WYIJza6zKV2kWfOIGTwOvPNWxchBNEMHUEgLI+Lvy
-         lS0F4r8OfIx797KwBP3VGj5pnguA/eVfDcPNGNJPvYGOsow8P2s4EAkRhXA1Pj1BDJ6b
-         JC9IveJMHA7RiES+uQ87sAG+9m/yW0seDRpu7x+TKhJtteFpJR6AWNStbKuMQa0Jw8QW
-         NhTslBdOWm58I6XAso9ceCcJGuL5EujexdVMtD6aeMfSZRDt+OTSoeb4pdAK6BmSDEM6
-         hk/s+/9Dem8bd1FssB3PwYcrQ/QBVjrzlaOAk55FGIdGlBfGZ3jnRQHwmvTBDrI6GVYN
-         rGSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wn7Ol+Nii+KRvjkJs021zJvmcVilYQbtbdjjj+CM3ls=;
-        b=dnMSV6aOjI+j0XlqmAKwrfZzORJVSOpH5/9blk8l4OXgZYuD5iqmDUUWTHIkfiANyS
-         3NJr5CTakSLx/ygeqVT6mMlLX170RtTe8bfBzRqDX8kG9EkJro7TLsy5AULY4svWHUiM
-         gV5dG1OeWrMIAji0ftxAtJm2nzOUdI/7E3zTvIXdXCdwumi7vjyYOO8crXFx+FXYIgdZ
-         BiyhZr4OlkVTPm/RHBM6rwA49n88xd8r/CIGc8HokYSTzJSUeYWIMu5n3in8o6R6xbfY
-         Zycu5svlN4rLT+foop/UWABC5DCaPtM4ES/d5iDs+LzYtQbpmKNW5uSRiE0y1oNOfJA9
-         MWqw==
-X-Gm-Message-State: ANoB5pkSvOGf57amoLCSkklKuCps9RfuaXL4sroEx3Rn4AV6QGNINTME
-        xQyKsIYdrTrY+rZCe2rkHIg=
-X-Google-Smtp-Source: AA0mqf4Q04DmUA95Ihc5nFTAKQA0gcUbMcOVE7u04B2KcMfMSL8jzhiJocguGJ/lwYUEuowW29N4yQ==
-X-Received: by 2002:ac8:68d:0:b0:3a5:f445:acf with SMTP id f13-20020ac8068d000000b003a5f4450acfmr27958303qth.67.1670884229338;
-        Mon, 12 Dec 2022 14:30:29 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id fu20-20020a05622a5d9400b003a69225c2cdsm6444538qtb.56.2022.12.12.14.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 14:30:28 -0800 (PST)
-Message-ID: <c6f01794-ee64-eaf7-1beb-74378d981ebf@gmail.com>
-Date:   Mon, 12 Dec 2022 14:30:20 -0800
+        Mon, 12 Dec 2022 17:31:00 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A61AF24;
+        Mon, 12 Dec 2022 14:30:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWGYW4rFNz4xN1;
+        Tue, 13 Dec 2022 09:30:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670884256;
+        bh=wol/ZquUNqtT5PILJNikpvyQiO2elLsIVTw0EVhiXFU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NJbZrKXH7Ug6Si6TrZWG9GZUB9Dn0bFOR9CpfMlD2KVR51974BbpfmiMYkz/oWxgD
+         NKLc0ztwU8+WyxVWVMwTYCWHNJ4w8WJzlHCgaA+ujieQ2+/tzLACw0qBgeLH95qdpH
+         +NcPizDbuUYnV57O6Lf610kFDP9HxBCAace5xZtPW2ofBNfzBCUg9afuEucnjgB1GB
+         j4qFqQgOrjyaexC9YPSCuRFb0u7ClfnIIpiva87MCbLCPV2GI7FSR4eH2Hp9bPqY2U
+         qzL3KNGu7NSf5LUXkgKi0UN17BrGpF70v1maU23wjxTZVMqH/AGQYXNfg1w3hHXlBW
+         lwMNyhQWrMHwA==
+Date:   Tue, 13 Dec 2022 09:30:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20221213093054.5211da74@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 00/67] 5.4.227-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221212130917.599345531@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221212130917.599345531@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/hTrzt8noqpeQkk73HvdJVDq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 05:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.227 release.
-> There are 67 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.227-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+--Sig_/hTrzt8noqpeQkk73HvdJVDq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Hi all,
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+After merging the mm-hotfixes tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
+mm/ksm.c: In function 'ksm_might_need_to_copy':
+mm/ksm.c:2605:21: error: implicit declaration of function 'copy_mc_user_hig=
+hpage'; did you mean 'copy_user_highpage'? [-Werror=3Dimplicit-function-dec=
+laration]
+ 2605 |                 if (copy_mc_user_highpage(new_page, page, address, =
+vma)) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+      |                     copy_user_highpage
+
+Caused by commit
+
+  b7edf4b1cdb1 ("mm: hwpoison: support recovery from ksm_might_need_to_copy=
+()")
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hTrzt8noqpeQkk73HvdJVDq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXq54ACgkQAVBC80lX
+0GwTRgf+NcfRNGZ/W9oWEtHBVM9dsvDd8ecNLaMVgoxMGLqRyIl+oq3fRCUNkhTh
+40oeVj3N76sOGzvytqPN01vVcJxrWzRkFfpBc5m/yC73YITp+hxmZ/mdPj/nGkvF
+1dRD3/erJZMYOSJ7WhNDATZ/jNSIsYhjxxIT7gvvz2D50XtpH1I6GbqCV7rHHPdJ
+9jqS/UU7Dd4ily77uG/uRgcKphh1CBeSlzfvojpDWL62piTDzWYr8qfehGvRU5yg
+gBG11dcqaO8UwXmEDxiwi8eqsZK12rQjO9LMczEU9/pQJdQzrWaDoBYP49geH1So
+pEziYEHRflWDdNBevmZ/ABuGfhH5yA==
+=Wcyq
+-----END PGP SIGNATURE-----
+
+--Sig_/hTrzt8noqpeQkk73HvdJVDq--
