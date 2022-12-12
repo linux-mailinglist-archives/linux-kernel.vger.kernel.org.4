@@ -2,195 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDBB64A3A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3E664A275
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiLLOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S233252AbiLLNyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiLLOpQ (ORCPT
+        with ESMTP id S233216AbiLLNyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:45:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4666424;
-        Mon, 12 Dec 2022 06:45:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A05C16106F;
-        Mon, 12 Dec 2022 14:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F50EC433EF;
-        Mon, 12 Dec 2022 14:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670856314;
-        bh=EvEZt8wVyoka0T/oimTSBNVo3axkDhbQxVc0X3rYsJ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W/Q2oUGaROnOpni/I0RkyJAOhFyqcVUG+jQrSD0pua65VfaYxN1cxW13gI/ZE2Df0
-         hqJ+FTsrX4nTLPIraWjI8+ciLB3AnnDvRb9iki+Nl0DfdbndrnoEx2eIVTyHX4cMav
-         CtbI6e3teGULTdJMi6ohbudqgmmP8QXvEfQs/3UdGwygzi/YE0bIRJ+EqQBTSfL4CK
-         /u/8NXmV1dLNnCvZbHdIVXLPD/dl8UXX+6xRJtGuIjCa5gSq7mV+fpqapvi0NOAFVM
-         /kD37Xp8kFvJJL/BStqs79U5RA0Yl4WaQqlcTCIgl5d9rBEDPtIunCNXpunke8ugNu
-         Ew6QZqBO4xFIQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 31EF140483; Mon, 12 Dec 2022 10:51:06 -0300 (-03)
-Date:   Mon, 12 Dec 2022 10:51:06 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y5cxyk3OdgFXlyhS@kernel.org>
-References: <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
- <Y5DNBZNC5rBBqlJW@kernel.org>
- <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
- <Y5JfgyN59dSeKbUP@kernel.org>
- <Y5Jl8MeW90DXy1wT@kernel.org>
- <8F6F0C27-53F3-4837-A19C-845768253249@linux.vnet.ibm.com>
+        Mon, 12 Dec 2022 08:54:13 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE75C2AF5;
+        Mon, 12 Dec 2022 05:54:12 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id fc4so28096730ejc.12;
+        Mon, 12 Dec 2022 05:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrqnHu9WTeRN234a31B5lZIUWTkJP7oJ2r4I37DZ9Cc=;
+        b=R8JumW17wBW6T2M+cCmPxYNeoDabzGl6wDAEDaMggdQJyFMhhN8poEKRNTzyq3FO8E
+         4kgdpM2uc0Qk7FY4QqE0ZQNbOE5Y+K7bYDz5U4NJb8hkyhxO+F5sHPYTmCQWdN1CLVMR
+         Wv328q22uM00GKX0JY1zMRCIPH+me3o/XOYVWtRaNC1BeulnFTnn7/YXe3OOyadiBt+O
+         nehb7iZRqJOoQ4eNVnUdjwpbkHlYFH7dKsg7QKxDjydUKaDVuCJIlQirLfXvtK5RaYxn
+         zC7GlW8ODlX068JBM9NTQSadQoQLP6cQZofeYWLfpXSzFCgiuBYDdFiHnh6Rojo9Ova0
+         R2Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YrqnHu9WTeRN234a31B5lZIUWTkJP7oJ2r4I37DZ9Cc=;
+        b=LAPWzMol1k76hMEgERFa3sbAwzVSt8Ns04sMNbNg/it2nC3cO+70PIKqJp9YWhPPFL
+         DBVSqGFhjrVKn7IV75Jgo4q65dBIa1tQm87FhPol4HNNddnUByR1rpuLzh4FPx4oqjkV
+         VKnWxYv76tGMiJetAOtkJ6FWz85oMC/mQPI10awDlIa97W7itbMspOrbT4Gc35INLd9f
+         xtAcC+JocRW+irMAKqyzb8iiCAsQK2HE2AsrdPQVSSGUbPsNKVBUyOSM1qCBYJm9FI9s
+         AdGebswSoJiameqEUtVDU69iYZ5Tf9qYB9S/9bIzsrrf7DlAMXCcOGuhszyGPPCbLTen
+         5xcA==
+X-Gm-Message-State: ANoB5plnBG79gYKzVALU49pZLLy5fI82mls5MC4R2Zz1weFeeuuOivz8
+        Iko+44bwrDEnhgNfZyqD5vo=
+X-Google-Smtp-Source: AA0mqf7VYG8pqqbA/vGlObK6vZxT6V1VD8sX8M3KMu+IZL0oUF6BnGFItKcfKJk/7dNIo3B0OgYktQ==
+X-Received: by 2002:a17:906:f2d5:b0:7c0:ff76:dc12 with SMTP id gz21-20020a170906f2d500b007c0ff76dc12mr13226446ejb.2.1670853251387;
+        Mon, 12 Dec 2022 05:54:11 -0800 (PST)
+Received: from skbuf ([188.27.185.63])
+        by smtp.gmail.com with ESMTPSA id ss2-20020a170907c00200b007c100eba66asm3322351ejc.77.2022.12.12.05.54.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 05:54:10 -0800 (PST)
+Date:   Mon, 12 Dec 2022 15:54:08 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
+        sergiu.moga@microchip.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] net: phylink: init phydev on phylink_resume()
+Message-ID: <20221212135408.j23agcjrikiucq4a@skbuf>
+References: <20221212112845.73290-1-claudiu.beznea@microchip.com>
+ <20221212112845.73290-2-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8F6F0C27-53F3-4837-A19C-845768253249@linux.vnet.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221212112845.73290-2-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Dec 09, 2022 at 12:04:18PM +0530, Athira Rajeev escreveu:
-> 
-> 
-> > On 09-Dec-2022, at 4:02 AM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > 
-> > Em Thu, Dec 08, 2022 at 07:04:52PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >> Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
-> >>>> On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> >>>> Can you try again? tmp.perf/core? That "tmp." part means its a force
-> >>>> pushed branch, so I just force pushed with some arch specific fixes, now
-> >>>> I'm down to (removing the successful builds and unrelated failures, now
-> >>>> related to libbpf's F_DUPFD_CLOEXEC kaboom):
-> >> 
-> >>> Ok Arnaldo, Sure, I will check with updated branch
-> >> 
-> >>>>  5     7.38 fedora:34                     : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
-> >>>>   /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function ‘evsel__rawptr’:
-> >>>>   /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: ‘TEP_FIELD_IS_RELATIVE’ undeclared (first use in this function); did you mean ‘TEP_FIELD_IS_FLAG’?
-> >>>>    2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
-> >>>>         |                                    ^~~~~~~~~~~~~~~~~~~~~
-> >>>>         |                                    TEP_FIELD_IS_FLAG
-> >> 
-> >>> I observed same issue as updated here: 
-> >>> https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@linux.vnet.ibm.com/
-> >> 
-> >>> Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of the system installed version.
-> >>> whereas it is there in header file in tools/lib/traceevent
-> >> 
-> >>> # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
-> >>> # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
-> >>> 	TEP_FIELD_IS_RELATIVE	= 256,
-> >> 
-> >> Right, I had noticed that as well, so as a prep patch I'm adding the
-> >> patch below, before Ian's. Please check and provide an
-> >> Acked-by/Tested-by/Reviewed-by if possible.
-> > 
-> > I ended up with the one below, _after_ Ian's patch as I had some trouble grafting
-> > it before and had already tested it this way multiple times, I'm pushing
-> > this to tmp/perf.core.
-> > 
-> > - Arnaldo
-> 
-> 
-> Hi Arnaldo, Ian
-> 
-> Thanks for the fixes.
-> 
-> Since we changed “CONFIG_TRACEEVENT” to “CONFIG_LIBTRACEEVENT”, 
-> below change is also needed in “arch/powerpc/util/Build”
-> 
-> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powerpc/util/Build
-> index 71e57f28abda..9889245c555c 100644
-> --- a/tools/perf/arch/powerpc/util/Build
-> +++ b/tools/perf/arch/powerpc/util/Build
-> @@ -1,5 +1,5 @@
->  perf-y += header.o
-> -perf-$(CONFIG_TRACEEVENT) += kvm-stat.o
-> +perf-$(CONFIG_LIBTRACEEVENT) += kvm-stat.o
->  perf-y += perf_regs.o
->  perf-y += mem-events.o
->  perf-y += sym-handling.o
-> 
-> With this change, I could successfully compile in these environment:
-> - Without libtraceevent-devel installed
-> - With libtraceevent-devel installed
-> - With “make NO_LIBTRACEEVENT=1”
-> 
-> With above change,
-> Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Hi Claudiu,
 
-I did that and the same thing for other architectures, thanks for
-testing!
+On Mon, Dec 12, 2022 at 01:28:44PM +0200, Claudiu Beznea wrote:
+> There are scenarios where PHY power is cut off on system suspend.
+> There are also MAC drivers which handles themselves the PHY on
+> suspend/resume path. For such drivers the
+> struct phy_device::mac_managed_phy is set to true and thus the
+> mdio_bus_phy_suspend()/mdio_bus_phy_resume() wouldn't do the
+> proper PHY suspend/resume. For such scenarios call phy_init_hw()
+> from phylink_resume().
+> 
+> Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+> 
+> Hi, Russel,
+> 
+> I let phy_init_hw() to execute for all devices. I can restrict it only
+> for PHYs that has struct phy_device::mac_managed_phy = true.
+> 
+> Please let me know what you think.
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> 
+>  drivers/net/phy/phylink.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index 09cc65c0da93..6003c329638e 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -2031,6 +2031,12 @@ void phylink_resume(struct phylink *pl)
+>  {
+>  	ASSERT_RTNL();
+>  
+> +	if (pl->phydev) {
+> +		int ret = phy_init_hw(pl->phydev);
+> +		if (ret)
+> +			return;
+> +	}
+> +
 
-I'll now give a try at implementing it without
-tools/build/feature/test-libtraceevent-tep_field_is_relative.c, using
-just the version of libtraceevent, as Ian suggested.
+If the config_init() method of the driver does things such as this:
 
-It would be great if you could test it again then,
+	phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
 
-Thanks,
+like for example the marvell10g.c driver, won't a user-configured manual
+MDI setting get overwritten after a suspend/resume cycle?
 
-- Arnaldo
-
-
-diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/util/Build
-index 88553c578ed7a1c4..78ef7115be3d91a7 100644
---- a/tools/perf/arch/arm64/util/Build
-+++ b/tools/perf/arch/arm64/util/Build
-@@ -3,7 +3,7 @@ perf-y += machine.o
- perf-y += perf_regs.o
- perf-y += tsc.o
- perf-y += pmu.o
--perf-$(CONFIG_TRACEEVENT) += kvm-stat.o
-+perf-$(CONFIG_LIBTRACEEVENT) += kvm-stat.o
- perf-$(CONFIG_DWARF)     += dwarf-regs.o
- perf-$(CONFIG_LOCAL_LIBUNWIND) += unwind-libunwind.o
- perf-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
-diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powerpc/util/Build
-index 71e57f28abdac7e9..9889245c555c4cfb 100644
---- a/tools/perf/arch/powerpc/util/Build
-+++ b/tools/perf/arch/powerpc/util/Build
-@@ -1,5 +1,5 @@
- perf-y += header.o
--perf-$(CONFIG_TRACEEVENT) += kvm-stat.o
-+perf-$(CONFIG_LIBTRACEEVENT) += kvm-stat.o
- perf-y += perf_regs.o
- perf-y += mem-events.o
- perf-y += sym-handling.o
-diff --git a/tools/perf/arch/s390/util/Build b/tools/perf/arch/s390/util/Build
-index aa8a5f05c9cb4706..db68840869979f2c 100644
---- a/tools/perf/arch/s390/util/Build
-+++ b/tools/perf/arch/s390/util/Build
-@@ -1,5 +1,5 @@
- perf-y += header.o
--perf-$(CONFIG_TRACEEVENT) += kvm-stat.o
-+perf-$(CONFIG_LIBTRACEEVENT) += kvm-stat.o
- perf-y += perf_regs.o
- 
- perf-$(CONFIG_DWARF) += dwarf-regs.o
+>  	if (test_bit(PHYLINK_DISABLE_MAC_WOL, &pl->phylink_disable_state)) {
+>  		/* Wake-on-Lan enabled, MAC handling */
+>  
+> -- 
+> 2.34.1
+> 
