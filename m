@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3671764A9BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F9C64A9BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 22:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiLLVt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 16:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S233631AbiLLVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 16:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiLLVtV (ORCPT
+        with ESMTP id S233659AbiLLVts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 16:49:21 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A621A079
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:49:20 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id 124so12755156vsv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:49:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJe5NEtSkbd9smAWbsgSF2T73y6hJatTH6s+Fn1bMbI=;
-        b=CBQRevtmEFAqd1TtAKxP52T/gInU3x1G/rR28CPD6d5LoM2NbmJtOCBmnkif99utni
-         O5pCKwWTxzqjNRAWTW7BccuM2OxZGxZAHQskt0fzg9yCiIZ2uovsrKvuG8H5EnkFAZGd
-         KMPYFsDGCbYshP2oszD+ifModnSqJq1MfwJ+mZn6O7Kpj8mAEQP95wgg/9Rup4brgWc1
-         m6R7ufgPLJKBCW2XZpeO1hKSX+l5Qw8Y+i2mrV56PV/p9AXPwgqj2aovjc66a2WOlp03
-         bjzZ5PHqOOX5ETDvZRg8YznZHdypMd0OpjbWabARTxRzoFldKlDS1KC1QKvbQcMs8Ns+
-         UpbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HJe5NEtSkbd9smAWbsgSF2T73y6hJatTH6s+Fn1bMbI=;
-        b=lrUB1trEoQ1xrzFQSYtrtYuiFRwhROs8wBKzf1ASjGBj0AEfCqGT/eoAs1/VnbmpyH
-         b+v4WqEr90olYd8w0ayMKY7RQut+cjhV96MKCVK74DnA/Ly+7uhvpRI4EQEoFFBLLOy7
-         sFjNIm24hUPuLBYQzaowYYMgTZKtfVmjdZ08Wfbf0tyjS2ZHlw4urlZHsuewzXThQpt6
-         osgXB0F44857qEP1hKmKDApWzqELaUL/+OOEA3ljMV/RF9vXW/Ayu+gt/xkWsf4RDEPM
-         VJV1X11pdGO77Oth7djPZVirk7ycW0qrAr7UEgEE166Nw+sJfEt5h9ZvwuWkuvtqFprT
-         sKBg==
-X-Gm-Message-State: ANoB5plTR32+VuxVDi/Lm5OF9Uj3kIs7WD1NFZBlK6VkKPJlNlJst0pH
-        JZ/pTxJepNa098wKvY+fIgjlxfbm3f+y7Aoy4Z/1xA==
-X-Google-Smtp-Source: AA0mqf5dJiRM2ruDp6Rvl99YdXcuYvQa1gNgQk9oBbm9lzyUbe0xFq/GifZUtj9oUrij8m1EjjXnDkdgpWTROSeOhX0=
-X-Received: by 2002:a05:6102:6c1:b0:3a9:b437:8bfb with SMTP id
- m1-20020a05610206c100b003a9b4378bfbmr43679050vsg.70.1670881759303; Mon, 12
- Dec 2022 13:49:19 -0800 (PST)
+        Mon, 12 Dec 2022 16:49:48 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766A11A06C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:49:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670881787; x=1702417787;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ULDXAwAAFmxVHF7z/2+d10TwMuCrsH3Q+pw4ZUvRKJU=;
+  b=LhSVdDwEr6tXaeS1t/nj7DTL9lPCYdip0Lh7xhEQ8NMciW1i9CwR4oio
+   TB8DQJfCobxBbLSE65QznB6fu3kdk9pUe1GxBpfaNiorc84LoWrIPL2t/
+   UOh2rSdYnRsY0OOAfmw0oasOfJzm8Sr5OM7TzSNsfh30+95K+aCAN72Sa
+   I1Q2Np2+szRTYQ6rhCiCTZ/8Pazk+VzsQj4e9ZxE4zV+2N9hu+f7JT3u+
+   xFmh+JM2sHHCms9HMfcfTUs5T1LGexl60huPTv5J3gBggTWOR46d/hqLN
+   gJuB6uvS01kq6iGP+u2Esoj6sDmOOYOroltsrT1vqLKCI9N8+KdmOtbt6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="318002832"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="318002832"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 13:49:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="737135058"
+X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
+   d="scan'208";a="737135058"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 13:49:45 -0800
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc-next] mei: bus-fixup:upon error print return values of send and receive
+Date:   Mon, 12 Dec 2022 23:49:33 +0200
+Message-Id: <20221212214933.275434-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221212213857.3636830-1-grundler@chromium.org>
-In-Reply-To: <20221212213857.3636830-1-grundler@chromium.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Mon, 12 Dec 2022 13:49:08 -0800
-Message-ID: <CABXOdTd34M1fCEdYfT7F7RAMDmvEj=Ak_Wcg+HgcU83nOFor8w@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: cros_usbpd: reclassify "default case!" as debug
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 1:39 PM Grant Grundler <grundler@chromium.org> wrote:
->
-> This doesn't need to be printed every second as an error:
-> ...
-> <3>[17438.628385] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1: default case!
-> <3>[17439.634176] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1: default case!
-> <3>[17440.640298] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1: default case!
-> ...
->
-> Reduce priority from ERROR to DEBUG.
->
-> Signed-off-by: Grant Grundler <grundler@chromium.org>
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+For easier debugging, upon error, print also return values
+from __mei_cl_recv() and __mei_cl_send() functions.
 
->
-> ---
->  drivers/power/supply/cros_usbpd-charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-> index cadb6a0c2cc7..b6c96376776a 100644
-> --- a/drivers/power/supply/cros_usbpd-charger.c
-> +++ b/drivers/power/supply/cros_usbpd-charger.c
-> @@ -276,7 +276,7 @@ static int cros_usbpd_charger_get_power_info(struct port_data *port)
->                 port->psy_current_max = 0;
->                 break;
->         default:
-> -               dev_err(dev, "Port %d: default case!\n", port->port_number);
-> +               dev_dbg(dev, "Port %d: default case!\n", port->port_number);
->                 port->psy_usb_type = POWER_SUPPLY_USB_TYPE_SDP;
->         }
->
-> --
-> 2.39.0.rc1.256.g54fd8350bd-goog
->
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+---
+ drivers/misc/mei/bus-fixup.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
+index 6df7679d9739..92c0930cc742 100644
+--- a/drivers/misc/mei/bus-fixup.c
++++ b/drivers/misc/mei/bus-fixup.c
+@@ -151,7 +151,7 @@ static int mei_fwver(struct mei_cl_device *cldev)
+ 	ret = __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0,
+ 			    MEI_CL_IO_TX_BLOCKING);
+ 	if (ret < 0) {
+-		dev_err(&cldev->dev, "Could not send ReqFWVersion cmd\n");
++		dev_err(&cldev->dev, "Could not send ReqFWVersion cmd ret = %d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -163,7 +163,7 @@ static int mei_fwver(struct mei_cl_device *cldev)
+ 		 * Should be at least one version block,
+ 		 * error out if nothing found
+ 		 */
+-		dev_err(&cldev->dev, "Could not read FW version\n");
++		dev_err(&cldev->dev, "Could not read FW version ret = %d\n", bytes_recv);
+ 		return -EIO;
+ 	}
+ 
+@@ -380,7 +380,7 @@ static int mei_nfc_if_version(struct mei_cl *cl,
+ 	ret = __mei_cl_send(cl, (u8 *)&cmd, sizeof(cmd), 0,
+ 			    MEI_CL_IO_TX_BLOCKING);
+ 	if (ret < 0) {
+-		dev_err(bus->dev, "Could not send IF version cmd\n");
++		dev_err(bus->dev, "Could not send IF version cmd ret = %d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -395,7 +395,7 @@ static int mei_nfc_if_version(struct mei_cl *cl,
+ 	bytes_recv = __mei_cl_recv(cl, (u8 *)reply, if_version_length, &vtag,
+ 				   0, 0);
+ 	if (bytes_recv < 0 || (size_t)bytes_recv < if_version_length) {
+-		dev_err(bus->dev, "Could not read IF version\n");
++		dev_err(bus->dev, "Could not read IF version ret = %d\n", bytes_recv);
+ 		ret = -EIO;
+ 		goto err;
+ 	}
+-- 
+2.38.1
+
