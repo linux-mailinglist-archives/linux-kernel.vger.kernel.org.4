@@ -2,208 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E703E64A9FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38F964AA07
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiLLWLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:11:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S233678AbiLLWNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiLLWLB (ORCPT
+        with ESMTP id S233476AbiLLWNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:11:01 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86DAD95;
-        Mon, 12 Dec 2022 14:10:59 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id r15so9159504qvm.6;
-        Mon, 12 Dec 2022 14:10:59 -0800 (PST)
+        Mon, 12 Dec 2022 17:13:51 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3321A232;
+        Mon, 12 Dec 2022 14:13:50 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gt4so1332634pjb.1;
+        Mon, 12 Dec 2022 14:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W3fdnCIdYn0lJ4Mxo5yFAqKtt9U4L6f/X7A6g14xg8A=;
-        b=WBE3mdrauA1fH2/P8EvrnWRt/RzNEL9q5gVfL193jYozk1EP0hH//vDL/LNtnPvYRF
-         4W3RU+5pCzo1eKIn9JrYHA6g3cZKMcTxYY+JTLVhII51tHssqWYlkogLQenKeK6lmUOj
-         65vES31846yd+TrWo1wmisWja15UWlcWjBm9mRkgioggJcbfm1nHeBZbumma2LNV0/U/
-         ATPUIxMJjUKuvTUBX0FIIz5sgQ8k346FjETh4gUSZPbiC5IPcCoHZtU51LkyJIxlbpA5
-         0y3g+aqvWHPiAL9E+GJGWaOtR44SLvnN7NDoNXyzHbHYcbp7qr9oO3Tp3dJ4WcdvyF8J
-         8sEg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n2XZBEP0JR3u42vjkud6u2pf7wcC2jLfekfdtsMKR2o=;
+        b=CFHCFDtE98y5A8aGdBtghjU5l9CphTqaYy8+bNqMg2oj+xvRkpTz+CiNOXnOGa+xmH
+         aFRyuXYMB56A8Qaj2sKuwGcPdNQ8AoKGDqpSvvk1nupxWCQ6HeVJMNeCoCndqgy4KHMa
+         gtTajfL2mnJdmGIF83EGfF+l6DuCgA8QoD2TcFhwAK1WOdR4yW8jtgwKhOVlWo2htGf2
+         5VbW7laZOO8WJeDhfUU061bT5bwJcSuhhe/E7n8AUutbCBMyf/ER4mfE68WrEqJxoo3a
+         6h3bRzsp+lesOssSJTDJcFigURcJGHNh6iZ62bkwx4gVc0a+Cg6S4v/6y1LTDsSJtivC
+         4Slg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W3fdnCIdYn0lJ4Mxo5yFAqKtt9U4L6f/X7A6g14xg8A=;
-        b=r20QcrPKg4h0k+imBnQEkz4Pjp4ye9HViOM2tad2Vc3rBVnoW4Ax03yAfTyYWhLYXr
-         cX4DzPQV/A3Xrg9EIoPIopnRq6r/JDd1ADt03vK5vyg9GynhdvZiCpjA1/fbKsl34R58
-         +gBidrpKts3v9jltsLbvYFx7Dj8sOlZVNd3TsB7GMen5+JxtVpIPENZbVAK6G6CxegVq
-         g2ScMRKNywa/iCI3PD4a90yg/J5k/Ga3nVNxGXDHby+E6vRecn0y6h2g6j3tIdtddUoe
-         6qMxW7SlCxzsBcfwaQErNRXwFqFoQDrRhWQvzy7WySET9BRXn4+I2TtIKzzjfAOMLGm6
-         sXZg==
-X-Gm-Message-State: ANoB5pnl5PMExGstMwnxqo0hMoK6BrJcftlz5yc28+J6jmfB6B2n7mPn
-        7FU073Zng5sVdf2Cr3E/9yoMOIXFd73SSw==
-X-Google-Smtp-Source: AA0mqf6LocvbuaTbqVkLPJ10p9RI6uMqXaM8vyeDgq/Ge1dPWQPM3UXW/fbz9MTvMks2tNgA6v8GIA==
-X-Received: by 2002:ad4:4bc2:0:b0:4bb:859f:b217 with SMTP id l2-20020ad44bc2000000b004bb859fb217mr23604024qvw.47.1670883058788;
-        Mon, 12 Dec 2022 14:10:58 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id dt38-20020a05620a47a600b006b9c9b7db8bsm6458167qkb.82.2022.12.12.14.10.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 14:10:58 -0800 (PST)
-Message-ID: <60723e86-dc4c-7506-2231-decc6e1bd29e@gmail.com>
-Date:   Mon, 12 Dec 2022 14:10:50 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n2XZBEP0JR3u42vjkud6u2pf7wcC2jLfekfdtsMKR2o=;
+        b=yr9pfWf4kDhLvyvVeZvMHFhe9i++qnF7ZY1ko2LAtz0mzB7opjeuu9/lb9XhM/29rK
+         HyJ1k3TZdoW7QRFQvCDtFeBi8lYvwoFUvX09WmAjLx0M2s07RiWHo/Qc9bTD4Y7fkOKh
+         8PJzdRFkLi1ehXNhS06W3TcC+uc/P/rWj+brvrN9QQMu187L7KgBIEJb6ehIbVaScwLv
+         cQ2zKqydLzn0XhLE8SKmOBBaHspHUagEmav789Q0Scj5N43FfYSv296Pd/ozkp1oU6D7
+         wt9rYep5VD87ssv1U0sOpHk2VJkk/fn+4kHBjPDUR1wlKeARTO5CGs6lDGN5O23iQc/f
+         YCrA==
+X-Gm-Message-State: ANoB5pmsKokylVe94ZRK3+INeVfHnz9ncE4Vpt4lVWs2aY/y7X8ENm1Y
+        fiAABasnnhk1XKr45O6YRbb2EBoWVJoLWA==
+X-Google-Smtp-Source: AA0mqf67w1m5VItBX9PGVatqIjNwsKAAmChP+SvVKw5BDzUrHAocCOyWg7+eIfj//6EU5zpEYbFhbQ==
+X-Received: by 2002:a05:6a20:8e02:b0:a0:462f:8e3f with SMTP id y2-20020a056a208e0200b000a0462f8e3fmr31554587pzj.53.1670883229447;
+        Mon, 12 Dec 2022 14:13:49 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id z29-20020aa7991d000000b00575afe3c188sm6255061pff.150.2022.12.12.14.13.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 14:13:48 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 12:13:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
+        Yi Zhang <yi.zhang@redhat.com>
+Subject: Re: [PATCH-block v2 1/3] bdi, blk-cgroup: Fix potential UAF of blkcg
+Message-ID: <Y5enmzQM7BIiEv9n@slm.duckdns.org>
+References: <20221211222058.2946830-1-longman@redhat.com>
+ <20221211222058.2946830-2-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4.9 00/31] 4.9.336-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221212130909.943483205@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221212130909.943483205@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221211222058.2946830-2-longman@redhat.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 05:19, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.336 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.336-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->      Linux 4.9.336-rc1
-> 
-> Dan Carpenter <error27@gmail.com>
->      net: mvneta: Fix an out of bounds check
-> 
-> Yang Yingliang <yangyingliang@huawei.com>
->      net: plip: don't call kfree_skb/dev_kfree_skb() under spin_lock_irq()
-> 
-> Juergen Gross <jgross@suse.com>
->      xen/netback: fix build warning
-> 
-> Zhang Changzhong <zhangchangzhong@huawei.com>
->      ethernet: aeroflex: fix potential skb leak in greth_init_rings()
-> 
-> YueHaibing <yuehaibing@huawei.com>
->      tipc: Fix potential OOB in tipc_link_proto_rcv()
-> 
-> Liu Jian <liujian56@huawei.com>
->      net: hisilicon: Fix potential use-after-free in hix5hd2_rx()
-> 
-> Liu Jian <liujian56@huawei.com>
->      net: hisilicon: Fix potential use-after-free in hisi_femac_rx()
-> 
-> Kees Cook <keescook@chromium.org>
->      NFC: nci: Bounds check struct nfc_target arrays
-> 
-> Dan Carpenter <error27@gmail.com>
->      net: mvneta: Prevent out of bounds read in mvneta_config_rss()
-> 
-> Valentina Goncharenko <goncharenko.vp@ispras.ru>
->      net: encx24j600: Fix invalid logic in reading of MISTAT register
-> 
-> Valentina Goncharenko <goncharenko.vp@ispras.ru>
->      net: encx24j600: Add parentheses to fix precedence
-> 
-> Wei Yongjun <weiyongjun1@huawei.com>
->      mac802154: fix missing INIT_LIST_HEAD in ieee802154_if_add()
-> 
-> Wang ShaoBo <bobo.shaobowang@huawei.com>
->      Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
-> 
-> Akihiko Odaki <akihiko.odaki@daynix.com>
->      igb: Allocate MSI-X vector when testing
-> 
-> Akihiko Odaki <akihiko.odaki@daynix.com>
->      e1000e: Fix TX dispatch condition
-> 
-> Xiongfeng Wang <wangxiongfeng2@huawei.com>
->      gpio: amd8111: Fix PCI device reference count leak
-> 
-> Ziyang Xuan <william.xuanziyang@huawei.com>
->      ieee802154: cc2520: Fix error return code in cc2520_hw_init()
-> 
-> ZhangPeng <zhangpeng362@huawei.com>
->      HID: core: fix shift-out-of-bounds in hid_report_raw_event
-> 
-> Anastasia Belova <abelova@astralinux.ru>
->      HID: hid-lg4ff: Add check for empty lbuf
-> 
-> Hans Verkuil <hverkuil-cisco@xs4all.nl>
->      media: v4l2-dv-timings.c: fix too strict blanking sanity checks
-> 
-> Adrian Hunter <adrian.hunter@intel.com>
->      mmc: sdhci: Fix voltage switch delay
-> 
-> Masahiro Yamada <yamada.masahiro@socionext.com>
->      mmc: sdhci: use FIELD_GET for preset value bit masks
-> 
-> Connor Shu <Connor.Shu@ibm.com>
->      rcutorture: Automatically create initrd directory
-> 
-> Juergen Gross <jgross@suse.com>
->      xen/netback: don't call kfree_skb() with interrupts disabled
-> 
-> Juergen Gross <jgross@suse.com>
->      xen/netback: do some code cleanup
-> 
-> Ross Lagerwall <ross.lagerwall@citrix.com>
->      xen/netback: Ensure protocol headers don't fall in the non-linear area
-> 
-> Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->      ASoC: soc-pcm: Add NULL check in BE reparenting
-> 
-> Kees Cook <keescook@chromium.org>
->      ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-> 
-> Tomislav Novak <tnovak@fb.com>
->      ARM: 9251/1: perf: Fix stacktraces for tracepoint events in THUMB2 kernels
-> 
-> Johan Jonker <jbx6244@gmail.com>
->      ARM: dts: rockchip: fix ir-receiver node names
-> 
-> Sebastian Reichel <sebastian.reichel@collabora.com>
->      arm: dts: rockchip: fix node name for hym8563 rtc
-> 
-> 
-> -------------
+On Sun, Dec 11, 2022 at 05:20:56PM -0500, Waiman Long wrote:
+>  static void blkcg_destroy_blkgs(struct blkcg *blkcg)
+>  {
+> +	/*
+> +	 * blkcg_destroy_blkgs() shouldn't be called with all the blkcg
+> +	 * references gone.
+> +	 */
+> +	if (WARN_ON_ONCE(!css_tryget(&blkcg->css)))
+> +		return;
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Wouldn't it make more sense to use percpu_ref_is_zero()? It's not like the
+obtained extra reference does anything, right?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks.
+
 -- 
-Florian
-
+tejun
