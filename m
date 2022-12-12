@@ -2,244 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68ED564AAA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB6A64AAA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbiLLWxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S233226AbiLLWz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiLLWxI (ORCPT
+        with ESMTP id S229653AbiLLWzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:53:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E558964CC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:53:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1BD0B80E9B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407B0C433D2;
-        Mon, 12 Dec 2022 22:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670885584;
-        bh=eBtj9H9dhMD2pPSWzMm8BEmfMHveMzKiWvGXUsCncwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b4x9wGt53L5BlWJW6LiI2NKzGQHJNhNq6VQTbwd46s1PUd/nLKrvZC+3v0HPDs0of
-         m1ECUcbF2xm4CX9Lbr1hvtA5wogCH+0AHyOIKPv/QfFRljhOM1+Fxe42ZAI43pirfv
-         RPxb9yD5IZ4BrLxrMIpb5JUyQWYLZh1fXY1kEXibc7K17iZ4ACHvSJZ1zeMvrQJlJv
-         XgH2yRVjNeJYgAIsMW8D4DLNurX/5CqDKLR25tPx6Mgh0uFIUzStKVN7KZHnpGVJ57
-         1ZUcJFArltsGjRoS9uR+kxFydMIAj1YH4E30oEFq3Fa/GWBxeCnMXunsP1u1DhUKal
-         RIrosMY3QxciA==
-Date:   Mon, 12 Dec 2022 14:53:02 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: do some cleanup for f2fs module init
-Message-ID: <Y5ewzsPuCd5UbCCJ@google.com>
-References: <20221125114736.19423-1-frank.li@vivo.com>
- <b8c54a6b-1f6d-9a86-b87c-e980902aa3a3@kernel.org>
+        Mon, 12 Dec 2022 17:55:23 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB39764A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:55:19 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so1585367pjj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v/bBC+07xi7sOoDrZvjkOQQutNEAYfx1z9nkux49oEQ=;
+        b=oWlC6TJVK+1bBmQrXNc4FJt5KjKFee9qfyLA67mwCymZIBpIQj2LyDDSY+q1rkNO3Q
+         9LXKynhdR93R4cv0RyJKNg+efLlOK2QCmWWIA6kuYJL7cHrOoErC0A+Hod9AfE6fiL3c
+         UvSsHHP8l91sbh13ElBqc4NdllmQBaNdBbGiXA25DnOLJrgEcxAadjHEj2F+WVFuTCRL
+         H14X4pSCdKx1BdUe2+JPKPCJ4fFqYaBXf3lnqJQ3+gXRUNGd9XCY+HvWCvTeGKA6JSwb
+         G5XGH5UMod/W+QfDoacMI/uROLV6N7oyyaOml8WYkJJTQGKO+0aP8oJgcv/0LUCDIRGW
+         4y8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v/bBC+07xi7sOoDrZvjkOQQutNEAYfx1z9nkux49oEQ=;
+        b=C2KvE1T8Et5kmxEPKJtTsr/jfjIZOLOHbQZNdY5JxiS0BS2UaCtV22RStss2FcKApN
+         B7MXaZ0oGp9ZcAn4GyFjf12mM5IKo20vzpIBXbez72fOt/hr3OfOtqkL4X1sSqPg2v49
+         l7GJUYPwFfdcHzIiQW2hEL2FDzc3u8AR17w1V7moCvgy/7WAVd9QEPg3q2DgXY0uJKBr
+         5BJr5jFpPMRPVpYd3r08Y4RUb9c2QkQj3TYlYyF2yxiYdrDhgZLYQXfWSYA/e9LcK/bs
+         Bcv/1J2GcvdwtzGodPH6BR2p4FA2JYaBGwiOBspAy13Ye5wVfqy0z2Sb6p7WG0Lq0E2a
+         BPQg==
+X-Gm-Message-State: ANoB5pkUZ25OaEDEWp4PlDR32EGpfuWJk4K5pS/JTyBPOwaOdZHHvyjM
+        SIu0zBIAajj9tKeAv1Yafeg=
+X-Google-Smtp-Source: AA0mqf5vY5yvF3P/2dTu80/kL6mlvK1TwW7f9rIi2rJtYHQFEzPYKbgh7YtBGvt8czMgVHNDcbbUyA==
+X-Received: by 2002:a17:903:cd:b0:189:d0a2:5340 with SMTP id x13-20020a17090300cd00b00189d0a25340mr17545762plc.33.1670885718483;
+        Mon, 12 Dec 2022 14:55:18 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170902f68c00b00174f7d10a03sm6962637plg.86.2022.12.12.14.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 14:55:18 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 12:55:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] workqueue: Check for null pointer return from
+ get_work_pwq()
+Message-ID: <Y5exVKEXe2vddXhP@slm.duckdns.org>
+References: <20221208005344.25195-1-quic_johmoo@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8c54a6b-1f6d-9a86-b87c-e980902aa3a3@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221208005344.25195-1-quic_johmoo@quicinc.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11, Chao Yu wrote:
-> On 2022/11/25 19:47, Yangtao Li wrote:
-> > Just for cleanup, no functional changes.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >   fs/f2fs/compress.c | 46 ++++++----------------------------------------
-> >   fs/f2fs/data.c     | 14 ++++----------
-> >   fs/f2fs/gc.c       |  4 +---
-> >   fs/f2fs/recovery.c |  4 +---
-> >   fs/f2fs/super.c    |  8 ++------
-> >   5 files changed, 14 insertions(+), 62 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-> > index d315c2de136f..f920ba8e0e85 100644
-> > --- a/fs/f2fs/compress.c
-> > +++ b/fs/f2fs/compress.c
-> > @@ -567,10 +567,7 @@ MODULE_PARM_DESC(num_compress_pages,
-> >   int f2fs_init_compress_mempool(void)
-> >   {
-> >   	compress_page_pool = mempool_create_page_pool(num_compress_pages, 0);
-> > -	if (!compress_page_pool)
-> > -		return -ENOMEM;
-> > -
-> > -	return 0;
-> > +	return compress_page_pool ? 0 : -ENOMEM;
+On Wed, Dec 07, 2022 at 04:53:44PM -0800, John Moon wrote:
+> We've encountered a kernel panic with the following stack trace:
 > 
-> I don't think this needs cleanup, other part looks good to me.
+> -> ret_from_fork
+>  -> kthread
+>   -> worker_thread
+>    -> process_one_work
+>     -> pwq_dec_nr_in_flight
+>      -> pwq_activate_inactive_work
+> 
+> The issue was narrowed down to a null pointer dereference within
+> pwq_activate_inactive_work() stemming from the return value of
+> get_work_pwq() which may return NULL, but was not checked for
+> null return prior to use.
+> 
+> While fixing the issue, other dereferences of get_work_pwq()'s
+> return value were found without a null check.
+> 
+> Add null pointer checks to the calling functions that need them.
 
-What is the point here comparing to the below? fyi; I picked this change.
+At that point the work item must have pwq assigned - see insert_work(), so
+this can't be the root cause. It's just papering over a bug somewhere else
+(e.g. the work item got freed or written over somehow).
 
-> 
-> Thanks,
-> 
-> >   }
-> >   void f2fs_destroy_compress_mempool(void)
-> > @@ -1983,9 +1980,7 @@ int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi)
-> >   	sbi->page_array_slab = f2fs_kmem_cache_create(slab_name,
-> >   					sbi->page_array_slab_size);
-> > -	if (!sbi->page_array_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return sbi->page_array_slab ? 0 : -ENOMEM;
-> >   }
-> >   void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi)
-> > @@ -1993,53 +1988,24 @@ void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi)
-> >   	kmem_cache_destroy(sbi->page_array_slab);
-> >   }
-> > -static int __init f2fs_init_cic_cache(void)
-> > +int __init f2fs_init_compress_cache(void)
-> >   {
-> >   	cic_entry_slab = f2fs_kmem_cache_create("f2fs_cic_entry",
-> >   					sizeof(struct compress_io_ctx));
-> >   	if (!cic_entry_slab)
-> >   		return -ENOMEM;
-> > -	return 0;
-> > -}
-> > -
-> > -static void f2fs_destroy_cic_cache(void)
-> > -{
-> > -	kmem_cache_destroy(cic_entry_slab);
-> > -}
-> > -
-> > -static int __init f2fs_init_dic_cache(void)
-> > -{
-> >   	dic_entry_slab = f2fs_kmem_cache_create("f2fs_dic_entry",
-> >   					sizeof(struct decompress_io_ctx));
-> >   	if (!dic_entry_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > -}
-> > -
-> > -static void f2fs_destroy_dic_cache(void)
-> > -{
-> > -	kmem_cache_destroy(dic_entry_slab);
-> > -}
-> > -
-> > -int __init f2fs_init_compress_cache(void)
-> > -{
-> > -	int err;
-> > -
-> > -	err = f2fs_init_cic_cache();
-> > -	if (err)
-> > -		goto out;
-> > -	err = f2fs_init_dic_cache();
-> > -	if (err)
-> >   		goto free_cic;
-> >   	return 0;
-> >   free_cic:
-> > -	f2fs_destroy_cic_cache();
-> > -out:
-> > +	kmem_cache_destroy(cic_entry_slab);
-> >   	return -ENOMEM;
-> >   }
-> >   void f2fs_destroy_compress_cache(void)
-> >   {
-> > -	f2fs_destroy_dic_cache();
-> > -	f2fs_destroy_cic_cache();
-> > +	kmem_cache_destroy(dic_entry_slab);
-> > +	kmem_cache_destroy(cic_entry_slab);
-> >   }
-> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > index 560fa80590e9..35c19248b1e2 100644
-> > --- a/fs/f2fs/data.c
-> > +++ b/fs/f2fs/data.c
-> > @@ -39,10 +39,8 @@ static struct bio_set f2fs_bioset;
-> >   int __init f2fs_init_bioset(void)
-> >   {
-> > -	if (bioset_init(&f2fs_bioset, F2FS_BIO_POOL_SIZE,
-> > -					0, BIOSET_NEED_BVECS))
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return bioset_init(&f2fs_bioset, F2FS_BIO_POOL_SIZE,
-> > +					0, BIOSET_NEED_BVECS);
-> >   }
-> >   void f2fs_destroy_bioset(void)
-> > @@ -4090,9 +4088,7 @@ int f2fs_init_post_read_wq(struct f2fs_sb_info *sbi)
-> >   	sbi->post_read_wq = alloc_workqueue("f2fs_post_read_wq",
-> >   						 WQ_UNBOUND | WQ_HIGHPRI,
-> >   						 num_online_cpus());
-> > -	if (!sbi->post_read_wq)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return sbi->post_read_wq ? 0 : -ENOMEM;
-> >   }
-> >   void f2fs_destroy_post_read_wq(struct f2fs_sb_info *sbi)
-> > @@ -4105,9 +4101,7 @@ int __init f2fs_init_bio_entry_cache(void)
-> >   {
-> >   	bio_entry_slab = f2fs_kmem_cache_create("f2fs_bio_entry_slab",
-> >   			sizeof(struct bio_entry));
-> > -	if (!bio_entry_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return bio_entry_slab ? 0 : -ENOMEM;
-> >   }
-> >   void f2fs_destroy_bio_entry_cache(void)
-> > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > index 0f967b1e98f2..4b0d2fa3a769 100644
-> > --- a/fs/f2fs/gc.c
-> > +++ b/fs/f2fs/gc.c
-> > @@ -1903,9 +1903,7 @@ int __init f2fs_create_garbage_collection_cache(void)
-> >   {
-> >   	victim_entry_slab = f2fs_kmem_cache_create("f2fs_victim_entry",
-> >   					sizeof(struct victim_entry));
-> > -	if (!victim_entry_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return victim_entry_slab ? 0 : -ENOMEM;
-> >   }
-> >   void f2fs_destroy_garbage_collection_cache(void)
-> > diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
-> > index dea95b48b647..77fd453949b1 100644
-> > --- a/fs/f2fs/recovery.c
-> > +++ b/fs/f2fs/recovery.c
-> > @@ -923,9 +923,7 @@ int __init f2fs_create_recovery_cache(void)
-> >   {
-> >   	fsync_entry_slab = f2fs_kmem_cache_create("f2fs_fsync_inode_entry",
-> >   					sizeof(struct fsync_inode_entry));
-> > -	if (!fsync_entry_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return fsync_entry_slab ? 0 : -ENOMEM;
-> >   }
-> >   void f2fs_destroy_recovery_cache(void)
-> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > index 31435c8645c8..1d56cba495a5 100644
-> > --- a/fs/f2fs/super.c
-> > +++ b/fs/f2fs/super.c
-> > @@ -288,9 +288,7 @@ static int __init f2fs_create_casefold_cache(void)
-> >   {
-> >   	f2fs_cf_name_slab = f2fs_kmem_cache_create("f2fs_casefolded_name",
-> >   							F2FS_NAME_LEN);
-> > -	if (!f2fs_cf_name_slab)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return f2fs_cf_name_slab ? 0 : -ENOMEM;
-> >   }
-> >   static void f2fs_destroy_casefold_cache(void)
-> > @@ -4646,9 +4644,7 @@ static int __init init_inodecache(void)
-> >   	f2fs_inode_cachep = kmem_cache_create("f2fs_inode_cache",
-> >   			sizeof(struct f2fs_inode_info), 0,
-> >   			SLAB_RECLAIM_ACCOUNT|SLAB_ACCOUNT, NULL);
-> > -	if (!f2fs_inode_cachep)
-> > -		return -ENOMEM;
-> > -	return 0;
-> > +	return f2fs_inode_cachep ? 0 : -ENOMEM;
-> >   }
-> >   static void destroy_inodecache(void)
+Thanks.
+
+-- 
+tejun
