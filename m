@@ -2,44 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BAC64A41C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCA764A426
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 16:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiLLPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 10:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S232167AbiLLPbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 10:31:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiLLPZ1 (ORCPT
+        with ESMTP id S231715AbiLLPbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 10:25:27 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4A732FADA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:25:26 -0800 (PST)
-Received: (qmail 854837 invoked by uid 1000); 12 Dec 2022 10:25:25 -0500
-Date:   Mon, 12 Dec 2022 10:25:25 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5dH5RqY2yOK1bVj@rowland.harvard.edu>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
- <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
- <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
- <Y5cvPulXceujfZv6@hovoldconsulting.com>
- <b1a5874b-8028-db14-e2ac-ebe3967559a5@suse.com>
- <Y5c3WWKyohzkspnw@hovoldconsulting.com>
+        Mon, 12 Dec 2022 10:31:01 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5CBDF6D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:31:00 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id fy4so173568pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:31:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dswdc8a03OJ4PZCgPN86bzdDFhJyMWhC2nUfUROyko4=;
+        b=kp+Ud8kOL2ExTdDIV+vpnRU2GZmmaCyk8O8bZFjjCdE7XizYCdqVUmGe7P9qUrnyDT
+         LH86TfsdXK/rIPvw621tAv2HRyzc7TTIUGXG3lahls2Kj4nwh28KG0EOOIRLpad5+17/
+         8e5KctNEjiB8yYWe70pjyZoaD7lBMGFPR5N7FPThkB/cKRc14SwySSE1Bb6ctTAqZn+h
+         skOlKGWeqhkGOprcicltuqF5qCDip2NlK4ny64rwzY+75VIkSSY3kXEnc8f4Rqqr/A55
+         RJIPuk7whAVJ13JJCLuJJ1tPEi+K8Rb3Blq+TMo5IYoHW7gWJQKLcffcOlSFZWYr8JRm
+         FCmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dswdc8a03OJ4PZCgPN86bzdDFhJyMWhC2nUfUROyko4=;
+        b=Ip0UFjM2HpyHX7yJIU8aBwFMUy5Mjf4tVLph0uKEY16SoDIXtmWzIB152hjOnT234N
+         PdSn/BwO9fhns5RTc0bMbl0FOmWYjPXmvSTORONBdOhfCBOii773yqJ+KZv+HPaozA62
+         ep5fa5MRAI9pcFlRSUkIxcGmO2QGw7sH/9xLFXlAhbNiMOHQPYHniF7+WZscte9tNhOm
+         bJDp7eRb9wYmogrTSYGFoVVzH881A5Y9w3usShVOOnx9xKdAfIXQDbIuTEGUofW3AANT
+         0fCzyJqD7kKuQIvgyuR6cHjDaqmp5SUkwZ98zlxwNId9VVhQoyGhSQTMERycOdlXpzAG
+         zqNQ==
+X-Gm-Message-State: ANoB5pklr3PSCgaijGF4Xtr51Ue91wPAavJU82eCeajdpBnHkRp8UR5O
+        lJ1QjvNmWOs8NNhmmFRP1Bi5V0ZKCKM=
+X-Google-Smtp-Source: AA0mqf4yNzNb+4DeaQhEYS2FVfrbpYQtwabRMD9CrjKWUvg5GkRjG5fC3vMaKLy+vnnFGLqqUb3RVA==
+X-Received: by 2002:a17:903:24b:b0:189:62fd:140e with SMTP id j11-20020a170903024b00b0018962fd140emr17961798plh.29.1670859059606;
+        Mon, 12 Dec 2022 07:30:59 -0800 (PST)
+Received: from localhost ([47.88.5.130])
+        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b001893a002107sm6538031plb.0.2022.12.12.07.30.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Dec 2022 07:30:59 -0800 (PST)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH 0/2] kvm: x86/mmu: Skip adding write-access for spte in FNAME(sync_page) and remove shadow_host_writable_mask
+Date:   Mon, 12 Dec 2022 23:32:03 +0800
+Message-Id: <20221212153205.3360-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5c3WWKyohzkspnw@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,71 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 03:14:49PM +0100, Johan Hovold wrote:
-> On Mon, Dec 12, 2022 at 03:04:50PM +0100, Oliver Neukum wrote:
-> > 
-> > 
-> > On 12.12.22 14:40, Johan Hovold wrote:
-> > > On Mon, Dec 12, 2022 at 02:27:46PM +0100, Oliver Neukum wrote:
-> > >> On 12.12.22 14:14, Johan Hovold wrote:
-> > >>> On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
-> > > 
-> > >>> And in this case there was also no kernel doc for usb_get_intfdata()
-> > >>> which is equally self documenting. Why add redundant docs for only one
-> > >>> of these functions?
-> > >>
-> > >> Because knowing that one of them exists makes the other much more
-> > >> obvious.
-> > > 
-> > > I doubt anyone finds out about this function by reading generated kernel
-> > > documentation. You look at a driver, grep the function and look at the
-> > > single-line implementation.
-> > 
-> > Look, we cannot solve the issue whether kerneldoc is a good idea
-> > in general here. If you want to open that can of worms on lkml,
-> > by all means. go for it.
-> > But failing that, silently eliminating it is just not nice.
-> 
-> It was just added. It's mostly misleading and incorrect. Hence revert,
-> rather than put the burden of adding proper documentation on the person
-> calling out the misunderstanding (which has already led to a series of
-> bogus patches).
-> 
-> > > But it was never perfectly good. It claims that a driver "should" use it,
-> > > when it may not need to (think simple driver using devres) and talks
-> > 
-> > If you are presented with an interface something needs to be done
-> > specific to that interface.
-> 
-> I'm not sure what you're saying here.
-> 
-> > > about driver core resetting the pointer which is irrelevant.
-> > 
-> > But correct and topical. I am not arguing what people should or should
-> > mot know.
-> 
-> The comment is also misleading as it signals that this is something you
-> need to care about.
-> 
-> > If you just remove the last sentence, all will be well. And if you
-> > insist replace "should" with "can".
-> 
-> Since you insist, I'll just rewrite the whole thing.
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-You're both missing the main point, which is that the USB core clears 
-intfdata after a driver is unbound.  As a consequence, drivers don't 
-need to worry about clearing intfdata themselves -- a fact which is 
-_not_ easily apparent from the implementation.  This would be a useful 
-thing to mention in the kerneldoc, as it may help prevent lots of 
-drivers from making unnecessary function calls (like the ones that 
-Vincent recently removed).
+shadow_host_writable_mask is used only in FNAME(sync_page) for adding
+write-access for spte which can be added in later page fault.
 
-Of course, this doesn't mean that drivers can't clear intfdata if they 
-want to, for example, if they use it as an internal flag.  But 
-developers shouldn't feel that they _need_ to clear it as a sort of 
-hygienic measure.
+Skip adding it and save a bit from spte.
 
-IMO it's worthwhile keeping the kerneldoc (but correcting it) so that it 
-can get this point across.
+Lai Jiangshan (2):
+  kvm: x86/mmu: Reduce the update to the spte in FNAME(sync_page)
+  kvm: x86/mmu: Remove useless shadow_host_writable_mask
 
-Alan Stern
+ arch/x86/kvm/mmu/paging_tmpl.h | 26 +++++++++++++++++++++--
+ arch/x86/kvm/mmu/spte.c        |  8 +------
+ arch/x86/kvm/mmu/spte.h        | 38 +++++++++++-----------------------
+ 3 files changed, 37 insertions(+), 35 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
+
