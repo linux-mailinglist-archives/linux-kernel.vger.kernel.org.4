@@ -2,231 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09E649A11
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFDF649A15
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiLLIe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 03:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S231598AbiLLIfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 03:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiLLIew (ORCPT
+        with ESMTP id S231555AbiLLIe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:34:52 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13505DFB4;
-        Mon, 12 Dec 2022 00:34:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670834089; x=1702370089;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=NTRBZmxGGfRxJFgqeduzMwtYQ6uKXbsiECqi3jz1+HY=;
-  b=DrclAw4Y57+weFG7Pen5U1FiCLRhePX/C3TtADTx+cb+lRjSQnxhd5V0
-   pIrIT7QNw+sQqpvw9+xJx7YXwmmHTjxpMhYGOBEmEe84X11STeRiypWef
-   Ifcfh2SASX7l9GKrMkAjwhtn/Mb78n8wVcBuH0uRs6M03CY5cWT13CNT9
-   SEY3HuJC0Df3m5rFHVhd773VYUes4BDnuEbqY9rQHBcaGrfnONlbvraaY
-   Evq8RGHI1Gamvqvgar24+YqhIjQCfFbPMHwEkmPVwLI6An/nOZX7qhzh+
-   NJY1deEOv6DUWssIlG9VP2J7RhEbxqPKe2mvWvO8uADwgVn+UzJhZPOOl
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="127641879"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2022 01:34:47 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 12 Dec 2022 01:34:46 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 12 Dec 2022 01:34:46 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l2RlwhwgnkAMO6cMRjmzicJsv20I35f5pzQ518NgDCIaVw0noGgyTjBx2jGoPFRGBYvFG31QprC8XILxNChLFkiWVKpSukeviHvm1BMtdfpvuqfX3etFIGFAGgVosbjmNWcWNJI7t0d90RzynYpusits9oR0q/1Y8EVG7J6oEGwXszlvQoftj5un1FBPnO15GdzIXpQpNeCAqN31EhbxxL5jdLFXvpc2a2Jegr5DH2IobIDPrwz/9zwMfJEtzyVVmlE1joulFBh1uidiiis2N7b2pF5otl/TjezY1MLz0YtR39uN/L2ifrN9g+k3y26huKygceXCX76OAs3HJthVng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bu6x3w6zzXr1mftX4f8Hy8Eka/1Fz3NeYg8FMoiOaZw=;
- b=RjvhlHqf3c7ARhv70pTq4DvoxcRDAAgmCczusOS4LXThywrpOOEyAfqEKcjhcYI+Cj9GfS43iVS1JlzdZN+RrK9kHXUJTnGwHPiEQfZ8dIQpRkbp27s5K+4cZSeRvFBbqsf/CaLc5+s4d4EvXcAaIyXiGPKTHiNISboEdTOCtZXENdqb0CspxKaytZ6sLmQSPfUeSVQyknnHGusCb74CR80FwX6C2rGo0iKo05GUVhhDoTuW7iYdWfCwk9v2/XJcc7YNAWCASXrOKLq43nkDMiQ2Z8ni78q61tDI4OExKU0A3ZONlZ7TJRgWrhu8sMHjppmS/ni60PhiHI4y39Pquw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bu6x3w6zzXr1mftX4f8Hy8Eka/1Fz3NeYg8FMoiOaZw=;
- b=WI23ayBq2c5P+pde9YC6jtlqOe43Tm7U7wlHtPTcrucZe7u9Dth+xTJS5ka1KlftWsxtUxpJB6ub9T4oPv3Dv/RbE6SLaS714HI8QU1xPWP012uWjovWGITl8FQw9XtIoArQVZpVvB2k+ve0XcbkYpD95+ugc42IhZ3MJJXjYuM=
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com (2603:10b6:303:9f::9)
- by PH7PR11MB6771.namprd11.prod.outlook.com (2603:10b6:510:1b5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 08:34:44 +0000
-Received: from CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::97f3:ca9:1e8f:b1e1]) by CO1PR11MB4771.namprd11.prod.outlook.com
- ([fe80::97f3:ca9:1e8f:b1e1%5]) with mapi id 15.20.5880.019; Mon, 12 Dec 2022
- 08:34:44 +0000
-From:   <Divya.Koppera@microchip.com>
-To:     <andrew@lunn.ch>
-CC:     <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH v5 net-next 2/2] net: phy: micrel: Fix warn: passing zero
- to PTR_ERR
-Thread-Topic: [PATCH v5 net-next 2/2] net: phy: micrel: Fix warn: passing zero
- to PTR_ERR
-Thread-Index: AQHZCUVX+xhZw8rF5EesOiBOrBuDqa5g1PgAgAAJjpCAAAeBgIAI7uug
-Date:   Mon, 12 Dec 2022 08:34:44 +0000
-Message-ID: <CO1PR11MB4771F8AA1CCAD01EAE797E59E2E29@CO1PR11MB4771.namprd11.prod.outlook.com>
-References: <20221206073511.4772-1-Divya.Koppera@microchip.com>
- <20221206073511.4772-3-Divya.Koppera@microchip.com>
- <Y48+rLpF7Gre/s1P@lunn.ch>
- <CO1PR11MB47713C125F3D0E08B7A6A132E21B9@CO1PR11MB4771.namprd11.prod.outlook.com>
- <Y49M++waEHLm0hEA@lunn.ch>
-In-Reply-To: <Y49M++waEHLm0hEA@lunn.ch>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CO1PR11MB4771:EE_|PH7PR11MB6771:EE_
-x-ms-office365-filtering-correlation-id: e95b1087-7887-41f2-8806-08dadc1bb86c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZJztoXr0Q+rQ1xyBeLNtTRavlXQFu/FtbUWPn1OqVsnSyT0pRn/iOSmdFkBfziyEW1NkwA02RRTsxWVstj87vUOlBF34TDULLhXX1hqzffGjTt6pdH9g8x6u5QUO5hGDTySlGB7lbj27fAnpg82YhZOhhOv5e0Z1V+zi32CQAzukR0l6PBxSnZ6PTfQtVIOJTRiaj6ldzjEyb2Sn7FTrRb9vtbkWeFHSG8TbEzBTFWwiU86frcfIXkcb5+whDEZGFg/h1jJ85HaCHZhNQHJROl9JI1bXa+yJn5sGl49dGbN1FbbvwIPhvvHcO63huMUuLJzhoarvgy1d7RKToHbD/v/rbaiPJlhhisQRZpWcSZFwYNUtNmXQwWjE85QBZa5G6BBFkrxOm65pBe6hwDTvwafawUxed78TNiAn6D2Ior0ukLJMmC5oJM5zX3PmS07d2TsBo9LfSUMG+LE7NRdioW6HuuTmcc1KXyrS5moNRSkK/p0eqcVA3eud7zg6tsLEW9zuRzIj1SLLebM9GHtRL3sY+6k1GGafCm4TFHKVRsm7TqNWqR7eFm2vYrY9SEpBIMOO8RuUyMGVRhkX3nORbP+W1CT96rBk0vF1wbyLEAv60697f8U3oB26oGmgR8/g18AoDgGqupRfqEXISeYvL7rKiL2SbFqxoLVPNEvIzJHqaLOiN1GMWxNu8e7pupWqb7jKioCCBu4Fm/9TxQOYCQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(366004)(346002)(39860400002)(136003)(451199015)(52536014)(5660300002)(38070700005)(316002)(6916009)(7416002)(54906003)(8936002)(76116006)(4326008)(66946007)(66556008)(66476007)(8676002)(64756008)(26005)(66446008)(9686003)(86362001)(107886003)(6506007)(53546011)(7696005)(186003)(83380400001)(33656002)(41300700001)(478600001)(71200400001)(2906002)(122000001)(55016003)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aX5ho2XZGOEQ8xWONwOLwi4FlfZWAdNKzThyXrYWOotZLgkWAY9xaAWIYhLE?=
- =?us-ascii?Q?APVxrbn3/w1VR5qb+cOdGnFFI19Uh2vz3fbga9TjuuDAva4CVZHiEme3Kzdh?=
- =?us-ascii?Q?K00/IRAU8x5xQYE57iHFqsFw7n7zUyJyh78QFm0lAGkAYHMzC/Q8X6iU/Sh7?=
- =?us-ascii?Q?Y+GdVaVZNdOlYfzHEJk/1lO1oyvVEYP+b+0Jlbwmv7YNz4+aBU86D4WLFpdP?=
- =?us-ascii?Q?i/2BPZ9wrIOqIDJxDB/q3BRU06fthpGl6OYGQBTYOrHvq4ylaAgf1mMoVgDD?=
- =?us-ascii?Q?jYCl25MTKDHdbmzevlh5meqwLKYNu2tyHAEUY5wx+ck3Qey0NsOnHW6mjNNg?=
- =?us-ascii?Q?U/4hkU/0HRkiCcIebB8YN5MMl3gWLBoMm21aZepM9BySAO311SWhsJdmuhjr?=
- =?us-ascii?Q?vysRvHc+zz1uPQGm25PFKlF9XyShp1zZ7TH/uo1rpPtoZmWhgzxcLi0N+2M6?=
- =?us-ascii?Q?+LYSpoTzFPQ8uBYBUFm8RsPIgkGhdsO1qfCfHLE9Pt/0g6GDAsMRKyyCc7mb?=
- =?us-ascii?Q?tZdSYdPV3frMOu41CprcpWVoHA2e3GRlp1lY9todajCVTTOuZCCLPoxI0K1+?=
- =?us-ascii?Q?k38TyfAH5c5qBgmMxJycPRWzEfanjmckMzAdS0IlSSzMlvG6ix2xmQL5RHYq?=
- =?us-ascii?Q?YsrTUKJGN/7P92Ce223CgaaJJqPA7zm5uFkWuRKZbyGzzk8CTVDncWAUpM20?=
- =?us-ascii?Q?7fui9BzDcyRuLG4mRJxepCKjCPWJ7UpknhXH5rfg00xkvSKEcQjVbzzKBmTb?=
- =?us-ascii?Q?nqwp6ypH5UCJB5f892NOev+984mjCswweDTlkxoO3Bl4lf28Z5F61yPi91ad?=
- =?us-ascii?Q?EleUvD9/xx/XTH4O3A6V/u7AJYW+ETTKaqVKpsn9z5uqHrDGF+PcdEzdVKAv?=
- =?us-ascii?Q?VLMj7RUFhLDwO/suj1NO1ntnYlsV60izYQU2yCXwq7S7JBL2/J9tR5sYldoI?=
- =?us-ascii?Q?9GGQlTmMx9xWgqmKtSeVmHxUdeivLCO7r2fH4GGHU1HPgvL+ylrvKUGaCjAz?=
- =?us-ascii?Q?kD9PYGntwLQDpO8+fWgv6lKSBwbQw54WWQZfN+m/RPYTopuq/ObuHqOn5kci?=
- =?us-ascii?Q?mt2I+FFEmav2Aki+5Udi63hsvpj797le2vbczZ6+kohQdqxJTPgPFpynf0yF?=
- =?us-ascii?Q?vV+wD+/15dyY5Nfox09v/0n9qyEXCAZEyws1Q1NKH3ErsIZQ4GuxGwDozwVC?=
- =?us-ascii?Q?o6uCUCw1EPbRavYKKiPG56/63vbnw8Xukuk7unubHiuc0WIRpiq/+djzNvn9?=
- =?us-ascii?Q?htcwPH+geBKXRodFc2hQcuzcY0TLasQ3jyKOcGnnBCNT40jpHn1lMAETVHHQ?=
- =?us-ascii?Q?grabrxDNl8ocsIGLTJss70BWmJP3okelyxPgCH8hqhSNa28KzR0QvRG6Bvs9?=
- =?us-ascii?Q?mK19iunxpvxeEFCAjBNBuUASqHnHiURXq/JKrq0mhDtsISE8aDMek1GIGEEK?=
- =?us-ascii?Q?iDD77xqHVo4SGsGf6w/7UIC8I4nnA1YJd+3+dszhogCmAg1P7Kxr3fzGZVn3?=
- =?us-ascii?Q?zEngjQrL5VjOG7xyUjddbU0unN5Vcfh43f0YgLO/jhb/G8LhiKDvboFxALv7?=
- =?us-ascii?Q?wUp1ha8HEHLVNHalVKWrcczbK2NLgW/UVDkF4easJgpVxQjN2kZ205lbqmOs?=
- =?us-ascii?Q?ag=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 12 Dec 2022 03:34:57 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0F06151;
+        Mon, 12 Dec 2022 00:34:54 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxB_Gu55Zj4fkEAA--.11267S3;
+        Mon, 12 Dec 2022 16:34:54 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXuCs55ZjGUEsAA--.41531S2;
+        Mon, 12 Dec 2022 16:34:53 +0800 (CST)
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+ <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+ <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+ <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <b78f02f4-4329-602e-ca8d-adbe911c2a54@loongson.cn>
+Date:   Mon, 12 Dec 2022 16:34:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e95b1087-7887-41f2-8806-08dadc1bb86c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 08:34:44.2069
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aRhhMCx1xmFOlbcLf1fvywtByO7JtYSmELiI6oeRq1ktSu+wlaB251XQ+rLXu76ucs9Phd86y/LTzHSL+9oYYcCXN3Uidp4l/3hDEotX0KA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6771
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxXuCs55ZjGUEsAA--.41531S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxurWkGw4DCF1kCrWDGF4UArb_yoW5Xw4xpF
+        W5Gayqkr4DJryIyw4vqw18ZF1fKa93uFy3Jr1Fk3s8Aryqqr93ZrWaqrWavF9ru3yUJr42
+        vF1Yk3yxu3WDAFJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
 
-> -----Original Message-----
-> From: Andrew Lunn <andrew@lunn.ch>
-> Sent: Tuesday, December 6, 2022 7:39 PM
-> To: Divya Koppera - I30481 <Divya.Koppera@microchip.com>
-> Cc: hkallweit1@gmail.com; linux@armlinux.org.uk; davem@davemloft.net;
-> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
-> richardcochran@gmail.com; UNGLinuxDriver
-> <UNGLinuxDriver@microchip.com>
-> Subject: Re: [PATCH v5 net-next 2/2] net: phy: micrel: Fix warn: passing =
-zero
-> to PTR_ERR
->=20
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> > > > -     if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
-> > > > -         !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
-> > > > -             return 0;
-> > > > -
-> > >
-> > > Why are you removing this ?
-> > >
-> >
-> > I got review comment from Richard in v2 as below, making it as consiste=
-nt
-> by checking ptp_clock. So removed it in next revision.
-> >
-> > " > static int lan8814_ptp_probe_once(struct phy_device *phydev)
-> > > {
-> > >         struct lan8814_shared_priv *shared =3D phydev->shared->priv;
-> > >
-> > >         if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
-> > >             !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
-> > >                 return 0;
-> >
-> > It is weird to use macros here, but not before calling ptp_clock_regist=
-er.
-> > Make it consistent by checking shared->ptp_clock instead.
-> > That is also better form."
->=20
-> O.K. If Richard said this fine.
->=20
-> Just out of interest, could you disassemble lan8814_ptp_probe_once() when
-> CONFIG_PTP_1588_CLOCK is disabled, with and without this check?
->=20
 
-If I understand correctly,
+在 2022/11/24 上午6:05, Linus Walleij 写道:
+> On Wed, Nov 23, 2022 at 9:02 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>> 在 2022/11/21 下午9:24, Linus Walleij 写道:
+> 
+>>>> +static int loongson_gpio_request(
+>>>> +                       struct gpio_chip *chip, unsigned int pin)
+>>>> +{
+>>>> +       if (pin >= chip->ngpio)
+>>>> +               return -EINVAL;
+>>>
+>>> This is not needed, the gpiolib core already checks this. Drop it.
+>> I check gpio_request in gpilib, I notice gpio_is_valid is not equal to
+>> this condition, so I still kept it for byte mode.
+> 
+> This is because descriptors can only be obtained from gpiod_get() and
+> similar and gpiod_get() falls to gpiod_get_index() which will not
+> return a valid descriptor from either HW backend. gpiod_get()
+> will call gpiod_request() for if and only if the descriptor is valid.
+> 
+> The only reason to implement something like this is because of
+> using the legacy GPIO numberspace which we are getting rid
+> of so it is irrelevant, the consumers of your driver will only be
+> using gpio descriptors, will only come in through gpiod_get_index()
+> and will have desc validity check done before calling gpiod_request().
+> 
+> So drop this.
+> 
+>>> I am bit suspicious that your IRQchip implementation expects consumers
+>>> to call gpiod_to_irq() first and this is not legal.
+>>
+>> okay, I got it, and other driver use gpio interrupt doesn't rely on
+>> gpiod_to_irq, but can use gpiod_to_irq.
+> 
+> Yes it can be used to look up the irq corresponding to a GPIO
+> but it is not mandatory to do that.
+> 
+>> The reason is that gpio interrupt wasn't an independent module,  The
+>> loongson interrupt controller liointc include lots of interrupt was
+>> route to perpherial, such as i2c/spi .. gpio, so gpio interrupt as
+>> normal perpherial interrupt, It is unnecessary and redundant to
+>> implement a gpio irq chip. The liointc controller driver had cover all
+>> interrupt.
+> 
+> This is fine, and it is common for GPIO drivers to implement
+> their own IRQchips.
+> 
+> But these drivers can not rely on the .gpio_to_irq() callback
+> to be called before an IRQ is requested and used.
+> 
+>> in addition,  I don't like to use the dynamically allocated gpio base,
+>> so I set the gpio base after call bgpio_init.
+> 
+> Don't do that because the GPIO maintainers love the
+> dynamic base and hate hardcoded bases. Set the base to -1
+> If you wonder why, read drivers/gpio/TODO.
+Hi Linus,
 
-With (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) check, initialization of mutex and=
- members of shared->ptp_clock_info need to be done in first function.
-Without above check ptp_clock_register should be done in second function. C=
-orrect me if I'm wrong.
+I recenly verfied other peripheral on upstream, some peripheral driver
+need use gpio number, but if use dynamic base that gpio number will be
+meaningless.  in additon I notice that many gpio driver don't use
+dynamic base, although bgpio_int was called.
 
-In this case, if first function is bypassed because of clock disable config=
-, no need to go to second function. Could you please check below solution, =
-if that works fine?
+so I think the gpio number should be keep consistent with datasheet for
+some platform that need use gpio number.
 
-> My guess is, when PTP is disabled, the mutex still gets initialised, all =
-the
-> member of shared->ptp_clock_info are set. The optimise cannot remove it.
-> With the macro check, the function is empty. So you end up with a slightl=
-y
-> bigger text size.
->=20
+Yinbo.
 
-If that is the case, I'll keep the CONFIG_PTP_1588_CLOCK disabled check bef=
-ore calling lan8814_ptp_probe_once.
+> 
+> Yours,
+> Linus Walleij
+> 
 
-Next thing is if CONFIG_PTP_1588_CLOCK disabled check pass then ptp_clock_r=
-egister will never return null because we are bypassing hardware clock chec=
-k before calling function itself.
-So, I can remove ptp_clock null check too. Let me know if this works, I'll =
-do changes in next revision.
-
->        Andrew
