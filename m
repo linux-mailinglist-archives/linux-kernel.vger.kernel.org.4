@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788FF64A492
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02864A498
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiLLQIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S232570AbiLLQKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiLLQIA (ORCPT
+        with ESMTP id S232589AbiLLQKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:08:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CA213D75;
-        Mon, 12 Dec 2022 08:07:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B4461130;
-        Mon, 12 Dec 2022 16:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBA4C433D2;
-        Mon, 12 Dec 2022 16:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670861274;
-        bh=WwnYlPtkuw+Ow6a4SYeX/8UoIZRk0Qh11SrgzRO24rw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WxbaR4vfBYZYLLCs6iYyCHTboCSG/GajlwHKR2y+js+30KB8Rqt0VSj4xjdoRvX0R
-         +oATBw5D0HQ5rjYyxJDRhY59RHsUuNt3cp4ucRWnM1IyDKZ8Jry01InV2Pb7a8ddW1
-         GkNxWL+P/Or8XBo+XinL8EOL6uBQt7EGoHZwDPlv5LriNwtmatIIp3MBA/B7/lAH7Q
-         yk/Zqykwn2kSaRsOjnXUcgUN4YJ7xmNSQn+mzcwz37fWQDW5O1jibSGiAvdEgyiRO9
-         WkXqKxhWZH5X0Fmt/68GFBLdrwVYmfUJMyyc+Z94G7qjyMVw43rgvsgipE43kHKrPf
-         4EbkBTpPOUYdw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4lLl-0000Q6-PE; Mon, 12 Dec 2022 17:08:17 +0100
-Date:   Mon, 12 Dec 2022 17:08:17 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5dR8X2mnytSCWrp@hovoldconsulting.com>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
- <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
- <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
- <Y5cvPulXceujfZv6@hovoldconsulting.com>
- <b1a5874b-8028-db14-e2ac-ebe3967559a5@suse.com>
- <Y5c3WWKyohzkspnw@hovoldconsulting.com>
- <Y5dH5RqY2yOK1bVj@rowland.harvard.edu>
+        Mon, 12 Dec 2022 11:10:18 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67432660
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:10:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670861416; x=1702397416;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CSivnj4EN1Y5ag/z4ECT81ZO0sOSCFPcf5f3ESOg+0c=;
+  b=BZZAVN5s89GU4aLppUjTRsSWXyoH9C8CJ9nDHlTSdFEKB2e+T2ms8lXc
+   bklMrlktP3OxYNNdJxxahv7PeSKIK85F0Uq7p65+iTrCSfqvARX5XJInY
+   2ClJmioIZyBL9zGrBXrIGoh5b7P/wVMrAPEY8jQg/r+5MSaF3YwlM+OnK
+   6IxJU8Se2OyFeuZ6gS6/AKo0QYAHRcxQfcOAE/S+VIQAOGpVVbUyBYxsN
+   qde69Tnl7pATMcfu4KIAu/mnfMZTG6cmZksdr/pRniS3ZGb8uE3Qc2GOy
+   7EP4E2vn+WBUhjTfF3FyoIA2epxia/geVv/3J5/60J3g/RjkMrevEqnqm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="305534535"
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="305534535"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 08:10:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="790546298"
+X-IronPort-AV: E=Sophos;i="5.96,238,1665471600"; 
+   d="scan'208";a="790546298"
+Received: from iprasad-mobl.amr.corp.intel.com (HELO [10.212.182.78]) ([10.212.182.78])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 08:10:14 -0800
+Message-ID: <e13331b2-a68c-c823-d02f-ba50949214cb@intel.com>
+Date:   Mon, 12 Dec 2022 08:10:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5dH5RqY2yOK1bVj@rowland.harvard.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
+ SEPT_VE_DISABLE
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+ <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
+ <e79c4b97-5718-9a60-406f-1df994ba089c@linux.intel.com>
+ <20221209170647.r32yjyc3hsqtnffo@box.shutemov.name>
+ <2e305bb5-9595-3531-6134-24344ff5c797@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <2e305bb5-9595-3531-6134-24344ff5c797@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 10:25:25AM -0500, Alan Stern wrote:
+On 12/9/22 12:51, Sathyanarayanan Kuppuswamy wrote:
+>>>> +	while (1) {
+>>>> +		__tdx_hypercall(&args, 0);
+>>>> +	}
+>>> Instead of an infinite loop, I'm wondering if the guest should panic after
+>>> retrying for few times.
+>> Hm. What difference would it make?
+> IIUC, the goal of this patch is to report the fatal error to VMM and panic.
+> But, if VMM does not terminate the guest as we expect, rather than trying 
+> continuously, isn't it better to panic ourselves? That way the behavior
+> will be similar to what we have currently.
 
-> > Since you insist, I'll just rewrite the whole thing.
-> 
-> You're both missing the main point, which is that the USB core clears 
-> intfdata after a driver is unbound.
+What does "panic ourselves" mean exactly?  What is the current behavior
+which that would match?
 
-I assure you that that hasn't been missed. :)
-
-> As a consequence, drivers don't 
-> need to worry about clearing intfdata themselves -- a fact which is 
-> _not_ easily apparent from the implementation.  This would be a useful 
-> thing to mention in the kerneldoc, as it may help prevent lots of 
-> drivers from making unnecessary function calls (like the ones that 
-> Vincent recently removed).
-
-My point is that the fact the USB core (and driver core) clears the
-pointer after the driver is unbound is mostly irrelevant. The driver
-would typically have freed the driver data at that point anyway, and the
-interface must no longer be used by the driver (e.g. as it could be
-bound to a new driver).
-
-This is a fundamental property of the driver model and not something
-that necessarily needs to be repeated for every function that operates
-on a struct device (or a subsystem container like struct usb_interface).
-
-> Of course, this doesn't mean that drivers can't clear intfdata if they 
-> want to, for example, if they use it as an internal flag.  But 
-> developers shouldn't feel that they _need_ to clear it as a sort of 
-> hygienic measure.
-
-Right.
-
-> IMO it's worthwhile keeping the kerneldoc (but correcting it) so that it 
-> can get this point across.
-
-As you saw I fixed up the kernel doc in v2, and tried to get the point
-about not having to clear the pointer across without getting into too
-much detail.
-
-The fact that USB core and driver core clears the pointer is an
-implementation detail which in principle could change. The important
-part is that drivers generally should not touch the struct device or
-containing structure after unbind (and must do so with care otherwise).
-
-Johan
