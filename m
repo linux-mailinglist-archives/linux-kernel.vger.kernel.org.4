@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714E764A860
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F5964A864
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiLLUFf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Dec 2022 15:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
+        id S233260AbiLLUFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiLLUFL (ORCPT
+        with ESMTP id S233413AbiLLUFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:05:11 -0500
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572F51789C;
-        Mon, 12 Dec 2022 12:05:10 -0800 (PST)
-Received: by mail-wm1-f52.google.com with SMTP id i187-20020a1c3bc4000000b003d21f02fbaaso715635wma.4;
-        Mon, 12 Dec 2022 12:05:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tC47u5ABuoEhubGgg4/9VNrEDUcZI85O5fBH9REajDA=;
-        b=iEPoscHd5fvbKadhR315VfbgvCWHCtTMs8h8qn8FXE6ZIkxjGXO/kRzF+nSO9A7PTs
-         JlFQPxpRlMPEBXouEdywyZ6T5215dDU8M1SMn0jaBIhQDTZQstjjaU5I24qZS4D7mZhj
-         po6MRtAOJm7/5dHefHckfl9A3x43nZ8YdxmDP3YQxHBX077mMRlc6/RfZNq5j70mxJwa
-         kVzt02RqyqwIDCcVKAqoecFXy4iqyW2qJCGSYUT4Cf5JTUo1+VsszOuHo0Vgj8z7Y6e6
-         ZmVEFNFjKnWCxDhnz6maZUc2XoOYbNgUOOIJPc/oNcvQKNTF7FOaKCqj83GcOCjjryCG
-         GrSA==
-X-Gm-Message-State: ANoB5pnGrPmXmhj9CxlCobKM1dNVlPQF5EC1eb4cCxYwnIJIeJXE4oeZ
-        LRd9FEbj7/kvGRNDeqeh7JcRIpPmtZtIiY0c3G4=
-X-Google-Smtp-Source: AA0mqf7MiW707fes7g9Q5aQzK1ML4tYsEM7LkIbboMUaR5/C23/d3G5PSVlEEIOTPC5a1CVCgpcs01dvbxXLAxI0UOM=
-X-Received: by 2002:a05:600c:3052:b0:3d1:cae5:efe9 with SMTP id
- n18-20020a05600c305200b003d1cae5efe9mr10986wmh.158.1670875508712; Mon, 12 Dec
- 2022 12:05:08 -0800 (PST)
+        Mon, 12 Dec 2022 15:05:50 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42551178A0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:05:47 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9086C1EC069C;
+        Mon, 12 Dec 2022 21:05:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670875544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=jlQcQtosWgVLltDqKXLfrqn4T86TR6jlKeOQ7vGHwYM=;
+        b=MZSlkLwz3pKd064Zoc6XxwdihUpHC9i61S1pTDCSuKTzs9ECJirBIiiooz94ZRJKaBBTaS
+        CzLC925f9JgwZ+LUWwaK6CLCRCvnXDVFADGTQOLtmzF58eMl9TZJKDSohSb/UGg5JTDnrO
+        gMI/eEL55O6gXXwT0fYnhCUKwJd60iA=
+Date:   Mon, 12 Dec 2022 21:05:39 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] ras/core for v6.2
+Message-ID: <Y5eJk3Tqh3Ip3oCx@zn.tnic>
 MIME-Version: 1.0
-References: <20221209190727.759804-1-namhyung@kernel.org> <20221209190727.759804-2-namhyung@kernel.org>
- <Y5eEJd/AhSzUfILO@kernel.org> <Y5eEbxVOHaUPw9UI@kernel.org> <Y5eE3Udv03uM4zhQ@kernel.org>
-In-Reply-To: <Y5eE3Udv03uM4zhQ@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 12 Dec 2022 12:04:56 -0800
-Message-ID: <CAM9d7ch2nNS_m_3f5J+M9GJ8=GimG1Y7Yqve=Loy1hhjnEvnag@mail.gmail.com>
-Subject: Re: [PATCH 1/4] perf lock contention: Add lock_data.h for common data
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+Hi Linus,
 
-On Mon, Dec 12, 2022 at 11:45 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Mon, Dec 12, 2022 at 04:43:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Mon, Dec 12, 2022 at 04:42:30PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Fri, Dec 09, 2022 at 11:07:24AM -0800, Namhyung Kim escreveu:
-> > > > Accessing BPF maps should use the same data types.  Add bpf_skel/lock_data.h
-> > > > to define the common data structures.  No functional changes.
-> > >
-> > > You forgot to update one of the stack_id users, that field got renamed:
-> > >
-> > > util/bpf_skel/lock_contention.bpf.c:144:6: error: no member named 'stack_id' in 'struct contention_key'
-> > >         key.stack_id = pelem->stack_id;
-> > >         ~~~ ^
-> > > 1 error generated.
-> > > make[2]: *** [Makefile.perf:1075: /tmp/build/perf/util/bpf_skel/.tmp/lock_contention.bpf.o] Error 1
-> > > make[1]: *** [Makefile.perf:236: sub-make] Error 2
-> > > make: *** [Makefile:113: install-bin] Error 2
-> > > make: Leaving directory '/var/home/acme/git/perf/tools/perf'
+please pull some updates to the RAS side of things, for 6.2.
 
-Oops, right.
+Thx.
 
-> > >
-> > >  Performance counter stats for 'make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 CORESIGHT=1 O=/tmp/build/perf -C tools/perf install-bin':
-> > >
-> > >      7,005,216,342      cycles:u
-> > >     11,851,225,594      instructions:u                   #    1.69  insn per cycle
-> > >
-> > >        3.168945139 seconds time elapsed
-> > >
-> > >        1.730964000 seconds user
-> > >        1.578932000 seconds sys
-> > >
-> > >
-> > > ⬢[acme@toolbox perf]$ git log --oneline -4
-> > > f6e7a5f1db49dc8e (HEAD) perf lock contention: Add lock_data.h for common data
-> > > 5d9b55713c5c037f perf python: Account for multiple words in CC
-> > > d9078bf3f3320457 perf off_cpu: Fix a typo in BTF tracepoint name, it should be 'btf_trace_sched_switch'
-> > > 3b7ea76f0f7844f5 perf test: Update event group check for support of uncore event
-> > > ⬢[acme@toolbox perf]$
-> > >
-> > > After some point it builds.
-> > >
-> > > I'm fixing this to keep it bisectable.
-> >
-> > I folded this:
-> >
-> > diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > index 0f63cc28ccbabd21..64fd1e040ac86e58 100644
-> > --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > @@ -141,7 +141,7 @@ int contention_end(u64 *ctx)
-> >
-> >       duration = bpf_ktime_get_ns() - pelem->timestamp;
-> >
-> > -     key.stack_id = pelem->stack_id;
-> > +     key.stack_or_task_id = pelem->stack_id;
-> >       data = bpf_map_lookup_elem(&lock_stat, &key);
-> >       if (!data) {
-> >               struct contention_data first = {
+---
 
-Thanks for fixing this.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
->
->
-> And then fixed up this:
->
-> Could not apply 3d4947c7bd10beba... perf lock contention: Implement -t/--threads option for BPF
-> ⬢[acme@toolbox perf]$
-> ⬢[acme@toolbox perf]$
-> ⬢[acme@toolbox perf]$ git diff
-> diff --cc tools/perf/util/bpf_skel/lock_contention.bpf.c
-> index 64fd1e040ac86e58,cd405adcd252b82d..0000000000000000
-> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> @@@ -141,7 -168,13 +168,17 @@@ int contention_end(u64 *ctx
->
->         duration = bpf_ktime_get_ns() - pelem->timestamp;
->
-> ++<<<<<<< HEAD
->  +      key.stack_or_task_id = pelem->stack_id;
-> ++=======
-> +       if (aggr_mode == LOCK_AGGR_CALLER) {
-> +               key.stack_or_task_id = pelem->stack_id;
-> +       } else {
-> +               key.stack_or_task_id = pid;
-> +               update_task_data(pid);
-> +       }
-> +
-> ++>>>>>>> 3d4947c7bd10beba (perf lock contention: Implement -t/--threads option for BPF)
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-Sure, it looks good to me.
+are available in the Git repository at:
 
-Thanks,
-Namhyung
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/ras_core_for_v6.2
+
+for you to fetch changes up to 50865c14f34edbd03f8113147fac069b39f4e390:
+
+  RAS: Fix return value from show_trace() (2022-10-31 18:55:18 +0100)
+
+----------------------------------------------------------------
+- Fix confusing output from /sys/kernel/debug/ras/daemon_active
+
+- Add another MCE severity error case to the Intel error severity
+table to promote UC and AR errors to panic severity and remove the
+corresponding code condition doing that.
+
+- Make sure the thresholding and deferred error interrupts on AMD SMCA
+systems clear the all registers reporting an error so that there are no
+multiple errors logged for the same event
+
+----------------------------------------------------------------
+Tony Luck (2):
+      x86/mce: Use severity table to handle uncorrected errors in kernel
+      RAS: Fix return value from show_trace()
+
+Yazen Ghannam (1):
+      x86/MCE/AMD: Clear DFR errors found in THR handler
+
+ arch/x86/kernel/cpu/mce/amd.c      | 33 ++++++++++++++++++++-------------
+ arch/x86/kernel/cpu/mce/severity.c |  8 +++++---
+ drivers/ras/debugfs.c              |  2 +-
+ 3 files changed, 26 insertions(+), 17 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
