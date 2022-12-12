@@ -2,182 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A621649ADD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD1E649AE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiLLJPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S231890AbiLLJQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiLLJP1 (ORCPT
+        with ESMTP id S231858AbiLLJQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:15:27 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78B99FD1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670836525; x=1702372525;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=4qWOYjI6HzAFqdDSK6MP2+ZJuunk3nHdTzyaWN88PzU=;
-  b=OVdirmExQiFcnYVqXXq9DlWymvTp01urBozt3/LWVxu7qOyl/Yf2IPF5
-   IZbvVI2W0hdH83VJlGXKHoUKNVAKYvpvtna6kBFq43FTomJ2BpLPmt/M+
-   iFu4gvhUBrnAXSnME0A0i6IpGZFPADn3XkcjmHmZs0J5+8abJQH8TvkH6
-   4PlpwA3E5zvysTEPmxm4OJupB+RGtBq8A2MD1mF5ZRpPdxcPO6AfAnqBm
-   1WvcgRoUpoAQa2nbNU4RJHIm6YFJgZGVz7sR+rlrkV050I92IyIPkOSJK
-   lp8r15iEb+b/mWRWfLou1mTsfN4BOZzmKAxDLJxMq/Br56vPJkpSapz9f
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="404064352"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="404064352"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 01:15:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="790422882"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="790422882"
-Received: from sshumihi-mobl.ger.corp.intel.com (HELO localhost) ([10.252.5.95])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 01:15:22 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Alexey Lukyanchuk <skif@skif-web.ru>,
-        tvrtko.ursulin@linux.intel.com
-Cc:     Alexey Lukyanchuk <skif@skif-web.ru>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] fix dell wyse 3040 poweroff
-In-Reply-To: <20221210180118.22087-1-skif@skif-web.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221210180118.22087-1-skif@skif-web.ru>
-Date:   Mon, 12 Dec 2022 11:15:19 +0200
-Message-ID: <87y1rdx9so.fsf@intel.com>
+        Mon, 12 Dec 2022 04:16:02 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584C2E0D1;
+        Mon, 12 Dec 2022 01:15:55 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1p4eu7-006PYn-Dc; Mon, 12 Dec 2022 17:15:20 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 12 Dec 2022 17:15:19 +0800
+Date:   Mon, 12 Dec 2022 17:15:19 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, dhowells@redhat.com,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] KEYS: asymmetric: Copy sig and digest in
+ public_key_verify_signature()
+Message-ID: <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+ <Y5OGr59A9wo86rYY@sol.localdomain>
+ <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Dec 2022, Alexey Lukyanchuk <skif@skif-web.ru> wrote:
-> Dell wyse 3040 cat't poweroff aftet kernel 5.11.
-> It happens  because i915_driver_shutdown function.
-> Disabling of this function mitigate this problem.
+On Mon, Dec 12, 2022 at 10:07:38AM +0100, Roberto Sassu wrote:
 >
-> Fixes: 440b354f3 ("drivers/gpu/drm:power off troubles on dell wyse 3040") 
+> The problem is a misalignment between req->src_len (set to sig->s_size
+> by akcipher_request_set_crypt()) and the length of the scatterlist (if
+> we set the latter to sig->s_size + sig->digest_size).
+> 
+> When rsa_enc() calls mpi_read_raw_from_sgl(), it passes req->src_len as
+> argument, and the latter allocates the MPI according to that. However,
+> it does parsing depending on the length of the scatterlist.
+> 
+> If there are two scatterlists, it is not a problem, there is no
+> misalignment. mpi_read_raw_from_sgl() picks the first. If there is just
+> one, mpi_read_raw_from_sgl() parses all data there.
 
-Fixes: is supposed to reference an existing commit.
+Thanks for the explanation.  That's definitely a bug which should
+be fixed either in the RSA code or in MPI.
 
-> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru> 
-> ---
-> There is trouble with i915_driver_shutdown function. After some diving I found that trouble looks like race condition in drm_atomic_get_connector_state function (drivers/gpu/drm/drm_atomic.c), maybe it linked to iterators. Now I fully exclude i915_driver_shutdown for wyse 3040 device.
->
-> Can any one comment on this one please ? 
+I'll look into it.
 
-Bypassing the entire shutdown function is not an acceptable quirk.
-
-Please file a bug over at fdo gitlab [1]. Add drm.debug=0xe module
-parameter, and attach dmesg from boot to reproducing the problem. Add
-log_buf_len=8M or similar as necessary to get the complete dmesg.
-
-Have you tried the more recent kernels?
-
-BR,
-Jani.
-
-
-[1] https://gitlab.freedesktop.org/drm/intel/wikis/How-to-file-i915-bugs
-
-
-> ---
->  drivers/gpu/drm/i915/display/intel_quirks.c | 25 +++++++++++++++++++++
->  drivers/gpu/drm/i915/i915_driver.c          |  3 +++
->  drivers/gpu/drm/i915/i915_drv.h             |  1 +
->  3 files changed, 29 insertions(+)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c b/drivers/gpu/drm/i915/display/intel_quirks.c
-> index e415cd7c0..a6a549d48 100644
-> --- a/drivers/gpu/drm/i915/display/intel_quirks.c
-> +++ b/drivers/gpu/drm/i915/display/intel_quirks.c
-> @@ -60,6 +60,12 @@ static void quirk_no_pps_backlight_power_hook(struct drm_i915_private *i915)
->  	drm_info(&i915->drm, "Applying no pps backlight power quirk\n");
->  }
->  
-> +static void quirk_wyse_3040_shutdown_fix(struct drm_i915_private *i915)
-> +{
-> +	i915->quirks |= QUIRK_WYSE_3040_SHUTDOWN_FIX;
-> +	drm_info(&i915->drm, "Applying wyse 3040 shutdown fix\n");
-> +}
-> +
->  struct intel_quirk {
->  	int device;
->  	int subsystem_vendor;
-> @@ -85,6 +91,12 @@ static int intel_dmi_no_pps_backlight(const struct dmi_system_id *id)
->  	return 1;
->  }
->  
-> +static int wyse_3040_shutdown_fix(const struct dmi_system_id *id)
-> +{
-> +	DRM_INFO("This device need help with poweroff %s\n", id->ident);
-> +	return 1;
-> +}
-> +
->  static const struct intel_dmi_quirk intel_dmi_quirks[] = {
->  	{
->  		.dmi_id_list = &(const struct dmi_system_id[]) {
-> @@ -131,6 +143,19 @@ static const struct intel_dmi_quirk intel_dmi_quirks[] = {
->  		},
->  		.hook = quirk_no_pps_backlight_power_hook,
->  	},
-> +	{
-> +		.dmi_id_list = &(const struct dmi_system_id[]) {
-> +			{
-> +				.callback = wyse_3040_shutdown_fix,
-> +				.ident = "Dell Inc. 0G56C0",
-> +				.matches = {DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Dell Inc."),
-> +					    DMI_EXACT_MATCH(DMI_BOARD_NAME, "0G56C0"),
-> +				},
-> +			},
-> +			{ }
-> +		},
-> +		.hook = quirk_wyse_3040_shutdown_fix,
-> +	},
->  };
->  
->  static struct intel_quirk intel_quirks[] = {
-> diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
-> index deb8a8b76..af60fb79a 100644
-> --- a/drivers/gpu/drm/i915/i915_driver.c
-> +++ b/drivers/gpu/drm/i915/i915_driver.c
-> @@ -1079,6 +1079,9 @@ static void intel_shutdown_encoders(struct drm_i915_private *dev_priv)
->  
->  void i915_driver_shutdown(struct drm_i915_private *i915)
->  {
-> +	if (!(i915->quirks & QUIRK_WYSE_3040_SHUTDOWN_FIX))
-> +		return;
-> +
->  	disable_rpm_wakeref_asserts(&i915->runtime_pm);
->  	intel_runtime_pm_disable(&i915->runtime_pm);
->  	intel_power_domains_disable(i915);
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 086bbe894..fdd6866e7 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -200,6 +200,7 @@ struct drm_i915_display_funcs {
->  #define QUIRK_INCREASE_T12_DELAY (1<<6)
->  #define QUIRK_INCREASE_DDI_DISABLED_TIME (1<<7)
->  #define QUIRK_NO_PPS_BACKLIGHT_POWER_HOOK (1<<8)
-> +#define QUIRK_WYSE_3040_SHUTDOWN_FIX (1<<9)
->  
->  struct i915_suspend_saved_registers {
->  	u32 saveDSPARB;
-
+Cheers,
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
