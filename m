@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302A1649F53
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0A164A06B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiLLNBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
+        id S232683AbiLLNYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiLLNBC (ORCPT
+        with ESMTP id S232653AbiLLNYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:01:02 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131F13D06;
-        Mon, 12 Dec 2022 04:59:58 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 12 Dec 2022 08:24:40 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6625A10A8;
+        Mon, 12 Dec 2022 05:24:40 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7BBA433801;
-        Mon, 12 Dec 2022 12:59:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670849995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=95JjiZBzv65n1mXRBvbktBTBpXMKtPfhRGInuWjwgaw=;
-        b=uuKDsqZWYBzL3/5EH0W9pudOuIMhaAq4/3TnbUS+als3ZaEvEGNa0OKuG9U915dTuE5nv1
-        J5XsBEBbXnDawcj5Nq3kHSUgUEF8D/90UfElpXVAK76hhfcDZgzhMEyL+gJTA1bFhbruQ4
-        4AB2Z5GtWCRgu6mh/wZqowW3cR1wTH4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A92B13456;
-        Mon, 12 Dec 2022 12:59:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EbVZDcsll2P+EgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 12 Dec 2022 12:59:55 +0000
-Date:   Mon, 12 Dec 2022 13:59:53 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
-Subject: Re: [PATCH-block v2 2/3] blk-cgroup: Don't flush a blkg if destroyed
-Message-ID: <20221212125953.GE16456@blackbody.suse.cz>
-References: <20221211222058.2946830-1-longman@redhat.com>
- <20221211222058.2946830-3-longman@redhat.com>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 52356849CD;
+        Mon, 12 Dec 2022 14:24:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1670851479;
+        bh=wY/WI/om5sMXcfycRCKXbM+9ZOxn96U7NatS25IVYlE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uoSRzw84rKs5en77zjxoJfhSgwy86Q1lEQQGM60G5KOhuIuGQDwj/fKY8d/znNBjW
+         Z90lQcZb6HyAnKQpCeiAAwnKNU/GaNFNVdCwpeycnxJgQf0vnhTMdQrTLIA50bg9LC
+         1hcb1ZP8nGfJepXRvuCzGokezXZS8GLaYXmANTm3EZ5yE9mQ7lvt5IwxYLI+m/bAc9
+         /6F9FdJRFa8F7e71xMOkBoIzujgEQNgL6Lu+oqw1GksqxOHfy00v4gIjmKhnOzosH3
+         AwHUQi+giAB0jeV1qRf6DnCWrRL9GmLMOnIQInI1YkWdX/5r+N/AZrczfdNTgQGpdZ
+         WJlxZG+Yx/EPQ==
+Message-ID: <2b5d33a1-4f8d-e1db-67ef-7e5c32d1ee83@denx.de>
+Date:   Mon, 12 Dec 2022 14:01:10 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="11Y7aswkeuHtSBEs"
-Content-Disposition: inline
-In-Reply-To: <20221211222058.2946830-3-longman@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/4] ARM: dts: stm32: Fix qspi pinctrl phandle for
+ stm32mp15xx-dhcom-som
+Content-Language: en-US
+To:     patrice.chotard@foss.st.com, robh+dt@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alexandre.torgue@foss.st.com
+Cc:     mcoquelin.stm32@gmail.com,
+        linux-stm32@st-md-mailman.stormreply.com, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>
+References: <20221212085142.3944367-1-patrice.chotard@foss.st.com>
+ <20221212085142.3944367-3-patrice.chotard@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20221212085142.3944367-3-patrice.chotard@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/12/22 09:51, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+> 
+> Chip select pinctrl phandle was missing in several stm32mp15x based boards.
+> 
+> Fixes: ea99a5a02ebc ("ARM: dts: stm32: Create separate pinmux for qspi cs pin in stm32mp15-pinctrl.dtsi)
+> 
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Marek Vasut <marex@denx.de>
+> Cc: Alexandre Torgue <alexandre.torgue@st.com>
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> To: linux-arm-kernel@lists.infradead.org
+> ---
+>   arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> index 238a611192e7..d3b85a8764d7 100644
+> --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> @@ -428,8 +428,12 @@ &pwr_regulators {
+>   
+>   &qspi {
+>   	pinctrl-names = "default", "sleep";
+> -	pinctrl-0 = <&qspi_clk_pins_a &qspi_bk1_pins_a>;
+> -	pinctrl-1 = <&qspi_clk_sleep_pins_a &qspi_bk1_sleep_pins_a>;
+> +	pinctrl-0 = <&qspi_clk_pins_a
+> +		     &qspi_bk1_pins_a
+> +		     &qspi_cs1_pins_a>;
+> +	pinctrl-1 = <&qspi_clk_sleep_pins_a
+> +		     &qspi_bk1_sleep_pins_a
+> +		     &qspi_cs1_sleep_pins_a>;
+>   	reg = <0x58003000 0x1000>, <0x70000000 0x4000000>;
+>   	#address-cells = <1>;
+>   	#size-cells = <0>;
 
---11Y7aswkeuHtSBEs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Splitting the pins makes sense indeed.
 
-Hello.
-
-On Sun, Dec 11, 2022 at 05:20:57PM -0500, Waiman Long <longman@redhat.com> wrote:
-> Before commit 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()"),
-> blkg's stats is only flushed if they are online.
-
-I'm not sure I follow -- css_release_work_fn/cgroup_rstat_flush may be
-called on an offlined blkcg (offlined!=released). There's no invariant
-ensuring offlined blkcg won't be flushed. (There is only current
-situation when there is no reader of io data that'd need them flushed
-[1].)
-
-> In addition, the stat flushing of blkgs in blkcg_rstat_flush()
-> includes propagating the rstat data to its parent. However, if a blkg
-> has been destroyed (offline), the validity of its parent may be
-> questionable.
-
-Parents won't be freed (neither offlined) before children (see
-css_killed_work_fn). It should be regularly OK to pass data into a
-parent of an offlined blkcg.
-
-> For safety, revert back to the old behavior by ignoring offline
-> blkg's.
-
-I don't know if this is a good reasoning. If you argue that offlined
-children needn't be taken into parent's account, then I think it's more
-efficient to exclude the offlined blkcgs from update. (With the caveat I
-have in [1].)
-
-Regards,
-Michal
-
-[1] https://lore.kernel.org/r/YqEfNgUc8jxlAq8D@blackbook/
-
---11Y7aswkeuHtSBEs
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY5clxQAKCRAkDQmsBEOq
-uSetAQCmnfBYSQWk5l/gfz/eBj+JLLtB5FF0vKwMUp7t6s2hdQEA/iF6GKtaE8D3
-6UdBR14daTYUWeIsw+Jji88gMzQy9gY=
-=kEQi
------END PGP SIGNATURE-----
-
---11Y7aswkeuHtSBEs--
+Reviewed-by: Marek Vasut <marex@denx.de>
