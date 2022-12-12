@@ -2,84 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C15664A600
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E126764A608
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 18:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbiLLReY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 12:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S233113AbiLLRfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 12:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbiLLRdi (ORCPT
+        with ESMTP id S233067AbiLLRfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 12:33:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ECD13D53
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 09:33:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 087C961199
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 69814C4339B;
-        Mon, 12 Dec 2022 17:33:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670866403;
-        bh=4IdvSE6sC7hTUkB6MGNbbavyzSbUlUZU8vsHdURc1XU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LjXDSwnyNPn37MNA6NQmziUv0YG77R6TwAAnxv4KIKxaK/kG7DKE+hnyfST0EimnK
-         GTXjHulZL7b/f5eyy1RxzBLHhjMjNpajnN2qTfjMKW9j6yaDo21wtmQx1lfiUtMPCX
-         LOMog1GUnBjzTvkMozYoqGdCXcmGfsurZFYB+VfMKxntzv+S+BRRm0UVNLFUJsxyKh
-         JnMc/TxoN0WikbMGuzsYKxxf8gKmd2IA0NEoJPy2R2ZxmYI9xgAPgf8YBb26I1XpNV
-         XUM3l8KHIHN088WoWC8cJAyDgSLgH5nP8Fm0mfNk/S2hw1HDGsC6oR3mkMWhVBCvLR
-         r7esgIWvgk6AA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57F3EC00448;
-        Mon, 12 Dec 2022 17:33:23 +0000 (UTC)
-Subject: Re: [GIT PULL] slab updates for 6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <8f81dbc0-da85-dff7-4a88-c0c4639649c1@suse.cz>
-References: <8f81dbc0-da85-dff7-4a88-c0c4639649c1@suse.cz>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <8f81dbc0-da85-dff7-4a88-c0c4639649c1@suse.cz>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.2-rc1
-X-PR-Tracked-Commit-Id: dc19745ad0e46c1a069540973e376cff0130443c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 893660b0e1c8d127960ae921f55983b435664e15
-Message-Id: <167086640335.22610.15239338618462713087.pr-tracker-bot@kernel.org>
-Date:   Mon, 12 Dec 2022 17:33:23 +0000
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Feng Tang <feng.tang@intel.com>,
-        Dennis Zhou <dennis@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 12:35:09 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE49813FA8;
+        Mon, 12 Dec 2022 09:34:29 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so586650pjd.5;
+        Mon, 12 Dec 2022 09:34:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QA82WucYBjIvOjXFoqh37l7Ah3kRRiWR9kIqKPLQajw=;
+        b=S+rhb35J1+gqdC9Cg24pBMiK/+6v3nTjzkizAnwCYQkZ/5b7bva2soRUr2vycrdahj
+         MiyhXlrd9Uly7nvSqcnGO6QBl8Tyv8FA90zMZBpkxe6Kukg8Kh7ps+jwmUAf3ncXMpy3
+         L63QitucKvWCt62RwS7BrZTWfzqz5kK5GIhGD1DHmnPRbbQwDuIRpZIVN+zBNsiqEt2j
+         uwIhi0mZuaVWPUY/WViS5kH2V4P8K7C5cLFiz4ZTPRZOr4pk9t+1qD607nSqv0usSvuB
+         Ccy/IMZAGY3/b5d0VUKGtMecRZda2Nv53v0LO8N+iIK/6cFQrrBts0d85iphQIS6h1Al
+         dv/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QA82WucYBjIvOjXFoqh37l7Ah3kRRiWR9kIqKPLQajw=;
+        b=PtbPFrI9Nas92J6P+0Ys0wUWd9SuyxL+8C1qVyku2ZFs2+iGoSGjEwmX+VcRM6PZBX
+         SsG3Io43VWfaf211Fkwa6bR3qCbZAzFA5JKTvWUKQPP6kqfMptmFRGi0FhY6OOj+cc14
+         BfNpQQPde50i2CvwL4BUYbaQMuDhLq0ab/P8KTEgLcPUnoiE5B8yt7RDvLEMa6iZXHzz
+         xyqv4z9zqZN7ppBJ9cQFgfKNj7thXCErJIO0ACRQuiXhspuW5RpL3V7JxcC0W/Y3egZ2
+         VX/9iXkXemu7ohiHPimZpRmPj1Z1bAwoXLWY2T+m86b+Qttot/hQpKp+ua+7WNRjNCM4
+         YWyg==
+X-Gm-Message-State: ANoB5plFHM4XwsTpbewCpoUTQIbwMeM+o+gHq5zs02qyH89qUbEjdqp1
+        oB+0crqbusm7QmQxp2Ao7o4=
+X-Google-Smtp-Source: AA0mqf6uqCKx5jRBmUHuRdevoFZ3OzexDOcQTIGL2Vusu0lLkkjOrWYce0fdO4hu9G2VX/wGlxVfpA==
+X-Received: by 2002:a17:902:ce8e:b0:186:a990:3fac with SMTP id f14-20020a170902ce8e00b00186a9903facmr23279239plg.10.1670866469134;
+        Mon, 12 Dec 2022 09:34:29 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:9159])
+        by smtp.gmail.com with ESMTPSA id l3-20020a170902e2c300b00189d4c666c8sm6647266plc.153.2022.12.12.09.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 09:34:28 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Dec 2022 07:34:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 05/31] sched: Add sched_class->reweight_task()
+Message-ID: <Y5dmI3uAl/kYR5nQ@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-6-tj@kernel.org>
+ <Y5cPA2L/G2GiRP9X@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5cPA2L/G2GiRP9X@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 9 Dec 2022 16:32:53 +0100:
+Hello,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.2-rc1
+On Mon, Dec 12, 2022 at 12:22:43PM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 29, 2022 at 10:22:47PM -1000, Tejun Heo wrote:
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index a4a20046e586..08799b2a566e 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -2193,6 +2193,8 @@ struct sched_class {
+> >  	 */
+> >  	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+> >  	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
+> > +	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
+> > +			      int newprio);
+> >  	void (*prio_changed) (struct rq *this_rq, struct task_struct *task,
+> >  			      int oldprio);
+> 
+> Hurmph.. this further propagate the existing problem of thinking that
+> 'prio' is a useful concept in general (it isn't).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/893660b0e1c8d127960ae921f55983b435664e15
+I'm not quite following. Can you please expand on why prio isn't a generally
+useful concept?
 
-Thank you!
+Thanks.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+tejun
