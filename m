@@ -2,156 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C7664983E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 04:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56FC649843
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 04:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiLLDaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 22:30:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        id S230503AbiLLDfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 22:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiLLDaA (ORCPT
+        with ESMTP id S230408AbiLLDfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 22:30:00 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67B9DE90;
-        Sun, 11 Dec 2022 19:29:59 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 17so3293233pll.0;
-        Sun, 11 Dec 2022 19:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:reply-to:user-agent:mime-version:date:message-id:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DFgrDYhwuet6qjJ8Wq4sAS0uEiwAbXa5YALkWoY0Wck=;
-        b=CfI2c265dZResWya/YCRxbZJeNm+wWXrt3ejL/JdVZYrEs3uGVmhCIt7wFam1u9ZDv
-         TqIM/NZGil4Lc0+wUaN1EaWIB8IALKqgAM/xEQa/VvXmnUaOiSq8BQipxwsBd6wOHmv2
-         /Tff/l5/3FUSFndWolsvOjWYHP/diJOCjc4YHGl+CRYWNY0V+EB51SDl3n+2KW3y8kM9
-         bF1tRJYUgmbHkmUpXdMWW2wWGyME1zN1/wDOoTTkhgMA4A+dNVkVn1PzdkxgAsrE9x0V
-         3I6nQa8ucXXTn3dPby/kSsF2QI0j36gxmcYVWIJ1yGIxAiZPbmY9wxt0q9XYglaWTFfJ
-         jILg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:reply-to:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFgrDYhwuet6qjJ8Wq4sAS0uEiwAbXa5YALkWoY0Wck=;
-        b=NRsmI2vk3DpPMLBxw/U2qRHmjIRE/3xvNA04vKDoiYezpPLrWAkuxixciFGtAX//CO
-         iU2SAQCTQvH9i/R9552HysZLRVpppIqYx5QSigzAtiTaUpB4I98lET02Tn/1juD1tbao
-         gfw2BNAUll/UJ+940oe9UVeb+Z7vXKEyodyuDrj2Xc9wpinmmomtQETWBba5Wpeq61Es
-         N3hc+TC89/FmeybAVzoagyfvhnd/qp8i2F8KOiLCgPLXUCTc6MmGBfuC6kdb8elcShm0
-         Zg/95VqDnAo3PpXkXRtq4dmRuWfbmUogBYVzOWrHFcA81XWuanka/mYVmX6zWNwo31OE
-         jX0w==
-X-Gm-Message-State: ANoB5pkpqD7rx27ZleUQU+g46/GNO6kqo5fkAXZ0JBjlPFtOqObutCiq
-        swfSMM2WOVQUXghisV8G40gRJtzd+SAcxQ==
-X-Google-Smtp-Source: AA0mqf6i9aWHyuq++jCdiWIG4ie0EpsS5rt1pb/Uk2cp1zdc+tfPqJhU6zQ63b/iE3WwxK80JCobOg==
-X-Received: by 2002:a17:90a:c304:b0:20d:bd63:830a with SMTP id g4-20020a17090ac30400b0020dbd63830amr14630926pjt.49.1670815799253;
-        Sun, 11 Dec 2022 19:29:59 -0800 (PST)
-Received: from [172.22.60.4] ([1.242.215.113])
-        by smtp.gmail.com with ESMTPSA id gf12-20020a17090ac7cc00b0021904307a53sm4338816pjb.19.2022.12.11.19.29.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Dec 2022 19:29:58 -0800 (PST)
-From:   Sungjong Seo <sjdev.seo@gmail.com>
-X-Google-Original-From: Sungjong Seo <sj1557.seo@samsung.com>
-Message-ID: <5229bc2c-2191-8e4d-f711-4787f8306226@samsung.com>
-Date:   Mon, 12 Dec 2022 12:29:54 +0900
+        Sun, 11 Dec 2022 22:35:31 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3124B493;
+        Sun, 11 Dec 2022 19:35:29 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jiapeng.chong@linux.alibaba.com;NM=0;PH=DS;RN=7;SR=0;TI=SMTPD_---0VX16Mju_1670816116;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VX16Mju_1670816116)
+          by smtp.aliyun-inc.com;
+          Mon, 12 Dec 2022 11:35:27 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     fenghua.yu@intel.com
+Cc:     dave.jiang@intel.com, vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] dmaengine: idxd: Remove the unused function set_completion_address()
+Date:   Mon, 12 Dec 2022 11:35:14 +0800
+Message-Id: <20221212033514.5831-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: sj1557.seo@samsung.com
-Subject: Re: [PATCH v1 6/6] exfat: reuse exfat_find_location() to simplify
- exfat_get_dentry_set()
-To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>,
-        "linkinjeon@kernel.org" <linkinjeon@kernel.org>
-Cc:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
-        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>
-References: <PUZPR04MB631628014876FC50CD7EF2A781189@PUZPR04MB6316.apcprd04.prod.outlook.com>
-Content-Language: en-US
-In-Reply-To: <PUZPR04MB631628014876FC50CD7EF2A781189@PUZPR04MB6316.apcprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi. Yuezhang,
+The function set_completion_address is defined in the dma.c file, but not
+called elsewhere, so remove this unused function.
 
-On 12/5/22 14:10, Yuezhang.Mo@sony.com wrote:
-> In exfat_get_dentry_set(), part of the code is the same as
-> exfat_find_location(), reuse exfat_find_location() to simplify
-> exfat_get_dentry_set().
-> 
-> Code refinement, no functional changes.
-> 
-> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
-> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
-> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
-> ---
->  fs/exfat/dir.c | 17 ++++-------------
->  1 file changed, 4 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c
-> index 8121a7e073bc..834c0e634250 100644
-> --- a/fs/exfat/dir.c
-> +++ b/fs/exfat/dir.c
-> @@ -818,7 +818,7 @@ int exfat_get_dentry_set(struct exfat_entry_set_cache *es,
->  		unsigned int type)
->  {
->  	int ret, i, num_bh;
-> -	unsigned int off, byte_offset, clu = 0;
-> +	unsigned int off;
->  	sector_t sec;
->  	struct exfat_sb_info *sbi = EXFAT_SB(sb);
->  	struct exfat_dentry *ep;
-> @@ -831,27 +831,16 @@ int exfat_get_dentry_set(struct exfat_entry_set_cache *es,
->  		return -EIO;
->  	}
->  
-> -	byte_offset = EXFAT_DEN_TO_B(entry);
-> -	ret = exfat_walk_fat_chain(sb, p_dir, byte_offset, &clu);
-> +	ret = exfat_find_location(sb, p_dir, entry, &sec, &off);
->  	if (ret)
->  		return ret;
->  
->  	memset(es, 0, sizeof(*es));
->  	es->sb = sb;
->  	es->modified = false;
-> -
-> -	/* byte offset in cluster */
-> -	byte_offset = EXFAT_CLU_OFFSET(byte_offset, sbi);
-> -
-> -	/* byte offset in sector */
-> -	off = EXFAT_BLK_OFFSET(byte_offset, sb);
->  	es->start_off = off;
->  	es->bh = es->__bh;
->  
-> -	/* sector offset in cluster */
-> -	sec = EXFAT_B_TO_BLK(byte_offset, sb);
-> -	sec += exfat_cluster_to_sector(sbi, clu);
-> -
->  	bh = sb_bread(sb, sec);
->  	if (!bh)
->  		return -EIO;
-> @@ -878,6 +867,8 @@ int exfat_get_dentry_set(struct exfat_entry_set_cache *es,
->  	for (i = 1; i < num_bh; i++) {
->  		/* get the next sector */
->  		if (exfat_is_last_sector_in_cluster(sbi, sec)) {
-> +			int clu = exfat_sector_to_cluster(sbi, sec);
-> +
-'clu' should be defined as 'unsigned int'.
- However, as of now, exfat_sector_to_cluster() seems to be unused
-function and to return wrong type 'int'. So it should be fixed prior to
-this patch.
+drivers/dma/idxd/dma.c:66:20: warning: unused function 'set_completion_address'.
 
-Could you send  patchset again includes the fix?
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3416
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/dma/idxd/dma.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
->  			if (p_dir->flags == ALLOC_NO_FAT_CHAIN)
->  				clu++;
->  			else if (exfat_get_next_cluster(sb, &clu))
+diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
+index e0874cb4721c..eb35ca313684 100644
+--- a/drivers/dma/idxd/dma.c
++++ b/drivers/dma/idxd/dma.c
+@@ -63,12 +63,6 @@ static void op_flag_setup(unsigned long flags, u32 *desc_flags)
+ 		*desc_flags |= IDXD_OP_FLAG_RCI;
+ }
+ 
+-static inline void set_completion_address(struct idxd_desc *desc,
+-					  u64 *compl_addr)
+-{
+-		*compl_addr = desc->compl_dma;
+-}
+-
+ static inline void idxd_prep_desc_common(struct idxd_wq *wq,
+ 					 struct dsa_hw_desc *hw, char opcode,
+ 					 u64 addr_f1, u64 addr_f2, u64 len,
+-- 
+2.20.1.7.g153144c
+
