@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FB0649925
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3594C649927
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiLLHDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S231406AbiLLHDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbiLLHDE (ORCPT
+        with ESMTP id S230506AbiLLHDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:03:04 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C584920D
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:03 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id p3-20020a6bfa03000000b006df8582e11cso5798969ioh.22
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:03 -0800 (PST)
+        Mon, 12 Dec 2022 02:03:05 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156FF2BD
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id b24-20020a056602219800b006e2bf9902cbso5624608iob.4
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:03:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7pRxe8xcGVdH/WupVjdusylJxDyL2uy8nmSKsprdS8g=;
-        b=l0BsBiGRneNC99Jk0FYRNBMj4f9cdshmtRjzqhPAxzGDZQgo5xEALDnCz+rHJjEOsj
-         zTI57V20gjI6oTyKnNnj/yFaJ3TIXDOtqAjyMAShzPhWyHjEiot8sDqvfcbPiBrx3knd
-         vejVN9C8f+4TEu4C0IQOFo/roPhPGdmU5AavzkXUaUp5pCuB++7wl57JbC6INIXXuTp2
-         Iz//Fz9QYd5gbRbdDmeEVRN9mRwZRsdD0T84Fl+ac0uVPBEQKCw5wMIV1efSBlcRBIWE
-         nSfM5aQtGVv26/sHCvZ2T2XSzWXVYc/zrTsD7HL6Zq6yRNpVVVjpAb3sIKU/ArB1rDTU
-         Vhng==
-X-Gm-Message-State: ANoB5pkp3NQ/k8VMO0RH6rQSVjJA/fyQfTI2GDjbzhLTtF0PMmX6ER/R
-        KzU0lo3nTOeuALoZYB9QOPvnLOoBTqgg29Gr4rajjo8KRo+y
-X-Google-Smtp-Source: AA0mqf5ocQ6LCSq9AEL78yKX4L9ZLbLE2Nd320kFza0By6V8AFx8E6kWiL9tcUBasx22xuVfo3B9c2g3xGAn93bQvF+mHXI8T6oY
+        bh=UPQdXpVEAh8N9SIBSH1a9NivfmH8puJf79PnbNA5xFA=;
+        b=7FTxeXgppCbaYFf7HeWxXpp9kqedZdqQIvFFgj1NHiZvzUQXRhaLKR5UqCWAPazVHh
+         rrqJ3AZ3MimQG2udnMyp7f4283vF+39c7JKxJi1pRYnpCLoCa8dcAaaJQR82+dDmUDfT
+         kHvGvcVdUxhEegn6+D5CB//H5izX/0D3A+ktzLOU4gIHcMe/Ydi88osaeRNWG0M3JrqD
+         9pApsapvO/W2vT6Oo4wzQBEoRx4pygHtwGky+RNEvt68oX9jqRHri17wULKtXNzEfzLN
+         PeY/bYIG8OkG6NJ2Zps9WkKlRtApJfx6aVP0PUZXeNPvuSVdQ4iL+TZvxNb0Huk1loE/
+         fdrg==
+X-Gm-Message-State: ANoB5pnrU6x/N1B/EvxxviLUwtxYYO2kZQclUfGRm2ACLV/tcGOaIpvb
+        1xbrI1VzQm2vFUkXlUqzEv2kz5ZaSdtkrCmcXXjHOtajOQOL
+X-Google-Smtp-Source: AA0mqf6M4+hAsfwkGkeQy5bBbmjtlI0ER5S96MF/TVSIP/yqJ8dE086xsT30fb4XVoMffLacBrqqWNwwo9w3+yV02kxzQdgd2EgO
 MIME-Version: 1.0
-X-Received: by 2002:a02:5442:0:b0:389:d81a:1d80 with SMTP id
- t63-20020a025442000000b00389d81a1d80mr24546860jaa.80.1670828583189; Sun, 11
+X-Received: by 2002:a05:6638:3470:b0:389:c976:846e with SMTP id
+ q48-20020a056638347000b00389c976846emr27282866jav.246.1670828583441; Sun, 11
  Dec 2022 23:03:03 -0800 (PST)
 Date:   Sun, 11 Dec 2022 23:03:03 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002e833305ef9c18a3@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in xfs_buf_delwri_submit_buffers
-From:   syzbot <syzbot+11d99e499adff05631cc@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000032654605ef9c1846@google.com>
+Subject: [syzbot] possible deadlock in do_page_mkwrite
+From:   syzbot <syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -57,135 +57,156 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=126cf0cd880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=11d99e499adff05631cc
+HEAD commit:    296a7b7eb792 Merge tag 'for-linus' of git://git.armlinux.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a4643f880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff866d16791d4984b3c7
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11918e67880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116013db880000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/afae3f863cb9/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/e884bd14818f/disk-296a7b7e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9d1ad945db61/vmlinux-296a7b7e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1295336774a6/bzImage-296a7b7e.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+11d99e499adff05631cc@syzkaller.appspotmail.com
+Reported-by: syzbot+ff866d16791d4984b3c7@syzkaller.appspotmail.com
 
-XFS (loop1): Quotacheck: Done.
-syz-executor383 (9789): drop_caches: 2
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 1 PID: 9789 Comm: syz-executor383 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0 Not tainted
+------------------------------------------------------
+syz-executor.4/7705 is trying to acquire lock:
+ffff88807ba26090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+
+but task is already holding lock:
+ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sb_pagefaults#3){.+.+}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_pagefault include/linux/fs.h:1930 [inline]
+       filemap_page_mkwrite+0x15c/0x7a0 mm/filemap.c:3420
+       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+       do_shared_fault mm/memory.c:4618 [inline]
+       do_fault mm/memory.c:4686 [inline]
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x1c63/0x3630 mm/memory.c:5217
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+
+-> #1 (&mm->mmap_lock#2){++++}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __might_fault+0xb2/0x110 mm/memory.c:5645
+       reiserfs_ioctl+0x11c/0x340 fs/reiserfs/ioctl.c:96
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sbi->lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
+       __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
+       generic_update_time fs/inode.c:1859 [inline]
+       inode_update_time fs/inode.c:1872 [inline]
+       __file_update_time fs/inode.c:2088 [inline]
+       file_update_time+0x551/0x5d0 fs/inode.c:2119
+       filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
+       do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+       wp_page_shared+0x15e/0x380 mm/memory.c:3323
+       handle_pte_fault mm/memory.c:4972 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->lock --> &mm->mmap_lock#2 --> sb_pagefaults#3
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_pagefaults#3);
+                               lock(&mm->mmap_lock#2);
+                               lock(sb_pagefaults#3);
+  lock(&sbi->lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/7705:
+ #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_trylock include/linux/mmap_lock.h:136 [inline]
+ #0: ffff888017d7f558 (&mm->mmap_lock#2){++++}-{3:3}, at: do_user_addr_fault+0x2e2/0xcb0 arch/x86/mm/fault.c:1369
+ #1: ffff88807b57c558 (sb_pagefaults#3){.+.+}-{0:0}, at: do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+
+stack backtrace:
+CPU: 0 PID: 7705 Comm: syz-executor.4 Not tainted 6.1.0-rc8-syzkaller-00154-g296a7b7eb792 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:981
- register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1294
- __lock_acquire+0xa8/0x3084 kernel/locking/lockdep.c:4934
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
- down+0x2c/0x68 kernel/locking/semaphore.c:59
- xfs_buf_lock fs/xfs/xfs_buf.c:1120 [inline]
- xfs_buf_delwri_submit_buffers+0x15c/0x394 fs/xfs/xfs_buf.c:2164
- xfs_buf_delwri_submit+0x4c/0x160 fs/xfs/xfs_buf.c:2242
- xfs_qm_shrink_scan+0x94/0x174 fs/xfs/xfs_qm.c:514
- do_shrink_slab+0x240/0x55c mm/vmscan.c:842
- shrink_slab+0xe4/0x1b8 mm/vmscan.c:1002
- drop_slab_node mm/vmscan.c:1037 [inline]
- drop_slab+0xc8/0x19c mm/vmscan.c:1047
- drop_caches_sysctl_handler+0x130/0x22c fs/drop_caches.c:66
- proc_sys_call_handler+0x240/0x3d8 fs/proc/proc_sysctl.c:604
- proc_sys_write+0x2c/0x3c fs/proc/proc_sysctl.c:630
- do_iter_write+0x318/0x560 fs/read_write.c:861
- vfs_iter_write+0x4c/0x6c fs/read_write.c:902
- iter_file_splice_write+0x2a8/0x518 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0x4c/0xe0 fs/splice.c:931
- splice_direct_to_actor+0x1dc/0x3e4 fs/splice.c:886
- do_splice_direct+0xc4/0x14c fs/splice.c:974
- do_sendfile+0x298/0x68c fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1317 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __arm64_sys_sendfile64+0x14c/0x230 fs/read_write.c:1309
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-list_add corruption. prev is NULL.
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:24!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 9789 Comm: syz-executor383 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __list_add_valid+0x78/0xb8 lib/list_debug.c:23
-lr : __list_add_valid+0x78/0xb8 lib/list_debug.c:23
-sp : ffff80001795b5b0
-x29: ffff80001795b5b0 x28: ffff8000178c3aa8 x27: 0000000000000003
-x26: 0000000000000000 x25: ffff800008e51208 x24: ffff80001795b5c8
-x23: ffff8000178c39f0 x22: 0000000000000000 x21: 7fffffffffffffff
-x20: ffff8000178c39a8 x19: 0000000000000002 x18: 00000000000002d4
-x17: 6e69676e45206574 x16: 0000000000000002 x15: 0000000000000000
-x14: 0000000000000000 x13: 205d393837395420 x12: 5b5d353332323338
-x11: ff808000081c4d64 x10: 0000000000000000 x9 : 73a8e374c5aaba00
-x8 : 73a8e374c5aaba00 x7 : 205b5d3533323233 x6 : ffff80000c091ebc
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000022
-Call trace:
- __list_add_valid+0x78/0xb8 lib/list_debug.c:23
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- ___down_common+0x5c/0x17c kernel/locking/semaphore.c:214
- __down_common kernel/locking/semaphore.c:246 [inline]
- __down+0x28/0x44 kernel/locking/semaphore.c:254
- down+0x64/0x68 kernel/locking/semaphore.c:63
- xfs_buf_lock fs/xfs/xfs_buf.c:1120 [inline]
- xfs_buf_delwri_submit_buffers+0x15c/0x394 fs/xfs/xfs_buf.c:2164
- xfs_buf_delwri_submit+0x4c/0x160 fs/xfs/xfs_buf.c:2242
- xfs_qm_shrink_scan+0x94/0x174 fs/xfs/xfs_qm.c:514
- do_shrink_slab+0x240/0x55c mm/vmscan.c:842
- shrink_slab+0xe4/0x1b8 mm/vmscan.c:1002
- drop_slab_node mm/vmscan.c:1037 [inline]
- drop_slab+0xc8/0x19c mm/vmscan.c:1047
- drop_caches_sysctl_handler+0x130/0x22c fs/drop_caches.c:66
- proc_sys_call_handler+0x240/0x3d8 fs/proc/proc_sysctl.c:604
- proc_sys_write+0x2c/0x3c fs/proc/proc_sysctl.c:630
- do_iter_write+0x318/0x560 fs/read_write.c:861
- vfs_iter_write+0x4c/0x6c fs/read_write.c:902
- iter_file_splice_write+0x2a8/0x518 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0x4c/0xe0 fs/splice.c:931
- splice_direct_to_actor+0x1dc/0x3e4 fs/splice.c:886
- do_splice_direct+0xc4/0x14c fs/splice.c:974
- do_sendfile+0x298/0x68c fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1317 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __arm64_sys_sendfile64+0x14c/0x230 fs/read_write.c:1309
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: d4210000 9001b740 913c9c00 94aa8a26 (d4210000) 
----[ end trace 0000000000000000 ]---
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+ reiserfs_dirty_inode+0xdf/0x230 fs/reiserfs/super.c:704
+ __mark_inode_dirty+0x1e7/0x600 fs/fs-writeback.c:2408
+ generic_update_time fs/inode.c:1859 [inline]
+ inode_update_time fs/inode.c:1872 [inline]
+ __file_update_time fs/inode.c:2088 [inline]
+ file_update_time+0x551/0x5d0 fs/inode.c:2119
+ filemap_page_mkwrite+0x248/0x7a0 mm/filemap.c:3421
+ do_page_mkwrite+0x19e/0x5e0 mm/memory.c:2977
+ wp_page_shared+0x15e/0x380 mm/memory.c:3323
+ handle_pte_fault mm/memory.c:4972 [inline]
+ __handle_mm_fault mm/memory.c:5096 [inline]
+ handle_mm_fault+0x1e72/0x3630 mm/memory.c:5217
+ do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+ handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+ exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f2f83486b3f
+Code: d0 eb 0b 0f 1f 84 00 00 00 00 00 48 89 f8 48 83 fa 10 0f 82 da 00 00 00 48 83 fa 20 0f 87 1f 01 00 00 0f 10 06 0f 10 4c 16 f0 <0f> 11 07 0f 11 4c 17 f0 c3 0f 1f 84 00 00 00 00 00 48 39 d1 0f 82
+RSP: 002b:00007ffd6e289b38 EFLAGS: 00010287
+RAX: 0000000020000080 RBX: 0000000000000000 RCX: 00007f2f83000000
+RDX: 0000000000000013 RSI: 00007f2f83001548 RDI: 0000000020000080
+RBP: 00007ffd6e289bf8 R08: 00007f2f83400000 R09: 00007f2f83000000
+R10: 00007f2f83001530 R11: 0000000000000246 R12: 000000000004b63d
+R13: 00007ffd6e289c20 R14: 00007f2f835abf80 R15: 0000000000000032
+ </TASK>
 
 
 ---
@@ -195,5 +216,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
