@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06B664A7FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 20:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2165264A800
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 20:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiLLTQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 14:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S233046AbiLLTPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 14:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiLLTPw (ORCPT
+        with ESMTP id S232244AbiLLTP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 14:15:52 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0473714037
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 11:15:42 -0800 (PST)
+        Mon, 12 Dec 2022 14:15:27 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAADD2D9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 11:15:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670872543; x=1702408543;
+  t=1670872526; x=1702408526;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=yEHR0I6eITON7CTY8pY+SLLOzeWsZG+6wjqUP2S+NJQ=;
-  b=MqRc4a/zfj/I/XqlOm2cRYrgM5HMJMmvz+Rb/HDiwBQwafh4c9f43Xab
-   vcU3nRIPtVHqFlbBgjAzTklf4UEFlqJg/V1kFT2c+BeicmdkNJ6li0xYr
-   t6C9JXeYSbDzzsQcSCU/pIcLbO/iR/8mcVL+JxeMM7TxFy8nfrkfHNhMr
-   0Nr7gsURpTuvER3uRkdQb8CSr9jrX0i0pHoZXPVK23VblMJuYbph0/4Qa
-   qb0SjyeKZiT6+kG4ejsh+2bN5lIbgDcZnOLLx/tufdTl59o9LCT06IdcW
-   qYOP0lXmfk8HKuvBgcWWZfVa+GV5lPqPwe2z6vhQXnqxnL4+0PDGGX8OK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="317973436"
+  bh=9aV9k8Blcc29JT0AD+oLbtKXYEbR3OZEG5vAyX9UFfY=;
+  b=fz9DIAB+BJRG5+renoTYYi8sh5XtpV8Nptur8QkS/2vBlgwCGNE2PDFF
+   ebFYDzjjgY0MrorCmUAjo0Flt45CKc0uv2fldJpgbELTRq7qndXS/w61n
+   5AM7QsT3qtGhHgVIO05pzotGLZO8erlRLimZpQdgAI/YxQCZtbOrkGWZd
+   SoqF+kFvHtdHba4j3fA42LhsWZ48hfZHAo9bodAvrOThOLS7Z8ZUKs2tF
+   XN9CymT8Ty1uuKpmQqxitEY6n/9K04cJzcgs/2aMVMJkozbb4TYD/AnOG
+   IqzayRbzREsJsT0dEPCPkxAtroGoDt+blzjvrcl0IR6xwiKvya5hYr2Oh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319800688"
 X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="317973436"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 11:15:25 -0800
+   d="scan'208";a="319800688"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 11:15:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="716911546"
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="641842094"
 X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="716911546"
+   d="scan'208";a="641842094"
 Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Dec 2022 11:15:24 -0800
+  by orsmga007.jf.intel.com with ESMTP; 12 Dec 2022 11:15:25 -0800
 From:   Dave Hansen <dave.hansen@linux.intel.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT PULL] x86/fpu for 6.2
-Date:   Mon, 12 Dec 2022 11:15:24 -0800
-Message-Id: <20221212191524.553255-1-dave.hansen@linux.intel.com>
+Subject: [GIT PULL] x86/sgx for 6.2
+Date:   Mon, 12 Dec 2022 11:15:25 -0800
+Message-Id: <20221212191525.553277-1-dave.hansen@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,56 +59,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-Please pull some x86/fpu changes for v6.2.  There are two little fixes
-in here, one to give better XSAVE warnings and another to address
-some undefined behavior in offsetof().
+Please pull some x86/sgx changes for v6.2.
 
-There is also a collection of patches to fix some issues with ptrace
-and the protection keys register (PKRU).  PKRU is a real oddity because
-it is exposed in the XSAVE-related ABIs, but it is generally managed
-without using XSAVE in the kernel.  This fix thankfully came with a
-selftest to ward off future regressions.
+The biggest deal in this series is support for a new hardware feature
+that allows enclaves to detect and mitigate single-stepping attacks.
+
+There's also a minor performance tweak and a little piece of the
+kmap_atomic()=>kmap_local() transition.
 
 --
 
-The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_fpu_for_6.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sgx_for_6.2
 
-for you to fetch changes up to 55228db2697c09abddcb9487c3d9fa5854a932cd:
+for you to fetch changes up to 89e927bbcd45d507e5612ef72fda04182e544a38:
 
-  x86/fpu: Use _Alignof to avoid undefined behavior in TYPE_ALIGN (2022-11-22 17:13:03 +0100)
-
-----------------------------------------------------------------
- * Clarify XSAVE consistency warnings
- * Fix up ptrace interface to protection keys register (PKRU)
- * Avoid undefined compiler behavior with TYPE_ALIGN
+  x86/sgx: Replace kmap/kunmap_atomic() calls (2022-12-02 14:59:56 +0100)
 
 ----------------------------------------------------------------
-Andrew Cooper (1):
-      x86/fpu/xstate: Fix XSTATE_WARN_ON() to emit relevant diagnostics
+ * Introduce a new SGX feature (Asynchrounous Exit Notification)
+   for bare-metal enclaves and KVM guests to mitigate single-step
+   attacks
+ * Increase batching to speed up enclave release
+ * Replace kmap/kunmap_atomic() calls
 
-Kyle Huey (6):
-      x86/fpu: Take task_struct* in copy_sigframe_from_user_to_xstate()
-      x86/fpu: Add a pkru argument to copy_uabi_from_kernel_to_xstate().
-      x86/fpu: Add a pkru argument to copy_uabi_to_xstate()
-      x86/fpu: Allow PKRU to be (once again) written by ptrace.
-      x86/fpu: Emulate XRSTOR's behavior if the xfeatures PKRU bit is not set
-      selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
+----------------------------------------------------------------
+Dave Hansen (1):
+      x86/sgx: Allow enclaves to use Asynchrounous Exit Notification
 
-YingChi Long (1):
-      x86/fpu: Use _Alignof to avoid undefined behavior in TYPE_ALIGN
+Kai Huang (1):
+      KVM/VMX: Allow exposing EDECCSSA user leaf function to KVM guest
 
- arch/x86/kernel/fpu/core.c                   |  19 ++--
- arch/x86/kernel/fpu/init.c                   |   7 +-
- arch/x86/kernel/fpu/regset.c                 |   2 +-
- arch/x86/kernel/fpu/signal.c                 |   2 +-
- arch/x86/kernel/fpu/xstate.c                 |  64 ++++++++++---
- arch/x86/kernel/fpu/xstate.h                 |   4 +-
- tools/testing/selftests/vm/pkey-x86.h        |  12 +++
- tools/testing/selftests/vm/protection_keys.c | 131 ++++++++++++++++++++++++++-
- 8 files changed, 208 insertions(+), 33 deletions(-)
+Kristen Carlson Accardi (1):
+      x86/sgx: Replace kmap/kunmap_atomic() calls
+
+Reinette Chatre (1):
+      x86/sgx: Reduce delay and interference of enclave release
+
+ arch/x86/include/asm/cpufeatures.h |  1 +
+ arch/x86/include/asm/sgx.h         | 33 ++++++++++++++++++++++++++-------
+ arch/x86/kernel/cpu/cpuid-deps.c   |  1 +
+ arch/x86/kernel/cpu/scattered.c    |  1 +
+ arch/x86/kernel/cpu/sgx/encl.c     | 35 +++++++++++++++++++++++++----------
+ arch/x86/kernel/cpu/sgx/ioctl.c    |  6 +++---
+ arch/x86/kernel/cpu/sgx/main.c     |  8 ++++----
+ arch/x86/kvm/cpuid.c               |  6 ++----
+ arch/x86/kvm/reverse_cpuid.h       |  3 +++
+ 9 files changed, 66 insertions(+), 28 deletions(-)
