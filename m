@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82E66498ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B31966498EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiLLGWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 01:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S231310AbiLLGXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 01:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiLLGWS (ORCPT
+        with ESMTP id S229726AbiLLGXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 01:22:18 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99EBB1FC;
-        Sun, 11 Dec 2022 22:22:17 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so11085014pjm.2;
-        Sun, 11 Dec 2022 22:22:17 -0800 (PST)
+        Mon, 12 Dec 2022 01:23:52 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0A3B845
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:23:51 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id js9so9917245pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=HCii+srz2iaNbP8AXqiOvVaT1PGofZlpv2hPExSpMSA=;
-        b=ipIM1jnyyvBEgUwCO1zi9dfHJYO5Xbl/UnjywWopciH/0/URRDOxmphlBjQitN8NEI
-         qwFyxECCcFvdCQlK5fqS0+QLWYNBAQSdhCKK1H5CrmnhtYfVKcHvPE+D9xwrCrjnH59Z
-         iBTLNsQCz28I+w8Nz/MeNAj0PdP1FCPTbhqCLqYwXsaYo8q0BP6Z0PC8kIlcgz7GdzS4
-         4WbGZCJ/hZRSoE/RoovaSLkcSnPjXvLFJGrAAKkoZOCOhk/SzBysY/jRMPoLQLNpZX7Z
-         dNBfuT75CLsj8KbqudFcBfFZls8c+/5tiA55z0SCf/vhQVtlRbWt3Ch5zCYIV7vZONP9
-         eJyw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=16qjFjVCSByPSmaTuD6/Rn3kPnlB8HVnWQrOiENDUnQ=;
+        b=i9Z0r6NITq9TRj+RUGURJbxiHaklMCriP5vPoXMX1iq0ZiQUewgeuwqnS+moJb1Pxb
+         aKaM5fiqklCwGLtJoqWAlSKTPQML5vV18ez36qWb/FJQKXNlr3ooSmnYxRL3I7sQz2Q5
+         Mqa5Sy5ZB3x5aFnQBy2UL9Kwby2+bmzGxQpf6heIA3AizBdIwqNzh3aN6KQk4dtJthN7
+         0sxax/K5xH3wOkQ7b7o7pFlUCXBBgxiuBBY7bwgx6+fqHSnkoRZxiP+uuF2s1bFu0/9p
+         0FbW4W5JUODSa5Hz2fuorIC/M5sHPmcUHhIRaoc75q1SnTe6rAMeROBlUC6pYlujVNUI
+         ewyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HCii+srz2iaNbP8AXqiOvVaT1PGofZlpv2hPExSpMSA=;
-        b=qaNODE46lCeH6+QeaxdZ0kpxsbwCHhfCp0Kl4tlNvuoeCJovgfsqP97PF83XYCrpP3
-         /1cdMiDvSTZ0f8PISIPaXQW1Y8WJBQ1nem0VBKcpQzFezmh+GKhtSv+wv1qhvcYTZARf
-         l0RmYrnnDMtdW0ZzgYj6iO31ToRQHvS7GSFpqLGe8a+JnXSkqvGqAhI9CnfcAiJswC+9
-         3H+OF58R/PN0twWh/UjQlElRbLPwTkIS4lJOb5OvkHzrPT4i74yY8NnE9SnQXC16kWi8
-         m+Xy61vXF+0bUOsX+CtF/MTr8nmAMvon4vVSWHZcgDAJBzsLAmjSKa+cyd2TAhY1M8Ix
-         f9lQ==
-X-Gm-Message-State: ANoB5pmMWsircMOLOIj9TLShWtS2SbwuGELGl8sVDkPUxrh696XJ8zdj
-        Al/o1TvTjnRn+06s6AZamRAoOAirCEiE8Q==
-X-Google-Smtp-Source: AA0mqf6cGl0DnxKB15HGOwU+aV8FOE4WlWGsgHo/HLwrP7DbmRK0Cv57Fenhkvpu7h92T/3bp/aBzA==
-X-Received: by 2002:a05:6a20:d398:b0:9d:efbf:6621 with SMTP id iq24-20020a056a20d39800b0009defbf6621mr19837485pzb.47.1670826136973;
-        Sun, 11 Dec 2022 22:22:16 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=16qjFjVCSByPSmaTuD6/Rn3kPnlB8HVnWQrOiENDUnQ=;
+        b=iqvEtOPIjZCkML/3neujdi6+1kp7GWybjQnaF63fw4xmI+8CCvfpTudNr8Enr8r9Jb
+         M8/EvTAU1vdfMGnsHC4qkAv9CSLxUfqhfQ8jDcCB3Jw4NY6sB/+v54Kd5T+YCVxLKVE6
+         A87Gjmks++gPXAZl0fwg2mne0jCSAQWmakvus7Yv6dVC8e91vQQ+VSHlccdt8/eupzq4
+         8TTk1vWpHBko5x/QUPZnBd+EEu+m1kUP8mZx7e/f+deAWhR55zVdwM6kox9QwwByEYZv
+         R/Gk71OpdSrlMfy2iy4K0Muj+e6Nyb1V+jr3P/abA92Lty2W/J2Ipqs6UNd/zVpUR4V2
+         JaOA==
+X-Gm-Message-State: ANoB5plJZeMpyPLRALp/h5c0rxirA2QXnXeU9WQNUX7+qktQtduVPsET
+        WgxB1wYg51Ua8xgCKH7cSVV++VzqzxMizQ==
+X-Google-Smtp-Source: AA0mqf7BcvB/V0ijOniyMqhsVQqV3Fi4laAk2txZkZMuFZcjghgl6Ff663EKYGi92pEfcajCcOwbwA==
+X-Received: by 2002:a17:902:930a:b0:188:da5c:152b with SMTP id bc10-20020a170902930a00b00188da5c152bmr14515056plb.9.1670826231221;
+        Sun, 11 Dec 2022 22:23:51 -0800 (PST)
 Received: from localhost ([2620:10d:c090:400::5:9159])
-        by smtp.gmail.com with ESMTPSA id u82-20020a627955000000b00571cdbd0771sm4946021pfc.102.2022.12.11.22.22.15
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b00189c26719cdsm5375734plg.272.2022.12.11.22.23.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Dec 2022 22:22:15 -0800 (PST)
+        Sun, 11 Dec 2022 22:23:50 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 11 Dec 2022 20:22:14 -1000
+Date:   Sun, 11 Dec 2022 20:23:49 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup changes for v6.2-rc1
-Message-ID: <Y5bIlstHSdB7FOID@slm.duckdns.org>
+To:     Richard Clark <richard.xnu.clark@gmail.com>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] workqueue: Prevent a new work item from queueing into a
+ destruction wq
+Message-ID: <Y5bI9ZbjpzNFpk/8@slm.duckdns.org>
+References: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20221212061836.3620-1-richard.xnu.clark@gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -69,56 +73,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 79a818b5087393d5a4cb356d4545d02f55bf1a2f:
+On Mon, Dec 12, 2022 at 02:18:36PM +0800, Richard Clark wrote:
+> Currently the __WQ_DRAINING is used to prevent a new work item from queueing
+> to a draining workqueue, but this flag will be cleared before the end of a
+> RCU grace period. Because the workqueue instance is actually freed after
+> the RCU grace period, this fact results in an opening window in which a new
+> work item can be queued into a destorying workqueue and be scheduled
+> consequently, for instance, the below code snippet demos this accident:
 
-  blkcg: Update MAINTAINERS entry (2022-10-17 09:27:18 -1000)
+I mean, this is just use-after-free. The same scenario can happen with
+non-RCU frees or if there happens to be an RCU grace period inbetween. I'm
+not sure what's being protected here.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.2
-
-for you to fetch changes up to 674b745e22b3caae48ad20422795eefd3f832a7b:
-
-  cgroup: remove rcu_read_lock()/rcu_read_unlock() in critical section of spin_lock_irq() (2022-11-23 07:16:38 -1000)
-
-----------------------------------------------------------------
-cgroup changes for v6.2-rc1
-
-Nothing too interesting.
-
-* Add CONFIG_DEBUG_GROUP_REF which makes cgroup refcnt operations kprobable.
-
-* A couple cpuset optimizations.
-
-* Other misc changes including doc and test updates.
-
-----------------------------------------------------------------
-Breno Leitao (1):
-      kselftest/cgroup: Fix gathering number of CPUs
-
-Kamalesh Babulal (2):
-      kselftest/cgroup: Add cleanup() to test_cpuset_prs.sh
-      cgroup/cpuset: Improve cpuset_css_alloc() description
-
-Ran Tian (1):
-      cgroup: remove rcu_read_lock()/rcu_read_unlock() in critical section of spin_lock_irq()
-
-Tejun Heo (2):
-      cgroup: Implement DEBUG_CGROUP_REF
-      cgroup: cgroup refcnt functions should be exported when CONFIG_DEBUG_CGROUP_REF
-
-Waiman Long (2):
-      cgroup/cpuset: Skip spread flags update on v2
-      cgroup/cpuset: Optimize cpuset_attach() on v2
-
- include/linux/cgroup.h                            | 98 +++--------------------
- include/linux/cgroup_refcnt.h                     | 96 ++++++++++++++++++++++
- kernel/cgroup/cgroup.c                            |  8 +-
- kernel/cgroup/cpuset.c                            | 48 ++++++++---
- lib/Kconfig.debug                                 | 10 +++
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 19 ++++-
- 6 files changed, 181 insertions(+), 98 deletions(-)
- create mode 100644 include/linux/cgroup_refcnt.h
+Thanks.
 
 -- 
 tejun
