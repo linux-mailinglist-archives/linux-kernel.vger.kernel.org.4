@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB70649D49
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FF8649D68
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbiLLLQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+        id S232012AbiLLLSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbiLLLQR (ORCPT
+        with ESMTP id S232345AbiLLLRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:16:17 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947D8BC82
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:47 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id d14so12285943edj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HbiaofHLZH1+eQ/j4x6PD7S/EmzHQlSBaHqxNP+0CDo=;
-        b=l/e3VS2HZH8V2QZz1gkSxfenk5xukl2LbbBznedchdh+vHPVoKS7g4MWV1tlUo5T/z
-         bvhVfU+h3dOe72zuMllXhSe2rqus76AmKwj7r1D41ek87ETd6x23AS5op1vCHYhK5Vkh
-         7r4uXHx2GaBXJQISaTODPnP/D0TOaTDaDkA+g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HbiaofHLZH1+eQ/j4x6PD7S/EmzHQlSBaHqxNP+0CDo=;
-        b=iSGr+eOWrTOivT7wI6Y6JTZJCrabfJM3TEuWfmyCqHVzpaDQn/h/q82HlUPKBhi0c0
-         yJqSOKdPZAWVAdJ+ZwSMa7+VWRsX79syvr7vdTWYUOomzlfNg3wGnFjrYasQohsSWRbm
-         nGtgrbyp+ra/3drA8D5wIKTZkHIpDsnMB7is5yJgnzg1BQ5lUfwD4eSGBmmftH/gWNeZ
-         n0Q33YY+u6BcObyoDZTmcQiAF+c4rW0ipQSn5/FwFLcPRpzZuhM1AxlSGrKpARLQBOBJ
-         KRcpq69C+UT9djJPDFgL/HiZaCuzqW2HEybp/Qf56IGmxotURLdobwVx6tSkVA6eWvJP
-         NMBw==
-X-Gm-Message-State: ANoB5pk8PyE1FzkGEf/yrIaNJKFiacayNDdfWX6mePDCinMy8fsoypMp
-        KAooM+CjhbXpJ6g90SXsl5tlcg==
-X-Google-Smtp-Source: AA0mqf5aAYhJ+ruuk796oKOJn5zMAafDXY9TP7vhsuckREguq08mio1/nxtl1oFRTDrd2O5LXHAACQ==
-X-Received: by 2002:a05:6402:380a:b0:467:7b2e:88a2 with SMTP id es10-20020a056402380a00b004677b2e88a2mr13010236edb.19.1670843446183;
-        Mon, 12 Dec 2022 03:10:46 -0800 (PST)
-Received: from miu.piliscsaba.redhat.com (193-226-215-206.pool.digikabel.hu. [193.226.215.206])
-        by smtp.gmail.com with ESMTPSA id d9-20020aa7d5c9000000b004611c230bd0sm3683035eds.37.2022.12.12.03.10.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 03:10:45 -0800 (PST)
-Date:   Mon, 12 Dec 2022 12:10:44 +0100
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [GIT PULL] fuse update for 6.2
-Message-ID: <Y5cMNDpL5digt1rJ@miu.piliscsaba.redhat.com>
+        Mon, 12 Dec 2022 06:17:06 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964DF65CB;
+        Mon, 12 Dec 2022 03:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0x/J6MjwpVWZFw3GS/riOJMOsvUk2gQMR6aRy5Y8xT4=; b=ostUdyHkSJwpf2go2dxt0W+KN0
+        ZXXmVQIzBIttv8RI0L/gTnlOR1klqUa+HTTy34Vt12BmEoEzCiqf4z0WSSMzpXn0N5N/HI70shtV8
+        ug6KD8/0vdZWxyyOr92tML/EY0OiNcpb5g1HudUmO1Aj4kvqtiZmvWElEsnK1WECVJJT9SwqM076n
+        OdXIKF4E6YwmOHNTQ/8mHte1INv+eIFFY6GrNidps/yXmtzK0HHRhpBNeKEKwjmop1YI2LoVRpdJZ
+        UwSso2G/qCnHm3g1SqUmR8edbdTFpd8wiSbDN65+mNarL9+dsgy2DjjSBVyGATm8nUuCgguNvWe51
+        Q11rvR4w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4gkg-00AyD7-5d; Mon, 12 Dec 2022 11:13:42 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ACE81300137;
+        Mon, 12 Dec 2022 12:13:31 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 95B8C209FB782; Mon, 12 Dec 2022 12:13:31 +0100 (CET)
+Date:   Mon, 12 Dec 2022 12:13:31 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 04/31] sched: Allow sched_cgroup_fork() to fail and
+ introduce sched_cancel_fork()
+Message-ID: <Y5cM24M4007WcPod@hirez.programming.kicks-ass.net>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-5-tj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221130082313.3241517-5-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Nov 29, 2022 at 10:22:46PM -1000, Tejun Heo wrote:
+> A new sched_clas needs a bit more control over forking. This patch makes the
+                 ^
+                 (insufficient s's)
 
-Please pull from:
+> following changes:
+> 
+> * Add sched_cancel_fork() which is called if fork fails after sched_fork()
+>   succeeds so that the preparation can be undone.
+> 
+> * Allow sched_cgroup_fork() to fail.
+> 
+> Neither is used yet and this patch shouldn't cause any behavior changes.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git tags/fuse-update-6.2
-
- - Allow some write requests to proceed in parallel
-
- - Fix a performance problem with allow_sys_admin_access
-
- - Add a special kind of invalidation that doesn't immediately purge
-   submounts
-
- - On revalidation treat the target of rename(RENAME_NOREPLACE) the same as
-   open(O_EXCL)
-
- - Use type safe helpers for some mnt_userns transformations
-
- - Misc cleanups
-
-
-Thanks,
-Miklos
-
----
-Christian Brauner (1):
-      fuse: port to vfs{g,u}id_t and associated helpers
-
-Dave Marchevsky (1):
-      fuse: Rearrange fuse_allow_current_process checks
-
-Dharmendra Singh (1):
-      fuse: allow non-extending parallel direct writes on the same file
-
-Fabio M. De Francesco (1):
-      fs/fuse: Replace kmap() with kmap_local_page()
-
-Jann Horn (1):
-      fuse: Remove user_ns check for FUSE_DEV_IOC_CLONE
-
-Jiachen Zhang (1):
-      fuse: always revalidate rename target dentry
-
-Miklos Szeredi (1):
-      fuse: add "expire only" mode to FUSE_NOTIFY_INVAL_ENTRY
-
-ye xingchen (1):
-      fuse: remove the unneeded result variable
-
----
- fs/fuse/acl.c             |  2 +-
- fs/fuse/cuse.c            |  5 +----
- fs/fuse/dev.c             |  7 +++----
- fs/fuse/dir.c             | 43 +++++++++++++++++++++++++------------------
- fs/fuse/file.c            | 43 ++++++++++++++++++++++++++++++++++++++++---
- fs/fuse/fuse_i.h          |  4 ++--
- fs/fuse/readdir.c         |  4 ++--
- include/uapi/linux/fuse.h | 16 ++++++++++++++--
- 8 files changed, 88 insertions(+), 36 deletions(-)
+Fails to explain why this would be needed and why that would be a good
+thing. IOW, total lack of justification.
