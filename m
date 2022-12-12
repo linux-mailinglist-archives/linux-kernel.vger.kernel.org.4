@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4559664A2C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A4964A2C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 15:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiLLOBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 09:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S232295AbiLLOEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 09:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiLLOBP (ORCPT
+        with ESMTP id S231779AbiLLOD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 09:01:15 -0500
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C8AFD7;
-        Mon, 12 Dec 2022 06:01:13 -0800 (PST)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        Mon, 12 Dec 2022 09:03:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D963210A5;
+        Mon, 12 Dec 2022 06:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zo/qFnAsqAdA6EwHKj640zNf/rPC7C+O0LLjxizZbPo=; b=DShHQBeT/EtTb+uCAKmtYRUIZb
+        zisvhtLlckkieQb8GDwzzSOEo0a1WLzx32KL7N2wVM/qhdpWOG9BU2Sqlaixg77WO+E9jaDJ9+sbj
+        mBFzoxtXlpO2mFyZSDyjzIEjNM3rOfg7rgTP5pmkWa62F6MYlktm96GeKtADv/loadzHsRnjOwNdV
+        5uu5nqQxJ52LatHiXUKqIzTTOprO4sx327wlZ+gCzsEtr2K3MVUK4g5rHmglXn0ajdDklUDR5fsTC
+        gZgl2VDa0v+pBAvOuxEb5JDt45LwENVOtU7JdGTYtFuQ/cDCv+K3yBdwioDb3yP7G9El7WO/Y0EPB
+        7eMifSgw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4jOv-009n2o-7X; Mon, 12 Dec 2022 14:03:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id DF92F200E6;
-        Mon, 12 Dec 2022 15:01:10 +0100 (CET)
-Date:   Mon, 12 Dec 2022 15:01:09 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Emma Anholt <emma@anholt.net>,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iommu/arm-smmu-qcom: Add SM8150 DPU compatible
-Message-ID: <20221212140109.vlc6daw4rfgodnks@SoMainline.org>
-References: <20221212121054.193059-1-konrad.dybcio@linaro.org>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDBAA300299;
+        Mon, 12 Dec 2022 15:03:20 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D4C2C2024870B; Mon, 12 Dec 2022 15:03:20 +0100 (CET)
+Date:   Mon, 12 Dec 2022 15:03:20 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example
+ scheduler
+Message-ID: <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-32-tj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212121054.193059-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130082313.3241517-32-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-12 13:10:53, Konrad Dybcio wrote:
-> From: Marijn Suijten <marijn.suijten@somainline.org>
+On Tue, Nov 29, 2022 at 10:23:13PM -1000, Tejun Heo wrote:
+> From: Dan Schatzberg <dschatzberg@meta.com>
 > 
-> Add the SM8150 DPU compatible to clients compatible list, as it also
-> needs the workarounds.
+> Atropos is a multi-domain BPF / userspace hybrid scheduler where the BPF
+> part does simple round robin in each domain and the userspace part
+> calculates the load factor of each domain and tells the BPF part how to load
+> balance the domains.
 > 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Changes since v1:
-> - rebase on clean -next
-> 
->  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> index 91d404deb115..ed884c85e262 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> @@ -250,6 +250,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
->  	{ .compatible = "qcom,sc7280-mdss" },
->  	{ .compatible = "qcom,sc7280-mss-pil" },
->  	{ .compatible = "qcom,sc8180x-mdss" },
-> +	{ .compatible = "qcom,sm8150-mdss" },
->  	{ .compatible = "qcom,sm8250-mdss" },
->  	{ .compatible = "qcom,sdm845-mdss" },
->  	{ .compatible = "qcom,sdm845-mss-pil" },
+> This scheduler demonstrates dividing scheduling logic between BPF and
+> userspace and using rust to build the userspace part.
 
-Yikes, this is neither chronological /nor/ alphabetical; that's on the
-one adding sm8250 though.  Perhaps because of where sc8180x and friends
-are?
+And here I am, speaking neither Rust nor BPF.
 
-> -- 
-> 2.38.1
-> 
+But really, having seen some of this I long for the UMCG patches -- that
+at least was somewhat sane and trivially composes, unlike all this
+madness.
+
