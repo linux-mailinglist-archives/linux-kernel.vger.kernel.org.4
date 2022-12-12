@@ -2,100 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CD664AA52
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF664AA5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 23:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiLLWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 17:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S233796AbiLLWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 17:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbiLLWcy (ORCPT
+        with ESMTP id S233787AbiLLWf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 17:32:54 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190D3CE2A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:32:52 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m19so15211060edj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:32:52 -0800 (PST)
+        Mon, 12 Dec 2022 17:35:27 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C465113F5E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:35:26 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id f139so15278114yba.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 14:35:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Pjg7gEEIEiqG8qk2Ag4JmG2Wml3Gf+/D4oy6vrZzZk=;
-        b=xag3aT0psNGFTj6HoRP4mFN+Tv5GrB35lv/JUZKmQhtLPegCrvZwdDUSxVPaFKqFjX
-         jfxG7SrIBf3aEEfd1m8fT66MnkCbuaZaWRDbvFxAxtX2CsLOnRFN2uMTh+cKrftASE6K
-         nJ9u8XyOfoV4IDC8AqdJkUp9mz+OUNsGslBhJDTLNx+V7d+5LsZjZZz+AHD7q2QWRwJR
-         keEvy2cYu0H9a+jJlpX+2oDA6HJNi5Nq2if1Qu4L4gxi/nnhwBoH1Jbs5CfeEDWAFasa
-         ASctHEKRJFsKHmd6BVJiEYtT25v/8RODzt7/eNCOZb6fJ3puDG/7gs7xFWC7y2DfRSJV
-         +vMg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IpAeK55ZtLsOItOVOsZUW0VX0dmUGZuhAd/spodi2Go=;
+        b=t14B1twGGRg6SASEJ+ZLGhHuryfaHLhvHJZJifSYAGZy7SktUGgGzYTV4SMEtrr2F+
+         NtAzSMIt9OgezFwIGrt5tvSLxJ664bJKgh7QHEpd9DSKH+TibYunqdwkeoNB70HdtaC+
+         u3wF5OQ3i1B71t8u/ghJ1uxJc4G7oo6GVUpDcKo2KBURmuyEDvvMkQgZyhzxbVvXxlX0
+         r1n0D258M0NkEx9Si+rocmFToLwfkEAIVegzKll09XNS7xODgko0a+pvEqvWtJf0CYYM
+         y2LR/qumoXQUQ4BY9gQ1KC1OlXq5qTTWEufUmBCTjL+Ijj8z3uWKmDPLG14ABDPisIxZ
+         rCvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Pjg7gEEIEiqG8qk2Ag4JmG2Wml3Gf+/D4oy6vrZzZk=;
-        b=Ps15GTdLUBePb6tJ6pDLjJm64qTZlerYtBb36Aw1z0zI6nCHgKnPXBpYdP/0+942GX
-         oQpifQHRxlS3D1JWkgRgs3u1QOL9BBMvUh72uY+Nx+D2easZMDQVksk11N0CwHsw+wnH
-         RkNirYGW+Xq9HnmOkZAGpFAT+I2BlPkpB5m5heCRyluJzBPOTkoRu6tvWhiz7YiRQLn0
-         qP7k5ZHeJZRcRcp0FX/zFD58HIzaysDAmW6hfOIgQCfXd2f6HR6yTOopAOBpgBkEJJJ4
-         QTsO3+el87ccq5iM7r4+998iQtJCgz4U8DzpImPLnmu0D+8o8pEiMiQyL2w977FOR5rz
-         CVsw==
-X-Gm-Message-State: ANoB5pkYRccbUgY3p2zwjQRXbi1lU5xAe+AhE1p5CEzlw2+kBJwxVuRM
-        d8bFRJFo45gKzEeGh6/dxa2KFQ==
-X-Google-Smtp-Source: AA0mqf4dgq6Z+VUlK2J2S80+mq9mLtLqx77Gpw8++bCFzvwCrmOS21zVC/w8NXL3b0+mwn2Zu0jkNg==
-X-Received: by 2002:aa7:db91:0:b0:461:9075:4161 with SMTP id u17-20020aa7db91000000b0046190754161mr14410616edt.15.1670884370561;
-        Mon, 12 Dec 2022 14:32:50 -0800 (PST)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id m15-20020a50930f000000b00463597d2c25sm4368051eda.74.2022.12.12.14.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 14:32:50 -0800 (PST)
-Message-ID: <6509898d-a16a-7202-f650-0426936ecc34@linaro.org>
-Date:   Mon, 12 Dec 2022 23:32:48 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IpAeK55ZtLsOItOVOsZUW0VX0dmUGZuhAd/spodi2Go=;
+        b=znplgTqsKpfBOYhh7d+c2f+yt5qEQtkyzO8F6Hd8O19GtwhknosI/7/JXu4J+0wPnM
+         7EA4NARjEBGdhbkVqHgM7Vicaf86Ar1H2EYT43NhH20BJjn350ZPENGvbODdJtmjJI1H
+         lD1URJrjrtQqvyR7xgSnip2s1JwT2bVo6ZyEQPGoRBtJEdH/7pK8ITh5yQuJqwht+JpO
+         YfKPxRX5VTM/v1lrcpF8wF+VvPODMWQI2lbYkfO4fMWajkoP2PvZ7NGa9s5NQBm8cFtd
+         b+tDZkaDPMTB5+KWP46pq5MjrGMLitmT2n1BorNojW0WILcJsMldRWZ+plMCvvwlfWUt
+         UecQ==
+X-Gm-Message-State: ANoB5pkjv+1c2yf3MHx9BeX/iFvlSpr2LiFKUBp33Xrjqp0E8RzHqwnW
+        tJBlV5/TPsX1+ZoBDyPkGzPhWZ5fg9Gypp/LFrGknQ==
+X-Google-Smtp-Source: AA0mqf6vQuxCOzGUSvZb2kDX2AlckUYquLDzfG7G1uiKoRmVPaZPcfA52u7eXv04oPAKviSZIokhuxUkroshPyUJ3hc=
+X-Received: by 2002:a25:384a:0:b0:710:a8a6:d45 with SMTP id
+ f71-20020a25384a000000b00710a8a60d45mr3558285yba.152.1670884525944; Mon, 12
+ Dec 2022 14:35:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH v3 10/19] irqdomain: Clean up irq_domain_push/pop_irq()
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+ <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org> <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
+ <be1411e8-1d07-7643-977c-a306016fd660@linaro.org> <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+ <e53844b7-601b-f355-302b-cc871962a446@linaro.org> <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
+In-Reply-To: <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 13 Dec 2022 00:35:14 +0200
+Message-ID: <CAA8EJpr5RYyQa7xu1_xJ0F-dn-H9aOf0KE-CDgDCwnZu3HPgXg@mail.gmail.com>
+Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, airlied@gmail.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221209140150.1453-1-johan+linaro@kernel.org>
- <20221209140150.1453-11-johan+linaro@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221209140150.1453-11-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/12/22 15:01, Johan Hovold wrote:
-> The irq_domain_push_irq() interface is used to add a new (outmost) level
-> to a hierarchical domain after IRQs have been allocated.
-> 
-> Possibly due to differing mental images of hierarchical domains, the
-> names used for the irq_data variables make these functions much harder
-> to understand than what they need to be.
-> 
-> Rename the struct irq_data pointer to the data embedded in the
-> descriptor as simply 'irq_data' and refer to the data allocated by this
-> interface as 'parent_irq_data' so that the names reflect how
-> hierarchical domains are implemented.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   kernel/irq/irqdomain.c | 65 +++++++++++++++++++++---------------------
->   1 file changed, 32 insertions(+), 33 deletions(-)
+On Mon, 12 Dec 2022 at 19:51, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+> On 12/8/2022 4:35 PM, Dmitry Baryshkov wrote:
+> > On 09/12/2022 02:22, Kuogee Hsieh wrote:
+> >>
+> >> On 12/8/2022 4:11 PM, Dmitry Baryshkov wrote:
+> >>> On 09/12/2022 01:38, Kuogee Hsieh wrote:
+> >>>>
+> >>>> On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
+> >>>>> On 09/12/2022 00:36, Kuogee Hsieh wrote:
+> >>>>>> Add both data-lanes and link-frequencies property into endpoint
+> >>>>>>
+> >>>>>> Changes in v7:
+> >>>>>> -- split yaml out of dtsi patch
+> >>>>>> -- link-frequencies from link rate to symbol rate
+> >>>>>> -- deprecation of old data-lanes property
+> >>>>>>
+> >>>>>> Changes in v8:
+> >>>>>> -- correct Bjorn mail address to kernel.org
+> >>>>>>
+> >>>>>> Changes in v10:
+> >>>>>> -- add menu item to data-lanes and link-frequecnis
+> >>>>>>
+> >>>>>> Changes in v11:
+> >>>>>> -- add endpoint property at port@1
+> >>>>>>
+> >>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+> >>>>>
+> >>>>> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencies
+> >>>>> property
+> >>>>> .git/rebase-apply/patch:47: trailing whitespace.
+> >>>>>
+> >>>>> .git/rebase-apply/patch:51: trailing whitespace.
+> >>>>>
+> >>>>>
+> >>>>> Also the dt_binding_check fails with an error for this schema. And
+> >>>>> after fixing the error in the schema I faced an example validation
+> >>>>> error. Did you check that the schema is correct and that the
+> >>>>> example validates against the schema?
+> >>>>
+> >>>> yes, but i run "make dt_binding_check
+> >>>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml"
+> >>>> at mu v5.15 branch since
+> >>>
+> >>> I wouldn't ask you to post the log here. But I don't think that
+> >>> either of the errors that I see here is related to 5.15 vs 6.1-rc.
+> >>>
+> >>> In fact after applying this patch against 5.15 I saw the expected
+> >>> failure:
+> >>>
+> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
+> >>> properties:required: ['port@0', 'port@1'] is not of type 'object',
+> >>> 'boolean'
+> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
+> >>> properties: 'required' should not be valid under {'$ref':
+> >>> '#/definitions/json-schema-prop-names'}
+> >>> Documentation/devicetree/bindings/display/msm/dp-controller.yaml:
+> >>> ignoring, error in schema: properties: required
+> >>>
+> >>>>
+> >>>> "make dt_binding_check" does not work at msm-next branch.
+> >>>
+> >>> I went ahead and just checked.
+> >>>
+> >>> `make dt_binding_check DT_SCHEMA_FILES=display/msm`  works cleanly
+> >>> in msm-next and reports a single example-related warning in
+> >>> msm-next-lumag. I pushed a patch to fix that warning (wich can
+> >>> hopefully be picked up by Abhinav into msm-fixes). So you can assume
+> >>> that both these branches have consistent error-free display/msm
+> >>> schemas.
+> >>>
+> >> I have clean msm-next branch (without my data-lines yaml patch
+> >> applied) and run "make dt_binding_check
+> >> DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml",
+> >> then I saw below error messages.
+> >>
+> >> Have you run into this problem?
+> >
+> > No.
+>
+> Did you do anything to fix "older dtschema instance"?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+I did not since I hadn't had such a problem. I can refer again to the
+steps I provided you beforehand. The email was sent 6 days ago. No
+answer from your side since that time.
 
+> I had run  "pip3 install dtschema --upgrade" and still not work.
+
+Can you please post a full log of this command?
+
+>
+> D you know how to fix this problem?
+>
+> Thanks,
+>
+> kuogee
+>
+> sort: -:2: disorder: 2022.1
+> ERROR: dtschema minimum version is v2022.3
+> make[2]: *** [check_dtschema_version] Error 1
+> make[1]: *** [dt_binding_check] Error 2
+> make: *** [__sub-make] Error 2
+
+Please add the output of:
+
+which dt-validate
+dt-validate -V
+
+And also a full log of your failing kernel build.
+
+
+
+> I had run "pip3 install dtschema --upgrade" according Rob Herring response.
+> but it still shows same problem.
+> Please let know how can I fix this problem.
+>
+> >
+> >>
+> >>    HOSTCC  scripts/basic/fixdep
+> >>    HOSTCC  scripts/dtc/dtc.o
+> >>    HOSTCC  scripts/dtc/flattree.o
+> >>    HOSTCC  scripts/dtc/fstree.o
+> >>    HOSTCC  scripts/dtc/data.o
+> >>    HOSTCC  scripts/dtc/livetree.o
+> >>    HOSTCC  scripts/dtc/treesource.o
+> >>    HOSTCC  scripts/dtc/srcpos.o
+> >>    HOSTCC  scripts/dtc/checks.o
+> >>    HOSTCC  scripts/dtc/util.o
+> >>    LEX     scripts/dtc/dtc-lexer.lex.c
+> >>    HOSTCC  scripts/dtc/dtc-lexer.lex.o
+> >>    HOSTCC  scripts/dtc/dtc-parser.tab.o
+> >>    HOSTLD  scripts/dtc/dtc
+> >> sort: -:2: disorder: 2022.1
+> >> ERROR: dtschema minimum version is v2022.3
+> >> make[2]: *** [check_dtschema_version] Error 1
+> >> make[1]: *** [dt_binding_check] Error 2
+> >> make: *** [__sub-make] Error 2
+> >
+> > This means that somewhere in your path you have an older dtschema
+> > instance.
+> >
+> > When you sent me a question regarding this error, I asked for the
+> > additional info. You provided none. Instead you went on sending the
+> > untested patch that doesn't work.
+>
+> since i can not test it on msm-next so that I did test it at my v5-15
+> branch.
+
+Wrong.
+
+>
+> besides, i think i have to sent the whole series patches include this
+> one to address your new comments on other patch.
+>
+> is this correct?
+
+No. Please fix your system first, validate your patches and send them
+afterwards. You can not expect others to do your job.
+
+--
+With best wishes
+Dmitry
