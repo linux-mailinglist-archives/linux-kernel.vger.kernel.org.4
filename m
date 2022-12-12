@@ -2,146 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C4B6499FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F5C649A04
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 09:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiLLI3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 03:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S231165AbiLLIbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 03:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiLLI3s (ORCPT
+        with ESMTP id S231293AbiLLIbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:29:48 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F86B7F7;
-        Mon, 12 Dec 2022 00:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670833787; x=1702369787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4dNviz02Ym3Lpa3zAdpmD6jepk2MvQbhR+/jMPnbllo=;
-  b=Tz0y/stPdnSF+Akm1EwlILgFctqr6A+/vCDT5rb1y9PggMhFyoUdBMD1
-   iDFo3aqy/MuzIkPq8i7mJEohR5aBaCC7EmUUI/k+W5oJ6pwIZLpL36tsM
-   y9MfafckmnbESh1oL0NdJDfoVnFA5kGgNWsv1hRSCuMdnWioyG6ikAMUY
-   yZU/JiPxEHSLBHepzi4DBnqMuux1olpBaU00g+LCYUr6x8ns40v39ap63
-   7TDomwqgKFrxONjVIIPTDABGEv2DbLqJEe7gx1aKQBVTERjz/4jRvemAR
-   tEmqBkP+qgmmKBg4abbqukWGKtWHeFyK1boa4LtEr0pNUHQ9MD2Ovx6Ww
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="317827675"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="317827675"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 00:29:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="625815522"
-X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="625815522"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 12 Dec 2022 00:29:35 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p4eBo-008NYI-12;
-        Mon, 12 Dec 2022 10:29:32 +0200
-Date:   Mon, 12 Dec 2022 10:29:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        macro@orcam.me.uk, cang1@live.co.uk, colin.i.king@gmail.com,
-        phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com,
-        geert+renesas@glider.be, lukas@wunner.de,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v8 tty-next 2/4] serial: 8250_pci1xxxx: Add driver for
- quad-uart support
-Message-ID: <Y5bma3Gp7pr+Ta7U@smile.fi.intel.com>
-References: <20221211014730.1233272-1-kumaravel.thiagarajan@microchip.com>
- <20221211014730.1233272-3-kumaravel.thiagarajan@microchip.com>
- <Y5T2ymgsCQhggtvz@smile.fi.intel.com>
- <PH7PR11MB5958DC96634CFF28AFA8695D9BE29@PH7PR11MB5958.namprd11.prod.outlook.com>
+        Mon, 12 Dec 2022 03:31:14 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3299CE2A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 00:31:12 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so14909059pjp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 00:31:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iWyqcbEobVY6MJH71CuFBWxe9XmeeKvZO6SIVIyqpig=;
+        b=nKIeqNHGRJB6T98ir5rkARvWH/vB1natI0w21/uQ2CUCTH6Pzva6OJJLipesiEydXl
+         HeOuvTrNeIom3knzVR6TjSh/GF2fpvtx14dySdlJA+WibjR0RKeYC/U4ODnpCUMhlAaP
+         JqQ/1Cb5ksE2rE88wMdvWzupLHegqBZm/DObm2dljRg5RD9se8FRyOgX1HyQj9ROhoRP
+         9WAnToJ/oXGZ4M7And9YvRufqqICUyB0CeOPOSHN7E2301aa3PLKTCppt+2+N8hXSXVr
+         r8YgzG5GwhSKwvKq3SM/ncuvQXZ/GfP/x5cGIv+oQZDQRNZHK7T0eQNnQrAaJMdp2XE8
+         pD7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iWyqcbEobVY6MJH71CuFBWxe9XmeeKvZO6SIVIyqpig=;
+        b=GiFv4E4szEeeFfeZCqidXWcrNlGl3z9/FJjU3dAe63prqfPcQ6TpfmyhY/lXv+BZo6
+         FBTuhz3FptRIBcqywjDPObcPV8vlgxPKo+2mS1G0drw653RF3oWlmekyML622XMMpwsO
+         5x3efqXyKrw0JywonKlcGpenfiBbtP672F4lEuJvc2N5acgorfXB075EOiOiuYqGrAuS
+         112nyKrGgQkEm0jWPwKSIsVrUrO5gfn3P/mvcsQKSXrH9xDCOKdO0Kfre8DeKUt+lXtl
+         NfwXthsVNoWeST+0ARgWDS7yWq17U6x85tCZAuPQ7aVfpfenIglSmUalg9r67eDoBRvb
+         BQ5g==
+X-Gm-Message-State: ANoB5pmK+xLJphqQ1JbDXS4qby6xrO/fbEw1PxPh4YFkOMC5dBwvkS/n
+        A0US8JhMnU932Bgf7CC/hSry
+X-Google-Smtp-Source: AA0mqf5YVHazpTO71ZrnKrYEDHTRfJPDKITohRgEWwQpgS65K5BiYVb/ehEEU4wTA2QcZ5twGgAn1A==
+X-Received: by 2002:a17:902:bb8a:b0:189:abdd:400a with SMTP id m10-20020a170902bb8a00b00189abdd400amr16646760pls.15.1670833872372;
+        Mon, 12 Dec 2022 00:31:12 -0800 (PST)
+Received: from thinkpad ([220.158.159.33])
+        by smtp.gmail.com with ESMTPSA id x18-20020a170902ec9200b00188fc6766d6sm5697322plg.219.2022.12.12.00.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 00:31:11 -0800 (PST)
+Date:   Mon, 12 Dec 2022 14:01:04 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com
+Subject: Re: [PATCH 00/12] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20221212083104.GC20655@thinkpad>
+References: <20221207135922.314827-1-manivannan.sadhasivam@linaro.org>
+ <COWBMT72Y57W.2W8G3XDNT3T34@otso>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH7PR11MB5958DC96634CFF28AFA8695D9BE29@PH7PR11MB5958.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <COWBMT72Y57W.2W8G3XDNT3T34@otso>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 07:16:55AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Sunday, December 11, 2022 2:45 AM
-> > To: Kumaravel Thiagarajan - I21417
-> > <Kumaravel.Thiagarajan@microchip.com>
+Hi Luca,
 
-...
-
-> > > +             4,/* PCI1p3 */
-> > > +     };
-> > 
-> > If you move this outside of the function you may use static_assert(), see
-> > below why.
+On Thu, Dec 08, 2022 at 10:16:27AM +0100, Luca Weiss wrote:
+> Hi Manivannan,
 > 
-> If you move this outside of the function -> Do you suggest to move the array outside
-> the function
-
-Yes.
-
-> and make it global?
-
-I don't get this, sorry.
-The array is already global, only name is scoped inside the certain function.
-
-...
-
-> >         if (subsys_dev <= ARRAY_SIZE(max_port))
-> >                 return max_port[subsys_dev];
-> > 
-> > (in this case you can make sure it is the same as the above using
-> > static_assert(), so it won't compile otherwise)
+> On Wed Dec 7, 2022 at 2:59 PM CET, Manivannan Sadhasivam wrote:
+> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> > accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> > This offset only works for some SoCs like SDM845 for which driver support
+> > was initially added.
+> >     
+> > But the later SoCs use different register stride that vary between the
+> > banks with holes in-between. So it is not possible to use a single register
+> > stride for accessing the CSRs of each bank. By doing so could result in a
+> > crash with the current drivers. So far this crash is not reported since
+> > EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> > driver extensively by triggering the EDAC IRQ (that's where each bank
+> > CSRs are accessed).
+> >     
+> > For fixing this issue, let's obtain the base address of each LLCC bank from
+> > devicetree and get rid of the fixed stride.
+> >
+> > This series affects multiple platforms but I have only tested this on
+> > SM8250 and SM8450. Testing on other platforms is welcomed.
 > 
-> I am not getting this. You suggest doing something like this:
-> static_assert(subsys_dev <= ARRAY_SIZE(max_port)) ?
-
-No, you need to compare ARRAY_SIZE() to the macro that you removed from
-the context here.
-
-...
-
-> > > +     priv->nr = nr_ports;
-> > > +     pci_set_master(pdev);
-> > > +     max_vec_reqd = pci1xxxx_get_max_port(subsys_dev);
-> > 
-> > The above needs a bit of reshuffling and perhaps a blank line or lines.
-> > Make it ordered and grouped more logically.
+> If you can tell me *how* I can test it, I'd be happy to test the series
+> on sm6350, like how to trigger the EDAC IRQ.
 > 
-> Okay. I will do something like this:
-> 	pci_set_master(pdev);
-> 	<NL>
-> 	priv->pdev = pdev;
-> 	priv->nr = nr_ports;
-> 	<NL>
 
-> 	subsys_dev = priv->pdev->subsystem_device;
+I suppose there is no manual way to trigger EDAC IRQ on Qcom platforms.
+For testing the series, I manually called the EDAC IRQ handler to verify
+that it doesn't crash reading the registers.
 
-Almost good, but why priv is still here?
+> So far without any extra patches I don't even see the driver probing,
+> with this in kconfig
+> 
+>   +CONFIG_EDAC=y
+>   +CONFIG_EDAC_QCOM=y
+> 
+> I do have /sys/bus/platform/drivers/qcom_llcc_edac at runtime but
+> nothing in there (except bind, uevent and unbind), and also nothing
+> interesting in dmesg with "llcc", with edac there's just this message:
+> 
+>   [    0.064800] EDAC MC: Ver: 3.0.0
+> 
+> From what I'm seeing now the edac driver is only registered if the
+> interrupt is specified but it doesn't seem like sm6350 (=lagoon) has
+> this irq? Downstream dts is just this:
+> 
 
-> 	max_vec_reqd = pci1xxxx_get_max_port(subsys_dev);
-> 	<NL>
-> 	num_vectors = pci_alloc_irq_vectors(pdev, 1, max_vec_reqd, PCI_IRQ_ALL_TYPES);
-> 	if (num_vectors < 0)
-> 		return num_vectors;
+Right. The upstream EDAC driver only works in IRQ mode. So you need the
+interrupts property in LLCC devicetree node for probing.
+
+> 	cache-controller@9200000 {
+> 		compatible = "lagoon-llcc-v1";
+> 		reg = <0x9200000 0x50000> , <0x9600000 0x50000>;
+> 		reg-names = "llcc_base", "llcc_broadcast_base";
+> 		cap-based-alloc-and-pwr-collapse;
+> 	};
+> 
+> From looking at the downstream code, perhaps it's using the polling mode
+> there?
+> 
+> 	/* Request for ecc irq */
+> 	ecc_irq = llcc_driv_data->ecc_irq;
+> 	if (ecc_irq < 0) {
+> 		dev_info(dev, "No ECC IRQ; defaulting to polling mode\n");
+> 
+
+In the next version, I will add polling support so that you can test the
+series on your platform without any hacks.
+
+Thanks,
+Mani
+
+> Let me know what you think.
+> 
+> Regards
+> Luca
+> 
+> >
+> > Thanks,
+> > Mani
+> >
+> > Manivannan Sadhasivam (12):
+> >   dt-bindings: arm: msm: Update the maintainers for LLCC
+> >   dt-bindings: arm: msm: Fix register regions used for LLCC banks
+> >   arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
+> >   arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
+> >   qcom: llcc/edac: Fix the base address used for accessing LLCC banks
+> >
+> >  .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
+> >  arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
+> >  arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
+> >  arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
+> >  arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
+> >  arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
+> >  arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
+> >  arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
+> >  drivers/edac/qcom_edac.c                      |  14 +-
+> >  drivers/soc/qcom/llcc-qcom.c                  |  64 +++++----
+> >  include/linux/soc/qcom/llcc-qcom.h            |   4 +-
+> >  13 files changed, 197 insertions(+), 67 deletions(-)
+> >
+> > -- 
+> > 2.25.1
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+மணிவண்ணன் சதாசிவம்
