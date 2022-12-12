@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4476498D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29F96498D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 07:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiLLGEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 01:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S231231AbiLLGIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 01:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiLLGET (ORCPT
+        with ESMTP id S229525AbiLLGIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 01:04:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA355D12E
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 22:04:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7FgJ27esuN9GoHpckrjt5wYbZDc+iWAdGgUREAfutxU=; b=INHldDRTL9L4nG0BXUfRWeDukW
-        g74cfXuPE8dWgNsZzp6K/r0ZQXRcqx/RMA0ivasa1ZnefKAJlUDt16U6fXKlec1SLWMUG118jgFYj
-        we0SccFHK98sG0dTfg5LQyZ/ldKYrK/l336BtV39zjN9UANIqPDwyrNuideFie1Qy1ihFhMeSzDGe
-        PKSE9STiMcmKGUOWhfUclQhLVZT7jPknnGxn2o+okd/vh+bDx419m8gXWxo/O6CJVke9b+bSOK6eV
-        3NrtDBL5eFA/WhoDLjtlLYSCZC+DoJOswiM96wi2SiaxVZheCgwnpdog6V74OWkwgzli1cPLcbHZF
-        JRsFJKPQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4bvF-008aCA-1z; Mon, 12 Dec 2022 06:04:17 +0000
-Date:   Sun, 11 Dec 2022 22:04:17 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michal Lach <michal.lach@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, russell.h.weight@intel.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        ming.lei@canonical.com, tiwai@suse.de
-Subject: Re: [PATCH] drivers/firmware_loader: remove list entry before
- deallocation
-Message-ID: <Y5bEYfQOMyA4XQEW@bombadil.infradead.org>
-References: <CGME20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9@eucas1p2.samsung.com>
- <20221123111455.94972-1-michal.lach@samsung.com>
+        Mon, 12 Dec 2022 01:08:15 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3331CE1F;
+        Sun, 11 Dec 2022 22:08:09 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so14523773pjs.4;
+        Sun, 11 Dec 2022 22:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9W9EiEDru65oG/XN8FDRzHu0aSp1hC8sberwuq7Mks=;
+        b=CqY8VlyG+dEp9cRlmgvgHjyQ36OO79+gOS7IfcVmddHRAZnTtnMesWwZOAFh+zSXCC
+         qVL4WYmGX0raYcKbCnXn4fCT55AGmstP0mmXLnk3oXBYzhxKn9y106lhAulkzHkf0ahL
+         7ulKonFKlc9pncfjxhgEiVq1l62gfoQouduqJIECqTXBu8ez3zDaLGj1QGk1qBzvb7WE
+         /1SfaNGbGCS0RKWZH7DFXu3qSdiMBYozKCU/uyBWBbN4GTRSrr/TpI24LWE52d4mqX/v
+         hBy2QDrAwfgjqxV6hc4fUDyySSczOlJdidX/FZ/7SFJ1BrEayDuyhfi/VBJs6lvODx5x
+         mgCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T9W9EiEDru65oG/XN8FDRzHu0aSp1hC8sberwuq7Mks=;
+        b=kundJaqvEV3YdfpXpUFopunwrEEsXXf58SDianIxEt8JoUcSmOpsNsoKJilv4IgXo+
+         hQL2mqFCOj9UQqIBvaZucT6xB4AEF1frG/ER3hJ/UelhSzG3ZocKjU4Xs+lst+4+gBy6
+         CyV+jRTViyp4njygiu0TkQj/WyfMT33sQOqm3yCI1x3c8Hi4Cbnrf0/t4s/oZ6lEuie9
+         DGOTfYeuqqmcV7mlAsZ8HnY7+1tMx5Pz6uKAiNPgXkVBR5KQjY7g6NXE6awEcpAWI/Tt
+         TBUHMcWGR6zpUjhO7Dj9IGXw6n7abZkisg5pXPBg8RN5zRwKS8dkBCx+D3+DU58zfE05
+         VwwQ==
+X-Gm-Message-State: ANoB5pkPICnl0DvywmOU3eScLlS1o+cBKPK/DduT59bA8nPMTifK1ZKb
+        KtG+zl24GL+yWlQkZarfkU8=
+X-Google-Smtp-Source: AA0mqf7GBbgEide84hMsx8LQgELDCNBGhjZFob2nLZ8jwsQwHUGUEy+VIaXXuGjVKNeRGhyQNsL5gQ==
+X-Received: by 2002:a17:90a:d906:b0:219:b015:58d4 with SMTP id c6-20020a17090ad90600b00219b01558d4mr17238795pjv.28.1670825289089;
+        Sun, 11 Dec 2022 22:08:09 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:9159])
+        by smtp.gmail.com with ESMTPSA id c14-20020a17090a674e00b0020c899b11f1sm4611886pjm.23.2022.12.11.22.08.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Dec 2022 22:08:08 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Sun, 11 Dec 2022 20:08:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y5bFRym3iFSvcFMW@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <alpine.DEB.2.22.394.2212112331150.29296@hadrien>
+ <Y5aO3y23uoQFCazr@slm.duckdns.org>
+ <alpine.DEB.2.22.394.2212120702560.2971@hadrien>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123111455.94972-1-michal.lach@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.22.394.2212120702560.2971@hadrien>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Michal! Thanks for your patch! I have a few doubts though!
-
-On Wed, Nov 23, 2022 at 12:14:56PM +0100, Michal Lach wrote:
-> If CONFIG_FW_LOADER_USER_HELPER is enabled, it is possible to interrupt
-> the loading process after adding pending_list to pending_fw_list.
-
-In that case wouldn't fw_load_abort() get called and do the right thing?
-That in the end calls __fw_state_set() which does:
-
-static inline void __fw_state_set(...)
-{
-	struct fw_state *fw_st = &fw_priv->fw_st;
-
-	WRITE_ONCE(fw_st->status, status);
-	if (status == FW_STATUS_DONE || status == FW_STATUS_ABORTED) {
-#ifdef CONFIG_FW_LOADER_USER_HELPER
-	list_del_init(&fw_priv->pending_list);
-#endif
-	complete_all(&fw_st->completion);
-	}
-}
-
-So the question I have for you is -- what path could be cancelled
-which we don't end up calling a respective abort fw_load_abort()?
-
-> Subsequently, if user calls release_firmware() which deallocates the
-> fw_priv structure which pending_list is a member of, the entry in the
-> list is not deleted. This causes a use-after-free on further attempts
-> to add an entry to the list or on list traversal.
-
-Now we're dealing with the possibility of a driver interaction drivers
-can be buggy too. So I'm curious what driver triggers this?
-
-> While not problematic in most drivers since this function is mainly used
-> in probe or init routines, some drivers expose firmware loading
-> functionality via user-accessible functions like write() etc.
-> In this case during the sysfs loading process, we can send SIGKILL to the
-> thread which is then in kernel, leave the entry in the list and then free
-> the structure.
-
-To account for not having to deal with specific drivers we have the
-Linux kernel selftests. And so you can test the firmware loader with all
-sorts of crazy situations which any driver could use and try to see
-if you can re-recreate the issue.
-
-The kernel selftests driver for the firmware loader is in
-lib/test_firmware.c and you can use thetools/testing/selftests/firmware/fw_run_tests.sh
-to run all the tests. To test the firmware fallback alone you can use
-just fw_fallback.sh.
-
-If you want to just virtualize this and you can also use kdevops [0] and
-enable the firmware loader selftest and use:;
-
-make menuconfig          #  enable selftests and just the firmware test
-make linux               #  build linux, pick linux-next
-make selftests
-make selftests-firmware
-
-But this may be something more you can use later once you get your flow
-going. Just compiling the kernel and running the selftest manually with
-fw_fallback.sh should suffice.
-
-[0] https://github.com/linux-kdevops/kdevops
-
-> Example kernel panics with CONFIG_DEBUG_LIST turned on:
+On Mon, Dec 12, 2022 at 07:03:56AM +0100, Julia Lawall wrote:
+> > Yeah, scx_exampl_central needs to either set ops.dispatch_max_batch higher
+> > according to number of CPUs or flush and exit the loop and retry when
+> > scx_bpf_dispatch_nr_slots() reaches zero. Will update.
 > 
-> kernel BUG at lib/list_debug.c:25!
-> /* ... */
-> Call trace:
->  __list_add_valid+0x7c/0x98
->  fw_load_sysfs_fallback+0xd4/0x334
->  fw_load_from_user_helper+0x148/0x1f8
->  firmware_fallback_sysfs+0xe0/0x17c
->  _request_firmware+0x1a0/0x470
->  request_firmware+0x50/0x78
-> /* ... */
-> 
-> or
-> 
-> kernel BUG at lib/list_debug.c:56!
-> /* ... */
-> Call trace:
->  __list_del_entry_valid+0xa0/0xa4
->  fw_load_abort+0x38/0x64
->  fw_load_sysfs_fallback+0x354/0x468
->  fw_load_from_user_helper+0x17c/0x1c0
->  firmware_fallback_sysfs+0xc0/0x11c
->  _request_firmware+0xe0/0x4a4
->  request_firmware+0x20/0x2c
-> /* ... */
+> Since there could be any number of waking threads, maybe some kind of
+> flush and retry solution would be better?
 
-OK so this proves the bug can happen but I'd like to see the full trace
-and the exact kernel version showing that this can happen on a recent
-kernel. Without that I'm not seeing how this can trigger yet.
+Yeah, cental is a bit unusual because it's scheudling for other CPUs too. In
+most cases, this doesn't matter that much because whether to retry or not
+can be determined by the kernel core code. There are a couple ways to go
+about it. When slots run out, it can explicitly queue another scheduling
+event on self, or use scx_bpf_consume() to flush the pending tasks. Either
+should work but neither is particularly pretty. I'm trying to see whether I
+can remove the static dispatch buffers altogether.
 
-It would be easy to prove with the selftests.
+Thanks.
 
-  Luis
+-- 
+tejun
