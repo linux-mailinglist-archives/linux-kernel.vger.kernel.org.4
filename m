@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07263649FF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589FF64A021
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiLLNRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S232414AbiLLNVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiLLNRI (ORCPT
+        with ESMTP id S231274AbiLLNUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:17:08 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DF813D5B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:16:47 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id c140so13538380ybf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:16:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FkyR78N3iX4V6QhYQNZQMk6zU3hhQIWKAm0khwBeVk8=;
-        b=Fc5ToA3N/6mBhzWYggCbi9Vvd2Yypv7tySFcVlWHAOEqmIThdNI9QiM6F2uZhCctqw
-         IFrQ/yKeESHaUhqahWjfOZGYyPwkT0pOPwQ/roki6Em8nqDpKhMUmn5y8v/zv0VlLwqB
-         SeBHD56DTfX3eIDdT88A2zjmsFr0kGF0Hb1s/xMh+t9FfeFgzBd9jbxhjJ1pwTpiw8+O
-         4IiDI7VhM6qmHDVstvIU1sWNpS0FzC3UbyiovWCZzuLlOJZz683ftb6SWxDPPqbZwOWC
-         o5kytVsK9aFlw4+B3woyM1Z2M4uco56klAjOQAfpxqGoK8y3rvWIZ+qiQYck1+PK/0QI
-         7jyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FkyR78N3iX4V6QhYQNZQMk6zU3hhQIWKAm0khwBeVk8=;
-        b=loxsZeImEm0GmsKWn5aRpnEW4kpy5TkIad/lUnpmGnP0WyQ8rmdPNCvAFBfjMWr9A4
-         R1/XCkg1ES8S4ZY5OMp5vnW0NUVPmUHI/xlDeTjoU1gkMcJgt11VhlNrkigEOBZ7NBlA
-         3VPKkFOncTdY/tpCIKt9+wCFaba5c5MQBqdojvCG2CEu6k7K+0C22IvXXI7KD4ZfwfPg
-         Hs7x5CXmcpC9DT9tkVR8FEGQso+5VsfmYrPfs43Yzgg5MAqzBhDEPO5sF4jgD4jHXr3n
-         K3J7CcV/6bV6+a3CMY6Nwc23U6ZLROnqPA/RVrPMXLtQXx8h6on85Ka3tGcKWjJBnKyY
-         5ZZA==
-X-Gm-Message-State: ANoB5pms8Gn7Cnc9Ya/sb/zWZmntPU7nPIZKf3cqzep/i0h2HM8gf5sz
-        oYuTCN+VpCMYHPwE7S/D4zlt0yssPQL1JuN88/3RyQ==
-X-Google-Smtp-Source: AA0mqf68h8GP6RKdf3MhIa8AVdyImwwInz7Yl/Abob+h4wj9HRNpw2i8lhyyABAxnjbHa0AJmtcq+eIgSft8xbhFBoQ=
-X-Received: by 2002:a25:8e82:0:b0:6d2:70d5:3ed0 with SMTP id
- q2-20020a258e82000000b006d270d53ed0mr95764740ybl.457.1670851006060; Mon, 12
- Dec 2022 05:16:46 -0800 (PST)
-MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
+        Mon, 12 Dec 2022 08:20:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987943B2;
+        Mon, 12 Dec 2022 05:20:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41F1DB80D3B;
+        Mon, 12 Dec 2022 13:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4094DC433EF;
+        Mon, 12 Dec 2022 13:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670851231;
+        bh=cIuO/YK/sb4kZMZnmwltYrqPmSY3b9FWO4Mq+D1ixJA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u34wWpBjfdEyyeWLRSaSQCykUfyw/l6DV3khVJlAQr8QxxvsPTfJ0PtS0dFaNd2rp
+         DOzJHnwgMSrbWWqvst7LnaXcw/FW1gAxT/TEiZw6dWCMh27oCbGflJ4ug8dEcF9ds2
+         EnBqcUtX4njo2G9CIUMGIDwXl7h87KCso/B6KWMM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.4 00/67] 5.4.227-rc1 review
 Date:   Mon, 12 Dec 2022 14:16:35 +0100
-Message-ID: <CACRpkdYZDXH=_Mgv0u+B8btLjFcCSTboWFXH4u1h9V=WqLEJQA@mail.gmail.com>
-Subject: [GIT PULL] pin control bulk changes for v6.2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Message-Id: <20221212130917.599345531@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.227-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.4.227-rc1
+X-KernelTest-Deadline: 2022-12-14T13:09+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,709 +63,313 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This is the start of the stable review cycle for the 5.4.227 release.
+There are 67 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-here is the bulk of pin control changes for the v6.2 kernel cycle.
+Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+Anything received after that time might be too late.
 
-The two large chunks is the header clean-up from Andy and the Qualcomm
-DT bindings clean-up from Krzysztof. Each which could give rise to conflict=
-s,
-but I haven't seen any.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.227-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+and the diffstat can be found below.
 
-The YAML conversions happening around the device tree is the biggest
-item in the series and is the result of Rob Herrings ambition to autovalida=
-te
-these trees against strict schemas and it is paying off in lots of bugs fou=
-nd
-and ever prettier device trees. Sooner or later the transition will be comp=
-lete,
-Krzysztof is fixing up all of the Qualcomm stuff, which is pretty voluminou=
-s.
+thanks,
 
-What has however conflicted in linux-next is pinctrl and the SoC tree, see:
-https://lore.kernel.org/linux-next/20221206121336.474457bb@canb.auug.org.au=
-/
-this was caused by a merge path misunderstanding, so now it becomes
-your problem, congratulations. However as you can see the resolution is
-fairly trivial and available in linux-next.
+greg k-h
 
-Further details in the signed tag.
+-------------
+Pseudo-Shortlog of commits:
 
-Please pull it in!
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.4.227-rc1
 
-Yours,
-Linus Walleij
+Frank Jungclaus <frank.jungclaus@esd.eu>
+    can: esd_usb: Allow REC and TEC to return to zero
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780=
-:
+Dan Carpenter <error27@gmail.com>
+    net: mvneta: Fix an out of bounds check
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Eric Dumazet <edumazet@google.com>
+    ipv6: avoid use-after-free in ip6_fragment()
 
-are available in the Git repository at:
+Yang Yingliang <yangyingliang@huawei.com>
+    net: plip: don't call kfree_skb/dev_kfree_skb() under spin_lock_irq()
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v6.2-1
+Juergen Gross <jgross@suse.com>
+    xen/netback: fix build warning
 
-for you to fetch changes up to 83e1bcaf8cef26edaaf2a6098ef760f563683483:
+Zhang Changzhong <zhangchangzhong@huawei.com>
+    ethernet: aeroflex: fix potential skb leak in greth_init_rings()
 
-  pinctrl: thunderbay: fix possible memory leak in
-thunderbay_build_functions() (2022-12-06 15:28:14 +0100)
+Ido Schimmel <idosch@nvidia.com>
+    ipv4: Fix incorrect route flushing when table ID 0 is used
 
-----------------------------------------------------------------
-Pin control changes for the v6.2 kernel cycle:
+Ido Schimmel <idosch@nvidia.com>
+    ipv4: Fix incorrect route flushing when source address is deleted
 
-Core changes:
+YueHaibing <yuehaibing@huawei.com>
+    tipc: Fix potential OOB in tipc_link_proto_rcv()
 
-- Minor but nice and important documentation clean-ups.
+Liu Jian <liujian56@huawei.com>
+    net: hisilicon: Fix potential use-after-free in hix5hd2_rx()
 
-New drivers:
+Liu Jian <liujian56@huawei.com>
+    net: hisilicon: Fix potential use-after-free in hisi_femac_rx()
 
-- New subdriver for the Qualcomm SDM670 SoC.
+Yongqiang Liu <liuyongqiang13@huawei.com>
+    net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
 
-- New subdriver for the Intel Moorefield SoC.
+Jisheng Zhang <jszhang@kernel.org>
+    net: stmmac: fix "snps,axi-config" node property parsing
 
-- New trivial support for the NXP Freescale i.MXRT1170 SoC.
+Pankaj Raghav <p.raghav@samsung.com>
+    nvme initialize core quirks before calling nvme_init_subsystem
 
-Other changes and improvements
+Kees Cook <keescook@chromium.org>
+    NFC: nci: Bounds check struct nfc_target arrays
 
-- A major clean-up of the Qualcomm pin control device tree bindings
-  by Krzysztof.
+Przemyslaw Patynowski <przemyslawx.patynowski@intel.com>
+    i40e: Disallow ip4 and ip6 l4_4_bytes
 
-- A major header clean-up by Andy.
+Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
+    i40e: Fix for VF MAC address 0
 
-- Some immutable irqchip clean-up for the Actions Semiconductor
-  and Nuvoton drivers.
+Michal Jaron <michalx.jaron@intel.com>
+    i40e: Fix not setting default xps_cpus after reset
 
-- GPIO helpers for The Cypress cy8c95x0 driver.
+Dan Carpenter <error27@gmail.com>
+    net: mvneta: Prevent out of bounds read in mvneta_config_rss()
 
-- Bias handling in the Mediatek MT7986 driver.
+Lin Liu <lin.liu@citrix.com>
+    xen-netfront: Fix NULL sring after live migration
 
-- Remove the unused pins-are-numbered concept that never flew.
+Valentina Goncharenko <goncharenko.vp@ispras.ru>
+    net: encx24j600: Fix invalid logic in reading of MISTAT register
 
-----------------------------------------------------------------
-Andy Shevchenko (78):
-      pinctrl: actions: make irq_chip immutable
-      pinctrl: cy8c95x0: Extract cy8c95x0_set_mode() helper
-      pinctrl: cy8c95x0: Implement ->gpio_request_enable() and
-->gpio_set_direction()
-      pinctrl: st: Switch to use fwnode instead of of_node
-      gpio: aspeed: Add missing header(s)
-      gpio: arizona: Remove unused header(s)
-      gpio: da9052: Remove unused header(s)
-      pinctrl: cy8c95x0: Don't use cy8c95x0_set_mode() twice
-      gpio: mockup: Add missing header(s)
-      gpio: pca953x: Add missing header(s)
-      gpio: pl061: Add missing header(s)
-      gpio: reg: Add missing header(s)
-      gpio: wm8350: Remove unused header(s)
-      gpio: tegra186: Add missing header(s)
-      gpiolib: cdev: Add missing header(s)
-      gpiolib: Clean up headers
-      media: c8sectpfe: Add missing header(s)
-      pinctrl: actions: Add missing header(s)
-      pinctrl: apple-gpio: Add missing header(s)
-      pinctrl: aspeed: Add missing header(s)
-      pinctrl: at91: Add missing header(s)
-      pinctrl: axp209: Add missing header(s)
-      pinctrl: bcm: Add missing header(s)
-      pinctrl: bm1880: Add missing header(s)
-      pinctrl: cirrus: Add missing header(s)
-      pinctrl: cy8c95x0: Add missing header(s)
-      pinctrl: gemini: Add missing header(s)
-      pinctrl: imx: Add missing header(s)
-      pinctrl: ingenic: Add missing header(s)
-      pinctrl: k210: Add missing header(s)
-      pinctrl: lantiq: Add missing header(s)
-      pinctrl: lochnagar: Add missing header(s)
-      pinctrl: lpc18xx: Add missing header(s)
-      pinctrl: mediatek: Add missing header(s)
-      pinctrl: microchip-sgpio: Add missing header(s)
-      pinctrl: mvebu: Add missing header(s)
-      pinctrl: npcm7xx: Add missing header(s)
-      pinctrl: ocelot: Add missing header(s)
-      pinctrl: qcom: Add missing header(s)
-      pinctrl: renesas: Add missing header(s)
-      pinctrl: samsung: Add missing header(s)
-      pinctrl: single: Add missing header(s)
-      pinctrl: spear: Add missing header(s)
-      pinctrl: sprd: Add missing header(s)
-      pinctrl: st: Add missing header(s)
-      pinctrl: starfive: Add missing header(s)
-      pinctrl: stm32: Add missing header(s)
-      pinctrl: stmfx: Add missing header(s)
-      pinctrl: sunxi: Add missing header(s)
-      pinctrl: tegra: Add missing header(s)
-      pinctrl: ti-iodelay: Add missing header(s)
-      pinctrl: uniphier: Add missing header(s)
-      pinctrl: zynqmp: Add missing header(s)
-      pinctrl: cherryview: Add missing header(s)
-      pinctrl: lynxpoint: Add missing header(s)
-      pinctrl: merrifield: Add missing header(s)
-      pinctrl: intel: Add missing header(s)
-      pinctrl: Clean up headers
-      pinctrl: alderlake: Deduplicate COMMUNITY macro code
-      pinctrl: cannonlake: Deduplicate COMMUNITY macro code
-      pinctrl: icelake: Deduplicate COMMUNITY macro code
-      pinctrl: sunrisepoint: Deduplicate COMMUNITY macro code
-      pinctrl: tigerlake: Deduplicate COMMUNITY macro code
-      pinctrl: intel: Use str_enable_disable() helper
-      pinctrl: qcom: lpass-lpi: Add missed bitfield.h
-      device property: Introduce fwnode_device_is_compatible() helper
-      soc: fsl: qe: Switch to use fwnode instead of of_node
-      pinctrl: intel: Use temporary variable for struct device
-      pinctrl: merrifield: Use temporary variable for struct device
-      pinctrl: intel: Add Intel Moorefield pin controller support
-      pinctrl: Put space between type and data in compound literal
-      pinctrl: Move for_each_maps() to namespace and hide iterator inside
-      pwm: Add a stub for devm_pwmchip_add()
-      pwm: lpss: Rename MAX_PWMS --> LPSS_MAX_PWMS
-      pwm: lpss: Include headers we are the direct user of
-      pwm: lpss: Allow other drivers to enable PWM LPSS
-      pwm: lpss: Rename pwm_lpss_probe() --> devm_pwm_lpss_probe()
-      pinctrl: intel: Enumerate PWM device when community has a capability
+Valentina Goncharenko <goncharenko.vp@ispras.ru>
+    net: encx24j600: Add parentheses to fix precedence
 
-Balsam CHIHI (2):
-      pinctrl: mediatek: common: add mt8365_set_clr_mode() callback
-for broken SET/CLR modes
-      pinctrl: mediatek: mt8365: use mt8365_set_clr_mode() callback
+Wei Yongjun <weiyongjun1@huawei.com>
+    mac802154: fix missing INIT_LIST_HEAD in ieee802154_if_add()
 
-Bernhard Rosenkr=C3=A4nzer (4):
-      pinctrl: mediatek: common: Remove check for pins-are-numbered
-      pinctrl: stm32: Remove check for pins-are-numbered
-      dt-bindings: pinctrl: mediatek,mt65xx: Deprecate pins-are-numbered
-      dt-bindings: pinctrl: st,stm32: Deprecate pins-are-numbered
+Zhengchao Shao <shaozhengchao@huawei.com>
+    selftests: rtnetlink: correct xfrm policy rule in kci_test_ipsec_offload
 
-Biju Das (2):
-      pinctrl: renesas: rzv2m: remove unnecessary check from
-rzv2m_dt_node_to_map()
-      pinctrl: renesas: rzg2l: remove unnecessary check from
-rzg2l_dt_node_to_map()
+Artem Chernyshev <artem.chernyshev@red-soft.ru>
+    net: dsa: ksz: Check return value
 
-Fabien Poussin (1):
-      pinctrl: sunxi: d1: Add CAN bus pinmuxes
+Chen Zhongjin <chenzhongjin@huawei.com>
+    Bluetooth: Fix not cleanup led when bt_init fails
 
-Frank Wunderlich (2):
-      dt-bindings: pinctrl: update pcie/pwm/spi bindings for MT7986 SoC
-      dt-bindings: pinctrl: update uart/mmc bindings for MT7986 SoC
+Wang ShaoBo <bobo.shaobowang@huawei.com>
+    Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
 
-Gaosheng Cui (1):
-      pinctrl: thunderbay: fix possible memory leak in
-thunderbay_build_functions()
+Kuniyuki Iwashima <kuniyu@amazon.com>
+    af_unix: Get user_ns from in_skb in unix_diag_get_exact().
 
-Geert Uytterhoeven (2):
-      pinctrl: renesas: gpio: Use dynamic GPIO base if no function GPIOs
-      pinctrl: starfive: Use existing variable gpio
+Akihiko Odaki <akihiko.odaki@daynix.com>
+    igb: Allocate MSI-X vector when testing
 
-Jesse Taube (6):
-      dt-bindings: arm: imx: Add i.MXRT compatible Documentation
-      dt-bindings: pinctrl: Fix file path for pinfunc include
-      dt-bindings: timer: gpt: Add i.MXRT compatible Documentation
-      dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
-      dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT1170 compatible
-      pinctrl: freescale: Fix i.MXRT1050 pad names
+Akihiko Odaki <akihiko.odaki@daynix.com>
+    e1000e: Fix TX dispatch condition
 
-Jonathan Neusch=C3=A4fer (3):
-      pinctrl: nuvoton: wpcm450: Convert irqchip to IRQCHIP_IMMUTABLE
-      pinctrl: nuvoton: wpcm450: Refactor MFSEL setting code
-      pinctrl: nuvoton: wpcm450: Fix handling of inverted MFSEL bits
+Xiongfeng Wang <wangxiongfeng2@huawei.com>
+    gpio: amd8111: Fix PCI device reference count leak
 
-Krzysztof Kozlowski (93):
-      dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix gpio pattern
-      dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: fix gpio pattern
-      dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: fix matching pin config
-      dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: fix matching pin confi=
-g
-      dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: fix matching pin config
-      dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: fix matching pin config
-      dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: add bias-bus-hold
-      dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: add bias-bus-hold
-and input-enable
-      dt-bindings: pinctrl: qcom,tlmm-common: add common check for function
-      dt-bindings: pinctrl: qcom,ipq6018: add qpic_pad function
-      dt-bindings: pinctrl: qcom,ipq6018: correct BLSP6->BLSP0 functions
-      dt-bindings: pinctrl: qcom,ipq6018: increase number of pins in pinmux
-      dt-bindings: pinctrl: qcom,ipq6018: fix matching pin config
-      dt-bindings: pinctrl: qcom,ipq6018: use common TLMM schema
-      dt-bindings: pinctrl: qcom,ipq6018: fix indentation in example
-      dt-bindings: pinctrl: qcom,msm8226: fix matching pin config
-      dt-bindings: pinctrl: qcom,msm8226: use common TLMM schema
-      dt-bindings: pinctrl: qcom,msm8226: add functions and input-enable
-      dt-bindings: pinctrl: qcom,msm8226: fix indentation in example
-      dt-bindings: pinctrl: qcom,msm8909-tlmm: fix matching pin config
-      dt-bindings: pinctrl: qcom,msm8909-tlmm: do not require function
-on non-GPIOs
-      dt-bindings: pinctrl: qcom,msm8909-tlmm: fix indentation in example
-      dt-bindings: pinctrl: qcom,msm8953: fix matching pin config
-      dt-bindings: pinctrl: qcom,msm8953: use common TLMM schema
-      dt-bindings: pinctrl: qcom,msm8953: fix indentation in example
-      dt-bindings: pinctrl: qcom,mdm9607: do not require function on non-GP=
-IOs
-      dt-bindings: pinctrl: qcom,mdm9607: fix indentation in example
-      dt-bindings: pinctrl: qcom,qcm2290: fix matching pin config
-      dt-bindings: pinctrl: qcom,qcm2290: use common TLMM schema
-      dt-bindings: pinctrl: qcom,sdx55: fix matching pin config
-      dt-bindings: pinctrl: qcom,sdx55: use common TLMM schema
-      dt-bindings: pinctrl: qcom,sdx55: fix indentation in example
-      dt-bindings: pinctrl: qcom,sdx65: fix matching pin config
-      dt-bindings: pinctrl: qcom,sdx65: use common TLMM schema
-      dt-bindings: pinctrl: qcom,sc7280: fix matching pin config
-      dt-bindings: pinctrl: qcom,sc8280xp: fix indentation in example
-(remaining piece)
-      dt-bindings: pinctrl: qcom,sdm845: convert to dtschema
-      dt-bindings: pinctrl: qcom,sdm630: convert to dtschema
-      dt-bindings: pinctrl: qcom,sm8250: add gpio-reserved-ranges and
-gpio-line-names
-      dt-bindings: pinctrl: qcom,sm8250: use common TLMM pin schema
-      dt-bindings: pinctrl: qcom,sm8250: fix matching pin config
-      dt-bindings: pinctrl: qcom,sm8250: add input-enable
-      dt-bindings: pinctrl: qcom,sc7280: correct number of GPIOs
-      dt-bindings: pinctrl: qcom,sc7280: add bias-bus-hold and input-enable
-      dt-bindings: pinctrl: qcom,sc7280: use common TLMM pin schema
-      dt-bindings: pinctrl: qcom,ipq6018: replace maintainer
-      dt-bindings: pinctrl: qcom,mdm9607: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sc8180x: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sc8180x: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,sc8280xp: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,sm6115: use common TLMM schema
-      dt-bindings: pinctrl: qcom,sm6125: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,sm6125: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sm6350: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sm6350: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,sm6375-tlmm: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sm6375-tlmm: drop checks used in common TL=
-MM
-      dt-bindings: pinctrl: qcom,sm8250: use common TLMM schema
-      dt-bindings: pinctrl: qcom,sm8350: drop ref to pinctrl.yaml
-      dt-bindings: pinctrl: qcom,sm8350: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,sm8450: drop checks used in common TLMM
-      dt-bindings: pinctrl: qcom,mdm9607-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,msm8909-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,qcm2290-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sdx65-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sc8180x-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sc8280xp-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm6115-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm6125-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm6350-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm6375-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm8250: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm8350-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm8450-tlmm: minor style cleanups
-      dt-bindings: pinctrl: qcom,sc7280-lpass-lpi: minor style cleanups
-      dt-bindings: pinctrl: qcom,sc8280xp-lpass-lpi: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm8250-lpass-lpi: minor style cleanups
-      dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: minor style cleanups
-      dt-bindings: pinctrl: qcom: adjust description
-      dt-bindings: pinctrl: qcom,sm8150: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8998: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8996: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8994: convert to dtschema
-      dt-bindings: pinctrl: qcom: drop minItems equal to maxItems
-      dt-bindings: pinctrl: qcom,msm8974: convert to dtschema
-      dt-bindings: pinctrl: qcom,sc7180: convert to dtschema
-      dt-bindings: pinctrl: qcom,pmic-mpp: make compatible fallbacks specif=
-ic
-      dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
-      dt-bindings: pinctrl: qcom,qcs404: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8660: convert to dtschema
-      dt-bindings: pinctrl: qcom,ipq8074: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8960: convert to dtschema
-      dt-bindings: pinctrl: qcom,msm8976: convert to dtschema
+Qiqi Zhang <eddy.zhang@rock-chips.com>
+    drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
 
-Linus Walleij (7):
-      Merge tag 'qcom-pinctrl-6.2' of
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt into
-devel
-      Merge tag 'intel-pinctrl-v6.1-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel into devel
-      Merge tag 'qcom-pinctrl-6.2-2' of
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt into
-devel
-      Merge tag 'intel-pinctrl-v6.2-1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel into devel
-      Merge tag 'renesas-pinctrl-for-v6.2-tag1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers
-into devel
-      pinctrl: loongson2: Fix some const correctness
-      Merge tag 'intel-pinctrl-v6.2-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/intel into devel
+Hauke Mehrtens <hauke@hauke-m.de>
+    ca8210: Fix crash by zero initializing data
 
-Mario Limonciello (1):
-      pinctrl: amd: Add dynamic debugging for active GPIOs
+Ziyang Xuan <william.xuanziyang@huawei.com>
+    ieee802154: cc2520: Fix error return code in cc2520_hw_init()
 
-Neil Armstrong (3):
-      dt-bindings: pinctrl: convert qcom,mdm9615-pinctrl.txt to dt-schema
-      dt-bindings: pinctrl: convert semtech,sx150xq bindings to dt-schema
-      dt-bindings: pinctrl: semtech,sx150xq: fix match patterns for 16
-GPIOs matching
+Baolin Wang <baolin.wang@linux.alibaba.com>
+    mm/hugetlb: fix races when looking up a CONT-PTE/PMD size hugetlb page
 
-Niyas Sait (2):
-      pinconf-generic: clarify pull up and pull down config values
-      pinconf-generic: fix style issues in pin_config_param doc
+Oliver Hartkopp <socketcan@hartkopp.net>
+    can: af_can: fix NULL pointer dereference in can_rcv_filter
 
-Ren Zhijie (1):
-      pinctrl: pinctrl-loongson2: fix Kconfig dependency
+ZhangPeng <zhangpeng362@huawei.com>
+    HID: core: fix shift-out-of-bounds in hid_report_raw_event
 
-Richard Acayan (3):
-      dt-bindings: pinctrl: qcom: add sdm670 pinctrl
-      pinctrl: qcom: do not reinitialize gpio valid mask
-      pinctrl: qcom: add sdm670 pinctrl
+Anastasia Belova <abelova@astralinux.ru>
+    HID: hid-lg4ff: Add check for empty lbuf
 
-Ryan Wanner (2):
-      pinctrl: at91-pio4: Add configuration to userspace
-      pinctrl: at91-pio4: Add persist state case in config
+Ankit Patel <anpatel@nvidia.com>
+    HID: usbhid: Add ALWAYS_POLL quirk for some mice
 
-Sam Shih (5):
-      pinctrl: mt7986: allow configuring uart rx/tx and rts/cts separately
-      dt-bindings: pinctrl: mt7986: add generic bias-pull* support
-      pinctrl: mediatek: fix the pinconf register offset of some pins
-      pinctrl: mediatek: extend pinctrl-moore to support new bias functions
-      pinctrl: mediatek: add pull_type attribute for mediatek MT7986 SoC
+Rob Clark <robdclark@chromium.org>
+    drm/shmem-helper: Remove errant put in error path
 
-Sebastian Reichel (1):
-      dt-bindings: pinctrl: rockchip: further increase max amount of
-device functions
+Thomas Huth <thuth@redhat.com>
+    KVM: s390: vsie: Fix the initialization of the epoch extension (epdx) field
 
-Shenwei Wang (2):
-      pinctrl: freescale: add pad wakeup config
-      gpio: mxc: enable pad wakeup on i.MX8x platforms
+John Starks <jostarks@microsoft.com>
+    mm/gup: fix gup_pud_range() for dax
 
-Siarhei Volkau (2):
-      docs/pinctrl: fix pinctrl_select_state examples
-      docs/pinctrl: fix runtime pinmuxing example
+Tejun Heo <tj@kernel.org>
+    memcg: fix possible use-after-free in memcg_write_event_control()
 
-Thierry Reding (1):
-      pinctrl: tegra: Separate Tegra194 instances
+Hans Verkuil <hverkuil-cisco@xs4all.nl>
+    media: v4l2-dv-timings.c: fix too strict blanking sanity checks
 
-Wei Li (1):
-      dt-bindings: pinctrl: Correct the header guard of mt6795-pinfunc.h
+Rafał Miłecki <rafal@milecki.pl>
+    Revert "net: dsa: b53: Fix valid setting for MDB entries"
 
-Yang Yingliang (2):
-      pinctrl: ocelot: add missing destroy_workqueue() in error path
-in ocelot_pinctrl_probe()
-      pinctrl: qcom: sdm670: change sdm670_reserved_gpios to static
+Juergen Gross <jgross@suse.com>
+    xen/netback: don't call kfree_skb() with interrupts disabled
 
-Yassine Oudjana (5):
-      dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Improve description
-      dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Make gpio-ranges optio=
-nal
-      dt-bindings: pinctrl: mediatek,mt6779-pinctrl: Add MT6797
-      dt-bindings: pinctrl: mediatek,pinctrl-mt6795: Fix interrupt count
-      dt-bindings: pinctrl: mediatek,pinctrl-mt6795: Improve
-interrupts description
+Juergen Gross <jgross@suse.com>
+    xen/netback: do some code cleanup
 
-Yinbo Zhu (1):
-      dt-bindings: pinctrl: add loongson-2 pinctrl
+Ross Lagerwall <ross.lagerwall@citrix.com>
+    xen/netback: Ensure protocol headers don't fall in the non-linear area
 
-ZhangPeng (2):
-      pinctrl: k210: call of_node_put()
-      pinctrl: pinconf-generic: add missing of_node_put()
+Jann Horn <jannh@google.com>
+    mm/khugepaged: invoke MMU notifiers in shmem/file collapse paths
 
-ye xingchen (1):
-      pinctrl: qcom: remove duplicate included header files
+Jann Horn <jannh@google.com>
+    mm/khugepaged: fix GUP-fast interaction by sending IPI
 
-zhanghongchen (1):
-      pinctrl: pinctrl-loongson2: add pinctrl driver support
+Jann Horn <jannh@google.com>
+    mm/khugepaged: take the right locks for page table retraction
 
- Documentation/devicetree/bindings/arm/fsl.yaml     |   12 +
- .../devicetree/bindings/mmc/fsl-imx-esdhc.yaml     |    4 +
- .../devicetree/bindings/pinctrl/fsl,imxrt1050.yaml |    2 +-
- .../bindings/pinctrl/loongson,ls2k-pinctrl.yaml    |  123 ++
- .../bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml  |    5 +-
- .../bindings/pinctrl/mediatek,mt6779-pinctrl.yaml  |   95 +-
- .../bindings/pinctrl/mediatek,mt6797-pinctrl.yaml  |  176 ---
- .../bindings/pinctrl/mediatek,mt7986-pinctrl.yaml  |  108 +-
- .../bindings/pinctrl/mediatek,pinctrl-mt6795.yaml  |    7 +-
- .../devicetree/bindings/pinctrl/pinctrl-sx150x.txt |   72 --
- .../bindings/pinctrl/qcom,ipq6018-pinctrl.yaml     |  113 +-
- .../bindings/pinctrl/qcom,ipq8074-pinctrl.txt      |  181 ---
- .../bindings/pinctrl/qcom,ipq8074-pinctrl.yaml     |  135 ++
- ...mdm9607-pinctrl.yaml =3D> qcom,mdm9607-tlmm.yaml} |   41 +-
- .../bindings/pinctrl/qcom,mdm9615-pinctrl.txt      |  161 ---
- .../bindings/pinctrl/qcom,mdm9615-pinctrl.yaml     |  119 ++
- .../bindings/pinctrl/qcom,msm8226-pinctrl.yaml     |  103 +-
- .../bindings/pinctrl/qcom,msm8660-pinctrl.txt      |   96 --
- .../bindings/pinctrl/qcom,msm8660-pinctrl.yaml     |  125 ++
- .../bindings/pinctrl/qcom,msm8909-tlmm.yaml        |   75 +-
- .../bindings/pinctrl/qcom,msm8916-pinctrl.txt      |  195 ---
- .../bindings/pinctrl/qcom,msm8916-pinctrl.yaml     |  166 +++
- .../bindings/pinctrl/qcom,msm8953-pinctrl.yaml     |   97 +-
- .../bindings/pinctrl/qcom,msm8960-pinctrl.txt      |  190 ---
- .../bindings/pinctrl/qcom,msm8960-pinctrl.yaml     |  164 +++
- .../bindings/pinctrl/qcom,msm8974-pinctrl.txt      |  121 --
- .../bindings/pinctrl/qcom,msm8974-pinctrl.yaml     |  179 +++
- .../bindings/pinctrl/qcom,msm8976-pinctrl.txt      |  183 ---
- .../bindings/pinctrl/qcom,msm8976-pinctrl.yaml     |  136 ++
- .../bindings/pinctrl/qcom,msm8994-pinctrl.txt      |  186 ---
- .../bindings/pinctrl/qcom,msm8994-pinctrl.yaml     |  162 +++
- .../bindings/pinctrl/qcom,msm8996-pinctrl.txt      |  208 ---
- .../bindings/pinctrl/qcom,msm8996-pinctrl.yaml     |  182 +++
- .../bindings/pinctrl/qcom,msm8998-pinctrl.txt      |  202 ---
- .../bindings/pinctrl/qcom,msm8998-pinctrl.yaml     |  171 +++
- .../devicetree/bindings/pinctrl/qcom,pmic-mpp.yaml |   45 +-
- ...qcm2290-pinctrl.yaml =3D> qcom,qcm2290-tlmm.yaml} |   64 +-
- .../bindings/pinctrl/qcom,qcs404-pinctrl.txt       |  199 ---
- .../bindings/pinctrl/qcom,qcs404-pinctrl.yaml      |  176 +++
- .../bindings/pinctrl/qcom,sc7180-pinctrl.txt       |  187 ---
- .../bindings/pinctrl/qcom,sc7180-pinctrl.yaml      |  158 +++
- .../pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml     |   48 +-
- .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml      |   47 +-
- ...sc8180x-pinctrl.yaml =3D> qcom,sc8180x-tlmm.yaml} |   29 +-
- .../pinctrl/qcom,sc8280xp-lpass-lpi-pinctrl.yaml   |   44 +-
- ...8280xp-pinctrl.yaml =3D> qcom,sc8280xp-tlmm.yaml} |   28 +-
- .../bindings/pinctrl/qcom,sdm630-pinctrl.yaml      |  188 +++
- .../bindings/pinctrl/qcom,sdm660-pinctrl.txt       |  191 ---
- .../bindings/pinctrl/qcom,sdm670-tlmm.yaml         |  127 ++
- .../bindings/pinctrl/qcom,sdm845-pinctrl.txt       |  176 ---
- .../bindings/pinctrl/qcom,sdm845-pinctrl.yaml      |  158 +++
- .../bindings/pinctrl/qcom,sdx55-pinctrl.yaml       |   95 +-
- ...com,sdx65-pinctrl.yaml =3D> qcom,sdx65-tlmm.yaml} |   62 +-
- ...m,sm6115-pinctrl.yaml =3D> qcom,sm6115-tlmm.yaml} |   67 +-
- ...m,sm6125-pinctrl.yaml =3D> qcom,sm6125-tlmm.yaml} |   32 +-
- ...m,sm6350-pinctrl.yaml =3D> qcom,sm6350-tlmm.yaml} |   25 +-
- .../bindings/pinctrl/qcom,sm6375-tlmm.yaml         |   23 +-
- .../bindings/pinctrl/qcom,sm8150-pinctrl.txt       |  190 ---
- .../bindings/pinctrl/qcom,sm8150-pinctrl.yaml      |  173 +++
- .../pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     |   58 +-
- .../bindings/pinctrl/qcom,sm8250-pinctrl.yaml      |  206 ++-
- ...m,sm8350-pinctrl.yaml =3D> qcom,sm8350-tlmm.yaml} |   25 +-
- .../pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml     |   51 +-
- ...m,sm8450-pinctrl.yaml =3D> qcom,sm8450-tlmm.yaml} |   24 +-
- .../bindings/pinctrl/qcom,tlmm-common.yaml         |   20 +-
- .../bindings/pinctrl/rockchip,pinctrl.yaml         |    2 +-
- .../bindings/pinctrl/semtech,sx1501q.yaml          |  208 +++
- .../bindings/pinctrl/st,stm32-pinctrl.yaml         |    7 +-
- .../devicetree/bindings/serial/fsl-lpuart.yaml     |    3 +
- .../devicetree/bindings/timer/fsl,imxgpt.yaml      |    2 +
- Documentation/driver-api/pin-control.rst           |   10 +-
- MAINTAINERS                                        |   10 +-
- drivers/gpio/gpio-arizona.c                        |    5 +-
- drivers/gpio/gpio-aspeed.c                         |    5 +-
- drivers/gpio/gpio-da9052.c                         |    9 +-
- drivers/gpio/gpio-mockup.c                         |    1 +
- drivers/gpio/gpio-mxc.c                            |   92 +-
- drivers/gpio/gpio-pca953x.c                        |    3 +-
- drivers/gpio/gpio-pl061.c                          |   15 +-
- drivers/gpio/gpio-tegra186.c                       |    3 +-
- drivers/gpio/gpio-wm8350.c                         |    7 +-
- drivers/gpio/gpiolib-acpi.h                        |   12 +
- drivers/gpio/gpiolib-cdev.c                        |    4 +-
- drivers/gpio/gpiolib-of.h                          |   11 +-
- drivers/gpio/gpiolib-sysfs.h                       |    2 +
- .../platform/st/sti/c8sectpfe/c8sectpfe-core.c     |    8 +-
- drivers/pinctrl/Kconfig                            |   11 +
- drivers/pinctrl/Makefile                           |    1 +
- drivers/pinctrl/actions/pinctrl-owl.c              |   49 +-
- drivers/pinctrl/aspeed/pinctrl-aspeed.c            |    1 +
- drivers/pinctrl/bcm/pinctrl-bcm281xx.c             |   13 +-
- drivers/pinctrl/bcm/pinctrl-cygnus-mux.c           |    9 +-
- drivers/pinctrl/bcm/pinctrl-iproc-gpio.c           |   12 +-
- drivers/pinctrl/bcm/pinctrl-ns2-mux.c              |    8 +-
- drivers/pinctrl/bcm/pinctrl-nsp-mux.c              |    8 +-
- drivers/pinctrl/cirrus/pinctrl-lochnagar.c         |    6 +-
- drivers/pinctrl/cirrus/pinctrl-madera-core.c       |    5 +-
- drivers/pinctrl/core.c                             |   25 +-
- drivers/pinctrl/core.h                             |   22 +-
- drivers/pinctrl/devicetree.h                       |    6 +
- drivers/pinctrl/freescale/pinctrl-imx.c            |    8 +-
- drivers/pinctrl/freescale/pinctrl-imx1-core.c      |    4 +-
- drivers/pinctrl/freescale/pinctrl-imxrt1050.c      |  546 ++++----
- drivers/pinctrl/freescale/pinctrl-mxs.c            |    7 +-
- drivers/pinctrl/freescale/pinctrl-scu.c            |   30 +
- drivers/pinctrl/intel/Kconfig                      |   11 +
- drivers/pinctrl/intel/Makefile                     |    1 +
- drivers/pinctrl/intel/pinctrl-alderlake.c          |   40 +-
- drivers/pinctrl/intel/pinctrl-cannonlake.c         |    8 +-
- drivers/pinctrl/intel/pinctrl-cherryview.c         |    6 +-
- drivers/pinctrl/intel/pinctrl-icelake.c            |    8 +-
- drivers/pinctrl/intel/pinctrl-intel.c              |   61 +-
- drivers/pinctrl/intel/pinctrl-lynxpoint.c          |    6 +-
- drivers/pinctrl/intel/pinctrl-merrifield.c         |   19 +-
- drivers/pinctrl/intel/pinctrl-moorefield.c         |  916 +++++++++++++
- drivers/pinctrl/intel/pinctrl-sunrisepoint.c       |   32 +-
- drivers/pinctrl/intel/pinctrl-tigerlake.c          |   28 +-
- drivers/pinctrl/mediatek/pinctrl-moore.c           |   52 +-
- drivers/pinctrl/mediatek/pinctrl-mt7986.c          |  112 +-
- drivers/pinctrl/mediatek/pinctrl-mt8365.c          |   18 +
- drivers/pinctrl/mediatek/pinctrl-mtk-common.c      |   21 +-
- drivers/pinctrl/mediatek/pinctrl-mtk-common.h      |    8 +-
- drivers/pinctrl/mediatek/pinctrl-paris.c           |    5 +
- drivers/pinctrl/mvebu/pinctrl-mvebu.c              |   14 +-
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c          |   11 +-
- drivers/pinctrl/nuvoton/pinctrl-wpcm450.c          |   48 +-
- drivers/pinctrl/pinconf-generic.c                  |    4 +-
- drivers/pinctrl/pinconf.h                          |   10 +
- drivers/pinctrl/pinctrl-amd.c                      |   10 +-
- drivers/pinctrl/pinctrl-apple-gpio.c               |    7 +-
- drivers/pinctrl/pinctrl-at91-pio4.c                |   36 +-
- drivers/pinctrl/pinctrl-at91.c                     |   16 +-
- drivers/pinctrl/pinctrl-axp209.c                   |    8 +-
- drivers/pinctrl/pinctrl-bm1880.c                   |    6 +-
- drivers/pinctrl/pinctrl-cy8c95x0.c                 |  134 +-
- drivers/pinctrl/pinctrl-falcon.c                   |    9 +-
- drivers/pinctrl/pinctrl-gemini.c                   |   12 +-
- drivers/pinctrl/pinctrl-ingenic.c                  |   10 +-
- drivers/pinctrl/pinctrl-k210.c                     |   16 +-
- drivers/pinctrl/pinctrl-lantiq.c                   |    5 +-
- drivers/pinctrl/pinctrl-lantiq.h                   |    7 +-
- drivers/pinctrl/pinctrl-loongson2.c                |  311 +++++
- drivers/pinctrl/pinctrl-lpc18xx.c                  |    6 +-
- drivers/pinctrl/pinctrl-microchip-sgpio.c          |    4 +-
- drivers/pinctrl/pinctrl-ocelot.c                   |   30 +-
- drivers/pinctrl/pinctrl-single.c                   |    6 +-
- drivers/pinctrl/pinctrl-st.c                       |   25 +-
- drivers/pinctrl/pinctrl-stmfx.c                    |    2 +
- drivers/pinctrl/pinctrl-thunderbay.c               |    8 +-
- drivers/pinctrl/pinctrl-utils.h                    |    5 +
- drivers/pinctrl/pinctrl-zynqmp.c                   |    5 +-
- drivers/pinctrl/pinmux.c                           |   17 +-
- drivers/pinctrl/pinmux.h                           |   11 +
- drivers/pinctrl/qcom/Kconfig                       |   10 +
- drivers/pinctrl/qcom/Makefile                      |    1 +
- drivers/pinctrl/qcom/pinctrl-lpass-lpi.c           |    5 +
- drivers/pinctrl/qcom/pinctrl-lpass-lpi.h           |    9 +-
- drivers/pinctrl/qcom/pinctrl-msm.c                 |   29 +-
- drivers/pinctrl/qcom/pinctrl-msm.h                 |    5 +
- drivers/pinctrl/qcom/pinctrl-sdm670.c              | 1345 ++++++++++++++++=
-++++
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c           |    8 +-
- drivers/pinctrl/qcom/pinctrl-spmi-mpp.c            |    8 +-
- drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c           |   19 +-
- drivers/pinctrl/qcom/pinctrl-ssbi-mpp.c            |   19 +-
- drivers/pinctrl/renesas/gpio.c                     |   10 +-
- drivers/pinctrl/renesas/pinctrl-rzg2l.c            |   10 +-
- drivers/pinctrl/renesas/pinctrl-rzn1.c             |    8 +-
- drivers/pinctrl/renesas/pinctrl-rzv2m.c            |    7 +-
- drivers/pinctrl/renesas/pinctrl.c                  |    8 +-
- drivers/pinctrl/samsung/pinctrl-samsung.c          |   11 +-
- drivers/pinctrl/spear/pinctrl-spear.c              |    6 +-
- drivers/pinctrl/sprd/pinctrl-sprd.c                |    7 +-
- drivers/pinctrl/starfive/pinctrl-starfive-jh7100.c |    7 +-
- drivers/pinctrl/stm32/pinctrl-stm32.c              |   21 +-
- drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c          |    4 +
- drivers/pinctrl/sunxi/pinctrl-sunxi.c              |   18 +-
- drivers/pinctrl/tegra/pinctrl-tegra-xusb.c         |    7 +-
- drivers/pinctrl/tegra/pinctrl-tegra.c              |   39 +-
- drivers/pinctrl/tegra/pinctrl-tegra.h              |    2 +
- drivers/pinctrl/tegra/pinctrl-tegra194.c           |  286 +++--
- drivers/pinctrl/ti/pinctrl-ti-iodelay.c            |    8 +-
- drivers/pinctrl/uniphier/pinctrl-uniphier-core.c   |    8 +-
- drivers/pwm/pwm-lpss-pci.c                         |    2 +-
- drivers/pwm/pwm-lpss-platform.c                    |    2 +-
- drivers/pwm/pwm-lpss.c                             |    8 +-
- drivers/pwm/pwm-lpss.h                             |   26 +-
- drivers/soc/fsl/qe/gpio.c                          |    4 +-
- include/dt-bindings/pinctrl/mt6795-pinfunc.h       |    4 +-
- include/linux/gpio.h                               |    2 +-
- include/linux/gpio/aspeed.h                        |    4 +
- include/linux/gpio/driver.h                        |    2 +-
- include/linux/gpio/gpio-reg.h                      |    4 +
- include/linux/gpio/machine.h                       |    1 -
- include/linux/pinctrl/consumer.h                   |   31 +-
- include/linux/pinctrl/devinfo.h                    |    6 +-
- include/linux/pinctrl/machine.h                    |    8 +-
- include/linux/pinctrl/pinconf-generic.h            |   29 +-
- include/linux/pinctrl/pinctrl.h                    |   20 +-
- include/linux/pinctrl/pinmux.h                     |    5 +-
- include/linux/platform_data/x86/pwm-lpss.h         |   33 +
- include/linux/property.h                           |   10 +-
- include/linux/pwm.h                                |    5 +
- 202 files changed, 7904 insertions(+), 4773 deletions(-)
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/mediatek,mt6797-pinctrl.yaml
- delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-sx150=
-x.txt
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,ipq8074-pinctrl.yaml
- rename Documentation/devicetree/bindings/pinctrl/{qcom,mdm9607-pinctrl.yam=
-l
-=3D> qcom,mdm9607-tlmm.yaml} (84%)
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,mdm9615-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8960-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8974-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8976-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8994-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8996-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8996-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,msm8998-pinctrl.yaml
- rename Documentation/devicetree/bindings/pinctrl/{qcom,qcm2290-pinctrl.yam=
-l
-=3D> qcom,qcm2290-tlmm.yaml} (76%)
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,qcs404-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sc8180x-pinctrl.yam=
-l
-=3D> qcom,sc8180x-tlmm.yaml} (88%)
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sc8280xp-pinctrl.ya=
-ml
-=3D> qcom,sc8280xp-tlmm.yaml} (89%)
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sdm630-pinctrl.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sdm660-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sdm670-tlmm.yaml
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sdx65-pinctrl.yaml
-=3D> qcom,sdx65-tlmm.yaml} (85%)
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sm6115-pinctrl.yaml
-=3D> qcom,sm6115-tlmm.yaml} (75%)
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sm6125-pinctrl.yaml
-=3D> qcom,sm6125-tlmm.yaml} (87%)
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sm6350-pinctrl.yaml
-=3D> qcom,sm6350-tlmm.yaml} (90%)
- delete mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.txt
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/qcom,sm8150-pinctrl.yaml
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sm8350-pinctrl.yaml
-=3D> qcom,sm8350-tlmm.yaml} (89%)
- rename Documentation/devicetree/bindings/pinctrl/{qcom,sm8450-pinctrl.yaml
-=3D> qcom,sm8450-tlmm.yaml} (89%)
- create mode 100644
-Documentation/devicetree/bindings/pinctrl/semtech,sx1501q.yaml
- create mode 100644 drivers/pinctrl/intel/pinctrl-moorefield.c
- create mode 100644 drivers/pinctrl/pinctrl-loongson2.c
- create mode 100644 drivers/pinctrl/qcom/pinctrl-sdm670.c
- create mode 100644 include/linux/platform_data/x86/pwm-lpss.h
+Davide Tronchin <davide.tronchin.94@gmail.com>
+    net: usb: qmi_wwan: add u-blox 0x1342 composition
+
+Dominique Martinet <asmadeus@codewreck.org>
+    9p/xen: check logical size for buffer size
+
+Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+    fbcon: Use kzalloc() in fbcon_prepare_logo()
+
+Andreas Kemnade <andreas@kemnade.info>
+    regulator: twl6030: fix get status of twl6032 regulators
+
+Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+    ASoC: soc-pcm: Add NULL check in BE reparenting
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: send: avoid unaligned encoded writes when attempting to clone range
+
+Kees Cook <keescook@chromium.org>
+    ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+
+Konrad Dybcio <konrad.dybcio@linaro.org>
+    regulator: slg51000: Wait after asserting CS pin
+
+GUO Zihua <guozihua@huawei.com>
+    9p/fd: Use P9_HDRSZ for header size
+
+Johan Jonker <jbx6244@gmail.com>
+    ARM: dts: rockchip: disable arm_global_timer on rk3066 and rk3188
+
+Giulio Benetti <giulio.benetti@benettiengineering.com>
+    ARM: 9266/1: mm: fix no-MMU ZERO_PAGE() implementation
+
+Tomislav Novak <tnovak@fb.com>
+    ARM: 9251/1: perf: Fix stacktraces for tracepoint events in THUMB2 kernels
+
+Johan Jonker <jbx6244@gmail.com>
+    ARM: dts: rockchip: rk3188: fix lcdc1-rgb24 node name
+
+Johan Jonker <jbx6244@gmail.com>
+    ARM: dts: rockchip: fix ir-receiver node names
+
+Sebastian Reichel <sebastian.reichel@collabora.com>
+    arm: dts: rockchip: fix node name for hym8563 rtc
+
+FUKAUMI Naoki <naoki@radxa.com>
+    arm64: dts: rockchip: keep I2S1 disabled for GPIO function on ROCK Pi 4 series
+
+
+-------------
+
+Diffstat:
+
+ Makefile                                           |    4 +-
+ arch/arm/boot/dts/rk3036-evb.dts                   |    2 +-
+ arch/arm/boot/dts/rk3188-radxarock.dts             |    2 +-
+ arch/arm/boot/dts/rk3188.dtsi                      |    3 +-
+ arch/arm/boot/dts/rk3288-evb-act8846.dts           |    2 +-
+ arch/arm/boot/dts/rk3288-firefly.dtsi              |    2 +-
+ arch/arm/boot/dts/rk3288-miqi.dts                  |    2 +-
+ arch/arm/boot/dts/rk3288-rock2-square.dts          |    2 +-
+ arch/arm/boot/dts/rk3xxx.dtsi                      |    7 +
+ arch/arm/include/asm/perf_event.h                  |    2 +-
+ arch/arm/include/asm/pgtable-nommu.h               |    6 -
+ arch/arm/include/asm/pgtable.h                     |   16 +-
+ arch/arm/mm/nommu.c                                |   19 +
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dts  |    1 -
+ arch/s390/kvm/vsie.c                               |    4 +-
+ drivers/gpio/gpio-amd8111.c                        |    4 +
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c              |    4 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c             |    4 +-
+ drivers/hid/hid-core.c                             |    3 +
+ drivers/hid/hid-ids.h                              |    3 +
+ drivers/hid/hid-lg4ff.c                            |    6 +
+ drivers/hid/hid-quirks.c                           |    3 +
+ drivers/media/v4l2-core/v4l2-dv-timings.c          |   20 +-
+ drivers/net/can/usb/esd_usb2.c                     |    6 +
+ drivers/net/dsa/b53/b53_common.c                   |    1 +
+ drivers/net/ethernet/aeroflex/greth.c              |    1 +
+ drivers/net/ethernet/cavium/thunder/nicvf_main.c   |    4 +-
+ drivers/net/ethernet/hisilicon/hisi_femac.c        |    2 +-
+ drivers/net/ethernet/hisilicon/hix5hd2_gmac.c      |    2 +-
+ drivers/net/ethernet/intel/e1000e/netdev.c         |    4 +-
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |    6 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |   19 +-
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |    2 +
+ drivers/net/ethernet/intel/igb/igb_ethtool.c       |    2 +
+ drivers/net/ethernet/marvell/mvneta.c              |    2 +-
+ drivers/net/ethernet/microchip/encx24j600-regmap.c |    4 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_platform.c  |    8 +-
+ drivers/net/ieee802154/ca8210.c                    |    2 +-
+ drivers/net/ieee802154/cc2520.c                    |    2 +-
+ drivers/net/plip/plip.c                            |    4 +-
+ drivers/net/usb/qmi_wwan.c                         |    1 +
+ drivers/net/xen-netback/common.h                   |   14 +-
+ drivers/net/xen-netback/interface.c                |   22 +-
+ drivers/net/xen-netback/netback.c                  |  229 +--
+ drivers/net/xen-netback/rx.c                       |   10 +-
+ drivers/net/xen-netfront.c                         |    6 +
+ drivers/nvme/host/core.c                           |    8 +-
+ drivers/regulator/slg51000-regulator.c             |    2 +
+ drivers/regulator/twl6030-regulator.c              |   15 +-
+ drivers/video/fbdev/core/fbcon.c                   |    2 +-
+ fs/btrfs/send.c                                    |   24 +-
+ include/asm-generic/tlb.h                          |    4 +
+ include/linux/cgroup.h                             |    1 +
+ include/linux/hugetlb.h                            |    6 +-
+ kernel/cgroup/cgroup-internal.h                    |    1 -
+ mm/gup.c                                           |   15 +-
+ mm/hugetlb.c                                       |   28 +-
+ mm/khugepaged.c                                    |   47 +-
+ mm/memcontrol.c                                    |   15 +-
+ mm/mmu_gather.c                                    |    5 +
+ net/9p/trans_fd.c                                  |    6 +-
+ net/9p/trans_xen.c                                 |    9 +
+ net/bluetooth/6lowpan.c                            |    1 +
+ net/bluetooth/af_bluetooth.c                       |    4 +-
+ net/can/af_can.c                                   |    4 +-
+ net/dsa/tag_ksz.c                                  |    3 +-
+ net/ipv4/fib_frontend.c                            |    3 +
+ net/ipv4/fib_semantics.c                           |    1 +
+ net/ipv6/ip6_output.c                              |    5 +
+ net/mac802154/iface.c                              |    1 +
+ net/nfc/nci/ntf.c                                  |    6 +
+ net/tipc/link.c                                    |    4 +-
+ net/unix/diag.c                                    |   20 +-
+ sound/core/seq/seq_memory.c                        |   11 +-
+ sound/soc/soc-pcm.c                                |    2 +
+ tools/testing/selftests/net/fib_tests.sh           | 1727 --------------------
+ tools/testing/selftests/net/rtnetlink.sh           |    2 +-
+ 77 files changed, 476 insertions(+), 1980 deletions(-)
+
+
