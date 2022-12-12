@@ -2,254 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8F1649DFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D835649D45
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbiLLLfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        id S231727AbiLLLQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbiLLLc4 (ORCPT
+        with ESMTP id S231951AbiLLLQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:32:56 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C963FC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:31:59 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id c7so1123229qtw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:31:59 -0800 (PST)
+        Mon, 12 Dec 2022 06:16:16 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC537DF93
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:47 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id cf42so17983324lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:10:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=06SKk3+Ze86qUIQMQYOS544icdjYuuKxQBSYDhiuvtQ=;
-        b=gA8s/mVH5bAQ+8OyUd2TRqibki/tYQvHDdM9WtPLZwkWOKi+HgQlMcCthHBVeIuHyt
-         9z7PVHiVcmINs0ZU7SHj22QmA5hr6WjbIVPTrLvoxJjLRebJXE1ARa19r5LXH7te7HzP
-         4uLi7LS43CBvcU4j8+oZeDA2oKoLmfVaAEirbId7A/0DNoHamSXJ16gcYjuGeSbzgKdn
-         fQQbQEpFzrJQPQNguMowb78OA6J+CB/JCmobR6Tlvo5EyJwExeDYroDrMerjw8ItU2Ss
-         P/dnFUByTNCtxqkUVv65UOUDg+KsiAmUoH1GFtQOvaEuC/jpZVEySYlWFWL6/LbZOUiS
-         iKDg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GaqnzgEez5o+aheB4jouM3JSYEeh5J5pWhvvk2MpmEg=;
+        b=b/l7p+kWOAQddo37xNV68tq1G5PdOYsZVSayXQc/n2hR7gWXdf+Jm8RNm40skIcET5
+         6uAuyUJmtLTTMo+TmyCWEbqYF37GaaGx7qD+DS7UdTSQ9cx4sBSche86jUfqWmpTRAV7
+         AbwfBwPy+6FQAwXCrOttv2DdzDMaS+uKF97o8/hEEu7Ab5kaSBq3FhRLRMAkgKRplCi0
+         bNUJrvLCXC5m1/wVPOFYljmeHuXyjRr9gxzt55yAbVaeibnVgFa+Fj/rY72Jckm9EMfW
+         Bc++Mh8VF3LESe6pKMnocoDpsZ90DnJVOHYo++vSVHQWJIBHWn3O2AYl8NyOebmXl1TH
+         o60A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=06SKk3+Ze86qUIQMQYOS544icdjYuuKxQBSYDhiuvtQ=;
-        b=E3wAom5c2YaVVtnsiECVCDdxKvz63XUh2i/yLkNSGSrg/YNSzRrUSc024pSbkhs/NO
-         Xp5/ozLUK8XaXSOsNdO0GzAEbMWE2FL7FTJ5Ipak8KWoLmB3J2NCZd5u2v9dRJ9DRKrv
-         7i1+TLO2j4CQemNHRytZXF48DitXQetqP9sY8/iJHX7MZhVQ4ay4z/TMlUIa7gZ3AnKA
-         fakVPDL175CTioMCAqGUCzUNTJhRgDl/ymKaSLOKGilXMnGQX0QAJpStblVrQG04HVXP
-         wzwYuFB06hqHjPJQs2l1RM8MzRkrmtIqhbjoeOCwHToPmAzNiBaDK2+HY7zRkbnBgSaY
-         TCbA==
-X-Gm-Message-State: ANoB5plwvHtbjHV5M4kYhXAKigcRgZvMvCCkxxdRPWoZt1pHPGMpHjai
-        UAH0QdjuNGvPiXMkqzDI+TI=
-X-Google-Smtp-Source: AA0mqf4P+n6Eu+i1LUXXipacAkxdDMEL288rmmWudwwNWxPNFSgf3UL4WUrJMBQYi6awf7zYDfAXnA==
-X-Received: by 2002:a05:622a:1b92:b0:3a5:1dcb:d231 with SMTP id bp18-20020a05622a1b9200b003a51dcbd231mr29265394qtb.59.1670844718854;
-        Mon, 12 Dec 2022 03:31:58 -0800 (PST)
-Received: from MBP ([68.74.118.125])
-        by smtp.gmail.com with ESMTPSA id d12-20020ac8118c000000b0039492d503cdsm5595104qtj.51.2022.12.12.03.31.53
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GaqnzgEez5o+aheB4jouM3JSYEeh5J5pWhvvk2MpmEg=;
+        b=vo91+fHOYyELNWHBK4I60jqLLB5AaZABDz9a6TFiXQVOGE63ol4fWVuS5j7Cs7gda7
+         G1pz5V8FPUSi28pTrpLnGtytkoP5OFPtJbC9uPIFIKoILHZ0Hamcr0UkPbxSY2j+W86I
+         NZSOL45rkM+R2uTNvVTfnz1D5FcsjoHwT8GB8B9l+Y3Olj9obuQRTwfxc6mQ01ZzOUAv
+         4NyVM9q75nZpFbwQIiWCPas1Dd92pEwLKn6UWMJM3WoLHLPcH/o6Vs5/UQSmsy6zx1Dj
+         ApisreiqCLyN9nb/dXK6Z+ab3ZtfsSw/E+T2xSVqekdlUFKjwx7eERaXAIE2Bw0aFj91
+         s2hQ==
+X-Gm-Message-State: ANoB5pmotqp3718RW5aK0eqL8IY7RVGHq1a4OoqVhCzMFB+usDl0o7wu
+        ncRPk6syFG6TV3jzOy0QEOPkGw==
+X-Google-Smtp-Source: AA0mqf7WNG69Av72RF+/EYRAlR8ZdhfMneuro3qaDzrmQ35ioUFKffzDpTaroJNhGXIOVSmHoFh2VQ==
+X-Received: by 2002:a05:6512:1082:b0:4a4:68b7:f884 with SMTP id j2-20020a056512108200b004a468b7f884mr7307008lfg.40.1670843446355;
+        Mon, 12 Dec 2022 03:10:46 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id b4-20020a056512060400b004b57a810e09sm1599110lfe.288.2022.12.12.03.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 03:31:58 -0800 (PST)
-References: <20221115140233.21981-1-schspa@gmail.com>
- <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Schspa Shi <schspa@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
-        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
-        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] umh: fix UAF when the process is being killed
-Date:   Mon, 12 Dec 2022 19:04:29 +0800
-In-reply-to: <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
-Message-ID: <m2bko8c0yh.fsf@gmail.com>
+        Mon, 12 Dec 2022 03:10:46 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/9] arm64: dts: qcom: ipq6018: Use lowercase hex
+Date:   Mon, 12 Dec 2022 12:10:29 +0100
+Message-Id: <20221212111037.98160-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221212111037.98160-1-konrad.dybcio@linaro.org>
+References: <20221212111037.98160-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use lowercase hex, as that's the preferred and overwhermingly present
+style.
 
-Luis Chamberlain <mcgrof@kernel.org> writes:
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> On Mon, Dec 05, 2022 at 07:38:21PM +0800, Schspa Shi wrote:
->> 
->> Schspa Shi <schspa@gmail.com> writes:
->> 
->> > When the process is killed, wait_for_completion_state will return with
->> > -ERESTARTSYS, and the completion variable in the stack will be freed.
->
-> There is no free'ing here, it's just not availabel anymore, which is
-> different.
->
-
-No, the whole thread stack will be freed when the process died. There
-will be some cases where it will be released. It will be more accurate
-to modify it to be unavailable.
-
->> > If the user-mode thread is complete at the same time, there will be a UAF.
->> >
->> > Please refer to the following scenarios.
->> >             T1                                  T2
->> > ------------------------------------------------------------------
->> > call_usermodehelper_exec
->> >                                    call_usermodehelper_exec_async
->> >                                    << do something >>
->> >                                    umh_complete(sub_info);
->> >                                    comp = xchg(&sub_info->complete, NULL);
->> >                                    /* we got the completion */
->> >                                    << context switch >>
-
-The sub_info->complete will be set to NULL.
-
->> >
->> >     << Being killed >>
->> > 	retval = wait_for_completion_state(sub_info->complete, state);
->> > 	if (!retval)
->> > 		goto wait_done;
->> >
->> > 	if (wait & UMH_KILLABLE) {
->> > 		/* umh_complete() will see NULL and free sub_info */
->> > 		if (xchg(&sub_info->complete, NULL))
->> > 			goto unlock;
->> >         << we can't got the completion >>
->
-> I'm sorry I don't understand what you tried to say here, we can't got?
->
-
-In this scenario, the sub_info->complete will be NULL, at the
-call_usermodehelper_exec_async, and we will go to the unlock branch here.
-
->> > 	}
->> > 	....
->> > unlock:
->> > 	helper_unlock();
->> > 	return retval;
->> > }
->> >
->> > /**
->> >  * the completion variable in stack is end of life cycle.
->> >  * and maybe freed due to process is recycled.
->> >  */
->> >                                    --------UAF here----------
->> >                                    if (comp)
->> >                                        complete(comp);
->> >
->> > To fix it, we can put the completion variable in the subprocess_info
->> > variable.
->> >
->> > Reported-by: syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com
->> > Reported-by: syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com
->> > Reported-by: syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
->> >
->> > Signed-off-by: Schspa Shi <schspa@gmail.com>
->> > ---
->> >  include/linux/umh.h | 1 +
->> >  kernel/umh.c        | 6 +++---
->> >  2 files changed, 4 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/include/linux/umh.h b/include/linux/umh.h
->> > index 5d1f6129b847..801f7efbc825 100644
->> > --- a/include/linux/umh.h
->> > +++ b/include/linux/umh.h
->> > @@ -20,6 +20,7 @@ struct file;
->> >  struct subprocess_info {
->> >  	struct work_struct work;
->> >  	struct completion *complete;
->> > +	struct completion done;
->> >  	const char *path;
->> >  	char **argv;
->> >  	char **envp;
->> > diff --git a/kernel/umh.c b/kernel/umh.c
->> > index 850631518665..3ed39956c777 100644
->> > --- a/kernel/umh.c
->> > +++ b/kernel/umh.c
->> > @@ -380,6 +380,7 @@ struct subprocess_info *call_usermodehelper_setup(const char *path, char **argv,
->> >  	sub_info->cleanup = cleanup;
->> >  	sub_info->init = init;
->> >  	sub_info->data = data;
->> > +	init_completion(&sub_info->done);
->> >    out:
->> >  	return sub_info;
->> >  }
->> > @@ -405,7 +406,6 @@ EXPORT_SYMBOL(call_usermodehelper_setup);
->> >  int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
->> >  {
->> >  	unsigned int state = TASK_UNINTERRUPTIBLE;
->> > -	DECLARE_COMPLETION_ONSTACK(done);
->> >  	int retval = 0;
->> >  
->> >  	if (!sub_info->path) {
->> > @@ -431,7 +431,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
->> >  	 * This makes it possible to use umh_complete to free
->> >  	 * the data structure in case of UMH_NO_WAIT.
->> >  	 */
->> > -	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &done;
->> > +	sub_info->complete = (wait == UMH_NO_WAIT) ? NULL : &sub_info->done;
->> >  	sub_info->wait = wait;
->> >  
->> >  	queue_work(system_unbound_wq, &sub_info->work);
->> > @@ -444,7 +444,7 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
->> >  	if (wait & UMH_FREEZABLE)
->> >  		state |= TASK_FREEZABLE;
->> >  
->> > -	retval = wait_for_completion_state(&done, state);
->> > +	retval = wait_for_completion_state(sub_info->complete, state);
->> >  	if (!retval)
->> >  		goto wait_done;
->> 
->> Hi Luis Chamberlain:
->> 
->> Could you help to review this patch? I'm not sure why we define the
->> amount of completion here on the stack. But this UAF can be fixed by
->> moving the completion variable to the heap.
->
-> It would seem to me that if this is an issue other areas would have
-> similar races as well, so I was hard pressed about the approach / fix.
->
-
-I think other modules will have similar bugs, but this is a limitation
-on the use of the DECLARE_COMPLETION_ONSTACK macro, and it has been
-specifically stated in the completion's documentation.
-
-There is the description from completion's documentation:
-
-Note that when using completion objects as local variables you must be
-acutely aware of the short life time of the function stack: the function
-must not return to a calling context until all activities (such as waiting
-threads) have ceased and the completion object is completely unused.
-
-> Wouldn't something like this be a bit more explicit about ensuring
-> we don't let the work item race beyond?
->
-> diff --git a/kernel/umh.c b/kernel/umh.c
-> index 850631518665..55fc698115a7 100644
-> --- a/kernel/umh.c
-> +++ b/kernel/umh.c
-> @@ -447,6 +447,8 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
->  	retval = wait_for_completion_state(&done, state);
->  	if (!retval)
->  		goto wait_done;
-> +	else if (retval == -ERESTARTSYS)
-> +		cancel_work_sync(&sub_info->work);
->
-
-I think this modification will make UMH_KILLABLE useless, we have to
-wait for this task to complete, even if it is killed.
-
->  	if (wait & UMH_KILLABLE) {
->  		/* umh_complete() will see NULL and free sub_info */
-
-
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index 5d453f11acd9..2ceae73a6069 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+@@ -679,7 +679,7 @@ dwc_1: usb@7000000 {
+ 
+ 		ssphy_0: ssphy@78000 {
+ 			compatible = "qcom,ipq6018-qmp-usb3-phy";
+-			reg = <0x0 0x78000 0x0 0x1C4>;
++			reg = <0x0 0x78000 0x0 0x1c4>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			ranges;
+@@ -696,7 +696,7 @@ ssphy_0: ssphy@78000 {
+ 			usb0_ssphy: phy@78200 {
+ 				reg = <0x0 0x00078200 0x0 0x130>, /* Tx */
+ 				      <0x0 0x00078400 0x0 0x200>, /* Rx */
+-				      <0x0 0x00078800 0x0 0x1F8>, /* PCS */
++				      <0x0 0x00078800 0x0 0x1f8>, /* PCS */
+ 				      <0x0 0x00078600 0x0 0x044>; /* PCS misc */
+ 				#phy-cells = <0>;
+ 				#clock-cells = <0>;
+@@ -721,7 +721,7 @@ qusb_phy_0: qusb@79000 {
+ 
+ 		usb3: usb@8af8800 {
+ 			compatible = "qcom,ipq6018-dwc3", "qcom,dwc3";
+-			reg = <0x0 0x8AF8800 0x0 0x400>;
++			reg = <0x0 0x8af8800 0x0 0x400>;
+ 			#address-cells = <2>;
+ 			#size-cells = <2>;
+ 			ranges;
+@@ -747,7 +747,7 @@ usb3: usb@8af8800 {
+ 
+ 			dwc_0: usb@8a00000 {
+ 				compatible = "snps,dwc3";
+-				reg = <0x0 0x8A00000 0x0 0xcd00>;
++				reg = <0x0 0x8a00000 0x0 0xcd00>;
+ 				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+ 				phys = <&qusb_phy_0>, <&usb0_ssphy>;
+ 				phy-names = "usb2-phy", "usb3-phy";
 -- 
-BRs
-Schspa Shi
+2.38.1
+
