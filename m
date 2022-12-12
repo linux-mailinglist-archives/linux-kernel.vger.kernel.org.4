@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4ADD64A4C8
+	by mail.lfdr.de (Postfix) with ESMTP id 5208464A4C6
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 17:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiLLQbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 11:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S232729AbiLLQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 11:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbiLLQbN (ORCPT
+        with ESMTP id S232812AbiLLQbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Dec 2022 11:31:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD2DFCC7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:31:11 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9292B48F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 08:31:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38ED4B80DB0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03C78C43392;
-        Mon, 12 Dec 2022 16:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670862669;
-        bh=JjA2ikQRyxGnFCxes7YpG1DhcGHv6s77ClCOnXbgkTM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=i5aCQTFL+2+lYOPTNLT6md6ZyT8UJKZ0rh1FdgOUaQrTiu+Vgx/CqTI4Fo8sz2R0/
-         S3DGkeMnKnkfFN1p6Zidu1n9RsegVSi8VTHZwf/Y31Xl8yAUMzF7jOX6lPACC1zn8x
-         IaVGSffzCMvulMBqlBEi2BS+tyWYrI80x7u+cBodtz088GgYUKAIGZ24muOtmcLjiW
-         cfelkNc30Udl8leTRcPytGZn4MyQ1nemlPsz/emqVB0jkqd7waZzDvlYLj/cbYhDdq
-         wd/cMiBJZxJt//j3uPvdWj+FHc9lQgl8fLWvmMB1MXWeAXe2hd1JkXtcuasMw+MhIG
-         jFCaJ2Yy9PFGA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E5F99C197B4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A467B80DAD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A0B9C433F0;
         Mon, 12 Dec 2022 16:31:08 +0000 (UTC)
-Subject: Re: [GIT PULL] -funsigned-char conversion for 6.2-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670862668;
+        bh=UVy/X2xXRYIrCuTETU+xYcww4kutig+6b8E8FUcuC+k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NO89au7KQqhOfl/EQTFrmyATi1lYylGPjve3AI2YHq1hvVFTw+bQaZSGqirBAk/Pa
+         x1ee4+1HeQKF9HkzI1aOmCdwbyyBuhMWKGRID2LvL2wqs9PkutUp6FSkvzjjXN7/vY
+         XCEIaA2RhHq7TmucboLrsxc3Bvia9kAhY78UEEbpsss2rm1aY28dWYmH0osG6O5NTZ
+         krAw6UvFmiVZxO1fpyw4GuQX7onWNkVO5pNVsPlP4lQYrrf+rGBMG2HtYKpzp3T0YI
+         k+kKUdLcwp23IdBwEn6xXrP0mX2fqN+qWve1C++SuKuy7SlmuZXiTINAKXM+IUKuI2
+         8tQBjFBBh+j3A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 19808C00445;
+        Mon, 12 Dec 2022 16:31:08 +0000 (UTC)
+Subject: Re: [GIT PULL] LKMM changes for v6.2
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221205150116.1064295-1-Jason@zx2c4.com>
-References: <20221205150116.1064295-1-Jason@zx2c4.com>
+In-Reply-To: <20221203011549.GA1815917@paulmck-ThinkPad-P17-Gen-1>
+References: <20221203011549.GA1815917@paulmck-ThinkPad-P17-Gen-1>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221205150116.1064295-1-Jason@zx2c4.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git tags/unsigned-char-6.2-for-linus
-X-PR-Tracked-Commit-Id: 0445d1bae1cce00ae4e99c8cde33784a8199bad6
+X-PR-Tracked-Message-Id: <20221203011549.GA1815917@paulmck-ThinkPad-P17-Gen-1>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2022.12.02a
+X-PR-Tracked-Commit-Id: ee5a86f451f7cc8a904fcbc4f3dece023d36d6e5
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3a28c2c89f4b412b648761430720d40a8dc326ef
-Message-Id: <167086266893.18680.16269402751623561396.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 5517a2eaec8f525506867988adc6cfe1c414c90a
+Message-Id: <167086266810.18680.9364659172030802300.pr-tracker-bot@kernel.org>
 Date:   Mon, 12 Dec 2022 16:31:08 +0000
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     torvalds@linux-foundation.org, stern@rowland.harvard.edu,
+        paul.heidekrueger@in.tum.de, sj@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon,  5 Dec 2022 16:01:16 +0100:
+The pull request you sent on Fri, 2 Dec 2022 17:15:49 -0800:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git tags/unsigned-char-6.2-for-linus
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2022.12.02a
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3a28c2c89f4b412b648761430720d40a8dc326ef
+https://git.kernel.org/torvalds/c/5517a2eaec8f525506867988adc6cfe1c414c90a
 
 Thank you!
 
