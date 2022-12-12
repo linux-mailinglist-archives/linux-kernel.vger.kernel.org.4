@@ -2,404 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006C2649B0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0330F649B10
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 10:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbiLLJY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 04:24:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S231859AbiLLJYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 04:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiLLJXq (ORCPT
+        with ESMTP id S231157AbiLLJYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 04:23:46 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A1D90
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 01:23:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670837024; x=1702373024;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gnJiZPI7w4a9ZInKV8aetpNn1G290OEIUkpbnuUSqqM=;
-  b=mYsoXvuL8XNRTtekuf0LfSuu8Kh9wwtO/iHsDdHP8mifLpKAGdiIG7nR
-   dYbkxH3tcrAJPfdv5g3o98B223NTTGf34NEsx+Pm5CTlz45CzN87InVpy
-   S0cAm83m8Vw1gukvdFW5vbLzDqyL2SVoG3ojG4yVhY+M7DkiKoKaGT+hc
-   5e+tSbkm0MahjJRamJjXJDOYY+VU9Xtq5oygbbm3w0C0vae+b1G+0J3yH
-   sxbJgw8rYVcBHgFE5S2KNn0UhfAuk3JG+5fHwPJDvKwdUiXJKsxLgL+7Y
-   8TTQ7FE2ruoRGsTjn4Rzw0BVT65W0TDFVEJHThGAVUvmhYuNPImbwXpk5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="404066119"
+        Mon, 12 Dec 2022 04:24:11 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610E7F53;
+        Mon, 12 Dec 2022 01:24:10 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="319665590"
 X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="404066119"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 01:23:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="711607520"
+   d="scan'208";a="319665590"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 01:24:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10558"; a="736903233"
 X-IronPort-AV: E=Sophos;i="5.96,237,1665471600"; 
-   d="scan'208";a="711607520"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.27.183]) ([10.213.27.183])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 01:23:40 -0800
-Message-ID: <ac002ab6-4563-825c-0aba-0ba049bef009@intel.com>
-Date:   Mon, 12 Dec 2022 10:23:38 +0100
+   d="scan'208";a="736903233"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Dec 2022 01:24:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1p4f2b-008Oim-0a;
+        Mon, 12 Dec 2022 11:24:05 +0200
+Date:   Mon, 12 Dec 2022 11:24:04 +0200
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jean Delvare <jdelvare@suse.de>, Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH] media: rc: Drop obsolete dependencies on COMPILE_TEST
+Message-ID: <Y5bzNH2tYeFUIGnI@smile.fi.intel.com>
+References: <20221121170911.7cd72bfc@endymion.delvare>
+ <20221211205648.hdv5haufqwfoxzu2@pengutronix.de>
+ <20221211231435.43c4f361@endymion.delvare>
+ <20221212075907.4iwjsib5nrk7eqr2@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [Intel-gfx] [PATCH 3/5] drm/i915/gt: kill fetch_and_zero usage
-Content-Language: en-US
-To:     "Upadhyay, Tejas" <tejas.upadhyay@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <20221209154843.4162814-3-andrzej.hajda@intel.com>
- <SJ1PR11MB6204758F6EDFF3BE8101565081E29@SJ1PR11MB6204.namprd11.prod.outlook.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <SJ1PR11MB6204758F6EDFF3BE8101565081E29@SJ1PR11MB6204.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221212075907.4iwjsib5nrk7eqr2@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 12, 2022 at 08:59:07AM +0100, Uwe Kleine-König wrote:
+> On Sun, Dec 11, 2022 at 11:14:35PM +0100, Jean Delvare wrote:
+> > On Sun, 11 Dec 2022 21:56:48 +0100, Uwe Kleine-König wrote:
+> > > On Mon, Nov 21, 2022 at 05:09:11PM +0100, Jean Delvare wrote:
 
+...
 
-On 12.12.2022 10:14, Upadhyay, Tejas wrote:
->
->> -----Original Message-----
->> From: Intel-gfx <intel-gfx-bounces@lists.freedesktop.org> On Behalf Of
->> Andrzej Hajda
->> Sent: Friday, December 9, 2022 9:19 PM
->> To: linux-kernel@vger.kernel.org; intel-gfx@lists.freedesktop.org; dri-
->> devel@lists.freedesktop.org
->> Cc: Hajda, Andrzej <andrzej.hajda@intel.com>; Arnd Bergmann
->> <arnd@arndb.de>; Vivi, Rodrigo <rodrigo.vivi@intel.com>; Andrew Morton
->> <akpm@linux-foundation.org>; Andy Shevchenko
->> <andriy.shevchenko@linux.intel.com>
->> Subject: [Intel-gfx] [PATCH 3/5] drm/i915/gt: kill fetch_and_zero usage
->>
->> Better use recently introduced kernel core helper.
->>
->> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
->> ---
->>   drivers/gpu/drm/i915/gt/intel_engine_cs.c            | 2 +-
->>   drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c     | 4 ++--
->>   drivers/gpu/drm/i915/gt/intel_execlists_submission.c | 4 ++--
->>   drivers/gpu/drm/i915/gt/intel_ggtt.c                 | 4 ++--
->>   drivers/gpu/drm/i915/gt/intel_gsc.c                  | 2 +-
->>   drivers/gpu/drm/i915/gt/intel_gt.c                   | 4 ++--
->>   drivers/gpu/drm/i915/gt/intel_gt_pm.c                | 2 +-
->>   drivers/gpu/drm/i915/gt/intel_lrc.c                  | 6 +++---
->>   drivers/gpu/drm/i915/gt/intel_migrate.c              | 2 +-
->>   drivers/gpu/drm/i915/gt/intel_rc6.c                  | 2 +-
->>   drivers/gpu/drm/i915/gt/intel_rps.c                  | 2 +-
->>   drivers/gpu/drm/i915/gt/selftest_context.c           | 2 +-
->>   drivers/gpu/drm/i915/gt/selftest_ring_submission.c   | 2 +-
->>   drivers/gpu/drm/i915/gt/selftest_timeline.c          | 2 +-
->>   drivers/gpu/drm/i915/gt/uc/intel_uc.c                | 2 +-
->>   drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c             | 2 +-
->>   16 files changed, 22 insertions(+), 22 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
->> b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
->> index c33e0d72d6702b..de318d96d52abd 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
->> @@ -1024,7 +1024,7 @@ static void cleanup_status_page(struct
->> intel_engine_cs *engine)
->>   	/* Prevent writes into HWSP after returning the page to the system */
->>   	intel_engine_set_hwsp_writemask(engine, ~0u);
->>
->> -	vma = fetch_and_zero(&engine->status_page.vma);
->> +	vma = exchange(&engine->status_page.vma, NULL);
->>   	if (!vma)
->>   		return;
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
->> b/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
->> index 9a527e1f5be655..6029fafaaa674f 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_engine_heartbeat.c
->> @@ -229,7 +229,7 @@ static void heartbeat(struct work_struct *wrk)
->>   	mutex_unlock(&ce->timeline->mutex);
->>   out:
->>   	if (!engine->i915->params.enable_hangcheck ||
->> !next_heartbeat(engine))
->> -		i915_request_put(fetch_and_zero(&engine-
->>> heartbeat.systole));
->> +		i915_request_put(exchange(&engine->heartbeat.systole, 0));
->>   	intel_engine_pm_put(engine);
->>   }
->>
->> @@ -244,7 +244,7 @@ void intel_engine_unpark_heartbeat(struct
->> intel_engine_cs *engine)  void intel_engine_park_heartbeat(struct
->> intel_engine_cs *engine)  {
->>   	if (cancel_delayed_work(&engine->heartbeat.work))
->> -		i915_request_put(fetch_and_zero(&engine-
->>> heartbeat.systole));
->> +		i915_request_put(exchange(&engine->heartbeat.systole, 0));
->>   }
->>
->>   void intel_gt_unpark_heartbeats(struct intel_gt *gt) diff --git
->> a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
->> b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
->> index 49a8f10d76c77b..29e78078d55a8b 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
->> @@ -3197,7 +3197,7 @@ static void execlists_reset_cancel(struct
->> intel_engine_cs *engine)
->>   		RB_CLEAR_NODE(rb);
->>
->>   		spin_lock(&ve->base.sched_engine->lock);
->> -		rq = fetch_and_zero(&ve->request);
->> +		rq = exchange(&ve->request, NULL);
->>   		if (rq) {
->>   			if (i915_request_mark_eio(rq)) {
->>   				rq->engine = engine;
->> @@ -3602,7 +3602,7 @@ static void rcu_virtual_context_destroy(struct
->> work_struct *wrk)
->>
->>   		spin_lock_irq(&ve->base.sched_engine->lock);
->>
->> -		old = fetch_and_zero(&ve->request);
->> +		old = exchange(&ve->request, NULL);
->>   		if (old) {
->>   			GEM_BUG_ON(!__i915_request_is_complete(old));
->>   			__i915_request_submit(old);
->> diff --git a/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> index 0c7fe360f87331..2eb0173c6e968c 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_ggtt.c
->> @@ -684,7 +684,7 @@ static void fini_aliasing_ppgtt(struct i915_ggtt *ggtt)  {
->>   	struct i915_ppgtt *ppgtt;
->>
->> -	ppgtt = fetch_and_zero(&ggtt->alias);
->> +	ppgtt = exchange(&ggtt->alias, NULL);
->>   	if (!ppgtt)
->>   		return;
->>
->> @@ -1238,7 +1238,7 @@ bool i915_ggtt_resume_vm(struct
->> i915_address_space *vm)
->>   				   was_bound);
->>
->>   		if (obj) { /* only used during resume => exclusive access */
->> -			write_domain_objs |= fetch_and_zero(&obj-
->>> write_domain);
->> +			write_domain_objs |= exchange(&obj-
->>> write_domain, 0);
->>   			obj->read_domains |= I915_GEM_DOMAIN_GTT;
->>   		}
->>   	}
->> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c
->> b/drivers/gpu/drm/i915/gt/intel_gsc.c
->> index bcc3605158dbde..7226b42bb70b2a 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
->> @@ -70,7 +70,7 @@ gsc_ext_om_alloc(struct intel_gsc *gsc, struct
->> intel_gsc_intf *intf, size_t size
->>
->>   static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)  {
->> -	struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
->> +	struct drm_i915_gem_object *obj = exchange(&intf->gem_obj, NULL);
->>
->>   	if (!obj)
->>   		return;
->> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c
->> b/drivers/gpu/drm/i915/gt/intel_gt.c
->> index 4e7af9bc73ad05..a277bd47db813e 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
->> @@ -757,7 +757,7 @@ int intel_gt_init(struct intel_gt *gt)
->>   	intel_uc_fini(&gt->uc);
->>   err_engines:
->>   	intel_engines_release(gt);
->> -	i915_vm_put(fetch_and_zero(&gt->vm));
->> +	i915_vm_put(exchange(&gt->vm, 0));
->>   err_pm:
->>   	intel_gt_pm_fini(gt);
->>   	intel_gt_fini_scratch(gt);
->> @@ -806,7 +806,7 @@ void intel_gt_driver_release(struct intel_gt *gt)  {
->>   	struct i915_address_space *vm;
->>
->> -	vm = fetch_and_zero(&gt->vm);
->> +	vm = exchange(&gt->vm, NULL);
->>   	if (vm) /* FIXME being called twice on error paths :( */
->>   		i915_vm_put(vm);
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
->> b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
->> index 16db85fab0b19b..f066936994a9e2 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
->> @@ -123,7 +123,7 @@ static int __gt_unpark(struct intel_wakeref *wf)
->> static int __gt_park(struct intel_wakeref *wf)  {
->>   	struct intel_gt *gt = container_of(wf, typeof(*gt), wakeref);
->> -	intel_wakeref_t wakeref = fetch_and_zero(&gt->awake);
->> +	intel_wakeref_t wakeref = exchange(&gt->awake, 0);
->>   	struct drm_i915_private *i915 = gt->i915;
->>
->>   	GT_TRACE(gt, "\n");
->> diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c
->> b/drivers/gpu/drm/i915/gt/intel_lrc.c
->> index 7771a19008c604..9a2bfb6d14196c 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_lrc.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
->> @@ -1144,7 +1144,7 @@ __lrc_alloc_state(struct intel_context *ce, struct
->> intel_engine_cs *engine)  static struct intel_timeline *  pinned_timeline(struct
->> intel_context *ce, struct intel_engine_cs *engine)  {
->> -	struct intel_timeline *tl = fetch_and_zero(&ce->timeline);
->> +	struct intel_timeline *tl = exchange(&ce->timeline, NULL);
->>
->>   	return intel_timeline_create_from_engine(engine,
->> page_unmask_bits(tl));  } @@ -1261,8 +1261,8 @@ void lrc_fini(struct
->> intel_context *ce)
->>   	if (!ce->state)
->>   		return;
->>
->> -	intel_ring_put(fetch_and_zero(&ce->ring));
->> -	i915_vma_put(fetch_and_zero(&ce->state));
->> +	intel_ring_put(exchange(&ce->ring, 0));
->> +	i915_vma_put(exchange(&ce->state, 0));
->>   }
->>
->>   void lrc_destroy(struct kref *kref)
->> diff --git a/drivers/gpu/drm/i915/gt/intel_migrate.c
->> b/drivers/gpu/drm/i915/gt/intel_migrate.c
->> index b405a04135ca21..2c076a51b66b30 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_migrate.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_migrate.c
->> @@ -1116,7 +1116,7 @@ void intel_migrate_fini(struct intel_migrate *m)  {
->>   	struct intel_context *ce;
->>
->> -	ce = fetch_and_zero(&m->context);
->> +	ce = exchange(&m->context, NULL);
->>   	if (!ce)
->>   		return;
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_rc6.c
->> b/drivers/gpu/drm/i915/gt/intel_rc6.c
->> index 2ee4051e4d9613..2451ebddb0f982 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_rc6.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_rc6.c
->> @@ -702,7 +702,7 @@ void intel_rc6_fini(struct intel_rc6 *rc6)
->>
->>   	intel_rc6_disable(rc6);
->>
->> -	pctx = fetch_and_zero(&rc6->pctx);
->> +	pctx = exchange(&rc6->pctx, NULL);
->>   	if (pctx)
->>   		i915_gem_object_put(pctx);
->>
->> diff --git a/drivers/gpu/drm/i915/gt/intel_rps.c
->> b/drivers/gpu/drm/i915/gt/intel_rps.c
->> index 9ad3bc7201cbaa..a102d8768e1d7b 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_rps.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_rps.c
->> @@ -1831,7 +1831,7 @@ static void rps_work(struct work_struct *work)
->>   	u32 pm_iir = 0;
->>
->>   	spin_lock_irq(gt->irq_lock);
->> -	pm_iir = fetch_and_zero(&rps->pm_iir) & rps->pm_events;
->> +	pm_iir = exchange(&rps->pm_iir, 0) & rps->pm_events;
->>   	client_boost = atomic_read(&rps->num_waiters);
->>   	spin_unlock_irq(gt->irq_lock);
->>
->> diff --git a/drivers/gpu/drm/i915/gt/selftest_context.c
->> b/drivers/gpu/drm/i915/gt/selftest_context.c
->> index 76fbae358072df..ca0a38de696eec 100644
->> --- a/drivers/gpu/drm/i915/gt/selftest_context.c
->> +++ b/drivers/gpu/drm/i915/gt/selftest_context.c
->> @@ -171,7 +171,7 @@ static int live_context_size(void *arg)
->>   		 * active state is sufficient, we are only checking that we
->>   		 * don't use more than we planned.
->>   		 */
->> -		saved = fetch_and_zero(&engine->default_state);
->> +		saved = exchange(&engine->default_state, NULL);
->>
->>   		/* Overlaps with the execlists redzone */
->>   		engine->context_size += I915_GTT_PAGE_SIZE; diff --git
->> a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
->> b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
->> index 87ceb0f374b673..9e901f1d5d76a9 100644
->> --- a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
->> +++ b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
->> @@ -269,7 +269,7 @@ static int live_ctx_switch_wa(void *arg)
->>   		if (IS_GRAPHICS_VER(gt->i915, 4, 5))
->>   			continue; /* MI_STORE_DWORD is privileged! */
->>
->> -		saved_wa = fetch_and_zero(&engine->wa_ctx.vma);
->> +		saved_wa = exchange(&engine->wa_ctx.vma, NULL);
->>
->>   		intel_engine_pm_get(engine);
->>   		err = __live_ctx_switch_wa(engine);
->> diff --git a/drivers/gpu/drm/i915/gt/selftest_timeline.c
->> b/drivers/gpu/drm/i915/gt/selftest_timeline.c
->> index 522d0190509ccc..d74b13b1b38a6e 100644
->> --- a/drivers/gpu/drm/i915/gt/selftest_timeline.c
->> +++ b/drivers/gpu/drm/i915/gt/selftest_timeline.c
->> @@ -892,7 +892,7 @@ static int create_watcher(struct hwsp_watcher *w,
->> static int check_watcher(struct hwsp_watcher *w, const char *name,
->>   			 bool (*op)(u32 hwsp, u32 seqno))
->>   {
->> -	struct i915_request *rq = fetch_and_zero(&w->rq);
->> +	struct i915_request *rq = exchange(&w->rq, NULL);
->>   	u32 offset, end;
->>   	int err;
->>
->> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc.c
->> b/drivers/gpu/drm/i915/gt/uc/intel_uc.c
->> index 4f4b519e12c1b7..0085b1727dd47a 100644
->> --- a/drivers/gpu/drm/i915/gt/uc/intel_uc.c
->> +++ b/drivers/gpu/drm/i915/gt/uc/intel_uc.c
->> @@ -166,7 +166,7 @@ static void __uc_capture_load_err_log(struct intel_uc
->> *uc)
->>
->>   static void __uc_free_load_err_log(struct intel_uc *uc)  {
->> -	struct drm_i915_gem_object *log = fetch_and_zero(&uc-
->>> load_err_log);
->> +	struct drm_i915_gem_object *log = exchange(&uc->load_err_log,
->> NULL);
->>
->>   	if (log)
->>   		i915_gem_object_put(log);
->> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
->> b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
->> index 6c83a8b66c9e32..44ff6da26bd698 100644
->> --- a/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
->> +++ b/drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c
->> @@ -1055,7 +1055,7 @@ void intel_uc_fw_cleanup_fetch(struct intel_uc_fw
->> *uc_fw)
->>   	if (!intel_uc_fw_is_available(uc_fw))
->>   		return;
->>
->> -	i915_gem_object_put(fetch_and_zero(&uc_fw->obj));
->> +	i915_gem_object_put(exchange(&uc_fw->obj, 0));
-> Should this be set to NULL instead?
+> > > > -		.of_match_table = of_match_ptr(pwm_ir_of_match),
+> > > > +		.of_match_table = pwm_ir_of_match,
 
-Yes, apparently my cocci script was not able to parse type of uc_fw->obj.
-Thx, will fix it in another iteration.
+> > > That hunk makes sense even without the Kconfig change. ACPI makes use of
+> > > .of_match_table, so
+> > > 
+> > > 	.of_match_table = of_match_ptr(pwm_ir_of_match),
+> > > 
+> > > is (almost?) always wrong.
+> > 
+> > Should we just get rid of this macro altogether then?
+> > 
+> > (Somehow I have a strange feeling that we already had this
+> > discussion...)
+> 
+> Might be. But for me this is only second hand knowledge, too. Maybe
+> someone of the new recipents in this thread feels competent to comment
+> here?!
 
-Regards
-Andrzej
+Pros of of_match_ptr() / ACPI_PTR():
+- saves a few dozens of bytes in the module ID tables
+- doesn't show ACPI ID for non-ACPI platform or OF ID on non-OF platforms
 
+Cons:
+- prevents from using OF IDs on ACPI platforms
+- doesn't show ACPI ID for non-ACPI platform or OF ID on non-OF platforms
+- makes error prone for the compiler to have the variable unused
+- makes code uglier
 
+(I left the second in the both because I find useful to have all supported IDs
+ to be listed even if the system is compiled with OF/ACPI opted-out.)
 
->
-> Thanks,
-> Tejas
->>   	intel_uc_fw_change_status(uc_fw,
->> INTEL_UC_FIRMWARE_SELECTED);  }
->> --
->> 2.34.1
+Personally I remove the of_match_ptr()/ACPI_PTR() from drivers that can be used
+on OF or ACPI platforms, which leaves us only with the drivers we are 100% sure
+that they won't ever be used on non-OF platforms. BUT, I do not see any sense
+to have of_match_ptr() that either in use, because the driver in question is
+100% for OF platform, or not when it's compile tested, which means it reduces
+test coverage anyway. All the same for ACPI_PTR().
+
+TL;DR: I don't see any [big] usefulness of keeping those macros.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
