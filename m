@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A313649D2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48156649D32
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiLLLIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S232086AbiLLLJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiLLLHY (ORCPT
+        with ESMTP id S232244AbiLLLIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:07:24 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9116F11C0A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:56:15 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ud5so26937939ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:56:15 -0800 (PST)
+        Mon, 12 Dec 2022 06:08:00 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B10C120A8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:58:13 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id f16so12085864ljc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 02:58:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sUJ5cvuCsGK8YGIL2fUMIgBzFaSAkYgBHiJvuOvGsag=;
-        b=UzwWO/goR1hVNGn165QBf2OGcAY+wwDHNMH9vgOU7ZEDy0WMopnshPMZW5BWLKcZls
-         zDx5YjKL3tqHm2U0ki5mvpUZUpEmAcl5WYNKWbLJ6E41F3l5JvTq8U7Mxebo9Kg1kDMh
-         mfylwJ5mKFk/DcVAgwCVMSqsJvWMH802dmTZA=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KKDIIwC0muGe5b+qB8UELuXYDs0YM6jtOaRVfXtdpWw=;
+        b=QOLjn72Kyxy4sxjiGDDxScP1UNkxBkF/8M/iTlnmW53PXHpKIentX3q0/wZTxyOcL+
+         LWWFQmSQ/jHKGsOKJDF3AS8Ixt+S66Ny20pkwmaRVUshFxiyC1LouYWzmYgS5BVZIOwI
+         aVIKObaeUnCuwM1wZTwmrW1NSGUgS/yEVmI0FXENm8UZ3Cz4883O3d97LMUf8U3nYHKH
+         B6zN0vhFeShJVvWP6Oi/6xy2hD6cDwSOlgTChTCyNcSG5lDRdTXpKxXlrGCjc0YjNmsj
+         9lldmF9Zct/sKxilY3U3y7fk6Osfpf8l84XNBtzlUS1fmLOBgtcwlNWjNTG0GbxuQTFy
+         COjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sUJ5cvuCsGK8YGIL2fUMIgBzFaSAkYgBHiJvuOvGsag=;
-        b=omdySckuNednXTnLJT0/PBsRaKQq+38WC8q0mVo1tb2h0xPMCCvf3SjUSphFuJNxzZ
-         JjvRQ1yyeTeB3V8uPUwuqRY5yBgcc1TV40s9tUCK8Z0KoJ8x8UrJW7OV3q0ELKJKxe2N
-         wqU40yt474foiNMrV/1c4Hnfa2nziVEK0cPiPbbe97lUu6QEReeuPvzkYnaK0pZse2MQ
-         Ro+3lwOMLhLOV2w6pKwX/EzTDBraFPrE5gTxmNFs/mfPZqa7+EvXxTlbq/Vv98ifNZdD
-         adDx0u63jpXL/shH2t4nrDmJuupeHJ1pTtuAymiXOer1wUeC/Yt1Xtg6qjhlM5doo1x1
-         NW/Q==
-X-Gm-Message-State: ANoB5pm0i/QAUCPZ29p2YZtNylUWvmXGDOBZvvvgG2x21L2ZkTdw+P7k
-        Xmz29vHAMX4UbzB8GZ16GJOWuw==
-X-Google-Smtp-Source: AA0mqf6QIcYu5BUKcyXNA3ylKVdp/HuLErE5ZfNLmUTMoY4QP0E3qyfe4lWhXF+OkPxUAAlhXbiWHQ==
-X-Received: by 2002:a17:906:71c2:b0:7ba:9c18:1205 with SMTP id i2-20020a17090671c200b007ba9c181205mr9922913ejk.50.1670842574188;
-        Mon, 12 Dec 2022 02:56:14 -0800 (PST)
-Received: from miu.piliscsaba.redhat.com (193-226-215-206.pool.digikabel.hu. [193.226.215.206])
-        by smtp.gmail.com with ESMTPSA id k4-20020a170906970400b007aea1dc1840sm3141236ejx.111.2022.12.12.02.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 02:56:13 -0800 (PST)
-Date:   Mon, 12 Dec 2022 11:56:06 +0100
-From:   Miklos Szeredi <miklos@szeredi.hu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
-Subject: [GIT PULL] overlayfs update for 6.2
-Message-ID: <Y5cIxrmoeQSCJMlQ@miu.piliscsaba.redhat.com>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KKDIIwC0muGe5b+qB8UELuXYDs0YM6jtOaRVfXtdpWw=;
+        b=DDKXauVdz4S0u8oVAArOqBFL1TkFR+X91uNUYrIlTXgheda5i/q1BctDhQ6IjOVPAf
+         V0eYw8inZwW01A2h0MONFJ3lfT6LKkZ8MD4WHfNYknSvSEbMhGiKuq9OfrJJksTI5GN6
+         CGEXn27/k2IrgqjvLaYhc8SGIjQnwQwoEvmtwlQjMMp4tL9B5PSs/IgWvPrqSIqqoscZ
+         Aa/BVNx+2iVcJF3s7n/KAUWogQhqCRivnaCuLzJHCOHR6ZQQik8FOiFLNVMZOUESwOwq
+         wxnIAs5zAJZJrB7yj+7CoSOG1S2gfRjHo7+0BNwUNovEEZPzHXU86G0daUjYG2aK8Y5p
+         cwCA==
+X-Gm-Message-State: ANoB5pmnVTrWF7ub/d4StYYZtDj+IxRN0+A/Ef5AHhPfgfYDEFv3VXAI
+        90iYSq99HLoY7yBKfh6Ja4nEBg==
+X-Google-Smtp-Source: AA0mqf5Lzb3ZKCF/89HxYr7XxLLhyljEIA7mBJvEm4UjPpNzQi6ngb2mpoJc/FYKG3ddZZ8lt/tZgA==
+X-Received: by 2002:a2e:3619:0:b0:279:c6bf:f3d1 with SMTP id d25-20020a2e3619000000b00279c6bff3d1mr3458812lja.33.1670842691686;
+        Mon, 12 Dec 2022 02:58:11 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.102])
+        by smtp.gmail.com with ESMTPSA id b13-20020a2eb90d000000b00278e9c0d3a2sm1183017ljb.33.2022.12.12.02.58.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Dec 2022 02:58:11 -0800 (PST)
+Date:   Mon, 12 Dec 2022 13:58:07 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+CC:     marijn.suijten@somainline.org, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu-qcom: Add SM8150 DPU compatible
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221212100617.18190-1-konrad.dybcio@linaro.org>
+References: <20221212100617.18190-1-konrad.dybcio@linaro.org>
+Message-ID: <552EFDD5-4BBE-408D-90EA-C96F4A0876B7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull from:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs.git tags/ovl-update-6.2
+On 12 December 2022 13:06:16 GMT+03:00, Konrad Dybcio <konrad=2Edybcio@lin=
+aro=2Eorg> wrote:
+>From: Marijn Suijten <marijn=2Esuijten@somainline=2Eorg>
+>
+>Add the SM8150 DPU compatible to clients compatible list, as it also
+>needs the workarounds=2E
 
- - Fix a couple of bugs found by syzbot
+Please rebase on top of linux-next, this part was rewritten=2E
 
- - Don't ingore some open flags set by fcntl(F_SETFL)
 
- - Fix failure to create a hard link in certain cases
+>
+>Signed-off-by: Marijn Suijten <marijn=2Esuijten@somainline=2Eorg>
+>Signed-off-by: Konrad Dybcio <konrad=2Edybcio@linaro=2Eorg>
+>---
+>Depends on the binding here:
+>
+>[1] https://lore=2Ekernel=2Eorg/linux-arm-msm/20221212093315=2E11390-1-ko=
+nrad=2Edybcio@linaro=2Eorg/T/#t
+>
+> drivers/iommu/arm/arm-smmu/arm-smmu-qcom=2Ec | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom=2Ec b/drivers/iommu=
+/arm/arm-smmu/arm-smmu-qcom=2Ec
+>index 6610f5d2877d=2E=2Ecd74c1efcfde 100644
+>--- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom=2Ec
+>+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom=2Ec
+>@@ -255,6 +255,7 @@ static const struct of_device_id qcom_smmu_client_of_=
+match[] __maybe_unused =3D {
+> 	{ =2Ecompatible =3D "qcom,sdm845-mss-pil" },
+> 	{ =2Ecompatible =3D "qcom,sm6350-mdss" },
+> 	{ =2Ecompatible =3D "qcom,sm6375-mdss" },
+>+	{ =2Ecompatible =3D "qcom,sm8150-mdss" },
+> 	{ =2Ecompatible =3D "qcom,sm8250-mdss" },
+> 	{ }
+> };
 
- - Use type safe helpers for some mnt_userns transformations
-
- - Improve performance of mount
-
- - Misc cleanups
-
-Thanks,
-Miklos
-
----
-Al Viro (1):
-      ovl: update ->f_iocb_flags when ovl_change_flags() modifies ->f_flags
-
-Amir Goldstein (2):
-      ovl: do not reconnect upper index records in ovl_indexdir_cleanup()
-      ovl: use plain list filler in indexdir and workdir cleanup
-
-Chen Zhongjin (1):
-      ovl: fix use inode directly in rcu-walk mode
-
-Christian Brauner (1):
-      ovl: port to vfs{g,u}id_t and associated helpers
-
-Colin Ian King (1):
-      ovl: Kconfig: Fix spelling mistake "undelying" -> "underlying"
-
-Jiangshan Yi (1):
-      ovl: fix comment typos
-
-Kees Cook (1):
-      ovl: Use "buf" flexible array for memcpy() destination
-
-Miklos Szeredi (1):
-      ovl: use inode instead of dentry where possible
-
-Stanislav Goriainov (1):
-      ovl: Add comment on upperredirect reassignment
-
-Zhang Tianci (1):
-      ovl: Use ovl mounter's fsuid and fsgid in ovl_link()
-
----
- fs/overlayfs/Kconfig     |  2 +-
- fs/overlayfs/dir.c       | 46 +++++++++++++++++++++++++-------------
- fs/overlayfs/export.c    |  8 +++----
- fs/overlayfs/file.c      |  3 ++-
- fs/overlayfs/namei.c     | 12 +++++++---
- fs/overlayfs/overlayfs.h | 11 ++++-----
- fs/overlayfs/readdir.c   | 58 ++++++++++++++++++++++--------------------------
- fs/overlayfs/super.c     |  7 +++++-
- fs/overlayfs/util.c      | 15 ++++++++-----
- 9 files changed, 93 insertions(+), 69 deletions(-)
+--=20
+With best wishes
+Dmitry
