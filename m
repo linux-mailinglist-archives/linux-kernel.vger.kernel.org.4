@@ -2,181 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6935F64991B
+	by mail.lfdr.de (Postfix) with ESMTP id B3D6664991C
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 08:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbiLLHBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 02:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S231372AbiLLHB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 02:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLLHBV (ORCPT
+        with ESMTP id S231340AbiLLHB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 02:01:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993ACBC81
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:01:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED39660EDA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 07:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8FE2C433EF;
-        Mon, 12 Dec 2022 07:01:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670828479;
-        bh=kEC/bBy/GTyYEBCgbPrMyXtSHdKJIlAGnQpUleGGwZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RD2iWcGqSwJ8Vjn1J3j24lv892KhzL/IAalLN+QOQ1WVvw23cy9x2JaZ0l607yhQd
-         POvOefa211GYpDgCOtGThvdeL3HaSj+bstUvxTiWmp5ncG2/W+NkFx7UJa5Sl18XSk
-         kqXd4r+kwsad4y/mMWV7yAG6Dpl9gz1Mx0tzdf6dt/uX22gXBMa/ZZnnWD59Usn2A5
-         pFKMcNghokirApjflY9VinSikE+czRVUdbqOgAjmIORST8uAjTaA64qcO9v0H3Wiqq
-         fYgWe50UaadU5C2MqFOWXQrMK330OPVodLqgKxRjh/i00txk4nMRVXb/lEY77cpDD2
-         B+m0Gxi0PKBmA==
-Date:   Mon, 12 Dec 2022 15:01:12 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Jia Zhu <zhujia.zj@bytedance.com>
-Subject: Re: [GIT PULL] erofs updates for 6.2-rc1 (fscache part inclusive)
-Message-ID: <Y5bRuDiEwUAK1si1@debian>
-Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>, Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Jia Zhu <zhujia.zj@bytedance.com>
-References: <Y5TB6E77vbpRMhIk@debian>
+        Mon, 12 Dec 2022 02:01:56 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60474BF42
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:01:55 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so5670122iog.0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 23:01:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0mPgoMg87vPOKC0UjuNxDbWwpmOmscsf4VbkK7wqqwg=;
+        b=n/f5qLvyCKuci3MJfy17Oy/43x8FLT3gXUxm10/w2XdLX0DHtMsvRrz9YMvNajj37a
+         LSEvCMM6cYKtAdktYcwHA736Fah8TuJLfGzr8T6thRwVCGlBpCQS9NCybyI2cT7QrtHH
+         jQsKFHOBjBOCXDDEiNxBVKXQArRUDHpBBXOAws46xctpsqFgB43/M6KnfR6joSb9uXnz
+         dZ6NQsp5wtsgu6es9j5BUkNFrTeuENnENcLNSwN4R0i9y6Htnfn3zEo75+HPA4aJfPut
+         /tBU2rKus9626DlGkL5sI4XIIlctUhPdfdOfwB6J4YN1gDssGj2daCJt3PlH/4yKrACL
+         F2LQ==
+X-Gm-Message-State: ANoB5pnHjziFdJO2zp77oZk8h2Jzw2XsbGpp6ZKY1HztEDS8gs3N6nkz
+        hWueMyqX7OdcAVSdKW+7ww7dIuopDWwoVdhnXl3hKSWyaKXP
+X-Google-Smtp-Source: AA0mqf4QZsRMXyeLfqq3XZnYm1GdTP4D0wyE7RvDzCPp1YR13yy0dSZ5WUVgQUFSfEcXgWup3y8V+ozK1sAoZWZpspcg4HpuVZ4o
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y5TB6E77vbpRMhIk@debian>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:c84f:0:b0:6e0:2b9e:b1c4 with SMTP id
+ y76-20020a6bc84f000000b006e02b9eb1c4mr5255683iof.186.1670828514726; Sun, 11
+ Dec 2022 23:01:54 -0800 (PST)
+Date:   Sun, 11 Dec 2022 23:01:54 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000019e05005ef9c1481@google.com>
+Subject: [syzbot] KASAN: stack-out-of-bounds Read in xfs_buf_delwri_submit_buffers
+From:   syzbot <syzbot+d2cdeba65d32ed1d2c4d@syzkaller.appspotmail.com>
+To:     djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello,
 
-On Sun, Dec 11, 2022 at 01:29:21AM +0800, Gao Xiang wrote:
-> Hi Linus,
-> 
-> Once the merge window opens, could you consider this pull request for
-> 6.2-rc1?
-> 
-> In this cycle, large folios are now enabled in the iomap/fscache mode
-> for uncompressed files first.  In order to do that, we've also cleaned
-> up better interfaces between erofs and fscache, which are acked by
-> fscache/netfs folks and included in this pull request.
-> 
-> Other than that, there are random fixes around erofs over fscache and
-> crafted images by syzbot, minor cleanups and documentation updates.
-> 
-> Note that there could be a trivial conflict between erofs and vfs
-> tree according to linux-next report [1].
-> 
-> Happy Holidays!
-> Gao Xiang
-> 
-> [1] https://lore.kernel.org/r/20221205092415.56cc6e19@canb.auug.org.au/
-> 
-> The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
-> 
->   Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.2-rc1
-> 
-> for you to fetch changes up to c505feba4c0d76084e56ec498ce819f02a7043ae:
-> 
+syzbot found the following issue on:
 
-Sorry for bothering again.
+HEAD commit:    3ecc37918c80 Merge tag 'media/v6.1-4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=162de243880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
+dashboard link: https://syzkaller.appspot.com/bug?extid=d2cdeba65d32ed1d2c4d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170a950b880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1625948f880000
 
-Just having seen v6.2 pull request requirements together with
-Linux 6.1 announcement.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/be14794fd26b/disk-3ecc3791.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/35b850996388/vmlinux-3ecc3791.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0eec0f8f6777/bzImage-3ecc3791.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/f72864a73792/mount_0.gz
 
-Comparing with the latest -next on the last Thursday, there was one-liner
-addition on
-commit 927e5010ff5b ("erofs: use kmap_local_page() only for erofs_bread()")
-as below:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d2cdeba65d32ed1d2c4d@syzkaller.appspotmail.com
 
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index 85932086d23f..5b3a793103af 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -268,6 +268,7 @@ static int erofs_fill_inode(struct inode *inode)
- 	case S_IFDIR:
- 		inode->i_op = &erofs_dir_iops;
- 		inode->i_fop = &erofs_dir_fops;
-+		inode_nohighmem(inode);
- 		break;
- 	case S_IFLNK:
- 		err = erofs_fill_symlink(inode, kaddr, ofs)
+XFS (loop5): Quotacheck: Done.
+==================================================================
+BUG: KASAN: stack-out-of-bounds in __lock_acquire+0x79/0x1f60 kernel/locking/lockdep.c:4925
+Read of size 8 at addr ffffc9000cad7918 by task syz-executor223/5006
 
-since I found erofs_lookup() could break on x86 platform with HIGHMEM
-enabled this weekend and I made all dirs inode_nohighmem() and folded
-into the original patch since it's no needed to keep dirs in HIGHMEM.
-I don't find other strange other than this.
+CPU: 1 PID: 5006 Comm: syz-executor223 Not tainted 6.1.0-rc8-syzkaller-00152-g3ecc37918c80 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x1f0 mm/kasan/report.c:395
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ __lock_acquire+0x79/0x1f60 kernel/locking/lockdep.c:4925
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xb3/0x100 kernel/locking/spinlock.c:162
+ down+0x35/0xb0 kernel/locking/semaphore.c:59
+ xfs_buf_lock fs/xfs/xfs_buf.c:1120 [inline]
+ xfs_buf_delwri_submit_buffers+0x22e/0x820 fs/xfs/xfs_buf.c:2164
+ xfs_buf_delwri_submit+0xbb/0x320 fs/xfs/xfs_buf.c:2242
+ xfs_qm_shrink_scan+0x1ca/0x410 fs/xfs/xfs_qm.c:514
+ do_shrink_slab+0x4e1/0xa00 mm/vmscan.c:842
+ shrink_slab+0x1e6/0x340 mm/vmscan.c:1002
+ drop_slab_node mm/vmscan.c:1037 [inline]
+ drop_slab+0x185/0x2c0 mm/vmscan.c:1047
+ drop_caches_sysctl_handler+0xb1/0x160 fs/drop_caches.c:66
+ proc_sys_call_handler+0x576/0x890 fs/proc/proc_sysctl.c:604
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+ splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+ do_splice_direct+0x279/0x3d0 fs/splice.c:974
+ do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1317 [inline]
+ __se_sys_sendfile64+0xd0/0x1b0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb176007db9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff863d4df8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 0000000000055e8c RCX: 00007fb176007db9
+RDX: 0000000020002080 RSI: 0000000000000004 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 00007fff863d4e20 R09: 00007fff863d4e20
+R10: 0000000000000870 R11: 0000000000000246 R12: 00007fff863d4e1c
+R13: 00007fff863d4e50 R14: 00007fff863d4e30 R15: 000000000000001a
+ </TASK>
 
-Because there is no -next version on Monday, if you would like to
-take all commits in -next you could take
-  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.2-rc1-alt
+The buggy address belongs to the virtual mapping at
+ [ffffc9000cad0000, ffffc9000cad9000) created by:
+ dup_task_struct+0x8b/0x490 kernel/fork.c:974
 
-instead (the top commit is e5293c693d68f705787480159c4cd332c09c5e67.)
+The buggy address belongs to the physical page:
+page:ffffea0001dbf580 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x76fd6
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 2, tgid 2 (kthreadd), ts 350542932176, free_ts 350448019466
+ prep_new_page mm/page_alloc.c:2539 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+ vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3043 [inline]
+ __vmalloc_node_range+0x9b2/0x1400 mm/vmalloc.c:3213
+ alloc_thread_stack_node+0x307/0x500 kernel/fork.c:311
+ dup_task_struct+0x8b/0x490 kernel/fork.c:974
+ copy_process+0x637/0x4000 kernel/fork.c:2084
+ kernel_clone+0x21b/0x620 kernel/fork.c:2671
+ kernel_thread+0x150/0x1d0 kernel/fork.c:2731
+ create_kthread kernel/kthread.c:399 [inline]
+ kthreadd+0x57c/0x750 kernel/kthread.c:746
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1459 [inline]
+ free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page_list+0xb4/0x7b0 mm/page_alloc.c:3529
+ release_pages+0x232a/0x25c0 mm/swap.c:1055
+ __pagevec_release+0x7d/0xf0 mm/swap.c:1075
+ pagevec_release include/linux/pagevec.h:71 [inline]
+ folio_batch_release include/linux/pagevec.h:135 [inline]
+ truncate_inode_pages_range+0x472/0x17f0 mm/truncate.c:373
+ kill_bdev block/bdev.c:76 [inline]
+ blkdev_flush_mapping+0x153/0x2c0 block/bdev.c:662
+ blkdev_put_whole block/bdev.c:693 [inline]
+ blkdev_put+0x4a5/0x730 block/bdev.c:953
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x494/0x520 fs/namespace.c:1186
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-In that way I will send another patch to fix the issue above later,
-but if it's possible, it'd be better to apply "tags/erofs-for-6.2-rc1"
-directly...
+Memory state around the buggy address:
+ ffffc9000cad7800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc9000cad7880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc9000cad7900: f3 f3 f3 f3 f3 f3 f3 f3 00 00 00 00 00 00 00 00
+                            ^
+ ffffc9000cad7980: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+ ffffc9000cad7a00: 00 00 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
-The diffstat of tags/erofs-for-6.2-rc1-alt is:
 
-Chen Zhongjin (1):
-      erofs: Fix pcluster memleak when its block address is zero
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Gao Xiang (5):
-      erofs: update documentation
-      erofs: clean up cached I/O strategies
-      erofs: use kmap_local_page() only for erofs_bread()
-      erofs: fix missing unmap if z_erofs_get_extent_compressedlen() fails
-      erofs: validate the extent length for uncompressed pclusters
-
-Hou Tao (1):
-      erofs: check the uniqueness of fsid in shared domain in advance
-
-Jingbo Xu (5):
-      erofs: enable large folios for iomap mode
-      fscache,cachefiles: add prepare_ondemand_read() callback
-      erofs: switch to prepare_ondemand_read() in fscache mode
-      erofs: support large folios for fscache mode
-      erofs: enable large folios for fscache mode
-
- Documentation/filesystems/erofs.rst |  38 ++--
- fs/cachefiles/io.c                  |  77 ++++---
- fs/erofs/data.c                     |  10 +-
- fs/erofs/fscache.c                  | 408 ++++++++++++++++--------------------
- fs/erofs/inode.c                    |   1 +
- fs/erofs/internal.h                 |  13 +-
- fs/erofs/super.c                    |   2 +-
- fs/erofs/xattr.c                    |   8 +-
- fs/erofs/zdata.c                    |  80 +++----
- fs/erofs/zmap.c                     |  15 +-
- include/linux/netfs.h               |   8 +
- include/trace/events/cachefiles.h   |  27 +--
- 12 files changed, 343 insertions(+), 344 deletions(-)
-
-Thanks,
-Gao Xiang
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
