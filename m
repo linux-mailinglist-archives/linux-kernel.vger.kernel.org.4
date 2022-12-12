@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67144649D36
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A3B649D39
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 12:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbiLLLJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 06:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S232011AbiLLLKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 06:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiLLLJA (ORCPT
+        with ESMTP id S231898AbiLLLJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 06:09:00 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5CD12624;
-        Mon, 12 Dec 2022 02:59:06 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NVz7j6kFBz6J7DH;
-        Mon, 12 Dec 2022 18:56:01 +0800 (CST)
-Received: from localhost (10.195.246.54) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 12 Dec
- 2022 10:59:03 +0000
-Date:   Mon, 12 Dec 2022 10:59:02 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ferry Toth <fntoth@gmail.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 01/11] iio: light: tsl2563: Do not hardcode interrupt
- trigger type
-Message-ID: <20221212105902.000059a4@Huawei.com>
-In-Reply-To: <c48cc4ff-9021-0e32-6e68-89fa549847cc@gmail.com>
-References: <20221207190348.9347-1-andriy.shevchenko@linux.intel.com>
-        <20221211132611.0ab2f29e@jic23-huawei>
-        <c48cc4ff-9021-0e32-6e68-89fa549847cc@gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 12 Dec 2022 06:09:15 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FBD334
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:00:14 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id p36so17878497lfa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 03:00:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M3x0iqp5aFPz8f2kzDNdPrCsTS3tTCB8nihQCK7Ujcw=;
+        b=bXRlZpMTIild+Dxjk6apgmlu9Il+qjLhPOq9J0J1hEypjodLTVRxyg8MNOMvWqhqRP
+         T45c287U3setZH4Mti8QK6YaAgHzKER67ZSyAPK4j4AkmGoVZ/CaRcqxY1QsqpY0I2/i
+         6HL6vf6SvYzlrNHCEMkqrBOQmqlX8VnEDvYr38G+yovRYxUerOzwjOFYYw+OTg0bjSRB
+         QY91vvJK+u4tOW5JNYp1Rd2HwQi8EWzuXEDRjowdUlT7TNZ7apq5EGDRpyWlTqcS7gvO
+         txFxxZ/uEQmsE1729bgdw1quhYnSqArU0SSRNGjsGKRCyY5AR3fR1GIxbmzDUrMYiuUC
+         i3eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3x0iqp5aFPz8f2kzDNdPrCsTS3tTCB8nihQCK7Ujcw=;
+        b=VO66VV+LaoEUK8Oxmipq5vfO5hbxkw/5CGCoxeuFPVqXA59B5V5dirWjOGeoFPvB08
+         e27sxpyWMtXy1iH44janY02RfZ22f2znejL3OBtca4ulchjkxX/d0xibkVNhxBHFizNr
+         p9OIg/MYAL1Oen9SCwSvTnOtk3U0z6Zj1wbMXpyNU15E0vgYAdkHn7SjnWEqlH8OZ7ba
+         eE/QyA7JDiFjPw7JAqCiLc4WSlvmK48fiLPve9xan00qolxx09dSzREMA5s9E+nJ+AiJ
+         /WQqEKey/kXyDTp6+LoZiQpRLUTRxj0r6wMUM9lzHzpx2GmArErvSoar8bL0IOgmDvJK
+         vEfA==
+X-Gm-Message-State: ANoB5pk3IecJs3opBisH0efOToS5IU1AxWtlCtv9o1nwcVj21LwuIwdb
+        t8n8VJDtOwS0Fc1Rf8UfC1Sokw==
+X-Google-Smtp-Source: AA0mqf4qaFlUlwvilOU1C1c17UbZjKzRgdAXx+vap0wTJcndFZ0qJ/knDQkSYUBNQirD9djsjr4DTg==
+X-Received: by 2002:ac2:5f6a:0:b0:4b5:61e8:8934 with SMTP id c10-20020ac25f6a000000b004b561e88934mr3245177lfc.64.1670842813000;
+        Mon, 12 Dec 2022 03:00:13 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id p14-20020a056512312e00b004b550c26949sm1578128lfd.290.2022.12.12.03.00.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 03:00:12 -0800 (PST)
+Message-ID: <57d3ba20-f1de-d7f3-d689-b25a02174379@linaro.org>
+Date:   Mon, 12 Dec 2022 12:00:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] iommu/arm-smmu-qcom: Add SM8150 DPU compatible
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20221212100617.18190-1-konrad.dybcio@linaro.org>
+ <552EFDD5-4BBE-408D-90EA-C96F4A0876B7@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <552EFDD5-4BBE-408D-90EA-C96F4A0876B7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.246.54]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022 18:14:01 +0100
-Ferry Toth <fntoth@gmail.com> wrote:
 
-> Hi,
-> 
-> Op 11-12-2022 om 14:26 schreef Jonathan Cameron:
-> > On Wed,  7 Dec 2022 21:03:38 +0200
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >   
-> >> From: Ferry Toth <ftoth@exalondelft.nl>
-> >>
-> >> Instead of hardcoding IRQ trigger type to IRQF_TRIGGER_RAISING,
-> >> let's respect the settings specified in the firmware description.
-> >> To be compatible with the older firmware descriptions, if trigger
-> >> type is not set up there, we'll set it to default (raising edge).
-> >>
-> >> Fixes: 388be4883952 ("staging:iio: tsl2563 abi fixes and interrupt handling")
-> >> Fixes: bdab1001738f ("staging:iio:light:tsl2563 remove old style event registration.")
-> >> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> >> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> > 
-> > Andy, would have preferred a cover letter, so I had an obvious place
-> > to reply to the whole series...
-> > 
-> > Mostly I'm amazed anyone still has one of these devices (I have one but
-> > it's on a break out board for the stargate2/imote2 pxa27x platform that we
-> > dropped support for last year - I hadn't booted it for a few years)
-> > - I can probably bodge it onto something else but I can't say it was
-> > high on my todo list ;)  So nice to know that someone still cares about
-> > this.
-> > 
-> > So I'm curious Ferry, what device has one of these?  
-> 
-> It's a breakout board too. I think it's something like GY-2561.
-> 
-> I wanted to write up an example how to get connect iio sensors to work 
-> with linux. So I asked my colleague who is a great fan of aliexpress if 
-> he had any sensor on a breakout board with I2C. In the past I had it 
-> working with MRAA and UPM but that seems to be a dead end now.
-> 
-> We have ACPI working on Intel Edison-Arduino with quite a few examples 
-> from Andy. And the "Arduino" header makes it very easy to wire up these 
-> kind of breakout boards, fantastic platform this type of developments.
-> 
-> Just wiring up the I2C and get it to work was easy enough. And then the 
-> interrupt pin makes an interesting example (even though likely useless 
-> for most applications of the light sensor).
-> 
-> Write-up here if you are interested:
-> https://htot.github.io/meta-intel-edison/4.6-libiio.html
 
-Thanks!
-
-Jonathan
-
+On 12.12.2022 11:58, Dmitry Baryshkov wrote:
 > 
-> > Whole series applied to the togreg branch of iio.git though note I'll only
-> > push this out as testing for now because I'll want to rebase that tree
-> > after rc1 is available.
-> > 
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> >> ---
-> >>   drivers/iio/light/tsl2563.c | 8 +++++++-
-> >>   1 file changed, 7 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/iio/light/tsl2563.c b/drivers/iio/light/tsl2563.c
-> >> index d0e42b73203a..71302ae864d9 100644
-> >> --- a/drivers/iio/light/tsl2563.c
-> >> +++ b/drivers/iio/light/tsl2563.c
-> >> @@ -704,6 +704,7 @@ static int tsl2563_probe(struct i2c_client *client)
-> >>   	struct iio_dev *indio_dev;
-> >>   	struct tsl2563_chip *chip;
-> >>   	struct tsl2563_platform_data *pdata = client->dev.platform_data;
-> >> +	unsigned long irq_flags;
-> >>   	int err = 0;
-> >>   	u8 id = 0;
-> >>   
-> >> @@ -759,10 +760,15 @@ static int tsl2563_probe(struct i2c_client *client)
-> >>   		indio_dev->info = &tsl2563_info_no_irq;
-> >>   
-> >>   	if (client->irq) {
-> >> +		irq_flags = irq_get_trigger_type(client->irq);
-> >> +		if (irq_flags == IRQF_TRIGGER_NONE)
-> >> +			irq_flags = IRQF_TRIGGER_RISING;
-> >> +		irq_flags |= IRQF_ONESHOT;
-> >> +
-> >>   		err = devm_request_threaded_irq(&client->dev, client->irq,
-> >>   					   NULL,
-> >>   					   &tsl2563_event_handler,
-> >> -					   IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> >> +					   irq_flags,
-> >>   					   "tsl2563_event",
-> >>   					   indio_dev);
-> >>   		if (err) {  
-> >   
 > 
+> On 12 December 2022 13:06:16 GMT+03:00, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>> From: Marijn Suijten <marijn.suijten@somainline.org>
+>>
+>> Add the SM8150 DPU compatible to clients compatible list, as it also
+>> needs the workarounds.
+> 
+> Please rebase on top of linux-next, this part was rewritten.
+This one wasn't, but yeah it is based on some local changes
+(see 6350/6375)..
 
+Konrad
+> 
+> 
+>>
+>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>> Depends on the binding here:
+>>
+>> [1] https://lore.kernel.org/linux-arm-msm/20221212093315.11390-1-konrad.dybcio@linaro.org/T/#t
+>>
+>> drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
+>> 1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>> index 6610f5d2877d..cd74c1efcfde 100644
+>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>> @@ -255,6 +255,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
+>> 	{ .compatible = "qcom,sdm845-mss-pil" },
+>> 	{ .compatible = "qcom,sm6350-mdss" },
+>> 	{ .compatible = "qcom,sm6375-mdss" },
+>> +	{ .compatible = "qcom,sm8150-mdss" },
+>> 	{ .compatible = "qcom,sm8250-mdss" },
+>> 	{ }
+>> };
+> 
