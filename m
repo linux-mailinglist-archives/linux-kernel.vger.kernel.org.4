@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782396497B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D7D6497B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 02:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiLLBeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 20:34:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S231142AbiLLBhX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 11 Dec 2022 20:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLLBeN (ORCPT
+        with ESMTP id S229475AbiLLBhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 20:34:13 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC124B1EB
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 17:34:11 -0800 (PST)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NVkfJ2Bq8zRpx0;
-        Mon, 12 Dec 2022 09:33:12 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
- (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 12 Dec
- 2022 09:34:09 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <almaz.alexandrovich@paragon-software.com>
-CC:     <linux-kernel@vger.kernel.org>, <ntfs3@lists.linux.dev>,
-        <xiexiuqi@huawei.com>, <liwei391@huawei.com>
-Subject: [PATCH] fs/ntfs3: Fix slab-out-of-bounds read in hdr_delete_de()
-Date:   Mon, 12 Dec 2022 09:31:34 +0800
-Message-ID: <20221212013134.2133231-1-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 11 Dec 2022 20:37:20 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC409B1F8;
+        Sun, 11 Dec 2022 17:37:18 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BC1YSTx8023772, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BC1YSTx8023772
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 12 Dec 2022 09:34:28 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Mon, 12 Dec 2022 09:35:16 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 12 Dec 2022 09:35:16 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Mon, 12 Dec 2022 09:35:16 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Li Zetao <lizetao1@huawei.com>
+CC:     "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linville@tuxdriver.com" <linville@tuxdriver.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+Subject: RE: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
+Thread-Topic: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in
+ _rtl8812ae_phy_set_txpower_limit()
+Thread-Index: AQHZDcmQLIWDqWxK5UWgWwHLimkfx65pd+Xg
+Date:   Mon, 12 Dec 2022 01:35:16 +0000
+Message-ID: <b94b47f851fb4bba84e6c6aca4bf4ee0@realtek.com>
+References: <66c119cc4e184a36d525a07f2fbd092348839610.camel@realtek.com>
+ <20221212023540.1540147-1-lizetao1@huawei.com>
+In-Reply-To: <20221212023540.1540147-1-lizetao1@huawei.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/11_=3F=3F_10:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is a BUG report from syzbot:
 
-BUG: KASAN: slab-out-of-bounds in hdr_delete_de+0xe0/0x150 fs/ntfs3/index.c:806
-Read of size 16842960 at addr ffff888079cc0600 by task syz-executor934/3631
 
-Call Trace:
- memmove+0x25/0x60 mm/kasan/shadow.c:54
- hdr_delete_de+0xe0/0x150 fs/ntfs3/index.c:806
- indx_delete_entry+0x74f/0x3670 fs/ntfs3/index.c:2193
- ni_remove_name+0x27a/0x980 fs/ntfs3/frecord.c:2910
- ntfs_unlink_inode+0x3d4/0x720 fs/ntfs3/inode.c:1712
- ntfs_rename+0x41a/0xcb0 fs/ntfs3/namei.c:276
+> -----Original Message-----
+> From: Li Zetao <lizetao1@huawei.com>
+> Sent: Monday, December 12, 2022 10:36 AM
+> To: Ping-Ke Shih <pkshih@realtek.com>
+> Cc: Larry.Finger@lwfinger.net; davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> kvalo@kernel.org; linux-kernel@vger.kernel.org; linux-wireless@vger.kernel.org; linville@tuxdriver.com;
+> lizetao1@huawei.com; netdev@vger.kernel.org; pabeni@redhat.com
+> Subject: [PATCH v3] rtlwifi: rtl8821ae: Fix global-out-of-bounds bug in _rtl8812ae_phy_set_txpower_limit()
+> 
+> There is a global-out-of-bounds reported by KASAN:
+> 
+>   BUG: KASAN: global-out-of-bounds in
+>   _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+>   Read of size 1 at addr ffffffffa0773c43 by task NetworkManager/411
+> 
+>   CPU: 6 PID: 411 Comm: NetworkManager Tainted: G      D
+>   6.1.0-rc8+ #144 e15588508517267d37
+>   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+>   Call Trace:
+>    <TASK>
+>    ...
+>    kasan_report+0xbb/0x1c0
+>    _rtl8812ae_eq_n_byte.part.0+0x3d/0x84 [rtl8821ae]
+>    rtl8821ae_phy_bb_config.cold+0x346/0x641 [rtl8821ae]
+>    rtl8821ae_hw_init+0x1f5e/0x79b0 [rtl8821ae]
+>    ...
+>    </TASK>
+> 
+> The root cause of the problem is that the comparison order of
+> "prate_section" in _rtl8812ae_phy_set_txpower_limit() is wrong. The
+> _rtl8812ae_eq_n_byte() is used to compare the first n bytes of the two
+> strings from tail to head, which causes the problem. In the
+> _rtl8812ae_phy_set_txpower_limit(), it was originally intended to meet
+> this requirement by carefully designing the comparison order.
+> For example, "pregulation" and "pbandwidth" are compared in order of
+> length from small to large, first is 3 and last is 4. However, the
+> comparison order of "prate_section" dose not obey such order requirement,
+> therefore when "prate_section" is "HT", when comparing from tail to head,
+> it will lead to access out of bounds in _rtl8812ae_eq_n_byte(). As
+> mentioned above, the _rtl8812ae_eq_n_byte() has the same function as
+> strcmp(), so just strcmp() is enough.
+> 
+> Fix it by removing _rtl8812ae_eq_n_byte() and use strcmp() barely.
+> Although it can be fixed by adjusting the comparison order of
+> "prate_section", this may cause the value of "rate_section" to not be
+> from 0 to 5. In addition, commit "21e4b0726dc6" not only moved driver
+> from staging to regular tree, but also added setting txpower limit
+> function during the driver config phase, so the problem was introduced
+> by this commit.
+> 
+> Fixes: 21e4b0726dc6 ("rtlwifi: rtl8821ae: Move driver from staging to regular tree")
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
 
-Before using the meta-data in struct INDEX_HDR, we need to
-check index header valid or not. Otherwise, the corruptedi
-(or malicious) fs image can cause out-of-bounds access which
-could make kernel panic.
+Thanks for your fix.
 
-Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
-Reported-by: syzbot+9c2811fd56591639ff5f@syzkaller.appspotmail.com
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- fs/ntfs3/fslog.c   | 2 +-
- fs/ntfs3/index.c   | 4 ++++
- fs/ntfs3/ntfs_fs.h | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
+Acked-by: Ping-Ke Shih <pkshih@realtek.com>
 
-diff --git a/fs/ntfs3/fslog.c b/fs/ntfs3/fslog.c
-index 0d611a6c5511..0de2bbb42721 100644
---- a/fs/ntfs3/fslog.c
-+++ b/fs/ntfs3/fslog.c
-@@ -2597,7 +2597,7 @@ static int read_next_log_rec(struct ntfs_log *log, struct lcb *lcb, u64 *lsn)
- 	return find_log_rec(log, *lsn, lcb);
- }
- 
--static inline bool check_index_header(const struct INDEX_HDR *hdr, size_t bytes)
-+bool check_index_header(const struct INDEX_HDR *hdr, size_t bytes)
- {
- 	__le16 mask;
- 	u32 min_de, de_off, used, total;
-diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index 440328147e7e..6f5d8dd6659d 100644
---- a/fs/ntfs3/index.c
-+++ b/fs/ntfs3/index.c
-@@ -798,6 +798,10 @@ static inline struct NTFS_DE *hdr_delete_de(struct INDEX_HDR *hdr,
- 	u32 off = PtrOffset(hdr, re);
- 	int bytes = used - (off + esize);
- 
-+	/* check INDEX_HDR valid before using INDEX_HDR */
-+	if (!check_index_header(hdr, le32_to_cpu(hdr->total)))
-+		return NULL;
-+
- 	if (off >= used || esize < sizeof(struct NTFS_DE) ||
- 	    bytes < sizeof(struct NTFS_DE))
- 		return NULL;
-diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 2c791222c4e2..c5c022fef4e0 100644
---- a/fs/ntfs3/ntfs_fs.h
-+++ b/fs/ntfs3/ntfs_fs.h
-@@ -574,6 +574,7 @@ int ni_rename(struct ntfs_inode *dir_ni, struct ntfs_inode *new_dir_ni,
- bool ni_is_dirty(struct inode *inode);
- 
- /* Globals from fslog.c */
-+bool check_index_header(const struct INDEX_HDR *hdr, size_t bytes);
- int log_replay(struct ntfs_inode *ni, bool *initialized);
- 
- /* Globals from fsntfs.c */
--- 
-2.25.1
+> ---
+> v1 -> v2: delete the third parameter of _rtl8812ae_eq_n_byte() and use
+> strcmp to replace loop comparison.
+> v2 -> v3: remove _rtl8812ae_eq_n_byte() and use strcmp() barely.
+> 
+>  .../wireless/realtek/rtlwifi/rtl8821ae/phy.c  | 52 +++++++------------
+>  1 file changed, 20 insertions(+), 32 deletions(-)
+> 
+
+[...]
 
