@@ -2,107 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE6664A183
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923BB64A18F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 14:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiLLNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 08:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S232726AbiLLNln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 08:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiLLNkf (ORCPT
+        with ESMTP id S232868AbiLLNlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 08:40:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDE66167;
-        Mon, 12 Dec 2022 05:39:52 -0800 (PST)
+        Mon, 12 Dec 2022 08:41:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C987113FB4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 05:40:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08BF261073;
-        Mon, 12 Dec 2022 13:39:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722FFC433F1;
-        Mon, 12 Dec 2022 13:39:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D2D61025
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 13:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4083C433F0;
+        Mon, 12 Dec 2022 13:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670852391;
-        bh=E9veDPnM/AmRfpGqoCi7tQ+BipgpSOgTYR/RBmWbZhg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p07s+Wq7dhBsRynFKxvtSzxBgIY8YwY+1Df2t2QQKpzNXu8DVI0NCKC31/ehZtCVN
-         oGCBLDi90dR9X78mM2kCQBxeP+xcRRDas4QK31wy6wRJh8ws+ifGto8R3/g+bJdubK
-         AgcElhdSWUwSAiA+HWVnM3US2+lXEVlGmzrnkHr9QQ5e/JOtXzIhR4WhkRHMsKTDrA
-         5X/f4dI24mpygXbQbZHwaVr1csyZ3AWl/711YYPjRB4+hGh1frmxpbZfp9FJ7zsYQn
-         JsZOxy80uYJqVE3Wyw6EsjTnYt18zMNRbsr3J9fKQSDBrW7tplYCMiHD2FLMoHI11d
-         1Ze55zdbjDz6w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p4j2U-0006iT-IL; Mon, 12 Dec 2022 14:40:14 +0100
-Date:   Mon, 12 Dec 2022 14:40:14 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: drop misleading usb_set_intfdata() kernel doc
-Message-ID: <Y5cvPulXceujfZv6@hovoldconsulting.com>
-References: <20221211120626.12210-1-johan@kernel.org>
- <efca6b26-fb20-ae38-0fc4-8612f1ee150b@suse.com>
- <Y5cDBSZrgC2TUnXs@hovoldconsulting.com>
- <4cf7bce3-dfbb-b064-9d91-27616bf11d6a@suse.com>
- <Y5cpH8aV7aox2Pbd@hovoldconsulting.com>
- <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
+        s=k20201202; t=1670852443;
+        bh=+UbaFzcpClMAttTUea/xxL4LXfpa8yju7PkmGGUeRPI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H2lRZMXdQC6nHVVqOf9ZYMEnd3aKNXI8cdIFbj0YsdPq3adBB3gOwk86y70AcOWau
+         UA5MNv2LWVLcVobzVxQsJQh9cubgt27VQBJbmW+1lwaHeVROM12BLcLmJEQ9KP2XyS
+         8Qxbh7GVTmZCUWcYOrHyAX+ritVjhJSpAIrS7viWeNpvdGwWh0B7bIAomY3ybfING5
+         T5W4KHXNPlLYFO/QfvqElT3GlbUQsUcGsV3lL+UxJ0X+VdU7jcz5a5mAaUi+EcLp+9
+         oRd7LbEHEa1R1tgF9nXKtNJKwZWktJaBJiJVz14NIL2Vrjgtw8p9L68XJDkXgtdrv+
+         KBDDqfAv9iyMg==
+Message-ID: <b76428f8-fd9e-7c4e-52ea-0eeb1ea443af@kernel.org>
+Date:   Mon, 12 Dec 2022 21:40:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a2935e6-ae3c-85d9-a2e9-f42fb4ca7d59@suse.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] f2fs: add support for counting time of submit discard
+ cmd
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221212125137.77187-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221212125137.77187-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 02:27:46PM +0100, Oliver Neukum wrote:
-> On 12.12.22 14:14, Johan Hovold wrote:
-> > On Mon, Dec 12, 2022 at 12:13:54PM +0100, Oliver Neukum wrote:
-
-> > And in this case there was also no kernel doc for usb_get_intfdata()
-> > which is equally self documenting. Why add redundant docs for only one
-> > of these functions?
+On 2022/12/12 20:51, Yangtao Li wrote:
+> This patch adds support for counting the average time and
+> peak time of submit discard command, and we can see its
+> value in debugfs.
 > 
-> Because knowing that one of them exists makes the other much more
-> obvious.
-
-I doubt anyone finds out about this function by reading generated kernel
-documentation. You look at a driver, grep the function and look at the
-single-line implementation.
-
-Driver data is such as integral part of the driver model so it's kinda
-hard to miss. Still dev_set_drvdata() also has no kernel doc either.
- 
-> > I'd rather drop this particular documentation which was added due to a
-> > misunderstanding then go down the rabbit hole of adding mindless kernel
-> > doc to every helper we have.
+> It is not sure whether the block layer has recorded these
+> data, and these data are allowed to be accessed by fs,
+> or they are only exported to user space.
 > 
-> Yes, but those are not the alternatives.
-> Removing the perfectly good part of the kerneldoc is a needless regression,
-> albeit a minor one.
+> On the one hand, I added these data to better understand
+> the current device operating status, and to further control
+> the discard process in a more detailed manner based on the
+> discard submit time in the future.
 
-But it was never perfectly good. It claims that a driver "should" use it,
-when it may not need to (think simple driver using devres) and talks
-about driver core resetting the pointer which is irrelevant.
+Again, w'd better to consider this functionality only when DEBUG_FS is
+enabled.
 
-> > Yes. The (device group) attributes are removed by driver core before
-> > ->remove() is called, otherwise you'd have an even bigger issue with the
-> > driver data itself which is typically deallocated before the pointer is
 > 
-> So what happens if user space calls read() or write() on an existing fd?
-> Sorry, but this is an issue we need to be sure about.
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/f2fs/debug.c   | 10 +++++++---
+>   fs/f2fs/f2fs.h    |  6 ++++++
+>   fs/f2fs/segment.c | 21 +++++++++++++++++++--
+>   3 files changed, 32 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+> index 32af4f0c5735..142c256b89d9 100644
+> --- a/fs/f2fs/debug.c
+> +++ b/fs/f2fs/debug.c
+> @@ -120,6 +120,10 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+>   			llist_empty(&SM_I(sbi)->fcc_info->issue_list);
+>   	}
+>   	if (SM_I(sbi)->dcc_info) {
+> +		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+> +
+> +		si->discard_avg = dcc->discard_time_avg;
+> +		si->discard_peak = dcc->discard_time_peak;
+>   		si->nr_discarded =
+>   			atomic_read(&SM_I(sbi)->dcc_info->issued_discard);
+>   		si->nr_discarding =
+> @@ -545,9 +549,9 @@ static int stat_show(struct seq_file *s, void *v)
+>   			   si->nr_wb_cp_data, si->nr_wb_data,
+>   			   si->nr_flushing, si->nr_flushed,
+>   			   si->flush_list_empty);
+> -		seq_printf(s, "Discard: (%4d %4d)) cmd: %4d undiscard:%4u\n",
+> -			   si->nr_discarding, si->nr_discarded,
+> -			   si->nr_discard_cmd, si->undiscard_blks);
+> +		seq_printf(s, "Discard: (%4d %4d, avg:%4lldns, peak:%4lldns)) cmd: %4d undiscard:%4u\n",
+> +			   si->nr_discarding, si->nr_discarded, ktime_to_us(si->discard_avg),
+> +			   ktime_to_us(si->discard_peak), si->nr_discard_cmd, si->undiscard_blks);
+>   		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
+>   			   si->aw_cnt, si->max_aw_cnt);
+>   		seq_printf(s, "  - compress: %4d, hit:%8d\n", si->compress_pages, si->compress_page_hit);
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index e8953c3dc81a..2cd55cb981ff 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -371,6 +371,8 @@ struct discard_cmd {
+>   	int error;			/* bio error */
+>   	spinlock_t lock;		/* for state/bio_ref updating */
+>   	unsigned short bio_ref;		/* bio reference count */
+> +	struct discard_cmd_control *dcc;	/* global discard cmd control */
+> +	ktime_t submit_start;	/* submit start time */
+>   };
+>   
+>   enum {
+> @@ -415,6 +417,9 @@ struct discard_cmd_control {
+>   	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
+>   	unsigned int undiscard_blks;		/* # of undiscard blocks */
+>   	unsigned int next_pos;			/* next discard position */
+> +	spinlock_t discard_time_lock;	/* for discard time statistics */
+> +	ktime_t discard_time_avg;		/* issued discard cmd avg time */
+> +	ktime_t discard_time_peak;		/* issued discard cmd peak time */
+>   	atomic_t issued_discard;		/* # of issued discard */
+>   	atomic_t queued_discard;		/* # of queued discard */
+>   	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
+> @@ -3896,6 +3901,7 @@ struct f2fs_stat_info {
+>   	int nr_dio_read, nr_dio_write;
+>   	unsigned int io_skip_bggc, other_skip_bggc;
+>   	int nr_flushing, nr_flushed, flush_list_empty;
+> +	ktime_t discard_avg, discard_peak;
+>   	int nr_discarding, nr_discarded;
+>   	int nr_discard_cmd;
+>   	unsigned int undiscard_blks;
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index a9099a754dd2..73cd05bb3f4a 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -937,6 +937,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
+>   	list_add_tail(&dc->list, pend_list);
+>   	spin_lock_init(&dc->lock);
+>   	dc->bio_ref = 0;
+> +	dc->dcc = dcc;
+>   	atomic_inc(&dcc->discard_cmd_cnt);
+>   	dcc->undiscard_blks += len;
+>   
+> @@ -1006,9 +1007,13 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
+>   static void f2fs_submit_discard_endio(struct bio *bio)
+>   {
+>   	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
+> +	struct discard_cmd_control *dcc = dc->dcc;
+>   	unsigned long flags;
+> +	ktime_t submit_time;
+> +	int nr_discarded;
+>   
+>   	spin_lock_irqsave(&dc->lock, flags);
+> +	submit_time = ktime_sub(ktime_get(), dc->submit_start);
+>   	if (!dc->error)
+>   		dc->error = blk_status_to_errno(bio->bi_status);
+>   	dc->bio_ref--;
+> @@ -1018,6 +1023,16 @@ static void f2fs_submit_discard_endio(struct bio *bio)
+>   	}
+>   	spin_unlock_irqrestore(&dc->lock, flags);
+>   	bio_put(bio);
+> +
+> +	spin_lock_irqsave(&dcc->discard_time_lock, flags);
+> +	nr_discarded = atomic_read(&dcc->issued_discard);
+> +	dcc->discard_time_avg = div_u64(ktime_add(nr_discarded * dcc->discard_time_avg,
+> +										submit_time),
+> +									nr_discarded + 1);
+> +	if (dcc->discard_time_avg > dcc->discard_time_peak)
+> +		dcc->discard_time_peak = dcc->discard_time_avg;
+> +	atomic_inc(&dcc->issued_discard);
+> +	spin_unlock_irqrestore(&dcc->discard_time_lock, flags);
 
-No need to be sorry, and I've looked at this before. kernfs handles the
-serialisation.
+Why not calculating average time only in update_general_status()? and here,
+we just need to account total_{discard_time, discard_count} w/o additional
+spinlock.
 
-But as I mentioned above, this is again irrelevant for the question at
-hand as the driver data is freed before the pointer is set to NULL.
+Thanks,
 
-Johan
+>   }
+>   
+>   static void __check_sit_bitmap(struct f2fs_sb_info *sbi,
+> @@ -1166,6 +1181,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   		 * right away
+>   		 */
+>   		spin_lock_irqsave(&dc->lock, flags);
+> +		dc->submit_start = ktime_get();
+>   		if (last)
+>   			dc->state = D_SUBMIT;
+>   		else
+> @@ -1185,8 +1201,6 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>   		bio->bi_opf |= flag;
+>   		submit_bio(bio);
+>   
+> -		atomic_inc(&dcc->issued_discard);
+> -
+>   		f2fs_update_iostat(sbi, NULL, FS_DISCARD, len * F2FS_BLKSIZE);
+>   
+>   		lstart += len;
+> @@ -2079,9 +2093,12 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
+>   	INIT_LIST_HEAD(&dcc->wait_list);
+>   	INIT_LIST_HEAD(&dcc->fstrim_list);
+>   	mutex_init(&dcc->cmd_lock);
+> +	spin_lock_init(&dcc->discard_time_lock);
+>   	atomic_set(&dcc->issued_discard, 0);
+>   	atomic_set(&dcc->queued_discard, 0);
+>   	atomic_set(&dcc->discard_cmd_cnt, 0);
+> +	dcc->discard_time_avg = 0;
+> +	dcc->discard_time_peak = 0;
+>   	dcc->nr_discards = 0;
+>   	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
+>   	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
