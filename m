@@ -2,70 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2ABA649831
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 04:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14818649834
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 04:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiLLDVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Dec 2022 22:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S231204AbiLLDYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Dec 2022 22:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiLLDUz (ORCPT
+        with ESMTP id S230504AbiLLDYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Dec 2022 22:20:55 -0500
-Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EFAB1C7
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Dec 2022 19:20:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jiapeng.chong@linux.alibaba.com;NM=0;PH=DS;RN=10;SR=0;TI=SMTPD_---0VX0qkLl_1670815243;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VX0qkLl_1670815243)
-          by smtp.aliyun-inc.com;
-          Mon, 12 Dec 2022 11:20:50 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     joonas.lahtinen@linux.intel.com
-Cc:     rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/i915/hwconfig: Modify mismatched function name
-Date:   Mon, 12 Dec 2022 11:20:12 +0800
-Message-Id: <20221212032012.114253-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sun, 11 Dec 2022 22:24:22 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8257BE38;
+        Sun, 11 Dec 2022 19:24:21 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NVn5S431hz15NKR;
+        Mon, 12 Dec 2022 11:23:24 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 12 Dec 2022 11:24:19 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <edumazet@google.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+Subject: [PATCH net-next v2] net: tso: inline tso_count_descs()
+Date:   Mon, 12 Dec 2022 11:24:26 +0800
+Message-ID: <20221212032426.16050-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+tso_count_descs() is a small function doing simple calculation,
+and tso_count_descs() is used in fast path, so inline it to
+reduce the overhead of calls.
 
-drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:112: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead.
-
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3414
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V2: include skbuff.h explicitly and refactor comment as jakub's
+    suggestion.
+---
+ include/net/tso.h | 8 +++++++-
+ net/core/tso.c    | 8 --------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
-index 4781fccc2687..bdb20beb3e70 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
-@@ -103,7 +103,7 @@ static bool has_table(struct drm_i915_private *i915)
- }
+diff --git a/include/net/tso.h b/include/net/tso.h
+index 62c98a9c60f1..e7e157ae0526 100644
+--- a/include/net/tso.h
++++ b/include/net/tso.h
+@@ -2,6 +2,7 @@
+ #ifndef _TSO_H
+ #define _TSO_H
  
- /**
-- * intel_guc_hwconfig_init - Initialize the HWConfig
-+ * guc_hwconfig_init - Initialize the HWConfig
-  *
-  * Retrieve the HWConfig table from the GuC and save it locally.
-  * It can then be queried on demand by other users later on.
++#include <linux/skbuff.h>
+ #include <net/ip.h>
+ 
+ #define TSO_HEADER_SIZE		256
+@@ -16,7 +17,12 @@ struct tso_t {
+ 	u32	tcp_seq;
+ };
+ 
+-int tso_count_descs(const struct sk_buff *skb);
++/* Calculate the worst case buffer count */
++static inline int tso_count_descs(const struct sk_buff *skb)
++{
++	return skb_shinfo(skb)->gso_segs * 2 + skb_shinfo(skb)->nr_frags;
++}
++
+ void tso_build_hdr(const struct sk_buff *skb, char *hdr, struct tso_t *tso,
+ 		   int size, bool is_last);
+ void tso_build_data(const struct sk_buff *skb, struct tso_t *tso, int size);
+diff --git a/net/core/tso.c b/net/core/tso.c
+index 4148f6d48953..e00796e3b146 100644
+--- a/net/core/tso.c
++++ b/net/core/tso.c
+@@ -5,14 +5,6 @@
+ #include <net/tso.h>
+ #include <asm/unaligned.h>
+ 
+-/* Calculate expected number of TX descriptors */
+-int tso_count_descs(const struct sk_buff *skb)
+-{
+-	/* The Marvell Way */
+-	return skb_shinfo(skb)->gso_segs * 2 + skb_shinfo(skb)->nr_frags;
+-}
+-EXPORT_SYMBOL(tso_count_descs);
+-
+ void tso_build_hdr(const struct sk_buff *skb, char *hdr, struct tso_t *tso,
+ 		   int size, bool is_last)
+ {
 -- 
-2.20.1.7.g153144c
+2.33.0
 
