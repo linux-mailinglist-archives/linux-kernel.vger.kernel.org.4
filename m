@@ -2,199 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7147D649EF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0534E649ED1
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 13:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiLLMgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 07:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S232351AbiLLMfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 07:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiLLMfm (ORCPT
+        with ESMTP id S232342AbiLLMez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 07:35:42 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6171276A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:34:48 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id 4so5959461plj.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 04:34:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jie7lgdvEnIQyGE6zlhbT0B1hTmWl4xcVmRV6TIX7Ks=;
-        b=eaCgJOSU0Eenl1pCm9rc7ZdHXRGdaf8ehej2UyKExNX14OP9y9q7t6bzQA9F6MFh8Y
-         H5ULrBo5EayBNpm/RX2smnE8G548NKB+F/i7bd6N6gqpr21/w2Qd0P8N/nVI+2EMt6rF
-         AAlK2EEuSaJIAuKutAfLU9L72haqT/M1tnZ2bOVub6MnlWS+qDQNFOZE/CyiureudYl6
-         9FcYjh41G5dtfMEYlWm98BRgL2o/VV5IpCu6tGc4VFD/0yOf4LyBy4Ybbompy1W5lgXb
-         CGQ3l29KZo7FTLPLFOP7UcSTCXflCzB4YR7lqMTRmCQVsTMalLhAO8tzybd3nJVE4QwW
-         yeWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jie7lgdvEnIQyGE6zlhbT0B1hTmWl4xcVmRV6TIX7Ks=;
-        b=LfjB3XmxLKOc592K31BvnFmwERfAit4odrndP3F5t+rPhVwo+cr2xWX0a8ZMHaMJeZ
-         nFKfmAiowBFGFfhXU7W2lUUoFtuCqs9/IbYkIGoL7U8yo/Cqz+LLisk/mW9WTccv7HWS
-         5TvVBmm6fK8r0mN7a1C0Uji0bhei8dcJ1tvQmx9P66Vqgo1FZbNueGrdFc8ZF1K9XaH3
-         ZaLMVH3e0JdKTGYE7X/E1wXhlytdBRwT+Q7WF1DGfOc6ltrx42OC/oMyP4MtGaSh1GH8
-         uM/mbYWzxzs7Kt3lbaKb18iz0BtsD+To+5RXW1TxLQVHmzrQgE7w2fK01CZy/7Wy9Y+h
-         TcvA==
-X-Gm-Message-State: ANoB5pkDFIxxJ49EeWTNIV/DTRwds9oYrcgLbAGSXIpJ6qbELUBu+AT/
-        Mh/tPiitdO1ij9ww6Se2u1I41JjKNK21Mhw=
-X-Google-Smtp-Source: AA0mqf5LpwGxW+PLMAvFM3kf27MXz56pW7cTMD9M0+puHlZxDzlk3HeUecpzAWk/fLvCVmfLeMnunA==
-X-Received: by 2002:a17:902:9891:b0:189:2688:c97f with SMTP id s17-20020a170902989100b001892688c97fmr14982727plp.50.1670848481155;
-        Mon, 12 Dec 2022 04:34:41 -0800 (PST)
-Received: from localhost.localdomain ([220.158.159.33])
-        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b00189c93ce5easm6252557plx.166.2022.12.12.04.34.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 04:34:40 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 13/13] qcom: llcc/edac: Support polling mode for ECC handling
-Date:   Mon, 12 Dec 2022 18:03:11 +0530
-Message-Id: <20221212123311.146261-14-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+        Mon, 12 Dec 2022 07:34:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5678A11A17;
+        Mon, 12 Dec 2022 04:34:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18D29B80D0C;
+        Mon, 12 Dec 2022 12:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5620C433F0;
+        Mon, 12 Dec 2022 12:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670848442;
+        bh=xtdAmCMl29VEatoJ4kmd4nWM9mHIzeabHXzaRNDlt6c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WPElUzUhbwqbhqrVW/KnFjqhzJKRMMF65RQAROvEyxu/tMyQ+nqOFDwInqgywOwcu
+         /WgDrgd/qBYJZ4sTrhRjGaPizPRhHNXvFFbWRiGNYpN8Y/V3vt9ghUMxJafXu7BwFL
+         9Hm+y9KFoesoEUjeuMlC9qKA3sy5rk/MNNsxOg5FjaIYrNMp6G0NVNhgVFrCM3h0TD
+         o/5k91AyaETIcv9oNwYTktIA7IuYxnU6UPKs3mPON4PL9TIbR1JC4Gq9U+eBPDjmHa
+         /JTiBbzOLEREZsHcJlYEO8GpkrcisMyiGW3U5PBJJeMY5TIrVnam+dQz7/ZBlq+vz/
+         t2B+7f09IcjAw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] vfsuid updates for v6.2
+Date:   Mon, 12 Dec 2022 13:33:48 +0100
+Message-Id: <20221212123348.169903-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5064; i=brauner@kernel.org; h=from:subject; bh=xtdAmCMl29VEatoJ4kmd4nWM9mHIzeabHXzaRNDlt6c=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSRPl18yk8c2re+m1IQ6/dWb3v/QsvUzm7D8yNXAeH+B3Nip HtPndJSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAExknS0jw+sQtruzil4/Ck7/M+lLiH pmXqLjpv/rrud7xEyZL79y5k9Ghm+ZBTeeHY38eOxhUcOfzByLA6J//P16/R8+3eOp/WPDJkYA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all Qcom platforms support IRQ mode for ECC handling. For those
-platforms, the current EDAC driver will not be probed due to missing ECC
-IRQ in devicetree.
+Hey Linus,
 
-So add support for polling mode so that the EDAC driver can be used on all
-Qcom platforms supporting LLCC.
+/* Summary */
+Last cycle we introduced the vfs{g,u}id_t types and associated helpers to gain
+type safety when dealing with idmapped mounts. That initial pull request back
+then already converted a lot of places over but there were still some left,
 
-The polling delay of 5000ms is chosed based on Qcom downstream/vendor
-driver.
+This pull request converts all remaining places that still make use of non-type
+safe idmapping helpers to rely on the new type safe vfs{g,u}id based helpers.
+Afterwards it removes all the old non-type safe helpers.
 
-Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/edac/qcom_edac.c     | 37 +++++++++++++++++++++++++-----------
- drivers/soc/qcom/llcc-qcom.c | 13 ++++++-------
- 2 files changed, 32 insertions(+), 18 deletions(-)
+Note that this pull request has the setgid inheritance branch merged in as the
+setgid inheritance branch unifies multiple open-coded checks into a single
+helper making the conversion here easier. I've sent a pull request for that
+work rearlier so it's on the list and in your inbox before this one. The lore
+url is:
+https://lore.kernel.org/lkml/20221212112053.99208-1-brauner@kernel.org
 
-diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-index 5be93577fc03..f7afb5375293 100644
---- a/drivers/edac/qcom_edac.c
-+++ b/drivers/edac/qcom_edac.c
-@@ -76,6 +76,8 @@
- #define DRP0_INTERRUPT_ENABLE           BIT(6)
- #define SB_DB_DRP_INTERRUPT_ENABLE      0x3
- 
-+#define ECC_POLL_MSEC			5000
-+
- enum {
- 	LLCC_DRAM_CE = 0,
- 	LLCC_DRAM_UE,
-@@ -283,8 +285,7 @@ dump_syn_reg(struct edac_device_ctl_info *edev_ctl, int err_type, u32 bank)
- 	return ret;
- }
- 
--static irqreturn_t
--llcc_ecc_irq_handler(int irq, void *edev_ctl)
-+static irqreturn_t llcc_ecc_irq_handler(int irq, void *edev_ctl)
- {
- 	struct edac_device_ctl_info *edac_dev_ctl = edev_ctl;
- 	struct llcc_drv_data *drv = edac_dev_ctl->pvt_info;
-@@ -328,6 +329,11 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
- 	return irq_rc;
- }
- 
-+static void llcc_ecc_check(struct edac_device_ctl_info *edev_ctl)
-+{
-+	llcc_ecc_irq_handler(0, edev_ctl);
-+}
-+
- static int qcom_llcc_edac_probe(struct platform_device *pdev)
- {
- 	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-@@ -356,22 +362,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
- 	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
- 	edev_ctl->pvt_info = llcc_driv_data;
- 
-+	/* Check if LLCC driver has passed ECC IRQ */
-+	ecc_irq = llcc_driv_data->ecc_irq;
-+	if (ecc_irq > 0) {
-+		/* Use interrupt mode if IRQ is available */
-+		edac_op_state = EDAC_OPSTATE_INT;
-+	} else {
-+		/* Fall back to polling mode otherwise */
-+		edac_op_state = EDAC_OPSTATE_POLL;
-+		edev_ctl->poll_msec = ECC_POLL_MSEC;
-+		edev_ctl->edac_check = llcc_ecc_check;
-+	}
-+
- 	rc = edac_device_add_device(edev_ctl);
- 	if (rc)
- 		goto out_mem;
- 
- 	platform_set_drvdata(pdev, edev_ctl);
- 
--	/* Request for ecc irq */
--	ecc_irq = llcc_driv_data->ecc_irq;
--	if (ecc_irq < 0) {
--		rc = -ENODEV;
--		goto out_dev;
--	}
--	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-+	/* Request ECC IRQ if available */
-+	if (ecc_irq > 0) {
-+		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
- 			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
--	if (rc)
--		goto out_dev;
-+		if (rc)
-+			goto out_dev;
-+	}
- 
- 	return rc;
- 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index a29f22dad7fa..e044e6756415 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -1011,13 +1011,12 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 		goto err;
- 
- 	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
--	if (drv_data->ecc_irq >= 0) {
--		llcc_edac = platform_device_register_data(&pdev->dev,
--						"qcom_llcc_edac", -1, drv_data,
--						sizeof(*drv_data));
--		if (IS_ERR(llcc_edac))
--			dev_err(dev, "Failed to register llcc edac driver\n");
--	}
-+
-+	llcc_edac = platform_device_register_data(&pdev->dev,
-+					"qcom_llcc_edac", -1, drv_data,
-+					sizeof(*drv_data));
-+	if (IS_ERR(llcc_edac))
-+		dev_err(dev, "Failed to register llcc edac driver\n");
- 
- 	return 0;
- err:
--- 
-2.25.1
+In case you don't want to pull "setgid inheritance updates for v6.2" but still
+would like to pull the remaining vfs{g,u}id_t conversions (That would be
+greatly appreciated as it gets rid of duplicated functionality between the
+different helpers.) I prepared the tag
 
+  fs.vfsuid.conversion.standalone.v6.2
+
+This tag only contains all the vfs{g,u}id_t patches without any of the "setgid
+inheritance updates for v6.2" patches.
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.vfsuid.conversion.standalone.v6.2
+
+/* Testing */
+clang: Ubuntu clang version 15.0.2-1
+gcc: gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+
+All patches are based on v6.1-rc1 and have been sitting in linux-next. No build
+failures or warnings were observed. The vfsuid conversionn portion passes all
+old and new tests in fstests, selftests, and LTP pass without regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.vfsuid.conversion.v6.2
+
+__Alternatively__, a standalone version without the setgid patches merged in
+can be found at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.vfsuid.conversion.standalone.v6.2
+
+for you to fetch changes up to eb7718cdb73c6b0c93002f8f73f4dd4701f8d2bb:
+
+  fs: remove unused idmapping helpers (2022-10-26 10:03:34 +0200)
+
+Please consider pulling these changes from the signed fs.vfsuid.conversion.v6.2
+or fs.vfsuid.conversion.standalone.v6.2 tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+fs.vfsuid.conversion.v6.2
+
+----------------------------------------------------------------
+Amir Goldstein (2):
+      ovl: remove privs in ovl_copyfile()
+      ovl: remove privs in ovl_fallocate()
+
+Christian Brauner (12):
+      attr: add in_group_or_capable()
+      fs: move should_remove_suid()
+      attr: add setattr_should_drop_sgid()
+      attr: use consistent sgid stripping checks
+      mnt_idmapping: add missing helpers
+      fs: use type safe idmapping helpers
+      caps: use type safe idmapping helpers
+      apparmor: use type safe idmapping helpers
+      ima: use type safe idmapping helpers
+      fuse: port to vfs{g,u}id_t and associated helpers
+      ovl: port to vfs{g,u}id_t and associated helpers
+      fs: remove unused idmapping helpers
+
+ Documentation/trace/ftrace.rst      |   2 +-
+ fs/attr.c                           |  74 +++++++++++++++++++++++---
+ fs/coredump.c                       |   4 +-
+ fs/exec.c                           |  16 +++---
+ fs/fuse/acl.c                       |   2 +-
+ fs/fuse/file.c                      |   2 +-
+ fs/inode.c                          |  72 ++++++++++++--------------
+ fs/internal.h                       |  10 +++-
+ fs/namei.c                          |  40 +++++++--------
+ fs/ocfs2/file.c                     |   4 +-
+ fs/open.c                           |   8 +--
+ fs/overlayfs/file.c                 |  28 ++++++++--
+ fs/overlayfs/util.c                 |   9 +++-
+ fs/remap_range.c                    |   2 +-
+ fs/stat.c                           |   7 ++-
+ include/linux/fs.h                  |  36 +------------
+ include/linux/mnt_idmapping.h       | 100 ++++++++++++------------------------
+ kernel/capability.c                 |   4 +-
+ security/apparmor/domain.c          |   8 +--
+ security/apparmor/file.c            |   4 +-
+ security/apparmor/lsm.c             |  25 ++++++---
+ security/commoncap.c                |  51 +++++++++---------
+ security/integrity/ima/ima_policy.c |  34 ++++++------
+ 23 files changed, 289 insertions(+), 253 deletions(-)
