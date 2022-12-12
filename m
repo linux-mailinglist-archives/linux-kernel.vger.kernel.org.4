@@ -2,70 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C828764A855
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3908D64A859
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Dec 2022 21:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbiLLUAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 15:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S233372AbiLLUBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 15:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbiLLUAS (ORCPT
+        with ESMTP id S232994AbiLLUBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 15:00:18 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5183E17431
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:00:18 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w23so13204513ply.12
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:00:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=u1JwA4591V3WWgjpQbG6VpbXkMhkR+cvLtonZzzHudc=;
-        b=bfxshwMaLU3HbMZsNFLMaIIXxXoewfJPvLfv8fNcQ9xVzr3N7zUXskhUOSQQ4HOIGV
-         C3QkAsPMqE9x3QD15QUA5F/sSa+3a/Tn34Vwyv5VK8DadYLDQeyw/7kH9D1EQMXlwQ4+
-         i3NjWmf6KFkx6sjgs3GdZ3twUEYkQPIrpeMgEC84ypMcbtBNq+8RSuV34QNECAaIycaU
-         /gPxnh0cjG4GNlLeJwr3R/WOs6dZKmUYQ3B11YFQe2GjhYcWQnlBoXoJ0CdIRy64j6EW
-         plDAwQskcl14RF4blhRyL6bmIyresxU6JgVGVcY+a9LuAIS+EADsk3+FyFYGZIZrfZ50
-         kqiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u1JwA4591V3WWgjpQbG6VpbXkMhkR+cvLtonZzzHudc=;
-        b=liARqyYHEk2ns1QQ2DpDOxQM7VBS3PzpSa6TPJ729CsiNUp+vgXiN9KCapavLzKBvz
-         qePnvxCsOH3h2YsPjlvqyurxXRAdQW6JNwlnV6oFVt3xawy6Rdd928UvqD04gmEWlqfw
-         8vAGn62M5ZAwaXjxxKmF9Vi5If5nt2gpK9CoFoU48rPWy2DHV9C/SEiZWqPwIsq3ugcC
-         zXLT3yIqMA/ke3SG6evr61aUxabr0CSkIWFFAkE7P3lbHc1F2L5LVth/1pobcyWBzBgG
-         VCVVzeHczHxzRKMUwm6Turf6GAQwL5T8Q1zpn+FR3sThleq/MW+3ViNVibQ3fffbVMFh
-         /MyQ==
-X-Gm-Message-State: ANoB5pl5wZr47wk9pgS0dpIKqmLvLo0md1eDiHX1la4JpWKixXeJkuSa
-        CwJn9at8Np94n8mKilcP0zY=
-X-Google-Smtp-Source: AA0mqf4RCH4lMqZAY0zXFUoMmJkIUNRx3C+hk8zPIReEVKy7OoeUs6wcMmr6gBWhpPH4x2E8RhkudA==
-X-Received: by 2002:a05:6a20:c892:b0:9d:efbf:48cb with SMTP id hb18-20020a056a20c89200b0009defbf48cbmr21757174pzb.15.1670875217772;
-        Mon, 12 Dec 2022 12:00:17 -0800 (PST)
-Received: from fedora ([2601:644:8002:1c20::2c6b])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902a3cf00b0016d9b101413sm6735764plb.200.2022.12.12.12.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 12:00:17 -0800 (PST)
-Date:   Mon, 12 Dec 2022 12:00:14 -0800
-From:   Vishal Moola <vishal.moola@gmail.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: huge_memory: Convert madvise_free_huge_pmd to
- use a folio
-Message-ID: <Y5eITvb5klwiczF6@fedora>
-References: <20221207023431.151008-1-wangkefeng.wang@huawei.com>
+        Mon, 12 Dec 2022 15:01:50 -0500
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB7517588
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 12:01:49 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 4ozhpgCRi0H6I4ozhpkHYh; Mon, 12 Dec 2022 21:01:47 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 12 Dec 2022 21:01:47 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Chris Mason <chris.mason@oracle.com>,
+        linux-btrfs@vger.kernel.org
+Subject: [PATCH] btrfs: Fix an error handling path in btrfs_defrag_leaves()
+Date:   Mon, 12 Dec 2022 21:01:43 +0100
+Message-Id: <9a1d857866d4768090d7f89869076b7a5a85116b.1670875295.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207023431.151008-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,10 +44,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 10:34:30AM +0800, Kefeng Wang wrote:
-> Using folios instead of pages removes several calls to compound_head(),
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+All error handling paths end to 'out', except this memory allocation
+failure.
 
-Reviewed-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+This is spurious. So branch to the error handling path also in this case.
+It will add a call to:
+	memset(&root->defrag_progress, 0,
+	       sizeof(root->defrag_progress));
+
+Fixes: 6702ed490ca0 ("Btrfs: Add run time btree defrag, and an ioctl to force btree defrag")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is completely speculative.
+
+Review with care !
+---
+ fs/btrfs/defrag.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/fs/btrfs/defrag.c b/fs/btrfs/defrag.c
+index 0a3c261b69c9..d81b764a7644 100644
+--- a/fs/btrfs/defrag.c
++++ b/fs/btrfs/defrag.c
+@@ -358,8 +358,10 @@ int btrfs_defrag_leaves(struct btrfs_trans_handle *trans,
+ 		goto out;
  
+ 	path = btrfs_alloc_path();
+-	if (!path)
+-		return -ENOMEM;
++	if (!path) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ 
+ 	level = btrfs_header_level(root->node);
+ 
+-- 
+2.34.1
+
