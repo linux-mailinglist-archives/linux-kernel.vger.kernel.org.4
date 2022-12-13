@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0884B64BAB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6BF64BABC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiLMROo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S235980AbiLMRPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235492AbiLMROm (ORCPT
+        with ESMTP id S236098AbiLMRPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:14:42 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FA6D11E;
-        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id 1so6021684lfz.4;
-        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
-        b=JxA3KmNK35szjBBUByLal17A0FbCxzcqofjBf+uM6nv+XLGYinzDArtPX+8hC8cQpE
-         vlxHaAKjqRlzcs6sFkPobj4VwjxIz0tnLJ3oYgC+fOL1AjNYhTxBdQTRTTx+Ab107VJA
-         UZ2PzT2RIu/f+GcTJd670CbihwwUyWLYDJQCry2Z1evNCm7l1xKDUfhP3QYq7jmHOB7O
-         rThlshfL1xpXbaA2CZGhtXd6w4oIKAu4P2w8CJELyxfjrAXBQgpBh7yiMF/cpYG4MXbG
-         TwoKVxk71nkTr4V7H9GlIxEW92XK6FSJylPLsMIIDUzetz4OGOxvtRTxjasWO26WJqx/
-         WsIw==
+        Tue, 13 Dec 2022 12:15:09 -0500
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FF76279;
+        Tue, 13 Dec 2022 09:15:08 -0800 (PST)
+Received: by mail-vk1-f176.google.com with SMTP id l17so1885279vkk.3;
+        Tue, 13 Dec 2022 09:15:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
-        b=R+6WH1KfEe0mWeztOg/1BIt8brqfXfqXNpZVEXj9jVhz7I3TjU1gQ7U2BEPXkH85VZ
-         nABYp0m6U+ZWJKRiaI9fsbm5bj29rx7Z0qzbImlTqwJyGeUzq1POBC7LeRIwp1NTpJ7U
-         W4673RvHLxCWeD8mQ4ylV1KpPoKe9LsG7NBLMO1AoEPimySTrYNh00k5jBghD7LJVOBZ
-         /M7qCrxT2ogAL8mdBuj8uLwJXny5cM6RiVkuOiYLKQu78UbqEALvzHX/zxMJRiMCcKGQ
-         0fShNBJBfyihlbu956j7PuK9dzFTJCvKA0TS9Rbnn1q9VadSJyVq7I+miladqOvvY0T/
-         yvwg==
-X-Gm-Message-State: ANoB5pnR+jOzJgCVeuQdTTmcYLBLkF2NSWgESpcK9SAQoRVdD7U3XXgv
-        C+jS2aaxm8mJYXrW0WgpapBtKjG/JXZxq2Cblw==
-X-Google-Smtp-Source: AA0mqf7+TK47LFZIJKhvzbdAU9vOoLQfGZHFr3/k0sb53fqlpg43oLLPILn5kGReDkcHH1K9hwESHKXGuyfl8Y11Z10=
-X-Received: by 2002:a05:6512:3b20:b0:4b4:d3aa:8f8c with SMTP id
- f32-20020a0565123b2000b004b4d3aa8f8cmr27004428lfv.94.1670951679752; Tue, 13
- Dec 2022 09:14:39 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7aP+igB0NaircxiSkGrnkdOtF08vfazQfrJeriBa6Dg=;
+        b=a/yYLXDMvd9VOEXFjQOVmO8O+D1+oUxiKwFaXwinnMGgeBAG/aY/40ZEemwe6Q9Mhg
+         hsLM9iIbhWP/Qxv7W+k0EAWZnNBsxu/b2GEj2OmZkSLoL3aRaDaU8gIKesp9eG8Va89l
+         yP9rJZAc1KiPQK+THcqyDxW3s4xBbHdBXe9/1KK/2+Weo01H/AReGfzdxlBZx73KUF9l
+         f9UrcT/+ap0fX3WYGlxKULn+V6ZnwVoWhStnx2QL7cRJIMWt1ikwY/v+ELzdBe1tZ1p3
+         VEFgmk0x3IqmmkeuCTU9iIpZHhnIhJIhMrRXwtLfmK1Ddk87blHjiqqRVI1oLhUbEUwn
+         lz8w==
+X-Gm-Message-State: ANoB5pm8wahtKRadylwEMYxZhATdi8ZWLGtXQq8MHJ0ISpXaRvoPzYNN
+        hpyOWbHTRIY+cjgJZ5aeG/01w3iTfq2zww==
+X-Google-Smtp-Source: AA0mqf6SgxemQ55PkdkD98xgLHlzxm24HIV5Csb9Y9zAn72OVWrtjFPY5qyUqj964xChfnRueCG2nA==
+X-Received: by 2002:a1f:a10e:0:b0:3be:16a9:6019 with SMTP id k14-20020a1fa10e000000b003be16a96019mr8691301vke.9.1670951707474;
+        Tue, 13 Dec 2022 09:15:07 -0800 (PST)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id v19-20020a05620a0f1300b006e16dcf99c8sm8264306qkl.71.2022.12.13.09.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 09:15:07 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-417b63464c6so101451337b3.8;
+        Tue, 13 Dec 2022 09:15:06 -0800 (PST)
+X-Received: by 2002:a0d:dd4b:0:b0:370:61f5:b19e with SMTP id
+ g72-20020a0ddd4b000000b0037061f5b19emr27207087ywe.316.1670951706562; Tue, 13
+ Dec 2022 09:15:06 -0800 (PST)
 MIME-Version: 1.0
-From:   "Seija K." <doremylover123@gmail.com>
-Date:   Tue, 13 Dec 2022 12:14:28 -0500
-Message-ID: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
-Subject: [PATCH] net: Fix for packets being rejected in the xHCI controller's
- ring buffer
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 13 Dec 2022 18:14:55 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
+Message-ID: <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
+Subject: Re: [PATCH v5 4/6] riscv: mm: dma-noncoherent: Pass direction and
+ operation to ALT_CMO_OP()
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a packet larger than MTU arrives in Linux from the modem,
-it is discarded with -EOVERFLOW error (Babble error).
+Hi Prabhakar,
 
-This is seen on USB3.0 and USB2.0 buses.
+On Mon, Dec 12, 2022 at 12:55 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Pass direction and operation to ALT_CMO_OP() macro.
+>
+> Vendors might want to perform different operations based on the direction
+> and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
+> arch_dma_prep_coherent) so to handle such cases pass the direction and
+> operation to ALT_CMO_OP() macro. This is in preparation for adding errata
+> for the Andes CPU core.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This is because the MRU (Max Receive Size) is not a separate entity
-from the MTU (Max Transmit Size),
-and the received packets can be larger than those transmitted.
+Thanks for your patch!
 
-Following the babble error, there was an endless supply of zero-length URBs,
-which are rejected with -EPROTO (increasing the rx input error counter
-each time).
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(                                           \
+>  #define THEAD_flush_A0 ".long 0x0275000b"
+>  #define THEAD_SYNC_S   ".long 0x0190000b"
+>
+> -#define ALT_CMO_OP(_op, _start, _size, _cachesize)                     \
+> +#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)         \
 
-This is only seen on USB3.0.
-These continue to come ad infinitum until the modem is shut down.
+Since commit a49ab905a1fc8630 ("RISC-V: Implement arch specific PMEM
+APIs") in riscv/for-next, there are two new users of this macro,
+which need to be updated to (add two zeroes?).
 
-There appears to be a bug in the core USB handling code in Linux
-that doesn't deal well with network MTUs smaller than 1500 bytes.
+Gr{oetje,eeting}s,
 
-By default, the dev->hard_mtu (the real MTU)
-is in lockstep with dev->rx_urb_size (essentially an MRU),
-and the latter is causing trouble.
+                        Geert
 
-This has nothing to do with the modems,
-as the issue can be reproduced by getting a USB-Ethernet dongle,
-setting the MTU to 1430, and pinging with size greater than 1406.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-Co-Authored-By: TarAldarion <gildeap@tcd.ie>
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 554d4e2a84a4..39db53a74b5a 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
-struct usb_interface *intf)
-}
-dev->net->netdev_ops = &qmi_wwan_netdev_ops;
-dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
-+ /* LTE Networks don't always respect their own MTU on receive side;
-+ * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
-+ * far-end network. Make the receive buffer large enough to accommodate
-+ * them, and add four bytes so MTU does not equal MRU on network
-+ * with 1500 MTU otherwise usbnet_change_mtu() will change both.
-+ */
-+ dev->rx_urb_size = ETH_DATA_LEN + 4;
-err:
-return status;
-}
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
