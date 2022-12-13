@@ -2,150 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5A264BC91
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C48E64BCB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbiLMTAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S236785AbiLMTHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:07:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236674AbiLMS75 (ORCPT
+        with ESMTP id S236758AbiLMTHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:59:57 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A91922B11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:59:56 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g7so6508071lfv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=niE9Gl1g7coSiv+o7hzU6IeDDQuCZTc7hB6J3K6GqeQ=;
-        b=MuUJRLtq2dNP5ghSyqTKd3xlOhgSYwZpXmg/dZdZpmiErBcTPtVOUuELUDjICWmRVv
-         fGpiuxW89ADVyBEQNoyMnhWCScFklpxbShDEjZKe/vgRocXT5SapjGL+7YMCrHyUuGE2
-         CvGV4lATVQ5N2LzDWCZW1FqjKu8Q8edkxFsZOunWpxC4CRA2AA1LdRR8GAKlkP5saeVv
-         KOmYesDEbwHDprWMj2k0gOoz3ZltgpvlVbRG9zjEXG4QDmHMY2+5yJFOWs/NasYhoItU
-         6Zhc4/13o2bp9fRsouPv0B/7JKhj+5zxwMx3xnzlmNDxnt81GACVNy1WnQXlC9Hqb667
-         XJEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=niE9Gl1g7coSiv+o7hzU6IeDDQuCZTc7hB6J3K6GqeQ=;
-        b=Bgxmp5swjNJjgqYOL7UNHH+mQTT0jLULDnfP2mTb2fl+4DTHVPH40ul6/iMDy7Hu11
-         +h8jEM7/XPdD1FLVsIgUpVABjWReNLEgfldL4NveY08HrnflMKJ90/m9g9GA6iKVAyWE
-         QvuYb3QRBYR0mFUnbYNoeFwanbHXXbwTSxGy7coIdVI9eqoKCDahMFr5kixkL1QTDso+
-         WozWA4uPRMffNI0Y4/RyWYJgaYALKiv3wFjAerdKabna4o/4nc1cnHBxy8HfWasL+vMP
-         AbmYFhDd/XfdQ61z6E1NWPRV9yNbYDp6XUbh6mJF4HKoux/MRfrAPJD6Ryu64aNI8Jp8
-         Z6vw==
-X-Gm-Message-State: ANoB5pnTtMMlFveeMQg2gk/G9Vlp9zP0b1qtKhQ6oRsGsXLkF+ERxEHF
-        AcKIPELni1wmLXpTS0CyFuKPtw==
-X-Google-Smtp-Source: AA0mqf6Rs/MAH5dsj8hMiWJjVJ9jvgmpiwkqL6TjlYQFmFIkqvk04wbEUP/YiOytSkc0q6UwRoX8pg==
-X-Received: by 2002:a19:550a:0:b0:4aa:114d:1fd7 with SMTP id n10-20020a19550a000000b004aa114d1fd7mr5151357lfe.19.1670957994647;
-        Tue, 13 Dec 2022 10:59:54 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v11-20020ac258eb000000b004b5831b69dcsm467299lfo.140.2022.12.13.10.59.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:59:54 -0800 (PST)
-Message-ID: <ecb2c9ff-b092-22fa-c91e-01ead6266457@linaro.org>
-Date:   Tue, 13 Dec 2022 19:59:53 +0100
+        Tue, 13 Dec 2022 14:07:33 -0500
+X-Greylist: delayed 97796 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 11:07:32 PST
+Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B265FD6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:07:32 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id D11AA5C0E60
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:58:45 +0000 (UTC)
+Received: from pdx1-sub0-mail-a304.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 5DA7F5C1737
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:58:45 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1670957925; a=rsa-sha256;
+        cv=none;
+        b=cqLHPD9FfJxDeZIrsPH72C9d0ZS2CzwUXZRbeLDqfbsIqmWxZnQiNvInOrK2mFGQtxufHM
+        R9jMJWt4URp4SIwzGuJBB7Ci1DagmDE50oOwVrHzk/k+PoQcs3G3/z5Wy980KW5XVifBur
+        o9EwYvhC/psNr4G4NvQ8Y4YZr1qh32jEElnsn1tNZhstZmAudWYPioKXuUdzREewehrqx9
+        MBy9JIUoA2S7Oxv7/quuPj855+1gJD1qUi5QV9fhwP6hqXXOikoPuW10P3cC4s/8Zr/+aB
+        8Ym1Xm+y1ZNx6pX3n+JgeZ3uxTJcsHiUNTVvrLTn17u9u62XJIEtaQqckmrBsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1670957925;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=E0qUk9TTQJ05tyym3+Ykvnx/NywduTmX7ZoBw4ir51k=;
+        b=NXSLQcRbT2saxtsgmEjKwf1sWyth/k73W2naGvnIqY+VdOZCauVYSIk9fsDLEISu7B4IDD
+        Bmn+NlUxU3tKxi3Zc4Zp2h+XkogU3S08Irl8iIX/Q2EMeccsabaVKeLRWhli5tNNu/iQow
+        LOeNWZgCMk0dwz1gCmzpwSbuRBlsknUviddq1Ipw0Vs6sO+1+Ti/VG7ShIHoRL83a3YEB3
+        HxNVU4HWt64YupEtazTQVbTlnGp+a500CZ8XtXaOssb6D0KbH2QuNgrCqBAME197j0LglT
+        uPBWtz9jOZ6mdJO+jkyIyGCOExvVBPHV/IBjXk76Il1AJbyCNPZcVQz0cRNeXg==
+ARC-Authentication-Results: i=1;
+        rspamd-d48c5ddb-vld7f;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Good
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Versed-Tank: 5d1e112157ecdc64_1670957925654_3624609171
+X-MC-Loop-Signature: 1670957925654:3485384674
+X-MC-Ingress-Time: 1670957925654
+Received: from pdx1-sub0-mail-a304.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.30 (trex/6.7.1);
+        Tue, 13 Dec 2022 18:58:45 +0000
+Received: from kmjvbox (c-73-70-108-208.hsd1.ca.comcast.net [73.70.108.208])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a304.dreamhost.com (Postfix) with ESMTPSA id 4NWnpD1F8TzMF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:58:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1670957924;
+        bh=E0qUk9TTQJ05tyym3+Ykvnx/NywduTmX7ZoBw4ir51k=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=HDlQsT9u0YLBXZPEfKIFYcff6girmqTtncfGBUnOmGwWXI8rggk9jNK67G3PGTWu9
+         ZA5nMtDJs5WyZ9/CSfZTiuoR1IPMmnkmhbYXgmL8zt9VQ3CFzueXSSGvUkUMrAQvXm
+         LYX/C+ss6rRjla0ibnVwKS78ieA28c89hHxwgV+w=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e0106
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Tue, 13 Dec 2022 10:58:42 -0800
+Date:   Tue, 13 Dec 2022 10:58:42 -0800
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Jan Beulich <jbeulich@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: Re: [PATCH linux-next v2] x86/xen/time: prefer tsc as clocksource
+ when it is invariant
+Message-ID: <20221213185842.GA1987@templeofstupid.com>
+References: <20221208163650.GA3225@templeofstupid.com>
+ <1e6c1b08-d573-fba9-61fd-d40a74427d46@oracle.com>
+ <20221212155730.GA1973@templeofstupid.com>
+ <20221212160524.GB1973@templeofstupid.com>
+ <1eb6048b-bf23-78a0-9c3c-54bbd12c3864@suse.com>
+ <20221212220519.GA1935@templeofstupid.com>
+ <60582b25-4fb9-a2c8-9db3-9b5593f039c1@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, andersson@kernel.org
-References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
- <20221213123823.455731-4-bhupesh.sharma@linaro.org>
- <39ff2174-6d04-ec21-b762-377ed28088cb@linaro.org>
- <CAH=2NtwUODvzLx=JThuZpADv+x+NtLx688Ox-95b_T9PtRf4_w@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAH=2NtwUODvzLx=JThuZpADv+x+NtLx688Ox-95b_T9PtRf4_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60582b25-4fb9-a2c8-9db3-9b5593f039c1@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 19:52, Bhupesh Sharma wrote:
-> Hi Krzysztof,
+On Tue, Dec 13, 2022 at 08:23:29AM +0100, Jan Beulich wrote:
+> On 12.12.2022 23:05, Krister Johansen wrote:
+> > On Mon, Dec 12, 2022 at 05:46:29PM +0100, Jan Beulich wrote:
+> >> On 12.12.2022 17:05, Krister Johansen wrote:
+> >>> Both the Intel SDM[4] and the Xen tsc documentation explain that marking
+> >>> a tsc as invariant means that it should be considered stable by the OS
+> >>> and is elibile to be used as a wall clock source.  The Xen documentation
+> >>> further clarifies that this is only reliable on HVM and PVH because PV
+> >>> cannot intercept a cpuid instruction.
+> >>
+> >> Without meaning to express a view on the argumentation as a whole, this
+> >> PV aspect is suspicious. Unless you open-code a use of the CPUID insn
+> >> in the kernel, all uses of CPUID are going to be processed by Xen by
+> >> virtue of the respective pvops hook. Documentation says what it says
+> >> for environments where this might not be the case.
+> > 
+> > Thanks, appreciate the clarification here. Just restating this for my
+> > own understanding: your advice would be to drop this check below?
 > 
-> On Tue, 13 Dec 2022 at 18:26, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 13/12/2022 13:38, Bhupesh Sharma wrote:
->>> Add USB superspeed qmp phy node to dtsi.
->>>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> ---
->>>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
->>>  1 file changed, 36 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> index e4ce135264f3d..9c5c024919f92 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
->>>                       status = "disabled";
->>>               };
->>>
->>> +             usb_qmpphy: phy@1615000 {
->>> +                     compatible = "qcom,sm6115-qmp-usb3-phy";
->>> +                     reg = <0x01615000 0x200>;
->>> +                     #clock-cells = <1>;
->>> +                     #address-cells = <1>;
->>> +                     #size-cells = <1>;
->>> +                     ranges;
->>> +                     clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
->>> +                              <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
->>> +                              <&gcc GCC_AHB2PHY_USB_CLK>;
->>> +                     clock-names = "com_aux",
->>> +                                   "ref",
->>> +                                   "cfg_ahb";
->>> +                     resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
->>> +                              <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
->>> +                     reset-names = "phy", "phy_phy";
->>> +                     status = "disabled";
->>
->> Hm, you add a disabled PHY which is used by existing controller. The
->> controller is enabled in board DTS, but new PHY node isn't. Aren't you
->> now breaking it?
+> No, I'm unconvinced of if/where this transformation is really appropriate.
+
+Ah, I see.  You're saying that you're not convinced that this code
+should ever lower the priority of xen clocksource in favor of the tsc?
+If so, are you willing to say a bit more about what you find to be
+unconvincing?
+
+In as much detail as I can muster: the impetus for the patch was that I
+had a variety of different systems running as both kvm and xen guests.
+Some of these guests had clocksource tunings in place as a result of
+consulting the documentation linked in the patch.  But others didn't.
+On kvm they had somehow done the "right" (?) thing.  Some systems had
+tuning in place for xen, despite no longer being a xen guests.  Other
+systems were running on xen and didn't have the recommended tuning
+applied.  That's all sorted now, but it seemed like it might be nice to
+eliminate the need for others to do this in future. With kvm doing
+something similar, I thought there might be enough precedent to consider
+this for xen guests.
+
+> My comment was merely to indicate that the justification for ...
 > 
-> The USB controller is connected to two PHYs - one is HS PHY and the other is SS
-> QMP Phy. So while the exiting board dts describes and uses only the HS
-> PHY, newer
-> board dts files (which will soon be sent out as a separate patch),
-
-Then I miss how do you narrow the existing DTS to use only one PHY. I
-don't see anything in this patchset.
-
-> will use both the HS and SS
-> USB PHYs.
+> >>> +	if (!(xen_hvm_domain() || xen_pvh_domain()))
+> >>> +		return 0;
 > 
-> So, this will not break the existing board dts files.
+> ... this isn't really correct.
 
-I still think it will be. The board boots with USB with one phy enabled
-and one disabled. The driver gets phys unconditionally and one of them
-is disabled.
+The rationale for this bit of code was the justification that turns
+out to be incorrect.  That sounds to me like I have unnessary code,
+unless I was right by mistake?
 
-Even if Linux implementation will work (devm_usb_get_phy_by_phandle will
-return -ENXIO or -ENODEV for disabled node), it is still a bit confusing
-and I wonder how other users of such DTS should behave. Although it will
-affect only one board, so maybe there are no other users?
+> > And then update the commit message to dispense with the distinction
+> > between HVM, PV, and PVH?
+> > 
+> >>> +	cpuid(xen_cpuid_base() + 3, &eax, &ebx, &ecx, &edx);
+> >>
+> >> Xen leaf 3 has sub-leaves, so I think you need to set ecx to zero before
+> >> this call.
+> > 
+> > The cpuid() inline in arch/x86/include/asm/processor.h assigns zero to
+> > ecx prior to calling __cpuid.  In arch/x86/boot/cpuflags.c the macros
+> > are a little different, but it looks like there too, the macro passes 0
+> > as an input argument to cpuid_count which ends up being %ecx.  Happy to
+> > fix this up if I'm looking at the wrong cpuid functions, though.
+> 
+> Oh, I didn't expect cpuid() to be more than a trivial wrapper around the
+> the pvops hook, and I merely looked at native_cpuid() and xen_cpuid().
+> I'm sorry for the noise then. Yet still, with there being sub-leaves, I'd
+> recommend switching to cpuid_count() just for clarity.
 
-Best regards,
-Krzysztof
+No apology necessary.  I'm happy to modify this to use cpuid_count() for
+clarity.
 
+-K
