@@ -2,213 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665FF64BDDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE0664BDE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiLMUWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S238015AbiLMUYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:24:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236745AbiLMUVy (ORCPT
+        with ESMTP id S237848AbiLMUYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:21:54 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA0C2791D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:18:55 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h16so8012627wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:18:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdPGwnHVcPtYyMt3MrhvxEjvQ4s6Eib4j5KCNAxoOwA=;
-        b=qsFxQFry5mILcXIT4Bd2F6nDdAxJNxOjfwc1/g5uw8BwhhLINvF4j+O496cTEhrCYb
-         3giv7n4Ts/ZM5rnLotQH3t82XP+wiuXZselkm516bb8hjgjfq2vbGAf1CzBORYdgpAXb
-         1yb/H92D+wlK07tNzEoM8gccJRZAZpihCHH+YdDg5+6RdZpE69beQB4lEAZVbETbOc3p
-         Tp62rRFZwDgvxN7XH+YUG16OGbOcj0QFtnb++haX2bBey7LJW/zxNu5OPtOA56hKDH98
-         pEcL4b94h2UXjsIjd5cjcJMleqwpcS1iCpATaSc5kj734sJqRRlMjGD5zR371E0UEdOx
-         viCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DdPGwnHVcPtYyMt3MrhvxEjvQ4s6Eib4j5KCNAxoOwA=;
-        b=zWAQvgm414SltAzmpuOqrwlt15FSUxFnnvu8rhB/vFkhyQKZfMcIqUsre8HXl3imKU
-         SXfG3ERmC4mV8Xl8YM1KTZOR5aRjC9sqqrfzREPxTf5NzJe3YNxfwPHjEgHMMJdZNvZG
-         jNl0mtU5OtpWDdUrR/s7anv5pDo2RrQLmu8YbzSwH4Dye2TlytP6ez46axPEzTw6XTdD
-         hDSny0O5YvXF/0pTktfuRtvRcgNSy1yCQet8TCDftfjcdwlq1KTZTcYKQ6Jm/hEBwHkA
-         WbagdfEBD5gbhsxIoM3ClxAaL9NcQbL20TZte5ZEb2984ew6uQLA80x/DuC10rkiKZR3
-         lGEQ==
-X-Gm-Message-State: ANoB5pmOGkZY+9uk/S03mN3V5D1hg1Fz6u/1EHTNBFRow04ZtYg2W9ye
-        nHFI7nz5zWawWgPUNMD0J3lZhUZ5dKWx0UGBoDFT1g==
-X-Google-Smtp-Source: AA0mqf6bunHhJ+W3cdKvhJ5Fhxb3bCtPNjpRfGK1BXiz2CO/kIRDd4QnBVW6hbL4wy87qsIqKDT2FyOA/Y+n56dMMzg=
-X-Received: by 2002:adf:dbd2:0:b0:236:3cf5:4528 with SMTP id
- e18-20020adfdbd2000000b002363cf54528mr59267457wrj.355.1670962733865; Tue, 13
- Dec 2022 12:18:53 -0800 (PST)
+        Tue, 13 Dec 2022 15:24:17 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E527DD5;
+        Tue, 13 Dec 2022 12:20:09 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJXNTZ008119;
+        Tue, 13 Dec 2022 20:20:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=zkFJ3+RBL9CmYP4LHNdAMRtSER55VO4d7qnzzXFPKNk=;
+ b=iQj1lFJYrYi3TfvtvGYK8oLXUNAD5Yr8YkUwnpdzDiuaqeZ9sW89BKfAue4GwRFYB3E7
+ UssIwnzdMvVyzCMwhBscGyiNZhhuKyJFDhvUZsuLY+c+nEVxhDqi+zk75uS5WFb/hDyB
+ 1jDZ7cxIP5ZhTGvYOEOUJ5aUzNXL6SMjHdGJ0X0scXdcc0EmTnuJeAIaX88lbtN+THvM
+ LsopWvzAFE7oXbDgNwespQPPar4DooRsLonGWOgWah7v48j+13h08szh41JaRaDnnoue
+ ItYAq6whStiHQnfBH8pVuP47gsOIu4e31D398fOCwdzJ3jzDi0sThC8+HkGuDDT0NMEC 3g== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn5h2e3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 20:20:08 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJsrKe011789;
+        Tue, 13 Dec 2022 20:20:07 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhg6j7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 20:20:06 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDKK5UQ36110628
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Dec 2022 20:20:05 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62FB958062;
+        Tue, 13 Dec 2022 20:20:05 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 805D358054;
+        Tue, 13 Dec 2022 20:20:04 +0000 (GMT)
+Received: from sig-9-65-192-247.ibm.com (unknown [9.65.192.247])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Dec 2022 20:20:04 +0000 (GMT)
+Message-ID: <7b388195aa5e10f1da934ed251809a6f21bf427e.camel@linux.ibm.com>
+Subject: [GIT PULL] integrity: susbsytem updates for v6.2
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 13 Dec 2022 15:20:04 -0500
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lOsr9YuEthwvn5bDQEn4nApY5vUhZzy-
+X-Proofpoint-GUID: lOsr9YuEthwvn5bDQEn4nApY5vUhZzy-
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-12-jthoughton@google.com> <Y5jTTYwzFHgmm5l6@monkey>
-In-Reply-To: <Y5jTTYwzFHgmm5l6@monkey>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 13 Dec 2022 15:18:41 -0500
-Message-ID: <CADrL8HVuZBiNxeanhk1UGWZRc+J=PPffuTrdBSSU6bFqMpXWWw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 11/47] hugetlb: add hugetlb_pmd_alloc and hugetlb_pte_alloc
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212130175
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 2:32 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 10/21/22 16:36, James Houghton wrote:
-> > These functions are used to allocate new PTEs below the hstate PTE. This
-> > will be used by hugetlb_walk_step, which implements stepping forwards in
-> > a HugeTLB high-granularity page table walk.
-> >
-> > The reasons that we don't use the standard pmd_alloc/pte_alloc*
-> > functions are:
-> >  1) This prevents us from accidentally overwriting swap entries or
-> >     attempting to use swap entries as present non-leaf PTEs (see
-> >     pmd_alloc(); we assume that !pte_none means pte_present and
-> >     non-leaf).
-> >  2) Locking hugetlb PTEs can different than regular PTEs. (Although, as
-> >     implemented right now, locking is the same.)
-> >  3) We can maintain compatibility with CONFIG_HIGHPTE. That is, HugeTLB
-> >     HGM won't use HIGHPTE, but the kernel can still be built with it,
-> >     and other mm code will use it.
-> >
-> > When GENERAL_HUGETLB supports P4D-based hugepages, we will need to
-> > implement hugetlb_pud_alloc to implement hugetlb_walk_step.
-> >
-> > Signed-off-by: James Houghton <jthoughton@google.com>
-> > ---
-> >  include/linux/hugetlb.h |  5 +++
-> >  mm/hugetlb.c            | 94 +++++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 99 insertions(+)
-> >
-> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> > index d30322108b34..003255b0e40f 100644
-> > --- a/include/linux/hugetlb.h
-> > +++ b/include/linux/hugetlb.h
-> > @@ -119,6 +119,11 @@ void hugetlb_pte_copy(struct hugetlb_pte *dest, const struct hugetlb_pte *src)
-> >
-> >  bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
-> >
-> > +pmd_t *hugetlb_pmd_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> > +             unsigned long addr);
-> > +pte_t *hugetlb_pte_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> > +             unsigned long addr);
-> > +
-> >  struct hugepage_subpool {
-> >       spinlock_t lock;
-> >       long count;
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index a0e46d35dabc..e3733388adee 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -341,6 +341,100 @@ static bool has_same_uncharge_info(struct file_region *rg,
-> >  #endif
-> >  }
-> >
-> > +pmd_t *hugetlb_pmd_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> > +             unsigned long addr)
->
-> A little confused as there are no users yet ... Is hpte the 'hstate PTE'
-> that we are trying to allocate ptes under?  For example, in the case of
-> a hugetlb_pmd_alloc caller hpte would be a PUD or CONT_PMD size pte?
+Hi Linus,
 
-The hpte is the level above the level we're trying to allocate (not
-necessarily the 'hstate PTE'). I'll make that clear in the comments
-for both functions.
+Aside from the one cleanup, the other changes are bug fixes:
 
-So consider allocating 4K PTEs for a 1G HugeTLB page:
-- With the hstate 'PTE' (PUD), we make a hugetlb_pte with that PUD
-(let's call it 'hpte')
-- We call hugetlb_pmd_alloc(hpte) which will leave 'hpte' the same,
-but the pud_t that hpte->ptep points to is no longer a leaf.
-- We call hugetlb_walk_step(hpte) to step down a level to get a PMD,
-changing hpte. The hpte->ptep is now pointing to a blank pmd_t.
-- We call hugetlb_pte_alloc(hpte) to allocate a bunch of PTEs and
-populate the pmd_t.
-- We call hugetlb_walk_step(hpte) to step down again.
+Cleanup:
+- Include missing iMac Pro 2017 in list of Macs with T2 security chip
 
-This is basically what hugetlb_hgm_walk does (in the next patch). We
-only change 'hpte' when we do a step, and that is when we populate
-'shift'. The 'sz' parameter for hugetlb_walk_step is what
-architectures can use to populate hpte->shift appropriately (ignored
-for x86).
+Bugs:
+- Improper instantiation of "encrypted" keys with user provided data
+- Not handling delay in updating LSM label based IMA policy rules (-
+ESTALE)
+- IMA and integrity memory leaks on error paths
+- CONFIG_IMA_DEFAULT_HASH_SM3 hash algorithm renamed
 
-For arm64, we can use 'sz' to populate hpte->shift with what the
-caller wants when we are free to choose (like if all the PTEs are
-none, we can do CONT_PTE_SHIFT). See [1]'s implementation of
-hugetlb_walk_step for what I *think* is correct for arm64.
+thanks,
 
-[1] https://github.com/48ca/linux/commit/bf3b8742e95c58c2431c80c5bed5cb5cb95885af
+Mimi
 
->
-> > +{
-> > +     spinlock_t *ptl = hugetlb_pte_lockptr(mm, hpte);
-> > +     pmd_t *new;
-> > +     pud_t *pudp;
-> > +     pud_t pud;
-> > +
-> > +     if (hpte->level != HUGETLB_LEVEL_PUD)
-> > +             return ERR_PTR(-EINVAL);
->
-> Ah yes, it is PUD level.  However, I guess CONT_PMD would also be valid
-> on arm64?
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-The level is always PGD, P4D, PUD, PMD, or PTE. CONT_PTE is on
-HUGETLB_LEVEL_PTE, CONT_PMD is on HUGETLB_LEVEL_PMD.
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-These functions are supposed to be used for all architectures (in
-their implementations of 'hugetlb_walk_step'; that's why they're not
-static, actually. I'll make that clear in the commit description).
+are available in the Git repository at:
 
->
-> > +
-> > +     pudp = (pud_t *)hpte->ptep;
-> > +retry:
-> > +     pud = *pudp;
->
-> We might want to consider a READ_ONCE here.  I am not an expert on such
-> things, but recall a similar as pointed out in the now obsolete commit
-> 27ceae9833843.
+  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.2
 
-Agreed. Will try to change all PTE reading to use READ_ONCE, though
-they can be easy to miss... :(
+for you to fetch changes up to b6018af440a07bd0d74b58c4e18045f4a8dbfe6b:
 
-Thanks very much for the reviews so far, Mike!
+  ima: Fix hash dependency to correct algorithm (2022-11-28 16:44:34 -0500)
 
-- James
+----------------------------------------------------------------
+integrity-v6.2
 
->
-> --
-> Mike Kravetz
->
+----------------------------------------------------------------
+Aditya Garg (1):
+      efi: Add iMac Pro 2017 to uefi skip cert quirk
+
+GUO Zihua (3):
+      ima: Simplify ima_lsm_copy_rule
+      ima: Handle -ESTALE returned by ima_filter_rule_match()
+      integrity: Fix memory leakage in keyring allocation error path
+
+Huaxin Lu (1):
+      ima: Fix a potential NULL pointer access in ima_restore_measurement_list
+
+Nikolaus Voss (1):
+      KEYS: encrypted: fix key instantiation with user-provided data
+
+Roberto Sassu (1):
+      ima: Fix memory leak in __ima_inode_hash()
+
+Tianjia Zhang (1):
+      ima: Fix hash dependency to correct algorithm
+
+Xiu Jianfeng (1):
+      ima: Fix misuse of dereference of pointer in template_desc_init_fields()
+
+ Documentation/security/keys/trusted-encrypted.rst |  3 +-
+ security/integrity/digsig.c                       |  6 ++-
+ security/integrity/ima/Kconfig                    |  2 +-
+ security/integrity/ima/ima_main.c                 |  7 +++-
+ security/integrity/ima/ima_policy.c               | 51 ++++++++++++++++-------
+ security/integrity/ima/ima_template.c             |  9 ++--
+ security/integrity/platform_certs/load_uefi.c     |  1 +
+ security/keys/encrypted-keys/encrypted.c          |  6 +--
+ 8 files changed, 59 insertions(+), 26 deletions(-)
+
+
