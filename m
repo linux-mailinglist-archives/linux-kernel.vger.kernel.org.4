@@ -2,153 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB0D64B6AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563E964B6B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbiLMOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S235519AbiLMODA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235236AbiLMOBX (ORCPT
+        with ESMTP id S230032AbiLMOC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:01:23 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6191EAD7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:01:22 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C43141EC06D7;
-        Tue, 13 Dec 2022 15:01:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670940080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=RlETWsJF/qf3+oSYZr5dCO2mk2rbFBrnrhMYfaNCAes=;
-        b=k8bcraQo9z6aULuwhiNvYc9zSlPpFKhLtPCg301mPiWKAY5rQNJbuV8fD7BG7OK0Bvbctk
-        Y47Tx8CayLo6DGYUc8GwQ1F0vYR4EHst4TtaGKYe1LAxXDqw/x86jDANfG3CRQjHuTIjLT
-        XDQDl+j6+oIJH/XT3RyribRH9boPYo4=
-Date:   Tue, 13 Dec 2022 15:01:16 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/cpu for v6.2
-Message-ID: <Y5iFrMDV+YOdncjA@zn.tnic>
+        Tue, 13 Dec 2022 09:02:57 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4315063FD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:02:57 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso3653981pjh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5YiSjWHoQWvxaPnMWkhQIQOkA+9eRIuJnwPdOS374zI=;
+        b=i191arESYf3ytwMfFMtgeaKAS9H5vjtkaPCums6F5nmiiiXLgP6n3izOpIxcPDHuMa
+         tGJT27K3n4zgHFtYDXQ/uuQ0wOOJJ8qYhZBSs2mJzJnZjInobNMYKb1uDZve++kIoQdO
+         lrn3gZIlO83al62AO3fAseNoqtZc5KiGkccvYuPzzKc3Do0EUC0I/Yn/cB4q+xHGkiKF
+         vYH/g7vgwp75Nw4Oi2NrBk/EDD4MKcjWRqiQbP0qGt+3Rlm5vOOWcYW3a5DrfIOlS/fT
+         SlsuX6f+4sIX3TyQ6AS/tL6BrA0Wh8C4PE0exCBY4cX0amezW2ahyc/0eRcs7bfoOd6H
+         8L0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5YiSjWHoQWvxaPnMWkhQIQOkA+9eRIuJnwPdOS374zI=;
+        b=UTqPebSgKz5+1GWwH2qwb8sZ1NOZJKPF0nXZUWBpTqtWGokHeWN3AmjzNbX7y+PeUP
+         LI8WqQbmD3pfqbepeolkDQ32axNVkXpUBvZ/Xr7HylkeUbi6WYJ8nQJ0n3O83x40k9Mt
+         F5USzqgYnNj9ZFvz9I67eXLp24QWfy09jcKVfMcL6tuociWgHb7sAN7bX9c+mNltzvfi
+         KO7FPJBPXm9IJheoaJU4xFnA3nAO1puRpzK7CSrS258YFSTGStFo6gNAEXCXApmSvJ4r
+         BW57qmQgB5Gb6IUZ6JUa1yVQEOM83FlGJ4rp30UhcGwpSm34s42tmXp3P324Jne88Kqn
+         SkZg==
+X-Gm-Message-State: ANoB5pniiDL74fk7tS5mkJSecg8NmyuyDfFzUIhFmSCL5BLlrRwLbYMd
+        9XY3C2UPvvhE4ptrF4QpXHA=
+X-Google-Smtp-Source: AA0mqf4ZPrtW54ww6Zvl6Ql4G2TELTlzGR4srjVLOEtRgpEOsxTRyyMe9EvHYVftTjcf85a6AR9rNw==
+X-Received: by 2002:a17:902:a588:b0:185:441e:90b5 with SMTP id az8-20020a170902a58800b00185441e90b5mr20420811plb.27.1670940176560;
+        Tue, 13 Dec 2022 06:02:56 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b001811a197797sm8462259plb.194.2022.12.13.06.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 06:02:55 -0800 (PST)
+Date:   Tue, 13 Dec 2022 23:02:49 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Dennis Zhou <dennis@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/12] mm, slub: remove percpu slabs with CONFIG_SLUB_TINY
+Message-ID: <Y5iGCY7LfQ1SKylO@hyeyoo>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-11-vbabka@suse.cz>
+ <Y4NEkF8DI1uXFRv4@hyeyoo>
+ <f318ccc3-eb03-e359-cb6f-157d0b4aed31@suse.cz>
+ <Y5cob2jicdNoviU3@fedora>
+ <Y5frwZNPN++sqHLY@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5frwZNPN++sqHLY@MiWiFi-R3L-srv>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Dec 13, 2022 at 11:04:33AM +0800, Baoquan He wrote:
+> On 12/12/22 at 05:11am, Dennis Zhou wrote:
+> > Hello,
+> > 
+> > On Mon, Dec 12, 2022 at 11:54:28AM +0100, Vlastimil Babka wrote:
+> > > On 11/27/22 12:05, Hyeonggon Yoo wrote:
+> > > > On Mon, Nov 21, 2022 at 06:12:00PM +0100, Vlastimil Babka wrote:
+> > > >> SLUB gets most of its scalability by percpu slabs. However for
+> > > >> CONFIG_SLUB_TINY the goal is minimal memory overhead, not scalability.
+> > > >> Thus, #ifdef out the whole kmem_cache_cpu percpu structure and
+> > > >> associated code. Additionally to the slab page savings, this reduces
+> > > >> percpu allocator usage, and code size.
+> > > > 
+> > > > [+Cc Dennis]
+> > > 
+> > > +To: Baoquan also.
+> 
+> Thanks for adding me.
+> 
+> > > 
+> > > > Wondering if we can reduce (or zero) early reservation of percpu area
+> > > > when #if !defined(CONFIG_SLUB) || defined(CONFIG_SLUB_TINY)?
+> > > 
+> > > Good point. I've sent a PR as it was [1], but (if merged) we can still
+> > > improve that during RC series, if it means more memory saved thanks to less
+> > > percpu usage with CONFIG_SLUB_TINY.
+> > > 
+> > > [1]
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/tag/?h=slab-for-6.2-rc1
+> > 
+> > The early reservation area not used at boot is then used to serve normal
+> > percpu allocations. Percpu allocates additional chunks based on a free
+> > page float count and is backed page by page, not all at once. I get
+> > slabs is the main motivator of early reservation, but if there are other
+> > users of percpu, then shrinking the early reservation area is a bit
+> > moot.
+> 
+> Agree. Before kmem_cache_init() is done, anyone calling alloc_percpu()
+> can only get allocation done from early reservatoin of percpu area.
+> So, unless we can make sure nobody need to call alloc_percpu() before
+> kmem_cache_init() now and future.
 
-please pull the x86/cpu pile of changes for 6.2.
+Thank you both for explaination.
+just googled and found random /proc/meminfo output of K210 board (6MB RAM, dual-core)
 
-Thx.
+Given that even K210 board uses around 100kB of percpu area,
+might not be worth thing to do :(
 
----
+https://gist.github.com/pdp7/0fd86d39e07ad7084f430c85a7a567f4?permalink_comment_id=3179983#gistcomment-3179983
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v6.2
-
-for you to fetch changes up to 7882b69eb6cdf6288a89d831d95c8547400a8b4d:
-
-  x86/mtrr: Make message for disabled MTRRs more descriptive (2022-12-05 11:08:25 +0100)
-
-----------------------------------------------------------------
-- Split MTRR and PAT init code to accomodate at least Xen PV and TDX
-guests which do not get MTRRs exposed but only PAT. (TDX guests do not
-support the cache disabling dance when setting up MTRRs so they fall
-under the same category.) This is a cleanup work to remove all the ugly
-workarounds for such guests and init things separately (Juergen Gross)
-
-- Add two new Intel CPUs to the list of CPUs with "normal" Energy
-Performance Bias, leading to power savings
-
-- Do not do bus master arbitration in C3 (ARB_DISABLE) on modern Centaur
-CPUs
-
-----------------------------------------------------------------
-Borislav Petkov (2):
-      x86/bugs: Use sysfs_emit()
-      x86/cpuid: Carve out all CPUID functionality
-
-Juergen Gross (22):
-      x86/mtrr: Add comment for set_mtrr_state() serialization
-      x86/mtrr: Remove unused cyrix_set_all() function
-      x86/mtrr: Replace use_intel() with a local flag
-      x86/mtrr: Rename prepare_set() and post_set()
-      x86/mtrr: Split MTRR-specific handling from cache dis/enabling
-      x86/mtrr: Move cache control code to cacheinfo.c
-      x86/mtrr: Disentangle MTRR init from PAT init
-      x86/mtrr: Remove set_all callback from struct mtrr_ops
-      x86/mtrr: Simplify mtrr_bp_init()
-      x86/mtrr: Get rid of __mtrr_enabled bool
-      x86/mtrr: Let cache_aps_delayed_init replace mtrr_aps_delayed_init
-      x86/mtrr: Add a stop_machine() handler calling only cache_cpu_init()
-      x86: Decouple PAT and MTRR handling
-      x86/cacheinfo: Switch cache_ap_init() to hotplug callback
-      x86/mtrr: Simplify mtrr_ops initialization
-      x86/cpufeatures: Add X86_FEATURE_XENPV to disabled-features.h
-      x86/cpu: Remove unneeded 64-bit dependency in arch_enter_from_user_mode()
-      x86/cpu: Drop 32-bit Xen PV guest code in update_task_stack()
-      x86/cpu: Remove X86_FEATURE_XENPV usage in setup_cpu_entry_area()
-      x86/cpu: Switch to cpu_feature_enabled() for X86_FEATURE_XENPV
-      x86/pat: Handle TDX guest PAT initialization
-      x86/mtrr: Make message for disabled MTRRs more descriptive
-
-Srinivas Pandruvada (1):
-      x86/intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
-
-Tony W Wang-oc (1):
-      x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
-
- arch/x86/include/asm/cacheinfo.h         |  13 +++
- arch/x86/include/asm/cpuid.h             | 141 +++++++++++++++++++++++-
- arch/x86/include/asm/disabled-features.h |   8 +-
- arch/x86/include/asm/entry-common.h      |   4 +-
- arch/x86/include/asm/memtype.h           |   5 +-
- arch/x86/include/asm/msr-index.h         |   1 +
- arch/x86/include/asm/mtrr.h              |  16 +--
- arch/x86/include/asm/processor.h         | 133 +----------------------
- arch/x86/include/asm/switch_to.h         |   7 +-
- arch/x86/kernel/acpi/cstate.c            |  24 +++--
- arch/x86/kernel/cpu/amd.c                |   2 +-
- arch/x86/kernel/cpu/bugs.c               | 105 +++++++++---------
- arch/x86/kernel/cpu/cacheinfo.c          | 179 +++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/common.c             |   2 +-
- arch/x86/kernel/cpu/hygon.c              |   2 +-
- arch/x86/kernel/cpu/intel_epb.c          |   7 +-
- arch/x86/kernel/cpu/mtrr/amd.c           |   8 +-
- arch/x86/kernel/cpu/mtrr/centaur.c       |   8 +-
- arch/x86/kernel/cpu/mtrr/cyrix.c         |  42 +-------
- arch/x86/kernel/cpu/mtrr/generic.c       | 107 ++----------------
- arch/x86/kernel/cpu/mtrr/mtrr.c          | 173 ++++-------------------------
- arch/x86/kernel/cpu/mtrr/mtrr.h          |  15 +--
- arch/x86/kernel/process_64.c             |   4 +-
- arch/x86/kernel/setup.c                  |  14 +--
- arch/x86/kernel/smpboot.c                |   9 +-
- arch/x86/kernel/topology.c               |   2 +-
- arch/x86/mm/cpu_entry_area.c             |   8 +-
- arch/x86/mm/pat/memtype.c                | 157 ++++++++++-----------------
- arch/x86/power/cpu.c                     |   3 +-
- include/linux/cpuhotplug.h               |   1 +
- 30 files changed, 538 insertions(+), 662 deletions(-)
+> The only drawback of early reservation is it's not so flexible. We can
+> only dynamically create chunk to increase percpu areas when early
+> reservation is run out, but can't shrink early reservation if system
+> doesn't need that much.
+> 
+> So we may need weigh the two ideas:
+>   - Not allowing to alloc_percpu() before kmem_cache_init();
+>   - Keep early reservation, and think of a economic value for
+>     CONFIG_SLUB_TINY.
+>  
+> start_kernel()
+>   ->setup_per_cpu_areas();
+>   ......
+>   ->mm_init();
+>       ......
+>       -->kmem_cache_init();
+> 
+> 
+> __alloc_percpu()
+>   -->pcpu_alloc()
+>      --> succeed to allocate from early reservation
+>       or
+>      -->pcpu_create_chunk()
+>         -->pcpu_alloc_chunk()
+>            -->pcpu_mem_zalloc()
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Hyeonggon
