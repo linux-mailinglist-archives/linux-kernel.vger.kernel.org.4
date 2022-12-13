@@ -2,181 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBEA64B573
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE77A64B571
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234919AbiLMMtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S235465AbiLMMtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235180AbiLMMtS (ORCPT
+        with ESMTP id S235436AbiLMMtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:49:18 -0500
-Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5D21BEA9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:17 -0800 (PST)
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199]) by mx-outbound46-236.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Tue, 13 Dec 2022 12:49:15 +0000
-Received: by mail-pl1-f199.google.com with SMTP id b17-20020a170903229100b00189da3b178bso12987564plh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:15 -0800 (PST)
+        Tue, 13 Dec 2022 07:49:10 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960021B9DF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:08 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id c1so4720864lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j4XCC2SNWD3YZuAByZlmhT1HNH2lwLYNZczilwjwoq8=;
-        b=ntUrA3y4KwnbuSPFOpGeXbFZS994aN7CbbPZvsvQY3PU9CtDofaTWlURW3hJYm4piF
-         A66eOcFeGRqyEFm8dIVPjXxBamT5ucn0otb8CI1bLk5XJz9moaDp5oEgpEV2JTV+QcpM
-         X40o4VrWxhPAf+u0Rfru6DLlA8tcnZbaACL1c=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W7A4zrO5QxiDGztNDUN0vMSVKFh2K/SajgDXGEDuryg=;
+        b=kqB/3XGde7RIFscBsJWiPeARCFwNFNuBGGFDvH/p/EwhvNIzSGEdhyYKpHVc4ROpD+
+         sgyEHUsJupWsl0oiZLQvg1R9qaAg2OD+3VHEW+yNHnF+5SzuC57VxfNT8g4jsae09CSq
+         G0hEnsVcn6WqVdMMYG4h2LU4Wj0gTFktB2mlTqMj0dgvv7w7GGptq4B5BodHa+03m+s5
+         yrSNq8oMgRrNdqgbwsHDXLwIFw/Ghp55CLHcBmOssK4IwHSUuvQzBWpCjxSG5DVwE1XP
+         KDBO28RflK8y0qSzAgcMytestCA5NJnN1LKmp+DZDELwa+2HYw9J9o35L0AigNwxPmtb
+         IVqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j4XCC2SNWD3YZuAByZlmhT1HNH2lwLYNZczilwjwoq8=;
-        b=GMr8mNPbh+MM4O0PHAtLpgUI2dL0fhXgZBmNfmp3SDJ7t2YeKhzWrMrqlAvNvwZlFJ
-         tGdp64s6IaZjkDmzXasOR/ETTRsqlh2w3m+dh7trfaGNfYIbwjeUpFZR/cEHsEF69Uey
-         klw2M4Jq2MbuGnajjKO4pwEi3Sh8o9v+liYCXvgQDB+3PDtXPVr8ZegZ4LazyegFJG+9
-         vlJc0b/TV+IqivsG9rsYUMj1zBxQUtpr9D9uhWgFRnSog2Az/324QXobIzw2Gao1UaRV
-         +MKDy9md7wbGjlPNCVmf7Ir2SZ2YrGOSVXEsncSyfw7XoZQ9Is7t3mjRPz9+c9q8zNzV
-         olMw==
-X-Gm-Message-State: ANoB5pl4toIS8U51YAcQ/nvCjJEgT3FKA0VUniCQwKuucW8mVxtOrPoS
-        iflhdn8hJEEXyCaqESyxJZNlqM4RRAE0Zgai/ee49NAzAE+h+PwI86cyqYl4GnPRSJ/0nafFObl
-        ym2sAxZ3cyFEMNvMK94VuS7iyAOJuJ23Q6EdiKic2LnRYVT/qk7cqnSUxBojf
-X-Received: by 2002:aa7:8250:0:b0:572:75f0:8010 with SMTP id e16-20020aa78250000000b0057275f08010mr18208292pfn.14.1670935753754;
-        Tue, 13 Dec 2022 04:49:13 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5N/tf/eQTEMT+wfQQLT9zHuYzXU6hPK99CRRxu4RbFzyftkLwlvTX28bUzYdHPhFSp+h5E/g==
-X-Received: by 2002:aa7:8250:0:b0:572:75f0:8010 with SMTP id e16-20020aa78250000000b0057275f08010mr18208275pfn.14.1670935753461;
-        Tue, 13 Dec 2022 04:49:13 -0800 (PST)
-Received: from LAP568U.mistral.in ([106.51.227.150])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa7942f000000b0057622e8e82csm7605485pfo.191.2022.12.13.04.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 04:49:12 -0800 (PST)
-From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
-X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH 2/2] phy: ti: j721e-wiz: Add support to enable LN23 Type-C swap
-Date:   Tue, 13 Dec 2022 18:18:54 +0530
-Message-Id: <20221213124854.3779-3-sinthu.raja@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221213124854.3779-1-sinthu.raja@ti.com>
-References: <20221213124854.3779-1-sinthu.raja@ti.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W7A4zrO5QxiDGztNDUN0vMSVKFh2K/SajgDXGEDuryg=;
+        b=XynTRtrUp/Bp8lILNDN+LWGGrWWR7GdQb3QD3TT/e2Rqjh6obqCqpWgTEt3texlS6m
+         QadcV0rJgGj0zunWwKGP/KwT4vKVMTlPo+4Deeqs36Oa7nWOeyZrbpX8eDqAv1V8xJKu
+         u4J3Jony1YU4RtcUWW/uwkGR2/vkWeu+CutUOBGc+1JNtMU7mchncppF09OENv/UUQNr
+         rN60HoWJm0sEz5gfa69vzXiFyUxLjFmCyZ5BnRMvBbZ1ozrlVkd6GPfHupS+KdgpAqXS
+         U6ojzIU2yHJJiLYyLET+F4pK9uhklwDV0Ml2okmEAUVXT3zJcDxgA1/mmLSOfXjFUit+
+         Y/eg==
+X-Gm-Message-State: ANoB5pmjjNfseyA/GIF2j1XJZTx0yAWp0mUdLN1BXT+tTlZo1id9I6dk
+        ybhQ4xtoWqsNUgmv6b+VGoPSKg==
+X-Google-Smtp-Source: AA0mqf4JKjFmszB4Il2zZ9HJXHMoWeUuhD/WPwQtJQI8c/GCcSN/xZ7P7O68SsIXayYbavIjaVEjiQ==
+X-Received: by 2002:a05:6512:22d2:b0:4b1:97ba:5716 with SMTP id g18-20020a05651222d200b004b197ba5716mr7090643lfu.0.1670935746967;
+        Tue, 13 Dec 2022 04:49:06 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id v16-20020ac25b10000000b004acff58a951sm356352lfn.133.2022.12.13.04.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 04:49:06 -0800 (PST)
+Message-ID: <20bd4594-7302-5823-447f-b980c476323e@linaro.org>
+Date:   Tue, 13 Dec 2022 13:49:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1670935754-312012-5635-5406-1
-X-BESS-VER: 2019.1_20221212.2317
-X-BESS-Apparent-Source-IP: 209.85.214.199
-X-BESS-Outbound-Spam-Score: 0.50
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.244774 [from 
-        cloudscan15-174.eu-central-1a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.50 BSF_RULE7568M          META: Custom Rule 7568M 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.50 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_RULE7568M, BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org
+References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+ <20221213123823.455731-4-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221213123823.455731-4-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Serdes wiz supports both LN23 and LN10 Type-C swap. Add support to
-configure LN23 bit to swap between lane2 or lane3 if required.
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
----
- drivers/phy/ti/phy-j721e-wiz.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-index b17eec632d49..0091892af0b0 100644
---- a/drivers/phy/ti/phy-j721e-wiz.c
-+++ b/drivers/phy/ti/phy-j721e-wiz.c
-@@ -58,6 +58,11 @@ enum wiz_lane_standard_mode {
- 	LANE_MODE_GEN4,
- };
- 
-+enum wiz_lane_typec_swap_mode {
-+	LANE10_SWAP = 0,
-+	LANE23_SWAP = 2,
-+};
-+
- enum wiz_refclk_mux_sel {
- 	PLL0_REFCLK,
- 	PLL1_REFCLK,
-@@ -194,6 +199,9 @@ static const struct reg_field p_mac_div_sel1[WIZ_MAX_LANES] = {
- static const struct reg_field typec_ln10_swap =
- 					REG_FIELD(WIZ_SERDES_TYPEC, 30, 30);
- 
-+static const struct reg_field typec_ln23_swap =
-+					REG_FIELD(WIZ_SERDES_TYPEC, 31, 31);
-+
- struct wiz_clk_mux {
- 	struct clk_hw		hw;
- 	struct regmap_field	*field;
-@@ -366,6 +374,7 @@ struct wiz {
- 	struct regmap_field	*mux_sel_field[WIZ_MUX_NUM_CLOCKS];
- 	struct regmap_field	*div_sel_field[WIZ_DIV_NUM_CLOCKS_16G];
- 	struct regmap_field	*typec_ln10_swap;
-+	struct regmap_field	*typec_ln23_swap;
- 	struct regmap_field	*sup_legacy_clk_override;
- 
- 	struct device		*dev;
-@@ -675,6 +684,13 @@ static int wiz_regfield_init(struct wiz *wiz)
- 		return PTR_ERR(wiz->typec_ln10_swap);
- 	}
- 
-+	wiz->typec_ln23_swap = devm_regmap_field_alloc(dev, regmap,
-+						       typec_ln23_swap);
-+	if (IS_ERR(wiz->typec_ln23_swap)) {
-+		dev_err(dev, "LN23_SWAP reg field init failed\n");
-+		return PTR_ERR(wiz->typec_ln23_swap);
-+	}
-+
- 	wiz->phy_en_refclk = devm_regmap_field_alloc(dev, regmap, phy_en_refclk);
- 	if (IS_ERR(wiz->phy_en_refclk)) {
- 		dev_err(dev, "PHY_EN_REFCLK reg field init failed\n");
-@@ -1242,15 +1258,24 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
- 				regmap_field_write(wiz->typec_ln10_swap, 0);
- 		} else {
- 			/* if no typec-dir gpio was specified, and USB lines
--			 * are connected to Lane 0 then set LN10 SWAP bit to 1.
-+			 * are connected to SWAP lanes '0' or '2' then set LN10 SWAP
-+			 * or LN23 bit to 1 respectively.
- 			 */
- 			u32 num_lanes = wiz->num_lanes;
- 			int i;
- 
- 			for (i = 0; i < num_lanes; i++) {
--				if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3) \
--						&& wiz->lane_phy_reg[i] == 0) {
--					regmap_field_write(wiz->typec_ln10_swap, 1);
-+				if (wiz->lane_phy_type[i] == PHY_TYPE_USB3) {
-+					switch (wiz->lane_phy_reg[i]) {
-+					case LANE10_SWAP:
-+						regmap_field_write(wiz->typec_ln10_swap, 1);
-+						break;
-+					case LANE23_SWAP:
-+						regmap_field_write(wiz->typec_ln23_swap, 1);
-+						break;
-+					default:
-+						break;
-+					}
- 				}
- 			}
- 		}
--- 
-2.36.1
+On 13.12.2022 13:38, Bhupesh Sharma wrote:
+> Add USB superspeed qmp phy node to dtsi.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+Please run make dtbs_check before sending dt patches, this one
+introduces new errors.
 
+
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
+>  1 file changed, 36 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index e4ce135264f3d..9c5c024919f92 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		usb_qmpphy: phy@1615000 {
+> +			compatible = "qcom,sm6115-qmp-usb3-phy";
+> +			reg = <0x01615000 0x200>;
+> +			#clock-cells = <1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+These -cells and ranges properties could go after status=disabled
+
+Konrad
+> +			clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> +				 <&gcc GCC_AHB2PHY_USB_CLK>;
+> +			clock-names = "com_aux",
+> +				      "ref",
+> +				      "cfg_ahb";
+> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> +			reset-names = "phy", "phy_phy";
+> +			status = "disabled";
+> +
+> +			usb_ssphy: phy@1615200 {
+> +				reg = <0x01615200 0x200>,
+> +				      <0x01615400 0x200>,
+> +				      <0x01615c00 0x400>,
+> +				      <0x01615600 0x200>,
+> +				      <0x01615800 0x200>,
+> +				      <0x01615a00 0x100>;
+> +				#phy-cells = <0>;
+> +				#clock-cells = <1>;
+> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +				clock-output-names = "usb3_phy_pipe_clk_src";
+> +			};
+> +		};
+> +
+> +
+>  		qfprom@1b40000 {
+>  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+>  			reg = <0x01b40000 0x7000>;
+> @@ -1023,8 +1057,8 @@ usb_dwc3: usb@4e00000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x04e00000 0xcd00>;
+>  				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+> -				phys = <&usb_hsphy>;
+> -				phy-names = "usb2-phy";
+> +				phys = <&usb_hsphy>, <&usb_ssphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+>  				iommus = <&apps_smmu 0x120 0x0>;
+>  				snps,dis_u2_susphy_quirk;
+>  				snps,dis_enblslpm_quirk;
