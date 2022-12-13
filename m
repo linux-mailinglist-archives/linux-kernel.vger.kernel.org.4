@@ -2,96 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2683C64B590
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA5164B595
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiLMM6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S235387AbiLMNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235182AbiLMM6Q (ORCPT
+        with ESMTP id S234956AbiLMNCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:58:16 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54310C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:58:14 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-89-xORWxX3AP_CUetMfbOsIHA-1; Tue, 13 Dec 2022 12:58:11 +0000
-X-MC-Unique: xORWxX3AP_CUetMfbOsIHA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Dec
- 2022 12:58:10 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Tue, 13 Dec 2022 12:58:10 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jiri Slaby' <jirislaby@kernel.org>, 'Tejun Heo' <tj@kernel.org>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: RE: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
- prints
-Thread-Topic: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
- prints
-Thread-Index: AQHY7hGH734dfSyX20WOi86L/FtKtq4rTpIAgD+71dKAALHkcIAAL92AgAACt3CAAAtKgIAADYvw
-Date:   Tue, 13 Dec 2022 12:58:10 +0000
-Message-ID: <d26f03e828c94df5b4653ac6980def59@AcuMS.aculab.com>
-References: <20221031114520.10518-1-jirislaby@kernel.org>
- <Y1++fLJXkeZgtXR2@infradead.org> <Y2AMcSPAJpj6obSA@slm.duckdns.org>
- <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
- <Y2FNa4bGhJoevRKT@slm.duckdns.org>
- <2b975ee3117e45aaa7882203cf9a4db8@AcuMS.aculab.com>
- <Y2Kaghnu/sPvl0+g@slm.duckdns.org> <Y2KePvYRRMOrqzOe@slm.duckdns.org>
- <320c939e-a3f0-1b1e-77e4-f3ecca00465d@kernel.org>
- <Y5ehU524daymEKgf@slm.duckdns.org>
- <f5220f08bd7f45248d718f1919503261@AcuMS.aculab.com>
- <9d2ead31-efab-cf49-08d4-1e613382d89f@kernel.org>
- <542d413b9d044474a34b6e7a40d70541@AcuMS.aculab.com>
- <c7539121-c8fc-b4b7-b722-ead833420b2b@kernel.org>
-In-Reply-To: <c7539121-c8fc-b4b7-b722-ead833420b2b@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 13 Dec 2022 08:02:16 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC090FACF
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j4so4855227lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
+        b=v3fQlf2kgSS+AJzKkGbQbQVxCdOzB79tHBy13LmzAC6tYjbvJD2/3NLM3k3N7C1s1C
+         fbi8XkxaQfqTRPtEEAWsCNSkbLZT0Lr16P/d85zsDuUCOfJo8NWwY2Sogcds8MRuDAVW
+         ikR8fOeVjci1sJjgcql5bKdLLhRUl2NRUmCYDkdjqWimEH2I7MVLAwHV9yHC6YaIid6T
+         lEA3KVr9Z8TL6FK2o0Qv+FpL+I1zqlcVC2VqdC6fRV6+K4eBfWCnij2ecsMIW+4o8jwH
+         S8Z7PVUeKsSMsSAsFM0FAgDdBajAbRjANH4oNaaf6uC0uiHpQxnWF7I2dEFPR3yLwa41
+         Pssw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
+        b=ENYa+EmSYEiwFIJWxTOo3dpUaDdyScPJ/8c2d0LhlEeY0RR9xnYsOvPRo/OQVJj28U
+         EqhQXpcUMYmX8NhX9YOk8aNJMnhiYVlel+LbDE/geupvp23qi4NAA+pm/01oNylIKN97
+         qaagz/MCHpspPOlIbCL4WkAUBEnMa4e/A8bDZvCZFRKa/wa/eUIqmEYhX5HxZmDpUp5y
+         72//JkQAAdWkVEHgq7OD8SrTCeE8qYKjnrYqu4iqmQTOkLCijd78JKaq2F5A79GdRCza
+         jjnYsgevu/hIvwDBz/Fr2JAh4xFjFlyfIXARaUzsU7xWWHShPlAxed8m6CGraQON/4Xo
+         7gUA==
+X-Gm-Message-State: ANoB5pmb5ZbYXbkis6zycwxfK0neGTXGHyYlZWPSvoZW+bGWMznhP5G2
+        4N5PzLy4UYSJyqtT99nBP3hVNw==
+X-Google-Smtp-Source: AA0mqf6NbjEsBWAPSxu32rWUqrPPN0YATuL85yOo7kXNM8FUMipRROZsB4b08JOvaexQsUYWdpUQSQ==
+X-Received: by 2002:a05:6512:b8c:b0:4b5:7d49:4a05 with SMTP id b12-20020a0565120b8c00b004b57d494a05mr7830468lfv.0.1670936532229;
+        Tue, 13 Dec 2022 05:02:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y12-20020a19914c000000b004b55a1c4649sm363680lfj.38.2022.12.13.05.02.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 05:02:11 -0800 (PST)
+Message-ID: <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
+Date:   Tue, 13 Dec 2022 14:02:10 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
 Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com,
+        linux-spi@vger.kernel.org,
+        Javier Martinez Canillas <fmartine@redhat.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-5-bmasney@redhat.com>
+ <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com> <Y5hvlX35nr8xQKEd@x1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y5hvlX35nr8xQKEd@x1>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSmlyaSBTbGFieSA8amlyaXNsYWJ5QGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDEzIERlY2Vt
-YmVyIDIwMjIgMTI6MDUNCj4gDQo+IE9uIDEzLiAxMi4gMjIsIDEyOjUwLCBEYXZpZCBMYWlnaHQg
-d3JvdGU6DQo+ID4gRnJvbTogSmlyaSBTbGFieQ0KPiA+PiBTZW50OiAxMyBEZWNlbWJlciAyMDIy
-IDExOjE1DQo+ID4+DQouLi4NCj4gPj4+PiBPaCBtYW4sIGl0J3Mga2luZGEgY3JhenkgdGhhdCB0
-aGUgY29tcGlsZXIgaXMgY2hhbmdpbmcgaW4gYSB3YXkgdGhhdCB0aGUNCj4gPj4+PiBzYW1lIHBp
-ZWNlIG9mIGNvZGUgY2FuJ3QgYmUgY29tcGlsZWQgdGhlIHNhbWUgd2F5IGFjcm9zcyB0d28gYWRq
-b2luaW5nDQo+ID4+Pj4gdmVyc2lvbnMgb2YgdGhlIHNhbWUgY29tcGlsZXIuIEJ1dCwgeWVhaCwg
-aWYgdGhhdCdzIHdoYXQgZ2NjIGlzIGdvbm5hIGRvIGFuZA0KPiA+Pj4+IHNwbGl0dGluZyBlbnVt
-cyBpcyB0aGUgb25seSB3YXkgdG8gYmUgb2theSBhY3Jvc3MgdGhlIGNvbXBpbGVyIHZlcnNpb25z
-LA0KPiA+Pj4+IHRoZXJlIGlzbid0IGFueSBvdGhlciBjaG9pY2Ugd2UgY2FuIG1ha2UuDQo+ID4+
-Pg0KPiA+Pj4gSXQgaXMgYWxzbyBhIHNpbGVudCBjb2RlLWJyZWFrZXIuDQo+ID4+PiBDb21waWxl
-IHRoaXMgZm9yIDMyYml0IHg4NjoNCj4gPj4+DQo+ID4+PiBlbnVtIHsgYSA9IDEsIGIgPSB+MHVs
-bH07DQo+ID4+DQo+ID4+IEJ1dCBoYXZpbmcgdWxsIGluIGFuIGVudW0gaXMgdW5kZWZpbmVkIGFu
-eXdheS4gQzk5IGFsbG93cyBvbmx5IGludA0KPiA+PiBjb25zdGFudHMuIGdudUMgc3VwcG9ydHMg
-dWxvbmcgZXhwcmVzc2lvbnMgKElJUkMpLg0KPiA+DQo+ID4gZ2NjIHN1cHBvcnRzICdsb25nIGxv
-bmcnIGFzIHdlbGwgLSA2NGJpdCBvbiAzMmJpdCBzeXN0ZW1zLg0KPiANCj4gQ2FuIHlvdSBlbGFi
-b3JhdGUgd2hhdCdzIHNvdXJjZSBvZiB0aGlzPyAuLi4NCg0KRXhwZXJpbWVudGF0aW9uLCBmb3Ig
-ZXhhbXBsZToNCg0KaHR0cHM6Ly9nb2Rib2x0Lm9yZy96L240cm5jN2NLRw0KDQoNCglEYXZpZA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+On 13/12/2022 13:27, Brian Masney wrote:
+> + Mark Brown and linux-spi list
+> 
+> On Tue, Dec 13, 2022 at 12:46:18PM +0530, Shazad Hussain wrote:
+>> On 12/12/2022 11:53 PM, Brian Masney wrote:
+>>> Add the missing nodes for the spi buses that's present on this SoC.
+>>>
+>>> This work was derived from various patches that Qualcomm delivered
+>>> to Red Hat in a downstream kernel.
+>>>
+>>> Signed-off-by: Brian Masney <bmasney@redhat.com>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 384 +++++++++++++++++++++++++
+>>>   1 file changed, 384 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> index 392a1509f0be..b50db09feae2 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> @@ -829,6 +829,22 @@ qup2_i2c16: i2c@880000 {
+>>>   				status = "disabled";
+>>>   			};
+>>> +			qup2_spi16: spi@880000 {
+>>> +				compatible = "qcom,geni-spi";
+>>> +				reg = <0 0x00880000 0 0x4000>;
+>>> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
+>>> +				clock-names = "se";
+>>> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+>>> +				#address-cells = <1>;
+>>> +				#size-cells = <0>;
+>>> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>>> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
+>>> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
+>>> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>>> +				spi-max-frequency = <50000000>;
+>>
+>> This is device property not host and same applicable for all below spi
+>> nodes.
+>> Also FYI let's enable below SPI for Qdrive usecases once spidev compatible
+>> name is confirmed.
+>> SE9  0x00A84000
+>> SE22 0x00898000
+> 
+> I talked to Javier Martinez Canillas yesterday about the spidev driver
+> and I think I now have a better understanding of what we need to do.
+> Quick background for Mark. For this automotive program, Qualcomm will be
+> delivering to Red Hat and our customers parts of the media stack in
+> userspace. This will be closed source, proprietary code that parts of it
+> will need to interface with SPI.
+> 
+> We can't add a generic qcom,spidev compatible to the spidev driver since
+> this is just a software abstraction. Instead, each type of device will
+> need to have it's own compatible that uniquely describes the type of
+> device. So you might have a compatible like qcom,spi-video-codec. There
+> will need to be a DT binding added that describes the hardware. I suspect
+> that a SPI device can simply be added to trivial-devices.yaml. Once the
+> DT binding is accepted, the compatible can be added to the spidev.c
+> driver. If an in-kernel driver is written in the future, then the 
+> compatible can be moved from spidev to the new driver.
+> 
+> Mark: Is my understanding above correct? If so, will it be a problem to
+> get a compatible added to spidev.c if the corresponding userspace code is
+> closed source and proprietary?
+
+qcom,spi-video-codec is still not specific enough. You need to describe
+real device behind spidev. To be clear - you do not describe userspace,
+but the device.
+
+Best regards,
+Krzysztof
 
