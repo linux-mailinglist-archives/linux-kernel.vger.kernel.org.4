@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016E064ABE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 00:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8402264ABE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbiLLX64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 18:58:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        id S229629AbiLMAAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233698AbiLLX6x (ORCPT
+        with ESMTP id S229872AbiLMAAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 18:58:53 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE60D1C102
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 15:58:51 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id z9so4233783ilu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 15:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OZjN4DfBt1MpKQnJvB+t2SgFukuSJ9KwUKmZ/hzFAhI=;
-        b=gzz8jhfC+YxU6CPIUoPEFVa32AeoGayYHzFWctIg35CBZHX08zzy5LNGJYniDlAUsK
-         cQw9aRyIjWsHnIjEMJPpsvBN7JSLwGDKbk2V1Eq4eapWt0DGmtfbtO9SbgwJ7Enm4ybm
-         R+BIiF1fLLil6hOamE8OgtsDessM+iXrogq1U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OZjN4DfBt1MpKQnJvB+t2SgFukuSJ9KwUKmZ/hzFAhI=;
-        b=NWKjNQ6RsUgF+AVz8uWyLWu7aGImuGjhLeh5YwUZjkrl8NJE2FppqUgHDPXRuW6vFK
-         lNhHuycZ89zBbyjVW+//CoKttL2VLUkLSsKjcwhq4MPWY7m5r7A80t9q6rsHZJ9nAJVY
-         0B3t4JOFNyGQALXf/N3coL1XJ81r8ffkR1mt0+rGqLQ+K8E6kKtAxBJqpJ1CSzySJydW
-         Sd3wBFEikGC5pkQa2I75bQGW6jVeQWcGov1fHIJdL/53pLjoHusjSRAswUtbUptfjifx
-         MABOQl7a5UvsOkgFmXhQrhc5dtyAVgZE52e9xW8Pmg6dwMEZS6O/Z9KS/hNclh0GgS56
-         3agA==
-X-Gm-Message-State: ANoB5pnrrGZeUoQtB4JlrrgVs/qfSS9CJQNneISwBAFnj3C4pI+lCYON
-        RDWSnuYumO2av6ICpJLBgH1N0TFZAqysaiQ4
-X-Google-Smtp-Source: AA0mqf5PU7eqBo0BF+Q2Sro7x9KVt3tYrLlLLX882/S+IjtN28no4eMFYTFNE6ze8+7d40T21fy2jg==
-X-Received: by 2002:a92:cd4e:0:b0:303:1141:1044 with SMTP id v14-20020a92cd4e000000b0030311411044mr1994430ilq.1.1670889531058;
-        Mon, 12 Dec 2022 15:58:51 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c4-20020a92d3c4000000b00302e09e0bb2sm3295862ilh.50.2022.12.12.15.58.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 15:58:50 -0800 (PST)
-Message-ID: <6c96b2f0-8144-8442-b127-e38aa46e252d@linuxfoundation.org>
-Date:   Mon, 12 Dec 2022 16:58:49 -0700
+        Mon, 12 Dec 2022 19:00:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A6BE0D2;
+        Mon, 12 Dec 2022 16:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0AF3612B3;
+        Tue, 13 Dec 2022 00:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 442CCC433F1;
+        Tue, 13 Dec 2022 00:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670889617;
+        bh=LWzJf9uXF09kZEe6TumIskn1pNTh2fW2T0Q4w5scBfk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=hN2PiY97ijyVI3r4quA4QrzprBhAew5dMKJgvmY5VpxATF9Y2t9D/kO48umIdXgNC
+         3XPrc4vE4GPekYWiP58bjBVn4jV65EYSDGJRmBfgoBhGvfnHjSs1Z2Fc2kc3tKPZ6R
+         m/roNYjIqaZGd1XMEVGV0CBPJFyTyFerIrL2aJHi2emJ74JDD80x9pCmT9VfiVn0US
+         OLM2e0eAwz8cR4Ha1/c4qhLXeXWDtvSF/4f2i2Z/BOC4ed6swURPSdbBYMw288FwSu
+         fgvPEbt2p9JQqY4UuXBU0/d8/24grrRmwPzkwnbeCW4IcdNFri1JcTdZib8yI1RXvS
+         cro5zLPloX5uQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 24746E21EF1;
+        Tue, 13 Dec 2022 00:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.15 000/123] 5.15.83-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221212130926.811961601@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221212130926.811961601@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v6 1/2] IPv6/GRO: generic helper to remove temporary
+ HBH/jumbo header in driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167088961714.16932.15471195808501226642.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Dec 2022 00:00:17 +0000
+References: <20221210041646.3587757-1-lixiaoyan@google.com>
+In-Reply-To: <20221210041646.3587757-1-lixiaoyan@google.com>
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        michael.chan@broadcom.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 06:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.83 release.
-> There are 123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.83-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hello:
 
-Compiled and booted on my test system. No dmesg regressions.
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+On Sat, 10 Dec 2022 04:16:45 +0000 you wrote:
+> IPv6/TCP and GRO stacks can build big TCP packets with an added
+> temporary Hop By Hop header.
+> 
+> Is GSO is not involved, then the temporary header needs to be removed in
+> the driver. This patch provides a generic helper for drivers that need
+> to modify their headers in place.
+> 
+> [...]
 
-thanks,
--- Shuah
+Here is the summary with links:
+  - [net-next,v6,1/2] IPv6/GRO: generic helper to remove temporary HBH/jumbo header in driver
+    https://git.kernel.org/netdev/net-next/c/89300468e2b2
+  - [RFC,net-next,v6,2/2] bnxt: Use generic HBH removal helper in tx path
+    https://git.kernel.org/netdev/net-next/c/b6488b161ab2
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
