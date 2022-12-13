@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AEC64BC51
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729C264BC59
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbiLMSry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S236316AbiLMSt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236692AbiLMSrW (ORCPT
+        with ESMTP id S235875AbiLMStZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:47:22 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CFC25284
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:47:21 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p8so6393219lfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:47:21 -0800 (PST)
+        Tue, 13 Dec 2022 13:49:25 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E61135
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:49:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id c1so6442660lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRwOpyUTyKwZUBQY9S8LUeQA/QLa8sJtEGHZbXqLC9M=;
-        b=sGK1i122jhMTjX3eHGkDcjeDAPF73PChEdmzvJsp5X/8qyzjl0rYuKS8H8KKD1St1M
-         3OmZ+wPhD4Vlm2UelB8tfS06WQqTNEtXjAHhQgZiwTReGH5hXqz8js+HUGvCTVS+2Dbg
-         q1NXNe9Ze62Kr5/Rqg/5/fhnnp2ixYRQDqwhQpQXiBHHyQBPzJe+I7shXo6Tz7v5Szk3
-         yV6Et3779dABbPSG/Rksz3t1F2hDgaWsMah3p2sgIkjr/W23kqr57Lt6Ao9m44BPsdOH
-         tKEw1IN1sGiQ6SoYx0GwhYSuB0v9RmrnlC9/NrH2T0JoMp/sHXtDC/nl70lZ1f3nc7As
-         kUmg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Z8/bxp7Ru0IcqP+97HvHKf6Od5YpO4Un+/bdWoueMc=;
+        b=ZkoMwQxtEEojprY96HRl/tPEfZWV7bVmiXJe4tw/+7qOovalFjORxVvvghy4oWol6h
+         P2GIVMB0WPB+zdXaS4i7zrlmFwJ9lVDaKy5Gap7VsaxOMTeBqwC0lcG/os7GynCgJpC1
+         NbeTQ6E+yWZjVe7Mbz64I4Pnvx9Ym1pmXOM2Ty7449ysG4Ds3bfFUHRVpp05o/lJ1gJN
+         reHMIgbEZ5cd6e/8jbbbZ9tmtufHl/NyWa8STQjaxBYG7gOg/FxI4rNCyhcGx8ZWBhMB
+         /XEWqIn1YIkfAwleMof+oiKyjnDLOBkvNWFlwJsxoIFHpEU7oWloc75oUcoR8zNWlASQ
+         A66w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRwOpyUTyKwZUBQY9S8LUeQA/QLa8sJtEGHZbXqLC9M=;
-        b=odtWzuAUrUqXzkFm+7qjRizmA/rieDE/a9iVqMIWLJEvRwSTVNiOKSjc2BxnzXWKx0
-         4bmakFLBEb1OlxekduSLBVWv4dYgEvVwBfBgPD04yPOdtlUUY3KrG0NE5Lq2fDc4RjCF
-         gvEIE1AtogB7UO+4b+Q9eyfbiHbm3uBDH6wCysdAFX4B6rE92caf9iugwfFOObl6kQXj
-         fcUrh3nR8X3CJzFe1B903g+cmEzVCny8Dq13wMTt8h0yIvR9DRsBsZw6LvwrUPzdbUBl
-         9MYBaKVpBQyRBm08uwzRe3lfXPS3KNoQZ2WHZ1x4Z1lGoMFIVwzcndPDAzoGmTisxIFt
-         iFiQ==
-X-Gm-Message-State: ANoB5plro3jKnaRQlBxfymBEMrPhHJg+yoL0vvgWE66wyOwMq+kIjAVX
-        KAOSgH1CvCPYQGA/ak9OO4eG+A==
-X-Google-Smtp-Source: AA0mqf4EzlyeUXlRyVVkTE9zBWWT/0m5aa7Czf1yi3T8wBUtLN19XL5M4jOioVNHsNguthRiFxrysg==
-X-Received: by 2002:ac2:4c24:0:b0:4b4:900c:3a28 with SMTP id u4-20020ac24c24000000b004b4900c3a28mr5168648lfq.60.1670957239616;
-        Tue, 13 Dec 2022 10:47:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 25-20020ac25699000000b004b58d457f2dsm471838lfr.61.2022.12.13.10.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:47:19 -0800 (PST)
-Message-ID: <195a55f1-76e7-3f00-da1f-4ae84f7943c0@linaro.org>
-Date:   Tue, 13 Dec 2022 19:47:17 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Z8/bxp7Ru0IcqP+97HvHKf6Od5YpO4Un+/bdWoueMc=;
+        b=H6hq5dJDTqljSNsEncASpey3VdCUN9XvOGpJ91ikLGY/ECaQ/ZW5SLhueo7PExcBUD
+         PQW8HIrb3Pdv4WHmzM2Dnwc4xTyQQ+y+5wMCJnOADBcWbIIYex6ubjfhZbt0rVLx5jsH
+         UbIcuIMdTqNgDS3DazsbdUNNWL2oUWNjDm7fPpxkdKVbCNDmxcC3EuFk+u8TFs+bs/tW
+         xe1eD57GJ5P+G2YbCnsF+0vTrdcp1HQLw/VHzX0gNubf2aVbpKU+jq+6xVaME5qbR452
+         vhY5fbZRbRP7gcSoo+/dkgFd092SZXxQWMyoaUjLTwjMkcALF/751el4h/keIycB5gW7
+         B6Ww==
+X-Gm-Message-State: ANoB5pk/ycPqNrB6I9M8nAHGeyMu+x0eYmwXDU2KxT2h1i+lJ6EHrrEd
+        t9ckp6VBwpS9L0pGJdvqq2yTnKhoFUr0ICiv78SufQ==
+X-Google-Smtp-Source: AA0mqf4gjU1kOVSsoaBjvy/V2YZbYMOlGdh5ZjsKuFUhJUtzP+rj9UE7xulfafzBMNTNvmGzgZasr6u8pOSrMv7ne4Y=
+X-Received: by 2002:ac2:55b5:0:b0:4b5:b787:623c with SMTP id
+ y21-20020ac255b5000000b004b5b787623cmr1499532lfg.328.1670957362414; Tue, 13
+ Dec 2022 10:49:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
- <20221213052802.GB4862@thinkpad>
- <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
- <20221213175738.GI4862@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213175738.GI4862@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+ <20221213123823.455731-2-bhupesh.sharma@linaro.org> <0152d45d-75ed-db44-69b2-d7736600f120@linaro.org>
+In-Reply-To: <0152d45d-75ed-db44-69b2-d7736600f120@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 14 Dec 2022 00:19:10 +0530
+Message-ID: <CAH=2Ntxh8pj9XEtrxM3UG3Z8zRQHeFEGBac_WU3+e2LXZkMiPw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm6115: Cleanup USB node names
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, andersson@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,90 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 18:57, Manivannan Sadhasivam wrote:
-> On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
->> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
->>> On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
->>>> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
->>>>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
->>>>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
->>>>> This offset only works for some SoCs like SDM845 for which driver support
->>>>> was initially added.
->>>>>
->>>>> But the later SoCs use different register stride that vary between the
->>>>> banks with holes in-between. So it is not possible to use a single register
->>>>> stride for accessing the CSRs of each bank. By doing so could result in a
->>>>> crash with the current drivers. So far this crash is not reported since
->>>>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
->>>>> driver extensively by triggering the EDAC IRQ (that's where each bank
->>>>> CSRs are accessed).
->>>>>
->>>>> For fixing this issue, let's obtain the base address of each LLCC bank from
->>>>> devicetree and get rid of the fixed stride.
->>>>>
->>>>> This series affects multiple platforms but I have only tested this on
->>>>> SM8250 and SM8450. Testing on other platforms is welcomed.
->>>>>
->>>>
->>>> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
->>>>
->>>
->>> Thanks!
->>>
->>>> I took this for a quick spin on the qdrive3 I've got access to without
->>>> any issue:
->>>>
->>>>     [root@localhost ~]# modprobe qcom_edac
->>>>     [root@localhost ~]# dmesg | grep -i edac
->>>>     [    0.620723] EDAC MC: Ver: 3.0.0
->>>>     [    1.165417] ghes_edac: GHES probing device list is empty
->>>>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
->>>>     [root@localhost ~]# cat /proc/interrupts | grep ecc
->>>>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
->>>>     [root@localhost ~]#
->>>>
->>>> Potentially stupid question, but are users expected to manually load the
->>>> driver as I did? I don't see how it would be loaded automatically in the
->>>> current state, but thought it was funny that I needed to modprobe
->>>> myself.
->>>>
->>>> Please let me know if you want me to do any more further testing!
->>>>
->>>
->>> Well, I always ended up using the driver as a built-in. I do make it module for
->>> build test but never really used it as a module, so didn't catch this issue.
->>>
->>> This is due to the module alias not exported by the qcom_edac driver. Below
->>> diff allows kernel to autoload it:
->>>
->>> diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
->>> index f7afb5375293..13919d01c22d 100644
->>> --- a/drivers/edac/qcom_edac.c
->>> +++ b/drivers/edac/qcom_edac.c
->>> @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
->>>  
->>>  MODULE_DESCRIPTION("QCOM EDAC driver");
->>>  MODULE_LICENSE("GPL v2");
->>> +MODULE_ALIAS("platform:qcom_llcc_edac");
->>
->> While this is a way to fix it, but instead of creating aliases for wrong
->> names, either a correct name should be used or driver should receive ID
->> table.
->>
-> 
-> I'm not sure how you'd fix it with a _correct_ name here. 
+Hi Krzysztof,
 
-Hm, I assumed that it would be enough if driver name would match device
-name. Currently these two are not in sync. Maybe it's not enough when
-built as module?
+On Tue, 13 Dec 2022 at 18:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 13/12/2022 13:38, Bhupesh Sharma wrote:
+> > There is only one USB controller present on SM6115 / SM4250
+> > Qualcomm SoC, so drop the numbering used with USB nodes
+>
+> The node names remain unaffected, so please mention you do it only for
+> the labels. Labels do not matter for the code, has no impact.
 
-> Also, the id table is
-> an overkill since there is only one driver that is making use of it. And
-> moreover, there is no definite ID to use.
+Fair point. Let me fix it in v2.
 
-Every driver with a single device support has usually ID table and it's
-not a problem...
+> > in the dtsi and the related sm4250-oneplus-billie2.dts.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts | 4 ++--
+> >  arch/arm64/boot/dts/qcom/sm6115.dtsi                | 8 ++++----
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > index a3f1c7c41fd73..fa57f4bf58256 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+> > @@ -225,11 +225,11 @@ &ufs_mem_phy {
+> >       status = "okay";
+> >  };
+> >
+> > -&usb_1 {
+> > +&usb {
+> >       status = "okay";
+> >  };
 
-Best regards,
-Krzysztof
-
+Regards,
+Bhupesh
