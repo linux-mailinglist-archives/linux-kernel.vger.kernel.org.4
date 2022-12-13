@@ -2,260 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805E464B7EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BB764B7F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236042AbiLMO5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S235846AbiLMO7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbiLMO5H (ORCPT
+        with ESMTP id S229820AbiLMO7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:57:07 -0500
+        Tue, 13 Dec 2022 09:59:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001A8EE0E;
-        Tue, 13 Dec 2022 06:57:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FF22098F;
+        Tue, 13 Dec 2022 06:59:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3807B81211;
-        Tue, 13 Dec 2022 14:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9759EC433EF;
-        Tue, 13 Dec 2022 14:57:02 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 09:56:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@google.com>
-Subject: [PATCH] tracing: Add a way to filter function addresses to function
- names
-Message-ID: <20221213095659.53f567c1@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 438FDB810F8;
+        Tue, 13 Dec 2022 14:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A0AC433EF;
+        Tue, 13 Dec 2022 14:59:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670943579;
+        bh=CvvcVxzxHT3CSYkCAysMeR2g9STIHLwzqNyMN04Vbac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oKhWwKyl7xO38XSlhb0AkJHhTGTlLhUSDcyrgnbMcjv3RACMe4P4qci7ETOFS3/jI
+         diuik2E/c0uosJ3Q9ZfejdX0gdNS9kkH9fm4RjiwR0C6lldJ178P2hpiBpQU8UW6+s
+         0N08S3LP4NZ6WveIlWfiE0tf5M8715hOSdB+/C7Cv8pcI4sdHvgzmyzILnSyojD7YN
+         y0xRop7Dp/gIxroJFRf+a7/rOV0hIvM+79NB1fbeT2qyj2WW4Xnh5h/G6Td2exgkp5
+         49oCXDP3P5iFMseDYHImxDYnVb1nm1LZO9Fb+8aUu6KncmzFBq05vngySwmK/B3JtR
+         LEDofz/1QkiSw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p56lC-0004nb-JA; Tue, 13 Dec 2022 15:59:59 +0100
+Date:   Tue, 13 Dec 2022 15:59:58 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
+ qup2_i2c18 nodes
+Message-ID: <Y5iTbu69TfChCtHA@hovoldconsulting.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-4-bmasney@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212182314.1902632-4-bmasney@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 12, 2022 at 01:23:13PM -0500, Brian Masney wrote:
+> Add the necessary nodes in order to get qup1_i2c15 and qup2_i2c18
+> functioning on the automotive board and exposed to userspace.
+> 
+> This work was derived from various patches that Qualcomm delivered
+> to Red Hat in a downstream kernel. This change was validated by using
+> i2c-tools 4.3.3 on CentOS Stream 9:
+> 
+> [root@localhost ~]# i2cdetect -l
+> i2c-15  i2c             Geni-I2C                                I2C adapter
+> i2c-18  i2c             Geni-I2C                                I2C adapter
+> 
+> [root@localhost ~]# i2cdetect -a -y 15
+> Warning: Can't use SMBus Quick Write command, will skip some addresses
+>      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:
+> 10:
+> 20:
+> 30: -- -- -- -- -- -- -- --
+> 40:
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60:
+> 70:
+> 
+> Bus 18 has the same output. I validated that we get the same output on
+> the downstream kernel.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
 
-[ Resend to include liunx-trace-kernel@vger.kernel.org ]
+> +	qup1_i2c15_default: qup1-i2c15-state {
+> +		mux-pins {
+> +			pins = "gpio36", "gpio37";
+> +			function = "qup15";
+> +		};
+> +
+> +		config-pins {
+> +			pins = "gpio36", "gpio37";
+> +			drive-strength = <0x02>;
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Use decimal notation.
 
-There's been several times where an event records a function address in
-its field and I needed to filter on that address for a specific function
-name. It required looking up the function in kallsyms, finding its size,
-and doing a compare of "field >= function_start && field < function_end".
+> +			bias-pull-up;
+> +		};
+> +	};
 
-But this would change from boot to boot and is unreliable in scripts.
-Also, it is useful to have this at boot up, where the addresses will not
-be known. For example, on the boot command line:
-
-  trace_trigger="initcall_finish.traceoff if initcall_finish.function ==
-  acpi_init"
-
-To implement this, add a ".function" prefix, that will check that the
-field is of size long, and the only operations allowed (so far) are "=="
-and "!=".
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/trace/events.rst     | 12 +++++
- kernel/trace/trace_events.c        |  2 +-
- kernel/trace/trace_events_filter.c | 79 +++++++++++++++++++++++++++++-
- 3 files changed, 91 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index c47f381d0c00..d0fd5c7220b7 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -207,6 +207,18 @@ field name::
- As the kernel will have to know how to retrieve the memory that the pointer
- is at from user space.
- 
-+You can convert any long type to a function address and search by function
-name:: +
-+  call_site.function == security_prepare_creds
-+
-+The above will filter when the field "call_site" falls on the address
-within +"security_prepare_creds". That is, it will compare the value of
-"call_site" and +the filter will return true if it is greater than or equal
-to the start of +the function "security_prepare_creds" and less than the
-end of that function. +
-+The ".function" postfix can only be attached to values of size long, and
-can only +be compared with "==" or "!=".
-+
- 5.2 Setting filters
- -------------------
- 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 33e0b4f8ebe6..db6e2f399440 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2822,7 +2822,7 @@ static __init int setup_trace_triggers(char *str)
- 		if (!trigger)
- 			break;
- 		bootup_triggers[i].event = strsep(&trigger, ".");
--		bootup_triggers[i].trigger = strsep(&trigger, ".");
-+		bootup_triggers[i].trigger = strsep(&trigger, "");
- 		if (!bootup_triggers[i].trigger)
- 			break;
- 	}
-diff --git a/kernel/trace/trace_events_filter.c
-b/kernel/trace/trace_events_filter.c index 96acc2b71ac7..eef6426051bb 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -64,6 +64,7 @@ enum filter_pred_fn {
- 	FILTER_PRED_FN_PCHAR_USER,
- 	FILTER_PRED_FN_PCHAR,
- 	FILTER_PRED_FN_CPU,
-+	FILTER_PRED_FN_FUNCTION,
- 	FILTER_PRED_FN_,
- 	FILTER_PRED_TEST_VISITED,
- };
-@@ -71,6 +72,7 @@ enum filter_pred_fn {
- struct filter_pred {
- 	enum filter_pred_fn 	fn_num;
- 	u64 			val;
-+	u64 			val2;
- 	struct regex		regex;
- 	unsigned short		*ops;
- 	struct ftrace_event_field *field;
-@@ -103,6 +105,7 @@ struct filter_pred {
- 	C(INVALID_FILTER,	"Meaningless filter expression"),	\
- 	C(IP_FIELD_ONLY,	"Only 'ip' field is supported for function
-trace"), \ C(INVALID_VALUE,	"Invalid value (did you forget
-quotes)?"), \
-+	C(NO_FUNCTION,		"Function not found"),
-		\ C(ERRNO,		"Error"),
-	\ C(NO_FILTER,		"No filter found")
- 
-@@ -876,6 +879,17 @@ static int filter_pred_comm(struct filter_pred *pred,
-void *event) return cmp ^ pred->not;
- }
- 
-+/* Filter predicate for functions. */
-+static int filter_pred_function(struct filter_pred *pred, void *event)
-+{
-+	unsigned long *addr = (unsigned long *)(event + pred->offset);
-+	unsigned long start = (unsigned long)pred->val;
-+	unsigned long end = (unsigned long)pred->val2;
-+	int ret = *addr >= start && *addr < end;
-+
-+	return pred->op == OP_EQ ? ret : !ret;
-+}
-+
- /*
-  * regex_match_foo - Basic regex callbacks
-  *
-@@ -1335,6 +1349,8 @@ static int filter_pred_fn_call(struct filter_pred
-*pred, void *event) return filter_pred_pchar(pred, event);
- 	case FILTER_PRED_FN_CPU:
- 		return filter_pred_cpu(pred, event);
-+	case FILTER_PRED_FN_FUNCTION:
-+		return filter_pred_function(pred, event);
- 	case FILTER_PRED_TEST_VISITED:
- 		return test_pred_visited_fn(pred, event);
- 	default:
-@@ -1350,8 +1366,13 @@ static int parse_pred(const char *str, void *data,
- 	struct trace_event_call *call = data;
- 	struct ftrace_event_field *field;
- 	struct filter_pred *pred = NULL;
-+	unsigned long offset;
-+	unsigned long size;
-+	unsigned long ip;
- 	char num_buf[24];	/* Big enough to hold an address */
- 	char *field_name;
-+	char *name;
-+	bool function = false;
- 	bool ustring = false;
- 	char q;
- 	u64 val;
-@@ -1393,6 +1414,12 @@ static int parse_pred(const char *str, void *data,
- 		i += len;
- 	}
- 
-+	/* See if the field is a user space string */
-+	if ((len = str_has_prefix(str + i, ".function"))) {
-+		function = true;
-+		i += len;
-+	}
-+
- 	while (isspace(str[i]))
- 		i++;
- 
-@@ -1423,7 +1450,57 @@ static int parse_pred(const char *str, void *data,
- 	pred->offset = field->offset;
- 	pred->op = op;
- 
--	if (ftrace_event_is_function(call)) {
-+	if (function) {
-+		/* The field must be the same size as long */
-+		if (field->size != sizeof(long)) {
-+			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos +
-i);
-+			goto err_free;
-+		}
-+
-+		/* Function only works with '==' or '!=' and an unquoted
-string */
-+		switch (op) {
-+		case OP_NE:
-+		case OP_EQ:
-+			break;
-+		default:
-+			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-+			goto err_free;
-+		}
-+
-+		if (isdigit(str[i])) {
-+			ret = kstrtol(num_buf, 0, &ip);
-+			if (ret) {
-+				parse_error(pe, FILT_ERR_INVALID_VALUE,
-pos + i);
-+				goto err_free;
-+			}
-+		} else {
-+			s = i;
-+			for (; str[i] && !isspace(str[i]); i++)
-+				;
-+
-+			len = i - s;
-+			name = kmemdup_nul(str + s, len, GFP_KERNEL);
-+			if (!name)
-+				goto err_mem;
-+			ip = kallsyms_lookup_name(name);
-+			kfree(name);
-+			if (!ip) {
-+				parse_error(pe, FILT_ERR_NO_FUNCTION, pos
-+ i);
-+				goto err_free;
-+			}
-+		}
-+
-+		/* Now find the function start and end address */
-+		if (!kallsyms_lookup_size_offset(ip, &size, &offset)) {
-+			parse_error(pe, FILT_ERR_NO_FUNCTION, pos + i);
-+			goto err_free;
-+		}
-+
-+		pred->fn_num = FILTER_PRED_FN_FUNCTION;
-+		pred->val = ip - offset;
-+		pred->val2 = pred->val + size;
-+
-+	} else if (ftrace_event_is_function(call)) {
- 		/*
- 		 * Perf does things different with function events.
- 		 * It only allows an "ip" field, and expects a string.
--- 
-2.35.1
-
+Johan
