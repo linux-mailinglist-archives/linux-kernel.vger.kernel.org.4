@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED7664B273
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D0B64B276
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234926AbiLMJfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S234752AbiLMJgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234930AbiLMJez (ORCPT
+        with ESMTP id S234970AbiLMJgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:34:55 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BDA1181E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:34:54 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id q6so3930024lfm.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yLw0ijR1P/QD9sJWgEsC47rvSjzALvfc0oOU7u/vybA=;
-        b=NBUP0i5Bo2JkflYl1q3hwzwprllGNpNuqiKPi/amMmRsmY+a+D3OmD1qQ6VMIM1q0w
-         QBVFw9DyLwTZQyu8Ib0UYPlz4LJsw9digHXjlSedrc2LbvphEVDc0HLZsqmmXwSxgjpm
-         ETPqGJsdXmy4fqfcvB1Pa9OsRJwRilv44JEE1vNTyMTJN80WlcVO+dlRjPGQDVCMOM/N
-         LeXVIEBzkxiKb1y7zjGiSkwjmFcQAFPtSEtLNmynoFpfH5c74LXMw8oe56U28bBrbfgq
-         1vV/W0JJRTkht3B3jQpVgc0dOpg9yQP+qlPks6b7xjHzqJmvmwIVoKXVvUmOvPWY1IyB
-         7aIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLw0ijR1P/QD9sJWgEsC47rvSjzALvfc0oOU7u/vybA=;
-        b=Cor87RHWyVlbtc55SNko6+3DPbsdYLO4zjPfO824Hiku0uZmQ/+djcAXs97W04s03I
-         uolsA9YBGl5W2r1EURPHjkY9+ierVaTEZn71wlLc5/I2ZIdomqfXS+SQDYxfR/0EhDn7
-         Nry7alMmllWD+yDwDgv4tnV2OxoQE4pNqpK+h9F77TYTNO/Va87wg0riLLUCcpw87Tgk
-         A6wbAvGGWx3jd7SWCDeegF2naxXvqKUH6EWjPsOFcSQdOb3aKXVF7N+8lyBnQ4kMQ3VD
-         3asZP0FOa2iZ17EwwWPNk6mVXOdhe1LNsiIO+hBUK08t8fhUSg0Tmdl911+gjQnVjh7L
-         gNog==
-X-Gm-Message-State: ANoB5pnj5GlfHAX/nHdx8BLQUp3yULuL9BTyalDkQnIiMwVu6ORg7Nes
-        mYeLf5DxPYsFLGVXo7I1FBtjgA==
-X-Google-Smtp-Source: AA0mqf4tDEGssHvi1Y8Iw+rQfW3lTrApyG+FO9irlSBVUQZJQPDEFS6w+1HcbI8GMkJwIlbDn2UAnw==
-X-Received: by 2002:ac2:5e61:0:b0:4b3:9b88:d9ce with SMTP id a1-20020ac25e61000000b004b39b88d9cemr6911432lfr.46.1670924092676;
-        Tue, 13 Dec 2022 01:34:52 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056512118100b004b57a253deasm289014lfr.162.2022.12.13.01.34.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 01:34:52 -0800 (PST)
-Message-ID: <da24e41b-4509-2dd6-1659-be001b447daf@linaro.org>
-Date:   Tue, 13 Dec 2022 10:34:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 12/12] ARM: dts: qcom: msm8960: add qcom,kpss-wdt-mdm9615
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
- <20221212163532.142533-12-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221212163532.142533-12-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 13 Dec 2022 04:36:09 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930169FCD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:36:07 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0B6075C013E;
+        Tue, 13 Dec 2022 04:36:07 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 13 Dec 2022 04:36:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670924167; x=1671010567; bh=nIy95hA8Yl
+        lVcU8qH+Ydxae5DxdLCTX5dvbD9BTDWpY=; b=o4vb5C4Xuoaf4mN0JefFqWxTb9
+        9tIVmtTYrP483PjL6tIYNlRlRcNFIA9TNB7kYFRinVQdDl6ja2n0TvJvYssBNEkx
+        VwjArABHZAghHLmvgb7myqV5DuymEOJOQig6zcRBGRLa7TZKFdUr4qWk8TjIhf+/
+        LphsrQ7sMw7jVjiClxxekqN4AIOMdg8v4YLD3p+QrV3OcfRy6PB8iQnbU8LIk8DE
+        UBM7xxkyz3lQw06rJbY/eaKcvWqcBqKOoq7W1JD8nCPUTPRQHAJ2tylE2zjTHmSR
+        do3a3hVJ6+yY4Wnb/m/1jA9vuk0MyeLyaoQQ17tZCIFQXN6Rn1hBWhExh4KQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670924167; x=1671010567; bh=nIy95hA8YllVcU8qH+Ydxae5DxdL
+        CTX5dvbD9BTDWpY=; b=azAeUOf2mC8LpF4rFESeoN3OUCfRsLdBJB5mdjQZMXGy
+        3C4dsAkCFyQvXyYSIan2mJMcU8tZgwX5+Zepu9K4Ng4uNoSWLaVpHz5eT1LEOdpj
+        cZp0q2f2ofrzI0PAWOC0dpL+f4exQGy0md2HexdNqC3fp3RhdEcF9A0sJmrgVH8T
+        e/4TFpvh9PlfcH8w1o9Xl9X54R4JQ3JNwfsbRT94bdNVNRneFELeoWnC5gQdfJmr
+        zC2f/WCPOBssc3/dD8KmzvNPEF4Eub0WM6HUYuXxCf7h5qhtScxwGfTrjc2bdfIS
+        jV+D7blz8zmy9CI2Uhl9rOh0/2UB0lXPl8vICcPQaQ==
+X-ME-Sender: <xms:hkeYYzoJcPphl9VLQ6aoWKUiuDgI6668GVguiJV3-WtOi1OO8HFv4g>
+    <xme:hkeYY9olbF8QbERsX08Wt6grNa0OKwy96rSVjZvf5vBeq6xHwEQxGJxwnDE7M2UW1
+    2Htu-0Xh1WyKcJsFj8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgddtiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:hkeYYwNSZrPeLNTrYpmt70ElaYV1fJS9zvBl9Po-npzVSmb-Dvy42Q>
+    <xmx:hkeYY24J58kDhf5oFgSqRdIVjP_hTnBjb4OA8P28ucQOvKDo9F4pUg>
+    <xmx:hkeYYy6cg9srb2gekdwXd39Th3lH1U0helvU5VSomPNJoL5qIG9sOA>
+    <xmx:h0eYY92R4ul0WNN-SIBPZPkblCDscrN9RLjHx-f5YPFL80s5xcv_5g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 528C9B60086; Tue, 13 Dec 2022 04:36:06 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <4610dfc8-33ed-4811-95dd-b13ec94adb46@app.fastmail.com>
+In-Reply-To: <53e7e660-9ee0-1177-b34a-365c1397ec3b@intel.com>
+References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
+ <b0c38501-440f-42a3-ae0f-dd95527b0e56@app.fastmail.com>
+ <53e7e660-9ee0-1177-b34a-365c1397ec3b@intel.com>
+Date:   Tue, 13 Dec 2022 10:35:46 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andrzej Hajda" <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Subject: Re: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of xchg
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 13, 2022, at 10:28, Andrzej Hajda wrote:
+> On 09.12.2022 18:16, Arnd Bergmann wrote:
+>> name for the backing of arch_xchg() or arch_xchg_relaxed(),
+>> maybe we can instead rename those to __arch_xchg() and use the
+>> __xchg() name for the new non-atomic version?
+>
+> I will try, but even compile test will be some challenge, need to find 
+> cross-compilers for these archs.
 
+I maintain this set of cross compilers, let me know if you
+have problems running them:
 
-On 12.12.2022 17:35, Krzysztof Kozlowski wrote:
-> Add specific compatible to timer/watchdog device node.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
-Konrad
->  arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> index a6331e5ebe09..536bd7b50762 100644
-> --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-> @@ -79,7 +79,8 @@ intc: interrupt-controller@2000000 {
->  		};
->  
->  		timer@200a000 {
-> -			compatible = "qcom,kpss-timer", "qcom,msm-timer";
-> +			compatible = "qcom,kpss-wdt-mdm9615", "qcom,kpss-timer",
-> +				     "qcom,msm-timer";
->  			interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
->  				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>,
->  				     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_EDGE_RISING)>;
+    Arnd
