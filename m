@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054D764BEF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84F464BF02
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237478AbiLMV4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 16:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S236761AbiLMWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbiLMVzk (ORCPT
+        with ESMTP id S237100AbiLMWBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 16:55:40 -0500
+        Tue, 13 Dec 2022 17:01:37 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B8626483;
-        Tue, 13 Dec 2022 13:54:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD385F71;
+        Tue, 13 Dec 2022 14:00:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5836174C;
-        Tue, 13 Dec 2022 21:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4822C433D2;
-        Tue, 13 Dec 2022 21:54:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC85A61745;
+        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22635C433F2;
+        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670968442;
-        bh=hgpBuVcvMrdGBqFui4q6AYWVyY2QiHfvL8dSsxHImI4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NNlijZ0iCOw2WXEnzChBBFPP6mZWTf6clLB1RTATzNb/Fm0ilLpMaZF3TeK3v1YAQ
-         1u5NvEFaQJC73aP32p+qbcbzpEdHVLtiNuXQbk4iSHgM5UsjqhyXPgLFoPE4TTsoxs
-         +DF/NB/jy2MjP7D58PXnwcbGDoiqzUHauJ81VnurExlZTzzIo6EGdYhy2w2SYF7qrC
-         Nd41VQPm2f9GS42D60abKlsEys1I/AYH4T9EEXKNfzPxzeKViW0P+LhX7UBOXACzGQ
-         /C3khILN8QJ0Vb5DQdhJmA+4/3NeVX/C1hEvyw+CbuaXTJd//erANuZgco4ZoqFP+P
-         0c7j3raksEO8w==
+        s=k20201202; t=1670968817;
+        bh=c7NQwUHD8mv5j/vpuyEPTKkX2njMoVjr9Iw3J+9RtzU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mIuTUnRc2wSatw0i/1uXf7E7+jOCKVEsPp7WeM10ihiQtqc3HznsW+Bc7ydUhLMRJ
+         5J88uQ55zzuBZvRaBC0P7xfqZQL8qR4Z97XYb93G2Ljr7I43yBMLJCMgWLuZttAJok
+         6iTfxwmGzsWFIaDvqsggIMyC7YGuhK5MQq32UTZWCBRWChuVcvbj4ZbXnDN05JcZOu
+         7D2ED68vEOR2EQBWpzbMRP5H25CmCcsGqFQXf6CuT3RjI9QXScCegyvt3yGh+duJv6
+         nqTDx0FOQg43893cQ7/k0jp/PXskAMn68YB93WU3Q/2vUtF8RC5EZpKsFWBO9qNtxv
+         YG5XCDKoe9aRQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5A6FC00445;
-        Tue, 13 Dec 2022 21:54:02 +0000 (UTC)
-Subject: Re: [GIT PULL] clk changes for the merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221213211749.4067995-1-sboyd@kernel.org>
-References: <20221213211749.4067995-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221213211749.4067995-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
-X-PR-Tracked-Commit-Id: 0e2c9884cbbae00f956d881848669790d73be43d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0015edd6f66172f93aa720192020138ca13ba0a6
-Message-Id: <167096844287.13204.6931822813419220324.pr-tracker-bot@kernel.org>
-Date:   Tue, 13 Dec 2022 21:54:02 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03A9DC41612;
+        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3] libbpf: Optimized return value in libbpf_strerror
+ when errno is libbpf errno
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167096881701.16694.14250332414378810386.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Dec 2022 22:00:17 +0000
+References: <20221210082045.233697-1-liuxin350@huawei.com>
+In-Reply-To: <20221210082045.233697-1-liuxin350@huawei.com>
+To:     Xin Liu <liuxin350@huawei.com>
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, zhangmingyi5@huawei.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,15 +62,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 13 Dec 2022 13:17:49 -0800:
+Hello:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0015edd6f66172f93aa720192020138ca13ba0a6
+On Sat, 10 Dec 2022 16:20:45 +0800 you wrote:
+> This is a small improvement in libbpf_strerror. When libbpf_strerror
+> is used to obtain the system error description, if the length of the
+> buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
+> ERANGE.
+> 
+> However, this processing is not performed when the error code
+> customized by libbpf is obtained. Make some minor improvements here,
+> return -ERANGE and set errno to ERANGE when buf is not enough for
+> custom description.
+> 
+> [...]
 
-Thank you!
+Here is the summary with links:
+  - [bpf-next,v3] libbpf: Optimized return value in libbpf_strerror when errno is libbpf errno
+    https://git.kernel.org/bpf/bpf-next/c/c2614f627941
 
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
