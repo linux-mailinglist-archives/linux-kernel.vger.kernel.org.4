@@ -2,134 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8922864BD28
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E9264BD2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiLMTWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S236752AbiLMTWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235382AbiLMTWd (ORCPT
+        with ESMTP id S236712AbiLMTWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:22:33 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C54220
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:22:31 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id l10so857847plb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:22:31 -0800 (PST)
+        Tue, 13 Dec 2022 14:22:35 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4F3220
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:22:34 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 1so6631131lfz.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:22:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GooOz5xzwABA0aXeznw8tJUM/w4xxzmJuyWu/svzARU=;
-        b=JQhIG2Dnt+kBdWNk3DVyFOdSdA0ib8mpr1HWSpWifG0Wgsu5cuwDKCXsQh8tWSrgyH
-         42GLmuR2Ph/Wci79VjQVy/C/W1o9PE46hYWAfq6TzhzJhdV7/d7OqkZ2F8n88iknOoVz
-         hkMKqFCyV52bkH93aadGRLMw2f38wQCcx+hq0MfiIE/9xCfCA6vzvyy2StriIrmjZt/s
-         Kp5RjTqR9zVNNWyBrneZ8Evqug9QLnxruisFOoy4/pOTlPwghDIaLH80mrTgUuFaN8dY
-         CdLmgmoqvfnRiL7VkF08qMmXGb9EEGcjpzdpOejtRPF6oCABT9Y6c47t+Zw54yxDiRnh
-         91fw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DONLyeUBEvtFdZRbXVpwOfCfRvSLKPBvM/+r4HRnRgM=;
+        b=v8HDutxzGC6RaReRlTrmxmKgJIXCXC/oVRaM+uT54YvOYonHAt11Imn8wYHFcsPdIA
+         VTvzL63p24fwRyy5Oq+BLykG4DNtF8ZTk3vunsvadKucc+oi4M2mCO5LB/q/HB3EJLuq
+         9w6/RCXNPuv89MVQt/29SfEADwScw+/rKxtuxIG07rcxilpaTNLDAwAtCwkBM6TUDlO6
+         z7u8Vp25g//j80hAAKHktNQOsPCqdTR29gnEyDAhK9upNq14dkd6xBWpuSrE/7pZ0VM8
+         j9LU6R/JvQJADgUuQ+pMBAXrdj1k5vDpD6Rox8bqkqtOSdC5YG4peOiyZF/GjIkjUuPR
+         dQKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GooOz5xzwABA0aXeznw8tJUM/w4xxzmJuyWu/svzARU=;
-        b=3V/TTh2wHbAP9GV8EGgB7wTUTpwxXWpF8UEgxkseQvKGFKe7MynH4DMlcMiMunjuo7
-         wwc2fIRjRIak+EN0idnammj2KnY1/fefNskU/ebSasiLEZV6k3rY2QqBQ2Jse6iYmB6j
-         1rD3H4tdxxZiXff6+4rHcQksB2R9dlRxGP5dB7BlMlT/2jq/7b1RTbXDUI/dLDN0FUvd
-         aiA49aJs9AzBVtKFnxuDRwTxVThPCmSrr6zLTby82srJRUIYUL+J0Fdnbi0ZLyXOeDtH
-         oCuK38OdmmTs/mQ7i6yqk4HU3zNMdjH84rtETtV6eWD07bx1fUI54TzHhrG9skVVXHGy
-         0sSw==
-X-Gm-Message-State: ANoB5pno4RcUy/IzB92RzM4JqvJLdrpETgfvDpfFUjVxLg3Gc4tr2w4F
-        3PatuG4tzLy+5iaMHnq6Un5wm5n4S2uQ6kVoyadA
-X-Google-Smtp-Source: AA0mqf7aGuvEMwZQ2myz4q21F/vwAjdbZ8+nOsSBmZZRAt8LcZga6xnXTekj7k2zRVU4K/i46QHyS2HTCWcbSGlnof8=
-X-Received: by 2002:a17:902:a70b:b0:189:b0a3:cf4f with SMTP id
- w11-20020a170902a70b00b00189b0a3cf4fmr37496320plq.56.1670959350637; Tue, 13
- Dec 2022 11:22:30 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DONLyeUBEvtFdZRbXVpwOfCfRvSLKPBvM/+r4HRnRgM=;
+        b=svlvdUxVDcEUPQWek3nMFc/BAhXtZTRA93/Z9iqERL3dp87E/XCZj8Sd9gkpRUDiOm
+         OZC8PPQfAMRD6E6UPAzlQGjMaZ8ZmM9nWy6QLDzjtncHK7LjgzvxH16wklOUlbdMIJip
+         /AAr0xRk6+awbAaIVnG/Ja+i46m+v+cvFHjkYShdfF+VT06WwBC+tOVps1cnzC+4Qn+S
+         OTY/+/H8/cXR4bj33W54mIhk+E0Swn0Qm08MrIkBGU/vd0IElAXxLtpznmLWBgLxSwYH
+         oBHQy5Csp7Fmf7GNlYW7n5FvKVsr0k/MnIit9Yp43M2LakR46ovOhl8Lp9l+VNQSafIu
+         2V1w==
+X-Gm-Message-State: ANoB5pkzfza95jJqTl+Sss29PiLlHSiQQqppEgOFr+yKZpo9rrq8KsXv
+        2Vu72ZORifhUK2zmIxr910qWkQ==
+X-Google-Smtp-Source: AA0mqf5uSyuiT5WBiKktCwmsC2x5fCZrowPoOImGCXw/yGr/q+6Uhi76/7oI59/c4EmGR3i7siSRDQ==
+X-Received: by 2002:a05:6512:23a9:b0:4b6:e775:ebb7 with SMTP id c41-20020a05651223a900b004b6e775ebb7mr4041100lfv.12.1670959352767;
+        Tue, 13 Dec 2022 11:22:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j20-20020ac24554000000b004b1892aa5c8sm482465lfm.56.2022.12.13.11.22.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 11:22:32 -0800 (PST)
+Message-ID: <b673eae4-03ab-0a87-32c3-49e35e8759a8@linaro.org>
+Date:   Tue, 13 Dec 2022 20:22:30 +0100
 MIME-Version: 1.0
-References: <20221209160453.3246150-1-jeffxu@google.com> <20221209160453.3246150-7-jeffxu@google.com>
- <CAHC9VhRBMTQvnBdSwMbkOsk9eemYfvCmj9TRgxtMeuex4KLCPA@mail.gmail.com> <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com>
-In-Reply-To: <CALmYWFvrasXnshO01YGWRyC7qKk4o0G88yAgkgjO1YBumF5zeA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 13 Dec 2022 14:22:19 -0500
-Message-ID: <CAHC9VhQKsjiGv3Af0iqg_TLNzCvdTaLnhw+BRTF9OEtJg1hX7g@mail.gmail.com>
-Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [Freedreno] [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes
+ and link-frequencies property
+Content-Language: en-US
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     devicetree@vger.kernel.org, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
+        airlied@gmail.com, andersson@kernel.org,
+        konrad.dybcio@somainline.org, robdclark@gmail.com,
+        dri-devel@lists.freedesktop.org, dianders@chromium.org,
+        robh+dt@kernel.org, vkoul@kernel.org, agross@kernel.org,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, sean@poorly.run, linux-kernel@vger.kernel.org
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+ <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
+ <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
+ <be1411e8-1d07-7643-977c-a306016fd660@linaro.org>
+ <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+ <e53844b7-601b-f355-302b-cc871962a446@linaro.org>
+ <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
+ <CAA8EJpr5RYyQa7xu1_xJ0F-dn-H9aOf0KE-CDgDCwnZu3HPgXg@mail.gmail.com>
+ <a9e2f269-b9df-814f-adcd-f5577f590fa7@quicinc.com>
+ <bca77270-f3ac-f23f-ef96-43f9f7d574c4@linaro.org>
+ <0c131d43-1e91-8b92-5517-ca8fffef238c@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0c131d43-1e91-8b92-5517-ca8fffef238c@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 10:00 AM Jeff Xu <jeffxu@google.com> wrote:
-> On Fri, Dec 9, 2022 at 10:29 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Fri, Dec 9, 2022 at 11:05 AM <jeffxu@chromium.org> wrote:
-> > >
-> > > From: Jeff Xu <jeffxu@google.com>
-> > >
-> > > The new security_memfd_create allows lsm to check flags of
-> > > memfd_create.
-> > >
-> > > The security by default system (such as chromeos) can use this
-> > > to implement system wide lsm to allow only non-executable memfd
-> > > being created.
-> > >
-> > > Signed-off-by: Jeff Xu <jeffxu@google.com>
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > ---
-> > >  include/linux/lsm_hook_defs.h | 1 +
-> > >  include/linux/lsm_hooks.h     | 4 ++++
-> > >  include/linux/security.h      | 6 ++++++
-> > >  mm/memfd.c                    | 5 +++++
-> > >  security/security.c           | 5 +++++
-> > >  5 files changed, 21 insertions(+)
-> >
-> > We typically require at least one in-tree LSM implementation to
-> > accompany a new LSM hook.  Beyond simply providing proof that the hook
-> > has value, it helps provide a functional example both for reviewers as
-> > well as future LSM implementations.  Also, while the BPF LSM is
-> > definitely "in-tree", its nature is such that the actual
-> > implementation lives out-of-tree; something like SELinux, AppArmor,
-> > Smack, etc. are much more desirable from an in-tree example
-> > perspective.
->
-> Thanks for the comments.
-> Would that be OK if I add a new LSM in the kernel  to block executable
-> memfd creation ?
+On 13/12/2022 18:31, Abhinav Kumar wrote:
+> 
+> 
+> On 12/13/2022 5:13 AM, Krzysztof Kozlowski wrote:
+>> On 13/12/2022 00:41, Abhinav Kumar wrote:
+>>>>>
+>>>>> besides, i think i have to sent the whole series patches include this
+>>>>> one to address your new comments on other patch.
+>>>>>
+>>>>> is this correct?
+>>>>
+>>>> No. Please fix your system first, validate your patches and send them
+>>>> afterwards. You can not expect others to do your job.
+>>>>
+>>>
+>>> Just finished working with kuogee on this. This issue had been reported
+>>> by few others earlier (example
+>>> https://lore.kernel.org/lkml/bc9be279-a130-d5e7-4397-bbb389d14403@intel.com/T/).
+>>
+>> This report says:
+>> "Sorry for the inconvenience, please ignore this false positive."
+>>
+> 
+> That was one of them, and I dont think its false, maybe because after 
+> fixing the PATH issues, the user deemed them as false.
+> 
+> Here is another one 
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20210812174209.1970-3-bbudiredla@marvell.com/ 
+> with the same report but no resolution.
 
-If you would be proposing the LSM only to meet the requirement of
-providing an in-tree LSM example, no that would definitely *not* be
-okay.
+Thanks. Could be also Python mismatch. `make dt_binding_check` could use
+dtschema from Python2 but the reporter used Python3 for checking the
+version: `pip3 show dtschema`
 
-Proposing a new LSM involves documenting a meaningful security model,
-implementing it, developing tests, going through a (likely multi-step)
-review process, and finally accepting the long term maintenance
-responsibilities of this new LSM.  If you are proposing a new LSM
-because you feel the current LSMs do not provide a security model
-which meets your needs, then yes, proposing a new LSM might be a good
-idea.  However, if you are proposing a new LSM because you don't want
-to learn how to add a new hook to an existing LSM, then I suspect you
-are misguided/misinformed with the amount of work involved in
-submitting a new LSM.
+> 
+> So i thought for the benefit of others I would atleast summarize how we 
+> resolved them.
 
-> Alternatively,  it might be possible to add this into SELinux or
-> landlock, it will be a larger change.
+Sure, that's helpful.
 
-It will be a much smaller change than submitting a new LSM, and it
-would have infinitely more value to the community than a throw-away
-LSM where the only use-case is getting your code merged upstream.
 
--- 
-paul-moore.com
+Best regards,
+Krzysztof
+
