@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEDE64ABF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C1C64ABF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiLMAEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S233947AbiLMAHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiLMAEg (ORCPT
+        with ESMTP id S233923AbiLMAHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:04:36 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80927167E5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:04:35 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id x11so4237124ilo.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:04:35 -0800 (PST)
+        Mon, 12 Dec 2022 19:07:00 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD55FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:06:58 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id e189so921498iof.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:06:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4RP/Ecj2nDWpVcmR1nLBO6gBmUtk2NUcP+9/dUfOyQM=;
-        b=HtyBpSqe+EZt7+aZWbhBFJo9Q4WUMRSya8P7RQISXYsIPa+70t51V/+GXrLzcBRVow
-         9bVTJwbsGKEjt5ahoWkDQyIM3pzxTiruGw6349snvgcMJcjWIwUUflFmJqpXWpIt6E12
-         s/oQaMi+WMslI0YP0dE6EGQysIOdlaGhFKXqU=
+        bh=2Db+FmifZCy1uWygbKZTWCX5801TWsuTURiI7y3O7ac=;
+        b=SFO+OJqeZ7SjtvEggmWRenFvL8o1MXYJKHBHTiFGu4uIpWQPDDgBbJTWbsMeYyGbQ/
+         jZP3HGDcUZI+IAyHsqPXC0QxOzp+GuxRvcrG/L2dV4Brb8i4dZKqoQDx6rf6mXyrfdvf
+         +3G5EutTiycaWhR75OfqVSv3d7Etxegvdyzyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4RP/Ecj2nDWpVcmR1nLBO6gBmUtk2NUcP+9/dUfOyQM=;
-        b=LP/jf8ExMOqovzk+bRaiSmodcVhxPLwTQSTL/yFijCN+TYMxp8i1l2Df9MdwbXniVj
-         /RYIfLZpOW3dxXTw8SsaJtXzHb9QD8n6twKIO9NZFIEBz9001vfkcGJWhvtT2fyVR+2U
-         OxoCmwrI7qg8aUqcOHGVC+dVl2V6I4CB0erCQHjmwCpybp+vbvkmWDLnjQ+EEFYy5m/V
-         edv+T+xyMPnhCXUXbbVT84cA6sL6hpCHYu2lqsUvXHUt5AhQAWc3j761bl5fG6hXG34b
-         cEzLX/x3xBSxs2EbNHzBJyhwT8tHub1wsxL275yDAw/nNwRkaUUuIrunlfh8Hicjiz5C
-         dZxQ==
-X-Gm-Message-State: ANoB5pk8KgomK7Zpeug2v+V30vgs2x060YZDO3Yc8kvZxtr7wjOHDrpi
-        /I/0A/8hPQ1XvKRrZfViof2RvpHADXmVdt7T
-X-Google-Smtp-Source: AA0mqf6tC52YycsOvnOOmbC/iRb5JZAhdSms4tMO+wgiZ0ucy/7HuwcUo8JWFybuPUgc5FdoTevJPA==
-X-Received: by 2002:a92:dc91:0:b0:304:c683:3c8a with SMTP id c17-20020a92dc91000000b00304c6833c8amr235836iln.3.1670889874868;
-        Mon, 12 Dec 2022 16:04:34 -0800 (PST)
+        bh=2Db+FmifZCy1uWygbKZTWCX5801TWsuTURiI7y3O7ac=;
+        b=rSkL2NBd9dVMYyt5ROdwN6TT1quBw75/OLElft2m1BtDA/0jWEL8PBQQ+wjmWOppNz
+         7hrHqn5v8YPje+rvaPzo00gwstKp9ZaCSTOjtDXROIr7kN70fq5HChZ/GVDEA8MZMx4o
+         qCQdbyLPRC6QnZl48wy82MvksgqKsm9zd458OkFfvKV3kLRa+aEIxlVX6d9AlH/bGU5w
+         cz5PyMp8nkr6mOyuvTjdsfVIg5qvO4iaxFi4mFJqMUL0eJ4NOHpsrjmXTNZWqxNILK70
+         9NJlorof3fa/+FBF37e76OnCXIBDZ2tlMLX4JZHKIVxTEZJFM4mwzj4YzUuwrv4gsc2R
+         F3Dw==
+X-Gm-Message-State: ANoB5pltSeHqgw3m3dAD7DG8FUYGZKDf5Npxn7L0PzhQvR9eb7HEyn1+
+        y3xwDNWEW9Nd6OC0fd4NNVUpTw==
+X-Google-Smtp-Source: AA0mqf6Kf2LiWQza+25hgRAHiDpLYJIOgT3Rvr//CUSIS7h8DDu9qdUvW7InhaNvZeMMyx5NLAhr9g==
+X-Received: by 2002:a6b:4916:0:b0:6dd:7096:d9bc with SMTP id u22-20020a6b4916000000b006dd7096d9bcmr1909782iob.2.1670890017737;
+        Mon, 12 Dec 2022 16:06:57 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y17-20020a92c751000000b00304a715461esm2538021ilp.16.2022.12.12.16.04.33
+        by smtp.gmail.com with ESMTPSA id k2-20020a0566022d8200b006ccc36c963fsm4671321iow.43.2022.12.12.16.06.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 16:04:34 -0800 (PST)
-Message-ID: <08a7e3e2-6a34-bc85-9d1f-58cc07b22429@linuxfoundation.org>
-Date:   Mon, 12 Dec 2022 17:04:33 -0700
+        Mon, 12 Dec 2022 16:06:57 -0800 (PST)
+Message-ID: <6494f1f7-33ce-05c6-df67-e5ec8e813611@linuxfoundation.org>
+Date:   Mon, 12 Dec 2022 17:06:56 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 4.19 00/49] 4.19.269-rc1 review
+Subject: Re: [PATCH 4.9 00/31] 4.9.336-rc1 review
 Content-Language: en-US
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org
@@ -63,9 +63,9 @@ Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20221212130913.666185567@linuxfoundation.org>
+References: <20221212130909.943483205@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221212130913.666185567@linuxfoundation.org>
+In-Reply-To: <20221212130909.943483205@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,9 +78,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 06:18, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.269 release.
-> There are 49 patches in this series, all will be posted as a response
+On 12/12/22 06:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.336 release.
+> There are 31 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -88,9 +88,9 @@ On 12/12/22 06:18, Greg Kroah-Hartman wrote:
 > Anything received after that time might be too late.
 > 
 > The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.269-rc1.gz
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.336-rc1.gz
 > or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
 > and the diffstat can be found below.
 > 
 > thanks,
