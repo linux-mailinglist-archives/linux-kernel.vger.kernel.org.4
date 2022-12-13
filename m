@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F30E64AF86
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1733864AF73
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbiLMF5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 00:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S234035AbiLMFua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 00:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbiLMF5H (ORCPT
+        with ESMTP id S233843AbiLMFu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:57:07 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3951A395;
-        Mon, 12 Dec 2022 21:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670911026; x=1702447026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=pcLW7bKOVb650cK7BeKpNUl7dgr1RoR9bTIb3VzwJzA=;
-  b=FH10XkV9AHVJe32FyD2yyCShj7WqDqvd+bF0VYEM5o6dBM8T0uOLc3bb
-   7C1ipOQIqBoRDwYqxwaQMp1a4MopdpYUsDee/DHm2hla0PsywCqNPn+MN
-   oH/9GjoKr2RNP7y8BKZoC175tZV1GuJ8Vq092vWq/h64Kx0uNAtQaQEXp
-   1Brz61Um/VBWV6R8QWtRFahDsOXV6ph063RFnlC27JLJf5nxRJTpOMfnG
-   J0BXmDjd2caGbNzChpG6JmzWihJxd8jI65tmdoWYfDEqPpOsVUZzjSNTf
-   6Srrd9lT0XFt+HggWPeWxhEHEUMeyFEF6CNJS12Vm9XuKJbfrqG4ZrL0v
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="315688359"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="315688359"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:57:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="737262414"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="737262414"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Dec 2022 21:57:03 -0800
-Date:   Tue, 13 Dec 2022 13:47:12 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/8] mfd: intel-m10-bmc: Add PMCI driver
-Message-ID: <Y5gR4ETBSRQd6uz+@yilunxu-OptiPlex-7050>
-References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
- <20221211103913.5287-8-ilpo.jarvinen@linux.intel.com>
+        Tue, 13 Dec 2022 00:50:27 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D979613FBF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:50:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=0;PH=DS;RN=11;SR=0;TI=SMTPD_---0VXCbU9B_1670910617;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VXCbU9B_1670910617)
+          by smtp.aliyun-inc.com;
+          Tue, 13 Dec 2022 13:50:23 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     jani.nikula@linux.intel.com
+Cc:     joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@gmail.com, daniel@ffwll.ch,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] drm/i915/hwconfig: Remove comment block
+Date:   Tue, 13 Dec 2022 13:50:15 +0800
+Message-Id: <20221213055015.27968-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211103913.5287-8-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-11 at 12:39:12 +0200, Ilpo Järvinen wrote:
-> Add the mfd driver for the Platform Management Component Interface
-> (PMCI) based interface of Intel MAX10 BMC controller.
-> 
-> PMCI is a software-visible interface, connected to card BMC which
-> provided the basic functionality of read/write BMC register. The access
-> to the register is done indirectly via a hardware controller/bridge
-> that handles read/write/clear commands and acknowledgments for the
-> commands.
-> 
-> Previously, intel-m10-bmc provided sysfs under
-> /sys/bus/spi/devices/... which is generalized in this change because
-> not all MAX10 BMC appear under SPI anymore.
-> 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Co-developed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+No functional modification involved.
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c:112: warning: expecting prototype for intel_guc_hwconfig_init(). Prototype was for guc_hwconfig_init() instead.
+
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3414
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+Changes in v2:
+  -Remove the comment block.
+
+ drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
+index 4781fccc2687..5559d39881ee 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_hwconfig.c
+@@ -102,12 +102,6 @@ static bool has_table(struct drm_i915_private *i915)
+ 	return false;
+ }
+ 
+-/**
+- * intel_guc_hwconfig_init - Initialize the HWConfig
+- *
+- * Retrieve the HWConfig table from the GuC and save it locally.
+- * It can then be queried on demand by other users later on.
+- */
+ static int guc_hwconfig_init(struct intel_gt *gt)
+ {
+ 	struct intel_hwconfig *hwconfig = &gt->info.hwconfig;
+-- 
+2.20.1.7.g153144c
+
