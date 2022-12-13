@@ -2,166 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F3964B685
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7F864B598
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiLMNph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:45:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S235433AbiLMNEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbiLMNpf (ORCPT
+        with ESMTP id S234940AbiLMNET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:45:35 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53162B23;
-        Tue, 13 Dec 2022 05:45:34 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDD2QXT010257;
-        Tue, 13 Dec 2022 13:45:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=eUgPrthoCID6QwmABsTsBu6qOsnjoUKBNQdpMF81+W4=;
- b=DOTv2MvLjSpqYEV438WPXJiOF4v3r4AoVwb1uUsd5r0e6lA18xhhWnG9bMNEkfmV9wIZ
- fFGHaVU/S2fft1VGalvyFSyHfdNhqoEyO5sMBULsooW3/OpAF7AD7I8fohteDEjEvVrT
- h/Rqo3pd9Ark/i08dPipDXsTYEQkPMZhl1XdO8n1EyJYcVKoF4U55qxEA5IuSaDlBB3V
- DjW08B6oItIGOhHccxEexQCQd48n6XEceJU0wGHkyYgs73kQoXE8pnE4EVyE4av8h856
- E568UdMl2kBazEjen3i7ycjnJPamSiSjtyc5mU8enec4Tm6xfVs6bz9D07KgPqkoD7uz 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre449n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:06 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDD6KLS019710;
-        Tue, 13 Dec 2022 13:45:06 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre448u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:05 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD5UCPh028384;
-        Tue, 13 Dec 2022 13:45:04 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mchr648eq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:45:03 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDDj1Bv46793140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 13:45:01 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB79D2004B;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4711C20043;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Received: from localhost (unknown [9.43.37.38])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
-Date:   Tue, 13 Dec 2022 15:53:48 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH v1 06/10] powerpc/bpf: Perform complete extra passes to
- update addresses
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
-References: <fa025537f584599c0271fc129c5cf4f57fbe7505.1669881248.git.christophe.leroy@csgroup.eu>
-        <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
+        Tue, 13 Dec 2022 08:04:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319E11D333;
+        Tue, 13 Dec 2022 05:04:18 -0800 (PST)
+Received: from [192.168.10.9] (unknown [39.45.25.143])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F4BD6602BE3;
+        Tue, 13 Dec 2022 13:04:09 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670936655;
+        bh=DS1yA+9XmvYzYNCforotpq+Ol0Tx/1wHHkNgJvMknJw=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=evzGVJCnpg4Ir/+WqpNCzOcMVx6xdKFUa4HxK6tKwytXZs8UBlg/7Wto83ls+GnYU
+         zEdZHrxsd717cqCl5ylOk2uwbNbNQC/14rcXw86eVcjWPOlOPVSe44c7NdPhOOwX31
+         tOzXdmwu0QGuOtaB/RoRJs2OzDyLo79VXLFMJcm4/SnCYcxVXeT3QSxKCsEE0RrbFO
+         HSgsGh+cfdTAv5HiH5Lq1zF4m+//KmonD/cqBokq/5WhmPPv64yiCHriPk44pw9la9
+         ukiD0t0DbNAOyFnmVan/cfDBl0ht7zKWOyqH0P6y3PVCmGqaFvfPIl5oyPevMlz3ou
+         TbscPsB/9K+dg==
+Message-ID: <d7185563-3a7a-d69e-d3d1-1a2b071aa85d@collabora.com>
+Date:   Tue, 13 Dec 2022 18:04:04 +0500
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1670926819.9nqhz2fj7v.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7UTJ-JytMBoZWiQz5BZHWlwz3MrF3EJl
-X-Proofpoint-ORIG-GUID: 3yIsWCYYIwCAqrzqIKaNf220JG_gsuBE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 clxscore=1011 mlxscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130120
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+Subject: Re: [PATCH v6 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+ <20221109102303.851281-3-usama.anjum@collabora.com> <Y5eSKBJ9hTtw9cbK@grain>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y5eSKBJ9hTtw9cbK@grain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> BPF core calls the jit compiler again for an extra pass in order
-> to properly set subprog addresses.
->=20
-> Unlike other architectures, powerpc only updates the addresses
-> during that extra pass. It means that holes must have been left
-> in the code in order to enable the maximum possible instruction
-> size.
->=20
-> In order avoid waste of space, and waste of CPU time on powerpc
-> processors on which the NOP instruction is not 0-cycle, perform
-> two real additional passes.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/net/bpf_jit_comp.c | 85 ---------------------------------
->  1 file changed, 85 deletions(-)
->=20
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 43e634126514..8833bf23f5aa 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -23,74 +23,6 @@ static void bpf_jit_fill_ill_insns(void *area, unsigne=
-d int size)
->  	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
->  }
-> =20
-> -/* Fix updated addresses (for subprog calls, ldimm64, et al) during extr=
-a pass */
-> -static int bpf_jit_fixup_addresses(struct bpf_prog *fp, u32 *image,
-> -				   struct codegen_context *ctx, u32 *addrs)
-> -{
-> -	const struct bpf_insn *insn =3D fp->insnsi;
-> -	bool func_addr_fixed;
-> -	u64 func_addr;
-> -	u32 tmp_idx;
-> -	int i, j, ret;
-> -
-> -	for (i =3D 0; i < fp->len; i++) {
-> -		/*
-> -		 * During the extra pass, only the branch target addresses for
-> -		 * the subprog calls need to be fixed. All other instructions
-> -		 * can left untouched.
-> -		 *
-> -		 * The JITed image length does not change because we already
-> -		 * ensure that the JITed instruction sequence for these calls
-> -		 * are of fixed length by padding them with NOPs.
-> -		 */
-> -		if (insn[i].code =3D=3D (BPF_JMP | BPF_CALL) &&
-> -		    insn[i].src_reg =3D=3D BPF_PSEUDO_CALL) {
-> -			ret =3D bpf_jit_get_func_addr(fp, &insn[i], true,
-> -						    &func_addr,
-> -						    &func_addr_fixed);
+On 12/13/22 1:42 AM, Cyrill Gorcunov wrote:
+> On Wed, Nov 09, 2022 at 03:23:02PM +0500, Muhammad Usama Anjum wrote:
+> ...
+>> +
+>> +static long do_pagemap_sd_cmd(struct mm_struct *mm, struct pagemap_scan_arg *arg)
+>> +{
+>> +	struct mmu_notifier_range range;
+>> +	unsigned long __user start, end;
+>> +	struct pagemap_scan_private p;
+>> +	int ret;
+>> +
+>> +	start = (unsigned long)untagged_addr(arg->start);
+>> +	if ((!IS_ALIGNED(start, PAGE_SIZE)) || (!access_ok((void __user *)start, arg->len)))
+>> +		return -EINVAL;
+>> +
+>> +	if (IS_GET_OP(arg) &&
+>> +	    ((arg->vec_len == 0) || (!access_ok((struct page_region *)arg->vec, arg->vec_len))))
+>> +		return -ENOMEM;
+>> +
+>> +	if (IS_SD_OP(arg) && ((arg->required_mask & PAGEMAP_NONSD_OP_MASK) ||
+>> +	     (arg->anyof_mask & PAGEMAP_NONSD_OP_MASK)))
+>> +		return -EINVAL;
+>> +
+>> +	end = start + arg->len;
+>> +	p.max_pages = arg->max_pages;
+>> +	p.found_pages = 0;
+>> +	p.flags = arg->flags;
+>> +	p.required_mask = arg->required_mask;
+>> +	p.anyof_mask = arg->anyof_mask;
+>> +	p.excluded_mask = arg->excluded_mask;
+>> +	p.return_mask = arg->return_mask;
+>> +	p.vec_index = 0;
+>> +	p.vec_len = arg->vec_len;
+>> +
+>> +	if (IS_GET_OP(arg)) {
+>> +		p.vec = vzalloc(arg->vec_len * sizeof(struct page_region));
+>> +		if (!p.vec)
+>> +			return -ENOMEM;
+>> +	} else {
+>> +		p.vec = NULL;
+>> +	}
+> 
+> Hi Muhammad! I'm really sorry for diving in such late (unfortunatelly too busy to
+> step in yet). Anyway, while in general such interface looks reasonable here are
+> few moments which really bothers me: as far as I undertstand you don't need
+> vzalloc here, plain vmalloc should works as well since you copy only filled
+> results back to userspace. Thank you for reviewing. Correct, I'll update to use vmalloc.
 
-I don't see you updating calls to bpf_jit_get_func_addr() in=20
-bpf_jit_build_body() to set extra_pass to true. Afaics, that's required=20
-to get the correct address to be branched to for subprogs.
+> Next -- there is no restriction on vec_len parameter,
+> is not here a door for DoS from userspace? Say I could start a number of ioctl
+> on same pagemap and try to allocate very big amount of vec_len in summay causing
+> big pressure on kernel's memory. Or I miss something obvious here?
+Yes, there is a chance that a large chunk of kernel memory can get
+allocated here as vec_len can be very large. We need to think of limiting
+this buffer in the current implementation. Any reasonable limit should
+work. I'm not sure what would be the reasonable limit. Maybe couple of
+hundred MBs? I'll think about it. Or I should update the implementation
+such that less amount of intermediate buffer can be used like mincore does.
+But this can complicate the implementation further as we are already using
+page ranges instead of keeping just the flags. I'll see what can be done.
 
-
-- Naveen
-
+-- 
+BR,
+Muhammad Usama Anjum
