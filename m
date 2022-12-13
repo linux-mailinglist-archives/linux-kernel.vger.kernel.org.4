@@ -2,111 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5B664B3AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BD064B3B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbiLMLBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 06:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S235257AbiLMLEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 06:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiLMLBK (ORCPT
+        with ESMTP id S235225AbiLMLEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:01:10 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F19662FB
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:01:08 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 4882DC01C; Tue, 13 Dec 2022 12:01:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670929277; bh=i+3KSd/BKuiZzIgaQKdwdpk5+VGqCi4zl8XD5fOa8QU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Myn8FwbQHXJqNcTPuq2ZLZaY3T2N2jYM/qyH7kvoubhGQovdc2y8dSzs9dafJRxS7
-         B4nkCYvv9c2zPcA28Q3WnEVx4gMNMvFfCc0QXEWAwVlYL+AtfGEFJhenIE6lTvhQVp
-         Sr2M3KWY79i9Fpj3yiPGz4BpAza1IXl7XIj0JP3kj/pczQ/glrB8FEHzEcUssj+Ojy
-         hitQ4I/VH5md1KV3Td9eTbS8CLmUA0lpkoSET/k6k5V+ZtHANKOjJpKoILb43k0/kY
-         aiBtGQ52TH1oVbUimVvGrRm5WOzJnjQ+XlSDRtMeoud8G+zfhSLImHFyrizg+4oB2o
-         M1RCWoZNKn0sg==
+        Tue, 13 Dec 2022 06:04:15 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C32625D1;
+        Tue, 13 Dec 2022 03:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670929454; x=1702465454;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qUgI9kJMyxfeIBUg1MqvWukhfpYdTN7aNnJshDSAb0o=;
+  b=IPw/dRoPVE1aEQp0LPUWPHFQly03zqFLYB4zhoMg8AceZR0eqeaa1cKE
+   LrmBpxsSlNAiQptWVgfDUGkUXv9NaQL8n64rvbUvdRkxjXcF791O0mK8X
+   3GPSb4jkM0MVxbtNBNscVhEwSmhz1oZeQKmlYVMKjKWlU7YArwxHLbX3T
+   NqZpp73vCZo1f9Pvz7wR99ai0Kn18NW6wDmFyLxaEGNCeH7JXH7Yn6yG4
+   deXb/cm2jB0aYvLmc7Fa9ICULqTWh0S82IkhGi06G5efsYHnlRDaC+I1+
+   RJz1J3exr9uM+GZ7UItAf3AWJ2xnXDVfwspuXHqCdURWWmFp22GthxuDD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="305744344"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="305744344"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="679263020"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="679263020"
+Received: from unknown (HELO paamrpdk12-S2600BPB.aw.intel.com) ([10.228.151.145])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 03:04:11 -0800
+From:   Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+To:     tirtha@gmail.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com
+Subject: [PATCH intel-next 0/5] i40e: support XDP multi-buffer
+Date:   Tue, 13 Dec 2022 16:20:18 +0530
+Message-Id: <20221213105023.196409-1-tirthendu.sarkar@intel.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 6957EC009;
-        Tue, 13 Dec 2022 12:01:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1670929276; bh=i+3KSd/BKuiZzIgaQKdwdpk5+VGqCi4zl8XD5fOa8QU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f6jaoe6b/cRpvorEGj2ppTb3TwsxUgxj9OpPv+ODz6+ULupIaHCEyledy/wyPy0Rl
-         3aIgRY3hOpNQ7B4/H+4x5xZh/bGE8eVT+YjOLQe29TzrXmd9sNI63DeuInrBiMSkIv
-         ntpvpiEbxThgus/zNUqchJWdpO++UDwyIwZ92WZsHEhadFLTGz3vT1PuO0+Gw4F3BD
-         9SYaYojunrCIUpK2teBcUDOcmI6/R4twBKo7JjFNld4jbE+rf0K7t2U4RiIMVhJ1B+
-         Kj4EIMkygP9LTwXiwiA2qGtKrWe4KIO/jQ6YbJfBTSW26v7pDzkZ9feyaZcosGnnbn
-         mRMqDJ95Z+RaQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5087022c;
-        Tue, 13 Dec 2022 11:01:00 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 20:00:45 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH] 9p/virtio: add a read barrier in p9_virtio_zc_request
-Message-ID: <Y5hbXanne5IryJBV@codewreck.org>
-References: <20221213065901.3523-1-hdanton@sina.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221213065901.3523-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Your mailer breaks threads, please have a look at how to make it send
-In-Reply-To and/or References headers)
+This patchset adds multi-buffer support for XDP. The first four patches
+are prepatory patches while the fifth one contains actual multi-buffer
+changes. 
 
-Hillf Danton wrote on Tue, Dec 13, 2022 at 02:59:01PM +0800:
-> On 10 Dec 2022 09:10:44 +0900 Dominique Martinet <asmadeus@codewreck.org>
-> > @@ -533,6 +533,12 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
-> >  	p9_debug(P9_DEBUG_TRANS, "virtio request kicked\n");
-> >  	err = wait_event_killable(req->wq,
-> >  			          READ_ONCE(req->status) >= REQ_STATUS_RCVD);
-> > +
-> > +	/* Make sure our req is coherent with regard to updates in other
-> > +	 * threads - echoes to wmb() in the callback like p9_client_rpc
-> > +	 */
-> > +	smp_rmb();
-> > +
-> >  	// RERROR needs reply (== error string) in static data
-> >  	if (READ_ONCE(req->status) == REQ_STATUS_RCVD &&
-> >  	    unlikely(req->rc.sdata[4] == P9_RERROR))
-> 
-> No sense can be made without checking err before req->status,
-> given the comment below. Worse after this change.
+Tirthendu Sarkar (5):
+  i40e: add pre-xdp page_count in rx_buffer
+  i40e: avoid per buffer next_to_clean access from i40e_ring
+  i40e: introduce next_to_process to i40e_ring
+  i40e: pull out rx buffer allocation to end of i40e_clean_rx_irq()
+  i40e: add support for XDP multi-buffer Rx
 
-Hmm, I don't see how it's worse (well, it makes it more likely for
-req->status to be RCVD after the barrier without the rest of the data
-being coherent I guess), but it's definitely incorrect, yes...
-Thanks for bringing it up.
-
-
-Having another look I also don't see how this can possibly be safe at
-all: if a process is killed during waiting here, p9_virtio_zc_request
-will drop pages it reserved for the response (in the need_drop case) and
-sg lists will be freed but the response can still come for a while --
-these need to be dropped only after flush has been handled.
-
-If these buffers are reused while the response comes we'll be overriding
-some random data...
-
-
-This isn't an easy fix, I'll just drop this patch for now; but I guess
-we should try to address that next cycle.
-
-Perhaps I can try to find time to dust off my async flush code, some
-other fix might have resolved the race I used to see with it...
+ drivers/net/ethernet/intel/i40e/i40e_main.c |  18 +-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 378 ++++++++++++++------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  13 +-
+ 3 files changed, 280 insertions(+), 129 deletions(-)
 
 -- 
-Dominique
+2.34.1
+
