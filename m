@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF30664B0AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E5664B0B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234509AbiLMIA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S234494AbiLMIBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:01:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233935AbiLMIAn (ORCPT
+        with ESMTP id S234440AbiLMIBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:00:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2617AB4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:00:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D29EA61357
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1533EC433EF;
-        Tue, 13 Dec 2022 08:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670918434;
-        bh=wmrczL6i5ek8KNk4nUN6DX8sToyA18W4TB1erQFFwS8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X76ygUxJV/hOD6HsMNAizo2p+sOy8X9im7UmLQFTuwSETKhAJrbNkIQ+GYd/axDDM
-         SbGOgNlvNWoS3Pfmz2Dl1mZxkxb7LJdo0gVmQjHG2E6ZYBdnpF8lsuOshbKkXPmzkW
-         IgaAWXRDqoPKv3DI+7Xi0Ej4ZKAtKW3S0pel+KEUUZZ50WsMiFHLPLg+J3riOC7BnN
-         d2l23PimpVAHzX5HuR3QbkasIb0U8c6hZeOtRPNwDVBpeKMVF4a/r7SpGggmXK/4uE
-         FZSXvR5/6oLbDGSoo/+vSUtKxz7HPKP0ifbwzN/o8a92sWQFuEBus5u1Fk0eG70Zba
-         2xod5zv4jDqrg==
-Date:   Tue, 13 Dec 2022 10:00:18 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Shaoqin Huang <shaoqin.huang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock updates for v6.2
-Message-ID: <Y5gxEtdyZuqp6hZd@kernel.org>
+        Tue, 13 Dec 2022 03:01:24 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF3618348
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:01:14 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j4so3702833lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:01:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=heWYQtv4xWf0HHku6hHfNqvO9iIIGMegbR7umcp7wts=;
+        b=dj7ZfKZWJdBmk+40UtdHfa6ndmfdSkzLoIhgXUFDl3W7emMrMOAYJN4DwDSmDarzFe
+         cZ+ohEyYGTefOTRk8/l//IKAOgy3OPnmiXx61yGjdQMrduQT1Ur+kkeQb8wupk9naJgK
+         cuGtEgKZFUqFtw3gOOsR8n4cJKTMNRjHa9ExNlL3O5k4xSe9m8aWU0D0BS4MeiF48iVC
+         Nr1WYiJrFjjb2l4yDBOte9C4UYQFdx36hKw/NN5f52eENn5e92a97/QPz7XyNlzZHmiQ
+         g7YH9SxxhCqqVLPVMUW8i3bVihb56PM0ktxkGHSVi0yjpZDDCm2y/WbmoV3VUgcqZEwc
+         gmLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=heWYQtv4xWf0HHku6hHfNqvO9iIIGMegbR7umcp7wts=;
+        b=4sif9WiCnHveNJvvL8Oloh7lK+anTHm7I5zv8qz8Yrb3GRdtcTCFXx7kHBOsVm8EPQ
+         M+z9uVUgVBwM3IUhz+5RtmyVQadkRETo1DXUz4Q7QqLjnxx9L9UXn62WPE/vlaAvvwU4
+         OsBaorc9biQQ/wHUuxhKYIaXQScLhOv+h49ozZPUk3oLkm4KaAOTPkOxRW/sKLW2eTtN
+         CQESM67c6/c+TfisQ1CpshpBblMrJbwP4Qgb7HmB6z9uLd4E4XDD8DMCoqu9yDYxGG1D
+         egrIi9uWCW7OO3vo5pMA5yzr3JXczakj6kIOQ9mcQwIaCXMiJL8z6lLH2ZGcWV2vApLd
+         qCxA==
+X-Gm-Message-State: ANoB5pnhcbf45K2CWNZyAsdc/Yq60XQgYL9+dfy8y3dfSRV9jvs8GT3D
+        3h5ilt9TDyT4L5u3g2GKQYyQLA==
+X-Google-Smtp-Source: AA0mqf5wCcypaptIGuX194nE3Cq/HugafgzPfOOMcrNMiFg8iTapPl0XUtQkIohQc4acGtF/A3Ocdw==
+X-Received: by 2002:ac2:5226:0:b0:4b5:830d:12b7 with SMTP id i6-20020ac25226000000b004b5830d12b7mr4893805lfl.41.1670918472389;
+        Tue, 13 Dec 2022 00:01:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id d16-20020ac25450000000b004b6e9530900sm261751lfn.110.2022.12.13.00.01.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 00:01:11 -0800 (PST)
+Message-ID: <f4102715-45b7-1196-878e-e0adce0d8c96@linaro.org>
+Date:   Tue, 13 Dec 2022 09:01:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
+Content-Language: en-US
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>, andersson@kernel.org,
+        johan@kernel.org
+Cc:     bmasney@redhat.com, kernel test robot <lkp@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221213051109.8685-1-quic_shazhuss@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213051109.8685-1-quic_shazhuss@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 13/12/2022 06:11, Shazad Hussain wrote:
+> Add the pcie2a, pcie2a_phy, and respective tlmm
+> nodes that are needed to get pcie 2a controller
+> enabled on Qdrive3.
+> 
+> This patch enables 4GB 64bit memory space for
+> PCIE_2A to have BAR allocations of 64bit pref mem
+> needed on this Qdrive3 platform with dual SoCs
+> for root port and switch NT-EP. Hence this ranges
+> property is overridden in sa8540p-ride.dts only.
+> 
+> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> Reviewed-by: Brian Masney <bmasney@redhat.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
+Drop, robot did not report this patch.
 
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+> ---
+> Changes since v3:
+> - Fix syntax error and add Reported-by (Kernel test robot)
 
-are available in the Git repository at:
+So the previous patch was not even build... thus 100% not tested. Is
+this one at least built?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/memblock-v6.2-rc1
+Best regards,
+Krzysztof
 
-for you to fetch changes up to 80c2fe022ef5d29f3bafee90c37dbcff18cab57a:
-
-  memblock tests: remove completed TODO item (2022-11-08 09:50:24 +0200)
-
-----------------------------------------------------------------
-memblock: extend test coverage
-
-* add tests that trigger reallocation of memblock structures from
-  memblock itself via memblock_double_array()
-* add tests for memblock_alloc_exact_nid_raw() that verify that requested
-  node and memory range constraints are respected.
-
-----------------------------------------------------------------
-Rebecca Mckeever (5):
-      memblock tests: introduce range tests for memblock_alloc_exact_nid_raw
-      memblock tests: add top-down NUMA tests for memblock_alloc_exact_nid_raw
-      memblock tests: add bottom-up NUMA tests for memblock_alloc_exact_nid_raw
-      memblock tests: add generic NUMA tests for memblock_alloc_exact_nid_raw
-      memblock tests: remove completed TODO item
-
-Shaoqin Huang (3):
-      memblock test: Add test to memblock_add() 129th region
-      memblock test: Add test to memblock_reserve() 129th region
-      memblock test: Update TODO list
-
- tools/testing/memblock/Makefile                    |    2 +-
- tools/testing/memblock/TODO                        |   14 +-
- tools/testing/memblock/main.c                      |    2 +
- tools/testing/memblock/tests/alloc_exact_nid_api.c | 1113 ++++++++++++++++++++
- tools/testing/memblock/tests/alloc_exact_nid_api.h |   25 +
- tools/testing/memblock/tests/alloc_nid_api.c       |  546 +++++-----
- tools/testing/memblock/tests/alloc_nid_api.h       |    1 +
- tools/testing/memblock/tests/basic_api.c           |  184 ++++
- tools/testing/memblock/tests/common.c              |    7 +-
- tools/testing/memblock/tests/common.h              |    8 +-
- 10 files changed, 1622 insertions(+), 280 deletions(-)
- create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
- create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
-
--- 
-Sincerely yours,
-Mike.
