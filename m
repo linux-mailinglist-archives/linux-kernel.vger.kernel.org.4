@@ -2,80 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353C164BE72
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81F164BE7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236652AbiLMVcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 16:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S236306AbiLMVem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 16:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236256AbiLMVb6 (ORCPT
+        with ESMTP id S235278AbiLMVek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 16:31:58 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6932248D0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 13:31:56 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id w15so17161767wrl.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 13:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+/koqlmEnYtwMnvjdPo/jyVVzdAIk2r7pe0MYh1qUgU=;
-        b=AhmlOzkpEAAsHzce1WbSOiZ0NaMXR4ItFqTykkUtDA8oHCb8varZkhEAoco2CGE/ag
-         IV6awrv0Tm2WwmCAWP9d21A3JJaYDmoRKG9bl7VtNd9+JyKjz66VRpo6ETjiJOEDSTMF
-         qNDcVuAulhVnW0qERRGOSVbDPZGXGYLsT8JChJmtOoW92kpyv4Z4YH3CDzIrtGccRm5H
-         TOSWtZ1iy2JOfNM+EtSFbMPJUs8u3J9Gw267OzxO6n8zBTDQDhexZtk7RRyFKxZluZCy
-         rcf9CjALIcSC15Qegy4Ajq0N+db0Hqy7enzdiSg54ZgxropE/4NQ5EWvpmUcoc1K99OD
-         +k4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+/koqlmEnYtwMnvjdPo/jyVVzdAIk2r7pe0MYh1qUgU=;
-        b=fm6vm0zTQsYrRfHqERwoA2MhaosR/eoN5HikfhJURWA81O7J9IT28WhVaCBweK/jWq
-         ycy1xgrrpzig0wH4kXk4kLG6SiYkE3fENcaLzdEnDezIb0Ot1iLy8s0p3/Jk6L4E2zYe
-         L50IJAc1eV48xd2R1kqKaF/UZf3ep/PtJsJ/Gm4Xih/Z37YCOYNiqtSSD+0Iw83+BW00
-         +FZIlWLQBdES3ZO6CjLvJe7CDeaFZz847JbQObdBsl+Lq9/jCUFnnhBeTI0/dn8nDCl9
-         bEwoYmKdhuRJ1kyUhLfAk9fWpKNwvfHhZc7DZUq76J9e3SWKOO2tOGBgrFY0KVr6APR2
-         VXiA==
-X-Gm-Message-State: ANoB5pnypoF9f2A5VXa64vc5H2NGqXLfAq2n+X9TM+MaQn9RbSrzrVuD
-        PXjwbaZQz/ilpeoBRHZ1+y2z7KGPeAmTWi/uXP2EBw==
-X-Google-Smtp-Source: AA0mqf6u6lhGgX83By8MX9imp5hKBk2V1tX1MIy8IpS3+GyVYm4LHXnqv41xKCQsdhgqOBsG4sli9s6EEvbHoTPKUiE=
-X-Received: by 2002:a5d:4acb:0:b0:242:78b7:6bf3 with SMTP id
- y11-20020a5d4acb000000b0024278b76bf3mr6524388wrs.375.1670967115262; Tue, 13
- Dec 2022 13:31:55 -0800 (PST)
+        Tue, 13 Dec 2022 16:34:40 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B0824BED;
+        Tue, 13 Dec 2022 13:34:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWsG31rFfz4xVH;
+        Wed, 14 Dec 2022 08:34:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670967275;
+        bh=q9NPhH/2/2nh2f6LGqYKrk6aHHA/IEOeaosLLSwo/NQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RcSmbroaa0ZwG7mKJLQwPE71+Ih6WeHnoF3rd6xJCoP239E6okHPCW3o1SIG7QFsI
+         238AAKY6aVCt5yFryVyZ3bOW2zxSuaRE+iTJTJhyHmrlREOfM9lSjZxcfwqm7AIFUj
+         dLX3gGbFY18cpaxVr+02Km6fuAGAk70m7OPKsDqZB5KYNmJ2IAReYrc8MaZzZ/fbDP
+         BfBYftJr5K29yGsYrZpoI+9RRr8wLqxVZ4wAETc09C/Rv1onmp/l4hHDAdVS+rjI11
+         IkAbdZhibvI1D7D5hWmKGJx2elAyuZcNGy+JLHwHwaZUDXDYlFra/WG/hjt0DQGOvF
+         MzyuMzf45SUBA==
+Date:   Wed, 14 Dec 2022 08:34:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the perf tree
+Message-ID: <20221214083434.4616378b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221202045743.2639466-1-irogers@google.com> <Y5ePpm3HKts3b+gJ@fjasle.eu>
-In-Reply-To: <Y5ePpm3HKts3b+gJ@fjasle.eu>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Dec 2022 13:31:43 -0800
-Message-ID: <CAP-5=fWjdA0Qpapfg_Vk287Skd+bNwn=5VPJcaPxqx-vkPTdzw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Improvements to incremental builds
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/xAf1HLKvZbVue8+/8SHJrg2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,57 +51,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:31 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Thu, Dec 01, 2022 at 08:57:38PM -0800 Ian Rogers wrote:
-> > Switching to using install_headers caused incremental builds to always
-> > rebuild most targets. This was caused by the headers always being
-> > reinstalled and then getting new timestamps causing dependencies to be
-> > rebuilt. Follow the convention in libbpf where the install targets are
-> > separated and trigger when the target isn't present or is out-of-date.
-> >
-> > Further, fix an issue in the perf build with libpython where
-> > python/perf.so was also regenerated as the target name was incorrect.
-> >
-> > Ian Rogers (5):
-> >   tools lib api: Add dependency test to install_headers
-> >   tools lib perf: Add dependency test to install_headers
-> >   tools lib subcmd: Add dependency test to install_headers
-> >   tools lib symbol: Add dependency test to install_headers
-> >   perf build: Fix python/perf.so library's name
-> >
-> >  tools/lib/api/Makefile     | 38 ++++++++++++++++++++++-----------
-> >  tools/lib/perf/Makefile    | 43 +++++++++++++++++++-------------------
-> >  tools/lib/subcmd/Makefile  | 23 +++++++++++---------
-> >  tools/lib/symbol/Makefile  | 21 ++++++++++++-------
-> >  tools/perf/Makefile.config |  4 +++-
-> >  tools/perf/Makefile.perf   |  2 +-
-> >  6 files changed, 79 insertions(+), 52 deletions(-)
-> >
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
->
-> Hi Ian,
->
-> which tree is your patch set based on?  At least it doesn't apply on the
-> current kbuild trees.
->
-> Kind regards,
-> Nicolas
+--Sig_/xAf1HLKvZbVue8+/8SHJrg2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nicolas,
+Hi all,
 
-for the perf tool the branch to follow is Arnaldo's perf/core one:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/?h=3Dperf%2F=
-core
+Commit
 
-I may have done this work on Arnaldo's tmp.perf/core branch, which is
-used for work-in-progress merges.
+  9e03ed43cd4f ("perf stat: Check existence of os->prefix, fixing a segfaul=
+t")
 
-Thanks,
-Ian
+is missing a Signed-off-by from its author.
 
-> --
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/xAf1HLKvZbVue8+/8SHJrg2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOY7+oACgkQAVBC80lX
+0Gyn3QgAhqP9/P72VovGHGa5yl4o/y61alsjV3sIO95VmJsz+j2ubJ5u9kel5v+W
+wo18B7p66NKuSF4H4CpiTckWLsf4+JKhX58idoeWpDFNzEVaI2n9cQ1L6eTGgQx3
+Jpa1/Oywq2VdvoKUfvQhyYh3EAn46pS8s7anuqB9psprv3S7QaxoylyO6E1hKuZi
+Gr5OA2vOj+m1OKzvo/ZP267KwjAyMae7b3ktXnajbtZPpQqiWrA0su0j6amYH6Y8
+A/GEaUpY7DZf4HCV1OkfXukBwtP/zWc2NIo1ei10W4DdrI7lFRqv4Foj/CodZZj3
+89mYB9SqmlKI2gB6tbOWh5pXHtDBtA==
+=jv2J
+-----END PGP SIGNATURE-----
+
+--Sig_/xAf1HLKvZbVue8+/8SHJrg2--
