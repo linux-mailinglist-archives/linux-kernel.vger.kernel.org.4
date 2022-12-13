@@ -2,245 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EB264ACB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241F064ACBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbiLMBBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S231481AbiLMBDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiLMBBf (ORCPT
+        with ESMTP id S233562AbiLMBDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:01:35 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66161115
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:01:32 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id s7so13924435plk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:01:32 -0800 (PST)
+        Mon, 12 Dec 2022 20:03:04 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3093C63A6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:03:02 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id s10so1836994ljg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:03:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0XnFLNyU+f87H6FII1iBQ7OGHIR5aH7bhoxNua0BSvc=;
-        b=IEwsHkAMSvqwSKxJanDbH1FYkNgyVXROZc1wRHuqToUiP44PQW0PnNv7/fXGFhndr4
-         z4hWVzHYSHqoIApOgZFXypROlR7Xs5kvHF7CCJ+aUBdHgIqmZC+9+J7z+tr4xiBhK/EL
-         4TTEG4IOlEYxqjgyl4Hu6orngOL+oEQlHuqGg=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=c4uydtI+TJBxOHIdUWp7WaxP1AbUhc5qkc9V6EJvCic=;
+        b=EEdB7Du271URciEUZOFlwc+L+uTXvnK00CZKbKg9UqPqnIdokWLS99gx8neaY6Qime
+         mU18qWCUImn9sISphSIkjx68Am3qUuykYENCcvzeQQ3R7Awa9tfyPpSeub/FCZcs0e0M
+         Fn7nubnlMx0U5HmdCvKJjz6jecoh26tWUcJ4CihrMn35UwC5Ozhh8Syq/P+VDu5e9DhH
+         +TFIMHEwBKnp53TtMBbKqZ5o9gGLJ5kI/Gud9EdQqTcMByhFFKrwJfJ42ZhQUwy06Edu
+         DB7Oqt0MdVb0Sn0Bi5pGhQcBrD607m/d0amc5XjWKHjKM6vlyBa/LdaPaCIb8QXAcEbd
+         9ZsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0XnFLNyU+f87H6FII1iBQ7OGHIR5aH7bhoxNua0BSvc=;
-        b=d6CBekeGxKrb6aV3zEYG+ckBo9RF+UF+5Ei+cRJL0gRSx7MiUAzc+g+fpGgLNw2jaj
-         wJOJga4/lD6Vp0EvW0tB9emvXvIqNn84bCzl6+W3Lc9KtdBqOdNLJR11qTl+2iGrJ2mo
-         qBPemCG636v3LrAyg0/BadrTprVdEg7owsLm565Stg3TImbaNYNlppyrw6Ay0Hs8HG1s
-         jVRDpaKy9SxKTbO+s3avlZFaZ62ezPsHHhSgxKhSut7fLF1jkOVU70jo//7gZvlia9uD
-         Jleuq1YyWn3tjCKysL1v3OOq8RocnfRTKEgVtf8D3zQzJ05z0Z7RrnpJySzkOzwkoHdZ
-         xl+g==
-X-Gm-Message-State: ANoB5pl3n4FPUSr1Ufd1L6w+PavrltRJG4VcD3R/Y54nvU40K+bPR2ZA
-        1ImuRh83p3idKcxXclVNDRdGrQ==
-X-Google-Smtp-Source: AA0mqf72s4Gw6+slWR3v0poPoBVzXDtwVYrTM/mNVX1zRboII6F2SKPoRkONon2GNkXBcOnBqiiM3g==
-X-Received: by 2002:a05:6a20:28a0:b0:ad:58d4:2a7a with SMTP id q32-20020a056a2028a000b000ad58d42a7amr11270896pzf.22.1670893292214;
-        Mon, 12 Dec 2022 17:01:32 -0800 (PST)
-Received: from ballway1.c.googlers.com.com (97.173.125.34.bc.googleusercontent.com. [34.125.173.97])
-        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b00186a2274382sm7022104plb.76.2022.12.12.17.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 17:01:31 -0800 (PST)
-From:   Allen Ballway <ballway@chromium.org>
-To:     dmitry.torokhov@gmail.com
-Cc:     ballway@chromium.org, benjamin.tissoires@redhat.com,
-        dtor@chromium.org, jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rydberg@bitmath.org
-Subject: [PATCH v3] HID: multitouch: Add quirks for flipped axes
-Date:   Tue, 13 Dec 2022 01:01:12 +0000
-Message-Id: <20221213010112.3394537-1-ballway@chromium.org>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-In-Reply-To: <Y5d29JwIxku9ubVb@google.com>
-References: <Y5d29JwIxku9ubVb@google.com>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c4uydtI+TJBxOHIdUWp7WaxP1AbUhc5qkc9V6EJvCic=;
+        b=6Pps+QrfzS00ZVedDlZbkqDsqlcFNRiAmYGmwhg6sz4vWWX5Z1ZLyzfN5FZuDZ51H1
+         UJnK/YCLs6thSQbbqTi7F9+MrrOrvx1xaxEUFUWav/4K382np+9a7BvsqnnNbB72I3SW
+         DlQPUxWL6CANTS/SeHzhsXSTmb/rnUPSuqX68Mvm9aQKJi6dJf39Epn6UTcZC3IhQ0x1
+         x5JPi+U6VKz3Hoo0yiciTrpQIFPg7Xk1gua9arMtOTG0RH7LK+AAtMyzI2brladZz3GH
+         owSIiZZ7UXy2tQNNVbXKzAtCuhRK3ayC40UtpCnaJrrtLACZjpI4J+6XstYj43KEoRWG
+         VlWw==
+X-Gm-Message-State: ANoB5pn0qsE+S8++1hlDCYpno6JdCPe7g7X+5ZLtjwGlheLnLyuicO7k
+        WAQzBFied5oxXpkOTDHUg9rMAw==
+X-Google-Smtp-Source: AA0mqf6/0+m1rsZkaUSHO7NwIJA9CMcebS/GmvIxG6UAb/gfbNFdP87gMoYB+be+y+4Mw4ambQTXOg==
+X-Received: by 2002:a2e:3a15:0:b0:27a:129f:770d with SMTP id h21-20020a2e3a15000000b0027a129f770dmr4414846lja.45.1670893380349;
+        Mon, 12 Dec 2022 17:03:00 -0800 (PST)
+Received: from [127.0.0.1] ([94.25.229.107])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05651c131000b0027760138c53sm137967lja.72.2022.12.12.17.02.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Dec 2022 17:02:59 -0800 (PST)
+Date:   Tue, 13 Dec 2022 04:02:54 +0300
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+CC:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, airlied@gmail.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v11_2/5=5D_dt-bindings=3A_msm/dp=3A_a?= =?US-ASCII?Q?dd_data-lanes_and_link-frequencies_property?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <a9e2f269-b9df-814f-adcd-f5577f590fa7@quicinc.com>
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com> <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com> <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org> <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com> <be1411e8-1d07-7643-977c-a306016fd660@linaro.org> <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com> <e53844b7-601b-f355-302b-cc871962a446@linaro.org> <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com> <CAA8EJpr5RYyQa7xu1_xJ0F-dn-H9aOf0KE-CDgDCwnZu3HPgXg@mail.gmail.com> <a9e2f269-b9df-814f-adcd-f5577f590fa7@quicinc.com>
+Message-ID: <46971A33-D9A4-4A84-9058-62F69C5618F4@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain touchscreen devices, such as the ELAN9034, are oriented
-incorrectly and report touches on opposite points on the X and Y axes.
-For example, a 100x200 screen touched at (10,20) would report (90, 180)
-and vice versa.
-
-This changed fixes the issue by adding device quirks to transform
-the touch points into the correct spaces, from X -> MAX(X) - X,
-and Y -> MAX(Y) - Y. These quirks are added in hid-quirks checking
-both DMI information and device vendor and product IDs. The quirk
-is handled in hid-multitouch to do the actual transformation.
-
-Signed-off-by: Allen Ballway <ballway@chromium.org>
----
-V2 -> V3: Use existing HID_QUIRK_*_INVERT and match the quirk in
-hid-quirk, passing down to hid-multitouch through the hid device.
-
-V1 -> V2: Address review comments, change to use DMI match. Confirmed
-MT_TOOL_X/Y require transformation and update orientation based on
-flipped axes.
 
 
- drivers/hid/hid-multitouch.c | 43 ++++++++++++++++++++++++++++++++----
- drivers/hid/hid-quirks.c     | 33 +++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+), 4 deletions(-)
+On 13 December 2022 02:41:55 GMT+03:00, Abhinav Kumar <quic_abhinavk@quici=
+nc=2Ecom> wrote:
+>Hi Dmitry
+>
+>On 12/12/2022 2:35 PM, Dmitry Baryshkov wrote:
+>> On Mon, 12 Dec 2022 at 19:51, Kuogee Hsieh <quic_khsieh@quicinc=2Ecom> =
+wrote:
+>>>=20
+>>>=20
+>>> On 12/8/2022 4:35 PM, Dmitry Baryshkov wrote:
+>>>> On 09/12/2022 02:22, Kuogee Hsieh wrote:
+>>>>>=20
+>>>>> On 12/8/2022 4:11 PM, Dmitry Baryshkov wrote:
+>>>>>> On 09/12/2022 01:38, Kuogee Hsieh wrote:
+>>>>>>>=20
+>>>>>>> On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
+>>>>>>>> On 09/12/2022 00:36, Kuogee Hsieh wrote:
+>>>>>>>>> Add both data-lanes and link-frequencies property into endpoint
+>>>>>>>>>=20
+>>>>>>>>> Changes in v7:
+>>>>>>>>> -- split yaml out of dtsi patch
+>>>>>>>>> -- link-frequencies from link rate to symbol rate
+>>>>>>>>> -- deprecation of old data-lanes property
+>>>>>>>>>=20
+>>>>>>>>> Changes in v8:
+>>>>>>>>> -- correct Bjorn mail address to kernel=2Eorg
+>>>>>>>>>=20
+>>>>>>>>> Changes in v10:
+>>>>>>>>> -- add menu item to data-lanes and link-frequecnis
+>>>>>>>>>=20
+>>>>>>>>> Changes in v11:
+>>>>>>>>> -- add endpoint property at port@1
+>>>>>>>>>=20
+>>>>>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>`
+>>>>>>>>=20
+>>>>>>>> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencie=
+s
+>>>>>>>> property
+>>>>>>>> =2Egit/rebase-apply/patch:47: trailing whitespace=2E
+>>>>>>>>=20
+>>>>>>>> =2Egit/rebase-apply/patch:51: trailing whitespace=2E
+>>>>>>>>=20
+>>>>>>>>=20
+>>>>>>>> Also the dt_binding_check fails with an error for this schema=2E =
+And
+>>>>>>>> after fixing the error in the schema I faced an example validatio=
+n
+>>>>>>>> error=2E Did you check that the schema is correct and that the
+>>>>>>>> example validates against the schema?
+>>>>>>>=20
+>>>>>>> yes, but i run "make dt_binding_check
+>>>>>>> DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/display/msm/dp=
+-controller=2Eyaml"
+>>>>>>> at mu v5=2E15 branch since
+>>>>>>=20
+>>>>>> I wouldn't ask you to post the log here=2E But I don't think that
+>>>>>> either of the errors that I see here is related to 5=2E15 vs 6=2E1-=
+rc=2E
+>>>>>>=20
+>>>>>> In fact after applying this patch against 5=2E15 I saw the expected
+>>>>>> failure:
+>>>>>>=20
+>>>>>> Documentation/devicetree/bindings/display/msm/dp-controller=2Eyaml:
+>>>>>> properties:required: ['port@0', 'port@1'] is not of type 'object',
+>>>>>> 'boolean'
+>>>>>> Documentation/devicetree/bindings/display/msm/dp-controller=2Eyaml:
+>>>>>> properties: 'required' should not be valid under {'$ref':
+>>>>>> '#/definitions/json-schema-prop-names'}
+>>>>>> Documentation/devicetree/bindings/display/msm/dp-controller=2Eyaml:
+>>>>>> ignoring, error in schema: properties: required
+>>>>>>=20
+>>>>>>>=20
+>>>>>>> "make dt_binding_check" does not work at msm-next branch=2E
+>>>>>>=20
+>>>>>> I went ahead and just checked=2E
+>>>>>>=20
+>>>>>> `make dt_binding_check DT_SCHEMA_FILES=3Ddisplay/msm`  works cleanl=
+y
+>>>>>> in msm-next and reports a single example-related warning in
+>>>>>> msm-next-lumag=2E I pushed a patch to fix that warning (wich can
+>>>>>> hopefully be picked up by Abhinav into msm-fixes)=2E So you can ass=
+ume
+>>>>>> that both these branches have consistent error-free display/msm
+>>>>>> schemas=2E
+>>>>>>=20
+>>>>> I have clean msm-next branch (without my data-lines yaml patch
+>>>>> applied) and run "make dt_binding_check
+>>>>> DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/display/msm/dp-c=
+ontroller=2Eyaml",
+>>>>> then I saw below error messages=2E
+>>>>>=20
+>>>>> Have you run into this problem?
+>>>>=20
+>>>> No=2E
+>>>=20
+>>> Did you do anything to fix "older dtschema instance"?
+>>=20
+>> I did not since I hadn't had such a problem=2E I can refer again to the
+>> steps I provided you beforehand=2E The email was sent 6 days ago=2E No
+>> answer from your side since that time=2E
+>>=20
+>>> I had run  "pip3 install dtschema --upgrade" and still not work=2E
+>>=20
+>> Can you please post a full log of this command?
+>>=20
+>>>=20
+>>> D you know how to fix this problem?
+>>>=20
+>>> Thanks,
+>>>=20
+>>> kuogee
+>>>=20
+>>> sort: -:2: disorder: 2022=2E1
+>>> ERROR: dtschema minimum version is v2022=2E3
+>>> make[2]: *** [check_dtschema_version] Error 1
+>>> make[1]: *** [dt_binding_check] Error 2
+>>> make: *** [__sub-make] Error 2
+>>=20
+>> Please add the output of:
+>>=20
+>> which dt-validate
+>> dt-validate -V
+>>=20
+>> And also a full log of your failing kernel build=2E
+>>=20
+>>=20
+>>=20
+>>> I had run "pip3 install dtschema --upgrade" according Rob Herring resp=
+onse=2E
+>>> but it still shows same problem=2E
+>>> Please let know how can I fix this problem=2E
+>>>=20
+>>>>=20
+>>>>>=20
+>>>>>     HOSTCC  scripts/basic/fixdep
+>>>>>     HOSTCC  scripts/dtc/dtc=2Eo
+>>>>>     HOSTCC  scripts/dtc/flattree=2Eo
+>>>>>     HOSTCC  scripts/dtc/fstree=2Eo
+>>>>>     HOSTCC  scripts/dtc/data=2Eo
+>>>>>     HOSTCC  scripts/dtc/livetree=2Eo
+>>>>>     HOSTCC  scripts/dtc/treesource=2Eo
+>>>>>     HOSTCC  scripts/dtc/srcpos=2Eo
+>>>>>     HOSTCC  scripts/dtc/checks=2Eo
+>>>>>     HOSTCC  scripts/dtc/util=2Eo
+>>>>>     LEX     scripts/dtc/dtc-lexer=2Elex=2Ec
+>>>>>     HOSTCC  scripts/dtc/dtc-lexer=2Elex=2Eo
+>>>>>     HOSTCC  scripts/dtc/dtc-parser=2Etab=2Eo
+>>>>>     HOSTLD  scripts/dtc/dtc
+>>>>> sort: -:2: disorder: 2022=2E1
+>>>>> ERROR: dtschema minimum version is v2022=2E3
+>>>>> make[2]: *** [check_dtschema_version] Error 1
+>>>>> make[1]: *** [dt_binding_check] Error 2
+>>>>> make: *** [__sub-make] Error 2
+>>>>=20
+>>>> This means that somewhere in your path you have an older dtschema
+>>>> instance=2E
+>>>>=20
+>>>> When you sent me a question regarding this error, I asked for the
+>>>> additional info=2E You provided none=2E Instead you went on sending t=
+he
+>>>> untested patch that doesn't work=2E
+>>>=20
+>>> since i can not test it on msm-next so that I did test it at my v5-15
+>>> branch=2E
+>>=20
+>> Wrong=2E
+>>=20
+>>>=20
+>>> besides, i think i have to sent the whole series patches include this
+>>> one to address your new comments on other patch=2E
+>>>=20
+>>> is this correct?
+>>=20
+>> No=2E Please fix your system first, validate your patches and send them
+>> afterwards=2E You can not expect others to do your job=2E
+>>=20
+>
+>Just finished working with kuogee on this=2E This issue had been reported=
+ by few others earlier (example https://lore=2Ekernel=2Eorg/lkml/bc9be279-a=
+130-d5e7-4397-bbb389d14403@intel=2Ecom/T/)=2E
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 91a4d3fc30e08..1f4c2aa511359 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -71,6 +71,8 @@ MODULE_LICENSE("GPL");
- #define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
- #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
- #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
-+#define MT_QUIRK_X_INVERT		BIT(22)
-+#define MT_QUIRK_Y_INVERT		BIT(23)
+Thanks a lot for helping Kuogee!
 
- #define MT_INPUTMODE_TOUCHSCREEN	0x02
- #define MT_INPUTMODE_TOUCHPAD		0x03
-@@ -1086,6 +1088,10 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 		int orientation = wide;
- 		int max_azimuth;
- 		int azimuth;
-+		int x;
-+		int y;
-+		int cx;
-+		int cy;
 
- 		if (slot->a != DEFAULT_ZERO) {
- 			/*
-@@ -1104,6 +1110,16 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 			if (azimuth > max_azimuth * 2)
- 				azimuth -= max_azimuth * 4;
- 			orientation = -azimuth;
-+
-+			/* Orientation is inverted if the X or Y axes are
-+			 * flipped, but normalized if both are inverted.
-+			 */
-+			if (quirks & (MT_QUIRK_X_INVERT | MT_QUIRK_Y_INVERT) &&
-+			    !((quirks & MT_QUIRK_X_INVERT)
-+			      && (quirks & MT_QUIRK_Y_INVERT))) {
-+				orientation = -orientation;
-+			}
-+
- 		}
+>
+>So let me summarize the fix:
+>
+>1) We do need up upgrade the dtschema first
+>
+>pip3 install git+https://github=2Ecom/devicetree-org/dt-schema=2Egit@main
 
- 		if (quirks & MT_QUIRK_TOUCH_SIZE_SCALING) {
-@@ -1115,10 +1131,23 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 			minor = minor >> 1;
- 		}
+I'd stick to the released version, unless there is any indication that the=
+ trunk has any significant features=2E Rob, Krzysztof, please correct me if=
+ I'm wrong=2E
 
--		input_event(input, EV_ABS, ABS_MT_POSITION_X, *slot->x);
--		input_event(input, EV_ABS, ABS_MT_POSITION_Y, *slot->y);
--		input_event(input, EV_ABS, ABS_MT_TOOL_X, *slot->cx);
--		input_event(input, EV_ABS, ABS_MT_TOOL_Y, *slot->cy);
-+		x = quirks & MT_QUIRK_X_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x :
-+			*slot->x;
-+		y = quirks & MT_QUIRK_Y_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->y :
-+			*slot->y;
-+		cx = quirks & MT_QUIRK_X_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->cx :
-+			*slot->cx;
-+		cy = quirks & MT_QUIRK_Y_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->cy :
-+			*slot->cy;
-+
-+		input_event(input, EV_ABS, ABS_MT_POSITION_X, x);
-+		input_event(input, EV_ABS, ABS_MT_POSITION_Y, y);
-+		input_event(input, EV_ABS, ABS_MT_TOOL_X, cx);
-+		input_event(input, EV_ABS, ABS_MT_TOOL_Y, cy);
- 		input_event(input, EV_ABS, ABS_MT_DISTANCE, !*slot->tip_state);
- 		input_event(input, EV_ABS, ABS_MT_ORIENTATION, orientation);
- 		input_event(input, EV_ABS, ABS_MT_PRESSURE, *slot->p);
-@@ -1735,6 +1764,12 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	if (id->vendor == HID_ANY_ID && id->product == HID_ANY_ID)
- 		td->serial_maybe = true;
 
-+	if (hdev->quirks & HID_QUIRK_X_INVERT)
-+		td->mtclass.quirks |= MT_QUIRK_X_INVERT;
-+
-+	if (hdev->quirks & HID_QUIRK_Y_INVERT)
-+		td->mtclass.quirks |= MT_QUIRK_Y_INVERT;
-+
- 	/* This allows the driver to correctly support devices
- 	 * that emit events over several HID messages.
- 	 */
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 0e9702c7f7d6c..47c6cd62f019a 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -16,6 +16,7 @@
- #include <linux/export.h>
- #include <linux/slab.h>
- #include <linux/mutex.h>
-+#include <linux/dmi.h>
- #include <linux/input/elan-i2c-ids.h>
+>
+>2) Python version issues were hitting some of the developers so even if w=
+e had the right version installed the PATH wasnt pointing to the right one
 
- #include "hid-ids.h"
-@@ -957,6 +958,29 @@ static const struct hid_device_id hid_mouse_ignore_list[] = {
- 	{ }
- };
+Yes, that is what I expected, when I asked for the pip command log and for=
+ the `which' command output=2E
 
-+static const struct hid_device_id elan_flipped_quirks[] = {
-+	{ HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8, USB_VENDOR_ID_ELAN, 0x2dcd),
-+		HID_QUIRK_X_INVERT | HID_QUIRK_Y_INVERT },
-+	{ }
-+};
-+
-+/*
-+ * This list contains devices which have specific issues based on the system
-+ * they're on and not just the device itself. The driver_data will have a
-+ * specific hid device to match against.
-+ */
-+static const struct dmi_system_id dmi_override_table[] = {
-+	{
-+		.ident = "DynaBook K50/FR",
-+		.matches = {
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dynabook Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "dynabook K50/FR"),
-+		},
-+		.driver_data = (void *)elan_flipped_quirks,
-+	},
-+	{ }	/* Terminate list */
-+};
-+
- bool hid_ignore(struct hid_device *hdev)
- {
- 	int i;
-@@ -1238,6 +1262,7 @@ static unsigned long hid_gets_squirk(const struct hid_device *hdev)
- {
- 	const struct hid_device_id *bl_entry;
- 	unsigned long quirks = 0;
-+	const struct dmi_system_id *system_id;
+I usually install dtschema to my user's dir and add ~/=2Elocal/bin to PATH=
+=2E
 
- 	if (hid_match_id(hdev, hid_ignore_list))
- 		quirks |= HID_QUIRK_IGNORE;
-@@ -1249,6 +1274,14 @@ static unsigned long hid_gets_squirk(const struct hid_device *hdev)
- 	if (bl_entry != NULL)
- 		quirks |= bl_entry->driver_data;
+>
+>3) We had to install yamllint
+>
+>We have documented these now for the benefit of others internally=2E
+>
+>With all these 3 done, we can compile msm-next-lumag using
+>make dt_binding_check DT_SCHEMA_FILES=3Ddisplay/msm
+>
+>Apologies for the setup issues on our end=2E These are resolved now and k=
+uogee will post a v12 for this=2E
 
-+	system_id = dmi_first_match(dmi_override_table);
-+	if (system_id != NULL) {
-+		bl_entry = hid_match_id(hdev, system_id->driver_data);
-+		if (bl_entry != NULL)
-+			quirks |= bl_entry->driver_data;
-+	}
-+
-+
- 	if (quirks)
- 		dbg_hid("Found squirk 0x%lx for HID device 0x%04x:0x%04x\n",
- 			quirks, hdev->vendor, hdev->product);
---
-2.39.0.rc1.256.g54fd8350bd-goog
+Great, I'm looking forward to seeing it and finally merging it!
 
+
+>
+>Thanks
+>
+>Abhinav
+>> --
+>> With best wishes
+>> Dmitry
+
+--=20
+With best wishes
+Dmitry
