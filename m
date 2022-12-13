@@ -2,219 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5572F64B631
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7D364B636
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235197AbiLMN3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S235552AbiLMNax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234855AbiLMN3i (ORCPT
+        with ESMTP id S235205AbiLMNau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:29:38 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB75C2;
-        Tue, 13 Dec 2022 05:29:37 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id EDD0F1F8B4;
-        Tue, 13 Dec 2022 13:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670938175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hyr4c+SKac14wkta1jaSfJl4YQdl4MmgZCTJffcE5qg=;
-        b=ITNcM/OPJCUsyRzFdas/Pg/f0lW4KGl5uuFBgsWNjbWdKHS0k/RIR21Se6GDKWu9DRrWEh
-        UwNhLpsGVMgrtk8DLrh/z2yIlafJRG1MESQxDTCP3PWLfUEIed0qzwv4ueMPEkVjACwiJA
-        mpdm+p2jF/AWUfeTzYoYM2RFWqB28Xk=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 13C4B2C141;
-        Tue, 13 Dec 2022 13:29:34 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 14:29:33 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: powerpc-part: was: Re: [PATCH v6] livepatch: Clear relocation
- targets on a module removal
-Message-ID: <Y5h+PX6a1a9yjQPp@alley>
-References: <20220901171252.2148348-1-song@kernel.org>
- <Y3expGRt4cPoZgHL@alley>
- <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
- <Y5Me5dTGv+GznvtO@alley>
- <CAPhsuW4pt7vfHTj8KorTRCx5zJaoUiyYUOLy8uXZDbTbur4RRA@mail.gmail.com>
- <Y5dg25LV24mBRf4t@alley>
- <CAPhsuW7y1GzT8+quk4vJEqM6SagqDqc=HXA3jtdmfTfC=Gsv-Q@mail.gmail.com>
+        Tue, 13 Dec 2022 08:30:50 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44E7C2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:30:48 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id d14so17674010edj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GkAga1fPXNCvgWWr0y17vOcwxqzOIKIhEW49YSLUBLs=;
+        b=zXfkNNv5mXOMPEanvux+4bWlBQnFuzxE2MzUd22vOUfuSUzuyhRUOfDzB0ggA71T8F
+         U4BoSvDNvouPUsFnxzBhZ9PkJKNOOi+r+fWw9vIFexrfG0KwcjqamyWJH78bxvSa+wEK
+         sviWJZdff4IfSH7PcbdsfV9IggXAnSU97epnS/d0NovCmFSRag3LxiwLBWEbw0wia48V
+         YbDPBVUWD+T8qS9AWX0q7GxruKFPjvBYZuFfVuhZJcW2vVgQJ/wUPa1YAkGfHLEO3TNv
+         ut45RL2Pkoauar+k5MQKvHAfX+4LQXjfZ+Tr4d/sXdDmzrGpjYfmw5ayEfmXxR2ffeRd
+         2uuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GkAga1fPXNCvgWWr0y17vOcwxqzOIKIhEW49YSLUBLs=;
+        b=vcYFUINW7LMF4D/uiDcHxLbjGKXeZO5sUeUXdTKMlnJm+OU26rj1T/WZptPRnkVGAJ
+         E1bPV3JWYmZ7rzbSr0PPsflM8lHaIembKZCqL0OcEM3votaq+PBjdpPBPiMDIkyogFJr
+         aJ4GWI1dpV55EkOzBqVLXOvn+wo6QTgSwoxMUImNxyFW99XW+9nK23hl9jGIpX37moTM
+         IdRkYdpDEV59pz44cqyYLj1j1VPI0vjYDvP43kE4DVK6ysDnhbXZ6ijScUatTqOS9nXX
+         JHJ2WGiqFrQoizzKAq+3qtQbh7h/RuQg4VmmrG7UMzEGS47xLjno614W8MyCpPDU8Ey7
+         WdeA==
+X-Gm-Message-State: ANoB5pn7tfcIx81lPl+djfpCBMCOec6zlmwLDFD7nu9qBvZUfs9RzHHS
+        FF3aVnrw/8eDSvYr0cwIKtLFhQ==
+X-Google-Smtp-Source: AA0mqf55nZH+ZFdawcdqg2GbkWyleEiww6bqn+BU/p1ARK9riCKQWs9Ju9dLnhFZ+gdPQNXQCWCLww==
+X-Received: by 2002:a05:6402:c08:b0:46d:83ea:44e8 with SMTP id co8-20020a0564020c0800b0046d83ea44e8mr18308556edb.21.1670938247443;
+        Tue, 13 Dec 2022 05:30:47 -0800 (PST)
+Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
+        by smtp.gmail.com with ESMTPSA id d7-20020aa7ce07000000b0046951b43e84sm4945096edv.55.2022.12.13.05.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 05:30:47 -0800 (PST)
+Date:   Tue, 13 Dec 2022 14:30:40 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
+Message-ID: <Y5h+gHBneexFQcR3@cmpxchg.org>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+ <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
+ <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPhsuW7y1GzT8+quk4vJEqM6SagqDqc=HXA3jtdmfTfC=Gsv-Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-12-13 00:13:46, Song Liu wrote:
-> )() ()On Mon, Dec 12, 2022 at 9:12 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Fri 2022-12-09 11:59:35, Song Liu wrote:
-> > > On Fri, Dec 9, 2022 at 3:41 AM Petr Mladek <pmladek@suse.com> wrote:
-> > > > On Mon 2022-11-28 17:57:06, Song Liu wrote:
-> > > > > On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
-> > > > > >
-> > > > > > > --- a/arch/powerpc/kernel/module_64.c
-> > > > > > > +++ b/arch/powerpc/kernel/module_64.c
-> > > > > > > +#ifdef CONFIG_LIVEPATCH
-> > > > > > > +void clear_relocate_add(Elf64_Shdr *sechdrs,
-> > > > > > > +                    const char *strtab,
-> > > > > > > +                    unsigned int symindex,
-> > > > > > > +                    unsigned int relsec,
-> > > > > > > +                    struct module *me)
-> > > > > > > +{
-> >
-> > [...]
-> >
-> > > > > > > +
-> > > > > > > +             instruction = (u32 *)location;
-> > > > > > > +             if (is_mprofile_ftrace_call(symname))
-> > > > > > > +                     continue;
-> > > >
-> > > > Why do we ignore these symbols?
-> > > >
-> > > > I can't find any counter-part in apply_relocate_add(). It looks super
-> > > > tricky. It would deserve a comment.
-> > > >
-> > > > And I have no idea how we could maintain these exceptions.
-> > > >
-> > > > > > > +             if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
-> > > > > > > +                     continue;
-> > > >
-> > > > Same here. It looks super tricky and there is no explanation.
-> > >
-> > > The two checks are from restore_r2(). But I cannot really remember
-> > > why we needed them. It is probably an updated version from an earlier
-> > > version (3 year earlier..).
-> >
-> > This is a good sign that it has to be explained in a comment.
-> > Or even better, it should not by copy pasted.
-> >
-> > > > > > > +             instruction += 1;
-> > > > > > > +             patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
-> >
-> > I believe that this is not enough. apply_relocate_add() does this:
-> >
-> > int apply_relocate_add(Elf64_Shdr *sechdrs,
-> > [...]
-> >                        struct module *me)
-> > {
-> > [...]
-> >                 case R_PPC_REL24:
-> >                         /* FIXME: Handle weak symbols here --RR */
-> >                         if (sym->st_shndx == SHN_UNDEF ||
-> >                             sym->st_shndx == SHN_LIVEPATCH) {
-> > [...]
-> >                         if (!restore_r2(strtab + sym->st_name,
-> >                                                         (u32 *)location + 1, me))
-> > [...]                                   return -ENOEXEC;
-> >
-> > --->                    if (patch_instruction((u32 *)location, ppc_inst(value)))
-> >                                 return -EFAULT;
-> >
-> > , where restore_r2() does:
-> >
-> > static int restore_r2(const char *name, u32 *instruction, struct module *me)
-> > {
-> > [...]
-> >         /* ld r2,R2_STACK_OFFSET(r1) */
-> > --->    if (patch_instruction(instruction, ppc_inst(PPC_INST_LD_TOC)))
-> >                 return 0;
-> > [...]
-> > }
-> >
-> > By other words, apply_relocate_add() modifies two instructions:
-> >
-> >    + patch_instruction() called in restore_r2() writes into "location + 1"
-> >    + patch_instruction() called in apply_relocate_add() writes into "location"
-> >
-> > IMHO, we have to clear both.
-> >
-> > IMHO, we need to implement a function that reverts the changes done
-> > in restore_r2(). Also we need to revert the changes done in
-> > apply_relocate_add().
+On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
+> Mina Almasry <almasrymina@google.com> writes:
 > 
-> I finally got time to read all the details again and recalled what
-> happened with the code.
+> > On Mon, Dec 12, 2022 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
+> >>
+> >> On Fri 02-12-22 14:35:31, Mina Almasry wrote:
+> >> > The nodes= arg instructs the kernel to only scan the given nodes for
+> >> > proactive reclaim. For example use cases, consider a 2 tier memory system:
+> >> >
+> >> > nodes 0,1 -> top tier
+> >> > nodes 2,3 -> second tier
+> >> >
+> >> > $ echo "1m nodes=0" > memory.reclaim
+> >> >
+> >> > This instructs the kernel to attempt to reclaim 1m memory from node 0.
+> >> > Since node 0 is a top tier node, demotion will be attempted first. This
+> >> > is useful to direct proactive reclaim to specific nodes that are under
+> >> > pressure.
+> >> >
+> >> > $ echo "1m nodes=2,3" > memory.reclaim
+> >> >
+> >> > This instructs the kernel to attempt to reclaim 1m memory in the second tier,
+> >> > since this tier of memory has no demotion targets the memory will be
+> >> > reclaimed.
+> >> >
+> >> > $ echo "1m nodes=0,1" > memory.reclaim
+> >> >
+> >> > Instructs the kernel to reclaim memory from the top tier nodes, which can
+> >> > be desirable according to the userspace policy if there is pressure on
+> >> > the top tiers. Since these nodes have demotion targets, the kernel will
+> >> > attempt demotion first.
+> >> >
+> >> > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> >> > reclaim""), the proactive reclaim interface memory.reclaim does both
+> >> > reclaim and demotion. Reclaim and demotion incur different latency costs
+> >> > to the jobs in the cgroup. Demoted memory would still be addressable
+> >> > by the userspace at a higher latency, but reclaimed memory would need to
+> >> > incur a pagefault.
+> >> >
+> >> > The 'nodes' arg is useful to allow the userspace to control demotion
+> >> > and reclaim independently according to its policy: if the memory.reclaim
+> >> > is called on a node with demotion targets, it will attempt demotion first;
+> >> > if it is called on a node without demotion targets, it will only attempt
+> >> > reclaim.
+> >> >
+> >> > Acked-by: Michal Hocko <mhocko@suse.com>
+> >> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >>
+> >> After discussion in [1] I have realized that I haven't really thought
+> >> through all the consequences of this patch and therefore I am retracting
+> >> my ack here. I am not nacking the patch at this statge but I also think
+> >> this shouldn't be merged now and we should really consider all the
+> >> consequences.
+> >>
+> >> Let me summarize my main concerns here as well. The proposed
+> >> implementation doesn't apply the provided nodemask to the whole reclaim
+> >> process. This means that demotion can happen outside of the mask so the
+> >> the user request cannot really control demotion targets and that limits
+> >> the interface should there be any need for a finer grained control in
+> >> the future (see an example in [2]).
+> >> Another problem is that this can limit future reclaim extensions because
+> >> of existing assumptions of the interface [3] - specify only top-tier
+> >> node to force the aging without actually reclaiming any charges and
+> >> (ab)use the interface only for aging on multi-tier system. A change to
+> >> the reclaim to not demote in some cases could break this usecase.
+> >>
+> >
+> > I think this is correct. My use case is to request from the kernel to
+> > do demotion without reclaim in the cgroup, and the reason for that is
+> > stated in the commit message:
+> >
+> > "Reclaim and demotion incur different latency costs to the jobs in the
+> > cgroup. Demoted memory would still be addressable by the userspace at
+> > a higher latency, but reclaimed memory would need to incur a
+> > pagefault."
+> >
+> > For jobs of some latency tiers, we would like to trigger proactive
+> > demotion (which incurs relatively low latency on the job), but not
+> > trigger proactive reclaim (which incurs a pagefault). I initially had
+> > proposed a separate interface for this, but Johannes directed me to
+> > this interface instead in [1]. In the same email Johannes also tells
+> > me that meta's reclaim stack relies on memory.reclaim triggering
+> > demotion, so it seems that I'm not the first to take a dependency on
+> > this. Additionally in [2] Johannes also says it would be great if in
+> > the long term reclaim policy and demotion policy do not diverge.
+> >
+> > [1] https://lore.kernel.org/linux-mm/Y35fw2JSAeAddONg@cmpxchg.org/
+> > [2] https://lore.kernel.org/linux-mm/Y36fIGFCFKiocAd6@cmpxchg.org/
 > 
-> The failure happens when we
-> 1) call apply_relocate_add() on klp load (or module first load,
->    if klp was loaded first);
-> 2) do nothing when the module is unloaded;
-> 3) call apply_relocate_add() on module reload, which failed.
-> 
-> The failure happens at this check in restore_r2():
-> 
->         if (*instruction != PPC_RAW_NOP()) {
->                 pr_err("%s: Expected nop after call, got %08x at %pS\n",
->                         me->name, *instruction, instruction);
->                 return 0;
->         }
-> 
-> Therefore, apply_relocate_add only fails when "location + 1"
-> is not NOP. And to make it not fail, we only need to write NOP to
-> "location + 1" in clear_relocate_add().
+> After these discussion, I think the solution maybe use different
+> interfaces for "proactive demote" and "proactive reclaim".  That is,
+> reconsider "memory.demote".  In this way, we will always uncharge the
+> cgroup for "memory.reclaim".  This avoid the possible confusion there.
+> And, because demotion is considered aging, we don't need to disable
+> demotion for "memory.reclaim", just don't count it.
 
-Yes, this should be enough to pass the existing check.
+Hm, so in summary:
 
-> IIUC, you want clear_relocate_add() to undo everything we did
-> in apply_relocate_add(); while I was writing clear_relocate_add()
-> to make the next apply_relocate_add() not fail.
-> 
-> I agree that, based on the name, clear_relocate_add() should
-> undo everything by apply_relocate_add(). But I am not sure how
-> to handle some cases. For example, how do we undo
-> 
->                 case R_PPC64_ADDR32:
->                         /* Simply set it */
->                         *(u32 *)location = value;
->                        break;
->
-> Shall we just write zeros? I don't think this matters.
+1) memory.reclaim would demote and reclaim like today, but it would
+   change to only count reclaimed pages against the goal.
 
-I guess that it would be zeros as we do in x86_64.
+2) memory.demote would only demote.
 
+   a) What if the demotion targets are full? Would it reclaim or fail?
 
-> I think this is the question we should answer first:
-> What shall clear_relocate_add() do?
-> 1) undo everything by apply_relocate_add();
-> 2) only do things needed to make the next
->    apply_relocate_add succeed;
-> 3) something between 1) and 2).
-
-Good question.
-
-Hmm, the commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24
-relocation support of livepatch symbols") suggests that all symbols
-in the section SHN_LIVEPATCH have the type R_PPC_REL24. AFAIK, the
-kernel livepatches are the only user of the clear_relocate_add()
-feature.
-
-If the above is correct then it might be enough to clear only
-R_PPC_REL24 type. And it might be enough to warn when clear_relocate_add()
-is called for another type so that we know when the relocations
-were not cleared properly.
-
-Good question.  We might need some input from people familiar
-with the architecture and creating the livepatches.
-
-Best Regards,
-Petr
+3) Would memory.reclaim and memory.demote still need nodemasks? Would
+   they return -EINVAL if a) memory.reclaim gets passed only toptier
+   nodes or b) memory.demote gets passed any lasttier nodes?
