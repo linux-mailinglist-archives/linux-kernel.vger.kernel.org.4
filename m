@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2375664B9BC
+	by mail.lfdr.de (Postfix) with ESMTP id 7031464B9BD
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiLMQaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S235955AbiLMQaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiLMQaO (ORCPT
+        with ESMTP id S235888AbiLMQaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:30:14 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCD52189F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:30:13 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id z26so5784685lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/3SSmm/UrY9ov0YZBX9cLDjY5MgUVcBzj1GBqULYveA=;
-        b=gepmD4P5WmaNihLk4FLDqomNV87KQP+3LlASTHvoA2eFcfvo/ed0fb9i5qx4ghQcw9
-         E0c3CeC5AY7ZgILK4aKW6BbihZcSppuu7JLcTFjHRLLuJgSLn8oTe+ZLuYhSYEcdgHtO
-         DTVxEsZHkOU3JArxgshFX9BTcMshDrAl061n7BE2Ex8STa2wVEiv3EnbJDimGGqaXBQF
-         CTuGIGsFM4E2Cc/v0YHb7QxRfuzToRaXvOY13jSk8b97UkawHuW57qtv9mJNi6NoWWbY
-         OfA9ZS1izz3BwPd6GzJMP8JI/4N8HS1xsabtJrktbx6WW0wfpPw/0YDSCd0ITpehnWFG
-         kjtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3SSmm/UrY9ov0YZBX9cLDjY5MgUVcBzj1GBqULYveA=;
-        b=6QhIHCT5srBzhIPnyoWoPs1jwVqXVof0d62IuD4TkPzXxDYufLl2V40flIsGoK8VCU
-         1d8Ysiyg+D8zdqxz19YkiU/eRWtZA60u42MkQ3BpXz2FhzDko3phD7amzmNtuS8m8cMy
-         B1WoePPPdZzS3YO1ZCCftpVOZMIXAeyHbp7OXIgHRr4S2yiNoPg4C/oULcWY2/KRZwp7
-         DQ+hBs6grRNZXcoZezQxCkS90DCPhFPzR4MGNIhmN6n1F5bTNH/oPgvWkR69QM8FENZ8
-         LgzjPqwh0dTDxCfJS64vUdZmyXF3eCToCYQQ4FPcMh/OXUa1PNeLo3u8T2KtljR67CPx
-         UjKg==
-X-Gm-Message-State: ANoB5pmxr0PHqj99DtJLrrMHC7nk+gtSorT+om3PkqXM30CqBlL6sD16
-        AjkmQsS7o4VM4zPzKS6S+Ctx4Q==
-X-Google-Smtp-Source: AA0mqf5QSLmfigRkLLT+tYJeVGs57UO57i8jBpV/wkL/rUs/C66Kzm9lt9pLeU8yVNXpkoSHB6LQfA==
-X-Received: by 2002:ac2:5bc9:0:b0:4b5:76a2:8ad4 with SMTP id u9-20020ac25bc9000000b004b576a28ad4mr5922231lfn.0.1670949011589;
-        Tue, 13 Dec 2022 08:30:11 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t27-20020ac24c1b000000b004a0589786ddsm430835lfq.69.2022.12.13.08.30.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 08:30:11 -0800 (PST)
-Message-ID: <e57ffec7-6757-5cd8-7764-28f6edb95985@linaro.org>
-Date:   Tue, 13 Dec 2022 17:30:09 +0100
+        Tue, 13 Dec 2022 11:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117251FCDE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FF3361610
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E746EC433D2;
+        Tue, 13 Dec 2022 16:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670949016;
+        bh=LloHy53SbXLXbE3aV7SnS0epf3d4eEaPG0nvPWm1AfQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ajLW80LQJ3VakJm1vjQtecugwbpUXmVGTeOltV/ruIhdblqugqrCiSNPTuS5u0KxQ
+         +AoXgGKh9IXYpmjNSUbqWDDgfThQoOC0GzictRr7n1Y3EJ/nKg9G531pGCQw5RWrKH
+         dWOi0nZoFHH9czhdqyO7QFd41RZuwKMSrdkx9W8saAaY1BikzPiZUQJyU+ie75EVYn
+         hZe/in+IWMD2AOaeE2m072RgMAtHKWVwExE8N/7go2Cj77QhjyBLIMVV6G+zJklC72
+         9fR5KNR9zkX2JFSRV3KvwfDe5flMLJKBqmFA63/NLhDstGpe3wRG0RVaYokLroUEUR
+         CHGJy/GgMt/RQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C936CE50D97;
+        Tue, 13 Dec 2022 16:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 04/13] arm64: dts: qcom: sc7180: Remove reg-names
- property from LLCC node
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, stable@vger.kernel.org
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-5-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221212123311.146261-5-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/1] riscv: Fix P4D_SHIFT definition for 3-level page table
+ mode
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167094901682.29011.15971870673116736802.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Dec 2022 16:30:16 +0000
+References: <20221201135128.1482189-1-alexghiti@rivosinc.com>
+In-Reply-To: <20221201135128.1482189-1-alexghiti@rivosinc.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        panqinglin2020@iscas.ac.cn, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
-> The LLCC block has several banks each with a different base address
-> and holes in between. So it is not a correct approach to cover these
-> banks with a single offset/size. Instead, the individual bank's base
-> address needs to be specified in devicetree with the exact size.
+Hello:
+
+This patch was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Thu,  1 Dec 2022 14:51:27 +0100 you wrote:
+> +cc linux-mm since I'm struggling to know how bad is this issue and
+> if this should be picked for 6.1-rc8 or not.
 > 
-> On SC7180, there is only one LLCC bank available. So only change needed is
-> to remove the reg-names property from LLCC node to conform to the binding.
+> I tested this fix on an Ubuntu kernel in sv39 mode without any issue
+> but the version without the fix seems to work fine too, either this is
+> not a real issue or I don't exercise the right thing to make it visible.
 > 
-> The driver is expected to parse the reg field based on index to get the
-> addresses of each LLCC banks.
-> 
-> Cc: <stable@vger.kernel.org> # 5.6
+> [...]
 
-Oh, no, there is no single bug here. Binding from v5.6+ (which cannot be
-changed) required/defined such reg-names. This is neither a bug nor
-possible to backport.
+Here is the summary with links:
+  - [1/1] riscv: Fix P4D_SHIFT definition for 3-level page table mode
+    https://git.kernel.org/riscv/c/71fc3621efc3
 
-> Fixes: c831fa299996 ("arm64: dts: qcom: sc7180: Add Last level cache controller node")
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Drop.
-
-> Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index f71cf21a8dd8..b0d524bbf051 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -2759,7 +2759,6 @@ dc_noc: interconnect@9160000 {
->  		system-cache-controller@9200000 {
->  			compatible = "qcom,sc7180-llcc";
->  			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
-> -			reg-names = "llcc_base", "llcc_broadcast_base";
-
-That's an ABI break...
-
->  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-
-Best regards,
-Krzysztof
 
