@@ -2,213 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B7D64B812
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD31564B815
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbiLMPIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S234607AbiLMPIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:08:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbiLMPH4 (ORCPT
+        with ESMTP id S236061AbiLMPIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:07:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0A692188A;
-        Tue, 13 Dec 2022 07:07:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D157E2F4;
-        Tue, 13 Dec 2022 07:08:33 -0800 (PST)
-Received: from [10.57.87.129] (unknown [10.57.87.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 115063F71E;
-        Tue, 13 Dec 2022 07:07:50 -0800 (PST)
-Message-ID: <741b64c2-0b09-6475-5736-d2cd3e33c34c@arm.com>
-Date:   Tue, 13 Dec 2022 15:07:46 +0000
+        Tue, 13 Dec 2022 10:08:49 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F369266
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:08:48 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id d14so18101140edj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:08:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fmCSRNYWGRh53ANKHIG9zq2BxJtN1OCNfzLk/Oj3LyI=;
+        b=kguGhTJ+Ndrw26kfqS1x05TdFZofEt0wYOIaG0NPY+Zl9ZuQLI4hkznOrhzIPa5YGH
+         zfc0Tx0gqFBz84QCwZamDYAyq0aw0MMfgCX8/2cgXZKiQ8KOLco2cKreU4dyfaHoH/O7
+         zNYYrRAxWPyBxPkcB9HbWzkQMnxQf0RK+Mmg0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fmCSRNYWGRh53ANKHIG9zq2BxJtN1OCNfzLk/Oj3LyI=;
+        b=z56qPZD7jVF7ImV0njLg0xIH2tEc0jLlwsM8Q1o/VBPfVNDJJ4i/+j731ANnfYui1n
+         SRRxmsSzcmHW9+gZgGtJgyUkBu7vtkU8OZhCmR8zqS6cJx/MpO+tN0PMSNE+5jlXTvuj
+         CqOUn13avB+Wfg3HKifQ1XpCV0GH7V6nWnjlOvCRllsqlzb3f6TPdEbM4iMtsEQRU/i7
+         w3GJoS2X4jVV7D/JB4PaMZWFojKmuHfuI8GAquAVoLpmkZDb2g5eH4H0y6WA5Rv8n4SU
+         8sSyV5VxocqCaRRFk3Tx5Yb4y/Ju094ELUO+fphd5Pqn0rFyfKXWtuHWRN8CToN33nWb
+         iafA==
+X-Gm-Message-State: ANoB5pn2cJinCswm2ltLJX8+cx21OuZoKnmjvngU4I4S1TRyacip+8Tr
+        2l/r/9gMBUS5s/tjSnucJKmBkg==
+X-Google-Smtp-Source: AA0mqf58O4Ns2Pwe7vT7aqwJgWWVvv3vGYdcJGMxOQCS1foLblD+NNjkGuZh7h11Cq1hfhivDgWaNw==
+X-Received: by 2002:a05:6402:3710:b0:45c:835b:8fb3 with SMTP id ek16-20020a056402371000b0045c835b8fb3mr15637831edb.30.1670944127112;
+        Tue, 13 Dec 2022 07:08:47 -0800 (PST)
+Received: from alco.roam.corp.google.com ([100.104.168.209])
+        by smtp.gmail.com with ESMTPSA id i15-20020a50fd0f000000b0046b4e0fae75sm5070258eds.40.2022.12.13.07.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 07:08:46 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 13 Dec 2022 16:08:22 +0100
+Subject: [PATCH] xhci-pci: set the dma max_seg_size
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] remoteproc: qcom_q6v5_mss: Use a carveout to
- authenticate modem headers
-Content-Language: en-GB
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        manivannan.sadhasivam@linaro.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, sumit.semwal@linaro.org,
-        will@kernel.org, catalin.marinas@arm.com
-References: <20221213140724.8612-1-quic_sibis@quicinc.com>
- <20221213140724.8612-5-quic_sibis@quicinc.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20221213140724.8612-5-quic_sibis@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20221213-xhci-max_seg_size-v1-0-608f716a3792@chromium.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1151; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=dnER4XXok/jcs6u5Dn/oTOUm9ImEIHCydXeSr3eDf9c=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmJV3L8s4WP9dFOY1ICJVhhrMxiLx29uWVGYiOrZu
+ Y1rzt/iJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5iVdwAKCRDRN9E+zzrEiKtsEA
+ CVdiyfiAKrzrdAgVEZHiEXJ7k2+96oeUwCVcF6vuON+IVpDOiU+vqSlv6dqjugCwaA1OuSDZYOD/dd
+ bYQnJcG7YrMpKHTQsd0qRaf/f5/KxTL+M7q/5y17hp86PH6vKhofJpNRoXLXgqab1C6V09ZQMljaqC
+ 2bOAkCoD12u2dkAVAiUJNZCo7ITTUK6f6wgtl1WlFmwcZilRxW00ZvP7M5zU54zFwtibJ/Lgm+tOlc
+ Vvj2K2FffEbe/yLllbXN7mqsAGqoVAvAP+Ppv5IfyTRabQ9HLFxkiqMRDM1QgS9WmrERFbGd4iCJYH
+ EAKgJolrnarFIa6OiGmve9AIPcMaLl2IWSR3RNrOGq7f/uuO/+Ja15ZrrG+WXVrLfXQ8y4HLS+JSmo
+ dHZrPuIX25VinT1dXf7hwmJqv6hOEZGyLeRoIzN9d4D5ZXmFq+1N46WOh332GmBmQ7AtOCbOeKBiZH
+ Sy/800gqdF4yxGePFiuiV0mUzrj7TZkXbx9DPmRfV1uyc6coNfdNuK7R2VnUSEuc/9xcKH27XAZ6Ch
+ 0hGXtJdRc5o6HAetElUHajHuJbAM8kFIHnZaUC9QY9cJYabPIG2YP88sqr78/ed0NGHALRLL1929jc
+ fNquFZe/9Y/KdiWsDSTEd17gf1JLko2iYGBcm7hwQI6bCOqsk+sKI/7nNsPQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-13 14:07, Sibi Sankar wrote:
-> The memory region allocated using dma_alloc_attr with no kernel mapping
-> attribute set would still be a part of the linear kernel map. Any access
-> to this region by the application processor after assigning it to the
-> remote Q6 will result in a XPU violation. Fix this by replacing the
-> dynamically allocated memory region with a no-map carveout and unmap the
-> modem metadata memory region before passing control to the remote Q6.
-> 
-> Reported-by: Amit Pundir <amit.pundir@linaro.org>
-> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
-> 
-> The addition of the carveout and memunmap is required only on SoCs that
-> mandate memory protection before transferring control to Q6, hence the
-> driver falls back to dynamic memory allocation in the absence of the
-> modem metadata carveout.
+Allow devices to have dma operations beyond 64K, and avoid warnings such
+as:
 
-The DMA_ATTR_NO_KERNEL_MAPPING stuff is still broken and pointless, so 
-I'd expect to see this solution replacing it, not being added alongside. 
-It's just silly to say pass the "I don't need a CPU mapping" flag, then 
-manually open-code the same CPU mapping you would have got if you 
-hadn't, in a way that only works at all when a cacheable alias exists 
-anyway.
+xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
 
-Thanks,
-Robin.
+Cc: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+To: Mathias Nyman <mathias.nyman@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/usb/host/xhci-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->   drivers/remoteproc/qcom_q6v5_mss.c | 85 +++++++++++++++++++++---------
->   1 file changed, 61 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index fddb63cffee0..8264275ecbd0 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -211,6 +211,7 @@ struct q6v5 {
->   	size_t mba_size;
->   	size_t dp_size;
->   
-> +	phys_addr_t mdata_phys;
->   	phys_addr_t mpss_phys;
->   	phys_addr_t mpss_reloc;
->   	size_t mpss_size;
-> @@ -935,6 +936,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->   {
->   	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS | DMA_ATTR_NO_KERNEL_MAPPING;
->   	unsigned long flags = VM_DMA_COHERENT | VM_FLUSH_RESET_PERMS;
-> +	void *mdata_region;
->   	struct page **pages;
->   	struct page *page;
->   	dma_addr_t phys;
-> @@ -951,34 +953,48 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->   	if (IS_ERR(metadata))
->   		return PTR_ERR(metadata);
->   
-> -	page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
-> -	if (!page) {
-> -		kfree(metadata);
-> -		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
-> -		return -ENOMEM;
-> -	}
-> +	if (qproc->mdata_phys) {
-> +		mdata_region = memremap(qproc->mdata_phys, size, MEMREMAP_WC);
-> +		if (!mdata_region) {
-> +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
-> +				&qproc->mdata_phys, size);
-> +			ret = -EBUSY;
-> +			goto free_dma_attrs;
-> +		}
->   
-> -	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
-> -	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
-> -	if (!pages) {
-> -		ret = -ENOMEM;
-> -		goto free_dma_attrs;
-> -	}
-> +		memcpy(mdata_region, metadata, size);
-> +		memunmap(mdata_region);
-> +		phys = qproc->mdata_phys;
-> +	} else {
-> +		page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
-> +		if (!page) {
-> +			kfree(metadata);
-> +			dev_err(qproc->dev, "failed to allocate mdt buffer\n");
-> +			return -ENOMEM;
-> +		}
->   
-> -	for (i = 0; i < count; i++)
-> -		pages[i] = nth_page(page, i);
-> +		count = PAGE_ALIGN(size) >> PAGE_SHIFT;
-> +		pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
-> +		if (!pages) {
-> +			ret = -ENOMEM;
-> +			goto free_dma_attrs;
-> +		}
->   
-> -	vaddr = vmap(pages, count, flags, pgprot_dmacoherent(PAGE_KERNEL));
-> -	kfree(pages);
-> -	if (!vaddr) {
-> -		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
-> -		ret = -EBUSY;
-> -		goto free_dma_attrs;
-> -	}
-> +		for (i = 0; i < count; i++)
-> +			pages[i] = nth_page(page, i);
->   
-> -	memcpy(vaddr, metadata, size);
-> +		vaddr = vmap(pages, count, flags, pgprot_dmacoherent(PAGE_KERNEL));
-> +		kfree(pages);
-> +		if (!vaddr) {
-> +			dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
-> +			ret = -EBUSY;
-> +			goto free_dma_attrs;
-> +		}
->   
-> -	vunmap(vaddr);
-> +		memcpy(vaddr, metadata, size);
-> +
-> +		vunmap(vaddr);
-> +	}
->   
->   	/* Hypervisor mapping to access metadata by modem */
->   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
-> @@ -1008,7 +1024,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
->   			 "mdt buffer not reclaimed system may become unstable\n");
->   
->   free_dma_attrs:
-> -	dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
-> +	if (!qproc->mdata_phys)
-> +		dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
->   	kfree(metadata);
->   
->   	return ret < 0 ? ret : 0;
-> @@ -1882,6 +1899,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->   	qproc->mpss_phys = qproc->mpss_reloc = r.start;
->   	qproc->mpss_size = resource_size(&r);
->   
-> +	if (!child) {
-> +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
-> +	} else {
-> +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
-> +		node = of_parse_phandle(child, "memory-region", 0);
-> +		of_node_put(child);
-> +	}
-> +
-> +	if (!node)
-> +		return 0;
-> +
-> +	ret = of_address_to_resource(node, 0, &r);
-> +	of_node_put(node);
-> +	if (ret) {
-> +		dev_err(qproc->dev, "unable to resolve metadata region\n");
-> +		return ret;
-> +	}
-> +
-> +	qproc->mdata_phys = r.start;
-> +
->   	return 0;
->   }
->   
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 7bccbe50bab1..116a2f328772 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -453,6 +453,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
+ 		pm_runtime_allow(&dev->dev);
+ 
++	dma_set_max_seg_size(&dev->dev, UINT_MAX);
++
+ 	return 0;
+ 
+ put_usb3_hcd:
+
+---
+base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+change-id: 20221213-xhci-max_seg_size-de366fbf12bc
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
