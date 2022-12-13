@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B3F64AD99
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE29464AD9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiLMC0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:26:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S233880AbiLMC2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiLMC0V (ORCPT
+        with ESMTP id S233757AbiLMC2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:26:21 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF75625E;
-        Mon, 12 Dec 2022 18:26:20 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id gt4so1882171pjb.1;
-        Mon, 12 Dec 2022 18:26:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mWLAHlaacUeR4U3imT5Jn5UVOaxNTjElTnRgxyZnEM4=;
-        b=DBmWrEliJz5TUxbKwl6VFRRxVHXmYJV5zdjVOvfI3mfDYyOqZRCYUYdXUDZPe09a5d
-         VzdgXIau7RVv5+RXT5OWq60aq14TRyZMiJrd1AfbvdPscYZXnK9bbOtsvaSp8Hm0T4ir
-         UsXpdmwuwnH5BZXiMVMy9PnesoNTVSfRO2Zprpincxxy0grafHdiaeT+K6GtfDPUzsS/
-         DwPHSVeFxGY3YVcqL2wLNQTE3bw/J3BYGoaYvhLJJxGlVts/j2SNnwAk710EzFJ56HJb
-         XFAyEjh5laWHRdN5ek207fPjGHyElLfxVOPHxdDeuFpiNR+T/zOnJ554pdmzUxtisYeA
-         UZKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mWLAHlaacUeR4U3imT5Jn5UVOaxNTjElTnRgxyZnEM4=;
-        b=aAs0W9P6rEGh35GI0L/HeF1l33leHe8YbnN1ikX2ZvTrWpGo+ft8HWlSeT1qJCL1K0
-         Q7B2eYFSAC8Vc0sK1OQ+M1Re8aAIwibccGFYA0/9xQYwbcQieTxZTAyxE1e8f+LGtsha
-         aJEiS9Ztapd51TS7W9+r86Z7RE8ll7Bldc4MCuvn5jRrYIOH8PVedAi+oVGuapHBvQsP
-         5HOaOwkEm5pyKZplmrSlK+kaLRQw0aDGa0/2sLpwZkZ2YBsrRr2KrcW7XGGWTYpUxplO
-         JCnZ+ZwB5iSL05XeIDEAe1nWO4y9UD9owfzs36Hxyn8SWwSdUabDnvfbFv9AziUtbXEk
-         tX7Q==
-X-Gm-Message-State: ANoB5pl7g3VGrm7J0vYZ+nL9ff+hGBR+r2aiBqn2JX4s3oHUYgUy/xxg
-        RS7ZCHj9PVkSkyzIuFfxDg==
-X-Google-Smtp-Source: AA0mqf5t5DXABoJRK3+UIHLX0G5uv+bR5iZaOdnkA+v3z7cKVQlxLuutN6GDN5LtY6IFrbuN+HwGCw==
-X-Received: by 2002:a17:903:1d0:b0:188:f5de:891f with SMTP id e16-20020a17090301d000b00188f5de891fmr24276903plh.11.1670898379806;
-        Mon, 12 Dec 2022 18:26:19 -0800 (PST)
-Received: from smtpclient.apple ([144.214.0.6])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170903120700b00189f2fdbdd0sm7090302plh.234.2022.12.12.18.26.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Dec 2022 18:26:19 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-From:   Hao Sun <sunhao.th@gmail.com>
-In-Reply-To: <Y5dDArARol3gfVNf@krava>
-Date:   Tue, 13 Dec 2022 10:26:13 +0800
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@meta.com>, Song Liu <song@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0B62D35A-E695-4B7A-A0D4-774767544C1A@gmail.com>
-References: <Y5NSStSi7h9Vdo/j@krava>
- <5c9d77bf-75f5-954a-c691-39869bb22127@meta.com> <Y5OuQNmkoIvcV6IL@krava>
- <ee2a087e-b8c5-fc3e-a114-232490a6c3be@iogearbox.net> <Y5O/yxcjQLq5oDAv@krava>
- <96b0d9d8-02a7-ce70-de1e-b275a01f5ff3@iogearbox.net>
- <20221209153445.22182ca5@kernel.org> <Y5PNeFYJrC6D4P9p@krava>
- <CAADnVQKr9NYektHFq2sUKMxxXJVFHcMPWh=pKa08b-yM9cgAAQ@mail.gmail.com>
- <Y5SFho7ZYXr9ifRn@krava> <Y5dDArARol3gfVNf@krava>
-To:     Jiri Olsa <olsajiri@gmail.com>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
+        Mon, 12 Dec 2022 21:28:11 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28A913D22
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:28:09 -0800 (PST)
+Received: from gproxy1-pub.mail.unifiedlayer.com (unknown [69.89.25.95])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 989F6802B61C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:28:05 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 8D5A810046667
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:27:44 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 4v1Epo4jFhMe54v1EpTtB1; Tue, 13 Dec 2022 02:27:44 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Ncoja0P4 c=1 sm=1 tr=0 ts=6397e320
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=sHyYjHe8cH0A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=N+7fP/bRQQgVoPJvAKgSsxxh7fQbFWp0IBG6nzw7i3Y=; b=F/P6gbS1Bsz4nLUUFgZ3qHNoj6
+        q9esYckOKdXSVz5fOxt+tJ2U5gskUT2DMQrWDq+WXblJo0sdjY4VUmB1ykHKnaBa+4kLT4ZyptuSk
+        28dA2gAD4P2gIU4/xdlXUQsIghBKbh/v4RefJzam12KWO13FK/Zw47SzFEqtaB9MSqobG7rOIwTVO
+        FLVNIRSRxc5J25XKdjUG9mHLb4fw2PKBjYxx8oXp0VWxZ6ipUTVXvNZeO0NVZHmbu+ZLoLj0w39on
+        3X1Pm8l6pziBoqRwPGCitnSirC/pwcbIhbBm8Lfp8MlBEZq2RfD6iIMNUxN4Q6SqD1CJB7j/VuR1i
+        Np0ajE+A==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32828 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1p4v1D-002qgr-65;
+        Mon, 12 Dec 2022 19:27:43 -0700
+Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221212130934.337225088@linuxfoundation.org>
+In-Reply-To: <20221212130934.337225088@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <170a1794-ff53-b620-af4a-1e856a6c8fb3@w6rz.net>
+Date:   Mon, 12 Dec 2022 18:27:37 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1p4v1D-002qgr-65
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:32828
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,102 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/12/22 5:15 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.13 release.
+> There are 157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.13-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> On 12 Dec 2022, at 11:04 PM, Jiri Olsa <olsajiri@gmail.com> wrote:
->=20
-> On Sat, Dec 10, 2022 at 02:11:34PM +0100, Jiri Olsa wrote:
->> On Fri, Dec 09, 2022 at 05:12:03PM -0800, Alexei Starovoitov wrote:
->>> On Fri, Dec 9, 2022 at 4:06 PM Jiri Olsa <olsajiri@gmail.com> wrote:
->>>>=20
->>>> On Fri, Dec 09, 2022 at 03:34:45PM -0800, Jakub Kicinski wrote:
->>>>> On Sat, 10 Dec 2022 00:32:07 +0100 Daniel Borkmann wrote:
->>>>>> fwiw, these should not be necessary, =
-Documentation/RCU/checklist.rst :
->>>>>>=20
->>>>>>   [...] One example of non-obvious pairing is the XDP feature in =
-networking,
->>>>>>   which calls BPF programs from network-driver NAPI (softirq) =
-context. BPF
->>>>>>   relies heavily on RCU protection for its data structures, but =
-because the
->>>>>>   BPF program invocation happens entirely within a single =
-local_bh_disable()
->>>>>>   section in a NAPI poll cycle, this usage is safe. The reason =
-that this usage
->>>>>>   is safe is that readers can use anything that disables BH when =
-updaters use
->>>>>>   call_rcu() or synchronize_rcu(). [...]
->>>>>=20
->>>>> FWIW I sent a link to the thread to Paul and he confirmed
->>>>> the RCU will wait for just the BH.
->>>>=20
->>>> so IIUC we can omit the rcu_read_lock/unlock on bpf_prog_run_xdp =
-side
->>>>=20
->>>> Paul,
->>>> any thoughts on what we can use in here to synchronize =
-bpf_dispatcher_change_prog
->>>> with bpf_prog_run_xdp callers?
->>>>=20
->>>> with synchronize_rcu_tasks I'm getting splats like:
->>>>  =
-https://lore.kernel.org/bpf/20221209153445.22182ca5@kernel.org/T/#m0a869f9=
-3404a2744884d922bc96d497ffe8f579f
->>>>=20
->>>> synchronize_rcu_tasks_rude seems to work (patch below), but it also =
-sounds special ;-)
->>>=20
->>> Jiri,
->>>=20
->>> I haven't tried to repro this yet, but I feel you're on
->>> the wrong path here. The splat has this:
->>> ? bpf_prog_run_xdp include/linux/filter.h:775 [inline]
->>> ? bpf_test_run+0x2ce/0x990 net/bpf/test_run.c:400
->>> that test_run logic takes rcu_read_lock.
->>> See bpf_test_timer_enter.
->>> I suspect the addition of synchronize_rcu_tasks_rude
->>> only slows down the race.
->>> The synchronize_rcu_tasks_trace also behaves like synchronize_rcu.
->>> See our new and fancy rcu_trace_implies_rcu_gp(),
->>> but I'm not sure it applies to synchronize_rcu_tasks_rude.
->>> Have you tried with just synchronize_rcu() ?
->>> If your theory about the race is correct then
->>> the vanila sync_rcu should help.
->>> If not, the issue is some place else.
->>=20
->> synchronize_rcu seems to work as well, I'll keep the test
->> running for some time
->=20
-> looks good, Hao Sun, could you please test change below?
-
-Hi,
-
-Tested on a latest bpf-next build. The reproducer would trigger
-the Oops in 5 mins without the patch. After applying the patch,
-the reproducer cannot trigger any issue for more than 15 mins.
-Seems working, tested on:
-
-HEAD commit: ef3911a3e4d6 docs/bpf: Reword docs for =
-BPF_MAP_TYPE_SK_STORAGE
-git tree: bpf-next
-kernel config: https://pastebin.com/raw/rZdWLcgK
-C reproducer: https://pastebin.com/raw/GFfDn2Gk
-
->=20
-> ---
-> diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-> index c19719f48ce0..4b0fa5b98137 100644
-> --- a/kernel/bpf/dispatcher.c
-> +++ b/kernel/bpf/dispatcher.c
-> @@ -124,6 +124,7 @@ static void bpf_dispatcher_update(struct =
-bpf_dispatcher *d, int prev_num_progs)
-> }
->=20
-> __BPF_DISPATCHER_UPDATE(d, new ?: (void *)&bpf_dispatcher_nop_func);
-> + synchronize_rcu();
->=20
-> if (new)
-> d->image_off =3D noff;
-
+Tested-by: Ron Economos <re@w6rz.net>
 
