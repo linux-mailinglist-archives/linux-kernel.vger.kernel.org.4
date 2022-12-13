@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8DF64AFFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1805A64B009
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbiLMGmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S234496AbiLMGs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiLMGmk (ORCPT
+        with ESMTP id S233753AbiLMGs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:42:40 -0500
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC15322D;
-        Mon, 12 Dec 2022 22:42:36 -0800 (PST)
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2BD6gDld018514;
-        Tue, 13 Dec 2022 15:42:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BD6gDld018514
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1670913734;
-        bh=uof4Oi5ZlD/xu/NRlW/T86pqlgXeRWN0YTEJnxzGLus=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AVSpwQNJLuaosDl98MioEZ2C3qUhLdyq9+9Me4XhbsmjbPB7aWVh0nXe6VQvIIs6h
-         zSEdjPlvpk/klF3tyLYvdDRJHiEzuZWTpXxHUaqATZD4yNZiQnu96H6ggPtbivT6at
-         yQ2CYLoHTyFQKuVS7PwrZiWxHna72ZERGEXtZYk9+6FLOUqd+jR5Dm90kEyvnduHYK
-         CRQ+Jvyz0mtgbj99rStP6AzMIRGp3TbzIeP3boDt11iwte4aqB/GrB05t3KmYahxeZ
-         wT3OYAYnur7NwmNAgLupBudz5npAt9xEOr/sECtcqeSZWB04rZ2PMq7UnxDDtsVK6L
-         sE2RteoC+d/ag==
-X-Nifty-SrcIP: [209.85.167.180]
-Received: by mail-oi1-f180.google.com with SMTP id q186so13399546oia.9;
-        Mon, 12 Dec 2022 22:42:13 -0800 (PST)
-X-Gm-Message-State: ANoB5pnIExTONrsyLDE/3UgcpqkEbL9CrGglttlQyp2AChRoYJbSJZQ8
-        ria0Poaw/+uWjGK/8NIP3c0TPPeFAD+qgoHkCBY=
-X-Google-Smtp-Source: AA0mqf6ynR5REOf0PBjTspgI+eSKGT0FaXuNT7P+tPKp7jhMgInWEwXVviDRyA3kr2DMx8/bPvU6u9lsNmF0946ORwM=
-X-Received: by 2002:a05:6808:aaf:b0:354:94a6:a721 with SMTP id
- r15-20020a0568080aaf00b0035494a6a721mr73151oij.194.1670913732802; Mon, 12 Dec
- 2022 22:42:12 -0800 (PST)
+        Tue, 13 Dec 2022 01:48:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1607817E25;
+        Mon, 12 Dec 2022 22:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s0r3sKZ22FIW4RvgWC+odYHiBjrvzyEHiairyKLURUw=; b=Fm6ZNDDEmC3fVLokI8VI0Gp2MS
+        Yh8D7Z85GByribjANlhRTC6B/h6YIlKrFAQHvCcVzw+9DOKKK7UkrjjRAhjdEKIZRgS7CQYm3Tcfq
+        3JCkXGKhXxCwv76phRO+ch2i56rSxizrcJN4qDcOdxwmdm3xPyT69TcMYIEzKwj+fogN1QKOXMGh9
+        qsHMLVS7x9/gMv6Lxvaq91BRXMAwjJAsw852mPRphL/7O7d+H5TiUOu7Wdx4whLSQ8Th7XMmbqGJG
+        GmsFz+lDdQxVtbjr0sBEBhEZOyKElejvc9NRU9qr5x/xNSvOgr/VlZtDqGUKm0NxBFPjO0nUhj3+y
+        KuL5dk/A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p4z5I-00Btcm-Bb; Tue, 13 Dec 2022 06:48:12 +0000
+Date:   Mon, 12 Dec 2022 22:48:12 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
+ init/do_mounts.c
+Message-ID: <Y5ggLBy+XBjl/vYj@infradead.org>
+References: <cover.1668644705.git.daniel@makrotopia.org>
+ <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
+ <Y3XM62P7CaeKXFsz@infradead.org>
+ <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
+ <Y3zCdJr5dKsADsnM@infradead.org>
+ <Y5NpsmN/npnG8lxY@makrotopia.org>
+ <Y5buTVuu0pfqBQh+@infradead.org>
+ <Y5cKSRmZ45OJq6Qq@makrotopia.org>
 MIME-Version: 1.0
-References: <20221211094919.2717594-1-masahiroy@kernel.org> <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
-In-Reply-To: <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 13 Dec 2022 15:41:36 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
-Message-ID: <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: do not sort after reading modules.order
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5cKSRmZ45OJq6Qq@makrotopia.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 1:18 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Sun 11 Dec 2022 18:49:18 GMT, Masahiro Yamada wrote:
-> > modules.order lists modules in the deterministic order (that is why
-> > "modules order"), and there is no duplication in the list.
->
-> Isn't a subdirectory's modules.order just created by
-> concatenation of $(obj-m) (w/ respect to mentioned subdirs)?
+On Mon, Dec 12, 2022 at 11:02:33AM +0000, Daniel Golle wrote:
+> The thing is that there isn't anything extraordinarily complex here,
+> just dynamically partitioning a block device based on a well-known
+> format.
 
-Not $(obj-m) directly.
+Yes, but a completely non-standard format that nests inside an
+partition.
 
-The magic is $^, which is a deduplicated list
-of prerequisites.
+> Using initramfs implies that we would need a 2nd copy of the standard C
+> library and libfdt, both alone will already occupy more than just a
+> single 64kB block of flash.
 
+Why do you need libfdt?  And with a simple statically linked kpartx
+you won't pull in much of libc either.
 
-> Thus, "no duplication" seems to be true, as long as there is no obj-m
-> containing duplicated entries.  Do we ensure unique entries in obj-m
-> only?
+> I understand that from the point of view of
+> classic x86 servers or even embedded devices with eMMC this seems
+> negligible. However, keep in mind that a huge number of existing
+> devices and also new designs of embedded devices often boot from just a
+> few megabytes of NOR flash, and there every byte counts.
 
+So I've worked quite a bit on really small deeply embedded systems,
+and for those I wouldn't even think of using strange image formats
+or the rather wasteful GPT partition format.
+There we wouldn't dare to use paritions or weird image formats, but
 
-The entries in modules.order must be unique.
-Moreover, the basename of modules must be unique.
+> > What is the point of the uImage.FIT?
+> 
+> It is the format used by Das U-Boot, which is by far the most common
+> bootloader found on small embedded devices running Linux.
+> Is is already used by Das U-Boot to validate and load kernel,
+> devicetree, initramfs, ... to RAM before launching Linux.
+> I've included a link to the documentation[1] which gives insights
+> regarding the motivation to create such a format.
 
-scripts/modules-check.sh is a stronger check.
+That doesn't explain why you'd want to use it.  Nor how people
+came up with it.
 
+> In fact, that's only one out of three possible uses in which parsing
+> the contained sub-image boundaries can be useful:
+>  * On devices with NOR flash uImage.FIT is stored in an MTD partition,
+>    hence the uImage.FIT partition parser (or small stackable block
+>    driver) would then operate on top of /dev/mtdblockX.
+> 
+>  * On devices with NAND flash uImage.FIT is stored in a UBI volume,
+>    hence in this case /dev/ubiblockX needs to be processed.
 
-You might be interested in these commits:
+And all the mtdblock / ubiblock is due to the lack of a native
+mtd/ubi backend for squashfs?  Why can't we take the block layer
+out of the loop entirely?
 
-d724b578a1f746db6fc1fd5e4cbba554a855dc8d
-3a48a91901c516a46a3406ea576798538a8d94d2
+> I hope this explains my motivation. Please ask should there by any
+> doubts or if any of my explainations above are not clear.
 
+None of this explains the silly nesting inside the GPT partition.
+It is not needed for the any use cases and the root probem here.
+Without that you could simply implement a parition format, with that
+you get into crazy nesting behavior.  Note that it would have
+any benefit over just not doing this silly image.
 
+Maybe someone just needs to go back and come up wit ha scheme that
+actually works and implement that in uboot as well.
 
-
->
-> Kind regards,
-> Nicolas
->
-> >
-> > $(sort ) is pointless.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/Makefile.modfinal | 2 +-
-> >  scripts/Makefile.modinst  | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> > index 25bedd83644b..4705d32388f3 100644
-> > --- a/scripts/Makefile.modfinal
-> > +++ b/scripts/Makefile.modfinal
-> > @@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
-> >  include $(srctree)/scripts/Makefile.lib
-> >
-> >  # find all modules listed in modules.order
-> > -modules :=3D $(sort $(shell cat $(MODORDER)))
-> > +modules :=3D $(shell cat $(MODORDER))
-> >
-> >  __modfinal: $(modules)
-> >       @:
-> > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> > index a4c987c23750..f4cff42069ad 100644
-> > --- a/scripts/Makefile.modinst
-> > +++ b/scripts/Makefile.modinst
-> > @@ -9,7 +9,7 @@ __modinst:
-> >  include include/config/auto.conf
-> >  include $(srctree)/scripts/Kbuild.include
-> >
-> > -modules :=3D $(sort $(shell cat $(MODORDER)))
-> > +modules :=3D $(shell cat $(MODORDER))
-> >
-> >  ifeq ($(KBUILD_EXTMOD),)
-> >  dst :=3D $(MODLIB)/kernel
-> > --
-> > 2.34.1
->
-> --
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
-
-
-
---=20
-Best Regards
-Masahiro Yamada
