@@ -2,151 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B485064BDEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6B764BDF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236623AbiLMUaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:30:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
+        id S236991AbiLMUdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236984AbiLMU3y (ORCPT
+        with ESMTP id S235488AbiLMUdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:29:54 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E45CFD1B;
-        Tue, 13 Dec 2022 12:26:25 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id f9so614891pgf.7;
-        Tue, 13 Dec 2022 12:26:25 -0800 (PST)
+        Tue, 13 Dec 2022 15:33:47 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B98D2FD;
+        Tue, 13 Dec 2022 12:33:46 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so4859458pjd.0;
+        Tue, 13 Dec 2022 12:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eunpPqNIioAIh6oggqPAPCImtIarWZxO3LlqXOoyfU=;
-        b=ZnAX3SjX1+BI5veXj4o/UF4Lsjtb07nZ9a2RWWK17Atuf+n8l8h8pwKO4X3pY/k5om
-         pFPjNE/Z5TnrLtLq/iYWa0hr/tkfmpGJuJNLQYs1g0ei1E7Pd5oHPBn9b32fRHmGyXiT
-         4e8XTZvXfK5En7qf/QBAWwdOwUAW+kQoklPu6nL5fv9la9TudN3ka3hszUE0hdeR0lVs
-         9psLKqVnh23ekJf/rd69lngrisc7GazzY/XI4VFKB76qyZag4FF4SRnEFKaStcawU2b8
-         TsOVwKBEWt1P+S9CCOrdMtT3FXDWTKsreHocqTJw4rb9MhmOqFMuk/SfskhOetNSknCN
-         Rr6Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JVo9tWO4+tFIzCaw7Dxokr33Yo7Hq5kcowYIl7lVu98=;
+        b=EcQvr1YL+COLx3NsyZZRsqlApYino4TUJys6im598IJmBDmMbHsywpKq83MY7noaxF
+         tFNntY0izm3v4V6Ho8pYKGXw3jVABTTIM9N7cvUCulUDJSxrCzbfqekNUCXUbEDFI16G
+         Vdj4I/m6TQU7MAZeEEnSdsJyyjmpOzPIXfAR8Xg9ArvRe4Go0Jn0ymSC7W+fJZ50agy6
+         rSppyL4h/QP/ZGPPJk8JgmBdY8xOysomjqsD/aVmik+XyQtMkjMCF9Un02C3b8+ltQkq
+         qU4a9RQ2uvUPrDVqzrs+hpOuNLCmZqy6QkIpFzxukgus14LI6fSPTbhilH8JqkDsonox
+         JHzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3eunpPqNIioAIh6oggqPAPCImtIarWZxO3LlqXOoyfU=;
-        b=4H62Wx+17nxJynR6dysR9ma4rt0cUKkoM5glLfzVDUA8sBE1Py2nCUHWTiLu1AMp9c
-         5uekvtL+j0OOXpPev51mY9xGnX/+vZAkbj2xCCXQnpsHg3vfEXrljZbMLyr994jUV551
-         /ZMP/3vkpOT/2SgFmUSGhjq2DEMlIf+v5d9Ml57XjKU4SCnxRKnfPBjKfFG5+mqSwZQL
-         uA2qR1vCaVI+2BqMXOa3tsxLiB93TSNdnTxBiB5TV6W7sRM6IgZFXAJlb3rwayK+zByz
-         MHyB97tGXX5ufj4c0Y1A0+K5NqCi/YCByGoreHKDs3EqkCsMYEe/GLBH6UV2WdKWY6Vz
-         m7kA==
-X-Gm-Message-State: ANoB5pmEc+rGAMbd1LLyEVD67lkXKEAoAZhWjpdqKGSJG4SurQ3swY5s
-        liTOiNmHCwtKR9m/Bq1YVnA=
-X-Google-Smtp-Source: AA0mqf7kzaiTGwjM7e0zM0LMUECvs/p0b9BGGN/53EWoMXlVd6Nkf4r5tdCqhn5+fPq5BAK3cjMoFw==
-X-Received: by 2002:aa7:8b48:0:b0:56b:ae1d:a3c6 with SMTP id i8-20020aa78b48000000b0056bae1da3c6mr5043203pfd.1.1670963184803;
-        Tue, 13 Dec 2022 12:26:24 -0800 (PST)
-Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
-        by smtp.gmail.com with ESMTPSA id e9-20020aa79809000000b00571bdf45888sm8023394pfl.154.2022.12.13.12.26.19
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JVo9tWO4+tFIzCaw7Dxokr33Yo7Hq5kcowYIl7lVu98=;
+        b=cbNLptTxoBtimYApYM2oWMqW77sl+sYcXchkyvqaBHlpTKgoqyfQsOICJWB81Dn91B
+         K0KAJTE7eDZKSDQovn+gKswn3x+JOj13kP9R0bHUtWdesOPgEBEqN11Lhsqepq+jZhOX
+         1Vl4bT3LFIKosE+Kkm9jJDwkuy62F/xkrSwmENvSNlZObzlY+Rlj5CWEpx3f/IyGIp4a
+         F590fuF/ENMnSh021UXw6nyv9rMcYC/Nbpw1UWG/SaAMuo6ruOuBpBGCuNmVwoWSusvf
+         hYbIRDOGu0GvgCUPkd62cMFjtg19dY6yI8bzepw6mvDGW366xTLCt4nmoWUMm6kvAPvY
+         G+zA==
+X-Gm-Message-State: ANoB5pmq03/n9/mU8uw2ukEuYyLDkWxQskX1oOvvm2quYNqUo0ycSmsY
+        A6n1reoaMo3+olD8XoFhYr0=
+X-Google-Smtp-Source: AA0mqf56z0lAldwwSpk9uf8fo52lyNErJJSQ+uBScPO++9AexA4M8F+CgqsWSrCNi5mxQg/hMODlbg==
+X-Received: by 2002:a05:6a20:441e:b0:ac:16ae:1082 with SMTP id ce30-20020a056a20441e00b000ac16ae1082mr39495811pzb.32.1670963626206;
+        Tue, 13 Dec 2022 12:33:46 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:c415])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902650500b0018971fba556sm303846plk.139.2022.12.13.12.33.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 12:26:24 -0800 (PST)
-Date:   Wed, 14 Dec 2022 09:26:15 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v3] scripts/tags.sh: choose which directories to exclude from
- being indexed
-Message-ID: <Y5jf59VCL/HAt60q@mail.google.com>
+        Tue, 13 Dec 2022 12:33:45 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 13 Dec 2022 10:33:44 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Don <joshdon@google.com>, torvalds@linux-foundation.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        brho@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, Peter Oskolkov <posk@google.com>
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example
+ scheduler
+Message-ID: <Y5jhqOk1mRC+k72x@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-32-tj@kernel.org>
+ <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+ <CABk29Nu5WiCmhNN2jZrTShELbCDOYUziUeW5xojkwB83R+VzEQ@mail.gmail.com>
+ <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5fdgI4uTpXZQ9yn@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's common for drivers that share same physical components to also
-duplicate source code (or at least portions of it). A good example is
-both drivers/gpu/drm/amdgpu/* and drivers/gpu/drm/radeon/* have a header
-file called atombios.h.
+Hello,
 
-While their contents aren't the same, a lot of their structs have
-the exact same names which makes navigating through the code base a bit
-messy as cscope will show up 'references' across drivers which aren't
-exactly correct.
+On Tue, Dec 13, 2022 at 12:30:06PM +0100, Peter Zijlstra wrote:
+> ( Many were already noted by Linus when he NAK'ed loadable schedulers
+>   previously. )
 
-Add IGNORE_DIRS variable, which specifies which directories
-to be ignored from indexing.
+Yeah, many of the points Linus raised still stand. However, that was 15
+years ago and the situation including hardware reality has changed a lot. As
+stated in the cover letter, that makes us (and others) want to try out
+various ideas but the barrier has often been too high to do so at any scale,
+which BPF drasically improves. Given those, I think it'd be worthwhile to
+revisit that discussion.
 
-Example:
-        make ARCH=x86 IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
+> sched_ext also sits at the very bottom of the class stack (it more or
+> less has to) the result is that in order to use it at all, you have to
+> have control over all runnable tasks in the system (a stray CFS task
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Changelog:
+> would interfere quite disastrously) but that is exactly the same
+> constraint you need to make UMCG work.
 
-- v3: change commit message wording and rst syntax (Req Bagas Sanjaya)
-      change makefile variable scope to global, use blank space
-      separator and change variable name to IGNORE_DIRS.
-      (Req: Vipin Sharma)
-- v2: change approach to include everything unless specified by the 
-  IGNOREDIRS variable: (Req: Vipin Sharma)
-- v1: https://lore.kernel.org/lkml/Y5OKDvbGk4Kro6MK@mail.google.com/
----
- Documentation/kbuild/kbuild.rst | 7 +++++++
- scripts/tags.sh                 | 7 +++++++
- 2 files changed, 14 insertions(+)
+One important distinction is that it's a lot easier to have control at the
+system level than at the application code level. Even for us with pretty
+good control over what runs in the fleet, it'd be practically impossible to
+effect that level of application change across the board. The situation is
+further complicated with containers which can be pretty opaque to the
+system. I have a hard time seeing co-operative application-driven scheduling
+working among mutiple applications across the whole system. If we get to
+non-fleet use-cases, it becomes even worse as you don't have enough resource
+on or control over the code base you're running.
 
-diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-index 08f575e6236c..5202186728b4 100644
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -278,6 +278,13 @@ To get all available archs you can also specify all. E.g.::
- 
-     $ make ALLSOURCE_ARCHS=all tags
- 
-+IGNORE_DIRS
-+-----------
-+For tags/TAGS/cscope targets, you can choose which directories won't
-+be included in the databases, separated by blank space. E.g.::
-+
-+    $ make IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
-+
- KBUILD_BUILD_TIMESTAMP
- ----------------------
- Setting this to a date string overrides the timestamp used in the
-diff --git a/scripts/tags.sh b/scripts/tags.sh
-index e137cf15aae9..1ad45f17179a 100755
---- a/scripts/tags.sh
-+++ b/scripts/tags.sh
-@@ -17,6 +17,13 @@ ignore="$(echo "$RCS_FIND_IGNORE" | sed 's|\\||g' )"
- # tags and cscope files should also ignore MODVERSION *.mod.c files
- ignore="$ignore ( -name *.mod.c ) -prune -o"
- 
-+# ignore arbitrary directories
-+if [ -n "${IGNORE_DIRS}" ]; then
-+	for i in ${IGNORE_DIRS}; do
-+		ignore="${ignore} ( -path $i ) -prune -o"
-+	done
-+fi
-+
- # Use make KBUILD_ABS_SRCTREE=1 {tags|cscope}
- # to force full paths for a non-O= build
- if [ "${srctree}" = "." -o -z "${srctree}" ]; then
--- 
-2.38.1
+There may be some overlapping areas between SCX and UMCG but they're very
+different things. After all, we can't let go of system level scheduling
+because some applications have better control over their own sequencing.
 
+As for the CFS starvation issue, I obviously don't find the currently
+proposed behavior too bad - CFS is always the default scheduler and we fall
+back to it whenever the BPF scheduling isn't working out whether that's
+outright bugs in the BPF scheduler implementation or starvation through CFS.
+That said, this comes down to what kind of behavior we wanna show to
+userspace and we can implement whatever is appropriate and acceptable.
+
+Thanks.
+
+--
+tejun
