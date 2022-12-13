@@ -2,75 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6600E64C0AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D33F64C0BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbiLMXc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S235836AbiLMXhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237254AbiLMXb5 (ORCPT
+        with ESMTP id S236514AbiLMXhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:31:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6753959B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:31:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45EC06178F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 23:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 188ECC433D2;
-        Tue, 13 Dec 2022 23:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670974316;
-        bh=XXkExz9DQCzCrKdXMEb9OpDUOZ9/DQ23rbN2cVSca2o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MtgnYlY/R8itN3u8CRHT+fguF8kOFbRWXTRtFuMNCo/JYWYEe8Ge1QQj6H388UmuZ
-         51e5P2T5NGskg0m4XtnOPq0AzVzj5ibcUxdd6fgenGLE3RV9KQ8ANHbGg8/r8zWmmp
-         kO2fA0Ids3fDEbUgvI5NS6eZjeX5d9DAbzjw2yGkXz/i+9egWw0xqY1px2HVrUgqn+
-         Aj63pfTTN24GzlGYSm1tozpGL88v9puZxw80uZSkSDn5UfqQ4H8HU7KHMOt+FaTi3R
-         QXGbX36OjnbwHLVripmd0r2BCzeviC5xOLmCJf2Cduz59bCq9jNV0U5YIZ5PlWvG+w
-         lqerpnybDyjFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 076FAC00445;
-        Tue, 13 Dec 2022 23:31:56 +0000 (UTC)
-Subject: Re: [PULL] xtensa updates for v6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221213155443.3704527-1-jcmvbkbc@gmail.com>
-References: <20221213155443.3704527-1-jcmvbkbc@gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221213155443.3704527-1-jcmvbkbc@gmail.com>
-X-PR-Tracked-Remote: https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20221213
-X-PR-Tracked-Commit-Id: 8939c58d68f97ce530f02d46c9f2b56c3ec88399
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1ca06f1c1acecbe02124f14a37cce347b8c1a90c
-Message-Id: <167097431602.3216.15330410080069651759.pr-tracker-bot@kernel.org>
-Date:   Tue, 13 Dec 2022 23:31:56 +0000
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 18:37:03 -0500
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40A292ED;
+        Tue, 13 Dec 2022 15:36:59 -0800 (PST)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id EA808E0EF3;
+        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=post; bh=eBpFStnJo5vywfTywan9
+        sXxiTpddI4vii6gPlA8SHjo=; b=rR7tGQiadPIkYXV+K1vHPD+7LxZeRDf3zsJy
+        Gy7anDLi8y1+Z0vepqspygcZjYDy4OrcuShgQCjUVv6LQrJKBjhN6+amEQkhXP1I
+        hDpYsxMYnWAhHTVViLg4+Cwp7+ZQK++PIyR613zelL8F0tZjNOMWm5tWkUhykVh2
+        Xa+KR/Q=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id D0B9CE0EBF;
+        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
+Received: from mobilestation (10.8.30.6) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Dec 2022 02:36:57 +0300
+Date:   Wed, 14 Dec 2022 02:36:49 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Thierry Reding <treding@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <20221213233649.zmmiskezdponleuc@mobilestation>
+References: <20221213195313.GA200257@bhelgaas>
+ <20221213200733.GA201693@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221213200733.GA201693@bhelgaas>
+X-Originating-IP: [10.8.30.6]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 13 Dec 2022 07:54:43 -0800:
+On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
+> On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
+> > > > > > Hi all,
+> > > > > > 
+> > > > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > > > > 
+> > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > > 
+> > > > > > between commit:
+> > > > > > 
+> > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> > > > > > 
+> > > > > > from the arm-soc tree and commit:
+> > > > > > 
+> > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> > > > > > 
+> > > > > > from the pci tree.
+> > > > > > 
+> > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
+> > > > > > the addition of "ecam").
+> > > > > 
+> > > > > Did I miss a suggested resolution for this?
+> > > 
+> > > > We had a brief discussion about this in another thread. So basically
+> > > > Stephen's resolution is fine here and the plan is to instead add the
+> > > > ECAM bits that the Tegra patch does in a separate patch on top of
+> > > > Serge's patch. I should get around to sending that patch tomorrow.
+> > > 
+> > > Actually the discussion still goes. I haven't got a respond to my
+> > > last suggestion which seems to me more reasonable than extending the
+> > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
+> > > the discussion here:
+> > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
+> > 
 
-> https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20221213
+> > Sorry, it's really too late for discussion.  I need to send the v6.2
+> > pull request today or at the very latest, tomorrow, so the only thing
+> > to decide is how to resolve the merge conflict in the simplest
+> > possible way.  Unless there's a very compelling reason to resolve it
+> > differently than Stephen did, that's going to be the answer.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1ca06f1c1acecbe02124f14a37cce347b8c1a90c
+Sigh... One more redundant vendor-specific name. I wish I was in the
+Cc-list of the original series.
 
-Thank you!
+> 
+> To be more specific, the current answer is this (which is the same as
+> what's in next-20221213):
+> 
+>   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks. I've got it from the @Stephen message. @Thierry will submit a
+new patch with the same 'ecam'-names change rebased on top of the
+updated DT-schema.
+
+-Serge(y)
+
+> 
+> If you think it needs to be different, please respond with a patch and
+> explanation.
+> 
+> Bjorn
+> 
+
