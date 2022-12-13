@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA23664AC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133D264AC9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbiLMAvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S233946AbiLMAwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiLMAv3 (ORCPT
+        with ESMTP id S233683AbiLMAwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:51:29 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD0012D1E;
-        Mon, 12 Dec 2022 16:51:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 12 Dec 2022 19:52:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4CF167DC;
+        Mon, 12 Dec 2022 16:52:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWKgg2lrhz4xN1;
-        Tue, 13 Dec 2022 11:51:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670892687;
-        bh=7b0blUPH4VN7Y+xGDYcerOCLn7BZu9/iBPHp4jawqMg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=os0G+Bi3BCTVeCM+rg6JYRKpEz2flTJicINUe/wzySfxS5VRwlC2jGuKzolqSmoug
-         2JfD05IrHN93VJjJO6+MbjSs3EB4lBtsnoJMaTVxE4f/Kg24KCbk2g3PjTekZOu5Eq
-         Caun41b1/NRIX+vr7bCpMIYsNfGcFiJXL2PEJqUNRt78uY2GFTG70lS3rPbqFxD8Gb
-         EiED5/BsLzbuSADnHDp6pH+lA40HNXMNOs2Um+w3JKLe4YDseSg6oPSvf9HZ5UE0lZ
-         Cg2XCJg54lC10G79Tfg3yjqa+Tc2ZSOnprLZkHRXXI/nENjQbhNx5mml8g1JO/V+Sy
-         YoquTF6QirQXw==
-Date:   Tue, 13 Dec 2022 11:51:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: failed to fetch the unsigned-char tree
-Message-ID: <20221213115125.51bb83ae@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 883B5612DA;
+        Tue, 13 Dec 2022 00:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EBBCAC433F1;
+        Tue, 13 Dec 2022 00:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670892741;
+        bh=xYbKc7QOaSjwtVA3UU++51eUglbdcWfP3Zg64xtOuZc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=b6bGmwPaTSn9b+Djmiv91Cx5Wi8Oqkd7EWDxXsWPl3FlJ661+0KOvv574JVFsV2+Z
+         GgE1784aNIYxBQTN76KomdCcWdgAhCahujfF6aAA1wEMM+1Ruk58Eou4F+G+GvBINX
+         D1fh1RFqvKTX6dFeLbsX+J0ZpwhH5fz5ZFTFvDgpYo76ShqN0m+wuTwSegh659oOv9
+         J4HNoSvQg3Fi+EAyy9Ujf8/8FVy0FivxCcAD0xxjMZdcZ1y4YzYo28SsU5IaDaMBs3
+         /YNcMrxk4dqn4adsDfETVf0R+SkReW3tom9hiSDhDWKY5223pmCkj+KA7R0WmGHIjX
+         jqy2bAaSP9KZg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8F20C00445;
+        Tue, 13 Dec 2022 00:52:20 +0000 (UTC)
+Subject: Re: [GIT PULL] KUnit next update for Linux 6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+References: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <8b11b434-51a6-0e4f-ebb5-220d49ca5bc5@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-next-6.2-rc1
+X-PR-Tracked-Commit-Id: 054be257f28ca8eeb8e3620766501b81ceb4b293
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e2ed78d5d9ca07a2b9d158ebac366170a2d3083d
+Message-Id: <167089274088.13252.2216125299220610597.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 00:52:20 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The pull request you sent on Mon, 12 Dec 2022 15:07:05 -0700:
 
-Hi Jason,
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-next-6.2-rc1
 
-Trying to fetch the unsigned-char tree produces this error:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e2ed78d5d9ca07a2b9d158ebac366170a2d3083d
 
-fatal: couldn't find remote ref refs/heads/unsigned-char
+Thank you!
 
-Are you finished withe this branch now (so I should remove it from
-linux-next)?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXzI4ACgkQAVBC80lX
-0GwDaggAifJVqEGh0gY7EklW+xQrwtr3JaOeMaoKsVOgIwAqQmhsN5PcR4a+zoIe
-Tpz0x8qa6fX4LbbfZ9wvz5qNTVso7H2PfOeXGJDvdnbh3tvTz0GAB0mg9qs08Uvz
-E7up5QbEhnxr5VWTXsxqDxP5LCQduy3g4YTILcAAIuzkwl+41ahIUwHLSes4K948
-MGNUcTZOEheKqM2b0nR4E0r6CYjG9vRtl05IZM0jyQ69XU/+uaDuQrT5MylGcXpW
-rV+pLG89Kh5c3X0GTkxoAtyGWMlTlFiC3tyOyFFUToFNtiBCNJTdyfdpqjo/RYFn
-Bbc2+jJWHbFTyYXaqLI6EU1HgcuDGw==
-=IMD/
------END PGP SIGNATURE-----
-
---Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
