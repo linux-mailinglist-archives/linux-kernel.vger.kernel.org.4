@@ -2,223 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F18E64B30E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8067964B310
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiLMKRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S235126AbiLMKTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234753AbiLMKRs (ORCPT
+        with ESMTP id S230494AbiLMKS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:17:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C96EB485;
-        Tue, 13 Dec 2022 02:17:47 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 358511FE90;
-        Tue, 13 Dec 2022 10:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670926665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWdApeddYiMYXB8pmHjPXlFof6sqZG2lI5ncWpQKXcI=;
-        b=hoRrXygslHjny+uwKR2kFMu+k1f8vpCZftGqeMF8I/Y5/lQepUhIumx8Zo3XeYbxkb0CR9
-        PLLaYj1pa1Hpp11YQ9NfXtE7a4PqlFMmNH7Up8pnhAmPZWzY/wYzVfwIpupSS9cbkv1F/L
-        nMYA7NXBuyQCN9BmViL0dx1Vjypg3rY=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 140322C141;
-        Tue, 13 Dec 2022 10:17:45 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 11:17:42 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Petr Pavlu <petr.pavlu@suse.com>, prarit@redhat.com,
-        david@redhat.com, mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y5hRRnBGYaPby/RS@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
+        Tue, 13 Dec 2022 05:18:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C2F1C412;
+        Tue, 13 Dec 2022 02:18:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670926737; x=1702462737;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ktyIis8mGu/ICZuWZwF6nUjMozy0i8++8ReudC6vW9c=;
+  b=HficGdPduGbidl+iRqbWGrekHdIq/B+LLavSsWKGo12nr15cJTVUT7vC
+   +v5D+lFjRiIFMsExb9CNcAjqnYeZNcckbsb2KFSCz77OiPzcLRmszG58A
+   L2oLXd02Y0g7W39LmrIXEFiCcIIlIQnnrJuNzLJafdYXb+7GaPHn+mGsh
+   ZLL6R+3eJQtbb9X95++A54du4L0NSDPCcMvDEQ415yWgr7LjLHQRkhZlm
+   w8ORyhW7S1XyNAgEumLUP5W4HASC4XNrwkYMLdO0eCP5rqandVfvYSx0o
+   NtDR0KPyEIU7ouytMuDMIAc8c5XAzQDbNoVSMFJhfgRwm51MtujZosDUz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="298438267"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="298438267"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:18:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="790870741"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="790870741"
+Received: from myegin-mobl1.ger.corp.intel.com ([10.251.216.20])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:18:52 -0800
+Date:   Tue, 13 Dec 2022 12:18:50 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 8/8] fpga: m10bmc-sec: Add support for N6000
+In-Reply-To: <Y5gXUMAvN5xBOGpF@yilunxu-OptiPlex-7050>
+Message-ID: <225b7feb-fa23-fdc-42af-b0a0f4737fca@linux.intel.com>
+References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com> <20221211103913.5287-9-ilpo.jarvinen@linux.intel.com> <Y5gXUMAvN5xBOGpF@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5gI/3crANzRv22J@bombadil.infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-875922969-1670926736=:1741"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-12-12 21:09:19, Luis Chamberlain wrote:
-> On Mon, Dec 05, 2022 at 11:35:57AM +0100, Petr Pavlu wrote:
-> > During a system boot, it can happen that the kernel receives a burst of
-> > requests to insert the same module but loading it eventually fails
-> > during its init call. For instance, udev can make a request to insert
-> > a frequency module for each individual CPU when another frequency module
-> > is already loaded which causes the init function of the new module to
-> > return an error.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-875922969-1670926736=:1741
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 13 Dec 2022, Xu Yilun wrote:
+
+> On 2022-12-11 at 12:39:13 +0200, Ilpo Järvinen wrote:
+> > Add support for PMCI-based flash access path and N6000 sec update
+> > support. Access to flash staging area is different for N6000 from that
+> > of the SPI interfaced counterparts.
 > > 
-> > This patch attempts a different solution for the problem 6e6de3dee51a
-> > was trying to solve. Rather than waiting for the unloading to complete,
-> > it returns a different error code (-EBUSY) for modules in the GOING
-> > state. This should avoid the error situation that was described in
-> > 6e6de3dee51a (user space attempting to load a dependent module because
-> > the -EEXIST error code would suggest to user space that the first module
-> > had been loaded successfully), while avoiding the delay situation too.
+> > Introduce intel_m10bmc_flash_bulk_ops to allow interface specific
+> > differentiations for the flash access path for sec update and make
+> > m10bmc_sec_read/write() in sec update driver to use the new operations.
 > > 
-> 
-> So sorry for the late review but these ideas only came to me as I
-> drafted my pull request to Linus.
-> 
-> Let's recap the issue from the start as this is why I ended having
-> to pause for a second and couldn't believe myself as I wrote that
-> we had merged this.
-
-IMHO, it is perfectly fine to delay this. The problem is not trivial.
-It always made my head spin. There is a risk of regression. The change
-spent in linux next only one week. And this particular merge window is
-not good for risking because of the holiday season.
-
-
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index d02d39c7174e..7a627345d4fd 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
-> >  	sched_annotate_sleep();
-> >  	mutex_lock(&module_mutex);
-> >  	mod = find_module_all(name, strlen(name), true);
-> > -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> > +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> > +		|| mod->state == MODULE_STATE_GOING;
-> >  	mutex_unlock(&module_mutex);
+> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/fpga/intel-m10-bmc-sec-update.c |  65 ++++++++++-
+> >  drivers/mfd/intel-m10-bmc-pmci.c        | 145 ++++++++++++++++++++++++
+> >  include/linux/mfd/intel-m10-bmc.h       |  14 +++
+> >  3 files changed, 223 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > index 9922027856a4..885e38f13897 100644
+> > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > @@ -14,6 +14,20 @@
+> >  #include <linux/platform_device.h>
+> >  #include <linux/slab.h>
 > >  
+> > +#define M10BMC_PMCI_FLASH_MUX_CTRL	0x1d0
+> > +#define FLASH_MUX_SELECTION		GENMASK(2, 0)
+> > +#define FLASH_MUX_IDLE			0
+> > +#define FLASH_MUX_NIOS			1
+> > +#define FLASH_MUX_HOST			2
+> > +#define FLASH_MUX_PFL			4
+> > +#define get_flash_mux(mux)		FIELD_GET(FLASH_MUX_SELECTION, mux)
+> > +
+> > +#define FLASH_NIOS_REQUEST		BIT(4)
+> > +#define FLASH_HOST_REQUEST		BIT(5)
+> > +
+> > +#define M10_FLASH_INT_US		1
+> > +#define M10_FLASH_TIMEOUT_US		10000
+> > +
+> >  struct m10bmc_sec {
+> >  	struct device *dev;
+> >  	struct intel_m10bmc *m10bmc;
+> > @@ -21,6 +35,7 @@ struct m10bmc_sec {
+> >  	char *fw_name;
+> >  	u32 fw_name_id;
+> >  	bool cancel_request;
+> > +	struct mutex flash_mutex;
+> >  };
+> >  
+> >  static DEFINE_XARRAY_ALLOC(fw_upload_xa);
+> > @@ -31,6 +46,24 @@ static DEFINE_XARRAY_ALLOC(fw_upload_xa);
+> >  #define REH_MAGIC		GENMASK(15, 0)
+> >  #define REH_SHA_NUM_BYTES	GENMASK(31, 16)
+> >  
+> > +static int m10bmc_sec_set_flash_host_mux(struct intel_m10bmc *m10bmc, bool request)
+> > +{
+> > +	u32 ctrl;
+> > +	int ret;
+> > +
+> > +	ret = regmap_update_bits(m10bmc->regmap, M10BMC_PMCI_FLASH_MUX_CTRL,
+> > +				 FLASH_HOST_REQUEST,
+> > +				 FIELD_PREP(FLASH_HOST_REQUEST, request));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return regmap_read_poll_timeout(m10bmc->regmap,
+> > +					M10BMC_PMCI_FLASH_MUX_CTRL, ctrl,
+> > +					request ? (get_flash_mux(ctrl) == FLASH_MUX_HOST) :
+> > +						  (get_flash_mux(ctrl) != FLASH_MUX_HOST),
+> > +					M10_FLASH_INT_US, M10_FLASH_TIMEOUT_US);
+> > +}
+> > +
+> >  static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u32 size)
+> >  {
+> >  	struct intel_m10bmc *m10bmc = sec->m10bmc;
+> > @@ -41,6 +74,15 @@ static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u
+> >  	u32 leftover_tmp = 0;
+> >  	int ret;
+> >  
+> > +	if (sec->m10bmc->flash_bulk_ops) {
+> > +		mutex_lock(&sec->flash_mutex);
+> > +		/* On write, firmware manages flash MUX */
+> > +		ret = sec->m10bmc->flash_bulk_ops->write(m10bmc, buf, offset, size);
+> > +		mutex_unlock(&sec->flash_mutex);
+> > +
+> > +		return ret;
+> > +	}
+> > +
+> >  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
+> >  		return -EINVAL;
+> >  
+> > @@ -69,7 +111,21 @@ static int m10bmc_sec_read(struct m10bmc_sec *sec, u8 *buf, u32 addr, u32 size)
+> >  	u32 leftover_offset = read_count * stride;
+> >  	u32 leftover_size = size - leftover_offset;
+> >  	u32 leftover_tmp;
+> > -	int ret;
+> > +	int ret, ret2;
+> > +
+> > +	if (sec->m10bmc->flash_bulk_ops) {
+> > +		mutex_lock(&sec->flash_mutex);
+> > +		ret = m10bmc_sec_set_flash_host_mux(m10bmc, true);
+> > +		if (ret)
+> > +			goto mux_fail;
+> 
+> If the flash host mux fail, we still need to un-mux it?
+
+It seemed safer to attempt to set it back after the code tried to alter 
+the MUX setting. I don't see how it could be harmful. Likely we're in the 
+deep end in that case anyway so setting it back might just fails too 
+(which is harmless sans the small extra delay) or just confirms that the 
+value wasn't changed.
+
+-- 
+ i.
+
+> > +		ret = sec->m10bmc->flash_bulk_ops->read(m10bmc, buf, addr, size);
+> > +mux_fail:
+> > +		ret2 = m10bmc_sec_set_flash_host_mux(m10bmc, false);
+> > +		mutex_unlock(&sec->flash_mutex);
+> > +		if (ret)
+> > +			return ret;
+> > +		return ret2;
+> > +	}
+> >  
+> >  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
+> >  		return -EINVAL;
+> > @@ -611,6 +667,8 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	mutex_init(&sec->flash_mutex);
+> > +
+> >  	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
+> >  			sec->fw_name_id);
+> >  	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
+> > @@ -633,6 +691,7 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+> >  fw_uploader_fail:
+> >  	kfree(sec->fw_name);
+> >  fw_name_fail:
+> > +	mutex_destroy(&sec->flash_mutex);
+> >  	xa_erase(&fw_upload_xa, sec->fw_name_id);
 > >  	return ret;
-> > @@ -2562,20 +2563,35 @@ static int add_unformed_module(struct module *mod)
-> >  
-> >  	mod->state = MODULE_STATE_UNFORMED;
-> >  
-> > -again:
+> >  }
 > 
-> So this is part of my biggest concern for regression, the removal of
-> this tag and its use.
-> 
-> Before this we always looped back to trying again and again.
-
-Just to be sure that we are on the same page.
-
-The loop was _not_ infinite. It serialized all attempts to load
-the same module. In our case, it serialized all failures and
-prolonged the pain.
-
-
-> >  	mutex_lock(&module_mutex);
-> >  	old = find_module_all(mod->name, strlen(mod->name), true);
-> >  	if (old != NULL) {
-> > -		if (old->state != MODULE_STATE_LIVE) {
-> > +		if (old->state == MODULE_STATE_COMING
-> > +		    || old->state == MODULE_STATE_UNFORMED) {
-> >  			/* Wait in case it fails to load. */
-> >  			mutex_unlock(&module_mutex);
-> >  			err = wait_event_interruptible(module_wq,
-> >  					       finished_loading(mod->name));
-> >  			if (err)
-> >  				goto out_unlocked;
-> > -			goto again;
-> 
-> We essentially bound this now, and before we didn't.
-> 
-> Yes we we wait for finished_loading() of the module -- but if udev is
-> hammering tons of same requests, well, we *will* surely hit this, as
-> many requests managed to get in before userspace saw the module present.
-> 
-> While this typically can be useful, it means *quite a bit* of conditions which
-> definitely *did* happen before will now *bail out* fast, to the extent
-> that I'm not even sure why we just re-try once now.
-
-I do not understand this. We do _not_ re-try the load in the new
-version. We just wait for the result of the parallel attempt to
-load the module.
-
-Maybe, you are confused that we repeat find_module_all(). But it is
-the way how to find the result of the parallel load.
-
-
-> If we're going to 
-> just re-check *once* why not do something graceful like *at least*
-> cond_resched() to let the system breathe for a *tiny bit*.
-
-We must check the result under module_mutex. We have to take this
-sleeping lock. There is actually a rescheduling. I do not think that
-cond_resched() would do any difference.
-
-
-> > +
-> > +			/* The module might have gone in the meantime. */
-> > +			mutex_lock(&module_mutex);
-> > +			old = find_module_all(mod->name, strlen(mod->name),
-> > +					      true);
-> >  		}
-> > -		err = -EEXIST;
-> > +
-> > +		/*
-> > +		 * We are here only when the same module was being loaded. Do
-> > +		 * not try to load it again right now. It prevents long delays
-> > +		 * caused by serialized module load failures. It might happen
-> > +		 * when more devices of the same type trigger load of
-> > +		 * a particular module.
-> > +		 */
-> > +		if (old && old->state == MODULE_STATE_LIVE)
-> > +			err = -EEXIST;
-> > +		else
-> > +			err = -EBUSY;
-> 
-> And for all those use cases we end up here now, with -EBUSY. So udev
-> before was not bounded, and kept busy-looping on the retry in-kernel,
-> and we now immediately bound its condition to just 2 tries to see if the
-> old module existed and now *return* a new value to userspace.
-> 
-> My main concerns are:
-> 
-> 0) Why not use cond_resched() if we're just going to check twice?
-
-We take module_mutex. It should cause even bigger delay than cond_resched().
-
-
-> 1) How are we sure we are not regressing userspace by removing the boundless
-> loop there? (even if the endless loop was stupid)
-
-We could not be sure. On the other hand, if more attempts help to load
-the module then it is racy and not reliable. The new approach would
-make it better reproducible and fix the race.
-
-
-> 2) How is it we expect that we won't resgress userspace now by bounding
-> that check and pretty much returning -EBUSY right away? This last part
-> seems dangerous, in that if userspace did not expect -EBUSY and if an
-> error before caused a module to fail and fail boot, why wouldn't we fail
-> boot now by bailing out faster??
-
-Same answer as for 1)
-
-
-> 3) *Fixing* a kernel regression by adding new expected API for testing
-> against -EBUSY seems not ideal.
-
-IMHO, the right solution is to fix the subsystems so that they send
-only one uevent.
-
-The question is how the module loader would deal with "broken"
-subsystems. Petr Pavlu, please, fixme. I think that there are
-more subsystems doing this ugly thing.
-
-I personally thing that returning -EBUSY is better than serializing
-all the loads. It makes eventual problem easier to reproduce and fix.
-
-Best Regards,
-Petr
+--8323329-875922969-1670926736=:1741--
