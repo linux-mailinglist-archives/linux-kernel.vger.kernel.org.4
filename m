@@ -2,53 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081B964AE26
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E199164AE2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233973AbiLMDXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 22:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S233980AbiLMD3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 22:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLMDXB (ORCPT
+        with ESMTP id S229441AbiLMD3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 22:23:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6E315801;
-        Mon, 12 Dec 2022 19:22:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWP2T0QVfz4x1H;
-        Tue, 13 Dec 2022 14:22:57 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670901777;
-        bh=4JD+J4S4csROrcVi8042P8Ob/bctBf6DCqQ9nNZXpRw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DRHSRbkAUSY5VHWxNDD+BGXNdXhUdGfXAUk+OJuYgyQsTZS1BZWXvJqZOh39dypqV
-         z9IFLDO2SFoQeQW1u0s0J/OKx5O4n3F5cIfxPQwFti/U1sWrtgOcujsE8JwOjBevIi
-         xL8vEvukMNpR+cpgAOt9UWLvgetS1mALGh3BBnW281BKZz79D916t7kDBVuObrsrsS
-         doSBsBAc0LVmP2kOxyCBpV/84CsENPoAoBYMSmqCMURKGYKf6OJr6L5zHcwfsKEGm2
-         mHpxRuo5taSkpwpjyjCPSR4ZtAIz1YqFnorDyoYgS5HsiNJcWTuIMhGEypvtp7cM/1
-         OvpSIEp4QDC2w==
-Date:   Tue, 13 Dec 2022 14:22:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        John Johansen <john.johansen@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-Subject: Re: linux-next: manual merge of the kunit-next tree with the
- apparmor tree
-Message-ID: <20221213142256.3d3ee811@canb.auug.org.au>
-In-Reply-To: <20221208135327.01364529@canb.auug.org.au>
-References: <20221208135327.01364529@canb.auug.org.au>
+        Mon, 12 Dec 2022 22:29:19 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D5F1B9CA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:18 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id jr11so10253712qtb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zp0U9Kl4wDERv8LP4SRbd+OyzbRFeaPhMPOi3/LSHe4=;
+        b=VrN+0XdiySagFbzfZT3HDYXIZ9s7TWs9LITr1N9EkXfEoqvxLaPWUJn0CCF0lzpS2q
+         mn6sM/KMo0sAcPdY48YkP/E8319NigCboqyj9OXDaOzw+vBHk9hMdOxiptzyzMQuGQO5
+         b4Un4hq68aqroz/YhO57TR4fQjc/VNj8lkZm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zp0U9Kl4wDERv8LP4SRbd+OyzbRFeaPhMPOi3/LSHe4=;
+        b=37A4Nudv1i1uPlV5xY9pBc/TN1p+M2KSVobBUbc4Sbq18wsvO7Zpdmtk5HV+DZQR01
+         Labu7Lby3VX70TP5j/LbqCNUxVsmk78GSRF2mks5Zh10GW3pqcpxrMU3Ewg+r/mXEYCR
+         a7Mzr4fUQV6uFHCw4U9avnrx0wDEtGZvWLYtokj19475CGteK1J6T8UQ2sFudmp7pwcX
+         xeyMiqubbZAq0F0SAi6zfQnFrLXrwHvXKzsuCkHuGlFW4TVjcTmCWNNM+a1swEWx7V29
+         kY0PQJQp8Hx1HvpDU7N51NjAG5aDsfvcZuypApsszdAJbfLDAte44DVDAlWGFDYCOPsW
+         PERg==
+X-Gm-Message-State: ANoB5pnO2+ETVLhfDWJ3j2OFKRYim0+yo4V72mFq8RxoT0bT9XTIQfFU
+        Yat11DxDt43F7xwa28J72LQbfkGt79621c8T
+X-Google-Smtp-Source: AA0mqf51ptQ9HR5O12blZDua7vucABtSQpfDFstBM5Kd1E5U2fuCxmO5EnOiItKWW/wXQD24Xzr4oA==
+X-Received: by 2002:a05:622a:581b:b0:39c:da1f:f817 with SMTP id fg27-20020a05622a581b00b0039cda1ff817mr25414089qtb.61.1670902156940;
+        Mon, 12 Dec 2022 19:29:16 -0800 (PST)
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com. [209.85.222.170])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05620a13f300b006fcab4da037sm6900109qkl.39.2022.12.12.19.29.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 19:29:16 -0800 (PST)
+Received: by mail-qk1-f170.google.com with SMTP id pe2so3530799qkn.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:15 -0800 (PST)
+X-Received: by 2002:ae9:ef48:0:b0:6fe:d4a6:dcef with SMTP id
+ d69-20020ae9ef48000000b006fed4a6dcefmr10633201qkg.594.1670902155636; Mon, 12
+ Dec 2022 19:29:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yr0s_NVnNEF9TrjAv+wuRF4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221212123348.169903-1-brauner@kernel.org>
+In-Reply-To: <20221212123348.169903-1-brauner@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 19:28:59 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
+Message-ID: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
+Subject: Re: [GIT PULL] vfsuid updates for v6.2
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,125 +73,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Yr0s_NVnNEF9TrjAv+wuRF4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Thu, 8 Dec 2022 13:53:27 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Mon, Dec 12, 2022 at 4:34 AM Christian Brauner <brauner@kernel.org> wrote:
 >
-> Today's linux-next merge of the kunit-next tree got a conflict in:
->=20
->   security/apparmor/policy_unpack.c
->=20
-> between commits:
->=20
->   371e50a0b19f ("apparmor: make unpack_array return a trianary value")
->   73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking t=
-rans_table")
->   217af7e2f4de ("apparmor: refactor profile rules and attachments")
-> (and probably others)
->=20
-> from the apparmor tree and commit:
->=20
->   2c92044683f5 ("apparmor: test: make static symbols visible during kunit=
- testing")
->=20
-> from the kunit-next tree.
->=20
-> This is somewhat of a mess ... pity there is not a shared branch (or
-> better routing if the patches).
->=20
-> I fixed it up (hopefully - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->=20
-> I also had to add this patch:
+> This pull request converts all remaining places that still make use of non-type
+> safe idmapping helpers to rely on the new type safe vfs{g,u}id based helpers.
+> Afterwards it removes all the old non-type safe helpers.
 
-This merge fix patch is now:
+So I've pulled this, but I'm not entirely happy about some of those
+crazy helpers.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 8 Dec 2022 13:47:43 +1100
-Subject: [PATCH] fixup for "apparmor: make unpack_array return a trianary v=
-alue"
+In particular, the whole "ordering" helpers are really not something
+that should be used in general, I feel. I'm talking about
+vfsuid_gt_kuid() and friends - it's an entirely insane operation and
+makes no sense at all.
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- security/apparmor/include/policy_unpack.h | 7 ++++++-
- security/apparmor/policy_unpack.c         | 5 -----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Yes, yes, I understand why they exist (those crazy IMA rules), but I
+feel that those functions *really* shouldn't be exposed to anybody
+else.
 
-diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/=
-include/policy_unpack.h
-index 940da8a33e0c..67d59b9736de 100644
---- a/security/apparmor/include/policy_unpack.h
-+++ b/security/apparmor/include/policy_unpack.h
-@@ -165,6 +165,11 @@ static inline void aa_put_loaddata(struct aa_loaddata =
-*data)
- 		kref_put(&data->count, aa_loaddata_kref);
- }
-=20
-+#define tri int
-+#define TRI_TRUE 1
-+#define TRI_NONE 0
-+#define TRI_FALSE -1
-+
- #if IS_ENABLED(CONFIG_KUNIT)
- bool aa_inbounds(struct aa_ext *e, size_t size);
- size_t aa_unpack_u16_chunk(struct aa_ext *e, char **chunk);
-@@ -172,7 +177,7 @@ bool aa_unpack_X(struct aa_ext *e, enum aa_code code);
- bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name=
-);
- bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
- bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
--size_t aa_unpack_array(struct aa_ext *e, const char *name);
-+tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
- size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
- int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
- int aa_unpack_strdup(struct aa_ext *e, char **string, const char *name);
-diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_u=
-npack.c
-index 6513545dad5e..173d832fc4ee 100644
---- a/security/apparmor/policy_unpack.c
-+++ b/security/apparmor/policy_unpack.c
-@@ -30,11 +30,6 @@
- #include "include/policy_unpack.h"
- #include "include/policy_compat.h"
-=20
--#define tri int
--#define TRI_TRUE 1
--#define TRI_NONE 0
--#define TRI_FALSE -1
--
- /* audit callback for unpack fields */
- static void audit_cb(struct audit_buffer *ab, void *va)
- {
---=20
-2.35.1
+IOW, making those insane functions available in <linux/idmapping.h>
+really seems wrong to me. They are crazy special cases, and I think
+they should exist purely in that crazy ima_security file.
 
---=20
-Cheers,
-Stephen Rothwell
+Again - I've pulled this, but I'm hoping to see a future commit that
+limits that craziness to the only user, in the hope that this disease
+will never spread.
 
---Sig_/Yr0s_NVnNEF9TrjAv+wuRF4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOX8BAACgkQAVBC80lX
-0GxudAf/Zh5m11HDJMUpf9GYMI7NHHkPsEyUFjI9HUQkqRpUB/K8R/FM1sxBj6rb
-JEh6PBKV4ZkSzeMrpZ7PQcbGc+7dOiHOzdwBtcjFBcVssKuwC3g2jOwjbugMYTVk
-yE0cBOplNgzJR1Ze2ODnrnsRzzXpQy4sPyw7Q0ccXkYrsQ0OFMwKj3RlHa7Oxmdx
-p8WaLXuIhEXdz2dhDGO6XYrszBESN4s9zv/D4IWBR1HeyU4GALl2E96gdcKt9qSA
-9Rc9LGPSxjI6EDf9g4a8674EMrl5eQD3CoaCWarltHu1g9l778DBFdE6SuQ6/89/
-crwVEGSrd9wn0raW2lBlb+NjIP+w0A==
-=3K0O
------END PGP SIGNATURE-----
-
---Sig_/Yr0s_NVnNEF9TrjAv+wuRF4--
+                Linus
