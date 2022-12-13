@@ -2,172 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268464AFEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218EC64AFEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234535AbiLMGcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S234590AbiLMGbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbiLMGcC (ORCPT
+        with ESMTP id S234384AbiLMGbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:32:02 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB79B1F610;
-        Mon, 12 Dec 2022 22:32:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670913120; x=1702449120;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=RRn4X9Gdnegzf1sgNDrCXchtLeBUYjVOO9r5f4wlFyE=;
-  b=AP7hYFzAaexLawNiFKtq3/JiYfE6/BB/yWkckKMj8j2pITxPnOMkJGSr
-   tNT03SAebeqnQjXADhBzIEH37T8k5E75kb/LHmwcluXcfKa8SrE1bVVw+
-   XpvF2Gg8to1M2RHoQOHjx01TvekRFqxrGUaTxqUW7LApYq+QccAlSZbXj
-   KVolPuykPVN5hZKDraPtaoJmoCSgaG7SmFjkixkK6dL0CBQmGaMgLxQha
-   011Jn2TnGBzFVLsBToqCZedGGs0j9OHxB0/j26fZbLbR7qEIOJyZRjYi5
-   2s1ZWyLqEu20vtlCLWwWl6beunZWpl2Quch7rudgc+PBKyKIG18DkGKqu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319199737"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="319199737"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 22:32:00 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="648454227"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="648454227"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 22:31:54 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-References: <20221202223533.1785418-1-almasrymina@google.com>
-        <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
-        <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
-Date:   Tue, 13 Dec 2022 14:30:57 +0800
-In-Reply-To: <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
-        (Mina Almasry's message of "Mon, 12 Dec 2022 16:54:27 -0800")
-Message-ID: <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 13 Dec 2022 01:31:39 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7221F2DF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:31:38 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id v81so1101520vkv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKyiy6rqr1s8RJTj8dqYYvulLQtys2Tc8voFn45GrzU=;
+        b=NnBfkXq/VChaqULajdA2qKhgoUKMVhfTWXDRqpnMJhcaCulwkj2CeMqrn3/Ay8AhRW
+         QUzdNE2kHqWMU33rDF5ccUEetiaPQr1oorsvAOAs8aiV377T546SzLQ70fDXdqzqQGVe
+         Fo4GryWPAmQHtqg/K/SWpXqvd0llTX1VG1YxarbtBjH17GbaOQXe+nnQqvYzPJ2JGCU9
+         tm3s2YqwOXRAC0IbnyuUO2ulXHs1eZCSX2T+EulxW0Y57VjaSTVlBAGxSsYgsDQS63Iu
+         enNs86Tt9+2YTs/8XLRHGtZ1CRjsQGENbDiQgZlfonUyN9kOV1X9eeV5JJFhBzexD2iD
+         dvoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VKyiy6rqr1s8RJTj8dqYYvulLQtys2Tc8voFn45GrzU=;
+        b=Q7NV+XDNgwv88jkvF4MxBQk2+CFVCXt7TCJL+0b9A4eKH0u9jXL/MjNYaoxYAxvPkC
+         te89xUnnW4LXHFhuIxs7zoKvKxRIaQS+ngWjWhvaKC0C+EsLPvuFvpiR36OeScHJZTU9
+         FvSU2eEjkXIwtRjT+Gr4/wbnLN3WWbBH8wpERNpkEBdhAEh9F9oDe9Cx8yqYaw5Or5cI
+         VfYmolekznqEoWTRdsN2zejh78rmFaLuxU03YW++W3+G/6twlo7sdZco4wC5cisrUP28
+         6B+3D6Z9YqppcnDZHS03MPUDEwznZqe19dseXUNmR3lRAIocDXvv7x8Vx7KCGOti5aO5
+         jcqQ==
+X-Gm-Message-State: ANoB5pkuAgWUqT29hZaCVJzd60V5oU10/PCxC9fFLw7BeSL9aHEp6UXT
+        Ug4JcftFu7o49xfycYYRniiocJWFZBG4x9t4a2uVoQ==
+X-Google-Smtp-Source: AA0mqf6jhubMdHwDvWT6AMebwaCz1mRJs22GLf8fj9JPa0C0R/H+CjLzed+EqoKIH7jkDZGht5kh9bXEwwhYOruAooI=
+X-Received: by 2002:a05:6122:1437:b0:3bd:dc4d:fb7d with SMTP id
+ o23-20020a056122143700b003bddc4dfb7dmr6550693vkp.7.1670913097036; Mon, 12 Dec
+ 2022 22:31:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212130934.337225088@linuxfoundation.org>
+In-Reply-To: <20221212130934.337225088@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Dec 2022 12:01:25 +0530
+Message-ID: <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        llvm@lists.linux.dev
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mina Almasry <almasrymina@google.com> writes:
+On Mon, 12 Dec 2022 at 19:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.0.13 release.
+> There are 157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.13-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-> On Mon, Dec 12, 2022 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
->>
->> On Fri 02-12-22 14:35:31, Mina Almasry wrote:
->> > The nodes= arg instructs the kernel to only scan the given nodes for
->> > proactive reclaim. For example use cases, consider a 2 tier memory system:
->> >
->> > nodes 0,1 -> top tier
->> > nodes 2,3 -> second tier
->> >
->> > $ echo "1m nodes=0" > memory.reclaim
->> >
->> > This instructs the kernel to attempt to reclaim 1m memory from node 0.
->> > Since node 0 is a top tier node, demotion will be attempted first. This
->> > is useful to direct proactive reclaim to specific nodes that are under
->> > pressure.
->> >
->> > $ echo "1m nodes=2,3" > memory.reclaim
->> >
->> > This instructs the kernel to attempt to reclaim 1m memory in the second tier,
->> > since this tier of memory has no demotion targets the memory will be
->> > reclaimed.
->> >
->> > $ echo "1m nodes=0,1" > memory.reclaim
->> >
->> > Instructs the kernel to reclaim memory from the top tier nodes, which can
->> > be desirable according to the userspace policy if there is pressure on
->> > the top tiers. Since these nodes have demotion targets, the kernel will
->> > attempt demotion first.
->> >
->> > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
->> > reclaim""), the proactive reclaim interface memory.reclaim does both
->> > reclaim and demotion. Reclaim and demotion incur different latency costs
->> > to the jobs in the cgroup. Demoted memory would still be addressable
->> > by the userspace at a higher latency, but reclaimed memory would need to
->> > incur a pagefault.
->> >
->> > The 'nodes' arg is useful to allow the userspace to control demotion
->> > and reclaim independently according to its policy: if the memory.reclaim
->> > is called on a node with demotion targets, it will attempt demotion first;
->> > if it is called on a node without demotion targets, it will only attempt
->> > reclaim.
->> >
->> > Acked-by: Michal Hocko <mhocko@suse.com>
->> > Signed-off-by: Mina Almasry <almasrymina@google.com>
->>
->> After discussion in [1] I have realized that I haven't really thought
->> through all the consequences of this patch and therefore I am retracting
->> my ack here. I am not nacking the patch at this statge but I also think
->> this shouldn't be merged now and we should really consider all the
->> consequences.
->>
->> Let me summarize my main concerns here as well. The proposed
->> implementation doesn't apply the provided nodemask to the whole reclaim
->> process. This means that demotion can happen outside of the mask so the
->> the user request cannot really control demotion targets and that limits
->> the interface should there be any need for a finer grained control in
->> the future (see an example in [2]).
->> Another problem is that this can limit future reclaim extensions because
->> of existing assumptions of the interface [3] - specify only top-tier
->> node to force the aging without actually reclaiming any charges and
->> (ab)use the interface only for aging on multi-tier system. A change to
->> the reclaim to not demote in some cases could break this usecase.
->>
->
-> I think this is correct. My use case is to request from the kernel to
-> do demotion without reclaim in the cgroup, and the reason for that is
-> stated in the commit message:
->
-> "Reclaim and demotion incur different latency costs to the jobs in the
-> cgroup. Demoted memory would still be addressable by the userspace at
-> a higher latency, but reclaimed memory would need to incur a
-> pagefault."
->
-> For jobs of some latency tiers, we would like to trigger proactive
-> demotion (which incurs relatively low latency on the job), but not
-> trigger proactive reclaim (which incurs a pagefault). I initially had
-> proposed a separate interface for this, but Johannes directed me to
-> this interface instead in [1]. In the same email Johannes also tells
-> me that meta's reclaim stack relies on memory.reclaim triggering
-> demotion, so it seems that I'm not the first to take a dependency on
-> this. Additionally in [2] Johannes also says it would be great if in
-> the long term reclaim policy and demotion policy do not diverge.
->
-> [1] https://lore.kernel.org/linux-mm/Y35fw2JSAeAddONg@cmpxchg.org/
-> [2] https://lore.kernel.org/linux-mm/Y36fIGFCFKiocAd6@cmpxchg.org/
+This is an additional report.
+Following issue is specific to clang nightly,
 
-After these discussion, I think the solution maybe use different
-interfaces for "proactive demote" and "proactive reclaim".  That is,
-reconsider "memory.demote".  In this way, we will always uncharge the
-cgroup for "memory.reclaim".  This avoid the possible confusion there.
-And, because demotion is considered aging, we don't need to disable
-demotion for "memory.reclaim", just don't count it.
+x86 clang-nightly builds failed with defconfig and tinyconfig due to
+below errors / warnings.
 
-Best Regards,
-Huang, Ying
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Regressions found on x86_64:
+
+    - build/clang-nightly-tinyconfig
+    - build/clang-nightly-x86_64_defconfig
+    - build/clang-nightly-allnoconfig
+    - build/clang-nightly-lkftconfig
+
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
+CC=clang
+
+ld.lld: error: version script assignment of 'LINUX_2.6' to symbol
+'__vdso_sgx_enter_enclave' failed: symbol not defined
+llvm-objdump: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
+or directory
+llvm-objcopy: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
+or directory
+make[4]: *** [/builds/linux/arch/x86/entry/vdso/Makefile:136:
+arch/x86/entry/vdso/vdso64.so] Error 1
+
+Steps to reproduce:
+--------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+# tuxmake --runtime podman --target-arch x86_64 --toolchain
+clang-nightly --kconfig x86_64_defconfig LLVM=1 LLVM_IAS=1
+
+tuxmake --runtime podman --target-arch x86_64 --toolchain
+clang-nightly --kconfig
+https://builds.tuxbuild.com/2IocvUIXEK9MUve4Uut67U0xskC/config LLVM=1
+LLVM_IAS=1
+
+Details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.12-158-g57dda3cf2efc/testrun/13588489/suite/build/test/clang-nightly-x86_64_defconfig/details/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
