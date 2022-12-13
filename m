@@ -2,126 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD6564BB72
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C69764BB6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbiLMR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S236193AbiLMR5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbiLMR6B (ORCPT
+        with ESMTP id S235844AbiLMR5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:58:01 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FC41F62F;
-        Tue, 13 Dec 2022 09:57:58 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id c66so18873583edf.5;
-        Tue, 13 Dec 2022 09:57:58 -0800 (PST)
+        Tue, 13 Dec 2022 12:57:48 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2742265D6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 65so2731682pfx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f74flBhltkIF6Kyzm1psBFvXaiR1ZpsFYBiux/pnBP0=;
-        b=h5saAjMhrH0HxaWeXItI+PASmkeSYJ2PQdO9BLbEOFZMfii8fwzQnWRsbK/4SKxc7s
-         rD4KG/Q1ZPION2xh25FfyL8e0ZB2Qd2fzVMGloq3ccKc3fh7BhotnxOssEIU6NXTOmPw
-         Ed0iTBqXWx2VVGJY2IcdbQFnpw0qfxiYeO5x4JEkEvIV37SnFXK3JBVkwiC/r04njS8y
-         DeZAUot9otBwpYzTq8BRqdksVkGzl71NkXIVhCIZ99z1EG+3khhsYIauwGuirflTgh0V
-         TCYybUkkwvY/s4CVK+hSzWpo0fEViGSEK8W+W0wklZBuO2soqu75jQ+l5cX7FKRhBJgT
-         3ohw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
+        b=h5lH2SaAjfj5nZRgT3MlmV0bU4ktCOBs1Us5zj/vVE/eHkYdKdWHa9z2rOsNxE23Zp
+         AvEASOnPtLEGudWCQE2Aou29D4FLJKnsu8EZ177IllFGVSqEu88pq6wR1wfudFu21/47
+         OXkLOZuGm7c4zCDnCT810zUnH9DkhWZIWgnc66Dm8lfmKyuDURNCgk+c7dmSxzcNZ+4i
+         oh8tnabQghXCOI02SQFz71NmJW92BfTj7hd3S3yjUXxwS4WXoIb5awcV9blzVnKSW4YR
+         PIvNcH1iQ/Pz02G6EBxYZYFx1Jgrbe6lx5w/Q1W3Y9QDzoVOS8/JoRtc+iQAN1PYzxcB
+         bLqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f74flBhltkIF6Kyzm1psBFvXaiR1ZpsFYBiux/pnBP0=;
-        b=i2BDavDhjQNQdURhqVmzR6+aovWcnNeWUaclauTtIYXpwnB535isAA4CYxs48KQBVF
-         QFW1Gp8FXbxWxY5yxkKLMpoWvr/B0xP1CDNcz9oadwjHCfFeSKe73c7pAdTPx70w4lp6
-         zlQpC8/EmuJ16/Ey3BSNSkQfoYO0Eo9DUW3nAK9KIfBUePmEP2sWT3pY0sFsBWydVvUs
-         MBEbNmRkPE99SI2t4I6X5xcROs4TN55EkVaFLObkygGOurJ3xpj1ZSDTY7inkhHvwMz8
-         TMEtO8nzlah2ziFfXqMnGCC6Ce+SdK6Th2MshOOoMKoHa1XgBix9MEHIbIhn7oxX4upl
-         6qog==
-X-Gm-Message-State: ANoB5plTu5Umg5e+l22/EDfEliMkZng608xJ+8WGgbBTQzmWTnjtZ+YG
-        0mWMLmoHwBGcsOoR8qsd11c71bub01ii/zukuLc=
-X-Google-Smtp-Source: AA0mqf5BkB6tOs9ZGs9+GqphqnUcCfvk0twwLhRnghScakJzu5AIhu6mkb8wvOOc7fcyfPZ5034mmUZ5ehkKT3Pvgc4=
-X-Received: by 2002:a05:6402:1f87:b0:468:7df:c38c with SMTP id
- c7-20020a0564021f8700b0046807dfc38cmr20457565edc.150.1670954276964; Tue, 13
- Dec 2022 09:57:56 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=opAga5NytnN90LYH/jNZqiNTmgPT7NfAYJd2Euocw8U=;
+        b=Phnul0HMTyE5674/7Irqp5ZIbfYtjaSzfbDQgTzJhES+cylu7JwYmytQ5KlZxCmcWt
+         UApAnL+X564hLPMRp3AppZRaEL45pH67cQyUOwRGHWjmyZzsonnVHNwJNYmqUWmihO3L
+         4azk4rBiDTKLnSkAv1jC27FmucSwo9o1o1RMvAobVeUD8EH65KUW2TYsKqaiLyB2P5+x
+         Ootn7Prg0AqNloTksoKb4QZg40fej6XjOiiuNFartyLX3yWTPzH6FdIMdtDx9fetdlQn
+         iMYHeX8c4ZAC3KP41/Bg+T6nqWnFF9tLL+s28oAFXhHfS8ZBhdUewet3TPzOsMUTr7Zl
+         GjhQ==
+X-Gm-Message-State: ANoB5pnjCzbpoxeWxwXWXWUUnLrkEGoo+vYWlRrYIUMl5TTd7sZLNsQC
+        aTHgHaUVDDW912ih6ifapk4b
+X-Google-Smtp-Source: AA0mqf6pTOvUT+TVngBCj6bDScNP+fRE5DB00eZbQPooYfnBCOCmTI1M7ZZsxiAv4tRky/H9QIHriw==
+X-Received: by 2002:aa7:828d:0:b0:574:9a46:6306 with SMTP id s13-20020aa7828d000000b005749a466306mr21729213pfm.20.1670954265596;
+        Tue, 13 Dec 2022 09:57:45 -0800 (PST)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id x8-20020aa79ac8000000b0056da63c8515sm8179465pfp.91.2022.12.13.09.57.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:57:44 -0800 (PST)
+Date:   Tue, 13 Dec 2022 23:27:38 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>, andersson@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
+Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+Message-ID: <20221213175738.GI4862@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+ <20221213052802.GB4862@thinkpad>
+ <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
 MIME-Version: 1.0
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 13 Dec 2022 17:57:30 +0000
-Message-ID: <CA+V-a8tuCV-p-BR3nAKZ+4Z1GnRus8eEKJZ_sBaTaa2mjqBb1w@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] riscv: mm: dma-noncoherent: Pass direction and
- operation to ALT_CMO_OP()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ec64e3a0-085d-7830-fd4e-6969c1c9bbdf@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Tue, Dec 13, 2022 at 05:54:56PM +0100, Krzysztof Kozlowski wrote:
+> On 13/12/2022 06:28, Manivannan Sadhasivam wrote:
+> > On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
+> >> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
+> >>> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> >>> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> >>> This offset only works for some SoCs like SDM845 for which driver support
+> >>> was initially added.
+> >>>
+> >>> But the later SoCs use different register stride that vary between the
+> >>> banks with holes in-between. So it is not possible to use a single register
+> >>> stride for accessing the CSRs of each bank. By doing so could result in a
+> >>> crash with the current drivers. So far this crash is not reported since
+> >>> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> >>> driver extensively by triggering the EDAC IRQ (that's where each bank
+> >>> CSRs are accessed).
+> >>>
+> >>> For fixing this issue, let's obtain the base address of each LLCC bank from
+> >>> devicetree and get rid of the fixed stride.
+> >>>
+> >>> This series affects multiple platforms but I have only tested this on
+> >>> SM8250 and SM8450. Testing on other platforms is welcomed.
+> >>>
+> >>
+> >> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+> >>
+> > 
+> > Thanks!
+> > 
+> >> I took this for a quick spin on the qdrive3 I've got access to without
+> >> any issue:
+> >>
+> >>     [root@localhost ~]# modprobe qcom_edac
+> >>     [root@localhost ~]# dmesg | grep -i edac
+> >>     [    0.620723] EDAC MC: Ver: 3.0.0
+> >>     [    1.165417] ghes_edac: GHES probing device list is empty
+> >>     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
+> >>     [root@localhost ~]# cat /proc/interrupts | grep ecc
+> >>     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
+> >>     [root@localhost ~]#
+> >>
+> >> Potentially stupid question, but are users expected to manually load the
+> >> driver as I did? I don't see how it would be loaded automatically in the
+> >> current state, but thought it was funny that I needed to modprobe
+> >> myself.
+> >>
+> >> Please let me know if you want me to do any more further testing!
+> >>
+> > 
+> > Well, I always ended up using the driver as a built-in. I do make it module for
+> > build test but never really used it as a module, so didn't catch this issue.
+> > 
+> > This is due to the module alias not exported by the qcom_edac driver. Below
+> > diff allows kernel to autoload it:
+> > 
+> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> > index f7afb5375293..13919d01c22d 100644
+> > --- a/drivers/edac/qcom_edac.c
+> > +++ b/drivers/edac/qcom_edac.c
+> > @@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
+> >  
+> >  MODULE_DESCRIPTION("QCOM EDAC driver");
+> >  MODULE_LICENSE("GPL v2");
+> > +MODULE_ALIAS("platform:qcom_llcc_edac");
+> 
+> While this is a way to fix it, but instead of creating aliases for wrong
+> names, either a correct name should be used or driver should receive ID
+> table.
+> 
 
-On Tue, Dec 13, 2022 at 5:15 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, Dec 12, 2022 at 12:55 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Pass direction and operation to ALT_CMO_OP() macro.
-> >
-> > Vendors might want to perform different operations based on the direction
-> > and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
-> > arch_dma_prep_coherent) so to handle such cases pass the direction and
-> > operation to ALT_CMO_OP() macro. This is in preparation for adding errata
-> > for the Andes CPU core.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(                                           \
-> >  #define THEAD_flush_A0 ".long 0x0275000b"
-> >  #define THEAD_SYNC_S   ".long 0x0190000b"
-> >
-> > -#define ALT_CMO_OP(_op, _start, _size, _cachesize)                     \
-> > +#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)         \
->
-> Since commit a49ab905a1fc8630 ("RISC-V: Implement arch specific PMEM
-> APIs") in riscv/for-next, there are two new users of this macro,
-> which need to be updated to (add two zeroes?).
->
-Thanks for pointing that out, I'll rebase on for-next. I think -1
-would be a better option than zeros.
+I'm not sure how you'd fix it with a _correct_ name here. Also, the id table is
+an overkill since there is only one driver that is making use of it. And
+moreover, there is no definite ID to use.
 
-Cheers,
-Prabhakar
+Thanks,
+Mani
+
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
