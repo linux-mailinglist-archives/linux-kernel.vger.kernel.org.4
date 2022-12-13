@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4931764B4E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BA764B4E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbiLMMML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S235588AbiLMMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235488AbiLMML7 (ORCPT
+        with ESMTP id S235547AbiLMMMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:11:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369115FFF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:11:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 13 Dec 2022 07:12:01 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA117431
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:11:52 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E329614B8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:11:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657F7C433F1;
-        Tue, 13 Dec 2022 12:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670933484;
-        bh=YZA2yIOIriN/9Ssu5tc207gmhOIAB7Lv6gAfd0usWG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qoHPDUVy4i37eFmvO0xW/SA4Aqfysnx4kTkB+vsR7Ewz+0qScMYPgpdnJxK2IZVZ+
-         Vil1yjm/W8KzPaSAo67HA48iW9vq3I4EVXHz3psT2DyiRwweHeTwN2InVtpxiBEitb
-         D8cIuZQBsAbcRhZ1BT9oUjr/vui3ajT/dDiParHBG/7vd1a/igjDgwPnSQ7qlt4/yF
-         oKA++2S1eGIuZ/xHWZLozkHUFARPhg2S8pspqTUs+r158k39PdW1khDOmqxekqaO3k
-         ttUvgB5UXMNIc1dMQ70BLs+E1TXbWa+YpHmANJtx2Tf8uYWSy3Jm76JOQHG2wApZIp
-         kmQEhshJGgquw==
-Date:   Tue, 13 Dec 2022 12:11:19 +0000
-From:   Will Deacon <will@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B53591EC049C;
+        Tue, 13 Dec 2022 13:11:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670933510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=X5lcL7DyuNwTH+ORfD5m65hr2g7vZ4p3O+iUlWkudm0=;
+        b=asbHmtPuHS+spOHhvhidvZutTfzEBR1T7cOiWjUG5brf7ZfbBouKVLSzdsgce6TrOxaZ7q
+        m1HqtIFh00LvRvAdDSKbbwJPKeCGJ/p8dL4IfsZp2VyatNOdUsd2YiiOhDyfZiKe1Y5eop
+        ltmNqzkDGGWsQcVndPO+uqDh/hneqUU=
+Date:   Tue, 13 Dec 2022 13:11:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        maz@kernel.org, ardb@kernel.org
-Subject: Re: [GIT PULL] arm64 updates for 6.2
-Message-ID: <20221213121118.GB5719@willie-the-truck>
-References: <20221209112500.GA3116@willie-the-truck>
- <CAHk-=wj-8gKB5SG0w_M2fK0KYyhZbNzDZ1W9H5pmisWzJ0XJEw@mail.gmail.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/boot for v6.2
+Message-ID: <Y5hqkAfK7okjRh6n@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj-8gKB5SG0w_M2fK0KYyhZbNzDZ1W9H5pmisWzJ0XJEw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,56 +49,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-[+Ard]
+please pull a pile of early boot cleanups and fixes for 6.2.
 
-On Mon, Dec 12, 2022 at 10:05:07AM -0800, Linus Torvalds wrote:
-> On Fri, Dec 9, 2022 at 3:25 AM Will Deacon <will@kernel.org> wrote:
-> >
-> > Dynamic SCS:
-> >         * Support for dynamic shadow call stacks to allow switching at
-> >           runtime between Clang's SCS implementation and the CPU's
-> >           pointer authentication feature when it is supported (complete
-> >           with scary DWARF parser!)
-> 
-> I've pulled this thing, but this part makes me nervous. There's some
-> bad history with debug information not being 100% reliable probably
-> simply because it gets very little correctness testing.
+Thx.
 
-Hey, I did use the word "scary"! This is, at least, very easy to back
-out (it's effectively an optimisation) if the DWARF info ends up being
-too unreliable and causes issues in practice. We're also only looking
-at .eh_frame here, which should hopefully get a lot more correctness
-testing when compared to the .debug sections due to exception unwinding.
+---
 
-> It might be worth thinking about at least verifying the information
-> using something like objtool, so that you at least catch problem cases
-> at *build* time rather than runtime.
+The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
 
-Checking that the DWARF data looks sensible at build time isn't a bad
-idea, but see below as I think we can probably still produce a functional
-kernel Image in this case.
+  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
 
-> For example, that whole
-> 
->     default:
->         pr_err("unhandled opcode: %02x in FDE frame %lx\n",
-> opcode[-1], (uintptr_t)frame);
->         return -ENOEXEC;
-> 
-> really makes me go "this should have been verified at build time, it's
-> much too late to notice now that you don't understand the dwarf data".
+are available in the Git repository at:
 
-This isn't actually as bad as it looks -- the patching operation here
-only kicks in on CPUs which do not implement the pointer authentication
-instructions (i.e. where the CPU executes these as NOPs). Therefore, if
-patching bails out half way due to the "unhandled opcode" above, we
-should be ok, albeit missing some SCS coverage. I say "should" because
-if we fail within a frame after patching in the SCS "push" but before
-patching in the "pop", then we'd end up with a corrupt SCS pointer.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_boot_for_v6.2
 
-Ard -- do you think we could tweak the patching so that we patch the push
-and the pop together (e.g. by tracking the two locations on a per-frame
-basis and postponing the text poking until just before we return from
-scs_handle_fde_frame())?
+for you to fetch changes up to 60253f100c5846029f1370e51be6ebaeb160dcec:
 
-Will
+  x86/boot: Remove x86_32 PIC using %ebx workaround (2022-11-29 16:26:53 +0100)
+
+----------------------------------------------------------------
+- Do some spring cleaning to the compressed boot code by moving the
+EFI mixed-mode code to a separate compilation unit, the AMD memory
+encryption early code where it belongs and fixing up build dependencies.
+Make the deprecated EFI handover protocol optional with the goal of
+removing it at some point (Ard Biesheuvel)
+
+- Skip realmode init code on Xen PV guests as it is not needed there
+
+- Remove an old 32-bit PIC code compiler workaround
+
+----------------------------------------------------------------
+Ard Biesheuvel (17):
+      x86/boot/compressed: Rename efi_thunk_64.S to efi-mixed.S
+      x86/boot/compressed: Move 32-bit entrypoint code into .text section
+      x86/boot/compressed: Move bootargs parsing out of 32-bit startup code
+      x86/boot/compressed: Move efi32_pe_entry into .text section
+      x86/boot/compressed: Move efi32_entry out of head_64.S
+      x86/boot/compressed: Move efi32_pe_entry() out of head_64.S
+      x86/boot/compressed, efi: Merge multiple definitions of image_offset into one
+      x86/boot/compressed: Simplify IDT/GDT preserve/restore in the EFI thunk
+      x86/boot/compressed: Avoid touching ECX in startup32_set_idt_entry()
+      x86/boot/compressed: Pull global variable reference into startup32_load_idt()
+      x86/boot/compressed: Move startup32_load_idt() into .text section
+      x86/boot/compressed: Move startup32_load_idt() out of head_64.S
+      x86/boot/compressed: Move startup32_check_sev_cbit() into .text
+      x86/boot/compressed: Move startup32_check_sev_cbit() out of head_64.S
+      x86/boot/compressed: Adhere to calling convention in get_sev_encryption_bit()
+      x86/boot/compressed: Only build mem_encrypt.S if AMD_MEM_ENCRYPT=y
+      x86/efi: Make the deprecated EFI handover protocol optional
+
+Juergen Gross (1):
+      x86/boot: Skip realmode init code when running as Xen PV guest
+
+Uros Bizjak (1):
+      x86/boot: Remove x86_32 PIC using %ebx workaround
+
+ arch/x86/Kconfig                        |  17 ++
+ arch/x86/boot/compressed/Makefile       |   8 +-
+ arch/x86/boot/compressed/efi_mixed.S    | 351 ++++++++++++++++++++++++++++++++
+ arch/x86/boot/compressed/efi_thunk_64.S | 195 ------------------
+ arch/x86/boot/compressed/head_32.S      |   4 -
+ arch/x86/boot/compressed/head_64.S      | 303 ++-------------------------
+ arch/x86/boot/compressed/mem_encrypt.S  | 152 ++++++++++++--
+ arch/x86/boot/cpuflags.c                |  15 +-
+ arch/x86/boot/header.S                  |   2 +-
+ arch/x86/boot/tools/build.c             |   2 +
+ arch/x86/include/asm/realmode.h         |   1 +
+ arch/x86/include/asm/x86_init.h         |   4 +
+ arch/x86/kernel/setup.c                 |   2 +-
+ arch/x86/kernel/x86_init.c              |   3 +
+ arch/x86/realmode/init.c                |   8 +-
+ arch/x86/xen/enlighten_pv.c             |   2 +
+ drivers/firmware/efi/libstub/x86-stub.c |   2 +-
+ 17 files changed, 553 insertions(+), 518 deletions(-)
+ create mode 100644 arch/x86/boot/compressed/efi_mixed.S
+ delete mode 100644 arch/x86/boot/compressed/efi_thunk_64.S
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
