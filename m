@@ -2,120 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2970264AF36
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5253C64AF3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbiLMFMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 00:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S234547AbiLMFOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 00:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiLMFLm (ORCPT
+        with ESMTP id S234581AbiLMFN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:11:42 -0500
+        Tue, 13 Dec 2022 00:13:28 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6321E10CA;
-        Mon, 12 Dec 2022 21:09:37 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD4Kk03019955;
-        Tue, 13 Dec 2022 05:09:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=apGM6zRavgSi8EWf7Ous2+JPhJi6p2bV2Dg4VVps0OQ=;
- b=ojpMG1RWdDZy1qw7kzXzAV9uxWs/dWggRCJtt6Xq4NTOsFVnioUFl+40r1zxcRzxnZun
- bG29Z90tvj6i8GAAF2FoTk6PZSNzNBDAF14XAfCs6le7QuOVwETKCp8u4Vq8SpeY1JuI
- mlQRBVePR7CHVy7POyflt2Dy249LZ0YVXft8a6ZDhIcFzgegJIBf/r6V2zM/u/L7l0mU
- R/oThS4GGBCBW9CaA6LlVrHc2ox3GjpQYJg81Z9BmgjSDmQjkzzHDqB6Hwp8ux5vHKja
- IxVTV9Hl3KjamzEO4yKWTjKXLRcL2ASyPKGbugfJDBSJsPlg7iUV941gOZvPUPjMG8c1 Tw== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CA429B;
+        Mon, 12 Dec 2022 21:11:45 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BCNpAjl030148;
+        Tue, 13 Dec 2022 05:11:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=VHuKGfxKnjNTt9JHWWViCO5yp0B2gIsVyNTdUxzDOvI=;
+ b=EoZXWHJiWJZlTlv2PGGOpn+MW9pEl5T5WH+03Z3Nr9bjbE9uUSFjKMFXMEW6UgJmn3x7
+ eVGJPnP/ZDCutZuCVqWuJBXmoHtCqKupznxGSBGwssdfUkAlystD4uFbjctkb68UnRUp
+ Sb7PucS419Qv6Ra5dVD1IPb69dGsKRrDzMjC2s53qsmO+wbpN3D9mkxyUS4WAZl6eXZN
+ SXCCQr0wfmdGCTBTj9jGZQHZXNzWRmF3aKJ8L//kpMHKg+yWL2VdRT6IyJcGLtpH6GP2
+ SvE+uGZxhwhPnoFpRri6viXdTZB4a7uUxxJ7ng8xNRSeFZCQswj0JGlCKELp+8xfK2Sy jg== 
 Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3me09gb2rv-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mcjb96c1k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 05:09:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD59RK2030530
+        Tue, 13 Dec 2022 05:11:39 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD5BcwW000929
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 05:09:27 GMT
-Received: from [10.50.38.23] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
- 2022 21:09:22 -0800
-Message-ID: <f9d5f681-5e4d-870b-ef51-4ba7f70a5b1f@quicinc.com>
-Date:   Tue, 13 Dec 2022 10:39:19 +0530
+        Tue, 13 Dec 2022 05:11:38 GMT
+Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 12 Dec 2022 21:11:34 -0800
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+To:     <andersson@kernel.org>, <johan@kernel.org>
+CC:     <bmasney@redhat.com>, Shazad Hussain <quic_shazhuss@quicinc.com>,
+        "kernel test robot" <lkp@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
+Date:   Tue, 13 Dec 2022 10:41:08 +0530
+Message-ID: <20221213051109.8685-1-quic_shazhuss@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 11/13] arm64: dts: qcom: sm6350: Remove reg-names
- property from LLCC node
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <bp@alien8.de>,
-        <tony.luck@intel.com>
-CC:     <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <james.morse@arm.com>,
-        <mchehab@kernel.org>, <rric@kernel.org>,
-        <linux-edac@vger.kernel.org>, <quic_ppareek@quicinc.com>,
-        <luca.weiss@fairphone.com>, <stable@vger.kernel.org>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-12-manivannan.sadhasivam@linaro.org>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20221212123311.146261-12-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uoTAYHwThRzyL4GhNV8zniarNTsKbvPM
-X-Proofpoint-GUID: uoTAYHwThRzyL4GhNV8zniarNTsKbvPM
+X-Proofpoint-GUID: eCTdV3gDJ3atKV60O8ka-PIvaC-wD9sk
+X-Proofpoint-ORIG-GUID: eCTdV3gDJ3atKV60O8ka-PIvaC-wD9sk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-13_02,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- bulkscore=0 phishscore=0 adultscore=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 suspectscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2212130047
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2022 6:03 PM, Manivannan Sadhasivam wrote:
-> The LLCC block has several banks each with a different base address
-> and holes in between. So it is not a correct approach to cover these
-> banks with a single offset/size. Instead, the individual bank's base
-> address needs to be specified in devicetree with the exact size.
-> 
-> On SM6350, there is only one LLCC bank available. So only change needed is
-> to remove the reg-names property from LLCC node to conform to the binding.
-> 
-> The driver is expected to parse the reg field based on index to get the
-> addresses of each LLCC banks.
-> 
-> Cc: <stable@vger.kernel.org> # 5.16
-> Fixes: ced2f0d75e13 ("arm64: dts: qcom: sm6350: Add LLCC node")
-> Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm6350.dtsi | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> index 43324bf291c3..1f39627cd7c6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -1174,7 +1174,6 @@ dc_noc: interconnect@9160000 {
->   		system-cache-controller@9200000 {
->   			compatible = "qcom,sm6350-llcc";
->   			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
-> -			reg-names = "llcc_base", "llcc_broadcast_base";
->   		};
->   
->   		gem_noc: interconnect@9680000 {
+Add the pcie2a, pcie2a_phy, and respective tlmm
+nodes that are needed to get pcie 2a controller
+enabled on Qdrive3.
 
-Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+This patch enables 4GB 64bit memory space for
+PCIE_2A to have BAR allocations of 64bit pref mem
+needed on this Qdrive3 platform with dual SoCs
+for root port and switch NT-EP. Hence this ranges
+property is overridden in sa8540p-ride.dts only.
+
+Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+Reviewed-by: Brian Masney <bmasney@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+Changes since v3:
+- Fix syntax error and add Reported-by (Kernel test robot)
+
+Changes since v2:
+- Discard below patch as v3 is merged in qcom tree
+  [v4] arm64: dts: qcom: sa8540p-ride: enable PCIe support
+  https://lore.kernel.org/all/20221206161916.315640-1-bmasney@redhat.com/
+- Move tlmm PINCTRL to the end and add R-b (Brian)
+
+Changes since v1:
+- Fix ranges property indentation (Konrad)
+
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 96 +++++++++++++++++------
+ 1 file changed, 71 insertions(+), 25 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index 6c547f1b13dc..d70859803fbd 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -146,6 +146,27 @@ vreg_l8g: ldo8 {
+ 	};
+ };
+ 
++&pcie2a {
++	ranges = <0x01000000 0x0 0x3c200000 0x0 0x3c200000 0x0 0x100000>,
++		 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>,
++		 <0x03000000 0x5 0x00000000 0x5 0x00000000 0x1 0x00000000>;
++
++	perst-gpios = <&tlmm 143 GPIO_ACTIVE_LOW>;
++	wake-gpios = <&tlmm 145 GPIO_ACTIVE_HIGH>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie2a_default>;
++
++	status = "okay";
++};
++
++&pcie2a_phy {
++	vdda-phy-supply = <&vreg_l11a>;
++	vdda-pll-supply = <&vreg_l3a>;
++
++	status = "okay";
++};
++
+ &pcie3a {
+ 	ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
+ 		 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x20000000>,
+@@ -186,31 +207,6 @@ &remoteproc_nsp1 {
+ 	status = "okay";
+ };
+ 
+-&tlmm {
+-	pcie3a_default: pcie3a-default-state {
+-		perst-pins {
+-			pins = "gpio151";
+-			function = "gpio";
+-			drive-strength = <2>;
+-			bias-pull-down;
+-		};
+-
+-		clkreq-pins {
+-			pins = "gpio150";
+-			function = "pcie3a_clkreq";
+-			drive-strength = <2>;
+-			bias-pull-up;
+-		};
+-
+-		wake-pins {
+-			pins = "gpio56";
+-			function = "gpio";
+-			drive-strength = <2>;
+-			bias-pull-up;
+-		};
+-	};
+-};
+-
+ &ufs_mem_hc {
+ 	reset-gpios = <&tlmm 228 GPIO_ACTIVE_LOW>;
+ 
+@@ -268,3 +264,53 @@ &usb_2_qmpphy0 {
+ &xo_board_clk {
+ 	clock-frequency = <38400000>;
+ };
++
++/* PINCTRL */
++
++&tlmm {
++	pcie2a_default: pcie2a-default-state {
++		perst-pins {
++			pins = "gpio143";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-down;
++		};
++
++		clkreq-pins {
++			pins = "gpio142";
++			function = "pcie2a_clkreq";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++
++		wake-pins {
++			pins = "gpio145";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++	};
++
++	pcie3a_default: pcie3a-default-state {
++		perst-pins {
++			pins = "gpio151";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-down;
++		};
++
++		clkreq-pins {
++			pins = "gpio150";
++			function = "pcie3a_clkreq";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++
++		wake-pins {
++			pins = "gpio56";
++			function = "gpio";
++			drive-strength = <2>;
++			bias-pull-up;
++		};
++	};
++};
+-- 
+2.38.0
+
