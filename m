@@ -2,171 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555DE64AC69
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C8D64AC56
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbiLMAZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S233907AbiLMAYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiLMAYo (ORCPT
+        with ESMTP id S233621AbiLMAY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:24:44 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5E12AE5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:24:40 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id y25so2289792lfa.9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:24:40 -0800 (PST)
+        Mon, 12 Dec 2022 19:24:29 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3A12195;
+        Mon, 12 Dec 2022 16:24:27 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1445ca00781so10607771fac.1;
+        Mon, 12 Dec 2022 16:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4NqADL9fRikgvphogBytlGfLHviEG2IYDDL43EsbLJM=;
-        b=fxIG0R1YWutzDM2ebme2YUNsnVBPR9NhVIaIyS5WlfSb4y6x1FAZ/sq7GgpgwGIOCI
-         u/7OD29+NCKkclW9EhgH/ygrjOeHaHiQ3fHqXCbQmnbyTWw4UgKog0zKd8R8FfIFLKeO
-         NQ6WwxkPe6prynwNHD+GTA7HxB5gm/cuRFVgl0v4eoMh9kls3rRH6imiaOstAy6/+QY2
-         ODSspyfa0Rs0Tcci7bjgC6Zieefm03DIfYPLNs7u0DeF/HiDGA/XfEdtMHMfq4Db6Ab5
-         e5g4sK6C3j3rNM7/0BYJZeeDAyG8ctHpWgy1QwhqEaTn7Lrk/V9IV7z5pMccP9tmtt4T
-         nrDQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=puW+NA+qcVfbNDwy3Cka1eMBFMm0X68cK1dM0/fozLw=;
+        b=Gt7OaSH+GRgqDlxMmqcg+BrgJTkKY2zhgR+fFFSpxbeOVYubEGSgMMK7VZbTDhi5OU
+         5eFi9ZJ+BJw9SlQz+ZI5LPFB1/f88G8zT9wFLdT8+mZTWoyYzPwGKgnR3RbGc0TbPbxN
+         mYNdrUukBvYLuxqSjaWSCUwm9B9T6XNOAQIrnzMmansPPvL+WhTorjMiwY4MVo5DfZOG
+         687+uMkPySjwwfSSWubNmgOH4DtSjUIySm2S1O8jnK9TaCIGhKw7eOV0XMzYeYNa4DR1
+         kSLFJ43jPUFELsoBrhHk6AAMv+55oAvtoOhZD7dTHvRpJNzpPrjppUi387Xkr4gJ12wU
+         oBSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4NqADL9fRikgvphogBytlGfLHviEG2IYDDL43EsbLJM=;
-        b=m25jm6IhSuwnr4tcyIDoF5IwbGn5liWNSVksLXh1CPTy3Og8jUgfW+2labqvVqyjsd
-         YRplJ1YQKsV3g5ny0rHcJdix/olUWTJXAEMk4MSyqSufEaCb7Bv9PQJEuP/h4UKyYbfQ
-         SUAc34U1FeM6jhmXhxwKOAeWbThA5muGUD87Q8yiy3V8w4T40LVlX9HfTOjJbL2AMGUj
-         HbM6v41MwsXB5Z1DZ5QWnhT3VD4x0vVSYBA+60Y0Gdt5Zk/HY6jlQvUzlGvDcP0i6l0a
-         2yQLrfBQGUKyWIlO3c34d78WbsJXsT0tDlZ6Hw6/Rx+1hNeBJOzSH9aJsgVYHfJfkutA
-         0fEw==
-X-Gm-Message-State: ANoB5pnTXB4nCLUJkuDoMrbjNG4lmCq1b/v78pJ35mmZGqXFHGH70KJ2
-        TfmUQc6Yr7uCFS9JfXlrJ6LJ0XMrXILTCQT0
-X-Google-Smtp-Source: AA0mqf7ztEvfed14f5GISkGdaXHFag5HjecBnWyEV2K7hdOGQx80J51qVunnDxiJBg94adYD058YeA==
-X-Received: by 2002:a05:6512:b91:b0:4a4:68b8:c2e4 with SMTP id b17-20020a0565120b9100b004a468b8c2e4mr7478764lfv.59.1670891079853;
-        Mon, 12 Dec 2022 16:24:39 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id m23-20020ac24257000000b004978e51b691sm137352lfl.266.2022.12.12.16.24.38
+        bh=puW+NA+qcVfbNDwy3Cka1eMBFMm0X68cK1dM0/fozLw=;
+        b=wRrnQudzgAvdiu0+QPa6Jv7mKtCUpkbEVMroK4fq7K3isJKPIYzJCqC8kFyQOG4Bv8
+         q8fi/sR3hzypvr4T2/iXF81JkOvyvQTLWlOuzPmdTLrcFjsAgF7dvgZ3ARPDfoNVvnrM
+         oa39K3Ky2EAkM73Nn6/k0nYi2j1RNKnsZtl/sojRcaanoC+LFrlkpXhljlLDDkbFo6ti
+         vC5CM3H1S1ETexFPLDkL49l9lnvTFTt2gZUtTnWzZ0J+KsXwLM/xDTo2NPwDw//v3Lr1
+         b9iQ9P8KnsogdrpeVVKiZxP1mWMR+ZhHfm/6ba+UEMzE72ttvzX9hj0XQG0sEsuRZZII
+         JSvg==
+X-Gm-Message-State: ANoB5plIGyv3N1l/RWqs8hk5dy5cBLhaxs8WtDdToKFpaNp787XIStqV
+        T6pLWSXETWFjo8754PPqsLU=
+X-Google-Smtp-Source: AA0mqf440i5VoGkq2sLet0cHK1bXq6hwkYJwe5Dmt9UoKiow17dF+uX43VZ2wMJJnd8N+esnys9KMw==
+X-Received: by 2002:a05:6870:b388:b0:13c:14fd:e901 with SMTP id w8-20020a056870b38800b0013c14fde901mr11662446oap.27.1670891067327;
+        Mon, 12 Dec 2022 16:24:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w6-20020a056871060600b001446480a042sm616253oan.58.2022.12.12.16.24.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 16:24:39 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] arm64: dts: qcom: sm8250: Add GPU speedbin support
-Date:   Tue, 13 Dec 2022 01:24:23 +0100
-Message-Id: <20221213002423.259039-8-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221213002423.259039-1-konrad.dybcio@linaro.org>
-References: <20221213002423.259039-1-konrad.dybcio@linaro.org>
+        Mon, 12 Dec 2022 16:24:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 12 Dec 2022 16:24:26 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/67] 5.4.227-rc1 review
+Message-ID: <20221213002426.GD2375064@roeck-us.net>
+References: <20221212130917.599345531@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212130917.599345531@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM8250 has (at least) four GPU speed bins. With the support added on the
-driver side, wire up bin detection in the DTS to restrict lower-quality
-SKUs from running at frequencies they were not validated at.
+On Mon, Dec 12, 2022 at 02:16:35PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.227 release.
+> There are 67 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+> 
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 447 pass: 447 fail: 0
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index c008f49b5852..0c4ecdab1244 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -955,6 +955,18 @@ ipcc: mailbox@408000 {
- 			#mbox-cells = <2>;
- 		};
- 
-+		qfprom: efuse@784000 {
-+			compatible = "qcom,sm8250-qfprom", "qcom,qfprom";
-+			reg = <0 0x00784000 0 0x8ff>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			gpu_speed_bin: gpu_speed_bin@19b {
-+				reg = <0x19b 0x1>;
-+				bits = <5 3>;
-+			};
-+		};
-+
- 		rng: rng@793000 {
- 			compatible = "qcom,prng-ee";
- 			reg = <0 0x00793000 0 0x1000>;
-@@ -2563,49 +2575,58 @@ gpu: gpu@3d00000 {
- 
- 			qcom,gmu = <&gmu>;
- 
-+			nvmem-cells = <&gpu_speed_bin>;
-+			nvmem-cell-names = "speed_bin";
-+
- 			status = "disabled";
- 
- 			zap-shader {
- 				memory-region = <&gpu_mem>;
- 			};
- 
--			/* note: downstream checks gpu binning for 670 Mhz */
- 			gpu_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
- 				opp-670000000 {
- 					opp-hz = /bits/ 64 <670000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
-+					opp-supported-hw = <0x6>;
- 				};
- 
- 				opp-587000000 {
- 					opp-hz = /bits/ 64 <587000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
-+					opp-supported-hw = <0x7>;
- 				};
- 
- 				opp-525000000 {
- 					opp-hz = /bits/ 64 <525000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L2>;
-+					opp-supported-hw = <0xf>;
- 				};
- 
- 				opp-490000000 {
- 					opp-hz = /bits/ 64 <490000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
-+					opp-supported-hw = <0xf>;
- 				};
- 
- 				opp-441600000 {
- 					opp-hz = /bits/ 64 <441600000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L0>;
-+					opp-supported-hw = <0xf>;
- 				};
- 
- 				opp-400000000 {
- 					opp-hz = /bits/ 64 <400000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
-+					opp-supported-hw = <0xf>;
- 				};
- 
- 				opp-305000000 {
- 					opp-hz = /bits/ 64 <305000000>;
- 					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
-+					opp-supported-hw = <0xf>;
- 				};
- 			};
- 		};
--- 
-2.39.0
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
