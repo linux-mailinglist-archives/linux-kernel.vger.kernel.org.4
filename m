@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC1E64BDA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EF264BDA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236642AbiLMTyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S236696AbiLMTzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbiLMTys (ORCPT
+        with ESMTP id S236735AbiLMTzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:54:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A322719
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670961239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q04pXB0nuaw4NyeT98qJ4CK1uIQuz5FaT/xQVCDx6WM=;
-        b=GYdQW+YjY6dlAfqQTo6aClVMki1Rni+dh8KcuPslGDYbksz4FPWb43hMwf00nCnL5Akiki
-        Id911GjjipQUqM0RngHD8DebeFVZBJekS4mQdO7QfAzaI8nWk5sbIEC1fiAdyXSWIv6gwI
-        GINVTuzh5T9K7Lteq24RHqVYbhdYrLM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-418-mkDnArbIMqqYOe1_pd7cpA-1; Tue, 13 Dec 2022 14:53:56 -0500
-X-MC-Unique: mkDnArbIMqqYOe1_pd7cpA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6C4E1C0756D;
-        Tue, 13 Dec 2022 19:53:55 +0000 (UTC)
-Received: from [10.22.32.205] (unknown [10.22.32.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B3446492C14;
-        Tue, 13 Dec 2022 19:53:54 +0000 (UTC)
-Message-ID: <34a8c4a7-a58d-63fc-4599-accf1cbb6aae@redhat.com>
-Date:   Tue, 13 Dec 2022 14:53:52 -0500
+        Tue, 13 Dec 2022 14:55:11 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115B626572;
+        Tue, 13 Dec 2022 11:55:10 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j4so6823130lfk.0;
+        Tue, 13 Dec 2022 11:55:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nk3UifPWZ8X9jtpCKSxbryHT9Gexr5oq8yB6NwibN9U=;
+        b=kemGwEJvt2zd6KBzrqEHTXqhqYMo0suffwvPbd2M1aN+H95ddC4bOnIAsVOr3cMo8o
+         yWIp2zZ+ho46O0SrFNgYOz0Ln2mMlz6IXIDUiRgqPD4NgRn6CgHflkgfQLSPgBmdkJvI
+         fNEejwpFG6MzxN9pXoXpfDZdBDHESaloM0SWssnhRRbrFhPx9A+WlUC4pxD49e7JJ1lY
+         WrSCCsapw28AlaYeM+ut2dGp7GMbtcozMVpVY4wZW+6xFxtiCgOyWbbGd8EW/Fjb1RK2
+         zA0fmeksK7R5yFVrc81xpO+LuGvsTRT0a3v5R3a3xsC4S4RGFarf5p8HN0ibI6xHEWD3
+         Kz9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nk3UifPWZ8X9jtpCKSxbryHT9Gexr5oq8yB6NwibN9U=;
+        b=GnwSmT0ZKQSNheMxf49qZhC68uUr00UUeMokTdLTbWIFeCJliBfqCJ9J8DY8haiZQk
+         v7qDoEiDNvOVG+4O54WOGlzuzrA5csJHIxbZfd4iKmGv5+NoHwUE/fYmxRsMJvmLra6J
+         8arhsNlHm7x6RXFXwuV9h95LalDfLElQ4Vv6l21vWPKrRfJjv/la2RzhzjRCh3gDo0/d
+         m9z5VW9iU7ebmiCpC2zJJTD0cqn4BsHUcrW7Yava5MNWHDc5PSTNchztXYO0JLLhA+z5
+         y/pwajK71XRdExys3u6hCGHGDdyU4+hKq5Wh/G0Ek/VPS/AmNXxynu2RJQWlWodci+0k
+         PZwQ==
+X-Gm-Message-State: ANoB5pkiv/V3UgXXL2n3Z926DtgJvqyuBjhSVtU9r6NYgL1mujtZpZ9m
+        ymzlBCVjQpPQZAfxfZNIiui3C1OwmyVPsQ/T3w==
+X-Google-Smtp-Source: AA0mqf79C7AC3F6i3PzYfN/nJFEFP2hYsBNPvmmImhudch/GOumKMTpC2rBPdTzoRO8xQ6CvE/fdFQaYdUYQgmJPjnI=
+X-Received: by 2002:a05:6512:238c:b0:4b5:87b5:75bf with SMTP id
+ c12-20020a056512238c00b004b587b575bfmr4503074lfv.493.1670961308268; Tue, 13
+ Dec 2022 11:55:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block v3 1/2] bdi, blk-cgroup: Fix potential UAF of blkcg
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
-        Yi Zhang <yi.zhang@redhat.com>
-References: <20221213184446.50181-1-longman@redhat.com>
- <20221213184446.50181-2-longman@redhat.com>
- <Y5jSllwwBdmQ1jQz@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y5jSllwwBdmQ1jQz@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
+ <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com>
+In-Reply-To: <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com>
+From:   "Seija K." <doremylover123@gmail.com>
+Date:   Tue, 13 Dec 2022 14:54:57 -0500
+Message-ID: <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
+Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
+ controller's ring buffer
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Yes, I did.
 
-On 12/13/22 14:29, Tejun Heo wrote:
-> On Tue, Dec 13, 2022 at 01:44:45PM -0500, Waiman Long wrote:
->> Commit 59b57717fff8 ("blkcg: delay blkg destruction until after
->> writeback has finished") delayed call to blkcg_destroy_blkgs() to
->> cgwb_release_workfn(). However, it is done after a css_put() of blkcg
->> which may be the final put that causes the blkcg to be freed as RCU
->> read lock isn't held.
->>
->> Another place where blkcg_destroy_blkgs() can be called indirectly via
->> blkcg_unpin_online() is from the offline_css() function called from
->> css_killed_work_fn(). Over there, the potentially final css_put() call
->> is issued after offline_css().
->>
->> By adding a css_tryget() into blkcg_destroy_blkgs() and warning its
->> failure, the following stack trace was produced in a test system on
->> bootup.
-> This doesn't agree with the code anymore. Otherwise
+On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
 >
-> Acked-by: Tejun Heo <tj@kernel.org>
-
-Sorry, I overlooked the commit log in my update. I will update it if I 
-need another version, or Jens can make the following edit:
-
-css_tryget() -> percpu_ref_is_zero().
-
-Thanks,
-Longman
-
+> Hello Seija,
+>
+> Il giorno mar 13 dic 2022 alle ore 18:44 Seija K.
+> <doremylover123@gmail.com> ha scritto:
+> >
+> > When a packet larger than MTU arrives in Linux from the modem, it is
+> > discarded with -EOVERFLOW error (Babble error).
+> >
+> > This is seen on USB3.0 and USB2.0 buses.
+> >
+> > This is because the MRU (Max Receive Size) is not a separate entity
+> > from the MTU (Max Transmit Size), and the received packets can be
+> > larger than those transmitted.
+> >
+> > Following the babble error, there was an endless supply of zero-length
+> > URBs that were rejected with -EPROTO (increasing the rx input error
+> > counter each time).
+> >
+> > This is only seen on USB3.0. These continue to come ad infinitum until
+> > the modem is shut down.
+> >
+> > There appears to be a bug in the core USB handling code in Linux that
+> > doesn't deal with network MTUs smaller than 1500 bytes well.
+> >
+> > By default, the dev->hard_mtu (the real MTU) is in lockstep with
+> > dev->rx_urb_size (essentially an MRU), and the latter is causing
+> > trouble.
+> >
+> > This has nothing to do with the modems; the issue can be reproduced by
+> > getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
+> > with size greater than 1406.
+> >
+> > Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+> >
+> > Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+> > ---
+> > drivers/net/usb/qmi_wwan.c | 7 +++++++
+> > 1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> > index 554d4e2a84a4..39db53a74b5a 100644
+> > --- a/drivers/net/usb/qmi_wwan.c
+> > +++ b/drivers/net/usb/qmi_wwan.c
+> > @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+> > struct usb_interface *intf)
+> > }
+> > dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+> > dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
+> > + /* LTE Networks don't always respect their own MTU on the receiving side;
+> > + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
+> > + * far-end networks. Make the receive buffer large enough to accommodate
+> > + * them, and add four bytes so MTU does not equal MRU on network
+> > + * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
+> > + */
+> > + dev->rx_urb_size = ETH_DATA_LEN + 4;
+>
+> Did you test this change with QMAP?
+>
+> To support qmap dl aggregated blocks qmi_wwan relies on the
+> usbnet_change_mtu behavior of changing the rx_urb_size.
+>
+> Thanks,
+> Daniele
+>
+> > err:
+> > return status;
+> > }
+> > --
+> > 2.38.2
