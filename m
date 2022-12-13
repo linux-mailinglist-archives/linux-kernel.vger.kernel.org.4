@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5103964BBF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC41D64BBE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236539AbiLMS2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbiLMS2D (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236446AbiLMS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 13 Dec 2022 13:28:03 -0500
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FF61FCF5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:28:02 -0800 (PST)
-Received: from TimeMachine.lan (adsl-d248.84-47-10.t-com.sk [84.47.10.248])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 2EB11202DF;
-        Tue, 13 Dec 2022 19:28:00 +0100 (CET)
-From:   Martin Botka <martin.botka@somainline.org>
-To:     martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Martin Botka <martin.botka@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] regulator: axp20x: Add support for AXP1530 variant
-Date:   Tue, 13 Dec 2022 19:27:42 +0100
-Message-Id: <20221213182743.3087889-4-martin.botka@somainline.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221213182743.3087889-1-martin.botka@somainline.org>
-References: <20221213182743.3087889-1-martin.botka@somainline.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236401AbiLMS16 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 13 Dec 2022 13:27:58 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D901A826
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:27:57 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id z4so4206675ljq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:27:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pRVW+CqdRPEDK22F/smPmIg2CNnoImB0xlqZnB6FMCI=;
+        b=q78cXwhMZgTyf1v/es8RSywmk8ZEWDhHb3IdqTdqRPUxJdOogVWo8Z4j51DeN6QlGc
+         EOU14M7gKw7vAE/NfmKKPCWI9JhkXgeMoySO0JNcBplkpskDpPuzpfy4ANG0waB0u8VO
+         ItaoaoenCzIogj+LMnhFx8Z8hIrOfdfA5DA10dy4nwfuumDkBICRFURS0BcvLtlmaed/
+         LTGHvxZjLr5H24zFXLI51abbh7qcwqqss5Vs+oILEcFas8iv+zjfQYKx3ph+NzvCk/SB
+         7qGKQEDPMd1LG+rXiLK/LwLSIstniumsyEEcDBHyT0vNz2CfGSOtobaS+m/R0XhT4s0x
+         JAWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pRVW+CqdRPEDK22F/smPmIg2CNnoImB0xlqZnB6FMCI=;
+        b=zbM/b/mRY7X/dnFhe2b9pDs4cmgc4z1pO0k75An5+fn2ZBzD+HAChsEgKhQ7FnLDKO
+         bTGcGWuk8jcm5qm1WumLLIkdrAd2M8PBeYoMiLfd5HzseEVXb845fzgYH4aPkJnF7KuZ
+         CS9lfQu/yeuZzTBltk0LRFgoXfJb9yDK9wudNW4kn35kemRl+QW/jJLySNilP3au/vut
+         iCrOUQrAJ2L6IrzLqDf49XAMlLgjQkslF6/4WB2RORKIjsqkwAcow7XbklEkIyphUqB0
+         6zwWOu8AxwumoiT+eR3/MHpcdEhsH13Gn6IbZYz2kYLG3t2GnvW2MN5wHAllCj9Q79S3
+         iRgg==
+X-Gm-Message-State: ANoB5pm1ONRY4l8JGOFcw3wQC7TaaaYsyl5DDzEu0lBeIaBj0oULZD1C
+        vEdanMCFJZK7TiAepsDoOIPrOA==
+X-Google-Smtp-Source: AA0mqf7sMI4z3Co7LrBbOam76K9nVgyiXSAd4TxERryPTmMBXjq9XaKr9UcZEA74UtC5h7GD0JN0cA==
+X-Received: by 2002:a05:651c:50f:b0:277:3931:a59b with SMTP id o15-20020a05651c050f00b002773931a59bmr6932788ljp.42.1670956075723;
+        Tue, 13 Dec 2022 10:27:55 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s16-20020a05651c049000b00279ee47099dsm351691ljc.116.2022.12.13.10.27.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 10:27:55 -0800 (PST)
+Message-ID: <35afe007-4ab1-3cce-1c05-3edd25108391@linaro.org>
+Date:   Tue, 13 Dec 2022 19:27:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_HTTP,
-        RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: mainline build failure due to e1d7dc52c3e6 ("ARM: dts: suniv:
+ f1c100s: add CIR DT node")
+To:     Andre Przywara <andre.przywara@arm.com>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <Y5hZcmnZHsgpv3Pu@debian>
+ <20221213171002.23c8c712@donnerap.cambridge.arm.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213171002.23c8c712@donnerap.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AXP1530 has a few regulators that are controlled via I2C Bus.
+On 13/12/2022 18:10, Andre Przywara wrote:
+> On Tue, 13 Dec 2022 10:52:34 +0000
+> "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com> wrote:
+> 
+> Hi Sudip,
+> 
+> thanks for the heads up.
+> 
+>> The latest mainline kernel branch fails to build arm allmodconfig and
+>> multi_v5_defconfig with the error:
+>>
+>> Error: arch/arm/boot/dts/suniv-f1c100s.dtsi:250.30-31 syntax error
+>> FATAL ERROR: Unable to parse input tree
+> 
+> This is because the clock patch hasn't reached Linus' tree yet, as it's
+> coming from a different branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git/log/?h=sunxi/clk-for-6.2
+> 
+> In the original series I had it in the right order, but I guess the single
+> line to add the "CLK_IR" symbol should have been in a separate patch and
+> gone along with the DT patches.
 
-Add support for them.
+No, the patchset was broken in few ways:
+1.
+https://lore.kernel.org/all/20221107005433.11079-5-andre.przywara@arm.com/
+You cannot mix driver changes and the bindings in the same patch.
 
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
----
- drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+2. Driver changes cannot go with DTS, thus you created non-bisectable
+patchset breaking now Linus and in future - breaking all bisects.
 
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index d260c442b788..9420839ff4f9 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -1001,6 +1001,40 @@ static const struct regulator_desc axp813_regulators[] = {
- 		    AXP22X_PWR_OUT_CTRL2, AXP22X_PWR_OUT_DC1SW_MASK),
- };
- 
-+static const struct linear_range axp1530_dcdc1_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-+	REGULATOR_LINEAR_RANGE(1600000, 0x58, 0x6A, 100000),
-+};
-+
-+static const struct linear_range axp1530_dcdc2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-+};
-+
-+static const struct linear_range axp1530_dcdc3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x66, 20000),
-+};
-+
-+static const struct regulator_desc axp1530_regulators[] = {
-+	AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", axp1530_dcdc1_ranges,
-+					0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(0)),
-+	AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", axp1530_dcdc2_ranges,
-+					0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(1)),
-+	AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", axp1530_dcdc3_ranges,
-+					0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(2)),
-+	AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
-+					AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-+					BIT(3)),
-+	AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
-+					AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-+					BIT(4)),
-+};
-+
- static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- {
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
-@@ -1040,6 +1074,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- 		def = 3000;
- 		step = 150;
- 		break;
-+	case AXP1530_ID:
-+		/*
-+		 * Do not set the DCDC frequency on AXP1530
-+		 */
-+		return 0;
-+		break;
- 	default:
- 		dev_err(&pdev->dev,
- 			"Setting DCDC frequency for unsupported AXP variant\n");
-@@ -1220,6 +1260,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
- 	bool drivevbus = false;
- 
- 	switch (axp20x->variant) {
-+	case AXP1530_ID:
-+		regulators = axp1530_regulators;
-+		nregulators = AXP1530_REG_ID_MAX;
-+		break;
- 	case AXP202_ID:
- 	case AXP209_ID:
- 		regulators = axp20x_regulators;
--- 
-2.38.1
+Its applying was also wrong - the sunxi tree had bisectability problem
+in its own for-next branch.
+
+In future, please do it the same way as we do with regular updates with
+dependencies between drivers+bindings+DTS, so:
+1. Binding patch is *always* separate.
+
+2. You have now choice of:
+2a. Maintainer puts the binding patch with DTS on the DTS branch and
+shares it via stable tag to the driver branch. The driver changes go to
+driver branch. The order of pull request is important as changes from
+driver branch cannot go to DTS branch.
+2b. Submitter: Binding patch goes with drivers, but DTS uses hard-coded
+numbers for defines and does not rely on the bindings patch.
+
+> Anyway it should magically solve itself in the next hours/days, I guess.
+
+No, it will not fix itself. Bisectability is broken.
+
+Jernej,
+Please be sure that your tree is covered by kernel build robot - all
+branches, not only for-next. If it were there, you would receive build
+error from the robot that bisectability is broken.
+
+Best regards,
+Krzysztof
 
