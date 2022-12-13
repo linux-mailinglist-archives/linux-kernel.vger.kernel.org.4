@@ -2,146 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3927F64ADF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B81564ADF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiLMCxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        id S234323AbiLMCyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiLMCxh (ORCPT
+        with ESMTP id S229842AbiLMCyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:53:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF17BC83;
-        Mon, 12 Dec 2022 18:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ZKX8lutJbYrUDMvUvqcO0M/AYzReqeJcn+AU7sWbq3c=; b=EzNOmVlRZedDG9/bRxvhjj+pzY
-        8cNF1TGiL/ingdazs5LswFkhQQj6oaJUAZUDP25ZlfsNzm+G9PCMZe/wSPPYEudkHJNgAPnR0iB70
-        7hIJP6wtcO2jDybwjEaapLAmNHqCm3xih4DUNm76dXY9B1ED0FNNqpLYIrqS7Wq8FDNKTEdNLv/T9
-        ij6/E9JYbW4XtBeQgTe8SjWqwCND58EeobUlVmAjBLj/miAiRyFBRjbHnT4BbHk1/n04rSyJqH7xt
-        eXDx0QT8GwA/SKU+SfHOJKGCtp93BtUoOY1Ng5uIzmSXrrXCbEBfeoq39YL8EOOmnnyBRWeG3VUB4
-        u4vEKwHA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4vQ7-009xiv-1i; Tue, 13 Dec 2022 02:53:27 +0000
-Date:   Mon, 12 Dec 2022 18:53:27 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     thunder.leizhen@huawei.com, swboyd@chromium.org,
-        yang.lee@linux.alibaba.com, linux@rasmusvillemoes.dk,
-        petr.pavlu@suse.com, mwilck@suse.com, pmladek@suse.com,
-        mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] modules changes for v6.2-rc1
-Message-ID: <Y5fpJ6MOxf9PD8Vh@bombadil.infradead.org>
+        Mon, 12 Dec 2022 21:54:22 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFBD13CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:54:21 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id o22-20020a6b5a16000000b006e2d564944aso1125902iob.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:54:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J6NXenqjtVYmfkITCWeR0vH6LO9Y9xEemg5D/oyg1+s=;
+        b=a7suDPA9jX7MXGbY1Em3cPmZ8d3/5R1WpKtBWB3Md8Z68Eg5M53amCplgVFqtQWa6L
+         sjXo67goLljBmWQdO5qhuhjJNTMPR/Q4HUBnjRYua+Sy60kKddqj59nRUHpJQ+zqN8WL
+         qi+kWDhG7uNRFt+I+7phk+ox3jIbUATd8/bahp1hS9TJoQmYGN1PMKCmLf9oCV3q8ZM4
+         KQ/nybf/LeJpdmJHVT3a1oNUs0Gua/B36gEPO9ONMOQQhnfJYGlNIA/L88e0bSmlWx4R
+         we/8cp1d7WLmA09yLXb1NOsbnGmMgE9lE/g5HR3wc31ojDWuMWsG3zwCypiIv04FcMwo
+         DTHg==
+X-Gm-Message-State: ANoB5pl/HzA7T/RHXMa1ggrmlaGGHgI7h4L4LR7H5f7gWF5jQ9qi8TNH
+        Gfy1RHiFs5LIQDIhM+5AxkvYk+sHdSijj3hzOWegsPP5YuaA
+X-Google-Smtp-Source: AA0mqf6kFyLPDYcVBDXKwlY1p0FjHb8+of7QeMhe1QP0YpiQ2cA1DSSvzDKAJW9FqWMo18v64960+pqM0TVAfVDx/l84uI9xJiyP
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:208e:b0:6d6:8034:5cc3 with SMTP id
+ a14-20020a056602208e00b006d680345cc3mr43478765ioa.10.1670900061234; Mon, 12
+ Dec 2022 18:54:21 -0800 (PST)
+Date:   Mon, 12 Dec 2022 18:54:21 -0800
+In-Reply-To: <20221213002232.3295-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009aed2905efacbca6@google.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in xfs_buf_delwri_submit_buffers
+From:   syzbot <syzbot+11d99e499adff05631cc@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit eb037f16f7e843722db5f0275d84b3f738d5649d:
+Hello,
 
-  Merge tag 'perf-tools-fixes-for-v6.1-2-2022-11-10' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux (2022-11-11 09:45:30 -0800)
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-are available in the Git repository at:
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P3560 } 2671 jiffies s: 2021 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.2-rc1
 
-for you to fetch changes up to 4f1354d5c6a3264c91238962d1597eef40c40419:
+Tested on:
 
-  livepatch: Call klp_match_callback() in klp_find_callback() to avoid code duplication (2022-12-12 18:30:58 -0800)
+commit:         8702f2c6 Merge tag 'mm-nonmm-stable-2022-12-12' of git..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=10722ab7880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1cb72ec9ab8aff5e
+dashboard link: https://syzkaller.appspot.com/bug?extid=11d99e499adff05631cc
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15d7c70b880000
 
-----------------------------------------------------------------
-modules changes for v6.2-rc1
-
-Tux gets for xmass improving the average lookup performance of
-kallsyms_lookup_name() by 715x thanks to the work by Zhen Lei, which
-upgraded our old implementation from being O(n) to O(log(n)), while also
-retaining the old implementation support on /proc/kallsyms. The only
-penalty was increasing the memory footprint by 3 * kallsyms_num_syms.
-Folks who want to improve this further now also have a dedicated selftest
-facility through KALLSYMS_SELFTEST. Since I had to start reviewing other
-future kallsyms / modules enhancements by Nick Alcock (his stuff is not
-merged, it requires more work) I carefully reviewed and merged Zhen Lei's
-kallsyms changes through modules-next tree a bit less than a month ago.
-So this has been exposed on linux-next for about a month now with no
-reported regressions.
-
-Stephen Boyd added zstd in-kernel decompression support, but the only
-users of this would be folks using the load-pin LSM because otherwise
-we do module docompression in userspace. This is the newest code and
-was merged last week on modules-next.
-
-We spent a lot of time analyzing and coming to grips with a proper
-fix to an old modules regression which only recently came to light
-(since v5.3-rc1, May 2019) but even though I merged that fix onto
-modules-next last week I'm having second thoughts about it now as I was
-writing about that fix in this git tag message for you, as I found a few
-things we cannot quite justify there yet. So I'm going to push back to the
-drawing board again there until all i's are properly dotted. Yes, it's a
-regression but the issue has been there for 2 years now and it came up
-because of high end CPU count, it can wait a *tiny* bit more for a proper
-fix.
-
-The only other thing with mentioning is a minor boot time optimization by
-Rasmus Villemoes which deferes param_sysfs_init() to late init. The rest
-is cleanups and minor fixes.
-
-----------------------------------------------------------------
-Chen Zhongjin (1):
-      module: Remove unused macros module_addr_min/max
-
-Miaoqian Lin (1):
-      module: Fix NULL vs IS_ERR checking for module_get_next_page
-
-Rasmus Villemoes (2):
-      module: remove redundant module_sysfs_initialized variable
-      kernel/params.c: defer most of param_sysfs_init() to late_initcall time
-
-Stephen Boyd (1):
-      module/decompress: Support zstd in-kernel decompression
-
-Yang Li (1):
-      kallsyms: Remove unneeded semicolon
-
-Zhen Lei (8):
-      scripts/kallsyms: rename build_initial_tok_table()
-      kallsyms: Improve the performance of kallsyms_lookup_name()
-      kallsyms: Correctly sequence symbols when CONFIG_LTO_CLANG=y
-      kallsyms: Reduce the memory occupied by kallsyms_seqs_of_names[]
-      kallsyms: Add helper kallsyms_on_each_match_symbol()
-      livepatch: Use kallsyms_on_each_match_symbol() to improve performance
-      kallsyms: Add self-test facility
-      livepatch: Call klp_match_callback() in klp_find_callback() to avoid code duplication
-
- include/linux/kallsyms.h   |   9 +
- include/linux/module.h     |   1 -
- init/Kconfig               |  13 ++
- kernel/Makefile            |   1 +
- kernel/kallsyms.c          | 116 +++++++++--
- kernel/kallsyms_internal.h |   1 +
- kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++++++++++
- kernel/kallsyms_selftest.h |  13 ++
- kernel/livepatch/core.c    |  31 +--
- kernel/module/Kconfig      |   3 +-
- kernel/module/decompress.c | 100 +++++++++-
- kernel/module/main.c       |   3 -
- kernel/module/sysfs.c      |   2 +-
- kernel/params.c            |  23 ++-
- scripts/kallsyms.c         |  78 +++++++-
- scripts/link-vmlinux.sh    |   4 +
- 16 files changed, 840 insertions(+), 43 deletions(-)
- create mode 100644 kernel/kallsyms_selftest.c
- create mode 100644 kernel/kallsyms_selftest.h
