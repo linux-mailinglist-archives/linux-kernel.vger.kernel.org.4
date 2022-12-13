@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635564B2B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC31764B2B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbiLMJuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S234558AbiLMJu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234897AbiLMJuF (ORCPT
+        with ESMTP id S234524AbiLMJue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:50:05 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27244F5D;
-        Tue, 13 Dec 2022 01:50:04 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD7U8NS008201;
-        Tue, 13 Dec 2022 09:49:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=WrklWuF+aB1VX6PUMihXwQAJi2MdBml231PZGx5ug5M=;
- b=ULfIClm/P2TLKehI1K965MnlZv4mjyFRpUPBYuVMMhUW8KotScYgwSebI60fsNPurbrm
- kRRlJvKBs6K0x+fvzsBOfgz8EYFP7OfhsDqqicJ88JNSAUBAOkA3e7WdUhlD74/fLeK/
- GSP29ekpBeVgAoPYmKkT5O8gE5X9fnljlclXjHBVc1l32pO+nVpS70GCL47f8XryJFPv
- KmWX6y4dKQ3MwEf6xX2NhQ+OLehIPUsdbpMuGPxR2eufFHhBthqC9ZG6yshZEysOMgk2
- lXF+QV1U5ZOAEXbu+hOm89ktranL33N0azfAf5GC8o/0tr2ATOaNwDLr7mD2Fr8Nsvxg 0A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3meh1pgutf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 09:49:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD9nL9R004454
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 09:49:21 GMT
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 13 Dec 2022 01:49:15 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
-        <krzysztof.kozlowski@linaro.org>, <mathieu.poirier@linaro.org>,
-        <corbet@lwn.net>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2 2/2] docs: remoteproc: Update section header name requirement
-Date:   Tue, 13 Dec 2022 15:18:49 +0530
-Message-ID: <1670924929-26507-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1670924929-26507-1-git-send-email-quic_srivasam@quicinc.com>
+        Tue, 13 Dec 2022 04:50:34 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73E918B1E;
+        Tue, 13 Dec 2022 01:50:27 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.49.245]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Myevl-1oiHwb0CmD-00yviF; Tue, 13 Dec 2022 10:50:00 +0100
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 297693C0EE; Tue, 13 Dec 2022 10:49:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1670924998; bh=j2FuJR2hJ9kTpSOuWg/6tab4lmcts8FkJUw55kxSFJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mABKFXFH6uYeWbohae22XXef3Qg3l1vs8mPyiKa4UbHlImTbZAZ1hZqVR0oN5fY8S
+         UDhmO8dk/OjS4RJ7kou5fSoYJO6SfY7uIlpDdhrtEIYAo7unhTM0Twl3zLdT91ipiC
+         7EeRdR+7OmTNFhc4WDG+DZHST7NRn6fDH7MIAO+U=
+Date:   Tue, 13 Dec 2022 10:49:57 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: do not sort after reading modules.order
+Message-ID: <Y5hKxddAEyWU5kIq@fjasle.eu>
+References: <20221211094919.2717594-1-masahiroy@kernel.org>
+ <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
+ <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cnBhuEDuNYBftybO7lliTweOHQI4G4ko
-X-Proofpoint-GUID: cnBhuEDuNYBftybO7lliTweOHQI4G4ko
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- adultscore=0 impostorscore=0 mlxscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 phishscore=0 bulkscore=0 mlxlogscore=982
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130087
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
+X-Provags-ID: V03:K1:/fBCWN3Lgd+wddg4xF6Nc3JmPmUHQjhszhDRlik3JVnU7ABD/mn
+ bOVxAwXyOPrlCcen8PL1dctnC29BoZ/mFf3X+oLwiCAszVDDBjazcalNjOcqlVCHmHQT41r
+ jJ5mdXM7b6gF9nc/OlC267DcD4K32ldWAFkFCI2sglVCixRmR87STx33Rnp1gnFPyFyGptl
+ u/+Z/Zirbn+i3TRpvrzrw==
+UI-OutboundReport: notjunk:1;M01:P0:dsm0u6hJVvs=;HX/VA7sqkp1O4mHMxouK/LXbFMe
+ I+jP6uWpAW1b3Oe6RIScauGDmbV3GFxM2o2pruoOQPMOr7HvMSyKkjbHv26hvDRLTQKaGrxA9
+ 00sG7VFk23OYlzyB+3BVFchSwBNCr+61D5iZq60kmHNm9KCQApQFh89eSN/I2z/7Gasr1p939
+ jy73HTWhbV0+Us+aF2s9iCCRkF4ND3lGIad/dF0FGvwwet91Gnzbn5b4/YDYleWnlfJrrM3tO
+ Ct1b+CzvJNoVIn/c5HhfCpvd6OBdmorcoPzR4tpYlLdahbDTzb3FWj/Nk6LVTr2P+8HL96XaY
+ x/KKDAwlYKeiRl9dI4kySfoss4TUy3SFqDul5W8AJbTlmHDWBs5+YhVS3Nqk7DVrdfKllZ2IP
+ fFWb0KgNK9o3dY5uV2xSNd5hYwoWKXuwk6XoOFieCRCX0hijnr5lzaOvJ10bcKx3CH+5ZVflk
+ UCM161r/pI37BHRvdT99cf2E8o4MGhDE4Oye8u0PA+Y+/8uSr85CuxsQAfsqXBlwundMqJ0IQ
+ QL1ovcxyia4++qzJ83AxrYojfGU1l0qNPcedTQh4ro9wcq8btf6uT/PHgaHeX3q0wX72ibA9+
+ 2/cqqlCRyON8+xGhOg5Ql5WB6TOzGT0JImYh7omHQHVa81QENqpGtUBa3lsivxaI+JTESjsfq
+ lpepDH8hYuTF9wDXj/arMfBoeVwjukATejgDn+q3eA==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add section header name requirement specification in elf segments.
+On Tue, Dec 13, 2022 at 03:41:36PM +0900 Masahiro Yamada wrote:
+> On Tue, Dec 13, 2022 at 1:18 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+> >
+> > On Sun 11 Dec 2022 18:49:18 GMT, Masahiro Yamada wrote:
+> > > modules.order lists modules in the deterministic order (that is why
+> > > "modules order"), and there is no duplication in the list.
+> >
+> > Isn't a subdirectory's modules.order just created by
+> > concatenation of $(obj-m) (w/ respect to mentioned subdirs)?
+>=20
+> Not $(obj-m) directly.
+>=20
+> The magic is $^, which is a deduplicated list
+> of prerequisites.
+>=20
+>=20
+> > Thus, "no duplication" seems to be true, as long as there is no obj-m
+> > containing duplicated entries.  Do we ensure unique entries in obj-m
+> > only?
+>=20
+>=20
+> The entries in modules.order must be unique.
+> Moreover, the basename of modules must be unique.
+>=20
+> scripts/modules-check.sh is a stronger check.
+>=20
+>=20
+> You might be interested in these commits:
+>=20
+> d724b578a1f746db6fc1fd5e4cbba554a855dc8d
+> 3a48a91901c516a46a3406ea576798538a8d94d2
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
- Documentation/staging/remoteproc.rst | 2 ++
- 1 file changed, 2 insertions(+)
+ah, thanks!
 
-diff --git a/Documentation/staging/remoteproc.rst b/Documentation/staging/remoteproc.rst
-index 348ee7e..3125030 100644
---- a/Documentation/staging/remoteproc.rst
-+++ b/Documentation/staging/remoteproc.rst
-@@ -245,6 +245,8 @@ if the remote processor is accessing memory directly).
- 
- In addition to the standard ELF segments, most remote processors would
- also include a special section which we call "the resource table".
-+This resource table section name may have anything appended after it,
-+but it must start with ".resource_table"
- 
- The resource table contains system resources that the remote processor
- requires before it should be powered on, such as allocation of physically
--- 
-2.7.4
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
+> > >
+> > > $(sort ) is pointless.
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  scripts/Makefile.modfinal | 2 +-
+> > >  scripts/Makefile.modinst  | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> > > index 25bedd83644b..4705d32388f3 100644
+> > > --- a/scripts/Makefile.modfinal
+> > > +++ b/scripts/Makefile.modfinal
+> > > @@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
+> > >  include $(srctree)/scripts/Makefile.lib
+> > >
+> > >  # find all modules listed in modules.order
+> > > -modules :=3D $(sort $(shell cat $(MODORDER)))
+> > > +modules :=3D $(shell cat $(MODORDER))
+> > >
+> > >  __modfinal: $(modules)
+> > >       @:
+> > > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> > > index a4c987c23750..f4cff42069ad 100644
+> > > --- a/scripts/Makefile.modinst
+> > > +++ b/scripts/Makefile.modinst
+> > > @@ -9,7 +9,7 @@ __modinst:
+> > >  include include/config/auto.conf
+> > >  include $(srctree)/scripts/Kbuild.include
+> > >
+> > > -modules :=3D $(sort $(shell cat $(MODORDER)))
+> > > +modules :=3D $(shell cat $(MODORDER))
+> > >
+> > >  ifeq ($(KBUILD_EXTMOD),)
+> > >  dst :=3D $(MODLIB)/kernel
+> > > --
+> > > 2.34.1
+> >
+> > --
+> > epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+> > =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+> >      -- frykten for herren er opphav til kunnskap --
+>=20
+>=20
+>=20
+> --=20
+> Best Regards
+> Masahiro Yamada
+
+--=20
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
