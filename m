@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E67964BEA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5289B64BEAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiLMVll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 16:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S235382AbiLMVoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 16:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbiLMVlj (ORCPT
+        with ESMTP id S236073AbiLMVo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 16:41:39 -0500
+        Tue, 13 Dec 2022 16:44:28 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9BB1A22B;
-        Tue, 13 Dec 2022 13:41:38 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJLxI2016987;
-        Tue, 13 Dec 2022 21:41:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=k2/6D6zuaLaEhdAcOJZCvzbKiS3qV2h9Q/FlVs18pVI=;
- b=pJMfb0J1GpF34CQSo857Eoi6aTK0JRrkAeyAKjVek8+qGI5atkeEfTaxjBEoTebaF9uu
- YpW1YpF5WF/CjO2uLD+Ie5NDzv1QyL+7dOtqRUI6h9atZj9ZNxW07JrbAbQPVY13egy1
- iS2kPVoSnUpmTfuC4QuKAkuUAABVdT53ySCe8dodqjRfittY7NQOyeRP98WSCeu7As4i
- MWxDR+RGQD1nrUJ2Owhl96d3StxnP3uAtQa3NKBE4Kym2vU7jB7LCjeAdNWAN3q4OzDw
- jhdLIHhrDsINDAkRPe9+XhHyqBuFr6IUMTTk35VUWKMw2dVnhvDFJrdCMGp6skgALS9H wA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3meyfx0cpx-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F081CB33;
+        Tue, 13 Dec 2022 13:44:27 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDLaWSS024870;
+        Tue, 13 Dec 2022 21:44:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=8twQYJAb5+mqxxvMQkkCgJPj+wzMneLRu45hZ2uEb9Q=;
+ b=MEaOXPsF272pMcfxBfmmux+C/CKt/NRrgMa4MDwqhaLwcz/EHO+RY8XEJOfGT5OZ8rzp
+ HbxcpczNxeaNiS31HGJII+VirorD6WJYsFVr2m+PjIZmwloyZ+HKn9pDxFSj1QD5PXgk
+ o6K0qCMYnghtR2/HKR48LjsOALU6rbbPVOMNSPu0QExU4s0amw/MbaUaoCLcXJDd+jgO
+ Jy5xGxAStiCiTydHI+916W9BiMDxbb6GwR9dm4j3BIAYfEy+AFn9e7zn8oNjqbbJrstd
+ 6vNmAHpOpG4JtV2j0DldhjVwDe3UxODziQS/kYoiVrKH42MewZnGiHFvLqB1NIbrH/cj Eg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3meyfkgd68-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 21:41:29 +0000
+        Tue, 13 Dec 2022 21:44:18 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDLfSLS027033
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDLiHan020720
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 21:41:28 GMT
-Received: from [10.111.167.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
- 2022 13:41:26 -0800
-Message-ID: <2e878a04-e86a-35d3-546d-34e4c1bafe19@quicinc.com>
-Date:   Tue, 13 Dec 2022 13:41:25 -0800
+        Tue, 13 Dec 2022 21:44:17 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 13 Dec 2022 13:44:17 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <airlied@gmail.com>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v12 0/5] Add data-lanes and link-frequencies to dp_out endpoint
+Date:   Tue, 13 Dec 2022 13:44:03 -0800
+Message-ID: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dpu: check for null return of devm_kzalloc() in
- dpu_writeback_init()
-Content-Language: en-US
-To:     Hui Tang <tanghui20@huawei.com>, <robdclark@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <airlied@gmail.com>,
-        <daniel@ffwll.ch>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <yusongping@huawei.com>
-References: <20221119055518.179937-1-tanghui20@huawei.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20221119055518.179937-1-tanghui20@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZuqlS4FmkMU5Mmlzw_Bd1mxRnoYF_9eM
-X-Proofpoint-ORIG-GUID: ZuqlS4FmkMU5Mmlzw_Bd1mxRnoYF_9eM
+X-Proofpoint-GUID: 4i4RHZEWREzKBGykYKsNXsZ8pb5Zbs13
+X-Proofpoint-ORIG-GUID: 4i4RHZEWREzKBGykYKsNXsZ8pb5Zbs13
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0 suspectscore=0
- mlxscore=0 mlxlogscore=853 phishscore=0 priorityscore=1501 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 clxscore=1015 phishscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=853 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2212130188
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add DP both data-lanes and link-frequencies property to dp_out endpoint and support
+functions to DP driver.
 
+Kuogee Hsieh (5):
+  arm64: dts: qcom: add data-lanes and link-freuencies into dp_out
+    endpoint
+  dt-bindings: msm/dp: add data-lanes and link-frequencies property
+  drm/msm/dp: parser data-lanes as property of dp_out endpoint
+  drm/msm/dp: parser link-frequencies as property of dp_out endpoint
+  drm/msm/dp: add support of max dp link rate
 
-On 11/18/2022 9:55 PM, Hui Tang wrote:
-> Because of the possilble failure of devm_kzalloc(), dpu_wb_conn might
-> be NULL and will cause null pointer derefrence later.
-derefrence --> dereference
-> 
-> Therefore, it might be better to check it and directly return -ENOMEM.
-> 
-> Fixes: 77b001acdcfe ("drm/msm/dpu: add the writeback connector layer")
-> Signed-off-by: Hui Tang <tanghui20@huawei.com>
+ .../bindings/display/msm/dp-controller.yaml        | 30 ++++++++++++-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  6 ++-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |  6 ++-
+ drivers/gpu/drm/msm/dp/dp_display.c                |  4 ++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  7 +--
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |  1 +
+ drivers/gpu/drm/msm/dp/dp_parser.c                 | 52 ++++++++++++++++++----
+ drivers/gpu/drm/msm/dp/dp_parser.h                 |  2 +
+ 8 files changed, 93 insertions(+), 15 deletions(-)
 
-With that nit fixed,
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
-> index 088ec990a2f2..2a5a68366582 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c
-> @@ -70,6 +70,8 @@ int dpu_writeback_init(struct drm_device *dev, struct drm_encoder *enc,
->   	int rc = 0;
->   
->   	dpu_wb_conn = devm_kzalloc(dev->dev, sizeof(*dpu_wb_conn), GFP_KERNEL);
-> +	if (!dpu_wb_conn)
-> +		return -ENOMEM;
->   
->   	drm_connector_helper_add(&dpu_wb_conn->base.base, &dpu_wb_conn_helper_funcs);
->   
