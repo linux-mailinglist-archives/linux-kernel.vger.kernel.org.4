@@ -2,84 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC63A64BD94
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FA864BD9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236573AbiLMTua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S236025AbiLMTwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236671AbiLMTuW (ORCPT
+        with ESMTP id S230061AbiLMTwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:50:22 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85AAB2656F
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:50:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77B9D2F4;
-        Tue, 13 Dec 2022 11:50:57 -0800 (PST)
-Received: from [192.168.89.251] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF80B3F73B;
-        Tue, 13 Dec 2022 11:50:15 -0800 (PST)
-Message-ID: <3a11ed33-0a3d-2668-ab2b-c44eea7eddbe@arm.com>
-Date:   Tue, 13 Dec 2022 19:50:18 +0000
+        Tue, 13 Dec 2022 14:52:42 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8B71147;
+        Tue, 13 Dec 2022 11:52:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670961159; x=1702497159;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MU6rFsdcfnzIZ8FnppA/8eHjC/2nt+tjADR1U5/R7l0=;
+  b=P3NQ9AA4pZXPhverRN7FZsV+uGtLaUWgf5Gk2nSDkyvoVcNMHRCSgFgB
+   jUvPsPeYZL2FpxX8eKh3giHaazxTwbCetPIWmYgD9WNxftYxgJ2f3FPtH
+   ROj6xpXw/ImJ0MIYOB9M17LBe37RtHcHtHrDGJkHm7Tp6QW5BTV9j+AGZ
+   xHOtlIvjTVx0xM/jI//13F/Uv/3+3U03Y+7jZNkByY/jLgpukxToI0arb
+   /+iTF+7hiVOnQJZtWx6qgC81m9SuVd70pTcr3Ampzc4/G5t4wdsVlStio
+   +QlosJB19SLiE4Vwx+4NMw31iCC/+UWjzO52vECHsUaNQG+Db/jSzCsb0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="320087110"
+X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
+   d="scan'208";a="320087110"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 11:52:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="717325838"
+X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
+   d="scan'208";a="717325838"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Dec 2022 11:52:32 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p5BKI-009RL9-07;
+        Tue, 13 Dec 2022 21:52:30 +0200
+Date:   Tue, 13 Dec 2022 21:52:29 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, hao.wu@intel.com,
+        yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v6 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+Message-ID: <Y5jX/eXrFdAO7xml@smile.fi.intel.com>
+References: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
+ <20221209214523.3484193-2-matthew.gerlach@linux.intel.com>
+ <Y5P6NjDxy/S7nlF7@debian.me>
+ <alpine.DEB.2.22.394.2212130844330.3732069@rhweight-WRK1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [for-next][PATCH 02/11] tracing: Add __cpumask to denote a trace
- event field that is a cpumask_t
-Content-Language: en-US
-From:   Douglas Raillard <douglas.raillard@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Valentin Schneider <vschneid@redhat.com>
-References: <20221124145019.782980678@goodmis.org>
- <20221124145045.743308431@goodmis.org>
- <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
- <20221212111256.3cf68f3e@gandalf.local.home>
- <8448372a-6911-e920-b630-15af850adcae@arm.com>
- <20221212185330.639bf491@gandalf.local.home>
- <764f8b9a-2111-c260-7f2c-89eb9f0ac7a3@arm.com>
-In-Reply-To: <764f8b9a-2111-c260-7f2c-89eb9f0ac7a3@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2212130844330.3732069@rhweight-WRK1>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-12-2022 14:20, Douglas Raillard wrote:
->
-> The only case I can think of where parsing would not follow regular C abstract declaration syntax is a type like that:
+On Tue, Dec 13, 2022 at 08:50:25AM -0800, matthew.gerlach@linux.intel.com wrote:
+> On Sat, 10 Dec 2022, Bagas Sanjaya wrote:
+> > On Fri, Dec 09, 2022 at 01:45:20PM -0800, matthew.gerlach@linux.intel.com wrote:
+
+...
+
+> > >  Open discussion
+> > >  ===============
+> > >  FME driver exports one ioctl (DFL_FPGA_FME_PORT_PR) for partial reconfiguration
+> > 
+> > What about this wording below (including fitting the prose within 80 columns)?
 > 
->      __data_loc int [3][]
+> The wording you suggest is an improvement. I will include your suggestions.
+> I mistakenly thought that Restructured Text needed list items to be a single
+> line and checkpatch.pl did not flag the long lines.
 
-After some experimentation, I came to the conclusion that "__data_loc <type> [] <id>" can indeed support any C type if they
-need to be added in the future. I would heavily suggest that any future extension works as the following, to avoid messing up
-the grammar in a subtle way that would prevent some types to be expressible, or make it a nightmare to implement.
+I usually test the output with rst2pdf. You can also try kernel doc script to
+produce man and HTML and see how they are rendered.
 
-The recipe to parse that with stock C parser is:
-* consume "__data_loc"
-* parse "<type> []" as a func prototype parameter declaration
-  (declaration using an abstract declarator, i.e. not introducing any identifier)
-* parse "<id>" as an identifier.
-
-> The outer-most array is by definition the dynamic one, so "[]". In normal C, [3] and [] would be swapped as
-> the outer-most array comes first. That's not too bad though as it is not ambiguous and easy to fixup directly
-> in the parse tree.
-
-Simply swapping is wrong in the general case. The correct modification of the "<type> []" parse tree is doing a
-"barrel shift" on nested array sizes. If the type is "int [1][2][]", it needs to be turned into "int [][1][2]".
-The now-top-level sizeless array is the dynamic array. Note that pointers level are transparent,
-so "int (*[1])[2][]" needs to be turned into "int (*[])[1][2]"
-
--- Douglas
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
