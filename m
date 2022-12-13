@@ -2,315 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6260164B6C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F16C264B6BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiLMOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S235418AbiLMOFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiLMOFx (ORCPT
+        with ESMTP id S229787AbiLMOFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:05:53 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7933A20F5A;
-        Tue, 13 Dec 2022 06:05:40 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDDhTwT015709;
-        Tue, 13 Dec 2022 14:05:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=7+F7z+Ta8EpscKUbPoTu/myv8SUS28PNc0GSWR9l3dY=;
- b=MPMFy4o3NF8jUQRCJwRMKvFj48hAppxtMyI3OZvX/lBkDEvOKARM9yEdDrPz/K1pt9+l
- Oh3JpL8yD+9BbByrIbr0Dx3NbnP89RJ69OQHYPZ/PGDp0M3u40XVfMMWD3ZTls2+3yQp
- Gzp5F2mecq4XITEYvQ1ZSO3kIudwjiDaBtJAObO+VnKmsgvcZ16Lyhv2Z8mB4hhflF7i
- 2g6SbX+6no3mRp4SxduOS1wfvMXQwhayL+ubjwaZmWhUF5hzBz9EnbdSB7ihBxdZlXLi
- djTqAfL4FAt68cGhlH/sOO0Ew90NAxK2bgwLziNTFgZbt1ov5Za6ZyIZV0Ts3ABTDEVi hw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mej4w9dv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 14:05:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDE51kN024525
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 14:05:01 GMT
-Received: from blr-ubuntu-87.ap.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 13 Dec 2022 06:04:56 -0800
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <manivannan.sadhasivam@linaro.org>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <konrad.dybcio@somainline.org>,
-        <amit.pundir@linaro.org>, <regressions@leemhuis.info>,
-        <sumit.semwal@linaro.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <robin.murphy@arm.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Gaurav Kohli <gkohli@codeaurora.org>
-Subject: [PATCH 2/2] mailbox: Add support for QTI CPUCP mailbox controller
-Date:   Tue, 13 Dec 2022 19:34:09 +0530
-Message-ID: <20221213140409.772-3-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221213140409.772-1-quic_sibis@quicinc.com>
-References: <20221213140409.772-1-quic_sibis@quicinc.com>
+        Tue, 13 Dec 2022 09:05:04 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2064.outbound.protection.outlook.com [40.107.104.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CE0634B;
+        Tue, 13 Dec 2022 06:05:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MAaH39G3xuqnUOEVy0sqMD1fDjtb97Oie70HUzhN7d5nnMO+63u2OsSm7A07haVW91QhE7e6JQoUIdUcw0kiMcLCogl30XQ+/rdIpIfijBaZ4q5EHVMcTFPQAF6MMyD686eTAZh9hZewtLJU23ARJTIsxMfDgJtixjGgqMOJ2xOR9Dve5c/k5GQ6vJfXHsLAlJvJ12G9WO9BJTuNd6eWDiGrw/l6zRNBla0VzZJdYvSAyv1K4AzRLu/3WI7tSLfNAPzbnGIlLfyrZbWLlYZcTHcJw4VK8R8SiW3uuSnJSKfc3hWnkrk1QFXqZXanKShL3SRPnIrv8HaBP2d2irUyaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+GtkjTxN5cDQ4ou9RHv6Ceh1CDyQGaQ4mGN7Q76yGpY=;
+ b=nJLsjNAj13SqoF9kjXgWAg9WpagtQTiV0OHYrF75bxDzuQ0TAuSjY5xiO7ENYlnnQUbwfM+UbUZINoffVbVM86at+81iJV9nrom6fSBOKVjR+rdl7TDKDNpNaJjvrUkccZjbyFidByBX2DYDW/+BT7uN6NIEbrGxIpG3Gb6TJsdLaTNu1NbSaNwC1J5fNd/Wp6i5xm6bAc8CRxOPP/7MtqtwY4DNy1YaVAymyIAuHofUpYVSN2r7nnCGjfLYPPCxd9a1KQdyDB4N8doBrviaZS0ZQTgSrrXBz/wZfxUm6Htw3s29Ggwf655asaV2U8HgQi2m6d0FiJuI0NBJNRYbjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vigem.de; dmarc=pass action=none header.from=vigem.de;
+ dkim=pass header.d=vigem.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vigem.de; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+GtkjTxN5cDQ4ou9RHv6Ceh1CDyQGaQ4mGN7Q76yGpY=;
+ b=ka3VDLt8c8YUgCOAPNv2e/7+NlJNE7DyONZmC/AgTGXNQWO3LFtK0PVyOGKalyKecRCyxgtdJSSkcPvSujpvreHd1kkuGew9rQF/uomVnZXQadRcUvgU7xLE1EYcV9PH0BC0DhDxHvlSO0cLQCZZWkNJiWOqW1Fmn2dsBAI4GuE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vigem.de;
+Received: from DU0P190MB1930.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:3bd::20)
+ by DB9P190MB1843.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:37e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
+ 2022 14:04:59 +0000
+Received: from DU0P190MB1930.EURP190.PROD.OUTLOOK.COM
+ ([fe80::ece:ddee:45dd:492]) by DU0P190MB1930.EURP190.PROD.OUTLOOK.COM
+ ([fe80::ece:ddee:45dd:492%4]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 14:04:59 +0000
+Date:   Tue, 13 Dec 2022 15:04:57 +0100 (CET)
+From:   =?UTF-8?Q?Sven_Z=C3=BChlsdorf?= <sven.zuehlsdorf@vigem.de>
+To:     Rishi Gupta <gupt21@gmail.com>
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Enrik Berkhan <Enrik.Berkhan@inka.de>,
+        linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: mcp2221: fix probing of the I2C bus added by
+ hid_mcp2221
+Message-ID: <55d7a712-5862-4d51-9ec8-7479dce15f78@vigem.de>
+Content-Type: multipart/mixed; boundary="8323329-164564908-1670940298=:103531"
+X-ClientProxiedBy: FR3P281CA0192.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a4::16) To DU0P190MB1930.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:10:3bd::20)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -rzQYEfOF2ROQyWGtM2BHjv3g9a5wfIk
-X-Proofpoint-GUID: -rzQYEfOF2ROQyWGtM2BHjv3g9a5wfIk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1011 adultscore=0 priorityscore=1501 phishscore=0 impostorscore=0
- lowpriorityscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212130125
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0P190MB1930:EE_|DB9P190MB1843:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5096fa8b-e5f6-44ed-c2f2-08dadd130518
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Evbv/K0QaO6a10HYMXGEHq3rvacSWDRoPc4PhgnCFjXUmMACkWml8Hl57NNxLm0cSnrzefTAliVD8RC+WCcl2SD0gCQsxSYMQvSO1cCHXj5sOcN50Ti1qMObXJO7BSdTjtA7L2l30kpefTKJlS9jAz60jD/IebJUbuXxygzW2jwlVtEppNXdvCp4ZiNLkqDeBrUTRi7qGENCT+rfIw5DeHW3HIDPUCPVy5cMErs1DkRrsU0fNcCQp0OSssuXPMm36k6SNoFZmjrsarPwbFK3/U3+4OLWN6KVdo89OI3UoFRvzgutGCrfUBO8D+F2bmKRcVXP97gbm2YbZJhLF9kD4EQTgyhj8xE9kiXdFUAquUyFs9K7z3mABeDL53UrDGpxu/UXssYr4HxBK+tDprTlXVRouiVw6Ug0vUDl+C6N34vtqVYG4SeTcMJx946vSvvjddu13ddH5vO7D+MyvfJS1zVZE6GPA1Mb0Bfb+DdJFVz2gE8SmQehRx5l5z9XomvldrcKwsayCKa6A6Cw60c5DYvwQ5IRbamgI/t7/AAR7M9gKpX/cADYdpFO0Dsuov/+t/vZpFnuB0Smwp3J96rxHfILjgWDltzXjjp+/TSRrok7E1zUrZgFIH/YCGhn1R+eoB8C1XQPMcONwwoFrwCAa20pgqKCNI8CEB3gJILQo3HUx4zO0NfTdkF8fJJ1NwVZmBoJYJNNBlBAbNuNKveYB9+vD2fHGA3bZ5GJuIJ7538=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0P190MB1930.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(39840400004)(396003)(451199015)(38350700002)(31686004)(5660300002)(33964004)(6506007)(26005)(86362001)(31696002)(2906002)(41300700001)(36756003)(52116002)(8936002)(66556008)(8676002)(66946007)(316002)(66476007)(4326008)(38100700002)(478600001)(186003)(83380400001)(6486002)(53546011)(66574015)(6512007)(54906003)(6916009)(2616005)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlRQL2d5bm1XVUFYWlp6S1o0dTFkTS9NaWl6a2RaZStaV0Q1dkg0SVVBVEUy?=
+ =?utf-8?B?ajgyTHRTeTVXY2d2UTFaczBZNTFXbHVjbmJNaXdyWXRiSlhDbEZIUklleURo?=
+ =?utf-8?B?WmxQek9POEJELy9tb0VLVHRKVUc4VUNuVEpHMks2eHY2b3ZoYnRKdWVERkJp?=
+ =?utf-8?B?RlhsU3pFT1NFYlhBcW1JZ0VxenFnNHlhWGY0VTBCQUcrc2JickNqT0tqRnor?=
+ =?utf-8?B?eEZiUmpEVWxQM0xydHJqaUtpMWN5eWFPc0lZRmxwODVMUEJvczlONDAvSWxV?=
+ =?utf-8?B?dWYrWG42ZU5NZzZuMXRRQjc1eXdZMUpYdFZtc3JYWlpOZVRnTzNRNm5YL2JM?=
+ =?utf-8?B?SFpHaFBuN0o3Z3RWM0VFQmFYS2wvb3U2YVJWMEJvMHJHdVQrNnhXVExBdXhs?=
+ =?utf-8?B?SXdhc0lDZ2xXUzRybDZ5bHkyWm1wVE5KUGlCdnRKR2tvaU5SZ3dYRldMdlR2?=
+ =?utf-8?B?c3JLaFNvNHFhajRrTFlnRGNzTW5pbnFyNnVIWENnQm5NdU5BOVNFRnNaK2tT?=
+ =?utf-8?B?MFhqMnhUcm9nWXgxNzl4TTlWdTB6aTA0bnN5cjFxV1VkN1FmNWdwR0lwaXRm?=
+ =?utf-8?B?bHc5QWZNSXRoM1VZRmQxMVp4SGQ4NzBjTlpvZFNKODVyWGpxVlU4RW96cUVO?=
+ =?utf-8?B?RTVLamFjck9ibFdyM0tDQ2h3UmhzOW8vT1R2QTkzMU56bkNSMFNrQmt3emZt?=
+ =?utf-8?B?RVkrTisxYVhhbVliQ2RhbHdCWmUzOXY1cXJDV2J5VDlQQTBYTGd6b3dDMFRF?=
+ =?utf-8?B?eU5jcWpTcmRLWVlwdFhDbFhWU0d4REUxN2QyT01kU0pvcGNOY24wSzF3bHoy?=
+ =?utf-8?B?Vmc5SzNhU3QvbUp0RDdRR2VkYTFHL1pSV1p3NG1QakgyNG1EYWNTNUF2UTA2?=
+ =?utf-8?B?bXhQbGpjWDNqci9yZEpINjJ2emlDUmlJN3hoTHU5VFNsT2hZT1RNcjY2eWZn?=
+ =?utf-8?B?N2xYbFJEcWwvR2poRzBYVjBMM1UyYjBveU5qS0hnRkI4dHNJUFozaWJJeFg4?=
+ =?utf-8?B?cnlPdUtNallQR1Rlb2U0QzRxV1o0OEVBUG5SbUs1Qkl4cUxaTVN5SXJzRjBZ?=
+ =?utf-8?B?Y2c2emMrR3RXZndDQ0pUZUY1bUxML1VBdTVaclFUM0JBd1pqbmhSakNDZW41?=
+ =?utf-8?B?Z1hyQzQ3OVhZZVF5QzhEUUNRTmFpMld6UmI0VHVCejBXd3pqM25acWlRZi8z?=
+ =?utf-8?B?d0dSR3ZpYTZ5S09jbVlRc0M5RU5LM1hxS01ucE1WUHFOL1BIZTJuN0J2VHlr?=
+ =?utf-8?B?OW1HNlZsWjl2eXdISkovWHo5Ymc2dzZaYjFCR0gzblFJcFhpS2xtdFpldzBY?=
+ =?utf-8?B?dTdJRFQrT2M5TlBGLy9xck1kYnE2eXp3Mjg2VFNoMUhuaGJoZkdKRzhaTWxM?=
+ =?utf-8?B?dTQ2WTVuRmNuUjJNUzI0cFFJTWdQeERPOHRDazhUR3pDaXAxWUZaaFhFWWdu?=
+ =?utf-8?B?QzBPeEtybzdUL2hRYllPdnBsSisxdEM0dGtHL3ZEdU1LZEt1d3IrWGRTeUQ4?=
+ =?utf-8?B?Q3ltWllaWkpnOUMrOTRiQnVzWjZzOE1SMHZtZXFjWGc0aHdLZWJKWlBRanRs?=
+ =?utf-8?B?NE1qeGdEeWFtOTZCamNTcVZwWEZmU05IbzM5NW55SWFEeWZMM0JpRnFYQWlz?=
+ =?utf-8?B?SGs3YmFLbEMxRFJ3Y3ZnQXk2a2xUd3lHUHFnVHdHbXRqa2xMSkdTalRFaDJk?=
+ =?utf-8?B?M05weW8rVG9wdmFxalNreUtxRHhVejVhSmR1TWpaQ0RFemprSUxGaVBVNDNJ?=
+ =?utf-8?B?TTl1SzRKVitFOFhsNFJXMHpWZTUrK3dzRXBwWElIcSt3ODNKTG5McnY0TTVD?=
+ =?utf-8?B?dGNwemR6OThIOW8rSDN1U042aEFvRHFpcUZnS3RrTkFFSnpzNGhkbTZWU0lO?=
+ =?utf-8?B?OWJNTFVmS2FsR1hwVEpBeUM2MmVXZ2kraHpRYlhoN2xhamQvbnVyTlI2clFs?=
+ =?utf-8?B?NndXVk5vZEhNdzlmYkVnbjNvV1RqTXNTQUZqRVlheVQ5NnlXUmNEc1RDamlF?=
+ =?utf-8?B?dHVKQzRVY0ZuV1dvRitNaGtDWU11VVRnMFp2REppam55aXVobHNoZTlCZ01G?=
+ =?utf-8?B?c0VXTndncWh2SFVITFB1Zml5RDVRQ21nOGVqczNTankzaitPbENZL3RncjZ4?=
+ =?utf-8?B?aTVlZkt5ZnR0NVdzM2ZCRkovMXkrQUQ2ZzhwSElITDQzT1VZK01ONXRBNFZD?=
+ =?utf-8?B?VUE9PQ==?=
+X-OriginatorOrg: vigem.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5096fa8b-e5f6-44ed-c2f2-08dadd130518
+X-MS-Exchange-CrossTenant-AuthSource: DU0P190MB1930.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 14:04:58.9253
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: dc3cc44e-876e-4b98-9250-42df44be4933
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RqAflhm7f/9ynpncF9nSUAJfbyL6l3FJWUcPcbNCsqG0qxOE3rGaAAaEKyNGomE0gBHnHcWyBeJ/b1WdiZK8CODiuuQ+TYGJ7RSIQr2MXC8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P190MB1843
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for CPUSS Control Processor (CPUCP) mailbox controller,
-this driver enables communication between AP and CPUCP by acting as
-a doorbell between them.
+--8323329-164564908-1670940298=:103531
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-Signed-off-by: Gaurav Kohli <gkohli@codeaurora.org>
-[sibis: moved to mailbox and misc. cleanups]
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+From: Karl Georg Esser <kgesser@vigem.de>
+Date: Fri, 9 Dec 2022 16:17:59 +0100
+Subject: [PATCH] HID: mcp2221: fix probing of the I2C bus added by hid_mcp2221
+
+As soon as the I2C driver part will be enabled in mcp2221_probe(), the
+first HID reports might be exchanged with the chip due to other drivers
+probing for their devices on the just added I2C bus. HID I/O has to be
+enabled explicitly during mcp2221_probe() to receive response reports.
+In addition, the I2C bus' adapdata has to be set before any use of the bus,
+otherwise mcp_{i2c,smbus}_xfer will attempt to dereference a NULL pointer.
+
+Fixes: 67a95c21463d ("HID: mcp2221: add usb to i2c-smbus host bridge")
+Signed-off-by: Karl Georg Esser <kgesser@vigem.de>
+Signed-off-by: Sven Zühlsdorf <sven.zuehlsdorf@vigem.de>
 ---
- drivers/mailbox/Kconfig           |   9 ++
- drivers/mailbox/Makefile          |   2 +
- drivers/mailbox/qcom-cpucp-mbox.c | 176 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 187 insertions(+)
- create mode 100644 drivers/mailbox/qcom-cpucp-mbox.c
+  drivers/hid/hid-mcp2221.c | 10 +++++++++-
+  1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mailbox/Kconfig b/drivers/mailbox/Kconfig
-index 05d6fae800e3..7766e0ad2f12 100644
---- a/drivers/mailbox/Kconfig
-+++ b/drivers/mailbox/Kconfig
-@@ -284,6 +284,15 @@ config SPRD_MBOX
- 	  to send message between application processors and MCU. Say Y here if
- 	  you want to build the Spreatrum mailbox controller driver.
- 
-+config QCOM_CPUCP_MBOX
-+	tristate "Qualcomm Technologies, Inc. CPUCP mailbox driver"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	help
-+	  Qualcomm Technologies, Inc. CPUSS Control Processor (CPUCP) mailbox
-+	  controller driver enables communication between AP and CPUCP by
-+	  acting as a doorbell between them. Say Y here if you want to build
-+	  this driver.
+diff --git a/drivers/hid/hid-mcp2221.c b/drivers/hid/hid-mcp2221.c
+index 5886543b17f3..35b7d6939b38 100644
+--- a/drivers/hid/hid-mcp2221.c
++++ b/drivers/hid/hid-mcp2221.c
+@@ -324,6 +324,9 @@ static int mcp_i2c_xfer(struct i2c_adapter *adapter,
+  	int ret;
+  	struct mcp2221 *mcp = i2c_get_adapdata(adapter);
+
++	if(!mcp)
++		return -ECONNREFUSED;
 +
- config QCOM_IPCC
- 	tristate "Qualcomm Technologies, Inc. IPCC driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-index fc9376117111..195b7e40541f 100644
---- a/drivers/mailbox/Makefile
-+++ b/drivers/mailbox/Makefile
-@@ -59,6 +59,8 @@ obj-$(CONFIG_SUN6I_MSGBOX)	+= sun6i-msgbox.o
- 
- obj-$(CONFIG_SPRD_MBOX)		+= sprd-mailbox.o
- 
-+obj-$(CONFIG_QCOM_CPUCP_MBOX)	+= qcom-cpucp-mbox.o
+  	hid_hw_power(mcp->hdev, PM_HINT_FULLON);
+
+  	mutex_lock(&mcp->lock);
+@@ -433,6 +436,9 @@ static int mcp_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
+  	int ret;
+  	struct mcp2221 *mcp = i2c_get_adapdata(adapter);
+
++	if(!mcp)
++		return -ECONNREFUSED;
 +
- obj-$(CONFIG_QCOM_IPCC)		+= qcom-ipcc.o
- 
- obj-$(CONFIG_APPLE_MAILBOX)	+= apple-mailbox.o
-diff --git a/drivers/mailbox/qcom-cpucp-mbox.c b/drivers/mailbox/qcom-cpucp-mbox.c
-new file mode 100644
-index 000000000000..063bb2d80f3e
---- /dev/null
-+++ b/drivers/mailbox/qcom-cpucp-mbox.c
-@@ -0,0 +1,176 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
+  	hid_hw_power(mcp->hdev, PM_HINT_FULLON);
+
+  	mutex_lock(&mcp->lock);
+@@ -1148,12 +1154,14 @@ static int mcp2221_probe(struct hid_device *hdev,
+  			"MCP2221 usb-i2c bridge on hidraw%d",
+  			((struct hidraw *)hdev->hidraw)->minor);
+
++	i2c_set_adapdata(&mcp->adapter, mcp);
++	hid_device_io_start(hdev);
 +
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/mailbox_controller.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+/* CPUCP Register offsets */
-+#define CPUCP_INTR_CLEAR_REG		0x8
-+#define CPUCP_INTR_STATUS_REG		0xC
-+#define CPUCP_SEND_IRQ_REG		0xC
-+
-+#define CPUCP_IRQ_CLEAR			BIT(3)
-+#define CPUCP_IRQ_STATUS_ASSERTED	BIT(3)
-+#define CPUCP_SEND_IRQ			BIT(28)
-+
-+/**
-+ * struct qcom_cpucp_mbox - Holder for the mailbox driver
-+ * @mbox:			The mailbox controller
-+ * @chan:			The mailbox channel
-+ * @tx_base:			Base address of the CPUCP tx registers
-+ * @rx_base:			Base address of the CPUCP rx registers
-+ * @dev:			Device associated with this instance
-+ * @lock:			Lock protecting private
-+ * @irq:			CPUCP to AP irq
-+ */
-+struct qcom_cpucp_mbox {
-+	struct mbox_controller mbox;
-+	struct mbox_chan chan;
-+	void __iomem *tx_base;
-+	void __iomem *rx_base;
-+	struct device *dev;
-+	int irq;
-+
-+	/* control access to the chan private data */
-+	spinlock_t lock;
-+};
-+
-+static inline struct qcom_cpucp_mbox *to_qcom_cpucp_mbox(struct mbox_controller *mbox)
-+{
-+	return container_of(mbox, struct qcom_cpucp_mbox, mbox);
-+}
-+
-+static irqreturn_t qcom_cpucp_mbox_irq_fn(int irq, void *data)
-+{
-+	struct qcom_cpucp_mbox *cpucp = data;
-+	unsigned long flags;
-+	u32 val;
-+
-+	val = readl(cpucp->rx_base + CPUCP_INTR_STATUS_REG);
-+	if (val & CPUCP_IRQ_STATUS_ASSERTED) {
-+		writel(CPUCP_IRQ_CLEAR, cpucp->rx_base + CPUCP_INTR_CLEAR_REG);
-+
-+		spin_lock_irqsave(&cpucp->lock, flags);
-+		if (cpucp->chan.con_priv)
-+			mbox_chan_received_data(&cpucp->chan, NULL);
-+		spin_unlock_irqrestore(&cpucp->lock, flags);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int qcom_cpucp_mbox_send_data(struct mbox_chan *chan, void *data)
-+{
-+	struct qcom_cpucp_mbox *cpucp = to_qcom_cpucp_mbox(chan->mbox);
-+
-+	writel(CPUCP_SEND_IRQ, cpucp->tx_base + CPUCP_SEND_IRQ_REG);
-+
-+	return 0;
-+}
-+
-+static void qcom_cpucp_mbox_shutdown(struct mbox_chan *chan)
-+{
-+	struct qcom_cpucp_mbox *cpucp = to_qcom_cpucp_mbox(chan->mbox);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&cpucp->lock, flags);
-+	chan->con_priv = NULL;
-+	spin_unlock_irqrestore(&cpucp->lock, flags);
-+}
-+
-+static const struct mbox_chan_ops cpucp_mbox_chan_ops = {
-+	.send_data = qcom_cpucp_mbox_send_data,
-+	.shutdown = qcom_cpucp_mbox_shutdown
-+};
-+
-+static struct mbox_chan *qcom_cpucp_mbox_xlate(struct mbox_controller *mbox,
-+					       const struct of_phandle_args *ph)
-+{
-+	struct qcom_cpucp_mbox *cpucp = to_qcom_cpucp_mbox(mbox);
-+
-+	if (ph->args_count != 0)
-+		return ERR_PTR(-EINVAL);
-+
-+	if (mbox->chans[0].con_priv)
-+		return ERR_PTR(-EBUSY);
-+
-+	mbox->chans[0].con_priv = cpucp;
-+
-+	return &mbox->chans[0];
-+}
-+
-+static int qcom_cpucp_mbox_probe(struct platform_device *pdev)
-+{
-+	struct qcom_cpucp_mbox *cpucp;
-+	struct mbox_controller *mbox;
-+	int ret;
-+
-+	cpucp = devm_kzalloc(&pdev->dev, sizeof(*cpucp), GFP_KERNEL);
-+	if (!cpucp)
-+		return -ENOMEM;
-+
-+	spin_lock_init(&cpucp->lock);
-+	cpucp->dev = &pdev->dev;
-+
-+	cpucp->tx_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(cpucp->tx_base))
-+		return PTR_ERR(cpucp->tx_base);
-+
-+	cpucp->rx_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(cpucp->rx_base))
-+		return PTR_ERR(cpucp->rx_base);
-+
-+	cpucp->irq = platform_get_irq(pdev, 0);
-+	if (cpucp->irq < 0)
-+		return cpucp->irq;
-+
-+	mbox = &cpucp->mbox;
-+	mbox->dev = cpucp->dev;
-+	mbox->num_chans = 1;
-+	mbox->chans = &cpucp->chan;
-+	mbox->ops = &cpucp_mbox_chan_ops;
-+	mbox->of_xlate = qcom_cpucp_mbox_xlate;
-+	mbox->txdone_irq = false;
-+	mbox->txdone_poll = false;
-+
-+	ret = devm_mbox_controller_register(&pdev->dev, mbox);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_request_irq(&pdev->dev, cpucp->irq, qcom_cpucp_mbox_irq_fn,
-+			       IRQF_TRIGGER_HIGH | IRQF_NO_SUSPEND, "qcom_cpucp_mbox", cpucp);
-+	if (ret < 0) {
-+		dev_err(&pdev->dev, "Failed to register the irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, cpucp);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id qcom_cpucp_mbox_of_match[] = {
-+	{ .compatible = "qcom,cpucp-mbox"},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, qcom_cpucp_mbox_of_match);
-+
-+static struct platform_driver qcom_cpucp_mbox_driver = {
-+	.probe = qcom_cpucp_mbox_probe,
-+	.driver = {
-+		.name = "qcom_cpucp_mbox",
-+		.of_match_table = qcom_cpucp_mbox_of_match,
-+	},
-+};
-+module_platform_driver(qcom_cpucp_mbox_driver);
-+
-+MODULE_AUTHOR("Gaurav Kohli <gkohli@codeaurora.org>");
-+MODULE_AUTHOR("Sibi Sankar <quic_sibis@qti.qualcomm.com>");
-+MODULE_DESCRIPTION("Qualcomm Technologies, Inc. CPUSS Control Processor Mailbox driver");
-+MODULE_LICENSE("GPL");
+  	ret = devm_i2c_add_adapter(&hdev->dev, &mcp->adapter);
+  	if (ret) {
+  		hid_err(hdev, "can't add usb-i2c adapter: %d\n", ret);
+  		return ret;
+  	}
+-	i2c_set_adapdata(&mcp->adapter, mcp);
+
+  #if IS_REACHABLE(CONFIG_GPIOLIB)
+  	/* Setup GPIO chip */
 -- 
-2.7.4
+2.38.1
 
+--8323329-164564908-1670940298=:103531--
