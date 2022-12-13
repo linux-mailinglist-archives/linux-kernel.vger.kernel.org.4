@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD1D64AC0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC5F64AC14
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbiLMAQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
+        id S234065AbiLMARC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiLMAQ2 (ORCPT
+        with ESMTP id S229975AbiLMAQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:16:28 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6383F1B1D4;
-        Mon, 12 Dec 2022 16:16:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWJv71JFhz4xN4;
-        Tue, 13 Dec 2022 11:16:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670890580;
-        bh=xAYs4RzRwjOFkzI7D5yEGU/NLolgCnhRJ8STI3pof/c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FRl2JzYYRhjzIuuD2avNqoAGw6msBylr58Ef/s6hj0wNErThnhG22FX+pqniXOlDO
-         arAZDTk0jD/KxH3j2fIt4U4E04ajGp4kLz/45Vttt0UZ5HwElRtEaZBBobRny8WOHi
-         bom5kh4satYvqCBVxsClI31jqNCr2FFjvbgx5fU0A4Szn4mVBHOSTH2ytAD18sZJwT
-         E67LM1CpuBlTMTUp8JfxmOWoYP8GcwmQpKCKmiNAyBv6YqbRVGiRT/8m6Od3ZsSwc8
-         L7F7b+c5OSDjZmF6q5S16u2yHAJuLCgLHNbNC9Uoceg6Bdf3g5JNDoXx12xGPDSy6O
-         kLCA6ueziI0aQ==
-Date:   Tue, 13 Dec 2022 11:16:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20221213111612.7bc1f917@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sp97=XczOeN82EqDD6bT2oD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 19:16:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504931B1DF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:16:57 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t9-20020a5b03c9000000b006cff5077dc9so14754853ybp.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rrmKIRMf4Mq2msGAMjuH9G/DlO6PhwIb4et9Vyytf0s=;
+        b=Y/SoLe17F+HoJZwya7YFOMVPVWxIyS8YXDXAdkZKURoZhYboc1qqDhxRYkM8qd/fyn
+         zV4AKnvonZDIf4kBxS6BbqKkYvK++Z8SlakM9rrpZf/WnJthiD/WaPvC4mId1Hi85VXx
+         HEnTLJKfq/AiMkE+A1lvFD7n5RUyEVn7KE12qMAkazwYdkxp/onbTYKAwGSZxx/+wvCu
+         AkCHnFjwsiycANQDr7f8nJl13jr3Aq6KbcvSvBjixq+cK42hwQ3dC8wgvpt4LO7Wo9ul
+         DCX6EzwtU8238LHHvhH1M16EyNBESvafX2Bsjx0/y3efzS0Lla4Z0vEPMEkwmHimVswS
+         SmYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrmKIRMf4Mq2msGAMjuH9G/DlO6PhwIb4et9Vyytf0s=;
+        b=iPPVa6to9mgE7ejoC+vrI+zYm5sEo4q6HjHEvhAmF/xuO7iN4vBV5E0vD55ZDYeTK/
+         qo48+EkP5iwCrwTlK3A+tpTYn71RhKOhyKVzKsfdhFhBeKVNrUYoxrA1yNCwulynGFFv
+         I/l5Y1csRy/fY2FSwxI/HqY1i9fEdP3SUbcO8gZwAICtr00Po2NztG2SrfZGbD6mwqMq
+         bQdzwwentfQo9dImXR/bV7BOV1oh3XQ1OBtR/qvx0rMCXUjbpEdZjLBvavF1eAQOXT0P
+         VfeXkd7J3qKR7etttxZj6RZrlRXeM9mFbWDCyTphLUEBrdWZ34CI2tFqbdLi11k7233p
+         jVgw==
+X-Gm-Message-State: ANoB5pkjWuBrOrLxMGi83o1d4iRO13yXaV9YvZYMZo+ZurxJpnXxYm2j
+        Jy+Zamzygjg3EfgHJELiFGidxQvoFqk=
+X-Google-Smtp-Source: AA0mqf6/pKu0pWWW1KBsbsV+bRwkpXaD3AJngXQVdm+DqVUnownROWyJFsvs/+l4EXLP/kxHJtplxf44+Wk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:2397:0:b0:724:2a55:aadb with SMTP id
+ j145-20020a252397000000b007242a55aadbmr1005565ybj.576.1670890616579; Mon, 12
+ Dec 2022 16:16:56 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 13 Dec 2022 00:16:39 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221213001653.3852042-1-seanjc@google.com>
+Subject: [PATCH 00/14] KVM: selftests: Clang fixes, Makefile cleanup
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ricardo Koller <ricarkol@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Raghavendra Rao Ananta <rananta@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/sp97=XczOeN82EqDD6bT2oD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Fix a variety of KVM selftests issues exposed by clang, and rework the
+Makefile and .gitignore to reduce the maintenance burden of selftests.
 
-Hi all,
+For the Makefile, programmatically generate the list of targets by
+looking for .c files, and opt-out via a dummy macro in the source
+instead of forcing architectures to opt-in.  The opt-out approach is
+less error prone (harder to forget to add an arch), doesn't generate
+unnecessary conflicts if multiple tests are added simultanesouly, and
+makes it much easier to understand which tests aren't supported, e.g.
 
-Today's linux-next merge of the fbdev tree got a conflict in:
+  $ git grep TEST_UNSUPPORTED | grep aarch64
+  hardware_disable_test.c:TEST_UNSUPPORTED(aarch64);
+  max_guest_memory_test.c:TEST_UNSUPPORTED(aarch64);
+  system_counter_offset_test.c:TEST_UNSUPPORTED(aarch64);
 
-  drivers/video/fbdev/Kconfig
+This all started when trying to reproduce clang build errors reported by
+Raghu and Aaron that were introduced by commit 6b6f71484bf4 ("KVM:
+selftests: Implement memcmp(), memcpy(), and memset() for guest use").
+Just getting selftests to compile with clang was a nightmare, as it took
+me several hours to realize that "CC=clang make" and "make CC=clang"
+aren't equivalent, and that the "include ../lib.mak" buried halfway through
+the Makefile was overriding "CC=clang make".
 
-between commit:
+After too many hours fighting to get clang working, my frustration with
+the Makefile boiled over a bit...
 
-  c8a17756c425 ("drm/ofdrm: Add ofdrm for Open Firmware framebuffers")
+Note, I have fixes for the RISC-V RSEQ bugs (outside of selftests/kvm) that
+I'll post separately.
 
-from the drm tree and commit:
+Tested on x86 and arm, build tested on s390x and RISC-V, all with both gcc
+and clang.
 
-  225e095bbd3a ("fbdev: offb: make offb driver tristate")
+Sean Christopherson (14):
+  KVM: selftests: Define literal to asm constraint in aarch64 as
+    unsigned long
+  KVM: selftests: Delete dead code in x86_64/vmx_tsc_adjust_test.c
+  KVM: selftests: Fix divide-by-zero bug in memslot_perf_test
+  KVM: selftests: Use pattern matching in .gitignore
+  KVM: selftests: Fix a typo in x86-64's kvm_get_cpu_address_width()
+  KVM: selftests: Rename UNAME_M to ARCH_DIR, fill explicitly for x86
+  KVM: selftests: Use proper function prototypes in probing code
+  KVM: selftests: Probe -no-pie with actual CFLAGS used to compile
+  KVM: selftests: Explicitly disable builtins for mem*() overrides
+  KVM: selftests: Include lib.mk before consuming $(CC)
+  KVM: selftests: Disable "gnu-variable-sized-type-not-at-end" warning
+  KVM: selftests: Use wildcards to find library source files
+  KVM: selftests: Use wildcards to find targets and test source files
+  KVM: selftests: Enable RSEQ test for RISC-V
 
-from the fbdev tree.
+ tools/testing/selftests/kvm/.gitignore        |  91 +------
+ tools/testing/selftests/kvm/Makefile          | 229 +++---------------
+ .../selftests/kvm/aarch64/page_fault_test.c   |   2 +-
+ .../selftests/kvm/access_tracking_perf_test.c |   3 +
+ .../selftests/kvm/dirty_log_perf_test.c       |   3 +
+ .../selftests/kvm/hardware_disable_test.c     |   4 +
+ .../testing/selftests/kvm/include/test_util.h |  11 +
+ .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
+ .../selftests/kvm/max_guest_memory_test.c     |   4 +
+ .../kvm/memslot_modification_stress_test.c    |   3 +
+ .../testing/selftests/kvm/memslot_perf_test.c |   6 +
+ tools/testing/selftests/kvm/steal_time.c      |   3 +
+ .../kvm/system_counter_offset_test.c          |   4 +
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |   5 -
+ 14 files changed, 80 insertions(+), 290 deletions(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+base-commit: f1a1d3aff0cc2e68a9ebbd8810d7dcd8cfe2714b
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-diff --cc drivers/video/fbdev/Kconfig
-index 71019b167f8b,a529511f7f53..000000000000
---- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@@ -456,9 -453,8 +456,9 @@@ config FB_ATAR
-  	  chipset found in Ataris.
- =20
-  config FB_OF
-- 	bool "Open Firmware frame buffer device support"
-- 	depends on (FB =3D y) && PPC && (!PPC_PSERIES || PCI)
-+ 	tristate "Open Firmware frame buffer device support"
-+ 	depends on FB && PPC && (!PPC_PSERIES || PCI)
- +	depends on !DRM_OFDRM
-  	select APERTURE_HELPERS
-  	select FB_CFB_FILLRECT
-  	select FB_CFB_COPYAREA
-
---Sig_/sp97=XczOeN82EqDD6bT2oD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXxEwACgkQAVBC80lX
-0Gxh8wf/e0gBQKPOoEg6O0eamyAvA1MrPv45E3hqftz0Qf8sg0+b1LLlBMPONe7F
-v1CD8ileZtYa9c/CpH6UNhRSbVsmE8OOJ6H+PgcKTri1FIuD5l6Us9Br8g8x61WP
-mjKuY3H5XjcYhGvnzjC/NpPbwyGQqHkqHSdOF0mMa+smkNjuTkYrQ5uG0GdyLBF0
-U7MLL3AMUmAJOMsBYy914Og4/8M+yhy8u9qNtSC5MIFI1hzxZrzuPuHXpKpypUJ5
-aCnKzXj68sU/v3gkiRQ5ZeWcQ5UHjmJoM09wDjvYTEzumymCHEdoPGQoRM/j0id1
-5x0oQ5+LdMIvLtIuUIogReMCT9nBXw==
-=xRxj
------END PGP SIGNATURE-----
-
---Sig_/sp97=XczOeN82EqDD6bT2oD--
