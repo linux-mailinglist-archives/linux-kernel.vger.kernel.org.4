@@ -2,230 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF264ACF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE6E64ACFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiLMBWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S234055AbiLMB0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiLMBWR (ORCPT
+        with ESMTP id S233437AbiLMB0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:22:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE276DEBC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:22:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3299AB81035
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:22:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A17AFC433EF;
-        Tue, 13 Dec 2022 01:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670894532;
-        bh=ZJutP6ZbAJukYe7JGF5sfO6MVhxr+yt4G7nFBq87jZo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lAwhBZcDdZlikyMzqmwYJu+zZE/2pqPzUUW4i5PCyKzLeW7VjKXiSV329jcLj7sbM
-         NElbbuVxkwR+USl2XsMuAd38loBP/Z7/f+4MQYfDiIVWTD8g2vbjeFN49urS005NN6
-         isb5p4ALIonGVZCzNKIj+fp0IZi+gyUGVeAm+8D6ptIpEmRi65nXQFsoABVd/1Uow0
-         Oi1NGuiqDuFAThHrirmubYW/8E0gNd5TL7keU0m2vokpMubzb20DpJWlyXqh2HpC+6
-         Ho2rzzmCVvBZqranaN/Zdf66ffcQLbGTi5813MlaW2ZKOX5AfKOEOu/MuAJREz9UW9
-         gAF3ikn2rFdKw==
-Message-ID: <0cc89bf7-ea7c-d6e9-5ba9-548181de4c82@kernel.org>
-Date:   Tue, 13 Dec 2022 09:22:09 +0800
+        Mon, 12 Dec 2022 20:26:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CACD626C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670894736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PNnuGiXysu47AR56a+iVf1X9BI5R1Thaz9yuLikoxqk=;
+        b=IWmj5ahcHBKmyIRg7Cs5SqB3czgPfvrh1JwGZKdugWsB1NyLFnHMYCPfgPVf/573SuakK7
+        KPPMps0kluE2HW2Gy2X3ZCBxdQGBfrsfWWG6twLnBh/NcxqQ3FFSYuLNURpwCUhzhzvM8C
+        D0aNVhMjBu36Y5i+QtHi0mKM9gdqdKM=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-57-a-qj0Nq-NSG8cYHbNKBanw-1; Mon, 12 Dec 2022 20:25:35 -0500
+X-MC-Unique: a-qj0Nq-NSG8cYHbNKBanw-1
+Received: by mail-pg1-f199.google.com with SMTP id f132-20020a636a8a000000b00473d0b600ebso8715612pgc.14
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:25:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PNnuGiXysu47AR56a+iVf1X9BI5R1Thaz9yuLikoxqk=;
+        b=ky9ewSnI3sDtmhvmDcBnPSb4saYnpA5ZCzVA4vXArxijiDXjP62Q1ZrKB1+/yTYFo4
+         Ro+8Su7wYmqoLNCkDME5Qhf0ZAN07dgZf/MeYYXHS/YCfbyp870aNE3xGBFY+c110MdB
+         S939LuorzfuDKr+gB84ZdrPc3+WFMOycxOQZdwvreR1cLY3LsruRowy2CQaOdO3FLwdM
+         CZGC3ZqSkZSZ7xzfZGuJhOy4K/4b9N3vr5Xr6b4M3PLeLlIgajwiukWKtEsWmDSrNIwN
+         75Pd8HI0GYwYnjLjfTWSDQKZKxmIv5kRHOwheGPgUa3rVuaM+AwOp+Pv4eSvKCWV2vxX
+         CXvA==
+X-Gm-Message-State: ANoB5pmOAX21FbeTm988x4cFumxe40fJE4Jx44yEg9tzFrL4Owui+sQ+
+        1unSr2FyybqmCEPBypOv86M6vAjh2LNcwUTQ2WseMA1qSxL/9QSUIzHq7FBg8HZaZ3EWjAjZOnf
+        z7ynF9O8vpfbZoBGGQVeC0AX3
+X-Received: by 2002:a62:be17:0:b0:56e:664f:a5f5 with SMTP id l23-20020a62be17000000b0056e664fa5f5mr19196059pff.8.1670894734049;
+        Mon, 12 Dec 2022 17:25:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf75kyZssg6bnmviLzWUYVaP8fo6OxR1Gz7erC1kJ5EjkNgdOPk7g3rvdzeV8Jz1mOVAWdTNtQ==
+X-Received: by 2002:a62:be17:0:b0:56e:664f:a5f5 with SMTP id l23-20020a62be17000000b0056e664fa5f5mr19196039pff.8.1670894733761;
+        Mon, 12 Dec 2022 17:25:33 -0800 (PST)
+Received: from [10.72.12.143] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id b27-20020aa7951b000000b00574c54423d3sm6587234pfp.145.2022.12.12.17.25.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 17:25:33 -0800 (PST)
+Subject: Re: [PATCH 2/2 v3] ceph: add ceph_lock_info support for file_lock
+To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, lhenriques@suse.de,
+        mchangir@redhat.com, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221118020642.472484-1-xiubli@redhat.com>
+ <20221118020642.472484-3-xiubli@redhat.com>
+ <CAOi1vP-dhH-Z9_dgGLLkqwoZ5di1Bp4o+5zeJRgRHddU=X1AwQ@mail.gmail.com>
+ <c5e95e043a1c79244fb6b3c4bc59f15fe1e9d5f4.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <932429ec-3dfe-0c27-6b00-0a9efa9893fa@redhat.com>
+Date:   Tue, 13 Dec 2022 09:25:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] f2fs: add support for counting time of submit discard
- cmd
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221212125137.77187-1-frank.li@vivo.com>
- <b76428f8-fd9e-7c4e-52ea-0eeb1ea443af@kernel.org>
- <Y5evc3D8eZlOjTjI@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y5evc3D8eZlOjTjI@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <c5e95e043a1c79244fb6b3c4bc59f15fe1e9d5f4.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/13 6:47, Jaegeuk Kim wrote:
-> On 12/12, Chao Yu wrote:
->> On 2022/12/12 20:51, Yangtao Li wrote:
->>> This patch adds support for counting the average time and
->>> peak time of submit discard command, and we can see its
->>> value in debugfs.
->>>
->>> It is not sure whether the block layer has recorded these
->>> data, and these data are allowed to be accessed by fs,
->>> or they are only exported to user space.
->>>
->>> On the one hand, I added these data to better understand
->>> the current device operating status, and to further control
->>> the discard process in a more detailed manner based on the
->>> discard submit time in the future.
->>
->> Again, w'd better to consider this functionality only when DEBUG_FS is
->> enabled.
-> 
-> BTW, why can't we use iostat to get the discard latencies?
 
-Agreed.
+On 13/12/2022 02:02, Jeff Layton wrote:
+> On Mon, 2022-12-12 at 18:56 +0100, Ilya Dryomov wrote:
+>> On Fri, Nov 18, 2022 at 3:07 AM <xiubli@redhat.com> wrote:
+>>> From: Xiubo Li <xiubli@redhat.com>
+>>>
+>>> When ceph releasing the file_lock it will try to get the inode pointer
+>>> from the fl->fl_file, which the memory could already be released by
+>>> another thread in filp_close(). Because in VFS layer the fl->fl_file
+>>> doesn't increase the file's reference counter.
+>>>
+>>> Will switch to use ceph dedicate lock info to track the inode.
+>>>
+>>> And in ceph_fl_release_lock() we should skip all the operations if
+>>> the fl->fl_u.ceph_fl.fl_inode is not set, which should come from
+>>> the request file_lock. And we will set fl->fl_u.ceph_fl.fl_inode when
+>>> inserting it to the inode lock list, which is when copying the lock.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Cc: Jeff Layton <jlayton@kernel.org>
+>>> URL: https://tracker.ceph.com/issues/57986
+>>> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+>>> ---
+>>>   fs/ceph/locks.c                 | 20 ++++++++++++++++++--
+>>>   include/linux/ceph/ceph_fs_fl.h | 17 +++++++++++++++++
+>>>   include/linux/fs.h              |  2 ++
+>>>   3 files changed, 37 insertions(+), 2 deletions(-)
+>>>   create mode 100644 include/linux/ceph/ceph_fs_fl.h
+>>>
+>>> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
+>>> index b191426bf880..621f38f10a88 100644
+>>> --- a/fs/ceph/locks.c
+>>> +++ b/fs/ceph/locks.c
+>>> @@ -34,18 +34,34 @@ static void ceph_fl_copy_lock(struct file_lock *dst, struct file_lock *src)
+>>>   {
+>>>          struct inode *inode = file_inode(dst->fl_file);
+>>>          atomic_inc(&ceph_inode(inode)->i_filelock_ref);
+>>> +       dst->fl_u.ceph_fl.fl_inode = igrab(inode);
+>>>   }
+>>>
+>>> +/*
+>>> + * Do not use the 'fl->fl_file' in release function, which
+>>> + * is possibly already released by another thread.
+>>> + */
+>>>   static void ceph_fl_release_lock(struct file_lock *fl)
+>>>   {
+>>> -       struct inode *inode = file_inode(fl->fl_file);
+>>> -       struct ceph_inode_info *ci = ceph_inode(inode);
+>>> +       struct inode *inode = fl->fl_u.ceph_fl.fl_inode;
+>>> +       struct ceph_inode_info *ci;
+>>> +
+>>> +       /*
+>>> +        * If inode is NULL it should be a request file_lock,
+>>> +        * nothing we can do.
+>>> +        */
+>>> +       if (!inode)
+>>> +               return;
+>>> +
+>>> +       ci = ceph_inode(inode);
+>>>          if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+>>>                  /* clear error when all locks are released */
+>>>                  spin_lock(&ci->i_ceph_lock);
+>>>                  ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
+>>>                  spin_unlock(&ci->i_ceph_lock);
+>>>          }
+>>> +       fl->fl_u.ceph_fl.fl_inode = NULL;
+>>> +       iput(inode);
+>>>   }
+>>>
+>>>   static const struct file_lock_operations ceph_fl_lock_ops = {
+>>> diff --git a/include/linux/ceph/ceph_fs_fl.h b/include/linux/ceph/ceph_fs_fl.h
+>>> new file mode 100644
+>>> index 000000000000..ad1cf96329f9
+>>> --- /dev/null
+>>> +++ b/include/linux/ceph/ceph_fs_fl.h
+>>> @@ -0,0 +1,17 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +/*
+>>> + * ceph_fs_fl.h - Ceph lock info
+>>> + *
+>>> + * LGPL2
+>>> + */
+>>> +
+>>> +#ifndef CEPH_FS_FL_H
+>>> +#define CEPH_FS_FL_H
+>>> +
+>>> +#include <linux/fs.h>
+>>> +
+>>> +struct ceph_lock_info {
+>>> +       struct inode *fl_inode;
+>>> +};
+>>> +
+>>> +#endif
+>>> diff --git a/include/linux/fs.h b/include/linux/fs.h
+>>> index d6cb42b7e91c..2b03d5e375d7 100644
+>>> --- a/include/linux/fs.h
+>>> +++ b/include/linux/fs.h
+>>> @@ -1066,6 +1066,7 @@ bool opens_in_grace(struct net *);
+>>>
+>>>   /* that will die - we need it for nfs_lock_info */
+>>>   #include <linux/nfs_fs_i.h>
+>>> +#include <linux/ceph/ceph_fs_fl.h>
+>>>
+>>>   /*
+>>>    * struct file_lock represents a generic "file lock". It's used to represent
+>>> @@ -1119,6 +1120,7 @@ struct file_lock {
+>>>                          int state;              /* state of grant or error if -ve */
+>>>                          unsigned int    debug_id;
+>>>                  } afs;
+>>> +               struct ceph_lock_info   ceph_fl;
+>> Hi Xiubo and Jeff,
+>>
+>> Xiubo, instead of defining struct ceph_lock_info and including
+>> a CephFS-specific header file in linux/fs.h, I think we should repeat
+>> what was done for AFS -- particularly given that ceph_lock_info ends up
+>> being a dummy type that isn't mentioned anywhere else.
+>>
+>> Jeff, could you please ack this with your file locking hat on?
+>>
+> ACK. I think that would be cleaner.
+
+Sure, will fix this.
 
 Thanks,
 
-> 
->>
->>>
->>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>> ---
->>>    fs/f2fs/debug.c   | 10 +++++++---
->>>    fs/f2fs/f2fs.h    |  6 ++++++
->>>    fs/f2fs/segment.c | 21 +++++++++++++++++++--
->>>    3 files changed, 32 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
->>> index 32af4f0c5735..142c256b89d9 100644
->>> --- a/fs/f2fs/debug.c
->>> +++ b/fs/f2fs/debug.c
->>> @@ -120,6 +120,10 @@ static void update_general_status(struct f2fs_sb_info *sbi)
->>>    			llist_empty(&SM_I(sbi)->fcc_info->issue_list);
->>>    	}
->>>    	if (SM_I(sbi)->dcc_info) {
->>> +		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
->>> +
->>> +		si->discard_avg = dcc->discard_time_avg;
->>> +		si->discard_peak = dcc->discard_time_peak;
->>>    		si->nr_discarded =
->>>    			atomic_read(&SM_I(sbi)->dcc_info->issued_discard);
->>>    		si->nr_discarding =
->>> @@ -545,9 +549,9 @@ static int stat_show(struct seq_file *s, void *v)
->>>    			   si->nr_wb_cp_data, si->nr_wb_data,
->>>    			   si->nr_flushing, si->nr_flushed,
->>>    			   si->flush_list_empty);
->>> -		seq_printf(s, "Discard: (%4d %4d)) cmd: %4d undiscard:%4u\n",
->>> -			   si->nr_discarding, si->nr_discarded,
->>> -			   si->nr_discard_cmd, si->undiscard_blks);
->>> +		seq_printf(s, "Discard: (%4d %4d, avg:%4lldns, peak:%4lldns)) cmd: %4d undiscard:%4u\n",
->>> +			   si->nr_discarding, si->nr_discarded, ktime_to_us(si->discard_avg),
->>> +			   ktime_to_us(si->discard_peak), si->nr_discard_cmd, si->undiscard_blks);
->>>    		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
->>>    			   si->aw_cnt, si->max_aw_cnt);
->>>    		seq_printf(s, "  - compress: %4d, hit:%8d\n", si->compress_pages, si->compress_page_hit);
->>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->>> index e8953c3dc81a..2cd55cb981ff 100644
->>> --- a/fs/f2fs/f2fs.h
->>> +++ b/fs/f2fs/f2fs.h
->>> @@ -371,6 +371,8 @@ struct discard_cmd {
->>>    	int error;			/* bio error */
->>>    	spinlock_t lock;		/* for state/bio_ref updating */
->>>    	unsigned short bio_ref;		/* bio reference count */
->>> +	struct discard_cmd_control *dcc;	/* global discard cmd control */
->>> +	ktime_t submit_start;	/* submit start time */
->>>    };
->>>    enum {
->>> @@ -415,6 +417,9 @@ struct discard_cmd_control {
->>>    	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
->>>    	unsigned int undiscard_blks;		/* # of undiscard blocks */
->>>    	unsigned int next_pos;			/* next discard position */
->>> +	spinlock_t discard_time_lock;	/* for discard time statistics */
->>> +	ktime_t discard_time_avg;		/* issued discard cmd avg time */
->>> +	ktime_t discard_time_peak;		/* issued discard cmd peak time */
->>>    	atomic_t issued_discard;		/* # of issued discard */
->>>    	atomic_t queued_discard;		/* # of queued discard */
->>>    	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
->>> @@ -3896,6 +3901,7 @@ struct f2fs_stat_info {
->>>    	int nr_dio_read, nr_dio_write;
->>>    	unsigned int io_skip_bggc, other_skip_bggc;
->>>    	int nr_flushing, nr_flushed, flush_list_empty;
->>> +	ktime_t discard_avg, discard_peak;
->>>    	int nr_discarding, nr_discarded;
->>>    	int nr_discard_cmd;
->>>    	unsigned int undiscard_blks;
->>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>> index a9099a754dd2..73cd05bb3f4a 100644
->>> --- a/fs/f2fs/segment.c
->>> +++ b/fs/f2fs/segment.c
->>> @@ -937,6 +937,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
->>>    	list_add_tail(&dc->list, pend_list);
->>>    	spin_lock_init(&dc->lock);
->>>    	dc->bio_ref = 0;
->>> +	dc->dcc = dcc;
->>>    	atomic_inc(&dcc->discard_cmd_cnt);
->>>    	dcc->undiscard_blks += len;
->>> @@ -1006,9 +1007,13 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
->>>    static void f2fs_submit_discard_endio(struct bio *bio)
->>>    {
->>>    	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
->>> +	struct discard_cmd_control *dcc = dc->dcc;
->>>    	unsigned long flags;
->>> +	ktime_t submit_time;
->>> +	int nr_discarded;
->>>    	spin_lock_irqsave(&dc->lock, flags);
->>> +	submit_time = ktime_sub(ktime_get(), dc->submit_start);
->>>    	if (!dc->error)
->>>    		dc->error = blk_status_to_errno(bio->bi_status);
->>>    	dc->bio_ref--;
->>> @@ -1018,6 +1023,16 @@ static void f2fs_submit_discard_endio(struct bio *bio)
->>>    	}
->>>    	spin_unlock_irqrestore(&dc->lock, flags);
->>>    	bio_put(bio);
->>> +
->>> +	spin_lock_irqsave(&dcc->discard_time_lock, flags);
->>> +	nr_discarded = atomic_read(&dcc->issued_discard);
->>> +	dcc->discard_time_avg = div_u64(ktime_add(nr_discarded * dcc->discard_time_avg,
->>> +										submit_time),
->>> +									nr_discarded + 1);
->>> +	if (dcc->discard_time_avg > dcc->discard_time_peak)
->>> +		dcc->discard_time_peak = dcc->discard_time_avg;
->>> +	atomic_inc(&dcc->issued_discard);
->>> +	spin_unlock_irqrestore(&dcc->discard_time_lock, flags);
->>
->> Why not calculating average time only in update_general_status()? and here,
->> we just need to account total_{discard_time, discard_count} w/o additional
->> spinlock.
->>
->> Thanks,
->>
->>>    }
->>>    static void __check_sit_bitmap(struct f2fs_sb_info *sbi,
->>> @@ -1166,6 +1181,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->>>    		 * right away
->>>    		 */
->>>    		spin_lock_irqsave(&dc->lock, flags);
->>> +		dc->submit_start = ktime_get();
->>>    		if (last)
->>>    			dc->state = D_SUBMIT;
->>>    		else
->>> @@ -1185,8 +1201,6 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
->>>    		bio->bi_opf |= flag;
->>>    		submit_bio(bio);
->>> -		atomic_inc(&dcc->issued_discard);
->>> -
->>>    		f2fs_update_iostat(sbi, NULL, FS_DISCARD, len * F2FS_BLKSIZE);
->>>    		lstart += len;
->>> @@ -2079,9 +2093,12 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->>>    	INIT_LIST_HEAD(&dcc->wait_list);
->>>    	INIT_LIST_HEAD(&dcc->fstrim_list);
->>>    	mutex_init(&dcc->cmd_lock);
->>> +	spin_lock_init(&dcc->discard_time_lock);
->>>    	atomic_set(&dcc->issued_discard, 0);
->>>    	atomic_set(&dcc->queued_discard, 0);
->>>    	atomic_set(&dcc->discard_cmd_cnt, 0);
->>> +	dcc->discard_time_avg = 0;
->>> +	dcc->discard_time_peak = 0;
->>>    	dcc->nr_discards = 0;
->>>    	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
->>>    	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+- Xiubo
+
+
+> Thanks
+
