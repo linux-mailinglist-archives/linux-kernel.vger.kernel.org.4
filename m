@@ -2,171 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F5A64BE65
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 032D764BE71
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbiLMV2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 16:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S236483AbiLMVbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 16:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiLMV2g (ORCPT
+        with ESMTP id S235278AbiLMVbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 16:28:36 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EE4240A7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 13:28:35 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ay8-20020a05600c1e0800b003d0808d2826so1590375wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 13:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sPxCch+SuJX/czcKg/x1jS3wKYQ1yhbWpMuG4i9oUWw=;
-        b=E+lkNW/vnitIH25/YnSrt7TWGivM29tl8AVsANwFHEc9rH5JKyJW7bRkbD1EqRGDfF
-         IbaXcj4hTp85nDZepnLtVL1fCB8FwovIslVrrUOWGStxH1cRsyNfYQaKraZfjbTx8zDG
-         Y6Uyb/fFOIDJ4Z+FwL4DHITXdbRlNIYY/kRFDet4bzICjNllgNH3NtqFshl1QoSaHf36
-         Cva9GMrwVGDI6RgldilFEV1lVZqc+2BDZ8j7owZX73X4ghABa3KeKjezgLW2oP653Mgu
-         MGnc51UtYncxknfwWT6Snyzc/1+oIN53DpcB/JL6LDj4IT6Sk8xxh80ao+ILw+aBlkwp
-         qcNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sPxCch+SuJX/czcKg/x1jS3wKYQ1yhbWpMuG4i9oUWw=;
-        b=EV5p9srS5vs0VhRu1G3PNjN/4bZsCL1MNnzmExci+Y3zmguAhXHasdroxmvLXZBuHL
-         Uvn/0rql7ZDbLce/CtIFt2MbBtqRCHajNnIWcdNmtTk3nKQrD7gD9EVcK9ny4XZILM4A
-         VABOiqR7LeXSLGh+3GyyTW4Z9amh6kh8DTbid6R2vlpXJ9nwACu7po7lgQkr5jM9Ccsz
-         IDCxuatvgGeArmDwpldnVxr8j7N8AxwIl+Tv84DXslk72ZQEFVpkB7lqRREv3PZ3sbZQ
-         VgEZKmJXARUlpQHj6Quj+Y+3CT9fUqk0sdD9JATPn3H28OhjpAOMsB9/R6OHwjRWhrsk
-         /DtA==
-X-Gm-Message-State: ANoB5plg52aqBV9GR8GTZ5XFbvUdcJdUsN1F/1hIW0mcJh77eyZYX6Q2
-        ikUiRd5zL1FVd83l8Bhy8/96XLoNkaYcWhR27F7p2w==
-X-Google-Smtp-Source: AA0mqf4mbRN9RO70+dP+17nvXwqHWyjSQsBIhtnZWLOuogyyAtbhcJWpE11dGgYAj5QrifRpofLF7t15nrzEa0jLA+w=
-X-Received: by 2002:a1c:7203:0:b0:3c6:c109:2d9 with SMTP id
- n3-20020a1c7203000000b003c6c10902d9mr13324wmc.149.1670966913709; Tue, 13 Dec
- 2022 13:28:33 -0800 (PST)
+        Tue, 13 Dec 2022 16:31:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D24240A5;
+        Tue, 13 Dec 2022 13:31:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWsBd31Ryz4xTy;
+        Wed, 14 Dec 2022 08:31:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670967097;
+        bh=d93HhSuM1bfwkBIxam509QCPSfb40NV1BNqQHTmZMg0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bPkZMxFpNxzcLMXgK4A0VtEDnhLSQzhrhdkV5ghFa2KPm4knZQkoDIDoR1Y5f5uz6
+         n0z9hNXSugEIA+Fhomm69TcnspQECO3kAHGRIE8AGFl2Lj7ykV2V9wPkV1bVVJQsdf
+         /PhC3qtdOLW2XtC1QEN+veCBYxezZov3cWFfhS6myFZlibwVia8fF/ZotpOcV9X/v9
+         xNdxF/389J+RAFCwL0BeJq8tYMQJ2y9OrhtVQP6nAoLQQVvze+9YwxPW0bupVXvZ6+
+         yIub2Tb4bwE9Mkf7ac8455x1lz/iPFjYTUwucJIDEdLLGFr9yhI8XkDm2i7OfDgMYX
+         Vto6Jq3IO5eOA==
+Date:   Wed, 14 Dec 2022 08:31:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the perf tree
+Message-ID: <20221214083119.248fa4a8@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221202045743.2639466-1-irogers@google.com> <20221202045743.2639466-4-irogers@google.com>
- <Y5eVwlId2A2/pN40@fjasle.eu>
-In-Reply-To: <Y5eVwlId2A2/pN40@fjasle.eu>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Dec 2022 13:28:21 -0800
-Message-ID: <CAP-5=fXeYsOs-YJH+hx=haGwJ_eqDNXYQQ30AiyDDfc5P2o84Q@mail.gmail.com>
-Subject: Re: [PATCH 3/5] tools lib subcmd: Add dependency test to install_headers
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ceNn7PW/ZP+gDgomp61Ihrl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:57 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Thu, Dec 01, 2022 at 08:57:41PM -0800 Ian Rogers wrote:
-> > Compute the headers to be installed from their source headers and make
-> > each have its own build target to install it. Using dependencies
-> > avoids headers being reinstalled and getting a new timestamp which
-> > then causes files that depend on the header to be rebuilt.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/lib/subcmd/Makefile | 23 +++++++++++++----------
-> >  1 file changed, 13 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-> > index 9a316d8b89df..b87213263a5e 100644
-> > --- a/tools/lib/subcmd/Makefile
-> > +++ b/tools/lib/subcmd/Makefile
-> > @@ -89,10 +89,10 @@ define do_install_mkdir
-> >  endef
-> >
-> >  define do_install
-> > -     if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
-> > -             $(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
-> > +     if [ ! -d '$2' ]; then             \
-> > +             $(INSTALL) -d -m 755 '$2'; \
-> >       fi;                                             \
-> > -     $(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
-> > +     $(INSTALL) $1 $(if $3,-m $3,) '$2'
->
-> What about using '$(INSTALL) -D ...' instead of the if-mkdir-block above?
-> (E.g. as in tools/debugging/Makefile.)
->
-> Kind regards,
-> Nicolas
+--Sig_/ceNn7PW/ZP+gDgomp61Ihrl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Nicolas, the reason was to keep the code consistent. That's not
-to say this is the best approach. For example, here is the same thing
-for tools/lib/api:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/l=
-ib/api/Makefile?h=3Dperf/core&id=3Df43368371888694a2eceaaad8f5e9775c092009a=
-#n84
+Hi all,
 
-If you'd like to improve this in all the versions and send patches I'd
-be happy to take a look.
+In commit
 
-Thanks,
-Ian
+  4d59952792c4 ("perf test: Update event group check for support of uncore =
+event")
 
-> >  endef
-> >
-> >  install_lib: $(LIBFILE)
-> > @@ -100,13 +100,16 @@ install_lib: $(LIBFILE)
-> >               $(call do_install_mkdir,$(libdir_SQ)); \
-> >               cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
-> >
-> > -install_headers:
-> > -     $(call QUIET_INSTALL, libsubcmd_headers) \
-> > -             $(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644=
-); \
-> > -             $(call do_install,help.h,$(prefix)/include/subcmd,644); \
-> > -             $(call do_install,pager.h,$(prefix)/include/subcmd,644); =
-\
-> > -             $(call do_install,parse-options.h,$(prefix)/include/subcm=
-d,644); \
-> > -             $(call do_install,run-command.h,$(prefix)/include/subcmd,=
-644);
-> > +HDRS :=3D exec-cmd.h help.h pager.h parse-options.h run-command.h
-> > +INSTALL_HDRS_PFX :=3D $(DESTDIR)$(prefix)/include/subcmd
-> > +INSTALL_HDRS :=3D $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
-> > +
-> > +$(INSTALL_HDRS): $(INSTALL_HDRS_PFX)/%.h: %.h
-> > +     $(call QUIET_INSTALL, $@) \
-> > +             $(call do_install,$<,$(INSTALL_HDRS_PFX)/,644)
-> > +
-> > +install_headers: $(INSTALL_HDRS)
-> > +     $(call QUIET_INSTALL, libsubcmd_headers)
-> >
-> >  install: install_lib install_headers
-> >
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
->
-> --
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
+Fixes tag
+
+  Fixes: b20d9215a35fb6ed ("perf test: Add event group test for events in m=
+ultiple PMUs")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 82e236e28a79 ("perf test: Add event group test for events in multipl=
+e PMUs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ceNn7PW/ZP+gDgomp61Ihrl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOY7ycACgkQAVBC80lX
+0GwcOQgAivpHLlIwlZ1TGR/oggi9krO8l9nmNSUs5LZQGew3JPCs9pu6VNDzq4NF
+GxVJ0k1TOEqDzgHa0SeV9w4+b9fs7oJlwnhdcGqOM9Bj2+GGOOwM+k5lIn04uLWB
+i8zwdWpzeFwfy2lIWcQPU3ShGRYTfpTSsIKm7wkaqrXwelJsW6D8G7cpRwAcGYiz
+LUPd2s/HPRhhYD4+GsuCrVdEjeoScCB45dtzCtPqKxfIB0mPmHwUu2Ji3vGPW+eS
+m3ermvsHzP7FDLs1HlIBmrooTSqR7FgrRqVdBfXUCV4I0l5iRVwnFqQjpRwoDQx0
+sY2WtT4Qyl5cgTfEz6zBmElLlxCx+w==
+=7AkC
+-----END PGP SIGNATURE-----
+
+--Sig_/ceNn7PW/ZP+gDgomp61Ihrl--
