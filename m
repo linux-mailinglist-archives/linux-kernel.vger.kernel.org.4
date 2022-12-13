@@ -2,59 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CFF64AD65
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E464AD6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbiLMCDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S233953AbiLMCED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbiLMCDE (ORCPT
+        with ESMTP id S234113AbiLMCEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:03:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420DE17581
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:03:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82E33B80E04
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0BFC433D2;
-        Tue, 13 Dec 2022 02:02:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670896980;
-        bh=zscdFGlQLq5lM+HV3Wr7JIYnd9xVoYqAFnWU2yJJolQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kkARd6WMQ/C8KJbfbvzY7TrdSCdVhLC/HQ9kCvyg4ykMJyrSSfPHy2a8n25u9ytQF
-         FkNDz8S/nvSjxTBURqP4cy3hJuCuPQyNR0QD9KY+fnyaCGUjMiSXxQ8VX8Ex8lXW4Z
-         QHGgDOtcgup43F/mVPA+uOTDacejrNorpkxXegfhJl90lBD3KR5xfMqWrqZD0poqbM
-         cx30TwQJIFHbKSTpOcZ97vFTYVYalS4KnMgb0dItAWzao5+cbXa4GSQ2sXMOtc5r0T
-         x2o9VMH2R16Hw47ma/pe27ldWxio1CHVEr6y0bSdnDGTLki/ncujh89n5rJlPPswAw
-         WVuLLogvbPbvg==
-Message-ID: <635cee2a-3f11-b963-b800-b417be7007b5@kernel.org>
-Date:   Tue, 13 Dec 2022 10:02:57 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] f2fs: do some cleanup for f2fs module init
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
+        Mon, 12 Dec 2022 21:04:01 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC671B1F0;
+        Mon, 12 Dec 2022 18:03:53 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id s196so9497380pgs.3;
+        Mon, 12 Dec 2022 18:03:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=13l+GAcYpGztlBUQlibYZJJu+N68RuXQ0jlYBQoMmJs=;
+        b=C7e8fTgkcHmuTrZQ/8Hm+970UEm9w0GwiZQGb4P0t3TPyHs6BpkM19PxJKevgaBLH9
+         ecc6OZuZK31MBIapt3Lx9Doc/1/2Zvy3Sv4RNgX6VByVPmrOtG/+Ga1wvjrYg7Bg+aJU
+         hBgAyMCEUrE77NMwofmYJhE+QZY8Sc2s5pf4BPUzxW6e00/RwCGXDej3FJWD8AG8SnJg
+         KgKJF3uN6Ged36LgIu81WCnrak4VYiMRSiCowJctYqviIDtOoOciCV/KMx1uoZlsH3dv
+         SRltgj/hC3dEGy/mcMZI0/LZcodQBnxbZfBAOgdy29UtCfFQTiPlpzjq8xKdCA8vgA0g
+         jGYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=13l+GAcYpGztlBUQlibYZJJu+N68RuXQ0jlYBQoMmJs=;
+        b=Hw/FI9Lzhh/tcVzuBY/BOtHhmZtNozv4LX/5cjmR32BNtqKPGCnzP3/WLSkHvvH8i4
+         G9V+BV9Xpm9CFcQFayYdxsKNLPwsGMMowZWjKsFi2RkwmfbAUZfKOPcECiSIgVy47M0d
+         3y83xVchTfSgUda69NBKiJKrA5pslpKrnDyoB1v4Tmst4nxz2fc5PDbXsthbZmexidIV
+         aM4yeYjx9nJECiTvTlOx2fSLTlSmEpe/qGlhUKMuzqoft2TCG/YfJodSoFdSWflhw9Gr
+         pU4+eoAOABGMaFnJ8z2dt003kvr2r9LC95Xs2RVK9EaHkW24bAER92P/9NUOcJON+j7L
+         j+1g==
+X-Gm-Message-State: ANoB5pl4WybH6nwLaLS78TKvueFZXccSSHDQnc2+I8N/1nVNb72Yr/tC
+        MyG7obTaM7fTf0toXPZ0vLc=
+X-Google-Smtp-Source: AA0mqf6TOA5Zv73oVP0Hyc/ykYBfNk8zTqgxjnqSQOAaaS39735qjuxncWfCwWmiPm9kAsblFyF7zA==
+X-Received: by 2002:a62:fb14:0:b0:574:2b95:6f41 with SMTP id x20-20020a62fb14000000b005742b956f41mr3757325pfm.1.1670897033202;
+        Mon, 12 Dec 2022 18:03:53 -0800 (PST)
+Received: from mail.google.com ([103.229.249.253])
+        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0056bc5ad4862sm6476212pfr.28.2022.12.12.18.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 18:03:52 -0800 (PST)
+Date:   Tue, 13 Dec 2022 15:03:44 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221125114736.19423-1-frank.li@vivo.com>
- <b8c54a6b-1f6d-9a86-b87c-e980902aa3a3@kernel.org>
- <Y5ewzsPuCd5UbCCJ@google.com>
- <c1daf309-a44d-46a8-7f97-bf5aab63aa9a@kernel.org>
- <Y5fXRihgabAa7Wmv@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y5fXRihgabAa7Wmv@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: Re: [PATCH v2] scripts/tags.sh: choose which directories to exclude
+ from being indexed
+Message-ID: <Y5fdgI4uTpXZQ9yn@mail.google.com>
+References: <Y5T66yWNVAZNIaJ0@mail.google.com>
+ <Y5UP+tnnxNgoi6A2@mail.google.com>
+ <CAHVum0eOzd8MgP0FGObHWvqG_oPVoTmk_5gkEB0sAJK9JgCsFg@mail.gmail.com>
+ <Y5ekQcJeoHd1i+Um@mail.google.com>
+ <CAHVum0fqOj9peepXdrAETTO3_qNX-B2qM41AnPdHMMgPNyrnKg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVum0fqOj9peepXdrAETTO3_qNX-B2qM41AnPdHMMgPNyrnKg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,214 +83,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/13 9:37, Jaegeuk Kim wrote:
-> On 12/13, Chao Yu wrote:
->> On 2022/12/13 6:53, Jaegeuk Kim wrote:
->>> On 12/11, Chao Yu wrote:
->>>> On 2022/11/25 19:47, Yangtao Li wrote:
->>>>> Just for cleanup, no functional changes.
->>>>>
->>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>>>> ---
->>>>>     fs/f2fs/compress.c | 46 ++++++----------------------------------------
->>>>>     fs/f2fs/data.c     | 14 ++++----------
->>>>>     fs/f2fs/gc.c       |  4 +---
->>>>>     fs/f2fs/recovery.c |  4 +---
->>>>>     fs/f2fs/super.c    |  8 ++------
->>>>>     5 files changed, 14 insertions(+), 62 deletions(-)
->>>>>
->>>>> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
->>>>> index d315c2de136f..f920ba8e0e85 100644
->>>>> --- a/fs/f2fs/compress.c
->>>>> +++ b/fs/f2fs/compress.c
->>>>> @@ -567,10 +567,7 @@ MODULE_PARM_DESC(num_compress_pages,
->>>>>     int f2fs_init_compress_mempool(void)
->>>>>     {
->>>>>     	compress_page_pool = mempool_create_page_pool(num_compress_pages, 0);
->>>>> -	if (!compress_page_pool)
->>>>> -		return -ENOMEM;
->>>>> -
->>>>> -	return 0;
->>>>> +	return compress_page_pool ? 0 : -ENOMEM;
->>>>
->>>> I don't think this needs cleanup, other part looks good to me.
->>>
->>> What is the point here comparing to the below? fyi; I picked this change.
->>
->> IIUC, the question is for Yangtao? :P
+On Mon, Dec 12, 2022 at 02:32:41PM -0800, Vipin Sharma wrote:
+> On Mon, Dec 12, 2022 at 1:59 PM Paulo Miguel Almeida
+> <paulo.miguel.almeida.rodenas@gmail.com> wrote:
+> >
+> > On Mon, Dec 12, 2022 at 01:27:37PM -0800, Vipin Sharma wrote:
+> > > On Sat, Dec 10, 2022 at 3:02 PM Paulo Miguel Almeida
+> > > <paulo.miguel.almeida.rodenas@gmail.com> wrote:
+> > > >  # find sources in rest of tree
+> > > > -# we could benefit from a list of dirs to search in here
+> > > >  find_other_sources()
+> > > >  {
+> > > > -       find ${tree}* $ignore \
+> > > > +       local loc_ignore=${ignore}
+> > > > +       if [ -n "${IGNOREDIRS}" ]; then
+> > > > +               exp_ignored_dirs=$(sed 's/,/ /g' <<< ${IGNOREDIRS})
+> > > > +               for i in ${exp_ignored_dirs}; do
+> > > > +                       loc_ignore="${loc_ignore} ( -path $i ) -prune -o"
+> > > > +               done
+> > > > +       fi
+> > > > +
+> > >
+> > > This should be global overwrite instead of just in this function.
+> > > Before find_other_sources() is executed, this script finds files in
+> > > arch directories. So, if you keep it local then those files cannot be
+> > > excluded which makes execution of the command incorrect:
+> > >
+> > > make IGNOREDIRS=arch/x86 cscope
+> > >
+> >
+> > Hi Vipin, thanks for taking the time to review this patch.
+> >
+> > I see where you are coming from. I was aware of the 'loophole' that the
+> > current approach could have but, to be honest, I thought that there
+> > would be very little use in being able to exclude arch/.*?/ files.
+> >
+> > The reason for that being that I thought the most common usage for this
+> > feature would be to ignore folders within subsystems like drivers and
+> > tools to ensure code navigation would be less 'messy'.
 > 
-> Heh, to you. :) I think either looks fine. Hence, 
+> Yes, the original intent was to make driver code browsing less messy
+> but if we are introducing an option we should adapt it for generic
+> cases and correct the semantics.
 
-Ah... alright.
-
-I comment on this cleanup, due to I don't see any benefit, since both implementations
-are very common in kernel codes.
-
-> I'm fine with this patch.
-
-Okay.
-
-Thanks,
+Agreed.
 
 > 
->>
->> Thanks,
->>
->>>
->>>>
->>>> Thanks,
->>>>
->>>>>     }
->>>>>     void f2fs_destroy_compress_mempool(void)
->>>>> @@ -1983,9 +1980,7 @@ int f2fs_init_page_array_cache(struct f2fs_sb_info *sbi)
->>>>>     	sbi->page_array_slab = f2fs_kmem_cache_create(slab_name,
->>>>>     					sbi->page_array_slab_size);
->>>>> -	if (!sbi->page_array_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return sbi->page_array_slab ? 0 : -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi)
->>>>> @@ -1993,53 +1988,24 @@ void f2fs_destroy_page_array_cache(struct f2fs_sb_info *sbi)
->>>>>     	kmem_cache_destroy(sbi->page_array_slab);
->>>>>     }
->>>>> -static int __init f2fs_init_cic_cache(void)
->>>>> +int __init f2fs_init_compress_cache(void)
->>>>>     {
->>>>>     	cic_entry_slab = f2fs_kmem_cache_create("f2fs_cic_entry",
->>>>>     					sizeof(struct compress_io_ctx));
->>>>>     	if (!cic_entry_slab)
->>>>>     		return -ENOMEM;
->>>>> -	return 0;
->>>>> -}
->>>>> -
->>>>> -static void f2fs_destroy_cic_cache(void)
->>>>> -{
->>>>> -	kmem_cache_destroy(cic_entry_slab);
->>>>> -}
->>>>> -
->>>>> -static int __init f2fs_init_dic_cache(void)
->>>>> -{
->>>>>     	dic_entry_slab = f2fs_kmem_cache_create("f2fs_dic_entry",
->>>>>     					sizeof(struct decompress_io_ctx));
->>>>>     	if (!dic_entry_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> -}
->>>>> -
->>>>> -static void f2fs_destroy_dic_cache(void)
->>>>> -{
->>>>> -	kmem_cache_destroy(dic_entry_slab);
->>>>> -}
->>>>> -
->>>>> -int __init f2fs_init_compress_cache(void)
->>>>> -{
->>>>> -	int err;
->>>>> -
->>>>> -	err = f2fs_init_cic_cache();
->>>>> -	if (err)
->>>>> -		goto out;
->>>>> -	err = f2fs_init_dic_cache();
->>>>> -	if (err)
->>>>>     		goto free_cic;
->>>>>     	return 0;
->>>>>     free_cic:
->>>>> -	f2fs_destroy_cic_cache();
->>>>> -out:
->>>>> +	kmem_cache_destroy(cic_entry_slab);
->>>>>     	return -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_compress_cache(void)
->>>>>     {
->>>>> -	f2fs_destroy_dic_cache();
->>>>> -	f2fs_destroy_cic_cache();
->>>>> +	kmem_cache_destroy(dic_entry_slab);
->>>>> +	kmem_cache_destroy(cic_entry_slab);
->>>>>     }
->>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>>>> index 560fa80590e9..35c19248b1e2 100644
->>>>> --- a/fs/f2fs/data.c
->>>>> +++ b/fs/f2fs/data.c
->>>>> @@ -39,10 +39,8 @@ static struct bio_set f2fs_bioset;
->>>>>     int __init f2fs_init_bioset(void)
->>>>>     {
->>>>> -	if (bioset_init(&f2fs_bioset, F2FS_BIO_POOL_SIZE,
->>>>> -					0, BIOSET_NEED_BVECS))
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return bioset_init(&f2fs_bioset, F2FS_BIO_POOL_SIZE,
->>>>> +					0, BIOSET_NEED_BVECS);
->>>>>     }
->>>>>     void f2fs_destroy_bioset(void)
->>>>> @@ -4090,9 +4088,7 @@ int f2fs_init_post_read_wq(struct f2fs_sb_info *sbi)
->>>>>     	sbi->post_read_wq = alloc_workqueue("f2fs_post_read_wq",
->>>>>     						 WQ_UNBOUND | WQ_HIGHPRI,
->>>>>     						 num_online_cpus());
->>>>> -	if (!sbi->post_read_wq)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return sbi->post_read_wq ? 0 : -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_post_read_wq(struct f2fs_sb_info *sbi)
->>>>> @@ -4105,9 +4101,7 @@ int __init f2fs_init_bio_entry_cache(void)
->>>>>     {
->>>>>     	bio_entry_slab = f2fs_kmem_cache_create("f2fs_bio_entry_slab",
->>>>>     			sizeof(struct bio_entry));
->>>>> -	if (!bio_entry_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return bio_entry_slab ? 0 : -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_bio_entry_cache(void)
->>>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->>>>> index 0f967b1e98f2..4b0d2fa3a769 100644
->>>>> --- a/fs/f2fs/gc.c
->>>>> +++ b/fs/f2fs/gc.c
->>>>> @@ -1903,9 +1903,7 @@ int __init f2fs_create_garbage_collection_cache(void)
->>>>>     {
->>>>>     	victim_entry_slab = f2fs_kmem_cache_create("f2fs_victim_entry",
->>>>>     					sizeof(struct victim_entry));
->>>>> -	if (!victim_entry_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return victim_entry_slab ? 0 : -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_garbage_collection_cache(void)
->>>>> diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
->>>>> index dea95b48b647..77fd453949b1 100644
->>>>> --- a/fs/f2fs/recovery.c
->>>>> +++ b/fs/f2fs/recovery.c
->>>>> @@ -923,9 +923,7 @@ int __init f2fs_create_recovery_cache(void)
->>>>>     {
->>>>>     	fsync_entry_slab = f2fs_kmem_cache_create("f2fs_fsync_inode_entry",
->>>>>     					sizeof(struct fsync_inode_entry));
->>>>> -	if (!fsync_entry_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return fsync_entry_slab ? 0 : -ENOMEM;
->>>>>     }
->>>>>     void f2fs_destroy_recovery_cache(void)
->>>>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
->>>>> index 31435c8645c8..1d56cba495a5 100644
->>>>> --- a/fs/f2fs/super.c
->>>>> +++ b/fs/f2fs/super.c
->>>>> @@ -288,9 +288,7 @@ static int __init f2fs_create_casefold_cache(void)
->>>>>     {
->>>>>     	f2fs_cf_name_slab = f2fs_kmem_cache_create("f2fs_casefolded_name",
->>>>>     							F2FS_NAME_LEN);
->>>>> -	if (!f2fs_cf_name_slab)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return f2fs_cf_name_slab ? 0 : -ENOMEM;
->>>>>     }
->>>>>     static void f2fs_destroy_casefold_cache(void)
->>>>> @@ -4646,9 +4644,7 @@ static int __init init_inodecache(void)
->>>>>     	f2fs_inode_cachep = kmem_cache_create("f2fs_inode_cache",
->>>>>     			sizeof(struct f2fs_inode_info), 0,
->>>>>     			SLAB_RECLAIM_ACCOUNT|SLAB_ACCOUNT, NULL);
->>>>> -	if (!f2fs_inode_cachep)
->>>>> -		return -ENOMEM;
->>>>> -	return 0;
->>>>> +	return f2fs_inode_cachep ? 0 : -ENOMEM;
->>>>>     }
->>>>>     static void destroy_inodecache(void)
+> >
+> > Additionally, if we go with the global IGNOREDIRS approach you just
+> > described, we could have some conflicting options too such as:
+> >
+> > make ALLSOURCE_ARCHS="x86 arm" IGNOREDIRS=arch/x86 cscope
+> >
+> 
+> I don't think this is conflicting, to me it is more complementary.
+> Above line shows get all code for x86 and arm but don't get x86 source
+> code ("arch/x86/include" is fine). This can even be fine tuned to sub
+> directories.
+> 
+
+That's a fair point. I had not thought about it that way. Thanks!
+
+Will implement the changes when I get home.
+
+> I just now noticed after seeing your command, ALLSOURCE_ARCHS take
+> space separated values, whereas, IGNOREDIRS take comma separated
+> values. They both should be in the same format, since ALLSOURCE_ARCHS
+> was already there, it is better to change IGNOREDIRS.
+> 
+> Can you also change IGNOREDIRS to IGNORE_DIRS? It is much easier to
+> read this way. Sorry, I should have said this in the  beginning.
+> 
+
+Yep, no problem! :-)
+
+> > My 2 cents is that ALLSOURCE_ARCHS is already the mechanism for
+> > excluding archs so it's 'okay' to keep IGNOREDIRS as is.
+> >
+> > Let me know your thoughts.
+> >
+> > Thanks!
+> >
+> > - Paulo A.
+> >
+> > > Above command will still index all of the code in arch/x86. Something
+> > > like this will be better.
+> > >
+> > > --- a/scripts/tags.sh
+> > > +++ b/scripts/tags.sh
+> > > @@ -17,6 +17,13 @@ ignore="$(echo "$RCS_FIND_IGNORE" | sed 's|\\||g' )"
+> > >  # tags and cscope files should also ignore MODVERSION *.mod.c files
+> > >  ignore="$ignore ( -name *.mod.c ) -prune -o"
+> > >
+> > > +if [ -n "${IGNOREDIRS}" ]; then
+> > > +       exp_ignored_dirs=$(sed 's/,/ /g' <<< ${IGNOREDIRS})
+> > > +       for i in ${exp_ignored_dirs}; do
+> > > +               ignore="${ignore} ( -path $i ) -prune -o"
+> > > +       done
+> > > +fi
+> > > +
+> > >  # Use make KBUILD_ABS_SRCTREE=1 {tags|cscope}
+> > >  # to force full paths for a non-O= build
+> > >  if [ "${srctree}" = "." -o -z "${srctree}" ]; then
+> > > @@ -62,9 +69,9 @@ find_include_sources()
+> > >  # we could benefit from a list of dirs to search in here
+> > >  find_other_sources()
+> > >  {
+> > > -       find ${tree}* $ignore \
+> > > -            \( -path ${tree}include -o -path ${tree}arch -o -name
+> > > '.tmp_*' \) -prune -o \
+> > > -              -name "$1" -not -type l -print;
+> > > +       find ${tree}* ${ignore} \
+> > > +               \( -path ${tree}include -o -path ${tree}arch -o -name
+> > > '.tmp_*' \) -prune -o \
+> > > +               -name "$1" -not -type l -print;
+> > >  }
+> > >
+> > > We will still have to specify arch/x86 and arch/x86/include but this
+> > > works and keeps the definition of IGNOREDIRS relatively correct.
+> > >
+> > >
+> > > > +       find ${tree}* ${loc_ignore} \
+> > > >              \( -path ${tree}include -o -path ${tree}arch -o -name '.tmp_*' \) -prune -o \
+> > > >                -name "$1" -not -type l -print;
+> > > >  }
+> > > > --
+> > > > 2.38.1
+> > > >
