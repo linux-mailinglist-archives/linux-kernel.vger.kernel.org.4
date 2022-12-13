@@ -2,239 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CF264BB64
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E32464BB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbiLMRup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S235622AbiLMRyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbiLMRuW (ORCPT
+        with ESMTP id S229820AbiLMRyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:50:22 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95867248C0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:49:47 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id t5so15390688vsh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:49:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqUM+ax68zeF7mzrZWkiSzr04RQkjlAcu7L4ga5z5vQ=;
-        b=ktRYLWBpOGbOKfZVS/0xpk76+a38y7Wpzto5CjLdt4788k8Y3bOGbtipl342O/g0hx
-         TLD/pNbgM0dgC/LHlCcbCMdKiBf/0M/+7n/zflkBlTrk+PCKRbrrFsBaFrD6DOYVxiHp
-         ZdqPaz4LeOpmfoaXf5jhCNuFZ8na5t8kNMpeb+3h152Y5XDbDPY6qXLG0O56LboT+A4w
-         2NJ9WerWsjMmSMTT0Hco/TFw7geDjMFD/D9YaymwvI2cXBwTPGgcxWmOU/wmm2mn1Bdf
-         uorQetiunr2GozfXGjySFaCH0Pq7DwrcePInpAqq3lv/O4ouZNj1X7BxmnlOFD9s8vJv
-         b+oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DqUM+ax68zeF7mzrZWkiSzr04RQkjlAcu7L4ga5z5vQ=;
-        b=CiJ7Km0aK+N99/PUxwpfAd5EmzMynhSKGoqTWqjYi8R+nMRXfXhKb0tjc80X97MQJV
-         vv7jXrKaZSKsxXkoXyJ1aORVOpeunttXi2JGmCJOm2OwiaUuC++ysbzNvWvdm4My7kAT
-         5H55uxOBqN8HMMEkxtNG22e2Nz937KJrNiEYu35rSg7JUx2cd3iAXm1AwcHfDjI84h1W
-         yHtmyUKaxlze2090AeX5mvpDE7ecJdimNnzOp495auSfhYocInREMlKv2Qtp8/Ho2m/H
-         nI+zo2kv2Cuq0/7Mplynx49WpE6flqvV62mq+fuyLvMIto6GVF5L+HZtdbENMlBCIn5e
-         RyDw==
-X-Gm-Message-State: ANoB5pmbZJ8VQqBZaQVd5TsVz5Kr0eYh9VwaGC41wLIZHmxPDoP8VzBQ
-        RJHEL6dhqylX55QgBZPEi/2nPw==
-X-Google-Smtp-Source: AA0mqf7YIh3+smLA9KO0wwiAj3WR2RyFhWmCYelRuDl0ZOT9GaC17ZkDDK5gZFzR7Sju/EDkQ3Lv4g==
-X-Received: by 2002:a05:6102:94c:b0:3b0:78cc:bfaf with SMTP id a12-20020a056102094c00b003b078ccbfafmr14776004vsi.15.1670953786450;
-        Tue, 13 Dec 2022 09:49:46 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006fa4cac54a5sm8288324qkb.72.2022.12.13.09.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:49:45 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p59PV-00AKeD-1G;
-        Tue, 13 Dec 2022 13:49:45 -0400
-Date:   Tue, 13 Dec 2022 13:49:45 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <Y5i7OWihTNCKXGEJ@ziepe.ca>
-References: <Y5CWVu08abcOuEQH@ziepe.ca>
- <20221207135203.GA22803@lst.de>
- <Y5CsH5PqMYAWYatw@ziepe.ca>
- <20221207163857.GB2010@lst.de>
- <Y5DOAKArjyfb6Mcz@ziepe.ca>
- <20221207183333.GA7049@lst.de>
- <Y5DyorZJPdtN5WcX@ziepe.ca>
- <20221212075046.GB11162@lst.de>
- <Y5iFnw5i3vI9iMFY@ziepe.ca>
- <20221213160807.GA626@lst.de>
+        Tue, 13 Dec 2022 12:54:22 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AF22229A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:54:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670954061; x=1702490061;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6JQlfSjmGWowuQLfU+ys4EB2UGCgEdecoNERcHGzVxk=;
+  b=CE0J7RpKBGUA0g+Mj3+446xB5HqfphhjgDEf4KcebC52Yo525i4sEpBE
+   p0PkWtwBfqY7mpgcukU7+VXTdPQ4oYtfXFX77MQ6ZNrnD0H8ZsfF+gtK3
+   hDV4itwY/zJBf4P80V5YzcF4XtZ1fX2zmYxjgS9nHI1ZzOzo1ZFnEFYNZ
+   fZScUDFOH/I6aicfFamCfbXzH7o7ZViMceMSFGBXrqOtqLoBBOm2T4kcg
+   UqnEurnKNCfgKinwn5rAc6YYxY9XU53gH+dGhAUac2Qz1WEIfhnuw1UvK
+   d5W3IwbmEvEpWbiSIQBFMEFArkbfICT6gISH7xe/o23iPtrzvJHTV/WkJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="297876987"
+X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
+   d="scan'208";a="297876987"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 09:54:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="755519188"
+X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
+   d="scan'208";a="755519188"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Dec 2022 09:54:20 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 09:54:19 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 09:54:19 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 13 Dec 2022 09:54:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l866ldLv1hiA31/JK+KawwjcpMZiHT+oxltuKm5Rdc5xxJJzbpVWhpCqhr9BiBldg9cK4xzCV4udkLenC4d2CQ6I9yAgzMcha5DOb1AoVA1imkMq/cWnhYzrg6MIUIqXDNAM42kP8jvE0vduAvl5awoVkgvtwtQqtm9yHXcepxPnDWyg5LmnTY7riEvZP9UaGS/VNhy8ssPxxNh64FC2t933pay6vbgCTr4D3UpGu/kyA38FAiw0lHBRVuSvZUwSbIBGPHiCT1oKQx/NwUymC42P+fi0DMEaJAOUMBf81m8iWokqQ0oVpfdC7tiOUV1qO62ciaDdnEjrJUdxpdrsFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KBvzZUpuPZvaI+pD2pjlgfEyI9VLpNVT/rj3Wv5Q/GI=;
+ b=FdxyabvOcG1Z6BWdozv49rlyT5msd6Xe0htlUfzAlKqqy109cHwID6os6DF4dCwYdkY9Lg9cF/BBfXGkQFAcbSFHX0SBWWFv/URF6+XrVuL4YcHNfdM1P+68DE3wAs7nLTlDLFpw6YDBOebkgn+62G7JFiqNgeABUXOd1ROwVAxcTXb+slOWlv6V96WYyOkmw+oF8h3IjzRHK97dx4ep9cYM6EvnXk0TPDDwc5ogSDQWlca07862AV0wHKLYPXaWvYwK0EjTYz9A1Ms6cygoPbQLhvP5egdoYPAIePNOc01P9c0yOzi6RVZQ2c4CEcSKkD9wN3RBJZ6QkHOEuE7Kuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by BN9PR11MB5418.namprd11.prod.outlook.com (2603:10b6:408:11f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
+ 2022 17:54:17 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::a1f7:e4c4:e60:c5b3]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::a1f7:e4c4:e60:c5b3%6]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 17:54:17 +0000
+Message-ID: <9c0e0e7c-45e4-ad65-f9a0-2eb582a62a3d@intel.com>
+Date:   Tue, 13 Dec 2022 09:54:14 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v4] x86/resctrl: Clear staged_config[] before and after it
+ is used
+Content-Language: en-US
+To:     Shawn Wang <shawnwang@linux.alibaba.com>, <fenghua.yu@intel.com>
+CC:     <bp@alien8.de>, <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <james.morse@arm.com>, <jamie@nuviainc.com>,
+        <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
+        <tglx@linutronix.de>, <x86@kernel.org>
+References: <20221209024436.22170-1-shawnwang@linux.alibaba.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20221209024436.22170-1-shawnwang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0108.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::49) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213160807.GA626@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BN9PR11MB5418:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9fd2293c-8ae2-4dd7-4fde-08dadd330db4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GqBTx0se5gvhj/I86c8COHM1RckBxR0BPu+Bn/zftVaeAEAeVUk3ZirmDPY8KyPjpFUwTumxfxAY2x7Vd43+ydBbQ+cOzvTiah6lUu+1XTbHm1q0EioZr7Fa3ahV1bZCadS7runGmaymyyyD/9fc+FbshHZl1L+LsKUaSqI6mBZYwHjsuDl+xve/Jrs2lRhS1J7nhiIl+WInjpJ7Mxd8V/A14cKVXIiLHLy3Uq3kxfew+0FxkdbLZK60nJG8KV4GRJrkL0pmKpA2m6BuHgK9w59K+PMLMokpefTyS/JmDRjkpyfNSGgQHbYLiMfOEgerzJH2kdFTSGz0kjhFInW0KnkpvQclvtTzVJHHwzjNfIlM8B8ZD/drTizJ4AnJNzp2panYABaLfnFaWDuAekjNYJl2YZXR0P33fcv9wii3q4egvvdTl0ZQvxn+xx34vLpO6cZipM5nKhC+InmgGDn537cyCDTLiYcXl0MWujoRcZnKudUdurEFmECvamwo8TSg0mby1f88TgZZCXqP5E+rYxTIkh4bM5RDAXEgafYaQfARH0WfsRYB2QMgpX0+Ag2wWthmzOUYbb4TXDdBDq7BZwmYZ/MbDvAfWtBPAOKtNh6ZSFFaI1+Gb7ehGohkPKZNj3xhRcYicDd0dLFDAxtsDEqliUi/DoDNQ507CLvel2KEabr81S17oIisYjcolTgthgsEJP72GFcakVgiVTsuP+ywlp/Hka12n9tgejtnNuM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199015)(82960400001)(2906002)(31686004)(44832011)(38100700002)(36756003)(6666004)(41300700001)(53546011)(6506007)(66476007)(86362001)(6512007)(26005)(5660300002)(6636002)(316002)(66946007)(7416002)(4326008)(66556008)(8676002)(8936002)(478600001)(186003)(6486002)(31696002)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3psUkZUaHkyZXE3UjZ2YkM3UjYzclNHaDNUdmJmQ2prTGsvdGtlaVFwc3JN?=
+ =?utf-8?B?UnBISGh4Z3RFbktjSVltSzAxd09CUzZpMUJ6YXNZS3UzZ0phc0FldzMrSW1T?=
+ =?utf-8?B?SmZ3MW1FSTAvSXB0cEk1ZUdVVnA3dlZ4Y3lXUHNFU3dUL2YxOWtJdGFLa3BK?=
+ =?utf-8?B?THV4TFJSRk93Y2pvVFh3NU9QV1NlUktYbVI3NFo2RTFCMU96Mm55cmF3ZVFI?=
+ =?utf-8?B?RW53Rk5SbmhteEhLV0dBV1lXNnVDYzM2dXZGTTkxQWlTQ0d0akhhZ05vVjJo?=
+ =?utf-8?B?c0xOclJwSXRtUlZ1R1RYZE9zaTRjUVdYVzF4TUx2TkdXQ3lwNit1ZVB4a3dN?=
+ =?utf-8?B?WTQrV0FQblBHaHNZMFBUb1EzV0R1R2N5V1pHZ0U3S1dLNVF2ekl1M0VVNlRv?=
+ =?utf-8?B?YU9ZSExHYmQrd2M2V3RLazc1MndxUGwzRnVmMVcwOVcvMVdwa1pBeGJkMVlm?=
+ =?utf-8?B?Sm5jYlFLSzU0TmRhMGhYY3NXOStzTFlBcTV4L21hNk16Z0ZENUlXU1NFKzhW?=
+ =?utf-8?B?aWdQay83K2oySnpwR3VERFc5WTRtS1VER1dVZDd4b0ptWmFrVDVyRlRyYkR3?=
+ =?utf-8?B?R1dHWkFHVitHVnkwV1poZVR6UjdnQzdHd1JiWmxldHp6bU5KTGcwczlOd0p4?=
+ =?utf-8?B?MjZ2UUFHcGdkWWNJbW9tZUdpckQ0SFNnY1M0RFg2SG53NW9yQWpMNjdKMGJi?=
+ =?utf-8?B?ZUZmVitHc2RLTmhianMwV1BJME55Zi8vK1EzeUNKOWZIbkV0UUFIcEI3NXo1?=
+ =?utf-8?B?U0dnY2xWeE9ldG12cEtCV29kdWNTYVE1ek9vc0ltZTY5dzNTSWw1eFhveW93?=
+ =?utf-8?B?VFVyZi9mNG5TZnJQT1RnWFVyUjNFamtYT29MY2xyaUR3dHY3ZG1Fb2pnQjFz?=
+ =?utf-8?B?bGF4UUNOR1NtcHZ5VGx2RXFmZnp5OVdjaGpha2UrV2ptbXE5R0pwVmRsODI2?=
+ =?utf-8?B?NEsyNGpIakFicUJlNnpDc0hsQXF3d1E3aUxCODNtVDdORlNXVDVMVVNsZkZ5?=
+ =?utf-8?B?NGFjMktJVjF2SnY1Uzh2Y0ZUWm9KTklvNGg3akZTRGxBWFhhNVJET1lxUFcv?=
+ =?utf-8?B?enp2bEdjcGNZWGR6RkRMTUo5eFpGRGZBTTBGT3dYUzN0U0RFQldvQlAwUkx6?=
+ =?utf-8?B?Nm1LRU1yc3FOODhaWHJCaEtUaTVtaVI3UE4wYnF3TmxXaVlSMzZHODVYaFRs?=
+ =?utf-8?B?OFpsMjI1ZElmRUhUMkVhOXNJU1pwdmhOM1RUUDRheUtaZFREWFRLeGpSL1FD?=
+ =?utf-8?B?ejE1NUg4SC9MVEE3TkpMU09qbnpKZm8zY0xJWjVYbVRXKzFSY3hNeEdoc05s?=
+ =?utf-8?B?dE9oYVMydGViMkFSM09KV2JRamVOMHhIUVJXbkxtdFowRGI4ckpucHluL1ly?=
+ =?utf-8?B?TXJxZ0RrNDdzNndEaHJFbGJpSXV1ZnVkZk5VWXlCZE0wQUpjVThRcDVCek9T?=
+ =?utf-8?B?VXpDY2U2bW1nVWM4Q01QWlptQUFWUVVVcGpSbDd1ZjVXUkhmanlBN01Yakgx?=
+ =?utf-8?B?WWhRSGhyN0lIMHQySXdJd0t6K2pvVHZVcE9MUk51MFV4U2lwd1pDWkpodlk1?=
+ =?utf-8?B?R3RVRHBNalA0VjNTdS9SRFN6b0h0S0FqbjVpWVFEWXJJeW8wMFVCOU83c3BC?=
+ =?utf-8?B?RFd6Nk5tcGR4ZjlaYitST1FSazZJS1ZzcGlMQW9DSWNpMmI1VWZsaEg3Z290?=
+ =?utf-8?B?TVF2ZFhZZzFXZHBzamlORTFBQ3ZUWXc1WGNIYXNHSjF4ZUJLWEwxcmtUQjJo?=
+ =?utf-8?B?QWpFdGVVTjd0K2NHMXVOS3cydmRFbld3cW4rT0JVZDF6OGU2bytpQW1nTmNR?=
+ =?utf-8?B?ZDRuMEE5LzhZbU1hc2xBTytoYnNMVHRPTlRVNXkwOUVXSDVWSU9oRXBBNnpF?=
+ =?utf-8?B?NDRXYUJyc25GcmoxaExWN0I4ZmE5SmYvUFhqYlZLLzZZL1ZYU1JpNmZsak4z?=
+ =?utf-8?B?amRjdUdpMktDTXh0bkh4OUU0U0VUTzkwYnJSNEE2bXRGc0lpSjFsUnZwZEE3?=
+ =?utf-8?B?YzZjalNkdnZmcDNHcGxSenFmQ0NLRnl6Qm52cEJLRjlNMVNPdHpUVzZmdmtq?=
+ =?utf-8?B?aUVNeWIyZmhPb21iY1BtcmdPd0E2Y3Y0cW9RdDJlNWM3bzJFUjMwRW40di9Q?=
+ =?utf-8?B?bzViZyswMFhKb1JIZmtsQ2VEZi9JeWxXNll1dlJINjdCOVlpM1ljd3ZYMDdE?=
+ =?utf-8?B?WEE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fd2293c-8ae2-4dd7-4fde-08dadd330db4
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 17:54:17.1212
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +bDmPeh70RkG62P//5HgFjHgTurP4RwGW0NqirgEKHEZMXuhGRpAg1m+CSAd+eEROgg5hS1RJnAzO4F/JIYZ5rQgueKC7731gcEA1bsezT4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5418
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:08:07PM +0100, Christoph Hellwig wrote:
-> On Tue, Dec 13, 2022 at 10:01:03AM -0400, Jason Gunthorpe wrote:
-> > > So now we need to write a vfio shim for every function even if there
-> > > is absolutely nothing special about that function?  Migrating really
-> > > is the controlling functions behavior, and writing a new vfio bit
-> > > for every controlled thing just does not scale.
-> > 
-> > Huh? "does not scale?" We are looking at boilerplates of around 20-30
-> > lines to make a VFIO driver for a real PCI device. Why is that even
-> > something we should worry about optimizing?
+Hi Shawn,
+
+On 12/8/2022 6:44 PM, Shawn Wang wrote:
+> As a temporary storage, staged_config[] in rdt_domain should be cleared
+> before and after it is used. The stale value in staged_config[] could
+> cause an MSR access error.
 > 
-> But we need a new driver for every controlled function now, which
-> is very different from the classic VFIO model where we had one
-> vfio_pci.
-
-To be fair, mainly vfio_pci had that model. Other uses of VFIO have
-device specific drivers already. We have the reset drivers in vfio
-platform, and the mdevs already. SIOV drivers are coming and they will
-not be general either. I know a few coming non-migration VFIO PCI
-variant drivers as well to deal with HW issues.
-
-Remember, we did a bunch of work to make this reasonable. Userspace
-can properly probe the correct VFIO driver for the HW it wants to use,
-just like normal devices. If we spawn the VFIO from the controlling
-function then it obviously will bring the correct driver along too.
-
-The mental model I have for VFIO is that every vfio_device has a
-driver, and we have three "universal" drivers that wildcard match to
-many devices (pci, fsl, and platform acpi reset). Otherwise VFIO is
-like every other driver subsystem out there, with physical devices and
-matching drivers that support them.
-
-Creating drivers for HW is not a problem, that is what a driver
-subsystem is for. We already invested effort in VFIO to make this
-scalable.
-
-> > And when you get into exciting future devices like SIOV you already
-> > need to make a special VFIO driver anyhow.
+> Here is a reproducer on a system with 16 usable CLOSIDs for a 15-way L3
+> Cache (MBA should be disabled if the number of CLOSIDs for MB is less than
+> 16.) :
+> 	mount -t resctrl resctrl -o cdp /sys/fs/resctrl
+> 	mkdir /sys/fs/resctrl/p{1..7}
+> 	umount /sys/fs/resctrl/
+> 	mount -t resctrl resctrl /sys/fs/resctrl
+> 	mkdir /sys/fs/resctrl/p{1..8}
 > 
-> You need to special support for it.  It's probably not another
-> Linux driver but part of the parent one, though.
-
-The designs we have done in mlx5 are split. The "parent" has just
-enough shim to describe what the SIOV is in terms of a 'slice of the
-parents resources' and then we layer another driver, located in the
-proper subsystem, to operate that slice. VDPA makes a
-/dev/virtio-whatever, VFIO would make a fake PCI function, mlx5 makes
-a netdev, etc.
-
-It is not so different from how a PF/VF relationship works, just that
-the SIOV is described by a struct auxillary_device not a struct
-pci_dev.
-
-I don't really like implementing VFIO drivers outside drivers/vfio, I
-think that has historically had bad outcomes in other subsystems.
-
-> > So far 100% of the drivers that have been presented, including the two
-> > RFC ones, have entanglements between live migration and vfio. Shifting
-> > things to dev/live_migration doesn't make the "communication problem"
-> > away, it just shifted it into another subsystem.
+> An error occurs when creating resource group named p8:
+>     unchecked MSR access error: WRMSR to 0xca0 (tried to write 0x00000000000007ff) at rIP: 0xffffffff82249142 (cat_wrmsr+0x32/0x60)
+>     Call Trace:
+>      <IRQ>
+>      __flush_smp_call_function_queue+0x11d/0x170
+>      __sysvec_call_function+0x24/0xd0
+>      sysvec_call_function+0x89/0xc0
+>      </IRQ>
+>      <TASK>
+>      asm_sysvec_call_function+0x16/0x20
 > 
-> The main entanglement seems to be that it needs to support a vfio
-> interface for live migration while the actual commands go to the
-> parent device.
-
-Not at all, that is only a couple function calls in 4 of the drivers
-so far.
-
-The entanglement is that the live migration FSM and the VFIO device
-operation are not isolated. I keep repeating this - mlx5 and the two
-RFC drivers must trap VFIO operations and relay them to their
-migration logic. hns has to mangle its BARs. These are things that
-only exist on the VFIO side.
-
-So, you are viewing live migration as orthogonal and separable to
-VFIO, and I don't agree with this because I haven't yet seen any proof
-in implementations.
-
-Let's go through the nvme spec process and see how it works out. If
-NVMe can address things which are tripping up other implemenations,
-like FLR of the controlled function. Then we may have the first
-example. If not, then it is just how things are.
-
-FLR is trickey, it not obvious to me that you want a definition of
-migration that isolates controlled function FLR from the migration
-FSM..
-
-There are advantages to having a reliable, universal, way to bring a
-function back to a clean slate, including restoring it to full
-operation (ie canceling any migration operation). The current
-definition of FLR provides this.
-
-> > It is worse than just VFIO vs one kernel driver, like mlx5 could spawn
-> > a controlled function that is NVMe, VDPA, mlx5, virtio-net, VFIO,
-> > etc.
+> When creating a new resource control group, hardware will be configured
+> by the following process:
+>     rdtgroup_mkdir()
+>       rdtgroup_mkdir_ctrl_mon()
+>         rdtgroup_init_alloc()
+>           resctrl_arch_update_domains()
 > 
-> This seems to violate the PCIe spec, which says:
+> resctrl_arch_update_domains() iterates and updates all resctrl_conf_type
+> whose have_new_ctrl is true. Since staged_config[] holds the same values as
+> when CDP was enabled, it will continue to update the CDP_CODE and CDP_DATA
+> configurations. When group p8 is created, get_config_index() called in
+> resctrl_arch_update_domains() will return 16 and 17 as the CLOSIDs for
+> CDP_CODE and CDP_DATA, which will be translated to an invalid register -
+> 0xca0 in this scenario.
 > 
-> "All VFs associated with a PF must be the same device type as the PF,
-> (e.g., the same network device type or the same storage device type.)",
-
-For VFs there are multiple PFs to follow the above, and for SIOV this
-language doesn't apply.
-
-It seems the PDS RFC driver does violate this spec requirement though..
-
-> > When we create the function we really want to tell the device what
-> > kind of function it is, and that also tells the kernel what driver
-> > should be bound to it.
+> Fix it by clearing staged_config[] before and after it is used.
 > 
-> I'd rather have different ways to probe by passing a "kind" or "type"
-> argument along the device IDs during probing.  E.g. "driver"
-> and "vfio", and then only match for the kind the creator of the device
-> added them to the device model for. 
+> Fixes: 75408e43509e ("x86/resctrl: Allow different CODE/DATA configurations to be staged")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
+> Suggested-by: Xin Hao <xhao@linux.alibaba.com>
+> ---
 
-Not everything can be done during driver probing. There are certainly
-steps at SIOV instantiation time or VF provisioning that impact what
-exactly is available on the controlled function. Eg on mlx5 when we
-create a VDPA device it actually is different from a full-function
-mlx5 device and that customization was done before any driver was
-probed.
+Thank you very much.
 
-In fact, not only is it done before driver binding, but it can be
-enforced as a security property from the DPU side when the DPU is the
-thing creating the function.
+Tested-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-I like the general idea of type to help specify the driver to probe,
-we tried to work on something like that once and it didn't go far, but
-I did like the concept of it.
+Reinette
 
-> > mlx5 even has weird limitations, like a controlled function that is
-> > live migration capable has fewer features than a function that is
-> > not. So the user must specify what parameters it wants the controlled
-> > function to have..
-> 
-> I don't think that is weird.  If you want to live migrate, you need to
-> 
->  a) make sure the feature set is compatible with the other side
->  b) there is only state that actually is migratable
-> 
-> so I'd expect that for any other sufficiently complex device.  NVMe
-> for sure will have limits like this.
-
-Oy, this has been pretty hard to define in mlx5 already :( Hopefully
-nvme-cli can sort it out for NVMe configurables.
-
-Jason
