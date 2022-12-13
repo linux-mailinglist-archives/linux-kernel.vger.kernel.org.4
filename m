@@ -2,71 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B1A64B99D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212FA64B9AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbiLMQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S235455AbiLMQ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235303AbiLMQ0N (ORCPT
+        with ESMTP id S235689AbiLMQ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:26:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818B236;
-        Tue, 13 Dec 2022 08:26:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A81BAB81260;
-        Tue, 13 Dec 2022 16:26:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61393C433EF;
-        Tue, 13 Dec 2022 16:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670948770;
-        bh=NkxDPuLY7Zyb3KNbQ2lo6DdobBvEk1ck2GXb4Yzjh1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bXuoP9G941WQ5H778c1k+WBpRS0EI10F6D4Uvuf0wcMz0tXCHBB/WAK8HCq5NG0jh
-         ZOtOAd6LyWTZPFdX03soWBTweC7dFblKrBbBcuLpds634TEMyF5GrJnQw4L4pqJKSD
-         3Arihx7ASAzJLghNk6VlEa2Zs981Ddv58J7TzjoZ3zD2Oo/SP9nCFbsbfSDAsZSJzQ
-         j502/OsTxh7P4rtt0Q1DbJ6pqeT5bguLMcC/FvTelgxdyjr6lxeviNEXhIFudTnqId
-         AyEWY8B7gqOg8xDpZCe/H84DHm4N8vWdRLkodOPZCasaje3f3JyXvKtrRv19lkculb
-         mxL5sVVRFczOg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p5872-0005vC-Dy; Tue, 13 Dec 2022 17:26:36 +0100
-Date:   Tue, 13 Dec 2022 17:26:36 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 11/12] arm64: dts: qcom: sc8280xp-crd: Enable EDP
-Message-ID: <Y5invNFKLBKy30v1@hovoldconsulting.com>
-References: <20221207220012.16529-1-quic_bjorande@quicinc.com>
- <20221207220012.16529-12-quic_bjorande@quicinc.com>
- <Y5MPa9l4btcDG9GP@hovoldconsulting.com>
- <20221213151012.GB16520@core-thresher1.qualcomm.com>
+        Tue, 13 Dec 2022 11:27:50 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79A9AE73
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:27:48 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p8so5744802lfu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=woXdvljG6W0F2gMdHz14LCFXupXMTFMtu7l19E30UtY=;
+        b=BaWb9PsabBqnOupjXMc2VrCXHLEnp+1e+S929J/8E69pNQs2LXdoOqTrQL63P8Q5M7
+         n9/1V0N9OK9CG1HMWLBYoBzURHVQcgjUnQ56Tx5K/xp8xy9a+rbjJWoBL+kJe3Sn03US
+         5PMLCg8VN/q6wGXX5S50035VVKWen9XSCXSGz2+B4EBXgJ4leFdwIBMjbh8fLDqFpWL7
+         w0GCKxqCm9n+ToOSUI0x9go8ujSoeRh8/hIA6lxhInlCizwCILF0TA97OPw/94Kgy3Js
+         euh1B4cYer1LZif8z2cYXc6YksR2OVKNu2r9LQTcgRL7R79SCQWdF2LXyP2Kqdfbd3mF
+         TnjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=woXdvljG6W0F2gMdHz14LCFXupXMTFMtu7l19E30UtY=;
+        b=7TM/5oe4v4SoYDL/diWqgkxOVYV3dUldj+Tfoe7ZKxJBHFbSwt1sfawIpHTT5+I47X
+         NiaNAxE47AgnZnZznexr+paoxvGfCpbgCiGrpAJ8JIYky2m79qnyXvZATLqC1QgRaN38
+         ybpKyNx+gyJoILop2zQ1kU7Y9qDok0kfl1jHKjTHxfcPI1XChDfFYsTzZEKUXrei0qjS
+         eb0zoO6cIE1B9hvuywnNO6GsFkltmY2vTPBq+67KL6CZaokjmZ4Rh6el5C37rJs38PXg
+         PRkOCi7DLH0KDnH0XctoH6/zl7ypAoTS1YHmnfJMspPtJ482m77ucdjYXuMreTU1luYw
+         qeFA==
+X-Gm-Message-State: ANoB5pkm53435Jc8wc/1g58doGKiHweBShOSZbqyvvN5ISgnPnXzRV3B
+        IJAvbFpoQXyPJHIi5Lut0e7Tsw==
+X-Google-Smtp-Source: AA0mqf64+qMEMjCRqk36Gl1uFOD29pICo0ApyZTFGy98SpUz/pCa7KHd+BZ3IldCgQzKolzJ3OevcQ==
+X-Received: by 2002:ac2:4119:0:b0:4b5:7f15:aa21 with SMTP id b25-20020ac24119000000b004b57f15aa21mr6878876lfi.52.1670948867094;
+        Tue, 13 Dec 2022 08:27:47 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q2-20020ac25142000000b0049482adb3basm427868lfd.63.2022.12.13.08.27.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 08:27:46 -0800 (PST)
+Message-ID: <038e6569-9f8f-3b59-0243-af6dcf0c2d80@linaro.org>
+Date:   Tue, 13 Dec 2022 17:27:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213151012.GB16520@core-thresher1.qualcomm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 03/13] arm64: dts: qcom: sdm845: Fix the base addresses
+ of LLCC banks
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com
+Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, stable@vger.kernel.org
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-4-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221212123311.146261-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +82,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:10:14AM -0800, Bjorn Andersson wrote:
-> On Fri, Dec 09, 2022 at 11:35:23AM +0100, Johan Hovold wrote:
- 
-> > > +	edp_reg_en: edp-reg-en-state {
-> > > +		pins = "gpio25";
-> > > +		function = "gpio";
-> > > +		output-enable;
-> > 
-> > 'output-enable' is not valid for tlmm and causes the settings to be
-> > rejected:
-> > 
-> > 	sc8280xp-tlmm f100000.pinctrl: pin_config_group_set op failed for group 25
-> > 	reg-fixed-voltage regulator-edp-3p3: Error applying setting, reverse things back
-> > 
+On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+> The LLCC block has several banks each with a different base address
+> and holes in between. So it is not a correct approach to cover these
+> banks with a single offset/size. Instead, the individual bank's base
+> address needs to be specified in devicetree with the exact size.
 > 
-> Thanks for spotting that, it doesn't seem to be needed for the gpio-regulator
-> driver anyways...
+> Also, let's get rid of reg-names property as it is not needed anymore.
+> The driver is expected to parse the reg field based on index to get the
+> addresses of each LLCC banks.
+> 
+> Cc: <stable@vger.kernel.org> # 5.4
 
-I noticed that the firmware on both CRD and X13s sets the drive strength
-to 16 here. Should we specify that too (and disable the pull up)
-instead of relying on the firmware configuration?
+No, you cannot backport it. You will break users.
 
-Johan
+> Fixes: ba0411ddd133 ("arm64: dts: sdm845: Add device node for Last level cache controller")
+> Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 65032b94b46d..683b861e060d 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -2132,8 +2132,9 @@ uart15: serial@a9c000 {
+>  
+>  		llcc: system-cache-controller@1100000 {
+>  			compatible = "qcom,sdm845-llcc";
+> -			reg = <0 0x01100000 0 0x31000>, <0 0x01300000 0 0x50000>;
+> -			reg-names = "llcc_base", "llcc_broadcast_base";
+
+Once property was made required, you cannot remove it. What if other
+bindings user depends on it?
+
+Please instead keep/update the reg-names and/or mark it as deprecated.
+It must stay in DTS for some time.
+
+Best regards,
+Krzysztof
+
