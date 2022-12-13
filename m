@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6153964B542
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC7F64B552
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbiLMMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S234622AbiLMMlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235336AbiLMMgZ (ORCPT
+        with ESMTP id S235645AbiLMMkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:36:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624C418B10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:36:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7D3C614C6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B1AC433D2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670934983;
-        bh=0Xw+Dqf9EeRU735a3/tFqNdCp+AD7AJJJF6DkxVcHkA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=erPv/EQS8CdtXSVv5QdpauwXWq5Gd8wAPzPJ8T0Kp9UirIMcPwbzfsBe8YwvD5p3o
-         cLY6iH0wt4cDR80M0l05EDO8gyzJ1KnzS6wnqUQzx73KDyRvxDHDkk09OWvHEkBLy9
-         fOGuN2GYg9ffzXyM9gi4e6MahaHI3ApQcOuY7XHSTHnytrov9Rmtbc60XOPJcwUbov
-         PKDu6wbnfE6IlHa54SBhr5wjNQZY/1UHMUnOXb9vRfb2TuKRIaEFd06yW+SSnxx4b3
-         ZABZ87B17Kkr4u/7L3S+md5hdIfrORgPMHqz05ep2fkIg/kxylFtvVR+YXOSKCuXXV
-         MNd2otzoBjOSA==
-Received: by mail-lf1-f51.google.com with SMTP id bp15so4625222lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:36:23 -0800 (PST)
-X-Gm-Message-State: ANoB5pmy5BB1dCO7UxhOPpFIT925P9A5wQJB1ceQiPs2Meo4eVUWw96x
-        Pzt5TY6tCF8ZRsJYRvZ2lPPMU0+d/TziysMKFkQ=
-X-Google-Smtp-Source: AA0mqf5Rv7sK6jU2Bfo5hGdRVw8IW6AsCRcC1gxd4lb5J7HqVSXSGtZ4ePkevgylC/0l0DZIv+RmwcRQnFQYq7RjZ/Y=
-X-Received: by 2002:a19:6b19:0:b0:4a2:740b:5b02 with SMTP id
- d25-20020a196b19000000b004a2740b5b02mr30598166lfa.122.1670934981185; Tue, 13
- Dec 2022 04:36:21 -0800 (PST)
+        Tue, 13 Dec 2022 07:40:18 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8131BEAB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:38:33 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so3397900pjm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BF8JndXAe7RFMWzoj2II+IDSsudG7x0IX18blakTqU=;
+        b=aFeUADQqf2xN9haWcEEq176sYYEkoT66D6W4F6Cc0gBcIuvjXrhMg04MXvqZEZbRFS
+         aHuMSYQ9sjBA/JggARg3iYMm0U6tCKHiX252IW4BZI95aRV/0ZZ1W27hQGBSx+btTGZX
+         512gTKbiWw2KgyvJzgw+33CAlNZF4ztarYfF2/1w5rnY+XA+JPBBJdicdPfZGQT8Kd1M
+         qdYHRUa6cXP8T7D+5pEiebcqdpQ2cJtU1gd1yL3Hmwn9wpKiMs42cgFtaEu2jAhf3blS
+         /OKzz5cYnIsbSqn4up74jE8C81Q+xWks4xtS7L5U+3CkM4PRNQVEd8+CacOFZcQlMuDs
+         0k2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/BF8JndXAe7RFMWzoj2II+IDSsudG7x0IX18blakTqU=;
+        b=RJ71+ZoyRjbK9WYN33Ep9ftNMPzUcOzh1lVsk4emUJnHT7cN94LQRUSKa5oFnskXCG
+         YUd7VoZ0gydFRZERzyYO2uezNZhoTCDFwrtZB2JEOlOfRXvWZX6TdPeMVPcd4T5m/yfq
+         ggRcV8EzvPXvHwFEzWaWx2tEwF4RJtJ2w/z24hZJug051WOFrngsLpMUluvgRp/63GdU
+         UOMAZAHR5UJDuIalp9zvBdS7dSuxmFlmKUBOIaJtWLe+pgRWRx/i53QWNxfgfAjUvq4k
+         XL3QV7hGYV6y0AD8/LQ+6yj8Q4485BPupM/McEu38cVsTEpk6I+j7ZGd4aHSOA5YX+VJ
+         vHug==
+X-Gm-Message-State: ANoB5pkgFLjelB2S0IQZHAfCGEB4QlljXKsrlzu1Qp/XM7xm+nZYUgi0
+        dcFeOYqzw0BVWaRzymc8jpoBAw==
+X-Google-Smtp-Source: AA0mqf5MSPjudIpNA6MAReWXCCofjZkVhmBjYKad9SStcXY7QUi9Q3DdzYkcPANTvyE8t2ry11ff5A==
+X-Received: by 2002:a17:902:9b8d:b0:186:605b:7527 with SMTP id y13-20020a1709029b8d00b00186605b7527mr19263795plp.48.1670935113345;
+        Tue, 13 Dec 2022 04:38:33 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c60:4bad:5c3:ab51:3d81:6264])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902c44c00b001889e58d520sm8297011plm.184.2022.12.13.04.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 04:38:32 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        konrad.dybcio@linaro.org, andersson@kernel.org
+Subject: [PATCH 0/3] arm64: dts: sm6115: Add USB SS qmp phy node and perform some cleanups  
+Date:   Tue, 13 Dec 2022 18:08:20 +0530
+Message-Id: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221209112500.GA3116@willie-the-truck> <CAHk-=wj-8gKB5SG0w_M2fK0KYyhZbNzDZ1W9H5pmisWzJ0XJEw@mail.gmail.com>
- <20221213121118.GB5719@willie-the-truck>
-In-Reply-To: <20221213121118.GB5719@willie-the-truck>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 13 Dec 2022 13:36:09 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
-Message-ID: <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
-Subject: Re: [GIT PULL] arm64 updates for 6.2
-To:     Will Deacon <will@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        maz@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,79 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-l
+This series adds USB SS qmp phy node for Qualcomm SM6115 / SM4250 SoC
+dtsi and also performs some related cleanups for USB nodes.
 
-On Tue, 13 Dec 2022 at 13:11, Will Deacon <will@kernel.org> wrote:
->
-> Hi Linus,
->
-> [+Ard]
->
-> On Mon, Dec 12, 2022 at 10:05:07AM -0800, Linus Torvalds wrote:
-> > On Fri, Dec 9, 2022 at 3:25 AM Will Deacon <will@kernel.org> wrote:
-> > >
-> > > Dynamic SCS:
-> > >         * Support for dynamic shadow call stacks to allow switching at
-> > >           runtime between Clang's SCS implementation and the CPU's
-> > >           pointer authentication feature when it is supported (complete
-> > >           with scary DWARF parser!)
-> >
-> > I've pulled this thing, but this part makes me nervous. There's some
-> > bad history with debug information not being 100% reliable probably
-> > simply because it gets very little correctness testing.
->
-> Hey, I did use the word "scary"! This is, at least, very easy to back
-> out (it's effectively an optimisation) if the DWARF info ends up being
-> too unreliable and causes issues in practice. We're also only looking
-> at .eh_frame here, which should hopefully get a lot more correctness
-> testing when compared to the .debug sections due to exception unwinding.
->
+Note that this series is rebased on linux-next/master and is also
+dependent on the corresponding dt-bindings and driver series sent via [1].
 
-Indeed. And this is Clang 15+ at the moment, for precisely this reason.
+[1]. https://lore.kernel.org/linux-arm-msm/20221213122843.454845-1-bhupesh.sharma@linaro.org/
 
-> > It might be worth thinking about at least verifying the information
-> > using something like objtool, so that you at least catch problem cases
-> > at *build* time rather than runtime.
->
-> Checking that the DWARF data looks sensible at build time isn't a bad
-> idea, but see below as I think we can probably still produce a functional
-> kernel Image in this case.
->
-> > For example, that whole
-> >
-> >     default:
-> >         pr_err("unhandled opcode: %02x in FDE frame %lx\n",
-> > opcode[-1], (uintptr_t)frame);
-> >         return -ENOEXEC;
-> >
-> > really makes me go "this should have been verified at build time, it's
-> > much too late to notice now that you don't understand the dwarf data".
->
-> This isn't actually as bad as it looks -- the patching operation here
-> only kicks in on CPUs which do not implement the pointer authentication
-> instructions (i.e. where the CPU executes these as NOPs). Therefore, if
-> patching bails out half way due to the "unhandled opcode" above, we
-> should be ok, albeit missing some SCS coverage.
+Bhupesh Sharma (3):
+  arm64: dts: qcom: sm6115: Cleanup USB node names
+  arm64: dts: qcom: sm6115: Move USB node's 'maximum-speed' and
+    'dr_mode' properties to dts
+  arm64: dts: qcom: sm6115: Add USB SS qmp phy node
 
-Indeed.
+ .../boot/dts/qcom/sm4250-oneplus-billie2.dts  |  9 +++-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 46 ++++++++++++++++---
+ 2 files changed, 46 insertions(+), 9 deletions(-)
 
-> I say "should" because
-> if we fail within a frame after patching in the SCS "push" but before
-> patching in the "pop", then we'd end up with a corrupt SCS pointer.
->
-> Ard -- do you think we could tweak the patching so that we patch the push
-> and the pop together (e.g. by tracking the two locations on a per-frame
-> basis and postponing the text poking until just before we return from
-> scs_handle_fde_frame())?
->
+-- 
+2.38.1
 
-The push and the pop are not necessarily balanced (there may be more
-than one pop for each push), and the opcode we look for
-(DW_CFA_negate_ra_state) may occur in places which are not actually a
-pop, so tracking these is not as straight-forward as this.
-
-What we could do is track the push and the first pop on a first pass,
-and if we don't encounter any unexpected opcodes, patch the push and
-do a second pass starting from the first pop. Or just simply run it
-twice and do no patching the first time around (the DWARF frames are
-not very big)
