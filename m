@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E199164AE2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79B464AE2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiLMD3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 22:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S234175AbiLMDah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 22:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLMD3T (ORCPT
+        with ESMTP id S229441AbiLMDaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 22:29:19 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D5F1B9CA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:18 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id jr11so10253712qtb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:18 -0800 (PST)
+        Mon, 12 Dec 2022 22:30:35 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6330F1B9C0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:30:34 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3ceb4c331faso153405777b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:30:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zp0U9Kl4wDERv8LP4SRbd+OyzbRFeaPhMPOi3/LSHe4=;
-        b=VrN+0XdiySagFbzfZT3HDYXIZ9s7TWs9LITr1N9EkXfEoqvxLaPWUJn0CCF0lzpS2q
-         mn6sM/KMo0sAcPdY48YkP/E8319NigCboqyj9OXDaOzw+vBHk9hMdOxiptzyzMQuGQO5
-         b4Un4hq68aqroz/YhO57TR4fQjc/VNj8lkZm8=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fvHSXXCkeu3/4sx+gtxDD1f9+Q7yHtx6Qc7Gq8TcTlk=;
+        b=LLRdDTGJMdrQ+p+GUnDsrf1yDPoRSSppeKjQs4nboSb+avGRmawlspUOhOBG45/Oyc
+         Y716L2oH9GnjWvtIhq7tQlvtAnPF5QUESJd/UyMZ3SF1NcBmFdEoRa6/UTyjYEb7oYHT
+         08KZOXU3p/P3Famupq2pckKrUL6+9bANZ166gzgFvEotOsNUJSTQZe1IUe/yL/xdXccJ
+         1Qi7bVajLliCxxq8uzKbZxczNBCDyOtI1M6bSv9GDhFCjQ/kufDbk3Wt4phE36kgW870
+         5AVp7S9JPiWbqOwB61ImhJiUOKRzzcboJbFhd7FJezjy3zGlHw/e+FAjspljmpyRvvW1
+         5fkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zp0U9Kl4wDERv8LP4SRbd+OyzbRFeaPhMPOi3/LSHe4=;
-        b=37A4Nudv1i1uPlV5xY9pBc/TN1p+M2KSVobBUbc4Sbq18wsvO7Zpdmtk5HV+DZQR01
-         Labu7Lby3VX70TP5j/LbqCNUxVsmk78GSRF2mks5Zh10GW3pqcpxrMU3Ewg+r/mXEYCR
-         a7Mzr4fUQV6uFHCw4U9avnrx0wDEtGZvWLYtokj19475CGteK1J6T8UQ2sFudmp7pwcX
-         xeyMiqubbZAq0F0SAi6zfQnFrLXrwHvXKzsuCkHuGlFW4TVjcTmCWNNM+a1swEWx7V29
-         kY0PQJQp8Hx1HvpDU7N51NjAG5aDsfvcZuypApsszdAJbfLDAte44DVDAlWGFDYCOPsW
-         PERg==
-X-Gm-Message-State: ANoB5pnO2+ETVLhfDWJ3j2OFKRYim0+yo4V72mFq8RxoT0bT9XTIQfFU
-        Yat11DxDt43F7xwa28J72LQbfkGt79621c8T
-X-Google-Smtp-Source: AA0mqf51ptQ9HR5O12blZDua7vucABtSQpfDFstBM5Kd1E5U2fuCxmO5EnOiItKWW/wXQD24Xzr4oA==
-X-Received: by 2002:a05:622a:581b:b0:39c:da1f:f817 with SMTP id fg27-20020a05622a581b00b0039cda1ff817mr25414089qtb.61.1670902156940;
-        Mon, 12 Dec 2022 19:29:16 -0800 (PST)
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com. [209.85.222.170])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05620a13f300b006fcab4da037sm6900109qkl.39.2022.12.12.19.29.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 19:29:16 -0800 (PST)
-Received: by mail-qk1-f170.google.com with SMTP id pe2so3530799qkn.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:29:15 -0800 (PST)
-X-Received: by 2002:ae9:ef48:0:b0:6fe:d4a6:dcef with SMTP id
- d69-20020ae9ef48000000b006fed4a6dcefmr10633201qkg.594.1670902155636; Mon, 12
- Dec 2022 19:29:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20221212123348.169903-1-brauner@kernel.org>
-In-Reply-To: <20221212123348.169903-1-brauner@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Dec 2022 19:28:59 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
-Message-ID: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
-Subject: Re: [GIT PULL] vfsuid updates for v6.2
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvHSXXCkeu3/4sx+gtxDD1f9+Q7yHtx6Qc7Gq8TcTlk=;
+        b=nMhnq3RdqlRjlN3UgsJWZTtiMJ3Uvzsk+Yb5wGZYCr5mCN+m0jEqNR7Cf80pqdbT6R
+         qnJWc8dC1VDnUP7rbm3ANv/XPQdVmxPPiYgJ3PTxFhnWgbu8PMbk3CkOu+N4JEA39Sfl
+         Md+55FtLcC9KExHqMCdzCrsambyaopifQDib9i24gGUr9gwDD8dnWnoXbzSnBGcCpUA2
+         PFRUnYf4OTaw3/PPz+pxMFO/OtJEudRsXolkc1wqNzaAID9DREGwIEM/4ZsfYQuRnEa6
+         PbecO/9WXsatfQnqqNjU/k5inbb7yRQYEIm/N5icWzXylI1Vly47uNg2fHfc5xdRAK7o
+         WuFQ==
+X-Gm-Message-State: ANoB5pkcGIVkOkKd5xUwYcj1M6WyUrmMbpRhGvNlaaUoJBMwZdX89RVA
+        6ZyiNKNVTPW8GQ7kyKrsTr8lgMkiqeE=
+X-Google-Smtp-Source: AA0mqf7WZkWhOp4xReQE+hoO2FppB9Dpsyv3a/YVfDmXeNw9+aBoYg6nPEnSRG4nKBDA9RC1ub3rwu1vP8g=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:998a:0:b0:3dd:49a2:837b with SMTP id
+ q132-20020a81998a000000b003dd49a2837bmr30831405ywg.241.1670902233643; Mon, 12
+ Dec 2022 19:30:33 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 13 Dec 2022 03:30:25 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221213033030.83345-1-seanjc@google.com>
+Subject: [PATCH 0/5] KVM: x86/mmu: TDP MMU fixes for 6.2
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 4:34 AM Christian Brauner <brauner@kernel.org> wrote:
->
-> This pull request converts all remaining places that still make use of non-type
-> safe idmapping helpers to rely on the new type safe vfs{g,u}id based helpers.
-> Afterwards it removes all the old non-type safe helpers.
+Fix three fatal TDP MMU bugs introduced in 6.2, harden related code,
+and clean up kvm_tdp_mmu_map() to eliminate the need for gotos.
 
-So I've pulled this, but I'm not entirely happy about some of those
-crazy helpers.
+Sean Christopherson (5):
+  KVM: x86/mmu: Don't attempt to map leaf if target TDP MMU SPTE is
+    frozen
+  KVM: x86/mmu: Map TDP MMU leaf SPTE iff target level is reached
+  KVM: x86/mmu: Re-check under lock that TDP MMU SP hugepage is
+    disallowed
+  KVM: x86/mmu: Don't install TDP MMU SPTE if SP has unexpected level
+  KVM: x86/mmu: Move kvm_tdp_mmu_map()'s prolog and epilog to its caller
 
-In particular, the whole "ordering" helpers are really not something
-that should be used in general, I feel. I'm talking about
-vfsuid_gt_kuid() and friends - it's an entirely insane operation and
-makes no sense at all.
+ arch/x86/kvm/mmu/mmu.c          |  9 +++++++-
+ arch/x86/kvm/mmu/mmu_internal.h |  1 -
+ arch/x86/kvm/mmu/tdp_mmu.c      | 39 +++++++++++++++------------------
+ 3 files changed, 26 insertions(+), 23 deletions(-)
 
-Yes, yes, I understand why they exist (those crazy IMA rules), but I
-feel that those functions *really* shouldn't be exposed to anybody
-else.
 
-IOW, making those insane functions available in <linux/idmapping.h>
-really seems wrong to me. They are crazy special cases, and I think
-they should exist purely in that crazy ima_security file.
+base-commit: 51229fd7872f82af07498aef5c79ad51baf81ea0
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-Again - I've pulled this, but I'm hoping to see a future commit that
-limits that craziness to the only user, in the hope that this disease
-will never spread.
-
-                Linus
