@@ -2,154 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE1864ADE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8819864AE0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiLMCtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S234412AbiLMDFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 22:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiLMCtL (ORCPT
+        with ESMTP id S234410AbiLMDFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:49:11 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D1E1DA46
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:49:09 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWNGJ4J12zRpt2;
-        Tue, 13 Dec 2022 10:48:08 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 13 Dec 2022 10:49:07 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>
-CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>, David Hildenbrand <david@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH -next v3] mm: hwposion: support recovery from ksm_might_need_to_copy()
-Date:   Tue, 13 Dec 2022 11:05:57 +0800
-Message-ID: <20221213030557.143432-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 12 Dec 2022 22:05:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083FE167F8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670900683;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ToI7hZ2DBEkG61hu0i1tPmmNJiNnyQodEsagogpyA4=;
+        b=L1W0F1Hgd5FKgAHta63BtNmD+n8pEEqr+FghJlaIgE4mYfrpojPoBU95WGBBi/AQeTkjdA
+        XQM6IxYxiOnNp6Vjsuqc9AqJsNT8smpW/O0JuJr7M6/ySvEQTBxqD/N0NaY7KsOl+ezq88
+        CNu7/XslORpOYDznuEspHb6L3KCn9qo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-T9RFYZ6OPNKcz28DZtS-yA-1; Mon, 12 Dec 2022 22:04:39 -0500
+X-MC-Unique: T9RFYZ6OPNKcz28DZtS-yA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE79D1C05AE8;
+        Tue, 13 Dec 2022 03:04:38 +0000 (UTC)
+Received: from localhost (ovpn-12-126.pek2.redhat.com [10.72.12.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6A3FE140E949;
+        Tue, 13 Dec 2022 03:04:37 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 11:04:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Dennis Zhou <dennis@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/12] mm, slub: remove percpu slabs with CONFIG_SLUB_TINY
+Message-ID: <Y5frwZNPN++sqHLY@MiWiFi-R3L-srv>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-11-vbabka@suse.cz>
+ <Y4NEkF8DI1uXFRv4@hyeyoo>
+ <f318ccc3-eb03-e359-cb6f-157d0b4aed31@suse.cz>
+ <Y5cob2jicdNoviU3@fedora>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5cob2jicdNoviU3@fedora>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the kernel copy a page from ksm_might_need_to_copy(), but runs
-into an uncorrectable error, it will crash since poisoned page is
-consumed by kernel, this is similar to Copy-on-write poison recovery,
-When an error is detected during the page copy, return VM_FAULT_HWPOISON
-in do_swap_page(), and install a hwpoison entry in unuse_pte() when
-swapoff, which help us to avoid system crash. Note, memory failure on
-a KSM page will be skipped, but still call memory_failure_queue() to
-be consistent with general memory failure process.
+On 12/12/22 at 05:11am, Dennis Zhou wrote:
+> Hello,
+> 
+> On Mon, Dec 12, 2022 at 11:54:28AM +0100, Vlastimil Babka wrote:
+> > On 11/27/22 12:05, Hyeonggon Yoo wrote:
+> > > On Mon, Nov 21, 2022 at 06:12:00PM +0100, Vlastimil Babka wrote:
+> > >> SLUB gets most of its scalability by percpu slabs. However for
+> > >> CONFIG_SLUB_TINY the goal is minimal memory overhead, not scalability.
+> > >> Thus, #ifdef out the whole kmem_cache_cpu percpu structure and
+> > >> associated code. Additionally to the slab page savings, this reduces
+> > >> percpu allocator usage, and code size.
+> > > 
+> > > [+Cc Dennis]
+> > 
+> > +To: Baoquan also.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- mm/ksm.c      |  8 ++++++--
- mm/memory.c   |  3 +++
- mm/swapfile.c | 19 +++++++++++++------
- 3 files changed, 22 insertions(+), 8 deletions(-)
+Thanks for adding me.
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index dd02780c387f..83e2f74ae7da 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
- 		new_page = NULL;
- 	}
- 	if (new_page) {
--		copy_user_highpage(new_page, page, address, vma);
--
-+		if (copy_mc_user_highpage(new_page, page, address, vma)) {
-+			put_page(new_page);
-+			new_page = ERR_PTR(-EHWPOISON);
-+			memory_failure_queue(page_to_pfn(page), 0);
-+			return new_page;
-+		}
- 		SetPageDirty(new_page);
- 		__SetPageUptodate(new_page);
- 		__SetPageLocked(new_page);
-diff --git a/mm/memory.c b/mm/memory.c
-index aad226daf41b..5b2c137dfb2a 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		if (unlikely(!page)) {
- 			ret = VM_FAULT_OOM;
- 			goto out_page;
-+		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
-+			ret = VM_FAULT_HWPOISON;
-+			goto out_page;
- 		}
- 		folio = page_folio(page);
+> > 
+> > > Wondering if we can reduce (or zero) early reservation of percpu area
+> > > when #if !defined(CONFIG_SLUB) || defined(CONFIG_SLUB_TINY)?
+> > 
+> > Good point. I've sent a PR as it was [1], but (if merged) we can still
+> > improve that during RC series, if it means more memory saved thanks to less
+> > percpu usage with CONFIG_SLUB_TINY.
+> > 
+> > [1]
+> > https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/tag/?h=slab-for-6.2-rc1
+> 
+> The early reservation area not used at boot is then used to serve normal
+> percpu allocations. Percpu allocates additional chunks based on a free
+> page float count and is backed page by page, not all at once. I get
+> slabs is the main motivator of early reservation, but if there are other
+> users of percpu, then shrinking the early reservation area is a bit
+> moot.
+
+Agree. Before kmem_cache_init() is done, anyone calling alloc_percpu()
+can only get allocation done from early reservatoin of percpu area.
+So, unless we can make sure nobody need to call alloc_percpu() before
+kmem_cache_init() now and future.
+
+The only drawback of early reservation is it's not so flexible. We can
+only dynamically create chunk to increase percpu areas when early
+reservation is run out, but can't shrink early reservation if system
+doesn't need that much.
+
+So we may need weigh the two ideas:
+  - Not allowing to alloc_percpu() before kmem_cache_init();
+  - Keep early reservation, and think of a economic value for
+    CONFIG_SLUB_TINY.
  
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 908a529bca12..06aaca111233 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1763,12 +1763,15 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 	struct page *swapcache;
- 	spinlock_t *ptl;
- 	pte_t *pte, new_pte;
-+	bool hwposioned = false;
- 	int ret = 1;
- 
- 	swapcache = page;
- 	page = ksm_might_need_to_copy(page, vma, addr);
- 	if (unlikely(!page))
- 		return -ENOMEM;
-+	else if (unlikely(PTR_ERR(page) == -EHWPOISON))
-+		hwposioned = true;
- 
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
-@@ -1776,13 +1779,17 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		goto out;
- 	}
- 
--	if (unlikely(!PageUptodate(page))) {
--		pte_t pteval;
-+	if (hwposioned || !PageUptodate(page)) {
-+		swp_entry_t swp_entry;
- 
- 		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
--		pteval = swp_entry_to_pte(make_swapin_error_entry());
--		set_pte_at(vma->vm_mm, addr, pte, pteval);
--		swap_free(entry);
-+		if (hwposioned) {
-+			swp_entry = make_hwpoison_entry(swapcache);
-+			page = swapcache;
-+		} else {
-+			swp_entry = make_swapin_error_entry();
-+		}
-+		new_pte = swp_entry_to_pte(swp_entry);
- 		ret = 0;
- 		goto out;
- 	}
-@@ -1816,9 +1823,9 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		new_pte = pte_mksoft_dirty(new_pte);
- 	if (pte_swp_uffd_wp(*pte))
- 		new_pte = pte_mkuffd_wp(new_pte);
-+out:
- 	set_pte_at(vma->vm_mm, addr, pte, new_pte);
- 	swap_free(entry);
--out:
- 	pte_unmap_unlock(pte, ptl);
- 	if (page != swapcache) {
- 		unlock_page(page);
--- 
-2.35.3
+start_kernel()
+  ->setup_per_cpu_areas();
+  ......
+  ->mm_init();
+      ......
+      -->kmem_cache_init();
+
+
+__alloc_percpu()
+  -->pcpu_alloc()
+     --> succeed to allocate from early reservation
+      or
+     -->pcpu_create_chunk()
+        -->pcpu_alloc_chunk()
+           -->pcpu_mem_zalloc()
 
