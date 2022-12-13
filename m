@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9687A64AE0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C24A64AE09
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234441AbiLMDFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 22:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S234361AbiLMDFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 22:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiLMDFc (ORCPT
+        with ESMTP id S234078AbiLMDFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 22:05:32 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173B81A209;
-        Mon, 12 Dec 2022 19:05:31 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so2124552pjm.2;
-        Mon, 12 Dec 2022 19:05:31 -0800 (PST)
+        Mon, 12 Dec 2022 22:05:20 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B491929B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:05:19 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gt4so1960405pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:05:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n8wKW76JtFs2F5+hWCFZWeal4WDxfruIrmk6Ywx4Si4=;
-        b=nMyvyxUJTgQlDMX08Le+mw3awdPBeGMcnKlhZx4cReQRGaNqBtTgMabpUeS++olgHa
-         gIrQubgHL+pXSdRjAQpL7sKpal0+oOfxKX2KhmxIWH01fKapkp6k+LWWH3lBk5/DhXyG
-         /UcG06Gtd+CBtBM1Mrs2l2Ocm9muOTfhOMFZvmLv3WCPgNt8rhj29ABSSHMHrxN8vJE2
-         +o7O3ibuJOJmeQZpVo9ad9uTQ3EfkcSmcxU2OekPSJKcx9l1hUm5pLRlxHg1m5QwymDW
-         3VwVw+5+tOgbYfMbdoQnBfE4sYJA0ldZ08bh2yQIeDyU7qye/7sYLBzzkaMKSTDqfD3E
-         PcYQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Rtk5TESQhMYupkDzAnSZrsExO2w9BU3bH6jn+cnUrr8=;
+        b=rNzlSEczqbuMhCJ1agNhaPGM7TfzPbAOeK8ceeOXoeNvqFY7bOWqogpFW+DVv6HRJT
+         NxWUl4raP5ShCDLQr0DYojsasNxd0A8cnO5hcu7WZH8PQvOOqEUAig0ZZ4ac+6SnHVs5
+         nMr3iQ2z2zXM6f9sgxMA8uhAzl3qBCp0rZHtnfEnsDM0eoloYEQH6bgXwarYe7+jtcK7
+         Q0d9Tyyxd5m1h4i+oQ2PO3RustYjWcvSWGFP15grikuDQ6rriR8rMFXY5xEnLpVgASz6
+         OfnlqWgLF/ok2viGY1yp3xMfOIeXFypcpzgS1sLZw1o1oTAiG9sEJZbcEQb5EBo4ugJE
+         XsuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n8wKW76JtFs2F5+hWCFZWeal4WDxfruIrmk6Ywx4Si4=;
-        b=UPwAQEbdvsa5yhz6W+vZFSzXU6pp8/B1wF3NbrfYqfiSnBC5feshNdhXRb2m9U6oQM
-         BcFuRKENGYz+Jv4WnuHoPriQcoK5J8wQpDIyCeDC4/0D1voC7Qd6uVgSX9O0pibMFSzD
-         uG3dhrGtoh7ArMjfThEb7MeR0GRGEp+ML2uRSkYLOa58IrPzNFxAKp5pIH+IGPnQnfMm
-         QHBIm7E2yWYQfVEl9JvJnNb5t10H1IDfGaCCg50lTqTGXJ6BX8FG6N04JtS22MCNOteT
-         9wj+xM0T8866GVZ89ahABU34DmVDprzO5OcO8sNCwazWZqtK05qydFnmb5SP8tZIakQQ
-         aXXw==
-X-Gm-Message-State: ANoB5pm/OjaF9EagP++Uf9JDII+SsZsIa7h5RXRdC9OMy2r7sZwwE21t
-        IY+ixh4xZFqaQZ/xY+jEMCPgVZ35Y22V
-X-Google-Smtp-Source: AA0mqf4jMuhgu2xaWXPmqap5CNcPUFjcJ/bD9N3t0xLKi8jYQXOMj/VRXxwRZSbdYxvdEne0tks+Lg==
-X-Received: by 2002:a05:6a21:3397:b0:a5:70ed:bda9 with SMTP id yy23-20020a056a21339700b000a570edbda9mr32647414pzb.26.1670900730224;
-        Mon, 12 Dec 2022 19:05:30 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.6])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa79495000000b005746c3b2445sm6481716pfk.151.2022.12.12.19.05.27
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 12 Dec 2022 19:05:29 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: check null propagation only neither reg is PTR_TO_BTF_ID
-Date:   Tue, 13 Dec 2022 11:04:36 +0800
-Message-Id: <20221213030436.17907-2-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20221213030436.17907-1-sunhao.th@gmail.com>
-References: <20221213030436.17907-1-sunhao.th@gmail.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rtk5TESQhMYupkDzAnSZrsExO2w9BU3bH6jn+cnUrr8=;
+        b=3QchrhLkwVBPs7q3Eb3UdcFkPiiEpgtgjGTfK8u04OtPacQmFj2u2U8znuHojcoTEh
+         er0F7f79H+UcpRI3BLSHeBla6F+HIo2oGsLEqry5GfNjG/3RoPRiLmUVXiOqvPia7RT4
+         fYbbrCBxyTi8m7cbmPsy51OlrKEPksAGKFUEvEqywTNCwohOLhcp2wgxN0RxfE21XiO4
+         +lYLaqqI0wLFKyFrmCfQ8AHPnbODBoTPuGqxJlEWKnTemxbXQ5jYqpOowHX058VPQ89T
+         2dN1/BfLyemYKBnsYzTRVMuP3qVna2LShv3Oec9X+quGY9bCwLHG3I6BxJIoUL3Pp26y
+         ng5A==
+X-Gm-Message-State: ANoB5pnQsQO+Hr6EcoIpmH6qcukuM0T03DAL7f8ZcCXTPZ1NkatwECO1
+        OC289+ZyNVTVOj3rNORORXJJ7LWG0Rq/TJxaiJQVVYQPYor5YWs=
+X-Google-Smtp-Source: AA0mqf5sXJfXq2xGHZuYJPucP5KXbmggjMQNiek+xwBIGByocsKl0BeOS+vBkTTEqug5rGt2mm4t5tq2wg7cxJagQKk=
+X-Received: by 2002:a17:902:a70b:b0:189:b0a3:cf4f with SMTP id
+ w11-20020a170902a70b00b00189b0a3cf4fmr37216824plq.56.1670900718781; Mon, 12
+ Dec 2022 19:05:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 12 Dec 2022 22:05:07 -0500
+Message-ID: <CAHC9VhTiYVO5SV6-P6gPcqR1chzwpEvwnDZaYEQACcU1kgvugw@mail.gmail.com>
+Subject: [GIT PULL] Audit patches for v6.2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-audit@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,46 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Verify that nullness information is not porpagated in the branches
-of register to register JEQ and JNE operations if one of them is
-PTR_TO_BTF_ID.
+Hi Linus,
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../bpf/verifier/jeq_infer_not_null.c         | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Two performance oriented patches for the audit subsystem: one
+consolidates similar code to gain some caching advantages, while the
+other stores a value in a stack variable to avoid repeated lookups in
+a loop.  The commit descriptions have more information, including some
+before/after performance measurements.  Please merge for v6.2.
 
-diff --git a/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c b/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
-index 67a1c07ead34..b2b215227d97 100644
---- a/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
-+++ b/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
-@@ -172,3 +172,25 @@
- 	.prog_type = BPF_PROG_TYPE_XDP,
- 	.result = ACCEPT,
- },
-+{
-+	"jne/jeq infer not null, PTR_TO_MAP_OR_NULL unchanged with PTR_TO_BTF_ID reg",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	/* r6 = bpf_map->inner_map_meta; */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
-+	/* r0 = map_lookup_elem(r1, r2); */
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	/* if (r0 == r6) read *r0; */
-+	BPF_JMP_REG(BPF_JEQ, BPF_REG_6, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_hash_8b = { 3 },
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.result = REJECT,
-+	.errstr = "R0 invalid mem access 'map_value_or_null'",
-+},
+-Paul
+
+--
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+ Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git
+   tags/audit-pr-20221212
+
+for you to fetch changes up to 50979953c0c41e929e5f955800da68e1bb24c7ab:
+
+ audit: unify audit_filter_{uring(), inode_name(), syscall()}
+   (2022-10-17 14:24:42 -0400)
+
+----------------------------------------------------------------
+audit/stable-6.2 PR 20221212
+
+----------------------------------------------------------------
+Ankur Arora (2):
+     audit: cache ctx->major in audit_filter_syscall()
+     audit: unify audit_filter_{uring(), inode_name(), syscall()}
+
+kernel/auditsc.c | 75 ++++++++++++++++++++++++++------------------------
+1 file changed, 39 insertions(+), 36 deletions(-)
+
 -- 
-2.38.1
-
+paul-moore.com
