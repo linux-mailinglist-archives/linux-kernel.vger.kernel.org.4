@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E0E64BD3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD91364BD3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbiLMTZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
+        id S236542AbiLMT0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236163AbiLMTZn (ORCPT
+        with ESMTP id S236155AbiLMT0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:25:43 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBB824959
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:25:42 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id x66so2915072pfx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:25:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kbOYAAjnKyXvg23pjUMzGuz9DSgOAIhX9TM1FNy+0Q=;
-        b=YQ8ZSNFzPrq2HNtcykvnHhbINRe8kgBNKOS/PDvQ0iunDkAHLiPBwJ6kju5zXBtI9q
-         0zeXx6hqc6oO0/pLFG/8TRpUHW/c2kLm7aIVq2JGPzUmim6kLRmMnezJ2G7i+M1dIOFM
-         EcrT222rB5pje2tUP9DxsQuohumAy5kfzjRt2w23C+ZPASM6arGfIYdP/xP4YeEKxRkW
-         gGV74nhJJDmG5vV8WC7ICjn72Bl+l+KbujJsmQAy49Aq6a5rL2F8MNQJ3+F8+Ke/EkWL
-         EaD7boOE6no4Xbf0RLHkdBjd3kFJuRt4UOLQ481H+ltMmqf52GHyE4Kuy+zhN1elABPY
-         omqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9kbOYAAjnKyXvg23pjUMzGuz9DSgOAIhX9TM1FNy+0Q=;
-        b=yH7a5zPO2AFXmf7KkqBeNbZcUIaLAybvueQyTfs1dIPetgnd3RBnAiTFw0JVj/F0tU
-         Tr7WcfgmJfQ/tKU2t+3is9dcYIgjbJ96SlwN0JMz+mYi+H1iB4J+CYbnPvLjCOmjpryM
-         GyY8tBEylpkKdPKubc4hhJld+txhWywnCU7B1htGrTAP1dMfmAiN1NVm2cF1OHfc8/VM
-         Fk2aU9bqrVvgMbhr8mWwzKM+1TR0GQciOoun36KiCTYpVdHVfnpZhWgeSojUMFVYtKaN
-         zSyPuSeX4Rrhpb1zjOgtQ2dOMoDRzYvFvqUW15znG1cZyTmqTzeIYxvYDy0N8DmK8L+q
-         u4oA==
-X-Gm-Message-State: ANoB5pk4fD4YB8m8kfO4UQU35vlyr4kmzPEe2e4Mu98M4nj+5BXn6z7s
-        Tb9UV0Ou2rhR4HeCgRfhDpGmriec16y0ZmBYRCJL
-X-Google-Smtp-Source: AA0mqf57kSqmNwGBjDyzVN0hyalSVuFVRwFQQjhF9S/cz0ORzHKxAexfG5G7j/186DQnoY80k93z3j9qhUTRlV3Jv/I=
-X-Received: by 2002:a63:4424:0:b0:477:96e2:9065 with SMTP id
- r36-20020a634424000000b0047796e29065mr70173881pga.533.1670959542176; Tue, 13
- Dec 2022 11:25:42 -0800 (PST)
+        Tue, 13 Dec 2022 14:26:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B12A22531
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:26:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B26E61598
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7ADC433D2;
+        Tue, 13 Dec 2022 19:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670959596;
+        bh=QK2oIpKFkW8Y+pz74LHORvAxoSG1SnUXy4S3zV/L44U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uT2x8oDPFQmOBhB06fHpXNUG8BIaSfysV1d0mSqOFUvwRfazhlQuGTCRhl/ICwcX3
+         atRzYdVQCI2MxWZGJ1fhvuz2tWgKyT8mgq9/hsMktCizQBril30G86ftXB/uZb8pF0
+         76nhXKgy3S1DoVKbelp+0TX6l9LPsW7tJwAtk6Iek7gBQ0SjSbZ3UBHB0gJpL47izZ
+         pdTzrj9cns4eE1fHszq2m+KhynY2QYJ9/omZdazrJSvek/492QSB63e7XoGfVNWc+L
+         ShQIINlai/aocSwdyFEL+yE/VsHVs9UD8/HtoIVHIlpH+HyTxC/Mi4ZPqmU0uKksKa
+         i0z/sQc+VdkaA==
+From:   SeongJae Park <sj@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        SeongJae Park <sj@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        vishal.moola@gmail.com, willy@infradead.org
+Subject: Re: [PATCH -next 8/8] mm: damon: remove unneed damon_get_page()
+Date:   Tue, 13 Dec 2022 19:26:33 +0000
+Message-Id: <20221213192633.138774-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221213092735.187924-9-wangkefeng.wang@huawei.com>
+References: 
 MIME-Version: 1.0
-References: <CAHC9VhSmJHDRroUJifUuDNF+KvVPVtW17CuMzb_RrUKBBkTabA@mail.gmail.com>
- <CAHk-=whH53GKhcT0+cKGwCVOHXD0_Gh82w2SVojjgoN7XZ-71g@mail.gmail.com>
-In-Reply-To: <CAHk-=whH53GKhcT0+cKGwCVOHXD0_Gh82w2SVojjgoN7XZ-71g@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 13 Dec 2022 14:25:31 -0500
-Message-ID: <CAHC9VhThEUiyVL2E5sAiQhiKhqV8nJbRE7TGOAq0QOJ2qzGjPw@mail.gmail.com>
-Subject: Re: [GIT PULL] SELinux patches for v6.2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:44 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Mon, Dec 12, 2022 at 7:05 PM Paul Moore <paul@paul-moore.com> wrote:
-> >
-> >   Unfortunately, this pull request does
-> > conflict with fixes that were merged during the v6.1-rcX cycle so you
-> > will either need to do some manual fixup or you can pull the tag below
-> > which has the necessary fixes and has been sanity tested today.
->
-> I did the merge manually, but compared to your version. They were
-> identical except that you hadn't added the documentation entry for the
-> gfp_flags parameter.
+Hi Kefeng,
 
-Ah, thanks for catching that.
+On Tue, 13 Dec 2022 17:27:35 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-> That said, I'm not super-happy with that merge ... It feels to me like
-> that thing shouldn't be an allocation at all, but that selinux should
-> use ref-counted strings instead (and just increase the refcount).
+> After all damon_get_page() callers are converted to damon_get_folio(),
+> remove unneed wrapper damon_get_page().
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/damon/ops-common.h | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/mm/damon/ops-common.h b/mm/damon/ops-common.h
+> index 4ee607813981..35a2e42a27da 100644
+> --- a/mm/damon/ops-common.h
+> +++ b/mm/damon/ops-common.h
+> @@ -8,13 +8,6 @@
+>  #include <linux/damon.h>
+>  
+>  struct folio *damon_get_folio(unsigned long pfn);
+> -static inline struct page *damon_get_page(unsigned long pfn)
+> -{
+> -	struct folio *folio = damon_get_folio(pfn);
+> -
+> -	return &folio->page;
+> -}
+> -
+>  void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
 
-It is something worth looking into for the future.  I'm in the middle
-of reworking the audit code, and one of the changes is heavy use of
-string refcounts to reduce the copies needed.
+Let's keep the one blank line before damon_ptep_mkold().
 
--- 
-paul-moore.com
+>  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+>  
+> -- 
+> 2.35.3
+
+Thanks,
+SJ
