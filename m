@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09BA64AC77
+	by mail.lfdr.de (Postfix) with ESMTP id 53F6364AC76
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbiLMA3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S234225AbiLMA3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbiLMA3K (ORCPT
+        with ESMTP id S233825AbiLMA3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:29:10 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB631F2D2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:26:31 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id q6so2291785lfm.10
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:26:31 -0800 (PST)
+        Mon, 12 Dec 2022 19:29:12 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0831F2D5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:26:34 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id z26so2311231lfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:26:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ugTcOj9Npd/SMM1GNN3IBZ5YypTVeK9e1l/D45aeEQU=;
-        b=QYVSM+NGhUbi/7aRxbymFXrovv+CUzYPcENl4GN7SIgV+MQg+wUXavYJZCsCWrvJot
-         lFQH4r05WWl3ZV/hs3fyHPhK90GrK0ubW3Dfq/BP5BD/Qp2mT0kGtr6ufOF6Du6zQDFv
-         DJPPlMBxYcWmWiLW1wjpsS/9/6IE3o/OLCW3r73bWzf18roRO9628xRSQrWbX0YRbyy/
-         F3ce4rC6eKJDrd481mVsMrB2o9DEjzW111Ouuqa3ottXYLSmwbMqei2LWom6vcp5n909
-         Yo04KYt+DLCWiPfXLHwMzDC9hcb8kZZNGaOoWNNLNvU59YoDL+SIkpCN21+SzI/3Fkbe
-         /05A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=64a16xm03GDRzSrRzGbHGfzDIJpeFaTeX77Wh7ttti4=;
+        b=iuYfFxLfpTQ0Vm7Ok91YF8ZXJ4acYipdS6f7TntzmkZxAwjmS3B6lXk16+ACdini3E
+         Mpo9Fp4hwU/4FxW/kfVEPlW3CVdI3XihyKrdCx4okSOSNMpSkP0z5s7tcVhzI2p/jy1L
+         pIGrPvY6EyoZH1I2Z1qEnnkhKIlme/ueWzMN1RChyxFHhi2ziLKaphFjWM/1meO5wq2I
+         uikUmwFHzKq9ERztMJAh1WhP2ZDPzW6lrDGYJ8baUPHr9rmFk8CQFcP92w035VA6XPbN
+         B2AL2sahczhBh46UPTOSob/xyMDjC9B8yanWNcsjy/B+BJc229qMHS2p7sUPyGsIdhBL
+         awuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ugTcOj9Npd/SMM1GNN3IBZ5YypTVeK9e1l/D45aeEQU=;
-        b=O8wmskpUH1iejRKvseR8IMSGjA2qsT2V6yd12hUjCdbdhjI/aNUT2x5eX6R7bDJTRS
-         KlC7phzBFFGXIxtGZDdiBU6bjeQsJnd6TyDrnxPomZz43vsYlg+yBeOkDBueFdsfhH+6
-         9Owb208PLD48r4c73A7p6L+WZ2HBSyLKepEMv/DhSCWnJMw0dlcydkilQQkh/Cwg/n72
-         15dirZbvnwxR7BtAgFWr8pNjS5PR+WFKRi884JytnoUKq/Dj6sVwy473CO0MBaHUO+Ab
-         +EvnlIa87xtchVdBiwUahWpD/trtp10uW+c4aIvR+AsCX1t3qzFM9kC6xoHPN5rMlTdr
-         ZvHQ==
-X-Gm-Message-State: ANoB5pltCF2dU6f1BDXn0CSC/0sSk3xeyB78WV2EfoA34Z6PchzyH0Jk
-        7sCVbJz/qis0dDLh2BzrmFpARw==
-X-Google-Smtp-Source: AA0mqf4UdtCG6n/ULmv52B8o3H8MKIe/aZ4oTvNr2ISnyj/sS85Aq3S68jHLXpqqySkfR2zExz4Hmg==
-X-Received: by 2002:a05:6512:41e:b0:4b5:7925:8707 with SMTP id u30-20020a056512041e00b004b579258707mr4923602lfk.26.1670891190110;
-        Mon, 12 Dec 2022 16:26:30 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=64a16xm03GDRzSrRzGbHGfzDIJpeFaTeX77Wh7ttti4=;
+        b=5SMdNbdLzehW15U8y9lEAc/pwkZ17aWPMt1gPEdzv7zUGONv1ECemR2D5wKBcECETe
+         EJMSQKIvqOADLVqwJjMU9260cC48GLg7xi9mv3tV7BNUH5bbR5Yh/nBl+9iTJNouknqV
+         y/8G4dMnJQ7Zeghlx5Fy1252Rjms1rGIC6d+hot7pYdHyCIrdZX+J7Er1LdmxmDAuAkJ
+         4LdwK5JpDGuAV6UgFzHGRERIGpkpG2GqABGxpzTMopK8twilNASzWFh9dyA96hjlJMbG
+         9xLrLG7NpnDdSUMmH2fwVSEpFCbn9HiBpWNQ/+t6v1BZec13B5wmS67rcQ0PBb4RyBmJ
+         ALlA==
+X-Gm-Message-State: ANoB5pnJ5QChjNysSrDtvWYb0RnFVuwLZ+KV9cO15b1vzwjOQzwx8CTk
+        cV1MhCYykhiThpvK5NjhylQUGg==
+X-Google-Smtp-Source: AA0mqf7IM9a/qZExoPzn3FRqUdqlme93mvUre5klopIcd86b/7ZAfQ5P7d5H6I4XRQvzJRo/BoHueQ==
+X-Received: by 2002:a19:ee11:0:b0:4b5:b6e8:bb53 with SMTP id g17-20020a19ee11000000b004b5b6e8bb53mr2934454lfb.24.1670891192101;
+        Mon, 12 Dec 2022 16:26:32 -0800 (PST)
 Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id y28-20020a19915c000000b00492dba3c85asm139371lfj.220.2022.12.12.16.26.28
+        by smtp.gmail.com with ESMTPSA id y28-20020a19915c000000b00492dba3c85asm139371lfj.220.2022.12.12.16.26.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 16:26:29 -0800 (PST)
+        Mon, 12 Dec 2022 16:26:31 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -61,10 +62,12 @@ Cc:     marijn.suijten@somainline.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
-Date:   Tue, 13 Dec 2022 01:26:25 +0100
-Message-Id: <20221213002626.260267-1-konrad.dybcio@linaro.org>
+Subject: [PATCH 2/2] arm64: dts: qcom: sm8150: Enable split pagetables for Adreno SMMU
+Date:   Tue, 13 Dec 2022 01:26:26 +0100
+Message-Id: <20221213002626.260267-2-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221213002626.260267-1-konrad.dybcio@linaro.org>
+References: <20221213002626.260267-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,28 +81,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marijn Suijten <marijn.suijten@somainline.org>
 
-sm8150 has an smmu-500 specifically for Adreno, where the GPU is allowed
-to switch pagetables.  Document the allowed 3-compatibles for this,
-similar to sc7280 and sm8250.
+Allow the Adreno GPU to access split pagetables specifically on the
+dedicated Adreno SMMU via the qcom,adreno-smmu compatible.
 
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-index 895ec8418465..b97181d4a399 100644
---- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-@@ -84,6 +84,7 @@ properties:
-         items:
-           - enum:
-               - qcom,sc7280-smmu-500
-+              - qcom,sm8150-smmu-500
-               - qcom,sm8250-smmu-500
-           - const: qcom,adreno-smmu
-           - const: arm,mmu-500
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 3f940cc3f32b..83b4450fb3eb 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -2253,7 +2253,7 @@ gpucc: clock-controller@2c90000 {
+ 		};
+ 
+ 		adreno_smmu: iommu@2ca0000 {
+-			compatible = "qcom,sm8150-smmu-500", "arm,mmu-500";
++			compatible = "qcom,sm8150-smmu-500", "qcom,adreno-smmu", "arm,mmu-500";
+ 			reg = <0 0x02ca0000 0 0x10000>;
+ 			#iommu-cells = <2>;
+ 			#global-interrupts = <1>;
 -- 
 2.39.0
 
