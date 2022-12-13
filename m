@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964F164B18D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A998764B18E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbiLMIwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S234867AbiLMIwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234831AbiLMIvq (ORCPT
+        with ESMTP id S234470AbiLMIw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:51:46 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A765A1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:51:45 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id i186so16783171ybc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:51:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cJvRbaiPchBmTkfubLEGTz0Ogu9fRyx82WgeZC745Dk=;
-        b=ZpHfmBlgH+6RvPy+iw040Q1a/x2t0YWMLcJwMQD3S8cZdwC/xYa+V6HyUN7KGXpi+2
-         36YMqlrgVPV1zrkc93/2NZakTM4vx/ImER9F352ObvZeibsGV4teZQxkE/fo1tzifH9e
-         Yc2iHtdCSEqVWV1GeUjQ5uYzbstfwfUdnZXjPfJSSPTlkYFKUVLJ0MmJ9wt8P7L4gquG
-         CBDrtjx+mNywlWR3ftbIetLyixDXPymvK9WF3eIHs7dzj5woK+oEmTy20MbcNQEwsJ8X
-         ZgsHwnJ3uWSNL5sHsL2Tn1Xku2LecpnHCqdZA5A43kZa+PgJWfiH4yZvot9cU+yLMVo0
-         j8BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cJvRbaiPchBmTkfubLEGTz0Ogu9fRyx82WgeZC745Dk=;
-        b=elYyOoKsQ9Ye4d/HJyk26KWudbl6LpEbvjSFlGLjxZ6FCYXpfe4I/vlH19gVX9IkT+
-         PRlTirMEg+UJXYTKYmRKz+w30CTSJP/Ktn3QyZB+HYDnTm1PeZyYkTgeI1fIN8tDVqjG
-         U27oET0JOohQli7xAUNFX1nVrAOgr/9qO3hn2R787lX8CqT9ZmoFDM3Cx0qWoRgrFZmV
-         ount2nAZJJQornEwd/aFgOd6jKCbPSjccb3cGnltbW7D3l18zqfMvtvMATflIosmqRqv
-         gKDRrarn3/vj8xCgnyqM5dbcy08RQ8CPbCJmB2GdbjdqmW5ttqy1FelN/U0TsboOeeZp
-         zv0g==
-X-Gm-Message-State: ANoB5plfjCaSPRNY4Nif1BbS8pLRVmuxMGWLU93OJpiyRuCOZPySo2Oj
-        oqwDVF83GYYZycx27uvexXQR2tL+MWLiOIFLu53GHg==
-X-Google-Smtp-Source: AA0mqf4FpckKPAuWRQQ8f1huRLbn/zDOCLdbrA1eKTP4TVYP5K7QRu9Fo8bs6ostcX0AVXjxTtAkgaXDGmofby9tx84=
-X-Received: by 2002:a25:d2ce:0:b0:710:f2e2:eb92 with SMTP id
- j197-20020a25d2ce000000b00710f2e2eb92mr2938674ybg.304.1670921504954; Tue, 13
- Dec 2022 00:51:44 -0800 (PST)
+        Tue, 13 Dec 2022 03:52:28 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACC2EAC
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:52:26 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 28EE7320034E;
+        Tue, 13 Dec 2022 03:52:23 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 13 Dec 2022 03:52:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irrelevant.dk;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1670921542; x=1671007942; bh=FB
+        3GTeThf+PxfwcfSkW3UMFO7h6VBRdiAGE3OquQ1yg=; b=Ra23TVkwDdC5DO3wHi
+        rSroRzvXwZiJMYDoYsYQfnFAz6T6sWoYphvE8bt6628DlsM3GoIu0kpt5RWfpB6T
+        oXeKgTM9VU43Mgl0AP2DaPouNmm0bZAkXxaz+v675sjyMDuURFrsZTfp5gc9pPqL
+        4fLvbOmD5PBflstHuSlEnapdqZATLgMTe8m99x8f4cRZeipfGy5W3XYETctaKnJ7
+        R0NrzYVVWNjdREJoxABddO7yuedrnuoFk/Z7uWlldwoDpTB9mIeSydI2MTJVjbZG
+        XFdfFdEDznwUNL3ez4B4818fywdfWlWAGWc299QQx5XTxqDz0WoIJou0MS0XRG9z
+        pqHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670921542; x=1671007942; bh=FB3GTeThf+PxfwcfSkW3UMFO7h6V
+        BRdiAGE3OquQ1yg=; b=WlsZKabHR0KMxBttNypfS8NJ0GCVpZA8f2UQX+k9eNWj
+        j0/NgWY3RDShLRkoOUmPxF+i+bewkwoB91+CX/3x2ibAkHj8tRUCEBbyfLcEaaH3
+        8CZWNJJ71D2MTezzrWozqXqgIEzIwg8nomNKaC4vIOWY8eM6y2UwjJznoPnlBZzJ
+        lARAygzZS4nM4z96c0s4BHoSNISPgCTT0cfBR1EMI13mzRdgSuyJVyzjqqBtWuAm
+        epEKYgnPndXw/VtiBQUhs8K4boBlxw8X4bzg4I/Zo28ucoh6KfrdKxFGJswH6+qk
+        ZmAWpCchAXWYO4UXHhy7in8bqX2KHdkHOqfDGnVejA==
+X-ME-Sender: <xms:Rj2YY5yih1YhilqionqrrmqsuycQWLDaVkZ7mYZiVTK12QO_tXnkYQ>
+    <xme:Rj2YY5SAnivRyqghrMVTyB9WZgiwt8-8I3m-RILz2bKoAfcKyKnldQ_x5prkAVb5S
+    7xxmIGTfEw5uYbSg0Y>
+X-ME-Received: <xmr:Rj2YYzUP0tF5xiqacPrBOS5aQEMTFB1sxFLUrRwh7XbpZhyT-QEC_C9Ukh5-WweX2UDGtBM86S2epOSjNBidqVe-dXAOcw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelgdduvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepmfhlrghu
+    shculfgvnhhsvghnuceoihhtshesihhrrhgvlhgvvhgrnhhtrdgukheqnecuggftrfgrth
+    htvghrnhepjefgjeefffdvuefhieefhffggfeuleehudekveejvedtuddugeeigeetffff
+    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    htshesihhrrhgvlhgvvhgrnhhtrdgukh
+X-ME-Proxy: <xmx:Rj2YY7iD2U8_9CLOflJYjVSXe9W-bALVhxT_gbqJkf-I8gdD-SeKnQ>
+    <xmx:Rj2YY7Ap2KV4yj_cLtgHFg6cf4FqKZDWuRRA6oLOkzwkqAHCYibnuQ>
+    <xmx:Rj2YY0J8pGFTAi_pZfLocquXQmuWYFhW843iyMl2us7GbMBFM7A4uA>
+    <xmx:Rj2YY9BXuQUY4EVqKvK2-dh2CFEWOymXllrtpLVyey2w03KbLIXgdA>
+Feedback-ID: idc91472f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Dec 2022 03:52:20 -0500 (EST)
+Date:   Tue, 13 Dec 2022 09:52:18 +0100
+From:   Klaus Jensen <its@irrelevant.dk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-nvme@lists.infradead.org, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-kernel@vger.kernel.org, Klaus Jensen <k.jensen@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] nvme-pci: fix doorbell buffer value endianness
+Message-ID: <Y5g9QhH1asYdXpZx@cormorant.local>
+References: <20221212150243.41283-1-its@irrelevant.dk>
+ <20221213085057.GA3998@lst.de>
 MIME-Version: 1.0
-References: <11af73e05bad75e4ef49067515e3214f6d944b3d.camel@gmail.com>
-In-Reply-To: <11af73e05bad75e4ef49067515e3214f6d944b3d.camel@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 13 Dec 2022 09:51:33 +0100
-Message-ID: <CACRpkdaXxPE3XhPnprhJ7GGjn9X_GMsCJ3mn26P90GcHzhsQDg@mail.gmail.com>
-Subject: Re: [PATCH] of: fdt: Honor CONFIG_CMDLINE* even without /chosen node
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linusw@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f6KDFeo6ijDRncdJ"
+Content-Disposition: inline
+In-Reply-To: <20221213085057.GA3998@lst.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 7:01 AM Alexander Sverdlin
-<alexander.sverdlin@gmail.com> wrote:
 
-> I do not read a strict requirement on /chosen node in either ePAPR or in
-> Documentation/devicetree. Help text for CONFIG_CMDLINE and
-> CONFIG_CMDLINE_EXTEND doesn't make their behavior explicitly dependent on
-> the presence of /chosen or the presense of /chosen/bootargs.
->
-> However the early check for /chosen and bailing out in
-> early_init_dt_scan_chosen() skips CONFIG_CMDLINE handling which is not
-> really related to /chosen node or the particular method of passing cmdline
-> from bootloader.
->
-> This leads to counterintuitive combinations (assuming
-> CONFIG_CMDLINE_EXTEND=y):
->
-> a) bootargs="foo", CONFIG_CMDLINE="bar" => cmdline=="foo bar"
-> b) /chosen missing, CONFIG_CMDLINE="bar" => cmdline==""
-> c) bootargs="", CONFIG_CMDLINE="bar" => cmdline==" bar"
->
-> Move CONFIG_CMDLINE handling outside of early_init_dt_scan_chosen() so that
-> cases b and c above result in the same cmdline.
->
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+--f6KDFeo6ijDRncdJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Excellent debugging Alexander!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Dec 13 09:50, Christoph Hellwig wrote:
+> On Mon, Dec 12, 2022 at 04:02:43PM +0100, Klaus Jensen wrote:
+> > -		old_value =3D *dbbuf_db;
+> > -		*dbbuf_db =3D value;
+> > +		old_value =3D le32_to_cpu(*dbbuf_db);
+> > +		*dbbuf_db =3D cpu_to_le32(value);
+>=20
+> As the buildbot noticed, this now means dbbuf_dbs needs to be
+> a __le32, and the endianess annoations will have to wee through
+> quite a few places.
+>=20
 
-I also think this should go to stable.
+Yes, I'll fix it :)
 
-Yours,
-Linus Walleij
+--f6KDFeo6ijDRncdJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEUigzqnXi3OaiR2bATeGvMW1PDekFAmOYPUEACgkQTeGvMW1P
+DelZbAgAjUBmJQ3Vwc+bf2H2i5eMeE6lMqnNtytTmRAE7zysG9f6Xj4tHORjniAP
+IWfnTH8xqTuD+LY2QoHDb8/VlGwy0v8Jx+l71zScPtetvKJbL4ei7YMi195aQPxP
+4kH3UyfWgrKZKZT6zlT1mecyvZqNZDM7ie/syoIRY9p4BaQAibKXhp2Oh8hu3Qkf
+y3sUo2tVvoeqqeNbFXbQ+f2IaQViNViB47iT13USIDr2K4q87D/lJMsXBGMDKgxd
+sJcpLhfd1X/VnfEPHOef/JgqwV0xNFz/7ETwEeOQD42V2Z1lKbprztIs+UBV9fM8
+Hl+26hwhmSe2cBmDfGUlQacynyy/cg==
+=UqF1
+-----END PGP SIGNATURE-----
+
+--f6KDFeo6ijDRncdJ--
