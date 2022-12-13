@@ -2,65 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A19B64BA8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D252164BA8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbiLMREJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S235710AbiLMRED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiLMRDD (ORCPT
+        with ESMTP id S236326AbiLMRDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Dec 2022 12:03:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439C52251A;
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E258123BC1;
         Tue, 13 Dec 2022 09:01:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEDB3B812A2;
-        Tue, 13 Dec 2022 17:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E66EC433EF;
-        Tue, 13 Dec 2022 17:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670950892;
-        bh=uH0LYOSexEh5rmYdYN0yvY9zCHzaNdE5DduFSGRtqbs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMVuCAzlQrQHOlsgTwtFZ+g2DaAoEPxa0+vuEZjFvdj6e/v79u0Kle9K+EB37sTht
-         bhP1tiiO+FoqeCieMeEcTS0vq1TtyipfxvUflLhdGnwp5xh68oULfypFNoywHnDSCm
-         /iA2G+keMD7peo0uOV1NSk6zf+DhsttgOoUGAvl7WpzIfnwzOJldQxrz5ccnixN+hw
-         CR0vpp9gmUKY7Nb9Rc4GAZ/ywx5wY6mx62VbO0AF2ZTgW/TobmW9yIPZmeN4LJV5F1
-         uTVIghQx24MF7a24ZgmhTDCiseGw1S612dXJFShK/W/3Uz55jO8i98n6tehWX0LjtM
-         25PbCqI2G18Hw==
-Date:   Tue, 13 Dec 2022 17:01:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-Subject: Re: [PATCH v4 1/9] spi: mtk-snfi: Change default page format to
- setup default setting
-Message-ID: <Y5iv5kPsOFm0OQni@sirena.org.uk>
-References: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
- <20221209064317.2828-2-xiangsheng.hou@mediatek.com>
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 370BC1C09F4; Tue, 13 Dec 2022 18:01:33 +0100 (CET)
+Date:   Tue, 13 Dec 2022 18:01:32 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/98] 5.10.159-rc2 review
+Message-ID: <Y5iv7CQIxi8GPvTF@duo.ucw.cz>
+References: <20221213150409.357752716@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jC3ytWRRxsiHrz4c"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="nEuYaVcywOxgLiWF"
 Content-Disposition: inline
-In-Reply-To: <20221209064317.2828-2-xiangsheng.hou@mediatek.com>
-X-Cookie: Edwin Meese made me wear CORDOVANS!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221213150409.357752716@linuxfoundation.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,36 +43,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jC3ytWRRxsiHrz4c
+--nEuYaVcywOxgLiWF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 09, 2022 at 02:43:09PM +0800, Xiangsheng Hou wrote:
-> Change default page format to setup default setting since the sector
-> size 1024 on MT7986 will lead to probe fail.
->=20
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> ---
->  drivers/spi/spi-mtk-snfi.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+Hi!
 
-Angelo, you've not reviewed this one - is there some problem with it or
-was it just missed?
+> This is the start of the stable review cycle for the 5.10.159 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
---jC3ytWRRxsiHrz4c
+CIP testing did not find any problems here:
+
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
+5.10.y
+
+Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+
+Best regards,
+                                                                Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--nEuYaVcywOxgLiWF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOYr+UACgkQJNaLcl1U
-h9BU0gf+IvrSdMswYwsbTgS7DBClWKuOuNQAt7lGGUz71eyMXy9UAzCuEDoScV/w
-pB+m2dTLcH79ILHq3hDSDj5S/DjmXwJi6Li/mHhYHvk02J0r6WDrU2zw3z2SECrc
-fEB8quuER9gh7d9QInhiVNRbNoSL4WAE0B/qIhA4CxJEBximJKR8j0Z/tSSa7GK3
-hQ9hudThr90bPE3ykzjPwygyt0uVMgqLHq3zuVX2azJ9yXmrbfWQn6xHvxGXfyt0
-3eeRvgpqUL+FpIMvShXLit8oIoZ5tw/HEa5K2I9RlwAja/TnX1ph49NSRYE/swwk
-8TCiI+HH1h0TM4w9Q6/TRJMSq91cxg==
-=XCqN
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY5iv7AAKCRAw5/Bqldv6
+8g8yAKCLcV1zS5D6HtnH6S+VLOt8YJ2GMQCggzuure6bk3BduCCxhuoKxZprr14=
+=s4Dt
 -----END PGP SIGNATURE-----
 
---jC3ytWRRxsiHrz4c--
+--nEuYaVcywOxgLiWF--
