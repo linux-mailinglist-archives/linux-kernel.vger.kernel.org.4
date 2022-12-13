@@ -2,87 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA8D64B73E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B26964B741
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235668AbiLMOWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
+        id S235356AbiLMOXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbiLMOWn (ORCPT
+        with ESMTP id S234673AbiLMOXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:22:43 -0500
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF60C268;
-        Tue, 13 Dec 2022 06:22:42 -0800 (PST)
-Received: by mail-oo1-f41.google.com with SMTP id q6-20020a4aa886000000b004a083f945a6so2381103oom.6;
-        Tue, 13 Dec 2022 06:22:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9nPYc70xBGK0Wj8psANEn98FZZPcSq92yTHRO99EQSs=;
-        b=cKt+DuyO1JN7ao96QG/otVH/li8GHIfCZMN5j1cD0QHnKf+0BFhT2FqL38/rQyi4PA
-         La/ipL/QDl33BZzOvV3/CfkVXIqqgktDwCTDAj+cNB437sHP9EixTs0F30YPY4uzEp79
-         xdRzUHEHvhvjQW5Mgo38t4gFa22HxrTiJiS5yTTGljBnAKRbQ6Rw+rLdq73T7XeabMHd
-         7ilsZAM1YsZW18y6KYHDHBdIC0Jsx0IpuNRTxDwi4jjPdCVrYa/0MxABH2jyD/IpbNgY
-         6PV/ZbjnsfBg66fPdOBmA6kmVWFZI+zur+WpX8jIFzaSIF8j4Nlf3xrpHxoMBW+4EbR8
-         cTnw==
-X-Gm-Message-State: ANoB5pkfx8spw34RHFXSwapAGmX6soelDPYqS8RXilczyEuriQlnUtt8
-        sOswGgFi5Xutc9QX02qi9g==
-X-Google-Smtp-Source: AA0mqf4KHNeZUBFBK8Dd0lGGuku2C3O9bcj5/PiV07nJKuDygyrL2XX0a1nldxe/GxB6Cg/4thpJPQ==
-X-Received: by 2002:a4a:d84c:0:b0:4a3:986e:3e07 with SMTP id g12-20020a4ad84c000000b004a3986e3e07mr8839675oov.5.1670941361968;
-        Tue, 13 Dec 2022 06:22:41 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z15-20020a4a304f000000b004a065c72a05sm1206791ooz.2.2022.12.13.06.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:22:41 -0800 (PST)
-Received: (nullmailer pid 958687 invoked by uid 1000);
-        Tue, 13 Dec 2022 14:22:40 -0000
-Date:   Tue, 13 Dec 2022 08:22:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>, andersson@kernel.org,
-        marijn.suijten@somainline.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        freedreno@lists.freedesktop.org, krzysztof.kozlowski@linaro.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        agross@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: display/msm: Add SM8150 MDSS & DPU
-Message-ID: <167094136007.958629.14485580510491889552.robh@kernel.org>
-References: <20221212093315.11390-1-konrad.dybcio@linaro.org>
+        Tue, 13 Dec 2022 09:23:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A11E25E;
+        Tue, 13 Dec 2022 06:23:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D52CF61554;
+        Tue, 13 Dec 2022 14:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89AB9C433D2;
+        Tue, 13 Dec 2022 14:23:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670941385;
+        bh=kIVlJ1wgdxh3uRwxhcQwYg7GRITJfYPzPgFLuI+9U4o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V6RUet3S5mNOEZXXkV6b4aAvTrfZNSuXAwWjM0dSWIoP/EkbY0mV69K/YSOBr8xn6
+         V+27PgkPjC4vBCY8BU2Iw+ixZHEOIOVjaI2zq4hkAkRde/qUcVX7BScZ8QTuCWZrz1
+         05wp/R0G9+bkrUPgkkOovsX2wRPSEiIZkPs43xCg=
+Date:   Tue, 13 Dec 2022 15:23:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     yuehaibing@huawei.com, keescook@chromium.org,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/106] 5.10.159-rc1 review
+Message-ID: <Y5iKxjEHCIzMEOCa@kroah.com>
+References: <20221212130924.863767275@linuxfoundation.org>
+ <Y5dzn4y73kgwuas+@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212093315.11390-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5dzn4y73kgwuas+@duo.ucw.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 12 Dec 2022 10:33:12 +0100, Konrad Dybcio wrote:
-> Add bindings for the display hardware on SM8150.
+On Mon, Dec 12, 2022 at 07:31:59PM +0100, Pavel Machek wrote:
+> Hi!
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/display/msm/qcom,sm8150-dpu.yaml |  92 +++++
->  .../display/msm/qcom,sm8150-mdss.yaml         | 330 ++++++++++++++++++
->  2 files changed, 422 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm8150-dpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm8150-mdss.yaml
+> > This is the start of the stable review cycle for the 5.10.159 release.
+> > There are 106 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > 
+> 
+> > YueHaibing <yuehaibing@huawei.com>
+> >     net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency for BCMGENET under ARCH_BCM2835
+> 
+> This one is not suitable for 5.10, we don't have
+> PTP_1588_CLOCK_OPTIONAL there.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Now dropped.
+
+> > Kees Cook <keescook@chromium.org>
+> >     ALSA: seq: Fix function prototype mismatch in
+> > snd_seq_expand_var_event
+> 
+> This is useful fo kCFI, but we don't have kCFI in 5.10 and others.
+
+I'll keep this one as it solves a clang warning that people are going to
+hit eventually on older kernels.
+
+thanks,
+
+greg k-h
