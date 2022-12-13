@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D2064B8C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6AD64B8D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiLMPn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S236055AbiLMPof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiLMPnZ (ORCPT
+        with ESMTP id S236242AbiLMPoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:43:25 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C713220F9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:43:12 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id i25so5162475ila.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:43:12 -0800 (PST)
+        Tue, 13 Dec 2022 10:44:20 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83EDC66
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:44:18 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id g7so5562224lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:44:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LXxSM72W9e0OIdQsYVPE+ecsCo1XbRnSTgnn3KVjBxI=;
-        b=ZX8X4qbhEiBJwa+FdGVbMJXcoBVXhL6FGklx9k9TimapOA/2TnlWPndMCNGYjLIW9S
-         aRFEUkNk65xlXuboUEwO6Ssc7p5iOY6aV6sMSIkvqOVv8i+M7Dv5SqIDhlmttR34eccX
-         PFjOr44B+OVHwcucO888Y8hSffqxBi71SliaIefD0Nb/x5c3HKuOIZEVEYFXeXCZue90
-         vN1gj1nGdPj6LheG5/RVaLVjAZ8Wo+/TUULe6mX6FJbgjSivxLzAyVGKtco7I8jC1tsP
-         8CslTn0mGGQugLo4bVHpHyDudEfZzC77arDDcRK8IFeoL2Iv49iw979Hp06Cx/99vNWS
-         rd0g==
+        bh=EGstHtifQPW5GO3v7hxlfERswPjhZXfr0wahKT87Wbg=;
+        b=cdQmXOl+woEiaypum/Th1omypryAPzX//HQ/hCldqepnH8fUd7OI4/+pAsXuQKfgcR
+         OhWVHeeAqCzRuYcp0xNRJ2A9bAB/QkkGQRfV3/uBqMDOQInUS3MaUdL1r8G+htDpL48E
+         HUHqY4E9T3VIyRjmf1z8VxCjxZ59ngpflZKhpjLKvvSmJ1i8TaNbMZgQMb/xoRycEjOX
+         V/sAAnni9mcHle0mlarWzd8w159pDGIrydPsokHSBiCraVtx0/1+33iCy+Cxt0KWlGuh
+         4OC+dM8kwPHmYQpbllKuc9V7vFid/Ep6Wb/oF6PsMT8KrrMN2KQaA52v5XXZrYXYg0GT
+         epew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXxSM72W9e0OIdQsYVPE+ecsCo1XbRnSTgnn3KVjBxI=;
-        b=JSdTlKfH8DZwCh1d2FFpXjvHo8nMDvo0SCajhBgIQvV/zIxdn8ArUB8K+zMn9PLTtk
-         nWOrlnaLjnxfW+6ipEryNHApOrMKmMM6RHbJx/egKvNozqAYi/SQl/jLmFlA4C07YbiC
-         kxxoM/HCNCDoARg+lWXDonludqfr+vEx1jT3h7bp5rOvGZ7R89wiQKwntXG9FKHWwgyO
-         72dx/dL5y4peI5hSSHNgWINa4DpscaJigQE9V+9pPHS051eOSUtO6opJNQnyXp++aroz
-         v0zLPeoVTeyBR231yqrWSVLLMzOiSvuGzH5SWu+22Wg7HpknP7GS3YUQeObDY/7msa5a
-         EMIw==
-X-Gm-Message-State: ANoB5plZMlJSro6rfRZDgiS4UozcWGAaMikxlqOrNKZj3+4NU8CTLrwK
-        oh66CJrgDzpzttacaa6NY/i1qw==
-X-Google-Smtp-Source: AA0mqf4hGcU1nJUCJa6dT7p8tsWAnDGqubxaYBeNS4WL/6cEURFeJLLze2oOnxogApSN2QYPQARbnQ==
-X-Received: by 2002:a92:cd8d:0:b0:302:d99a:bfd1 with SMTP id r13-20020a92cd8d000000b00302d99abfd1mr3100857ilb.0.1670946191959;
-        Tue, 13 Dec 2022 07:43:11 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d32-20020a0285a3000000b00389d74d7e24sm944516jai.146.2022.12.13.07.43.10
+        bh=EGstHtifQPW5GO3v7hxlfERswPjhZXfr0wahKT87Wbg=;
+        b=8I85EVsII+N7I3qhhV0W0vBKMJUHh9+fDCj2++gTt2R5ZjiT9hs4ZPErbmNA1tLjN1
+         LF9yy98QzitgsbYSGf+ARFC1hwNM6hj0w2It0cV5fWWq95ZGxUoHy66jTkv0htnvOEis
+         vu6iZ2m+6/rFtkG7id8Ht25NtxPZrlJvxUpUaQ4zBiK2IfQhjShG0A+PtXpq4WFcfe1K
+         8B/eDAcNBDLenbDbcvB7pFw7vSXLVZFfHYdbmZLUeovFVGr+4oPKNuk2+LSUUzClkF51
+         FMx1MUpvmcU0lvyZQ/igv8XoUBBaTQ43itYEpgAsisySdEpy/kgGvsNqkpDYhfUlPV17
+         +Evw==
+X-Gm-Message-State: ANoB5pnmDkd3o2nxaay8/H9Z+gU7YrF+fyhIyOziOUyZMrGjTV9gyKcH
+        yVLJTT7elxmUhVYWndKRMazgug==
+X-Google-Smtp-Source: AA0mqf5/eioldK0Ihu8+1CQheeMf4HYHScxc0xfuWrWmdsCn7jqwdvf58iRG6fQe109pDxdiJo79lg==
+X-Received: by 2002:a05:6512:298c:b0:4b5:b2b1:69a9 with SMTP id du12-20020a056512298c00b004b5b2b169a9mr4642149lfb.20.1670946257217;
+        Tue, 13 Dec 2022 07:44:17 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b00498fc3d4d15sm411410lfs.190.2022.12.13.07.44.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 07:43:11 -0800 (PST)
-Message-ID: <0bcf7776-59d7-53ef-bfd0-449940a05161@kernel.dk>
-Date:   Tue, 13 Dec 2022 08:43:09 -0700
+        Tue, 13 Dec 2022 07:44:16 -0800 (PST)
+Message-ID: <c2be661a-87e4-864e-3571-75032484f66f@linaro.org>
+Date:   Tue, 13 Dec 2022 16:44:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH V10 0/8] block, bfq: extend bfq to support multi-actuator
- drives
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
 Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>
-Cc:     linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
-        Rory Chen <rory.c.chen@seagate.com>,
-        Glen Valante <glen.valante@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-References: <20221209094442.36896-1-paolo.valente@linaro.org>
- <A0328388-7C6B-46A4-A05E-DCD6D91334AE@linaro.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <A0328388-7C6B-46A4-A05E-DCD6D91334AE@linaro.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-2-bmasney@redhat.com>
+ <Y5iSDehp72mQPc+h@hovoldconsulting.com> <Y5iWeTk2zOp9rInx@x1>
+ <Y5iaDP+nV9B59U2b@hovoldconsulting.com>
+ <03252ccd-e200-a112-b4dd-ba9fbf25c480@quicinc.com>
+ <Y5icyo7I5ZGAL02q@hovoldconsulting.com>
+ <Y5idf5dP2ttBSOUa@hovoldconsulting.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <Y5idf5dP2ttBSOUa@hovoldconsulting.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 8:40?AM, Paolo Valente wrote:
-> Hi Jens, Damien,
-> can we consider this for 6.2?
 
-No, it's too late to queue up for 6.2, even when it was posted on
-Friday. Bigger changes like that should be in my tree at least a week
-before the merge window opens, preferably two (or somewhere in between).
 
-I already tagged the main 6.2 block changes on Friday, and the pull
-request has been sent out.
+On 13.12.2022 16:42, Johan Hovold wrote:
+> On Tue, Dec 13, 2022 at 04:39:54PM +0100, Johan Hovold wrote:
+>> On Tue, Dec 13, 2022 at 09:04:39PM +0530, Shazad Hussain wrote:
+>>> On 12/13/2022 8:58 PM, Johan Hovold wrote:
+> 
+>>>>> So qup2_i2c18 becomes qup2_i2c2. Would I use the flat naming scheme for
+>>>>> the alias like so?
+>>>>>
+>>>>>      aliases {
+>>>>>          i2c18 = &qup2_i2c2;
+>>>>>      }
+>>>>
+>>>> Or perhaps the i2c controllers should use a zero-based index instead of
+>>>> being named after the serial engines (e.g. as we do for the console
+>>>> uart).
+>>>>
+>>>> How are they named in the schematics?
+>>>
+>>> We should use from 0 to N.
+>>
+>> With N being 23 after the number of serial engines, or the number of
+>> available i2c buses on a particular board minus one?
+> 
+> Looks like the more recent Qualcomm platforms use aliases that reflect
+> the engine number (i.e. 0 to 23) for i2c and spi.
+IMO it makes the most sense, as it tells the userspace "hello, this
+device is connected to the physical I2Cn on the SoC" as opposed to
+"hello, this device is connected to the nth enabled bus on this
+particular board".
 
--- 
-Jens Axboe
-
+Konrad
+> 
+> Johan
