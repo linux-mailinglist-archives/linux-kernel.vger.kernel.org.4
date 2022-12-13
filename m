@@ -2,104 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D0B64B276
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376A264B27F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234752AbiLMJgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S230282AbiLMJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiLMJgJ (ORCPT
+        with ESMTP id S234952AbiLMJgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:36:09 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930169FCD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:36:07 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0B6075C013E;
-        Tue, 13 Dec 2022 04:36:07 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 13 Dec 2022 04:36:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670924167; x=1671010567; bh=nIy95hA8Yl
-        lVcU8qH+Ydxae5DxdLCTX5dvbD9BTDWpY=; b=o4vb5C4Xuoaf4mN0JefFqWxTb9
-        9tIVmtTYrP483PjL6tIYNlRlRcNFIA9TNB7kYFRinVQdDl6ja2n0TvJvYssBNEkx
-        VwjArABHZAghHLmvgb7myqV5DuymEOJOQig6zcRBGRLa7TZKFdUr4qWk8TjIhf+/
-        LphsrQ7sMw7jVjiClxxekqN4AIOMdg8v4YLD3p+QrV3OcfRy6PB8iQnbU8LIk8DE
-        UBM7xxkyz3lQw06rJbY/eaKcvWqcBqKOoq7W1JD8nCPUTPRQHAJ2tylE2zjTHmSR
-        do3a3hVJ6+yY4Wnb/m/1jA9vuk0MyeLyaoQQ17tZCIFQXN6Rn1hBWhExh4KQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670924167; x=1671010567; bh=nIy95hA8YllVcU8qH+Ydxae5DxdL
-        CTX5dvbD9BTDWpY=; b=azAeUOf2mC8LpF4rFESeoN3OUCfRsLdBJB5mdjQZMXGy
-        3C4dsAkCFyQvXyYSIan2mJMcU8tZgwX5+Zepu9K4Ng4uNoSWLaVpHz5eT1LEOdpj
-        cZp0q2f2ofrzI0PAWOC0dpL+f4exQGy0md2HexdNqC3fp3RhdEcF9A0sJmrgVH8T
-        e/4TFpvh9PlfcH8w1o9Xl9X54R4JQ3JNwfsbRT94bdNVNRneFELeoWnC5gQdfJmr
-        zC2f/WCPOBssc3/dD8KmzvNPEF4Eub0WM6HUYuXxCf7h5qhtScxwGfTrjc2bdfIS
-        jV+D7blz8zmy9CI2Uhl9rOh0/2UB0lXPl8vICcPQaQ==
-X-ME-Sender: <xms:hkeYYzoJcPphl9VLQ6aoWKUiuDgI6668GVguiJV3-WtOi1OO8HFv4g>
-    <xme:hkeYY9olbF8QbERsX08Wt6grNa0OKwy96rSVjZvf5vBeq6xHwEQxGJxwnDE7M2UW1
-    2Htu-0Xh1WyKcJsFj8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgddtiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:hkeYYwNSZrPeLNTrYpmt70ElaYV1fJS9zvBl9Po-npzVSmb-Dvy42Q>
-    <xmx:hkeYY24J58kDhf5oFgSqRdIVjP_hTnBjb4OA8P28ucQOvKDo9F4pUg>
-    <xmx:hkeYYy6cg9srb2gekdwXd39Th3lH1U0helvU5VSomPNJoL5qIG9sOA>
-    <xmx:h0eYY92R4ul0WNN-SIBPZPkblCDscrN9RLjHx-f5YPFL80s5xcv_5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 528C9B60086; Tue, 13 Dec 2022 04:36:06 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <4610dfc8-33ed-4811-95dd-b13ec94adb46@app.fastmail.com>
-In-Reply-To: <53e7e660-9ee0-1177-b34a-365c1397ec3b@intel.com>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <b0c38501-440f-42a3-ae0f-dd95527b0e56@app.fastmail.com>
- <53e7e660-9ee0-1177-b34a-365c1397ec3b@intel.com>
-Date:   Tue, 13 Dec 2022 10:35:46 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andrzej Hajda" <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     "Rodrigo Vivi" <rodrigo.vivi@intel.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Subject: Re: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of xchg
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 04:36:37 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D07BF63
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:36:36 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id v71so16897198ybv.6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:36:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Hd26A52tCpr/TZckO2AVYLVhE5lfnmKa/PoDrSKaIA=;
+        b=G3H1wlAZpdpmQYEieqdVuJKIsOzW5NXXiQInR7B8S9KT3ra2veBRSQ/BqZ5EWCjQqs
+         qYKAfPqCdD3slKR8pI+qp+du4ChkVYmD3V8WcqYibXxIjPCiBekfspJkhEAVlP3OczhF
+         HDS6JM968T9/yi1meoD9tZaH2RtYsxwA7eocXUdrhSNLmiNDC4boRIpo1rv3SPqy4+Q+
+         KcgVKC78qG9irgH4Q1aashBRhUUBRhn9pXpf3FgxB3Oru21hgDkIxo8IKywySuk23/xH
+         u0GehlP7GwmfIXOGXG8SISBiNcf6tIA4LMTXganXiVNdWS01R/7rwXbiJwPuaGt7qlSf
+         j6rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Hd26A52tCpr/TZckO2AVYLVhE5lfnmKa/PoDrSKaIA=;
+        b=4p0zRt63LbF+QOD2MAwYCXFXfNkkf1CvP/ZZ0GmPDjsr9eAGWvaE+4Dl1g5yqi2zvO
+         jjnhQyvytOuYn3C0psK3AayTv/pjeVHpSfbufIIyH8/fo0gSqg7xn9xBHkqnkVhsZXFr
+         1v3rld4z6l4WR9qt1anVMlLI1gD6oL+dNrrbAy6PK2xcRjTKQ+eJbjbOdcrFuITuSOff
+         AUDLw+d9gtxv+zDCsVJhXTy4+fquHo4tVx8B+yyd7OqwAKW93fAS67V5ejRiedATikf5
+         LZ3vtCnzTjTMQ0+ciku4YLdNUU7iroumLUwAVMHl4mrypfrl8xp0M3JSeRmjl3prGMG0
+         BCwA==
+X-Gm-Message-State: ANoB5pk5tkSywD6hQ/65UokguFMR/pfc8Csw/Y5A+SROeBi9kb0DpN8y
+        1n8T8dLARDHX9zVaeYFgb1rp5CgfmYiurBNrLZ95LA==
+X-Google-Smtp-Source: AA0mqf7nZkHxiu+fKuIysqXHZF7UfBmLi0ZBnxPGnQLtOGWmyCu8e8cxfKokNJEIdxwKsyPc4kMyW8JbkbnRGby4zNA=
+X-Received: by 2002:a25:d2ce:0:b0:710:f2e2:eb92 with SMTP id
+ j197-20020a25d2ce000000b00710f2e2eb92mr2950219ybg.304.1670924195683; Tue, 13
+ Dec 2022 01:36:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn> <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+ <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn> <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+ <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn> <CACRpkdbgP9m40t_Ky4H+SQi9TELikomT2M-JpF7+auKmzOxQdg@mail.gmail.com>
+ <ce858832-c052-1797-ffeb-2dbe654cbdd1@loongson.cn>
+In-Reply-To: <ce858832-c052-1797-ffeb-2dbe654cbdd1@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 13 Dec 2022 10:36:24 +0100
+Message-ID: <CACRpkda0VerZhVGMJJjMYyAWdobvSLj4=eWxBjh+5ubmxvFcjQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022, at 10:28, Andrzej Hajda wrote:
-> On 09.12.2022 18:16, Arnd Bergmann wrote:
->> name for the backing of arch_xchg() or arch_xchg_relaxed(),
->> maybe we can instead rename those to __arch_xchg() and use the
->> __xchg() name for the new non-atomic version?
+On Mon, Dec 12, 2022 at 9:13 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+
+> mask_irq/unmask_irq/irq_ack/ function always be called by
+> handle_level_irq/handle_edge_irq in current irq domain. and the
+> handle_level_irq/handle_edge_irq will be called  by handle_irq_desc that
+> ask know which irq is.
 >
-> I will try, but even compile test will be some challenge, need to find 
-> cross-compilers for these archs.
+> when a peripheral need to use a gpio irq that gpio irq driver need know
+> irq status and call irq desc->irq_handler.
+>
+> so I don't got it about which case it is unnecessary to know which irq.
 
-I maintain this set of cross compilers, let me know if you
-have problems running them:
+Sorry I don't understand what you are asking, can you elaborate?
 
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
+Do you mean that you don't know which driver will not call ->to_irq()
+on the gpiochip? That would be any driver that takes an IRQ directly in
+the device tree:
 
-    Arnd
+gpio: gpio {
+    interrupt-controller;
+    #interrupt-cells = <2>;
+    ....
+};
+
+device {
+    interrupts = <&gpio 14 IRQ_TYPE_LEVEL_HIGH>;
+    ....
+};
+
+This case will only call the irqchip callbacks and will never call
+the .to_irq() on the gpio_chip.
+
+> > You find an example of a hierarchical GPIO irqchip using the
+> > GPIOLIB_IRQCHIP in drivers/gpio/gpio-ixp4xx.c.
+>
+> Loongson-2 gpio irq hardware only a enable register, and when a gpio irq
+> happen, then will has a such flow:  "cpuintc -> liointc -> gpioinc ->
+> generic_handle_domain_irq -> handle_level_irq ->
+> peripheral-action(action->handler)"
+>
+> generic_handle_domain_irq need rely on specific hwirq that ask gpio irq
+> hardware has a status register but Loongson-2 gpio irq hardware doesn't
+> have it.
+>
+> so I still think it wasn't appropriate that for loongson-2 gpio driver
+> add a irq chip.
+
+generic_handle_domain_irq() is of no concern, what matters is if
+your interrupt is hierarchical or not, the callback in the GPIO chip
+can be a simple remapping of the numberspace followed by
+a call to the parent callbacks.
+
+Yours,
+Linus Walleij
