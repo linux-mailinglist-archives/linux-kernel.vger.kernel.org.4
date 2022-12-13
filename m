@@ -2,662 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58BE64B041
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A73864B042
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234578AbiLMHQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 02:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S234637AbiLMHQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 02:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234396AbiLMHQg (ORCPT
+        with ESMTP id S233753AbiLMHQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 02:16:36 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424F216489;
-        Mon, 12 Dec 2022 23:16:34 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD58oeT006912;
-        Tue, 13 Dec 2022 07:16:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5zPcSIpw+Sw7EjI2RMem4yVGrs+JS1DweOzIyxC1zYQ=;
- b=AeyF2aCtZe132uEyFSy61BYw2+lM/fvC4RgJva1vhY1uQVC2WuZiDLgf/kEWPrrT6xc9
- 9cwRZHWvG+1XAoB2EbXKcwWhn4lKxPL9OEhA7t7F2hJaIkxrtql8YBbytcoOw4D/FIU6
- FZWurSXamtlgFNm03MgHqMzPqR5ItGjxeqkp+pHWHmqP0XUtSeqNGijAuUgLoKhgns/f
- AAHIQ7TmvBQ1bqmr7ky4oJM3YE2XvZ0Zmk0MbL1DZFXWkRVnsYcayVNmibCjLKKueWj+
- 3+jwz/Wj25dbaXhwHbDqr4986Jl0nJfAleZESriHIyPLg7xOK3TCViJCJ84NJC/34ByU ZA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mehje0e71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 07:16:28 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD7GQ6p029285
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 07:16:27 GMT
-Received: from [10.252.221.242] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
- 2022 23:16:22 -0800
-Message-ID: <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com>
-Date:   Tue, 13 Dec 2022 12:46:18 +0530
+        Tue, 13 Dec 2022 02:16:40 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9F16489
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:16:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BbKOaiZp1OHHYGDhwA8RvZNwi7WclsuS23BoZGgYQJ4uK8o8rXlL+9b8z4SQ7R1hLZVf+o9As9BVNEmnaRwnNpGruBEjTTXkehXFsnhJlylGcwOTHaSVEmeiZVr8g+MrOmPYA0O8yAvU5Wmm5sq+RegfH6ubxq1oZkZk3opZFtpIQiZ5zFZA+pnNY8W3UHjwPTD3gdx9ErTz16MRcA4ksGy7lt46ID4NCKuJpKJK15kr0d7WmNlhwowLk0fj/zZTDpehyZd/8k0wJIsxvAhQmG0BR06w5pnZ6oK1f7RmS08veLi12Ch5gVTmY97uH40WLRCEC0Aylx/9fkxNaVG9yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5UTrk22fcqRCRP2DO8efONbvSqECO9AEARhvPb2xNEE=;
+ b=h8uBmO9PVmJkc0zGAa0Mm6Kg6FRKK4L6Kv1bm+ULypSRF3qrFpHlDZIw5onRk6p2v57rmlMjXfsHL3ccwYZxNMOSXB89fRZaiZxTUq4UM7HGvi6RWevQI0YdX0zVlOv3hh+2cfJEonHce2qMz+TC1PEXZNBG6yja9Q49HmHsaUnzNPOhYdWRPjm8nwJkAztPPfTa62jzUI4kEVlLcfveDLjh6GBpBfZA79+T2IMddSwNGD7YN4651P5TTWNoftO7zODU3F/8AdTt9F9FSEEe5MFNdq9tTO5VBoL18a6mwaCwmswSNVUhPMLI9GGvMAvdPdymqUoflsAK4ID/bgfUOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5UTrk22fcqRCRP2DO8efONbvSqECO9AEARhvPb2xNEE=;
+ b=vlHz6tGFgfyLJxeL1shQyUBNspFr5Vy+/vGck6p85PGN39Qjems6AyxcUf//o6Jb4CH0hjMb2AK2tHJIL7fglMrMeL9qrIS+iWPBQUZcAGB6Ea+Dm2NIuOG5xn9RnUtTlZBLSp5AUU7z9dNVmDEMFLjh+b27mIUeOm7gAsK0SXE=
+Received: from BLAPR05CA0008.namprd05.prod.outlook.com (2603:10b6:208:36e::11)
+ by IA1PR12MB7759.namprd12.prod.outlook.com (2603:10b6:208:420::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
+ 2022 07:16:37 +0000
+Received: from BL02EPF0000C409.namprd05.prod.outlook.com
+ (2603:10b6:208:36e:cafe::cf) by BLAPR05CA0008.outlook.office365.com
+ (2603:10b6:208:36e::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.6 via Frontend
+ Transport; Tue, 13 Dec 2022 07:16:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BL02EPF0000C409.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5924.9 via Frontend Transport; Tue, 13 Dec 2022 07:16:36 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 13 Dec
+ 2022 01:16:36 -0600
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
+ via Frontend Transport; Tue, 13 Dec 2022 01:16:30 -0600
+From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <venkataprasad.potturu@amd.com>,
+        <ssabakar@amd.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        "Bard Liao" <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: SOF: amd: Enable cache for AMD Rembrandt platform
+Date:   Tue, 13 Dec 2022 12:46:37 +0530
+Message-ID: <20221213071640.3038853-1-Vsujithkumar.Reddy@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Content-Language: en-US
-To:     Brian Masney <bmasney@redhat.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <johan+linaro@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ahalaney@redhat.com>, <echanude@redhat.com>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-5-bmasney@redhat.com>
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <20221212182314.1902632-5-bmasney@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -4n2rnhqbXqbmuwH9BBYaZn2DWiqUCwJ
-X-Proofpoint-ORIG-GUID: -4n2rnhqbXqbmuwH9BBYaZn2DWiqUCwJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- bulkscore=0 clxscore=1011 malwarescore=0 priorityscore=1501 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130065
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000C409:EE_|IA1PR12MB7759:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1cab2fce-c168-4378-2cc1-08dadcd9f8fb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Xv3DS4qcS7XsAwOKrCgMrpKUqSCU/YGUEr3Lhvpz7iHVGHdEkUCbOdHe8bZ0sZ0khuC2WAai3CI0WDk9VKqzo8LbYx20dtOAZ/VlLy+GkCBk2oZyyk0wnk37nFpkzRTbKd9cF4+QpaGW1RRbqUzTaRbSeDuG2Wxrj/lD9LQnwU3pSHZQ+rPhUuPyHc1fc5mO7opIY0KHU5br48G9rFnuM173oa/+PcAFD6sY0ajZJ9AVlAki5QgI+n47VcHnXdR/tL4Vu/JGEqZTa4coKNLMp9eq1KB3IJwut6B148X+E2V+6aj24urwUy9Mxu4F+7TyxsI9vuf+ZGRCg4yFBxsH4Gc2AExab2asCRUFQO4I3RRZ/8rF5cuMdIgXZ9VfE39ZW6TQa0s9+hFLi+i33RrRpaZTN0tpjn93Z7ZMWzEerTnqi/4qbmiqjfEKJ2DMqwl4bYPHgSBj2TAzbjD4TGdFReVdbKp+J34vm1jd3MUe81BTrtkdlzmbsKKQcacFJbN1Wq0/o2EJouTBs+fXWaUHQUyU96SE7+ckAf8aaPvCav+MXFSd4F3sggf4OsgTrQcews8UwheMAngFSAYtQO3tPN//CyeLcJbniM/cmdArZrYVL6bXvm1rmI74dGYFPQnLDUyFpWo9gsrYztylE4S8xa0Zn+jdmZKT38uWImG7pDMNqMtM1igW97F5trCo/n6TbMiXWuGNp4bEvoSh77a3Eb2SzTj1FIBFVLegjzgPjio=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(186003)(81166007)(8936002)(478600001)(26005)(82740400003)(83380400001)(70206006)(70586007)(356005)(36756003)(86362001)(4326008)(40460700003)(47076005)(2616005)(426003)(7696005)(41300700001)(1076003)(82310400005)(336012)(5660300002)(7416002)(110136005)(54906003)(2906002)(36860700001)(40480700001)(8676002)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 07:16:36.9102
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cab2fce-c168-4378-2cc1-08dadcd9f8fb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C409.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7759
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable DSP cache for ACP memory
 
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/sof/amd/acp-dsp-offset.h | 4 ++++
+ sound/soc/sof/amd/acp-loader.c     | 7 +++++++
+ sound/soc/sof/amd/acp.h            | 2 ++
+ 3 files changed, 13 insertions(+)
 
-On 12/12/2022 11:53 PM, Brian Masney wrote:
-> Add the missing nodes for the spi buses that's present on this SoC.
-> 
-> This work was derived from various patches that Qualcomm delivered
-> to Red Hat in a downstream kernel.
-> 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 384 +++++++++++++++++++++++++
->   1 file changed, 384 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 392a1509f0be..b50db09feae2 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -829,6 +829,22 @@ qup2_i2c16: i2c@880000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi16: spi@880000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00880000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
+diff --git a/sound/soc/sof/amd/acp-dsp-offset.h b/sound/soc/sof/amd/acp-dsp-offset.h
+index de5726251dc6..920155dee819 100644
+--- a/sound/soc/sof/amd/acp-dsp-offset.h
++++ b/sound/soc/sof/amd/acp-dsp-offset.h
+@@ -85,4 +85,8 @@
+ 
+ #define ACP_SCRATCH_REG_0			0x10000
+ #define ACP6X_DSP_FUSION_RUNSTALL		0x0644
++
++/* Cache window registers */
++#define ACP_DSP0_CACHE_OFFSET0			0x0420
++#define ACP_DSP0_CACHE_SIZE0			0x0424
+ #endif
+diff --git a/sound/soc/sof/amd/acp-loader.c b/sound/soc/sof/amd/acp-loader.c
+index 090c8b18c83c..a4bce5a3ae48 100644
+--- a/sound/soc/sof/amd/acp-loader.c
++++ b/sound/soc/sof/amd/acp-loader.c
+@@ -151,6 +151,7 @@ static void configure_pte_for_fw_loading(int type, int num_pages, struct acp_dev
+ int acp_dsp_pre_fw_run(struct snd_sof_dev *sdev)
+ {
+ 	struct pci_dev *pci = to_pci_dev(sdev->dev);
++	const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
+ 	struct acp_dev_data *adata;
+ 	unsigned int src_addr, size_fw;
+ 	u32 page_count, dma_size;
+@@ -183,6 +184,12 @@ int acp_dsp_pre_fw_run(struct snd_sof_dev *sdev)
+ 	if (ret < 0)
+ 		dev_err(sdev->dev, "acp dma transfer status: %d\n", ret);
+ 
++	if (desc->rev > 3) {
++		/* Cache Window enable */
++		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_DSP0_CACHE_OFFSET0, desc->sram_pte_offset);
++		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_DSP0_CACHE_SIZE0, SRAM1_SIZE | BIT(31));
++	}
++
+ 	/* Free memory once DMA is complete */
+ 	dma_size =  (PAGE_ALIGN(sdev->basefw.fw->size) >> PAGE_SHIFT) * ACP_PAGE_SIZE;
+ 	dma_free_coherent(&pci->dev, dma_size, adata->bin_buf, adata->sha_dma_addr);
+diff --git a/sound/soc/sof/amd/acp.h b/sound/soc/sof/amd/acp.h
+index 09e16ef8afa0..4314094a97fd 100644
+--- a/sound/soc/sof/amd/acp.h
++++ b/sound/soc/sof/amd/acp.h
+@@ -72,6 +72,8 @@
+ #define EXCEPT_MAX_HDR_SIZE			0x400
+ #define AMD_STACK_DUMP_SIZE			32
+ 
++#define SRAM1_SIZE				0x13A000
++
+ enum clock_source {
+ 	ACP_CLOCK_96M = 0,
+ 	ACP_CLOCK_48M,
+-- 
+2.25.1
 
-This is device property not host and same applicable for all below spi 
-nodes.
-Also FYI let's enable below SPI for Qdrive usecases once spidev 
-compatible name is confirmed.
-SE9  0x00A84000
-SE22 0x00898000
-
--Shazad
-
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c17: i2c@884000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00884000 0 0x4000>;
-> @@ -845,6 +861,22 @@ qup2_i2c17: i2c@884000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi17: spi@884000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00884000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S1_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 583 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_uart17: serial@884000 {
->   				compatible = "qcom,geni-uart";
->   				reg = <0 0x00884000 0 0x4000>;
-> @@ -875,6 +907,22 @@ qup2_i2c18: i2c@888000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi18: spi@888000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00888000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S2_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 584 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c19: i2c@88c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x0088c000 0 0x4000>;
-> @@ -891,6 +939,22 @@ qup2_i2c19: i2c@88c000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi19: spi@88c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x0088c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S3_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c20: i2c@890000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00890000 0 0x4000>;
-> @@ -907,6 +971,22 @@ qup2_i2c20: i2c@890000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi20: spi@890000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00890000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S4_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 586 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c21: i2c@894000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00894000 0 0x4000>;
-> @@ -923,6 +1003,22 @@ qup2_i2c21: i2c@894000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi21: spi@894000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00894000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S5_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 587 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c22: i2c@898000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00898000 0 0x4000>;
-> @@ -939,6 +1035,22 @@ qup2_i2c22: i2c@898000 {
->   				status = "disabled";
->   			};
->   
-> +			qup2_spi22: spi@898000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00898000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S6_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 833 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup2_i2c23: i2c@89c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x0089c000 0 0x4000>;
-> @@ -954,6 +1066,22 @@ qup2_i2c23: i2c@89c000 {
->   				interconnect-names = "qup-core", "qup-config", "qup-memory";
->   				status = "disabled";
->   			};
-> +
-> +			qup2_spi23: spi@89c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x0089c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S7_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 834 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
->   		};
->   
->   		qup0: geniqup@9c0000 {
-> @@ -986,6 +1114,22 @@ qup0_i2c0: i2c@980000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi0: spi@980000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00980000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c1: i2c@984000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00984000 0 0x4000>;
-> @@ -1002,6 +1146,22 @@ qup0_i2c1: i2c@984000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi1: spi@984000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00984000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S1_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 602 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c2: i2c@988000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00988000 0 0x4000>;
-> @@ -1018,6 +1178,22 @@ qup0_i2c2: i2c@988000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi2: spi@988000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00988000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S2_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c3: i2c@98c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x0098c000 0 0x4000>;
-> @@ -1034,6 +1210,22 @@ qup0_i2c3: i2c@98c000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi3: spi@98c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x0098c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S3_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c4: i2c@990000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00990000 0 0x4000>;
-> @@ -1050,6 +1242,22 @@ qup0_i2c4: i2c@990000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi4: spi@990000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00990000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S4_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c5: i2c@994000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00994000 0 0x4000>;
-> @@ -1066,6 +1274,22 @@ qup0_i2c5: i2c@994000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi5: spi@994000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00994000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S5_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 606 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c6: i2c@998000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00998000 0 0x4000>;
-> @@ -1082,6 +1306,22 @@ qup0_i2c6: i2c@998000 {
->   				status = "disabled";
->   			};
->   
-> +			qup0_spi6: spi@998000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00998000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S6_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 607 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup0_i2c7: i2c@99c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x0099c000 0 0x4000>;
-> @@ -1097,6 +1337,22 @@ qup0_i2c7: i2c@99c000 {
->   				interconnect-names = "qup-core", "qup-config", "qup-memory";
->   				status = "disabled";
->   			};
-> +
-> +			qup0_spi7: spi@99c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x0099c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S7_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-> +						<&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
->   		};
->   
->   		qup1: geniqup@ac0000 {
-> @@ -1129,6 +1385,22 @@ qup1_i2c8: i2c@a80000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi8: spi@a80000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a80000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S0_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c9: i2c@a84000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a84000 0 0x4000>;
-> @@ -1145,6 +1417,22 @@ qup1_i2c9: i2c@a84000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi9: spi@a84000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a84000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S1_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c10: i2c@a88000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a88000 0 0x4000>;
-> @@ -1161,6 +1449,22 @@ qup1_i2c10: i2c@a88000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi10: spi@a88000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a88000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S2_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c11: i2c@a8c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a8c000 0 0x4000>;
-> @@ -1177,6 +1481,22 @@ qup1_i2c11: i2c@a8c000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi11: spi@a8c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a8c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S3_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c12: i2c@a90000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a90000 0 0x4000>;
-> @@ -1193,6 +1513,22 @@ qup1_i2c12: i2c@a90000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi12: spi@a90000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a90000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S4_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c13: i2c@a94000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a94000 0 0x4000>;
-> @@ -1209,6 +1545,22 @@ qup1_i2c13: i2c@a94000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi13: spi@a94000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a94000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S5_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c14: i2c@a98000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a98000 0 0x4000>;
-> @@ -1225,6 +1577,22 @@ qup1_i2c14: i2c@a98000 {
->   				status = "disabled";
->   			};
->   
-> +			qup1_spi14: spi@a98000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a98000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S6_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 835 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
-> +
->   			qup1_i2c15: i2c@a9c000 {
->   				compatible = "qcom,geni-i2c";
->   				reg = <0 0x00a9c000 0 0x4000>;
-> @@ -1240,6 +1608,22 @@ qup1_i2c15: i2c@a9c000 {
->   				interconnect-names = "qup-core", "qup-config", "qup-memory";
->   				status = "disabled";
->   			};
-> +
-> +			qup1_spi15: spi@a9c000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00a9c000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP1_S7_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 836 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0 &clk_virt SLAVE_QUP_CORE_1 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_1 0>,
-> +				                <&aggre1_noc MASTER_QUP_1 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
-> +				spi-max-frequency = <50000000>;
-> +				status = "disabled";
-> +			};
->   		};
->   
->   		pcie4: pcie@1c00000 {
