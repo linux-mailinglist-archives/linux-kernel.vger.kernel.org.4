@@ -2,163 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9A864B845
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C4564B83D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236110AbiLMPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S236106AbiLMPTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236093AbiLMPUJ (ORCPT
+        with ESMTP id S236099AbiLMPTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:20:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A0421E24
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:19:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670944759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P0CSk5cc8z+MIxtfJaqK2iC+ecrtBBfDO+a5TkKb2FU=;
-        b=XhaOxNIKEIq4IzMHiJ1YAbk/9SkoS76rtnObI36+CDyrBcbMBx/2i4h/SGGCzk38yEqkz4
-        lonXM93bE+hEWkDJers7q8GJ/9qAYgKQdFWTWKnbbgjzhGFiElgS3asd6FvgL4zdmE0Ned
-        OhMrzmuQiRyzUUwhoPWE6DZDhCrHrGU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-323-1G5IhelTPYimS10JXbgMHg-1; Tue, 13 Dec 2022 10:19:17 -0500
-X-MC-Unique: 1G5IhelTPYimS10JXbgMHg-1
-Received: by mail-wr1-f71.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso2914114wra.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:19:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P0CSk5cc8z+MIxtfJaqK2iC+ecrtBBfDO+a5TkKb2FU=;
-        b=byuno+bQfa5UdQjL1ESJcCvfsptsqJk7i6xknSXHelmVjhpi1oZWAW1LQd9M7NfMHP
-         7bOnPFHLYvw+6bFjHsoy1AREoS8nSM1BIM9SsRT0FrovYIKbGUleQn1BUOpZ+WKEfNIp
-         i8GHg1SBkZdU+qrm7zhQ+8adgCJfN4aTWxSP7vofgH5EpYuJ7IVCleqp5ONMnatBqoXv
-         1Lselh4oePlm8xBRRIMf/oREI3duayvLeT1nJMZGcc5nAlH7FqMv/7XpQHDIuWwnL3hj
-         0sXUxc2mhBfWcig9wFMQY6EvfoMFJdUrfyflmQGNxy1zyRPZyCOkmUaf0qydF6EdLx3v
-         ft6A==
-X-Gm-Message-State: ANoB5pmU7Gs0kIUsHet1kwSjAAEj5JTyKbcn5c0DBX61jy+al35+fZGO
-        3Pw5iAb95ZrXYx5mcFOTi+9kgYDC4IcOn5wTUJInGlyS7iz0sZBMLwBDRIjhHd9RF5zppeROf6m
-        PbUteLKvxsb8sg+LBisYyW5fD
-X-Received: by 2002:a05:6000:883:b0:241:94bc:26d3 with SMTP id ca3-20020a056000088300b0024194bc26d3mr12880755wrb.49.1670944756427;
-        Tue, 13 Dec 2022 07:19:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6seChERFleznECQpOM83h6tXK8y66oPcOVYUArJEX37U9aakvW3lDwTiQIG+CeJ4MrHBQTcw==
-X-Received: by 2002:a05:6000:883:b0:241:94bc:26d3 with SMTP id ca3-20020a056000088300b0024194bc26d3mr12880749wrb.49.1670944756196;
-        Tue, 13 Dec 2022 07:19:16 -0800 (PST)
-Received: from redhat.com ([2.52.138.183])
-        by smtp.gmail.com with ESMTPSA id t15-20020adff60f000000b00241c4bd6c09sm68907wrp.33.2022.12.13.07.19.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:19:15 -0800 (PST)
-Date:   Tue, 13 Dec 2022 10:19:12 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>,
-        "eperezma@redhat.com" <eperezma@redhat.com>,
-        "lulu@redhat.com" <lulu@redhat.com>
-Subject: Re: [PATH v2 0/8] vdpa/mlx5: Add debugfs subtree and fixes
-Message-ID: <20221213101853-mutt-send-email-mst@kernel.org>
-References: <20221114131759.57883-1-elic@nvidia.com>
- <DM8PR12MB540016371DAF2915B3277949AB0F9@DM8PR12MB5400.namprd12.prod.outlook.com>
- <DM8PR12MB540004BAE87EF27CFC6B1C69ABE39@DM8PR12MB5400.namprd12.prod.outlook.com>
+        Tue, 13 Dec 2022 10:19:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1A52183C;
+        Tue, 13 Dec 2022 07:19:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE4B66159F;
+        Tue, 13 Dec 2022 15:19:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3C8C433EF;
+        Tue, 13 Dec 2022 15:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670944742;
+        bh=jZsLp8bpAs8v+aLzKXeFWiL5E5Xn6zfVmUtVQ0BqEkA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qs4HAK4Emz9hzOJYaySZadvmLsY1XogOTrknWHgknYcJ1tzdk5NmCtS33VakU2y4P
+         oaq56P6CVD0ex1VhWDRWaIHKwKGWCiivBU3q/vSFEaNBmwJEIHr6BysRgQwmCtUidb
+         y+9IX0EACcJ/A+Bz+d6VhUJfCK7hhydabm6xZaFsD+pI8fBJpNS2Z2VGROrLHKEd3O
+         K09ZrBpEc05bFzcW+CzCzeOdBo1bt58oK+rpTihS1m0KMs5Cr9g3+QkVKxvOT8Z0UL
+         x6/DrToWHbVwWoj9JLpXWTO3GcG2XBRIi0B9n0hXaZ2cx4WcI9BZm8T1WkzN9lwCcD
+         lns7X3M6GQB7A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p5744-00054f-Qt; Tue, 13 Dec 2022 16:19:28 +0100
+Date:   Tue, 13 Dec 2022 16:19:28 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
+        echanude@redhat.com
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
+Message-ID: <Y5iYAAdkJVfLrITf@hovoldconsulting.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-2-bmasney@redhat.com>
+ <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+ <5ac2a022-59e5-1189-bcba-e67b4974cbad@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM8PR12MB540004BAE87EF27CFC6B1C69ABE39@DM8PR12MB5400.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5ac2a022-59e5-1189-bcba-e67b4974cbad@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes it's all going into the next pull, thanks!
-
-On Tue, Dec 13, 2022 at 07:33:08AM +0000, Eli Cohen wrote:
-> Michael?
+On Tue, Dec 13, 2022 at 08:34:56PM +0530, Shazad Hussain wrote:
 > 
-> > -----Original Message-----
-> > From: Eli Cohen
-> > Sent: Thursday, 24 November 2022 8:34
-> > To: mst@redhat.com; jasowang@redhat.com; linux-kernel@vger.kernel.org;
-> > virtualization@lists.linux-foundation.org
-> > Cc: si-wei.liu@oracle.com; eperezma@redhat.com; lulu@redhat.com
-> > Subject: RE: [PATH v2 0/8] vdpa/mlx5: Add debugfs subtree and fixes
-> > 
-> > Hi Michael,
-> > 
-> > Are you going to pull this series? It has been reviewed.
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: Eli Cohen <elic@nvidia.com>
-> > > Sent: Monday, 14 November 2022 15:18
-> > > To: mst@redhat.com; jasowang@redhat.com; linux-
-> > kernel@vger.kernel.org;
-> > > virtualization@lists.linux-foundation.org
-> > > Cc: si-wei.liu@oracle.com; eperezma@redhat.com; lulu@redhat.com; Eli
-> > > Cohen <elic@nvidia.com>
-> > > Subject: [PATH v2 0/8] vdpa/mlx5: Add debugfs subtree and fixes
-> > >
-> > > This series is a resend of previously sent patch list. It adds a few
-> > > fixes so I treat as a v0 of a new series.
-> > >
-> > > It adds a kernel config param CONFIG_MLX5_VDPA_STEERING_DEBUG
-> > that
-> > > when
-> > > eabled allows to read rx unicast and multicast counters per tagged or
-> > untagged
-> > > traffic.
-> > >
-> > > Examples:
-> > > $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-
-> > > 0/rx/untagged/mcast/packets
-> > > $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-
-> > 0/rx/untagged/ucast/bytes
-> > >
-> > > v1->v2:
-> > > 1. Reorder patches so fixes are first
-> > > 2. Break "Fix rule forwarding VLAN to TIR" into two patches
-> > > 3. Squash fix for bug in first patch from "Add RX counters to debugfs"
-> > > 4. Move clearing of nb_registered before calling mlx5_notifier_unregister()
-> > in
-> > > mlx5_vdpa_dev_del()
-> > >
-> > >
-> > > Eli Cohen (8):
-> > >   vdpa/mlx5: Fix rule forwarding VLAN to TIR
-> > >   vdpa/mlx5: Return error on vlan ctrl commands if not supported
-> > >   vdpa/mlx5: Fix wrong mac address deletion
-> > >   vdpa/mlx5: Avoid using reslock in event_handler
-> > >   vdpa/mlx5: Avoid overwriting CVQ iotlb
-> > >   vdpa/mlx5: Move some definitions to a new header file
-> > >   vdpa/mlx5: Add debugfs subtree
-> > >   vdpa/mlx5: Add RX counters to debugfs
-> > >
-> > >  drivers/vdpa/Kconfig               |  12 ++
-> > >  drivers/vdpa/mlx5/Makefile         |   2 +-
-> > >  drivers/vdpa/mlx5/core/mlx5_vdpa.h |   5 +-
-> > >  drivers/vdpa/mlx5/core/mr.c        |  44 ++---
-> > >  drivers/vdpa/mlx5/net/debug.c      | 152 ++++++++++++++++++
-> > >  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 250 ++++++++++++++---------------
-> > >  drivers/vdpa/mlx5/net/mlx5_vnet.h  |  94 +++++++++++
-> > >  7 files changed, 412 insertions(+), 147 deletions(-)
-> > >  create mode 100644 drivers/vdpa/mlx5/net/debug.c
-> > >  create mode 100644 drivers/vdpa/mlx5/net/mlx5_vnet.h
-> > >
-> > > --
-> > > 2.38.1
 > 
+> On 12/13/2022 8:24 PM, Johan Hovold wrote:
+> > On Mon, Dec 12, 2022 at 01:23:11PM -0500, Brian Masney wrote:
+> >> According to the downstream 5.4 kernel sources for the sa8540p,
+> >> i2c@894000 is labeled i2c bus 21, not 5. The interrupts and clocks
+> >> also match. Let's go ahead and correct the name that's used in the
+> >> three files where this is listed.
+> >>
+> >> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> >> Fixes: 152d1faf1e2f3 ("arm64: dts: qcom: add SC8280XP platform")
+> >> Fixes: ccd3517faf183 ("arm64: dts: qcom: sc8280xp: Add reference device")
+> >> Fixes: 32c231385ed43 ("arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s devicetree")
+> > 
+> >> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> >> index 109c9d2b684d..875cc91324ce 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> >> @@ -827,7 +827,7 @@ qup2_uart17: serial@884000 {
+> >>   				status = "disabled";
+> >>   			};
+> >>   
+> >> -			qup2_i2c5: i2c@894000 {
+> >> +			qup2_i2c21: i2c@894000 {
+> > 
+> > Note that the node is labelled qup2_i2c5 and not qup_i2c5.
+> > 
+> > That is, the QUP nodes are labelled using two indices, and specifically
+> > 
+> > 	qup2_i2c5
+> > 
+> > would be another name for
+> > 
+> > 	qup_i2c21
+> > 
+> > if we'd been using such a flat naming scheme (there are 8 engines per
+> > QUP).
+> > 
+> > So there's nothing wrong with how these nodes are currently named, but
+> > mixing the two scheme as you are suggesting would not be correct.
+> 
+> Wondering we might need to change qup2_uart17 to qup2_uart1 then ?
 
+Right, I just noticed that too.
+
+Johan
