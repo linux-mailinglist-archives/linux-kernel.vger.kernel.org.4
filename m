@@ -2,102 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E4164AD1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB2E64AD20
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiLMBf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S234162AbiLMBgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbiLMBfy (ORCPT
+        with ESMTP id S234163AbiLMBgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:35:54 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C671D334;
-        Mon, 12 Dec 2022 17:35:51 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p36so2488743lfa.12;
-        Mon, 12 Dec 2022 17:35:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=30U9RseqGKfwyGVXa0b/Q1IAyRMAB0Es1Wq7/iCU9Wg=;
-        b=o9juF837/EiQLtFz9n2pD0pRgQb6NB8Ve4n25hehNtG99jcMdZUmeOp0kQ0tbip+Un
-         xTKy3zLMVbpwFDOC+o7yrUM6PMogCq/UYCrJr/QbXMp+nR3/N5C7r/ZPymCT4P4Y59x7
-         LXuQTyJe7QCYhQ9cFWXjUeUMJei/q1uPoN9PuunQ9lIBjT4yqHqYkNUjIF1eFaU3Bc5u
-         d3GsqILZ4tW7odLyzq6xRZD4WvZS3opwlsYcGDBj2iaVkN0xf02UXlH96UuNCh/pAJol
-         DPuYjtTjjqM80DiRhmdl4CePTGksOuv9QH9oPPDYnKPv0nO2tiORQ41XHUb8fvBaiXqg
-         ZL+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=30U9RseqGKfwyGVXa0b/Q1IAyRMAB0Es1Wq7/iCU9Wg=;
-        b=DBnjMkYP8SaQDiK8l93aFeYfyTzj+EOYkHSt9xHYGUAjvP9JntZGvJUf86DmiCa3RQ
-         bt0x5wYCttR7cpP+OIxmx6b+7EXJKIekhJDvtL9MZGOoLabYIU6E+UVA1ouCSUYjlSKx
-         qmyGOQ9Xf85PmEd6YDDove4ta7KET4ceOCaArvBCGc13Kdo84iQd24dz8VZDBmFMEe76
-         JHoh0KxtSf85abckpQvlpwK4sIX4O4w/9GM72e+iytPlI/LVCgOVw5aCofz4h2CDILg4
-         kqbVx+H8kUKQMzVncZycQOpJD9v3K/E/FCWNBQ7dIgUb4aNGURvFNZ1WoeyA4L6GKnBg
-         srhA==
-X-Gm-Message-State: ANoB5pkReGvzeiJpQaIU+K1grX81rJ/zQUtf+zXrMA7HyYHzxRVjDxKp
-        baVCefnXbXihYkk2qS4TL84UcM5d3vsxCZaRsg==
-X-Google-Smtp-Source: AA0mqf5sGCmOeRTT5bapPst5F9cgZvwXmhZZldMvOEPDGzDoFADAQC0MATqlzFDmAV6OwEVcdrKbrh5DjcqCaKfNUd0=
-X-Received: by 2002:a05:6512:3da9:b0:4b6:ee79:63ab with SMTP id
- k41-20020a0565123da900b004b6ee7963abmr250256lfv.662.1670895349526; Mon, 12
- Dec 2022 17:35:49 -0800 (PST)
+        Mon, 12 Dec 2022 20:36:08 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B151D32D;
+        Mon, 12 Dec 2022 17:36:07 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD1KIIc002952;
+        Tue, 13 Dec 2022 01:36:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pCZeAfDoRhwWqONc4flZx60RTmPIhwedWOry2zw04m8=;
+ b=ESnm0JDYvat8UpXraksERXMqs2Kj/Hl8XfKh3gRys+XF7yzraas7zLQqRa/1ZDGyGwat
+ MK0l50xPL+2Gr0v8KfdYMqpwew3Ts6JqZnq+jvI7D5TeD/tb2foZfDlAGqfH9czfIoF1
+ qL5+GYIZagzoACiWw4L1taWnjIcfP1c+vt4yzfB8q/yMgJEGXQSQYypDw+7/OAiWuPZq
+ fdMBEZRhPa89inkvf6VKasKjLQZ7PRVF10WUlwE6MJBF+UaFKF28pPKL+nmXLkCXHCf3
+ jPMD5uXteUh47bd4nRBLjIKHeO+Uifyw8ba8zeYaj1Fozf/gQg1k7QhIXrx3yHMVf/oh LA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mchesdsy7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 01:36:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD1a2c2022801
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 01:36:02 GMT
+Received: from [10.111.167.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
+ 2022 17:36:00 -0800
+Message-ID: <46c1f014-7c3f-88c4-d576-7b6bd5e1590d@quicinc.com>
+Date:   Mon, 12 Dec 2022 17:35:58 -0800
 MIME-Version: 1.0
-References: <cover.1670541363.git.quic_asutoshd@quicinc.com> <a6ef5951dbefd6e8cc9a670cc48ad1ae70fd61f9.1670541364.git.quic_asutoshd@quicinc.com>
-In-Reply-To: <a6ef5951dbefd6e8cc9a670cc48ad1ae70fd61f9.1670541364.git.quic_asutoshd@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 13 Dec 2022 09:35:37 +0800
-Message-ID: <CAGaU9a-3r-mhSLmU6MxmvxgQT+TC6szScn7orv2wvNvsrg=rJQ@mail.gmail.com>
-Subject: Re: [PATCH v11 14/16] ufs: mcq: Add completion support of a cqe
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Keoseong Park <keosung.park@samsung.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/hdm: Fix the error handling path of
+ msm_hdmi_dev_probe()
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>
+References: <b3d9dac978f1e2e42a40ec61f58aa98c44c85dfd.1670741386.git.christophe.jaillet@wanadoo.fr>
+ <b34374ed-0444-6bd9-4994-7f890455b451@quicinc.com>
+In-Reply-To: <b34374ed-0444-6bd9-4994-7f890455b451@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QiioKxyM5fxSL8PC9z6BgRR-vYYuuoh5
+X-Proofpoint-GUID: QiioKxyM5fxSL8PC9z6BgRR-vYYuuoh5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-12_02,2022-12-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212130014
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 7:33 AM Asutosh Das <quic_asutoshd@quicinc.com> wrote:
->
-> Add support for completing requests from Completion Queue.
-> Some host controllers support vendor specific registers
-> that provide a bitmap of all CQ's which have at least one
-> completed CQE. Add this support.
-> The MCQ specification doesn't provide the Task Tag or its
-> equivalent in the Completion Queue Entry.
-> So use an indirect method to find the Task Tag from the
-> Completion Queue Entry.
->
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+
+On 12/12/2022 5:34 PM, Abhinav Kumar wrote:
+> 
+> 
+> On 12/10/2022 10:50 PM, Christophe JAILLET wrote:
+>> If an error occurs after a successful msm_hdmi_get_phy() call, it must be
+>> undone by a corresponding msm_hdmi_put_phy(), as already done in the
+>> remove function.
+>>
+>> Fixes: 437365464043 ("drm/msm/hdmi: move msm_hdmi_get_phy() to 
+>> msm_hdmi_dev_probe()")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+Actually, i missed one nit
+
+In the subject line, it should be "drm/msm/hdmi"
+
+The "i" is missing.
+
+Please fix that and post it.
+
+> 
+>> ---
+>> Not sure if the Fixes tag is correct. At least it is when the probe needs
+>> to be fixed but the issue was maybe there elsewhere before.
+> 
+> Seems right to me.
+> 
+>> ---
+>>   drivers/gpu/drm/msm/hdmi/hdmi.c | 12 ++++++++++--
+>>   1 file changed, 10 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c 
+>> b/drivers/gpu/drm/msm/hdmi/hdmi.c
+>> index 4d3fdc806bef..97372bb241d8 100644
+>> --- a/drivers/gpu/drm/msm/hdmi/hdmi.c
+>> +++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+>> @@ -532,11 +532,19 @@ static int msm_hdmi_dev_probe(struct 
+>> platform_device *pdev)
+>>       ret = devm_pm_runtime_enable(&pdev->dev);
+>>       if (ret)
+>> -        return ret;
+>> +        goto err_put_phy;
+>>       platform_set_drvdata(pdev, hdmi);
+>> -    return component_add(&pdev->dev, &msm_hdmi_ops);
+>> +    ret = component_add(&pdev->dev, &msm_hdmi_ops);
+>> +    if (ret)
+>> +        goto err_put_phy;
+>> +
+>> +    return 0;
+>> +
+>> +err_put_phy:
+>> +    msm_hdmi_put_phy(hdmi);
+>> +    return ret;
+>>   }
+>>   static int msm_hdmi_dev_remove(struct platform_device *pdev)
