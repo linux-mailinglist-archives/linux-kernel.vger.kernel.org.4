@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8916864B10E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD32664B10A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234789AbiLMIZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S234783AbiLMIZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbiLMIZH (ORCPT
+        with ESMTP id S234447AbiLMIZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:25:07 -0500
+        Tue, 13 Dec 2022 03:25:06 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D960E13D60;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C1E9B4B4;
         Tue, 13 Dec 2022 00:25:05 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
   by mx.socionext.com with ESMTP; 13 Dec 2022 17:25:04 +0900
 Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 06B052059054;
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 072252058B4F;
         Tue, 13 Dec 2022 17:25:04 +0900 (JST)
 Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:04 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5E9ECA855C;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 832031CDE;
         Tue, 13 Dec 2022 17:25:03 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -30,9 +30,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 02/17] dt-bindings: reset: Fix node descriptions in uniphier-reset example
-Date:   Tue, 13 Dec 2022 17:24:34 +0900
-Message-Id: <20221213082449.2721-3-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 03/17] dt-bindings: pinctrl: Fix node descriptions in uniphier-pinctrl example
+Date:   Tue, 13 Dec 2022 17:24:35 +0900
+Message-Id: <20221213082449.2721-4-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
 References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
@@ -46,110 +46,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to adding dt-bindings for SoC-dependent controllers, rename the
-reset nodes to the generic names in the example.
-
-And drop redundant examples and a parent node of the reset as it is not
-directly necessary.
+Drop parent node of the pinctrl as it is not directly necessary, and
+add more examples, that is "groups", "function", and a child node to set
+pin attributes, to express this pinctrl node in detail.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../reset/socionext,uniphier-glue-reset.yaml  | 23 +++-----
- .../reset/socionext,uniphier-reset.yaml       | 52 ++-----------------
- 2 files changed, 11 insertions(+), 64 deletions(-)
+ .../pinctrl/socionext,uniphier-pinctrl.yaml     | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml b/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
-index 0a2c13e1e230..fa253c518d79 100644
---- a/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
-@@ -95,19 +95,12 @@ required:
- 
- examples:
+diff --git a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+index 14a8c0215cc6..bc34e2c872bc 100644
+--- a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++
+ %YAML 1.2
+ ---
+ $id: http://devicetree.org/schemas/pinctrl/socionext,uniphier-pinctrl.yaml#
+@@ -69,11 +70,17 @@ examples:
    - |
--    usb-glue@65b00000 {
--        compatible = "simple-mfd";
--        #address-cells = <1>;
--        #size-cells = <1>;
--        ranges = <0 0x65b00000 0x400>;
--
--        usb_rst: reset@0 {
--            compatible = "socionext,uniphier-ld20-usb3-reset";
--            reg = <0x0 0x4>;
--            #reset-cells = <1>;
--            clock-names = "link";
--            clocks = <&sys_clk 14>;
--            reset-names = "link";
--            resets = <&sys_rst 14>;
--        };
-+    usb_rst: reset-controller@0 {
-+        compatible = "socionext,uniphier-ld20-usb3-reset";
-+        reg = <0x0 0x4>;
-+        #reset-cells = <1>;
-+        clock-names = "link";
-+        clocks = <&sys_clk 14>;
-+        reset-names = "link";
-+        resets = <&sys_rst 14>;
-     };
-diff --git a/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml b/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
-index 6566804ec567..033b252a3dfe 100644
---- a/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
-@@ -66,53 +66,7 @@ required:
+     // The UniPhier pinctrl should be a subnode of a "syscon" compatible node.
  
- examples:
-   - |
--    sysctrl@61840000 {
--        compatible = "socionext,uniphier-sysctrl", "simple-mfd", "syscon";
--        reg = <0x61840000 0x4000>;
--
--        reset {
--            compatible = "socionext,uniphier-ld11-reset";
--            #reset-cells = <1>;
--        };
--
--        // other nodes ...
--    };
--
--  - |
--    mioctrl@59810000 {
--        compatible = "socionext,uniphier-mioctrl", "simple-mfd", "syscon";
--        reg = <0x59810000 0x800>;
--
--        reset {
--            compatible = "socionext,uniphier-ld11-mio-reset";
--            #reset-cells = <1>;
--        };
--
--        // other nodes ...
--    };
--
--  - |
--    perictrl@59820000 {
--        compatible = "socionext,uniphier-perictrl", "simple-mfd", "syscon";
--        reg = <0x59820000 0x200>;
--
--        reset {
--            compatible = "socionext,uniphier-ld11-peri-reset";
--            #reset-cells = <1>;
--        };
--
--        // other nodes ...
--    };
--
--  - |
--    adamv@57920000 {
--        compatible = "socionext,uniphier-ld11-adamv", "simple-mfd", "syscon";
--        reg = <0x57920000 0x1000>;
--
--        reset {
--            compatible = "socionext,uniphier-ld11-adamv-reset";
--            #reset-cells = <1>;
--        };
--
--        // other nodes ...
-+    reset-controller {
-+        compatible = "socionext,uniphier-ld11-reset";
-+        #reset-cells = <1>;
+-    soc-glue@5f800000 {
+-        compatible = "socionext,uniphier-pro4-soc-glue", "simple-mfd", "syscon";
+-        reg = <0x5f800000 0x2000>;
++    pinctrl {
++        compatible = "socionext,uniphier-ld20-pinctrl";
++
++        pinctrl_ether_rgmii: ether-rgmii {
++            groups = "ether_rgmii";
++            function = "ether_rgmii";
+ 
+-        pinctrl: pinctrl {
+-            compatible = "socionext,uniphier-pro4-pinctrl";
++            tx {
++                pins = "RGMII_TXCLK", "RGMII_TXD0", "RGMII_TXD1",
++                       "RGMII_TXD2", "RGMII_TXD3", "RGMII_TXCTL";
++                drive-strength = <9>;
++            };
+         };
      };
 -- 
 2.25.1
