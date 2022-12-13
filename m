@@ -2,264 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F122064B663
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B3B64B665
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiLMNgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S235666AbiLMNhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbiLMNgk (ORCPT
+        with ESMTP id S235706AbiLMNg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:36:40 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7481419C38
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:36:39 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so7493005ild.18
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:36:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0YRwHAXNZ50GNWF2AK2coFpr1Tq8FUiG/h0+/L+UhI=;
-        b=O9siSQdIQu1PI3IX2eCCArxp8Iz4ai/CupXkZQAssTilDH5+ttshN/+viEprkhimmM
-         Wp/ONbJhpjRFcMLYSdRQZ3fispaGtebsf6XETye/BjVbZU99dD1IhPsu9eAp+UTWnWkV
-         PoSpket+fUd5ZlfJbEM4zN9ZFv4Ue4C4adysXE5/+H3IpVNoAyaqPcz+8cz6VVC6Sp1q
-         j/TcUhFAnazbEHcEb8ezC1Nhlw0mD/+TgixDSnstCet9/u/IOLpgY0w4mOxRk8c95kl7
-         lIBnQ5N66lRS8SCPnYYpOBhlvcXFx9lUR2sHZAdFu7pPNZgFSweEw7+i1oFiSKQRbfnO
-         gh/w==
-X-Gm-Message-State: ANoB5pnIkqdussa1GtZexPLy6agfwHwpyZwnOzLtxqGA/tt7dBqRY4UR
-        As7aI7oKNnIU95KffXEffJFpn8ALwvE18gHKtL97JdUctNPy
-X-Google-Smtp-Source: AA0mqf5h6cRF83tWEtYROGmLv5BMziYxszyo/HW8rorNHVYLLRNEmyTP5N1OgA+k5b+adYHWn8elJhqsqa3gRDA8kXM8n5kEB6Ih
+        Tue, 13 Dec 2022 08:36:56 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DBF1AD89;
+        Tue, 13 Dec 2022 05:36:55 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2EEEF7C5;
+        Tue, 13 Dec 2022 14:36:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670938613;
+        bh=yz95QcmUw/zJmophSOTte9cvua4UsCpsbavzC/vzCrU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O316pwCtcsI8PSiWT895jsDXF5a0BndzoWqMuAM6aTc+VhEMZEp9iOXEcGwdFhsCq
+         0JhmmxBS4GvauqqXxW9kzIIKwvxJx0YIEFQtDt9d8O7U0yneyKWOc8J544j19jxyPh
+         N0iErI+eFXaucOjDOmTI10M2kGwJm2/AvLkzWH2E=
+Message-ID: <d39841c6-868c-408b-4142-5f9a4bd4e3c6@ideasonboard.com>
+Date:   Tue, 13 Dec 2022 15:36:49 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id
- t13-20020a92ca8d000000b00302de107ae1mr35537013ilo.15.1670938598794; Tue, 13
- Dec 2022 05:36:38 -0800 (PST)
-Date:   Tue, 13 Dec 2022 05:36:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009f6b9c05efb5b59c@google.com>
-Subject: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
-From:   syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 3/8] dt-bindings: media: add bindings for TI DS90UB913
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-4-tomi.valkeinen@ideasonboard.com>
+ <Y5YPpGVJxAhkNJmC@pendragon.ideasonboard.com>
+ <Y5YRj8emzJsB1BgK@pendragon.ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y5YRj8emzJsB1BgK@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 11/12/2022 19:21, Laurent Pinchart wrote:
+> I missed one issue.
+> 
+> On Sun, Dec 11, 2022 at 07:13:10PM +0200, Laurent Pinchart wrote:
+>> Hi Tomi,
+>>
+>> Thank you for the patch.
+>>
+>> On Thu, Dec 08, 2022 at 12:40:01PM +0200, Tomi Valkeinen wrote:
+>>> Add DT bindings for TI DS90UB913 FPDLink-3 Serializer.
+>>>
+>>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>> ---
+>>>   .../bindings/media/i2c/ti,ds90ub913.yaml      | 121 ++++++++++++++++++
+>>>   1 file changed, 121 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+>>> new file mode 100644
+>>> index 000000000000..3a5b34c6bb64
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+>>> @@ -0,0 +1,121 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub913.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Texas Instruments DS90UB913 FPD-Link 3 Serializer
+>>
+>> I think TI consistently writes it "FPD-Link III". If you rename it,
+>> please do so through the whole series.
+>>
+>>> +
+>>> +maintainers:
+>>> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>>> +
+>>> +description:
+>>> +  The TI DS90UB913 is an FPD-Link 3 video serializer for parallel video.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - ti,ds90ub913a-q1
+>>
+>> Is the -q1 suffix needed, are there other variants ?
+>>
+>>> +
+>>> +  '#gpio-cells':
+>>> +    const: 2
+>>> +
+>>> +  gpio-controller: true
+>>> +
+>>> +  clocks:
+>>> +    maxItems: 1
+>>> +    description:
+>>> +      Reference clock connected to the CLKIN pin.
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: clkin
+>>> +
+>>> +  '#clock-cells':
+>>> +    const: 0
+>>> +
+>>> +  ports:
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +
+>>> +    properties:
+>>> +      port@0:
+>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>>> +        unevaluatedProperties: false
+>>> +        description: CSI-2 input port
+> 
+> This should be "Parallel input port".
 
-syzbot found the following issue on:
+Oops...
 
-HEAD commit:    830b3c68c1fb Linux 6.1
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=137401b7880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
-dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176d36b7880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109371b7880000
+>>> +
+>>> +        properties:
+>>> +          endpoint:
+>>> +            $ref: /schemas/media/video-interfaces.yaml#
+>>> +            unevaluatedProperties: false
+> 
+> Should at least the bus-width property be mandatory, as the device
+> supports both 10- and 12-bit inputs ?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/955d55d85d6c/disk-830b3c68.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7ef0e1f6a0c3/vmlinux-830b3c68.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/27601eb5ff0b/bzImage-830b3c68.xz
+Hmm... It supports 10-bit, 12-bit HF and 12-bit LF modes. If we need to 
+configure the mode based on DT, we need one more property for the HF/LF. 
+Then again, the HF/LF is separate from the input port, it's more about 
+internal operation and the link to the deserializer.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
+However, this (the mode) should always be set in the HW via the MODE 
+pins. And the driver can read the HW's MODE from the registers. Only in 
+some very odd circumstances should the mode be configured by hand (and 
+then carefully, as the link to the deserializer will drop).
 
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-BUG: KASAN: use-after-free in put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
-BUG: KASAN: use-after-free in gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
-Write of size 4 at addr ffff8880276d7840 by task syz-executor126/18689
+So the bus-width is not something that the driver would normally use. If 
+we would need to define the bus-width and HF/LF in the DT for some 
+reason in the future, I think an "old" DT without those specified should 
+continue working fine, as the mode can be read from a register.
 
-CPU: 0 PID: 18689 Comm: syz-executor126 Not tainted 6.1.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
- gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- vfs_get_super fs/super.c:1190 [inline]
- get_tree_single+0xd0/0x160 fs/super.c:1207
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- vfs_fsconfig_locked fs/fsopen.c:232 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig+0xbc0/0x1060 fs/fsopen.c:314
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1ce0ecbdf9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff0005e5f8 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
-RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f1ce0ecbdf9
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000206b5
-R13: 00007fff0005e60c R14: 00007fff0005e620 R15: 00007fff0005e610
- </TASK>
+That said, to complicate matters, the deserializer needs to know the 
+serializer's mode before it can communicate with it (and thus, before we 
+can read the mode). This is set with the deserializer's "ti,rx-mode" 
+property, where you find RAW10, RAW12LF and RAW12HF modes (and for 
+ub953, CSI-2 sync and non-sync modes).
 
-Allocated by task 18687:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:371 [inline]
- __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
- kmalloc include/linux/slab.h:553 [inline]
- kzalloc include/linux/slab.h:689 [inline]
- dev_new drivers/usb/gadget/legacy/inode.c:170 [inline]
- gadgetfs_fill_super+0x2f9/0x8a0 drivers/usb/gadget/legacy/inode.c:2041
- vfs_get_super fs/super.c:1169 [inline]
- get_tree_single+0xb4/0x160 fs/super.c:1207
- vfs_get_tree+0x88/0x270 fs/super.c:1531
- vfs_fsconfig_locked fs/fsopen.c:232 [inline]
- __do_sys_fsconfig fs/fsopen.c:439 [inline]
- __se_sys_fsconfig+0xbc0/0x1060 fs/fsopen.c:314
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+So if we would define the bus-width and HF/LF in ub913's properties, the 
+deserializer could go peeking the mode from there. But is that a good 
+idea... I'm not so sure.
 
-Freed by task 18687:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1724 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1750
- slab_free mm/slub.c:3661 [inline]
- __kmem_cache_free+0x71/0x110 mm/slub.c:3674
- put_dev drivers/usb/gadget/legacy/inode.c:163 [inline]
- gadgetfs_kill_sb+0x8a/0x100 drivers/usb/gadget/legacy/inode.c:2086
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- put_fs_context+0x90/0x7a0 fs/fs_context.c:465
- fscontext_release+0x61/0x80 fs/fsopen.c:73
- __fput+0x3ba/0x880 fs/file_table.c:320
- task_work_run+0x243/0x300 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x664/0x2070 kernel/exit.c:820
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
- __do_sys_exit_group kernel/exit.c:961 [inline]
- __se_sys_exit_group kernel/exit.c:959 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+  Tomi
 
-The buggy address belongs to the object at ffff8880276d7800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 64 bytes inside of
- 1024-byte region [ffff8880276d7800, ffff8880276d7c00)
-
-The buggy address belongs to the physical page:
-page:ffffea00009db400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x276d0
-head:ffffea00009db400 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888012841dc0
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3626, tgid 3626 (sshd), ts 64243807059, free_ts 64103482939
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
- alloc_slab_page+0xbd/0x190 mm/slub.c:1794
- allocate_slab+0x5e/0x4b0 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0x782/0xe20 mm/slub.c:3180
- __slab_alloc mm/slub.c:3279 [inline]
- slab_alloc_node mm/slub.c:3364 [inline]
- __kmem_cache_alloc_node+0x252/0x310 mm/slub.c:3437
- __do_kmalloc_node mm/slab_common.c:954 [inline]
- __kmalloc_node_track_caller+0x9c/0x190 mm/slab_common.c:975
- kmalloc_reserve net/core/skbuff.c:437 [inline]
- __alloc_skb+0x112/0x2b0 net/core/skbuff.c:509
- alloc_skb_fclone include/linux/skbuff.h:1317 [inline]
- tcp_stream_alloc_skb+0x3c/0x300 net/ipv4/tcp.c:862
- tcp_sendmsg_locked+0xd70/0x40d0 net/ipv4/tcp.c:1325
- tcp_sendmsg+0x2c/0x40 net/ipv4/tcp.c:1483
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- sock_write_iter+0x3d4/0x540 net/socket.c:1108
- call_write_iter include/linux/fs.h:2199 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
- free_slab mm/slub.c:2031 [inline]
- discard_slab mm/slub.c:2037 [inline]
- __unfreeze_partials+0x1ab/0x200 mm/slub.c:2586
- put_cpu_partial+0x106/0x170 mm/slub.c:2662
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- kmem_cache_alloc_node+0x1ca/0x340 mm/slub.c:3443
- __alloc_skb+0xcf/0x2b0 net/core/skbuff.c:497
- alloc_skb_fclone include/linux/skbuff.h:1317 [inline]
- tcp_stream_alloc_skb+0x3c/0x300 net/ipv4/tcp.c:862
- tcp_sendmsg_locked+0xd70/0x40d0 net/ipv4/tcp.c:1325
- tcp_sendmsg+0x2c/0x40 net/ipv4/tcp.c:1483
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- sock_write_iter+0x3d4/0x540 net/socket.c:1108
- call_write_iter include/linux/fs.h:2199 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-
-Memory state around the buggy address:
- ffff8880276d7700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880276d7780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880276d7800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                           ^
- ffff8880276d7880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880276d7900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
