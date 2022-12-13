@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6164764BA1C
+	by mail.lfdr.de (Postfix) with ESMTP id 87B7B64BA1D
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiLMQrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S235303AbiLMQrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbiLMQqU (ORCPT
+        with ESMTP id S236329AbiLMQqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Dec 2022 11:46:20 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BB61262E;
-        Tue, 13 Dec 2022 08:45:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698221E3A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:45:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=wrJUFpTSTEZ6dU+1aP5FM2CWsqDDx9F0OdDQskoYMMw=; b=AbQmTCqPqGgn89AQLOTH/xKspj
-        HscMOAfb6Qt5RWJWLwTkILx2ECA78VGgKffnzQ0r4IRmHdXOlKcGpXTdC/aY7h5GcmRbcAesMr6SA
-        lOUfaYv8FHDRDdNQOJSfO7Cxvc23SziIz3tl3ZMHCMmbm2SIzDgvvGtjzbKBk7yb0JMEPP1/bbDf9
-        QPh3tCphI7AN8nAuTx9ejvYsZ8bufxlNUF0daumhX3lg6SfG0MLMO9dGSxn5j4f5HpKVhIX5GZCXj
-        77CRtMF/VSYN53Pah745n7NB7JQM80UmU5YDa3JhinSd7oggFf8Q8nsEBHc/pdgy7FojZPBl0UuEK
-        XRwXuSWA==;
-Received: from [2601:1c2:d80:3110::a2e7]
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=2fASWcD3MDWnHKMm2m0npaho2EJ4dCmlsjEfJBSNCFo=; b=uKKPjR5vkDUE9jWxBL+DVkrQ9d
+        rseeItl2hbeJ/CaHjOse/jUUT+w1bD8MG2b3baWA8Xnd4c+T8MOQE4y7hT+Nr5L4AJBKydRxybkoj
+        C3uYO0YpS4UpVFRHLv2yIKhf6d0+02bJcANIruCIILmS8HiDfkc6FRxhuuhNwtKIMKiZhQfXr0ZYC
+        ACdPGaVJ4x5EnwgcxdFgttm1dLaCcCqluXLNZMIyAS7NT749PrJHTYkVPTnfyYx6dU90C9nYRvANu
+        Ym7VtB0X4xZ9VoNlydmnNi5j9Sl55EMjIgDBuflqhoX7OWt9qCbmCGyPW9VlHC9TMgnzALysh0uaN
+        0gtOYSbw==;
+Received: from [2001:4bb8:192:2f53:30b:ddad:22aa:f9f9] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p58Pa-0032jW-9r; Tue, 13 Dec 2022 16:45:46 +0000
-Message-ID: <aae11fd8-03c0-7996-67ca-7b528a6fec15@infradead.org>
-Date:   Tue, 13 Dec 2022 08:45:44 -0800
+        id 1p58Pf-0032nk-Pc; Tue, 13 Dec 2022 16:45:52 +0000
+Date:   Tue, 13 Dec 2022 17:45:49 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Joel Becker <jlbec@evilplan.org>
+Subject: [GIT PULL] configfs updates for Linux 6.2
+Message-ID: <Y5isPdnDCpJ4cL7g@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH 2/2] block: add uImage.FIT block partition driver
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <Y5h0C4iKoeCJgRCb@makrotopia.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y5h0C4iKoeCJgRCb@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_PDS_OTHER_BAD_TLD autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
+  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
 
-On 12/13/22 04:46, Daniel Golle wrote:
-> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
-> index a41145d52de9..f8618bc869b2 100644
-> --- a/drivers/block/Kconfig
-> +++ b/drivers/block/Kconfig
-> @@ -383,6 +383,17 @@ config VIRTIO_BLK
->  	  This is the virtual block driver for virtio.  It can be used with
->            QEMU based VMMs (like KVM or Xen).  Say Y or M.
->  
-> +config UIMAGE_FIT_BLK
-> +	bool "uImage.FIT block driver"
-> +	help
-> +	  This is driver allows using filesystems contained in uImage.FIT images
+are available in the Git repository at:
 
-	  This driver allows
+  git://git.infradead.org/users/hch/configfs.git tags/configfs-6.2-2022-12-13
 
-> +	  by mapping them as block devices.
-> +
-> +	  This driver can currently not be built as a module.
-> +
-> +	  Say Y if you want to mount filesystems sub-images of a uImage.FIT
-> +	  stored in a block device partition, mtdblock or ubiblock device.
+for you to fetch changes up to 77992f896745c63ae64bfccfdc429ab7b3d88da5:
 
--- 
-~Randy
+  configfs: remove mentions of committable items (2022-12-02 11:11:27 +0100)
+
+----------------------------------------------------------------
+configfs updates for Linux 6.2
+
+ - fix a memory leak in configfs_create_dir (Chen Zhongjin)
+ - remove mentions of committable items that were implemented
+   (Bartosz Golaszewski)
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      configfs: remove mentions of committable items
+
+Chen Zhongjin (1):
+      configfs: fix possible memory leak in configfs_create_dir()
+
+ Documentation/filesystems/configfs.rst | 48 ----------------------------------
+ fs/configfs/dir.c                      |  2 ++
+ include/linux/configfs.h               |  3 ---
+ 3 files changed, 2 insertions(+), 51 deletions(-)
