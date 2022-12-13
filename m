@@ -2,233 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A247964B5D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4177164B5D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiLMNN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S233881AbiLMNNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:13:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234624AbiLMNNu (ORCPT
+        with ESMTP id S235468AbiLMNNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:13:50 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8001F635;
-        Tue, 13 Dec 2022 05:13:49 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDD6056017928;
-        Tue, 13 Dec 2022 13:13:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=viiIwFX8wj5VdwFsbkcZl9kNCr2kWeQfUK0ZFqAXI4c=;
- b=E2TOo1R/xczFH2rwMfnvESxJDr2gUpWoCZVSqx+5GPbqqHsbR0ECLGH8vDD8xP95KrAk
- cbgtBEpS0ger+dM9IuzUG6/jP4smUq7woKMyPQE511xR8eQ18JwD7DiOqW7l7omJHQgy
- 9xqxUXef4uc39gxMdirkBLsXdj11D92Hn+UqUi/d2XNOnE7mlFJYVrc2Sw2ZUMVdvTcK
- H9iNkV5Y0h/ZtPthfe4Lj1neSS+e0e6IOvrXT9MwAx1SPak3qRyzOMgoTnXD3ee5Oxq3
- EMgvFrEE4TwyoX7UfY9Ik+xgaOmYZGZTHSIe+Bm2LUmWCF918OAezYtSxoTtnhj7HX40 Lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3merajjj4a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:13:26 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDD6SuL022139;
-        Tue, 13 Dec 2022 13:13:26 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3merajjj37-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:13:26 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD4cPxU030800;
-        Tue, 13 Dec 2022 13:13:23 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mchr5v72e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:13:23 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDDDLbj45875690
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 13:13:21 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2916F20043;
-        Tue, 13 Dec 2022 13:13:21 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F399D20040;
-        Tue, 13 Dec 2022 13:13:20 +0000 (GMT)
-Received: from [9.152.212.244] (unknown [9.152.212.244])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 13:13:20 +0000 (GMT)
-Message-ID: <990b0e9d-93fa-464e-c72f-ce51cf4dff83@linux.ibm.com>
-Date:   Tue, 13 Dec 2022 14:13:20 +0100
+        Tue, 13 Dec 2022 08:13:42 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AA39584
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:13:40 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id x28so4821973lfn.6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:13:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vd3T8ah0dWWDH2U5v0IMPHsJRf7PThuVXGlxa+Fk7UM=;
+        b=V1fR4x97oaWfy1VMojxg6M8O2dPqeQVawUxtzpzfwbxeCJOzWCJmgQcNe8l22OI1k9
+         UaJ06VWqGFv8hCDEuZth1+8OH+LI5MeQ1oK+ZdqHZ2dDwj3DZoumzNSLSu/m/7O6u5Z0
+         tRDwRsta6XHOMSBHDue+xmitUdWdjlUYvLKE3aBX+gFymGdKjiJ+5xLke/pqW0Ayn/Lo
+         SZ6vDRn4XE5bL1WcmnFRlMyuiAIIv2UHBig4XRzBv4vdDd2JGwA2cZik9/iHF91X/XWy
+         q2OepdSYTD629UA1O7uWAQ0KOa+xHKscbiiTm6fegvMtXfJm/yn06Qs6oFQZ/oPMIWNq
+         6yiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vd3T8ah0dWWDH2U5v0IMPHsJRf7PThuVXGlxa+Fk7UM=;
+        b=V7Y82l5wPGP8D6kX0Dd4n46kolQXKtSQjDoutQq98U1RxGW04MD7PEBAGetJzrUo61
+         4X7rIoozbDpT0GQU3r7sz54sl3k1rlsgZQ7YLC71ThKCEHGhXSD/u8dsJS6Tc/B9BaYg
+         nPYya0vdzUvTYUTH6qeh0X55YEAkPvi55TRsAfu3PZigbWsUcn4NWtsK6gNUP3+d2RuE
+         UX67HdoJt+8hPS27cNHYpt1MOEz9eH+IlgEB2EgdnmWNwsgIicywGu/SxDX3mvOCDx9Z
+         RwF8RjXkf0ULQqYOMp7k/jvyQAwoUTiFmuSmEZvGaOJcfEw7aV0i7YvkUpe3LmtgTIX0
+         tswg==
+X-Gm-Message-State: ANoB5pmx8PTDiKPLgaWrlEiOeArYRpvyp8outUlbcGC0UOkItDzUVhDy
+        7feZL8EaVY5BrK9E5Xc4bjkZqg==
+X-Google-Smtp-Source: AA0mqf5wXBdUAnvmZIvysTHRCIWUkZNsPqVOmaLbYbtInVwUKBFj2syz/R6zVfkeLETTtp1+isewQQ==
+X-Received: by 2002:a05:6512:6d1:b0:4b4:91e2:7864 with SMTP id u17-20020a05651206d100b004b491e27864mr6016763lff.26.1670937219058;
+        Tue, 13 Dec 2022 05:13:39 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 25-20020ac24839000000b004b5979f9ba8sm360705lft.210.2022.12.13.05.13.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 05:13:38 -0800 (PST)
+Message-ID: <bca77270-f3ac-f23f-ef96-43f9f7d574c4@linaro.org>
+Date:   Tue, 13 Dec 2022 14:13:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] perf stat: Do not delay the workload with --delay
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Kevin Nomura <nomurak@google.com>
-References: <20221212230820.901382-1-namhyung@kernel.org>
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
 Content-Language: en-US
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20221212230820.901382-1-namhyung@kernel.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, airlied@gmail.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
+ <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
+ <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
+ <be1411e8-1d07-7643-977c-a306016fd660@linaro.org>
+ <b6d90c1f-5365-7197-be63-96c3d8cf0746@quicinc.com>
+ <e53844b7-601b-f355-302b-cc871962a446@linaro.org>
+ <8b306c8f-3089-4aaf-7fc1-038a8330c89a@quicinc.com>
+ <CAA8EJpr5RYyQa7xu1_xJ0F-dn-H9aOf0KE-CDgDCwnZu3HPgXg@mail.gmail.com>
+ <a9e2f269-b9df-814f-adcd-f5577f590fa7@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a9e2f269-b9df-814f-adcd-f5577f590fa7@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: If96xoHZi7NIi1GdrRPjZ1gaIrYoa6m-
-X-Proofpoint-GUID: LvqRGN9ZCr2XcdukIknxQtbWKbtzLWcd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0
- clxscore=1011 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2212130115
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 00:08, Namhyung Kim wrote:
-> The -D/--delay option is to delay the measure after the program starts.
-> But the current code goes to sleep before starting the program so the
-> program is delayed too.  This is not the intention, let's fix it.
+On 13/12/2022 00:41, Abhinav Kumar wrote:
+>>>
+>>> besides, i think i have to sent the whole series patches include this
+>>> one to address your new comments on other patch.
+>>>
+>>> is this correct?
+>>
+>> No. Please fix your system first, validate your patches and send them
+>> afterwards. You can not expect others to do your job.
+>>
 > 
-> Before:
-> 
->   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
->   Events disabled
->   Events enabled
-> 
->    Performance counter stats for 'system wide':
-> 
->        4,326,949,337      cycles
-> 
->          4.007494118 seconds time elapsed
-> 
->   real	0m7.474s
->   user	0m0.356s
->   sys	0m0.120s
-> 
-> It ran the workload for 4 seconds and gave the 3 second delay.  So it
-> should skip the first 3 second and measure the last 1 second only.  But
-> as you can see, it delays 3 seconds and ran the workload after that for
-> 4 seconds.  So the total time (real) was 7 seconds.
-> 
-> After:
-> 
->   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
->   Events disabled
->   Events enabled
-> 
->    Performance counter stats for 'system wide':
-> 
->        1,063,551,013      cycles
-> 
->          1.002769510 seconds time elapsed
-> 
->   real	0m4.484s
->   user	0m0.385s
->   sys	0m0.086s
-> 
-> The bug was introduced when it changed enablement of system-wide events
-> with a command line workload.  But it should've considered the initial
-> delay case.  The code was reworked since then (in bb8bc52e7578) so I'm
-> afraid it won't be applied cleanly.
-> 
-> Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
-> Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> Cc: Thomas Richter <tmricht@linux.ibm.com>
-> Reported-by: Kevin Nomura <nomurak@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-stat.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index d040fbcdcc5a..b39bf785a16e 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -540,26 +540,14 @@ static int enable_counters(void)
->  			return err;
->  	}
->  
-> -	if (stat_config.initial_delay < 0) {
-> -		pr_info(EVLIST_DISABLED_MSG);
-> -		return 0;
-> -	}
-> -
-> -	if (stat_config.initial_delay > 0) {
-> -		pr_info(EVLIST_DISABLED_MSG);
-> -		usleep(stat_config.initial_delay * USEC_PER_MSEC);
-> -	}
-> -
->  	/*
->  	 * We need to enable counters only if:
->  	 * - we don't have tracee (attaching to task or cpu)
->  	 * - we have initial delay configured
->  	 */
-> -	if (!target__none(&target) || stat_config.initial_delay) {
-> +	if (!target__none(&target)) {
->  		if (!all_counters_use_bpf)
->  			evlist__enable(evsel_list);
-> -		if (stat_config.initial_delay > 0)
-> -			pr_info(EVLIST_ENABLED_MSG);
->  	}
->  	return 0;
->  }
-> @@ -930,14 +918,27 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->  			return err;
->  	}
->  
-> -	err = enable_counters();
-> -	if (err)
-> -		return -1;
-> +	if (stat_config.initial_delay) {
-> +		pr_info(EVLIST_DISABLED_MSG);
-> +	} else {
-> +		err = enable_counters();
-> +		if (err)
-> +			return -1;
-> +	}
->  
->  	/* Exec the command, if any */
->  	if (forks)
->  		evlist__start_workload(evsel_list);
->  
-> +	if (stat_config.initial_delay > 0) {
-> +		usleep(stat_config.initial_delay * USEC_PER_MSEC);
-> +		err = enable_counters();
-> +		if (err)
-> +			return -1;
-> +
-> +		pr_info(EVLIST_ENABLED_MSG);
-> +	}
-> +
->  	t0 = rdclock();
->  	clock_gettime(CLOCK_MONOTONIC, &ref_time);
->  
+> Just finished working with kuogee on this. This issue had been reported 
+> by few others earlier (example 
+> https://lore.kernel.org/lkml/bc9be279-a130-d5e7-4397-bbb389d14403@intel.com/T/).
 
-Tested successfully on s390
+This report says:
+"Sorry for the inconvenience, please ignore this false positive."
 
-Acked-by: Thomas Richter <tmricht@linux.ibm.com>
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+Best regards,
+Krzysztof
 
