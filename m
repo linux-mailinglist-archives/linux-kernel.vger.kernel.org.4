@@ -2,129 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDBF64BAB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB9C64BAB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235523AbiLMRNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S235565AbiLMROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbiLMRNN (ORCPT
+        with ESMTP id S234027AbiLMROI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:13:13 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD796365
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:13:12 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id h11so16331722wrw.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:13:12 -0800 (PST)
+        Tue, 13 Dec 2022 12:14:08 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534FFB491
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:14:07 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id l10so446394plb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:14:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wbQFyaeQ3XEAXhWOdQEYNCmIqs2vEtR7/9/GJv05CpI=;
-        b=j4YWBLG15Slcs0Fq+ePqgTHB7thUqj9f5sCRbYQb15sZmW4s9FkW1yZFt19E0CTt0B
-         pR97bH1C14/EcQglaA6T0lcZttEOFhYUhL2Idbi+v02h74vYMdw8n14uI5VQgvrJz3AD
-         9dM8ve9EDypSt2MzAJrsAtME6KF5qRDSYqpo+rKBAibwjVGYB/EO/9zRMWOyNICOAxbK
-         l/4R5a7tQQABMY2lIo+5DkOYEfdwnvrFt5FiZox7KF8oQv1JR6XeWipJ/Fq+qdHT44Al
-         NVpKfxqMDMFyLomvAXAAgRv0PQqIM5shQOgQpPOfUvmHUmkoF0OkSaK3gPBdLYXWlZO3
-         +kkw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Dwsi4XK3nypjad6xn89/3e9RdwQ2gxMpiVm425namZk=;
+        b=bhNjhbviV/wfSfKS13Fws26P5KRs9qbgQCtrwQChwkOQvxooc002D2czyQGQbytYPB
+         LolVht+FJ7xstmMWPAX23Y30qyN6mMHEu77143uOi/4hLsMmFp5OXUg0ESXfOjUErwXj
+         nxg00ndEFcEHo6vb9RSYhGRSbfP6XH4XylFuRNt0IuFe2nV+VNJX/DGRUG6NRI37YEYQ
+         D6q+Q89r6OPau3zhY7M9BeFWVRYepxS6imVF9kXC/F2uUG0PeYgXBMJJ2zc+kBQJmDCN
+         0kFn9g0sYgJFVysA0v3GhPfSDHhwRcd/i0fi4UevAnohPDe80Sd807YgfgzsKANJ/sPT
+         x4AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wbQFyaeQ3XEAXhWOdQEYNCmIqs2vEtR7/9/GJv05CpI=;
-        b=x7FHAwk8bA6tXaD/fsnhQ7XTcA0iYneoxORBqVmjFTljH8k7qwIZiplxRN473oOzeS
-         7kL4Gl8imW8eIbHwPiDn0dCI3QZOjb1tPorxq+fm/HAt39S157a639KIVc5QvPZYVDpw
-         L3V9KYYQ2wcVXE0KRhfKJAtcXB8lZIxefI+CpRDjQi2SrboSA1bv22VKfX6gTJ6LiqLA
-         lOBiSsiaylLG2qr25DT1NQx+Vm1hRgH3c7XvOaS0ORNSoOwI7gTC+NfmJUpJ/ePc3Xok
-         LVdCs+oMqW6YLYXZO8TKkr5uuwjR0M+Mu6AMXbg7B7DTQalLvrmDOuRfOVFMn+L4IDlQ
-         aWXQ==
-X-Gm-Message-State: ANoB5pktcw4CDbg8cJZqRPwxR1cWWmS7Hz95qg7IKcYBaI9ujVIuFIou
-        bStsWdLQbgeS/4qKpsW/seeNPdEjIz71thfW
-X-Google-Smtp-Source: AA0mqf6fYeERk/XTOqzh5/xmIosQ9hfCjwZ3PblMvKKAa3RzsKqafketngCyk5yYH5iNli7zu1xNpg==
-X-Received: by 2002:a5d:5108:0:b0:242:1ce8:c51c with SMTP id s8-20020a5d5108000000b002421ce8c51cmr15560798wrt.45.1670951590848;
-        Tue, 13 Dec 2022 09:13:10 -0800 (PST)
-Received: from blmsp ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d4f02000000b00241cfe6e286sm277400wru.98.2022.12.13.09.13.09
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dwsi4XK3nypjad6xn89/3e9RdwQ2gxMpiVm425namZk=;
+        b=s08z9/GUW+BsCtXfr7+8c4KI0IBtHiE4BNlwQ7siODT4w4n8III4fjymF3C4y71lLI
+         ZnLpeJmLLFb+U/K84mdJhajjkI3paQ4kvPYglQ9dwqdEm0IFuZyKHWgYcQz3eGL8bcaK
+         K4Qet8yFHHkZ8tcU0CnqGqZiQyN6r+g9v8WSUGTWXegt6Z7n6Z+/garHnXanaBm1N4Ol
+         GMWKtuYp8v74A0yR5IVj1A0/tJPkkSjN3XoFMuMizOmJN1cAogdORZrVjoTI2s+tvedb
+         mI/132e3p5Pdgpmkd459ZLoCosZAl3oxumxgCzrtAoGtZx3pl452aEJPg8x/sI5Xuzn+
+         ubyg==
+X-Gm-Message-State: ANoB5pkK2yubSpBUoxzpg+iQ/OhpziCwXExoToGSXTO6oBpf341AFE9g
+        78yo3LHS9e7UCVAYjxd6tDFQ
+X-Google-Smtp-Source: AA0mqf4VEGrh9kRZw/kVcazlPNbSmzR1tCkBU8kk1z9hAaDmC9KFy+HjK81iS3KAvR1FjSKvFYoKDA==
+X-Received: by 2002:a17:902:d4d1:b0:189:e7e:784c with SMTP id o17-20020a170902d4d100b001890e7e784cmr31284779plg.21.1670951646763;
+        Tue, 13 Dec 2022 09:14:06 -0800 (PST)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id i14-20020a17090332ce00b001869394a372sm123384plr.201.2022.12.13.09.13.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:13:10 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:13:09 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Message-ID: <20221213171309.c4nrdhwjj2ivrqim@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-4-msp@baylibre.com>
- <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
- <20221202083740.moa7whqd52oasbar@blmsp>
- <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
+        Tue, 13 Dec 2022 09:14:05 -0800 (PST)
+Date:   Tue, 13 Dec 2022 22:43:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 03/13] arm64: dts: qcom: sdm845: Fix the base
+ addresses of LLCC banks
+Message-ID: <20221213171356.GD4862@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-4-manivannan.sadhasivam@linaro.org>
+ <038e6569-9f8f-3b59-0243-af6dcf0c2d80@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <038e6569-9f8f-3b59-0243-af6dcf0c2d80@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 03:46:30PM +0100, Marc Kleine-Budde wrote:
-> On 02.12.2022 09:37:40, Markus Schneider-Pargmann wrote:
-> > Hi Marc,
+On Tue, Dec 13, 2022 at 05:27:45PM +0100, Krzysztof Kozlowski wrote:
+> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+> > The LLCC block has several banks each with a different base address
+> > and holes in between. So it is not a correct approach to cover these
+> > banks with a single offset/size. Instead, the individual bank's base
+> > address needs to be specified in devicetree with the exact size.
 > > 
-> > On Thu, Dec 01, 2022 at 12:14:50PM +0100, Marc Kleine-Budde wrote:
-> > > On 16.11.2022 21:52:56, Markus Schneider-Pargmann wrote:
-> > > > On peripheral chips every read/write can be costly. Avoid reading easily
-> > > > trackable information and cache them internally. This saves multiple
-> > > > reads.
-> > > > 
-> > > > Transmit FIFO put index is cached, this is increased for every time we
-> > > > enqueue a transmit request.
-> > > > 
-> > > > The transmits in flight is cached as well. With each transmit request it
-> > > > is increased when reading the finished transmit event it is decreased.
-> > > > 
-> > > > A submit limit is cached to avoid submitting too many transmits at once,
-> > > > either because the TX FIFO or the TXE FIFO is limited. This is currently
-> > > > done very conservatively as the minimum of the fifo sizes. This means we
-> > > > can reach FIFO full events but won't drop anything.
-> > > 
-> > > You have a dedicated in_flight variable, which is read-modify-write in 2
-> > > different code path, i.e. this looks racy.
+> > Also, let's get rid of reg-names property as it is not needed anymore.
+> > The driver is expected to parse the reg field based on index to get the
+> > addresses of each LLCC banks.
 > > 
-> > True, of course, thank you. Yes I have to redesign this a bit for
-> > concurrency.
-> > 
-> > > If you allow only power-of-two FIFO size, you can use 2 unsigned
-> > > variables, i.e. a head and a tail pointer. You can apply a mask to get
-> > > the index to the FIFO. The difference between head and tail is the fill
-> > > level of the FIFO. See mcp251xfd driver for this.
-> > 
-> > Maybe that is a trivial question but what's wrong with using atomics
-> > instead?
+> > Cc: <stable@vger.kernel.org> # 5.4
 > 
-> I think it's Ok to use an atomic for the fill level. The put index
-> doesn't need to be. No need to cache the get index, as it's in the same
-> register as the fill level.
+> No, you cannot backport it. You will break users.
 > 
-> As the mcp251xfd benefits from caching both indexes, a head and tail
-> pointer felt like the right choice. As both are only written in 1
-> location, no need for atomics or locking.
-> 
-> > The tcan mram size is limited to 2048 so I would like to avoid limiting
-> > the possible sizes of the tx fifos.
-> 
-> What FIFO sizes are you using currently?
 
-I am currently using 13 for TXB, TXE and RXF0.
+If the driver change gets backported, it will break users, isn't it?
 
-Best,
-Markus
+> > Fixes: ba0411ddd133 ("arm64: dts: sdm845: Add device node for Last level cache controller")
+> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > index 65032b94b46d..683b861e060d 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > @@ -2132,8 +2132,9 @@ uart15: serial@a9c000 {
+> >  
+> >  		llcc: system-cache-controller@1100000 {
+> >  			compatible = "qcom,sdm845-llcc";
+> > -			reg = <0 0x01100000 0 0x31000>, <0 0x01300000 0 0x50000>;
+> > -			reg-names = "llcc_base", "llcc_broadcast_base";
+> 
+> Once property was made required, you cannot remove it. What if other
+> bindings user depends on it?
+> 
+> Please instead keep/update the reg-names and/or mark it as deprecated.
+> It must stay in DTS for some time.
+> 
+
+Fair enough. I will mark it as deprecated in binding and will keep it in dts.
+
+Thanks,
+Mani
+
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
