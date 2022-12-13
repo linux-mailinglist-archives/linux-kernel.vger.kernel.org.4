@@ -2,287 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C91D64B0C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEDE64B0CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbiLMIG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S234440AbiLMIKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbiLMIGm (ORCPT
+        with ESMTP id S234291AbiLMIKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:06:42 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24866B1D2;
-        Tue, 13 Dec 2022 00:06:40 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4NWW9t1sshz9v7cH;
-        Tue, 13 Dec 2022 15:59:46 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBnog1oMphjjUcMAA--.22467S2;
-        Tue, 13 Dec 2022 09:06:11 +0100 (CET)
-Message-ID: <bf05aa8c3161a799fae84a4acfc46dc54499b271.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, Casey Schaufler <casey@schaufler-ca.com>
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 13 Dec 2022 09:05:55 +0100
-In-Reply-To: <8ca5be2f5ac0f5690a9025e5eec9fc93e8613842.camel@linux.ibm.com>
-References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
-         <20221123095202.599252-3-roberto.sassu@huaweicloud.com>
-         <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
-         <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
-         <8ca5be2f5ac0f5690a9025e5eec9fc93e8613842.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 13 Dec 2022 03:10:41 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D86916592;
+        Tue, 13 Dec 2022 00:10:40 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id v7so7662383wmn.0;
+        Tue, 13 Dec 2022 00:10:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ns4iM9T1bOBC02dlnDL65OgFGuOFjTz8LmgOUq5fuL0=;
+        b=MqpCAh3CO4E+o1vbt2VPUVfETTRnXl7qNseW10tqjsbGFdPXcTGQMcH+/CVS/rGZzQ
+         F/Or1RCNKkWl4XbAZswMgmcaHqYCHsc03dT+1KCpck4yrS6FaKxrog1o4A002DPyxX1n
+         Sf+Te0qsSfR5hydNvaNWMJ4kgMbx7G1Gr7N/Y2ZdxQbtA/3A4OaXWIbvxb9RQLWapDA1
+         OEFq4cKV7i38IFx637frmUmegg9pL9PXmccfLjqe8L45hp2OBv1go/x5Q+AyFtXLo7Tj
+         UJoRFaqWDco2tJjoTwTLayC4j1VYd1gYkTPL1OUO7mWuWH9l4KLdYfe6zQG1ROnlsp22
+         Sngw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ns4iM9T1bOBC02dlnDL65OgFGuOFjTz8LmgOUq5fuL0=;
+        b=X82GqbBHtohtYz3f6n7bAN/ZZmB3o4SUXNIxcqnXLOoQFO/yhbEt8QLF0Lye1MXt+r
+         OPOmRYFjyu3loLsdRu4bww+nMthaMaabCmC51yt8WR7+dMXVOpA5uCF09IPeVTATVoLL
+         8V5a1lu53XBReXXYRku++8DH8f8QIOtuCROjhUuu6vBFMmtFU0X4MRSMd8bn8zBQ/mrh
+         KZvXT455cNIJ17GAHMMe8fzMjO/ll/z5LCGOpWMrcr1lsSPyPdtk93r5Hn2XChccp6az
+         mXeb0JEMRb/c3merwB7kl6xSYfEczkrCo6yGkPTNGLM0VxjlvnTO/KO5juvp9zpTuDYb
+         wH/g==
+X-Gm-Message-State: ANoB5pkrVGjUO3NBQhA+oApsAYJz6SKO4N2VoT0za42F/2t0Kcq0J1Ee
+        WReTf1GbcdEMKZ4w+4OQjxM=
+X-Google-Smtp-Source: AA0mqf67wc36VO9KkdjBiBFZ12ec9z40OWMm5lKuh18uloE4wH6TgfTK6XpKdLvoBJrr0YEZ/LSXSw==
+X-Received: by 2002:a05:600c:554b:b0:3d2:1761:3742 with SMTP id iz11-20020a05600c554b00b003d217613742mr8939469wmb.15.1670919038750;
+        Tue, 13 Dec 2022 00:10:38 -0800 (PST)
+Received: from localhost.localdomain (2a02-8428-46a0-7c01-bc7c-15f1-6c3b-ad74.rev.sfr.net. [2a02:8428:46a0:7c01:bc7c:15f1:6c3b:ad74])
+        by smtp.gmail.com with ESMTPSA id p25-20020a05600c205900b003a6125562e1sm11585047wmg.46.2022.12.13.00.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 00:10:38 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, paul@crapouillou.net,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christophe Branchereau <cbranchereau@gmail.com>
+Subject: [PATCH 1/2] drm/panel: Add driver for the AUO A030JTN01 TFT LCD
+Date:   Tue, 13 Dec 2022 09:10:33 +0100
+Message-Id: <20221213081034.14226-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBnog1oMphjjUcMAA--.22467S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ww4xZF1UAr1rurWrtw1UWrg_yoW3ur48pF
-        W8KF1jkr4rJFyUWrWSqanI9an29rWrGrZrXrs3G347ZF1qkrn7tr10yr15ua4rJrW8JF10
-        qw4UArsxuwn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4KTJgAAsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-29 at 08:14 -0500, Mimi Zohar wrote:
-> On Thu, 2022-11-24 at 09:11 +0100, Roberto Sassu wrote:
-> > On Wed, 2022-11-23 at 12:46 -0500, Mimi Zohar wrote:
-> > > On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > 
-> > > > In preparation for removing security_old_inode_init_security(), switch to
-> > > > security_inode_init_security().
-> > > > 
-> > > > Extend the existing ocfs2_initxattrs() to take the
-> > > > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > > > name/value/len triple with the first xattr provided by LSMs. Supporting
-> > > > multiple xattrs is not currently supported, as it requires non-trivial
-> > > > changes that can be done at a later time.
-> > > 
-> > > ocfs2 already defines ocfs2_init_security_get() as a wrapper around
-> > > calling either security_old_inode_init_security() or
-> > > security_inode_init_security().  Based on "si" one or the other hook is
-> > > called.  ocfs2_initxattrs is already defined.
-> > > 
-> > >         struct ocfs2_security_xattr_info si = {
-> > >                 .name = NULL,
-> > >                 .enable = 1,
-> > >         };
-> > > 
-> > > The main difference between calling security_old_inode_init_security or
-> > > security_inode_init_security() is whether or not security.evm is
-> > > calculated and written.
-> > 
-> > Uhm, it seems unfortunately more complicated.
-> > 
-> > Calling security_old_inode_init_security() allows filesystems to get
-> > the xattr, do some calculations (e.g. for reservation) and then write
-> > the xattr.
-> > 
-> > The initxattrs() callback to be passed to
-> > security_inode_init_security() is meant to let filesystems provide a
-> > filesystem-specific way of writing the xattrs, just after LSMs provided
-> > them. This seems incompatible with the old behavior, as a filesystem
-> > might need to do the calculations in the middle before writing the
-> > xattrs.
-> > 
-> > The initxattrs() callback, when security_old_inode_init_security() was
-> > used, is just a way of emulating the old behavior, i.e. returning the
-> > xattr to the caller.
-> > 
-> > It should be possible, I guess, to handle more xattrs but if the code
-> > was designed to handle one, it would be better if the filesystem
-> > maintainers add support for it.
-> 
-> Hi Mark, Joel, Joseph,
-> 
-> Commit 9d8f13ba3f48 ("security: new security_inode_init_security API
-> adds function callback") introduced security_old_inode_init_security()
-> to support reiserfs and ocfs2 a long time ago.  It was suppose to be a
-> temporary fix until they moved to the new
-> security_inode_init_security() hook.  ocsf2 partially migrated to
-> security_inode_init_security(), but not completely.
-> 
-> security_old_inode_init_security() is finally going away.  Instead of
-> migrating the remaining old usage to the new
-> security_inode_init_security() properly, this patch simulates the
-> existing usage.
-> 
-> Can we get some Reviewed-by, Tested-by tags or comments?
+Add driver for the AUO A030JTN01 panel, which is a 320x480 3.0" 4:3
+24-bit TFT LCD panel with non-square pixels and a delta-RGB 8-bit
+interface.
 
-Ping.
+Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/gpu/drm/panel/Kconfig               |   8 +
+ drivers/gpu/drm/panel/Makefile              |   1 +
+ drivers/gpu/drm/panel/panel-auo-a030jtn01.c | 295 ++++++++++++++++++++
+ 3 files changed, 304 insertions(+)
+ create mode 100644 drivers/gpu/drm/panel/panel-auo-a030jtn01.c
 
-Thanks
-
-Roberto
-
-> thanks,
-> 
-> Mimi
-> 
-> > > Perhaps it is time to remove the call to
-> > > security_old_inode_init_security() in ocfs2_init_security_get().  We
-> > > need to hear back from the ocfs2 community.  Mark?  Joel?
-> > > 
-> > > As noted previously this change affects mknod and symlinks.
-> > > 
-> > > 
-> > > > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> > > > of replicating the behavior of security_old_inode_init_security(), i.e.
-> > > > just obtaining the xattr, in addition to setting all xattrs provided by
-> > > > LSMs.
-> > > > 
-> > > > Finally, modify the handling of the return value from
-> > > > ocfs2_init_security_get(). As security_inode_init_security() does not
-> > > > return -EOPNOTSUPP, remove this case and directly handle the error if the
-> > > > return value is not zero.
-> > > > 
-> > > > However, the previous case of receiving -EOPNOTSUPP should be still
-> > > > taken into account, as security_inode_init_security() could return zero
-> > > > without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> > > > 
-> > > > Instead, if security_inode_init_security() returned zero, look at the xattr
-> > > > if it was set, and behave accordingly, i.e. set si->enable to zero to
-> > > > notify to the functions following ocfs2_init_security_get() that the xattr
-> > > > is not available (same as if security_old_inode_init_security() returned
-> > > > -EOPNOTSUPP).
-> > > > 
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > ---
-> > > >  fs/ocfs2/namei.c | 18 ++++++------------
-> > > >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
-> > > >  2 files changed, 32 insertions(+), 16 deletions(-)
-> > > > 
-> > > > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> > > > index 05f32989bad6..55fba81cd2d1 100644
-> > > > --- a/fs/ocfs2/namei.c
-> > > > +++ b/fs/ocfs2/namei.c
-> > > > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> > > >  	int want_meta = 0;
-> > > >  	int xattr_credits = 0;
-> > > >  	struct ocfs2_security_xattr_info si = {
-> > > > +		.name = NULL,
-> > > >  		.enable = 1,
-> > > >  	};
-> > > >  	int did_quota_inode = 0;
-> > > > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> > > >  	/* get security xattr */
-> > > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> > > >  	if (status) {
-> > > > -		if (status == -EOPNOTSUPP)
-> > > > -			si.enable = 0;
-> > > > -		else {
-> > > > -			mlog_errno(status);
-> > > > -			goto leave;
-> > > > -		}
-> > > > +		mlog_errno(status);
-> > > > +		goto leave;
-> > > >  	}
-> > > >  
-> > > >  	/* calculate meta data/clusters for setting security and acl xattr */
-> > > > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> > > >  	int want_clusters = 0;
-> > > >  	int xattr_credits = 0;
-> > > >  	struct ocfs2_security_xattr_info si = {
-> > > > +		.name = NULL,
-> > > >  		.enable = 1,
-> > > >  	};
-> > > >  	int did_quota = 0, did_quota_inode = 0;
-> > > > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> > > >  	/* get security xattr */
-> > > >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> > > >  	if (status) {
-> > > > -		if (status == -EOPNOTSUPP)
-> > > > -			si.enable = 0;
-> > > > -		else {
-> > > > -			mlog_errno(status);
-> > > > -			goto bail;
-> > > > -		}
-> > > > +		mlog_errno(status);
-> > > > +		goto bail;
-> > > >  	}
-> > > >  
-> > > >  	/* calculate meta data/clusters for setting security xattr */
-> > > > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> > > > index 95d0611c5fc7..55699c573541 100644
-> > > > --- a/fs/ocfs2/xattr.c
-> > > > +++ b/fs/ocfs2/xattr.c
-> > > > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
-> > > >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
-> > > >  		     void *fs_info)
-> > > >  {
-> > > > +	struct ocfs2_security_xattr_info *si = fs_info;
-> > > >  	const struct xattr *xattr;
-> > > >  	int err = 0;
-> > > >  
-> > > > +	if (si) {
-> > > > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> > > > +				    GFP_KERNEL);
-> > > > +		if (!si->value)
-> > > > +			return -ENOMEM;
-> > > > +
-> > > > +		si->name = xattr_array->name;
-> > > > +		si->value_len = xattr_array->value_len;
-> > > > +		return 0;
-> > > > +	}
-> > > > +
-> > > >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
-> > > >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
-> > > >  				      xattr->name, xattr->value,
-> > > > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
-> > > >  			    const struct qstr *qstr,
-> > > >  			    struct ocfs2_security_xattr_info *si)
-> > > >  {
-> > > > +	int ret;
-> > > > +
-> > > >  	/* check whether ocfs2 support feature xattr */
-> > > >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
-> > > >  		return -EOPNOTSUPP;
-> > > > -	if (si)
-> > > > -		return security_old_inode_init_security(inode, dir, qstr,
-> > > > -							&si->name, &si->value,
-> > > > -							&si->value_len);
-> > > > +	if (si) {
-> > > > +		ret = security_inode_init_security(inode, dir, qstr,
-> > > > +						   &ocfs2_initxattrs, si);
-> > > > +		/*
-> > > > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> > > > +		 * we have to check the xattr ourselves.
-> > > > +		 */
-> > > > +		if (!ret && !si->name)
-> > > > +			si->enable = 0;
-> > > > +
-> > > > +		return ret;
-> > > > +	}
-> > > >  
-> > > >  	return security_inode_init_security(inode, dir, qstr,
-> > > >  					    &ocfs2_initxattrs, NULL);
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index a582ddd583c2..3db85c68d182 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -8,6 +8,14 @@ config DRM_PANEL
+ menu "Display Panels"
+ 	depends on DRM && DRM_PANEL
+ 
++config DRM_PANEL_AUO_A030JTN01
++	tristate "AUO A030JTN01"
++	depends on OF && SPI
++	select REGMAP_SPI
++	help
++	  Say Y here to enable support for the AUO A030JTN01 320x480 3.0" panel
++	  as found in the YLM RS-97 handheld gaming console.
++
+ config DRM_PANEL_ABT_Y030XX067A
+ 	tristate "ABT Y030XX067A 320x480 LCD panel"
+ 	depends on OF && SPI
+diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+index 34e717382dbb..f425599c2717 100644
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_DRM_PANEL_AUO_A030JTN01) += panel-auo-a030jtn01.o
+ obj-$(CONFIG_DRM_PANEL_ABT_Y030XX067A) += panel-abt-y030xx067a.o
+ obj-$(CONFIG_DRM_PANEL_ARM_VERSATILE) += panel-arm-versatile.o
+ obj-$(CONFIG_DRM_PANEL_ASUS_Z00T_TM5P5_NT35596) += panel-asus-z00t-tm5p5-n35596.o
+diff --git a/drivers/gpu/drm/panel/panel-auo-a030jtn01.c b/drivers/gpu/drm/panel/panel-auo-a030jtn01.c
+new file mode 100644
+index 000000000000..1c4f812e9483
+--- /dev/null
++++ b/drivers/gpu/drm/panel/panel-auo-a030jtn01.c
+@@ -0,0 +1,295 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * AU Optronics A030JTN01.0 TFT LCD panel driver
++ *
++ * Copyright (C) 2020, Paul Cercueil <paul@crapouillou.net>
++ * Copyright (C) 2020, Christophe Branchereau <cbranchereau@gmail.com>
++ */
++
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/gpio/consumer.h>
++#include <linux/media-bus-format.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
++
++#include <drm/drm_modes.h>
++#include <drm/drm_panel.h>
++
++struct a030jtn01_info {
++	const struct drm_display_mode *display_modes;
++	unsigned int num_modes;
++	u16 width_mm, height_mm;
++	u32 bus_format, bus_flags;
++};
++
++struct a030jtn01 {
++	struct drm_panel panel;
++	struct spi_device *spi;
++	struct regmap *map;
++
++	const struct a030jtn01_info *panel_info;
++
++	struct regulator *supply;
++	struct gpio_desc *reset_gpio;
++};
++
++static inline struct a030jtn01 *to_a030jtn01(struct drm_panel *panel)
++{
++	return container_of(panel, struct a030jtn01, panel);
++}
++
++static int a030jtn01_prepare(struct drm_panel *panel)
++{
++	struct a030jtn01 *priv = to_a030jtn01(panel);
++	struct device *dev = &priv->spi->dev;
++	int err;
++
++	err = regulator_enable(priv->supply);
++	if (err) {
++		dev_err(dev, "Failed to enable power supply: %d\n", err);
++		return err;
++	}
++
++	usleep_range(1000, 8000);
++
++	/* Reset the chip */
++	gpiod_set_value_cansleep(priv->reset_gpio, 1);
++	usleep_range(100, 8000);
++	gpiod_set_value_cansleep(priv->reset_gpio, 0);
++	usleep_range(2000, 8000);
++
++	/*
++	 * No idea why two writes are needed. If this write is commented,
++	 * the colors are wrong. Doesn't seem to be timing-related, since
++	 * a msleep(200) doesn't fix it.
++	 */
++	regmap_write(priv->map, 0x06, 0x00);
++
++	/* Use (24 + 6) == 0x1e as the vertical back porch */
++	err = regmap_write(priv->map, 0x06, 0x1e);
++	if (err)
++		goto err_disable_regulator;
++
++	/* Use (42 + 30) * 3 == 0xd8 as the horizontal back porch */
++	err = regmap_write(priv->map, 0x07, 0xd8);
++	if (err)
++		goto err_disable_regulator;
++
++	regmap_write(priv->map, 0x05, 0x74);
++
++	return 0;
++
++err_disable_regulator:
++	gpiod_set_value_cansleep(priv->reset_gpio, 1);
++	regulator_disable(priv->supply);
++	return err;
++}
++
++static int a030jtn01_unprepare(struct drm_panel *panel)
++{
++	struct a030jtn01 *priv = to_a030jtn01(panel);
++
++	gpiod_set_value_cansleep(priv->reset_gpio, 1);
++	regulator_disable(priv->supply);
++
++	return 0;
++}
++
++static int a030jtn01_enable(struct drm_panel *panel)
++{
++	struct a030jtn01 *priv = to_a030jtn01(panel);
++	int ret;
++
++	ret = regmap_write(priv->map, 0x05, 0x75);
++	if (ret)
++		return ret;
++
++	/* Wait for the picture to be stable */
++	if (panel->backlight)
++		msleep(100);
++
++	return 0;
++}
++
++static int a030jtn01_disable(struct drm_panel *panel)
++{
++	struct a030jtn01 *priv = to_a030jtn01(panel);
++
++	return regmap_write(priv->map, 0x05, 0x74);
++}
++
++static int a030jtn01_get_modes(struct drm_panel *panel,
++				struct drm_connector *connector)
++{
++	struct a030jtn01 *priv = to_a030jtn01(panel);
++	const struct a030jtn01_info *panel_info = priv->panel_info;
++	struct drm_display_mode *mode;
++	unsigned int i;
++
++	for (i = 0; i < panel_info->num_modes; i++) {
++		mode = drm_mode_duplicate(connector->dev,
++					  &panel_info->display_modes[i]);
++		if (!mode)
++			return -ENOMEM;
++
++		drm_mode_set_name(mode);
++
++		mode->type = DRM_MODE_TYPE_DRIVER;
++		if (panel_info->num_modes == 1)
++			mode->type |= DRM_MODE_TYPE_PREFERRED;
++
++		drm_mode_probed_add(connector, mode);
++	}
++
++	connector->display_info.bpc = 8;
++	connector->display_info.width_mm = panel_info->width_mm;
++	connector->display_info.height_mm = panel_info->height_mm;
++
++	drm_display_info_set_bus_formats(&connector->display_info,
++					 &panel_info->bus_format, 1);
++	connector->display_info.bus_flags = panel_info->bus_flags;
++
++	return panel_info->num_modes;
++}
++
++static const struct drm_panel_funcs a030jtn01_funcs = {
++	.prepare	= a030jtn01_prepare,
++	.unprepare	= a030jtn01_unprepare,
++	.enable		= a030jtn01_enable,
++	.disable	= a030jtn01_disable,
++	.get_modes	= a030jtn01_get_modes,
++};
++
++static bool a030jtn01_has_reg(struct device *dev, unsigned int reg)
++{
++	static const u32 a030jtn01_regs_mask = 0x001823f1fb;
++
++	return a030jtn01_regs_mask & BIT(reg);
++};
++
++static const struct regmap_config a030jtn01_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.read_flag_mask = 0x40,
++	.max_register = 0x1c,
++	.readable_reg = a030jtn01_has_reg,
++	.writeable_reg = a030jtn01_has_reg,
++};
++
++static int a030jtn01_probe(struct spi_device *spi)
++{
++	struct device *dev = &spi->dev;
++	struct a030jtn01 *priv;
++	int err;
++
++	spi->mode |= SPI_MODE_3 | SPI_3WIRE;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->spi = spi;
++	spi_set_drvdata(spi, priv);
++
++	priv->map = devm_regmap_init_spi(spi, &a030jtn01_regmap_config);
++	if (IS_ERR(priv->map)) {
++		dev_err(dev, "Unable to init regmap\n");
++		return PTR_ERR(priv->map);
++	}
++
++	priv->panel_info = of_device_get_match_data(dev);
++	if (!priv->panel_info)
++		return -EINVAL;
++
++	priv->supply = devm_regulator_get(dev, "power");
++	if (IS_ERR(priv->supply)) {
++		dev_err(dev, "Failed to get power supply\n");
++		return PTR_ERR(priv->supply);
++	}
++
++	priv->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
++	if (IS_ERR(priv->reset_gpio)) {
++		dev_err(dev, "Failed to get reset GPIO\n");
++		return PTR_ERR(priv->reset_gpio);
++	}
++
++	drm_panel_init(&priv->panel, dev, &a030jtn01_funcs,
++		       DRM_MODE_CONNECTOR_DPI);
++
++	err = drm_panel_of_backlight(&priv->panel);
++	if (err)
++		return err;
++
++	drm_panel_add(&priv->panel);
++
++	return 0;
++}
++
++static void a030jtn01_remove(struct spi_device *spi)
++{
++	struct a030jtn01 *priv = spi_get_drvdata(spi);
++
++	drm_panel_remove(&priv->panel);
++	drm_panel_disable(&priv->panel);
++	drm_panel_unprepare(&priv->panel);
++}
++
++static const struct drm_display_mode a030jtn01_modes[] = {
++	{ /* 60 Hz */
++		.clock = 14400,
++		.hdisplay = 320,
++		.hsync_start = 320 + 8,
++		.hsync_end = 320 + 8 + 42,
++		.htotal = 320 + 8 + 42 + 30,
++		.vdisplay = 480,
++		.vsync_start = 480 + 90,
++		.vsync_end = 480 + 90 + 24,
++		.vtotal = 480 + 90 + 24 + 6,
++		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
++	},
++	{ /* 50 Hz */
++		.clock = 12000,
++		.hdisplay = 320,
++		.hsync_start = 320 + 8,
++		.hsync_end = 320 + 8 + 42,
++		.htotal = 320 + 8 + 42 + 30,
++		.vdisplay = 480,
++		.vsync_start = 480 + 90,
++		.vsync_end = 480 + 90 + 24,
++		.vtotal = 480 + 90 + 24 + 6,
++		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
++	},
++};
++
++static const struct a030jtn01_info a030jtn01_info = {
++	.display_modes = a030jtn01_modes,
++	.num_modes = ARRAY_SIZE(a030jtn01_modes),
++	.width_mm = 70,
++	.height_mm = 51,
++	.bus_format = MEDIA_BUS_FMT_RGB888_3X8_DELTA,
++	.bus_flags = DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
++};
++
++static const struct of_device_id a030jtn01_of_match[] = {
++	{ .compatible = "auo,a030jtn01", .data = &a030jtn01_info },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, a030jtn01_of_match);
++
++static struct spi_driver a030jtn01_driver = {
++	.driver = {
++		.name = "auo-a030jtn01",
++		.of_match_table = a030jtn01_of_match,
++	},
++	.probe = a030jtn01_probe,
++	.remove = a030jtn01_remove,
++};
++module_spi_driver(a030jtn01_driver);
++
++MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
++MODULE_AUTHOR("Christophe Branchereau <cbranchereau@gmail.com>");
++MODULE_LICENSE("GPL v2");
+-- 
+2.35.1
 
