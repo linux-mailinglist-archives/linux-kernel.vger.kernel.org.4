@@ -2,79 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D2664AF59
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16B264AF65
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiLMFc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 00:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S233100AbiLMFoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 00:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiLMFcv (ORCPT
+        with ESMTP id S229455AbiLMFoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:32:51 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9852713D43;
-        Mon, 12 Dec 2022 21:32:48 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id f20so2234268lja.4;
-        Mon, 12 Dec 2022 21:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qm9joTADv9j0tGCJx1JGU7wkHn1gQO4t8dEAYaWXy70=;
-        b=RJ89sCv95B86fePFNIw8H8q36kNGtnKn9vO/d0aReZkcx8fTSv0+pQfLQXd/P0BmU5
-         n/RhsjnZp2rHcKo0q4lZlQ4VkAVkgXFvcLRQbl8WFEdyCh+UTxVz0IFLZJyYxxPfoxem
-         6DoFsbp46mI+q1Zm7GJ/PmOQmelZh8VEGjTAev36HXgHJ2ZbtJdQtmpBLwaffzQCNIZy
-         IaM8a8B9ZTLbI2/aH5vLvBJL/kMxLCKYoA+PLBIVg6u8cOtzccfjQe5CS+CiaWEeXvF4
-         HTPAvN1FBueHl1V+jdE4Pxdkol/tfM2IAa34m20A2KjUwQoGubZ4H3cjyelZuWMGLxHP
-         76uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qm9joTADv9j0tGCJx1JGU7wkHn1gQO4t8dEAYaWXy70=;
-        b=kfoKjfXnRvxTc2IzLJk4MjKVv2ZVGZJbhZKrpT4NF/f5l7SpjONBb36NqcK8VP2FYC
-         0khZp2wkZ9Sdj8qsOUeaHTGnbPn7w1TmTvw1rr7WQ1t7L6DNAqwv89rzfLNLQmnSyk+e
-         LM7ZFGp9w3Sf0+T3OjT5m5xPKihmUr93aT/cvEB48ijd/G7eA/R7GA7cVd6Di6bjbpQS
-         eaSBCLqRIyuK03FTAyuF2R/vkyuX1zBfYLvkAGB5BkbNjRSsZAhTgKNXmhMkIunXxIo+
-         xKgQSAQ9nkwGieTpgEfZcre03Yy8BL0Vvl/ZYLICEJkyCRqdU0NISw94n4CADat3+5ai
-         +LXQ==
-X-Gm-Message-State: ANoB5pmtx+UZobFtZYfgbsiGxoWulYZ85zQbzA86TdAXE+MbV1BBF5XO
-        m8iTmjbQtOLwt7pDPaEqGZAafdsQr1+y4FxWa5H7YEpIDz6Q
-X-Google-Smtp-Source: AA0mqf46EQTHpmYYKuD32y8kyBx9XB2ds8BeeUCVtOBg92geJdHPie+7BcpJJbgbfg0QwB3aX5SbyEYaiZHO/VFMtEs=
-X-Received: by 2002:a2e:8887:0:b0:279:f19b:2192 with SMTP id
- k7-20020a2e8887000000b00279f19b2192mr7781433lji.471.1670909566618; Mon, 12
- Dec 2022 21:32:46 -0800 (PST)
+        Tue, 13 Dec 2022 00:44:05 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9E217E2E;
+        Mon, 12 Dec 2022 21:44:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670910243; x=1702446243;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=GlIRjLlouUWO1uozDPsslI/wfIy9NlpDuzuMY/D2txM=;
+  b=gpbuNjTCJOoTT6hl7UlBi90QfVzIkGGwEv162NkWxpaWEagu+IXZFTJf
+   fAvswbQga+6x+qpf/6gUd4HffzgLJ/+48DEwJIz6Azc51u6Cx4p/ekSkW
+   1Qlusfdugg9qh0E1Qpq2GpUNY+vnyzGqun+ZAgrQcP1lN+y9vwVl46ajt
+   d/vldXautHUhjSkLgmHtg24kRxuWzOMiVToCgRvhO9z63Tju8MhdnHCHS
+   Gnl7H2cDUaMYNftI2n/+2qUGHBhAMQWNjV0Lzl5LHXd/slQIhR8PfFwjD
+   1LmISqeK1VLBHGLKIyYQU7sG7TYWTxYSnGcod7nSfCbLMSdRUz+pWXAuE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="316750317"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="316750317"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:44:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="977326298"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="977326298"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Dec 2022 21:44:00 -0800
+Date:   Tue, 13 Dec 2022 13:34:09 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/8] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y5gO0US05awIxdTm@yilunxu-OptiPlex-7050>
+References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
+ <20221211103913.5287-2-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-References: <1670763911-8695-1-git-send-email-Arthur.Simchaev@wdc.com> <1670763911-8695-2-git-send-email-Arthur.Simchaev@wdc.com>
-In-Reply-To: <1670763911-8695-2-git-send-email-Arthur.Simchaev@wdc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 13 Dec 2022 13:32:35 +0800
-Message-ID: <CAGaU9a_Td7Ks0tJmkxev54CJrCy0Fs89juzUd=M0G+m8+eS7wQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] ufs: core: Remove redundant wb check
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Cc:     martin.petersen@oracle.com, beanhuo@micron.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221211103913.5287-2-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 9:08 PM Arthur Simchaev <Arthur.Simchaev@wdc.com> wrote:
->
-> We used to use the extended-feature field in the device descriptor,
-> as an indication that the device supports ufs2.2 or later.
-> Remove that as this check is specifically done few lines above.
->
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Bean Huo <beanhuo@micron.com>
-> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+On 2022-12-11 at 12:39:06 +0200, Ilpo Järvinen wrote:
+> BMC type specific info is currently set by a switch/case block. The
+> size of this info is expected to grow as more dev types and features
+> are added which would have made the switch block bloaty.
+> 
+> Store type specific info into struct and place them into .driver_data
+> instead because it makes things a bit cleaner.
+> 
+> The m10bmc_type enum can be dropped as the differentiation is now
+> fully handled by the platform info.
+> 
+> The info member of struct intel_m10bmc that is added here is not used
+> yet in this change but its addition logically still belongs to this
+> change. The CSR map change that comes after this change needs to have
+> the info member.
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Reviewed-by: Xu Yilun <yilun.xu@intel.com>
