@@ -2,126 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2439664B33C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7836264B344
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiLMK1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S234771AbiLMKcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbiLMK1X (ORCPT
+        with ESMTP id S229884AbiLMKc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:27:23 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170FC1CFC8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670927237; x=1702463237;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xo4cPD17Q8E85pIFLX7I4jQUoYar/XftlntIfv8FRww=;
-  b=XGs2d3VGzQB8JT+/PQ3wIQXU3fSL+MNl1ObEneAL9oZfDBf7UJoY/aQq
-   cmRr1QSxtXjtvD8/4X8341LCemNbIv6o9oD+XOhJ9cTbfanIYI6E2Sa0D
-   1jSgpPO7e416iDfG+Lk2dHv0HPh+X0cPqXR+wergJWwkMpsMq5NjD3o51
-   UFBF2pgYbSB36ruC+okshvhAjAaB3Fl0JQOgKnWT+QeK+MPO9J9+L19p6
-   83amnt3XdvMCe0al1zsELZQQJKUYq9sHYNfetVujn1zlOWDLhhE5lyYwL
-   uI97ZCuCf0En6a5A/g72btaM9Jm+AFr9KbESxzwzYw/fiSLstGV8fjV1a
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="404354275"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="404354275"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:27:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="598782174"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="598782174"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2022 02:27:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p52VA-009ALu-2B;
-        Tue, 13 Dec 2022 12:27:08 +0200
-Date:   Tue, 13 Dec 2022 12:27:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version
- of xchg
-Message-ID: <Y5hTfB+oc1/tWdWQ@smile.fi.intel.com>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <Y5OE3AX7DS/DfClX@smile.fi.intel.com>
- <398d55d0-3256-238e-132a-195baaf7f4a6@intel.com>
+        Tue, 13 Dec 2022 05:32:27 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F383CB8;
+        Tue, 13 Dec 2022 02:32:25 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NWZYv2YXNz4f3kpT;
+        Tue, 13 Dec 2022 18:32:19 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgCH6bS0VJhjUsCFCA--.4892S3;
+        Tue, 13 Dec 2022 18:32:22 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix possible uaf for 'bfqq->bic'
+To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221210102537.655670-1-yukuai1@huaweicloud.com>
+ <20221212133537.hrs5t32ijj6lxoaf@quack3>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <ba364ff7-c6eb-9005-2c4d-04857a7298c5@huaweicloud.com>
+Date:   Tue, 13 Dec 2022 18:32:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <398d55d0-3256-238e-132a-195baaf7f4a6@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221212133537.hrs5t32ijj6lxoaf@quack3>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCH6bS0VJhjUsCFCA--.4892S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw1kGF43WFWfZF45Zr4rGrg_yoWrWw15pr
+        ZxJayxAw48JrWagw47Zw18t3WfXws3Wr47Jr1Sgr1xKrW5Ar13XFZ2yF1UZrWfWrykuay3
+        WF1DJrZ7XryIva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
+        UU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:09:12AM +0100, Andrzej Hajda wrote:
-> On 09.12.2022 19:56, Andy Shevchenko wrote:
-> > On Fri, Dec 09, 2022 at 04:48:39PM +0100, Andrzej Hajda wrote:
+Hi, Jan!
 
-...
-
-> > > I hope there will be place for such tiny helper in kernel.
-> > > Quick cocci analyze shows there is probably few thousands places
-> > > where it could be used, of course I do not intend to do it :).
-> > > 
-> > > I was not sure where to put this macro, I hope near swap definition
-> > > is the most suitable place.
-> > 
-> > Ah, swap() in this context is not the same. minmax.h hosts it because
-> > it's often related to the swap function in the sort-type algorithms.
-
-> >> Moreover sorry if to/cc is not correct - get_maintainers.pl was
-> > > more confused than me, to who address this patch.
-
-...
-
-> > >   include/linux/minmax.h | 14 ++++++++++++++
-> > 
-> > Does it really suit this header? I would expect something else.
-> > Maybe include/linux/non-atomic/xchg.h, dunno.
+在 2022/12/12 21:35, Jan Kara 写道:
+> On Sat 10-12-22 18:25:37, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Our test report a uaf for 'bfqq->bic' in 5.10:
+>>
+>> ==================================================================
+>> BUG: KASAN: use-after-free in bfq_select_queue+0x378/0xa30
+>> Read of size 8 at addr ffff88810efb42d8 by task fsstress/2318352
+>>
+>> CPU: 6 PID: 2318352 Comm: fsstress Kdump: loaded Not tainted 5.10.0-60.18.0.50.h602.kasan.eulerosv2r11.x86_64 #1
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
+>> Call Trace:
+> ...
+>>   bfq_select_queue+0x378/0xa30
+>>   __bfq_dispatch_request+0x1c4/0x220
+>>   bfq_dispatch_request+0xe8/0x130
+>>   __blk_mq_do_dispatch_sched+0x3f4/0x560
+>>   blk_mq_do_dispatch_sched+0x62/0xb0
+>>   __blk_mq_sched_dispatch_requests+0x215/0x2a0
+>>   blk_mq_sched_dispatch_requests+0x8f/0xd0
+>>   __blk_mq_run_hw_queue+0x98/0x180
+>>   __blk_mq_delay_run_hw_queue+0x22b/0x240
+>>   blk_mq_run_hw_queue+0xe3/0x190
+>>   blk_mq_sched_insert_requests+0x107/0x200
+>>   blk_mq_flush_plug_list+0x26e/0x3c0
+>>   blk_finish_plug+0x63/0x90
+>>   __iomap_dio_rw+0x7b5/0x910
+>>   iomap_dio_rw+0x36/0x80
+>>   ext4_dio_read_iter+0x146/0x190 [ext4]
+>>   ext4_file_read_iter+0x1e2/0x230 [ext4]
+>>   new_sync_read+0x29f/0x400
+>>   vfs_read+0x24e/0x2d0
+>>   ksys_read+0xd5/0x1b0
 > 
-> non-atomic seems quite strange for me, I would assume everything not in
-> atomic is non-atomic, unless explicitly specified.
+> Perhaps we can trim this UAF report a bit to what I've left above? That
+> should be enough to give idea about the problem.
+Yes, of course.
 > 
-> > 
-> > Btw, have you looked if Ingo's gigantic series have done anything to cmpxchg.h
-> > and related headers? Maybe some ideas can be taken from there?
+>> Commit 3bc5e683c67d ("bfq: Split shared queues on move between cgroups")
+>> changes that move process to a new cgroup will allocate a new bfqq to
+>> use, however, the old bfqq and new bfqq can point to the same bic:
+>>
+>> 1) Initial state, two process with io in the same cgroup.
+>>
+>> Process 1       Process 2
+>>   (BIC1)          (BIC2)
+>>    |  Λ            |  Λ
+>>    |  |            |  |
+>>    V  |            V  |
+>>    bfqq1           bfqq2
+>>
+>> 2) bfqq1 is merged to bfqq2.
+>>
+>> Process 1       Process 2（cg1)
+>>   (BIC1)          (BIC2)
+>>    |               |
+>>     \-------------\|
+>>                    V
+>>    bfqq1           bfqq2(coop)
+>>
+>> 3) Process 1 exit, then issue new io(denoce IOA) from Process 2.
+>>
+>>   (BIC2)
+>>    |  Λ
+>>    |  |
+>>    V  |
+>>    bfqq2(coop)
+>>
+>> 4) Before IOA is completed, move Process 2 to another cgroup and issue io.
+>>
+>> Process 2
+>>   (BIC2)
+>>     Λ
+>>     |\--------------\
+>>     |                V
+>>    bfqq2           bfqq3
+>>
+>> Now that BIC2 points to bfqq3, while bfqq2 and bfqq3 both point to BIC2.
+>> If all the requests are completed, and Process 2 exit, BIC2 will be
+>> freed while there is no guarantee that bfqq2 will be freed before BIC2.
+>>
+>> Fix the problem by clearing bfqq->bic if process references is decreased
+>> to zero, since that they are not related anymore.
+>>
+>> Fixes: 3bc5e683c67d ("bfq: Split shared queues on move between cgroups")
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > 
-> Grepping it didn't give any clue.
+> Thanks for the analysis and the patch! I agree this is a problem.
 > 
-> Looking at 'near' languages just to get an idea (they name the function
-> differently):
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index a72304c728fc..6eada99d1b34 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -3036,6 +3036,14 @@ void bfq_release_process_ref(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>>   
+>>   	bfq_reassign_last_bfqq(bfqq, NULL);
+>>   
+>> +	/*
+>> +	 * __bfq_bic_change_cgroup() just reset bic->bfqq so that a new bfqq
+>> +	 * will be created to handle new io, while old bfqq will stay around
+>> +	 * until all the requests are completed. It's unsafe to keep bfqq->bic
+>> +	 * since they are not related anymore.
+>> +	 */
+>> +	if (bfqq_process_refs(bfqq) == 1)
+>> +		bfqq->bic = NULL;
+>>   	bfq_put_queue(bfqq);
 > 
-> C++ [1]: exchange and swap are in utility header
-> Rust[2]: replace and swap are in std::mem module
+> Rather than changing bfq_release_process_ref() I think it would be more
+> logical to change bic_set_bfqq() like:
 > 
-> This is some argument to put them together.
+> 	struct bfq_queue *old_bfqq = bic->bfqq[is_sync];
+> 
+> 	/* Clear bic pointer if we are detaching bfqq from its bic */
+> 	if (old_bfqq && old_bfqq->bic == bic)
+> 		old_bfqq->bic = NULL;
+> 
+> And then we can also remove several explicit bfqq->bic = NULL statements
+> from bfq code.
 
-Again, I left the above part on top of this message, the swap() in Linux kernel
-is not related to __xchg() or similar. That said, minmax.h is not a good place
-for the latter.
+Yes, I agree. I'll send a new patch soon.
 
-> [1]: https://en.cppreference.com/w/cpp/header/utility
-> [2]: https://doc.rust-lang.org/std/mem/index.html
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Thanks,
+Kuai
+> 
+> 								Honza
+> 
 
