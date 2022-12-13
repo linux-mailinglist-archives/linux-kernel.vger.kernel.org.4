@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABFD64AE93
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 05:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2792564AE90
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 05:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234245AbiLMEMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 23:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S229700AbiLMEMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 23:12:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbiLMEMs (ORCPT
+        with ESMTP id S229611AbiLMEMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 23:12:48 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90497398
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:39 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id i20so4352272qtw.9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:39 -0800 (PST)
+        Mon, 12 Dec 2022 23:12:31 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C7A16589
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:29 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id a9so14306550pld.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IbX66ZXwXxKVKyE5+d5TwpxRmxyoArAKr+H2f8obyNQ=;
-        b=Yvg8jYxnKKGYYS96lK+qTy6828mLCsBGBUhO4kv2uFz3BXfleQ4F6ocBPx95r1oHrm
-         J/qcF4SsXvzDHpPAvk0L9m0uq9vTL4nhZXb1qniyQ2oHPbsIOpxjou/VxekGSDIM3I17
-         3DWgDzJ83YlECtx5BRGdI5fKmsx3bUV+0NO2Y=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0phE3o9mO3P/oDVOwXOrXlOT+3nv35crWDJ9EleFA8k=;
+        b=sHBTPQS7PuFFom9l/xeN0gQMYHSKFT3zGrmxWMVKhuPySFVYag+kJAbhHFpnxYQtTj
+         ACtt9S5s6ZRr2LPCKm+77ySWReIfb0ZwtiZxzHzIox4AnAWoHb1bhleYODAlIX4bjmqz
+         OIuti1iFmb+ldG8BTUpx52Q2V8c2gk9bYDiQ7UTYVng/JrXqnTwoGjqFUvwvG/1xp8jz
+         I06WTCgq0XP+tGVKVr4aX/lpZjqc7fPOgr8B5Nhv7xuneieXDxgndnOZeITArpHBjfrt
+         cMIcd9zZHQPc1tmek2hMUJdKdp4oRB2lD5JrDDlqPEBKoMSuLnSNZRwkyEFD04gH4dVk
+         pRyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IbX66ZXwXxKVKyE5+d5TwpxRmxyoArAKr+H2f8obyNQ=;
-        b=GpnpG9OYwhpMVRTqkCx8CFayA+Rjo22DtkmtwAHUq2YvUOBmTo98GzltTYLPolUbal
-         tozG0hzCyMCLWl22Jfv6x0IYYtHpDm1ulacX9jvElOzjvm0nrl6bTQErTpc/bSzWeIQs
-         iM9JvT8fViITUrguYw69WPOU3VQW/CIMJjgdWV0Y59Jcssfham0W/3LIlpUYrnZrB9LS
-         KJ3zj4X7RcyIDw7FiL1lNX3uuE7Wx0t8piC+nVf/+KI2/4JGuec6ssqd93Wb2gl0Ggk/
-         4lrnuKJ7Drlycgf1IHISAEBqbqtx5XJLG0d0MBqahc/TSzNBVThLGPU5aUMajZv0/IdJ
-         9WyQ==
-X-Gm-Message-State: ANoB5pnwzDinhfzyMPi9KarWgYUll4ffCuWR9+9DajGLNLIyln2JKjO6
-        CyWkLbInx+vr+3rRJQA1swupkEFmkYt0+VGT
-X-Google-Smtp-Source: AA0mqf7dM8rHNO+DfEKNz1y8vaXZ+Hg+lXqtvgu3k2kION7oUXGediFo0uwGdnqhmFLbWnptJvCOuA==
-X-Received: by 2002:ac8:4e44:0:b0:3a5:1be0:d879 with SMTP id e4-20020ac84e44000000b003a51be0d879mr35155645qtw.51.1670904758005;
-        Mon, 12 Dec 2022 20:12:38 -0800 (PST)
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com. [209.85.222.178])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05622a008200b0039cc0fbdb61sm3187169qtw.53.2022.12.12.20.12.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 20:12:34 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id pj1so3653998qkn.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:34 -0800 (PST)
-X-Received: by 2002:a37:8883:0:b0:6fb:628a:1aea with SMTP id
- k125-20020a378883000000b006fb628a1aeamr84330860qkd.697.1670904754152; Mon, 12
- Dec 2022 20:12:34 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0phE3o9mO3P/oDVOwXOrXlOT+3nv35crWDJ9EleFA8k=;
+        b=jzoG9oMFV4QfXJYA5rkVu1kucp63NTzDIxQEKxmafhXxGvWldlgMBps5x7FHaAbSip
+         P8S32KALlail5lpD71cqPSHmYzmgTkzuvU2j9mJ5RERg4kom4UzkbfxUNGc8b2fSSi6T
+         DoZCpau/FgRONc0VvvjUgQDBgsguSHAESpHNikNc1yRGBUTzQDf4ZGRzB9N/OQadV+K2
+         D4NgMzzs6Pusd6rnXe8a333L6B6lRBRTmC5ZTr0ssH0RF0knHq/44bLpFF7auEwmgGYv
+         540SDh5LDQQy39mDwW4J1Fpu5KJYAVUWezH42oBm4UgsFeL0JRiPR9M2NN06DZOGb6lz
+         dIdA==
+X-Gm-Message-State: ANoB5pkq7Z0fMywHB6E34kstZL4Ye+sx/u0SGQQ3xhLKHegO/+O6BrSd
+        F4Ni+73i05Uk70PpfySSQglzdg==
+X-Google-Smtp-Source: AA0mqf6Q/0eTmnGfJNcE+7MMOSleUzEAQxVrRiuBTqrUwYwc1ZEVGXINl0fsk0ZvLHVGoeS5yx/HHw==
+X-Received: by 2002:a05:6a21:1583:b0:a3:d7b0:aeef with SMTP id nr3-20020a056a21158300b000a3d7b0aeefmr111868pzb.0.1670904748417;
+        Mon, 12 Dec 2022 20:12:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id hk3-20020a17090b224300b002194319662asm6263318pjb.42.2022.12.12.20.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 20:12:27 -0800 (PST)
+Date:   Tue, 13 Dec 2022 04:12:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nagareddy Reddy <nspreddy@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [RFC PATCH v4 0/2] Deprecate BUG() in pte_list_remove() in
+ shadow mmu
+Message-ID: <Y5f7qBp4zXAiENNh@google.com>
+References: <20221129191237.31447-1-mizhang@google.com>
+ <Y5Oob6mSJKGoDBnt@google.com>
+ <Y5avm5VXpRt263wQ@google.com>
+ <Y5dax8XJV0F5adUw@google.com>
+ <CALzav=f2k9dPYkeW2D0ZvkDuDhA8Wmu+zV8W4isMFfd-HAQjrA@mail.gmail.com>
+ <Y5fXxsPtDeMZn2nV@google.com>
 MIME-Version: 1.0
-References: <Y5TB6E77vbpRMhIk@debian> <Y5bRuDiEwUAK1si1@debian>
-In-Reply-To: <Y5bRuDiEwUAK1si1@debian>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Dec 2022 20:12:18 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg44HkHGo-j5HEChEJYqW0-=vu7=i0euGBPT4asc1xBaQ@mail.gmail.com>
-Message-ID: <CAHk-=wg44HkHGo-j5HEChEJYqW0-=vu7=i0euGBPT4asc1xBaQ@mail.gmail.com>
-Subject: Re: [GIT PULL] erofs updates for 6.2-rc1 (fscache part inclusive)
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Jia Zhu <zhujia.zj@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5fXxsPtDeMZn2nV@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +82,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 11:01 PM Gao Xiang <xiang@kernel.org> wrote:
->
-> Comparing with the latest -next on the last Thursday, there was one-liner
-> addition  commit 927e5010ff5b ("erofs: use kmap_local_page()
-> only for erofs_bread()") as below:
-[...]
-> Because there is no -next version on Monday, if you would like to
-> take all commits in -next you could take
->   git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.2-rc1-alt
+On Tue, Dec 13, 2022, Mingwei Zhang wrote:
+> On Mon, Dec 12, 2022, David Matlack wrote:
+> > > What about explicitly treating both get_mmio_spte() and this as potential data
+> > > corruption?  E.g. something like this, and then use the DATA_CORRUPTION variant
+> > > in pte_list_remove()?
+> > >
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 2055e04b8f89..1cb69c6d186b 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -4075,6 +4075,7 @@ static bool get_mmio_spte(struct kvm_vcpu *vcpu, u64 addr, u64 *sptep)
+> > >                         pr_err("------ spte = 0x%llx level = %d, rsvd bits = 0x%llx",
+> > >                                sptes[level], level,
+> > >                                get_rsvd_bits(rsvd_check, sptes[level], level));
+> > > +               KVM_BUG_ON_DATA_CORRUPTION(reserved, vcpu->kvm);
 
-No worries. That one-liner isn't a problem, and you sent the pull
-request to me early, so I'm perfectly happy with your original request
-and have pulled it.
+Random aside, this would be better:
 
-Thanks for being careful,
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 99c40617d325..d9c46f2a6748 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4090,7 +4090,7 @@ static int handle_mmio_page_fault(struct kvm_vcpu *vcpu, u64 addr, bool direct)
+                return RET_PF_EMULATE;
+ 
+        reserved = get_mmio_spte(vcpu, addr, &spte);
+-       if (WARN_ON(reserved))
++       if (KVM_BUG_ON_DATA_CORRUPTION(reserved, vcpu->kvm))
+                return -EINVAL;
+ 
+        if (is_mmio_spte(spte)) {
 
-                 Linus
+> > >         }
+> > >
+> > >         return reserved;
+> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > index f16c4689322b..5c4a06f66f46 100644
+> > > --- a/include/linux/kvm_host.h
+> > > +++ b/include/linux/kvm_host.h
+> > > @@ -863,6 +863,17 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
+> > >         unlikely(__ret);                                        \
+> > >  })
+> > >
+> > > +#define KVM_BUG_ON_DATA_CORRUPTION(cond, kvm)                  \
+> > > +({                                                             \
+> > > +       int __ret = (cond);                                     \
+> > > +                                                               \
+> > > +       if (IS_ENABLED(CONFIG_BUG_ON_DATA_CORRUPTION))          \
+> > > +               BUG_ON(__ret);                                  \
+> > > +       else if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))      \
+> > > +               kvm_vm_bugged(kvm);                             \
+> > > +       unlikely(__ret);                                        \
+> > > +})
+> > > +
+> > >  static inline void kvm_vcpu_srcu_read_lock(struct kvm_vcpu *vcpu)
+> > >  {
+> > >  #ifdef CONFIG_PROVE_RCU
+> > 
+> > That sounds reasonable to me.
+> 
+> Actually, I disagree after thinking about it for a while. Since
+> Google turns on CONFIG_BUG_ON_DATA_CORRUPTION on default, this
+> KVM_BUG_ON_DATA_CORRUPTION() is literally BUG_ON(). Then there is no
+> point. The purpose of the series is to save the host from crash.
+
+Sure, but Google is not the only consumer of KVM.  E.g. I'm guessing many distros
+use CONFIG_BUG_ON_DATA_CORRUPTION=n.  Any user that doesn't have the infrastructure
+to capture crash dumps is likely better served overall by the WARN-and-continue
+behavior.
+
+> If we follow the upper changes on get_mmio_spte() as well, we are
+> introducing more BUG()!, ie., more chances to crash the host machine. So
+> I cannot stay with this idea.
+
+For get_mmio_spte() specifically, I am quite confident that in production kernels,
+the benefits of a BUG() far outweigh the risk of unnecessarily panicking the host.
+There have been recent-ish bugs that escaped into kernel releases, but the first
+one (wrong root level) escaped only because it affected an esoteric, rarely used
+configuration (shadow paging with a 32-bit host kernel), and the second one was
+a purely theoretical bug fix that was also limited to 32-bit kernels.
+
+  39b4d43e6003 ("KVM: x86/mmu: Get root level from walkers when retrieving MMIO SPTE")
+  2aa078932ff6 ("KVM: x86/mmu: Use -1 to flag an undefined spte in get_mmio_spte()")
+
+> In fact, there could many reasons why RMAPs and SPTEs are messed. In
+> many times, as illustrated by my example, they are not data corruptions.
+> They are just errors due to code refactoring or some miscalculations under
+> certain tricky corner situations, e.g., offset by 1.  So, treating them
+> blindly as data corruptions is an overkill.
+
+For SPTEs in prod, not really.  Something has gone really wrong if KVM messes up a
+SPTE to the point where _hardware_ unexpectedly observes a reserved bit in a
+production build.  We've had bugs where we've botched the software sanity checks,
+e.g. see commit
+
+  6c6ab524cfae ("KVM: x86/mmu: Treat NX as a valid SPTE bit for NPT")
+
+but except for rarely used setups (see above), unexpected reserved SPTE faults
+in production pretty much won't happen unless there's memory corruption or a CPU
+error.
+
+For RMAPs, I agree it's less clear cut, but at the same time the status quo is to
+always BUG(), so from an upstream perspective allowing the admin to avoid the
+BUG() is an unqualified improvement.
+
+> This is a comparison to the list traversal bug, which clearly shows data corruptions.
+
+That depends on what is considered "data corruption".  In this case,
+CONFIG_BUG_ON_DATA_CORRUPTION is about the kernel memory structures being corrupted,
+it's not referring to generic data corruption user data.
+
+  Select this option if the kernel should BUG when it encounters
+  data corruption in kernel memory structures when they get checked
+  for validity.
+
+And IMO that definition fits KVM's behavior perfectly.  get_mmio_spte() detects
+corrupted SPTEs, pte_list_remove() detects corrupted RMAP lists.
+
+If "data corruption" is interpeted to be corruption of user data than the list
+behavior is wildly overstepping.  E.g. if a subsystem has a bug where an object
+is added to two different lists, list_add() will yell about the issue but because
+all writes to the list_head are aborted with CONFIG_DEBUG_LIST=y, it's entirely
+possible for the bug to be benign or limited to the subsystem.
+
+A somewhat contrived example would be if a (complex) allocator and its caller both
+add the object to the same list; the second list_add() is problematic and would
+trigger BUG() with CONFIG_BUG_ON_DATA_CORRUPTION=y, but with CONFIG_DEBUG_LIST=y
+the bug would be completely benign.
+
+> So, alternatively, I think it should be reasonable to shutdown the KVM
+> instance if we see things messed up in MMIO SPTEs as well, but please
+> don not the host for that.
+
+Again, this doesn't unconditionally bring down the host.  Google is _choosing_
+to BUG() on _potential_ data corruption.  I'm open to not tieing KVM's behavior to
+CONFIG_BUG_ON_DATA_CORRUPTION if there's a good argument for doing so, but if we
+(Google) plan on turning on the BUG() behavior for KVM then I don't see the point.
+
+In other words, we should discuss internally whether or not we want/need to push
+for a separate control, but from an upstream perspective I think the proposed
+behavior is entirely reasonable.
