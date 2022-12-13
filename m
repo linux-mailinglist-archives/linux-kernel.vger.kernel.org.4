@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D3464AFAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BCC64AFB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbiLMGOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S234487AbiLMGP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiLMGOb (ORCPT
+        with ESMTP id S234477AbiLMGPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:14:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADFDFACF;
-        Mon, 12 Dec 2022 22:14:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E38E6119B;
-        Tue, 13 Dec 2022 06:14:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D592C433F0;
-        Tue, 13 Dec 2022 06:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670912068;
-        bh=9qlkAvr6fL5DQQbYvPUZpYWAoWwScOvU8dCgcv4X4YU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0vdyolHyyEUHy6X9A9C6XD/uQh1YVvVOFjQmqTsXuYE9UkwHSEHvpVVXT3TWetHy6
-         1OmgINN0XCrWc2bpG6nft5EErNgUuvCc+7mYJlN/Gh2uQos+MfOm/6eChVaQ0WPbe0
-         xcUC2se8q3QosMbmzTwc6+VXSag3PYvrq4g5tsuQ=
-Date:   Tue, 13 Dec 2022 07:14:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
-Message-ID: <Y5gYQZ3iA/k9EPJn@kroah.com>
-References: <20221213025120.23149-1-jiasheng@iscas.ac.cn>
+        Tue, 13 Dec 2022 01:15:52 -0500
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11515A00
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:15:51 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id 4yZvpMESVbw2u4yZvpN1WL; Tue, 13 Dec 2022 07:15:49 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 13 Dec 2022 07:15:49 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: [PATCH v2] drm/msm/hdmi: Fix the error handling path of msm_hdmi_dev_probe()
+Date:   Tue, 13 Dec 2022 07:15:33 +0100
+Message-Id: <b3f9da097851e2e42a40dc61458aa98c41c88d0d.1670741386.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213025120.23149-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 10:51:19AM +0800, Jiasheng Jiang wrote:
-> Add the check for the return value of dma_alloc_coherent
-> in order to avoid NULL pointer dereference.
-> 
-> Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/usb/gadget/udc/aspeed_udc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-> index 01968e2167f9..6cf46562bb25 100644
-> --- a/drivers/usb/gadget/udc/aspeed_udc.c
-> +++ b/drivers/usb/gadget/udc/aspeed_udc.c
-> @@ -1516,6 +1516,8 @@ static int ast_udc_probe(struct platform_device *pdev)
->  					  AST_UDC_EP_DMA_SIZE *
->  					  AST_UDC_NUM_ENDPOINTS,
->  					  &udc->ep0_buf_dma, GFP_KERNEL);
-> +	if (!udc->ep0_buf)
-> +		return -ENOMEM;
+If an error occurs after a successful msm_hdmi_get_phy() call, it must be
+undone by a corresponding msm_hdmi_put_phy(), as already done in the
+remove function.
 
-How did you test this?  I ask as it is obviously not correct.  Please
-always test your patches before submitting them as adding new bugs when
-claiming that you are fixing a problem is not good.
+Fixes: 437365464043 ("drm/msm/hdmi: move msm_hdmi_get_phy() to msm_hdmi_dev_probe()")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+Change in v2:
+  - Fix a typo in the prefix of the subject line    [Abhinav Kumar]
+  - Add R-b tag    [Abhinav Kumar]
 
-And how did you find this potential problem?  What tool did you use and
-why did you not follow the documentation for properly describing the
-tool?
+v1:
+https://lore.kernel.org/all/b3d9dac978f1e2e42a40ec61f58aa98c44c85dfd.1670741386.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/gpu/drm/msm/hdmi/hdmi.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
+index 4d3fdc806bef..97372bb241d8 100644
+--- a/drivers/gpu/drm/msm/hdmi/hdmi.c
++++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
+@@ -532,11 +532,19 @@ static int msm_hdmi_dev_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_pm_runtime_enable(&pdev->dev);
+ 	if (ret)
+-		return ret;
++		goto err_put_phy;
+ 
+ 	platform_set_drvdata(pdev, hdmi);
+ 
+-	return component_add(&pdev->dev, &msm_hdmi_ops);
++	ret = component_add(&pdev->dev, &msm_hdmi_ops);
++	if (ret)
++		goto err_put_phy;
++
++	return 0;
++
++err_put_phy:
++	msm_hdmi_put_phy(hdmi);
++	return ret;
+ }
+ 
+ static int msm_hdmi_dev_remove(struct platform_device *pdev)
+-- 
+2.34.1
 
-greg k-h
