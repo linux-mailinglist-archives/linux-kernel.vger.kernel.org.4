@@ -2,192 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94F964B88B
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDF664B88A
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbiLMPfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S235975AbiLMPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbiLMPfm (ORCPT
+        with ESMTP id S236202AbiLMPft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:35:42 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B471F63A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:35:40 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id n8-20020a6b4108000000b006de520dc5c9so2083814ioa.19
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:35:40 -0800 (PST)
+        Tue, 13 Dec 2022 10:35:49 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCBF1F60D;
+        Tue, 13 Dec 2022 07:35:48 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id q6-20020a4aa886000000b004a083f945a6so2420470oom.6;
+        Tue, 13 Dec 2022 07:35:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6RxT+yoEXvae8IZOVzRkgDoj7dOx8+ozRPGUkIsbuyE=;
-        b=XJWORWl4H7BvFI+bsYotORphZlFoIEBtMT9Qq65pWzRO3C8uQI1PNwC8H1bS/jODf7
-         BDeA2HlS+3AxUWLiET8q4QbAS1VoS3qJc1MfoszdwDDuxEC3IkjLZfrId9dnYeWGUvDb
-         rlQMIzdh9xyp+hovB+rQVtBj4/RNlhnACr14WbOl4ydDCNoJSyXruLWoDD45d20LHKp1
-         xmeedbQRtqq95y3vTPcw0GgtK5lF8Cm1PR2/A5DnDiEv4gYyFgJuFfTZThOcmUAnZyDY
-         N/uhU2oCowbiFekz9RUlipQ/RHK2DPaudvhK7XBFyzEp0pLvuz7Kzq9PIXmmO525KpYE
-         nAAg==
-X-Gm-Message-State: ANoB5plJTgMbMkbE1xlVivcQsuGIUB7JrJNMZek8P9OliUA30D+hruiR
-        vAQ6Y3R1y+7IGg6Tg781Rm0naorT3LMGdJOO26BB3kV3ZHDp
-X-Google-Smtp-Source: AA0mqf6AIADVjhBFdqvCaPHcsy9o9+e0DIRyToosTovBS/F4dkhCuNCRxExzFX/gPA8yewZTXWA5pHELZ3agBShiHxls0WtKuV1j
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OUQXNd8OYvFs7+8iUyrLASdaaAYcUXx/ROKukFE8BU=;
+        b=fR4iD+ZyQoRTozC1N94PSo1ApNOo/XIFrFr56aDm/tfPpD2b7YFe7RPaFT6VJIpnxe
+         IKLvpVNbh9PW1MnYIrvs8mqK39iQc4uG1Uk/hOLT5FEyMZi+6+6q5WoyRTsfmsL7sEgp
+         C2BizP5WK1G+go9bfqQy9C20ozrM88GvqeRFJ69vsC7pQiWTe2kuo+b1nnTEU/dde/JM
+         +or78GNMcISB+UZuJfrDpnDul8EwcCAAl/DLiWb+ukjfp3NarxYnjS0Rw7f2d+CxHZOQ
+         BrrXlcgr1jWyjzUVA2P6mMn0K152x6OPyAeSZyQh5ZdDJQhhGSunSRL+6bbpRGssZXaV
+         2erg==
+X-Gm-Message-State: ANoB5pl4uWmFUzGOWaXr/cpmgGjD+AKKk6XpyjiDHksAVwt+Ox64UiDD
+        FGV90eVfSA5N4b6iLaX92Q==
+X-Google-Smtp-Source: AA0mqf5oAzMg6NWIlDVuwgZZKBVTdUgYITUUMi3HoVwRv5EqTUODYJy3Qq4DelBLPMUbE9q9SFlpeg==
+X-Received: by 2002:a4a:49d5:0:b0:4a3:7135:d6e6 with SMTP id z204-20020a4a49d5000000b004a37135d6e6mr9443291ooa.2.1670945748025;
+        Tue, 13 Dec 2022 07:35:48 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h18-20020a4a2812000000b00499527def25sm1220105ooa.47.2022.12.13.07.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 07:35:47 -0800 (PST)
+Received: (nullmailer pid 1398415 invoked by uid 1000);
+        Tue, 13 Dec 2022 15:35:46 -0000
+Date:   Tue, 13 Dec 2022 09:35:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/12] dt-bindings: watchdog: qcom-wdt: allow interrupts
+Message-ID: <20221213153546.GA1368120-robh@kernel.org>
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d590:0:b0:303:4c6:dd96 with SMTP id
- a16-20020a92d590000000b0030304c6dd96mr26682271iln.246.1670945739940; Tue, 13
- Dec 2022 07:35:39 -0800 (PST)
-Date:   Tue, 13 Dec 2022 07:35:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000044cc2e05efb75fc3@google.com>
-Subject: [syzbot] KASAN: stack-out-of-bounds Read in __blk_flush_plug
-From:   syzbot <syzbot+27ad9fcb89d23f44ca81@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, bpf@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212163532.142533-5-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Dec 12, 2022 at 05:35:25PM +0100, Krzysztof Kozlowski wrote:
+> Both of type of watchdogs described in the binding (the KPSS watchdog
+> and APSS WDT timer) have interrupts.  Allow interrupts and describe them
+> for KPSS watchdog to fix warnings like:
+> 
+>   watchdog@17c10000: Unevaluated properties are not allowed ('interrupts' was unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/watchdog/qcom-wdt.yaml           | 24 ++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 1828eaf70b3b..b7fc57f4800e 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -9,9 +9,6 @@ title: Qualcomm Krait Processor Sub-system (KPSS) Watchdog timer
+>  maintainers:
+>    - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+>  
+> -allOf:
+> -  - $ref: watchdog.yaml#
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -51,11 +48,31 @@ properties:
+>    clocks:
+>      maxItems: 1
+>  
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 5
 
-syzbot found the following issue on:
+I only see 2 interrupts described at all.
 
-HEAD commit:    0d1409e4ff08 Merge tag 'drm-fixes-2022-12-09' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=170a308f880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=27ad9fcb89d23f44ca81
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9ab0143f95cb/disk-0d1409e4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e574d5eaa32f/vmlinux-0d1409e4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/31109436b00b/bzImage-0d1409e4.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+27ad9fcb89d23f44ca81@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: stack-out-of-bounds in __blk_flush_plug+0x4ca/0x570 block/blk-core.c:1136
-Read of size 8 at addr ffffc900031bf37f by task syz-executor.3/10381
-
-CPU: 0 PID: 10381 Comm: syz-executor.3 Not tainted 6.1.0-rc8-syzkaller-00148-g0d1409e4ff08 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- __blk_flush_plug+0x4ca/0x570 block/blk-core.c:1136
- blk_finish_plug+0x5a/0x80 block/blk-core.c:1161
- read_pages+0x7a8/0x9c0 mm/readahead.c:184
- page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
- page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
- filemap_get_pages+0x465/0x10d0 mm/filemap.c:2581
- filemap_read+0x3cf/0xea0 mm/filemap.c:2675
- call_read_iter include/linux/fs.h:2193 [inline]
- generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
- do_splice_to fs/splice.c:793 [inline]
- splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
- do_splice_direct+0x279/0x3d0 fs/splice.c:974
- do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0ef8e8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0ef9c36168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f0ef8fabf80 RCX: 00007f0ef8e8c0d9
-RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000006
-RBP: 00007f0ef8ee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000f03b0000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff02d3b9cf R14: 00007f0ef9c36300 R15: 0000000000022000
- </TASK>
-
-The buggy address belongs to stack of task syz-executor.3/10381
- and is located at offset 31 in frame:
- read_pages+0x0/0x9c0 include/linux/page-flags.h:319
-
-This frame has 1 object:
- [32, 72) 'plug'
-
-The buggy address belongs to the virtual mapping at
- [ffffc900031b8000, ffffc900031c1000) created by:
- dup_task_struct+0x8b/0x490 kernel/fork.c:974
-
-The buggy address belongs to the physical page:
-page:ffffea00008b5a40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x22d69
-memcg:ffff888027c8ad02
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888027c8ad02
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 10379, tgid 10379 (syz-executor.3), ts 335022583921, free_ts 334826793550
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
- vm_area_alloc_pages mm/vmalloc.c:2975 [inline]
- __vmalloc_area_node mm/vmalloc.c:3043 [inline]
- __vmalloc_node_range+0x9b2/0x1400 mm/vmalloc.c:3213
- alloc_thread_stack_node+0x307/0x500 kernel/fork.c:311
- dup_task_struct+0x8b/0x490 kernel/fork.c:974
- copy_process+0x637/0x4000 kernel/fork.c:2084
- kernel_clone+0x21b/0x620 kernel/fork.c:2671
- __do_sys_clone kernel/fork.c:2812 [inline]
- __se_sys_clone kernel/fork.c:2796 [inline]
- __x64_sys_clone+0x228/0x290 kernel/fork.c:2796
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page_list+0xb4/0x7b0 mm/page_alloc.c:3529
- release_pages+0x232a/0x25c0 mm/swap.c:1055
- tlb_batch_pages_flush mm/mmu_gather.c:59 [inline]
- tlb_flush_mmu_free mm/mmu_gather.c:254 [inline]
- tlb_flush_mmu+0x850/0xa70 mm/mmu_gather.c:261
- tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:361
- exit_mmap+0x275/0x630 mm/mmap.c:3102
- __mmput+0x114/0x3b0 kernel/fork.c:1185
- exit_mm+0x1f5/0x2d0 kernel/exit.c:516
- do_exit+0x5e7/0x2070 kernel/exit.c:807
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
- __do_sys_exit_group kernel/exit.c:961 [inline]
- __se_sys_exit_group kernel/exit.c:959 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffffc900031bf200: 00 00 00 00 00 00 00 00 f1 f1 f1 f1 00 00 f3 f3
- ffffc900031bf280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc900031bf300: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
-                                                                ^
- ffffc900031bf380: 00 00 00 00 00 f3 f3 f3 f3 f3 f3 f3 00 00 00 00
- ffffc900031bf400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - clocks
+>  
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,kpss-wdt
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          minItems: 1
+> +          items:
+> +            - description: Bark
+> +            - description: Bite
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -66,5 +83,6 @@ examples:
+>        compatible = "qcom,apss-wdt-sm8150", "qcom,kpss-wdt";
+>        reg = <0x17c10000 0x1000>;
+>        clocks = <&sleep_clk>;
+> +      interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+>        timeout-sec = <10>;
+>      };
+> -- 
+> 2.34.1
+> 
+> 
