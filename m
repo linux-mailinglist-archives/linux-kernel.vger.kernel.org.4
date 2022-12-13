@@ -2,182 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADC64BB41
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8C164BB47
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236121AbiLMRmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S236262AbiLMRoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiLMRmr (ORCPT
+        with ESMTP id S236149AbiLMRoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:42:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97ECB13F25;
-        Tue, 13 Dec 2022 09:42:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3B182F4;
-        Tue, 13 Dec 2022 09:43:25 -0800 (PST)
-Received: from [10.57.9.1] (unknown [10.57.9.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F39A93F73B;
-        Tue, 13 Dec 2022 09:42:42 -0800 (PST)
-Message-ID: <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
-Date:   Tue, 13 Dec 2022 17:42:40 +0000
+        Tue, 13 Dec 2022 12:44:17 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E521E2F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:44:14 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id n3so2701410pfq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:44:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/pTb3bmFNJAoW4OTXZevQvKRa3GaR4zJvxJl+2o4gSw=;
+        b=SUw8T6MW5blOavkLjRFKUF3uKeaFGj4ARONjFQcL4evy+zxbGwoN3MWQz12plsh43w
+         FrDGn9ctk+kuo4SstmBtIGEpXML/KUPJOXQmzFaE72RlddSRdh3tOABkrzRxggnDmz8P
+         SZUalZbNB1BU0NeTwPieXc9+kRGVnAVIL05btz/KjXByzbPt83PiAmrETlioiFVce+tn
+         VcnbRJ/0xOzfN4LzZN/8XGB7hjgVUOoPDJ2VjXgme5nv2Ws3KRjk3JDjEOi5NlZHZUUr
+         923oIzW55rT88uYom7Uj9b/344zhtAhcuWrnTN9JJvZcvBmUn1eyTpX+MDmXf9l0wa7l
+         6IpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/pTb3bmFNJAoW4OTXZevQvKRa3GaR4zJvxJl+2o4gSw=;
+        b=3Wnckfr+bmOIaYlrlL3SjgmmEXdDW+zBd4kgeOCyEUEBi2LpWS0YYjgttYFT7RXJcT
+         cX+txR2L2LE3ka4UA1au9tgY0vBdk9tZZttFJYuj1+S81cP+6dXsxNG/18zwEvqcthqN
+         XnoYDYTUcWI9gFZqlJd440igMe4ATwWimmUHQnaSIJPvRhR8wiQ+uXd8+/M59Szc8xGZ
+         9ogKyje3HrfwgUrQUu27drO5F+4+1u/9Fmc1JJGruE0DGYeqml/BROizcE0COGrbkYb2
+         z1oa7d1lMvK8YR/aVUFuaT48yqszVSvaqAQLeN7PEWAZB1jwqE2CaacKon6HUMmPgFnQ
+         hxkg==
+X-Gm-Message-State: ANoB5pn8lGMAMVL0gflvOL3axVgGP7ayffDp3wUk5gO26D1PFHa3GJYS
+        ylaxG7QbnocrvMMx2XZGhX9dL162yFd/MTk=
+X-Google-Smtp-Source: AA0mqf54qJPb7YmooDC3RdnMvRXNS/ebqWefbj6rMHkzZfj0B3BtOhiWuI6WORqIQeiqmO1v20bQzA==
+X-Received: by 2002:a62:1488:0:b0:56b:b890:6ccd with SMTP id 130-20020a621488000000b0056bb8906ccdmr20416983pfu.4.1670953454385;
+        Tue, 13 Dec 2022 09:44:14 -0800 (PST)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id g28-20020aa79ddc000000b00573769811d6sm7936930pfq.44.2022.12.13.09.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:44:13 -0800 (PST)
+Date:   Tue, 13 Dec 2022 23:14:06 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 12/13] qcom: llcc/edac: Fix the base address used for
+ accessing LLCC banks
+Message-ID: <20221213174406.GH4862@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-13-manivannan.sadhasivam@linaro.org>
+ <ccd54883-d369-8387-881a-b5ac7a377c97@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-References: <20221127141742.1644023-1-qyousef@layalina.io>
- <20221127141742.1644023-4-qyousef@layalina.io>
- <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
- <20221203143323.w32boxa6asqvvdnp@airbuntu>
- <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
- <20221205110159.nd5igwvsaj55jar7@airbuntu>
- <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
- <20221208140526.vvmjxlz6akgqyoma@airbuntu>
- <20221209164739.GA24368@vingu-book>
- <20221212184317.sntxy3h6k44oz4mo@airbuntu>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221212184317.sntxy3h6k44oz4mo@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ccd54883-d369-8387-881a-b5ac7a377c97@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qais,
-
-I thought I could help with this issue.
-
-On 12/12/22 18:43, Qais Yousef wrote:
-> On 12/09/22 17:47, Vincent Guittot wrote:
+On Tue, Dec 13, 2022 at 05:37:37PM +0100, Krzysztof Kozlowski wrote:
+> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> > accessing the (Control and Status Registers) CSRs of each LLCC bank.
+> > This stride only works for some SoCs like SDM845 for which driver
+> > support was initially added.
+> > 
+> > But the later SoCs use different register stride that vary between the
+> > banks with holes in-between. So it is not possible to use a single register
+> > stride for accessing the CSRs of each bank. By doing so could result in a
+> > crash.
+> > 
+> > For fixing this issue, let's obtain the base address of each LLCC bank from
+> > devicetree and get rid of the fixed stride. This also means, we no longer
+> > need to rely on reg-names property and get the base addresses using index.
+> > 
+> > First index is LLCC bank 0 and last index is LLCC broadcast. If the SoC
+> > supports more than one bank, then those needs to be defined in devicetree
+> > for index from 1..N-1.
+> > 
+> > Cc: <stable@vger.kernel.org> # 4.20
+> > Fixes: a3134fb09e0b ("drivers: soc: Add LLCC driver")
+> > Fixes: 27450653f1db ("drivers: edac: Add EDAC driver support for QCOM SoCs")
 > 
-> [...]
-> 
->>>>>> This patch loops on all cpufreq policy in sched softirq, how can this
->>>>>> be sane ? and not only in eas mode but also in the default asymmetric
->>>>>
->>>>> Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
->>>>> in the wake up path in feec()?
->>>>
->>>> feec() should be considered as an exception not as the default rule.
->>>> Thing like above which loops for_each on external subsystem should be
->>>> prevented and the fact that feec loops all PDs doesn't means that we
->>>> can put that everywhere else
->>>
->>> Fair enough. But really understanding the root cause behind this limitation
->>> will be very helpful. I don't have the same appreciation of why this is
->>> a problem, and shedding more light will help me to think more about it in the
->>> future.
->>>
->>
->> Take the example of 1k cores with per cpu policy. Do you really think a
->> for_each_cpufreq_policy would be reasonable ?
-> 
-> Hmm I don't think such an HMP system makes sense to ever exist.
-> 
-> That system has to be a multi-socket system and I doubt inversion detection is
-> something of value.
-> 
-> Point taken anyway. Let's find another way to do this.
+> Your previous patches in the series had incorrect CC-stable/Fixes tags,
+> thus I have doubts also here.
 > 
 
-Another way might be to use the 'update' code path, which sets this
-information source, for the thermal pressure. That code path isn't as
-hot as this in the task scheduler. Furthermore, we would also
-have time and handle properly CPU hotplug callbacks there.
+Sorry I do not agree with you. I wanted to backport binding, dts and driver
+patches to possible LTS kernels together and that's why I tagged stable list.
 
-So something like this, I have in mind:
+Either all goes to stable or none. If your question is more towards what if one
+goes before the other, then in that case I may need to specify the dependency
+of commits but that will look messy. I took the gamble because, the driver is
+already broken in stable kernels.
 
-------------------------------8<-----------------------------
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index e7d6e6657ffa..7f372a93e21b 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -16,6 +16,7 @@
-  #include <linux/sched/topology.h>
-  #include <linux/cpuset.h>
-  #include <linux/cpumask.h>
-+#include <linux/mutex.h>
-  #include <linux/init.h>
-  #include <linux/rcupdate.h>
-  #include <linux/sched.h>
-@@ -153,6 +154,33 @@ void topology_set_freq_scale(const struct cpumask 
-*cpus, unsigned long cur_freq,
-  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-  EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
+> Can you confirm, that this patch alone (alone! Without DTS patches) when
+> backported to v4.20, still works perfectly fine for sdm845?
+> 
 
-+static struct cpumask highest_capacity_mask;
+It won't and that's why I also tagged dts patches for backporting.
 
-+static struct cpumask highest_capacity_mask;
-+static unsigned int max_possible_capacity;
-+static DEFINE_MUTEX(max_capacity_lock);
-+
-+static void max_capacity_update(const struct cpumask *cpus,
-+                               unsigned long capacity)
-+{
-+       mutex_lock(&max_capacity_lock);
-+
-+       if (max_possible_capacity < capacity) {
-+               max_possible_capacity = capacity;
-+
-+               cpumask_clear(&highest_capacity_mask);
-+
-+               cpumask_or(&highest_capacity_mask,
-+                          &highest_capacity_mask, cpus);
-+       }
-+
-+       mutex_unlock(&max_capacity_lock);
-+}
-+
-+bool topology_test_max_cpu_capacity(unsigned int cpu)
-+{
-+       return cpumask_test_cpu(cpu, &highest_capacity_mask);
-+}
-+EXPORT_SYMBOL_GPL(topology_test_max_cpu_capacity);
-+
-  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
-  {
-         per_cpu(cpu_scale, cpu) = capacity;
-@@ -203,6 +231,8 @@ void topology_update_thermal_pressure(const struct 
-cpumask *cpus,
+> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/edac/qcom_edac.c           | 14 +++---
+> >  drivers/soc/qcom/llcc-qcom.c       | 72 +++++++++++++++++-------------
+> >  include/linux/soc/qcom/llcc-qcom.h |  6 +--
+> >  3 files changed, 48 insertions(+), 44 deletions(-)
+> > 
+> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+> > index 97a27e42dd61..5be93577fc03 100644
+> > --- a/drivers/edac/qcom_edac.c
+> > +++ b/drivers/edac/qcom_edac.c
+> > @@ -213,7 +213,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+> >  
+> >  	for (i = 0; i < reg_data.reg_cnt; i++) {
+> >  		synd_reg = reg_data.synd_reg + (i * 4);
+> > -		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
+> > +		ret = regmap_read(drv->regmaps[bank], synd_reg,
+> >  				  &synd_val);
+> >  		if (ret)
+> >  			goto clear;
+> > @@ -222,8 +222,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+> >  			    reg_data.name, i, synd_val);
+> >  	}
+> >  
+> > -	ret = regmap_read(drv->regmap,
+> > -			  drv->offsets[bank] + reg_data.count_status_reg,
+> > +	ret = regmap_read(drv->regmaps[bank], reg_data.count_status_reg,
+> >  			  &err_cnt);
+> >  	if (ret)
+> >  		goto clear;
+> > @@ -233,8 +232,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
+> >  	edac_printk(KERN_CRIT, EDAC_LLCC, "%s: Error count: 0x%4x\n",
+> >  		    reg_data.name, err_cnt);
+> >  
+> > -	ret = regmap_read(drv->regmap,
+> > -			  drv->offsets[bank] + reg_data.ways_status_reg,
+> > +	ret = regmap_read(drv->regmaps[bank], reg_data.ways_status_reg,
+> >  			  &err_ways);
+> >  	if (ret)
+> >  		goto clear;
+> > @@ -296,8 +294,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> >  
+> >  	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
+> >  	for (i = 0; i < drv->num_banks; i++) {
+> > -		ret = regmap_read(drv->regmap,
+> > -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
+> > +		ret = regmap_read(drv->regmaps[i], DRP_INTERRUPT_STATUS,
+> >  				  &drp_error);
+> >  
+> >  		if (!ret && (drp_error & SB_ECC_ERROR)) {
+> > @@ -312,8 +309,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
+> >  		if (!ret)
+> >  			irq_rc = IRQ_HANDLED;
+> >  
+> > -		ret = regmap_read(drv->regmap,
+> > -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
+> > +		ret = regmap_read(drv->regmaps[i], TRP_INTERRUPT_0_STATUS,
+> >  				  &trp_error);
+> >  
+> >  		if (!ret && (trp_error & SB_ECC_ERROR)) {
+> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> > index 23ce2f78c4ed..a29f22dad7fa 100644
+> > --- a/drivers/soc/qcom/llcc-qcom.c
+> > +++ b/drivers/soc/qcom/llcc-qcom.c
+> > @@ -62,8 +62,6 @@
+> >  #define LLCC_TRP_WRSC_CACHEABLE_EN    0x21f2c
+> >  #define LLCC_TRP_ALGO_CFG8	      0x21f30
+> >  
+> > -#define BANK_OFFSET_STRIDE	      0x80000
+> > -
+> >  #define LLCC_VERSION_2_0_0_0          0x02000000
+> >  #define LLCC_VERSION_2_1_0_0          0x02010000
+> >  #define LLCC_VERSION_4_1_0_0          0x04010000
+> > @@ -898,8 +896,8 @@ static int qcom_llcc_remove(struct platform_device *pdev)
+> >  	return 0;
+> >  }
+> >  
+> > -static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
+> > -		const char *name)
+> > +static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev, u8 index,
+> > +					  const char *name)
+> >  {
+> >  	void __iomem *base;
+> >  	struct regmap_config llcc_regmap_config = {
+> > @@ -909,7 +907,7 @@ static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
+> >  		.fast_io = true,
+> >  	};
+> >  
+> > -	base = devm_platform_ioremap_resource_byname(pdev, name);
+> > +	base = devm_platform_ioremap_resource(pdev, index);
+> >  	if (IS_ERR(base))
+> >  		return ERR_CAST(base);
+> >  
+> > @@ -927,6 +925,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+> >  	const struct llcc_slice_config *llcc_cfg;
+> >  	u32 sz;
+> >  	u32 version;
+> > +	struct regmap *regmap;
+> >  
+> >  	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
+> >  	if (!drv_data) {
+> > @@ -934,21 +933,51 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+> >  		goto err;
+> >  	}
+> >  
+> > -	drv_data->regmap = qcom_llcc_init_mmio(pdev, "llcc_base");
+> > -	if (IS_ERR(drv_data->regmap)) {
+> > -		ret = PTR_ERR(drv_data->regmap);
+> > +	/* Initialize the first LLCC bank regmap */
+> > +	regmap = qcom_llcc_init_mmio(pdev, i, "llcc0_base");
+> 
+> What is the value of "i" here? Looks like not initialized in my next.
+> 
 
-         for_each_cpu(cpu, cpus)
-                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-+
-+       max_capacity_update(cpus, capacity);
-  }
-  EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
+Yes, this was a mistake and been reported by kernel bot. It will be fixed in
+next version.
 
+> > +	if (IS_ERR(regmap)) {
+> > +		ret = PTR_ERR(regmap);
+> >  		goto err;
+> >  	}
+> >  
+> > -	drv_data->bcast_regmap =
+> > -		qcom_llcc_init_mmio(pdev, "llcc_broadcast_base");
+> > +	cfg = of_device_get_match_data(&pdev->dev);
+> > +
+> > +	ret = regmap_read(regmap, cfg->reg_offset[LLCC_COMMON_STATUS0], &num_banks);
+> > +	if (ret)
+> > +		goto err;
+> > +
+> > +	num_banks &= LLCC_LB_CNT_MASK;
+> > +	num_banks >>= LLCC_LB_CNT_SHIFT;
+> > +	drv_data->num_banks = num_banks;
+> > +
+> > +	drv_data->regmaps = devm_kcalloc(dev, num_banks, sizeof(*drv_data->regmaps), GFP_KERNEL);
+> > +	if (!drv_data->regmaps) {
+> > +		ret = -ENOMEM;
+> > +		goto err;
+> > +	}
+> > +
+> > +	drv_data->regmaps[0] = regmap;
+> > +
+> > +	/* Initialize rest of LLCC bank regmaps */
+> > +	for (i = 1; i < num_banks; i++) {
+> > +		char *base = kasprintf(GFP_KERNEL, "llcc%d_base", i);
+> > +
+> > +		drv_data->regmaps[i] = qcom_llcc_init_mmio(pdev, i, base);
+> > +		if (IS_ERR(drv_data->regmaps[i])) {
+> > +			ret = PTR_ERR(drv_data->regmaps[i]);
+> > +			kfree(base);
+> > +			goto err;
+> 
+> This looks like the ABI break so:
+> 1. Existing users are broken,
 
---------------------------->8--------------------------------
+I fixed the dts for all affected SoCs, then who are all other existing users?
 
-We could use the RCU if there is a potential to read racy date
-while the updater modifies the mask in the meantime. Mutex is to
-serialize the thermal writers which might be kicked for two
-policies at the same time.
+> 2. It cannot be backported.
+> 
 
-If you like I can develop and test such code in the arch_topology.c
+This is a bug fix and clearly needs to be backported along with the dts
+changes. For this purpose only I have tagged both dts and driver patches for
+backporting. Am I missing anything here?
 
-Regards,
-Lukasz
+Thanks,
+Mani
+
+> 
+> > +		}
+> > +
+> > +		kfree(base);
+> > +	}
+> > +
+> 
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
