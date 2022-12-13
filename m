@@ -2,74 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AC464BAAC
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE0C64BAAD
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236135AbiLMRLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S235422AbiLMRLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235971AbiLMRKs (ORCPT
+        with ESMTP id S235183AbiLMRLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:10:48 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF4A22B35;
-        Tue, 13 Dec 2022 09:10:46 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 094711C0002;
-        Tue, 13 Dec 2022 17:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670951445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7iuMiw/eBTs7pQOsswp5hx4LvKR8NcA0YmrtdyMH2Po=;
-        b=hpOmW4vlAby3uSeaFtMos4HfPzGvIJ7xY52aI8qt4i0vVab1nAZUQL0NY0FrmjGyPInWVg
-        T4PuGD5g1nk/cK9rtXCH1DEWRJjV4Xzoput34JsASq0MVUeK+LuewoKjKxuDPso3nm6N11
-        1jPGTiBab1kT3YWgL7mmxUsr71bIP3U7uZcrK+z8dXbBCFFg2TP3Ck56nf5SEMYOco+Fs/
-        aa3kZekDvDhM37fHYTH8mR2CbVJr3SkaIQvstk6ZbVbGLmH79VB3sMgxnDOb1dZ0cXQ6hZ
-        7jHDR7Dj8NU4HrUkg1D9P5caq239b5syzh+uhulW2UHPiNlVl0G8K5si4B12lQ==
-Date:   Tue, 13 Dec 2022 18:10:44 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     upstream@phytec.de, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wadim Egorov <w.egorov@phytec.de>
-Cc:     a.zummo@towertech.it
-Subject: Re: [PATCH] rtc: rv3028: Use IRQ flags obtained from device tree if
- available
-Message-ID: <167095141138.625012.10617503828700847507.b4-ty@bootlin.com>
-References: <20221208133605.4193907-1-w.egorov@phytec.de>
+        Tue, 13 Dec 2022 12:11:38 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7311AD90
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:11:37 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id o13so5290372ilc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:11:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzPRmPJd5jX18eH45PIAN8StaeBDhiKrmupibyDWdg8=;
+        b=FcHqQZiQueKJ651RYxOjnxiNoPcwp76wuWOgFrCSmWSBDLfAvtqqjxjqU1EEPe9eEc
+         XlrVgbFDhlVhxOxc6xya0KapeOs5Jk6fRw7iNKkD+8uoop7CqZ0AU++wuC8fE5ap/pwk
+         LRMrEcspEEvcopA+/mDOujTzVtkEXotR4+SsRdUcJ08HTbaS2pjkjaHyNbY+VS1pRQgJ
+         b5IXRVZIkYuNmWXb/FvLyICQ3SJmtnTYkYIsTnjY2t4wyENdzHzkljl6dE5iG1lt6Hl7
+         eDlFhgsfWfCgST9oAJ8/Rqd7VOPIhaS7cgn5BUKejl6kEB6wZYXYpSVVNcOfFJjSoeyO
+         FB+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jzPRmPJd5jX18eH45PIAN8StaeBDhiKrmupibyDWdg8=;
+        b=2h/6q25XDCECeAi5OFWtdk63Cyb6D0y/R0TTTChHU1dEjzWRSKVj93r00qdVJ2w+8U
+         dDavD34bvDN1OG2Clf4Aw/fDE8akjn5GS1rHip3lJmiVbY7j0/Tv52BVHNhwamupFbKS
+         Tnltq2zUre/ts0K+0wBeib/u7jMgsEJzXOKrwz5iDM60AS6b+CxLRkgVZ9FvxpLPNM/q
+         8Y8xGACj/jCC0/RYgRxWSuixKP9yLFJAc7OjVtvuKKUFHbMH8wazQGYF1zHJw/OSt3bF
+         NXGQVVjtEesFFIDaCV/H6exRzq90rOnuIXbZfD3kA87mvsHRU0klxd5hErZBRESnpcSr
+         wG2g==
+X-Gm-Message-State: ANoB5pnYZnM6C1XbitVeQpBJFNsVZhsGsm/M+bexpEFDWOWAHCUTl5H5
+        lODDzRFBGCGaYyy4Kwi8Rztr7phOwKY=
+X-Google-Smtp-Source: AA0mqf6x6l3ZDqo2+/4Ek7BNKuSl0keRsInOG2BuToRH9bhyxM43ZOygbLSbX1xxvPZ2/Oa/APLyag==
+X-Received: by 2002:a92:c5cf:0:b0:304:bf1f:d72f with SMTP id s15-20020a92c5cf000000b00304bf1fd72fmr3730788ilt.32.1670951497030;
+        Tue, 13 Dec 2022 09:11:37 -0800 (PST)
+Received: from pop-os.. ([173.23.87.62])
+        by smtp.gmail.com with ESMTPSA id q4-20020a056e02078400b003029afc3672sm3915512ils.36.2022.12.13.09.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:11:36 -0800 (PST)
+From:   Matthew Anderson <ruinairas1992@gmail.com>
+To:     maarten.lankhorst@linux.intel.com
+Cc:     mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Matthew Anderson <ruinairas1992@gmail.com>
+Subject: [PATCH] drm: panel-orientation-quirks: Add quirks for One XPlayer handheld variants
+Date:   Tue, 13 Dec 2022 11:10:44 -0600
+Message-Id: <20221213171044.14869-1-ruinairas1992@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208133605.4193907-1-w.egorov@phytec.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 14:36:05 +0100, Wadim Egorov wrote:
-> Make the interrupt pin of the RV3028 usable with GPIO controllers
-> without level type IRQs support, such as the TI Davinci GPIO controller.
-> 
-> Therefore, allow the IRQ type to be passed from the device tree if
-> available.
-> 
-> Based on commit d4785b46345c ("rtc: pcf2127: use IRQ flags obtained from device tree if available")
-> 
-> [...]
+We have more handhelds in the One XPLAYER lineup now that needs support added to the orientation-quirks.
+By adding more native resolution checks and the one unique BIOS variant available we add support to most devices.
 
-Applied, thanks!
+Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
+---
+ .../gpu/drm/drm_panel_orientation_quirks.c    | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-[1/1] rtc: rv3028: Use IRQ flags obtained from device tree if available
-      commit: 2d620d98d74311ac06719adf08dc9a695bd1a10b
-
-Best regards,
-
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index 52d8800a8ab8..335d636e6696 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -103,6 +103,12 @@ static const struct drm_dmi_panel_orientation_data lcd800x1280_rightside_up = {
+ 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+ };
+ 
++static const struct drm_dmi_panel_orientation_data lcd800x1280_leftside_up = {
++	.width = 800,
++	.height = 1280,
++	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
++};
++
+ static const struct drm_dmi_panel_orientation_data lcd1080x1920_leftside_up = {
+ 	.width = 1080,
+ 	.height = 1920,
+@@ -115,6 +121,12 @@ static const struct drm_dmi_panel_orientation_data lcd1200x1920_rightside_up = {
+ 	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+ };
+ 
++static const struct drm_dmi_panel_orientation_data lcd1200x1920_leftside_up = {
++	.width = 1200,
++	.height = 1920,
++	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
++};
++
+ static const struct drm_dmi_panel_orientation_data lcd1280x1920_rightside_up = {
+ 	.width = 1280,
+ 	.height = 1920,
+@@ -344,6 +356,24 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
+ 		},
+ 		.driver_data = (void *)&lcd1600x2560_leftside_up,
++	}, {	/* OneXPlayer Mini 800p */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
++		},
++		.driver_data = (void *)&lcd800x1280_leftside_up,
++	}, {	/* OneXPlayer Mini 1200p */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK TECHNOLOGY CO., LTD."),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONE XPLAYER"),
++		},
++		.driver_data = (void *)&lcd1200x1920_leftside_up,
++	}, {	/* OneXPlayer Mini A07 Bios Variant */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ONE-NETBOOK"),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "ONEXPLAYER mini A07"),
++		},
++		.driver_data = (void *)&lcd800x1280_leftside_up,
+ 	}, {	/* Samsung GalaxyBook 10.6 */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "SAMSUNG ELECTRONICS CO., LTD."),
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
