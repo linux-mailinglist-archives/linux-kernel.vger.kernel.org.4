@@ -2,121 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E4E64B917
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336C764B940
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiLMQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S235586AbiLMQFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiLMQAi (ORCPT
+        with ESMTP id S234989AbiLMQF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:00:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9C71166
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670947192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VKfcx7pkq8LkHwoqbOrspcVXGem6hw74j7W+b/DBJjE=;
-        b=eHv9qLIo7xoVVUnfoPMZUONJdUxWNAwr+OTBMzr+ldlBSQkIfS3BAseZK+TviqjZ3UKOxZ
-        bLRyVc0Snv6a4jZw/gZUylYNNtw81PhFtTzGnn5RaLkUPdOXwwYxKz2lvG6GNmk0MC8F97
-        8tmGFziaa+TEb+d0k2YWjH3/7j/G2Bc=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-358-UvEKJ0rbNK2Fe6bWoxqyPA-1; Tue, 13 Dec 2022 10:59:50 -0500
-X-MC-Unique: UvEKJ0rbNK2Fe6bWoxqyPA-1
-Received: by mail-io1-f72.google.com with SMTP id j5-20020a5d9d05000000b006e2f0c28177so2132908ioj.17
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:59:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VKfcx7pkq8LkHwoqbOrspcVXGem6hw74j7W+b/DBJjE=;
-        b=eC6p3K00zgD8oofRPaytt+1E0EhixiAZVR0X4JePx7MPyxtaYQJoB1xuCz0tnxxmIe
-         qw72xMSlCG2veEFmMpJncHAd8vMhG4+4j6g0U787gEL5tgt6wfncN2+eNEvN6f4LgCuH
-         MAGjSXdetQj617c4V3XIcopEW1bW68rjMVvgK1B7ttMgePsQdsJuyId3C5MQShEBQ7+h
-         Z25dpmCy69zbklELMBRuIMV3RV7HB0d6ddTGLq+rm9yEhSG6BoI4bAgxcghjsgZO3iRu
-         XHnBPPKqp3puHfr+V/g0CZaDcAnoVb3j01BFkZbx/UmFyVe7I/rkw4tUfA8rDYDfi5FG
-         oWgA==
-X-Gm-Message-State: ANoB5plGNAV0FZJhVsmonBbO3o48DHtQZnB4wE8xLE1YBR+fLnn7jhvm
-        M1XCMo/ZHS7Q1vdwAPnemEOMes0JkYAlufxnqwf2odLozsZ4JpRzTFO4r+zW7xietqbfaEWKAnZ
-        1AYPajyjsvCwz0mo62aBhmxzO
-X-Received: by 2002:a5d:8ac8:0:b0:6bc:d712:8bcd with SMTP id e8-20020a5d8ac8000000b006bcd7128bcdmr10964571iot.21.1670947189884;
-        Tue, 13 Dec 2022 07:59:49 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4RyM/tNgJp/BidYuSNp90JmxZFBwrBqK2Yha1hSQQq+15GZXjPHmkGKGhC7C6qWogwTcmFAA==
-X-Received: by 2002:a5d:8ac8:0:b0:6bc:d712:8bcd with SMTP id e8-20020a5d8ac8000000b006bcd7128bcdmr10964554iot.21.1670947189666;
-        Tue, 13 Dec 2022 07:59:49 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id q29-20020a02b05d000000b00389e1f5751asm966242jah.65.2022.12.13.07.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:59:49 -0800 (PST)
-Date:   Tue, 13 Dec 2022 10:59:47 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
-Message-ID: <Y5ihczgZs1RBJ0IN@x1>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-2-bmasney@redhat.com>
- <Y5iSDehp72mQPc+h@hovoldconsulting.com>
- <Y5iXjTQnEtMCZy7W@hovoldconsulting.com>
- <114e960f-3b63-8c8f-9d4a-87173049d730@linaro.org>
- <Y5ibG29yKQgD54Dn@hovoldconsulting.com>
+        Tue, 13 Dec 2022 11:05:26 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 37F4820F45
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:05:23 -0800 (PST)
+Received: (qmail 891916 invoked by uid 1000); 13 Dec 2022 11:05:22 -0500
+Date:   Tue, 13 Dec 2022 11:05:22 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com>
+Cc:     gregkh@linuxfoundation.org, hbh25y@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mingo@kernel.org, rdunlap@infradead.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Write in gadgetfs_kill_sb
+Message-ID: <Y5iiwlZm8hgj8S0W@rowland.harvard.edu>
+References: <0000000000009f6b9c05efb5b59c@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5ibG29yKQgD54Dn@hovoldconsulting.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000009f6b9c05efb5b59c@google.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 04:32:43PM +0100, Johan Hovold wrote:
-> On Tue, Dec 13, 2022 at 04:29:04PM +0100, Konrad Dybcio wrote:
-> > On 13.12.2022 16:17, Johan Hovold wrote:
-> > > It appears sc8280xp is the only qcom platform using a qup prefix (even
-> > > if some older platform use a blsp equivalent), and we're not even using
-> > > it consistently as we, for example, have both
-> > > 
-> > > 	qup2_uart17, and
-> > > 	qup2_i2c5
-> > > 
-> > > (where the former should have been qup2_uart1).
-> > > 
-> > > So either we fix up the current labels or just drop the qup prefixes and
-> > > use a flat naming scheme (e.g. uart17 and i2c21).
+On Tue, Dec 13, 2022 at 05:36:38AM -0800, syzbot wrote:
+> Hello,
 > 
-> > Oh, I didn't notice that! I suppose sticking with i2cN as we've been
-> > doing ever since i2c-geni was introduced sounds like the best option..
+> syzbot found the following issue on:
 > 
-> Yeah, sounds good to me.
+> HEAD commit:    830b3c68c1fb Linux 6.1
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=137401b7880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5a194ed4fc682723
+> dashboard link: https://syzkaller.appspot.com/bug?extid=33d7ad66d65044b93f16
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176d36b7880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109371b7880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/955d55d85d6c/disk-830b3c68.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/7ef0e1f6a0c3/vmlinux-830b3c68.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/27601eb5ff0b/bzImage-830b3c68.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+33d7ad66d65044b93f16@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
+> BUG: KASAN: use-after-free in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
+> BUG: KASAN: use-after-free in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
+> BUG: KASAN: use-after-free in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+> BUG: KASAN: use-after-free in refcount_dec_and_test include/linux/refcount.h:333 [inline]
+> BUG: KASAN: use-after-free in put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
+> BUG: KASAN: use-after-free in gadgetfs_kill_sb+0x33/0x100 drivers/usb/gadget/legacy/inode.c:2086
+> Write of size 4 at addr ffff8880276d7840 by task syz-executor126/18689
 
-This makes sense and I'll fix up the existing geni nodes and my new
-nodes in v2.
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ 830b3c68c1fb
 
-I noticed another inconsistency with sc8280xp.dtsi compared to other
-platforms. I left off all of the pin mappings in sc8280xp.dtsi and
-added them to the sa8540-ride.dts file since the existing sc8280xp.dtsi
-file contains no pin mappings. Other platforms such as sm8450.dtsi,
-sm8350.dtsi, and sm8250.dtsi contain the geni pin mappings. My
-understanding is that these geni pins are fixed within the SoC and
-don't change with the different boards. Should I also add the geni
-pin mappings to sc8280xp.dtsi?
+ drivers/usb/gadget/legacy/inode.c |   28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
-Brian
-
+Index: usb-devel/drivers/usb/gadget/legacy/inode.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/inode.c
++++ usb-devel/drivers/usb/gadget/legacy/inode.c
+@@ -229,6 +229,7 @@ static void put_ep (struct ep_data *data
+  */
+ 
+ static const char *CHIP;
++static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
+ 
+ /*----------------------------------------------------------------------*/
+ 
+@@ -2010,13 +2011,20 @@ gadgetfs_fill_super (struct super_block
+ {
+ 	struct inode	*inode;
+ 	struct dev_data	*dev;
++	int		rc;
+ 
+-	if (the_device)
+-		return -ESRCH;
++	mutex_lock(&sb_mutex);
++
++	if (the_device) {
++		rc = -ESRCH;
++		goto Done;
++	}
+ 
+ 	CHIP = usb_get_gadget_udc_name();
+-	if (!CHIP)
+-		return -ENODEV;
++	if (!CHIP) {
++		rc = -ENODEV;
++		goto Done;
++	}
+ 
+ 	/* superblock */
+ 	sb->s_blocksize = PAGE_SIZE;
+@@ -2053,13 +2061,17 @@ gadgetfs_fill_super (struct super_block
+ 	 * from binding to a controller.
+ 	 */
+ 	the_device = dev;
+-	return 0;
++	rc = 0;
++	goto Done;
+ 
+-Enomem:
++ Enomem:
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	rc = -ENOMEM;
+ 
+-	return -ENOMEM;
++ Done:
++	mutex_unlock(&sb_mutex);
++	return rc;
+ }
+ 
+ /* "mount -t gadgetfs path /dev/gadget" ends up here */
+@@ -2081,6 +2093,7 @@ static int gadgetfs_init_fs_context(stru
+ static void
+ gadgetfs_kill_sb (struct super_block *sb)
+ {
++	mutex_lock(&sb_mutex);
+ 	kill_litter_super (sb);
+ 	if (the_device) {
+ 		put_dev (the_device);
+@@ -2088,6 +2101,7 @@ gadgetfs_kill_sb (struct super_block *sb
+ 	}
+ 	kfree(CHIP);
+ 	CHIP = NULL;
++	mutex_unlock(&sb_mutex);
+ }
+ 
+ /*----------------------------------------------------------------------*/
