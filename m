@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FE664B7FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA9E64B801
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbiLMPDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:03:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S235673AbiLMPFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiLMPDS (ORCPT
+        with ESMTP id S230200AbiLMPFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:03:18 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA40B7C6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:03:17 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id o5so15928649wrm.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:03:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE8TrVlOPagyz/Xf+Vluj5c/1Shf2awMH865U/kgSzo=;
-        b=C/D+1izcIet/7EVJRR+V7gM1hheYXcGc9fU6xJvq8OpEfUrdfISAJuzvGCaxG/3gVq
-         rmDtB5WFhKizMShvkRA0INKdz9B3LZ9UUyId+2YnixryQO+JQigIkBMgP909XVsQrF05
-         v9/xrdgYrXWGZ+CJrkxBe6qcsdWPcXEBaH09Ne847ng0/Qk4N1/30Vv7iqhiLNxnRaEO
-         JJOxsDMPP9gtp7/s4OlxHa3v/stCiNDKeqgT9Pgue3fqX8EmFDdB/pOVzFoLfMjcX7uh
-         9gG3G/IBY8j7qr0kg8xUy92CEMJAoR93vi8oA1+kBwGsZmfP6UgZQN9m19LHCcSXS2gm
-         a82w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE8TrVlOPagyz/Xf+Vluj5c/1Shf2awMH865U/kgSzo=;
-        b=5VrUNzqcrdZ4pKtnh0O9oV/dZYDSafBORG26VDKCoA1nMukghXcRRkzok/P8lXv3hz
-         04RWC+Jx3XqmqdgYeDpjiIx1ENWg5kKL9R3YA07onj44DmkBCfC67isQv0C6cBybJiMb
-         JsZvttXjxmcwBvRSBP38QCPKX6MQZAy7TSY5nluyRHUWBZbVbp0t7HSnrUQLTL4B7CQt
-         XYMpZwG69x+34JoPuLRCPASP8PX2fE06vjv51GENfcBefph8DMouHia53Eobjwy7U4mV
-         6gd/J+KO0pUapRFiEq1SLYpgEUKyjBniIoAXGOTW3nZGQnSxEtKRQqhccI+Gj65SLK7Y
-         MVAg==
-X-Gm-Message-State: ANoB5pmUHoiNqY+yw7liKQZhHabeoeV255Boti6mb2DINqt87WdJES3a
-        InCMzR2+rjlRg4ldK54zHBj7dA==
-X-Google-Smtp-Source: AA0mqf4EcXdCATRa0h1bfkO4Qau6rGAOKEKsaonqVOfzHUcWixwCeWZLyX1BCyZnzBymrk8MHvKjlw==
-X-Received: by 2002:adf:ee88:0:b0:24a:9b90:b621 with SMTP id b8-20020adfee88000000b0024a9b90b621mr11428556wro.30.1670943795967;
-        Tue, 13 Dec 2022 07:03:15 -0800 (PST)
-Received: from prec5560.. ([2001:bf7:830:a7a4:b85b:2e8b:7dd0:999e])
-        by smtp.gmail.com with ESMTPSA id s16-20020adfecd0000000b00225307f43fbsm15953wro.44.2022.12.13.07.03.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:03:15 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>
-Subject: [PATCH v1] drm/bridge: lt9611: Fix PLL being unable to lock
-Date:   Tue, 13 Dec 2022 16:03:04 +0100
-Message-Id: <20221213150304.4189760-1-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Dec 2022 10:05:14 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3D1DFEA;
+        Tue, 13 Dec 2022 07:05:13 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDEEsSm025406;
+        Tue, 13 Dec 2022 15:05:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3mdHWz8hrvFV53AcHIB2oMArONg9HoIGdISTDDxqZi8=;
+ b=K1b+/yosgFNYJU+/fvO+/57bszgmTqzXG1FU/9Jo8pyAggE1brtqEhqqptMumOoplgjj
+ VKDHK3cw0fYFUGxKwfXnqHb3TL8C98TwNgqlc0kCoo/p9XlsKZ139tcqfD2FTIfEWzhc
+ HTKoBWzvXkhCVRDx1npVB4HgihfdawRJyA475+4hbO79+IfyfemJ5RO0HcsXCIbWrbyl
+ frP3siPxpr8TtmDqdvA/mRdLpKZNfXDfO6N10y6ykzjkQorFEAfeFoiqJUf9o6s0Q0cU
+ EUXPrLoBsri6+B+/AlL+IEe54Y0hKyqPjvg46zFVvOkZYjEh/1ROk280/Ity237/i2ux Vg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mes4a8ejm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 15:05:06 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDF55kU032253
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 15:05:05 GMT
+Received: from [10.216.48.1] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
+ 2022 07:05:00 -0800
+Message-ID: <5ac2a022-59e5-1189-bcba-e67b4974cbad@quicinc.com>
+Date:   Tue, 13 Dec 2022 20:34:56 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>, Brian Masney <bmasney@redhat.com>
+CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <johan+linaro@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ahalaney@redhat.com>, <echanude@redhat.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-2-bmasney@redhat.com>
+ <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+In-Reply-To: <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DXNr_Zn5E8fkrgaFJJXClRtI_8bplx1t
+X-Proofpoint-ORIG-GUID: DXNr_Zn5E8fkrgaFJJXClRtI_8bplx1t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 spamscore=0 malwarescore=0 impostorscore=0
+ mlxscore=0 suspectscore=0 mlxlogscore=974 adultscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212130133
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes PLL being unable to lock, and is derived from an equivalent
-downstream commit.
 
-Available LT9611 documentation does not list this register, neither does
-LT9611UXC (which is a different chip).
 
-This commit has been confirmed to fix HDMI output on DragonBoard 845c.
+On 12/13/2022 8:24 PM, Johan Hovold wrote:
+> On Mon, Dec 12, 2022 at 01:23:11PM -0500, Brian Masney wrote:
+>> According to the downstream 5.4 kernel sources for the sa8540p,
+>> i2c@894000 is labeled i2c bus 21, not 5. The interrupts and clocks
+>> also match. Let's go ahead and correct the name that's used in the
+>> three files where this is listed.
+>>
+>> Signed-off-by: Brian Masney <bmasney@redhat.com>
+>> Fixes: 152d1faf1e2f3 ("arm64: dts: qcom: add SC8280XP platform")
+>> Fixes: ccd3517faf183 ("arm64: dts: qcom: sc8280xp: Add reference device")
+>> Fixes: 32c231385ed43 ("arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s devicetree")
+> 
+>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> index 109c9d2b684d..875cc91324ce 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> @@ -827,7 +827,7 @@ qup2_uart17: serial@884000 {
+>>   				status = "disabled";
+>>   			};
+>>   
+>> -			qup2_i2c5: i2c@894000 {
+>> +			qup2_i2c21: i2c@894000 {
+> 
+> Note that the node is labelled qup2_i2c5 and not qup_i2c5.
+> 
+> That is, the QUP nodes are labelled using two indices, and specifically
+> 
+> 	qup2_i2c5
+> 
+> would be another name for
+> 
+> 	qup_i2c21
+> 
+> if we'd been using such a flat naming scheme (there are 8 engines per
+> QUP).
+> 
+> So there's nothing wrong with how these nodes are currently named, but
+> mixing the two scheme as you are suggesting would not be correct.
 
-Suggested-by: Amit Pundir <amit.pundir@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- drivers/gpu/drm/bridge/lontium-lt9611.c | 1 +
- 1 file changed, 1 insertion(+)
+Wondering we might need to change qup2_uart17 to qup2_uart1 then ?
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-index ffcdc8dba3798..3ce4e495aee50 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-@@ -259,6 +259,7 @@ static int lt9611_pll_setup(struct lt9611 *lt9611, const struct drm_display_mode
- 		{ 0x8126, 0x55 },
- 		{ 0x8127, 0x66 },
- 		{ 0x8128, 0x88 },
-+		{ 0x812a, 0x20 },
- 	};
- 
- 	regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
--- 
-2.34.1
+Shazad
 
+> 
+> Johan
