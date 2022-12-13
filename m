@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C58F64B227
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C9C64B238
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234685AbiLMJU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:20:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S234611AbiLMJVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234570AbiLMJTz (ORCPT
+        with ESMTP id S234742AbiLMJUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:19:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C132BFB;
-        Tue, 13 Dec 2022 01:19:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6951B810DF;
-        Tue, 13 Dec 2022 09:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32500C433EF;
-        Tue, 13 Dec 2022 09:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670923182;
-        bh=tFne0xthz+EtxoclkKpYRT/JOXwYWJ7gjsUvH8OM7I4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DnKMSZqDUBWL1JuPMZAxngIXaWqyoSy7c8zHUtL5eMi3GJCFdcMx6cOvWDS9sqaQC
-         6x5/dlLuZoEZNx0fECKM+Bn4+deLKKKUsRY0cMVCOq/cGNaFyFwjMHtX19/wsSfgFM
-         X4rsXRLfQqP5rpBa9cA2m+fJUZVt0Xz4BGfTQbdj6AlWomQ2fLEPrLQP612/90aPkJ
-         ZsHyW06fy9OK85cbAhuy4FepC4R223CVZQpWgZbP54vWFmPhEefWrDzvGWI6iCBIPq
-         m1BUbPTzi6S2JYJPn7OXinZ6pHLUv3zxF2QDujq1QDbfITvZV5axMRb4YyPke8SbkB
-         1PgYg7rNDqPAA==
-Date:   Tue, 13 Dec 2022 10:19:37 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] vfsuid updates for v6.2
-Message-ID: <20221213091937.dmshin7hd6hqsliq@wittgenstein>
-References: <20221212123348.169903-1-brauner@kernel.org>
- <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
+        Tue, 13 Dec 2022 04:20:35 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E327AF71
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:20:33 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id t5so13996758vsh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:20:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=99UAZJTrfKiJofFWBM4NXTM8EodixIF3J6Az3rrCy4A=;
+        b=FlVsUZujxyAO6a2fFPG8cg5ZrM7kqbzA4NeT1MAaJ7gyIpdUf8S5IMC0Rjc0rpBNr/
+         xDRJy3ZBT7J8Utk2cJqRjjHu+/DrjqD8DqV6C68cqEQsbUEUif5rcbLVtRv1Z8+B2rRm
+         Fdif/Vd812iGnHF+QaWHPtJMlQhgQm47cLB7r0N06OTC4D6B81Mc2AFOh4tzuJAd9Ax1
+         rTRaAi7WqDnEN4l+ZsElDwV2bkJejq3C9MYCobvCxfxqNGipvrbS2+JRzkiRD+Eeh22F
+         6dUe9CDqDAEmYMjmhIPQNWp9fSVvbTb4M04kgg8dDx4qqqRDluY+C2G9CgwWk4YuqIJ9
+         lPiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=99UAZJTrfKiJofFWBM4NXTM8EodixIF3J6Az3rrCy4A=;
+        b=aNFozHu1HKqkZIaI7+JPnOvCgQzTeQwJmra+TNxNKGLE7K15klmpw5Vn8HqOztf+sH
+         vXT86vzx3OF18aErjsbrTvaCq3nX3zQ7sOE7ZwMGPwWdMNmDYAHXeCmx8W0EEi8A42AX
+         ywP6F+pNV4ADQQULpV/ZNCBYHPhKANGgRDs7M8EmzYHsUD9AD2m0O08p1bJI1lLVbBfK
+         2yyL3aTgC5/A8LK68mcWvbfxce1ka9xaPlG7H7OxTOAxPT53JAhvxI6iblqulK+UFgrM
+         1p5NoN5HPMCcULlFDhv6xlIJYcNwXd7EXIlGcruo2ag0mDiUMKxkZXBch+uP0rKG1E3K
+         QL0w==
+X-Gm-Message-State: ANoB5pmBY0wpFehMvhiU0M+ktz1NWl1PxnTZXJm7r8goNrUpW5H8G6HU
+        HDMiE/IMDss0Lr1NlyvuRP2JtiUjI6/zdi0d0JJYfQ==
+X-Google-Smtp-Source: AA0mqf6uFnKRk2QSUJ0KAvYnKeLU2GkehLzganp6e8uKVPnodOU7S355ViySWjngXw2uINdpr0CuVM9+oq7tgqW6sAM=
+X-Received: by 2002:a05:6102:3ca1:b0:3b5:d38:9d4 with SMTP id
+ c33-20020a0561023ca100b003b50d3809d4mr607213vsv.9.1670923232845; Tue, 13 Dec
+ 2022 01:20:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj4BpEwUd=OkTv1F9uykvSrsBNZJVHMp+p_+e2kiV71_A@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221212130917.599345531@linuxfoundation.org>
+In-Reply-To: <20221212130917.599345531@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Dec 2022 14:50:21 +0530
+Message-ID: <CA+G9fYtdgLx0hrtGk7G8Jvt2GhY-FoCTp0KtF8ngGix289G2QQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/67] 5.4.227-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,52 +74,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 07:28:59PM -0800, Linus Torvalds wrote:
-> On Mon, Dec 12, 2022 at 4:34 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > This pull request converts all remaining places that still make use of non-type
-> > safe idmapping helpers to rely on the new type safe vfs{g,u}id based helpers.
-> > Afterwards it removes all the old non-type safe helpers.
-> 
-> So I've pulled this, but I'm not entirely happy about some of those
-> crazy helpers.
-> 
-> In particular, the whole "ordering" helpers are really not something
-> that should be used in general, I feel. I'm talking about
-> vfsuid_gt_kuid() and friends - it's an entirely insane operation and
-> makes no sense at all.
+On Mon, 12 Dec 2022 at 18:50, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.227 release.
+> There are 67 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.227-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Oh yes, I very much agree.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> 
-> Yes, yes, I understand why they exist (those crazy IMA rules), but I
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I would've really liked to have avoided their existence altogether but I
-have no clear idea what ima is doing with these comparisons. And
-everytime we do wider scoped vfs work I spend about 1 or 2 good weeks in
-security/ just to understand what all the various security modules do,
-audit callchains and then come up with something that doesn't break half
-of them. And often this means unpleasant compromises in the vfs layer
-which I really don't like.
+NOTE:
+Following build warning found,
 
-And just to be clear, I don't want to be on of those "LSMs are bad"
-people. I do really think they provide additional value.
-But I think it's fair to acknowledge that the hook infrastructure with
-multiple LSMs makes the vfs and developers pay when reworking codepaths.
+mm/hugetlb.c: In function 'follow_huge_pmd_pte':
+mm/hugetlb.c:5191:1: warning: label 'out' defined but not used [-Wunused-la=
+bel]
+ 5191 | out:
+      | ^~~
 
-And the fact that some things that are LSM-like (ima etc.) have separate
-hooks doesn't help either.
+details of commit causing this build warning.
+   mm/hugetlb: fix races when looking up a CONT-PTE/PMD size hugetlb page
+   commit fac35ba763ed07ba93154c95ffc0c4a55023707f upstream.
 
-> feel that those functions *really* shouldn't be exposed to anybody
-> else.
-> 
-> IOW, making those insane functions available in <linux/idmapping.h>
-> really seems wrong to me. They are crazy special cases, and I think
-> they should exist purely in that crazy ima_security file.
-> 
-> Again - I've pulled this, but I'm hoping to see a future commit that
-> limits that craziness to the only user, in the hope that this disease
-> will never spread.
+## Build
+* kernel: 5.4.227-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 8c05f5e0777d154e70c3ab34e0fb0e1778b7e23c
+* git describe: v5.4.226-68-g8c05f5e0777d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+26-68-g8c05f5e0777d
 
-Let me see what I can do about this. Hopefully I can still find
-something during the merge window.
+## Test Regressions (compared to v5.4.226)
+
+## Metric Regressions (compared to v5.4.226)
+
+## Test Fixes (compared to v5.4.226)
+
+## Metric Fixes (compared to v5.4.226)
+
+## Test result summary
+total: 114898, pass: 99995, fail: 1941, skip: 12727, xfail: 235
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 146 total, 145 passed, 1 failed
+* arm64: 44 total, 40 passed, 4 failed
+* i386: 26 total, 20 passed, 6 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 37 total, 35 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
