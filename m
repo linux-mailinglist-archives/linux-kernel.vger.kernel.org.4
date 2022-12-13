@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C7B64BA34
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D8064BA37
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236254AbiLMQvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S235774AbiLMQve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbiLMQvJ (ORCPT
+        with ESMTP id S235940AbiLMQvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595CC1055F;
-        Tue, 13 Dec 2022 08:51:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E47FD615E7;
-        Tue, 13 Dec 2022 16:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D69C433EF;
-        Tue, 13 Dec 2022 16:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670950267;
-        bh=XuyPsD72oPHirUFch10ORuPd8S8i15OahN565MHaV3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UulrFBfvcnR1w6K3YNUjNDZcZ7syW1CNLwHP52g1fRg0NiL+ufzmvvXbtW+qWBLF4
-         JXeZbqtpwOTCcV7XYKGyfBsOp4vCdXCJSu6EP5sLRYjYy9QuPIqFYmCjzkJ6pAMdAD
-         bw0SJzye9X/1myFawQ6MwgsuUoS4+fcEnnFop6uNiQAyanNtA7pyKjmomzBETf7Wzs
-         H6EFFqunywPAOVhpjRz2tlrMOp6r/E/H83WJwJ9+W9PAetSChyYS8oPzhW2HwxpNDY
-         S2IjtGNRAwlu+HJpR/BxYZkoLbyjvbpj6n2ZQ/EuhnL5f9yjHHMN35Kxh9ycOjAjt5
-         VqC4SArSIY+lg==
-Date:   Tue, 13 Dec 2022 09:51:04 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        llvm@lists.linux.dev, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
-Message-ID: <Y5iteH7jCU83w5qm@dev-arch.thelio-3990X>
-References: <20221212130934.337225088@linuxfoundation.org>
- <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
+        Tue, 13 Dec 2022 11:51:31 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EDD1580B;
+        Tue, 13 Dec 2022 08:51:29 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id v62-20020a4a7c41000000b004a0a214dfbaso2459884ooc.9;
+        Tue, 13 Dec 2022 08:51:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=l3ZUJv9Y+27Bs9i0rYBQ2dQ+xTle+B/Uw+LnnqewtAI=;
+        b=ttrtRAfsjfnxcNpjVSvMFGfmf+TmB908iqlSNhomGlkSeIehvXrIeLjM5tPvSN30zx
+         S9zI9+bfSWxCQ7tdc+apeLNdAFZMT83bV9sxgAPRcJvtho3nlqIkXehziffgJQbjInZ2
+         dGrYkKINORpCTzwvSG3LNzCX6euw1eQEML1uB1f79fMfloUkBIfGDf6ICA2GZ1y0tVp8
+         C5u4T+JnG06qWWCYgzbPuDLMCsIBA+SvdVe4tdXy2Whj2S8irkSYJEPOGizYNVSj+BgD
+         IIzIn1pKlqlEEcuESteVxQJgITY0pSQ4rB43K4kx5vO5MLw+ZmRsR6jS9x91zgudRf2x
+         SEJw==
+X-Gm-Message-State: ANoB5plnxPclqT8303SODIQhnKn/3CR5MTcVXDGGjl2Qxt85RMN4vgYs
+        dYkX2lC8/HI/Yqh1sS9K23IqSqDIaQ==
+X-Google-Smtp-Source: AA0mqf4uxiz8zVTcATxrPc5TgQzwdrBo/FmFnmMQ4bp0twsxdG8ie2Zm4wjNl+XN7ym6jo+a7thPDg==
+X-Received: by 2002:a4a:e051:0:b0:4a0:ad7a:b260 with SMTP id v17-20020a4ae051000000b004a0ad7ab260mr10406051oos.3.1670950289042;
+        Tue, 13 Dec 2022 08:51:29 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h4-20020a4aa284000000b004a3cc18e86asm1288376ool.40.2022.12.13.08.51.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 08:51:28 -0800 (PST)
+Received: (nullmailer pid 2037521 invoked by uid 1000);
+        Tue, 13 Dec 2022 16:51:27 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, robin.murphy@arm.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, sumit.semwal@linaro.org,
+        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
+        catalin.marinas@arm.com, manivannan.sadhasivam@linaro.org,
+        linux-arm-msm@vger.kernel.org, regressions@leemhuis.info,
+        will@kernel.org
+In-Reply-To: <20221213140409.772-2-quic_sibis@quicinc.com>
+References: <20221213140409.772-1-quic_sibis@quicinc.com>
+ <20221213140409.772-2-quic_sibis@quicinc.com>
+Message-Id: <167095022641.2035001.13548295585567513866.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: mailbox: Add dt binding for QTI CPUCP
+ mailbox controller
+Date:   Tue, 13 Dec 2022 10:51:27 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
 
-On Tue, Dec 13, 2022 at 12:01:25PM +0530, Naresh Kamboju wrote:
-> This is an additional report.
-> Following issue is specific to clang nightly,
+On Tue, 13 Dec 2022 19:34:08 +0530, Sibi Sankar wrote:
+> Add devicetree binding for CPUSS Control Processor (CPUCP) mailbox
+> controller.
 > 
-> x86 clang-nightly builds failed with defconfig and tinyconfig due to
-> below errors / warnings.
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>  .../bindings/mailbox/qcom,cpucp-mbox.yaml          | 51 ++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mailbox/qcom,cpucp-mbox.yaml
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Regressions found on x86_64:
-> 
->     - build/clang-nightly-tinyconfig
->     - build/clang-nightly-x86_64_defconfig
->     - build/clang-nightly-allnoconfig
->     - build/clang-nightly-lkftconfig
-> 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-> CC=clang
-> 
-> ld.lld: error: version script assignment of 'LINUX_2.6' to symbol
-> '__vdso_sgx_enter_enclave' failed: symbol not defined
-> llvm-objdump: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-> or directory
-> llvm-objcopy: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-> or directory
-> make[4]: *** [/builds/linux/arch/x86/entry/vdso/Makefile:136:
-> arch/x86/entry/vdso/vdso64.so] Error 1
 
-Thanks for the report!
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-This is resolved in mainline now with commit 45be2ad007a9 ("x86/vdso:
-Conditionally export __vdso_sgx_enter_enclave()"). I was going to
-request stable backports once it was a little calmer but if people are
-hitting this now, I guess now is as good a time as ever :) I believe it
-should backport cleanly to 5.15+, which is where it is needed.
+yamllint warnings/errors:
 
-Cheers,
-Nathan
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mailbox/qcom,cpucp-mbox.example.dtb: mailbox@17400000: reg: [[0, 398458880], [0, 16], [0, 408486656], [0, 1792]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mailbox/qcom,cpucp-mbox.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221213140409.772-2-quic_sibis@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
