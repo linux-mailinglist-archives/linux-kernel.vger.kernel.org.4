@@ -2,117 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346EA64B2BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F81364B2CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiLMJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
+        id S235045AbiLMJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235014AbiLMJwC (ORCPT
+        with ESMTP id S235008AbiLMJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:52:02 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FB415A08
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:52:01 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h10so15008867wrx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5puRTi/aBwHreExscKf/w+BThNFn9mhIDV4jDBOxJ4=;
-        b=cX9OvtSSUPl2VjlUMxN9wkJTxjF4VMryEK2+74/Jcp2+VxH/7zdJAOksUNssIxTm51
-         zg9bgDUDeJ1da0Q996JdsUZgJPySpalntdnf95UOKKDwkbLVqfZrmNUqAsJxl8FWHMCo
-         iy42JdAmC96Wf8DLM5Sr75akb1KR+vn97tncFrPZBcvjFGsoCr31lDbd1B+K+87hjvvn
-         J6OXoKWzFDZwo6PVBpAVoy279lQ0QJaFjVIq0qJgY5lAWSUvA0Y+b8aCIhtTQTKtfXNx
-         h4SjEkvduYcq4V2JhT/HRFFC/rhUGSGHW5+soZiuFIjG+etlAVkEl6tT5ICKi8K/z2Ab
-         cL+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5puRTi/aBwHreExscKf/w+BThNFn9mhIDV4jDBOxJ4=;
-        b=d0l29YRN7jHAsHKJW5MAs1LVmfk4eZQXJa9eHfO+biQMAgLFEBcfSJwivSq1STgfht
-         GWr0EOqw+59xuEW5wEO5nX4QY/o+3jAJxiHoJLUp5ahNIox+mXwLUPIIYUQwDYjI4sok
-         6GcGJWOyNg+vswVWlqlY+jyoPKhfxnVtcTn7EmjfZePcGiX3rlWp1whjT3rx0jZ1vVr5
-         eSQruciNkIDfdhX1ZIVD3Ufgpp8HK3f+BQdAgEM49Kfz8h3mb94UpA4iGBhRLbatCzFD
-         21C08wUVXW45ucKE2FKZyznwFblx491jt17LyZftRqI/MdVrXLZU25+2Y6LNK4PG7lWq
-         rp/g==
-X-Gm-Message-State: ANoB5pk+xTlghM68xc4U3P9LKVz6QTE+yrdTefDYobnJjMyFvX2IqBTi
-        ClxqlAsmvu4jcVn1S0D1DjxTYqGIp/DSVixPUsw=
-X-Google-Smtp-Source: AA0mqf4PMHJopL+j1/FAA6cNdu0WvhJE91YQY4pXO/EmIJ2pu66aV5lVRtcU7SIMWuMwfp4CKKKVmw==
-X-Received: by 2002:adf:d22f:0:b0:242:1fb8:1ca9 with SMTP id k15-20020adfd22f000000b002421fb81ca9mr10116658wrh.37.1670925120065;
-        Tue, 13 Dec 2022 01:52:00 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id y5-20020a5d4705000000b00241f029e672sm10620076wrq.107.2022.12.13.01.51.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 01:51:59 -0800 (PST)
-Message-ID: <f32e0526-2c67-0962-52c8-27d02439fbc2@linaro.org>
-Date:   Tue, 13 Dec 2022 10:51:57 +0100
+        Tue, 13 Dec 2022 04:53:44 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76CE2BF7;
+        Tue, 13 Dec 2022 01:53:43 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD8974J010082;
+        Tue, 13 Dec 2022 09:53:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
+ from : in-reply-to : date : cc : message-id : references : to :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=XHzjwrobxd+TbunuZRAOYWf7gEEvMa3zA6CrDQ/bD8c=;
+ b=rVKkK3dKAZ99KFG+UDmW4L7hT92/4HHZfAkbrbAG6B2bfA3w/Kmq4C3mQ5BvqcMe7d42
+ kXtACBOuTjozVNRgnoYgKwEjwngs6PHbNXTJ8K99/mMqtFF/mnJ0OSTHar7GMi+89WWC
+ Xl4rOsXy6EUQLoZRClr9d/Z9T1qNW5wJl5JEt93yvoWnwVLPLtLc0cqIO8RNI+JfdSH/
+ PEmfYbwWjze9DmIOHmrCtDXr/Domj/l28KNc/8cYpuKrmhakrrjfcc69Hvbd8pX7gewJ
+ af8gYZ1ihmP+m5RXs1OIKD+QmIy9jK1kgHOY/Qu408/tz4+lvdjpRIYaSfApgU1Bm81C HQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejrdxf9n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 09:53:29 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BD8IqW9014552;
+        Tue, 13 Dec 2022 09:53:28 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejrdxf99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 09:53:28 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD4xhYd007765;
+        Tue, 13 Dec 2022 09:53:26 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mchcf3ymx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 09:53:26 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BD9rO2R19399176
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Dec 2022 09:53:24 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11BAF20049;
+        Tue, 13 Dec 2022 09:53:24 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 841EF20043;
+        Tue, 13 Dec 2022 09:53:21 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.34.192])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 13 Dec 2022 09:53:21 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <Y5cxyk3OdgFXlyhS@kernel.org>
+Date:   Tue, 13 Dec 2022 15:23:19 +0530
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Message-Id: <BB236C92-3505-4DAB-AE28-A55F74EDE161@linux.vnet.ibm.com>
+References: <Y491d1wEW4TfUi5f@kernel.org> <Y4921D+36UGdhK92@kernel.org>
+ <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
+ <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
+ <Y5DNBZNC5rBBqlJW@kernel.org>
+ <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
+ <Y5JfgyN59dSeKbUP@kernel.org> <Y5Jl8MeW90DXy1wT@kernel.org>
+ <8F6F0C27-53F3-4837-A19C-845768253249@linux.vnet.ibm.com>
+ <Y5cxyk3OdgFXlyhS@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2Bny2CfjGFNq4kOQrw1bvHECQTOc8JDU
+X-Proofpoint-ORIG-GUID: iZlkoCnTfH2k37QW6qXy03YuzmNodnsC
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 01/14] KVM: selftests: Define literal to asm constraint in
- aarch64 as unsigned long
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ricardo Koller <ricarkol@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Raghavendra Rao Ananta <rananta@google.com>
-References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-2-seanjc@google.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221213001653.3852042-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212130084
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/22 01:16, Sean Christopherson wrote:
-> Define a literal '0' asm input constraint to aarch64/page_fault_test's
-> guest_cas() as an unsigned long to make clang happy.
-> 
->    tools/testing/selftests/kvm/aarch64/page_fault_test.c:120:16: error:
->      value size does not match register size specified by the constraint
->      and modifier [-Werror,-Wasm-operand-widths]
->                         :: "r" (0), "r" (TEST_DATA), "r" (guest_test_memory));
->                                 ^
->    tools/testing/selftests/kvm/aarch64/page_fault_test.c:119:15: note:
->      use constraint modifier "w"
->                         "casal %0, %1, [%2]\n"
->                                ^~
->                                %w0
-> 
-> Fixes: 35c581015712 ("KVM: selftests: aarch64: Add aarch64/page_fault_test")
-> Cc: Ricardo Koller <ricarkol@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   tools/testing/selftests/kvm/aarch64/page_fault_test.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+> On 12-Dec-2022, at 7:21 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wr=
+ote:
+>=20
+> Em Fri, Dec 09, 2022 at 12:04:18PM +0530, Athira Rajeev escreveu:
+>>=20
+>>=20
+>>> On 09-Dec-2022, at 4:02 AM, Arnaldo Carvalho de Melo <acme@kernel.org> =
+wrote:
+>>>=20
+>>> Em Thu, Dec 08, 2022 at 07:04:52PM -0300, Arnaldo Carvalho de Melo escr=
+eveu:
+>>>> Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
+>>>>>> On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel.o=
+rg> wrote:
+>>>>>> Can you try again? tmp.perf/core? That "tmp." part means its a force
+>>>>>> pushed branch, so I just force pushed with some arch specific fixes,=
+ now
+>>>>>> I'm down to (removing the successful builds and unrelated failures, =
+now
+>>>>>> related to libbpf's F_DUPFD_CLOEXEC kaboom):
+>>>>=20
+>>>>> Ok Arnaldo, Sure, I will check with updated branch
+>>>>=20
+>>>>>> 5     7.38 fedora:34                     : FAIL gcc version 11.3.1 2=
+0220421 (Red Hat 11.3.1-2) (GCC)
+>>>>>>  /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function =E2=80=98e=
+vsel__rawptr=E2=80=99:
+>>>>>>  /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: =E2=80=
+=98TEP_FIELD_IS_RELATIVE=E2=80=99 undeclared (first use in this function); =
+did you mean =E2=80=98TEP_FIELD_IS_FLAG=E2=80=99?
+>>>>>>   2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
+>>>>>>        |                                    ^~~~~~~~~~~~~~~~~~~~~
+>>>>>>        |                                    TEP_FIELD_IS_FLAG
+>>>>=20
+>>>>> I observed same issue as updated here:=20
+>>>>> https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@lin=
+ux.vnet.ibm.com/
+>>>>=20
+>>>>> Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of the=
+ system installed version.
+>>>>> whereas it is there in header file in tools/lib/traceevent
+>>>>=20
+>>>>> # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
+>>>>> # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
+>>>>> 	TEP_FIELD_IS_RELATIVE	=3D 256,
+>>>>=20
+>>>> Right, I had noticed that as well, so as a prep patch I'm adding the
+>>>> patch below, before Ian's. Please check and provide an
+>>>> Acked-by/Tested-by/Reviewed-by if possible.
+>>>=20
+>>> I ended up with the one below, _after_ Ian's patch as I had some troubl=
+e grafting
+>>> it before and had already tested it this way multiple times, I'm pushing
+>>> this to tmp/perf.core.
+>>>=20
+>>> - Arnaldo
+>>=20
+>>=20
+>> Hi Arnaldo, Ian
+>>=20
+>> Thanks for the fixes.
+>>=20
+>> Since we changed =E2=80=9CCONFIG_TRACEEVENT=E2=80=9D to =E2=80=9CCONFIG_=
+LIBTRACEEVENT=E2=80=9D,=20
+>> below change is also needed in =E2=80=9Carch/powerpc/util/Build=E2=80=9D
+>>=20
+>> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powerp=
+c/util/Build
+>> index 71e57f28abda..9889245c555c 100644
+>> --- a/tools/perf/arch/powerpc/util/Build
+>> +++ b/tools/perf/arch/powerpc/util/Build
+>> @@ -1,5 +1,5 @@
+>> perf-y +=3D header.o
+>> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+>> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+>> perf-y +=3D perf_regs.o
+>> perf-y +=3D mem-events.o
+>> perf-y +=3D sym-handling.o
+>>=20
+>> With this change, I could successfully compile in these environment:
+>> - Without libtraceevent-devel installed
+>> - With libtraceevent-devel installed
+>> - With =E2=80=9Cmake NO_LIBTRACEEVENT=3D1=E2=80=9D
+>>=20
+>> With above change,
+>> Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+>=20
+> I did that and the same thing for other architectures, thanks for
+> testing!
+>=20
+> I'll now give a try at implementing it without
+> tools/build/feature/test-libtraceevent-tep_field_is_relative.c, using
+> just the version of libtraceevent, as Ian suggested.
+>=20
+> It would be great if you could test it again then,
+>=20
+
+Sure Arnaldo, I will test with updated code.
+
+Thanks
+Athira
+
+> Thanks,
+>=20
+> - Arnaldo
+>=20
+>=20
+> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/uti=
+l/Build
+> index 88553c578ed7a1c4..78ef7115be3d91a7 100644
+> --- a/tools/perf/arch/arm64/util/Build
+> +++ b/tools/perf/arch/arm64/util/Build
+> @@ -3,7 +3,7 @@ perf-y +=3D machine.o
+> perf-y +=3D perf_regs.o
+> perf-y +=3D tsc.o
+> perf-y +=3D pmu.o
+> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+> perf-$(CONFIG_DWARF)     +=3D dwarf-regs.o
+> perf-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
+> perf-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
+> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powerpc=
+/util/Build
+> index 71e57f28abdac7e9..9889245c555c4cfb 100644
+> --- a/tools/perf/arch/powerpc/util/Build
+> +++ b/tools/perf/arch/powerpc/util/Build
+> @@ -1,5 +1,5 @@
+> perf-y +=3D header.o
+> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+> perf-y +=3D perf_regs.o
+> perf-y +=3D mem-events.o
+> perf-y +=3D sym-handling.o
+> diff --git a/tools/perf/arch/s390/util/Build b/tools/perf/arch/s390/util/=
+Build
+> index aa8a5f05c9cb4706..db68840869979f2c 100644
+> --- a/tools/perf/arch/s390/util/Build
+> +++ b/tools/perf/arch/s390/util/Build
+> @@ -1,5 +1,5 @@
+> perf-y +=3D header.o
+> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
+> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
+> perf-y +=3D perf_regs.o
+>=20
+> perf-$(CONFIG_DWARF) +=3D dwarf-regs.o
 
