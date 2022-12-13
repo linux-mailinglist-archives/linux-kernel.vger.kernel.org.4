@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D69364C0DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C363664C0DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237213AbiLMXp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S236408AbiLMXq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237209AbiLMXpF (ORCPT
+        with ESMTP id S236149AbiLMXqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:45:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D181C909;
-        Tue, 13 Dec 2022 15:44:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Dec 2022 18:46:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C4A19C3B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:45:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670975116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DVhb72kd9R99mwbuxV0gpxyvFBS7R/Jb7x2Bq+94b50=;
+        b=hDkYAJFABz/c+uzTQ3YCO5IQP/VE6wn2mWBTYgAgVT4qcxGDjOPSDxZfkBZMrToDm6Rvjq
+        c6v7DNwU/hH+VBYArk8ALr+fsyhuQJU6qUxLZHb57tR3ml33JK2PwxfabgUFJlujTNcIj1
+        ZEQZQPwLz5V+PgHSi4m+ERp9oTf7jT4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-FE8nIjigNqSvYgEBCMkZsw-1; Tue, 13 Dec 2022 18:45:13 -0500
+X-MC-Unique: FE8nIjigNqSvYgEBCMkZsw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E16EB815FE;
-        Tue, 13 Dec 2022 23:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627B8C433F1;
-        Tue, 13 Dec 2022 23:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670975084;
-        bh=2tvp9NwfkXVkp5bFjHTkmFQ7muXx0ZcIww+kK5zEtVg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rs22s+42gOPyj0CUdx6/k27/mWhapSg8QDoyLDf0HLDv1OakEC2dfZBjVPBtaD+PN
-         KX9CSFjEAe0Z15L9UPgyJG1XVfaI/uzPalHBmCeHUUwTY7LefInlrN7kqwidLdET7C
-         iGRNJ+Y06F2m6nM1wdlEQ3AXL1DhP+NgNJO+e/UlBkcHNlqbX9KTC/sxvZKKpQspRp
-         kbhg7V1fhF+DJBHQAZLnZ5kasXYZMbw4WDgswRcdLLQWy8yTPoWeRR603q21ECuYT+
-         gJthfOJEwBvYAcRC6W0Z6yGjg5UYHku3byLM97SKQqRmiwmK2v4YLTqeFT04Y1NHnc
-         3FFXLLu/W0Gdg==
-Date:   Tue, 13 Dec 2022 17:44:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kishon Vijay Abraham I <kishon@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Joao Pinto <Joao.Pinto@synopsys.com>,
-        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        hch@infradead.org, nsekhar@ti.com
-Subject: Re: [PATCH v7 01/23] PCI: endpoint: Add EP core layer to enable EP
- controller and EP functions
-Message-ID: <20221213234442.GA219721@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BCAA1803533;
+        Tue, 13 Dec 2022 23:45:12 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.32.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 37F894085720;
+        Tue, 13 Dec 2022 23:45:12 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     muchun.song@linux.dev, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, willy@infradead.org,
+        gerald.schaefer@linux.ibm.com
+Subject: [RFC V2] mm: add the zero case to page[1].compound_nr in set_compound_order
+Date:   Tue, 13 Dec 2022 16:45:05 -0700
+Message-Id: <20221213234505.173468-1-npache@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20170410135510.30673-1-kishon@ti.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2017 at 07:25:10PM +0530, Kishon Vijay Abraham I wrote:
-> Introduce a new EP core layer in order to support endpoint functions in
-> linux kernel. This comprises the EPC library (Endpoint Controller Library)
-> and EPF library (Endpoint Function Library). EPC library implements
-> functions specific to an endpoint controller and EPF library implements
-> functions specific to an endpoint function.
+Since commit 1378a5ee451a ("mm: store compound_nr as well as
+compound_order") the page[1].compound_nr must be explicitly set to 0 if
+calling set_compound_order(page, 0).
 
-> +void *pci_epf_alloc_space(struct pci_epf *epf, size_t size, enum pci_barno bar)
-> +{
-> +	void *space;
-> +	struct device *dev = &epf->dev;
-> +	dma_addr_t phys_addr;
-> +
-> +	if (size < 128)
-> +		size = 128;
-> +	size = roundup_pow_of_two(size);
-> +
-> +	space = dma_alloc_coherent(dev, size, &phys_addr, GFP_KERNEL);
-> +	if (!space) {
-> +		dev_err(dev, "failed to allocate mem space\n");
-> +		return NULL;
-> +	}
-> +
-> +	epf->bar[bar].phys_addr = phys_addr;
+This can lead to bugs if the caller of set_compound_order(page, 0) forgets
+to explicitly set compound_nr=0. An example of this is commit ba9c1201beaa
+("mm/hugetlb: clear compound_nr before freeing gigantic pages")
 
-> + * struct pci_epf_bar - represents the BAR of EPF device
-> + * @phys_addr: physical address that should be mapped to the BAR
-> + * @size: the size of the address space present in BAR
-> + */
-> +struct pci_epf_bar {
-> +	dma_addr_t	phys_addr;
+Collapse these calls into the set_compound_order by utilizing branchless
+bitmaths [1].
 
-If this "phys_addr" is an address that can appear on the PCI bus, is
-"phys_addr" a misnomer?  Many drivers use dma, dmabuf, bus_addr, etc.
+[1] https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
 
-Bjorn
+V2: slight changes to commit log and remove extra '//' in the comments
+
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ include/linux/mm.h | 6 +++++-
+ mm/hugetlb.c       | 6 ------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6a05a3bc0a28..9510f6294706 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -938,9 +938,13 @@ static inline int head_compound_pincount(struct page *head)
+ 
+ static inline void set_compound_order(struct page *page, unsigned int order)
+ {
++	unsigned long shift = (1U << order);
+ 	page[1].compound_order = order;
+ #ifdef CONFIG_64BIT
+-	page[1].compound_nr = 1U << order;
++	// Branchless conditional:
++	// order  > 0 --> compound_nr = shift
++	// order == 0 --> compound_nr = 0
++	page[1].compound_nr = shift ^ (-order  ^ shift) & shift;
+ #endif
+ }
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 3d9f4abec17c..706dec43a6a2 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1344,9 +1344,6 @@ static void __destroy_compound_gigantic_page(struct page *page,
+ 	}
+ 
+ 	set_compound_order(page, 0);
+-#ifdef CONFIG_64BIT
+-	page[1].compound_nr = 0;
+-#endif
+ 	__ClearPageHead(page);
+ }
+ 
+@@ -1865,9 +1862,6 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
+ 		__ClearPageReserved(p);
+ 	}
+ 	set_compound_order(page, 0);
+-#ifdef CONFIG_64BIT
+-	page[1].compound_nr = 0;
+-#endif
+ 	__ClearPageHead(page);
+ 	return false;
+ }
+-- 
+2.38.1
+
