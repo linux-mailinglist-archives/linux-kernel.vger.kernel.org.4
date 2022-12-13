@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233ED64BDBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F3664BDE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbiLMUHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S236064AbiLMUXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiLMUHk (ORCPT
+        with ESMTP id S237851AbiLMUWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:07:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB22E290;
-        Tue, 13 Dec 2022 12:07:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5830161714;
-        Tue, 13 Dec 2022 20:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E063C433EF;
-        Tue, 13 Dec 2022 20:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670962055;
-        bh=GYYlwzxQ3UCGDe4WcOmFtXm8+K3DpY1ve1L3XVCcVmU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KofgOd1F40PH4rNxNB0DqLPpABTiEpu0ZdQZ0akIFU8PBSgL3kPKuUnREhGzShzOk
-         FQwMU4YkKA2TvR4n/jIe3pvx/HJ/8ZRVqfuvdhLAHCUBcHELvXNzUKjfHM0H8IUZh4
-         e/jT0oU0+NDN2xcx3k7cUBz9z5VLF+DZ9cmaP4RM2Idw9PY3/MjNwad4YucEnp9de+
-         +48UKgpJEsTXQ6ElCMOmcZx9u5WAzJS6Fb1uJ6JGCBHjZH2tOpfoMOZwdu+DKKrPTk
-         9aY1pJj2bhTEpBEZV+ZauufRAStYboO9PUduehSn3xb6WqxOuLXVNMoXOVnDYZs5DF
-         cvtWPVNOvpfiQ==
-Date:   Tue, 13 Dec 2022 14:07:33 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-Message-ID: <20221213200733.GA201693@bhelgaas>
+        Tue, 13 Dec 2022 15:22:19 -0500
+X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 12:19:10 PST
+Received: from freundtech.com (freundtech.com [78.47.86.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F59126541;
+        Tue, 13 Dec 2022 12:19:10 -0800 (PST)
+Received: from arch-desktop.fritz.box (unknown [IPv6:2a02:8071:2b80:7760:fecd:7e78:31fb:a087])
+        by freundtech.com (Postfix) with ESMTPSA id 0658C1E332D;
+        Tue, 13 Dec 2022 21:13:45 +0100 (CET)
+From:   Adrian Freund <adrian@freund.io>
+To:     linux-acpi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Adrian Freund <adrian@freund.io>
+Subject: [PATCH] ACPI: resource: do IRQ override on Lenovo 14ALC7
+Date:   Tue, 13 Dec 2022 21:13:11 +0100
+Message-Id: <20221213201311.10022-1-adrian@freund.io>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213195313.GA200257@bhelgaas>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
-> On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
-> > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
-> > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
-> > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > > 
-> > > > > Today's linux-next merge of the pci tree got a conflict in:
-> > > > > 
-> > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > > > > 
-> > > > > between commit:
-> > > > > 
-> > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
-> > > > > 
-> > > > > from the arm-soc tree and commit:
-> > > > > 
-> > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
-> > > > > 
-> > > > > from the pci tree.
-> > > > > 
-> > > > > I didn't know how to fix this up, so I just used the latter (and so lost
-> > > > > the addition of "ecam").
-> > > > 
-> > > > Did I miss a suggested resolution for this?
-> > 
-> > > We had a brief discussion about this in another thread. So basically
-> > > Stephen's resolution is fine here and the plan is to instead add the
-> > > ECAM bits that the Tegra patch does in a separate patch on top of
-> > > Serge's patch. I should get around to sending that patch tomorrow.
-> > 
-> > Actually the discussion still goes. I haven't got a respond to my
-> > last suggestion which seems to me more reasonable than extending the
-> > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
-> > the discussion here:
-> > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
-> 
-> Sorry, it's really too late for discussion.  I need to send the v6.2
-> pull request today or at the very latest, tomorrow, so the only thing
-> to decide is how to resolve the merge conflict in the simplest
-> possible way.  Unless there's a very compelling reason to resolve it
-> differently than Stephen did, that's going to be the answer.
+Commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
+added an override for Lenovo IdeaPad 5 16ALC7. The 14ALC7 variant also
+suffers from a broken touchscreen and trackpad.
 
-To be more specific, the current answer is this (which is the same as
-what's in next-20221213):
+Fixes: 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen platforms")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216804
+Signed-off-by: Adrian Freund <adrian@freund.io>
+---
+ drivers/acpi/resource.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-  https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index f27914aedbd5..819390665da1 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -435,7 +435,14 @@ static const struct dmi_system_id asus_laptop[] = {
+ 	{ }
+ };
+ 
+-static const struct dmi_system_id lenovo_82ra[] = {
++static const struct dmi_system_id lenovo_laptop[] = {
++	{
++		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
++		},
++	},
+ 	{
+ 		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
+ 		.matches = {
+@@ -458,8 +465,8 @@ struct irq_override_cmp {
+ static const struct irq_override_cmp override_table[] = {
+ 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+-	{ lenovo_82ra, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+-	{ lenovo_82ra, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
++	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
++	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+ };
+ 
+ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+-- 
+2.38.1
 
-If you think it needs to be different, please respond with a patch and
-explanation.
-
-Bjorn
