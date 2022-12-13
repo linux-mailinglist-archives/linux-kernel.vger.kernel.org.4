@@ -2,142 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F67C64B45C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAA064B460
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234830AbiLMLml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 06:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S235058AbiLMLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 06:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbiLMLmj (ORCPT
+        with ESMTP id S235360AbiLMLnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:42:39 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA85395
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:42:37 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id o15-20020a6bf80f000000b006de313e5cfeso1697528ioh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:42:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nzcefoxpg77f8NRJkj+YK7P0MI1lkm4SAhWKpjm0eRA=;
-        b=eY0RQjjscLmSn0A3B032m65SbmlLFYDg2vxuXTvnuhc3+4vCgXFZHOQG6jAr/G7k4U
-         u8ik+cBruY3yXBMiDjsy/mk/5p1d2XrzHlYCuIW3Y20ZOIbVBPaYY34mbc8JZn9EF9Y8
-         ZOXTLY/5FMnIU2J4KhmgAbUaHeiDlhy7vshmdlxEaVN8xk0KcHdn3Hb7EOh8GOPPrNRg
-         Xg1p8oUaBJ3vjoUeCHAP4wjbG7Uk1gR4n9YJmCqIcW9RQ5Lukamt90zmcQnenqzgfJGO
-         m2gynhSqLN5RqjvV8R2rq1PaIG77iE6K17MHmE9dbDyTNhn3YO2/RYqQ9u5RkW/aFdyg
-         ymOA==
-X-Gm-Message-State: ANoB5pkjQdUITKHhHinNCheDNDaEP+RhUljTB+7u6mXifDdLiEVIgoS4
-        55/xwxI+KXMbB7f7DC8hspt2dd+5+4afu8YOtALfXJxUNk07
-X-Google-Smtp-Source: AA0mqf6pWHrieU2RXJM1g31rjSEXEFbmUh7tFyfL9gEtfq7Vz9eE+FxGQKfblbb5LNXMIi5O23gZQ98OEUJOqZmxjBHfCW6X4JS9
+        Tue, 13 Dec 2022 06:43:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCDC1038;
+        Tue, 13 Dec 2022 03:43:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88106B810DE;
+        Tue, 13 Dec 2022 11:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9B76C433EF;
+        Tue, 13 Dec 2022 11:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670931788;
+        bh=00Jmw3K9MYCSLRqFQ7goQGM4sGIf8nbeNhXmxTGaG0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZDl/zKaShM1uSik9G8u2tPAPHkZe96hMN3yHAMxRqBBwUnoMdMrQT6D1+EWffWy8L
+         Z96NbsUNNzap+EhEJhEKN7Ojl/4jg+Vn1E6CJfdNVQXTjBdlRZmolNQ6JT9YVNmCST
+         L4iXDoUZREKTT9SjVXMbcIhY3dUEkX3F49xFMDNMtNrl7ev3dbw7iCefmOYmkpOD2N
+         DhtJFh3j+epADAWTpl7XnwdMINiEgAYYjwjnKJNWeElYaPSRydyNHufsC2JNfnPBXS
+         bX+UDeIEXCFfKO4J9JT8n1QiMm/nVMGmMIJ8h8dmMP5h+OkqyNoUzqGzQUUDu1kUeA
+         /K6y+oOPsZ1pw==
+Date:   Tue, 13 Dec 2022 13:43:03 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Liming Wu <liming.wu@jaguarmicro.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "398776277@qq.com" <398776277@qq.com>
+Subject: Re: [PATCH] PCI/IOV: Expose error return to dmesg
+Message-ID: <Y5hlR9Otgvf9b6zF@unreal>
+References: <20221213081607.1641-1-liming.wu@jaguarmicro.com>
+ <Y5g/eo3Z7xy3COzn@unreal>
+ <PSAPR06MB3942A2CFB519F5F3BB6DE6B7E1E39@PSAPR06MB3942.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d117:0:b0:6a3:a0cf:ea32 with SMTP id
- l23-20020a6bd117000000b006a3a0cfea32mr37861276iob.155.1670931757069; Tue, 13
- Dec 2022 03:42:37 -0800 (PST)
-Date:   Tue, 13 Dec 2022 03:42:37 -0800
-In-Reply-To: <000000000000839ff805e9f9e286@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d2fe7205efb41d2c@google.com>
-Subject: Re: [syzbot] general protection fault in do_xmote
-From:   syzbot <syzbot+ececff266234ba40fe13@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PSAPR06MB3942A2CFB519F5F3BB6DE6B7E1E39@PSAPR06MB3942.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Dec 13, 2022 at 11:33:27AM +0000, Liming Wu wrote:
+> HI,
+> 
+> Thanks for review it.
+> 
+> > -----Original Message-----
+> > From: Leon Romanovsky <leon@kernel.org>
+> > Sent: Tuesday, December 13, 2022 5:02 PM
+> > To: Liming Wu <liming.wu@jaguarmicro.com>
+> > Cc: bhelgaas@google.com; linux-pci@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; alex.williamson@redhat.com; 398776277@qq.com
+> > Subject: Re: [PATCH] PCI/IOV: Expose error return to dmesg
+> > 
+> > On Tue, Dec 13, 2022 at 04:16:07PM +0800, Liming Wu wrote:
+> > > There are many errors returned during the initialization of sriov,
+> > > such as -EIO/-ENOMEM, but they are not exposed to dmesg.
+> > > Let's expose the real errors to the user.
+> > 
+> > Please provide motivation. It is pretty easy to see what went wrong even
+> > without info print in dmesg.
+> The background is that we use our smat nic in the ARM64 architecture server
+> The following code in the sriov_init() function threw an exception
+> 
+> if (resource_size(res) & (PAGE_SIZE - 1)) {
+> 
+> The resource size obtained from smat nic is 4096(it's incorrectly set to a fixed value in nic).
+>  But the PAGE_SIZE is 65536, 
+> so sriov_init()  exits, but the relevant exception information is not found in dmesg. 
 
-HEAD commit:    764822972d64 Merge tag 'nfsd-6.2' of git://git.kernel.org/..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1428fb0b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-dashboard link: https://syzkaller.appspot.com/bug?extid=ececff266234ba40fe13
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ce69c0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1016950b880000
+It is not motivation, but summarizing HW bug found during device bringup.
+Why should we (as users) see this print in upstream kernel?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0c840c19749d/disk-76482297.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bdfd51618ae0/vmlinux-76482297.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fef17b5d4d6d/bzImage-76482297.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a114b1cb5db6/mount_0.gz
+> 
+> > >
+> > > In addition, -ENODEV doesn't make much sense and is not returned just
+> > > like any other capabilities.
+> > >
+> > > Signed-off-by: Liming Wu <liming.wu@jaguarmicro.com>
+> > > ---
+> > >  drivers/pci/iov.c   | 9 ++++++---
+> > >  drivers/pci/pci.h   | 2 --
+> > >  drivers/pci/probe.c | 6 +++++-
+> > >  3 files changed, 11 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c index
+> > > 952217572113..519aa2b48236 100644
+> > > --- a/drivers/pci/iov.c
+> > > +++ b/drivers/pci/iov.c
+> > > @@ -767,8 +767,11 @@ static int sriov_init(struct pci_dev *dev, int pos)
+> > >  	pci_write_config_word(dev, pos + PCI_SRIOV_CTRL, ctrl);
+> > >
+> > >  	pci_read_config_word(dev, pos + PCI_SRIOV_TOTAL_VF, &total);
+> > > -	if (!total)
+> > > +	if (!total) {
+> > > +		pci_info(dev, "SR-IOV capability is enabled but has %d VFs)\n",
+> > > +			total);
+> > 
+> > total is always 0 in this print.
+> Spec describe PCI_SRIOV_TOTAL_VF reg (Total Virtual Functions) as below:
+> Indicates the maximum number of Virtual Functions (VFs) that can be associated
+> With the Physical Function (PF).
+> This values is HWInit in Single Root mode and must contain the same values as InitialVFs
+> In Multi-Root mode, the Multi-Root PCI Manager(MR-PCIM) can change this values.
+> 
+> I don't think total is always 0 in this print for it has been confirmed to have  SR-IOV capability Enabled.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ececff266234ba40fe13@syzkaller.appspotmail.com
+You added print under if(!total) condition. The "SR-IOV capability is
+enabled but has %d VFs" will always print "SR-IOV capability is enabled but has 0 VFs"
 
-general protection fault, probably for non-canonical address 0xdffffc0000000097: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000004b8-0x00000000000004bf]
-CPU: 1 PID: 1273 Comm: kworker/1:1H Not tainted 6.1.0-syzkaller-03225-g764822972d64 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: glock_workqueue glock_work_func
-RIP: 0010:is_system_glock fs/gfs2/glock.c:725 [inline]
-RIP: 0010:do_xmote+0xdde/0x13d0 fs/gfs2/glock.c:835
-Code: 00 48 03 5d 00 48 89 d8 48 c1 e8 03 42 80 3c 30 00 74 08 48 89 df e8 91 e1 27 fe bd b8 04 00 00 48 03 2b 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 73 e1 27 fe 4c 8b 64 24 08 4c 39
-RSP: 0018:ffffc900061a7b70 EFLAGS: 00010202
-RAX: 0000000000000097 RBX: ffff888021dd8718 RCX: ffff888021c93a80
-RDX: 0000000000000000 RSI: 0000000000004000 RDI: 0000000000000000
-RBP: 00000000000004b8 R08: ffffffff83b7d986 R09: ffffed10043bb016
-R10: ffffed10043bb016 R11: 1ffff110043bb015 R12: ffff888075bf0548
-R13: 0000000000000818 R14: dffffc0000000000 R15: ffff888021dd8000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020002080 CR3: 000000007a61b000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- glock_work_func+0x2c2/0x450 fs/gfs2/glock.c:1082
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:is_system_glock fs/gfs2/glock.c:725 [inline]
-RIP: 0010:do_xmote+0xdde/0x13d0 fs/gfs2/glock.c:835
-Code: 00 48 03 5d 00 48 89 d8 48 c1 e8 03 42 80 3c 30 00 74 08 48 89 df e8 91 e1 27 fe bd b8 04 00 00 48 03 2b 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 73 e1 27 fe 4c 8b 64 24 08 4c 39
-RSP: 0018:ffffc900061a7b70 EFLAGS: 00010202
-RAX: 0000000000000097 RBX: ffff888021dd8718 RCX: ffff888021c93a80
-RDX: 0000000000000000 RSI: 0000000000004000 RDI: 0000000000000000
-RBP: 00000000000004b8 R08: ffffffff83b7d986 R09: ffffed10043bb016
-R10: ffffed10043bb016 R11: 1ffff110043bb015 R12: ffff888075bf0548
-R13: 0000000000000818 R14: dffffc0000000000 R15: ffff888021dd8000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020002080 CR3: 000000007e6e4000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 48 03             	add    %cl,0x3(%rax)
-   3:	5d                   	pop    %rbp
-   4:	00 48 89             	add    %cl,-0x77(%rax)
-   7:	d8 48 c1             	fmuls  -0x3f(%rax)
-   a:	e8 03 42 80 3c       	callq  0x3c804212
-   f:	30 00                	xor    %al,(%rax)
-  11:	74 08                	je     0x1b
-  13:	48 89 df             	mov    %rbx,%rdi
-  16:	e8 91 e1 27 fe       	callq  0xfe27e1ac
-  1b:	bd b8 04 00 00       	mov    $0x4b8,%ebp
-  20:	48 03 2b             	add    (%rbx),%rbp
-  23:	48 89 e8             	mov    %rbp,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-  2f:	74 08                	je     0x39
-  31:	48 89 ef             	mov    %rbp,%rdi
-  34:	e8 73 e1 27 fe       	callq  0xfe27e1ac
-  39:	4c 8b 64 24 08       	mov    0x8(%rsp),%r12
-  3e:	4c                   	rex.WR
-  3f:	39                   	.byte 0x39
+> 
+> My arm64 Server dmesg as follow:
+> # dmesg -T |grep -B 1 -i total_vf
+> [Tue Dec 13 04:02:34 2022] pci 0000:07:00.0: reg 0x18: [mem 0x80001c00000-0x80001c00fff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 255
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:08:00.0: reg 0x18: [mem 0x80001a00000-0x80001a00fff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 255
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:20:00.0: reg 0x18: [mem 0x80000200000-0x80000200fff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 255
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:21:00.0: reg 0x18: [mem 0x80000000000-0x80000000fff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 255
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:7d:00.0: reg 0x18: [mem 0x120f00000-0x120ffffff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 3
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:7d:00.1: reg 0x18: [mem 0x120b00000-0x120bfffff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 3
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:7d:00.2: reg 0x18: [mem 0x120700000-0x1207fffff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 3
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:7d:00.3: reg 0x18: [mem 0x120300000-0x1203fffff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 3
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:83:00.0: PME# supported from D3cold
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 8
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:83:00.1: PME# supported from D3cold
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 8
+> --
+> [Tue Dec 13 04:02:34 2022] pci 0000:dd:00.0: reg 0x18: [mem 0x400120000000-0x4001200fffff 64bit pref]
+> [Tue Dec 13 04:02:34 2022] drivers/pci/iov.c: 632 [info]: read PCI_SRIOV_TOTAL_VF 0
+> 
+> > 
+> > >  		return 0;
+> > > +	}
+> > >
+> > >  	pci_read_config_dword(dev, pos + PCI_SRIOV_SUP_PGSIZE, &pgsz);
+> > >  	i = PAGE_SHIFT > 12 ? PAGE_SHIFT - 12 : 0; @@ -899,13 +902,13 @@ int
+> > > pci_iov_init(struct pci_dev *dev)
+> > >  	int pos;
+> > >
+> > >  	if (!pci_is_pcie(dev))
+> > > -		return -ENODEV;
+> > > +		return;
+> > 
+> > Please at least compile patches before you send them.
+> OK, thanks.
+> How about return 0, or any other suggestions.
 
+Drop the patch and leave this code as is.
+
+Thanks
