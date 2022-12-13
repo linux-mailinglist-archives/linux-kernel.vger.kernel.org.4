@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9133264B166
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B261A64B168
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbiLMIqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S234835AbiLMIqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbiLMIpo (ORCPT
+        with ESMTP id S234798AbiLMIp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:45:44 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BE219C38;
-        Tue, 13 Dec 2022 00:45:43 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id x18so6229059qki.4;
-        Tue, 13 Dec 2022 00:45:43 -0800 (PST)
+        Tue, 13 Dec 2022 03:45:57 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20801A3A1;
+        Tue, 13 Dec 2022 00:45:56 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id ay32so11251680qtb.11;
+        Tue, 13 Dec 2022 00:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Bk5BO8mhQb+fsvz9M+5Piwo+AtUhFdtpFocu7SHwZQ=;
-        b=YMle2F49XWZqxSDi6qjVBt/kVbZC39YfKxW7S5VrwbdRiX1PRxP8+CEK/T2ok9WdF8
-         vdwRm0XLhUbzYV2E4bzTz4rUo5GNMUVk0k8qC+FI9mmASngSN2KV3r0aOjrhHn1Ud8PQ
-         Cg8UEdcYGG/i1/ffip4EbmznnY/gpg2wEP9BKKKaqSKv2txgt/c4EW34JDLZGs+/DrBK
-         G4zrLoT+oJmcDDVW8XAECgtGs2ZU4ibLYNlDYkOw6KFLOmqIVYkdz2IwQUz22UbHVxGU
-         EvJKzAy7IZfb1HK0iO8p8tPAl/6zgQGt33ABvPElw9Rt/w1UFKBBgVGHYDoFPF2juuAb
-         iuZw==
+        bh=tvTCz8SsoxXhcC9pujbnf6TIAiCpC9/d3HGYJmVHsoc=;
+        b=quWXRSdHuXkoUnwHNL6hO/VASK1B3GBfalchrO8CUwMWhqjdZPFPT3uX1Ff4uzxqXu
+         ubhiXVAZsZJBSCJTqgKgCwxQCjqsoQ0xUVYc62ICHuQ2X6f6U4RDcWpYHuq4dMsEphd9
+         SOuu+cEDSck381OXMNnJAOYY/GUKXEn47g2OPEN34AYyb27h/2RQakOftuFrdjUaF/yz
+         o4MidKUKkxhWhYYHvJnT+pHXJndx8oRzjahFwN0b/eDNuvX0gBQPwZoAoSmhzniQZqu8
+         o8QxJz77Id6MbhDYsKuipB/IxRawHskCW1n4GEm/31b5al6VrQGRQtFixGXUcX2x30X3
+         gFcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Bk5BO8mhQb+fsvz9M+5Piwo+AtUhFdtpFocu7SHwZQ=;
-        b=B9YV/Iw6uAmwq7RdTDfx3ThRI9pG+boaQkwCSLXvZcj0qbwTFYVxBl/SFimm3uArPH
-         RHy93RybxauAGe3ngQuXie/7eB4RJ0k6Jpoyb0JL+Eo9gj+3w8Y0QzDrbPQezD4XPZAi
-         zZabf1WhLxzwP+52jMvcuaHQ6wRtpc91BBnsBr29U6HI6MygqlTESQqwGWGOpuNCfJso
-         Uw9Rfrm07t8awYG1n2wrMZKUOVtrnoW6oewyDr3kkGOACMFa+QUdDF2elD7MOVv6jhpU
-         lJTc5g2Sez6wVwMBe9YOgBLcxDzBp2gZ5t2dd64kXFL6KquH4aE2Al8PMaqX+/ug8sEH
-         Pi1A==
-X-Gm-Message-State: ANoB5pnN6iAVOSuyJqF1jde7D8WDy7rZfkwBX0rWfFTbz6/leTgmSczs
-        5QoZK4/tmvCatMofp56/pNdO1ohD1sdNkgteSbDW+3RFfMU=
-X-Google-Smtp-Source: AA0mqf5Dd907U3uTg8cjZR7DNqfHJSUyQAO7lSd+eMb+KqYs1IM0LzAK0sPFCWXW3lznoIv3VzjuRQb+lDp4t4DdRus=
-X-Received: by 2002:a37:8ac2:0:b0:6fa:442d:f4d3 with SMTP id
- m185-20020a378ac2000000b006fa442df4d3mr83183171qkd.665.1670921142542; Tue, 13
- Dec 2022 00:45:42 -0800 (PST)
+        bh=tvTCz8SsoxXhcC9pujbnf6TIAiCpC9/d3HGYJmVHsoc=;
+        b=MvCmIPHqcJIE01d975uM7SY2LXdZrqMDWDQ4Aig7/QNWQMwn9IK4nMfYjpxaF5RKMn
+         fHKuKJDPp2igvg7+D4egnGA0Zp+bs/zv1X5XNX1NWs5EAUoIlFqtXw+XkJi11svwORUV
+         NMusiot41eoVIBYTSGYbIp3QzK73hS8QAsdeUCTWjw0g5iYKEEnDb9wEdQK20pKuo9Gc
+         YMYqHofAowTYRmsgSySZBbvk6JCJsf7+WU4AaGemOXXDp6HwN5TCez1V8MlkGEh+ESTy
+         i9ZFnFqZWAal6RJyuoz3Y5nOgrWvYznsDWar0UFcMlMWyE4F5qGaz6ygvA/9M535WbjC
+         zXAw==
+X-Gm-Message-State: ANoB5pnTeCPWmACIXOWxwqrsQylPPJ8LNy10866/yhvV1BdSQYY/dL4s
+        Z2em81XqRMTBM2lMo6F0txV9NkAFwQZzdhHrXhA=
+X-Google-Smtp-Source: AA0mqf6wNxhjJLAjP90fjTblN2s8aEKGTtEZ6vnWHOOGL2loVoAoQM+jUfjo8swYxRdvVoBAtBd5kKDeNI631z0wTr8=
+X-Received: by 2002:ac8:4245:0:b0:3a8:2080:4597 with SMTP id
+ r5-20020ac84245000000b003a820804597mr158162qtm.23.1670921156010; Tue, 13 Dec
+ 2022 00:45:56 -0800 (PST)
 MIME-Version: 1.0
 References: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
- <20221019110647.11076-10-victor.shih@genesyslogic.com.tw> <a154ee25-e1e7-8709-abad-8064edc3c43f@intel.com>
-In-Reply-To: <a154ee25-e1e7-8709-abad-8064edc3c43f@intel.com>
+ <20221019110647.11076-11-victor.shih@genesyslogic.com.tw> <3b36c596-3353-bb2c-b92f-fb475934503a@intel.com>
+In-Reply-To: <3b36c596-3353-bb2c-b92f-fb475934503a@intel.com>
 From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Tue, 13 Dec 2022 16:45:30 +0800
-Message-ID: <CAK00qKBCC5tCtAOW66Dxd8UzYr7N5o-3Fh1PKgb074-fDs3A=Q@mail.gmail.com>
-Subject: Re: [PATCH V5 09/26] mmc: sdhci: add UHS-II module
+Date:   Tue, 13 Dec 2022 16:45:43 +0800
+Message-ID: <CAK00qKBT-tz1R3+BKebNFggkEU9C1JT1sOwFQY+fwMOuvMHCvw@mail.gmail.com>
+Subject: Re: [PATCH V5 10/26] mmc: sdhci-uhs2: dump UHS-II registers
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
@@ -74,93 +74,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi, Adrian
 
-On Wed, Nov 2, 2022 at 1:12 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+On Wed, Nov 2, 2022 at 1:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
 > On 19/10/22 14:06, Victor Shih wrote:
 > > From: AKASHI Takahiro <takahiro.akashi@linaro.org>
 > >
-> > This patch adds sdhci-uhs2.c as a module for UHS-II support.
-> > This is a skelton for further development in this patch series.
+> > Dump UHS-II specific registers, if available, in sdhci_dumpregs()
+> > for informative/debugging use.
 > >
 > > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 > > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
 > > ---
-> >  drivers/mmc/host/Makefile     |  1 +
-> >  drivers/mmc/host/sdhci-uhs2.c | 46 +++++++++++++++++++++++++++++++++++
-> >  2 files changed, 47 insertions(+)
-> >  create mode 100644 drivers/mmc/host/sdhci-uhs2.c
+> >  drivers/mmc/host/sdhci-uhs2.c | 30 ++++++++++++++++++++++++++++++
+> >  drivers/mmc/host/sdhci-uhs2.h |  4 ++++
+> >  drivers/mmc/host/sdhci.c      |  3 +++
+> >  3 files changed, 37 insertions(+)
 > >
-> > diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
-> > index 4e4ceb32c4b4..c4ae7c6d9c04 100644
-> > --- a/drivers/mmc/host/Makefile
-> > +++ b/drivers/mmc/host/Makefile
-> > @@ -11,6 +11,7 @@ obj-$(CONFIG_MMC_PXA)               += pxamci.o
-> >  obj-$(CONFIG_MMC_MXC)                += mxcmmc.o
-> >  obj-$(CONFIG_MMC_MXS)                += mxs-mmc.o
-> >  obj-$(CONFIG_MMC_SDHCI)              += sdhci.o
-> > +obj-$(CONFIG_MMC_SDHCI_UHS2) += sdhci-uhs2.o
-> >  obj-$(CONFIG_MMC_SDHCI_PCI)  += sdhci-pci.o
-> >  sdhci-pci-y                  += sdhci-pci-core.o sdhci-pci-o2micro.o sdhci-pci-arasan.o \
-> >                                  sdhci-pci-dwc-mshc.o sdhci-pci-gli.o
 > > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-> > new file mode 100644
-> > index 000000000000..f29d3a4ed43c
-> > --- /dev/null
+> > index f29d3a4ed43c..08905ed081fb 100644
+> > --- a/drivers/mmc/host/sdhci-uhs2.c
 > > +++ b/drivers/mmc/host/sdhci-uhs2.c
-> > @@ -0,0 +1,46 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + *  linux/drivers/mmc/host/sdhci_uhs2.c - Secure Digital Host Controller
-> > + *  Interface driver
-> > + *
-> > + *  Copyright (C) 2014 Intel Corp, All Rights Reserved.
-> > + *  Copyright (C) 2020 Genesys Logic, Inc.
-> > + *  Authors: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > + *  Copyright (C) 2020 Linaro Limited
-> > + *  Author: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> > + */
+> > @@ -18,6 +18,36 @@
+> >  #define DRIVER_NAME "sdhci_uhs2"
+> >  #define DBG(f, x...) \
+> >       pr_debug(DRIVER_NAME " [%s()]: " f, __func__, ## x)
+> > +#define SDHCI_UHS2_DUMP(f, x...) \
+> > +     pr_err("%s: " DRIVER_NAME ": " f, mmc_hostname(host->mmc), ## x)
 > > +
-> > +#include <linux/module.h>
-> > +
-> > +#include "sdhci.h"
-> > +#include "sdhci-uhs2.h"
-> > +
-> > +#define DRIVER_NAME "sdhci_uhs2"
-> > +#define DBG(f, x...) \
-> > +     pr_debug(DRIVER_NAME " [%s()]: " f, __func__, ## x)
-> > +
-> > +/*****************************************************************************\
-> > + *                                                                           *
-> > + * Driver init/exit                                                          *
-> > + *                                                                           *
-> > +\*****************************************************************************/
-> > +
-> > +static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
+> > +void sdhci_uhs2_dump_regs(struct sdhci_host *host)
 > > +{
-> > +     return 0;
-> > +}
-> > +
-> > +static int __init sdhci_uhs2_mod_init(void)
-> > +{
-> > +     return 0;
-> > +}
-> > +module_init(sdhci_uhs2_mod_init);
-> > +
-> > +static void __exit sdhci_uhs2_exit(void)
+> > +     if (!host->mmc || !(host->mmc->flags & MMC_UHS2_SUPPORT))
 >
-> It would be better to match the form of the init name
-> e.g. sdhci_uhs2_mod_exit
+> !host->mmc is not possible
 >
 
-I will update it in the patch#8 of the new [PATCH V6].
+I will update it in the patch#9 of the new [PATCH V6].
 
-> > +{
-> > +}
-> > +module_exit(sdhci_uhs2_exit);
+> > +             return;
 > > +
-> > +MODULE_AUTHOR("Intel, Genesys Logic, Linaro");
-> > +MODULE_DESCRIPTION("MMC UHS-II Support");
-> > +MODULE_LICENSE("GPL v2");
+> > +     SDHCI_UHS2_DUMP("==================== UHS2 ==================\n");
+> > +     SDHCI_UHS2_DUMP("Blk Size:  0x%08x | Blk Cnt:  0x%08x\n",
+> > +                     sdhci_readw(host, SDHCI_UHS2_BLOCK_SIZE),
+> > +                     sdhci_readl(host, SDHCI_UHS2_BLOCK_COUNT));
+> > +     SDHCI_UHS2_DUMP("Cmd:       0x%08x | Trn mode: 0x%08x\n",
+> > +                     sdhci_readw(host, SDHCI_UHS2_COMMAND),
+> > +                     sdhci_readw(host, SDHCI_UHS2_TRANS_MODE));
+> > +     SDHCI_UHS2_DUMP("Int Stat:  0x%08x | Dev Sel : 0x%08x\n",
+> > +                     sdhci_readw(host, SDHCI_UHS2_DEV_INT_STATUS),
+> > +                     sdhci_readb(host, SDHCI_UHS2_DEV_SELECT));
+> > +     SDHCI_UHS2_DUMP("Dev Int Code:  0x%08x\n",
+> > +                     sdhci_readb(host, SDHCI_UHS2_DEV_INT_CODE));
+> > +     SDHCI_UHS2_DUMP("Reset:     0x%08x | Timer:    0x%08x\n",
+> > +                     sdhci_readw(host, SDHCI_UHS2_SW_RESET),
+> > +                     sdhci_readw(host, SDHCI_UHS2_TIMER_CTRL));
+> > +     SDHCI_UHS2_DUMP("ErrInt:    0x%08x | ErrIntEn: 0x%08x\n",
+> > +                     sdhci_readl(host, SDHCI_UHS2_ERR_INT_STATUS),
+> > +                     sdhci_readl(host, SDHCI_UHS2_ERR_INT_STATUS_EN));
+> > +     SDHCI_UHS2_DUMP("ErrSigEn:  0x%08x\n",
+> > +                     sdhci_readl(host, SDHCI_UHS2_ERR_INT_SIG_EN));
+> > +}
+> > +EXPORT_SYMBOL_GPL(sdhci_uhs2_dump_regs);
+> >
+> >  /*****************************************************************************\
+> >   *                                                                           *
+> > diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs2.h
+> > index 5610affebdf3..afdb05d6056b 100644
+> > --- a/drivers/mmc/host/sdhci-uhs2.h
+> > +++ b/drivers/mmc/host/sdhci-uhs2.h
+> > @@ -207,4 +207,8 @@
+> >  #define SDHCI_UHS2_EMBED_CTRL        0xE6
+> >  #define SDHCI_UHS2_VENDOR    0xE8
+> >
+> > +struct sdhci_host;
+> > +
+> > +void sdhci_uhs2_dump_regs(struct sdhci_host *host);
+> > +
+> >  #endif /* __SDHCI_UHS2_H */
+> > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> > index fef03de85b99..2cdd183c8ada 100644
+> > --- a/drivers/mmc/host/sdhci.c
+> > +++ b/drivers/mmc/host/sdhci.c
+> > @@ -110,6 +110,9 @@ void sdhci_dumpregs(struct sdhci_host *host)
+> >               }
+> >       }
+> >
+> > +     if (host->ops->dump_uhs2_regs)
+> > +             host->ops->dump_uhs2_regs(host);
+> > +
+> >       if (host->ops->dump_vendor_regs)
+> >               host->ops->dump_vendor_regs(host);
+> >
 >
 
 Thanks, Victor Shih
