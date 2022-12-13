@@ -2,145 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218EC64AFEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CE664AFF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiLMGbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S234356AbiLMGcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbiLMGbj (ORCPT
+        with ESMTP id S230052AbiLMGcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:31:39 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7221F2DF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:31:38 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id v81so1101520vkv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:31:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VKyiy6rqr1s8RJTj8dqYYvulLQtys2Tc8voFn45GrzU=;
-        b=NnBfkXq/VChaqULajdA2qKhgoUKMVhfTWXDRqpnMJhcaCulwkj2CeMqrn3/Ay8AhRW
-         QUzdNE2kHqWMU33rDF5ccUEetiaPQr1oorsvAOAs8aiV377T546SzLQ70fDXdqzqQGVe
-         Fo4GryWPAmQHtqg/K/SWpXqvd0llTX1VG1YxarbtBjH17GbaOQXe+nnQqvYzPJ2JGCU9
-         tm3s2YqwOXRAC0IbnyuUO2ulXHs1eZCSX2T+EulxW0Y57VjaSTVlBAGxSsYgsDQS63Iu
-         enNs86Tt9+2YTs/8XLRHGtZ1CRjsQGENbDiQgZlfonUyN9kOV1X9eeV5JJFhBzexD2iD
-         dvoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VKyiy6rqr1s8RJTj8dqYYvulLQtys2Tc8voFn45GrzU=;
-        b=Q7NV+XDNgwv88jkvF4MxBQk2+CFVCXt7TCJL+0b9A4eKH0u9jXL/MjNYaoxYAxvPkC
-         te89xUnnW4LXHFhuIxs7zoKvKxRIaQS+ngWjWhvaKC0C+EsLPvuFvpiR36OeScHJZTU9
-         FvSU2eEjkXIwtRjT+Gr4/wbnLN3WWbBH8wpERNpkEBdhAEh9F9oDe9Cx8yqYaw5Or5cI
-         VfYmolekznqEoWTRdsN2zejh78rmFaLuxU03YW++W3+G/6twlo7sdZco4wC5cisrUP28
-         6B+3D6Z9YqppcnDZHS03MPUDEwznZqe19dseXUNmR3lRAIocDXvv7x8Vx7KCGOti5aO5
-         jcqQ==
-X-Gm-Message-State: ANoB5pkuAgWUqT29hZaCVJzd60V5oU10/PCxC9fFLw7BeSL9aHEp6UXT
-        Ug4JcftFu7o49xfycYYRniiocJWFZBG4x9t4a2uVoQ==
-X-Google-Smtp-Source: AA0mqf6jhubMdHwDvWT6AMebwaCz1mRJs22GLf8fj9JPa0C0R/H+CjLzed+EqoKIH7jkDZGht5kh9bXEwwhYOruAooI=
-X-Received: by 2002:a05:6122:1437:b0:3bd:dc4d:fb7d with SMTP id
- o23-20020a056122143700b003bddc4dfb7dmr6550693vkp.7.1670913097036; Mon, 12 Dec
- 2022 22:31:37 -0800 (PST)
+        Tue, 13 Dec 2022 01:32:17 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D22F1F2DF;
+        Mon, 12 Dec 2022 22:32:15 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id A1A0424E023;
+        Tue, 13 Dec 2022 14:32:07 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Dec
+ 2022 14:32:07 +0800
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Dec
+ 2022 14:32:07 +0800
+Received: from EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e]) by
+ EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e%16]) with mapi id
+ 15.00.1497.044; Tue, 13 Dec 2022 14:32:07 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+CC:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH 0/6] crypto: starfive: Add driver for cryptographic engine
+Thread-Topic: [PATCH 0/6] crypto: starfive: Add driver for cryptographic
+ engine
+Thread-Index: AQHZBH/pPWRKQfsetk2izJkM4PGjPq5jvsYw//+A4ICAAIfRMIAHH2GAgACIHJA=
+Date:   Tue, 13 Dec 2022 06:32:07 +0000
+Message-ID: <8680f0d88b1046d1b554825651ed21c1@EXMBX068.cuchost.com>
+References: <a0bd9060bab348eba1044cd911653bd7@EXMBX068.cuchost.com>
+ <mhng-181c038e-a986-4dac-9745-9405d6814c84@palmer-ri-x1c9>
+In-Reply-To: <mhng-181c038e-a986-4dac-9745-9405d6814c84@palmer-ri-x1c9>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221212130934.337225088@linuxfoundation.org>
-In-Reply-To: <20221212130934.337225088@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 13 Dec 2022 12:01:25 +0530
-Message-ID: <CA+G9fYt7QTkGWPhj0NX8bcDOvEvf9jOW5Oaj8T2zmzasHjo1yA@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        llvm@lists.linux.dev
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022 at 19:07, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.13 release.
-> There are 157 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.13-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-This is an additional report.
-Following issue is specific to clang nightly,
-
-x86 clang-nightly builds failed with defconfig and tinyconfig due to
-below errors / warnings.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Regressions found on x86_64:
-
-    - build/clang-nightly-tinyconfig
-    - build/clang-nightly-x86_64_defconfig
-    - build/clang-nightly-allnoconfig
-    - build/clang-nightly-lkftconfig
-
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-CC=clang
-
-ld.lld: error: version script assignment of 'LINUX_2.6' to symbol
-'__vdso_sgx_enter_enclave' failed: symbol not defined
-llvm-objdump: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-or directory
-llvm-objcopy: error: 'arch/x86/entry/vdso/vdso64.so.dbg': No such file
-or directory
-make[4]: *** [/builds/linux/arch/x86/entry/vdso/Makefile:136:
-arch/x86/entry/vdso/vdso64.so] Error 1
-
-Steps to reproduce:
---------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch x86_64 --toolchain
-clang-nightly --kconfig x86_64_defconfig LLVM=1 LLVM_IAS=1
-
-tuxmake --runtime podman --target-arch x86_64 --toolchain
-clang-nightly --kconfig
-https://builds.tuxbuild.com/2IocvUIXEK9MUve4Uut67U0xskC/config LLVM=1
-LLVM_IAS=1
-
-Details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.12-158-g57dda3cf2efc/testrun/13588489/suite/build/test/clang-nightly-x86_64_defconfig/details/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUGFsbWVyIERhYmJlbHQg
+PHBhbG1lckBkYWJiZWx0LmNvbT4NCj4gU2VudDogVHVlc2RheSwgRGVjZW1iZXIgMTMsIDIwMjIg
+MjoyMCBQTQ0KPiBUbzogSmlhSmllIEhvIDxqaWFqaWUuaG9Ac3RhcmZpdmV0ZWNoLmNvbT4NCj4g
+Q2M6IGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZzsgaGVyYmVydEBnb25kb3IuYXBhbmEu
+b3JnLmF1Ow0KPiBkYXZlbUBkYXZlbWxvZnQubmV0OyByb2JoK2R0QGtlcm5lbC5vcmc7DQo+IGty
+enlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZzsgbGludXgtY3J5cHRvQHZnZXIua2VybmVs
+Lm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
+cm5lbC5vcmc7IGxpbnV4LQ0KPiByaXNjdkBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6
+IFJFOiBbUEFUQ0ggMC82XSBjcnlwdG86IHN0YXJmaXZlOiBBZGQgZHJpdmVyIGZvciBjcnlwdG9n
+cmFwaGljIGVuZ2luZQ0KPiANCj4gPj4NCj4gPj4gWW91IHJlY2VpdmVkIHNvbWUgY29tbWVudHMg
+c28gdGhlIGV4cGVjdGF0aW9uIGlzIHRvIHNlbmQgYSB2Mi4NCj4gPj4NCj4gPg0KPiA+IFN1cmUs
+IEknbGwgZG8gdGhhdCB0aGVuLg0KPiANCj4gTm90IHN1cmUgaWYgSSBtaXNzZWQgaXQsIGJ1dCBJ
+IGNhbid0IGZpbmQgYSB2Mi4NCg0KSGkgUGFsbWVyLA0KDQpJJ20gc3RpbGwgd29ya2luZyBvbiB0
+aGUgcGF0Y2hlcy4gIEknbGwgc2VuZCB0aGVtIG91dCBzb29uLg0KDQpUaGFua3MsDQpKaWEgSmll
+DQo=
