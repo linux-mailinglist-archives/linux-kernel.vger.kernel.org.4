@@ -2,132 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D33F64C0BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DDD64C0BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbiLMXhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S236527AbiLMXkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236514AbiLMXhD (ORCPT
+        with ESMTP id S236343AbiLMXkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:37:03 -0500
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40A292ED;
-        Tue, 13 Dec 2022 15:36:59 -0800 (PST)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id EA808E0EF3;
-        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=post; bh=eBpFStnJo5vywfTywan9
-        sXxiTpddI4vii6gPlA8SHjo=; b=rR7tGQiadPIkYXV+K1vHPD+7LxZeRDf3zsJy
-        Gy7anDLi8y1+Z0vepqspygcZjYDy4OrcuShgQCjUVv6LQrJKBjhN6+amEQkhXP1I
-        hDpYsxMYnWAhHTVViLg4+Cwp7+ZQK++PIyR613zelL8F0tZjNOMWm5tWkUhykVh2
-        Xa+KR/Q=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id D0B9CE0EBF;
-        Wed, 14 Dec 2022 02:36:57 +0300 (MSK)
-Received: from mobilestation (10.8.30.6) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 14 Dec 2022 02:36:57 +0300
-Date:   Wed, 14 Dec 2022 02:36:49 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Thierry Reding <treding@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-Message-ID: <20221213233649.zmmiskezdponleuc@mobilestation>
-References: <20221213195313.GA200257@bhelgaas>
- <20221213200733.GA201693@bhelgaas>
+        Tue, 13 Dec 2022 18:40:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F622E08A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:39:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670974783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q50OQjlYexkQlDEQoAk6I4jcWlBiIdpfALgNpYBxl74=;
+        b=GhanTi5Xb38VgcL8wIPAP6WuhKwNwOtd5uxMzSRUu11pF+04xV9OGNauxCGl5cDJBtrUog
+        Y85+j+iEJqNK0FPI5rizLx5Q1CJ69BBH4heHW/T0K5A+CEqWbEPTWwKqnbi5rCSE5LnlQI
+        g3BzRhPaELhmxcT8dQWY09qJvy21Gcc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-580-mYMdRKRaNxWghhQnAOvOiA-1; Tue, 13 Dec 2022 18:39:41 -0500
+X-MC-Unique: mYMdRKRaNxWghhQnAOvOiA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66593101A54E;
+        Tue, 13 Dec 2022 23:39:41 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.32.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C48E12026D68;
+        Tue, 13 Dec 2022 23:39:40 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     muchun.song@linux.dev, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, willy@infradead.org,
+        gerald.schaefer@linux.ibm.com
+Subject: [RFC] mm: add the zero case to page[1].compound_nr in set_compound_order
+Date:   Tue, 13 Dec 2022 16:39:24 -0700
+Message-Id: <20221213233924.170878-1-npache@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221213200733.GA201693@bhelgaas>
-X-Originating-IP: [10.8.30.6]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 02:07:33PM -0600, Bjorn Helgaas wrote:
-> On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
-> > On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
-> > > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
-> > > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
-> > > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
-> > > > > > Hi all,
-> > > > > > 
-> > > > > > Today's linux-next merge of the pci tree got a conflict in:
-> > > > > > 
-> > > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> > > > > > 
-> > > > > > between commit:
-> > > > > > 
-> > > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
-> > > > > > 
-> > > > > > from the arm-soc tree and commit:
-> > > > > > 
-> > > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
-> > > > > > 
-> > > > > > from the pci tree.
-> > > > > > 
-> > > > > > I didn't know how to fix this up, so I just used the latter (and so lost
-> > > > > > the addition of "ecam").
-> > > > > 
-> > > > > Did I miss a suggested resolution for this?
-> > > 
-> > > > We had a brief discussion about this in another thread. So basically
-> > > > Stephen's resolution is fine here and the plan is to instead add the
-> > > > ECAM bits that the Tegra patch does in a separate patch on top of
-> > > > Serge's patch. I should get around to sending that patch tomorrow.
-> > > 
-> > > Actually the discussion still goes. I haven't got a respond to my
-> > > last suggestion which seems to me more reasonable than extending the
-> > > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
-> > > the discussion here:
-> > > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
-> > 
+Since commit 1378a5ee451a ("mm: store compound_nr as well as
+compound_order") the page[1].compound_nr must be explicitly set to 0 if
+calling set_compound_order(page, 0).
 
-> > Sorry, it's really too late for discussion.  I need to send the v6.2
-> > pull request today or at the very latest, tomorrow, so the only thing
-> > to decide is how to resolve the merge conflict in the simplest
-> > possible way.  Unless there's a very compelling reason to resolve it
-> > differently than Stephen did, that's going to be the answer.
+This can lead to bugs if the caller of set_compound_order(page, 0) forgets
+to explicitly set compound_nr=0. An example of this is commit ba9c1201beaa
+("mm/hugetlb: clear compound_nr before freeing gigantic pages")
 
-Sigh... One more redundant vendor-specific name. I wish I was in the
-Cc-list of the original series.
+Collapse these calls into the set_compound_order by utilizing branchless
+bitmaths [1].
 
-> 
-> To be more specific, the current answer is this (which is the same as
-> what's in next-20221213):
-> 
->   https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
+[1] https://graphics.stanford.edu/~seander/bithacks.html#ConditionalSetOrClearBitsWithoutBranching
 
-Thanks. I've got it from the @Stephen message. @Thierry will submit a
-new patch with the same 'ecam'-names change rebased on top of the
-updated DT-schema.
+Signed-off-by: Nico Pache <npache@redhat.com>
 
--Serge(y)
+ Author:    Nico Pache <npache@redhat.com>
+---
+ include/linux/mm.h | 6 +++++-
+ mm/hugetlb.c       | 6 ------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-> 
-> If you think it needs to be different, please respond with a patch and
-> explanation.
-> 
-> Bjorn
-> 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6a05a3bc0a28..75b57c71781f 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -938,9 +938,13 @@ static inline int head_compound_pincount(struct page *head)
+ 
+ static inline void set_compound_order(struct page *page, unsigned int order)
+ {
++	unsigned long shift = (1U << order);
+ 	page[1].compound_order = order;
+ #ifdef CONFIG_64BIT
+-	page[1].compound_nr = 1U << order;
++	// Branchless conditional:
++	// // order  > 0 --> compound_nr = shift
++	// // order == 0 --> compound_nr = 0
++	page[1].compound_nr = shift ^ (-order  ^ shift) & shift;
+ #endif
+ }
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 3d9f4abec17c..706dec43a6a2 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1344,9 +1344,6 @@ static void __destroy_compound_gigantic_page(struct page *page,
+ 	}
+ 
+ 	set_compound_order(page, 0);
+-#ifdef CONFIG_64BIT
+-	page[1].compound_nr = 0;
+-#endif
+ 	__ClearPageHead(page);
+ }
+ 
+@@ -1865,9 +1862,6 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
+ 		__ClearPageReserved(p);
+ 	}
+ 	set_compound_order(page, 0);
+-#ifdef CONFIG_64BIT
+-	page[1].compound_nr = 0;
+-#endif
+ 	__ClearPageHead(page);
+ 	return false;
+ }
+-- 
+2.38.1
 
