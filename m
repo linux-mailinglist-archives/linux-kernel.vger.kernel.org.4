@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0531364BCD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B869664BCDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbiLMTLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S236697AbiLMTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236712AbiLMTKt (ORCPT
+        with ESMTP id S236720AbiLMTKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:10:49 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C689248F4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:48 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id x11so4359011ljh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:48 -0800 (PST)
+        Tue, 13 Dec 2022 14:10:50 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC6925C44
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:49 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id y4so4348929ljc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ts/j2CHYg1kPm6cKPUq2V9hf2EsZAdlZm5xdzR+Qb20=;
-        b=F61no4iBYe7WADg1b5OwnJFFwNtT9IxMVRaCN4JwLtW7bINFK3JVPwj4fbgGE4lcv2
-         fsRThwY7svqFVHUk+PJE5EuU0bLGxF/vRRy7CKw8f+1YmcOx67gIbBlEHcoCRyv9+nMM
-         WWzHM8dGwc5gtS/wX2RZC76Hge1DxEG34cZqxYBOoWBXHLRYYm1S+p2kBWmaZWUZ2QhJ
-         R4U/pAsR4ImQBGcCsrZKQDavD/sJnhuZEO2oziqDE+wVpEeEY4217kIJo6USUA0nfmbm
-         Ywl6PgxfXyHl0LHHKAxGEzIaL+2pEsM/rH3dNkt8PgqSM1D9G61gvmG6Zov7TZYfrOx+
-         t4bQ==
+        bh=Vk8myMSZixEpFm7TSq22NpEC9ZPyK1WEgfZ1nKeoUI0=;
+        b=LBivIO/xpTg0SgheLpW6nkV0gFksPw2fYej+MmIKLvy1qqUqyQxJeJrWIpSMQvex+0
+         Um5DNqhVlKdLwfzxrh8PitybZB4WQzP9/fD+8pIpJaJxV4fK1u3ZDJyVv18FKLYSx064
+         QYbslSZq7/aGYdTh20Xmuc/Rzy+JMNWAx8ZeWGkBfzKT5rrbP0e8tzwJzO+/ScHvNQSc
+         Z4XnHtvkJOBuAIt3GHC1Ukp9wzyM5DR0QtJxFW+R0rNxS7kTcX1/jyCXsSPp5eEgAgd/
+         knV7bux63l3QrXMuzzkS2Gm+FEqGOH2KsCCWwMlfEW+jLbThpu4M65pD2QY+Mg2OBlut
+         aFXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ts/j2CHYg1kPm6cKPUq2V9hf2EsZAdlZm5xdzR+Qb20=;
-        b=a/xJwcAhVbIv8lRf4XUVYmV/GLAET/YIwYWKa1kNhjw6THsa/gqQ5iM4hQu6qtqh9P
-         pklhIj+LrnXV0piL4aJ+Nth41VSMqRiF5CJzzu4dhpLi3xkTAWl3RrVOIPDDRPkRRczz
-         LGeEQ5OYgS7gAqJKLcTEM5507r42mCunGIFSnkpmkEDny6UmVEx7jZRg1MAI/t/I2qBB
-         ef+kZgBWsMZZ9T8WBOLb+WAOzIDVztmrq7qrwhF3Xq8lbla+GMA1HFKrt6gzGIl9N++x
-         Y8A4jNlCG3YFEhqTaKQtAYYvgPqeatL8s3DK5fzBdFez/+096CFyo28Jfa7x4cJ/BC2I
-         kCHg==
-X-Gm-Message-State: ANoB5pnrFc8ZiQrQVo2unFAVasLx6ZwvNZ+oqA2jjVhTnW9uPLksgiLV
-        ymREydPspmaJzvHVQ/T6Y0rLgA==
-X-Google-Smtp-Source: AA0mqf4mkXFIBu8VurPY5NeKDJDXBMhBChTmgaDR0Mryrd8K8gEc0+m7U3UDMuUnxAFxfNaz4kkOLA==
-X-Received: by 2002:a2e:be85:0:b0:26f:db34:a151 with SMTP id a5-20020a2ebe85000000b0026fdb34a151mr6879475ljr.20.1670958646572;
-        Tue, 13 Dec 2022 11:10:46 -0800 (PST)
+        bh=Vk8myMSZixEpFm7TSq22NpEC9ZPyK1WEgfZ1nKeoUI0=;
+        b=pq5+ZbPKQmfpU4WN3ngdRpT/0XIuGR3DnEBGnPkXrX3B4H6NDCd/N03E2I1XWIsdRL
+         butSZOjIHCPBYN8QCRc/mrHJ3JxlDEeSoOjt76KpEEJ+bYjyj8GGzt7MKNI8jNOTMjnK
+         ggMnz7lhw4GgFJjhwl68DYyu5cmUK0J3xBYmtP5xb2ibW5sTjo/TBqpWFPY5UZ5G+Ctk
+         vuxICrkPNiGM6vaEjSRlbhr8Y4IiLJMjk+/ghbJg5+bx5Y8ltcgxZZW5/wcmP0z3Zoko
+         teyhKXLnoOP4xFmprThxap3QNj9dSBpXjo/z8cQ7KvjHF5adq8SO+HPAZHwTzycnIvNg
+         uQRw==
+X-Gm-Message-State: ANoB5pk0axw+o84MJyW+xZym0J4wTg9M+j7wjDBvnM5bCP2cCJAqyF+d
+        QmfWDGkkdgKIPXno4vMMyBI84w==
+X-Google-Smtp-Source: AA0mqf7jbQsikqDrllNs/d8q4yTeCugJEkCG+GWHORbxVOyVfU9XhDQuG66FPNRdNOOfv7/g6BvAzw==
+X-Received: by 2002:a2e:6e13:0:b0:279:d056:21cf with SMTP id j19-20020a2e6e13000000b00279d05621cfmr7406288ljc.18.1670958648012;
+        Tue, 13 Dec 2022 11:10:48 -0800 (PST)
 Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id w28-20020a05651c119c00b0026dfbdfc1ddsm372023ljo.11.2022.12.13.11.10.45
+        by smtp.gmail.com with ESMTPSA id w28-20020a05651c119c00b0026dfbdfc1ddsm372023ljo.11.2022.12.13.11.10.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 11:10:46 -0800 (PST)
+        Tue, 13 Dec 2022 11:10:47 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -59,9 +59,9 @@ Cc:     marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] arm64: dts: qcom: sm8450-nagara: Set up camera regulators
-Date:   Tue, 13 Dec 2022 20:10:34 +0100
-Message-Id: <20221213191036.611241-5-konrad.dybcio@linaro.org>
+Subject: [PATCH 6/7] arm64: dts: qcom: sm8450-nagara: Enable PMIC RESIN+PON
+Date:   Tue, 13 Dec 2022 20:10:35 +0100
+Message-Id: <20221213191036.611241-6-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221213191036.611241-1-konrad.dybcio@linaro.org>
 References: <20221213191036.611241-1-konrad.dybcio@linaro.org>
@@ -69,164 +69,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set up gpio-controlled fixed regulators for camera on PDX223 and fix
-up the existing ones in common and PDX224 trees.
+Enable the power and volume up buttons, connected to PON and RESIN
+respectively.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../qcom/sm8450-sony-xperia-nagara-pdx223.dts | 38 +++++++++++++++++++
- .../qcom/sm8450-sony-xperia-nagara-pdx224.dts | 15 +++++++-
- .../dts/qcom/sm8450-sony-xperia-nagara.dtsi   | 16 +++++++-
- 3 files changed, 65 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-index 561cd4f09ab7..daf2f91f356e 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-@@ -11,6 +11,26 @@
- / {
- 	model = "Sony Xperia 1 IV";
- 	compatible = "sony,pdx223", "qcom,sm8450";
-+
-+	imx316_lvdd_regulator: imx316-lvdd-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx316_lvdd_regulator";
-+		gpio = <&pm8350b_gpios 6 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&cam_pwr_ld_en>;
-+	};
-+
-+	tcs3490_vdd_regulator: rgbcir-vdd-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "tcs3490_vdd_regulator";
-+		gpio = <&pm8350c_gpios 6 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rgbc_ir_pwr_en>;
-+	};
- };
- 
- &pm8350b_gpios {
-@@ -22,6 +42,15 @@ &pm8350b_gpios {
- 			  "CAM_PWR_LD_EN",
- 			  "NC",
- 			  "FOCUS_N";
-+
-+	cam_pwr_ld_en: cam-pwr-ld-en-state {
-+		pins = "gpio6";
-+		function = "normal";
-+		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-+		power-source = <0>;
-+		drive-push-pull;
-+		output-low;
-+	};
- };
- 
- &pm8350c_gpios {
-@@ -34,6 +63,15 @@ &pm8350c_gpios {
- 			  "NC",
- 			  "NC",
- 			  "WIDEC_PWR_EN";
-+
-+	rgbc_ir_pwr_en: rgbc-ir-pwr-en-state {
-+		pins = "gpio6";
-+		function = "normal";
-+		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-+		power-source = <1>;
-+		drive-push-pull;
-+		output-low;
-+	};
- };
- 
- &tlmm {
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-index fc9d74d0f227..dc4de2d3fe48 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
-@@ -12,11 +12,14 @@ / {
- 	model = "Sony Xperia 5 IV";
- 	compatible = "sony,pdx224", "qcom,sm8450";
- 
--	imx563_vdig_vreg: imx563-vdig-regulator {
-+	imx563_vdig_regulator: imx563-vdig-regulator {
- 		compatible = "regulator-fixed";
--		regulator-name = "imx563_vdig_vreg";
-+		regulator-name = "imx563_vdig_regulator";
- 		gpio = <&tlmm 22 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&uwidec_pwr_en>;
- 	};
- };
- 
-@@ -254,4 +257,12 @@ &tlmm {
- 			  "APPS_I2C_0_SCL",
- 			  "CCI_I2C3_SDA",
- 			  "CCI_I2C3_SCL";
-+
-+	uwidec_pwr_en: uwidec-pwr-en-state {
-+		pins = "gpio22";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
- };
 diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-index 3d96b6757aa3..e26bd077d3d9 100644
+index e26bd077d3d9..1a0c26d84b4f 100644
 --- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
-  */
+@@ -643,6 +643,15 @@ &pmk8350_gpios {
+ 			  "PMK8350_OPTION";
+ };
  
-+#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "sm8450.dtsi"
- #include "pm8350.dtsi"
-@@ -93,11 +94,14 @@ ramoops@ffc00000 {
- 	};
- 
- 	/* Sadly, the voltages for these GPIO regulators are unknown. */
--	imx650_vana_vreg: imx650-vana-regulator {
-+	imx650_vana_regulator: imx650-vana-regulator {
- 		compatible = "regulator-fixed";
--		regulator-name = "imx650_vana_vreg";
-+		regulator-name = "imx650_vana_regulator";
- 		gpio = <&tlmm 23 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
++&pon_pwrkey {
++	status = "okay";
++};
 +
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&telec_pwr_en>;
- 	};
- 
- 	vph_pwr: vph-pwr-regulator {
-@@ -703,6 +707,14 @@ ts_int_default: ts-int-default-state {
- 		input-enable;
- 	};
- 
-+	telec_pwr_en: telec-pwr-en-state {
-+		pins = "gpio23";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+		output-low;
-+	};
++&pon_resin {
++	linux,code = <KEY_VOLUMEUP>;
++	status = "okay";
++};
 +
- 	sdc2_card_det_n: sd-card-det-n-state {
- 		pins = "gpio92";
- 		function = "gpio";
+ &remoteproc_adsp {
+ 	firmware-name = "qcom/sm8350/Sony/nagara/adsp.mbn";
+ 	status = "okay";
 -- 
 2.39.0
 
