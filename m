@@ -2,397 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8781F64BE17
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D63E64BE1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236870AbiLMUqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:46:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S236897AbiLMUsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbiLMUqB (ORCPT
+        with ESMTP id S236613AbiLMUsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:46:01 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD271402A;
-        Tue, 13 Dec 2022 12:45:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670964357;
-        bh=wkOEaRoar0f3VODmtfmpr2wYNhRJFaNhTTQrbuCkEiM=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=gUgy8qjEOp5tXAM7o04UuMRNJ2T3HBpIVTN31PZ8/3x/rkXaIC44aHrlfsLhNE6fw
-         3vfUCEEHGjy/RmPQanA4O7nS2ynEKzjaAGHflNpD4D6IOHZRXa5ZepFzM7JD92+eFE
-         TqwKPT/w18/bTewcU7k5OF7jOXY8WJ2Qp0p353Yw=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D2A9E1284D2A;
-        Tue, 13 Dec 2022 15:45:57 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id s9OrZnzFCNmS; Tue, 13 Dec 2022 15:45:57 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1670964357;
-        bh=wkOEaRoar0f3VODmtfmpr2wYNhRJFaNhTTQrbuCkEiM=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=gUgy8qjEOp5tXAM7o04UuMRNJ2T3HBpIVTN31PZ8/3x/rkXaIC44aHrlfsLhNE6fw
-         3vfUCEEHGjy/RmPQanA4O7nS2ynEKzjaAGHflNpD4D6IOHZRXa5ZepFzM7JD92+eFE
-         TqwKPT/w18/bTewcU7k5OF7jOXY8WJ2Qp0p353Yw=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 33A4F1282CC1;
-        Tue, 13 Dec 2022 15:45:57 -0500 (EST)
-Message-ID: <b2e824bbd1e40da64d2d01657f2f7a67b98919fb.camel@HansenPartnership.com>
-Subject: [GIT PULL] first round of SCSI updates for the 6.1+ merge window
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 13 Dec 2022 15:45:55 -0500
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 13 Dec 2022 15:48:47 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE34175AA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:48:44 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id z12so906797qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GgB8o7r5q35ufkQfTVEI1g6ta2jLelpUzptLG5w6In4=;
+        b=D+kO/iR7y9EiLfw2ghUa2eLjJOuj2TVXIaYhzIHlfLueijDowkxBcWTHwLbzkg8NSu
+         zvhJ9QqgDIVBoZZNwirnaTUg6BbomKH2yuhYljYbWrBpk6Qllh5Cd4HB0PfMOYMpt9VM
+         2WZCZuvIYejfh4A5IQ2IjyKRrN/nHXj8tP+dw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GgB8o7r5q35ufkQfTVEI1g6ta2jLelpUzptLG5w6In4=;
+        b=ypJF3GCoI53P2qElKJmYUazKIbBQ0NyTyw/fstQVy0tkwPgmb30ziq3e/U49sg18MQ
+         3A4ZvaBcnODmt0/n7peW1FFwYBbcweSM6PBa0j/02JmK4KxlM3lX4EjzD9+RfKrcWu8t
+         Km+ji2syhe/C6Wu2ATaJjOWQb27lWRgWjh3NpwMBRpCdZuJ0TBB+NDblQRUTw1dF77Ap
+         GBtudP1bmGLzgq5NXbrhsQwVe3QLQJc7AfwTO/qliuFwO5xPljQjd3DU6Q0T/Sfb6yrK
+         +qUcnoV3/gJ1GE+B16q5hwFg3FXx22O923rM1rkwFTywMgkGOCiwejQntndtl49Z45jv
+         7ICw==
+X-Gm-Message-State: ANoB5pm0o5+UhDURCt6JjxER9IxlCIEhskwMrjl1ol4SnM3Y3RRa0ukh
+        kwKmAiQ6h0XCk+mmdL4sV+vJj6GfyPm9aArc
+X-Google-Smtp-Source: AA0mqf5cnanCMQPwlbQAedBXFJ/TiioaUyby/c5MhJ0ZKix8MUewm+FgZgdW7zncCqjjO3uqi6QehA==
+X-Received: by 2002:ac8:534c:0:b0:3a4:ea5c:6fc2 with SMTP id d12-20020ac8534c000000b003a4ea5c6fc2mr6670731qto.52.1670964523400;
+        Tue, 13 Dec 2022 12:48:43 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05620a400300b006fc447eebe5sm8562757qko.27.2022.12.13.12.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 12:48:42 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        connoro@google.com
+Subject: [PATCH v3 rcu/dev 1/2] locktorture: Allow non-rtmutex lock types to be boosted
+Date:   Tue, 13 Dec 2022 20:48:38 +0000
+Message-Id: <20221213204839.321027-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Updates to the usual drivers (target, ufs, smartpqi, lpfc).  There are
-some core changes, mostly around reworking some of our user context
-assumptions in device put and moving some code around.  The remaining
-updates are bug fixes and minor changes.
+Currently RT boosting is only done for rtmutex_lock, however with proxy
+execution, we also have the mutex_lock participating in priorities. To
+exercise the testing better, add RT boosting to other lock testing types
+as well, using a new knob (rt_boost).
 
-The patch is available here:
+Tested with boot parameters:
+locktorture.torture_type=mutex_lock
+locktorture.onoff_interval=1
+locktorture.nwriters_stress=8
+locktorture.stutter=0
+locktorture.rt_boost=1
+locktorture.rt_boost_factor=1
+locktorture.nlocks=3
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+For the rtmutex test, rt_boost is always enabled even if disabling is
+requested.
 
-The short changelog is:
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ kernel/locking/locktorture.c | 99 ++++++++++++++++++++----------------
+ 1 file changed, 56 insertions(+), 43 deletions(-)
 
-Anastasia Kovaleva (3):
-      scsi: target: core: Change the way target_xcopy_do_work() sets restiction on max I/O
-      scsi: target: core: Make hw_max_sectors store the sectors amount in blocks
-      scsi: target: core: Send max transfer length in blocks
-
-Bart Van Assche (27):
-      scsi: ufs: core: Fix the polling implementation
-      scsi: device_handler: alua: Call scsi_device_put() from non-atomic context
-      scsi: device_handler: alua: Revert "Move a scsi_device_put() call out of alua_check_vpd()"
-      scsi: qla2xxx: Fix set-but-not-used variable warnings
-      scsi: bfa: Rework bfad_reset_sdev_bflags()
-      scsi: bfa: Convert bfad_reset_sdev_bflags() from a macro into a function
-      scsi: alua: Move a scsi_device_put() call out of alua_rtpg_select_sdev()
-      scsi: alua: Move a scsi_device_put() call out of alua_check_vpd()
-      scsi: ufs: core: Introduce ufshcd_abort_all()
-      scsi: ufs: Fix a deadlock between PM and the SCSI error handler
-      scsi: ufs: Introduce the function ufshcd_execute_start_stop()
-      scsi: ufs: Track system suspend / resume activity
-      scsi: ufs: Try harder to change the power mode
-      scsi: ufs: Reduce the START STOP UNIT timeout
-      scsi: ufs: Use 'else' in ufshcd_set_dev_pwr_mode()
-      scsi: ufs: Remove an outdated comment
-      scsi: core: Support failing requests while recovering
-      scsi: core: Change the return type of .eh_timed_out()
-      scsi: core: Fix a race between scsi_done() and scsi_timeout()
-      scsi: core: Release SCSI devices synchronously
-      scsi: core: Remove the put_device() call from scsi_device_get()
-      scsi: ufs: Simplify ufshcd_set_dev_pwr_mode()
-      scsi: core: Rework scsi_single_lun_run()
-      scsi: core: Introduce a new list for SCSI proc directory entries
-      scsi: core: Fail host creation if creating the proc directory fails
-      scsi: esas2r: Introduce scsi_template_proc_dir()
-      scsi: esas2r: Initialize two host template members implicitly
-
-Bean Huo (3):
-      scsi: ufs: core: Use is_visible to control UFS unit descriptor sysfs nodes
-      scsi: ufs: core: Clean up ufshcd_slave_alloc()
-      scsi: ufs: core: Revert "WB is only available on LUN #0 to #7"
-
-ChanWoo Lee (6):
-      scsi: ufs: ufs-mediatek: Remove unnecessary return code
-      scsi: ufs: ufs-mediatek: Modify the return value
-      scsi: ufs: ufs-mediatek: Remove unneeded code
-      scsi: ufs: core: Fix unnecessary operation for early return
-      scsi: ufs: core: Switch 'check_for_bkops' to bool
-      scsi: ufs: core: Separate function name and message
-
-Chen Zhongjin (2):
-      scsi: fcoe: Fix transport not deattached when fcoe_if_init() fails
-      scsi: efct: Fix possible memleak in efct_device_init()
-
-Christophe JAILLET (1):
-      scsi: target: Use kstrtobool() instead of strtobool()
-
-Colin Ian King (8):
-      scsi: libfc: Remove redundant variable ev_qual
-      scsi: lpfc: Remove redundant pointer 'lp'
-      scsi: target: core: Remove unused variable 'unit_serial_len'
-      scsi: csiostor: Remove unused variable 'n'
-      scsi: qla2xxx: Remove unused variable 'found_devs'
-      scsi: BusLogic: Remove variable 'adapter_count'
-      scsi: message: fusion: Remove variable 'where'
-      scsi: pcmcia: nsp_cs: Remove unused variable i
-
-Dmitry Bogdanov (6):
-      scsi: target: core: Dynamically set DPO and FUA in usage_bits
-      scsi: target: core: Check emulate_3pc for RECEIVE COPY
-      scsi: target: core: Add emulate_rsoc attribute
-      scsi: target: core: Dynamic opcode support in RSOC
-      scsi: target: core: Add list of opcodes for RSOC
-      scsi: target: core: Add support for RSOC command
-
-Don Brace (3):
-      scsi: smartpqi: Change version to 2.1.20-035
-      scsi: smartpqi: Initialize feature section info
-      scsi: smartpqi: Convert to host_tagset
-
-Gaosheng Cui (1):
-      scsi: snic: Fix possible UAF in snic_tgt_create()
-
-Gilbert Wu (1):
-      scsi: smartpqi: Add controller cache flush during rmmod
-
-Gleb Chesnokov (2):
-      scsi: qla2xxx: Initialize vha->unknown_atio_[list, work] for NPIV hosts
-      scsi: qla2xxx: Remove duplicate of vha->iocb_work initialization
-
-Gustavo A. R. Silva (1):
-      scsi: bfa: Replace one-element array with flexible-array member
-
-Harshit Mogalapalli (3):
-      scsi: scsi_debug: Fix a warning in resp_report_zones()
-      scsi: scsi_debug: Fix a warning in resp_verify()
-      scsi: scsi_debug: Fix a warning in resp_write_scat()
-
-Igor Pylypiv (2):
-      scsi: pm80xx: Remove unused reset_in_progress flag logic
-      scsi: pm8001: Remove pm8001_tag_init()
-
-Jason Yan (8):
-      scsi: libsas: Use sas_phy_match_port_addr() instead of open coding it
-      scsi: libsas: Use sas_phy_addr_match() instead of open coding it
-      scsi: libsas: Use sas_phy_match_dev_addr() instead of open coding it
-      scsi: hisi_sas: Use sas_find_attathed_phy_id() instead of open coding it
-      scsi: mvsas: Use sas_find_attached_phy_id() instead of open coding it
-      scsi: pm8001: Use sas_find_attached_phy_id() instead of open coding it
-      scsi: libsas: Introduce sas_find_attached_phy_id() helper
-      scsi: libsas: Introduce SAS address comparison helpers
-
-Jiapeng Chong (2):
-      scsi: qedf: Remove set but unused variable 'page'
-      scsi: target: Remove the unused function transport_lba_64_ext()
-
-Jie Zhan (5):
-      scsi: libsas: Do not export sas_ata_wait_after_reset()
-      scsi: hisi_sas: Fix SATA devices missing issue during I_T nexus reset
-      scsi: libsas: Add smp_ata_check_ready_type()
-      scsi: Revert "scsi: hisi_sas: Don't send bcast events from HW during nexus HA reset"
-      scsi: Revert "scsi: hisi_sas: Drain bcast events in hisi_sas_rescan_topology()"
-
-Jilin Yuan (1):
-      scsi: NCR5380: Fix repeated words in comment
-
-John Garry (15):
-      scsi: core: Use SCSI_SCAN_INITIAL in do_scsi_scan_host()
-      scsi: core: Use SCSI_SCAN_RESCAN in __scsi_add_device()
-      scsi: MAINTAINERS: Make Xiang Chen HiSilicon SAS controller driver maintainer
-      scsi: pm8001: Drop !task check in pm8001_abort_task()
-      scsi: mvsas: Use sas_task_find_rq() for tagging
-      scsi: mvsas: Delete mvs_tag_init()
-      scsi: pm8001: Use sas_task_find_rq() for tagging
-      scsi: hisi_sas: Put reserved tags in lower region of tagset
-      scsi: hisi_sas: Use sas_task_find_rq()
-      scsi: libsas: Add sas_task_find_rq()
-      scsi: libsas: Update SATA dev FIS in sas_ata_task_done()
-      scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-      scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
-      scsi: pm8001: Modify task abort handling for SATA task
-      scsi: libsas: Add sas_ata_device_link_abort()
-
-Justin Tee (10):
-      scsi: lpfc: Update lpfc version to 14.2.0.9
-      scsi: lpfc: Fix crash involving race between FLOGI timeout and devloss handler
-      scsi: lpfc: Fix MI capability display in cmf_info sysfs attribute
-      scsi: lpfc: Correct bandwidth logging during receipt of congestion sync WCQE
-      scsi: lpfc: Fix WQ|CQ|EQ resource check
-      scsi: lpfc: Update lpfc version to 14.2.0.8
-      scsi: lpfc: Create a sysfs entry called lpfc_xcvr_data for transceiver info
-      scsi: lpfc: Log when congestion management limits are in effect
-      scsi: lpfc: Fix hard lockup when reading the rx_monitor from debugfs
-      scsi: lpfc: Set sli4_param's cmf option to zero when CMF is turned off
-
-Keoseong Park (2):
-      scsi: ufs: core: Remove check_upiu_size() from ufshcd.h
-      scsi: ufs: core: Refactor ufshcd_hba_enable()
-
-Kevin Barnett (2):
-      scsi: smartpqi: Change sysfs raid_level attribute to N/A for controllers
-      scsi: smartpqi: Correct max LUN number
-
-Kirill A. Shutemov (1):
-      scsi: sg: Fix get_user() in call sg_scsi_ioctl()
-
-Kumar Meiyappan (1):
-      scsi: smartpqi: Correct device removal for multi-actuator devices
-
-Maurizio Lombardi (2):
-      scsi: target: core: Fix hard lockup when executing a compare-and-write command
-      scsi: target: iscsi: Fix a race condition between login_work and the login thread
-
-Mike McGowen (1):
-      scsi: smartpqi: Add new controller PCI IDs
-
-Nathan Chancellor (1):
-      scsi: elx: libefc: Fix second parameter type in state callbacks
-
-Peter Wang (1):
-      scsi: ufs: core: Print events for WLUN suspend and resume failures
-
-Shang XiaoJing (1):
-      scsi: ipr: Fix WARNING in ipr_init()
-
-Shin'ichiro Kawasaki (1):
-      scsi: sd: Use 16-byte SYNCHRONIZE CACHE on ZBC devices
-
-Thomas Gleixner (1):
-      scsi: lpfc: Remove linux/msi.h include
-
-Wenchao Hao (3):
-      scsi: core: Do not increase scsi_device's iorequest_cnt if dispatch failed
-      scsi: core: Increase scsi_device's iodone_cnt in scsi_timeout()
-      scsi: iscsi: Rename iscsi_set_param() to iscsi_if_set_param()
-
-Xingui Yang (3):
-      scsi: hisi_sas: Modify v3 HW SATA disk error state completion processing
-      scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
-      scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
-
-Xiu Jianfeng (1):
-      scsi: lpfc: Use memset_startat() helper
-
-Yang Yingliang (5):
-      scsi: scsi_debug: Fix possible name leak in sdebug_add_host_helper()
-      scsi: fcoe: Fix possible name leak when device_register() fails
-      scsi: hpsa: Fix possible memory leak in hpsa_add_sas_device()
-      scsi: hpsa: Fix error handling in hpsa_add_sas_host()
-      scsi: mpt3sas: Fix possible resource leaks in mpt3sas_transport_port_add()
-
-Yu Zhe (1):
-      scsi: megaraid_sas: Fix some spelling mistakes in comment
-
-Yuan Can (1):
-      scsi: hpsa: Fix possible memory leak in hpsa_init_one()
-
-And the diffstat:
-
- Documentation/scsi/scsi_eh.rst               |   7 +-
- MAINTAINERS                                  |   2 +-
- drivers/message/fusion/mptctl.c              |   2 -
- drivers/message/fusion/mptsas.c              |   8 +-
- drivers/scsi/BusLogic.c                      |   6 +-
- drivers/scsi/NCR5380.c                       |   2 +-
- drivers/scsi/bfa/bfa_fc.h                    |   2 +-
- drivers/scsi/bfa/bfad_bsg.c                  |  29 +
- drivers/scsi/bfa/bfad_im.h                   |  26 -
- drivers/scsi/csiostor/csio_wr.c              |   3 +-
- drivers/scsi/device_handler/scsi_dh_alua.c   |  65 +-
- drivers/scsi/elx/efct/efct_driver.c          |   1 +
- drivers/scsi/elx/libefc/efclib.h             |   6 +-
- drivers/scsi/esas2r/esas2r_main.c            |  19 +-
- drivers/scsi/fcoe/fcoe.c                     |   1 +
- drivers/scsi/fcoe/fcoe_sysfs.c               |  19 +-
- drivers/scsi/hisi_sas/hisi_sas.h             |   1 +
- drivers/scsi/hisi_sas/hisi_sas_main.c        | 109 ++--
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c       |  53 +-
- drivers/scsi/hosts.c                         |   3 +-
- drivers/scsi/hpsa.c                          |   9 +-
- drivers/scsi/ipr.c                           |  10 +-
- drivers/scsi/libfc/fc_disc.c                 |   3 -
- drivers/scsi/libiscsi.c                      |  26 +-
- drivers/scsi/libsas/sas_ata.c                |  47 +-
- drivers/scsi/libsas/sas_expander.c           |  44 +-
- drivers/scsi/libsas/sas_init.c               |   3 -
- drivers/scsi/libsas/sas_internal.h           |  23 +
- drivers/scsi/lpfc/lpfc_attr.c                | 120 +++-
- drivers/scsi/lpfc/lpfc_crtn.h                |   3 +
- drivers/scsi/lpfc/lpfc_els.c                 | 169 ++++-
- drivers/scsi/lpfc/lpfc_hbadisc.c             |  36 +-
- drivers/scsi/lpfc/lpfc_hw4.h                 |   5 +-
- drivers/scsi/lpfc/lpfc_init.c                |  16 +-
- drivers/scsi/lpfc/lpfc_sli.c                 |  31 +-
- drivers/scsi/lpfc/lpfc_sli4.h                |   1 +
- drivers/scsi/lpfc/lpfc_version.h             |   2 +-
- drivers/scsi/megaraid/megaraid_sas_base.c    |   7 +-
- drivers/scsi/megaraid/megaraid_sas_fusion.c  |   8 +-
- drivers/scsi/mpt3sas/mpt3sas_transport.c     |   2 +
- drivers/scsi/mvsas/mv_defs.h                 |   1 +
- drivers/scsi/mvsas/mv_init.c                 |  11 +-
- drivers/scsi/mvsas/mv_sas.c                  |  59 +-
- drivers/scsi/mvsas/mv_sas.h                  |   8 +-
- drivers/scsi/mvumi.c                         |   4 +-
- drivers/scsi/pcmcia/nsp_cs.c                 |   4 +-
- drivers/scsi/pm8001/pm8001_hwi.c             | 186 +-----
- drivers/scsi/pm8001/pm8001_init.c            |  14 +-
- drivers/scsi/pm8001/pm8001_sas.c             |  54 +-
- drivers/scsi/pm8001/pm8001_sas.h             |  18 +-
- drivers/scsi/pm8001/pm80xx_hwi.c             | 200 +-----
- drivers/scsi/qedf/qedf_main.c                |   3 -
- drivers/scsi/qla2xxx/qla_def.h               |  22 +-
- drivers/scsi/qla2xxx/qla_init.c              |  10 +-
- drivers/scsi/qla2xxx/qla_inline.h            |   4 +-
- drivers/scsi/qla2xxx/qla_os.c                |   5 +-
- drivers/scsi/qla2xxx/qla_target.c            |   3 +
- drivers/scsi/qla4xxx/ql4_os.c                |   8 +-
- drivers/scsi/scsi.c                          |  12 +-
- drivers/scsi/scsi_debug.c                    |  11 +-
- drivers/scsi/scsi_error.c                    |  42 +-
- drivers/scsi/scsi_ioctl.c                    |   2 +-
- drivers/scsi/scsi_lib.c                      |  43 +-
- drivers/scsi/scsi_priv.h                     |   6 +-
- drivers/scsi/scsi_proc.c                     | 137 +++-
- drivers/scsi/scsi_scan.c                     |   5 +-
- drivers/scsi/scsi_sysfs.c                    |  22 +-
- drivers/scsi/scsi_transport_fc.c             |   7 +-
- drivers/scsi/scsi_transport_iscsi.c          |   4 +-
- drivers/scsi/scsi_transport_srp.c            |   8 +-
- drivers/scsi/sd.c                            |  16 +-
- drivers/scsi/sd_zbc.c                        |   3 +-
- drivers/scsi/smartpqi/smartpqi.h             |   5 +-
- drivers/scsi/smartpqi/smartpqi_init.c        | 164 +++--
- drivers/scsi/snic/snic_disc.c                |   3 +
- drivers/scsi/storvsc_drv.c                   |   4 +-
- drivers/scsi/virtio_scsi.c                   |   4 +-
- drivers/target/iscsi/iscsi_target_nego.c     |  12 +-
- drivers/target/target_core_configfs.c        |  49 +-
- drivers/target/target_core_device.c          |   1 +
- drivers/target/target_core_fabric_configfs.c |   3 +-
- drivers/target/target_core_file.c            |   1 -
- drivers/target/target_core_iblock.c          |   4 +-
- drivers/target/target_core_sbc.c             |  30 +-
- drivers/target/target_core_spc.c             | 934 ++++++++++++++++++++++++++-
- drivers/target/target_core_xcopy.c           | 103 +--
- drivers/target/target_core_xcopy.h           |   2 +-
- drivers/ufs/core/ufs-sysfs.c                 |  21 +-
- drivers/ufs/core/ufshcd-priv.h               |   6 +-
- drivers/ufs/core/ufshcd.c                    | 368 ++++++-----
- drivers/ufs/core/ufshpb.c                    |  16 +-
- drivers/ufs/host/ufs-mediatek.c              |  15 +-
- include/scsi/libiscsi.h                      |   2 +-
- include/scsi/libsas.h                        |  24 +-
- include/scsi/sas_ata.h                       |  13 +-
- include/scsi/scsi_cmnd.h                     |   3 +-
- include/scsi/scsi_device.h                   |   2 +-
- include/scsi/scsi_host.h                     |  32 +-
- include/scsi/scsi_proto.h                    |  10 +
- include/scsi/scsi_transport_fc.h             |   2 +-
- include/scsi/scsi_transport_srp.h            |   2 +-
- include/target/target_core_base.h            |  19 +-
- include/ufs/ufshcd.h                         |  11 +-
- 103 files changed, 2535 insertions(+), 1191 deletions(-)
-
-James
+diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+index 9c2fb613a55d..e2271e8fc302 100644
+--- a/kernel/locking/locktorture.c
++++ b/kernel/locking/locktorture.c
+@@ -46,6 +46,8 @@ torture_param(int, shutdown_secs, 0, "Shutdown time (j), <= zero to disable.");
+ torture_param(int, stat_interval, 60,
+ 	     "Number of seconds between stats printk()s");
+ torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
++torture_param(int, rt_boost, 2,
++		"Do periodic rt-boost. 0=Disable, 1=Only for rt_mutex, 2=For all lock types.");
+ torture_param(int, verbose, 1,
+ 	     "Enable verbose debugging printk()s");
+ 
+@@ -127,15 +129,49 @@ static void torture_lock_busted_write_unlock(int tid __maybe_unused)
+ 	  /* BUGGY, do not use in real life!!! */
+ }
+ 
+-static void torture_boost_dummy(struct torture_random_state *trsp)
++static void __torture_rt_boost(struct torture_random_state *trsp)
+ {
+-	/* Only rtmutexes care about priority */
++	const unsigned int factor = 50000; /* yes, quite arbitrary */
++
++	if (!rt_task(current)) {
++		/*
++		 * Boost priority once every ~50k operations. When the
++		 * task tries to take the lock, the rtmutex it will account
++		 * for the new priority, and do any corresponding pi-dance.
++		 */
++		if (trsp && !(torture_random(trsp) %
++			      (cxt.nrealwriters_stress * factor))) {
++			sched_set_fifo(current);
++		} else /* common case, do nothing */
++			return;
++	} else {
++		/*
++		 * The task will remain boosted for another ~500k operations,
++		 * then restored back to its original prio, and so forth.
++		 *
++		 * When @trsp is nil, we want to force-reset the task for
++		 * stopping the kthread.
++		 */
++		if (!trsp || !(torture_random(trsp) %
++			       (cxt.nrealwriters_stress * factor * 2))) {
++			sched_set_normal(current, 0);
++		} else /* common case, do nothing */
++			return;
++	}
++}
++
++static void torture_rt_boost(struct torture_random_state *trsp)
++{
++	if (rt_boost != 2)
++		return;
++
++	__torture_rt_boost(trsp);
+ }
+ 
+ static struct lock_torture_ops lock_busted_ops = {
+ 	.writelock	= torture_lock_busted_write_lock,
+ 	.write_delay	= torture_lock_busted_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_lock_busted_write_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -179,7 +215,7 @@ __releases(torture_spinlock)
+ static struct lock_torture_ops spin_lock_ops = {
+ 	.writelock	= torture_spin_lock_write_lock,
+ 	.write_delay	= torture_spin_lock_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_spin_lock_write_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -206,7 +242,7 @@ __releases(torture_spinlock)
+ static struct lock_torture_ops spin_lock_irq_ops = {
+ 	.writelock	= torture_spin_lock_write_lock_irq,
+ 	.write_delay	= torture_spin_lock_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_lock_spin_write_unlock_irq,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -275,7 +311,7 @@ __releases(torture_rwlock)
+ static struct lock_torture_ops rw_lock_ops = {
+ 	.writelock	= torture_rwlock_write_lock,
+ 	.write_delay	= torture_rwlock_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_rwlock_write_unlock,
+ 	.readlock       = torture_rwlock_read_lock,
+ 	.read_delay     = torture_rwlock_read_delay,
+@@ -318,7 +354,7 @@ __releases(torture_rwlock)
+ static struct lock_torture_ops rw_lock_irq_ops = {
+ 	.writelock	= torture_rwlock_write_lock_irq,
+ 	.write_delay	= torture_rwlock_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_rwlock_write_unlock_irq,
+ 	.readlock       = torture_rwlock_read_lock_irq,
+ 	.read_delay     = torture_rwlock_read_delay,
+@@ -358,7 +394,7 @@ __releases(torture_mutex)
+ static struct lock_torture_ops mutex_lock_ops = {
+ 	.writelock	= torture_mutex_lock,
+ 	.write_delay	= torture_mutex_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_mutex_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -456,7 +492,7 @@ static struct lock_torture_ops ww_mutex_lock_ops = {
+ 	.exit		= torture_ww_mutex_exit,
+ 	.writelock	= torture_ww_mutex_lock,
+ 	.write_delay	= torture_mutex_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_ww_mutex_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -474,37 +510,6 @@ __acquires(torture_rtmutex)
+ 	return 0;
+ }
+ 
+-static void torture_rtmutex_boost(struct torture_random_state *trsp)
+-{
+-	const unsigned int factor = 50000; /* yes, quite arbitrary */
+-
+-	if (!rt_task(current)) {
+-		/*
+-		 * Boost priority once every ~50k operations. When the
+-		 * task tries to take the lock, the rtmutex it will account
+-		 * for the new priority, and do any corresponding pi-dance.
+-		 */
+-		if (trsp && !(torture_random(trsp) %
+-			      (cxt.nrealwriters_stress * factor))) {
+-			sched_set_fifo(current);
+-		} else /* common case, do nothing */
+-			return;
+-	} else {
+-		/*
+-		 * The task will remain boosted for another ~500k operations,
+-		 * then restored back to its original prio, and so forth.
+-		 *
+-		 * When @trsp is nil, we want to force-reset the task for
+-		 * stopping the kthread.
+-		 */
+-		if (!trsp || !(torture_random(trsp) %
+-			       (cxt.nrealwriters_stress * factor * 2))) {
+-			sched_set_normal(current, 0);
+-		} else /* common case, do nothing */
+-			return;
+-	}
+-}
+-
+ static void torture_rtmutex_delay(struct torture_random_state *trsp)
+ {
+ 	const unsigned long shortdelay_us = 2;
+@@ -530,10 +535,18 @@ __releases(torture_rtmutex)
+ 	rt_mutex_unlock(&torture_rtmutex);
+ }
+ 
++static void torture_rt_boost_rtmutex(struct torture_random_state *trsp)
++{
++	if (!rt_boost)
++		return;
++
++	__torture_rt_boost(trsp);
++}
++
+ static struct lock_torture_ops rtmutex_lock_ops = {
+ 	.writelock	= torture_rtmutex_lock,
+ 	.write_delay	= torture_rtmutex_delay,
+-	.task_boost     = torture_rtmutex_boost,
++	.task_boost     = torture_rt_boost_rtmutex,
+ 	.writeunlock	= torture_rtmutex_unlock,
+ 	.readlock       = NULL,
+ 	.read_delay     = NULL,
+@@ -600,7 +613,7 @@ __releases(torture_rwsem)
+ static struct lock_torture_ops rwsem_lock_ops = {
+ 	.writelock	= torture_rwsem_down_write,
+ 	.write_delay	= torture_rwsem_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_rwsem_up_write,
+ 	.readlock       = torture_rwsem_down_read,
+ 	.read_delay     = torture_rwsem_read_delay,
+@@ -652,7 +665,7 @@ static struct lock_torture_ops percpu_rwsem_lock_ops = {
+ 	.exit		= torture_percpu_rwsem_exit,
+ 	.writelock	= torture_percpu_rwsem_down_write,
+ 	.write_delay	= torture_rwsem_write_delay,
+-	.task_boost     = torture_boost_dummy,
++	.task_boost     = torture_rt_boost,
+ 	.writeunlock	= torture_percpu_rwsem_up_write,
+ 	.readlock       = torture_percpu_rwsem_down_read,
+ 	.read_delay     = torture_rwsem_read_delay,
+-- 
+2.39.0.314.g84b9a713c41-goog
 
