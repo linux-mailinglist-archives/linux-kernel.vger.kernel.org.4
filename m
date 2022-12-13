@@ -2,244 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C5C64AFA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14BF64AFC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbiLMGKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S234505AbiLMGU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiLMGJu (ORCPT
+        with ESMTP id S229803AbiLMGUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:09:50 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE721ADA8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:09:28 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id k7-20020a17090a39c700b002192c16f19aso1347144pjf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=FqdJjiwJ+3KBa9yJbuoyosmHEFIdRQ7rtSq2Gl3y3sA=;
-        b=L0uRFcqMg4zxrXLXzS5agUTJtSHNHZaZB/Umstjib0KDLbzEMDkaIE5IYILiNh4ihO
-         Ks61vZYMKGfYWtht5ScwwNerE+C+y6uWagJ0CcBgoMLA2MHnwrngn38QzloYlobOUjZ2
-         LyWEcAhE8EP0Ftp6XZJM/ey9/GhxkepiJvO7Zdo3G+MDxVA6RcDRZc9XqkSiJ0pa5KsN
-         GjAVmtse3/tNYkngK2mewx7lLyeujrbP9aRghooZ2FUrMr++mTifKKsdKXJjGPNfl4VC
-         EVTOIpaCOflVepNg538v55OTMIVlEOvHsRVJ0ZKCh92IxSJ3cgUee0q54Mfe68Bz0vwf
-         ej5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FqdJjiwJ+3KBa9yJbuoyosmHEFIdRQ7rtSq2Gl3y3sA=;
-        b=yA+JhqbwSL3/J4aIEaFlAPY+4aLnwsuaVBZj0qJrFcvEORq+HbiPRnCYrp16OY3WRk
-         GNDRQeIkx4/NPqdEg5hETYZ7RjNUsyj2a1NhNR7nVB8DNJrp2VExduWPC5gGiELCNj3d
-         j4+r3/1ju3cv+BxLn7o0eqc937Gm7U2mzCXpiu3xqXjzcinssccAlbgjcsc7xscpF3Rx
-         ASQABG2fZBhPqTfPw1X6rwCpXKDE356H6il6JEorV5yUSYs8PoU0yV2s6jpFs9TZfUYd
-         UcGvjb4pVzP/wFXv7EVICjK7KeGLiiyKthqr2o10VCTVlN4ZPwqyE9Nn8ODIQzRt6jdO
-         KvUw==
-X-Gm-Message-State: ANoB5pkHxviwmmyW9y+wI53RfLVfwdn5IqIYEWRubppvQTT9+h3cCMrP
-        e3zxQ11Mdv468qqp1sXPJ/6xqr1TsoQ=
-X-Google-Smtp-Source: AA0mqf68WNGPX3LjDP06mA0PiEMAKBsyVZ5/dIfSh6Ot3lsLIv8000phHCdV7ZPecbA8WXpdCc4Ktcn+8wY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:85d9:0:b0:577:53a9:836c with SMTP id
- z25-20020aa785d9000000b0057753a9836cmr10672135pfn.5.1670911768146; Mon, 12
- Dec 2022 22:09:28 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 13 Dec 2022 06:09:12 +0000
-In-Reply-To: <20221213060912.654668-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221213060912.654668-1-seanjc@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221213060912.654668-8-seanjc@google.com>
-Subject: [PATCH 7/7] KVM: VMX: Handle NMI VM-Exits in noinstr region
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 01:20:20 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E971CFE4;
+        Mon, 12 Dec 2022 22:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670912419; x=1702448419;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XDDXjUI8qP+CNgHzid5D7Sq1q7ptGtCSkvRbAeJuPhs=;
+  b=PDJl9Jch3sDSXXDckq4s0aKd4yTLEsfTshdHlCpqZeEymCDERk6Ye/pm
+   UNf0ie2W1O9sxs6ZnqxkZ0YMDsvelRPAsq4AEybzfpzIeQ4+6ahS1R94I
+   mZTJ/khzalBnTrLVMlVFhXz9OHwhw3O91LR3Kxy3pQBaCYPr4P1YwPpNa
+   2NtooKJgFyG9wAgx1toueqea6wSBUm0PpN1rAM0KjR8uvgXsPnBDCALnj
+   m7T6+c5yaFicZMsrqC1gz9aWRAq+XfzF1MzvUm+CEL4Q3FlaLnOvMe0iR
+   7Jhf3tnllOlEm/6aP+iuYQ95fZaBqBpYnqywY/BhC+RskfSi3N8qq9iXh
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="298396675"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="298396675"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 22:20:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="641997203"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="641997203"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga007.jf.intel.com with ESMTP; 12 Dec 2022 22:20:15 -0800
+Date:   Tue, 13 Dec 2022 14:10:24 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 8/8] fpga: m10bmc-sec: Add support for N6000
+Message-ID: <Y5gXUMAvN5xBOGpF@yilunxu-OptiPlex-7050>
+References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
+ <20221211103913.5287-9-ilpo.jarvinen@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221211103913.5287-9-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move VMX's handling of NMI VM-Exits into vmx_vcpu_enter_exit() so that
-the NMI is handled prior to leaving the safety of noinstr.  Handling the
-NMI after leaving noinstr exposes the kernel to potential ordering
-problems as an instrumentation-induced fault, e.g. #DB, #BP, #PF, etc.
-will unblock NMIs when IRETing back to the faulting instruction.
+On 2022-12-11 at 12:39:13 +0200, Ilpo Järvinen wrote:
+> Add support for PMCI-based flash access path and N6000 sec update
+> support. Access to flash staging area is different for N6000 from that
+> of the SPI interfaced counterparts.
+> 
+> Introduce intel_m10bmc_flash_bulk_ops to allow interface specific
+> differentiations for the flash access path for sec update and make
+> m10bmc_sec_read/write() in sec update driver to use the new operations.
+> 
+> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c |  65 ++++++++++-
+>  drivers/mfd/intel-m10-bmc-pmci.c        | 145 ++++++++++++++++++++++++
+>  include/linux/mfd/intel-m10-bmc.h       |  14 +++
+>  3 files changed, 223 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 9922027856a4..885e38f13897 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -14,6 +14,20 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  
+> +#define M10BMC_PMCI_FLASH_MUX_CTRL	0x1d0
+> +#define FLASH_MUX_SELECTION		GENMASK(2, 0)
+> +#define FLASH_MUX_IDLE			0
+> +#define FLASH_MUX_NIOS			1
+> +#define FLASH_MUX_HOST			2
+> +#define FLASH_MUX_PFL			4
+> +#define get_flash_mux(mux)		FIELD_GET(FLASH_MUX_SELECTION, mux)
+> +
+> +#define FLASH_NIOS_REQUEST		BIT(4)
+> +#define FLASH_HOST_REQUEST		BIT(5)
+> +
+> +#define M10_FLASH_INT_US		1
+> +#define M10_FLASH_TIMEOUT_US		10000
+> +
+>  struct m10bmc_sec {
+>  	struct device *dev;
+>  	struct intel_m10bmc *m10bmc;
+> @@ -21,6 +35,7 @@ struct m10bmc_sec {
+>  	char *fw_name;
+>  	u32 fw_name_id;
+>  	bool cancel_request;
+> +	struct mutex flash_mutex;
+>  };
+>  
+>  static DEFINE_XARRAY_ALLOC(fw_upload_xa);
+> @@ -31,6 +46,24 @@ static DEFINE_XARRAY_ALLOC(fw_upload_xa);
+>  #define REH_MAGIC		GENMASK(15, 0)
+>  #define REH_SHA_NUM_BYTES	GENMASK(31, 16)
+>  
+> +static int m10bmc_sec_set_flash_host_mux(struct intel_m10bmc *m10bmc, bool request)
+> +{
+> +	u32 ctrl;
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(m10bmc->regmap, M10BMC_PMCI_FLASH_MUX_CTRL,
+> +				 FLASH_HOST_REQUEST,
+> +				 FIELD_PREP(FLASH_HOST_REQUEST, request));
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_read_poll_timeout(m10bmc->regmap,
+> +					M10BMC_PMCI_FLASH_MUX_CTRL, ctrl,
+> +					request ? (get_flash_mux(ctrl) == FLASH_MUX_HOST) :
+> +						  (get_flash_mux(ctrl) != FLASH_MUX_HOST),
+> +					M10_FLASH_INT_US, M10_FLASH_TIMEOUT_US);
+> +}
+> +
+>  static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u32 size)
+>  {
+>  	struct intel_m10bmc *m10bmc = sec->m10bmc;
+> @@ -41,6 +74,15 @@ static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u
+>  	u32 leftover_tmp = 0;
+>  	int ret;
+>  
+> +	if (sec->m10bmc->flash_bulk_ops) {
+> +		mutex_lock(&sec->flash_mutex);
+> +		/* On write, firmware manages flash MUX */
+> +		ret = sec->m10bmc->flash_bulk_ops->write(m10bmc, buf, offset, size);
+> +		mutex_unlock(&sec->flash_mutex);
+> +
+> +		return ret;
+> +	}
+> +
+>  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
+>  		return -EINVAL;
+>  
+> @@ -69,7 +111,21 @@ static int m10bmc_sec_read(struct m10bmc_sec *sec, u8 *buf, u32 addr, u32 size)
+>  	u32 leftover_offset = read_count * stride;
+>  	u32 leftover_size = size - leftover_offset;
+>  	u32 leftover_tmp;
+> -	int ret;
+> +	int ret, ret2;
+> +
+> +	if (sec->m10bmc->flash_bulk_ops) {
+> +		mutex_lock(&sec->flash_mutex);
+> +		ret = m10bmc_sec_set_flash_host_mux(m10bmc, true);
+> +		if (ret)
+> +			goto mux_fail;
 
-Reported-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmcs.h    |  4 ++--
- arch/x86/kvm/vmx/vmenter.S |  8 ++++----
- arch/x86/kvm/vmx/vmx.c     | 34 +++++++++++++++++++++-------------
- arch/x86/kvm/x86.h         |  6 +++---
- 4 files changed, 30 insertions(+), 22 deletions(-)
+If the flash host mux fail, we still need to un-mux it?
 
-diff --git a/arch/x86/kvm/vmx/vmcs.h b/arch/x86/kvm/vmx/vmcs.h
-index ac290a44a693..7c1996b433e2 100644
---- a/arch/x86/kvm/vmx/vmcs.h
-+++ b/arch/x86/kvm/vmx/vmcs.h
-@@ -75,7 +75,7 @@ struct loaded_vmcs {
- 	struct vmcs_controls_shadow controls_shadow;
- };
- 
--static inline bool is_intr_type(u32 intr_info, u32 type)
-+static __always_inline bool is_intr_type(u32 intr_info, u32 type)
- {
- 	const u32 mask = INTR_INFO_VALID_MASK | INTR_INFO_INTR_TYPE_MASK;
- 
-@@ -146,7 +146,7 @@ static inline bool is_icebp(u32 intr_info)
- 	return is_intr_type(intr_info, INTR_TYPE_PRIV_SW_EXCEPTION);
- }
- 
--static inline bool is_nmi(u32 intr_info)
-+static __always_inline bool is_nmi(u32 intr_info)
- {
- 	return is_intr_type(intr_info, INTR_TYPE_NMI_INTR);
- }
-diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-index 9d987e7e48c4..059243085211 100644
---- a/arch/x86/kvm/vmx/vmenter.S
-+++ b/arch/x86/kvm/vmx/vmenter.S
-@@ -299,6 +299,10 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
- 
- SYM_FUNC_END(__vmx_vcpu_run)
- 
-+SYM_FUNC_START(vmx_do_nmi_irqoff)
-+	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
-+SYM_FUNC_END(vmx_do_nmi_irqoff)
-+
- 
- .section .text, "ax"
- 
-@@ -353,10 +357,6 @@ SYM_FUNC_START(vmread_error_trampoline)
- SYM_FUNC_END(vmread_error_trampoline)
- #endif
- 
--SYM_FUNC_START(vmx_do_nmi_irqoff)
--	VMX_DO_EVENT_IRQOFF call asm_exc_nmi_kvm_vmx
--SYM_FUNC_END(vmx_do_nmi_irqoff)
--
- SYM_FUNC_START(vmx_do_interrupt_irqoff)
- 	VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
- SYM_FUNC_END(vmx_do_interrupt_irqoff)
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index c242e2591896..b03020ca1840 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5095,8 +5095,13 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
- 	vect_info = vmx->idt_vectoring_info;
- 	intr_info = vmx_get_intr_info(vcpu);
- 
-+	/*
-+	 * Machine checks are handled by handle_exception_irqoff(), or by
-+	 * vmx_vcpu_run() if a #MC occurs on VM-Entry.  NMIs are handled by
-+	 * vmx_vcpu_enter_exit().
-+	 */
- 	if (is_machine_check(intr_info) || is_nmi(intr_info))
--		return 1; /* handled by handle_exception_nmi_irqoff() */
-+		return 1;
- 
- 	/*
- 	 * Queue the exception here instead of in handle_nm_fault_irqoff().
-@@ -6809,7 +6814,7 @@ static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
- 		rdmsrl(MSR_IA32_XFD_ERR, vcpu->arch.guest_fpu.xfd_err);
- }
- 
--static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
-+static void handle_exception_irqoff(struct vcpu_vmx *vmx)
- {
- 	u32 intr_info = vmx_get_intr_info(&vmx->vcpu);
- 
-@@ -6822,12 +6827,6 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
- 	/* Handle machine checks before interrupts are enabled */
- 	else if (is_machine_check(intr_info))
- 		kvm_machine_check();
--	/* We need to handle NMIs before interrupts are enabled */
--	else if (is_nmi(intr_info)) {
--		kvm_before_interrupt(&vmx->vcpu, KVM_HANDLING_NMI);
--		vmx_do_nmi_irqoff();
--		kvm_after_interrupt(&vmx->vcpu);
--	}
- }
- 
- static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
-@@ -6857,7 +6856,7 @@ static void vmx_handle_exit_irqoff(struct kvm_vcpu *vcpu)
- 	if (vmx->exit_reason.basic == EXIT_REASON_EXTERNAL_INTERRUPT)
- 		handle_external_interrupt_irqoff(vcpu);
- 	else if (vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI)
--		handle_exception_nmi_irqoff(vmx);
-+		handle_exception_irqoff(vmx);
- }
- 
- /*
-@@ -7119,6 +7118,18 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- 
- 	vmx_enable_fb_clear(vmx);
- 
-+	if (unlikely(vmx->fail))
-+		vmx->exit_reason.full = 0xdead;
-+	else
-+		vmx->exit_reason.full = vmcs_read32(VM_EXIT_REASON);
-+
-+	if ((u16)vmx->exit_reason.basic == EXIT_REASON_EXCEPTION_NMI &&
-+	    is_nmi(vmx_get_intr_info(vcpu))) {
-+		kvm_before_interrupt(vcpu, KVM_HANDLING_NMI);
-+		vmx_do_nmi_irqoff();
-+		kvm_after_interrupt(vcpu);
-+	}
-+
- 	guest_state_exit_irqoff();
- }
- 
-@@ -7260,12 +7271,9 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
- 
- 	vmx->idt_vectoring_info = 0;
- 
--	if (unlikely(vmx->fail)) {
--		vmx->exit_reason.full = 0xdead;
-+	if (unlikely(vmx->fail))
- 		return EXIT_FASTPATH_NONE;
--	}
- 
--	vmx->exit_reason.full = vmcs_read32(VM_EXIT_REASON);
- 	if (unlikely((u16)vmx->exit_reason.basic == EXIT_REASON_MCE_DURING_VMENTRY))
- 		kvm_machine_check();
- 
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 9de72586f406..44d1827f0a30 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -382,13 +382,13 @@ enum kvm_intr_type {
- 	KVM_HANDLING_NMI,
- };
- 
--static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu,
--					enum kvm_intr_type intr)
-+static __always_inline void kvm_before_interrupt(struct kvm_vcpu *vcpu,
-+						 enum kvm_intr_type intr)
- {
- 	WRITE_ONCE(vcpu->arch.handling_intr_from_guest, (u8)intr);
- }
- 
--static inline void kvm_after_interrupt(struct kvm_vcpu *vcpu)
-+static __always_inline void kvm_after_interrupt(struct kvm_vcpu *vcpu)
- {
- 	WRITE_ONCE(vcpu->arch.handling_intr_from_guest, 0);
- }
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
+Others look good to me.
 
+Thanks,
+Yilun
+
+
+> +		ret = sec->m10bmc->flash_bulk_ops->read(m10bmc, buf, addr, size);
+> +mux_fail:
+> +		ret2 = m10bmc_sec_set_flash_host_mux(m10bmc, false);
+> +		mutex_unlock(&sec->flash_mutex);
+> +		if (ret)
+> +			return ret;
+> +		return ret2;
+> +	}
+>  
+>  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
+>  		return -EINVAL;
+> @@ -611,6 +667,8 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> +	mutex_init(&sec->flash_mutex);
+> +
+>  	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
+>  			sec->fw_name_id);
+>  	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
+> @@ -633,6 +691,7 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+>  fw_uploader_fail:
+>  	kfree(sec->fw_name);
+>  fw_name_fail:
+> +	mutex_destroy(&sec->flash_mutex);
+>  	xa_erase(&fw_upload_xa, sec->fw_name_id);
+>  	return ret;
+>  }
