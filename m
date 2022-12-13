@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE29464AD9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D3D64ADA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbiLMC2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S234059AbiLMCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiLMC2L (ORCPT
+        with ESMTP id S229727AbiLMCf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:28:11 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28A913D22
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:28:09 -0800 (PST)
-Received: from gproxy1-pub.mail.unifiedlayer.com (unknown [69.89.25.95])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 989F6802B61C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:28:05 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 8D5A810046667
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:27:44 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 4v1Epo4jFhMe54v1EpTtB1; Tue, 13 Dec 2022 02:27:44 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Ncoja0P4 c=1 sm=1 tr=0 ts=6397e320
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=sHyYjHe8cH0A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=N+7fP/bRQQgVoPJvAKgSsxxh7fQbFWp0IBG6nzw7i3Y=; b=F/P6gbS1Bsz4nLUUFgZ3qHNoj6
-        q9esYckOKdXSVz5fOxt+tJ2U5gskUT2DMQrWDq+WXblJo0sdjY4VUmB1ykHKnaBa+4kLT4ZyptuSk
-        28dA2gAD4P2gIU4/xdlXUQsIghBKbh/v4RefJzam12KWO13FK/Zw47SzFEqtaB9MSqobG7rOIwTVO
-        FLVNIRSRxc5J25XKdjUG9mHLb4fw2PKBjYxx8oXp0VWxZ6ipUTVXvNZeO0NVZHmbu+ZLoLj0w39on
-        3X1Pm8l6pziBoqRwPGCitnSirC/pwcbIhbBm8Lfp8MlBEZq2RfD6iIMNUxN4Q6SqD1CJB7j/VuR1i
-        Np0ajE+A==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32828 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1p4v1D-002qgr-65;
-        Mon, 12 Dec 2022 19:27:43 -0700
-Subject: Re: [PATCH 6.0 000/157] 6.0.13-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221212130934.337225088@linuxfoundation.org>
-In-Reply-To: <20221212130934.337225088@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <170a1794-ff53-b620-af4a-1e856a6c8fb3@w6rz.net>
-Date:   Mon, 12 Dec 2022 18:27:37 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 12 Dec 2022 21:35:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37586BF40;
+        Mon, 12 Dec 2022 18:35:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E71CCB80DCB;
+        Tue, 13 Dec 2022 02:35:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59AAFC433D2;
+        Tue, 13 Dec 2022 02:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1670898955;
+        bh=MJfbec56Cilr/DNLc0S8FXtEAXdlH2MTjKaFB6ucBmg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fmeZFJX+3CpcHfz1KgOGfv35JsRvRB/tTPGDm/55Wi2EdwTHWKg2tn0jpg9cfGCOD
+         si1B/TcaCkr1WqWsdHeFAHO0/fKk81LpvaKTXWwCDKIKkconhjgPhygP6QuVNyJcbN
+         JaNQnc05SBej+lyWwKyXYiyKd8T8n1XSGA1u+UJI=
+Date:   Mon, 12 Dec 2022 18:35:54 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [GIT PULL] non-MM commits for 6.2-rc1
+Message-Id: <20221212183554.e0a2536e860172282b189ca4@linux-foundation.org>
+In-Reply-To: <e7c6b99a-743f-f40a-0b0f-31730964cb36@suse.cz>
+References: <20221212134425.b20b80955e5e8a4a36ce1b9a@linux-foundation.org>
+        <Y5eoS/UfBhovR70j@zx2c4.com>
+        <20221212142754.5f699c4ff515fd9d42768fb2@linux-foundation.org>
+        <e7c6b99a-743f-f40a-0b0f-31730964cb36@suse.cz>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1p4v1D-002qgr-65
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:32828
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 5:15 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.13 release.
-> There are 157 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.13-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, 13 Dec 2022 00:16:07 +0100 Vlastimil Babka <vbabka@suse.cz> wrote:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> On 12/12/22 23:27, Andrew Morton wrote:
+> > On Mon, 12 Dec 2022 15:16:43 -0700 "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+> > 
+> >> On Mon, Dec 12, 2022 at 01:44:25PM -0800, Andrew Morton wrote:
+> >> >       wifi: rt2x00: use explicitly signed or unsigned types
+> >> 
+> >> Why is this part of your PULL? This was a netdev/wireless tree fix which
+> >> was in 6.1-rc5. Kalle wrote that he took it on 21 Oct 2022 in:
+> >> https://lore.kernel.org/all/166633563389.6242.13987912613257140089.kvalo@kernel.org/
+> >> 
+> > 
+> > Huh.  I guess git quietly accepts the identical commit, so Stephen
+> > never told me and my test-merge-with-Linus-latest also came up clean. 
+> > Which leaves it to me to manually handle these things, and that's
+> > unreliable.
+> > 
+> > Is there some way of telling git to complain about identical changes
+> > when doing a trial merge?
+>  
+> Probably not exactly that, but there seems to be a way with "git cherry". Dunno
+> how reliable in practice, seems to be based on patch-id so probably can fail
+> easily if the commit or context changes slightly?
 
-Tested-by: Ron Economos <re@w6rz.net>
+Well here's a hacky thing - just look for duplicated patch titles after
+stripping away the hashes.
+
+
+$ git log --oneline --no-merges v6.0..HEAD | sed -e "s/[^ ]* //" | sort > /tmp/1        
+$ uniq < /tmp/1 > /tmp/2
+$ diff -u /tmp/1 /tmp/2 | grep "^-.*"
+
+The above turns up 67 duplicates in Linus's tree and 382 in linux-next.
+Maybe this is wrong - I'm just tossing it out there in the hope that
+someone will do the work for me :)
 
