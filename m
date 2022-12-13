@@ -2,52 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB15F64B25B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3DF64B261
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234902AbiLMJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S234605AbiLMJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiLMJ3F (ORCPT
+        with ESMTP id S234276AbiLMJbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:29:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA00E627C;
-        Tue, 13 Dec 2022 01:29:03 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWY7k2zvHzRpt4;
-        Tue, 13 Dec 2022 17:28:02 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 13 Dec 2022 17:29:01 +0800
-Message-ID: <7f35ca55-cbed-98ac-4988-1b783db21dc5@huawei.com>
-Date:   Tue, 13 Dec 2022 17:29:00 +0800
+        Tue, 13 Dec 2022 04:31:42 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DF8CF3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:31:40 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id q6so3918335lfm.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:31:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eBNGkpSXOiqxD0QFw5sTJNcEwlVctRLV2sWFD35T7yM=;
+        b=wgXxB7i9Myiz3fetBQR2uDgOzp8pixRPZY7JajZqv2ZHuw8Kvfs/kjuy2Bc75ziv6G
+         g52YZfw4cCzgQkGCl1TJ3RNbIZsp14K9L/rv1Ztk70RnbeuzXbwESSNQ5pcRJrFPOLOa
+         riEgRB/yPlM8Kc+5K9HnrO4AQdafEnkm4a2OChbhDyBnB7dENko89aPBrZ/LkDQex0YR
+         ZPmip2txg/tQ1mJvow0qD6k8xHx79Ny0guy661fLdbcKB2umPv+JlY7AF1zX+tcDfJnx
+         ij6jK3IinSGQpapR7FSZ7dSPJX5ynlX1dma59irSYrYmqTrhLRKUHfdsRlJwQqw2rNRY
+         8uWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eBNGkpSXOiqxD0QFw5sTJNcEwlVctRLV2sWFD35T7yM=;
+        b=YX5y1L0u6ncGBv+eOzer/G8wVEiagly7xUamYv1PqsK1bTGfT/0Yp+cj3DY7n0L4dx
+         spETp29oj1qizlamrxKl6yAtLiQHzbaeF/geLMn7ENCDdPcS1jhtwiFmvGP0FwJwmObl
+         euz13JkN9ZXKXGTBJBpj39yeaCZJhcoCXdqV/GGItj5lOcFkfmloxKMij/5mmdB4v8jb
+         TR6pXYTnilFn1DdiGVI2yK/+g7jAthC2S/a1B3tT89a2uU4uaAkSODdIRZWk9tWUrI7+
+         nEX+evEcBuayBTqB+RvZ5cn2tBeuEb+Czoe6JWialmKFVPVF7I4XjiA3OefKJOraLk4k
+         3QPw==
+X-Gm-Message-State: ANoB5pnBFxR7V62yamYg0zXt/Zv2rkPrSTH79W6Y/MpI6cTytn1kwQGP
+        e5RfQPFegOsxu493x5hWuBIPDT94EOp47sgg
+X-Google-Smtp-Source: AA0mqf5FI/j9Le7pQBHJzExIQOzU6406ebgIjketJYTAuv2HASPjuYxFAMBnopyXLe0ptTyK/+cLNQ==
+X-Received: by 2002:a05:6512:3092:b0:4a4:68b7:dedd with SMTP id z18-20020a056512309200b004a468b7deddmr7261189lfd.57.1670923899326;
+        Tue, 13 Dec 2022 01:31:39 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id f22-20020a19dc56000000b004b4ea0f4e7fsm285654lfj.299.2022.12.13.01.31.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 01:31:38 -0800 (PST)
+Message-ID: <48bda658-2312-809c-6dac-227b15f3ec40@linaro.org>
+Date:   Tue, 13 Dec 2022 10:31:37 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH] r6040: Fix kmemleak in probe and remove
-To:     Li Zetao <lizetao1@huawei.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221213101723.348289-1-lizetao1@huawei.com>
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-In-Reply-To: <20221213101723.348289-1-lizetao1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 07/12] ARM: dts: qcom: reverse compatibles to match
+ bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-7-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221212163532.142533-7-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,92 +81,76 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/12/13 18:17, Li Zetao wrote:
-> There is a memory leaks reported by kmemleak:
+
+On 12.12.2022 17:35, Krzysztof Kozlowski wrote:
+> The most specific compatible should be upfront.
 > 
->   unreferenced object 0xffff888116111000 (size 2048):
->     comm "modprobe", pid 817, jiffies 4294759745 (age 76.502s)
->     hex dump (first 32 bytes):
->       00 c4 0a 04 81 88 ff ff 08 10 11 16 81 88 ff ff  ................
->       08 10 11 16 81 88 ff ff 00 00 00 00 00 00 00 00  ................
->     backtrace:
->       [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
->       [<ffffffff827e20ee>] phy_device_create+0x4e/0x90
->       [<ffffffff827e6072>] get_phy_device+0xd2/0x220
->       [<ffffffff827e7844>] mdiobus_scan+0xa4/0x2e0
->       [<ffffffff827e8be2>] __mdiobus_register+0x482/0x8b0
->       [<ffffffffa01f5d24>] r6040_init_one+0x714/0xd2c [r6040]
->       ...
-> 
-> The problem occurs in probe process as follows:
->   r6040_init_one:
->     mdiobus_register
->       mdiobus_scan    <- alloc and register phy_device,
->                          the reference count of phy_device is 3
->     r6040_mii_probe
->       phy_connect     <- connect to the first phy_device,
->                          so the reference count of the first
->                          phy_device is 4, others are 3
->     register_netdev   <- fault inject succeeded, goto error handling path
-> 
->     // error handling path
->     err_out_mdio_unregister:
->       mdiobus_unregister(lp->mii_bus);
->     err_out_mdio:
->       mdiobus_free(lp->mii_bus);    <- the reference count of the first
->                                        phy_device is 1, it is not released
->                                        and other phy_devices are released
->   // similarly, the remove process also has the same problem
-> 
-> The root cause is traced to the phy_device is not disconnected when
-> removes one r6040 device in r6040_remove_one() or on error handling path
-> after r6040_mii probed successfully. In r6040_mii_probe(), a net ethernet
-> device is connected to the first PHY device of mii_bus, in order to
-> notify the connected driver when the link status changes, which is the
-> default behavior of the PHY infrastructure to handle everything.
-> Therefore the phy_device should be disconnected when removes one r6040
-> device or on error handling path.
-> 
-> Fix it by adding phy_disconnect() when removes one r6040 device or on
-> error handling path after r6040_mii probed successfully.
-> 
-> Fixes: 3831861b4ad8 ("r6040: implement phylib")
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/net/ethernet/rdc/r6040.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-
-Please use [PATCH net] ... format in title.
-
-
+Konrad
+>  arch/arm/boot/dts/qcom-apq8064.dtsi | 4 ++--
+>  arch/arm/boot/dts/qcom-ipq4019.dtsi | 2 +-
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ++--
+>  arch/arm/boot/dts/qcom-msm8960.dtsi | 4 ++--
+>  4 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/net/ethernet/rdc/r6040.c b/drivers/net/ethernet/rdc/r6040.c
-> index eecd52ed1ed2..95b682597da1 100644
-> --- a/drivers/net/ethernet/rdc/r6040.c
-> +++ b/drivers/net/ethernet/rdc/r6040.c
-> @@ -1159,10 +1159,12 @@ static int r6040_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	err = register_netdev(dev);
->  	if (err) {
->  		dev_err(&pdev->dev, "Failed to register net device\n");
-> -		goto err_out_mdio_unregister;
-> +		goto err_out_r6040_mii_remove;
-
-better to use something like 'err_out_phy_disconnect'
-
->  	}
->  	return 0;
+> diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> index 0da9623ea084..79575d6b3a81 100644
+> --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> @@ -375,8 +375,8 @@ intc: interrupt-controller@2000000 {
+>  		};
 >  
-> +err_out_r6040_mii_remove:
-> +	phy_disconnect(dev->phydev);
->  err_out_mdio_unregister:
->  	mdiobus_unregister(lp->mii_bus);
->  err_out_mdio:
-> @@ -1186,6 +1188,7 @@ static void r6040_remove_one(struct pci_dev *pdev)
->  	struct r6040_private *lp = netdev_priv(dev);
+>  		timer@200a000 {
+> -			compatible = "qcom,kpss-timer",
+> -				     "qcom,kpss-wdt-apq8064", "qcom,msm-timer";
+> +			compatible = "qcom,kpss-wdt-apq8064", "qcom,kpss-timer",
+> +				     "qcom,msm-timer";
+>  			interrupts = <1 1 0x301>,
+>  				     <1 2 0x301>,
+>  				     <1 3 0x301>;
+> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+> index acb08dcf9442..a73c3a17b6a4 100644
+> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+> @@ -400,7 +400,7 @@ blsp1_uart2: serial@78b0000 {
+>  		};
 >  
->  	unregister_netdev(dev);
-> +	phy_disconnect(dev->phydev);
->  	mdiobus_unregister(lp->mii_bus);
->  	mdiobus_free(lp->mii_bus);
->  	netif_napi_del(&lp->napi);
+>  		watchdog: watchdog@b017000 {
+> -			compatible = "qcom,kpss-wdt", "qcom,kpss-wdt-ipq4019";
+> +			compatible = "qcom,kpss-wdt-ipq4019", "qcom,kpss-wdt";
+>  			reg = <0xb017000 0x40>;
+>  			clocks = <&sleep_clk>;
+>  			timeout-sec = <10>;
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index 7e784b0995da..9daafe9de02a 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -549,8 +549,8 @@ intc: interrupt-controller@2000000 {
+>  		};
+>  
+>  		timer@200a000 {
+> -			compatible = "qcom,kpss-timer",
+> -				     "qcom,kpss-wdt-ipq8064", "qcom,msm-timer";
+> +			compatible = "qcom,kpss-wdt-ipq8064", "qcom,kpss-timer",
+> +				     "qcom,msm-timer";
+>  			interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) |
+>  						 IRQ_TYPE_EDGE_RISING)>,
+>  				     <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) |
+> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> index 7debf9db7cb1..63c3c40fe9a2 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> @@ -103,8 +103,8 @@ intc: interrupt-controller@2000000 {
+>  		};
+>  
+>  		timer@200a000 {
+> -			compatible = "qcom,kpss-timer",
+> -				     "qcom,kpss-wdt-msm8960", "qcom,msm-timer";
+> +			compatible = "qcom,kpss-wdt-msm8960", "qcom,kpss-timer",
+> +				     "qcom,msm-timer";
+>  			interrupts = <GIC_PPI 1 0x301>,
+>  				     <GIC_PPI 2 0x301>,
+>  				     <GIC_PPI 3 0x301>;
