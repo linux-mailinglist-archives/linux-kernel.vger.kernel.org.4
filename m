@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695E764B0FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8916864B10E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiLMIZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S234789AbiLMIZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiLMIZG (ORCPT
+        with ESMTP id S234565AbiLMIZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:25:06 -0500
+        Tue, 13 Dec 2022 03:25:07 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 266BD13CEE;
-        Tue, 13 Dec 2022 00:25:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D960E13D60;
+        Tue, 13 Dec 2022 00:25:05 -0800 (PST)
 Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 13 Dec 2022 17:25:03 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 693D62059054;
-        Tue, 13 Dec 2022 17:25:03 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:03 +0900
+  by mx.socionext.com with ESMTP; 13 Dec 2022 17:25:04 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 06B052059054;
+        Tue, 13 Dec 2022 17:25:04 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:04 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 3A1D4A855F;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5E9ECA855C;
         Tue, 13 Dec 2022 17:25:03 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -30,9 +30,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 01/17] dt-bindings: clock: Fix node descriptions in uniphier-clock example
-Date:   Tue, 13 Dec 2022 17:24:33 +0900
-Message-Id: <20221213082449.2721-2-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 02/17] dt-bindings: reset: Fix node descriptions in uniphier-reset example
+Date:   Tue, 13 Dec 2022 17:24:34 +0900
+Message-Id: <20221213082449.2721-3-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
 References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
@@ -47,21 +47,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Prior to adding dt-bindings for SoC-dependent controllers, rename the
-clock nodes to the generic names in the example.
+reset nodes to the generic names in the example.
 
-And drop redundant examples and a parent node of the clock as it is not
+And drop redundant examples and a parent node of the reset as it is not
 directly necessary.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../clock/socionext,uniphier-clock.yaml       | 39 ++-----------------
- 1 file changed, 3 insertions(+), 36 deletions(-)
+ .../reset/socionext,uniphier-glue-reset.yaml  | 23 +++-----
+ .../reset/socionext,uniphier-reset.yaml       | 52 ++-----------------
+ 2 files changed, 11 insertions(+), 64 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
-index 9a0cc7341630..4e82582fb2f3 100644
---- a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
-@@ -61,40 +61,7 @@ required:
+diff --git a/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml b/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
+index 0a2c13e1e230..fa253c518d79 100644
+--- a/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
++++ b/Documentation/devicetree/bindings/reset/socionext,uniphier-glue-reset.yaml
+@@ -95,19 +95,12 @@ required:
+ 
+ examples:
+   - |
+-    usb-glue@65b00000 {
+-        compatible = "simple-mfd";
+-        #address-cells = <1>;
+-        #size-cells = <1>;
+-        ranges = <0 0x65b00000 0x400>;
+-
+-        usb_rst: reset@0 {
+-            compatible = "socionext,uniphier-ld20-usb3-reset";
+-            reg = <0x0 0x4>;
+-            #reset-cells = <1>;
+-            clock-names = "link";
+-            clocks = <&sys_clk 14>;
+-            reset-names = "link";
+-            resets = <&sys_rst 14>;
+-        };
++    usb_rst: reset-controller@0 {
++        compatible = "socionext,uniphier-ld20-usb3-reset";
++        reg = <0x0 0x4>;
++        #reset-cells = <1>;
++        clock-names = "link";
++        clocks = <&sys_clk 14>;
++        reset-names = "link";
++        resets = <&sys_rst 14>;
+     };
+diff --git a/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml b/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
+index 6566804ec567..033b252a3dfe 100644
+--- a/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
++++ b/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.yaml
+@@ -66,53 +66,7 @@ required:
  
  examples:
    - |
@@ -69,9 +102,9 @@ index 9a0cc7341630..4e82582fb2f3 100644
 -        compatible = "socionext,uniphier-sysctrl", "simple-mfd", "syscon";
 -        reg = <0x61840000 0x4000>;
 -
--        clock {
--            compatible = "socionext,uniphier-ld11-clock";
--            #clock-cells = <1>;
+-        reset {
+-            compatible = "socionext,uniphier-ld11-reset";
+-            #reset-cells = <1>;
 -        };
 -
 -        // other nodes ...
@@ -82,9 +115,9 @@ index 9a0cc7341630..4e82582fb2f3 100644
 -        compatible = "socionext,uniphier-mioctrl", "simple-mfd", "syscon";
 -        reg = <0x59810000 0x800>;
 -
--        clock {
--            compatible = "socionext,uniphier-ld11-mio-clock";
--            #clock-cells = <1>;
+-        reset {
+-            compatible = "socionext,uniphier-ld11-mio-reset";
+-            #reset-cells = <1>;
 -        };
 -
 -        // other nodes ...
@@ -95,15 +128,28 @@ index 9a0cc7341630..4e82582fb2f3 100644
 -        compatible = "socionext,uniphier-perictrl", "simple-mfd", "syscon";
 -        reg = <0x59820000 0x200>;
 -
--        clock {
--            compatible = "socionext,uniphier-ld11-peri-clock";
--            #clock-cells = <1>;
+-        reset {
+-            compatible = "socionext,uniphier-ld11-peri-reset";
+-            #reset-cells = <1>;
 -        };
 -
 -        // other nodes ...
-+    clock-controller {
-+        compatible = "socionext,uniphier-ld11-clock";
-+        #clock-cells = <1>;
+-    };
+-
+-  - |
+-    adamv@57920000 {
+-        compatible = "socionext,uniphier-ld11-adamv", "simple-mfd", "syscon";
+-        reg = <0x57920000 0x1000>;
+-
+-        reset {
+-            compatible = "socionext,uniphier-ld11-adamv-reset";
+-            #reset-cells = <1>;
+-        };
+-
+-        // other nodes ...
++    reset-controller {
++        compatible = "socionext,uniphier-ld11-reset";
++        #reset-cells = <1>;
      };
 -- 
 2.25.1
