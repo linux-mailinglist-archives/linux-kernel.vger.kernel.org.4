@@ -2,72 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F92664AD94
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CFB64ADA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiLMCXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
+        id S233757AbiLMCe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiLMCXJ (ORCPT
+        with ESMTP id S229842AbiLMCe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:23:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52D5FE2;
-        Mon, 12 Dec 2022 18:23:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 261DAB80E06;
-        Tue, 13 Dec 2022 02:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A6BC433D2;
-        Tue, 13 Dec 2022 02:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1670898185;
-        bh=4dd0Jbjx0gjIAljkmA0ZgSH+i9WhUDx2iCgULP7i/E0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X0HDRs3avxe+K/MYbWB6BMM0/LmaRrkAg7glg+raHBuLqz/wqrjVxgQF9Ag0CyoFt
-         7Ce2timhwby7O+C9TqZi/wWJ/PwJDm4m5Gox/fUB5AcILVJ/8zYBNQz/nrCzN0FH7g
-         LAx2ahqr3StMu4/N8zAvp6um4SHt+i+EF1yBel+c=
-Date:   Mon, 12 Dec 2022 18:23:04 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm-hotfixes tree
-Message-Id: <20221212182304.fc148bf08bc17e58ec4b6674@linux-foundation.org>
-In-Reply-To: <e8dfaf60-ff35-66d3-7bc1-f11eaaef642a@huawei.com>
-References: <20221213093054.5211da74@canb.auug.org.au>
-        <e8dfaf60-ff35-66d3-7bc1-f11eaaef642a@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 12 Dec 2022 21:34:26 -0500
+X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Dec 2022 18:34:25 PST
+Received: from mail-m11880.qiye.163.com (mail-m11880.qiye.163.com [115.236.118.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54099BF40;
+        Mon, 12 Dec 2022 18:34:25 -0800 (PST)
+Received: from [172.16.12.69] (unknown [58.22.7.114])
+        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id 9E6AA2020F;
+        Tue, 13 Dec 2022 10:24:43 +0800 (CST)
+Message-ID: <faea4932-add6-fc51-836d-b113e8c9a194@rock-chips.com>
+Date:   Tue, 13 Dec 2022 10:24:44 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Cc:     shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
+Content-Language: en-GB
+To:     William Qiu <william.qiu@starfivetech.com>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-3-william.qiu@starfivetech.com>
+From:   Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <20221207131731.1291517-3-william.qiu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTENCVh5DHUgdTRlCHUMdQ1UTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Oj46Shw*Vj0vAk4OGTgeIiw5
+        LUsaCzRVSlVKTUxLQ0JDSUNPSElIVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+        C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlCQ0g3Bg++
+X-HM-Tid: 0a85094c758b2eb6kusn9e6aa2020f
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 09:34:24 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+Hi
 
-> Hi, this patch relays on Tony Luck's Patch series "Copy-on-write poison 
-> recovery".[1]
-> and tested ppc64_defconfig based on next-20221208, it's no build failure
+On 2022/12/7 21:17, William Qiu wrote:
+> Add sdio/emmc driver support for StarFive JH7110 soc.
+> 
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> ---
+>   MAINTAINERS                        |   6 +
+>   drivers/mmc/host/Kconfig           |  10 ++
+>   drivers/mmc/host/Makefile          |   1 +
+>   drivers/mmc/host/dw_mmc-starfive.c | 197 +++++++++++++++++++++++++++++
+>   4 files changed, 214 insertions(+)
+>   create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
+> 
 
-I reordered these a couple of days ago, not sure how Stephen got a hold
-of this tree - perhaps I wasn't pushy enough.
+...
 
-Stephen, quoting the mm-everything tag would be helpful, but rarely
-useful so only if you're feeling bored ;)
+> +
+> +static unsigned long dw_mci_starfive_caps[] = {
+> +	MMC_CAP_CMD23,
+> +	MMC_CAP_CMD23,
+> +	MMC_CAP_CMD23
+> +};
+> +
 
-> I think it is not very hotfix, also will send v3 to address some comments
-> we could adjust the patch order in mm tree, thanks.
+....
 
-This patch is still in mm-unstable so updates won't be a problem. 
-Soon, please.
+> +	host->priv = priv;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dw_mci_drv_data starfive_data = {
+> +	.caps = dw_mci_starfive_caps,
+> +	.num_caps = ARRAY_SIZE(dw_mci_starfive_caps),
+
+use ".common_caps = MMC_CAP_CMD23" instead.
+
+> +	.set_ios = dw_mci_starfive_set_ios,
+> +	.parse_dt = dw_mci_starfive_parse_dt,
+> +	.execute_tuning = dw_mci_starfive_execute_tuning,
+> +};
+> +
+> +static const struct of_device_id dw_mci_starfive_match[] = {
 
