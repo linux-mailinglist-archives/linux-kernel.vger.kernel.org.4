@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA5A64BDE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683BC64BDE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiLMUYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        id S238155AbiLMUZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237993AbiLMUYJ (ORCPT
+        with ESMTP id S236937AbiLMUYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:24:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE2C27CEA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:20:05 -0800 (PST)
+        Tue, 13 Dec 2022 15:24:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7416226EF;
+        Tue, 13 Dec 2022 12:20:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79FAA61532
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3477BC43398;
-        Tue, 13 Dec 2022 20:20:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FAA9B815CF;
+        Tue, 13 Dec 2022 20:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E5B0AC433F1;
+        Tue, 13 Dec 2022 20:20:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670962805;
-        bh=FIFYxRafz/IoKAee6YwLUlifVFEA8reoXarVh2nr+1U=;
+        s=k20201202; t=1670962819;
+        bh=XIxVIV4u854tpmsqvmSQs8SsH2ntM3l9ZaoZEX0zemk=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nyxMQcPibklqnByu8vJmjftZ2He9bPhSKA9QhsNbdXLpik9LN/Clpgtpm6HjM0++l
-         NykS96YZq8Pwv42oJjG2ufEI3eqxzBGU+tNWyS4qHdsW5YJIzr8oPtslBunSZOZTFb
-         kimpAwcPWQOnEQR6Ov56XCCGcHi6fD2qKTus8GDd7Sut/WaDtzoKc0bGh7BnyNNZNQ
-         q2fgVF5QkZ1a76uk77v8ZpmIrxBmE2q1u7ihUP5emn3Lr20bNLfxY6Vz9ma/ERaQXz
-         ec4rnqyBKU5kbd0w+b/4fD5ulgH+ZF+EOyNbIgsBCtZz4PxU8v71P7ReZqsYRfIw+Z
-         ZIanav6DnwmUQ==
+        b=kFOApZURHBOXYDb/r4DopxmyzIgOtpAMseoWudU3BH2mkHzoVQtO9jL1+DqMU2cen
+         t+SXRlcWbhhm+ZP9XNJ7WDMbGjBt5H3FElzargJdusvbE5Yj4zMUBajlmkYPyHlScz
+         IQV4nS98Hd+c1nT+ie88VNmXT8I6dxNM1j4v9Ca313PKoPvyZIBXR/oSTP4TPWDDG7
+         985BhpIfa1NIBEoQbnesbbaxMBIVKPDzJ9sdPJMf6Mdf01rHRp8rtiW9NjUhisNuGv
+         Sdq0m6pWcpWl4Ci8FXm74WhmT3c9gcQVEMnNggHXEtgwCPXyZxgjBKtjojBlG4VX5/
+         PHCwmNexnXReA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 229F2C41612;
-        Tue, 13 Dec 2022 20:20:05 +0000 (UTC)
-Subject: Re: [git pull] drm for 6.2-rc1
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD693C00445;
+        Tue, 13 Dec 2022 20:20:19 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.2-rc1] media updates
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAPM=9txGCMqyriq_xiwgFCUBa-PpHvSuRQuptAHusHcjpH+zqA@mail.gmail.com>
-References: <CAPM=9txGCMqyriq_xiwgFCUBa-PpHvSuRQuptAHusHcjpH+zqA@mail.gmail.com>
-X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
- <dri-devel.lists.freedesktop.org>
-X-PR-Tracked-Message-Id: <CAPM=9txGCMqyriq_xiwgFCUBa-PpHvSuRQuptAHusHcjpH+zqA@mail.gmail.com>
-X-PR-Tracked-Remote: git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-12-13
-X-PR-Tracked-Commit-Id: 66efff515a6500d4b4976fbab3bee8b92a1137fb
+In-Reply-To: <20221212084920.756bfd7b@sal.lan>
+References: <20221212084920.756bfd7b@sal.lan>
+X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221212084920.756bfd7b@sal.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.2-1
+X-PR-Tracked-Commit-Id: 3178804c64ef7c8c87a53cd5bba0b2942dd64fec
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a594533df0f6ca391da003f43d53b336a2d23ffa
-Message-Id: <167096280511.13378.2856917258516541935.pr-tracker-bot@kernel.org>
-Date:   Tue, 13 Dec 2022 20:20:05 +0000
-To:     Dave Airlie <airlied@gmail.com>
+X-PR-Merge-Commit-Id: cdb9d3537711939e4d8fd0de2889c966f88346eb
+Message-Id: <167096281976.13378.4746124475282302008.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 20:20:19 +0000
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 13 Dec 2022 12:56:25 +1000:
+The pull request you sent on Mon, 12 Dec 2022 08:49:20 +0000:
 
-> git://anongit.freedesktop.org/drm/drm tags/drm-next-2022-12-13
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.2-1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a594533df0f6ca391da003f43d53b336a2d23ffa
+https://git.kernel.org/torvalds/c/cdb9d3537711939e4d8fd0de2889c966f88346eb
 
 Thank you!
 
