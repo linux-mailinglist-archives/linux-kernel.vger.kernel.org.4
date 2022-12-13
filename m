@@ -2,344 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C23464BB42
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ADC64BB41
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236184AbiLMRnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S236121AbiLMRmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236317AbiLMRm7 (ORCPT
+        with ESMTP id S235907AbiLMRmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:42:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58FA23BD6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:42:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670953376; x=1702489376;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JbygnR+34aVP50LuHDGng6ylvUT5LCMJ5h3J6y1OskA=;
-  b=AHEP32LK7KmqvZvJ2SY+P8Gf2PMirkAPWrgp2ROFcpwMOCoII/Ynhp7P
-   B6HwvEGluzcvDFobiHPBw1Q5YbOmcQmk1pZs2J7kBQuJgYKNffBUqPyIj
-   hPOKrU/9S39jXHW7y0h4Nh7QlUlwxU29MC8T72ffLrBNbAUiNMT55ekoL
-   sb/6Oqb+lma3313Y8QQjzsAxagDgqCuGBzU2p2MRhK4gBElnX3SzVgtn4
-   nXRfrX9NDT79EmZewqOhSY2IogC/Nf5O5VdKPROqUmwXQfdZVScjrVw4V
-   2VzzAv7N5n5wGZs000JXn6CKfIJzwk4llg4hIER0q1adG0yKHH88o408d
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="320052685"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="320052685"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 09:42:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="737460079"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="737460079"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Dec 2022 09:42:55 -0800
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kirill.shutemov@linux.intel.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Subject: [GIT PULL] x86/mm for 6.2
-Date:   Tue, 13 Dec 2022 09:42:34 -0800
-Message-Id: <20221213174234.688534-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Dec 2022 12:42:47 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97ECB13F25;
+        Tue, 13 Dec 2022 09:42:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3B182F4;
+        Tue, 13 Dec 2022 09:43:25 -0800 (PST)
+Received: from [10.57.9.1] (unknown [10.57.9.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F39A93F73B;
+        Tue, 13 Dec 2022 09:42:42 -0800 (PST)
+Message-ID: <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
+Date:   Tue, 13 Dec 2022 17:42:40 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
+ <20221127141742.1644023-4-qyousef@layalina.io>
+ <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
+ <20221203143323.w32boxa6asqvvdnp@airbuntu>
+ <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
+ <20221205110159.nd5igwvsaj55jar7@airbuntu>
+ <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
+ <20221208140526.vvmjxlz6akgqyoma@airbuntu>
+ <20221209164739.GA24368@vingu-book>
+ <20221212184317.sntxy3h6k44oz4mo@airbuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20221212184317.sntxy3h6k44oz4mo@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Qais,
 
-Please pull some x86/mm changes for 6.2.
+I thought I could help with this issue.
 
-This includes some new randomization of the per-cpu entry areas from
-Peter Z.  Without it, these areas are a tasty target for attackers.
-The entry code and mappings are especially tricky code and this has
-caused some issues along the way, but they have settled down.
+On 12/12/22 18:43, Qais Yousef wrote:
+> On 12/09/22 17:47, Vincent Guittot wrote:
+> 
+> [...]
+> 
+>>>>>> This patch loops on all cpufreq policy in sched softirq, how can this
+>>>>>> be sane ? and not only in eas mode but also in the default asymmetric
+>>>>>
+>>>>> Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
+>>>>> in the wake up path in feec()?
+>>>>
+>>>> feec() should be considered as an exception not as the default rule.
+>>>> Thing like above which loops for_each on external subsystem should be
+>>>> prevented and the fact that feec loops all PDs doesn't means that we
+>>>> can put that everywhere else
+>>>
+>>> Fair enough. But really understanding the root cause behind this limitation
+>>> will be very helpful. I don't have the same appreciation of why this is
+>>> a problem, and shedding more light will help me to think more about it in the
+>>> future.
+>>>
+>>
+>> Take the example of 1k cores with per cpu policy. Do you really think a
+>> for_each_cpufreq_policy would be reasonable ?
+> 
+> Hmm I don't think such an HMP system makes sense to ever exist.
+> 
+> That system has to be a multi-socket system and I doubt inversion detection is
+> something of value.
+> 
+> Point taken anyway. Let's find another way to do this.
+> 
 
-This also contains a new hardware feature: Linear Address Masking
-(LAM).  It is similar conceptually to the ARM Top-Byte-Ignore (TBI)
-feature and should allow userspace memory sanitizers to be used
-with less overhead on x86.
+Another way might be to use the 'update' code path, which sets this
+information source, for the thermal pressure. That code path isn't as
+hot as this in the task scheduler. Furthermore, we would also
+have time and handle properly CPU hotplug callbacks there.
 
-LAM adds some pointer tag/untag functions which are used relatively
-widely in the tree, but were just stubs on x86 until now.  The
-new functions also unearthed a SCSI build issue.  There's a fix in
-the SCSI tree for it:
+So something like this, I have in mind:
 
-	4e80eef45ad7 ("scsi: sg: Fix get_user() in call sg_scsi_ioctl()")
+------------------------------8<-----------------------------
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index e7d6e6657ffa..7f372a93e21b 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -16,6 +16,7 @@
+  #include <linux/sched/topology.h>
+  #include <linux/cpuset.h>
+  #include <linux/cpumask.h>
++#include <linux/mutex.h>
+  #include <linux/init.h>
+  #include <linux/rcupdate.h>
+  #include <linux/sched.h>
+@@ -153,6 +154,33 @@ void topology_set_freq_scale(const struct cpumask 
+*cpus, unsigned long cur_freq,
+  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
+  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
+  EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
 
-but this should not be pulled without that patch being in place
-first.
++static struct cpumask highest_capacity_mask;
 
-Last, there is a merge conflict between the set_memory_rox() work
-in this branch and x86/core.  I've included a suggested resolution
-below from Ingo.
++static struct cpumask highest_capacity_mask;
++static unsigned int max_possible_capacity;
++static DEFINE_MUTEX(max_capacity_lock);
++
++static void max_capacity_update(const struct cpumask *cpus,
++                               unsigned long capacity)
++{
++       mutex_lock(&max_capacity_lock);
++
++       if (max_possible_capacity < capacity) {
++               max_possible_capacity = capacity;
++
++               cpumask_clear(&highest_capacity_mask);
++
++               cpumask_or(&highest_capacity_mask,
++                          &highest_capacity_mask, cpus);
++       }
++
++       mutex_unlock(&max_capacity_lock);
++}
++
++bool topology_test_max_cpu_capacity(unsigned int cpu)
++{
++       return cpumask_test_cpu(cpu, &highest_capacity_mask);
++}
++EXPORT_SYMBOL_GPL(topology_test_max_cpu_capacity);
++
+  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
+  {
+         per_cpu(cpu_scale, cpu) = capacity;
+@@ -203,6 +231,8 @@ void topology_update_thermal_pressure(const struct 
+cpumask *cpus,
 
----
+         for_each_cpu(cpu, cpus)
+                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
++
++       max_capacity_update(cpus, capacity);
+  }
+  EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
 
-Merge branch 'x86/core' into x86/mm, to resolve conflicts
 
-Resolve conflicts between this commit in tip:x86/core:
+--------------------------->8--------------------------------
 
-      4c4eb3ecc91f ("x86/modules: Set VM_FLUSH_RESET_PERMS in module_alloc()")
+We could use the RCU if there is a potential to read racy date
+while the updater modifies the mask in the meantime. Mutex is to
+serialize the thermal writers which might be kicked for two
+policies at the same time.
 
-    ... and this one in tip:x86/mm:
+If you like I can develop and test such code in the arch_topology.c
 
-      1f6eae430528 mm: Introduce set_memory_rox()
-
-The set_vm_flush_reset_perms() calls need to be removed in the
-set_memory_rox()-simplified code too.
-
-Conflicts:
-	arch/x86/kernel/ftrace.c
-	arch/x86/kernel/kprobes/core.c
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-
-diff --cc arch/x86/kernel/ftrace.c
-index 03579460d0ec,cf15ef5aecff..3d883eb989c7
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@@ -413,9 -421,9 +421,8 @@@ create_trampoline(struct ftrace_ops *op
-  	/* ALLOC_TRAMP flags lets us know we created it */
-  	ops->flags |= FTRACE_OPS_FL_ALLOC_TRAMP;
-  
-- 	set_vm_flush_reset_perms(trampoline);
-- 
- -	if (likely(system_state != SYSTEM_BOOTING))
- -		set_memory_ro((unsigned long)trampoline, npages);
- -	set_memory_x((unsigned long)trampoline, npages);
- +	set_memory_rox((unsigned long)trampoline, npages);
-++
-  	return (unsigned long)trampoline;
-  fail:
-  	tramp_free(trampoline);
-diff --cc arch/x86/kernel/kprobes/core.c
-index e7b7ca64acdf,01b8d956aa76..66299682b6b7
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@@ -414,8 -414,12 +414,6 @@@ void *alloc_insn_page(void
-  	if (!page)
-  		return NULL;
-  
-- 	set_vm_flush_reset_perms(page);
- -	/*
- -	 * First make the page read-only, and only then make it executable to
- -	 * prevent it from being W+X in between.
- -	 */
- -	set_memory_ro((unsigned long)page, 1);
---
-  	/*
-  	 * TODO: Once additional kernel code protection mechanisms are set, ensure
-  	 * that the page was not maliciously altered and it is still zeroed.
-
---
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
-
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_6.2
-
-for you to fetch changes up to ce66a02538f39f071443bac9bc6ff8f3a780ab92:
-
-  x86/mm: Fix sparse warnings in untagged_ptr() (2022-11-28 15:12:25 -0800)
-
-----------------------------------------------------------------
-New Features:
-* Introduce Hardware-based Linear Address Masking (LAM)
-* Randomize the per-cpu entry areas
-Cleanups:
-* Move to "native" set_memory_rox() helper
-* Clean up pmd_get_atomic() and i386-PAE
-* Remove some unused page table size macros
-
-----------------------------------------------------------------
-Andrey Ryabinin (1):
-      x86/kasan: Map shadow for percpu pages on demand
-
-Dave Hansen (1):
-      x86/mm: Ensure forced page table splitting
-
-Kirill A. Shutemov (12):
-      x86/mm: Fix CR3_ADDR_MASK
-      x86: CPUID and CR3/CR4 flags for Linear Address Masking
-      mm: Pass down mm_struct to untagged_addr()
-      x86/mm: Handle LAM on context switch
-      x86/uaccess: Provide untagged_addr() and remove tags before address check
-      KVM: Serialize tagged address check against tagging enabling
-      x86/mm: Provide arch_prctl() interface for LAM
-      x86/mm: Reduce untagged_addr() overhead until the first LAM user
-      mm: Expose untagging mask in /proc/$PID/status
-      iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
-      x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
-      x86/mm: Fix sparse warnings in untagged_ptr()
-
-Pasha Tatashin (1):
-      x86/mm: Remove P*D_PAGE_MASK and P*D_PAGE_SIZE macros
-
-Peter Zijlstra (27):
-      x86/mm: Randomize per-cpu entry area
-      Merge branch 'v6.1-rc3'
-      mm: Move mm_cachep initialization to mm_init()
-      x86/mm: Use mm_alloc() in poking_init()
-      x86/mm: Initialize text poking earlier
-      x86/ftrace: Remove SYSTEM_BOOTING exceptions
-      x86/mm: Do verify W^X at boot up
-      mm: Introduce set_memory_rox()
-      x86/mm: Implement native set_memory_rox()
-      mm: Update ptep_get_lockless()'s comment
-      x86/mm/pae: Make pmd_t similar to pte_t
-      sh/mm: Make pmd_t similar to pte_t
-      mm: Fix pmd_read_atomic()
-      mm: Rename GUP_GET_PTE_LOW_HIGH
-      mm: Rename pmd_read_atomic()
-      mm/gup: Fix the lockless PMD access
-      x86/mm/pae: Don't (ab)use atomic64
-      x86/mm/pae: Use WRITE_ONCE()
-      x86/mm/pae: Be consistent with pXXp_get_and_clear()
-      x86_64: Remove pointless set_64bit() usage
-      x86/mm/pae: Get rid of set_64bit()
-      mm: Remove pointless barrier() after pmdp_get_lockless()
-      mm: Convert __HAVE_ARCH_P..P_GET to the new style
-      x86/mm: Add a few comments
-      x86/mm: Untangle __change_page_attr_set_clr(.checkalias)
-      x86/mm: Inhibit _PAGE_NX changes from cpa_process_alias()
-      x86/mm: Rename __change_page_attr_set_clr(.checkalias)
-
-Sean Christopherson (5):
-      x86/mm: Recompute physical address for every page of per-CPU CEA mapping
-      x86/mm: Populate KASAN shadow for entire per-CPU range of CPU entry area
-      x86/kasan: Rename local CPU_ENTRY_AREA variables to shorten names
-      x86/kasan: Add helpers to align shadow addresses up and down
-      x86/kasan: Populate shadow for shared chunk of the CPU entry area
-
-Weihong Zhang (5):
-      selftests/x86/lam: Add malloc and tag-bits test cases for linear-address masking
-      selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address masking
-      selftests/x86/lam: Add io_uring test cases for linear-address masking
-      selftests/x86/lam: Add inherit test cases for linear-address masking
-      selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for linear-address masking
-
- arch/arm/mach-omap1/sram-init.c                  |    8 +-
- arch/arm/mach-omap2/sram.c                       |    8 +-
- arch/arm64/include/asm/memory.h                  |    4 +-
- arch/arm64/include/asm/mmu_context.h             |    6 +
- arch/arm64/include/asm/signal.h                  |    2 +-
- arch/arm64/include/asm/uaccess.h                 |    2 +-
- arch/arm64/kernel/hw_breakpoint.c                |    2 +-
- arch/arm64/kernel/traps.c                        |    4 +-
- arch/arm64/mm/fault.c                            |   10 +-
- arch/mips/Kconfig                                |    2 +-
- arch/powerpc/include/asm/nohash/32/pgtable.h     |    2 +-
- arch/powerpc/kernel/kprobes.c                    |    9 +-
- arch/sh/Kconfig                                  |    2 +-
- arch/sh/include/asm/pgtable-3level.h             |   10 +-
- arch/sparc/include/asm/mmu_context_64.h          |    6 +
- arch/sparc/include/asm/pgtable_64.h              |    2 +-
- arch/sparc/include/asm/uaccess_64.h              |    2 +
- arch/um/include/asm/pgtable-3level.h             |    8 -
- arch/x86/Kconfig                                 |    2 +-
- arch/x86/include/asm/cmpxchg_32.h                |   28 -
- arch/x86/include/asm/cmpxchg_64.h                |    5 -
- arch/x86/include/asm/cpu_entry_area.h            |    4 -
- arch/x86/include/asm/cpufeatures.h               |    1 +
- arch/x86/include/asm/kasan.h                     |    3 +
- arch/x86/include/asm/mmu.h                       |   12 +-
- arch/x86/include/asm/mmu_context.h               |   47 +
- arch/x86/include/asm/page_types.h                |   12 +-
- arch/x86/include/asm/pgtable-3level.h            |  171 +---
- arch/x86/include/asm/pgtable-3level_types.h      |    7 +
- arch/x86/include/asm/pgtable_64_types.h          |    1 +
- arch/x86/include/asm/pgtable_areas.h             |    8 +-
- arch/x86/include/asm/pgtable_types.h             |    4 +-
- arch/x86/include/asm/processor-flags.h           |    4 +-
- arch/x86/include/asm/set_memory.h                |    3 +
- arch/x86/include/asm/tlbflush.h                  |   34 +
- arch/x86/include/asm/uaccess.h                   |   42 +-
- arch/x86/include/uapi/asm/prctl.h                |    5 +
- arch/x86/include/uapi/asm/processor-flags.h      |    6 +
- arch/x86/kernel/alternative.c                    |   10 -
- arch/x86/kernel/amd_gart_64.c                    |    2 +-
- arch/x86/kernel/ftrace.c                         |    6 +-
- arch/x86/kernel/head64.c                         |    2 +-
- arch/x86/kernel/hw_breakpoint.c                  |    2 +-
- arch/x86/kernel/kprobes/core.c                   |    9 +-
- arch/x86/kernel/process.c                        |    3 +
- arch/x86/kernel/process_64.c                     |   87 +-
- arch/x86/kernel/traps.c                          |    6 +-
- arch/x86/mm/cpu_entry_area.c                     |   50 +-
- arch/x86/mm/init.c                               |    2 +-
- arch/x86/mm/kasan_init_64.c                      |   53 +-
- arch/x86/mm/mem_encrypt_boot.S                   |    4 +-
- arch/x86/mm/mem_encrypt_identity.c               |   18 +-
- arch/x86/mm/pat/set_memory.c                     |  105 +-
- arch/x86/mm/pti.c                                |    2 +-
- arch/x86/mm/tlb.c                                |   53 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c |    2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          |    2 +-
- drivers/gpu/drm/radeon/radeon_gem.c              |    2 +-
- drivers/infiniband/hw/mlx4/mr.c                  |    2 +-
- drivers/iommu/intel/irq_remapping.c              |   13 +-
- drivers/iommu/iommu-sva-lib.c                    |   16 +-
- drivers/media/common/videobuf2/frame_vector.c    |    2 +-
- drivers/media/v4l2-core/videobuf-dma-contig.c    |    2 +-
- drivers/misc/sram-exec.c                         |    7 +-
- drivers/staging/media/atomisp/pci/hmm/hmm_bo.c   |    2 +-
- drivers/tee/tee_shm.c                            |    2 +-
- drivers/vfio/vfio_iommu_type1.c                  |    2 +-
- fs/proc/array.c                                  |    6 +
- fs/proc/task_mmu.c                               |    2 +-
- include/linux/filter.h                           |    3 +-
- include/linux/ioasid.h                           |    9 -
- include/linux/mm.h                               |   11 -
- include/linux/mmu_context.h                      |   14 +
- include/linux/pgtable.h                          |   73 +-
- include/linux/sched/mm.h                         |    8 +-
- include/linux/sched/task.h                       |    2 +-
- include/linux/set_memory.h                       |   10 +
- include/linux/uaccess.h                          |   15 +
- init/main.c                                      |    4 +-
- kernel/bpf/bpf_struct_ops.c                      |    3 +-
- kernel/bpf/core.c                                |    6 +-
- kernel/bpf/trampoline.c                          |    3 +-
- kernel/events/core.c                             |    2 +-
- kernel/fork.c                                    |   37 +-
- lib/strncpy_from_user.c                          |    2 +-
- lib/strnlen_user.c                               |    2 +-
- mm/Kconfig                                       |    2 +-
- mm/gup.c                                         |    8 +-
- mm/hmm.c                                         |    3 +-
- mm/khugepaged.c                                  |    2 +-
- mm/madvise.c                                     |    2 +-
- mm/mapping_dirty_helpers.c                       |    2 +-
- mm/mempolicy.c                                   |    6 +-
- mm/migrate.c                                     |    2 +-
- mm/mincore.c                                     |    2 +-
- mm/mlock.c                                       |    4 +-
- mm/mmap.c                                        |    2 +-
- mm/mprotect.c                                    |    4 +-
- mm/mremap.c                                      |    2 +-
- mm/msync.c                                       |    2 +-
- mm/userfaultfd.c                                 |    2 +-
- mm/vmscan.c                                      |    5 +-
- net/bpf/bpf_dummy_struct_ops.c                   |    3 +-
- tools/testing/selftests/x86/Makefile             |    2 +-
- tools/testing/selftests/x86/lam.c                | 1149 ++++++++++++++++++++++
- virt/kvm/kvm_main.c                              |   14 +-
- 106 files changed, 1901 insertions(+), 485 deletions(-)
- create mode 100644 tools/testing/selftests/x86/lam.c
+Regards,
+Lukasz
