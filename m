@@ -2,196 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B708764B018
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73E464B01F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiLMG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S234453AbiLMHAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 02:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbiLMG7F (ORCPT
+        with ESMTP id S234396AbiLMHAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:59:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491D17E20
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670914687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TG6nTIySLJL4GzMcoFkoHrZJOcHOyrIknDZjMAhUKq0=;
-        b=G/kna0llW/rX0exl6hO8JfMxQcA7Ic27cKyK/YC1OMivds3007l9PkqiXavZnTh9T74k/N
-        2y6Pkr0YFc09zlMPiJ6BcnNB5W7U8522zhSzfvjq2c6M/3p+O/6Rtryr0vR3bX8HW6jZ/D
-        AueXsPvH8xsxzUfbLXwh/ZDQ/qaVdgY=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-605-iGdcunWeMAG6J87tDA4prQ-1; Tue, 13 Dec 2022 01:58:06 -0500
-X-MC-Unique: iGdcunWeMAG6J87tDA4prQ-1
-Received: by mail-ot1-f70.google.com with SMTP id bm9-20020a056830374900b0066e7ffcb95dso8104941otb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:58:06 -0800 (PST)
+        Tue, 13 Dec 2022 02:00:44 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1717E20
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:00:43 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id t5so13723187vsh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:00:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jD0TEPiT0O5ndbPBWe7291iaK3/qwh0ScrkryadniPM=;
+        b=nxp+eWseW0Ql1PhtfIWRkDtCHsw07bIZBK5iUUEzPwRpUu9FXlaexlKvmNdE9cJWr4
+         mkRRqvjBWF0d7+TRsmp8o2sjehrAwa5DZduIUtKXJKA5+ofJwTwSz1eoAj/1d70r7o6a
+         HdbQaqwgXEQv4nMyoS2EH2Wkmgt3E3KFGP/1hQW09rQQodifueomyaFKRaAYa+hS+loi
+         QQY98XTmjjyn9TN/hvcmrQi/qjftcZp7i79xzfn/qF4Ua9wIugO6co/zF7tIu5G/iXQY
+         0utmUgkRxb6rsFO61vTdcKp236X7wJsVv9ic7/TZTKQgH6pWNEZNz+jz00VZ8RbAiYZA
+         6kwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TG6nTIySLJL4GzMcoFkoHrZJOcHOyrIknDZjMAhUKq0=;
-        b=FwKnO0oHIOi9nQz/vBmnwByz0hXF7+jCQjjrg9uwE/Z085D1KpzR5mjzzRMqeaGcIx
-         DPgtb5vGK6Q7M6QC0X9hE76F/t4AlfxBr+h2eJR7O6bViRcOKfqlFhHesY6mEA1R4ZyQ
-         gYVtTYgKLAAPjMrLi1A6lMOPa4Cta1FvT5c6R+eAJTRRT4+QRQBC+3N4k9f4U95XOz83
-         BJ9hkyVx++sVE45pzZOEs+JodMTLHPLpZIIzTdesB+JF7/17D5j7fY+K+vgQbF0tefp7
-         Tc0KYBlrfpBx6VwvpRiyYvkfHeQHxPHtKBNrkzXwPGoAIMsE3/4AJDgHjjWJbV3ATPgW
-         nqRQ==
-X-Gm-Message-State: ANoB5pkTJtcbLzpnvDqkbFXsAL6QPk93pZ11skwCB6EnCBkx+Y+1pwky
-        IzX7ZRgAq7aUvn44vTt/0MZVcrUS/t1QvyQUqc73KxXzNov1dRMRsAqQm7UlIYTCcg5QT0YRoch
-        yMg3/gTznrCDD69ScTca9Fxz3kOrwnhsZcbu70ODl
-X-Received: by 2002:a05:6870:170e:b0:144:a97b:1ae2 with SMTP id h14-20020a056870170e00b00144a97b1ae2mr124204oae.35.1670914685835;
-        Mon, 12 Dec 2022 22:58:05 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4q5+B7Fl7DK/u/JIISxL//DMMmbkyJdDsxO+tjxYnaAJ9f8ZhI/Xt7Ljn+PCpZVIIixCW/Btptl5YKy40YUOc=
-X-Received: by 2002:a05:6870:170e:b0:144:a97b:1ae2 with SMTP id
- h14-20020a056870170e00b00144a97b1ae2mr124202oae.35.1670914685564; Mon, 12 Dec
- 2022 22:58:05 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jD0TEPiT0O5ndbPBWe7291iaK3/qwh0ScrkryadniPM=;
+        b=iG1hlZo/5lT+EwebDkuGsmkoW7Yhbq8de6j7ohw5BAJ95p6t7LetQ16yFwKT3J6jpm
+         6z0i7njkTgO1QSA3aQpoKV9ZTqo9VDoaiMzWx4dYDJajbRCKBUuFZ6PuC5Wfd2nT/fI4
+         Dy2Bu2545LR9KU9T7WdYoJ8Yb3sJsCpnynJ51ZMeWG8zFES8c1NPxKabOgc+9qVJ2hYK
+         n9cX2zzziBq1mu8J0Bcjj2Zqv2GA/bfXpfoh6MjDIaEU9fW/hqE+rrQG/vmj7l7weand
+         4Cuxdv4kpwohBKdQIXbf30xOpnSGbG+QigAZkkIqxVNRu8eNTDJbJdnROLoRx4m+6Q0Z
+         FYYQ==
+X-Gm-Message-State: ANoB5pmGtauyAeEnjLJRozhkDxsj7yy6upYBL6uxsXch39BiH+HxdXCo
+        MQlcZ65M+6uOigGdT2oDA0kDOXSGObwp9LC3PeUq/A==
+X-Google-Smtp-Source: AA0mqf5Y4PJM+7m4exb7HnMZWnwJZSAKEvc/ILw64rfqmzdup4nKQR10T/XHIXSlhkcfef0UGSW2fmeeA2AoGLt0C20=
+X-Received: by 2002:a05:6102:3590:b0:3aa:eee:5bc9 with SMTP id
+ h16-20020a056102359000b003aa0eee5bc9mr43972880vsu.24.1670914842510; Mon, 12
+ Dec 2022 23:00:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20221212091029.54390-1-jasowang@redhat.com> <20221212042144-mutt-send-email-mst@kernel.org>
- <1670902391.9610498-1-xuanzhuo@linux.alibaba.com> <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
- <20221213013231-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221213013231-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 13 Dec 2022 14:57:54 +0800
-Message-ID: <CACGkMEukRrOWghcBXiqPrOtNbdjdDJUW7-cg9PsdtsVs1SuCyQ@mail.gmail.com>
-Subject: Re: [PATCH net] virtio-net: correctly enable callback during start_xmit
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
+References: <20221212130926.811961601@linuxfoundation.org>
+In-Reply-To: <20221212130926.811961601@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Dec 2022 12:30:31 +0530
+Message-ID: <CA+G9fYuCQBpAz8z0orqesA=n9nfuB6HgBHDz_VNLEL22iaatSw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/123] 5.15.83-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        llvm@lists.linux.dev
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 2:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Mon, 12 Dec 2022 at 18:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Dec 13, 2022 at 11:43:36AM +0800, Jason Wang wrote:
-> > On Tue, Dec 13, 2022 at 11:38 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > >
-> > > On Mon, 12 Dec 2022 04:25:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
-> > > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> > > > > virtqueue callback via the following statement:
-> > > > >
-> > > > >         do {
-> > > > >            ......
-> > > > >     } while (use_napi && kick &&
-> > > > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > > >
-> > > > > This will cause a missing call to virtqueue_enable_cb_delayed() when
-> > > > > kick is false. Fixing this by removing the checking of the kick from
-> > > > > the condition to make sure callback is enabled correctly.
-> > > > >
-> > > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > ---
-> > > > > The patch is needed for -stable.
-> > > >
-> > > > stable rules don't allow for theoretical fixes. Was a problem observed?
-> >
-> > Yes, running a pktgen sample script can lead to a tx timeout.
+> This is the start of the stable review cycle for the 5.15.83 release.
+> There are 123 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Since April 2021 and we only noticed now? Are you sure it's the
-> right Fixes tag?
-
-Well, reverting a7766ef18b33 makes pktgen work again.
-
-The reason we doesn't notice is probably because:
-
-1) We don't support BQL, so no bulk dequeuing (skb list) in normal traffic
-2) When burst is enabled for pktgen, it can do bulk xmit via skb list by its own
-
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
 >
-> > > >
-> > > > > ---
-> > > > >  drivers/net/virtio_net.c | 4 ++--
-> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index 86e52454b5b5..44d7daf0267b 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > > > >
-> > > > >             free_old_xmit_skbs(sq, false);
-> > > > >
-> > > > > -   } while (use_napi && kick &&
-> > > > > -          unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > > > +   } while (use_napi &&
-> > > > > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > > >
-> > > >
-> > > > A bit more explanation pls.  kick simply means !netdev_xmit_more -
-> > > > if it's false we know there will be another packet, then transmissing
-> > > > that packet will invoke virtqueue_enable_cb_delayed. No?
-> > >
-> > > It's just that there may be a next packet, but in fact there may not be.
-> > > For example, the vq is full, and the driver stops the queue.
-> >
-> > Exactly, when the queue is about to be full we disable tx and wait for
-> > the next tx interrupt to re-enable tx.
-> >
-> > Thanks
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.83-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
 >
-> OK, it's a good idea to document that.
-
-Will do.
-
-> And we should enable callbacks at that point, not here on data path.
-
-I'm not sure I understand here. Are you suggesting removing the
-!user_napi check here?
-
-                if (!use_napi &&
-                    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-                        /* More just got used, free them then recheck. */
-                        free_old_xmit_skbs(sq, false);
-                        if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
-                                netif_start_subqueue(dev, qnum);
-                                virtqueue_disable_cb(sq->vq);
-                        }
-                }
-
-Btw, it doesn't differ too much as kick is always true without pktgen
-and that may even need more comments or make the code even harder to
-read. We need a patch for -stable at least so I prefer to let this
-patch go first and do optimization on top.
-
-Thanks
-
+> thanks,
 >
->
-> > >
-> > > Thanks.
-> > >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > >     /* timestamp packet in software */
-> > > > >     skb_tx_timestamp(skb);
-> > > > > --
-> > > > > 2.25.1
-> > > >
-> > > > _______________________________________________
-> > > > Virtualization mailing list
-> > > > Virtualization@lists.linux-foundation.org
-> > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> > >
->
+> greg k-h
 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+Same build failures noticed on stable-rc linux-6.0.y
+* x86_64, build failures.
+  - clang-nightly-allnoconfig
+  - clang-nightly-lkftconfig
+  - clang-nightly-tinyconfig
+  - clang-nightly-x86_64_defconfig
+
+## Build
+* kernel: 5.15.83-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: d731c63c25d167aac504bec579352a3f0c3e14ce
+* git describe: v5.15.82-124-gd731c63c25d1
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.82-124-gd731c63c25d1
+
+## Test Regressions (compared to v5.15.82)
+
+## Metric Regressions (compared to v5.15.82)
+
+## Test Fixes (compared to v5.15.82)
+
+## Metric Fixes (compared to v5.15.82)
+
+## Test result summary
+total: 144331, pass: 124830, fail: 3201, skip: 15737, xfail: 563
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 35 passed, 7 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
