@@ -2,127 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D95864B3A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5B664B3AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbiLMK5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S235047AbiLMLBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 06:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiLMK5s (ORCPT
+        with ESMTP id S230122AbiLMLBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:57:48 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755251165;
-        Tue, 13 Dec 2022 02:57:46 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD9AQDf003783;
-        Tue, 13 Dec 2022 10:57:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=XiK7J/1ktzDbjREs0kGxte/ZhmscYe+yynabo/BcqMw=;
- b=YBLMACewwYCORaVD+d5e6U+9VSSOeqP9ZWPp9cGOqeCih6Sre05HjEkJEbRxbZuHIZvx
- 35aaDUu1GrZYQOidpYJSIypzcdrR83I5/5EBBmtKykd5e2JrnJS/v7pDgNgQIWVViQCr
- tC1G+3m/UvIPqi6CVY59t/13QVM6W5fFui9eAn1TeqaaraimFnVdDzy27zoHUHkrHiBS
- UKlk3CpUAlJgjJ9RBk+Bx0pfqmFj/3877cWs9qNlVMVpNhBdA4QKn32Fvnwo2i59myJd
- d+YT8QpBOOvhPqFcqln2QHkxx1Ay26NSLX++gxRdWrwpSMCM+X5mBAmJAqMI7ct4wB+K Yg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mep3vu4yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 10:57:44 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD4ehfU028390;
-        Tue, 13 Dec 2022 10:57:42 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mchr641nv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 10:57:42 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDAvcKp48234926
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 10:57:38 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8118F20049;
-        Tue, 13 Dec 2022 10:57:38 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3AEBB20040;
-        Tue, 13 Dec 2022 10:57:38 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 10:57:38 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com
-Cc:     svens@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH 2/2] perf/test: Fix perf test 89 on x86
-Date:   Tue, 13 Dec 2022 11:57:29 +0100
-Message-Id: <20221213105729.1447368-2-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221213105729.1447368-1-tmricht@linux.ibm.com>
-References: <20221213105729.1447368-1-tmricht@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qZ5WhW-iuQGi-tMAX1nZTD_QWgKgF7Q3
-X-Proofpoint-GUID: qZ5WhW-iuQGi-tMAX1nZTD_QWgKgF7Q3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-12_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 impostorscore=0 phishscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 06:01:10 -0500
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F19662FB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:01:08 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 4882DC01C; Tue, 13 Dec 2022 12:01:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670929277; bh=i+3KSd/BKuiZzIgaQKdwdpk5+VGqCi4zl8XD5fOa8QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Myn8FwbQHXJqNcTPuq2ZLZaY3T2N2jYM/qyH7kvoubhGQovdc2y8dSzs9dafJRxS7
+         B4nkCYvv9c2zPcA28Q3WnEVx4gMNMvFfCc0QXEWAwVlYL+AtfGEFJhenIE6lTvhQVp
+         Sr2M3KWY79i9Fpj3yiPGz4BpAza1IXl7XIj0JP3kj/pczQ/glrB8FEHzEcUssj+Ojy
+         hitQ4I/VH5md1KV3Td9eTbS8CLmUA0lpkoSET/k6k5V+ZtHANKOjJpKoILb43k0/kY
+         aiBtGQ52TH1oVbUimVvGrRm5WOzJnjQ+XlSDRtMeoud8G+zfhSLImHFyrizg+4oB2o
+         M1RCWoZNKn0sg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 6957EC009;
+        Tue, 13 Dec 2022 12:01:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1670929276; bh=i+3KSd/BKuiZzIgaQKdwdpk5+VGqCi4zl8XD5fOa8QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f6jaoe6b/cRpvorEGj2ppTb3TwsxUgxj9OpPv+ODz6+ULupIaHCEyledy/wyPy0Rl
+         3aIgRY3hOpNQ7B4/H+4x5xZh/bGE8eVT+YjOLQe29TzrXmd9sNI63DeuInrBiMSkIv
+         ntpvpiEbxThgus/zNUqchJWdpO++UDwyIwZ92WZsHEhadFLTGz3vT1PuO0+Gw4F3BD
+         9SYaYojunrCIUpK2teBcUDOcmI6/R4twBKo7JjFNld4jbE+rf0K7t2U4RiIMVhJ1B+
+         Kj4EIMkygP9LTwXiwiA2qGtKrWe4KIO/jQ6YbJfBTSW26v7pDzkZ9feyaZcosGnnbn
+         mRMqDJ95Z+RaQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5087022c;
+        Tue, 13 Dec 2022 11:01:00 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 20:00:45 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH] 9p/virtio: add a read barrier in p9_virtio_zc_request
+Message-ID: <Y5hbXanne5IryJBV@codewreck.org>
+References: <20221213065901.3523-1-hdanton@sina.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221213065901.3523-1-hdanton@sina.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf test '89: probe libc's inet_pton & backtrace it with ping'
-fails on x86. Debugging revealed a changed stack trace for the
-ping command using probes:
+(Your mailer breaks threads, please have a look at how to make it send
+In-Reply-To and/or References headers)
 
-ping 35729 [002]  8006.365063: probe_libc:inet_pton: (3ff9603e7c0)
-                  12be50 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
-                  4fca main+0x139b (/usr/bin/ping)
+Hillf Danton wrote on Tue, Dec 13, 2022 at 02:59:01PM +0800:
+> On 10 Dec 2022 09:10:44 +0900 Dominique Martinet <asmadeus@codewreck.org>
+> > @@ -533,6 +533,12 @@ p9_virtio_zc_request(struct p9_client *client, struct p9_req_t *req,
+> >  	p9_debug(P9_DEBUG_TRANS, "virtio request kicked\n");
+> >  	err = wait_event_killable(req->wq,
+> >  			          READ_ONCE(req->status) >= REQ_STATUS_RCVD);
+> > +
+> > +	/* Make sure our req is coherent with regard to updates in other
+> > +	 * threads - echoes to wmb() in the callback like p9_client_rpc
+> > +	 */
+> > +	smp_rmb();
+> > +
+> >  	// RERROR needs reply (== error string) in static data
+> >  	if (READ_ONCE(req->status) == REQ_STATUS_RCVD &&
+> >  	    unlikely(req->rc.sdata[4] == P9_RERROR))
+> 
+> No sense can be made without checking err before req->status,
+> given the comment below. Worse after this change.
 
-The line getaddrinfo.... in the call stack is gone.
-It was introduced with glibc version 2.36.8 released
-with Fedora 37.
+Hmm, I don't see how it's worse (well, it makes it more likely for
+req->status to be RCVD after the barrier without the rest of the data
+being coherent I guess), but it's definitely incorrect, yes...
+Thanks for bringing it up.
 
-Output before on x86
- # ./perf test 89
- 89: probe libc's inet_pton & backtrace it with ping   : FAILED!
- #
 
-Output after on x86:
- # ./perf test 89
- 89: probe libc's inet_pton & backtrace it with ping   : Ok
- #
+Having another look I also don't see how this can possibly be safe at
+all: if a process is killed during waiting here, p9_virtio_zc_request
+will drop pages it reserved for the response (in the need_drop case) and
+sg lists will be freed but the response can still come for a while --
+these need to be dropped only after flush has been handled.
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
----
- tools/perf/tests/shell/record+probe_libc_inet_pton.sh | 1 -
- 1 file changed, 1 deletion(-)
+If these buffers are reused while the response comes we'll be overriding
+some random data...
 
-diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-index 0f01c62cbee9..51ae8b906055 100755
---- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-+++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
-@@ -50,7 +50,6 @@ trace_libc_inet_pton_backtrace() {
- 		;;
- 	*)
- 		eventattr='max-stack=3'
--		echo "getaddrinfo\+0x[[:xdigit:]]+[[:space:]]\($libc\)$" >> $expected
- 		echo ".*(\+0x[[:xdigit:]]+|\[unknown\])[[:space:]]\(.*/bin/ping.*\)$" >> $expected
- 		;;
- 	esac
+
+This isn't an easy fix, I'll just drop this patch for now; but I guess
+we should try to address that next cycle.
+
+Perhaps I can try to find time to dust off my async flush code, some
+other fix might have resolved the race I used to see with it...
+
 -- 
-2.38.1
-
+Dominique
