@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DCE64B4CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322DC64B4CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbiLMMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S234299AbiLMMIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbiLMMHx (ORCPT
+        with ESMTP id S234987AbiLMMIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:07:53 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE522C6;
-        Tue, 13 Dec 2022 04:07:52 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso7694760wme.5;
-        Tue, 13 Dec 2022 04:07:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hwy96dh9v1V8mXivId3Duf1vYojAc0muUBqdvexRVmE=;
-        b=nLdaQuUaCDULhZg7QvL0uDTj+P1Gtbt/9ndz0wgrAAI6KuB6oDgw8SfMDM5RHQBBaY
-         QFw6grq3dXP/RWaq229clNE21tb72lFAkdFD6mRov4trsAIGjsnb7Ni6BARcziybmEVQ
-         j8YLToeHKzYzok+3hw82EPZzllUUBp47dzmQOUcS9lpsv7vSFbFZyNXvpHpbu9yOQda8
-         IFMQdW6Hs9PP1YEtLCaYv9nkPDRq2zxPonTmE7KjWrxtX46N8Bk/5h9vmlVxhbZXCIjX
-         jamHQUu23Tlz6iWsaOpQiyCZ5QpdHKrnNMAc8BjR9MXWG/AFYCNuvaKJDYIR6aoGRfoJ
-         K2Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hwy96dh9v1V8mXivId3Duf1vYojAc0muUBqdvexRVmE=;
-        b=PLIDuP9/Vp7iNdtyKFg2ma+MWdJntgbScafLPYcgHxx1MVyj8ZgODnGe6Pc1OptwS3
-         YepO2Fwl39n1pUEc5KLOBLpUxf5BWiH0gY+fqf9y+FO6EsmKBbeMQT76Gfa3D72ds43F
-         a6M1DQhWf3ibV4U2J+HctinrnAZxLHtR7DNkefCusV5f0rxGswMjPSmL+oYfhkZwWmg4
-         0972uOfuVrrMlYP3LcQUN33Kd50kA8cK2svyXxPgbTJqmptCxScnTXtJ75SHSVne01oG
-         +1Dtoj3tkw5AMe4H7QawqzKgW/kUCSUkIijQMe18eMShLm9YyDJF7/PZD9pKmqtEpMU7
-         5aNQ==
-X-Gm-Message-State: ANoB5plOk4znA3mcYvcHyjxOMeWlx/60GZfH9sMzK2lobDyIidHlLAh/
-        VsvZ6AHxjdiakP9iEkt5qxY=
-X-Google-Smtp-Source: AA0mqf51D/AdG/PNwZ0KBIYFURBFUGUmJMWvOQUlqozFf+heS21aHbui9wyxTQlYuM6h2YtcnJXmiA==
-X-Received: by 2002:a05:600c:3d8f:b0:3cf:a18d:399c with SMTP id bi15-20020a05600c3d8f00b003cfa18d399cmr15428532wmb.1.1670933271321;
-        Tue, 13 Dec 2022 04:07:51 -0800 (PST)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id g20-20020a05600c4ed400b003c71358a42dsm17382287wmq.18.2022.12.13.04.07.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 04:07:51 -0800 (PST)
-Date:   Tue, 13 Dec 2022 12:07:49 +0000
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/123] 5.15.83-rc1 review
-Message-ID: <Y5hrFdv7r+WYhtUL@debian>
-References: <20221212130926.811961601@linuxfoundation.org>
+        Tue, 13 Dec 2022 07:08:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2714314D19;
+        Tue, 13 Dec 2022 04:08:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAF41B81184;
+        Tue, 13 Dec 2022 12:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CCAC433D2;
+        Tue, 13 Dec 2022 12:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670933310;
+        bh=1tNxadmfkO3wj3an2rLdn3PtureG9sBU9F7brxxdtrU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rFY4pyCHiVD7KgWofs2wsmFjqM4rL08Dplh3GbhT9v7DJqVBDyvjDzATa8bB6cib3
+         S3+6iIZgeD1l684fNA0IHiBdi1TiF2dNj+prfU+U9kdA9nwWyZksd38HhAfwi7pJd/
+         VP+paDps1N+Ojb/Q00qQPFRgGYNuNvbl5ilUwZtRZmc9T58WWMU3JEKoZYXADkMKKM
+         9QW7KHZe4k34GlxbCG/Do/pExBrOJGlck9Cpmk5EkAYO3U3FPWNtcRJZoMQk2ciJ55
+         iBKv69j6Ra/XaMe2t5KQiKS/Nx5p9iVksp2zkaPBlqaBJlRGHupKNUe8wqAjYb6Kmv
+         dIiOkw7waa/Dw==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: [PATCH v3] block/blk-iocost (gcc13): keep large values in a new enum
+Date:   Tue, 13 Dec 2022 13:08:26 +0100
+Message-Id: <20221213120826.17446-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212130926.811961601@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Since gcc13, each member of an enum has the same type as the enum [1]. And
+that is inherited from its members. Provided:
+  VTIME_PER_SEC_SHIFT     = 37,
+  VTIME_PER_SEC           = 1LLU << VTIME_PER_SEC_SHIFT,
+  ...
+  AUTOP_CYCLE_NSEC        = 10LLU * NSEC_PER_SEC,
+the named type is unsigned long.
 
-On Mon, Dec 12, 2022 at 02:16:06PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.83 release.
-> There are 123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
+This generates warnings with gcc-13:
+  block/blk-iocost.c: In function 'ioc_weight_prfill':
+  block/blk-iocost.c:3037:37: error: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int'
 
-Build test (gcc version 12.2.1 20221127):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+  block/blk-iocost.c: In function 'ioc_weight_show':
+  block/blk-iocost.c:3047:34: error: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int'
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+So split the anonumois enum with large values to a separate enum, so
+that they don't affect other members.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2340
-[2]. https://openqa.qa.codethink.co.uk/tests/2342
-[3]. https://openqa.qa.codethink.co.uk/tests/2344
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Cc: Martin Liska <mliska@suse.cz>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Josef Bacik <josef@toxicpanda.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: cgroups@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
 
+Notes:
+    [v3] move more to a new enum (effectively split the enums)
+    [v2] move to a new enum
+
+ block/blk-iocost.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index d1bdc12deaa7..549ddc9e0c6f 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -232,7 +232,9 @@ enum {
+ 
+ 	/* 1/64k is granular enough and can easily be handled w/ u32 */
+ 	WEIGHT_ONE		= 1 << 16,
++};
+ 
++enum {
+ 	/*
+ 	 * As vtime is used to calculate the cost of each IO, it needs to
+ 	 * be fairly high precision.  For example, it should be able to
 -- 
-Regards
-Sudip
+2.39.0
+
