@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD1E64B20B
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAAB64B209
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234814AbiLMJO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S234534AbiLMJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbiLMJM6 (ORCPT
+        with ESMTP id S233843AbiLMJM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:12:58 -0500
+        Tue, 13 Dec 2022 04:12:59 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05F115A35
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:11:22 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWXlR60YRzJqT4;
-        Tue, 13 Dec 2022 17:10:27 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AC215FF0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:11:23 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWXlL3283zRptt;
+        Tue, 13 Dec 2022 17:10:22 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 13 Dec 2022 17:11:20 +0800
+ 15.1.2375.34; Tue, 13 Dec 2022 17:11:21 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@redhat.com>,
@@ -30,9 +30,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <damon@lists.linux.dev>, <vishal.moola@gmail.com>,
         <willy@infradead.org>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH -next 5/8] mm: damon: convert damon_ptep/pmdp_mkold() to use folios
-Date:   Tue, 13 Dec 2022 17:27:32 +0800
-Message-ID: <20221213092735.187924-6-wangkefeng.wang@huawei.com>
+Subject: [PATCH -next 6/8] mm: damon: paddr: convert damon_pa_*() to use folios
+Date:   Tue, 13 Dec 2022 17:27:33 +0800
+Message-ID: <20221213092735.187924-7-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20221213092735.187924-1-wangkefeng.wang@huawei.com>
 References: <20221213092735.187924-1-wangkefeng.wang@huawei.com>
@@ -56,64 +56,119 @@ damon_pmdp_mkold() to use folios.
 
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- mm/damon/ops-common.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ mm/damon/paddr.c | 44 +++++++++++++++++++-------------------------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
-diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
-index 40b79b022129..40ea39fe204d 100644
---- a/mm/damon/ops-common.c
-+++ b/mm/damon/ops-common.c
-@@ -36,9 +36,9 @@ struct folio *damon_get_folio(unsigned long pfn)
- void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
+diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+index 6b36de1396a4..95d4686611a5 100644
+--- a/mm/damon/paddr.c
++++ b/mm/damon/paddr.c
+@@ -33,17 +33,15 @@ static bool __damon_pa_mkold(struct folio *folio, struct vm_area_struct *vma,
+ 
+ static void damon_pa_mkold(unsigned long paddr)
  {
- 	bool referenced = false;
--	struct page *page = damon_get_page(pte_pfn(*pte));
-+	struct folio *folio = damon_get_folio(pte_pfn(*pte));
+-	struct folio *folio;
+-	struct page *page = damon_get_page(PHYS_PFN(paddr));
++	struct folio *folio = damon_get_folio(PHYS_PFN(paddr));
+ 	struct rmap_walk_control rwc = {
+ 		.rmap_one = __damon_pa_mkold,
+ 		.anon_lock = folio_lock_anon_vma_read,
+ 	};
+ 	bool need_lock;
  
 -	if (!page)
 +	if (!folio)
  		return;
+-	folio = page_folio(page);
  
- 	if (pte_young(*pte)) {
-@@ -52,19 +52,19 @@ void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
- #endif /* CONFIG_MMU_NOTIFIER */
+ 	if (!folio_mapped(folio) || !folio_raw_mapping(folio)) {
+ 		folio_set_idle(folio);
+@@ -93,7 +91,7 @@ static bool __damon_pa_young(struct folio *folio, struct vm_area_struct *vma,
+ 	DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, addr, 0);
  
- 	if (referenced)
--		set_page_young(page);
-+		folio_set_young(folio);
+ 	result->accessed = false;
+-	result->page_sz = PAGE_SIZE;
++	result->page_sz = PAGE_SIZE * folio_nr_pages(folio);
+ 	while (page_vma_mapped_walk(&pvmw)) {
+ 		addr = pvmw.address;
+ 		if (pvmw.pte) {
+@@ -122,8 +120,7 @@ static bool __damon_pa_young(struct folio *folio, struct vm_area_struct *vma,
  
--	set_page_idle(page);
--	put_page(page);
-+	folio_set_idle(folio);
-+	folio_put(folio);
- }
- 
- void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr)
+ static bool damon_pa_young(unsigned long paddr, unsigned long *page_sz)
  {
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- 	bool referenced = false;
--	struct page *page = damon_get_page(pmd_pfn(*pmd));
-+	struct folio *folio = damon_get_folio(pmd_pfn(*pmd));
+-	struct folio *folio;
+-	struct page *page = damon_get_page(PHYS_PFN(paddr));
++	struct folio *folio = damon_get_folio(PHYS_PFN(paddr));
+ 	struct damon_pa_access_chk_result result = {
+ 		.page_sz = PAGE_SIZE,
+ 		.accessed = false,
+@@ -135,9 +132,8 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *page_sz)
+ 	};
+ 	bool need_lock;
  
 -	if (!page)
 +	if (!folio)
- 		return;
+ 		return false;
+-	folio = page_folio(page);
  
- 	if (pmd_young(*pmd)) {
-@@ -78,10 +78,10 @@ void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr)
- #endif /* CONFIG_MMU_NOTIFIER */
+ 	if (!folio_mapped(folio) || !folio_raw_mapping(folio)) {
+ 		if (folio_test_idle(folio))
+@@ -205,28 +201,28 @@ static unsigned int damon_pa_check_accesses(struct damon_ctx *ctx)
+ static unsigned long damon_pa_pageout(struct damon_region *r)
+ {
+ 	unsigned long addr, applied;
+-	LIST_HEAD(page_list);
++	LIST_HEAD(folio_list);
  
- 	if (referenced)
--		set_page_young(page);
-+		folio_set_young(folio);
+ 	for (addr = r->ar.start; addr < r->ar.end; addr += PAGE_SIZE) {
+-		struct page *page = damon_get_page(PHYS_PFN(addr));
++		struct folio *folio = damon_get_folio(PHYS_PFN(addr));
  
--	set_page_idle(page);
--	put_page(page);
-+	folio_set_idle(folio);
-+	folio_put(folio);
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+-		if (!page)
++		if (!folio)
+ 			continue;
+ 
+-		ClearPageReferenced(page);
+-		test_and_clear_page_young(page);
+-		if (isolate_lru_page(page)) {
+-			put_page(page);
++		folio_clear_referenced(folio);
++		folio_test_clear_young(folio);
++		if (folio_isolate_lru(folio)) {
++			folio_put(folio);
+ 			continue;
+ 		}
+-		if (PageUnevictable(page)) {
+-			putback_lru_page(page);
++		if (folio_test_unevictable(folio)) {
++			folio_putback_lru(folio);
+ 		} else {
+-			list_add(&page->lru, &page_list);
+-			put_page(page);
++			list_add(&folio->lru, &folio_list);
++			folio_put(folio);
+ 		}
+ 	}
+-	applied = reclaim_pages(&page_list);
++	applied = reclaim_pages(&folio_list);
+ 	cond_resched();
+ 	return applied * PAGE_SIZE;
  }
+@@ -237,12 +233,10 @@ static inline unsigned long damon_pa_mark_accessed_or_deactivate(
+ 	unsigned long addr, applied = 0;
  
+ 	for (addr = r->ar.start; addr < r->ar.end; addr += PAGE_SIZE) {
+-		struct page *page = damon_get_page(PHYS_PFN(addr));
+-		struct folio *folio;
++		struct folio *folio = damon_get_folio(PHYS_PFN(addr));
+ 
+-		if (!page)
++		if (!folio)
+ 			continue;
+-		folio = page_folio(page);
+ 
+ 		if (mark_accessed)
+ 			folio_mark_accessed(folio);
 -- 
 2.35.3
 
