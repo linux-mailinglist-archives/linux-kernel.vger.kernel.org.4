@@ -2,164 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA65964AD3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D791264AD3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbiLMBjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S234419AbiLMBkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiLMBjO (ORCPT
+        with ESMTP id S234274AbiLMBjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:39:14 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6071D65E;
-        Mon, 12 Dec 2022 17:39:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E59B11F8D4;
-        Tue, 13 Dec 2022 01:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670895550;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cajLCajPaDc8CWLPffOGHxb5630iyhqgwcYX5YPINOA=;
-        b=WH4S6e9kfgpWLG43MvlTV3SAWD2h8cyKe3eCR0AZr3lQNQ5gn/sM8O0eFEjWZBnsJIqr9n
-        I2YDDMtYLDR6PQdkKVo72yJLqVN+AV3dKgRPnTM54LR36CDra0YSN/41cnH5UkzuptCBjl
-        pkXOwAO1DD04+kJGdHmClwX2xATxPX0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670895550;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cajLCajPaDc8CWLPffOGHxb5630iyhqgwcYX5YPINOA=;
-        b=OcDNNoreGwlKc0rIIsxqLkzoQ2dT2ZRQJeyQuyGcuR1a9ZIGjhD7jHyvPoPtCiGMr/AbzK
-        UzXYKh7R00BvA9BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B044613456;
-        Tue, 13 Dec 2022 01:39:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fxgCKr7Xl2P3cQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 13 Dec 2022 01:39:10 +0000
-Date:   Tue, 13 Dec 2022 02:38:29 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     David Sterba <dsterba@suse.com>, torvalds@linux-foundation.org,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Btrfs updates for 6.2 (updated merge log)
-Message-ID: <20221213013829.GD5824@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <cover.1670873892.git.dsterba@suse.com>
- <09d56e5a-0e11-ca60-785a-7f06aedf1932@gmx.com>
+        Mon, 12 Dec 2022 20:39:31 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A19654F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:39:23 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id g10so13990197plo.11
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gw9lJ6aK3kO8Zby1Es3z12UsrjzqgSAcUGWG4cZ2Bi4=;
+        b=gn3WsGo0laaxSpOG0/xHVWdUjJwAYJXJFUMg0qSkAcEqESWPgswuKaJd+FIZH44nhY
+         Hza8l83wFUF3cY/CDEE3sS/SxYc2ZCIOF8dAYZYAFdywS3i+W8O490U+Y3seOiPNNXR3
+         0hJXlJFo4aAKHdJUNwcdI2d/v/rYxICeXdNUn8DBl/efFllH7AD6qUyqpf6tEVtICHz1
+         d9AfjuC9B+XnDioGgjVmCnxxlEkMmDAZt6Zpb2GhtnqDhk95yVvLfvrZtSzK3KHa/Q4I
+         qubuw/JeHsVYP7kayMH6vmhZ/PVgSvEreoLKnTl3LrmArjwhG4QpAdks32Q8Nu0IpSV9
+         Bnqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gw9lJ6aK3kO8Zby1Es3z12UsrjzqgSAcUGWG4cZ2Bi4=;
+        b=5IdOCxgwFAB9tmnjX7VMPtz8MqfNdez+JEyx73IcHCwnMvY+L2aNXqLDV7gIk6K/OA
+         UiQqJlS/ewPvsiZRh925j+AuPnH7hNRRvJeuC3iXf2sQE9FIjTdxo0VgeYVkSAybiQGn
+         CRiy15Ss7GBtl+a1/Ky7gZ1Nr19rdrLWUnuAvvXA9nL7rH/u/eLNEDvtdS9RL1JPWVMr
+         HFVsn21Vn7egVlFBC4SwL7+O0a8nOcuInf9pEOvSNLUQoib6Po582VtqDOaXvbWGqVOp
+         fhr/uhOLkhnSMeM6ZXpFgW7gV6UIMk7L84Y2bpIn8iiEj360pnCslx1a9Ik0QsF4J/4r
+         UhFw==
+X-Gm-Message-State: ANoB5pmeO37cZIbI/5d0gIei1q2zr/4wH9AN69H7rUhrKmEDKBChSOCr
+        nOmRZgpxA9isvVS1CMuPVPNzWA==
+X-Google-Smtp-Source: AA0mqf5sKn41TAu/WUk4Ug3Jl/DPtoBxsoRElbzkJJdKW3eZ3ktQUDCszH+u3IpNiqgnYfNJcu3+Qg==
+X-Received: by 2002:a05:6a20:d38e:b0:aa:5c2d:ae2a with SMTP id iq14-20020a056a20d38e00b000aa5c2dae2amr21754266pzb.61.1670895562379;
+        Mon, 12 Dec 2022 17:39:22 -0800 (PST)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b00172973d3cd9sm7091052plg.55.2022.12.12.17.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 17:39:21 -0800 (PST)
+Date:   Tue, 13 Dec 2022 01:39:18 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nagareddy Reddy <nspreddy@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [RFC PATCH v4 0/2] Deprecate BUG() in pte_list_remove() in
+ shadow mmu
+Message-ID: <Y5fXxsPtDeMZn2nV@google.com>
+References: <20221129191237.31447-1-mizhang@google.com>
+ <Y5Oob6mSJKGoDBnt@google.com>
+ <Y5avm5VXpRt263wQ@google.com>
+ <Y5dax8XJV0F5adUw@google.com>
+ <CALzav=f2k9dPYkeW2D0ZvkDuDhA8Wmu+zV8W4isMFfd-HAQjrA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09d56e5a-0e11-ca60-785a-7f06aedf1932@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALzav=f2k9dPYkeW2D0ZvkDuDhA8Wmu+zV8W4isMFfd-HAQjrA@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 08:09:29AM +0800, Qu Wenruo wrote:
-> > - raid56 reliability vs performance trade off
-> >    - fix destructive RMW for raid5 data (raid6 still needs work) - do full RMW
-> >      cycle for writes and verify all checksums before overwrite, this should
-> >      prevent rewriting potentially corrupted data without notice
+On Mon, Dec 12, 2022, David Matlack wrote:
+> On Mon, Dec 12, 2022 at 8:46 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Dec 12, 2022, Mingwei Zhang wrote:
+> > > On Fri, Dec 09, 2022, David Matlack wrote:
+> > > > On Tue, Nov 29, 2022 at 07:12:35PM +0000, Mingwei Zhang wrote:
+> > > > > Deprecate BUG() in pte_list_remove() in shadow mmu to avoid crashing a
+> > > > > physical machine. There are several reasons and motivations to do so:
+> > > > >
+> > > > > MMU bug is difficult to discover due to various racing conditions and
+> > > > > corner cases and thus it extremely hard to debug. The situation gets much
+> > > > > worse when it triggers the shutdown of a host. Host machine crash might
+> > > > > eliminates everything including the potential clues for debugging.
+> > > > >
+> > > > > From cloud computing service perspective, BUG() or BUG_ON() is probably no
+> > > > > longer appropriate as the host reliability is top priority. Crashing the
+> > > > > physical machine is almost never a good option as it eliminates innocent
+> > > > > VMs and cause service outage in a larger scope. Even worse, if attacker can
+> > > > > reliably triggers this code by diverting the control flow or corrupting the
+> > > > > memory, then this becomes vm-of-death attack. This is a huge attack vector
+> > > > > to cloud providers, as the death of one single host machine is not the end
+> > > > > of the story. Without manual interferences, a failed cloud job may be
+> > > > > dispatched to other hosts and continue host crashes until all of them are
+> > > > > dead.
+> > > >
+> > > > My only concern with using KVM_BUG() is whether the machine can keep
+> > > > running correctly after this warning has been hit. In other words, are
+> > > > we sure the damage is contained to just this VM?
+> >
+> > Hmm, good point.  The counter-argument is that KVM doesn't BUG() in get_mmio_spte()
+> > when a non-MMIO SPTE has reserved bits set, and as we've seen internally in multiple
+> > splats where the reserved bits appear to be set by stack overflow, that has a much,
+> > much higher probability of being a symptom of data corruption.
+> >
+> > That said, that's more of a reason to change get_mmio_spte() than it is to ignore
+> > potential data corruption in this case.  KVM arguably should kill the VM if
+> > get_mmio_spte() fails too.
+> >
+> > What about explicitly treating both get_mmio_spte() and this as potential data
+> > corruption?  E.g. something like this, and then use the DATA_CORRUPTION variant
+> > in pte_list_remove()?
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 2055e04b8f89..1cb69c6d186b 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -4075,6 +4075,7 @@ static bool get_mmio_spte(struct kvm_vcpu *vcpu, u64 addr, u64 *sptep)
+> >                         pr_err("------ spte = 0x%llx level = %d, rsvd bits = 0x%llx",
+> >                                sptes[level], level,
+> >                                get_rsvd_bits(rsvd_check, sptes[level], level));
+> > +               KVM_BUG_ON_DATA_CORRUPTION(reserved, vcpu->kvm);
+> >         }
+> >
+> >         return reserved;
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index f16c4689322b..5c4a06f66f46 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -863,6 +863,17 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
+> >         unlikely(__ret);                                        \
+> >  })
+> >
+> > +#define KVM_BUG_ON_DATA_CORRUPTION(cond, kvm)                  \
+> > +({                                                             \
+> > +       int __ret = (cond);                                     \
+> > +                                                               \
+> > +       if (IS_ENABLED(CONFIG_BUG_ON_DATA_CORRUPTION))          \
+> > +               BUG_ON(__ret);                                  \
+> > +       else if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))      \
+> > +               kvm_vm_bugged(kvm);                             \
+> > +       unlikely(__ret);                                        \
+> > +})
+> > +
+> >  static inline void kvm_vcpu_srcu_read_lock(struct kvm_vcpu *vcpu)
+> >  {
+> >  #ifdef CONFIG_PROVE_RCU
 > 
-> Unfortunately, the "RMW" term seems abused.
+> That sounds reasonable to me.
 
-I used is as a shortcut but it's probably confusing, thanks for the
-suggested updates.
+Actually, I disagree after thinking about it for a while. Since
+Google turns on CONFIG_BUG_ON_DATA_CORRUPTION on default, this
+KVM_BUG_ON_DATA_CORRUPTION() is literally BUG_ON(). Then there is no
+point. The purpose of the series is to save the host from crash.
 
-> >    - stripes are cached in memory which should reduce the performance impact but
-> >      still can hurt some workloads
-> 
-> The cache behavior is not changed in this big chunk of raid56 work, but 
-> commit f6065f8edeb2 ("btrfs: raid56: don't trust any cached sector in 
-> __raid56_parity_recover()") is still the main thing affecting recovery path.
-> 
-> Thus although we didn't change the cache policy, it will still be bad 
-> for recovery cases (missing device, or some sector has mimsatch csum).
+If we follow the upper changes on get_mmio_spte() as well, we are
+introducing more BUG()!, ie., more chances to crash the host machine. So
+I cannot stay with this idea.
 
-Yeah, there's no change but I felt it should be mentioned together with
-the RMW as it'll be used more than before.
+In fact, there could many reasons why RMAPs and SPTEs are messed. In
+many times, as illustrated by my example, they are not data corruptions.
+They are just errors due to code refactoring or some miscalculations
+under certain tricky corner situations, e.g., offset by 1.  So, treating
+them blindly as data corruptions is an overkill. This is a comparison to
+the list traversal bug, which clearly shows data corruptions.
 
-Linus, below is the complete merge log with the edits.
+So, alternatively, I think it should be reasonable to shutdown the KVM
+instance if we see things messed up in MMIO SPTEs as well, but please
+don not the host for that.
 
----
-User visible features:
 
-- raid56 reliability vs performance trade off
-  - fix destructive RMW for raid5 data (raid6 still needs work) - do full
-    checksum verification for all data during RMW cycle, this should prevent
-    rewriting potentially corrupted data without notice
-  - stripes are cached in memory which should reduce the performance impact but
-    still can hurt some workloads
-  - checksums are verified after repair again
-  - this is the last option without introducing additional features (write
-    intent bitmap, journal, another tree), the extra checksum read/verification
-    was supposed to be avoided by the original implementation exactly for
-    performance reasons but that caused all the reliability problems
-
-- discard=async by default for devices that support it
-
-- implement emergency flush reserve to avoid almost all unnecessary transaction
-  aborts due to ENOSPC in cases where there are too many delayed refs or
-  delayed allocation
-
-- skip block group synchronization if there's no change in used bytes, can
-  reduce transaction commit count for some workloads
-
-Performance improvements:
-
-- fiemap and lseek
-  - overall speedup due to skipping unnecessary or duplicate searches (-40% run time)
-  - cache some data structures and sharedness of extents (-30% run time)
-
-- send
-  - faster backref resolution when finding clones
-  - cached leaf to root mapping for faster backref walking
-  - improved clone/sharing detection
-  - overall run time improvements (-70%)
-
-Core:
-
-- module initialization converted to a table of function pointers run in a
-  sequence
-
-- preparation for fscrypt, extend passing file names across calls, dir item can
-  store encryption status
-
-- raid56 updates
-  - more accurate error tracking of sectors within stripe
-  - simplify recovery path and remove dedicated endio worker kthread
-  - simplify scrub call paths
-  - refactoring to support the extra data checksum verification during RMW
-    cycle
-
-- tree block parentness checks consolidated and done at metadata read time
-
-- improved error handling
-
-- cleanups
-  - move a lot of code for better synchronization between kernel and user space
-    sources, split big files
-  - enum cleanups
-  - GFP flag cleanups
-  - header file cleanups, prototypes, dependencies
-  - redundant parameter cleanups
-  - inline extent handling simplifications
-  - inode parameter conversion
-  - data structure cleanups, reductions, renames, merges
