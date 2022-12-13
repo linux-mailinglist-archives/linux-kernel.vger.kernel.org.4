@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B152464AC99
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA23664AC9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiLMAsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
+        id S233346AbiLMAvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiLMAsB (ORCPT
+        with ESMTP id S229679AbiLMAv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:48:01 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EA2291;
-        Mon, 12 Dec 2022 16:47:59 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8A4425C0167;
-        Mon, 12 Dec 2022 19:47:56 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 12 Dec 2022 19:47:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-        :content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1670892476; x=1670978876; bh=b/6U3Dsyg/OAcTxM7FPRAqkwl
-        KpPSObmH5aoZ/TKCSA=; b=SP1iddR05wcYU3fqLMeztGxYBEElhSNOud4h49Xx0
-        DngHBJ+32WY14wRUNMA6h/sMipPu+TFJEU3aLyY+O+F5pRtft4T147fVGJQP2ztK
-        e5kQ4hHd5CcW+aL8OqYJDx+2rfl4QKp3XuuJy3PG7gHb2OHjBH9kWvlatt0P8A6/
-        9CKUy6icKwsbMEiEQg62r5QseXWY5b+I9U+ZJ+Zw1kIKZBDhuew+0SD6jCBTEEgR
-        V6sIahJNEmadWo1tfmhtmfHW7hT96HdM/xMQYVrsVS3QL2UZTN5UPzCOtVDwqUI5
-        5vnfu0GDs/jdQiv2YbT5KwK13rRMuL1F7tga+PM4BK0gg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1670892476; x=1670978876; bh=b/6U3Dsyg/OAcTxM7FPRAqkwlKpPSObmH5a
-        oZ/TKCSA=; b=XriSMC0URg6AyIdk38qrITSp9/NhY60KNflAgnb+gMaDVIFWgi0
-        NEBfBdV4VDVMCMqMGylhQBY6g9R5C3ZropXi/isW7hcGNEWvXyIJ3A+g21lxyT6Q
-        IuxtCwQj7ecERVFDGPRvT1rKPJPxAMi9nOnxO7t1BaMMqHVfNMyOfkhIArOwiKCN
-        ET15S/a6UvqH+VPkFZJPw2lAMWXFxtjaCwBCJuCO1scUDFDhhh35kcDz6UxTocvA
-        0W214HqzhwmqhvPQD5kfds33ZwJ2jegPLCaZPhvKBbo4VBZOAn9BvsMdBDwzHnBY
-        NPW3jS4nbHJgVlJM6JMZvvdp1gz/tlOsqSQ==
-X-ME-Sender: <xms:vMuXY26v_zwZN74j0lN-mQp8FHuYzSYYKDSV0xperwR-iOvPZxXsgQ>
-    <xme:vMuXY_6h2BUPXGz2XgHUgO-SrK3l2WTxqvdVyZic0VNL5uCsMTSPhUCI7skIdHP9T
-    DuIwd1kP7ZBqB-dSpg>
-X-ME-Received: <xmr:vMuXY1eFT4BG121lIG-G8FEKsb8BG8TH2ThV0YGzfPPJJ3nOMLCGas-BpNAcwkbZopRsgD6Yc4M1oeemgg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenmh
-    hishhsihhnghcuvffquchfihgvlhguucdlfedtmdenogetfedtuddqtdduucdludehmden
-    ucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghruc
-    ffvghlvghvohhrhigrshcuoehpvghtvghrsehpjhgurdguvghvqeenucggtffrrghtthgv
-    rhhnpeegveeivdefgedvteevvdeugfeuffeuhfelueffgfdvtedugfetvdegkeekledutd
-    enucffohhmrghinhepthhinhihuhhrlhdrtghomhenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehpvghtvghrsehpjhgurdguvghv
-X-ME-Proxy: <xmx:vMuXYzJcv7aKq3gXC_mT1Hc685oLVVxXWk0u75TZJk_ZJBEjjG6KJw>
-    <xmx:vMuXY6LxqlJv_Z2FJ6PcZLHnR1S4X-xQziFTabNL8TaMbgtVtC11sA>
-    <xmx:vMuXY0wKH4bvP0g9SrSC0p1YPWFvX4oQ5li7l6oQifPiLQYbUG33zw>
-    <xmx:vMuXYy_Mj-VcjlS0noNz950RJWNwp_o9F-jEFVxM581_2ee49wWu1w>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Dec 2022 19:47:55 -0500 (EST)
-From:   Peter Delevoryas <peter@pjd.dev>
-Cc:     peter@pjd.dev, sam@mendozajonas.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net/ncsi: Always use unicast source MAC address
-Date:   Mon, 12 Dec 2022 16:47:54 -0800
-Message-Id: <20221213004754.2633429-1-peter@pjd.dev>
-X-Mailer: git-send-email 2.30.2
+        Mon, 12 Dec 2022 19:51:29 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD0012D1E;
+        Mon, 12 Dec 2022 16:51:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWKgg2lrhz4xN1;
+        Tue, 13 Dec 2022 11:51:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670892687;
+        bh=7b0blUPH4VN7Y+xGDYcerOCLn7BZu9/iBPHp4jawqMg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=os0G+Bi3BCTVeCM+rg6JYRKpEz2flTJicINUe/wzySfxS5VRwlC2jGuKzolqSmoug
+         2JfD05IrHN93VJjJO6+MbjSs3EB4lBtsnoJMaTVxE4f/Kg24KCbk2g3PjTekZOu5Eq
+         Caun41b1/NRIX+vr7bCpMIYsNfGcFiJXL2PEJqUNRt78uY2GFTG70lS3rPbqFxD8Gb
+         EiED5/BsLzbuSADnHDp6pH+lA40HNXMNOs2Um+w3JKLe4YDseSg6oPSvf9HZ5UE0lZ
+         Cg2XCJg54lC10G79Tfg3yjqa+Tc2ZSOnprLZkHRXXI/nENjQbhNx5mml8g1JO/V+Sy
+         YoquTF6QirQXw==
+Date:   Tue, 13 Dec 2022 11:51:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: failed to fetch the unsigned-char tree
+Message-ID: <20221213115125.51bb83ae@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I use QEMU for development, and I noticed that NC-SI packets get dropped by
-the Linux software bridge[1] because we use a broadcast source MAC address
-for the first few NC-SI packets.
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The spec requires that the destination MAC address is FF:FF:FF:FF:FF:FF,
-but it doesn't require anything about the source MAC address as far as I
-know. From testing on a few different NC-SI NIC's (Broadcom 57502, Nvidia
-CX4, CX6) I don't think it matters to the network card. I mean, Meta has
-been using this in mass production with millions of BMC's [2].
+Hi Jason,
 
-In general, I think it's probably just a good idea to use a unicast MAC.
+Trying to fetch the unsigned-char tree produces this error:
 
-This might have the effect of causing the NIC to learn 2 MAC addresses from
-an NC-SI link if the BMC uses OEM Get MAC Address commands to change its
-initial MAC address, but it shouldn't really matter. Who knows if NIC's
-even have MAC learning enabled from the out-of-band BMC link, lol.
+fatal: couldn't find remote ref refs/heads/unsigned-char
 
-[1]: https://tinyurl.com/4933mhaj
-[2]: https://tinyurl.com/mr3tyadb
+Are you finished withe this branch now (so I should remove it from
+linux-next)?
 
-Signed-off-by: Peter Delevoryas <peter@pjd.dev>
----
- net/ncsi/ncsi-cmd.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/net/ncsi/ncsi-cmd.c b/net/ncsi/ncsi-cmd.c
-index dda8b76b7798..fd090156cf0d 100644
---- a/net/ncsi/ncsi-cmd.c
-+++ b/net/ncsi/ncsi-cmd.c
-@@ -377,15 +377,7 @@ int ncsi_xmit_cmd(struct ncsi_cmd_arg *nca)
- 	eh = skb_push(nr->cmd, sizeof(*eh));
- 	eh->h_proto = htons(ETH_P_NCSI);
- 	eth_broadcast_addr(eh->h_dest);
--
--	/* If mac address received from device then use it for
--	 * source address as unicast address else use broadcast
--	 * address as source address
--	 */
--	if (nca->ndp->gma_flag == 1)
--		memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
--	else
--		eth_broadcast_addr(eh->h_source);
-+	memcpy(eh->h_source, nca->ndp->ndev.dev->dev_addr, ETH_ALEN);
- 
- 	/* Start the timer for the request that might not have
- 	 * corresponding response. Given NCSI is an internal
--- 
-2.30.2
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOXzI4ACgkQAVBC80lX
+0GwDaggAifJVqEGh0gY7EklW+xQrwtr3JaOeMaoKsVOgIwAqQmhsN5PcR4a+zoIe
+Tpz0x8qa6fX4LbbfZ9wvz5qNTVso7H2PfOeXGJDvdnbh3tvTz0GAB0mg9qs08Uvz
+E7up5QbEhnxr5VWTXsxqDxP5LCQduy3g4YTILcAAIuzkwl+41ahIUwHLSes4K948
+MGNUcTZOEheKqM2b0nR4E0r6CYjG9vRtl05IZM0jyQ69XU/+uaDuQrT5MylGcXpW
+rV+pLG89Kh5c3X0GTkxoAtyGWMlTlFiC3tyOyFFUToFNtiBCNJTdyfdpqjo/RYFn
+Bbc2+jJWHbFTyYXaqLI6EU1HgcuDGw==
+=IMD/
+-----END PGP SIGNATURE-----
+
+--Sig_/FJQBCLWtZ_VcHXWtwEsT6mJ--
