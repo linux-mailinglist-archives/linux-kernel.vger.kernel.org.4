@@ -2,139 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A431364BDAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E4D64BDAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiLMTz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S236754AbiLMT4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbiLMTzz (ORCPT
+        with ESMTP id S236727AbiLMT4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:55:55 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071221A39C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:55:51 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJWxL1003226;
-        Tue, 13 Dec 2022 19:55:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=Nz+oMYUXNSwyCA0OyESTudg6sgnwGqY9qJUO8ezl8Nw=;
- b=ZPWOCOilWr/t9aVbJfGz6uXNjRx9UHG2tCS9tKpnlRDmRaxwC9nxrMr9A5SS09uzpj1X
- JhTWSJvq1FIbhbCfGNxojsK6UuMFnwRC+26qJJKXeDL2nn5e95KQzqDYOVwhbd0CAYf0
- 1PfjXKQlkc4DmhwAYVZk1LQlrrLbIckQco+VEUrEzzZXJeK+5KPkswUamGPJyEgZCydI
- Z5Rlf0G3C/URzJfnP3ZUTI1nYd5awKSC3WClCUe6XoTVgGgrsCpEJRV4/ZOGxeVTdd1t
- ZcfOFxTeNWLMegZ74AY6zLGcY/k5q3rXXSuuDTgILvn8qMlQ2iVeDaIXpI52YtsS/W82 tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn9regx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 19:55:46 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDJXqR6005073;
-        Tue, 13 Dec 2022 19:55:46 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn9regp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 19:55:46 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDEIv6N030674;
-        Tue, 13 Dec 2022 19:55:44 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3mchr5uc1t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 19:55:44 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDJtfxp45154804
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 19:55:41 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C719F20049;
-        Tue, 13 Dec 2022 19:55:41 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BAB7220043;
-        Tue, 13 Dec 2022 19:55:39 +0000 (GMT)
-Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.94.137])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 13 Dec 2022 19:55:39 +0000 (GMT)
-Date:   Wed, 14 Dec 2022 01:25:36 +0530
-From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH] staging: vme_user: Add spaces around "<<"
-Message-ID: <Y5jYuKfm9d59h6bd@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
+        Tue, 13 Dec 2022 14:56:34 -0500
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551112654A;
+        Tue, 13 Dec 2022 11:56:33 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id r15so11118753qvm.6;
+        Tue, 13 Dec 2022 11:56:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FF2ytRdyd1k49TJUY72Gw2rCc9xi0XLxuoiI0SmpnD0=;
+        b=j9mRwIel76Klzf9yTJlK6M1OeOZN77kBnse0ioGurN9Psiz4UnaG2jfx/R14Ad5Ga1
+         0mamCOQpn2JQiYLce/Yf6b0Bt3QPGZIOM8rAylJzVFnQ3r3PEtgibHEg0OmQkWSDQCm5
+         N6hjfMUml8cxPVJRh6YOrztpQU2f5KZv/c6Y8W03zC8cTV6Mzkt9kVuKNE9bmHSw6muL
+         KFsUFcLXOPXcv8LZ2Q+rSwFOo47e5K8VF2i6prL62UJgXfgoYkTkkyUTP/YnFtqyiPjS
+         HNEDrDcqDdisSZ9k5/WJNzpkpe5KCzOqd/Jv17Th+k1SYmibAPCdyt8RvJ5oHsVLE9uf
+         bojA==
+X-Gm-Message-State: ANoB5pkBlI01z8DbzRV+v6uU92i4QeXe21E3p5JoAGA7m17PHpFcpGoy
+        Ifp9j/85sVsU92+94nz2prtV7VpAT2K5IiNhqjk=
+X-Google-Smtp-Source: AA0mqf4qoxAT0kzXxvDM80UKPbvt7KNfq48AR5gRJVHJ334HyE4k0x3jE4vGrUQELFgh1CM83GcqazNAskqdrBoLc8k=
+X-Received: by 2002:a0c:facd:0:b0:4de:83db:b846 with SMTP id
+ p13-20020a0cfacd000000b004de83dbb846mr461608qvo.119.1670961392410; Tue, 13
+ Dec 2022 11:56:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QOYFX_owzdf7nkxvyQ0tO-mlaAu_4mnM
-X-Proofpoint-ORIG-GUID: 3--nR4D5iiyuJWz4qmn2BRjZkrGbVidw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0
- phishscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212130171
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <3ccca41f-0899-b205-903b-ec8c742f3e91@linaro.org>
+In-Reply-To: <3ccca41f-0899-b205-903b-ec8c742f3e91@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 13 Dec 2022 20:56:21 +0100
+Message-ID: <CAJZ5v0j2FvdkxHQqHErV0i7sMyxAnW7gnQwe5s195xLU1aa15A@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal drivers for v6.2-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Robert Marko <robimarko@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Johan Hovold <johan@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add spaces around the "<<" in adherence to the Linux kernel coding-style.
-The issues were reported by checkpatch.pl.
+On Fri, Dec 9, 2022 at 6:08 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> The following changes since commit 7d4b19ab6b89903fde8ad02f28a8943a4734e7b0:
+>
+>    Merge Intel thermal control drivers changes for v6.2 (2022-12-02
+> 19:39:07 +0100)
+>
+> are available in the Git repository at:
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.2-rc1
+>
+> for you to fetch changes up to f3ce48d06440a712de3c5ef1d26003c1e77afd74:
+>
+>    Revert "thermal/sysfs: Remove unnecessary check in
+> trip_point_hyst_show()" (2022-12-09 16:23:16 +0100)
+>
+> ----------------------------------------------------------------
+> - Rework a large bunch of drivers to use the generic thermal trip
+>    structure and the opportunity to do more cleanups by removing unused
+>    functions in the OF code (Daniel Lezcano)
+>
+> - Add the sm8450 QCom compatible string in the DT bindings (Luca
+>    Weiss)
+>
+> - Use devm_platform_get_and_ioremap_resource on the ST platform to
+>    group two calls into a single one (Minghao Chi)
+>
+> - Add the sm8550 QCom compatible string in the DT bindings (Neil
+>    Armstrong)
+>
+> - Use GENMASK instead of bitmaps and validate the temperature after
+>    reading it (Marcus Folkesson)
+>
+> - Convert generic-adc-thermal to DT schema (Rob Herring)
+>
+> - Fix the debug print message where the logic is inverted (Keerthy)
+>
+> - Fix NULL pointer dereference when getting the critical temp (Daniel
+>    Lezcano)
+>
+> - Fix memory leak on thermal_of_zone_register() failure (Ido Schimmel)
+>
+> - Add support for IPQ8074 in the tsens driver along with the DT
+>    bindings (Robert Marko)
+>
+> - Fix and rework the debugfs code in the tsens driver (Christian
+>    Marangi)
+>
+> - Add calibration and DT documentation for the imx8mm driver (Marek
+>    Vasut)
+>
+> - Add DT bindings and compatible for the Mediatek SoCs mt7981 and
+>    mt7983 (Daniel Golle)
+>
+> - Don't show an error message if it happens at probe time while it
+>    will be deferred on the QCom SPMI ADC driver (Johan Hovold)
+>
+> - Add the HWMon support on the imx8mm board (Alexander Stein)
+>
+> - Remove a pointless include in the power allocator governor
+>    (Christophe JAILLET)
+>
+> - Add interrupt DT bindings for QCom SoCs SC8280XP, SM6350 and SM8450
+>    (Krzysztof Kozlowski)
+>
+> - Fix inaccurate warning message for the QCom tsens gen2 (Luca Weiss)
+>
+> - Demote error log of thermal zone register to debug on the tsens QCom
+>    driver (Manivannan Sadhasivam)
+>
+> - Consolidate the TI Bandgap driver regarding how is handled the efuse
+>    values and the errata handling (Bryan Brattlof)
+>
+> - Document the Renesas RZ/Five as compatible with RZ/G2UL in the DT
+>    bindings (Lad Prabhakar)
+>
+> - Fix the irq handler return value in the LMh driver (Bjorn Andersson)
+>
+> ----------------------------------------------------------------
+> Alexander Stein (1):
+>        thermal/drivers/imx8mm: Add hwmon support
+>
+> Bjorn Andersson (1):
+>        thermal/drivers/qcom/lmh: Fix irq handler return value
+>
+> Bryan Brattlof (6):
+>        thermal/drivers/k3_j72xx_bandgap: Simplify k3_thermal_get_temp()
+> function
+>        thermal/drivers/k3_j72xx_bandgap: Use bool for i2128 erratum flag
+>        thermal/drivers/k3_j72xx_bandgap: Remove fuse_base from structure
+>        thermal/drivers/k3_j72xx_bandgap: Map fuse_base only for erratum
+> workaround
+>        dt-bindings: thermal: k3-j72xx: elaborate on binding description
+>        dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+>
+> Christian Marangi (3):
+>        thermal/drivers/qcom/tsens: Init debugfs only with successful probe
+>        thermal/drivers/qcom/tsens: Fix wrong version id dbg_version_show
+>        thermal/drivers/qcom/tsens: Rework debugfs file structure
+>
+> Christophe JAILLET (1):
+>        thermal/core/power allocator: Remove a useless include
+>
+> Dan Carpenter (1):
+>        thermal/sysfs: remove unnecessary check in trip_point_hyst_show()
+>
+> Daniel Golle (1):
+>        dt-bindings: thermal: mediatek: add compatible string for MT7986
+> and MT7981 SoC
+>
+> Daniel Lezcano (33):
+>        thermal/core: Add a generic thermal_zone_get_trip() function
+>        thermal/sysfs: Always expose hysteresis attributes
+>        thermal/core: Add a generic thermal_zone_set_trip() function
+>        thermal/core/governors: Use thermal_zone_get_trip() instead of
+> ops functions
+>        thermal/of: Use generic thermal_zone_get_trip() function
+>        thermal/of: Remove unused functions
+>        thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/exynos: of_thermal_get_ntrips()
+>        thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
+> thermal_zone_get_trip()
+>        thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/uniphier: Use generic thermal_zone_get_trip()
+> function
+>        thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/armada: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/rcar_gen3: Use the generic function to get the
+> number of trips
+>        thermal/of: Remove of_thermal_get_ntrips()
+>        thermal/of: Remove of_thermal_is_trip_valid()
+>        thermal/of: Remove of_thermal_set_trip_hyst()
+>        thermal/of: Remove of_thermal_get_crit_temp()
+>        thermal/drivers/st: Use generic trip points
+>        thermal/drivers/imx: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/broadcom: Use generic thermal_zone_get_trip()
+> function
+>        thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/ti: Remove unused macros
+> ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
+>        thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
+>        thermal/intel/int340x: Replace parameter to simplify
+>        thermal/drivers/intel: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/exynos: Fix NULL pointer dereference when getting
+> the critical temp
+>        wifi: iwlwifi: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/mellanox: Use generic thermal_zone_get_trip()
+> function
+>        Revert "thermal/sysfs: Remove unnecessary check in
+> trip_point_hyst_show()"
+>
+> Geert Uytterhoeven (1):
+>        thermal: ti-soc-thermal: Drop comma after SoC match table sentinel
+>
+> Ido Schimmel (1):
+>        thermal/of: Fix memory leak on thermal_of_zone_register() failure
+>
+> Johan Hovold (1):
+>        thermal: qcom-spmi-adc-tm5: suppress probe-deferral error message
+>
+> Jon Hunter (1):
+>        thermal/drivers/tegra: Fix crash when getting critical temp
+>
+> Keerthy (1):
+>        thermal/drivers/k3_j72xx_bandgap: Fix the debug print message
+>
+> Krzysztof Kozlowski (1):
+>        dt-bindings: thermal: qcom-tsens: narrow interrupts for SC8280XP,
+> SM6350 and SM8450
+>
+> Lad Prabhakar (1):
+>        dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
+>
+> Luca Weiss (2):
+>        dt-bindings: thermal: tsens: Add sm8450 compatible
+>        thermal/drivers/qcom/temp-alarm: Fix inaccurate warning for gen2
+>
+> Manivannan Sadhasivam (1):
+>        thermal/drivers/qcom: Demote error log of thermal zone register
+> to debug
+>
+> Marcus Folkesson (2):
+>        thermal/drivers/imx8mm_thermal: Use GENMASK() when appropriate
+>        thermal/drivers/imx8mm_thermal: Validate temperature range
+>
+> Marek Vasut (2):
+>        dt-bindings: thermal: imx8mm-thermal: Document optional nvmem-cells
+>        thermal/drivers/imx: Add support for loading calibration data
+> from OCOTP
+>
+> Minghao Chi (1):
+>        thermal/drivers/st: Use devm_platform_get_and_ioremap_resource()
+>
+> Neil Armstrong (1):
+>        dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
+>
+> Rob Herring (1):
+>        dt-bindings: thermal: Convert generic-adc-thermal to DT schema
+>
+> Robert Marko (4):
+>        dt-bindings: thermal: tsens: Add ipq8074 compatible
+>        thermal/drivers/tsens: Add support for combined interrupt
+>        thermal/drivers/tsens: Allow configuring min and max trips
+>        thermal/drivers/tsens: Add IPQ8074 support
+>
+>   .../bindings/thermal/generic-adc-thermal.yaml      |  84 +++++++++
+>   .../bindings/thermal/imx8mm-thermal.yaml           |   7 +
+>   .../bindings/thermal/mediatek-thermal.txt          |   2 +
+>   .../devicetree/bindings/thermal/qcom-tsens.yaml    |  81 ++++++--
+>   .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +-
+>   .../bindings/thermal/thermal-generic-adc.txt       |  95 ----------
+>   .../bindings/thermal/ti,j72xx-thermal.yaml         |  35 +++-
+>   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
+>   drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
+>   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209
+> +++++----------------
+>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
+>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
+>   drivers/platform/x86/acerhdf.c                     |  73 +++----
+>   drivers/thermal/armada_thermal.c                   |  37 ++--
+>   drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
+>   drivers/thermal/da9062-thermal.c                   |  52 +----
+>   drivers/thermal/gov_bang_bang.c                    |  37 ++--
+>   drivers/thermal/gov_fair_share.c                   |  18 +-
+>   drivers/thermal/gov_power_allocator.c              |  52 +++--
+>   drivers/thermal/gov_step_wise.c                    |  22 +--
+>   drivers/thermal/hisi_thermal.c                     |  11 +-
+>   drivers/thermal/imx8mm_thermal.c                   | 180
+> +++++++++++++++++-
+>   drivers/thermal/imx_thermal.c                      |  72 +++----
+>   .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
+>   .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
+>   .../int340x_thermal/processor_thermal_device.c     |  10 +-
+>   drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
+>   drivers/thermal/k3_j72xx_bandgap.c                 |  67 +++----
+>   drivers/thermal/qcom/lmh.c                         |   2 +-
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   8 +-
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  42 ++---
+>   drivers/thermal/qcom/tsens-8960.c                  |   3 +
+>   drivers/thermal/qcom/tsens-v0_1.c                  |   3 +
+>   drivers/thermal/qcom/tsens-v1.c                    |   3 +
+>   drivers/thermal/qcom/tsens-v2.c                    |  20 ++
+>   drivers/thermal/qcom/tsens.c                       |  68 ++++---
+>   drivers/thermal/qcom/tsens.h                       |   8 +-
+>   drivers/thermal/rcar_gen3_thermal.c                |   2 +-
+>   drivers/thermal/rcar_thermal.c                     |  53 +-----
+>   drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
+>   drivers/thermal/st/st_thermal.c                    |  47 +----
+>   drivers/thermal/st/stm_thermal.c                   |   4 +-
+>   drivers/thermal/tegra/soctherm.c                   |  35 ++--
+>   drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
+>   drivers/thermal/thermal_core.c                     | 153 ++++++++++++---
+>   drivers/thermal/thermal_core.h                     |  24 +--
+>   drivers/thermal/thermal_helpers.c                  |  28 +--
+>   drivers/thermal/thermal_netlink.c                  |  19 +-
+>   drivers/thermal/thermal_of.c                       | 124 +-----------
+>   drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
+>   drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
+>   drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
+>   drivers/thermal/uniphier_thermal.c                 |  27 ++-
+>   include/linux/thermal.h                            |  10 +
+>   54 files changed, 1115 insertions(+), 1224 deletions(-)
+>   create mode 100644
+> Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+>   delete mode 100644
+> Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
 
-Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
----
- drivers/staging/vme_user/vme.h | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
-index 98da8d039d60..a74724457d29 100644
---- a/drivers/staging/vme_user/vme.h
-+++ b/drivers/staging/vme_user/vme.h
-@@ -54,20 +54,20 @@ enum vme_resource_type {
- #define VME_R_ROBIN_MODE	0x1
- #define VME_PRIORITY_MODE	0x2
- 
--#define VME_DMA_PATTERN			(1<<0)
--#define VME_DMA_PCI			(1<<1)
--#define VME_DMA_VME			(1<<2)
--
--#define VME_DMA_PATTERN_BYTE		(1<<0)
--#define VME_DMA_PATTERN_WORD		(1<<1)
--#define VME_DMA_PATTERN_INCREMENT	(1<<2)
--
--#define VME_DMA_VME_TO_MEM		(1<<0)
--#define VME_DMA_MEM_TO_VME		(1<<1)
--#define VME_DMA_VME_TO_VME		(1<<2)
--#define VME_DMA_MEM_TO_MEM		(1<<3)
--#define VME_DMA_PATTERN_TO_VME		(1<<4)
--#define VME_DMA_PATTERN_TO_MEM		(1<<5)
-+#define VME_DMA_PATTERN			(1 << 0)
-+#define VME_DMA_PCI			(1 << 1)
-+#define VME_DMA_VME			(1 << 2)
-+
-+#define VME_DMA_PATTERN_BYTE		(1 << 0)
-+#define VME_DMA_PATTERN_WORD		(1 << 1)
-+#define VME_DMA_PATTERN_INCREMENT	(1 << 2)
-+
-+#define VME_DMA_VME_TO_MEM		(1 << 0)
-+#define VME_DMA_MEM_TO_VME		(1 << 1)
-+#define VME_DMA_VME_TO_VME		(1 << 2)
-+#define VME_DMA_MEM_TO_MEM		(1 << 3)
-+#define VME_DMA_PATTERN_TO_VME		(1 << 4)
-+#define VME_DMA_PATTERN_TO_MEM		(1 << 5)
- 
- struct vme_dma_attr {
- 	u32 type;
--- 
-2.31.1
-
+Pulled and added to my linux-next branch, thanks!
