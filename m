@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2792564AE90
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 05:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DD464AE9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 05:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLMEMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 23:12:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S234108AbiLMESr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 23:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiLMEMb (ORCPT
+        with ESMTP id S229611AbiLMESm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 23:12:31 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C7A16589
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:29 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id a9so14306550pld.7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 20:12:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0phE3o9mO3P/oDVOwXOrXlOT+3nv35crWDJ9EleFA8k=;
-        b=sHBTPQS7PuFFom9l/xeN0gQMYHSKFT3zGrmxWMVKhuPySFVYag+kJAbhHFpnxYQtTj
-         ACtt9S5s6ZRr2LPCKm+77ySWReIfb0ZwtiZxzHzIox4AnAWoHb1bhleYODAlIX4bjmqz
-         OIuti1iFmb+ldG8BTUpx52Q2V8c2gk9bYDiQ7UTYVng/JrXqnTwoGjqFUvwvG/1xp8jz
-         I06WTCgq0XP+tGVKVr4aX/lpZjqc7fPOgr8B5Nhv7xuneieXDxgndnOZeITArpHBjfrt
-         cMIcd9zZHQPc1tmek2hMUJdKdp4oRB2lD5JrDDlqPEBKoMSuLnSNZRwkyEFD04gH4dVk
-         pRyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0phE3o9mO3P/oDVOwXOrXlOT+3nv35crWDJ9EleFA8k=;
-        b=jzoG9oMFV4QfXJYA5rkVu1kucp63NTzDIxQEKxmafhXxGvWldlgMBps5x7FHaAbSip
-         P8S32KALlail5lpD71cqPSHmYzmgTkzuvU2j9mJ5RERg4kom4UzkbfxUNGc8b2fSSi6T
-         DoZCpau/FgRONc0VvvjUgQDBgsguSHAESpHNikNc1yRGBUTzQDf4ZGRzB9N/OQadV+K2
-         D4NgMzzs6Pusd6rnXe8a333L6B6lRBRTmC5ZTr0ssH0RF0knHq/44bLpFF7auEwmgGYv
-         540SDh5LDQQy39mDwW4J1Fpu5KJYAVUWezH42oBm4UgsFeL0JRiPR9M2NN06DZOGb6lz
-         dIdA==
-X-Gm-Message-State: ANoB5pkq7Z0fMywHB6E34kstZL4Ye+sx/u0SGQQ3xhLKHegO/+O6BrSd
-        F4Ni+73i05Uk70PpfySSQglzdg==
-X-Google-Smtp-Source: AA0mqf6Q/0eTmnGfJNcE+7MMOSleUzEAQxVrRiuBTqrUwYwc1ZEVGXINl0fsk0ZvLHVGoeS5yx/HHw==
-X-Received: by 2002:a05:6a21:1583:b0:a3:d7b0:aeef with SMTP id nr3-20020a056a21158300b000a3d7b0aeefmr111868pzb.0.1670904748417;
-        Mon, 12 Dec 2022 20:12:28 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id hk3-20020a17090b224300b002194319662asm6263318pjb.42.2022.12.12.20.12.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 20:12:27 -0800 (PST)
-Date:   Tue, 13 Dec 2022 04:12:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nagareddy Reddy <nspreddy@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [RFC PATCH v4 0/2] Deprecate BUG() in pte_list_remove() in
- shadow mmu
-Message-ID: <Y5f7qBp4zXAiENNh@google.com>
-References: <20221129191237.31447-1-mizhang@google.com>
- <Y5Oob6mSJKGoDBnt@google.com>
- <Y5avm5VXpRt263wQ@google.com>
- <Y5dax8XJV0F5adUw@google.com>
- <CALzav=f2k9dPYkeW2D0ZvkDuDhA8Wmu+zV8W4isMFfd-HAQjrA@mail.gmail.com>
- <Y5fXxsPtDeMZn2nV@google.com>
+        Mon, 12 Dec 2022 23:18:42 -0500
+X-Greylist: delayed 1168 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Dec 2022 20:18:36 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C725192BD;
+        Mon, 12 Dec 2022 20:18:35 -0800 (PST)
+Received: from leknes.fjasle.eu ([46.142.49.245]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1M5wTt-1p1tgF13Gt-007R4o; Tue, 13 Dec 2022 05:18:12 +0100
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id C93C83C0EE;
+        Tue, 13 Dec 2022 05:18:10 +0100 (CET)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 2820A381; Tue, 13 Dec 2022 05:18:04 +0100 (CET)
+Date:   Tue, 13 Dec 2022 05:18:04 +0100
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: do not sort after reading modules.order
+Message-ID: <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
+References: <20221211094919.2717594-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Upav2svuIRAE6goJ"
 Content-Disposition: inline
-In-Reply-To: <Y5fXxsPtDeMZn2nV@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221211094919.2717594-1-masahiroy@kernel.org>
+Jabber-ID: nicolas@fjasle.eu
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:dusdd3ZvI66iLKPsiSw3XRx26yaF1bifpOM6avUoVkxvjA3PrmW
+ xf4OiDO2NYPqmaNcH2u+PcvmAAE+4WQL5rj5fjRUmS4B4BrzkNvAZ3IZaCNcxoqVgGjZrs8
+ IZ2m9Gz4runfFIriqQ9JjZ86bafdc6yu6pAFI2HdZpF2nifekeCrybDPIpTdKwqKFRLzYQ/
+ nLtlsZhskvZpHeUnZVWXQ==
+UI-OutboundReport: notjunk:1;M01:P0:Zt+MErAqjeQ=;V+gC71bwH++jfPY3DSYatp17Kgc
+ ezu2trfwFLvE1xZh5Q4Cc51DIDkNo3o7TupAYqAih4D9xYhS5V+iSaDVncPhhq+2YOEwqUW7Z
+ tB1FJHx1SUU5rhfoimjqs5mfqrpAeXw6AuDMtSvD+rb7xfuCX/95taIYAIz7H/bN1Inxoo/0A
+ 7lucphi4kGcCn0TkenjL2Zm2foih9TY8wWD8/42ymWCTQgxx1NKFOScTK37dz3jgSnRUFJGiX
+ 9KYu5a8ABxd8tbT4jB/HOMu4KrnzXp1771ttrOqRKri25xn2RjlSxrNjX5TLhkCT+Klc/+Rt7
+ 0KE1NgYrErx77eTr6TZsRInA9A0PWZxw0wfAqXx3Zq/NfUvTDpmDz6BCzea+22Kty0IeJ9Fme
+ W5YZQMS4Qwcx2eJxH5tGcMMHMmsJeJz3vKJWnAtNSagMoo7UC/medJAQ3bCbabbEvGT3z1xRp
+ 3IlWvDqE8oh9C5s3DqnDyeLJ85XYUyzaVJSCTyl30+UvuzXOftYrKqo8Y5rJ24K85mT/1Y3DF
+ TfXmcbs8sLppLpqbQ2VyHm+wvcwmBfKHgOzSc6ethZcnhVNMMr1/IW7cvXeQAaXjG8G/SHKgs
+ o9JDwvQ/y452wdQkuX8TRg3Wv4J29r9fxK/lvB/HRoEgrLwGL/yUsUsVovhJN/zx72F+UyipK
+ V+vc5FhMpjgQRRy+Bh7UeyNd6D3fE5UDSpKi/haNXQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,144 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022, Mingwei Zhang wrote:
-> On Mon, Dec 12, 2022, David Matlack wrote:
-> > > What about explicitly treating both get_mmio_spte() and this as potential data
-> > > corruption?  E.g. something like this, and then use the DATA_CORRUPTION variant
-> > > in pte_list_remove()?
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 2055e04b8f89..1cb69c6d186b 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -4075,6 +4075,7 @@ static bool get_mmio_spte(struct kvm_vcpu *vcpu, u64 addr, u64 *sptep)
-> > >                         pr_err("------ spte = 0x%llx level = %d, rsvd bits = 0x%llx",
-> > >                                sptes[level], level,
-> > >                                get_rsvd_bits(rsvd_check, sptes[level], level));
-> > > +               KVM_BUG_ON_DATA_CORRUPTION(reserved, vcpu->kvm);
 
-Random aside, this would be better:
+--Upav2svuIRAE6goJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 99c40617d325..d9c46f2a6748 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4090,7 +4090,7 @@ static int handle_mmio_page_fault(struct kvm_vcpu *vcpu, u64 addr, bool direct)
-                return RET_PF_EMULATE;
- 
-        reserved = get_mmio_spte(vcpu, addr, &spte);
--       if (WARN_ON(reserved))
-+       if (KVM_BUG_ON_DATA_CORRUPTION(reserved, vcpu->kvm))
-                return -EINVAL;
- 
-        if (is_mmio_spte(spte)) {
+On Sun 11 Dec 2022 18:49:18 GMT, Masahiro Yamada wrote:
+> modules.order lists modules in the deterministic order (that is why
+> "modules order"), and there is no duplication in the list.
 
-> > >         }
-> > >
-> > >         return reserved;
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index f16c4689322b..5c4a06f66f46 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -863,6 +863,17 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
-> > >         unlikely(__ret);                                        \
-> > >  })
-> > >
-> > > +#define KVM_BUG_ON_DATA_CORRUPTION(cond, kvm)                  \
-> > > +({                                                             \
-> > > +       int __ret = (cond);                                     \
-> > > +                                                               \
-> > > +       if (IS_ENABLED(CONFIG_BUG_ON_DATA_CORRUPTION))          \
-> > > +               BUG_ON(__ret);                                  \
-> > > +       else if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))      \
-> > > +               kvm_vm_bugged(kvm);                             \
-> > > +       unlikely(__ret);                                        \
-> > > +})
-> > > +
-> > >  static inline void kvm_vcpu_srcu_read_lock(struct kvm_vcpu *vcpu)
-> > >  {
-> > >  #ifdef CONFIG_PROVE_RCU
-> > 
-> > That sounds reasonable to me.
-> 
-> Actually, I disagree after thinking about it for a while. Since
-> Google turns on CONFIG_BUG_ON_DATA_CORRUPTION on default, this
-> KVM_BUG_ON_DATA_CORRUPTION() is literally BUG_ON(). Then there is no
-> point. The purpose of the series is to save the host from crash.
+Isn't a subdirectory's modules.order just created by
+concatenation of $(obj-m) (w/ respect to mentioned subdirs)?
+Thus, "no duplication" seems to be true, as long as there is no obj-m=20
+containing duplicated entries.  Do we ensure unique entries in obj-m=20
+only?
 
-Sure, but Google is not the only consumer of KVM.  E.g. I'm guessing many distros
-use CONFIG_BUG_ON_DATA_CORRUPTION=n.  Any user that doesn't have the infrastructure
-to capture crash dumps is likely better served overall by the WARN-and-continue
-behavior.
+Kind regards,
+Nicolas
 
-> If we follow the upper changes on get_mmio_spte() as well, we are
-> introducing more BUG()!, ie., more chances to crash the host machine. So
-> I cannot stay with this idea.
+>=20
+> $(sort ) is pointless.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>=20
+>  scripts/Makefile.modfinal | 2 +-
+>  scripts/Makefile.modinst  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 25bedd83644b..4705d32388f3 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
+>  include $(srctree)/scripts/Makefile.lib
+> =20
+>  # find all modules listed in modules.order
+> -modules :=3D $(sort $(shell cat $(MODORDER)))
+> +modules :=3D $(shell cat $(MODORDER))
+> =20
+>  __modfinal: $(modules)
+>  	@:
+> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> index a4c987c23750..f4cff42069ad 100644
+> --- a/scripts/Makefile.modinst
+> +++ b/scripts/Makefile.modinst
+> @@ -9,7 +9,7 @@ __modinst:
+>  include include/config/auto.conf
+>  include $(srctree)/scripts/Kbuild.include
+> =20
+> -modules :=3D $(sort $(shell cat $(MODORDER)))
+> +modules :=3D $(shell cat $(MODORDER))
+> =20
+>  ifeq ($(KBUILD_EXTMOD),)
+>  dst :=3D $(MODLIB)/kernel
+> --=20
+> 2.34.1
 
-For get_mmio_spte() specifically, I am quite confident that in production kernels,
-the benefits of a BUG() far outweigh the risk of unnecessarily panicking the host.
-There have been recent-ish bugs that escaped into kernel releases, but the first
-one (wrong root level) escaped only because it affected an esoteric, rarely used
-configuration (shadow paging with a 32-bit host kernel), and the second one was
-a purely theoretical bug fix that was also limited to 32-bit kernels.
+--=20
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
 
-  39b4d43e6003 ("KVM: x86/mmu: Get root level from walkers when retrieving MMIO SPTE")
-  2aa078932ff6 ("KVM: x86/mmu: Use -1 to flag an undefined spte in get_mmio_spte()")
+--Upav2svuIRAE6goJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> In fact, there could many reasons why RMAPs and SPTEs are messed. In
-> many times, as illustrated by my example, they are not data corruptions.
-> They are just errors due to code refactoring or some miscalculations under
-> certain tricky corner situations, e.g., offset by 1.  So, treating them
-> blindly as data corruptions is an overkill.
+-----BEGIN PGP SIGNATURE-----
 
-For SPTEs in prod, not really.  Something has gone really wrong if KVM messes up a
-SPTE to the point where _hardware_ unexpectedly observes a reserved bit in a
-production build.  We've had bugs where we've botched the software sanity checks,
-e.g. see commit
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmOX/PcACgkQB1IKcBYm
+Eml6exAAsCxV0lz3EyMp9YaivYDv2cQ601+Et58gZhXxNwrvi+pOBg+3lqRPdkaM
+D5v+O/fCiAKmYf9rDMUyaS+OFiyKjOTzWAHCR62goP5TQK2jgmRNEl74CUjAXxlD
+10QKNQe/tOyK9MFgZzVzO0ineDDXLTqzTy7+jdmS8xK0Xssm1U2XkDQgMYvO4Np3
+PFS5Hd989d03bjUQSc2gL7cSOzUeMrs2rXOwVFF6su92nbm/a17XcdsDniE+YKl8
+VNT1Vuf4p22ZilJCd1+C/oJrW+fUhCXBw7heI7/jCkUCNESrQiyx16xb9QznS9gn
+kh2rzmfrCbZZisBdgtF5Mp5FaFJMNxEQ1nGIgOc179Rzc/0I2KYa2o3aYXmIuFxh
+wA7H2ytwXeALWb1mGiQ5Vc9YVvp+qFlhX8beX7yY/6XbPvTgF0lLOguaMCXYXW88
+bqZ3rFHLIuP6sYAvQltXkfHkerF29hv4YRseazminlEYk3fgjTSQr0CG4rK5JZ+g
+hwhUYpOTY07qKOLHRBNXZVQwlAA9F0foLbB3xFwRaCs4KbzbdcadGlO5MM+BA/Ws
+o/+O3Jxu9coedlBVsLTl4caYGN/jaK/pXjiaEn4u5AVGgsDrQ4zjCdNbCKGfktoJ
+xWpl9+gxeZrjPMnsYPtGBNn4d4VTyETwPYo/I9oKxPfeylrWpUE=
+=mA0S
+-----END PGP SIGNATURE-----
 
-  6c6ab524cfae ("KVM: x86/mmu: Treat NX as a valid SPTE bit for NPT")
-
-but except for rarely used setups (see above), unexpected reserved SPTE faults
-in production pretty much won't happen unless there's memory corruption or a CPU
-error.
-
-For RMAPs, I agree it's less clear cut, but at the same time the status quo is to
-always BUG(), so from an upstream perspective allowing the admin to avoid the
-BUG() is an unqualified improvement.
-
-> This is a comparison to the list traversal bug, which clearly shows data corruptions.
-
-That depends on what is considered "data corruption".  In this case,
-CONFIG_BUG_ON_DATA_CORRUPTION is about the kernel memory structures being corrupted,
-it's not referring to generic data corruption user data.
-
-  Select this option if the kernel should BUG when it encounters
-  data corruption in kernel memory structures when they get checked
-  for validity.
-
-And IMO that definition fits KVM's behavior perfectly.  get_mmio_spte() detects
-corrupted SPTEs, pte_list_remove() detects corrupted RMAP lists.
-
-If "data corruption" is interpeted to be corruption of user data than the list
-behavior is wildly overstepping.  E.g. if a subsystem has a bug where an object
-is added to two different lists, list_add() will yell about the issue but because
-all writes to the list_head are aborted with CONFIG_DEBUG_LIST=y, it's entirely
-possible for the bug to be benign or limited to the subsystem.
-
-A somewhat contrived example would be if a (complex) allocator and its caller both
-add the object to the same list; the second list_add() is problematic and would
-trigger BUG() with CONFIG_BUG_ON_DATA_CORRUPTION=y, but with CONFIG_DEBUG_LIST=y
-the bug would be completely benign.
-
-> So, alternatively, I think it should be reasonable to shutdown the KVM
-> instance if we see things messed up in MMIO SPTEs as well, but please
-> don not the host for that.
-
-Again, this doesn't unconditionally bring down the host.  Google is _choosing_
-to BUG() on _potential_ data corruption.  I'm open to not tieing KVM's behavior to
-CONFIG_BUG_ON_DATA_CORRUPTION if there's a good argument for doing so, but if we
-(Google) plan on turning on the BUG() behavior for KVM then I don't see the point.
-
-In other words, we should discuss internally whether or not we want/need to push
-for a separate control, but from an upstream perspective I think the proposed
-behavior is entirely reasonable.
+--Upav2svuIRAE6goJ--
