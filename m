@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED15364B289
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9E564B28E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiLMJkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S234531AbiLMJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiLMJkh (ORCPT
+        with ESMTP id S229689AbiLMJnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:40:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321FE15A19;
-        Tue, 13 Dec 2022 01:40:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Dec 2022 04:43:03 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B00F01D;
+        Tue, 13 Dec 2022 01:43:01 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0168B80B73;
-        Tue, 13 Dec 2022 09:40:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA86C433D2;
-        Tue, 13 Dec 2022 09:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670924433;
-        bh=94w9PQjxXcHSOdNO2ViYGpWqz7tr3/iZR+3+yFegweE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SVamNgLrq9RgdNb2QHI4sORF1eidc1gT/INF9gIEFlkz7rhfbUEzbfKaU6V4SAy6P
-         MMydcluzBR6Ovux0Igz8jvX4+wjgSIsMRRHmrYDmyKlPXJXtz+XjOGrnFrWNC1oVcM
-         o7kF+F5Bp2S5di7E45j86ePqLzlmCSSHpYZFrc4PHPJ4lXjUhP62Yy1jwe3bMIfIY0
-         OQkSs/cenNOTqyyRuQ/8TyaYM7/kJVkYRIwrqHKALKnNBkN1C8mTowwDkACSmTZJ5V
-         q1g2/B6ny2kD23LHQ6LYjUHpw+dSt98yBpqaKWF3vNNK27Sh18Tut/QMbt+rwD8xHf
-         ei9dXkQ2x1Teg==
-Date:   Tue, 13 Dec 2022 10:40:29 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] fs idmapped updates for v6.2
-Message-ID: <20221213094029.4csl2ff7ovtkxikt@wittgenstein>
-References: <20221212131915.176194-1-brauner@kernel.org>
- <CAHk-=wj+tqv2nyUZ5T5EwYWzDAAuhxQ+-DA2nC9yYOTUo5NOPg@mail.gmail.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8FFB86602C2F;
+        Tue, 13 Dec 2022 09:42:59 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670924580;
+        bh=VMAoG4F0h5+2Tw6EEa082N1EiJ7bqvGUQOspWsbMvtQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nO4q0ZGLrpF68McW2i5tJS/hRxHNV+JxWpcNEhyfiA323dsriZkn42C8iP3aO69Ox
+         r2f+QiWQSlr8v6Xh1FPeIr5/9z5q8viZj+JTmXGzgwIUJGbYMr8dB//IOKgXuCRfQY
+         QJwdo6J0VUvr8YlqNfo4vTy7rJhz5NRGW/XMoKAz6dUKn20sFtpk97udrFlaTeEBri
+         /g2nCMeyqRdjq6AZp/tlM9TFqQ+iPi3ImBIgyKJAvWMg3IOhAbO1UMwApvnnZCPbok
+         E0c6JiYYGUX50g3Yp7Vr9DAZdi3zCgfVEdkkJIgZeGB8H6Pj2pRcbnlBu7KOujeTX1
+         VPEQXTHev9JLg==
+Message-ID: <3729df62-8d39-db47-0b57-2bef37cc5830@collabora.com>
+Date:   Tue, 13 Dec 2022 10:42:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj+tqv2nyUZ5T5EwYWzDAAuhxQ+-DA2nC9yYOTUo5NOPg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 8/9] arm/arm64: dts: mediatek: Fix existing NAND
+ controller node name
+Content-Language: en-US
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221209064317.2828-1-xiangsheng.hou@mediatek.com>
+ <20221209064317.2828-9-xiangsheng.hou@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221209064317.2828-9-xiangsheng.hou@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 07:40:29PM -0800, Linus Torvalds wrote:
-> On Mon, Dec 12, 2022 at 5:19 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > Please note the tag contains all other branches for this cycle merged in.
+Il 09/12/22 07:43, Xiangsheng Hou ha scritto:
+> Change the existing node name in order to match NAND controller DT
+> bindings.
 > 
-> Well, considering that the explanation basically assumed I had already
-> merged those (and I had), I wish you also had made the diffstat and
-> the shortlog reflect that.
-
-I wasn't sure what the best way was.
-I'll make a note to use a better shortlog this time.
-
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> ---
+>   arch/arm/boot/dts/mt2701.dtsi             | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt7622.dtsi  | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> As it was, now the diffstat and shortlog ends up containing not what
-> this last pull request brought in, but what they *all* brought in...
 
-I didn't want it to look like I was trying to hide the pretty obvious
-ugliness of the branch by editing the shortlog.
+Splitting this in two commits, one for ARM and one for ARM64 would probably
+be better, but since I don't have strong opinions on that...
 
-> 
-> I'm also not super-happy with how ugly your history for this branch
-> was. You had literally merged the acl rework branch three times - at
-> different points of that branch.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I hate the history of that branch. And I have zero idea why I didn't
-rebase when I applied it before I pushed it into linux-next.
 
-I really had to fight the __very__ strong urge to rebase before sending
-this pr. I had to step outside for a walk to resist it.
-
-> 
-> Do we have other ugly history in the tree? Yes. But we've been getting
-> better. This was _not_ one of those "getting better" moments.
-> 
-> Oh well. I can see what you wanted to do, and I agree with the end
-> result, I just don't particularly like how this was done.
-> 
-> I've pulled it.
-
-Thank you!
-Christian
