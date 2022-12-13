@@ -2,182 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6079B64B713
+	by mail.lfdr.de (Postfix) with ESMTP id 0C14664B712
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbiLMONP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S236004AbiLMONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235956AbiLMOMg (ORCPT
+        with ESMTP id S235858AbiLMOMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:12:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7429320BEF;
-        Tue, 13 Dec 2022 06:11:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 307E4B81204;
-        Tue, 13 Dec 2022 14:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A207FC433EF;
-        Tue, 13 Dec 2022 14:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670940697;
-        bh=ro10CqJEpDOOkWURK+9ji5eHns6LfgisIWEJmB7FR+c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SanjH8Fb0ODeBWUz3j1ivH32DpSj5Ca4m7gw/NdLbVmlty6u0V1Igza15BuLQxgLB
-         C8Titz5NReQhGCN8R30WuDqou/FQyfgL2FdQZUgcaRPzUvfvOs5+rU5/N7AhVWNB/V
-         sQTwrqX2Tddl8lLyDD1hT4yCWM7M/pz6nCvb/vRxKm/oSyvL/A5Ukc9ZseZ0fa19tU
-         kyWwvHDQKxmasw7sd5DK3mucDS25TYLtGTADfR588x+nY7DbnQlcAzK1BsT0of3e0z
-         UapAHLpim/YV8D0l/0a/9Sufg1kvJ3hJnlpyzYddMf9TpzB811gS9tU4a7GyZRLx3w
-         gCZn8LpeY9ugw==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     bpf@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Akinobu Mita <akinobu.mita@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2 2/2] docs: fault-injection: Add requirements of error injectable functions
-Date:   Tue, 13 Dec 2022 23:11:31 +0900
-Message-Id: <167094069168.608798.9644454927302716989.stgit@devnote3>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-In-Reply-To: <167094067084.608798.11303550366840600235.stgit@devnote3>
-References: <167094067084.608798.11303550366840600235.stgit@devnote3>
-User-Agent: StGit/0.19
+        Tue, 13 Dec 2022 09:12:48 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD92420F54
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:11:50 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id n205so14305915oib.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9fBPZ3cvhwxlIbAToCD1RhaObrm4/4AXeDAeYG8TUw=;
+        b=odseQVN4IOK1y7eLveSmHbFoNenj1BDOZ4ZzPItVmPos67biTmifn+ay8Q30JO89LB
+         RLP2BwZYZFqT7PZSQhUdsEcwj1hrYNBOIKNWtrmp77TlcekN4KE/Z1eaS7KrdvqrhQip
+         2Pj5FuvSpYYv3nb4UFf/McOERUvm3dEc9isVIzQbT5y5zY5TAesuTKKQ6rIQfOv1yilG
+         y1z7ZDdI6005DdRnNdg+5FHekUfTL67vbiMBV8rdbKeBWLaQPCDfyT//HAKO+TR/ONkX
+         UWNPRS+FYD3Y6fwwgTGDTr+pUTuCnTowBHX3ETZcmBpD86n4YVOU1HdPsk3rNrIb9QM9
+         Sbuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T9fBPZ3cvhwxlIbAToCD1RhaObrm4/4AXeDAeYG8TUw=;
+        b=myGopUWSLWiqVNRvt5IbuXt7+gpQ6LL9gAJEzW8HUlycRYrwfNbhAk76LlA8+6eoZh
+         u2x20f2kK2pEaSWD84Pa5mbjwRuUWEZqbDPDvIE4bqUNNuaNPi/JeUmij4rfsqU1qvTU
+         /+xrmI96m52ePhnK92HZa0ro1uvGMrI1tDXV+avDHtKTiaR/OeeuzpXdtJGVm89IEiW5
+         TOopnb2vlB5RwckgmfMI3WFSeAv3SRfPhcceNgAaf+x4mMRoPXGVt6Iqov4IuNA8B6TG
+         SdOgapFHB6BAiTu7dPSR0Yu7geGw8tJI/wFdgOEfWNbFzKLy5ADVQsyEiJnXuQ7wMvGC
+         Iy9g==
+X-Gm-Message-State: ANoB5plV5JnTWCyIcacVwnfngojAP/ABkwl5I1PwiACIrt8w1jTzHULe
+        YFOHGfB3nSRWbiK430x3IGg=
+X-Google-Smtp-Source: AA0mqf7gN36VXlHEBg1UtiDC/6eRgdKmc1ip6wevu8tWWQ/Ip+wyBsrGeMXvZzsONBvgFxHONsdp3Q==
+X-Received: by 2002:a05:6808:1987:b0:35e:4393:8d71 with SMTP id bj7-20020a056808198700b0035e43938d71mr12693104oib.28.1670940709975;
+        Tue, 13 Dec 2022 06:11:49 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a30-20020a544e1e000000b0035a9003b8edsm4561548oiy.40.2022.12.13.06.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 06:11:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fd532051-7b11-3a0a-0dd1-13e1820960db@roeck-us.net>
+Date:   Tue, 13 Dec 2022 06:11:47 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: mainline build failure due to e240e53ae0ab ("mm, slub: add
+ CONFIG_SLUB_TINY")
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Linus Torvalds <torvalds@linux-foundation.org>
+References: <Y5hTTGf/RA2kpqOF@debian> <20221213131140.GA3622636@roeck-us.net>
+ <48cd0d18-a13c-bf20-e064-2041f63b05bf@suse.cz>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <48cd0d18-a13c-bf20-e064-2041f63b05bf@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 12/13/22 05:27, Vlastimil Babka wrote:
+> On 12/13/22 14:11, Guenter Roeck wrote:
+>> On Tue, Dec 13, 2022 at 10:26:20AM +0000, Sudip Mukherjee (Codethink) wrote:
+>>> Hi All,
+>>>
+>>> The latest mainline kernel branch fails to build xtensa allmodconfig
+>>> with gcc-11 with the error:
+>>>
+>>> kernel/kcsan/kcsan_test.c: In function '__report_matches':
+>>> kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]
+>>>    257 | }
+>>>        | ^
+>>>
+>>> git bisect pointed to e240e53ae0ab ("mm, slub: add CONFIG_SLUB_TINY")
+>>>
+>>
+>> In part that is because above commit changes Kconfig dependencies such
+>> that xtensa:allmodconfig actually tries to build kernel/kcsan/kcsan_test.o.
+>> In v6.1, CONFIG_KCSAN_KUNIT_TEST is not enabled for xtensa:allmodconfig.
+> 
+> OK, so IIUC
+> - e240e53ae0ab introduces SLUB_TINY and adds !SLUB_TINY to KASAN's depend
+> - allyesconfig/allmodconfig will enable SLUB_TINY
+> - thus KASAN is disabled where it was previously enabled
+> - thus KCSAN which depends on !KASAN is enabled where it was previously disabled
+> - also arch/xtensa/Kconfig:    select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
+> 
+>> Downside of the way SLUB_TINY is defined is that it is enabled for all
+>> allmodconfig / allyesconfig builds, which then disables building a lot
+>> of the more sophisticated memory allocation options.
+> 
+> It does disable KASAN, but seems that on the other hand allows enabling
+> other stuff.
+> Is there a way to exclude the SLUB_TINY option from all(mod/yes)config? Or
+> it needs to be removed to SLUB_FULL and logically reversed?
+> 
 
-Add a section about the requirements of the error injectable functions
-and the type of errors.
-Since this section must be read before using ALLOW_ERROR_INJECTION()
-macro, that section is referred from the comment of the macro too.
+"depends on !COMPILE_TEST" should do it. Not sure though if that would just
+hide the other compile failures seen with powerpc and arm allmodconfig
+builds.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Link: https://lore.kernel.org/all/20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org/T/#u
----
- Changes in v2:
-  - Fix typos and misses according to Randy's comment.
----
- Documentation/fault-injection/fault-injection.rst |   65 +++++++++++++++++++++
- include/asm-generic/error-injection.h             |    6 +-
- 2 files changed, 69 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/fault-injection/fault-injection.rst
-index 17779a2772e5..76bc9c857761 100644
---- a/Documentation/fault-injection/fault-injection.rst
-+++ b/Documentation/fault-injection/fault-injection.rst
-@@ -233,6 +233,71 @@ proc entries
- 	This feature is intended for systematic testing of faults in a single
- 	system call. See an example below.
- 
-+
-+Error Injectable Functions
-+--------------------------
-+
-+This part is for the kenrel developers considering adding a function
-+using the ALLOW_ERROR_INJECTION() macro.
-+
-+Requirements for the Error Injectable Functions
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+Since the function-level error injection forcibly changes the code path
-+and returns an error even if the input and conditions are proper, this can
-+cause unexpected kernel crash if you allow error injection on the function
-+which is NOT error injectable. Thus, you (and reviewers) must ensure;
-+
-+- The function returns an error code if it fails, and the callers must check
-+  it correctly (need to recover from it).
-+
-+- The function does not execute any code which can change any state before
-+  the first error return. The state includes global or local, or input
-+  variable. For example, clear output address storage (e.g. `*ret = NULL`),
-+  increment/decrement counter, set a flag, preempt/irq disable or get
-+  a lock (if those are recovered before returning error, that will be OK.)
-+
-+The first requirement is important, and it will result in that the release
-+(free objects) functions are usually harder to inject errors than allocate
-+functions. If errors of such release functions are not correctly handled
-+it will cause a memory leak easily (the caller will confuse that the object
-+has been released or corrupted.)
-+
-+The second one is for the caller which expects the function should always
-+do something. Thus if the function error injection skips all of the
-+function, the expectation is betrayed and causes an unexpected error.
-+
-+Type of the Error Injectable Functions
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+Each error injectable function will have the error type specified by the
-+ALLOW_ERROR_INJECTION() macro. You have to choose it carefully if you add
-+a new error injectable function. If the wrong error type is chosen, the
-+kernel may crash because it may not be able to handle the error.
-+There are 4 types of errors defined in include/asm-generic/error-injection.h
-+
-+EI_ETYPE_NULL
-+  This function will return `NULL` if it fails. e.g. return an allocated
-+  object address.
-+
-+EI_ETYPE_ERRNO
-+  This function will return an `-errno` error code if it fails. e.g. return
-+  -EINVAL if the input is wrong. This will include the functions which will
-+  return an address which encodes `-errno` by ERR_PTR() macro.
-+
-+EI_ETYPE_ERRNO_NULL
-+  This function will return an `-errno` or `NULL` if it fails. If the caller
-+  of this function checks the return value with IS_ERR_OR_NULL() macro, this
-+  type will be appropriate.
-+
-+EI_ETYPE_TRUE
-+  This function will return `true` (non-zero positive value) if it fails.
-+
-+If you specify a wrong type, for example, EI_TYPE_ERRNO for the function
-+which returns an allocated object, it may cause a problem because the returned
-+value is not an object address and the caller can not access to the address.
-+
-+
- How to add new fault injection capability
- -----------------------------------------
- 
-diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-index c0b9d3217ed9..18324d7aa56d 100644
---- a/include/asm-generic/error-injection.h
-+++ b/include/asm-generic/error-injection.h
-@@ -19,8 +19,10 @@ struct pt_regs;
- 
- #ifdef CONFIG_FUNCTION_ERROR_INJECTION
- /*
-- * Whitelist generating macro. Specify functions which can be
-- * error-injectable using this macro.
-+ * Whitelist generating macro. Specify functions which can be error-injectable
-+ * using this macro. If you are unsure what is required for the error-injectable
-+ * functions, please read Documentation/fault-injection/fault-injection.rst
-+ * 'Error Injectable Functions' section.
-  */
- #define ALLOW_ERROR_INJECTION(fname, _etype)				\
- static struct error_injection_entry __used				\
+Guenter
 
