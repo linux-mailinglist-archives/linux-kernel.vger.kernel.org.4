@@ -2,77 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3109364BC6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE90664BC71
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbiLMSyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S236546AbiLMSzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235679AbiLMSyU (ORCPT
+        with ESMTP id S235403AbiLMSzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:54:20 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0532C1DDEC
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:54:19 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id cf42so6497913lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:54:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lC+KntX++hM1w2lGSafes7pleNUR4S0pNhLp6Irfr/Q=;
-        b=roYxglUr66VQa48ZHTZeu3uESZPXgc3tc3VCC+rRlXfM+pAuZX7d4eHa7JyuDevVx+
-         5nrVchqktDeTLoeSJIct3WylaiScdddTDcLQFAinEMsHRrOFTm8f9bYKozeqRep2AFA6
-         CYNgslUg9o2UnMzWsDAHA1jXD2TAE7MbOvszDfOWcgZ5RS75Dzx1mnJJUA1YsKqFxUiJ
-         VhWj92XsLPw0JpyEdrTPpG5obwr40fp6g/2+NyMk7DE2ytfVhxuCQEB17uiuxQW4/GWz
-         UC75tFrXrEt745KGIkOP17azY+7oqHrw+y+A56t++8yoGdykms/GNWWoe+Apcq7Ow2Zl
-         tAog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lC+KntX++hM1w2lGSafes7pleNUR4S0pNhLp6Irfr/Q=;
-        b=q8j6YRv8gFAT84wTGI+pIyINP9wodab2nrqIvTMUDaNLDODSxqnSzRKiIm3NJTbysC
-         +TfSUTyrJ3KZ0JYoNKDLhETFIvXwJrXxwDo4u8NQ8RL16dv/Kk8CVqSu9fq/3Dp88Ga7
-         AZWW38t7UF5p0GSh4RdMK73mOFRe2hxrDqa4v9mC+Jn36s+F4j9HjJIIaNXWnOEsHTpq
-         uNmOeCQFDLzn8nh96Nskk+hNcOGtLNSiLDE/dnDdxfu9dcXL3lbP9IjTMvyvV9hGHMIk
-         U/1wv9Sx7yec+Y8b9lA0YUwFLR1WEn1kKSgbYiZ8I9+rO1swMVIVzZEdPFZSP6VwMVb/
-         AZEQ==
-X-Gm-Message-State: ANoB5pkkN86Y+kGUQ3nuuMePEdQvyYsrjeuZHStdFFnddJt+dBcxwUIs
-        otnZZ1DHc6L7IqF12Aewchb0ZA==
-X-Google-Smtp-Source: AA0mqf4ZVl2lPVieJ+fMy9p8YDr0NR6mPjhOR69Td7DxTSED7Y57FO0SHQZ6jZpXcFrL6y+7S2jJNA==
-X-Received: by 2002:a05:6512:b24:b0:4b6:f027:2af8 with SMTP id w36-20020a0565120b2400b004b6f0272af8mr2367597lfu.66.1670957657408;
-        Tue, 13 Dec 2022 10:54:17 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id w26-20020ac2599a000000b004b40c2fccfdsm474474lfn.59.2022.12.13.10.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:54:16 -0800 (PST)
-Message-ID: <c91e1b25-54b4-8d58-fafd-35202db5d65b@linaro.org>
-Date:   Tue, 13 Dec 2022 19:54:12 +0100
+        Tue, 13 Dec 2022 13:55:00 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D1D1DDEC;
+        Tue, 13 Dec 2022 10:54:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 911E5CE1784;
+        Tue, 13 Dec 2022 18:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8011C433EF;
+        Tue, 13 Dec 2022 18:54:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670957695;
+        bh=dW7PxafR2nLb4Pz9N7biRBiffrpy3fpNqnmPXg08GNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tqyXUFemEIUFlf7GAGVOknNCyIZCjHflkzJr/CaRA2vINWL13+uhUUce3sPqfP2kh
+         Go7pKpQBgHol+bZ0PBPiEbp2w2CmpNDc0varO1C7AmmB71u93Z8eD62Ddaxm9LOCO/
+         QezKvAhy41MVaLF5MgSlBmvzDgHzjraCToC+11A1kZKHcd2h+ogeXzPA/ttww9eYOW
+         hbZIui7GZc4IsIOEaVQoBMDLPJrMQiy7CQvsFqYN2HqwO0pEwzI5cN4C8vf2L/1llt
+         Uphqun7gySrXBWalvtssaxmyqljUNCpIKS1a3aTVNZePRde1Gpzt/p3aPguNyYZOTV
+         IOEL113enzpXA==
+Date:   Tue, 13 Dec 2022 10:54:53 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jun Nie <jun.nie@linaro.org>
+Cc:     tytso@mit.edu, jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fscrypt: Fix null pointer when defer i_crypt_info
+Message-ID: <Y5jKfdDrJkdKtEbC@sol.localdomain>
+References: <20221213081103.2182231-1-jun.nie@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        andersson@kernel.org
-References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
- <20221213123823.455731-4-bhupesh.sharma@linaro.org>
- <39ff2174-6d04-ec21-b762-377ed28088cb@linaro.org>
- <CAH=2NtwUODvzLx=JThuZpADv+x+NtLx688Ox-95b_T9PtRf4_w@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAH=2NtwUODvzLx=JThuZpADv+x+NtLx688Ox-95b_T9PtRf4_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213081103.2182231-1-jun.nie@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,104 +53,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 13, 2022 at 04:11:03PM +0800, Jun Nie wrote:
+> syzbot report below bug[1]. Fix it with checking null pointer before
+> deferring i_crypt_info.
+> 
+> [1]
+> general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+> CPU: 3 PID: 456 Comm: repro Not tainted 6.1.0+gc0daf896 #169
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> RIP: 0010:fscrypt_limit_io_blocks+0xfa/0x2c0
+> Call Trace:
+>  <TASK>
+>  ext4_iomap_begin+0x6c5/0x7e0
+>  ? asym_cpu_capacity_scan+0x6b0/0x6b0
+>  ? ext4_iomap_begin_report+0x6b0/0x6b0
+>  ? __sanitizer_cov_trace_const_cmp1+0x1a/0x20
+>  ? ext4_commit_super+0x3c1/0x560
+>  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+>  ? ext4_handle_error+0x3bf/0x6b0
+>  ? ext4_iomap_begin_report+0x6b0/0x6b0
+>  iomap_iter+0x538/0xc80
+>  iomap_bmap+0x1ed/0x2d0
+>  ? iomap_to_fiemap+0x220/0x220
+>  ? rwsem_down_read_slowpath+0xc00/0xc00
+>  ? __ext4_iget+0x19c/0x4370
+>  ext4_bmap+0x288/0x470
+>  ? mpage_prepare_extent_to_map+0xd80/0xd80
+>  bmap+0xb1/0x120
+>  jbd2_journal_init_inode+0x7d/0x3f0
+>  ? up_write+0x6c/0xb0
+>  ? jbd2_journal_init_dev+0x130/0x130
+>  ? register_shrinker+0x33/0x160
+>  ext4_fill_super+0xa467/0xc650
+>  ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+>  ? ext4_reconfigure+0x2ad0/0x2ad0
+>  ? snprintf+0xbb/0xf0
+>  ? vsprintf+0x40/0x40
+>  ? up_write+0x6c/0xb0
+>  ? __sanitizer_cov_trace_cmp4+0x16/0x20
+>  ? set_blocksize+0x2f0/0x380
+>  get_tree_bdev+0x438/0x740
+>  ? get_tree_bdev+0x438/0x740
+>  ? ext4_reconfigure+0x2ad0/0x2ad0
+>  ext4_get_tree+0x1d/0x30
+>  vfs_get_tree+0x88/0x2e0
+>  path_mount+0x6ca/0x1ec0
+>  ? putname+0x110/0x150
+>  ? finish_automount+0x790/0x790
+>  ? putname+0x115/0x150
+>  __x64_sys_mount+0x2aa/0x340
+>  ? copy_mnt_ns+0xab0/0xab0
+>  ? __sanitizer_cov_trace_cmp4+0x16/0x20
+>  ? exit_to_user_mode_prepare+0x40/0x120
+>  do_syscall_64+0x35/0x80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Fixes: 5fee36095cda ("fscrypt: add inline encryption support")
+> Reported-by: syzbot+ba9dac45bc76c490b7c3@syzkaller.appspotmail.com
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> ---
+>  fs/crypto/inline_crypt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/crypto/inline_crypt.c b/fs/crypto/inline_crypt.c
+> index cea8b14007e6..fec859e83774 100644
+> --- a/fs/crypto/inline_crypt.c
+> +++ b/fs/crypto/inline_crypt.c
+> @@ -232,7 +232,7 @@ void fscrypt_destroy_inline_crypt_key(struct super_block *sb,
+>  
+>  bool __fscrypt_inode_uses_inline_crypto(const struct inode *inode)
+>  {
+> -	return inode->i_crypt_info->ci_inlinecrypt;
+> +	return inode->i_crypt_info && inode->i_crypt_info->ci_inlinecrypt;
+>  }
+>  EXPORT_SYMBOL_GPL(__fscrypt_inode_uses_inline_crypto);
 
+Thanks, but this has already been fixed upstream by commit 105c78e12468
+("ext4: don't allow journal inode to have encrypt flag").
 
-On 13.12.2022 19:52, Bhupesh Sharma wrote:
-> Hi Krzysztof,
-> 
-> On Tue, 13 Dec 2022 at 18:26, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 13/12/2022 13:38, Bhupesh Sharma wrote:
->>> Add USB superspeed qmp phy node to dtsi.
->>>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> ---
->>>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
->>>  1 file changed, 36 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> index e4ce135264f3d..9c5c024919f92 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
->>>                       status = "disabled";
->>>               };
->>>
->>> +             usb_qmpphy: phy@1615000 {
->>> +                     compatible = "qcom,sm6115-qmp-usb3-phy";
->>> +                     reg = <0x01615000 0x200>;
->>> +                     #clock-cells = <1>;
->>> +                     #address-cells = <1>;
->>> +                     #size-cells = <1>;
->>> +                     ranges;
->>> +                     clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
->>> +                              <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
->>> +                              <&gcc GCC_AHB2PHY_USB_CLK>;
->>> +                     clock-names = "com_aux",
->>> +                                   "ref",
->>> +                                   "cfg_ahb";
->>> +                     resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
->>> +                              <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
->>> +                     reset-names = "phy", "phy_phy";
->>> +                     status = "disabled";
->>
->> Hm, you add a disabled PHY which is used by existing controller. The
->> controller is enabled in board DTS, but new PHY node isn't. Aren't you
->> now breaking it?
-> 
-> The USB controller is connected to two PHYs - one is HS PHY and the other is SS
-> QMP Phy. So while the exiting board dts describes and uses only the HS
-> PHY, newer
-> board dts files (which will soon be sent out as a separate patch),
-> will use both the HS and SS
-> USB PHYs.
-It will break Oneplus billie2, you need to specify just the usb2
-phy (and phy-names with just usb2-phy) there. Otherwise it's gonna
-end up waiting infinitely for the usb3 one to probe (but it won't
-because it's disabled)
+Also, I don't think adding a NULL check to __fscrypt_inode_uses_inline_crypto()
+is a good idea because it is only meant to be called when the inode's encryption
+key has already been set up.  Instead of making the function return a
+potentially-incorrect result, it was better to address the root cause of why it
+was being called at an inappropriate time in the first place.
 
-Konrad
-> 
-> So, this will not break the existing board dts files.
-> 
->>> +
->>> +                     usb_ssphy: phy@1615200 {
->>> +                             reg = <0x01615200 0x200>,
->>> +                                   <0x01615400 0x200>,
->>> +                                   <0x01615c00 0x400>,
->>> +                                   <0x01615600 0x200>,
->>> +                                   <0x01615800 0x200>,
->>> +                                   <0x01615a00 0x100>;
->>> +                             #phy-cells = <0>;
->>> +                             #clock-cells = <1>;
->>> +                             clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
->>> +                             clock-names = "pipe0";
->>> +                             clock-output-names = "usb3_phy_pipe_clk_src";
->>> +                     };
->>> +             };
->>> +
->>> +
->>
->> Just one blank line.
-> 
-> Ok, Will fix it in v2.
-> 
->>>               qfprom@1b40000 {
->>>                       compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->>>                       reg = <0x01b40000 0x7000>;
->>> @@ -1023,8 +1057,8 @@ usb_dwc3: usb@4e00000 {
->>>                               compatible = "snps,dwc3";
->>>                               reg = <0x04e00000 0xcd00>;
->>>                               interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
->>> -                             phys = <&usb_hsphy>;
->>> -                             phy-names = "usb2-phy";
->>> +                             phys = <&usb_hsphy>, <&usb_ssphy>;
->>> +                             phy-names = "usb2-phy", "usb3-phy";
->>>                               iommus = <&apps_smmu 0x120 0x0>;
->>>                               snps,dis_u2_susphy_quirk;
->>>                               snps,dis_enblslpm_quirk;
->>
-> 
-> Thanks,
-> Bhupesh
+- Eric
