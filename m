@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EB464BC3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5DC64BC45
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236401AbiLMSnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
+        id S236422AbiLMSps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiLMSnr (ORCPT
+        with ESMTP id S236344AbiLMSpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:43:47 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898702495B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:43:46 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id a14so2844462pfa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:43:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRGW0A+WTGjFo/YgO5+knFwqY+lAetwgiQNnuZJK0ps=;
-        b=JIKmFS0ek7EajdqLddDexCX/fRyN6IBC6pmw5HLl/UxsJPPx3Vz1AkQgQZWkhP48V8
-         2gR2Qt+eLzojj3gcKbcGK8ScWFsZzSzCRsusU6Eq6u9YjxprWCrgmdUC/7tjsbg2tdnS
-         V1wYEKQp9WvVfrl/7L7zT8+fmS4EHwmHH0ejf7iaka+X1PjPBw5EEJRVhxi3gSGVyGt3
-         GXXNSpMXpTzpL+cENTbJsX16sfxazev75oeWwFVevwzn5/h3oL/DnE8kGvE7j5RcmDok
-         0+3QJ5SAj3oBuBH00fM3bksJ9ftJd6hjERRIWCA9haYpfqhfX8A+hUOaL5xQ6fpFpB0N
-         7aGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uRGW0A+WTGjFo/YgO5+knFwqY+lAetwgiQNnuZJK0ps=;
-        b=fW0IU/K7D8NT1Pb8W8gX71uQL21l+cYjfl32JaPKWFzSunVup8cOvOVllnv4nvgp4B
-         afSwGU28zotB4/uvFuqEnnn1TUjbzpVVPNwOH8o2W9Lw/p2c5Esb2kp+FEE5WA5CLEe0
-         Zphg2tjZbK82aR18kt/DK0hLlZYC9DrBDFL6LSWJZ7INnUXUMchxEMi9xVVRM2lHOHPD
-         oaT1QRMBSmWJc0+u5D+LNVr2fsvlaWw8VCAKRjzQ3PqkP5gG/sv539kvo/yEEwIInjKb
-         z33zwhs/FKr/ArN3VKUzx9rBHZx+vf3AWFdEs8ENBtL2zuYcCZkrH5VaJO4eupQv2v1a
-         KgEw==
-X-Gm-Message-State: ANoB5pnbG0P5lK5op6TPHpYYcoQyFWRnTOTyzsDpA7UUdOzG19HQG63z
-        7aWNNyQUvsVjf7vyyTwvdCSjS9/jW7obqlpjUWEuSw==
-X-Google-Smtp-Source: AA0mqf7HIg+ZL6u6Vm7VqqRU5sJQKj0S5J3zqbG7iBJWLAfsTsDvYbKfhNZvnBOz8boiRoThjX/RqqSzbBtXSzBBiAU=
-X-Received: by 2002:aa7:9006:0:b0:578:8d57:12ce with SMTP id
- m6-20020aa79006000000b005788d5712cemr513366pfo.42.1670957025838; Tue, 13 Dec
- 2022 10:43:45 -0800 (PST)
+        Tue, 13 Dec 2022 13:45:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF9F24F0D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670957103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gC79KdPgX8meWkHV6kEH9PpY7k/sykKi+3gQfcC9IOQ=;
+        b=GrJhw/afHh5tSPXb6noS6xJNUuigebxVQEAiDXu4KcNNJZymo6gX8c1enDPBIsKihc8USf
+        U9VaPCpAvVG+FmgUGLPwaoJFnB6382DUvgqte0UECpJmjH1yo5AXsDfl/9HBKuFQB8llft
+        Hv6Wh9VJYpccItP2pH18LUzQ7MavRiU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-20-BvYR3lxsNKWZAZOxPDL65Q-1; Tue, 13 Dec 2022 13:44:58 -0500
+X-MC-Unique: BvYR3lxsNKWZAZOxPDL65Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6381185A78F;
+        Tue, 13 Dec 2022 18:44:57 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E9CCC15BA0;
+        Tue, 13 Dec 2022 18:44:57 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-block v3 0/2] blk-cgroup: Fix potential UAF & flush rstat at blkgs destruction path
+Date:   Tue, 13 Dec 2022 13:44:44 -0500
+Message-Id: <20221213184446.50181-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20221213175714.31963-1-milan@mdaverde.com>
-In-Reply-To: <20221213175714.31963-1-milan@mdaverde.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 13 Dec 2022 10:43:34 -0800
-Message-ID: <CAKH8qBvRnDFhWEkZr9UNdznKNoCcjsZNBXeSVpXWooFhm5+C3g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: prevent leak of lsm program after failed attach
-To:     Milan Landaverde <milan@mdaverde.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,45 +65,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 9:58 AM Milan Landaverde <milan@mdaverde.com> wrote:
->
-> In [0], we added the ability to bpf_prog_attach LSM programs to cgroups,
-> but in our validation to make sure the prog is meant to be attached to
-> BPF_LSM_CGROUP, we return too early if the check fails. This results in
-> lack of decrementing prog's refcnt (through bpf_prog_put)
-> leaving the LSM program alive past the point of the expected lifecycle.
-> This fix allows for the decrement to take place.
->
-> [0] https://lore.kernel.org/all/20220628174314.1216643-4-sdf@google.com/
->
-> Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-> Signed-off-by: Milan Landaverde <milan@mdaverde.com>
+ v3:
+  - Drop v2 patch 2 as it may not be needed.
+  - Replace css_tryget() with percpu_ref_is_zero() in patch 1 as
+    suggested by Tejun.
+  - Expand comment on patch 2 to elaborate the reason for this patch.
 
-Makes sense, thank you!
+ v2:
+  - Remove unnecessary rcu_read_{lock|unlock} from
+    cgroup_rstat_css_cpu_flush() in patch 3.
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+It was found that blkcg_destroy_blkgs() may be called with all blkcg
+references gone. This may potentially cause user-after-free and so should
+be fixed. The second patch flushes rstat when blkcg_destroy_blkgs().
 
-> ---
->  kernel/bpf/syscall.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 35972afb6850..64131f88c553 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -3518,9 +3518,9 @@ static int bpf_prog_attach(const union bpf_attr *attr)
->         case BPF_PROG_TYPE_LSM:
->                 if (ptype == BPF_PROG_TYPE_LSM &&
->                     prog->expected_attach_type != BPF_LSM_CGROUP)
-> -                       return -EINVAL;
-> -
-> -               ret = cgroup_bpf_prog_attach(attr, ptype, prog);
-> +                       ret = -EINVAL;
-> +               else
-> +                       ret = cgroup_bpf_prog_attach(attr, ptype, prog);
->                 break;
->         default:
->                 ret = -EINVAL;
-> --
-> 2.34.1
->
+Waiman Long (2):
+  bdi, blk-cgroup: Fix potential UAF of blkcg
+  blk-cgroup: Flush stats at blkgs destruction path
+
+ block/blk-cgroup.c     | 22 ++++++++++++++++++++++
+ include/linux/cgroup.h |  1 +
+ kernel/cgroup/rstat.c  | 18 ++++++++++++++++++
+ mm/backing-dev.c       |  8 ++++++--
+ 4 files changed, 47 insertions(+), 2 deletions(-)
+
+-- 
+2.31.1
+
