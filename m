@@ -2,134 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2D064B2F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E4D64B2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234906AbiLMKGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S235078AbiLMKGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234930AbiLMKF6 (ORCPT
+        with ESMTP id S234753AbiLMKGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:05:58 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4881B78C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:05:56 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id 124so14109033vsv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:05:56 -0800 (PST)
+        Tue, 13 Dec 2022 05:06:34 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C601A811
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:06:33 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id s25so2804375lji.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:06:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMzzFTvuqaMziGtwkJpPvbzIY0Mb8qOTWg1NfkHEVhE=;
-        b=JIrF0JrjEbC22Xe6s6IPvHqn0qMEb89jhAc1+irAGXJYCtQqITTSxVN8qDSZsBoAeA
-         Aaqr31a2yqCR0CihwMb8QpsIsVzFpGH9JjnQeEwM9vmHQ5iktcAwRTLotk6sR/SUPCop
-         lU42FjqrvgCiNST4BOzA05muKUsiQZey/riVqY1EyplKc6C9WA5IQpeBY3WdhQCTrXEK
-         fgp/TcuKmt8/8a+Nm59w6TjpWHQjx7UXgbLp0kRcuV20NpDhjJU1lL+DdUniWlWJb7wF
-         VfoA3PlKY+HefsP+6mjk6Khg7uHcn9jkBOR9oKGiqR4JuqJ23T7ukicXjB9FvwDfgAJa
-         +khQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGJw/EOjMqDnh3BfLdeIG768fIWRdNcK55satWiXQuI=;
+        b=AcxQR6AhJwEOauuVa2V+6jTIqKsFKkAaRHSz0pU+596zCl+8B7ccxjtqQ4k4Oe2rFL
+         kE2I+Hp8z56W8lEiQvihibBErJDPSWsuH8gD53mDZULY4iSfRUE/pEUuUiIcShKxpvft
+         yB/0SzgCZlooZGgSYRJwrXaJaXOh/9V7QECx8C2vOin2BQWG4SZFz28C25MhPvsQhP2n
+         +mnmjLneM1HKC8OF/kEs3JZUW6746xP/91XOWTjAzVEbEcvlTSys/Vp5meASLwewjZm0
+         SLsPYkvfnywicqCtxa6Ve7xK0oRbyfbTkt665Vchg7BCOyX4FdkL+petQYnrwaFA6ihX
+         tC8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XMzzFTvuqaMziGtwkJpPvbzIY0Mb8qOTWg1NfkHEVhE=;
-        b=Q9ZsBaXIIbq+aLItO/zISP4Lxl7PJ7Yo1UTJJ5fBPtIK55/2PWNL4KhxJLPY81dG8z
-         KBx1/P/pP4nmghcAWhCI+n1JYkfLSSn/yQpH0hf/eQsGVXcHOtmxwIeC5brl9wt7VMbR
-         9uNAE2uyxADXDb+aimxXqQDttJduG0KalxbAG9LRe9iJqEx5FsGLObuI2NOulyytnZ89
-         aNWe7FAApIS39uIKBAYJvZgnGxIYOibtFmtie3ZZtyvbqAoGgpqnBz56zpQpIs26+x8W
-         hQdEOWSDY+cgCiIMyW6Ci/EJ1WGqU64xGsDqO6W2m9AKHCP6HIZCnS3Fx4WyyoVMDnIn
-         ywyg==
-X-Gm-Message-State: ANoB5pnhcGTYqvIZvoBCpqZw6z+sss1XrRWlCg9WtfRSbZgKF0g5ZCd3
-        Ncdd4FRYjCJGUJJLUWzeX4+fcvpFfj7U9NpmDs1Yeg==
-X-Google-Smtp-Source: AA0mqf7vpSlMQ7Ef8ekL/1O2JwgvLvwzON3XuqsxRGCJcCtaYNlJG/cxmKIIJCa9o9rRzJFCC+FwwmxHhtbLGjWE/NQ=
-X-Received: by 2002:a05:6102:3590:b0:3aa:eee:5bc9 with SMTP id
- h16-20020a056102359000b003aa0eee5bc9mr44049108vsu.24.1670925955828; Tue, 13
- Dec 2022 02:05:55 -0800 (PST)
+        bh=jGJw/EOjMqDnh3BfLdeIG768fIWRdNcK55satWiXQuI=;
+        b=P6Hw53PRUMF+hTMKzRVGeQHmoKn1oePbYTCJbOwD2qA18LacCWwttw3XaOm+OmyJ56
+         xLoexy+XQn09gYPCB87kKYFqxtm6MMYgOF/RnRhfLNZ9bBi+FIfyvgmprahGH0W1M3uF
+         2XuaxLfAa3+C92IDHrkFDDxM/NcBhnOjVoCeswi9r3FpDpshLV3FPtTy4JNl2bT/7q1Z
+         o5Y71EkjbUI04fC0XjqaNMpbBldvAy1ZUjlJV3ANciyptZNaqZR34Gwgc/jQShsjVnjK
+         c5zcsqv7pOokABm8aJ0wGVuienK3MzOXIMo625HMNXLVfNBMgJf6/H5ZUQav1uQiSZV5
+         k94w==
+X-Gm-Message-State: ANoB5pmURNivfnNBF+Z76IPuRiR0AYLstX9acvBY4F1vuXIFDYL8BvLC
+        TYWCkRlilmBy3HT9bME566t2Yw==
+X-Google-Smtp-Source: AA0mqf74gsmhPLr5eD9lFE5n6EczP1cTlFkFgSWvDjeZOYyCmJx+cwI4H589ziNCZZ1JeRfYUtqxSw==
+X-Received: by 2002:a05:651c:88c:b0:26f:db35:7e36 with SMTP id d12-20020a05651c088c00b0026fdb357e36mr4618263ljq.5.1670925991722;
+        Tue, 13 Dec 2022 02:06:31 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g14-20020a2eb5ce000000b00279ece03c45sm198627ljn.64.2022.12.13.02.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 02:06:31 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwmon: ntc-thermistor: drop Naveen Krishna Chatradhi from maintainers
+Date:   Tue, 13 Dec 2022 11:06:26 +0100
+Message-Id: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221212130924.863767275@linuxfoundation.org> <CA+G9fYv7tm9zQwVWnPMQMjFXtNDoRpdGkxZ4ehMjY9qAFF0QLQ@mail.gmail.com>
- <86c7e7a5-6457-49c5-a9e3-b28b8b8c1134@app.fastmail.com>
-In-Reply-To: <86c7e7a5-6457-49c5-a9e3-b28b8b8c1134@app.fastmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 13 Dec 2022 15:35:44 +0530
-Message-ID: <CA+G9fYtNvr-82FG23mkKj2LAMtS87hGEEpjZsGNUhr8oPU6O2A@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/106] 5.10.159-rc1 review
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Jakub Kicinski <kuba@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 at 14:50, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 13, 2022, at 08:48, Naresh Kamboju wrote:
-> > On Mon, 12 Dec 2022 at 18:43, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> >
-> > Regression detected on arm64 Raspberry Pi 4 Model B the NFS mount failed.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Following changes have been noticed in the Kconfig file between good and bad.
-> > The config files attached to this email.
-> >
-> > -CONFIG_BCMGENET=y
-> > -CONFIG_BROADCOM_PHY=y
-> > +# CONFIG_BROADCOM_PHY is not set
-> > -CONFIG_BCM7XXX_PHY=y
-> > +# CONFIG_BCM7XXX_PHY is not set
-> > -CONFIG_BCM_NET_PHYLIB=y
->
-> > Full test log details,
-> >  - https://lkft.validation.linaro.org/scheduler/job/5946533#L392
-> >  -
-> > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.158-107-gd2432186ff47/testrun/13594402/suite/log-parser-test/tests/
-> >  -
-> > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.158-107-gd2432186ff47/testrun/13594402/suite/log-parser-test/test/check-kernel-panic/history/
->
-> Where does the kernel configuration come from? Is this
-> a plain defconfig that used to work, or do you have
-> a board specific config file?
->
-> This is most likely caused by the added dependency on
-> CONFIG_PTP_1588_CLOCK that would lead to the BCMGENET
-> driver not being built-in if PTP support is in a module.
+Emails to Naveen Krishna Chatradhi bounce ("550 5.1.1 Recipient address
+rejected: User unknown").
 
-Here is the build command which is the same for working and not working
-kernels.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml | 1 -
+ 1 file changed, 1 deletion(-)
 
-# tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
---kconfig defconfig
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
- --kconfig-add CONFIG_ARM64_MODULE_PLTS=y
- --kconfig-add CONFIG_SYN_COOKIES=y
- --kconfig-add CONFIG_SCHEDSTATS=y CROSS_COMPILE_COMPAT=arm-linux-gnueabihf-
+diff --git a/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml b/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+index def693a60f55..3d0146e20d3e 100644
+--- a/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
++++ b/Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml
+@@ -6,7 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: NTC thermistor temperature sensors
+ 
+ maintainers:
+-  - Naveen Krishna Chatradhi <ch.naveen@samsung.com>
+   - Linus Walleij <linus.walleij@linaro.org>
+ 
+ description: |
+-- 
+2.34.1
 
-- Naresh
-
->
->      Arnd
