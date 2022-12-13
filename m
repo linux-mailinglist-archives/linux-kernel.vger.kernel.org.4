@@ -2,131 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BA764B4E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3255B64B50F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbiLMMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S235630AbiLMMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbiLMMMB (ORCPT
+        with ESMTP id S235605AbiLMMWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:12:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA117431
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:11:52 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B53591EC049C;
-        Tue, 13 Dec 2022 13:11:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670933510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=X5lcL7DyuNwTH+ORfD5m65hr2g7vZ4p3O+iUlWkudm0=;
-        b=asbHmtPuHS+spOHhvhidvZutTfzEBR1T7cOiWjUG5brf7ZfbBouKVLSzdsgce6TrOxaZ7q
-        m1HqtIFh00LvRvAdDSKbbwJPKeCGJ/p8dL4IfsZp2VyatNOdUsd2YiiOhDyfZiKe1Y5eop
-        ltmNqzkDGGWsQcVndPO+uqDh/hneqUU=
-Date:   Tue, 13 Dec 2022 13:11:46 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/boot for v6.2
-Message-ID: <Y5hqkAfK7okjRh6n@zn.tnic>
+        Tue, 13 Dec 2022 07:22:23 -0500
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 04:22:21 PST
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAFCBB4;
+        Tue, 13 Dec 2022 04:22:21 -0800 (PST)
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-07.nifty.com with ESMTP id 2BDCDaMo002832;
+        Tue, 13 Dec 2022 21:13:36 +0900
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2BDCDLx9026781;
+        Tue, 13 Dec 2022 21:13:21 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BDCDLx9026781
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1670933602;
+        bh=jPEostDy9/vEakl3XTQVCX9XEz9FU/Jk6r+V9qKfjuM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XkNtsEc2kUycZSbesW77QvhHxPLP+HrgS5y2pZh2Fd3AVApyqQByCoNUJx8cQ8pIW
+         Z8FsuqyhbWCQjsP22d50IQ04MeKJrSmGXO5fc01qf8sFSfZ6jK0MbeOSCcW6b152oS
+         CWPREXqmPpXeWbq/NEgQZoQra0IJyqECITY0PtI0Gc3MOx/zzoRBUPr8CMUqJ6fKHE
+         UJSXMs2+9AHdB3oq4f6ZrhZmTWr2NPl2BvFR1aZh1Jy54JCSE391pPYAFD/lhEixUZ
+         EiP/b7/FiQycEvqIXuwLvzoGvOBPZLHdqjtfX0kPUX09g3eWcNl4Akq/z77q0D9WSd
+         +8FTc86AocKBw==
+X-Nifty-SrcIP: [209.85.210.54]
+Received: by mail-ot1-f54.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso9131256oth.5;
+        Tue, 13 Dec 2022 04:13:21 -0800 (PST)
+X-Gm-Message-State: ANoB5plwf/ZKM7javm3u8024Q22wmGipfjajHGrY83RI3R+AJVS78lrt
+        gvFkGsYSmiUucq3XC80ewGCdeDZ1PMadai1Wwc4=
+X-Google-Smtp-Source: AA0mqf49GboRoHKfWueMtOx43I//pF5NCXtfCT1dwFlEom7xK6kmRBG/C/T/6hUEeQlY1UGliE3yoMjpLOmtuyXm0eo=
+X-Received: by 2002:a9d:6748:0:b0:670:64b2:ae66 with SMTP id
+ w8-20020a9d6748000000b0067064b2ae66mr4036347otm.225.1670933600853; Tue, 13
+ Dec 2022 04:13:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012181841.333325-1-masahiroy@kernel.org>
+In-Reply-To: <20221012181841.333325-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 13 Dec 2022 21:12:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATncU_o3JDi4k-F4ALOb3LbVZbSmA4X6kfkHf2fb1omUg@mail.gmail.com>
+Message-ID: <CAK7LNATncU_o3JDi4k-F4ALOb3LbVZbSmA4X6kfkHf2fb1omUg@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: raise minimum supported version of
+ binutils to 2.25
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Oct 13, 2022 at 3:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Binutils 2.23 was released in 2012. Almost 10 years old.
+>
+> We already require GCC 5.1, released in 2015.
+>
+> Bump the binutils version to 2.25, which was released one year before
+> GCC 5.1.
+>
+> With this applied, some subsystems can start to clean up code.
+> Examples:
+>   arch/arm/Kconfig.assembler
+>   arch/mips/vdso/Kconfig
+>   arch/powerpc/Makefile
+>   arch/x86/Kconfig.assembler
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-please pull a pile of early boot cleanups and fixes for 6.2.
 
-Thx.
 
----
+I will pick this up to the kbuild tree
+because it got Linus' ack.
 
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
 
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_boot_for_v6.2
 
-for you to fetch changes up to 60253f100c5846029f1370e51be6ebaeb160dcec:
 
-  x86/boot: Remove x86_32 PIC using %ebx workaround (2022-11-29 16:26:53 +0100)
+> ---
+>
+>  Documentation/process/changes.rst | 4 ++--
+>  scripts/min-tool-version.sh       | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> index 9844ca3a71a6..ef540865ad22 100644
+> --- a/Documentation/process/changes.rst
+> +++ b/Documentation/process/changes.rst
+> @@ -35,7 +35,7 @@ Rust (optional)        1.62.0           rustc --version
+>  bindgen (optional)     0.56.0           bindgen --version
+>  GNU make               3.82             make --version
+>  bash                   4.2              bash --version
+> -binutils               2.23             ld -v
+> +binutils               2.25             ld -v
+>  flex                   2.5.35           flex --version
+>  bison                  2.0              bison --version
+>  pahole                 1.16             pahole --version
+> @@ -119,7 +119,7 @@ Bash 4.2 or newer is needed.
+>  Binutils
+>  --------
+>
+> -Binutils 2.23 or newer is needed to build the kernel.
+> +Binutils 2.25 or newer is needed to build the kernel.
+>
+>  pkg-config
+>  ----------
+> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> index 8766e248ffbb..4e5b45d9b526 100755
+> --- a/scripts/min-tool-version.sh
+> +++ b/scripts/min-tool-version.sh
+> @@ -14,7 +14,7 @@ fi
+>
+>  case "$1" in
+>  binutils)
+> -       echo 2.23.0
+> +       echo 2.25.0
+>         ;;
+>  gcc)
+>         echo 5.1.0
+> --
+> 2.34.1
+>
 
-----------------------------------------------------------------
-- Do some spring cleaning to the compressed boot code by moving the
-EFI mixed-mode code to a separate compilation unit, the AMD memory
-encryption early code where it belongs and fixing up build dependencies.
-Make the deprecated EFI handover protocol optional with the goal of
-removing it at some point (Ard Biesheuvel)
-
-- Skip realmode init code on Xen PV guests as it is not needed there
-
-- Remove an old 32-bit PIC code compiler workaround
-
-----------------------------------------------------------------
-Ard Biesheuvel (17):
-      x86/boot/compressed: Rename efi_thunk_64.S to efi-mixed.S
-      x86/boot/compressed: Move 32-bit entrypoint code into .text section
-      x86/boot/compressed: Move bootargs parsing out of 32-bit startup code
-      x86/boot/compressed: Move efi32_pe_entry into .text section
-      x86/boot/compressed: Move efi32_entry out of head_64.S
-      x86/boot/compressed: Move efi32_pe_entry() out of head_64.S
-      x86/boot/compressed, efi: Merge multiple definitions of image_offset into one
-      x86/boot/compressed: Simplify IDT/GDT preserve/restore in the EFI thunk
-      x86/boot/compressed: Avoid touching ECX in startup32_set_idt_entry()
-      x86/boot/compressed: Pull global variable reference into startup32_load_idt()
-      x86/boot/compressed: Move startup32_load_idt() into .text section
-      x86/boot/compressed: Move startup32_load_idt() out of head_64.S
-      x86/boot/compressed: Move startup32_check_sev_cbit() into .text
-      x86/boot/compressed: Move startup32_check_sev_cbit() out of head_64.S
-      x86/boot/compressed: Adhere to calling convention in get_sev_encryption_bit()
-      x86/boot/compressed: Only build mem_encrypt.S if AMD_MEM_ENCRYPT=y
-      x86/efi: Make the deprecated EFI handover protocol optional
-
-Juergen Gross (1):
-      x86/boot: Skip realmode init code when running as Xen PV guest
-
-Uros Bizjak (1):
-      x86/boot: Remove x86_32 PIC using %ebx workaround
-
- arch/x86/Kconfig                        |  17 ++
- arch/x86/boot/compressed/Makefile       |   8 +-
- arch/x86/boot/compressed/efi_mixed.S    | 351 ++++++++++++++++++++++++++++++++
- arch/x86/boot/compressed/efi_thunk_64.S | 195 ------------------
- arch/x86/boot/compressed/head_32.S      |   4 -
- arch/x86/boot/compressed/head_64.S      | 303 ++-------------------------
- arch/x86/boot/compressed/mem_encrypt.S  | 152 ++++++++++++--
- arch/x86/boot/cpuflags.c                |  15 +-
- arch/x86/boot/header.S                  |   2 +-
- arch/x86/boot/tools/build.c             |   2 +
- arch/x86/include/asm/realmode.h         |   1 +
- arch/x86/include/asm/x86_init.h         |   4 +
- arch/x86/kernel/setup.c                 |   2 +-
- arch/x86/kernel/x86_init.c              |   3 +
- arch/x86/realmode/init.c                |   8 +-
- arch/x86/xen/enlighten_pv.c             |   2 +
- drivers/firmware/efi/libstub/x86-stub.c |   2 +-
- 17 files changed, 553 insertions(+), 518 deletions(-)
- create mode 100644 arch/x86/boot/compressed/efi_mixed.S
- delete mode 100644 arch/x86/boot/compressed/efi_thunk_64.S
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best Regards
+Masahiro Yamada
