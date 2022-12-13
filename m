@@ -2,157 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5008864B38A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0F464B38E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235290AbiLMKsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S235268AbiLMKtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbiLMKsI (ORCPT
+        with ESMTP id S235279AbiLMKsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:48:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418E31E700;
-        Tue, 13 Dec 2022 02:47:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA94CB810CC;
-        Tue, 13 Dec 2022 10:47:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA63C433D2;
-        Tue, 13 Dec 2022 10:47:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670928426;
-        bh=n1hDnyLATu1NrxJXGrzGdJ+OhzBscdwZGmuwCYDV9TM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ut9wwf1CoQ9ZU5rnlqQGxvTPOPCTwbNrSWjI0r9s4OSBeBhKOrqDr3fp6YJ45Uk/+
-         +tV81FMtj/6cy64cwJkat/4saR6oQ/LWCeR1H2XGCI46RXMyOXMmZRMhRNISIPft/I
-         8nxGUUh2Hu+GciYhmuqWZCn+0XL76TEZ2Jtn0TNm+bt6MQMKl4dPwfte5DBxg0yZyn
-         cWH5Sc3YSRhr+pdn+hXQ4jZCgGRjGWfvdK8+DmRk9U8jIN/95yj2D7bOBE22/oiRYm
-         xgmuQBVhzwqgTx14IC8eRxzoMuyXJQ80qyOPfGomgrKNFCez74qdP90/smW29AY2C5
-         pNrAPCfYA0j2w==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] simple xattr updates for v6.2
-Date:   Tue, 13 Dec 2022 11:46:44 +0100
-Message-Id: <20221213104643.238650-1-brauner@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Dec 2022 05:48:37 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6802FCC4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670928467; x=1702464467;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Ppz86myWl4dw6PRdICVKBV9EV6dhxfN1XvHIrLD2gU8=;
+  b=flzDF1UjztGxTG7bpYavI5hbdORul2iTnt9ZR5A8dAuagoVps2Z50L/t
+   H0NzAM120+0ecJFDviMTRU31USn1v+AVi5Bxv9Xjs1KoKMRi0av19I3fe
+   6g4/J+ct0KKK8N+WdnpaOGJ44qxoCd6lmRkl8N/VlMFNaqGHIZ7/GNTRk
+   5s8eGTL1pydMLdrq4L4ZapuHM+wmC60xwa0LeLt4hp2n+o7Xn2v5b+CWZ
+   IMzZEbwWCBrX0OycKOKbsl1jn/nHy63fNMabCGegKc7WzlYmf51Y+VXw5
+   KJJl5OvkFQaro5uId/HA6zrrflcAP6dJiG7yWBmVsXWY/cwcIN/LECqK7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="380305369"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="380305369"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:47:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="650692466"
+X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
+   d="scan'208";a="650692466"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Dec 2022 02:47:44 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 02:47:44 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 02:47:43 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 02:47:43 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 13 Dec 2022 02:47:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ct5Ih3exVP+pNqJqnhgxbHNZExyNmDoDhthe1jXuXFCUD0eLmOPyC7mph3PrqDTQoqXQF6Pw6hPEdhSLLa3SnpbsTpfkkHiMQEbjA5bxRj1lnX3ybgm5GtIddwrIJu885n59WNwuUOsUDEW72+1Z9uXft9JLK2DGbqd+rle7XCi4h04RhyAOIp4//QkS4kJPaOUt6QWTgtZAnN+SYaVB82pHzJGexx/fAxSQxn4yT20vMUR6RiRpUU7W8Hkob4VEJ0lj0JaUS/V2/eF0g7XHrOAZywWKFsCuOYldyuqCnRPNagc02UeuqYdGvfJtMp5TCgeZKsp/ty3dCnhXVMQJYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D1qF0pr0o08nmR+6Vpyt681xzeQZjipergrza8AVtMQ=;
+ b=J6re38FJ+bpqjO26uFkNbIZjpcKEwnW8CaWawhLf50nKmjSZ0NMVwGUG2Wnh7aOgRuXNbAVI7v+HrZMXiPuKju+EtypuYWFq7wcHgQ30f3Nn+Kame6Q5fKIS6Sb2g93TjJahS6T2D84cP2zrUc1PDjkKamOO63yJEOk3MNZE1wCQV5ocRg4klhzwuzrHQ5+dS49rQ8+I/Kfo2IrZWMK+UmrSIcOQZ6SmqdvRpodnoqyNDfVP2v5LULiS3d2RABrPYH8HXu6EPI1gC34pTz7bZtbE1Y2irzP+BonAibsgngMj22gWFT56EYtWqAKuFWw143FsVfUTZh//qbBgpDXq3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6204.namprd11.prod.outlook.com (2603:10b6:a03:459::19)
+ by SN7PR11MB7565.namprd11.prod.outlook.com (2603:10b6:806:344::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
+ 2022 10:47:36 +0000
+Received: from SJ1PR11MB6204.namprd11.prod.outlook.com
+ ([fe80::4e35:9914:650b:269a]) by SJ1PR11MB6204.namprd11.prod.outlook.com
+ ([fe80::4e35:9914:650b:269a%8]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 10:47:36 +0000
+From:   "Upadhyay, Tejas" <tejas.upadhyay@intel.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>
+CC:     "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "Abaci Robot" <abaci@linux.alibaba.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "airlied@gmail.com" <airlied@gmail.com>
+Subject: RE: [Intel-gfx] [PATCH] drm/i915/gt: Modify mismatched function name
+Thread-Topic: [Intel-gfx] [PATCH] drm/i915/gt: Modify mismatched function name
+Thread-Index: AQHZDtjEgdZrOK7N4kO7ODo7FzRGVq5ron/w
+Date:   Tue, 13 Dec 2022 10:47:36 +0000
+Message-ID: <SJ1PR11MB62042313A2F529D22CC799F081E39@SJ1PR11MB6204.namprd11.prod.outlook.com>
+References: <20221213095145.1899-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20221213095145.1899-1-jiapeng.chong@linux.alibaba.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6204:EE_|SN7PR11MB7565:EE_
+x-ms-office365-filtering-correlation-id: 61cdcd37-49a2-4b12-6c9b-08dadcf772d7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sD8vNFb4VWyv48g3xBZOI45C5wWXBTQ6c0U/lJs2JtZTHWzIdz07xdJMYapQJa1fl7Wui1x3JYgN2cEe81iKfM4RNTjUsEe3vQMogQ09PItPaEembSZYMaAJ6q4YYzvXgMdIl571Sf1lhgjQxyYangW0EvVjsQ96h0IwnmZ/a95+wBZtdxusAJGCEsh5BK3cR4R5FLbNEHIsyuTuRBccf8uiOjPWNsHkO7IhyB5CtV0zBk8F47GWUBbaYsFSNrfUzR/+dWpQph2XOijWTR2iOc96CAMPaTnthYmvPoZ+TUY0HWxRj/qAdQO75ChnEEZIoO4nYfWuDeHaKwDuso9mr9Cp/pR9QsCN9+2aXDuJyeJdN0gZDziJtcHa18cVRr3I8vrbLZl09zMy1oxkvVXnvhVlFUZo7/9hlT9WfSaT5SY1+E8MloTdl7GHVrsvv0XznhmJ6keXRE52vOoVDmIkeQm3J88ydX44tF1GYkdTAbeMwa/CrCXVe1YCaF7/RUd/ge5u+j+6G+QebK6fFPTxmXm2x7A9aWrkS+Da16y4Rybge5JAo4r7X4Q8D1aDoKrJ47VxaTkXe+c5Shh7T6j/gmAZrvm4wDPKHRbu4uUfta/ueJ3VVMHFsUk16pMV+lWdpZkA4O70dESvopOCv6l/LWwY5c1QgCYAWa3s0G9MB8+1UnU/3KaEBqrrLCbFpERInsWv5/LgmS+nqtro6JgWnScff36c2i17Kutygwfhff0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6204.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199015)(38100700002)(6506007)(7696005)(82960400001)(478600001)(55016003)(966005)(41300700001)(186003)(76116006)(66946007)(4326008)(86362001)(66446008)(26005)(64756008)(9686003)(8676002)(66556008)(53546011)(71200400001)(38070700005)(83380400001)(66476007)(52536014)(5660300002)(8936002)(316002)(122000001)(33656002)(110136005)(2906002)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eqzDy62TcTtSgKBlCRvjUlEnrwJECQQitodVM3pLoiD8m3S2oE770pLdScXK?=
+ =?us-ascii?Q?+127kiVm1zNjmKAeuEKqxOVInfKPWXTc6HjTW78b3AvGguZo6v1/bCBP98aU?=
+ =?us-ascii?Q?JuZYrykU9s+s0xrS+U32ZvVmrr1UdwqysKjJOyT/uPLIZBclP+aevAIPa+sc?=
+ =?us-ascii?Q?cIEjR2LWs1uuyc7poONyUHHgl20+xVzadFUoYOhhHnNEFjqXfY8C8UfT97CW?=
+ =?us-ascii?Q?zSIK+OrY0QOO7a+D1QfdoM4NsK7RZr5gbH+GQC/mrNTKKX2ECB75NcpKmP30?=
+ =?us-ascii?Q?DOLha+1uqFXsGnk9lBC7c6f67JDFIuqcopTvi3WrT6TgfZJ5/imMXGySZaR4?=
+ =?us-ascii?Q?IcSGUKpQ5MkAdBskK61p1gIt1ZjgHrwjMkG/EotfGVTuBs1q9kjaj8hBYYiw?=
+ =?us-ascii?Q?ZDp615Y7dTaiaJg4eiIb0LlrM/ry0hfxuysI0BhnjaQMmOf98toHI8XR97C/?=
+ =?us-ascii?Q?USVrHgIVxTKtvRUWLQgcEtcOpcHF6dyyqIF4dvI5ED6jHF2QWyL9y26ccosY?=
+ =?us-ascii?Q?7m5IjWMbZ0VFwCkB8JKJtkcHFiQCzWXqvqiG2vSIDcThmoFzmjOsvp3rhlzy?=
+ =?us-ascii?Q?kz8gjsPPuSDFGG3vJPHRr0v1h69hC+Xi7O+I3PpTu8ZdmMLtCmrsSNDrJYQe?=
+ =?us-ascii?Q?5wp2fcYYlmqWl955OmRDh67rAMyN17feCasN4jTA1hy9S6msY9thIMC4XSUd?=
+ =?us-ascii?Q?CjNz6v7yUmTSwS+XoN/x+ksTwfaCEm54ZFQ8gkMJ6Asoi2WfoG7rcFvxJldc?=
+ =?us-ascii?Q?Kn5b8FWG/ADQPJgFaVE1MEUyXlmsJ743lASp7JS7DeM/A8e9U3G4g6PwXb3I?=
+ =?us-ascii?Q?jLPfeSva8qgu0BO0j6mWeTkgUOtmVOnLoP54nPvY60dz/wmifNGZFfbCcoI7?=
+ =?us-ascii?Q?C22gPu2I+H8olAJhzmSn0kBW4Jh5Uba21gwfSuUsCnrLG3UxMk3ItwjDRof8?=
+ =?us-ascii?Q?m5Mkl1pod5L6wUMxsd6noziumH2WRvnqwjDmwE+cIeYYVMptyY6S965fbmCo?=
+ =?us-ascii?Q?RZnFh242sdHaYhKw+XT32cKi5Ek0zGM66gAKG1fpn0KGIeGcUKmPeKvFBgLo?=
+ =?us-ascii?Q?0OKYacO3LfVVhOh0tz/lAtrdDjKyiKLMd6J5ctatWGWklbgQxQNntNvpaC+u?=
+ =?us-ascii?Q?j5vEmLlbIdzrogAO2GclrbLhDzhVl64qLb7TEY/inqyTSloE2+rGZAqBecT5?=
+ =?us-ascii?Q?Uq4e8J7b+rJlHw+Jmq53h46T7QMlItaRCrNJtbyFxn+CLoeG5mJTywHropo/?=
+ =?us-ascii?Q?Nitrdq30VIV+m0YJa7sa2psYM7/PancRoaUeagePTuoBN49xW2Gmrd8r62xN?=
+ =?us-ascii?Q?/fOFsJQHRxqHTes4CfBIKnRK89tJmFWr7OSrGEwRXH7ODLa/Qu8UWK+RCr0G?=
+ =?us-ascii?Q?zQR8l1y/RcDUWH9WV3tLzHGPthl8Z4NYcr9zgdR1UYSP61V6CiAARgMfXhyR?=
+ =?us-ascii?Q?PH1KnpOgrRhq1I2esqtQO36q/E2ysjX0D7C4EsGerVR6fQMA7ESzg9wMnuSd?=
+ =?us-ascii?Q?tVd1S9TULJSjFSNVvogyuvUp405eaFhlgfXb7HuJpxaORmpqNFZasDyqC8R8?=
+ =?us-ascii?Q?eje/88POVu3THZ0Ga6swUFg0REvV6Wai3j9WqZEmLSZi0PD3RcECvF+fEsQ7?=
+ =?us-ascii?Q?BQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4798; i=brauner@kernel.org; h=from:subject; bh=n1hDnyLATu1NrxJXGrzGdJ+OhzBscdwZGmuwCYDV9TM=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSTPCL+ifvjIzNZF6m99epqzpi3Znv1xyizWxT5rhJg+ewt8 TI2p7ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI6AmG/74LvJdkSDC9ef1/zZ0Ptg oZk9tnXlVR6XyxKvbaXe1s3peMDFumhH97XzNd+c278zGRHPozJX//Fo72kErLKllYfJD3Mz8A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6204.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61cdcd37-49a2-4b12-6c9b-08dadcf772d7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2022 10:47:36.7631
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 530sLaeKtUh0uS1/49a5S3d43I9+ByedP58vT3l4Oby5UExl8LQ4sT4ogs86HtMHwHhqcvJToC58vohLVOoeGtrDbvQevMcMev36fdW1/f8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7565
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linus,
+Indeed looks like miss. Thanks for the patch.
 
-(I thought I had sent this one yesterday but I only did my usual --dry-run
- routine. So this one is one day late.)
+Reviewed-by: Tejas Upadhyay <tejas.upadhyay@intel.com>
 
-/* Summary */
-This ports the simple xattr infrastucture to rely on a simple rbtree protected
-by a read-write lock instead of a linked list protected by a spinlock.
+> -----Original Message-----
+> From: Intel-gfx <intel-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> Jiapeng Chong
+> Sent: Tuesday, December 13, 2022 3:22 PM
+> To: jani.nikula@linux.intel.com
+> Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>; intel-
+> gfx@lists.freedesktop.org; Abaci Robot <abaci@linux.alibaba.com>; linux-
+> kernel@vger.kernel.org; dri-devel@lists.freedesktop.org; daniel@ffwll.ch;
+> Vivi, Rodrigo <rodrigo.vivi@intel.com>; airlied@gmail.com
+> Subject: [Intel-gfx] [PATCH] drm/i915/gt: Modify mismatched function name
+>=20
+> No functional modification involved.
+>=20
+> drivers/gpu/drm/i915/gt/intel_engine_cs.c:1306: warning: expecting
+> prototype for intel_engines_init_common(). Prototype was for
+> engine_init_common() instead.
+>=20
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D3442
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/gpu/drm/i915/gt/intel_engine_cs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> index c33e0d72d670..dfcd3a91fbe7 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> @@ -1292,7 +1292,7 @@ create_kernel_context(struct intel_engine_cs
+> *engine)  }
+>=20
+>  /**
+> - * intel_engines_init_common - initialize cengine state which might requ=
+ire
+> hw access
+> + * engine_init_common - initialize cengine state which might require hw
+> + access
+>   * @engine: Engine to initialize.
+>   *
+>   * Initializes @engine@ structure members shared between legacy and
+> execlists
+> --
+> 2.20.1.7.g153144c
 
-A while ago we received reports about scaling issues for filesystems using the
-simple xattr infrastructure that also support setting a larger number of
-xattrs. Specifically, cgroups and tmpfs.
-
-Both cgroupfs and tmpfs can be mounted by unprivileged users in unprivileged
-containers and root in an unprivileged container can set an unrestricted number
-of security.* xattrs and privileged users can also set unlimited trusted.*
-xattrs. A few more words on further that below. Other xattrs such as user.* are
-restricted for kernfs-based instances to a fairly limited number.
-
-As there are apparently users that have a fairly large number of xattrs we
-should scale a bit better. Using a simple linked list protected by a spinlock
-used for set, get, and list operations doesn't scale well if users use a lot of
-xattrs even if it's not a crazy number.
-
-Let's switch to a simple rbtree protected by a rwlock. It scales way better and
-gets rid of the perf issues some people reported. We originally had fancier
-solutions even using an rcu+seqlock protected rbtree but we had concerns about
-being to clever and also that deletion from an rbtree with rcu+seqlock isn't
-entirely safe.
-
-The rbtree plus rwlock is perfectly fine. By far the most common operation is
-getting an xattr. While setting an xattr is not and should be comparatively
-rare. And listxattr() often only happens when copying xattrs between files or
-together with the contents to a new file.
-
-Holding a lock across listxattr() is unproblematic because it doesn't list the
-values of xattrs. It can only be used to list the names of all xattrs set on a
-file. And the number of xattr names that can be listed with listxattr() is
-limited to XATTR_LIST_MAX aka 65536 bytes. If a larger buffer is passed then
-vfs_listxattr() caps it to XATTR_LIST_MAX and if more xattr names are found it
-will return -E2BIG. In short, the maximum amount of memory that can be
-retrieved via listxattr() is limited and thus listxattr() bounded.
-
-Of course, the API is broken as documented on xattr(7) already. While I have no
-idea how the xattr api ended up in this state we should probably try to come up
-with something here at some point. An iterator pattern similar to readdir() as
-an alternative to listxattr() or something else.
-
-Right now it is extremly strange that users can set millions of xattrs but then
-can't use listxattr() to know which xattrs are actually set. And it's really
-trivial to do:
-for i in {1..1000000}; do setfattr -n security.$i -v $i ./file1; done
-And around 5000 xattrs it's impossible to use listxattr() to figure out which
-xattrs are actually set. So I have suggested that we try to limit the number of
-xattrs for simple xattrs at least. But that's a future patch and I don't
-consider it very urgent.
-
-A bonus of this port to rbtree+rwlock is that we shrink the memory consumption
-for users of the simple xattr infrastructure.
-
-This also adds kernel documentation to all the functions.
-
-/* Testing */
-clang: Ubuntu clang version 15.0.2-1
-gcc: gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0
-
-All patches are based on v6.1-rc1 and have been sitting in linux-next. No build
-failures or warnings were observed. All old and new tests in fstests,
-selftests, and LTP pass without regressions.
-
-/* Conflicts */
-At the time of creating this PR no merge conflicts were reported from
-linux-next and no merge conflicts showed up doing a test-merge with current
-mainline.
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.xattr.simple.rework.rbtree.rwlock.v6.2
-
-for you to fetch changes up to 3b4c7bc01727e3a465759236eeac03d0dd686da3:
-
-  xattr: use rbtree for simple_xattrs (2022-11-12 10:49:26 +0100)
-
-Please consider pulling these changes from the signed fs.xattr.simple.rework.rbtree.rwlock.v6.2 tag.
-
-Thanks!
-Christian
-
-----------------------------------------------------------------
-fs.xattr.simple.rework.rbtree.rwlock.v6.2
-
-----------------------------------------------------------------
-Christian Brauner (1):
-      xattr: use rbtree for simple_xattrs
-
- fs/xattr.c            | 317 +++++++++++++++++++++++++++++++++++++++-----------
- include/linux/xattr.h |  38 ++----
- mm/shmem.c            |   2 +-
- 3 files changed, 260 insertions(+), 97 deletions(-)
