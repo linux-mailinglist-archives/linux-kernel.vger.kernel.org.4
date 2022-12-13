@@ -2,102 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C0A64C0F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FCF64C0F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237126AbiLMXyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S234027AbiLMX6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbiLMXyq (ORCPT
+        with ESMTP id S236598AbiLMX6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:54:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74161114E
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670975638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8kNUFsiSapaEOV7ygdQ/RnZuA4WU7ECuH6Dq3VkyTdI=;
-        b=LYcTaHOrEMtbLz1A7e8dVz8cdLsH/rQEErj9d1btmPu4PAxDfdWNO/doxARZJu9OaqG4jp
-        sepbKKcI77NXsrxmvVxh/pK2OvhsrmLxjjjR1jRWLgL0aEWw0khuNjnz4K7wgtAr4tAEGg
-        nQ+yjrNdKMUua8B3dMR/lCcAR/6aTG8=
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
- [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-317-kJiZCHGyPDmVgIK-CabHSQ-1; Tue, 13 Dec 2022 18:53:57 -0500
-X-MC-Unique: kJiZCHGyPDmVgIK-CabHSQ-1
-Received: by mail-yb1-f199.google.com with SMTP id i19-20020a253b13000000b0070358cca7f7so18370709yba.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:53:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8kNUFsiSapaEOV7ygdQ/RnZuA4WU7ECuH6Dq3VkyTdI=;
-        b=mUr7tv0LG9iX8bcDUNdXn1HckoodVqDgVh9BaLNLfjvChtbAqmbvCJ2cIsxdHK9caV
-         P+Lh7vGGlxv5DIHB6EQfua4RFseUDo9BtDBvkVE64SWG6CVjlGxEhNdCgQjHEkKFZrmQ
-         /RUBG9Ih2IAZZEFnHsoyBI+doQGc4eqpQaaZuX1of8zFV+ak+lS69M+lGYmUagK1ctfR
-         YL4KAReQtndJ4LaWfMQu36+OaYFqeMWo3paWpXcX/Dw8887XGYjYXbbh8aE2kyuQmq8X
-         oE+/PRHFA6D1PXdCkmmM0DJvRlJjSyXuef4AyQ91QVFgscxlOr7z2rUFsZrPHiY48JUH
-         tGVA==
-X-Gm-Message-State: ANoB5plaVqa8VmEJ3Un1pMWWOz7uL75g1tcqw8f69FBglvw33jiMdjBo
-        ybAg6GcQo8obdOBBoVcQijepDZTWUko9psS+Ak70FF+BI3RVrhZozasgiUp/GFQVXBG+WKDTkKF
-        rRv7fO0BqpsNQ84uZgVr6lfxUYM9dJUQBZqiufdRr
-X-Received: by 2002:a81:c86:0:b0:3f0:3355:86f2 with SMTP id 128-20020a810c86000000b003f0335586f2mr17786210ywm.88.1670975636972;
-        Tue, 13 Dec 2022 15:53:56 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf51Jqh+4WEJhTU4iZtLHU49d0jUgx/pvRdiDLO5I6Ppy8t6dKAAJVVlZreokulIGnI/17grT6Iw71IV+auKuMo=
-X-Received: by 2002:a81:c86:0:b0:3f0:3355:86f2 with SMTP id
- 128-20020a810c86000000b003f0335586f2mr17786202ywm.88.1670975636731; Tue, 13
- Dec 2022 15:53:56 -0800 (PST)
+        Tue, 13 Dec 2022 18:58:41 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4219622281;
+        Tue, 13 Dec 2022 15:58:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWwS84z60z4xMy;
+        Wed, 14 Dec 2022 10:58:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670975913;
+        bh=bZ4RGyeJh2RXyjyUYY1LvU8RneVn5tnBRWeGuh+hOKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pZAj3xJh96hLjNNhYK1lrRyrmLhh2LzRyWCP8SOHLnNJ8Vgw8ECXX/zivIVIaR6ae
+         1xo2ZXiRjcVp+NN7PdDjq3lrQma6qxzgc13cs5NCulLw9hoYYwCYsKdPjVnl35lZxL
+         lCy9jtdcbZ2FQE+37AOJ4yrGrCQ3Q1f4dKO2Bv7GDK3uHb9Oib4xIZ25cvOrHEwgGD
+         nlvtQYAe05T7DTIDiRh5VIWZHfklkxJ34+geSCR51/kOoKiarWxwpMkc+I8EbJsjjm
+         1zw0824YK6/TzZedlnOIPyGmQ65g95Q3UexefcVswpTkhEvJAaL5+m6aEmRat5WblU
+         0O2UkH4JytwZw==
+Date:   Wed, 14 Dec 2022 10:58:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rae Moar <rmoar@google.com>
+Subject: Re: linux-next: manual merge of the kunit-next tree with the
+ apparmor tree
+Message-ID: <20221214105830.3bde0179@canb.auug.org.au>
+In-Reply-To: <20221208124653.71ba9491@canb.auug.org.au>
+References: <20221208124653.71ba9491@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221213234505.173468-1-npache@redhat.com> <Y5kPKpNp5qCnZEWy@monkey>
-In-Reply-To: <Y5kPKpNp5qCnZEWy@monkey>
-From:   Nico Pache <npache@redhat.com>
-Date:   Tue, 13 Dec 2022 16:53:30 -0700
-Message-ID: <CAA1CXcB653kDtF90oWUgVA3TDUrJHac-WPe1HdsQtRwtN5B3gA@mail.gmail.com>
-Subject: Re: [RFC V2] mm: add the zero case to page[1].compound_nr in set_compound_order
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        muchun.song@linux.dev, akpm@linux-foundation.org,
-        willy@infradead.org, gerald.schaefer@linux.ibm.com,
-        sidhartha.kumar@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+O0ZxHU/rk0+ec2g2d+N/6m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+--Sig_/+O0ZxHU/rk0+ec2g2d+N/6m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the pointer! Would the branchless conditional be an
-improvement over the current approach? I'm not sure how hot this path
-is, but it may be worth the optimization.
+Hi all,
 
--- Nico
+On Thu, 8 Dec 2022 12:46:53 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the kunit-next tree got a conflict in:
+>=20
+>   security/apparmor/policy_unpack_test.c
+>=20
+> between commits:
+>=20
+>   371e50a0b19f ("apparmor: make unpack_array return a trianary value")
+>   32490541682b ("apparmor: Fix kunit test for out of bounds array")
+>=20
+> from the apparmor tree and commit:
+>=20
+>   2c92044683f5 ("apparmor: test: make static symbols visible during kunit=
+ testing")
+>=20
+> from the kunit-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc security/apparmor/policy_unpack_test.c
+> index 7465da42492d,f25cf2a023d5..000000000000
+> --- a/security/apparmor/policy_unpack_test.c
+> +++ b/security/apparmor/policy_unpack_test.c
+> @@@ -144,8 -147,8 +147,8 @@@ static void policy_unpack_test_unpack_a
+>  =20
+>   	puf->e->pos +=3D TEST_ARRAY_BUF_OFFSET;
+>  =20
+> - 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, NULL, &array_size),
+>  -	array_size =3D aa_unpack_array(puf->e, NULL);
+>  -
+> ++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, NULL, &array_size),
+>  +			TRI_TRUE);
+>   	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
+>   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
+>   		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
+> @@@ -159,8 -162,8 +162,8 @@@ static void policy_unpack_test_unpack_a
+>  =20
+>   	puf->e->pos +=3D TEST_NAMED_ARRAY_BUF_OFFSET;
+>  =20
+> - 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, name, &array_size),
+>  -	array_size =3D aa_unpack_array(puf->e, name);
+>  -
+> ++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, name, &array_size),
+>  +			TRI_TRUE);
+>   	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
+>   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
+>   		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
+> @@@ -175,8 -178,9 +178,8 @@@ static void policy_unpack_test_unpack_a
+>   	puf->e->pos +=3D TEST_NAMED_ARRAY_BUF_OFFSET;
+>   	puf->e->end =3D puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16);
+>  =20
+> - 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, name, &array_size),
+>  -	array_size =3D aa_unpack_array(puf->e, name);
+>  -
+>  -	KUNIT_EXPECT_EQ(test, array_size, 0);
+> ++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, name, &array_size),
+>  +			TRI_FALSE);
+>   	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
+>   		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
+>   }
 
-On Tue, Dec 13, 2022 at 4:48 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 12/13/22 16:45, Nico Pache wrote:
-> > Since commit 1378a5ee451a ("mm: store compound_nr as well as
-> > compound_order") the page[1].compound_nr must be explicitly set to 0 if
-> > calling set_compound_order(page, 0).
-> >
-> > This can lead to bugs if the caller of set_compound_order(page, 0) forgets
-> > to explicitly set compound_nr=0. An example of this is commit ba9c1201beaa
-> > ("mm/hugetlb: clear compound_nr before freeing gigantic pages")
->
-> There has been some recent work in this area.  The latest patch being,
-> https://lore.kernel.org/linux-mm/20221213212053.106058-1-sidhartha.kumar@oracle.com/
->
-> --
-> Mike Kravetz
->
+This is now a conflict between the apparmor tree and Linus' tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+O0ZxHU/rk0+ec2g2d+N/6m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOZEaYACgkQAVBC80lX
+0Gx/ewf/cLWHgqmcA4c51sliHeP5JvxIYLWcLY2ZlKhvYnfQykGyxueyI3/gc7k8
+Ez/9TGq+/R86jodzaGTCQYrXEWe7IpmkV7UuCDCAQVne8O6XWUNG+o6dJaop9Teu
+E+XYT+C9mXgI17wV2YJAHdqcAq7fG6979e6wvFDAYLpl8ZA6e0+WUpr5LcCp3FFr
+vEpba2ulXSaxGsawUnIDghDEAWCT3zK0F71PzRpks2B7OaoF0r5yod2QI9I8zdHt
+9/Ucm0yMRdu8zIACz54z/omVsN9IuMJDsW92MqnD4P6eDHtQRB/Mj+tInoJXQpqD
+7QEEcL3ImePrpJVbNNSo8x693NGAXA==
+=/nMs
+-----END PGP SIGNATURE-----
+
+--Sig_/+O0ZxHU/rk0+ec2g2d+N/6m--
