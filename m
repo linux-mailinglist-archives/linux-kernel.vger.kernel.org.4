@@ -2,135 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A0B64BF4D
+	by mail.lfdr.de (Postfix) with ESMTP id 97BEE64BF4E
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236558AbiLMWWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S236518AbiLMWXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiLMWWi (ORCPT
+        with ESMTP id S236661AbiLMWXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:22:38 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9291FF9C;
-        Tue, 13 Dec 2022 14:22:35 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id c1so7374777lfi.7;
-        Tue, 13 Dec 2022 14:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=grg0bvt97ijbsfmyQgu+5+MNtO6B9tZuIIZrlfXrE7g=;
-        b=G9cs68AGm0bDo2dxa3H+gWo/J6MyRHIeXJ20mm/LQuWgWQUgQehvq+ynwR+urC9gwZ
-         BLHGiQ/auh2nYN2KleCpgDML8YKeuit5PfaNAzQPpdNIvABNP/SeHVlmiylqr/8p0AAZ
-         6MC9RaeQKHJHAvVuHGbVYwTiGxYH2VQ2c+M7r6hBH/ic6J4JoG12hOrHLivluU+F3lEN
-         trBhSbjWvENewcIbEfgZ2RwvoN1xGZuwGedaopx0YnwEu65SoWgJpM8Wsxj9bePxt2kI
-         +NZInILggNT3DlntTw27WrASJa22vkPuwtTEE/2FBNHuIO1YFQ8KlQwwh6+qm660raC/
-         GCiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=grg0bvt97ijbsfmyQgu+5+MNtO6B9tZuIIZrlfXrE7g=;
-        b=PWA0LKtAhIGuvc2CKP/K2/a6TnSeinhv21spuw1CgWL41fL8goooWaB6TCbNjlf8f9
-         ZHlZw6ejO0kHma21wWZWBburpTLAKbl8TZgZDhy3xARQle+0KW15lfJD6XvCkU7Qb9f5
-         mHnaKRr2JRpUWYAIMPvvoRedb10WFHHaL175piqOy6qyykO1YKu5kfVp+JLOuV/RY2DC
-         p5/v2AcHSlnjzBbeWaKpmEUxzNDMyyym9spfbiSyh6HhEOvE1i579m2BN3BiZpE4s+O5
-         hs0Mx7ZaUV7ZoiF0S0Rj+Qgq95Jdg6Wc5eCfVy61btke1FLrz671v0JenT3fLx+qkqvd
-         JiWg==
-X-Gm-Message-State: ANoB5pm30xpSlPvDYFBYXWkYKRhLYCEwq5faBl38INeIX+6WEQXVAu3f
-        IWhAqyxs3x7jlympkuWwd7o=
-X-Google-Smtp-Source: AA0mqf7apQ6SPd44a4c4jCfkeueA+Hwx6ga2toN4O+BsyaHnVrSk6bw5HptAKGAyvZiPDSlnd5V11g==
-X-Received: by 2002:a05:6512:3d0e:b0:4b5:9043:2530 with SMTP id d14-20020a0565123d0e00b004b590432530mr7831770lfv.68.1670970153809;
-        Tue, 13 Dec 2022 14:22:33 -0800 (PST)
-Received: from grain.localdomain ([5.18.253.97])
-        by smtp.gmail.com with ESMTPSA id o5-20020ac25e25000000b004acd6e441cesm530270lfg.205.2022.12.13.14.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 14:22:32 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 820EB5A0020; Wed, 14 Dec 2022 01:22:31 +0300 (MSK)
-Date:   Wed, 14 Dec 2022 01:22:31 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-Subject: Re: [PATCH v6 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y5j7J3hI7Div/WH8@grain>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
- <20221109102303.851281-3-usama.anjum@collabora.com>
- <Y5eSKBJ9hTtw9cbK@grain>
- <d7185563-3a7a-d69e-d3d1-1a2b071aa85d@collabora.com>
+        Tue, 13 Dec 2022 17:23:08 -0500
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6032633
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:23:06 -0800 (PST)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221213222303euoutp02ee1c437b747db413e8d35a66f5a2b7c8~weodkis870283402834euoutp02E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:23:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221213222303euoutp02ee1c437b747db413e8d35a66f5a2b7c8~weodkis870283402834euoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1670970183;
+        bh=2EZqbcx0W4vqGwh+HQvv99s9jy1fUMLoBIMNmNisezo=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=vIwO5khUbwG3OuKUfHbgVQDFLgzBzE2/wFMJiIqvD66NlK5rIMJLufcFiza39vSkB
+         +L1fDddX+/g4n5ePblph3pmp5kKPHVZPBO9cqolBkaKXbFGlUcwniPCMO7m+NSwabj
+         DUSjB78s1AHWZg09T79mdMtsD+vah80a8sDADnbw=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221213222302eucas1p13c33b2064912f308b52c50b6f7f0c892~weocY2bJN0957309573eucas1p1e;
+        Tue, 13 Dec 2022 22:23:02 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 75.9F.09549.64BF8936; Tue, 13
+        Dec 2022 22:23:02 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221213222301eucas1p1c7ef09661b9c127fc3fb2d76bbeba440~weobtXRXg2919029190eucas1p12;
+        Tue, 13 Dec 2022 22:23:01 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221213222301eusmtrp2ab471d61bad2b6a99ef67e498f7ce15b~weobslrj42509225092eusmtrp2I;
+        Tue, 13 Dec 2022 22:23:01 +0000 (GMT)
+X-AuditID: cbfec7f5-f47ff7000000254d-33-6398fb464993
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0B.02.09026.54BF8936; Tue, 13
+        Dec 2022 22:23:01 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221213222300eusmtip18c852a573ff877b224a1b093f69b1b2d~weoa1e1N82385523855eusmtip1N;
+        Tue, 13 Dec 2022 22:23:00 +0000 (GMT)
+Message-ID: <be56fd97-08b5-8a7a-2630-371c83dcab18@samsung.com>
+Date:   Tue, 13 Dec 2022 23:23:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7185563-3a7a-d69e-d3d1-1a2b071aa85d@collabora.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v2] regulator: core: Use different devices for resource
+ allocation and DT lookup
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     ChiYuan Huang <u0084500@gmail.com>, djrscally@gmail.com,
+        hdegoede@redhat.com, markgross@kernel.org, lgirdwood@gmail.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        yangyingliang@huawei.com, gene_chen@richtek.com,
+        chiaen_wu@richtek.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        ChiYuan Huang <cy_huang@richtek.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <Y5ipFd8BfU361QzN@sirena.org.uk>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLKsWRmVeSWpSXmKPExsWy7djPc7puv2ckG6xbI2zx8+U0RoupD5+w
+        Waw9qW/xZU8/q8W2w+9YLZ70nGO1eHN8OpPFtysdTBabHl9jtbi8aw6bRde1J6wWB6ZOY7aY
+        93ctq8XqPS+YLSatu8dkseXTNSYHAY+n/VvZPXbOusvu0XLkLavHplWdbB6bl9R7vN93lc1j
+        xqcpbB4H9xl6fN4kF8AZxWWTkpqTWZZapG+XwJVxs+sdW8E77opdH98xNzDu4+xi5OSQEDCR
+        mL15A3sXIxeHkMAKRok133oZIZwvjBIzf7+Ccj4zSnTd+8EC0/J07jyoxHJGiYv9i5lBEkIC
+        HxklfkyvArF5BewkvnR1MILYLAKqEvMPz2KCiAtKnJz5BGyQqECKxIGdZ8HiwgJpEs/2t7KB
+        2MwC4hK3nswHi4sIKEtc/b6XBWQZs8BBZomtnfdYQRJsAoYSXW+7wBo4BXQltp6aB9UsL7H9
+        7RxmkAYJge2cEuvPX2KFONtF4siiRmYIW1ji1fEt7BC2jMT/nSDbQBraGSUW/L4P5UxglGh4
+        fosRospa4s65X0ArOIBWaEqs36UPEXaUOPr+GFhYQoBP4sZbQYgj+CQmbZvODBHmlehoE4Ko
+        VpOYdXwd3NqDFy4xT2BUmoUULrOQ/D8LyTuzEPYuYGRZxSieWlqcm55abJyXWq5XnJhbXJqX
+        rpecn7uJEZgCT/87/nUH44pXH/UOMTJxMB5ilOBgVhLhVdWYlizEm5JYWZValB9fVJqTWnyI
+        UZqDRUmcd8WUjmQhgfTEktTs1NSC1CKYLBMHp1QDk1thwd4Ffgt26U+eMNXyld6Vfo3l9ma/
+        Web7f3zuyrM7aMcPAxaTv6rltdc/7r3pnNrxsS+hlvmYDnvW95PR91jruXVWFU5qtVq/I8Pw
+        s23vSWGlNYuv7l9xLlstYUe2vaO6z9U1kbcXKL8sz3W4b9w990jitPatrX2Oae/UrubtLTf+
+        qHRiqWay9N2GrXuPcvQ9NTLb1HvmqdvbaQGt3yNyim1u/7DfK/vn+za30tXsAb+1TSpeWBr/
+        reDbZWVaom9wTvheurRSwa5zhWeb626Yci/nazq4NJY56MjpyDDXs/Gt501+SlmITlrOHS4g
+        /dBn+jMjlqMmXtWPn1osEUmetmmd2F0r4a+fZjl2KrEUZyQaajEXFScCAF81X4HwAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsVy+t/xu7quv2ckG7xYLG/x8+U0RoupD5+w
+        Waw9qW/xZU8/q8W2w+9YLZ70nGO1eHN8OpPFtysdTBabHl9jtbi8aw6bRde1J6wWB6ZOY7aY
+        93ctq8XqPS+YLSatu8dkseXTNSYHAY+n/VvZPXbOusvu0XLkLavHplWdbB6bl9R7vN93lc1j
+        xqcpbB4H9xl6fN4kF8AZpWdTlF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eT
+        kpqTWZZapG+XoJdxs+sdW8E77opdH98xNzDu4+xi5OSQEDCReDp3HiOILSSwlFFi34Z8iLiM
+        xMlpDawQtrDEn2tdbF2MXEA17xkljl5+xASS4BWwk/jS1QHWzCKgKjH/8CyouKDEyZlPWEBs
+        UYEUifaef2BxYYE0iWf7W9lAbGYBcYlbT+aDxUUElCWuft/LArKAWeAgs8TGBzOZIba9YpJY
+        2bACrINNwFCi620XmM0poCux9dQ8qElmEl1buxghbHmJ7W/nME9gFJqF5JBZSBbOQtIyC0nL
+        AkaWVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIExv+3Yzy07GFe++qh3iJGJg/EQowQHs5II
+        r6rGtGQh3pTEyqrUovz4otKc1OJDjKbA0JjILCWanA9MOnkl8YZmBqaGJmaWBqaWZsZK4rye
+        BR2JQgLpiSWp2ampBalFMH1MHJxSDUzSfAyLXG9PTl6Zy+v6zHjZ34tNDrJVJ9ds++Xx2VTM
+        6JRT65mpJUpSzFfiTl/QvHOt5OvG5u+nXRWr93+wC2T8etH1X+DqRPvni9cUTf8uVVt+/mmn
+        gChPafhu058e2V85ElXzam9ssMt+vlqnTOdFrXS0nPK3NWsMM4Lm5515p7eucZbxqbD40ouJ
+        dimzg42l13/erH9cU1C1+CGjrf3F+zMuKj+0eHRb1GF+jN2OXZsOXFsTwvGrj2HxehGNNU3Z
+        LOyMTkLiYXvV7683vzqLb3bdds8tiiL3lSfUppY7BZxjTzMX3xQmYVSnVvR9sbqJ+u2cvH3n
+        uOef/ZWRMj/Aa+arg0nhmUufNZzkylBiKc5INNRiLipOBABi/y0NggMAAA==
+X-CMS-MailID: 20221213222301eucas1p1c7ef09661b9c127fc3fb2d76bbeba440
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221213113259eucas1p1c224898772bc5e59de90c1aa65a34de0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221213113259eucas1p1c224898772bc5e59de90c1aa65a34de0
+References: <CGME20221213113259eucas1p1c224898772bc5e59de90c1aa65a34de0@eucas1p1.samsung.com>
+        <1670311341-32664-1-git-send-email-u0084500@gmail.com>
+        <dd329b51-f11a-2af6-9549-c8a014fd5a71@samsung.com>
+        <CADiBU39-FUD787RmV9Z+jsSrb2Se66A6FrLWGxf78q2Ud-SrjA@mail.gmail.com>
+        <dc6c80f1-f34d-eaab-d561-32caa7fa140c@samsung.com>
+        <Y5ipFd8BfU361QzN@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 06:04:04PM +0500, Muhammad Usama Anjum wrote:
-> > Hi Muhammad! I'm really sorry for diving in such late (unfortunatelly too busy to
-> > step in yet). Anyway, while in general such interface looks reasonable here are
-> > few moments which really bothers me: as far as I undertstand you don't need
-> > vzalloc here, plain vmalloc should works as well since you copy only filled
-> > results back to userspace.
->
-> Thank you for reviewing. Correct, I'll update to use vmalloc.
-> 
-> > Next -- there is no restriction on vec_len parameter,
-> > is not here a door for DoS from userspace? Say I could start a number of ioctl
-> > on same pagemap and try to allocate very big amount of vec_len in summay causing
-> > big pressure on kernel's memory. Or I miss something obvious here?
->
-> Yes, there is a chance that a large chunk of kernel memory can get
-> allocated here as vec_len can be very large. We need to think of limiting
-> this buffer in the current implementation. Any reasonable limit should
-> work. I'm not sure what would be the reasonable limit. Maybe couple of
-> hundred MBs? I'll think about it. Or I should update the implementation
-> such that less amount of intermediate buffer can be used like mincore does.
-> But this can complicate the implementation further as we are already using
-> page ranges instead of keeping just the flags. I'll see what can be done.
+On 13.12.2022 17:32, Mark Brown wrote:
+> On Tue, Dec 13, 2022 at 03:29:00PM +0100, Marek Szyprowski wrote:
+>> On 13.12.2022 15:19, ChiYuan Huang wrote:
+>>> I don't have the board. Could you help to test this change to see
+>>> whether it's been fixed or not?
+>> The above change fixes the issue. Thanks! Feel free to add following
+>> tags to the final patch:
+>> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Thanks for jumping on this so quickly!  Marek, are these boards (or
+> similar ones) generally available?  They seem great at showing up issues
+> so it'd be good if I could get them into my CI and spot problems earlier
+> (or something like kernelci.org would be about as good)?
 
-You know, I'm not yet convinced about overall design. This is new uapi which
-should be reviewed very very carefully, once merged in we can't step back and
-will have to live with it forever. As to buffer size: look how pagemap_read
-is implemented, it allocates PAGEMAP_WALK_SIZE buffer array to gather results
-then copies it back to userspace. If the main idea to be able to walk over
-memory of a process with mm context locked it still doesn't bring much benefit
-because once ioctl is complete the state of mm can be changed so precise results
-are only possible if target process is not running.
+Well, they are quite old, but I've seen some used ones on eBay. Just 
+look for "Samsung Chomebook XE503C12" (Peach-Pit) or XE503C32 (Peach-Pi, 
+very rare).
 
-Maybe all of these aspects are been discussed already I probably need to read
-all previous converstaions first :)
+Getting it integrated into the CI requires a bit of manual work. You 
+have to solder UART lines to the test points on the motherboard. The 
+board can be fully controlled via so called Embedded Controller, what in 
+practice means that you can turn power on/off by sending commands to the 
+dedicated EC UART. The kernel console UART uses 1.8V, while the EC UART 
+- 3.3V. Let me know if you need more details.
+
+Peach-Pi was used on kernelci.org some time ago, but I have no idea what 
+has happened to it.
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
