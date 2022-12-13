@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6BF64BABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29BD64BAD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbiLMRPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
+        id S236204AbiLMRQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiLMRPJ (ORCPT
+        with ESMTP id S236190AbiLMRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:15:09 -0500
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FF76279;
-        Tue, 13 Dec 2022 09:15:08 -0800 (PST)
-Received: by mail-vk1-f176.google.com with SMTP id l17so1885279vkk.3;
-        Tue, 13 Dec 2022 09:15:08 -0800 (PST)
+        Tue, 13 Dec 2022 12:16:56 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304A511173
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:16:55 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id w37so287503pga.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:16:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NmYDZU11nklc+tzMmUwahX1BZ8SL82PffaoR0JHcaqM=;
+        b=PEO23n/pcpdK2ZCNaXgzQHxOvQrCbJU5CS++mVujrC/4KT+2y72fJ0YeYSZ47Cz6vG
+         AiyoUpzARyAT3RbpeYqOZ1utkA9Iym4mmZpO9KFuaTHkV4FqVxR30vcstfBCqeRDDocD
+         gtym1YmFMKsGAnHv21Z65DZPxMt+FMdPJJDWQGVZS6iUZSos6eMY03waRa42i6l12q8B
+         w6K0iiyS9AYsycclK/BdSPBKw31XA/bMpNS8gx5yHUzW2vIJ+jgz9KBsg+8vBqSBpmh7
+         eWNLwtQFw5fNyaOVggZXEh7CAcTfntEU0tMTkqVcFen+O60bsX2MCcl3nTA15vnALjm1
+         PVzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7aP+igB0NaircxiSkGrnkdOtF08vfazQfrJeriBa6Dg=;
-        b=a/yYLXDMvd9VOEXFjQOVmO8O+D1+oUxiKwFaXwinnMGgeBAG/aY/40ZEemwe6Q9Mhg
-         hsLM9iIbhWP/Qxv7W+k0EAWZnNBsxu/b2GEj2OmZkSLoL3aRaDaU8gIKesp9eG8Va89l
-         yP9rJZAc1KiPQK+THcqyDxW3s4xBbHdBXe9/1KK/2+Weo01H/AReGfzdxlBZx73KUF9l
-         f9UrcT/+ap0fX3WYGlxKULn+V6ZnwVoWhStnx2QL7cRJIMWt1ikwY/v+ELzdBe1tZ1p3
-         VEFgmk0x3IqmmkeuCTU9iIpZHhnIhJIhMrRXwtLfmK1Ddk87blHjiqqRVI1oLhUbEUwn
-         lz8w==
-X-Gm-Message-State: ANoB5pm8wahtKRadylwEMYxZhATdi8ZWLGtXQq8MHJ0ISpXaRvoPzYNN
-        hpyOWbHTRIY+cjgJZ5aeG/01w3iTfq2zww==
-X-Google-Smtp-Source: AA0mqf6SgxemQ55PkdkD98xgLHlzxm24HIV5Csb9Y9zAn72OVWrtjFPY5qyUqj964xChfnRueCG2nA==
-X-Received: by 2002:a1f:a10e:0:b0:3be:16a9:6019 with SMTP id k14-20020a1fa10e000000b003be16a96019mr8691301vke.9.1670951707474;
-        Tue, 13 Dec 2022 09:15:07 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id v19-20020a05620a0f1300b006e16dcf99c8sm8264306qkl.71.2022.12.13.09.15.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 09:15:07 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-417b63464c6so101451337b3.8;
-        Tue, 13 Dec 2022 09:15:06 -0800 (PST)
-X-Received: by 2002:a0d:dd4b:0:b0:370:61f5:b19e with SMTP id
- g72-20020a0ddd4b000000b0037061f5b19emr27207087ywe.316.1670951706562; Tue, 13
- Dec 2022 09:15:06 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmYDZU11nklc+tzMmUwahX1BZ8SL82PffaoR0JHcaqM=;
+        b=lMA3mOcG1wKsJUy1KFNqFWsuyCjylvl+9H+S6kSnpR7XEah5eHnD5jerO0c632TwOt
+         crmHmvEeiDEKLqpNc18ToM+8lIU0c06o1FdNsXbG5P+rQyuATsdcO8bYtk227HjgloJk
+         Vtpsbusrfk+CADlRrdfizhlIsCqitG7WuHhszmcu1HgV1FW8h46dIsR+j+f3ijXp7UHI
+         3OUYUC53HDgNeecjaBNTt1Z+GOojnFOkZCbscPdV6wm1w5Zz3fveCicwq9dbkOdIR26X
+         LbGP3eep9cjBrVIbXLRr8Moki9dMhkStBFj8S+MkDStfpHzKqM0+wEWGrsGMAH9uwSkv
+         1WXw==
+X-Gm-Message-State: ANoB5pmeYDQvR6Iez2sCItf9TdNxvj889oVkMn8lFzYE3kegjeRYzULK
+        VlJY9xI6iYDkl04bAGYT5efs
+X-Google-Smtp-Source: AA0mqf7E+4z5rJUSuBENaRVoW/8hRKN5T2vCU8OIH+2aeLMhIKU6gFugNjrJ1w8TXcrX5SAwBJnIEw==
+X-Received: by 2002:a05:6a00:791:b0:577:f836:6bcb with SMTP id g17-20020a056a00079100b00577f8366bcbmr19139798pfu.29.1670951814589;
+        Tue, 13 Dec 2022 09:16:54 -0800 (PST)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id e27-20020aa798db000000b00576d4c45a22sm8171855pfm.147.2022.12.13.09.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:16:53 -0800 (PST)
+Date:   Tue, 13 Dec 2022 22:46:47 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 04/13] arm64: dts: qcom: sc7180: Remove reg-names
+ property from LLCC node
+Message-ID: <20221213171647.GE4862@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-5-manivannan.sadhasivam@linaro.org>
+ <e57ffec7-6757-5cd8-7764-28f6edb95985@linaro.org>
 MIME-Version: 1.0
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221212115505.36770-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 13 Dec 2022 18:14:55 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
-Message-ID: <CAMuHMdXeeCoHNt0tSD51HmexQG7qVBnJO+-_pURix7fr678LNQ@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] riscv: mm: dma-noncoherent: Pass direction and
- operation to ALT_CMO_OP()
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e57ffec7-6757-5cd8-7764-28f6edb95985@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Tue, Dec 13, 2022 at 05:30:09PM +0100, Krzysztof Kozlowski wrote:
+> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+> > The LLCC block has several banks each with a different base address
+> > and holes in between. So it is not a correct approach to cover these
+> > banks with a single offset/size. Instead, the individual bank's base
+> > address needs to be specified in devicetree with the exact size.
+> > 
+> > On SC7180, there is only one LLCC bank available. So only change needed is
+> > to remove the reg-names property from LLCC node to conform to the binding.
+> > 
+> > The driver is expected to parse the reg field based on index to get the
+> > addresses of each LLCC banks.
+> > 
+> > Cc: <stable@vger.kernel.org> # 5.6
+> 
+> Oh, no, there is no single bug here. Binding from v5.6+ (which cannot be
+> changed) required/defined such reg-names. This is neither a bug nor
+> possible to backport.
+> 
+> > Fixes: c831fa299996 ("arm64: dts: qcom: sc7180: Add Last level cache controller node")
+> 
+> Drop.
+> 
+> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > index f71cf21a8dd8..b0d524bbf051 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> > @@ -2759,7 +2759,6 @@ dc_noc: interconnect@9160000 {
+> >  		system-cache-controller@9200000 {
+> >  			compatible = "qcom,sc7180-llcc";
+> >  			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
+> > -			reg-names = "llcc_base", "llcc_broadcast_base";
+> 
+> That's an ABI break...
+> 
 
-On Mon, Dec 12, 2022 at 12:55 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Pass direction and operation to ALT_CMO_OP() macro.
->
-> Vendors might want to perform different operations based on the direction
-> and callbacks (arch_sync_dma_for_device/arch_sync_dma_for_cpu/
-> arch_dma_prep_coherent) so to handle such cases pass the direction and
-> operation to ALT_CMO_OP() macro. This is in preparation for adding errata
-> for the Andes CPU core.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+As agreed, I will keep reg-names in dts for now.
 
-Thanks for your patch!
+Thanks,
+Mani
 
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(                                           \
->  #define THEAD_flush_A0 ".long 0x0275000b"
->  #define THEAD_SYNC_S   ".long 0x0190000b"
->
-> -#define ALT_CMO_OP(_op, _start, _size, _cachesize)                     \
-> +#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)         \
+> >  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+> >  		};
+> >  
+> 
+> Best regards,
+> Krzysztof
+> 
 
-Since commit a49ab905a1fc8630 ("RISC-V: Implement arch specific PMEM
-APIs") in riscv/for-next, there are two new users of this macro,
-which need to be updated to (add two zeroes?).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+மணிவண்ணன் சதாசிவம்
