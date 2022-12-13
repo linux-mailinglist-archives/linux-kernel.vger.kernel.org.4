@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7644F64B6B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FFD64B6C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235782AbiLMODY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:03:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
+        id S234909AbiLMOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiLMODW (ORCPT
+        with ESMTP id S235785AbiLMOFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:03:22 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17E063B2;
-        Tue, 13 Dec 2022 06:03:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 799EF22C51;
-        Tue, 13 Dec 2022 14:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670940200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XKy/NcC13yXOmU25oapyqo2lixJpYFXoptQAq2pSWKk=;
-        b=OXYUAfMi2KkrqhWQhsIVfKCRYnn9puhrGfj1DKpChL2k4O+RB+uq/EZhyif4+UQRAMXvNh
-        PM2zJr7QsmnppAyzVtHWA6+e2xcA1xU5R6hRRo3HDFKfJZYSdkZ/SkyYWM4bRPZYMh2VoW
-        AzNkVq0gLDdu0r4il93PtD7Xrdo8wZw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 51E73138F9;
-        Tue, 13 Dec 2022 14:03:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vJ3IESiGmGOJYgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 13 Dec 2022 14:03:20 +0000
-Date:   Tue, 13 Dec 2022 15:03:19 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-Message-ID: <Y5iGJ/9PMmSCwqLj@dhcp22.suse.cz>
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
- <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
- <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y5h+gHBneexFQcR3@cmpxchg.org>
+        Tue, 13 Dec 2022 09:05:09 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F4E63DF;
+        Tue, 13 Dec 2022 06:05:08 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDCJQb5008062;
+        Tue, 13 Dec 2022 14:04:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=s3Cn0XuaHR45db4sSCFl4kAjyRjvDPc/VA0vF5EIuss=;
+ b=oavohSaeTqeDOuw7J78oURrhJVF0KFc6JLoayqWg1toBTrqVAnJK/JPNxfjGWh5qGvEl
+ itm/i1nPxNsaf/zIpLDeKK+CDjgC/pXBJQPn9ZVAo5KwIhJpSUZnOq+Wpkwb7lo+SMIP
+ UvaKOMH/IbBLyMJhJMqn53rR8NTmRg6aFJrVv7WKdOYgBfsm5eeS9rPlkeKhaRdPVB0n
+ 9TfmwIj8sqsMYZfhUyhPglJSdltBEPBOkyi3q5ZapwgLsv0laP0shvDOUJqvBU3/VTK+
+ wD4cqtEmNKe6GFbG3W0bTuymEHJZdEj/4nB9vt3n+MdO+QJOZ8lNZvtWPh2kIE2hz+sT tQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mehje1h8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 14:04:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDE4mNp011365
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 14:04:48 GMT
+Received: from blr-ubuntu-87.ap.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 13 Dec 2022 06:04:44 -0800
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <manivannan.sadhasivam@linaro.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <konrad.dybcio@somainline.org>,
+        <amit.pundir@linaro.org>, <regressions@leemhuis.info>,
+        <sumit.semwal@linaro.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <robin.murphy@arm.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH 0/2] Add support for CPUCP mailbox controller
+Date:   Tue, 13 Dec 2022 19:34:07 +0530
+Message-ID: <20221213140409.772-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5h+gHBneexFQcR3@cmpxchg.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TmpijNi31auZCrO2a5gyQhBam3v1INu9
+X-Proofpoint-ORIG-GUID: TmpijNi31auZCrO2a5gyQhBam3v1INu9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=810
+ bulkscore=0 clxscore=1011 malwarescore=0 priorityscore=1501 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212130125
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 13-12-22 14:30:40, Johannes Weiner wrote:
-> On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
-[...]
-> > After these discussion, I think the solution maybe use different
-> > interfaces for "proactive demote" and "proactive reclaim".  That is,
-> > reconsider "memory.demote".  In this way, we will always uncharge the
-> > cgroup for "memory.reclaim".  This avoid the possible confusion there.
-> > And, because demotion is considered aging, we don't need to disable
-> > demotion for "memory.reclaim", just don't count it.
-> 
-> Hm, so in summary:
-> 
-> 1) memory.reclaim would demote and reclaim like today, but it would
->    change to only count reclaimed pages against the goal.
-> 
-> 2) memory.demote would only demote.
-> 
->    a) What if the demotion targets are full? Would it reclaim or fail?
-> 
-> 3) Would memory.reclaim and memory.demote still need nodemasks? Would
->    they return -EINVAL if a) memory.reclaim gets passed only toptier
->    nodes or b) memory.demote gets passed any lasttier nodes?
+Add support for CPUSS Control Processor (CPUCP) mailbox controller
+which enables communication between AP and CPUCP by acting as a
+doorbell between them.
 
-I would also add
-4) Do we want to allow to control the demotion path (e.g. which node to
-   demote from and to) and how to achieve that?
-5) Is the demotion api restricted to multi-tier systems or any numa
-   configuration allowed as well?
+Sibi Sankar (2):
+  dt-bindings: mailbox: Add dt binding for QTI CPUCP mailbox controller
+  mailbox: Add support for QTI CPUCP mailbox controller
+
+ .../bindings/mailbox/qcom,cpucp-mbox.yaml          |  51 ++++++
+ drivers/mailbox/Kconfig                            |   9 ++
+ drivers/mailbox/Makefile                           |   2 +
+ drivers/mailbox/qcom-cpucp-mbox.c                  | 176 +++++++++++++++++++++
+ 4 files changed, 238 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/qcom,cpucp-mbox.yaml
+ create mode 100644 drivers/mailbox/qcom-cpucp-mbox.c
 
 -- 
-Michal Hocko
-SUSE Labs
+2.7.4
+
