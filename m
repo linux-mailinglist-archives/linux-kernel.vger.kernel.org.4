@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CBB64BE90
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A5864BE95
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 22:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbiLMVhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 16:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S236432AbiLMVhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 16:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236367AbiLMVhM (ORCPT
+        with ESMTP id S236149AbiLMVhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 16:37:12 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A507624F19;
-        Tue, 13 Dec 2022 13:37:11 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id q18-20020a056830441200b006704633f258so725763otv.0;
-        Tue, 13 Dec 2022 13:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ffFvuzeAsFg4usIiUX8o14DQ+ZaIRo1HJb/MQnPkF9g=;
-        b=lVHYHiVdiriGasw8OkvwLO1dBUMsjqhbb0P5PrAKWxYGG+8JyfBkmBgUxloWixBVKz
-         F5w9K3bkIHgyKBk/GTHCK5svvqYo339g8xZNr2XDCJnkoBOthB1CpX7jh+2YCsze/JqD
-         yglo6EA+r8K9DEakGxN7Jsq7GJmxkbJ/GHS62lrUo8jTHWR4iqAPfVyTpy1C9PvOt6bu
-         patcV0mRzOAwydXPk3jgUv6pe0ht8prcK5Acp+uH4mWRFZGxFkkDxhYEHcYoNcN6na50
-         9x8RDiAtBdNHesGeBRQC46yCRxgiD2kLyw/q7ZmSzL6bhUsmyxCtCOLa9WhodoRc3Uv+
-         aFqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ffFvuzeAsFg4usIiUX8o14DQ+ZaIRo1HJb/MQnPkF9g=;
-        b=t7smc+mWGmZq7xP+vPwsdRwskbs295TSx+dWJSj4jTTLa+JLUgm/vsgvu4NG5AJzTV
-         cYdsP07RXDIg1QkOifO4/KWU40pRxxEKBQnu7O76c94S8UuAFWp8XOCrJZAAJFeTkWtC
-         2YrTCSCcLbowAXGzNNAfWtaXouV4k39/gfWodrS/QHwMShtCxmEFs8WigBmgaug5Ds/A
-         P4ElAAUuMLYMxU5YdHw8Z2mwLd86nOWVNFk9Vwj3z3t2BI6BnnDy+Ha6XUNkjKovfIw5
-         Nwg39lnPsQHjeulX4ll+ozRdjMxlRRd7PkkUyp+dUVvDHE6jVa5LCe3sbiSke5zzFnD3
-         Dh/g==
-X-Gm-Message-State: ANoB5plLdgic6Cou0483qqkt8r3eQVxx8oloQr7HdzAY27FhB+CTYaNh
-        YjVG8F4elM7Sh060yG3dnsA=
-X-Google-Smtp-Source: AA0mqf7l7tmOEMaF5vfVk9r2cjRUTnBsKExODssz2oKdil7MUCQWwASGcftynjuqy7MK1t5WT6zCYw==
-X-Received: by 2002:a9d:63d6:0:b0:671:cacb:681b with SMTP id e22-20020a9d63d6000000b00671cacb681bmr784330otl.22.1670967430928;
-        Tue, 13 Dec 2022 13:37:10 -0800 (PST)
-Received: from [127.0.0.1] ([187.19.236.93])
-        by smtp.gmail.com with ESMTPSA id v21-20020a9d7d15000000b0066c3bbe927esm1662336otn.21.2022.12.13.13.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 13:37:10 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:36:49 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Ian Rogers <irogers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the perf tree
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221214083434.4616378b@canb.auug.org.au>
-References: <20221214083434.4616378b@canb.auug.org.au>
-Message-ID: <45524A4F-3892-46B5-B987-6DCF11F58DF8@gmail.com>
+        Tue, 13 Dec 2022 16:37:53 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A74AE096;
+        Tue, 13 Dec 2022 13:37:51 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJL4cK021414;
+        Tue, 13 Dec 2022 21:37:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mEJGbVQ4YAj8MitwrH5vAkyQVtyHiP0YPpO4KnP5Thg=;
+ b=ceM5FcYNszAw1YE5UkIPSf0DuxcBpqO/KUXUfXPGXjbIzyEmb33sjLAY3RiRfeheuREN
+ BfsLcdd4Ccc4EOczIQyPnSBC6DH6+eGk4SClf55lvnMtPLRYqIUunv6m4Ya0/+j0H0EK
+ nSDFZytW6VaAVttAxwWzqGOfyHLdnRlw0wbbz51lzw+Jq/lGH6VdPK0mtggo5LR7Fyuk
+ yvFPfu2P5o1TmDMnvcSV3418Ct62QzFEJTxw4T+ONmtFcKAiVL3YHivLVZhHr1KWvTIG
+ JwqQonswZ1KmDQg62N3ff52Ytq23OJtqUHREjbHA6LiRR9J+KbiE1fMffjn3XbKSIh69 Uw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3meyfkgctt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 21:37:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDLbH4b014410
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 21:37:17 GMT
+Received: from [10.111.167.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
+ 2022 13:37:15 -0800
+Message-ID: <e055af1a-908c-2628-fd7b-531210163789@quicinc.com>
+Date:   Tue, 13 Dec 2022 13:37:13 -0800
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Add check for pstates
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, <robdclark@gmail.com>,
+        <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
+        <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <quic_jesszhan@quicinc.com>, <ville.syrjala@linux.intel.com>,
+        <yang.lee@linux.alibaba.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221206080236.43687-1-jiasheng@iscas.ac.cn>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221206080236.43687-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1VEralEEiHfngy7W9tqwnK9KYxi7n8EW
+X-Proofpoint-ORIG-GUID: 1VEralEEiHfngy7W9tqwnK9KYxi7n8EW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 clxscore=1015 phishscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212130187
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,18 +84,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On December 13, 2022 6:34:34 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eau=
-ug=2Eorg=2Eau> wrote:
->Hi all,
->
->Commit
->
->  9e03ed43cd4f ("perf stat: Check existence of os->prefix, fixing a segfa=
-ult")
->
->is missing a Signed-off-by from its author=2E
+On 12/6/2022 12:02 AM, Jiasheng Jiang wrote:
+> As kzalloc may fail and return NULL pointer,
+> it should be better to check pstates
+> in order to avoid the NULL pointer dereference.
+> 
+> Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Thanks, I'll fix this as well=2E
+Once again, your lines are wrapped around too early, please use the full 
+character limit for the commit text.
 
-- Arnaldo=20
->
+With that fixed,
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index 13ce321283ff..f51cb46ecfd6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -1150,6 +1150,8 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
+>   	bool needs_dirtyfb = dpu_crtc_needs_dirtyfb(crtc_state);
+>   
+>   	pstates = kzalloc(sizeof(*pstates) * DPU_STAGE_MAX * 4, GFP_KERNEL);
+> +	if (!pstates)
+> +		return -ENOMEM;
+>   
+>   	if (!crtc_state->enable || !crtc_state->active) {
+>   		DRM_DEBUG_ATOMIC("crtc%d -> enable %d, active %d, skip atomic_check\n",
