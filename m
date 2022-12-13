@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0160664B0A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF6464B0AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiLMH5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 02:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S233753AbiLMIAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiLMH5D (ORCPT
+        with ESMTP id S233935AbiLMIAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 02:57:03 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E037713D67
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:57:00 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h11so14698491wrw.13
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:57:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6o0GeZJe7zgU/rQbNGO95bs2olhPXjHiwqfmfQC5R7A=;
-        b=YjfllNNB32j4iHz3ehIUDe2K11iAW5NST8YgvWTvel7Ca2tyyrir/QmG3MBaAaF8Dw
-         6BGujKvE2jVDfZlXrdKxkY1DRG6uRQwJSR99PkVDPktwI2r+5bEmOEZPkvtqqzX/y/Km
-         7bLiFwkST1oDvgcEnyAgZyE3M8xj5oW0SNuWcmUJj87Klox8NRsl+ZfGlF5W2CqUc7tJ
-         EjSzNEMA5iTQV3Y10avb0/4Tny9UNW47ZK3PXY06g0DqHjCKbvM8+MqmfV6L2MW6KLcF
-         aeTyYXtRmfe1TbZRulomxOZ/4pitudsf5inLeOTbJmc6DWxXN3mHC27OLG/nq4x32j0t
-         3UHw==
+        Tue, 13 Dec 2022 03:00:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2604817ABA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670918355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VFqAyp486VxHBW/rh0z5cNT8CQKi3KWcwqHcpX33JJc=;
+        b=HApDkL/dPOVCslOfSFPS36LR9DB3HdtuZNAXBMZA7ccYP3Hld5dZz13oXDssIchbXYGIWz
+        PsuxxKqSuCPGrqtTSVGo68lQj+HF+b4Hr16PBLy9rH8AOlod3sgAL43ffj0NYwklDCgoLE
+        PUnf0SkFC4RHQFGFyM8u6XEXHCvEygI=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-161-HEAakjrnMXKcwfvZnDkVBQ-1; Tue, 13 Dec 2022 02:59:14 -0500
+X-MC-Unique: HEAakjrnMXKcwfvZnDkVBQ-1
+Received: by mail-il1-f197.google.com with SMTP id 7-20020a056e0220c700b0030386f0d0e6so6925254ilq.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:59:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6o0GeZJe7zgU/rQbNGO95bs2olhPXjHiwqfmfQC5R7A=;
-        b=1BhhyxdsrBZ9yfGHjCJxb/XCVcbz+0f32+BYBKu0S9TJhTtZnCnC9O63JNMAVNpOui
-         TeVna2Oj5Tchr4iX2kYuSMc7Ynv73VgLiycWnBaB+pF0gyu+4gxOa3VWTxolz9kI/zBB
-         BDMVSNS9BJ0d/RHXOCkmbpU9VJzob1KWTygUnybEufnQ2ynR08wuTPAHEMJSmZJaXVOd
-         eNQhLSVtTUH7nU1bM5TbTIDinQTbC1QlDbAjkIYHJEk72IvabzdamuzPc04wVS6pUs7t
-         AhJICSLoEGWemh1Eo2YvsaVE63pPJ+J7Oi2f/tptP1d6EGXPCnxARbCfP0PXmywKu5iS
-         i2kg==
-X-Gm-Message-State: ANoB5pmpsyGQXzB1f/F3m+Psg3k3UC1Saq/oS3osACudvg+WYSdjEpeL
-        pcMUZDpuXBv+cyB348+AIorS8nN6qurrtJVDHHqHqA==
-X-Google-Smtp-Source: AA0mqf5CAW19crv/THSl7pw+ACF9HjBX2ntNgiivqTeLEk1s3kIsOF+Zmw7LKwen32ZAnBWYGYgoNLW+m979aqJdBe0=
-X-Received: by 2002:a5d:504d:0:b0:242:246c:2f89 with SMTP id
- h13-20020a5d504d000000b00242246c2f89mr24102419wrt.108.1670918219475; Mon, 12
- Dec 2022 23:56:59 -0800 (PST)
+        bh=VFqAyp486VxHBW/rh0z5cNT8CQKi3KWcwqHcpX33JJc=;
+        b=sELHGXLGvhGsqghOvofb3DyjxgUCOp5k670OtKzfCxf6VXO1FgKDbFQv5zczhD92b5
+         Wtdr1ETiLuHGWnoVeB708tsBo1nfSlv6XRQ4614S1DOUNYB9BXBLnihMTY3LvOP/+UFF
+         egy7Q5Rps4sLmRWOUocpDXDXr5IyPoxBc3ypgmvT6x+mKldlb2oF8Z/39HJA1KZ3aFqH
+         ObS5NOeOX4cG89V8exeosH0BK5yxxtOyryOnF7OUlS70BWMCAurdfFIbe3U3/F+X4bkk
+         OuXD9dqx1ZqOK/3f/uQ9/CIhV7NeLaUSFZkfcImWIn2tVXCKXVzF7Gh7wcGWoQHeIDof
+         5o9Q==
+X-Gm-Message-State: ANoB5pl3j+uAlMkBllA3ytz134B7AVwld4PItBCulKfOw4IZT+jhrWEy
+        beU86yM1rcy7prlBQzKam1u6XvUIdkVqnyFFAtj7cYs2TwLmJHKNMQrhHcHPyed8fDuWGiaahdv
+        32DNblaJTJ32CaN/IpjYTTdDGogCS5/0jLi4aVSHL
+X-Received: by 2002:a05:6e02:de1:b0:303:4414:8ea8 with SMTP id m1-20020a056e020de100b0030344148ea8mr12363607ilj.124.1670918353393;
+        Mon, 12 Dec 2022 23:59:13 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf51VT1t55LjXTVNhkuJSBctYXn0AktGweNXi3fQ/x2ZU6mKpAxCi6mJtBBpovEerJCMzX2bPS9ksh1rccU3g5o=
+X-Received: by 2002:a05:6e02:de1:b0:303:4414:8ea8 with SMTP id
+ m1-20020a056e020de100b0030344148ea8mr12363601ilj.124.1670918353170; Mon, 12
+ Dec 2022 23:59:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20221212143102.175065-1-alexghiti@rivosinc.com> <CAL_JsqJz4uf+956oC4BfZGdjb+rfAZqduexLw3=D5HHjtyBC+g@mail.gmail.com>
-In-Reply-To: <CAL_JsqJz4uf+956oC4BfZGdjb+rfAZqduexLw3=D5HHjtyBC+g@mail.gmail.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 13 Dec 2022 08:56:48 +0100
-Message-ID: <CAHVXubgu_Voet_TPB0z+yec4DG8TP2_nSTDUcQdW2yf20wvP1w@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-6-benjamin.tissoires@redhat.com> <CAO-hwJ+fYvpD5zbDNq-f-gUEVpxsrdJ7K-ceNd37nLxzBxYL+g@mail.gmail.com>
+ <53f21d98-4ee6-c0e9-1c0a-5fae23c1b9a8@meta.com> <Y5dxAz3QTQnaB71Q@kroah.com>
+ <43e6e9ec-3a0c-7238-30b2-daa7e71b169b@meta.com> <Y5gbg820K5LHI7K6@kroah.com>
+In-Reply-To: <Y5gbg820K5LHI7K6@kroah.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 13 Dec 2022 08:59:02 +0100
+Message-ID: <CAO-hwJLs3a41cUvQ-sU04Pg4vJDiBGHfU=N_d_APhjEdQsR3Xg@mail.gmail.com>
+Subject: Re: [PATCH hid v12 05/15] HID: bpf jmp table: simplify the logic of
+ cleaning up programs
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Yonghong Song <yhs@meta.com>, Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,86 +83,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Tue, Dec 13, 2022 at 7:28 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Dec 12, 2022 at 10:39:26AM -0800, Yonghong Song wrote:
+> >
+> >
+> > On 12/12/22 10:20 AM, Greg KH wrote:
+> > > On Mon, Dec 12, 2022 at 09:52:03AM -0800, Yonghong Song wrote:
+> > > >
+> > > >
+> > > > On 12/12/22 9:02 AM, Benjamin Tissoires wrote:
+> > > > > On Thu, Nov 3, 2022 at 4:58 PM Benjamin Tissoires
+> > > > > <benjamin.tissoires@redhat.com> wrote:
+> > > > > >
+> > > > > > Kind of a hack, but works for now:
+> > > > > >
+> > > > > > Instead of listening for any close of eBPF program, we now
+> > > > > > decrement the refcount when we insert it in our internal
+> > > > > > map of fd progs.
+> > > > > >
+> > > > > > This is safe to do because:
+> > > > > > - we listen to any call of destructor of programs
+> > > > > > - when a program is being destroyed, we disable it by removing
+> > > > > >     it from any RCU list used by any HID device (so it will never
+> > > > > >     be called)
+> > > > > > - we then trigger a job to cleanup the prog fd map, but we overwrite
+> > > > > >     the removal of the elements to not do anything on the programs, just
+> > > > > >     remove the allocated space
+> > > > > >
+> > > > > > This is better than previously because we can remove the map of known
+> > > > > > programs and their usage count. We now rely on the refcount of
+> > > > > > bpf, which has greater chances of being accurate.
+> > > > > >
+> > > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > > > >
+> > > > > > ---
+> > > > >
+> > > > > So... I am a little bit embarrassed, but it turns out that this hack
+> > > > > is not safe enough.
+> > > > >
+> > > > > If I compile the kernel with LLVM=1, the function
+> > > > > bpf_prog_put_deferred() is optimized in a weird way: if we are not in
+> > > > > irq, the function is inlined into __bpf_prog_put(), but if we are, the
+> > > > > function is still kept around as it is called in a scheduled work
+> > > > > item.
+> > > > >
+> > > > > This is something I completely overlooked: I assume that if the
+> > > > > function would be inlined, the HID entrypoint BPF preloaded object
+> > > > > would not be able to bind, thus deactivating HID-BPF safely. But if a
+> > > > > function can be both inlined and not inlined, then I have no
+> > > > > guarantees that my cleanup call will be called. Meaning that a HID
+> > > > > device might believe there is still a bpf function to call. And things
+> > > > > will get messy, with kernel crashes and others.
+> > > >
+> > > > You should not rely fentry to a static function. This is unstable
+> > > > as compiler could inline it if that static function is called
+> > > > directly. You could attach to a global function if it is not
+> > > > compiled with lto.
+> > >
+> > > But now that the kernel does support LTO, how can you be sure this will
+> > > always work properly?  The code author does not know if LTO will kick in
+> > > and optimize this away or not, that's the linker's job.
+> >
+> > Ya, that is right. So for in-kernel bpf programs, attaching to global
+> > functions are not safe either. For other not-in-kernel bpf programs, it
+> > may not work but that is user's responsibility to adjust properly
+> > (to different functions based on a particular build, etc.).
+>
+> So if in-kernel bpf programs will not work or are not safe, how will
+> in-kernel bpf programs properly attach?
 
+Sorry if that wasn't clear. Loading a bpf program from the kernel is
+fine and safe. But it was the use of it that wasn't.
 
-On Mon, Dec 12, 2022 at 6:54 PM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Mon, Dec 12, 2022 at 8:31 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
-> >
-> > During the early page table creation, we used to set the mapping for
-> > PAGE_OFFSET to the kernel load address: but the kernel load address is
-> > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> > PAGE_OFFSET is).
-> >
-> > But actually we don't have to establish this mapping (ie set va_pa_offset)
-> > that early in the boot process because:
-> >
-> > - first, setup_vm installs a temporary kernel mapping and among other
-> >   things, discovers the system memory,
-> > - then, setup_vm_final creates the final kernel mapping and takes
-> >   advantage of the discovered system memory to create the linear
-> >   mapping.
-> >
-> > During the first phase, we don't know the start of the system memory and
-> > then until the second phase is finished, we can't use the linear mapping at
-> > all and phys_to_virt/virt_to_phys translations must not be used because it
-> > would result in a different translation from the 'real' one once the final
-> > mapping is installed.
-> >
-> > So here we simply delay the initialization of va_pa_offset to after the
-> > system memory discovery. But to make sure noone uses the linear mapping
-> > before, we add some guard in the DEBUG_VIRTUAL config.
-> >
-> > Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-> > in a better TLB utilization.
-> >
-> > Note that we rely on the firmware to protect itself using PMP.
-> >
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > ---
-> >
-> > v2:
-> > - Add a comment on why RISCV64 does not need to set initrd_start/end that
-> >   early in the boot process, as asked by Rob
-> >
-> > Note that this patch is rebased on top of:
-> > [PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-> >
-> >  arch/riscv/include/asm/page.h | 16 ++++++++++++++++
-> >  arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
-> >  arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
-> >  drivers/of/fdt.c              |  7 ++++++-
-> >  4 files changed, 57 insertions(+), 7 deletions(-)
->
-> [...]
->
-> > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > index 7b571a631639..012554445054 100644
-> > --- a/drivers/of/fdt.c
-> > +++ b/drivers/of/fdt.c
-> > @@ -895,8 +895,13 @@ static void __early_init_dt_declare_initrd(unsigned long start,
-> >          * enabled since __va() is called too early. ARM64 does make use
-> >          * of phys_initrd_start/phys_initrd_size so we can skip this
-> >          * conversion.
-> > +        * On RISCV64, the usage of __va() before the linear mapping exists
-> > +        * is wrong and RISCV64 rightly calls reserve_initrd_mem after it is
-> > +        * available where it actually resets the translation that is done
-> > +        * here and re-computes it.
->
-> No, I want a single comment that covers both cases (and the next arch
-> we add here). Something like this:
->
-> __va() is not yet available this early on some platforms. In that
-> case, the platform uses phys_initrd_start/phys_initrd_size instead and
-> does the VA conversion itself.
+In my case, HID-BPF to fix devices is safe (whether the program is
+loaded from the kernel or from userspace): the bpf JIT/verifier
+ensures that there are no out of bound read/write and the API is
+properly defined. But the problem I am facing with the generic bpf
+implementation is that it is made to be a global processing and to
+attach to one given function, when I wanted to have a couple function
++ device.
 
+So in this patch, I actually abused BPF to get free event
+notifications when the bpf program was released.
+The first implementation (HID: initial BPF implementation) was safer
+than this patch because I was using BPF for notifications of my
+internals but I wasn't messing up with the reference count. So if I
+did not get the events, I wouldn't decrement the bpf_prog and the end
+result means that the bpf program would stay forever attached to the
+device. Not user friendly but it doesn't introduce a kernel crash.
 
-I have just sent the v3, thanks for your reviews,
+However, this patch is messing with reference counting of an internal
+kernel object assuming I would always get the event. This is not the
+case and so I get read after free errors.
 
-Alex
+TL;DR: (ab)using BPF internally for kernel introspection to manage
+kernel structures is just plain wrong. Mea culpa.
 
->
->
-> Rob
+Cheers,
+Benjamin
+
