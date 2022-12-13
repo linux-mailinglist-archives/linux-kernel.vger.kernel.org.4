@@ -2,106 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B6164B380
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5008864B38A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiLMKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S235290AbiLMKsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbiLMKqg (ORCPT
+        with ESMTP id S235197AbiLMKsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:46:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA83A1B9F5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:45:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670928348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ng1wd9XMGqm8kfTwHIk/MN0YdretQ2zd7KrLEZThTl8=;
-        b=TD1gazDlq1yl0A4XBIKZ2x3Pmp6ZXR9CpvKnPMFTN4nGr7YMnhYt+2veFkGIh5wmlcDIjT
-        WPBUOeZ6g/h2C8yYOja8OVcCP4KRQnNdbUa3FHKrWByH7I1TTSvP/W5lZvzdvsWGr1A/Mg
-        +cmzCOenZzXuxoXIM9VNZXUeq7DV73g=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-599-gOdcezJ2Oia4xbnFLbqUlA-1; Tue, 13 Dec 2022 05:45:46 -0500
-X-MC-Unique: gOdcezJ2Oia4xbnFLbqUlA-1
-Received: by mail-wr1-f70.google.com with SMTP id w11-20020adfbacb000000b002418a90da01so2811190wrg.16
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:45:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ng1wd9XMGqm8kfTwHIk/MN0YdretQ2zd7KrLEZThTl8=;
-        b=qh8hGiGCBGevlIk44m6AdX2qOYtMNnlUeZ0qFAO9fyJANes7m35NtTyHAU5lKdCAkW
-         yA0/sIhRruRVq6BR9Bv2EL5cPZ8uJw0tjO6OfC7WcZceon+qUdQS742Y0b5xT9sZvVQ2
-         ET0OOGwaymWHKPfBkeuheGoXC8lvZmg58uLbWCILpNVn+CdOkm3H3CsXOZxoo36hHAzc
-         xA1GeR9TGNXphPQ9ucN9y6iUGa5kewIlOcvei/aZA32SazLi/CO7GEyv2RK4U+OCyEHQ
-         VQB769fUIrxcXXUM1gIcABpQAlzX9JMDV85jbXz9Z9SGQI/XT+aJr25lEqF0a7WZnI1I
-         0zzg==
-X-Gm-Message-State: ANoB5pkAj5UEtxZCpv/+T4F2Q7UeA/k5/OeMmxp8nI9rgonNttxwewo/
-        fLFmIUQC8rdfhEf9VFM/uigjggM2tJmWaJbap0mT2oqb/+eeOws+oiTxb8/2MD8XOzGGVPaGC42
-        iHVVQ0+HTcvsNpQiKIyOMd6r/
-X-Received: by 2002:a5d:4747:0:b0:242:1f8d:999 with SMTP id o7-20020a5d4747000000b002421f8d0999mr12652330wrs.14.1670928345340;
-        Tue, 13 Dec 2022 02:45:45 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4ztoklTJqIwHxoPbA5x2OKUpO2qh4VDozvm8AXd41GT3ej8DL4wCxvlY2h7af0pfy4ekABUA==
-X-Received: by 2002:a5d:4747:0:b0:242:1f8d:999 with SMTP id o7-20020a5d4747000000b002421f8d0999mr12652317wrs.14.1670928345137;
-        Tue, 13 Dec 2022 02:45:45 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id i8-20020adfefc8000000b0022cdeba3f83sm11389245wrp.84.2022.12.13.02.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 02:45:44 -0800 (PST)
-Date:   Tue, 13 Dec 2022 11:45:42 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v4 2/4] test/vsock: rework message bounds test
-Message-ID: <20221213104542.o2fzurh3fsrkgod4@sgarzare-redhat>
-References: <6be11122-7cf2-641f-abd8-6e379ee1b88f@sberdevices.ru>
- <44a15b4f-5769-7ed8-f4d1-04abbca6f379@sberdevices.ru>
+        Tue, 13 Dec 2022 05:48:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418E31E700;
+        Tue, 13 Dec 2022 02:47:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA94CB810CC;
+        Tue, 13 Dec 2022 10:47:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA63C433D2;
+        Tue, 13 Dec 2022 10:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670928426;
+        bh=n1hDnyLATu1NrxJXGrzGdJ+OhzBscdwZGmuwCYDV9TM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ut9wwf1CoQ9ZU5rnlqQGxvTPOPCTwbNrSWjI0r9s4OSBeBhKOrqDr3fp6YJ45Uk/+
+         +tV81FMtj/6cy64cwJkat/4saR6oQ/LWCeR1H2XGCI46RXMyOXMmZRMhRNISIPft/I
+         8nxGUUh2Hu+GciYhmuqWZCn+0XL76TEZ2Jtn0TNm+bt6MQMKl4dPwfte5DBxg0yZyn
+         cWH5Sc3YSRhr+pdn+hXQ4jZCgGRjGWfvdK8+DmRk9U8jIN/95yj2D7bOBE22/oiRYm
+         xgmuQBVhzwqgTx14IC8eRxzoMuyXJQ80qyOPfGomgrKNFCez74qdP90/smW29AY2C5
+         pNrAPCfYA0j2w==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] simple xattr updates for v6.2
+Date:   Tue, 13 Dec 2022 11:46:44 +0100
+Message-Id: <20221213104643.238650-1-brauner@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <44a15b4f-5769-7ed8-f4d1-04abbca6f379@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4798; i=brauner@kernel.org; h=from:subject; bh=n1hDnyLATu1NrxJXGrzGdJ+OhzBscdwZGmuwCYDV9TM=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMSTPCL+ifvjIzNZF6m99epqzpi3Znv1xyizWxT5rhJg+ewt8 TI2p7ShlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI6AmG/74LvJdkSDC9ef1/zZ0Ptg oZk9tnXlVR6XyxKvbaXe1s3peMDFumhH97XzNd+c278zGRHPozJX//Fo72kErLKllYfJD3Mz8A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 08:50:55PM +0000, Arseniy Krasnov wrote:
->This updates message bound test making it more complex. Instead of
->sending 1 bytes messages with one MSG_EOR bit, it sends messages of
->random length(one half of messages are smaller than page size, second
->half are bigger) with random number of MSG_EOR bits set. Receiver
->also don't know total number of messages.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/control.c    |  28 +++++++
-> tools/testing/vsock/control.h    |   2 +
-> tools/testing/vsock/util.c       |  13 ++++
-> tools/testing/vsock/util.h       |   1 +
-> tools/testing/vsock/vsock_test.c | 128 +++++++++++++++++++++++++++----
-> 5 files changed, 157 insertions(+), 15 deletions(-)
+Hey Linus,
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+(I thought I had sent this one yesterday but I only did my usual --dry-run
+ routine. So this one is one day late.)
 
+/* Summary */
+This ports the simple xattr infrastucture to rely on a simple rbtree protected
+by a read-write lock instead of a linked list protected by a spinlock.
+
+A while ago we received reports about scaling issues for filesystems using the
+simple xattr infrastructure that also support setting a larger number of
+xattrs. Specifically, cgroups and tmpfs.
+
+Both cgroupfs and tmpfs can be mounted by unprivileged users in unprivileged
+containers and root in an unprivileged container can set an unrestricted number
+of security.* xattrs and privileged users can also set unlimited trusted.*
+xattrs. A few more words on further that below. Other xattrs such as user.* are
+restricted for kernfs-based instances to a fairly limited number.
+
+As there are apparently users that have a fairly large number of xattrs we
+should scale a bit better. Using a simple linked list protected by a spinlock
+used for set, get, and list operations doesn't scale well if users use a lot of
+xattrs even if it's not a crazy number.
+
+Let's switch to a simple rbtree protected by a rwlock. It scales way better and
+gets rid of the perf issues some people reported. We originally had fancier
+solutions even using an rcu+seqlock protected rbtree but we had concerns about
+being to clever and also that deletion from an rbtree with rcu+seqlock isn't
+entirely safe.
+
+The rbtree plus rwlock is perfectly fine. By far the most common operation is
+getting an xattr. While setting an xattr is not and should be comparatively
+rare. And listxattr() often only happens when copying xattrs between files or
+together with the contents to a new file.
+
+Holding a lock across listxattr() is unproblematic because it doesn't list the
+values of xattrs. It can only be used to list the names of all xattrs set on a
+file. And the number of xattr names that can be listed with listxattr() is
+limited to XATTR_LIST_MAX aka 65536 bytes. If a larger buffer is passed then
+vfs_listxattr() caps it to XATTR_LIST_MAX and if more xattr names are found it
+will return -E2BIG. In short, the maximum amount of memory that can be
+retrieved via listxattr() is limited and thus listxattr() bounded.
+
+Of course, the API is broken as documented on xattr(7) already. While I have no
+idea how the xattr api ended up in this state we should probably try to come up
+with something here at some point. An iterator pattern similar to readdir() as
+an alternative to listxattr() or something else.
+
+Right now it is extremly strange that users can set millions of xattrs but then
+can't use listxattr() to know which xattrs are actually set. And it's really
+trivial to do:
+for i in {1..1000000}; do setfattr -n security.$i -v $i ./file1; done
+And around 5000 xattrs it's impossible to use listxattr() to figure out which
+xattrs are actually set. So I have suggested that we try to limit the number of
+xattrs for simple xattrs at least. But that's a future patch and I don't
+consider it very urgent.
+
+A bonus of this port to rbtree+rwlock is that we shrink the memory consumption
+for users of the simple xattr infrastructure.
+
+This also adds kernel documentation to all the functions.
+
+/* Testing */
+clang: Ubuntu clang version 15.0.2-1
+gcc: gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0
+
+All patches are based on v6.1-rc1 and have been sitting in linux-next. No build
+failures or warnings were observed. All old and new tests in fstests,
+selftests, and LTP pass without regressions.
+
+/* Conflicts */
+At the time of creating this PR no merge conflicts were reported from
+linux-next and no merge conflicts showed up doing a test-merge with current
+mainline.
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git tags/fs.xattr.simple.rework.rbtree.rwlock.v6.2
+
+for you to fetch changes up to 3b4c7bc01727e3a465759236eeac03d0dd686da3:
+
+  xattr: use rbtree for simple_xattrs (2022-11-12 10:49:26 +0100)
+
+Please consider pulling these changes from the signed fs.xattr.simple.rework.rbtree.rwlock.v6.2 tag.
+
+Thanks!
+Christian
+
+----------------------------------------------------------------
+fs.xattr.simple.rework.rbtree.rwlock.v6.2
+
+----------------------------------------------------------------
+Christian Brauner (1):
+      xattr: use rbtree for simple_xattrs
+
+ fs/xattr.c            | 317 +++++++++++++++++++++++++++++++++++++++-----------
+ include/linux/xattr.h |  38 ++----
+ mm/shmem.c            |   2 +-
+ 3 files changed, 260 insertions(+), 97 deletions(-)
