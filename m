@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5604E64ACD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DEB64ACD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiLMBLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
+        id S233805AbiLMBLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiLMBLB (ORCPT
+        with ESMTP id S233827AbiLMBLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:11:01 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B51BE96;
-        Mon, 12 Dec 2022 17:11:00 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p36so2417574lfa.12;
-        Mon, 12 Dec 2022 17:11:00 -0800 (PST)
+        Mon, 12 Dec 2022 20:11:21 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642BB1CB2F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:11:20 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id z144so983661iof.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:11:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=esoVLCCBYM+KX0CUdhS5Tl7OrN1x4of3zTJl3qN9icA=;
-        b=NMuhfgNsuogs/lKBdTzTSxywh7B2zonZdSfUoK/QPlQUZ/DQv7izsLVlBcVk0O5MZn
-         Nn7FJSFaQ8TFy+/u/3L9TQqRaeEkVfJHNfmLV8ZmkNhWl852vmPc0u7i9BhDuilMbTEh
-         RstFtmGbUu82ABJkPyur8h/J6d1RBKwLWDxYT+lJhlfw7bOR00ewNx6nqa799DiHjdEk
-         MnfAUi6Z+F9h9bYT4i0aaBs8DMizbPNVzmGxo1ZuILxQgrhIqq+ssQpc4LXDeq2Nir07
-         a1sq6TVT49UJXdHvXdb4lgJEkQQtz0VbY5Emrae7Uzwm52SEP9zOnfUEl/l95Ma0vuYN
-         c1EQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pAR7trYZxyJz6dDjjGtnhQhvH4CV37H8ORJAnU50YAI=;
+        b=OynFoN1pxipzXa/LRGcM80xD2vmYyGNwHBjBEuCjqZYJEqN9DZLh8crm+GMKI/72Fz
+         7HlpLIQy1Fpv7C+E1DZNIFKRvoT3XlW6fyxsdx3xupxod/KmnXyVMZ8ubid6KNxGnmoy
+         Qxxi4v+SuPsrHDtow570icb8+YuEWnNBfoizdLkwuKcg6pBcNGDanvcXDwknKuFX4dMS
+         VBJOFwk9CFUnXei7eiIcdlCoPVfj4DS2UVkQcxbwWFF8CS5rHJ7Egq79zImRfpYzqkqN
+         vDacxqXKTmpDqYbpVex7xMOsys3gZANZw5nYRnQ6czRCHKsbf6I36DaYapwrQ4bViBYw
+         JWKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=esoVLCCBYM+KX0CUdhS5Tl7OrN1x4of3zTJl3qN9icA=;
-        b=cg0R1/XHRltUYV6IuebKbzLgwBamN3G5sOzwZJmwc4FEbzckT4x6Tm6S4E4HlcCUMt
-         qDPTbtU3MnaDO7QIB8+nrzTTJ8QG3qHYWB05qTxGlWUNBj9FR6Cnx5ZHOno8BOD7LV3E
-         3Hnrqp7gOpuP219fC2NLN80hrj0Zwlr0YwnP+sUyHQVPlxRQm+uGwXimDkMQHr51XJB2
-         QSE5D6cE++DszyBndXcYlzGmIGutGbYCKXe8nYCSriZ38UEqNXN9k/FGdzTGf1E22yET
-         VPXaRZhjgKtPChTijQG0u6TGWg08faDgznj9crL9Gws1T7TsxcJsCTnlc77cJD0l12bm
-         6oNQ==
-X-Gm-Message-State: ANoB5pkOj1kWFzmdncdNKmokJSPH1DD06lkN1dv/lHAxDETsHKOaWavl
-        qaitMyjmkOEvmPf+J8O6yOrFwALd3RQ2FV5yLteGLM6b9/5R
-X-Google-Smtp-Source: AA0mqf58RZyS51eX38TmMel2o8skD5TQBzq3b+UAV6YS6xaih8iPW7Gjp7uYZtWR9RNFDqIDjwrAniqVO8EF3DtGd1k=
-X-Received: by 2002:a05:6512:96b:b0:4b6:ea33:d0b6 with SMTP id
- v11-20020a056512096b00b004b6ea33d0b6mr331622lft.651.1670893858419; Mon, 12
- Dec 2022 17:10:58 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pAR7trYZxyJz6dDjjGtnhQhvH4CV37H8ORJAnU50YAI=;
+        b=zt26u0cQOLjS/d8mmSF+R5epxxc8daBWrWeLyWTXYhAEjJCuW58xrtL6irgUyA2IV9
+         UkqM69XMOxE4ycWTeZtrEuFW50n6qiIR+eoFFSBcgvoDPLxYFJwD2QPTZczNS/+f7/Bw
+         qvNwagPncZ5V8+pykTXIKMxaJ2VsLNPfGK8sMijWNMN3L0aPaGqlneRVe0UZUnaAY7aL
+         hYnKmmV9be7ntKKh1l/PlvDYtX+JgRXaveCGa635AwJZOXOOxwA+jRaBuPWL/W5sn6tR
+         JusIUiBb41iQqX10D+ekEGTFTAM1NfQg4GWL7M/dr6HBJQW/v/LCcjFYGAPcTKCIO6Rs
+         uSLg==
+X-Gm-Message-State: ANoB5pkSFq4eCslH8qG45Cwvkj8k9h2oBP4mxC0+V5vXPHuCoc9K1jdg
+        noP+JaluQtCIatyI54sibFbhjw==
+X-Google-Smtp-Source: AA0mqf5iT+UyD0qvn7NpOSGyfj+cr/V7nAI47f6cpKUqG428uF+45DFYJC396XBHW9j/HJIVVKMX7Q==
+X-Received: by 2002:a6b:fb0a:0:b0:6df:5a37:ed5 with SMTP id h10-20020a6bfb0a000000b006df5a370ed5mr9593060iog.17.1670893879743;
+        Mon, 12 Dec 2022 17:11:19 -0800 (PST)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id m13-20020a02a14d000000b0038a382d84c5sm414160jah.64.2022.12.12.17.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 17:11:19 -0800 (PST)
+Message-ID: <008d3e20-2c6b-c3f1-3fd3-ef4ef4dd061e@linaro.org>
+Date:   Mon, 12 Dec 2022 19:11:17 -0600
 MIME-Version: 1.0
-References: <cover.1670541363.git.quic_asutoshd@quicinc.com> <d3bb47811bbdbb273f4a307ff514820d5be0f8fd.1670541364.git.quic_asutoshd@quicinc.com>
-In-Reply-To: <d3bb47811bbdbb273f4a307ff514820d5be0f8fd.1670541364.git.quic_asutoshd@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Tue, 13 Dec 2022 09:10:46 +0800
-Message-ID: <CAGaU9a-dCqgwNvqb+CXWuAtAxt06D2bUDD=FjoWs6m-fmiTUkA@mail.gmail.com>
-Subject: Re: [PATCH v11 06/16] ufs: core: mcq: Configure resource regions
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 2/2] net: ipa: add IPA v4.7 support
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, andersson@kernel.org,
+        agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+References: <20221208211529.757669-1-elder@linaro.org>
+ <20221208211529.757669-3-elder@linaro.org>
+ <47b2fb29-1c2e-db6e-b14f-6dfe90341825@linaro.org>
+ <fa6d342e-0cfe-b870-b044-b0af476e3905@linaro.org>
+ <48bef9dd-b71c-b6aa-e853-1cf821e88b50@linaro.org>
+ <20221212155450.34fdae6b@kernel.org>
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20221212155450.34fdae6b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 7:24 AM Asutosh Das <quic_asutoshd@quicinc.com> wrote:
->
-> Define the mcq resources and add support to ioremap
-> the resource regions.
->
-> Co-developed-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Can Guo <quic_cang@quicinc.com>
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+On 12/12/22 5:54 PM, Jakub Kicinski wrote:
+>>> which in total gives us 0x146a8000-0x146aafff
+>> Can you tell me where you found this information?
+> [1], [2]
+> 
+>>    
+>>> That would also mean all of your writes are kind of skewed, unless
+>>> you already applied some offsets to them.
+>> This region is used by the modem, but must be set up
+>> by the AP.
+>>    
+>>> (IMEM on 6350 starts at 0x14680000 and is 0x2e000 long, as per
+>>> the bootloader memory map)
+>> On SM7250 (sorry, I don't know about 7225, or 6350 for that matter),
+>> the IMEM starts at 0x14680000 and has length 0x2c000.  However that
+>> memory is used by multiple entities.  The portion set aside for IPA
+>> starts at 0x146a9000 and has size 0x2000.
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+This is awesome, thank you!
+
+Yes I think there are a couple of minor corrections to make
+but I haven't had the time to go do the research yet, so
+hadn't yet responded.
+
+Nothing is "supported" upstream anyway until there's a
+system with a DTS that uses it, and that won't happen
+until after the end of the merge window.
+
+Again, thank you very much, it's a safe thing to take
+for now.
+
+					-Alex
+
