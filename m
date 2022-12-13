@@ -2,154 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE7464AF53
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D2664AF59
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiLMF2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 00:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S230002AbiLMFc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 00:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiLMF2L (ORCPT
+        with ESMTP id S229611AbiLMFcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:28:11 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98EAA1B8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:28:09 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id n3so1430851pfq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:28:09 -0800 (PST)
+        Tue, 13 Dec 2022 00:32:51 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9852713D43;
+        Mon, 12 Dec 2022 21:32:48 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id f20so2234268lja.4;
+        Mon, 12 Dec 2022 21:32:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iYoYQhWJou1xY1HILvG4sxk2kvaHAyApw8QYJCywc2w=;
-        b=GYoAsi06rrW5fX9uclJQ/U+KcRh994V7NNddvGeQgqaJsIShMY16lqpMQcmkI94N0e
-         aXmTcJ49MbnwIobDFBLBR+Oq5Jg9ADxXk1qH2L3pl2tfMq1aQgTwHbrjfmmH/M2Hp8sz
-         EK2B8VbkVfZlVGlXpFuJ21ssVb3qa5kF47JoFU56F+vKWXzlh3l3GvjdhLDuYVpT5Ndg
-         kbx9gp7N78U6sffwrjRQoTCHhKYqBhmE/TDH0QpIHH3lD5H7fHrQ7x20NwGzSNPpevWC
-         hXbXKCS3T17oWNBvzZsNoZovgOwwntIEfWwI9M5sF0/CHraxIT1Lz209ych8BLRjk9k5
-         Z/Jg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qm9joTADv9j0tGCJx1JGU7wkHn1gQO4t8dEAYaWXy70=;
+        b=RJ89sCv95B86fePFNIw8H8q36kNGtnKn9vO/d0aReZkcx8fTSv0+pQfLQXd/P0BmU5
+         n/RhsjnZp2rHcKo0q4lZlQ4VkAVkgXFvcLRQbl8WFEdyCh+UTxVz0IFLZJyYxxPfoxem
+         6DoFsbp46mI+q1Zm7GJ/PmOQmelZh8VEGjTAev36HXgHJ2ZbtJdQtmpBLwaffzQCNIZy
+         IaM8a8B9ZTLbI2/aH5vLvBJL/kMxLCKYoA+PLBIVg6u8cOtzccfjQe5CS+CiaWEeXvF4
+         HTPAvN1FBueHl1V+jdE4Pxdkol/tfM2IAa34m20A2KjUwQoGubZ4H3cjyelZuWMGLxHP
+         76uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iYoYQhWJou1xY1HILvG4sxk2kvaHAyApw8QYJCywc2w=;
-        b=3du53dk5EHcMeP8+ug+YddUiUAIebep2rphw7Vf76NCU+iOEsxwusSdldXZfX9EBzG
-         NuaHQR5xgfZF/32VFTpzlLoWML2AYBZFNqX8sJefkL3p7ZblYQfv1cRfnUr4fiSQYP8l
-         NjrcpVmVCmcBMqb23Q1w2JPWUxKwkofWSdX/4MLPiEtFnjwZqITUrR46af/AqO1xup3E
-         NoJiVbWUbyGL4xptnCS/6x7XyfCzpNTrMRUPk/5VG3StmseQ7Pip0l/fX2HHej//Pffa
-         MUr774zQ39BFa4uvW6VFROgWS6ZxITGMBJlAGJ/BBBUasf1zYhUgzcoxSG49EHcz59He
-         FKHQ==
-X-Gm-Message-State: ANoB5pkQeWcuZS33t5FsHGB6qciZCocIwY9vx/tpjqLtMsXeZ6cJ5kWe
-        914yzNqMFLs4FEa6YtuZ1TQd
-X-Google-Smtp-Source: AA0mqf4LHRNZwtxKRfKFXi7Own+x57zRKuhgTPc0qGBE3kpBEnjgCc5OBnfMufu1S7lqqDn6XmcS3A==
-X-Received: by 2002:a62:cd0c:0:b0:577:2a9:96ef with SMTP id o12-20020a62cd0c000000b0057702a996efmr21025176pfg.28.1670909289300;
-        Mon, 12 Dec 2022 21:28:09 -0800 (PST)
-Received: from thinkpad ([220.158.158.136])
-        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b005779110635asm6715221pfq.51.2022.12.12.21.28.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 21:28:08 -0800 (PST)
-Date:   Tue, 13 Dec 2022 10:58:02 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com
-Subject: Re: [PATCH v2 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Message-ID: <20221213052802.GB4862@thinkpad>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qm9joTADv9j0tGCJx1JGU7wkHn1gQO4t8dEAYaWXy70=;
+        b=kfoKjfXnRvxTc2IzLJk4MjKVv2ZVGZJbhZKrpT4NF/f5l7SpjONBb36NqcK8VP2FYC
+         0khZp2wkZ9Sdj8qsOUeaHTGnbPn7w1TmTvw1rr7WQ1t7L6DNAqwv89rzfLNLQmnSyk+e
+         LM7ZFGp9w3Sf0+T3OjT5m5xPKihmUr93aT/cvEB48ijd/G7eA/R7GA7cVd6Di6bjbpQS
+         eaSBCLqRIyuK03FTAyuF2R/vkyuX1zBfYLvkAGB5BkbNjRSsZAhTgKNXmhMkIunXxIo+
+         xKgQSAQ9nkwGieTpgEfZcre03Yy8BL0Vvl/ZYLICEJkyCRqdU0NISw94n4CADat3+5ai
+         +LXQ==
+X-Gm-Message-State: ANoB5pmtx+UZobFtZYfgbsiGxoWulYZ85zQbzA86TdAXE+MbV1BBF5XO
+        m8iTmjbQtOLwt7pDPaEqGZAafdsQr1+y4FxWa5H7YEpIDz6Q
+X-Google-Smtp-Source: AA0mqf46EQTHpmYYKuD32y8kyBx9XB2ds8BeeUCVtOBg92geJdHPie+7BcpJJbgbfg0QwB3aX5SbyEYaiZHO/VFMtEs=
+X-Received: by 2002:a2e:8887:0:b0:279:f19b:2192 with SMTP id
+ k7-20020a2e8887000000b00279f19b2192mr7781433lji.471.1670909566618; Mon, 12
+ Dec 2022 21:32:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221212192340.evgtbpzmw7hcdolb@halaney-x13s>
+References: <1670763911-8695-1-git-send-email-Arthur.Simchaev@wdc.com> <1670763911-8695-2-git-send-email-Arthur.Simchaev@wdc.com>
+In-Reply-To: <1670763911-8695-2-git-send-email-Arthur.Simchaev@wdc.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Tue, 13 Dec 2022 13:32:35 +0800
+Message-ID: <CAGaU9a_Td7Ks0tJmkxev54CJrCy0Fs89juzUd=M0G+m8+eS7wQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/4] ufs: core: Remove redundant wb check
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
+Cc:     martin.petersen@oracle.com, beanhuo@micron.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 01:23:40PM -0600, Andrew Halaney wrote:
-> On Mon, Dec 12, 2022 at 06:02:58PM +0530, Manivannan Sadhasivam wrote:
-> > The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-> > accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
-> > This offset only works for some SoCs like SDM845 for which driver support
-> > was initially added.
-> >
-> > But the later SoCs use different register stride that vary between the
-> > banks with holes in-between. So it is not possible to use a single register
-> > stride for accessing the CSRs of each bank. By doing so could result in a
-> > crash with the current drivers. So far this crash is not reported since
-> > EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
-> > driver extensively by triggering the EDAC IRQ (that's where each bank
-> > CSRs are accessed).
-> >
-> > For fixing this issue, let's obtain the base address of each LLCC bank from
-> > devicetree and get rid of the fixed stride.
-> >
-> > This series affects multiple platforms but I have only tested this on
-> > SM8250 and SM8450. Testing on other platforms is welcomed.
-> >
-> 
-> Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-> 
+On Sun, Dec 11, 2022 at 9:08 PM Arthur Simchaev <Arthur.Simchaev@wdc.com> wrote:
+>
+> We used to use the extended-feature field in the device descriptor,
+> as an indication that the device supports ufs2.2 or later.
+> Remove that as this check is specifically done few lines above.
+>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Reviewed-by: Bean Huo <beanhuo@micron.com>
+> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
 
-Thanks!
-
-> I took this for a quick spin on the qdrive3 I've got access to without
-> any issue:
-> 
->     [root@localhost ~]# modprobe qcom_edac
->     [root@localhost ~]# dmesg | grep -i edac
->     [    0.620723] EDAC MC: Ver: 3.0.0
->     [    1.165417] ghes_edac: GHES probing device list is empty
->     [  594.688103] EDAC DEVICE0: Giving out device to module qcom_llcc_edac controller llcc: DEV qcom_llcc_edac (INTERRUPT)
->     [root@localhost ~]# cat /proc/interrupts | grep ecc
->     174:          0          0          0          0          0          0          0          0     GICv3 614 Level     llcc_ecc
->     [root@localhost ~]#
-> 
-> Potentially stupid question, but are users expected to manually load the
-> driver as I did? I don't see how it would be loaded automatically in the
-> current state, but thought it was funny that I needed to modprobe
-> myself.
-> 
-> Please let me know if you want me to do any more further testing!
-> 
-
-Well, I always ended up using the driver as a built-in. I do make it module for
-build test but never really used it as a module, so didn't catch this issue.
-
-This is due to the module alias not exported by the qcom_edac driver. Below
-diff allows kernel to autoload it:
-
-diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-index f7afb5375293..13919d01c22d 100644
---- a/drivers/edac/qcom_edac.c
-+++ b/drivers/edac/qcom_edac.c
-@@ -419,3 +419,4 @@ module_platform_driver(qcom_llcc_edac_driver);
- 
- MODULE_DESCRIPTION("QCOM EDAC driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:qcom_llcc_edac");
-
-Please test and let me know. I will add this as a new patch in next version.
-
-Thanks,
-Mani
-
-> Thanks,
-> Andrew
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
