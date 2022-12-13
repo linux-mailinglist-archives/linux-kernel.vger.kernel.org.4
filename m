@@ -2,199 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C622A64C03B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280A064C03E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbiLMXG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S236928AbiLMXG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236928AbiLMXGX (ORCPT
+        with ESMTP id S236935AbiLMXGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:06:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0163B1A3B3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:06:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670972782; x=1702508782;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CCUnzEyGEKLvz2QKxpZRU55Orhdnz4fyaad5thE9it0=;
-  b=jY1seP8XoK0hFfcgn2oF132Cu1pn/JxRLvgQTltR5WPTI6zg/i5GsZKB
-   Mjy8eTw8taXvg9b3zDuIRx4q9iOG9adA/6UoGTcB/0dcvELGoFGYYsZgO
-   XkJpb/U2sitVsr34nS9LslHgPdi2UYn4UNb7KPuF+Bm7b8bqCmvzeS47K
-   MLROzDh2NpKrzfcC5VKCXG93jVC6unUuAVEW9W9On03+nlqGyPcRl7uMc
-   1UD3xS8gyo+jbDJ8sweOTJBYHt1QeYfGjIwKBH0EGMXtJvfWzdoKBwNVQ
-   vqhkMPG34NKPUFlTH/M1PJsyEA+Mt4LDjwadlNytXjONyLrOhxSGw3p9d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="305898784"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="305898784"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 15:06:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="648731771"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="648731771"
-Received: from snjones-mobl1.amr.corp.intel.com (HELO [10.212.218.27]) ([10.212.218.27])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 15:06:07 -0800
-Message-ID: <3121847d-d334-67fc-43d8-0670c08c64b6@intel.com>
-Date:   Tue, 13 Dec 2022 15:06:07 -0800
+        Tue, 13 Dec 2022 18:06:49 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEE317A8D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:06:48 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g7so7555559lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:06:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kQ9UDEKrGBlUcNO4sH3ZDmuGjEg0UnW+K0pM704i6h4=;
+        b=EGJYsfsdcAfUgmOpZg5H+z1o0EFyoU43QuVvL1htgp3oMzcw4T7CFqEnzUyIV6sEVH
+         iMwFo/ZITg75aSSv9eHw1EMtytTUQZcoo1PpRnIjp2T/mqSWh9InDNRx0fnTCWSj8ELI
+         a/A8MpamBle04ND8JnGfcgbBsnBgpTEck5elM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kQ9UDEKrGBlUcNO4sH3ZDmuGjEg0UnW+K0pM704i6h4=;
+        b=ycZE4fziAQmK3UAY0EJPDu4jGrAO3QjvxHKU1D4djoyJbGgebjwQFfE/uI9+Ao0mkI
+         3j+JH3335Fh9rgK6Lp01qv8voiGoqptEy2GECqjDCV177mvrRcj2N1zxYJ9Xu5dJbwIE
+         nL4aVJXjqlh/0ANwMdnRgo4DJGzSUyY6/qEhd3LPEN64ugFQCuaZ5jt9tk3UyJp+VV2Z
+         4kPYK7njS0ECLufULIhSLjq8kD/HdY+QcgupfXNC03oeh9pgvz053Fb28pd/DammCLiZ
+         rM3yd+snTDqX2xNcZW3ykAN4pTi7nUSs9jGDf3oNF5+F582ob1H+hf6pxdYKJEdD7VZ6
+         S8ng==
+X-Gm-Message-State: ANoB5pnV5KRoybuZ9BWU6zdosMts21ssUvqKVZ+1JjjE+4pWJctu6vmz
+        wPBJA8dZVXclR3MR0y+jNlinmuHcXaKrtfYapc2T/A==
+X-Google-Smtp-Source: AA0mqf7E+0gYIlsn+eJZUnoQxwAAegzX06aJJjONxcWqY6lnTQGcJuvpNtrGrbvAPrVBHen0DXMLaf3G2kd78m/boGs=
+X-Received: by 2002:ac2:4189:0:b0:4b1:2447:6971 with SMTP id
+ z9-20020ac24189000000b004b124476971mr27184258lfh.83.1670972806927; Tue, 13
+ Dec 2022 15:06:46 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 13 Dec 2022 15:06:46 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/4] x86/tdx: Use ReportFatalError to report missing
- SEPT_VE_DISABLE
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
- <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221209132524.20200-3-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com> <1670967848-31475-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 13 Dec 2022 15:06:46 -0800
+Message-ID: <CAE-0n52eHYCqxUJqQXoaQ8vyqCk-QfouSun+zUp3yo5DufWbwg@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        robdclark@gmail.com, robh+dt@kernel.org, sean@poorly.run,
+        vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/22 05:25, Kirill A. Shutemov wrote:
-> The check for SEPT_VE_DISABLE happens early in the kernel boot where
-> earlyprintk is not yet functional. Kernel successfully detect broken
-> TD configuration and stops the kernel with panic(), but it cannot
-> communicate the reason to the user.
+Quoting Kuogee Hsieh (2022-12-13 13:44:05)
+> Add both data-lanes and link-frequencies property into endpoint
 
-Linux TDX guests require that the SEPT_VE_DISABLE "attribute" be set.
-If it is not set, the kernel is theoretically required to handle
-exceptions anywhere that kernel memory is accessed, including places
-like NMI handlers and in the syscall entry gap.
+Why do we care? Please tell us why it's important.
 
-Rather than even try to handle these exceptions, the kernel refuses to
-run if SEPT_VE_DISABLE is unset.
+>
+> Changes in v7:
+> -- split yaml out of dtsi patch
+> -- link-frequencies from link rate to symbol rate
+> -- deprecation of old data-lanes property
+>
+> Changes in v8:
+> -- correct Bjorn mail address to kernel.org
+>
+> Changes in v10:
+> -- add menu item to data-lanes and link-frequecnis
+>
+> Changes in v11:
+> -- add endpoint property at port@1
+>
+> Changes in v12:
+> -- use enum for item at data-lanes and link-frequencies
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+                                                       ^
+Stray ` here? -----------------------------------------/
 
-However, the SEPT_VE_DISABLE detection and refusal code happens very
-early in boot, even before earlyprintk runs.  Calling panic() will
-effectively just hang the system.
-
-Instead, call a TDX-specific panic() function.  This makes a very simple
-TDVMCALL which gets a short error string out to the hypervisor without
-any console infrastructure.
-
---
-
-Is that better?
-
-Also, are you sure we want to do this?  Is there any way to do this
-inside of panic() itself to get panic() itself to call tdx_panic() and
-get a short error message out to the hypervisor?
-
-Getting *all* users of panic this magic ability would be a lot better
-than giving it to one call-site of panic().
-
-I'm all for making the panic() path as short and simple as possible, but
-it would be nice if this fancy hypercall would get used in more than one
-spot.
-
-> Use TDG.VP.VMCALL<ReportFatalError> to report the error. The hypercall
-> can encode message up to 64 bytes in eight registers.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > ---
->  arch/x86/coco/tdx/tdx.c | 38 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 37 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index cfd4c95b9f04..8ad04d101270 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -22,6 +22,7 @@
->  
->  /* TDX hypercall Leaf IDs */
->  #define TDVMCALL_MAP_GPA		0x10001
-> +#define TDVMCALL_REPORT_FATAL_ERROR	0x10003
->  
->  /* MMIO direction */
->  #define EPT_READ	0
-> @@ -140,6 +141,41 @@ int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport)
->  }
->  EXPORT_SYMBOL_GPL(tdx_mcall_get_report0);
->  
-> +static void __noreturn tdx_panic(const char *msg)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = TDVMCALL_REPORT_FATAL_ERROR,
-> +		.r12 = 0, /* Error code: 0 is Panic */
-> +	};
-> +	union {
-> +		/* Define register order according to the GHCI */
-> +		struct { u64 r14, r15, rbx, rdi, rsi, r8, r9, rdx; };
+>  .../bindings/display/msm/dp-controller.yaml        | 30 ++++++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> index f2515af..8fb9fa5 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> @@ -96,14 +97,37 @@ properties:
+>
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
 > +
-> +		char str[64];
-> +	} message;
+>      properties:
+>        port@0:
+> -        $ref: /schemas/graph.yaml#/properties/port
+> +        $ref: "/schemas/graph.yaml#/$defs/port-base"
+>          description: Input endpoint of the controller
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+>
+>        port@1:
+> -        $ref: /schemas/graph.yaml#/properties/port
+> +        $ref: "/schemas/graph.yaml#/$defs/port-base"
+
+I thought the quotes weren't needed?
+
+>          description: Output endpoint of the controller
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+
+Does this need 'unevaluatedProperties: false' here?
+
+> +            properties:
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  enum: [ 0, 1, 2, 3 ]
 > +
-> +	/* VMM assumes '\0' in byte 65, if the message took all 64 bytes */
-> +	strncpy(message.str, msg, 64);
+> +              link-frequencies:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  enum: [ 1620000000, 2700000000, 5400000000, 8100000000 ]
 > +
-> +	args.r8  = message.r8;
-> +	args.r9  = message.r9;
-> +	args.r14 = message.r14;
-> +	args.r15 = message.r15;
-> +	args.rdi = message.rdi;
-> +	args.rsi = message.rsi;
-> +	args.rbx = message.rbx;
-> +	args.rdx = message.rdx;
+> +    required:
+> +      - port@0
+> +      - port@1
+>
+>  required:
+>    - compatible
+> @@ -193,6 +217,8 @@ examples:
+>                  reg = <1>;
+>                  endpoint {
+>                      remote-endpoint = <&typec>;
+> +                    data-lanes = <0 1>;
+> +                    link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000 8100000000>;
+>                  };
 
-I dunno.  Is that struct/union better, or would something like this be
-more readable:
+So far we haven't used the output port on the DP controller in DT.
 
-	args.r8  = *(u64 *)&message[48];
-	args.r9  = *(u64 *)&message[56];
+I'm still not clear on what we should do in general for DP because
+there's a PHY that actually controls a lane count and lane mapping. In
+my mental model of the SoC, this DP controller's output port is
+connected to the DP PHY, which then sends the DP lanes out of the SoC to
+the next downstream device (i.e. a DP connector or type-c muxer). Having
+a remote-endpoint property with a phandle to typec doesn't fit my mental
+model. I'd expect it to be the typec PHY.
 
-and just hard-code the offsets.
+That brings up the question: when we have 2 lanes vs. 4 lanes will we
+duplicate the data-lanes property in the PHY binding? I suspect we'll
+have to. Hopefully that sort of duplication is OK?
 
-> +	/*
-> +	 * Keep calling the hypercall in case VMM did not terminated
+Similarly, we may have a redriver that limits the link-frequencies
+property further (e.g. only support <= 2.7GHz). Having multiple
+link-frequencies along the graph is OK, right? And isn't the
+link-frequencies property known here by fact that the DP controller
+tells us which SoC this controller is for, and thus we already know the
+supported link frequencies?
 
-							terminate^
-
-> +	 * the TD as it must.
-> +	 */
-> +	while (1) {
-> +		__tdx_hypercall(&args, 0);
-> +	}
-> +}
-> +
->  static void tdx_parse_tdinfo(u64 *cc_mask)
->  {
->  	struct tdx_module_output out;
-> @@ -172,7 +208,7 @@ static void tdx_parse_tdinfo(u64 *cc_mask)
->  	 */
->  	td_attr = out.rdx;
->  	if (!(td_attr & ATTR_SEPT_VE_DISABLE))
-> -		panic("TD misconfiguration: SEPT_VE_DISABLE attibute must be set.\n");
-> +		tdx_panic("TD misconfiguration: SEPT_VE_DISABLE attribute must be set.");
->  }
-
-Would it be worth making it more clear when the message is truncated?
-Maybe something like:
-
-	if (strlen(msg) > 64) {
-		len = 64
-		strncpy(&msg[61], "...", 3);
-	}
-
-I'm sure I have five off-by-one bugs in there, but you get the idea.
-Can we stick a "..." at the end of things that get truncated?
+Finally, I wonder if we should put any of this in the DP controller's
+output endpoint, or if we can put these sorts of properties in the DP
+PHY binding directly? Can't we do that and then when the DP controller
+tries to set 4 lanes, the PHY immediately fails the call and the link
+training algorithm does its thing and tries fewer lanes? And similarly,
+if link-frequencies were in the PHY's binding, the PHY could fail to set
+those frequencies during link training, returning an error to the DP
+controller, letting the training move on to a lower frequency. If we did
+that this patch series would largely be about modifying the PHY binding,
+updating the PHY driver to enforce constraints, and handling errors
+during link training in the DP controller (which may already be done? I
+didn't check).
