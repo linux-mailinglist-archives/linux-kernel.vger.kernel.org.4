@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8658064BCD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0531364BCD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236774AbiLMTLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S236806AbiLMTLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:11:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236707AbiLMTKs (ORCPT
+        with ESMTP id S236712AbiLMTKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:10:48 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B4923BD8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:46 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id s10so4387460ljg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:46 -0800 (PST)
+        Tue, 13 Dec 2022 14:10:49 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C689248F4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:48 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id x11so4359011ljh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:10:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/t+rBbRgiSp1H+BSs+HFKH8stRiXimoBLtWD4wzdfGk=;
-        b=lRlup79Tm7c71KHSvIb3NtZaXYQX9g1mU9RSmT0LgtEz/D9x5XljnB/zttTUtLxm67
-         gmVhy/pHaYpCJ1MKgX4tSBCtiuH/ncw7wV2vEr6SuqEB6Tta6c+AZdIPNMz+HZzKx9h1
-         djVe5zaJN/rJH4NL+VfL2+IPMo39dnTBubq8n9357RhGUa2tbwW7FMLqt4j/rgyf22GM
-         bcaPHvDIT+aWsgl8KWwwo0TQUlqtIBqZCBN521rau4Wm7NuYhPGMugnz2o4HGcarpmDs
-         +zJxxtXJvRAOkIXEpSbgg0OPOv1RovVXp/Io64a0OIThxUNNo6rLVhEt5j/W39cmLb/x
-         9rBg==
+        bh=ts/j2CHYg1kPm6cKPUq2V9hf2EsZAdlZm5xdzR+Qb20=;
+        b=F61no4iBYe7WADg1b5OwnJFFwNtT9IxMVRaCN4JwLtW7bINFK3JVPwj4fbgGE4lcv2
+         fsRThwY7svqFVHUk+PJE5EuU0bLGxF/vRRy7CKw8f+1YmcOx67gIbBlEHcoCRyv9+nMM
+         WWzHM8dGwc5gtS/wX2RZC76Hge1DxEG34cZqxYBOoWBXHLRYYm1S+p2kBWmaZWUZ2QhJ
+         R4U/pAsR4ImQBGcCsrZKQDavD/sJnhuZEO2oziqDE+wVpEeEY4217kIJo6USUA0nfmbm
+         Ywl6PgxfXyHl0LHHKAxGEzIaL+2pEsM/rH3dNkt8PgqSM1D9G61gvmG6Zov7TZYfrOx+
+         t4bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/t+rBbRgiSp1H+BSs+HFKH8stRiXimoBLtWD4wzdfGk=;
-        b=MfQjgUAJO0pL1IRksIrU3Cpjhk0U7EpKXYsk7hDXvu1q7TZRT39ac6tGtewZIvnPQw
-         zXWruT518VqGlEFZT7+jgPvswfUuu0rssRpZs2JX63CRzZPzLJlacCANoiEEvx7JuIKV
-         A3uECio6KkGV/eIFT5oz1w0tBCFHkLuuIOhpFQSBDTyEaweiO6LjY5W2Gh3RenxVMrKG
-         whk6kYswwqIVxO7dExw6LdXH/oj7Zv+b0GVURslgcBuiCUa6c+ulKlIq6KcggrP+0vrL
-         o7bUO1UYAmXgGkJm1zyohuVHhjKoyiCrS4wrTbN2FD36J8BPtt4Wz8aJaBHe+krZ/828
-         VY6w==
-X-Gm-Message-State: ANoB5pnkhmrwzmaTBhhyNpOdKC0lLWIBTDbJr4TGIC+ChMlnW+xHit2z
-        1KtXEFa7WUsKXbos2JdHBbNZTQ==
-X-Google-Smtp-Source: AA0mqf7SNuH9OcrGcO2nXemYNqHyxAJ2oaG4kYWSjXDBbtgNWbDW+fJnSqtgUuQVWB9SsHdjPm+npA==
-X-Received: by 2002:a05:651c:1144:b0:277:1888:cfb3 with SMTP id h4-20020a05651c114400b002771888cfb3mr4914239ljo.16.1670958645028;
-        Tue, 13 Dec 2022 11:10:45 -0800 (PST)
+        bh=ts/j2CHYg1kPm6cKPUq2V9hf2EsZAdlZm5xdzR+Qb20=;
+        b=a/xJwcAhVbIv8lRf4XUVYmV/GLAET/YIwYWKa1kNhjw6THsa/gqQ5iM4hQu6qtqh9P
+         pklhIj+LrnXV0piL4aJ+Nth41VSMqRiF5CJzzu4dhpLi3xkTAWl3RrVOIPDDRPkRRczz
+         LGeEQ5OYgS7gAqJKLcTEM5507r42mCunGIFSnkpmkEDny6UmVEx7jZRg1MAI/t/I2qBB
+         ef+kZgBWsMZZ9T8WBOLb+WAOzIDVztmrq7qrwhF3Xq8lbla+GMA1HFKrt6gzGIl9N++x
+         Y8A4jNlCG3YFEhqTaKQtAYYvgPqeatL8s3DK5fzBdFez/+096CFyo28Jfa7x4cJ/BC2I
+         kCHg==
+X-Gm-Message-State: ANoB5pnrFc8ZiQrQVo2unFAVasLx6ZwvNZ+oqA2jjVhTnW9uPLksgiLV
+        ymREydPspmaJzvHVQ/T6Y0rLgA==
+X-Google-Smtp-Source: AA0mqf4mkXFIBu8VurPY5NeKDJDXBMhBChTmgaDR0Mryrd8K8gEc0+m7U3UDMuUnxAFxfNaz4kkOLA==
+X-Received: by 2002:a2e:be85:0:b0:26f:db34:a151 with SMTP id a5-20020a2ebe85000000b0026fdb34a151mr6879475ljr.20.1670958646572;
+        Tue, 13 Dec 2022 11:10:46 -0800 (PST)
 Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id w28-20020a05651c119c00b0026dfbdfc1ddsm372023ljo.11.2022.12.13.11.10.43
+        by smtp.gmail.com with ESMTPSA id w28-20020a05651c119c00b0026dfbdfc1ddsm372023ljo.11.2022.12.13.11.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 11:10:44 -0800 (PST)
+        Tue, 13 Dec 2022 11:10:46 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -59,9 +59,9 @@ Cc:     marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/7] arm64: dts: qcom: sm8450-nagara: Add GPIO keys
-Date:   Tue, 13 Dec 2022 20:10:33 +0100
-Message-Id: <20221213191036.611241-4-konrad.dybcio@linaro.org>
+Subject: [PATCH 5/7] arm64: dts: qcom: sm8450-nagara: Set up camera regulators
+Date:   Tue, 13 Dec 2022 20:10:34 +0100
+Message-Id: <20221213191036.611241-5-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221213191036.611241-1-konrad.dybcio@linaro.org>
 References: <20221213191036.611241-1-konrad.dybcio@linaro.org>
@@ -76,93 +76,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With PMIC GPIOs now available, set up required pin settings and add
-gpio-keys.
+Set up gpio-controlled fixed regulators for camera on PDX223 and fix
+up the existing ones in common and PDX224 trees.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../dts/qcom/sm8450-sony-xperia-nagara.dtsi   | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ .../qcom/sm8450-sony-xperia-nagara-pdx223.dts | 38 +++++++++++++++++++
+ .../qcom/sm8450-sony-xperia-nagara-pdx224.dts | 15 +++++++-
+ .../dts/qcom/sm8450-sony-xperia-nagara.dtsi   | 16 +++++++-
+ 3 files changed, 65 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-index 8e128efcb128..3d96b6757aa3 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
-@@ -27,6 +27,41 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		label = "gpio-keys";
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+index 561cd4f09ab7..daf2f91f356e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+@@ -11,6 +11,26 @@
+ / {
+ 	model = "Sony Xperia 1 IV";
+ 	compatible = "sony,pdx223", "qcom,sm8450";
++
++	imx316_lvdd_regulator: imx316-lvdd-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "imx316_lvdd_regulator";
++		gpio = <&pm8350b_gpios 6 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&focus_n &snapshot_n &vol_down_n>;
-+
-+		key-camera-focus {
-+			label = "Camera Focus";
-+			linux,code = <KEY_CAMERA_FOCUS>;
-+			gpios = <&pm8350b_gpios 8 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
-+
-+		key-camera-snapshot {
-+			label = "Camera Snapshot";
-+			linux,code = <KEY_CAMERA>;
-+			gpios = <&pm8350b_gpios 5 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
-+
-+		key-volume-down {
-+			label = "Volume Down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&pm8350_gpios 6 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
++		pinctrl-0 = <&cam_pwr_ld_en>;
 +	};
 +
- 	reserved-memory {
- 		adsp_mem: memory@85700000 {
- 			reg = <0x0 0x85700000 0x0 0x2800000>;
-@@ -562,6 +597,32 @@ &pm8350_gpios {
- 			  "NC",
- 			  "NC",
- 			  "PM8350_OPTION"; /* GPIO_10 */
++	tcs3490_vdd_regulator: rgbcir-vdd-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "tcs3490_vdd_regulator";
++		gpio = <&pm8350c_gpios 6 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
 +
-+	vol_down_n: vol-down-n-state {
-+		pins = "gpio6";
-+		function = "normal";
-+		power-source = <1>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+};
-+
-+&pm8350b_gpios {
-+	snapshot_n: snapshot-n-state {
-+		pins = "gpio5";
-+		function = "normal";
-+		power-source = <0>;
-+		bias-pull-up;
-+		input-enable;
-+	};
-+
-+	focus_n: focus-n-state {
-+		pins = "gpio8";
-+		function = "normal";
-+		power-source = <0>;
-+		bias-pull-up;
-+		input-enable;
++		pinctrl-names = "default";
++		pinctrl-0 = <&rgbc_ir_pwr_en>;
 +	};
  };
  
- &pm8450_gpios {
+ &pm8350b_gpios {
+@@ -22,6 +42,15 @@ &pm8350b_gpios {
+ 			  "CAM_PWR_LD_EN",
+ 			  "NC",
+ 			  "FOCUS_N";
++
++	cam_pwr_ld_en: cam-pwr-ld-en-state {
++		pins = "gpio6";
++		function = "normal";
++		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
++		power-source = <0>;
++		drive-push-pull;
++		output-low;
++	};
+ };
+ 
+ &pm8350c_gpios {
+@@ -34,6 +63,15 @@ &pm8350c_gpios {
+ 			  "NC",
+ 			  "NC",
+ 			  "WIDEC_PWR_EN";
++
++	rgbc_ir_pwr_en: rgbc-ir-pwr-en-state {
++		pins = "gpio6";
++		function = "normal";
++		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
++		power-source = <1>;
++		drive-push-pull;
++		output-low;
++	};
+ };
+ 
+ &tlmm {
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
+index fc9d74d0f227..dc4de2d3fe48 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dts
+@@ -12,11 +12,14 @@ / {
+ 	model = "Sony Xperia 5 IV";
+ 	compatible = "sony,pdx224", "qcom,sm8450";
+ 
+-	imx563_vdig_vreg: imx563-vdig-regulator {
++	imx563_vdig_regulator: imx563-vdig-regulator {
+ 		compatible = "regulator-fixed";
+-		regulator-name = "imx563_vdig_vreg";
++		regulator-name = "imx563_vdig_regulator";
+ 		gpio = <&tlmm 22 GPIO_ACTIVE_HIGH>;
+ 		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&uwidec_pwr_en>;
+ 	};
+ };
+ 
+@@ -254,4 +257,12 @@ &tlmm {
+ 			  "APPS_I2C_0_SCL",
+ 			  "CCI_I2C3_SDA",
+ 			  "CCI_I2C3_SCL";
++
++	uwidec_pwr_en: uwidec-pwr-en-state {
++		pins = "gpio22";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++		output-low;
++	};
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
+index 3d96b6757aa3..e26bd077d3d9 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara.dtsi
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
+  */
+ 
++#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+ #include "sm8450.dtsi"
+ #include "pm8350.dtsi"
+@@ -93,11 +94,14 @@ ramoops@ffc00000 {
+ 	};
+ 
+ 	/* Sadly, the voltages for these GPIO regulators are unknown. */
+-	imx650_vana_vreg: imx650-vana-regulator {
++	imx650_vana_regulator: imx650-vana-regulator {
+ 		compatible = "regulator-fixed";
+-		regulator-name = "imx650_vana_vreg";
++		regulator-name = "imx650_vana_regulator";
+ 		gpio = <&tlmm 23 GPIO_ACTIVE_HIGH>;
+ 		enable-active-high;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&telec_pwr_en>;
+ 	};
+ 
+ 	vph_pwr: vph-pwr-regulator {
+@@ -703,6 +707,14 @@ ts_int_default: ts-int-default-state {
+ 		input-enable;
+ 	};
+ 
++	telec_pwr_en: telec-pwr-en-state {
++		pins = "gpio23";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++		output-low;
++	};
++
+ 	sdc2_card_det_n: sd-card-det-n-state {
+ 		pins = "gpio92";
+ 		function = "gpio";
 -- 
 2.39.0
 
