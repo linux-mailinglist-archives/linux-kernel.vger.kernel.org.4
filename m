@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E431564ACE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A9C64ACEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbiLMBSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S234041AbiLMBSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiLMBSI (ORCPT
+        with ESMTP id S233798AbiLMBSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:18:08 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149DF1208B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:18:07 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id x28so2477348lfn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:18:06 -0800 (PST)
+        Mon, 12 Dec 2022 20:18:23 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAFB1208B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:18:22 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id z12so7719356qtv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:18:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RfH8kkxJvYDkHZoR/+BVEo4zBkqyra3aG6rgjb414Ng=;
-        b=L8/+nHhrB5o0UVC+DKEp6OeXAyYCcbQ1Gx+fHf44e2LTIul/4cVxGKqcx3N+vzNBuM
-         D86JhEjjQbXnaeOn8Has1S8iUh5QKw8Z/GeDuUlA8yZzqFP4A/ojkv0L/gna0H99D6gb
-         KQ+Gsm5idOZ4nS79g350yi8jbzLAF3h+yhkelLeM+Xfp1TuQzZycHizPtYE47i9ka8O+
-         9BRgB8JyULLNxJHlReyXVL/98W3jnVOj8TQWwdDeBJNMbIOKlzCis0v5n8PmI1B4YDAm
-         haVrOtxFuhKoh1wZ+7Vi0Ryy/9A4UgVDyfaIhkMXJKh7zigztGY7XQyC2OmzVTFIvXJE
-         hmMA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=v1qlp2GTj5x/LkTSxfePaRyJL4fqAt8PlJEzH2bzb7I=;
+        b=ZGUcpYl3WCUCAmSbHPOYgGi1Mr5al02m2Riul5cdqCqBBm6zJVef3JRhXH2W8Y5jG6
+         2NLH9kWHvaymO8AjwpPGyIo8jcatEiF0ZyMGUCvMGrk+wSI9Pr8vF99Wt5WB3htApnKg
+         b4FCWRmKE/gatcP/BuQ5l/zRd3IF5fzPRlbjs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RfH8kkxJvYDkHZoR/+BVEo4zBkqyra3aG6rgjb414Ng=;
-        b=Y5ndP29pUj1g2OHu6NEgKceEf4tkFv/tTZoRiZ0E9g3xcXlF8bXwP1AKMCAUnT+7C0
-         jNZC0tp2G1F1BQx20JYqA4G5u1vfw+7I0F3tmUFJqAi2Txc4Av/zViIg8X6YGwCH2KTZ
-         188bYwYSb2jiqLPiupM8+Xp5abwEP6nJuH/GCB5xuWQerKEIczG1SG19c2DguujJ93dw
-         449QRoC/2WlieuUaZRbi2DKkeoMzIcN95f1ujSgm9OQWm4CzAnJDUFpwWMljMvNCCapq
-         pwj5yHdFYEY6zgaBhso0NwHeTGoUOXCWLh7YfPJFn3eWg6Kw9sbelesKEIrPHtbwtveT
-         L8uw==
-X-Gm-Message-State: ANoB5pnMhK7AGLmIZusimGRgIz/yPW8UiGSd6kwrREKD9drJUST/+KWL
-        JR2mhrT+qcxn6fFzV/SrB+6ZTA==
-X-Google-Smtp-Source: AA0mqf4NCJGtrfXxBc+iPdhZjn5t+SS+bxDYJ+lmD2OeQt33SGuvuPsJ+J8h19c5b0KrraKt06Jjog==
-X-Received: by 2002:ac2:4e4e:0:b0:4a4:68b9:608a with SMTP id f14-20020ac24e4e000000b004a468b9608amr3963518lfr.21.1670894285445;
-        Mon, 12 Dec 2022 17:18:05 -0800 (PST)
-Received: from [127.0.0.1] ([94.25.229.107])
-        by smtp.gmail.com with ESMTPSA id t17-20020a195f11000000b004ac980a1ba1sm158445lfb.24.2022.12.12.17.18.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Dec 2022 17:18:05 -0800 (PST)
-Date:   Tue, 13 Dec 2022 04:18:00 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Eric Chanudet <echanude@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Brian Masney <bmasney@redhat.com>
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: pm8450a: add rtc node
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221213005539.1133443-1-echanude@redhat.com>
-References: <20221213005539.1133443-1-echanude@redhat.com>
-Message-ID: <219F5CF2-BA91-4749-A32C-84BCF541ECE0@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v1qlp2GTj5x/LkTSxfePaRyJL4fqAt8PlJEzH2bzb7I=;
+        b=YfE3EEjnzMmCzD37x/JTaZpEOwqARZ3otdLwYoSPoHTU9/gexjs+IzULdC/4VifO9/
+         f2yKDzZxowRdqOiHXO5ClCc8NO0SGLLqtRApJuh+GM1eELDUIDIvUBCF75WMQH4qkxp1
+         UPtrYxuoAtNIpXbP9VcPKVDeIkt0QJz7wC+dmhJn8tH2IaQPlivQaNDmRSZa4NNo3yFg
+         AFxDtxWahQHVsakqvMKLAmgqdbr8MW6JcraABx4pRtwZLFieTBvorrzfP27CB4JtJZ3L
+         ticAGi9msYUIAxKh1LvSN74FON0K8qwEbFl+rgWE/jF/Fjf7v4K3sqJ7e4WCAQuji3yN
+         ijhQ==
+X-Gm-Message-State: ANoB5plZ/DTZ1qGaY2kdDldt76gA/w+yVDdllsuhaIB49FC6+PBL3LP0
+        hAetcFk/jtGnpvLMmoQrpB+MlaFjua7287/2
+X-Google-Smtp-Source: AA0mqf7pVNG493ClTEb6xByKzdsx7z90l1Vw66bccePCVgD/wsZJQ2pbMlOYFrm4qn1jryFOiranpg==
+X-Received: by 2002:a05:622a:1e8d:b0:3a5:2ff3:1ea7 with SMTP id bz13-20020a05622a1e8d00b003a52ff31ea7mr26338186qtb.26.1670894300850;
+        Mon, 12 Dec 2022 17:18:20 -0800 (PST)
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac85046000000b003a5430ee366sm6603038qtm.60.2022.12.12.17.18.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 17:18:19 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id a25so2199603qkl.12
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:18:19 -0800 (PST)
+X-Received: by 2002:ae9:ef48:0:b0:6fe:d4a6:dcef with SMTP id
+ d69-20020ae9ef48000000b006fed4a6dcefmr10621664qkg.594.1670894299003; Mon, 12
+ Dec 2022 17:18:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221211005609.270457-1-ojeda@kernel.org>
+In-Reply-To: <20221211005609.270457-1-ojeda@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 17:18:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiW=ioE_6N988=fseYLTzaCXaULNzippLMTRTcT=oPa0A@mail.gmail.com>
+Message-ID: <CAHk-=wiW=ioE_6N988=fseYLTzaCXaULNzippLMTRTcT=oPa0A@mail.gmail.com>
+Subject: Re: [GIT PULL] Rust for 6.2
+To:     ojeda@kernel.org
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13 December 2022 03:55:38 GMT+03:00, Eric Chanudet <echanude@redhat=2Ec=
-om> wrote:
->Add the rtc block on pm8450a first pmic to enable the rtc for
->sa8540p-ride=2E
+On Sat, Dec 10, 2022 at 4:56 PM <ojeda@kernel.org> wrote:
 >
->Signed-off-by: Eric Chanudet <echanude@redhat=2Ecom>
->---
-> arch/arm64/boot/dts/qcom/pm8450a=2Edtsi | 8 ++++++++
-> 1 file changed, 8 insertions(+)
->
->diff --git a/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi b/arch/arm64/boot/dt=
-s/qcom/pm8450a=2Edtsi
->index 34fc72896761=2E=2Eaf761dbfbc66 100644
->--- a/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi
->+++ b/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi
->@@ -13,6 +13,14 @@ pm8450a: pmic@0 {
-> 		#address-cells =3D <1>;
-> 		#size-cells =3D <0>;
->=20
->+		rtc@6000 {
->+			compatible =3D "qcom,pm8941-rtc";
->+			reg =3D <0x6000>;
->+			reg-names =3D "rtc", "alarm";
->+			interrupts =3D <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+> - String and formatting: new types `CString`, `CStr`, `BStr` and
+>   `Formatter`; new macros `c_str!`, `b_str!` and `fmt!`.
 
+Heh. You have an unusual habit of using the back-tick instead of the
+regular single quote character. It's not wrong, just surprising. I
+ended up just replacing it with the regular single quote.
 
-0x60?
+Maybe I'm biased against it, because I grew up with it being a dead
+key, and while my current keyboard has it very easily accessible, in
+many situations it's actually very inconvenient (ie it ends up being a
+dead key to generate acute grave on many European keyboard layouts).
 
->+			wakeup-source;
->+		};
->+
-> 		pm8450a_gpios: gpio@c000 {
-> 			compatible =3D "qcom,pm8150-gpio", "qcom,spmi-gpio";
-> 			reg =3D <0xc000>;
+Anyway, not a big deal. Just odd enough for me to react to that thing.
 
---=20
-With best wishes
-Dmitry
+At least you didn't do the thing where you are trying to match it with
+the tick going the *other* way (which doesn't even exist in ASCII and
+requires UTF-8), which is literally impossible to type without going
+through strange contortions.
+
+Or, worse yet, do the crazy traditional "pair apostrophe with
+backtick" that also looks very ugly in most fonts because the two
+characters aren't even visually symmetrical in modern fonts and often
+have different weights.
+
+So it's unusual, and I edited it in the commit message, but it's not
+one of the actively horrid options.
+
+              Linus
