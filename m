@@ -2,167 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C0564AFFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5960064AFFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiLMGj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S234352AbiLMGkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:40:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbiLMGjX (ORCPT
+        with ESMTP id S231888AbiLMGka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:39:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA98B878
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670913513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pG8pk6806WunH38LK3XOKaKNRvcbToIEcrDuqWIIVJA=;
-        b=WPv/CugNotPkU+9cXluW0NQxlp2YZPVS4xulEBtd3ycVegMfgnqJJmkyJ7w7TXO57qHwha
-        Rjxw8ojjRz7oS5TFR6IFcaHByY0i/cWRoS7g7J5jUAOBCi8Bnbh+w6g3hFX1GZNMubfBBm
-        4LczDlgmO0MD6cgAq4espswqjnju3so=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-85-WcXob_GQPcivO0pk3ykCEA-1; Tue, 13 Dec 2022 01:38:32 -0500
-X-MC-Unique: WcXob_GQPcivO0pk3ykCEA-1
-Received: by mail-wm1-f72.google.com with SMTP id 21-20020a05600c021500b003d227b209e1so1411840wmi.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:38:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pG8pk6806WunH38LK3XOKaKNRvcbToIEcrDuqWIIVJA=;
-        b=Dc4VkPj02jk+joXFj3DZUIm76tK8Tx3U5rjLgjFbKg7E4r5vXU9DX5QjhYxXcvuWSU
-         ietnZPe2kpmdAVSoJd6rHduG2/afiNWBRAQU5FATOuri6DSEr71a6I6UbG/nKSHZR0zm
-         uIvxV2rXV7cGQOOfszF3Amh8oJDD45ChiYNVTIADG/SVcrsVV0uO7yhM/MrgN+QzirrN
-         OV11mFYXbSaT1HkELcRk+3l12sF2Xopxo9H5Xc0ETQGP1Yn4VWIqnZZbLvsh8cQSE+ou
-         uTR0Bbu823rCR9arOdYAl0ZoBoOuDBbyqtXcyjGnROCLqwS1lwlzn7gyGYhwlhADAx7w
-         Og8w==
-X-Gm-Message-State: ANoB5pm/7PZdVUKQ8h8pUo8OaxIRNHYRJgBFNSCtW9pVZOxT/QGXT4qr
-        HAc8vwrVlmUXlF/Do+FiKhGjKKjFc2i/7ltZvXD5qEKno18k2cdMIzi37/CqaKJcDAyaa8YyyRm
-        WydFsnAsDJnW1jmRmI+m8dmPU
-X-Received: by 2002:a05:600c:5011:b0:3cf:91e9:f771 with SMTP id n17-20020a05600c501100b003cf91e9f771mr14680172wmr.36.1670913511084;
-        Mon, 12 Dec 2022 22:38:31 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7a0Jg5I3qlu4+RONkY5PwQtc+kv3pnp/OWxrJYOaFho0Wyum/OG/OEnozMktADLH8herMaKg==
-X-Received: by 2002:a05:600c:5011:b0:3cf:91e9:f771 with SMTP id n17-20020a05600c501100b003cf91e9f771mr14680167wmr.36.1670913510863;
-        Mon, 12 Dec 2022 22:38:30 -0800 (PST)
-Received: from redhat.com ([2.52.138.183])
-        by smtp.gmail.com with ESMTPSA id g23-20020a05600c4c9700b003cf4ec90938sm11063543wmp.21.2022.12.12.22.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 22:38:30 -0800 (PST)
-Date:   Tue, 13 Dec 2022 01:38:27 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
-Subject: Re: [PATCH net] virtio-net: correctly enable callback during
- start_xmit
-Message-ID: <20221213013231-mutt-send-email-mst@kernel.org>
-References: <20221212091029.54390-1-jasowang@redhat.com>
- <20221212042144-mutt-send-email-mst@kernel.org>
- <1670902391.9610498-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
+        Tue, 13 Dec 2022 01:40:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6077BE0E;
+        Mon, 12 Dec 2022 22:40:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A24761330;
+        Tue, 13 Dec 2022 06:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389E7C433D2;
+        Tue, 13 Dec 2022 06:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670913628;
+        bh=jb4WvD/Lz4Ywp31spUGOBKaoeKuHgB6FtTjgVpaXqY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CSxCFSJzyZSW8MFu7sBHzMLw9t3gdWBmmoJtW2jLDan2z8ydq6jFHjBb3D2OpaAjK
+         Z+01ztD5zV0Gewn2zWseoKcK5xCtvz8djL0V8AxHDgsIpsRxZ/oPlV305CSNaCkdju
+         xXSHaX2caT6+QrHJebzPz1QCKuenF3EEmqPhzCem0uDR1SjZhkMXv6lrB1ePTQwljr
+         4cQmm9vhz/AWsTLYCyc9WCa1KjcxqKcHYC9IqZaanrxBvDN4QlxJqUqizw/Hr9e0h5
+         f4z+LVyHRAFs5EJSVTZZeGhm+JK2B3Qqcm/pxsgV1tP0s+w0wXSco5jCWPSSqlOBsS
+         AWOARcr9dXv/g==
+Date:   Mon, 12 Dec 2022 22:40:26 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     syzbot <syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com>
+Cc:     clm@fb.com, dsterba@suse.com, glider@google.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KMSAN: uninit-value in longest_match
+Message-ID: <Y5geWpk1WfgwjzuA@sol.localdomain>
+References: <0000000000004f995905ef61a764@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000004f995905ef61a764@google.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:43:36AM +0800, Jason Wang wrote:
-> On Tue, Dec 13, 2022 at 11:38 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> >
-> > On Mon, 12 Dec 2022 04:25:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
-> > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
-> > > > virtqueue callback via the following statement:
-> > > >
-> > > >         do {
-> > > >            ......
-> > > >     } while (use_napi && kick &&
-> > > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > >
-> > > > This will cause a missing call to virtqueue_enable_cb_delayed() when
-> > > > kick is false. Fixing this by removing the checking of the kick from
-> > > > the condition to make sure callback is enabled correctly.
-> > > >
-> > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
-> > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > ---
-> > > > The patch is needed for -stable.
-> > >
-> > > stable rules don't allow for theoretical fixes. Was a problem observed?
+On Fri, Dec 09, 2022 at 01:19:41AM -0800, syzbot wrote:
+> Hello,
 > 
-> Yes, running a pktgen sample script can lead to a tx timeout.
-
-Since April 2021 and we only noticed now? Are you sure it's the
-right Fixes tag?
-
-> > >
-> > > > ---
-> > > >  drivers/net/virtio_net.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > index 86e52454b5b5..44d7daf0267b 100644
-> > > > --- a/drivers/net/virtio_net.c
-> > > > +++ b/drivers/net/virtio_net.c
-> > > > @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
-> > > >
-> > > >             free_old_xmit_skbs(sq, false);
-> > > >
-> > > > -   } while (use_napi && kick &&
-> > > > -          unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > > +   } while (use_napi &&
-> > > > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
-> > > >
-> > >
-> > > A bit more explanation pls.  kick simply means !netdev_xmit_more -
-> > > if it's false we know there will be another packet, then transmissing
-> > > that packet will invoke virtqueue_enable_cb_delayed. No?
-> >
-> > It's just that there may be a next packet, but in fact there may not be.
-> > For example, the vq is full, and the driver stops the queue.
+> syzbot found the following issue on:
 > 
-> Exactly, when the queue is about to be full we disable tx and wait for
-> the next tx interrupt to re-enable tx.
+> HEAD commit:    30d2727189c5 kmsan: fix memcpy tests
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=117d38f5880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a2144983ada8b4f3
+> dashboard link: https://syzkaller.appspot.com/bug?extid=14d9e7602ebdf7ec0a60
+> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: i386
 > 
-> Thanks
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/1e8c2d419c2e/disk-30d27271.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/9e8a728a72a9/vmlinux-30d27271.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/89f71c80c707/bzImage-30d27271.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com
+> 
+> =====================================================
+> BUG: KMSAN: uninit-value in longest_match+0xc88/0x1220 lib/zlib_deflate/deflate.c:668
+>  longest_match+0xc88/0x1220 lib/zlib_deflate/deflate.c:668
+>  deflate_fast+0x1838/0x2280 lib/zlib_deflate/deflate.c:954
+>  zlib_deflate+0x1783/0x22b0 lib/zlib_deflate/deflate.c:410
+>  zlib_compress_pages+0xd34/0x1f90 fs/btrfs/zlib.c:178
+>  compression_compress_pages fs/btrfs/compression.c:77 [inline]
+>  btrfs_compress_pages+0x325/0x440 fs/btrfs/compression.c:1208
+>  compress_file_range+0x11ac/0x3510 fs/btrfs/inode.c:730
+>  async_cow_start+0x33/0xd0 fs/btrfs/inode.c:1458
+>  btrfs_work_helper+0x55a/0x990 fs/btrfs/async-thread.c:280
+>  process_one_work+0xb27/0x13e0 kernel/workqueue.c:2289
+>  worker_thread+0x1076/0x1d60 kernel/workqueue.c:2436
+>  kthread+0x31b/0x430 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
-OK, it's a good idea to document that.
-And we should enable callbacks at that point, not here on data path.
+zlib has long been known to use initialized values in longest_match().  This
+issue is mentioned in the zlib FAQ.  I personally consider this to be a bug, as
+the code could be written in a way such that it doesn't use uninitialized
+memory.  However, zlib considers it to be "safe" and "working as intended".
 
+Note that the copy of zlib in Linux is not really being maintained, and it is
+based on a 25-year old version of zlib.  However, upstream zlib does not change
+much anyway (it's very hard to get changes accepted into it), and as far as I
+can tell even the latest version of upstream zlib has this same issue.
 
-> >
-> > Thanks.
-> >
-> > >
-> > >
-> > >
-> > >
-> > >
-> > > >     /* timestamp packet in software */
-> > > >     skb_tx_timestamp(skb);
-> > > > --
-> > > > 2.25.1
-> > >
-> > > _______________________________________________
-> > > Virtualization mailing list
-> > > Virtualization@lists.linux-foundation.org
-> > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> >
+So I suppose the way to resolve this syzbot report is to just add
+__no_kmsan_checks to longest_match().  The real issue, though, is that zlib
+hasn't kept up with the times (nor has Linux kept up with zlib).
 
+- Eric
