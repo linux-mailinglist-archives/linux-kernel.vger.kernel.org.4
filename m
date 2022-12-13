@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE9564B7E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3A564B7EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiLMOyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S236013AbiLMO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbiLMOya (ORCPT
+        with ESMTP id S235944AbiLMO4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:54:30 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E2A2188B;
-        Tue, 13 Dec 2022 06:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670943270; x=1702479270;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZatOAHNkQsW1nDuKDZq+RkkySdsy6O82Kh9XxlKI6Hw=;
-  b=MrfJyXNJ5fIKwE495Vz3LTVpMCOk2xUN/GmMmF64HweSeRIvJL6pOW8r
-   tKHlFLoX3lfa8FOQwui4ZEe35T0n3uvRBiNQRKc1zr45H1/LAS7blTlgE
-   vj7m0x5UxmNMRGmGM1p2GQjYEPmqgKNHdvkl5PPJj9++t08GQ14ygLkJy
-   bk4BFVf7PemUrQ67YozyehtLRXL9z76qB710UGrRXMFSFAeYsttrJH0z3
-   L7kajOYcJrzPhFMlpkFcOxzXviCZ1pZkTTNZ2/Lyh50JC6LbvBWuxa63A
-   k3rlN8j1/1B7rt8fD5Eu/WYLvX1Mw3s3D/YsdQ1L6Pt19xMGdYfFa0/Aa
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="315784093"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="315784093"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 06:54:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="737419417"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="737419417"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Dec 2022 06:54:18 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id BE73AF7; Tue, 13 Dec 2022 16:54:46 +0200 (EET)
-Date:   Tue, 13 Dec 2022 16:54:46 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] thunderbolt (gcc13): synchronize
- tb_port_is_clx_enabled()'s 2nd param
-Message-ID: <Y5iSNppygdGM3Ls6@black.fi.intel.com>
-References: <20221212102936.23074-1-jirislaby@kernel.org>
+        Tue, 13 Dec 2022 09:56:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BEEFCC7;
+        Tue, 13 Dec 2022 06:56:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ADE7614C3;
+        Tue, 13 Dec 2022 14:56:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E7DC433EF;
+        Tue, 13 Dec 2022 14:56:03 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 09:56:02 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: [PATCH] tracing: Have trigger filter parsing errors show up in 
+ error_log
+Message-ID: <20221213095602.083fa9fd@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221212102936.23074-1-jirislaby@kernel.org>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-On Mon, Dec 12, 2022 at 11:29:36AM +0100, Jiri Slaby (SUSE) wrote:
-> tb_port_is_clx_enabled() generates a valid warning with gcc-13:
->   drivers/thunderbolt/switch.c:1286:6: error: conflicting types for 'tb_port_is_clx_enabled' due to enum/integer mismatch; have 'bool(struct tb_port *, unsigned int)' ...
->   drivers/thunderbolt/tb.h:1050:6: note: previous declaration of 'tb_port_is_clx_enabled' with type 'bool(struct tb_port *, enum tb_clx)' ...
-> 
-> I.e. the type of the 2nd parameter of tb_port_is_clx_enabled() in the
-> declaration is unsigned int, while the definition spells enum tb_clx.
-> Synchronize them to the former as the parameter is in fact a mask of the
-> enum values.
-> 
-> Cc: Martin Liska <mliska@suse.cz>
-> Cc: Andreas Noever <andreas.noever@gmail.com>
-> Cc: Michael Jamet <michael.jamet@intel.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Yehezkel Bernat <YehezkelShB@gmail.com>
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+It is annoying that the filter parsing of triggers do not show up in the
+error_log. Trying to figure out what is incorrect in the input is
+difficult when it fails for a typo.
 
-Looks good now. I will pick this up after the merge window closes.
-Thanks!
+Have the errors of filter parsing show up in error_log as well.
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace_events_trigger.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
+index 918730d74932..19ce9d22bfd7 100644
+--- a/kernel/trace/trace_events_trigger.c
++++ b/kernel/trace/trace_events_trigger.c
+@@ -1067,7 +1067,14 @@ int set_trigger_filter(char *filter_str,
+ 
+ 	/* The filter is for the 'trigger' event, not the triggered event */
+ 	ret = create_event_filter(file->tr, file->event_call,
+-				  filter_str, false, &filter);
++				  filter_str, true, &filter);
++
++	/* Only enabled set_str for error handling */
++	if (filter) {
++		kfree(filter->filter_string);
++		filter->filter_string = NULL;
++	}
++
+ 	/*
+ 	 * If create_event_filter() fails, filter still needs to be freed.
+ 	 * Which the calling code will do with data->filter.
+-- 
+2.35.1
+
