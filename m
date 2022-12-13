@@ -2,124 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E7F64B2FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FF164B307
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 11:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbiLMKJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 05:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S235108AbiLMKPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 05:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiLMKJW (ORCPT
+        with ESMTP id S234753AbiLMKPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 05:09:22 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D72B62D9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 02:09:22 -0800 (PST)
+        Tue, 13 Dec 2022 05:15:12 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026061B7AD;
+        Tue, 13 Dec 2022 02:14:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670926162; x=1702462162;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y7mWiA5z3JdJhnUdjaksIrJ99mKqEF14NUmSP2j4CxM=;
-  b=kx6UYUj7hE7Nu3aAkQDkglVrlMKh9ocU+aTL5rYzXshxQ6+K8ZBAI2O+
-   lz0QALe7NmbAARIZ9SFqY8I2zhghP2EShC+tExbne8W5d8zUCQcXlyPG5
-   OWv0/B1IhO75Aij0HcKB+UhdVP059pN8akS1xlpHiBjZ5NfHhKFiOIlR6
-   bUadQ+ATH/mnzUtyqCW6fnLeCgGmUzTa3YHuuQLRNjs5pL5UnR7R5d7b9
-   jII590Pu0Fk3ZdubRAmEcvTVNAbBULAnx3LYG55uiuhYMNzTUHDtrRt7r
-   M7stHrjrhY7qPEOGAzPOYDyGFPCyl310QydDhQ4KUh6b4is7ZaJrKGqLG
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670926496; x=1702462496;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Gfjh3ZJpkPC3xWETT6ztzTsldD6PDg4VZwFB/XqjB4k=;
+  b=uVkClGY1+hj2U+jqWNkpVmIVKhNhEEQMzoPZpFK1yfZ+Rmz6EpzFSK61
+   TwaspXeREpRLheZnstDI6/5gtMeaaWCLbiWJVGheMhyk0EUrpxDnPG/sQ
+   nLpJ2SXnc/K8/2QPLmZH3nIogrKYKq3PiGmPdSuByEK1v33xmcZKWPBvZ
+   9g7mVM1a+pn/Vst7rdK031H+FVz6SWEdl9Y0VZHdeMbClzXE+8Ug5GFTx
+   DMxPY/WeV2ix3642at8mg2IzwMPaL1BPqlT25vJvCFlVpYzVdfVktV/63
+   iOr61ZGXXGqLFbo2CKct1BRtRB1go9LK+YIl8yaY+QSxDSPG0zn0my5jN
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319240455"
 X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="319240455"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:09:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="712021323"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="712021323"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.28.83]) ([10.213.28.83])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 02:09:14 -0800
-Message-ID: <398d55d0-3256-238e-132a-195baaf7f4a6@intel.com>
-Date:   Tue, 13 Dec 2022 11:09:12 +0100
+   d="scan'208";a="127869668"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2022 03:14:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 03:14:56 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 03:14:50 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <ceggers@arri.de>
+Subject: [Patch net] net: dsa: microchip: remove IRQF_TRIGGER_FALLING in request_threaded_irq
+Date:   Tue, 13 Dec 2022 15:44:40 +0530
+Message-ID: <20221213101440.24667-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of
- xchg
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <Y5OE3AX7DS/DfClX@smile.fi.intel.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <Y5OE3AX7DS/DfClX@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.12.2022 19:56, Andy Shevchenko wrote:
-> On Fri, Dec 09, 2022 at 04:48:39PM +0100, Andrzej Hajda wrote:
->> The pattern of setting variable with new value and returning old
->> one is very common in kernel. Usually atomicity of the operation
->> is not required, so xchg seems to be suboptimal and confusing in
->> such cases. Since name xchg is already in use and __xchg is used
->> in architecture code, proposition is to name the macro exchange.
->>
->> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
->> ---
->> Hi,
->>
->> I hope there will be place for such tiny helper in kernel.
->> Quick cocci analyze shows there is probably few thousands places
->> where it could be used, of course I do not intend to do it :).
->>
->> I was not sure where to put this macro, I hope near swap definition
->> is the most suitable place.
-> 
-> Ah, swap() in this context is not the same. minmax.h hosts it because
-> it's often related to the swap function in the sort-type algorithms. > >> Moreover sorry if to/cc is not correct - get_maintainers.pl was
->> more confused than me, to who address this patch.
-> 
-> ...
-> 
->>   include/linux/minmax.h | 14 ++++++++++++++
-> 
-> Does it really suit this header? I would expect something else.
-> Maybe include/linux/non-atomic/xchg.h, dunno.
+KSZ swithes used interrupts for detecting the phy link up and down.
+During registering the interrupt handler, it used IRQF_TRIGGER_FALLING
+flag. But this flag has to be retrieved from device tree instead of hard
+coding in the driver, so removing the flag.
 
-non-atomic seems quite strange for me, I would assume everything not in 
-atomic is non-atomic, unless explicitly specified.
+Fixes: ff319a644829 ("net: dsa: microchip: move interrupt handling logic from lan937x to ksz_common")
+Reported-by: Christian Eggers <ceggers@arri.de>
+Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+---
+ drivers/net/dsa/microchip/ksz_common.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> 
-> Btw, have you looked if Ingo's gigantic series have done anything to cmpxchg.h
-> and related headers? Maybe some ideas can be taken from there?
-> 
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index d612181b3226..c68f48cd1ec0 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -1883,8 +1883,7 @@ static int ksz_irq_common_setup(struct ksz_device *dev, struct ksz_irq *kirq)
+ 		irq_create_mapping(kirq->domain, n);
+ 
+ 	ret = request_threaded_irq(kirq->irq_num, NULL, ksz_irq_thread_fn,
+-				   IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
+-				   kirq->name, kirq);
++				   IRQF_ONESHOT, kirq->name, kirq);
+ 	if (ret)
+ 		goto out;
+ 
 
-Grepping it didn't give any clue.
-
-Looking at 'near' languages just to get an idea (they name the function 
-differently):
-
-C++ [1]: exchange and swap are in utility header
-Rust[2]: replace and swap are in std::mem module
-
-This is some argument to put them together.
-
-[1]: https://en.cppreference.com/w/cpp/header/utility
-[2]: https://doc.rust-lang.org/std/mem/index.html
-
-Regards
-Andrzej
+base-commit: e095493091e850d5292ad01d8fbf5cde1d89ac53
+-- 
+2.36.1
 
