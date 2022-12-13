@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA8564B073
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DD164B06A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiLMHdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 02:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
+        id S234662AbiLMHal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 02:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234671AbiLMHdm (ORCPT
+        with ESMTP id S234538AbiLMHai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 02:33:42 -0500
-Received: from mail-m11880.qiye.163.com (mail-m11880.qiye.163.com [115.236.118.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DF311A1E;
-        Mon, 12 Dec 2022 23:33:38 -0800 (PST)
-Received: from [172.16.12.69] (unknown [58.22.7.114])
-        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id E0491201C6;
-        Tue, 13 Dec 2022 15:33:34 +0800 (CST)
-Message-ID: <cd4639e4-b0e4-3141-5b9f-1a7bd14cb799@rock-chips.com>
-Date:   Tue, 13 Dec 2022 15:33:35 +0800
+        Tue, 13 Dec 2022 02:30:38 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41391AF26;
+        Mon, 12 Dec 2022 23:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670916638; x=1702452638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T/4fTI8XAOxsvA34xrnPsv9rjRhIMMEqFu1gCstvong=;
+  b=TxygkzsTjypPM5BTr4NwbAk6NKd2/gFJSG47zqkKIYkBxgaNVKmnDIzr
+   /0FfjKgG+We4cBnmtOsjTkfY43xsW5Eu1glLPiEMZJpdfXWftbkT+ZueD
+   t2/OuRgvL9ga3Q7FgsAgl/o9NvliCG1oKoUoVaGs2VKcH03CWQp9KLbzG
+   b5KB+GFcHy/+qBtu9nfGThOXumaPWCfet2eDu/oV7BC8Yok31aRx3AqgT
+   GlgonEpZfOh5DfW3ExDJq2mjAEdYt6XBl4oCKGI6d0BmmIw3O7k5BfvqJ
+   2tpWvgfV0rUMrXmHAm1XT/uoZHk2KyWjbCCcoLQ9/q0AsUecSgEXJAYfd
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="192833257"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Dec 2022 00:30:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 00:30:37 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Tue, 13 Dec 2022 00:30:36 -0700
+Date:   Tue, 13 Dec 2022 08:35:45 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
+        <lars.povlsen@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        kernel test robot <lkp@intel.com>,
+        "Dan Carpenter" <error27@gmail.com>
+Subject: Re: [PATCH net-next] net: microchip: vcap: Fix initialization of
+ value and mask
+Message-ID: <20221213073545.vuel5l6k7cej6xk6@soft-dev3-1>
+References: <20221209120701.218937-1-horatiu.vultur@microchip.com>
+ <20221212130224.19bf695f@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Cc:     shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 2/3] mmc: starfive: Add sdio/emmc driver support
-Content-Language: en-GB
-To:     William Qiu <william.qiu@starfivetech.com>
-References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
- <20221207131731.1291517-3-william.qiu@starfivetech.com>
- <faea4932-add6-fc51-836d-b113e8c9a194@rock-chips.com>
- <26e9c3eb-aaeb-8cbd-dda0-20f28331dbeb@starfivetech.com>
-From:   Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <26e9c3eb-aaeb-8cbd-dda0-20f28331dbeb@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTR0eVh5DGUlMTR4aTUxIGVUTARMWGhIXJB
-        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MEk6EQw*DD0jOE0rIzoZQjAt
-        NTkKCzJVSlVKTUxLQkpNQ0pOTU9CVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-        C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlDSkM3Bg++
-X-HM-Tid: 0a850a67395a2eb6kusne0491201c6
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221212130224.19bf695f@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+The 12/12/2022 13:02, Jakub Kicinski wrote:
+> 
+> On Fri, 9 Dec 2022 13:07:01 +0100 Horatiu Vultur wrote:
+> >       case VCAP_FIELD_U128:
+> > +             value = data->u128.value;
+> > +             mask = data->u128.value;
+> 
+> If setting both to value is intentional - please mention in the commit
+> message. Otherwise this looks odd.
 
-On 2022/12/13 15:21, William Qiu wrote:
-> 
-> 
-> On 2022/12/13 10:24, Shawn Lin wrote:
->> Hi
->
->> use ".common_caps = MMC_CAP_CMD23" instead.
->>
-> 
-> Hi Shawn,
-> 
-> Thank you for taking time to review.
-> The .common_caps is not defined in dw_mci_drv_data.
-> And .num_caps is also used in dw_mci-rockchip.c.
-> 
+It should not be both set to value. Will fix this in th next version.
 
-That means your patch is based on old upstream kernel which hasn't
-been updated for at least one year.:)
-
-> Best regards,
-> William Qiu
->>> +    .set_ios = dw_mci_starfive_set_ios,
->>> +    .parse_dt = dw_mci_starfive_parse_dt,
->>> +    .execute_tuning = dw_mci_starfive_execute_tuning,
->>> +};
->>> +
->>> +static const struct of_device_id dw_mci_starfive_match[] = {
->>
+-- 
+/Horatiu
