@@ -2,51 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9595A64B188
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC67264B18B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiLMIvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
+        id S234890AbiLMIvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234825AbiLMIvL (ORCPT
+        with ESMTP id S234913AbiLMIvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:51:11 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53342192
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:51:09 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0458D68D06; Tue, 13 Dec 2022 09:50:59 +0100 (CET)
-Date:   Tue, 13 Dec 2022 09:50:57 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Klaus Jensen <its@irrelevant.dk>
-Cc:     linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
-        Klaus Jensen <k.jensen@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] nvme-pci: fix doorbell buffer value endianness
-Message-ID: <20221213085057.GA3998@lst.de>
-References: <20221212150243.41283-1-its@irrelevant.dk>
+        Tue, 13 Dec 2022 03:51:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE47167C9;
+        Tue, 13 Dec 2022 00:51:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4591B22053;
+        Tue, 13 Dec 2022 08:51:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670921488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cJqVpp0rgt2DpLfJteOt1+knopZ57BAnBRXhD56Saew=;
+        b=MfMJRehQtolYF5vDu/F2qedFOWN5WjmU9c57R+GI1JCJbJYbMgJO0bjjf4S1YVNy0qGtIo
+        u672Fjtmqv/Ii8avOlmNsNaT+W4ZkjnojFEgAYgg+bY/BIy2tr2FefoWzPGm0l/yfl6CEJ
+        bn5zrj+XgsAI5VrL7PTa5ET5Aefo6Ok=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 215B2138EE;
+        Tue, 13 Dec 2022 08:51:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qu2dBBA9mGN5LAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 13 Dec 2022 08:51:28 +0000
+Date:   Tue, 13 Dec 2022 09:51:27 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Mina Almasry <almasrymina@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
+Message-ID: <Y5g9D12uEr7HpP5K@dhcp22.suse.cz>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+ <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
+ <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212150243.41283-1-its@irrelevant.dk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 04:02:43PM +0100, Klaus Jensen wrote:
-> -		old_value = *dbbuf_db;
-> -		*dbbuf_db = value;
-> +		old_value = le32_to_cpu(*dbbuf_db);
-> +		*dbbuf_db = cpu_to_le32(value);
+On Tue 13-12-22 14:30:57, Huang, Ying wrote:
+> Mina Almasry <almasrymina@google.com> writes:
+[...]
+> After these discussion, I think the solution maybe use different
+> interfaces for "proactive demote" and "proactive reclaim".  That is,
+> reconsider "memory.demote".  In this way, we will always uncharge the
+> cgroup for "memory.reclaim".  This avoid the possible confusion there.
+> And, because demotion is considered aging, we don't need to disable
+> demotion for "memory.reclaim", just don't count it.
 
-As the buildbot noticed, this now means dbbuf_dbs needs to be
-a __le32, and the endianess annoations will have to wee through
-quite a few places.
+As already pointed out in my previous email, we should really think more
+about future requirements. Do we add memory.promote interface when there
+is a request to implement numa balancing into the userspace? Maybe yes
+but maybe the node balancing should be more generic than bound to memory
+tiering and apply to a more fine grained nodemask control.
+
+Fundamentally we already have APIs to age (MADV_COLD, MADV_FREE),
+reclaim (MADV_PAGEOUT, MADV_DONTNEED) and MADV_WILLNEED to prioritize
+(swap in, or read ahead) which are per mm/file. Their primary usability
+issue is that they are process centric and that requires a very deep
+understanding of the process mm layout so it is not really usable for a
+larger scale orchestration.
+The important part of those interfaces is that they do not talk about
+demotion because that is an implementation detail. I think we want to
+follow that model at least. From a higher level POV I believe we really
+need an interface to age&reclaim and balance memory among nodes. Are
+there more higher level usecases?
+-- 
+Michal Hocko
+SUSE Labs
