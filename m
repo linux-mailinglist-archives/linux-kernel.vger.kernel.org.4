@@ -2,131 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8A964B0D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DB164B0D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbiLMIKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S234714AbiLMILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiLMIKq (ORCPT
+        with ESMTP id S234583AbiLMILN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:10:46 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F6517881
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:10:44 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id z26so3643033lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:10:44 -0800 (PST)
+        Tue, 13 Dec 2022 03:11:13 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6317E34
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:11:12 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so2701254pje.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:11:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ngP6KFAyVOKzK+3E0gEeMUxmzS5AboYYNyPmbfhWDPo=;
-        b=mnEUKTrYOg4f5a19BkYRim4NFQND3oHmrTnyfVaHX9TY1chrPh3TB9fsj0l7ojWVsy
-         kCvaZP3s/c5sjJeRxcs89oBmF1EFHjeOrUpMJVBXEuWPvw8i9ybCFftHw7alis4J1qrW
-         m98bqWRIovxzxgdO4KlOgPB1JRK+GFU97SO/SsOv3UORS+2GjgAoVuIOrnQy93QcF9uS
-         BJ7wM+txhtnMa9o3PlKymssEHE/4SduvaNQac1IcZMkiaBg+jr3dprNlNxXF78/ZwW33
-         yvRfUl4NOtMbu8a3vBQBqo29xQOrgezlXKuB3DBFZzC96SfJlUDvM0OAyOc5NDI/ZCRC
-         7scw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LdixbUsDgZBRFhhWcpEMBV8T7dpZCUPI7rjUYbSLzrM=;
+        b=udcno0lDcEMVMXQpTnhDi/Iy/Bnh+y+OyDrCwV/6DKlKH/rDyWjlhUElau3iKhH9gc
+         iLXIP1e+JK+6T3aI+Z5doWUSOiwMAIMj8kIAc8wSJzw8DsjbnHJhPZtaQ7pnH0III6z9
+         8isv63T3WDzVyOYEZBiY0B+/knY2IQREMpo4MYikJc2BxXtGulXDOLbPQU51EzYdy+UM
+         HhYDCSEfnQ5q1j8wbx6MBB78q5HsirhWKOHmB1o0e6Hm1iVpW2ir+DxNEDxls/vP6Ptt
+         7+Hf+4cJQ20dK10UViRSN9xhQt3TryrXvWWbJsYEubrszJ7ZiVTcTKWmclgCmygNsjK8
+         4XUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ngP6KFAyVOKzK+3E0gEeMUxmzS5AboYYNyPmbfhWDPo=;
-        b=P+D0ZrGIjH/tscsNMzcq1b01lpY6hfVh2P4E98h3tyZ7fIsZU1o406IUHMQ9J3r/Xn
-         AtL1jsm7vTxsEN0Iz/gXtOGFK/CFHh5pGYtN5LnwpbMA7YMi/m0ywMdtxyEPmf2PuCy4
-         pmf1WtAj+km262uYu73eoNfO2gvpA089tPt9/pSCPYxGI3BljXKnJjg2AS2fn8p5oVco
-         X7Eoyx6hp2OkyTXJaH45fVru8FYmog0AHDc7Ky0WZIb7Q8dmXY6S0mtOssI++tddgAj+
-         ikoEA56ajJIEx6FToiT2VKqyBmKsaiE+YMw02w6/vMtQ4Z8oi2yN9yWBmce1TWiSYhKX
-         0FEA==
-X-Gm-Message-State: ANoB5pk8UoYzsIAF7RHhnQnLQ7AMQED/0mOrmwqsOcNAHG7EdbO8WjmO
-        bw22rVe7V4WlXBRCVMzDmvSv5A==
-X-Google-Smtp-Source: AA0mqf6IyhG9UPqLf+uuvW/OUq5YPM6GivLxxOEuHnk5ozfFtWnNjuHl2owEFbAXnr9BNwtjUTXCGg==
-X-Received: by 2002:ac2:59c7:0:b0:4b5:850e:6f4a with SMTP id x7-20020ac259c7000000b004b5850e6f4amr4888236lfn.69.1670919042818;
-        Tue, 13 Dec 2022 00:10:42 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac25506000000b004b53eb60e3csm259904lfk.256.2022.12.13.00.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 00:10:42 -0800 (PST)
-Message-ID: <81265853-6705-861b-2ee5-32adf3c05341@linaro.org>
-Date:   Tue, 13 Dec 2022 09:10:41 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LdixbUsDgZBRFhhWcpEMBV8T7dpZCUPI7rjUYbSLzrM=;
+        b=X31MGpmBXlZ9Qjzjm8buq2+QpgCgJ+IWQxpCyvAiIQBHrM9tse2DW4DsLkZW1ASya4
+         +KtR0opz4A4hAt038mNpcAXSZlOlaooun7At0Da0sF/LcVYx2biiiuEE3jVVHCI5tCdB
+         FfZE6/DPlgYaLsfLokZes+o2hdvnfp6BaJtwaBW0lCYEFriu5tNSQ8cvqd9nQFwoC5+P
+         lMiGRlmVz3I8t8E8UerTEpuotB/ESVMBTtvz3LDo50xUkJqtvYZ9b1uODR58Wwaqm7OK
+         sC47VH1PJgfqs2Go4L4zVaRSWVORcl5d0IL9MDwmeEn9ljtS4WA7tiIjEfdhs4IlPPDe
+         EvdA==
+X-Gm-Message-State: ANoB5pkuHgt0W3upD7tR6T8ujwUQU5cdtwj1jUijB9TqXtsR3NplWUa8
+        Uh7gzXBpXnDy0EluPUWlQrhMdFs+iCss5JKu
+X-Google-Smtp-Source: AA0mqf5Ta1p1en6UFwTxcEdNJFP03V1wR+0fMQiNUSSbVS6Z/nSmWTedseocX/UQj6mYupQ3CAkGBA==
+X-Received: by 2002:a17:90b:198e:b0:219:cb6d:7b0b with SMTP id mv14-20020a17090b198e00b00219cb6d7b0bmr19147590pjb.44.1670919072227;
+        Tue, 13 Dec 2022 00:11:12 -0800 (PST)
+Received: from niej-dt-7B47.. (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id m6-20020a17090a34c600b00219025945dcsm6747757pjf.19.2022.12.13.00.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 00:11:11 -0800 (PST)
+From:   Jun Nie <jun.nie@linaro.org>
+To:     tytso@mit.edu, jaegeuk@kernel.org, ebiggers@kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fscrypt: Fix null pointer when defer i_crypt_info
+Date:   Tue, 13 Dec 2022 16:11:03 +0800
+Message-Id: <20221213081103.2182231-1-jun.nie@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-Content-Language: en-US
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, andersson@kernel.org,
-        johan@kernel.org
-Cc:     bmasney@redhat.com, kernel test robot <lkp@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221213051109.8685-1-quic_shazhuss@quicinc.com>
- <f4102715-45b7-1196-878e-e0adce0d8c96@linaro.org>
- <09fbf4af-f1c6-828f-3ca6-3f06ff83b5ce@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <09fbf4af-f1c6-828f-3ca6-3f06ff83b5ce@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 09:05, Shazad Hussain wrote:
-> 
-> 
-> On 12/13/2022 1:31 PM, Krzysztof Kozlowski wrote:
->> On 13/12/2022 06:11, Shazad Hussain wrote:
->>> Add the pcie2a, pcie2a_phy, and respective tlmm
->>> nodes that are needed to get pcie 2a controller
->>> enabled on Qdrive3.
->>>
->>> This patch enables 4GB 64bit memory space for
->>> PCIE_2A to have BAR allocations of 64bit pref mem
->>> needed on this Qdrive3 platform with dual SoCs
->>> for root port and switch NT-EP. Hence this ranges
->>> property is overridden in sa8540p-ride.dts only.
->>>
->>> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->>> Reviewed-by: Brian Masney <bmasney@redhat.com>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>
->> Drop, robot did not report this patch.
->>
-> 
-> You mean I should keep only Kernel test as Reported by ?
+syzbot report below bug[1]. Fix it with checking null pointer before
+deferring i_crypt_info.
 
-No, I mean entire line should be removed. This robot did not report
-missing feature/bug thus there is no credit for him for creating this patch.
+[1]
+general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 3 PID: 456 Comm: repro Not tainted 6.1.0+gc0daf896 #169
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+RIP: 0010:fscrypt_limit_io_blocks+0xfa/0x2c0
+Call Trace:
+ <TASK>
+ ext4_iomap_begin+0x6c5/0x7e0
+ ? asym_cpu_capacity_scan+0x6b0/0x6b0
+ ? ext4_iomap_begin_report+0x6b0/0x6b0
+ ? __sanitizer_cov_trace_const_cmp1+0x1a/0x20
+ ? ext4_commit_super+0x3c1/0x560
+ ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+ ? ext4_handle_error+0x3bf/0x6b0
+ ? ext4_iomap_begin_report+0x6b0/0x6b0
+ iomap_iter+0x538/0xc80
+ iomap_bmap+0x1ed/0x2d0
+ ? iomap_to_fiemap+0x220/0x220
+ ? rwsem_down_read_slowpath+0xc00/0xc00
+ ? __ext4_iget+0x19c/0x4370
+ ext4_bmap+0x288/0x470
+ ? mpage_prepare_extent_to_map+0xd80/0xd80
+ bmap+0xb1/0x120
+ jbd2_journal_init_inode+0x7d/0x3f0
+ ? up_write+0x6c/0xb0
+ ? jbd2_journal_init_dev+0x130/0x130
+ ? register_shrinker+0x33/0x160
+ ext4_fill_super+0xa467/0xc650
+ ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
+ ? ext4_reconfigure+0x2ad0/0x2ad0
+ ? snprintf+0xbb/0xf0
+ ? vsprintf+0x40/0x40
+ ? up_write+0x6c/0xb0
+ ? __sanitizer_cov_trace_cmp4+0x16/0x20
+ ? set_blocksize+0x2f0/0x380
+ get_tree_bdev+0x438/0x740
+ ? get_tree_bdev+0x438/0x740
+ ? ext4_reconfigure+0x2ad0/0x2ad0
+ ext4_get_tree+0x1d/0x30
+ vfs_get_tree+0x88/0x2e0
+ path_mount+0x6ca/0x1ec0
+ ? putname+0x110/0x150
+ ? finish_automount+0x790/0x790
+ ? putname+0x115/0x150
+ __x64_sys_mount+0x2aa/0x340
+ ? copy_mnt_ns+0xab0/0xab0
+ ? __sanitizer_cov_trace_cmp4+0x16/0x20
+ ? exit_to_user_mode_prepare+0x40/0x120
+ do_syscall_64+0x35/0x80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> 
->>> ---
->>> Changes since v3:
->>> - Fix syntax error and add Reported-by (Kernel test robot)
->>
->> So the previous patch was not even build... thus 100% not tested. Is
->> this one at least built?
->>
-> 
-> I built that, but after running checkpatch with --fix, I think it 
-> dropped the closing brace of tlmm. My bad :|
+Fixes: 5fee36095cda ("fscrypt: add inline encryption support")
+Reported-by: syzbot+ba9dac45bc76c490b7c3@syzkaller.appspotmail.com
+Signed-off-by: Jun Nie <jun.nie@linaro.org>
+---
+ fs/crypto/inline_crypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please do not send patches with checkpatch --fix, without prior testing
-the patch. Not the code, but the patch. By testing patch I mean checking
-different mainline branch, applying the mbox/patch (git am) and
-comparing with git diff.
-
-Best regards,
-Krzysztof
+diff --git a/fs/crypto/inline_crypt.c b/fs/crypto/inline_crypt.c
+index cea8b14007e6..fec859e83774 100644
+--- a/fs/crypto/inline_crypt.c
++++ b/fs/crypto/inline_crypt.c
+@@ -232,7 +232,7 @@ void fscrypt_destroy_inline_crypt_key(struct super_block *sb,
+ 
+ bool __fscrypt_inode_uses_inline_crypto(const struct inode *inode)
+ {
+-	return inode->i_crypt_info->ci_inlinecrypt;
++	return inode->i_crypt_info && inode->i_crypt_info->ci_inlinecrypt;
+ }
+ EXPORT_SYMBOL_GPL(__fscrypt_inode_uses_inline_crypto);
+ 
+-- 
+2.34.1
 
