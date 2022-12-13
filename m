@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F3064B770
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24DB64B775
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235882AbiLMOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S235003AbiLMOfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:35:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiLMOca (ORCPT
+        with ESMTP id S229787AbiLMOfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:32:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D06201A7;
-        Tue, 13 Dec 2022 06:32:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11063B810FB;
-        Tue, 13 Dec 2022 14:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E684C433D2;
-        Tue, 13 Dec 2022 14:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670941946;
-        bh=6Las1K6UsElcFFPKMNMg/lxZmRcl29cdsCfhLvP95Vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UeIoSVBuUB/0IelecfTsfwwOBLOjzk4biEag1yZSGBsgssA16IZz7Zw3OF7b+Vy2V
-         3PH0MIiz/Y5bbJne7eAkOxpYE7wdDgq4SQY81kalO1rwQ0uyOSVFyVMea04l3GBuJV
-         68y42W5AGZiQuabz+FWzGA2XCMnqzGE7ALHC5oO4=
-Date:   Tue, 13 Dec 2022 15:32:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2] usb: gadget: aspeed_udc: Add check for
- dma_alloc_coherent
-Message-ID: <Y5iM90xfRT65Invq@kroah.com>
-References: <20221213122116.43278-1-jiasheng@iscas.ac.cn>
+        Tue, 13 Dec 2022 09:35:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63818C06
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Bp1NI5NxRf5KPduMUan4tguo3EwGdbgGIpn9oy21c2M=; b=Z9y1G33QX5Kj1ZxByLC52j2sGN
+        t/6SEShZ/322yWKWHyaUh1MxwCUY7jL8NnetYR/Xs30mEgxSsMIfdbnc/kIx6/4sN4LFygtPjW4AG
+        hvedfDFbtVQGaeH7S1fkBKv4y1c3c0aqesi5yxUK9HTKPvKGHYO/24pRLfLcEySQJcREDVC6FYN1q
+        3HJlIUofmcFw/kJojLFvMuhhWR/IKO1Bz6pofhWoyYQAZPU6PH6Fp0MTDmfUN8njxQfYEfsxhs/9/
+        N5ONc6nOw92WqGncQ8iciGN1uUMMJuKFx6+zVuvSRjXJOjtOLkqiSrDvpXzgQO5WeoEgAe1EpBAgS
+        OQZdpXbQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p56Mq-00CIsd-V2; Tue, 13 Dec 2022 14:34:49 +0000
+Date:   Tue, 13 Dec 2022 14:34:48 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        SeongJae Park <sj@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        vishal.moola@gmail.com
+Subject: Re: [PATCH -next 2/8] mm: page_idle: Convert page idle to use folios
+Message-ID: <Y5iNiNUoNlupyhow@casper.infradead.org>
+References: <20221213092735.187924-1-wangkefeng.wang@huawei.com>
+ <20221213092735.187924-3-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213122116.43278-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221213092735.187924-3-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 08:21:16PM +0800, Jiasheng Jiang wrote:
-> Add the check for the return value of dma_alloc_coherent
-> in order to avoid NULL pointer dereference.
-> 
-> Fixes: 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Tue, Dec 13, 2022 at 05:27:29PM +0800, Kefeng Wang wrote:
+> -static struct page *page_idle_get_page(unsigned long pfn)
+> +static struct folio *folio_idle_get_folio(unsigned long pfn)
+>  {
+> -	struct page *page = pfn_to_online_page(pfn);
+> +	struct folio *folio = pfn_to_online_folio(pfn);
+>  
+> -	if (!page || !PageLRU(page) ||
+> -	    !get_page_unless_zero(page))
+> +	if (!folio || !folio_test_lru(folio) || !folio_try_get(folio))
+>  		return NULL;
 
-Again, please prove that you tested this and follow the requirements at:
-	Documentation/process/researcher-guidelines.rst
-in order for us to be able to accept your changes.
+You've changed the semantics here, and I suspect will cause breakage
+as a result.  Before if you called page_idle_get_page() on a tail page,
+you got a NULL pointer returned.  Now you get the folio that contains
+that tail page.
 
-thanks,
+I think you have to continue to call pfn_to_online_page() and do
+the conversion to folio manually in this function.  By all means
+convert this function to return the folio, but you need to take a
+little more care.
 
-greg k-h
