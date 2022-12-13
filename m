@@ -2,79 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021F064BD08
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CA264BD10
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiLMTRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S236849AbiLMTRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236795AbiLMTRF (ORCPT
+        with ESMTP id S236833AbiLMTRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:17:05 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592AC1208C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:17:03 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id x28so6587116lfn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qNFlupRNay7QtBN1gYgAwepn8MTKWIgiDFJfAaHmsaE=;
-        b=HqncM7Q19slsaUK8jTLvD50q5GQpnTnnBLmJjh8atlwWgPnDiwC3M8hXC5krKDc5dS
-         15Pw3m1kbpTJ3XCR+jJjV7U0QtxzWee3Y38e/qNhwSpXsGi0oRd+oaoRKcugvLZaxT06
-         ImbojyURPjn/SkxP1ogKIwMz0qDAMSA6RJv7SXOfIHf785VsyS3+AltV3F4AxUoHO7K0
-         v55ZDFZnZ+aRx51EKg5kLRSTVqzHF10e8VdSbnf96TgR+PDfbWWiaoNOQUU2NvUdjoiY
-         spPgHNneyb3jxtNYtPMN1UGsY5UTnwr5DQL5A0d7zCFVOSTiX3VtrK3lwOhUiPm34fKt
-         /E/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNFlupRNay7QtBN1gYgAwepn8MTKWIgiDFJfAaHmsaE=;
-        b=fW0jfD1qF77Rb27bNG4Y5jnsaQZv8UxtIBWk3E0ADtTebgUgj0I/lFdhZVnH6cxl6D
-         ZtRVVlkEDO5NSJQCy4XrgmfbBoXXhUj912Umjql0dkNeKKb2HZga5cejYSYJ4Y2eDSG2
-         7kOGPhgcTgx3aAKazuWE7kaiV1zvhK47Zou8+Cs7csnNCHHLARKph2nzyMpjmJp86cM2
-         pOE46C9qRMWQnZapWfcW6Iphc2hj+C2riBfl+brbUFQvLCgh5gexf+Jx8j7o5HL+p1fY
-         Pz4Z3qkYYhRQ298Is8FDjQAmFgGhSE68R5wQ/zIWQkWCJIf6Iuv2Lo6RO5EsrwJSYD0w
-         Si6g==
-X-Gm-Message-State: ANoB5plMvsoDZxo4RwXxCb0Z64FXg64b97dak4UjuvMXc6usQmCDb3dl
-        ZKOcMZc/V87BLqPoWGCQBGg6eg==
-X-Google-Smtp-Source: AA0mqf78OGRZNv2p3To8XTH7hJMvF9CJYStMqeqmnG4Fk0Pq67mOWBidvvzX1YI2TueLoxgmk7pQYg==
-X-Received: by 2002:ac2:4283:0:b0:4a4:68b7:deb7 with SMTP id m3-20020ac24283000000b004a468b7deb7mr5457333lfh.19.1670959021812;
-        Tue, 13 Dec 2022 11:17:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q23-20020ac25297000000b004b5821219fbsm478726lfm.60.2022.12.13.11.17.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 11:17:01 -0800 (PST)
-Message-ID: <1057d0b2-9003-7144-74e0-d4bde1e9b39b@linaro.org>
-Date:   Tue, 13 Dec 2022 20:17:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 6/6] i2c: qcom-cci: Deprecate duplicated compatibles
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 13 Dec 2022 14:17:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97625C79
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:17:22 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p5AmD-00040J-Rz; Tue, 13 Dec 2022 20:17:17 +0100
+Received: from pengutronix.de (hardanger.fritz.box [IPv6:2a03:f580:87bc:d400:154c:16df:813d:4fb3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4414F13E18D;
+        Tue, 13 Dec 2022 19:17:17 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 20:17:17 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221213183305.544644-1-konrad.dybcio@linaro.org>
- <20221213183305.544644-6-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213183305.544644-6-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
+Message-ID: <20221213191717.422omlznn2cjjwjz@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-4-msp@baylibre.com>
+ <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
+ <20221202083740.moa7whqd52oasbar@blmsp>
+ <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
+ <20221213171309.c4nrdhwjj2ivrqim@blmsp>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bcur63jhnvxo3fy4"
+Content-Disposition: inline
+In-Reply-To: <20221213171309.c4nrdhwjj2ivrqim@blmsp>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,19 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 19:33, Konrad Dybcio wrote:
-> Many compatibles have been introduced, pointing to the same config data.
-> Leave a note reminding future developers to not do that again.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Changes in v2:
-> - new patch
-> 
 
+--bcur63jhnvxo3fy4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 13.12.2022 18:13:09, Markus Schneider-Pargmann wrote:
+> > > The tcan mram size is limited to 2048 so I would like to avoid limiti=
+ng
+> > > the possible sizes of the tx fifos.
+> >=20
+> > What FIFO sizes are you using currently?
+>=20
+> I am currently using 13 for TXB, TXE and RXF0.
 
-Best regards,
-Krzysztof
+Have you CAN-FD enabled?
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--bcur63jhnvxo3fy4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYz7oACgkQrX5LkNig
+013yOwf/WiOvUyh+xa09Nz4+inYEqnqII6YfTLcYZRTdf09PmO9ycmOt+ZNmf2j1
+qEkz1M4G0WzdBDdE9QfCr8WKo6pIE8/TrCkKD/D4rAmlgpHYJ1CkZjKZKGVmMuAw
+qhJybdYoYx7z3eeXbJmws6ApPtfcz8HWjEmubcZEO/sK1wBqXonGfNzie2CXiYzc
+v9LqFwUe41Xe136qZ2gr0AktNJcwnh8btwGNmJVOAijmKlD5rShKpGmcK8EQFPKp
+v/hxkYZo95fNu1Df0/8YvevlTGZ1kZMyIuAP4ip5O71d4KMhgMzGMTIyGMWteyOV
+8koHq9OeqTNEPj2hITpyTuM9FllONw==
+=/Rqn
+-----END PGP SIGNATURE-----
+
+--bcur63jhnvxo3fy4--
