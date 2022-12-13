@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A7C64AD24
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A7C64AD27
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbiLMBgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S234198AbiLMBgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbiLMBgc (ORCPT
+        with ESMTP id S234180AbiLMBgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:36:32 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D601D673;
-        Mon, 12 Dec 2022 17:36:30 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id z4so1870623ljq.6;
-        Mon, 12 Dec 2022 17:36:30 -0800 (PST)
+        Mon, 12 Dec 2022 20:36:36 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B651D642;
+        Mon, 12 Dec 2022 17:36:35 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z26so2515172lfu.8;
+        Mon, 12 Dec 2022 17:36:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fvZ9dsbTSO5t0cyccsnnRz540B4PzoHkUUU3iPVGl+U=;
-        b=WgQoeWydkLJHdlGHP6gVQ0NIsZGb+iP903Y9h70Q2Y2zyLPlvkHC23QVprLR0ayRsR
-         hnv2d2eKWl94mrkGGphxPTE/BdzFgZCPLaB/ywq7t6ESd+XGt9ggyRRaypfxw647VOtN
-         ElOJwKa2zTFse1Lqr5jfQ7TBDL0P/aYXIBmoNAbuQaT75UWYAOjZMcLCKYrX9WPjyRbq
-         ikTbp6iwWsdGzWRWtmjWl1elWwF9nZPrswsokChiAYPt6VdUh8A3rzBUI0Rk35ur0Jbn
-         rbQX5Guzkwgjn4D43+XRfXXrqxLwontWolWiiE8BEerqSVM1SR80yBzbvfkDMoLYBWh6
-         DtKg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gkXRGTeYk3totrxjicy/YMmtCnEnptDqd4J8k9vI8nY=;
+        b=jtzJPT36io9O+jtDg+i02EFBIsisrizM6g9Wcksnq3ss1gwhzHkqhwxZidqcIAzTGa
+         eB/n80jEOnOmEekXkVpirjTJ65wxlZTfcFRoAk8b0ak2aWR9Hb8KOprrjBQBeBTOFnr4
+         JBd5/JAUXtmGgyX+t5J8KyipwZYK0BPbTiQ4093rvLtRZ/PqVyxjn9jLJMX5/RMH1QZm
+         L+U/NMOVUOmqilghc/5tQ1Z73MvxtZRF7zAx9q1IDRYBPCPYacp/dLD/NEaOZy4xai9f
+         FRFoN6AR8bqk3zvytCFLKeXYXSTpsU3LIEsRg5SGXxbSczTYWGXB9KRv5eQviCHJBu2V
+         5HeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fvZ9dsbTSO5t0cyccsnnRz540B4PzoHkUUU3iPVGl+U=;
-        b=bQtnN/exxrEpQtTTzq0+5HwvFpGj8P6EBK3bmdTtdKgsh6w8f0iGiFfKiEQ11R0uzN
-         i0Bc5pSvhx+lr74Ip3BvfziIxTcaQTuxHYFjJcOPRAgHe391P0tDfeIzNn4H8m84blfa
-         jm9MzsseZyrBoPP7rpUASb6x8XrNz/Ln/UyU1tQQLb9vGeIAHJwjlYmsEwD5G1EMX3AR
-         o50/O360F84cRlnHvdYfNxVPNvOqwbVrcjRnOTnVOX8Aaj7SJxf/j30BqbRYNV9FEFp2
-         dy5FZkWBUhPqlln3VppqqgrRGHbk9djKxOt72n1zP4pxFIuP+aMpHxNZo36UbD39YRIE
-         39NA==
-X-Gm-Message-State: ANoB5pngzfyyaNZWjXrf6klXrShTbEf5o2791cRDoYsxnVF9Fu2smiqm
-        ZKXA8nSIXgkMmdX7vnyOE6xU6xDo8+bPZz+vcQ==
-X-Google-Smtp-Source: AA0mqf5wvwkn6bzo+kHF2Ex75sOLfziqTgDo96h9zXDqPU6XFguoZFVG9koMv9TLZBI5+I3Wc5FTsiJcFynLhHDdlsg=
-X-Received: by 2002:a05:651c:3c9:b0:279:ee82:f30a with SMTP id
- f9-20020a05651c03c900b00279ee82f30amr7180475ljp.397.1670895389018; Mon, 12
- Dec 2022 17:36:29 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gkXRGTeYk3totrxjicy/YMmtCnEnptDqd4J8k9vI8nY=;
+        b=R/oKdbVhsjVXSSjTrRFkFakdAxv9KyByp39xY4vB8DXYFhX+ScXL75Un5uSVPMNJ9G
+         wDUvQo4vFW7B9M2dPxWKgAt9MVQRilBs0PQdckU9NXntoLkGc9+chZpJqmCvZXhJ7eNI
+         x08RYa4LI++Vi0FQb729tbabi7fLieEPNwPrH9QeU/BQRkpFrXL4HjtJsDcqd3MC1oo+
+         VJmD+vBJbreLBhGL3TwNyZFQKGEf+cdubZIxeLT2mWycMVo9L6EbxyZ5OT4whsfQXFsT
+         NL67NAcwBDRfleDhoZnebe1OSK6Lbr7jvlKg9+j8PKcRLWxneEZVMeV9HTNkqRHv0ijp
+         CGWg==
+X-Gm-Message-State: ANoB5plKMUnK0pnmg4BEEnqY0X1599+7Q+2bKayR4ukQr7+gb0U6v2LU
+        BibXTILXuePfagmsrhQ6fiZoeWNu/t9PTXI7eg==
+X-Google-Smtp-Source: AA0mqf4VT4kUSse4hGyGngXID4CFSPgFNvw0mlASJB2/gRLS9q54bJwO6ectd11va4JINTv+9LAWMOhTTJHLhKvgZ+w=
+X-Received: by 2002:a05:6512:104a:b0:4b5:6683:795c with SMTP id
+ c10-20020a056512104a00b004b56683795cmr7038881lfb.101.1670895393221; Mon, 12
+ Dec 2022 17:36:33 -0800 (PST)
 MIME-Version: 1.0
-From:   "Seija K." <doremylover123@gmail.com>
-Date:   Mon, 12 Dec 2022 20:36:18 -0500
-Message-ID: <CAA42iKzuae0PL1qm20sU87D2V-GF8mMFPSjKJu=fB81RrZgZbg@mail.gmail.com>
-Subject: [PATCH] drivers: correct parameters passed to strncmp
-To:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Kani Toshi <toshi.kani@hpe.com>, Jia He <justin.he@arm.com>
-Cc:     James Morse <james.morse@arm.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        devel@acpica.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
-        nd@arm.com, Peter Zijlstra <peterz@infradead.org>
+References: <cover.1670541363.git.quic_asutoshd@quicinc.com> <2d0824aaad6624aba41b3b5546e7473033c6b920.1670541364.git.quic_asutoshd@quicinc.com>
+In-Reply-To: <2d0824aaad6624aba41b3b5546e7473033c6b920.1670541364.git.quic_asutoshd@quicinc.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Tue, 13 Dec 2022 09:36:21 +0800
+Message-ID: <CAGaU9a-R6CbEZBW5x1_+eMYhORHLya-5CRFv+LCKSTi-7xeqwQ@mail.gmail.com>
+Subject: Re: [PATCH v11 15/16] ufs: core: mcq: Add completion support in poll
+To:     Asutosh Das <quic_asutoshd@quicinc.com>
+Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        eddie.huang@mediatek.com, daejun7.park@samsung.com,
+        bvanassche@acm.org, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,141 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many times when strncmp is called with the intent of ignoring the NULL
-terminator, the null terminator is accidentally included in that
-comparison, which in practice is just an strcmp with extra steps.
+On Fri, Dec 9, 2022 at 7:32 AM Asutosh Das <quic_asutoshd@quicinc.com> wrote:
+>
+> Complete cqe requests in poll. Assumption is that
+> several poll completion may happen in different CPUs
+> for the same completion queue. Hence a spin lock
+> protection is added.
+>
+> Co-developed-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-Subtract from the places where the intent seems to be to do a
-comparison without the NULL terminator.
-
-Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-
-diff --git a/arch/arm/mach-omap2/sr_device.c b/arch/arm/mach-omap2/sr_device.c
-index db672cf19a51..883f3078e233 100644
---- a/arch/arm/mach-omap2/sr_device.c
-+++ b/arch/arm/mach-omap2/sr_device.c
-@@ -94,12 +94,12 @@ static int __init sr_init_by_name(const char
-*name, const char *voltdm)
-struct omap_volt_data *volt_data;
-static int i;
-- if (!strncmp(name, "smartreflex_mpu_iva", 20) ||
-- !strncmp(name, "smartreflex_mpu", 16))
-+ if (!strncmp(name, "smartreflex_mpu_iva", 19) ||
-+ !strncmp(name, "smartreflex_mpu", 15))
-sr_data = &omap_sr_pdata[OMAP_SR_MPU];
-- else if (!strncmp(name, "smartreflex_core", 17))
-+ else if (!strncmp(name, "smartreflex_core", 16))
-sr_data = &omap_sr_pdata[OMAP_SR_CORE];
-- else if (!strncmp(name, "smartreflex_iva", 16))
-+ else if (!strncmp(name, "smartreflex_iva", 15))
-sr_data = &omap_sr_pdata[OMAP_SR_IVA];
-if (!sr_data) {
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index e3318e5575a3..1d832f484f8d 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4333,7 +4333,7 @@ static int __init amd64_edac_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-if (!x86_match_cpu(amd64_cpuids))
-diff --git a/drivers/edac/i10nm_base.c b/drivers/edac/i10nm_base.c
-index 65aeea53e2df..546dd9fc5cc5 100644
---- a/drivers/edac/i10nm_base.c
-+++ b/drivers/edac/i10nm_base.c
-@@ -759,7 +759,7 @@ static int __init i10nm_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-diff --git a/drivers/edac/igen6_edac.c b/drivers/edac/igen6_edac.c
-index 544dd19072ea..7df2b3a82221 100644
---- a/drivers/edac/igen6_edac.c
-+++ b/drivers/edac/igen6_edac.c
-@@ -1275,7 +1275,7 @@ static int __init igen6_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-edac_op_state = EDAC_OPSTATE_NMI;
-diff --git a/drivers/edac/pnd2_edac.c b/drivers/edac/pnd2_edac.c
-index 2b306f2cc605..08aeab382cb4 100644
---- a/drivers/edac/pnd2_edac.c
-+++ b/drivers/edac/pnd2_edac.c
-@@ -1532,7 +1532,7 @@ static int __init pnd2_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index 0c779a0326b6..6f8904b55213 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -3638,7 +3638,7 @@ static int __init sbridge_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
-index 9397abb42c49..ea38449710f5 100644
---- a/drivers/edac/skx_base.c
-+++ b/drivers/edac/skx_base.c
-@@ -657,7 +657,7 @@ static int __init skx_init(void)
-return -EBUSY;
-owner = edac_get_owner();
-- if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR)))
-+ if (owner && strncmp(owner, EDAC_MOD_STR, sizeof(EDAC_MOD_STR) - 1))
-return -EBUSY;
-if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-diff --git a/drivers/media/pci/bt8xx/bttv-cards.c
-b/drivers/media/pci/bt8xx/bttv-cards.c
-index c2b5ab287dd7..c24cc2f46d2f 100644
---- a/drivers/media/pci/bt8xx/bttv-cards.c
-+++ b/drivers/media/pci/bt8xx/bttv-cards.c
-@@ -2968,7 +2968,7 @@ static void identify_by_eeprom(struct bttv *btv,
-unsigned char eeprom_data[256])
-if (0 == strncmp(eeprom_data,"GET MM20xPCTV",13))
-type = BTTV_BOARD_MODTEC_205;
-- else if (0 == strncmp(eeprom_data+20,"Picolo",7))
-+ else if (0 == strncmp(eeprom_data + 20, "Picolo", 6))
-type = BTTV_BOARD_EURESYS_PICOLO;
-else if (eeprom_data[0] == 0x84 && eeprom_data[2]== 0)
-type = BTTV_BOARD_HAUPPAUGE; /* old bt848 */
-diff --git a/drivers/net/ethernet/cavium/liquidio/lio_main.c
-b/drivers/net/ethernet/cavium/liquidio/lio_main.c
-index 98793b2ac2c7..795c44656ab3 100644
---- a/drivers/net/ethernet/cavium/liquidio/lio_main.c
-+++ b/drivers/net/ethernet/cavium/liquidio/lio_main.c
-@@ -912,7 +912,7 @@ liquidio_probe(struct pci_dev *pdev, const struct
-pci_device_id __maybe_unused *
-static bool fw_type_is_auto(void)
-{
-return strncmp(fw_type, LIO_FW_NAME_TYPE_AUTO,
-- sizeof(LIO_FW_NAME_TYPE_AUTO)) == 0;
-+ sizeof(LIO_FW_NAME_TYPE_AUTO) - 1) == 0;
-}
-/**
-diff --git a/drivers/staging/nvec/nvec_power.c
-b/drivers/staging/nvec/nvec_power.c
-index b1ef196e1cfe..3ed9e06e32de 100644
---- a/drivers/staging/nvec/nvec_power.c
-+++ b/drivers/staging/nvec/nvec_power.c
-@@ -207,7 +207,7 @@ static int nvec_power_bat_notifier(struct
-notifier_block *nb,
-* This differs a little from the spec fill in more if you find
-* some.
-*/
-- if (!strncmp(power->bat_type, "Li", 30))
-+ if (!strncmp(power->bat_type, "Li", 2))
-power->bat_type_enum = POWER_SUPPLY_TECHNOLOGY_LION;
-else
-power->bat_type_enum = POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
