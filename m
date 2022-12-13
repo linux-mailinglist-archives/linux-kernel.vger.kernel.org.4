@@ -2,228 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1094464B7EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369C064B7C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbiLMO6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S235234AbiLMOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiLMO6i (ORCPT
+        with ESMTP id S234255AbiLMOuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:58:38 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765B020982;
-        Tue, 13 Dec 2022 06:58:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670943517; x=1702479517;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=n1Iz0xuquQcsewEe9eCEHtwu2R9ypF9zn7yduOFE3ys=;
-  b=k6Qye6OdTxWgjD5MMLVKBylmv0MB4UeKoLNOilFrCNJKWqcWV74WJZeP
-   xgadC4g8vIblj5vCQfMQ6QiRRYACTMPgce7knlgfyRv4P2ywOSSxZzV9D
-   9wK7OxC2EY0/6tnHFdmKRYjyhA+ixBgaO7SwvA8y7uaLN4j0P/+r63v98
-   DDS6PlchFHKGf4+jZOw0O2D0/CkYHIf9scNnTXWrb0P+z4eY2H3A5oDpx
-   Ty0b6wS1jVNWGjx3g0pnQsHAoOXiW+zbNcIc07hSUUmVZEgPrvfSIZg8L
-   ohVsulF7UNaYY5qied8MI+jtOEB98+ylAuGveTG7Ncwec5sDL6kdKuHIi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319289577"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="319289577"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 06:58:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="598822748"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="598822748"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2022 06:58:33 -0800
-Date:   Tue, 13 Dec 2022 22:48:41 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 8/8] fpga: m10bmc-sec: Add support for N6000
-Message-ID: <Y5iQyefMnpxJsBFw@yilunxu-OptiPlex-7050>
-References: <20221211103913.5287-1-ilpo.jarvinen@linux.intel.com>
- <20221211103913.5287-9-ilpo.jarvinen@linux.intel.com>
- <Y5gXUMAvN5xBOGpF@yilunxu-OptiPlex-7050>
- <225b7feb-fa23-fdc-42af-b0a0f4737fca@linux.intel.com>
+        Tue, 13 Dec 2022 09:50:11 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CF9110B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:50:10 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id q6so5252221lfm.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mB0KyvqD0ZqBlFhaR84Srpxb4q3+wwTogg2S2DXkML4=;
+        b=dl6LT2ovp/B3Y8Aog5ybn1DkZ642QYFV8JNKX1yB40+DiHoijbyZlUIHK0L+iiGECp
+         oLVuAIg1kjBIOeAJJlIlAMb5szh4oey9yAGsHu7yhT33z/mzLNfWvcDHH34j4zhlJ3i5
+         D7dBBiM+najrsgIoQNE0ytCF4qSbsHPCMKGVzzcysociARtsY9ubAvbCOGFjd4xbEfhx
+         v/cDVJdUJ6jFlGqWTpvPhPbsbCDHkZznO6CytKKZ47lqgFa51DbckYI7ZZNS2Rl5KvFA
+         UgXUKedi4I2MLVkNwDz6uoWcW1WHDmYNt6sYgQNoQlxncSz4C4V4pRF7oow+U//Z0O5Q
+         VduA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mB0KyvqD0ZqBlFhaR84Srpxb4q3+wwTogg2S2DXkML4=;
+        b=OdBZkLyEpAniATq4KVph3W7tv6nwT2cYz+kA2ALryfRCrvqhTLyKcMYfR8GSDvxmUn
+         14ZeKslHfcVNDpIRKwBLv2H81HZigZQ9mrMJLeHV8Y4uTfbsgznbYa8g0cPth4U5NYub
+         8I8bxBGnp2A6EiVJ873jy+hrftIl3ySbbWaHgc7Zcvqp70rKcej87wm8sI13445lM7oG
+         st1Zv48oBiDFCOR3Ia8JM/xorXqA9x8sdfXdjhq5ra6ONZl5z3DezYccic24vQ8nFB27
+         C7yZ5Swrgt1VtcgoagMULOCUHWL11IOLuga37SeB1KH0g3tfaUwyT2J0N/Dipe5g7ulq
+         RCOg==
+X-Gm-Message-State: ANoB5pn2UQjbbT9092L0SwKnCc0RNa1VEF47qJoOrSldWZbr6PqVJTkA
+        vylCChb3coXejgsinYkGVfdygw==
+X-Google-Smtp-Source: AA0mqf4KuAGFhbPb0Ty13iG9BNOSTdRpE4YMXaM6bojLbmytGkhMxOskRTyEq2EfStBLNwzjOiqO3A==
+X-Received: by 2002:ac2:430c:0:b0:4a4:68b9:6085 with SMTP id l12-20020ac2430c000000b004a468b96085mr4816436lfh.16.1670943009070;
+        Tue, 13 Dec 2022 06:50:09 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c2-20020ac25f62000000b004b7033da2d7sm42359lfc.128.2022.12.13.06.50.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 06:50:08 -0800 (PST)
+Message-ID: <371d9af8-5af4-e421-2382-8fc29b35eec6@linaro.org>
+Date:   Tue, 13 Dec 2022 15:50:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <225b7feb-fa23-fdc-42af-b0a0f4737fca@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 01/17] dt-bindings: clock: Fix node descriptions in
+ uniphier-clock example
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
+ <20221213082449.2721-2-hayashi.kunihiko@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213082449.2721-2-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-13 at 12:18:50 +0200, Ilpo Järvinen wrote:
-> On Tue, 13 Dec 2022, Xu Yilun wrote:
+On 13/12/2022 09:24, Kunihiko Hayashi wrote:
+> Prior to adding dt-bindings for SoC-dependent controllers, rename the
+> clock nodes to the generic names in the example.
 > 
-> > On 2022-12-11 at 12:39:13 +0200, Ilpo Järvinen wrote:
-> > > Add support for PMCI-based flash access path and N6000 sec update
-> > > support. Access to flash staging area is different for N6000 from that
-> > > of the SPI interfaced counterparts.
-> > > 
-> > > Introduce intel_m10bmc_flash_bulk_ops to allow interface specific
-> > > differentiations for the flash access path for sec update and make
-> > > m10bmc_sec_read/write() in sec update driver to use the new operations.
-> > > 
-> > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/fpga/intel-m10-bmc-sec-update.c |  65 ++++++++++-
-> > >  drivers/mfd/intel-m10-bmc-pmci.c        | 145 ++++++++++++++++++++++++
-> > >  include/linux/mfd/intel-m10-bmc.h       |  14 +++
-> > >  3 files changed, 223 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > index 9922027856a4..885e38f13897 100644
-> > > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> > > @@ -14,6 +14,20 @@
-> > >  #include <linux/platform_device.h>
-> > >  #include <linux/slab.h>
-> > >  
-> > > +#define M10BMC_PMCI_FLASH_MUX_CTRL	0x1d0
-> > > +#define FLASH_MUX_SELECTION		GENMASK(2, 0)
-> > > +#define FLASH_MUX_IDLE			0
-> > > +#define FLASH_MUX_NIOS			1
-> > > +#define FLASH_MUX_HOST			2
-> > > +#define FLASH_MUX_PFL			4
-> > > +#define get_flash_mux(mux)		FIELD_GET(FLASH_MUX_SELECTION, mux)
-> > > +
-> > > +#define FLASH_NIOS_REQUEST		BIT(4)
-> > > +#define FLASH_HOST_REQUEST		BIT(5)
-> > > +
-> > > +#define M10_FLASH_INT_US		1
-> > > +#define M10_FLASH_TIMEOUT_US		10000
-> > > +
-> > >  struct m10bmc_sec {
-> > >  	struct device *dev;
-> > >  	struct intel_m10bmc *m10bmc;
-> > > @@ -21,6 +35,7 @@ struct m10bmc_sec {
-> > >  	char *fw_name;
-> > >  	u32 fw_name_id;
-> > >  	bool cancel_request;
-> > > +	struct mutex flash_mutex;
-> > >  };
-> > >  
-> > >  static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> > > @@ -31,6 +46,24 @@ static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> > >  #define REH_MAGIC		GENMASK(15, 0)
-> > >  #define REH_SHA_NUM_BYTES	GENMASK(31, 16)
-> > >  
-> > > +static int m10bmc_sec_set_flash_host_mux(struct intel_m10bmc *m10bmc, bool request)
-> > > +{
-> > > +	u32 ctrl;
-> > > +	int ret;
-> > > +
-> > > +	ret = regmap_update_bits(m10bmc->regmap, M10BMC_PMCI_FLASH_MUX_CTRL,
-> > > +				 FLASH_HOST_REQUEST,
-> > > +				 FIELD_PREP(FLASH_HOST_REQUEST, request));
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	return regmap_read_poll_timeout(m10bmc->regmap,
-> > > +					M10BMC_PMCI_FLASH_MUX_CTRL, ctrl,
-> > > +					request ? (get_flash_mux(ctrl) == FLASH_MUX_HOST) :
-> > > +						  (get_flash_mux(ctrl) != FLASH_MUX_HOST),
-> > > +					M10_FLASH_INT_US, M10_FLASH_TIMEOUT_US);
-> > > +}
-> > > +
-> > >  static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u32 size)
-> > >  {
-> > >  	struct intel_m10bmc *m10bmc = sec->m10bmc;
-> > > @@ -41,6 +74,15 @@ static int m10bmc_sec_write(struct m10bmc_sec *sec, const u8 *buf, u32 offset, u
-> > >  	u32 leftover_tmp = 0;
-> > >  	int ret;
-> > >  
-> > > +	if (sec->m10bmc->flash_bulk_ops) {
-> > > +		mutex_lock(&sec->flash_mutex);
-> > > +		/* On write, firmware manages flash MUX */
-> > > +		ret = sec->m10bmc->flash_bulk_ops->write(m10bmc, buf, offset, size);
-> > > +		mutex_unlock(&sec->flash_mutex);
-> > > +
-> > > +		return ret;
-> > > +	}
-> > > +
-> > >  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
-> > >  		return -EINVAL;
-> > >  
-> > > @@ -69,7 +111,21 @@ static int m10bmc_sec_read(struct m10bmc_sec *sec, u8 *buf, u32 addr, u32 size)
-> > >  	u32 leftover_offset = read_count * stride;
-> > >  	u32 leftover_size = size - leftover_offset;
-> > >  	u32 leftover_tmp;
-> > > -	int ret;
-> > > +	int ret, ret2;
-> > > +
-> > > +	if (sec->m10bmc->flash_bulk_ops) {
-> > > +		mutex_lock(&sec->flash_mutex);
-> > > +		ret = m10bmc_sec_set_flash_host_mux(m10bmc, true);
-> > > +		if (ret)
-> > > +			goto mux_fail;
-> > 
-> > If the flash host mux fail, we still need to un-mux it?
+> And drop redundant examples and a parent node of the clock as it is not
+> directly necessary.
 > 
-> It seemed safer to attempt to set it back after the code tried to alter 
-> the MUX setting. I don't see how it could be harmful. Likely we're in the 
-> deep end in that case anyway so setting it back might just fails too 
-> (which is harmless sans the small extra delay) or just confirms that the 
-> value wasn't changed.
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
 
-Fine. It's good to me.
 
-> 
-> -- 
->  i.
-> 
-> > > +		ret = sec->m10bmc->flash_bulk_ops->read(m10bmc, buf, addr, size);
-> > > +mux_fail:
-> > > +		ret2 = m10bmc_sec_set_flash_host_mux(m10bmc, false);
-> > > +		mutex_unlock(&sec->flash_mutex);
-> > > +		if (ret)
-> > > +			return ret;
-> > > +		return ret2;
-> > > +	}
-> > >  
-> > >  	if (WARN_ON_ONCE(stride > sizeof(leftover_tmp)))
-> > >  		return -EINVAL;
-> > > @@ -611,6 +667,8 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
-> > >  	if (ret)
-> > >  		return ret;
-> > >  
-> > > +	mutex_init(&sec->flash_mutex);
-> > > +
-> > >  	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
-> > >  			sec->fw_name_id);
-> > >  	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
-> > > @@ -633,6 +691,7 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
-> > >  fw_uploader_fail:
-> > >  	kfree(sec->fw_name);
-> > >  fw_name_fail:
-> > > +	mutex_destroy(&sec->flash_mutex);
-> > >  	xa_erase(&fw_upload_xa, sec->fw_name_id);
-> > >  	return ret;
-> > >  }
-> > 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
