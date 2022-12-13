@@ -2,267 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBCD64BF20
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AD064BF2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbiLMWJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S236933AbiLMWMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235836AbiLMWJX (ORCPT
+        with ESMTP id S236932AbiLMWMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:09:23 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0269193F7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:09:21 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id h8-20020a1c2108000000b003d1efd60b65so9055651wmh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:09:21 -0800 (PST)
+        Tue, 13 Dec 2022 17:12:34 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FD9193DB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:12:32 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id q6so7306437lfm.10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SK0a74SExwo6tehnROoC1PuxTBylsxyy4c3HHV+FZZQ=;
-        b=dCICheVvn42ItoiBZ18d0THWwQrq4cS0ikUWBSnXTdmj1me47v5qpwL9q8GRtAuQK6
-         FONbctAog/MmGZ6lkLWVl9rOkA3AyhdJIPrJFVLVzwhjoBozxJcSaJw/3MU0xXi9WIwU
-         mfoo4gIZmkFdBjORPDFNhKRJR4HErxlraipTQ2u6uEM1GkAQFJDyvtU+/KcFB2DvoNk+
-         xxbna0D1B19jQ1oM9CGsVJQr+3LIkzp8ELh2cNm3N5yDhp8PCDJ5AK2S/taQIktanQzT
-         lC/sdSWRU6KAkhrZRbwen9v/5NRuO3TKdrVzu34ZoUdlTB5AT37rRSadpNzLguqoALSK
-         jUEg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T57htGX7w3pkH4iZZTnHtoAqVjQqavKl1hAXdV9m3Xw=;
+        b=aWL7c0bP6EiVYuu/P0uqLB73C7ZV/p4lnopcLYdPlg5vBlfdWSSS5J5K+68KyrWS2o
+         jEqKn65kKUCDERq3/4Kc27EWfEu3nisJcQ86SU4Ef3i5kuJJtmtDThP9/tESLNCMsqWI
+         /JtF/+sislqE8NIhkmm8tO6vgCALEVSHey2x8igeGSmA3ItCGa+cvhybGm6/BJz4pqwh
+         V/hBcq6fzfg+1XhARv7E4x2ql/AvFifeRkUWuTnE4JXQxY0wE6R9NuCXY8Nt1F0xafiS
+         2KfaRgv2mwmEOmZZ3umY5AmcRvK/TPa89EpnVXId5xqsTEj+/29aDnVj2X6BaSIIOPCu
+         aYZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SK0a74SExwo6tehnROoC1PuxTBylsxyy4c3HHV+FZZQ=;
-        b=ZSX0zEpM9P2D83blQWg0+utT7BNZZwNvtkSc0f3Pv1yAAActqw0xCdgCt52IfhRizx
-         xukMsLZ2K2R5VQy/rxs662glBptcqiCOc1pKAZWWbaIBzXWE7tspXFYVn3I5O/RIRQnA
-         zm+RldFmMLyQGTAQB/5QrEzvOcsCmHkJTuhI/JmmS+5Rd1/s+6rOu/nYimgWRBRV8ehR
-         X7Y/x0I7O/iww3x2FRLr0w90siaLPurlkaLwcVTPUaXAwN9iG32/vlL4/BPYQ4zwek4x
-         YWA126x0EE6K129AjvH62poGekFy0msESdYYGc79xthSvRmnXKhvCOanUz6HuyS5pF5F
-         t5CA==
-X-Gm-Message-State: ANoB5pkHfNuZx/wrFqdmxR6H4lmdFBTKrLIp+/8FWZQbCkfT+VIpU9OE
-        CEFwwA8Wtsc/mfIQdyZDq5HMMm5/HHSWwqL+sQXZIg==
-X-Google-Smtp-Source: AA0mqf5CZkQpS3/8A2dDqs0IvrnKonot9L9N0BgdovL45nAQFEl0ri0WSUV56B9zGddQ58Pate5qSfa/2m0tRqlRUpQ=
-X-Received: by 2002:a1c:7308:0:b0:3d0:50c4:432c with SMTP id
- d8-20020a1c7308000000b003d050c4432cmr16984wmb.67.1670969360110; Tue, 13 Dec
- 2022 14:09:20 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T57htGX7w3pkH4iZZTnHtoAqVjQqavKl1hAXdV9m3Xw=;
+        b=v0T+cry2u9gLQk74FMbvEZ6C2SLyAIKbRQB7OFwAQC82s0M4h4h6Hvo297Vpk8QQ7v
+         PWqvU0iie2mR5mRq6M1/gdxwrvXHobsX554o65e9Jlue3a45l/7VDdcyg2JIePsHJ0Dc
+         j8mGyyOXsaV7jPwAQ+Hz4sZp63J138yXVmU8ZrBoT/qN/1MKjsXu4bs4Hu02ie7vWXMf
+         bmuhAdxYlm+YFOxmH0e1APc8MrCfY6OdnT3uMr7jS5u4SlT6cMGRRNvOX9t/8e/CHN3I
+         9Ds7y3msNaXEP9h/IVNp2voL/Qzv3BuHisH91xQp7AF1k/7JyfL0tPr4XmPu6se6ax/Y
+         Ar/g==
+X-Gm-Message-State: ANoB5pnrpv52BNSmneg7OlRZxpa1Kc/lDpqP9UQJLD8QMgdDvqhg7pnX
+        3WVypAiQtrWMG55J1lQToOxI0w==
+X-Google-Smtp-Source: AA0mqf4EGeYBCVnq7ugiUMSP85O1VdGYrTp1W6FPDn9r/8+q1Or+VRc9vCV7Jr28hpe4ERzuNLodXQ==
+X-Received: by 2002:a05:6512:3e19:b0:4b0:6023:6f6f with SMTP id i25-20020a0565123e1900b004b060236f6fmr8448931lfv.57.1670969550443;
+        Tue, 13 Dec 2022 14:12:30 -0800 (PST)
+Received: from ?IPv6:::1? (dzccz6yfpdgdc5vwjcs5y-3.rev.dnainternet.fi. [2001:14ba:a085:4d00:8c19:462c:c647:13f2])
+        by smtp.gmail.com with ESMTPSA id z2-20020a195042000000b004b4b90a6992sm534511lfj.95.2022.12.13.14.12.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Dec 2022 14:12:30 -0800 (PST)
+Date:   Wed, 14 Dec 2022 00:11:58 +0200
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>
+CC:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_01/12=5D_dt-bindings=3A_displa?= =?US-ASCII?Q?y=3A_msm=3A_Rename_mdss_node_name_in_example?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ad7ecffc-3fc9-7859-82b7-9d161fc28cae@quicinc.com>
+References: <20221130200950.144618-1-a39.skl@gmail.com> <20221130200950.144618-2-a39.skl@gmail.com> <19e78a06-2f3d-92af-1988-b22dc3ffc84e@linaro.org> <ad7ecffc-3fc9-7859-82b7-9d161fc28cae@quicinc.com>
+Message-ID: <86FA3AF9-5B35-4E27-80DA-8B5BF9E6B3AC@linaro.org>
 MIME-Version: 1.0
-References: <Y491d1wEW4TfUi5f@kernel.org> <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com> <Y5DNBZNC5rBBqlJW@kernel.org>
- <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com> <Y5JfgyN59dSeKbUP@kernel.org>
- <Y5Jl8MeW90DXy1wT@kernel.org> <8F6F0C27-53F3-4837-A19C-845768253249@linux.vnet.ibm.com>
- <Y5cxyk3OdgFXlyhS@kernel.org> <BB236C92-3505-4DAB-AE28-A55F74EDE161@linux.vnet.ibm.com>
-In-Reply-To: <BB236C92-3505-4DAB-AE28-A55F74EDE161@linux.vnet.ibm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 13 Dec 2022 14:09:07 -0800
-Message-ID: <CAP-5=fVVPDo_3cjKmumEVKDN2Zssz-ZU=nYVQFNr1xUGHxx-PQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 1:53 AM Athira Rajeev
-<atrajeev@linux.vnet.ibm.com> wrote:
->
->
->
-> > On 12-Dec-2022, at 7:21 PM, Arnaldo Carvalho de Melo <acme@kernel.org> =
-wrote:
-> >
-> > Em Fri, Dec 09, 2022 at 12:04:18PM +0530, Athira Rajeev escreveu:
-> >>
-> >>
-> >>> On 09-Dec-2022, at 4:02 AM, Arnaldo Carvalho de Melo <acme@kernel.org=
-> wrote:
-> >>>
-> >>> Em Thu, Dec 08, 2022 at 07:04:52PM -0300, Arnaldo Carvalho de Melo es=
-creveu:
-> >>>> Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
-> >>>>>> On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel=
-.org> wrote:
-> >>>>>> Can you try again? tmp.perf/core? That "tmp." part means its a for=
-ce
-> >>>>>> pushed branch, so I just force pushed with some arch specific fixe=
-s, now
-> >>>>>> I'm down to (removing the successful builds and unrelated failures=
-, now
-> >>>>>> related to libbpf's F_DUPFD_CLOEXEC kaboom):
-> >>>>
-> >>>>> Ok Arnaldo, Sure, I will check with updated branch
-> >>>>
-> >>>>>> 5     7.38 fedora:34                     : FAIL gcc version 11.3.1=
- 20220421 (Red Hat 11.3.1-2) (GCC)
-> >>>>>>  /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function =E2=80=
-=98evsel__rawptr=E2=80=99:
-> >>>>>>  /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: =E2=
-=80=98TEP_FIELD_IS_RELATIVE=E2=80=99 undeclared (first use in this function=
-); did you mean =E2=80=98TEP_FIELD_IS_FLAG=E2=80=99?
-> >>>>>>   2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
-> >>>>>>        |                                    ^~~~~~~~~~~~~~~~~~~~~
-> >>>>>>        |                                    TEP_FIELD_IS_FLAG
-> >>>>
-> >>>>> I observed same issue as updated here:
-> >>>>> https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@l=
-inux.vnet.ibm.com/
-> >>>>
-> >>>>> Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of t=
-he system installed version.
-> >>>>> whereas it is there in header file in tools/lib/traceevent
-> >>>>
-> >>>>> # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
-> >>>>> # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
-> >>>>>   TEP_FIELD_IS_RELATIVE   =3D 256,
-> >>>>
-> >>>> Right, I had noticed that as well, so as a prep patch I'm adding the
-> >>>> patch below, before Ian's. Please check and provide an
-> >>>> Acked-by/Tested-by/Reviewed-by if possible.
-> >>>
-> >>> I ended up with the one below, _after_ Ian's patch as I had some trou=
-ble grafting
-> >>> it before and had already tested it this way multiple times, I'm push=
-ing
-> >>> this to tmp/perf.core.
-> >>>
-> >>> - Arnaldo
-> >>
-> >>
-> >> Hi Arnaldo, Ian
-> >>
-> >> Thanks for the fixes.
-> >>
-> >> Since we changed =E2=80=9CCONFIG_TRACEEVENT=E2=80=9D to =E2=80=9CCONFI=
-G_LIBTRACEEVENT=E2=80=9D,
-> >> below change is also needed in =E2=80=9Carch/powerpc/util/Build=E2=80=
-=9D
-> >>
-> >> diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/powe=
-rpc/util/Build
-> >> index 71e57f28abda..9889245c555c 100644
-> >> --- a/tools/perf/arch/powerpc/util/Build
-> >> +++ b/tools/perf/arch/powerpc/util/Build
-> >> @@ -1,5 +1,5 @@
-> >> perf-y +=3D header.o
-> >> -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
-> >> +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> >> perf-y +=3D perf_regs.o
-> >> perf-y +=3D mem-events.o
-> >> perf-y +=3D sym-handling.o
-> >>
-> >> With this change, I could successfully compile in these environment:
-> >> - Without libtraceevent-devel installed
-> >> - With libtraceevent-devel installed
-> >> - With =E2=80=9Cmake NO_LIBTRACEEVENT=3D1=E2=80=9D
-> >>
-> >> With above change,
-> >> Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> >
-> > I did that and the same thing for other architectures, thanks for
-> > testing!
-> >
-> > I'll now give a try at implementing it without
-> > tools/build/feature/test-libtraceevent-tep_field_is_relative.c, using
-> > just the version of libtraceevent, as Ian suggested.
-> >
-> > It would be great if you could test it again then,
-> >
->
-> Sure Arnaldo, I will test with updated code.
->
-> Thanks
-> Athira
 
 
-Thanks Athira and Arnaldo. It is a little strange to me to be using
-the shell to do a version number test. The intent was to be doing
-these in the code:
-#if LIBRTRACEEVENT_VERSION >=3D MAKE_LIBTRACEEVENT_VERSION(1, 5, 0)
-vs
-...
-LIBTRACEEVENT_VERSION_WITH_TEP_FIELD_IS_RELATIVE :=3D $(shell expr 1 \*
-255 \* 255 + 5 \* 255 + 0) # 1.5.0
-ifeq ($(shell test $(LIBTRACEEVENT_VERSION_CPP) -gt
-$(LIBTRACEEVENT_VERSION_WITH_TEP_FIELD_IS_RELATIVE); echo $$?),0)
-CFLAGS +=3D -DHAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-endif
-...
-#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-I'm a little selfish as I'm maintaining a bazel build and a single
-version number to maintain is easier than lots of HAVE_... tests. I'm
-happy to follow Arnaldo's lead. I think the test should also be
-greater-equal rather than greater-than:
-https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tree/include=
-/traceevent/event-parse.h?h=3Dlibtraceevent-v1.5#n128
-
-Thanks,
-Ian
-
-
-Ian
-
-> > Thanks,
-> >
-> > - Arnaldo
-> >
-> >
-> > diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/u=
-til/Build
-> > index 88553c578ed7a1c4..78ef7115be3d91a7 100644
-> > --- a/tools/perf/arch/arm64/util/Build
-> > +++ b/tools/perf/arch/arm64/util/Build
-> > @@ -3,7 +3,7 @@ perf-y +=3D machine.o
-> > perf-y +=3D perf_regs.o
-> > perf-y +=3D tsc.o
-> > perf-y +=3D pmu.o
-> > -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
-> > +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> > perf-$(CONFIG_DWARF)     +=3D dwarf-regs.o
-> > perf-$(CONFIG_LOCAL_LIBUNWIND) +=3D unwind-libunwind.o
-> > perf-$(CONFIG_LIBDW_DWARF_UNWIND) +=3D unwind-libdw.o
-> > diff --git a/tools/perf/arch/powerpc/util/Build b/tools/perf/arch/power=
-pc/util/Build
-> > index 71e57f28abdac7e9..9889245c555c4cfb 100644
-> > --- a/tools/perf/arch/powerpc/util/Build
-> > +++ b/tools/perf/arch/powerpc/util/Build
-> > @@ -1,5 +1,5 @@
-> > perf-y +=3D header.o
-> > -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
-> > +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> > perf-y +=3D perf_regs.o
-> > perf-y +=3D mem-events.o
-> > perf-y +=3D sym-handling.o
-> > diff --git a/tools/perf/arch/s390/util/Build b/tools/perf/arch/s390/uti=
-l/Build
-> > index aa8a5f05c9cb4706..db68840869979f2c 100644
-> > --- a/tools/perf/arch/s390/util/Build
-> > +++ b/tools/perf/arch/s390/util/Build
-> > @@ -1,5 +1,5 @@
-> > perf-y +=3D header.o
-> > -perf-$(CONFIG_TRACEEVENT) +=3D kvm-stat.o
-> > +perf-$(CONFIG_LIBTRACEEVENT) +=3D kvm-stat.o
-> > perf-y +=3D perf_regs.o
-> >
-> > perf-$(CONFIG_DWARF) +=3D dwarf-regs.o
+On 13 December 2022 23:53:48 EET, Abhinav Kumar <quic_abhinavk@quicinc=2Ec=
+om> wrote:
 >
+>
+>On 12/1/2022 11:54 AM, Dmitry Baryshkov wrote:
+>> On 30/11/2022 22:09, Adam Skladowski wrote:
+>>> Follow other YAMLs and replace mdss name into display-subystem=2E
+>>>=20
+>>> Signed-off-by: Adam Skladowski <a39=2Eskl@gmail=2Ecom>
+>>=20
+>> Reviewed-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
+>
+>Going to add two fixes tags here as we are touching two chipsets:
+>
+>Fixes: b93bdff44a85 ("dt-bindings: display/msm: add support for SM6115")
+>Fixes: 06097b13ef97 ("dt-bindings: display/msm: split dpu-qcm2290 into DP=
+U and MDSS parts")
+
+Note, your tag gif wrapped, so patchwork will pick it up incorrectly=2E
+
+>
+>Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc=2Ecom>
+>
+>>=20
+>> We will pick this into msm-fixes during the next cycle=2E
+>
+>Yes, we can with the above fixes tags but first, can you please send a MR=
+ from msm-next-lumag to msm-next? So that I can send a MR for fixes to msm-=
+next=2E
+
+This would create an additional merge commit in msm-next for no particular=
+ reason=2E You can branch -fixes from rc1, or from the msm-next-lumag and t=
+hen send MR to msm-next=2E
+
+>
+>ATM, they are out of sync=2E
+>
+>
+>>=20
+>>> ---
+>>> =C2=A0 =2E=2E=2E/devicetree/bindings/display/msm/qcom,qcm2290-mdss=2Ey=
+aml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+>>> =C2=A0 =2E=2E=2E/devicetree/bindings/display/msm/qcom,sm6115-mdss=2Eya=
+ml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2 +-
+>>> =C2=A0 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>=20
+>>> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,qcm229=
+0-mdss=2Eyaml b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-=
+mdss=2Eyaml
+>>> index d6f043a4b08d=2E=2E4795e13c7b59 100644
+>>> --- a/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss=
+=2Eyaml
+>>> +++ b/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss=
+=2Eyaml
+>>> @@ -72,7 +72,7 @@ examples:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #include <dt-bindings/interconnect/qcom=
+,qcm2290=2Eh>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #include <dt-bindings/power/qcom-rpmpd=
+=2Eh>
+>>> -=C2=A0=C2=A0=C2=A0 mdss@5e00000 {
+>>> +=C2=A0=C2=A0=C2=A0 display-subsystem@5e00000 {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =
+=3D <1>;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D=
+ <1>;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D =
+"qcom,qcm2290-mdss";
+>>> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115=
+-mdss=2Eyaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-md=
+ss=2Eyaml
+>>> index a86d7f53fa84=2E=2E886858ef6700 100644
+>>> --- a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss=
+=2Eyaml
+>>> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss=
+=2Eyaml
+>>> @@ -62,7 +62,7 @@ examples:
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #include <dt-bindings/interrupt-control=
+ler/arm-gic=2Eh>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #include <dt-bindings/power/qcom-rpmpd=
+=2Eh>
+>>> -=C2=A0=C2=A0=C2=A0 mdss@5e00000 {
+>>> +=C2=A0=C2=A0=C2=A0 display-subsystem@5e00000 {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =
+=3D <1>;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D=
+ <1>;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D =
+"qcom,sm6115-mdss";
+>>=20
+
+--=20
+With best wishes
+Dmitry
