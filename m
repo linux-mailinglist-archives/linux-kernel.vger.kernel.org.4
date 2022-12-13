@@ -2,121 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B6564BAE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8973964BAEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbiLMRT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S236239AbiLMR0Z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Dec 2022 12:26:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbiLMRTv (ORCPT
+        with ESMTP id S235691AbiLMR0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:19:51 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62E022BFE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:19:48 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o5-20020a05600c510500b003d21f02fbaaso1622261wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:19:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3EhMA6MMSu4b3D077MyxeOEBc3NixPe7QR4AlMv00C8=;
-        b=6zr23JVIZwJKfOEfOAIHU80gTz21PGMoILrZJWuBVj2+3ReU+NUtdHX4lYRSlw1iwW
-         nNXXjro6uxrP9zFiG//8W0znYdENXyWwpxDu6IhYzrvXx1vzyrcdPd8d6+PmR7DaypUJ
-         YYGL287lOUoAR3Haq+2KREXNxFA/d1WQrc02txsK6LSDdFfXnQryWp9jeIW9vb+dBrCi
-         LmfVJ7X5LuUmebgKkeT/2xIurygLi1VDF1c99nt7pRzyIVgUmEYweV96Nl+5froTqzPV
-         sk5YEA3/M6KnNOWm8AhyadA3avXxB5P/BdzPILHThKNztUtZBW5ovpOc6kPKI9q6Guqi
-         rKbQ==
+        Tue, 13 Dec 2022 12:26:23 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B34219014;
+        Tue, 13 Dec 2022 09:26:22 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id i20so381379qtw.9;
+        Tue, 13 Dec 2022 09:26:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3EhMA6MMSu4b3D077MyxeOEBc3NixPe7QR4AlMv00C8=;
-        b=NEcPDAmW+4Kvp9p8eamgTwJW0MV5ve7BHnQsbKB0c3mJ8s/V7iwFT0uqjEPfMndmve
-         MGGq2xFG8oCEcvi+ej/HHueDX1DAiOxOHyyK1KSoNA07oDm6cqtumqEQnXbjjZJ9zxz/
-         I7hv4sFQHQ0pLOx7uVV9ZRTWO0KIdI/lIvqvrxgZG68MrsLuLwt7G1NVsNUulB5g3JAg
-         o1UQ7qiC245WYQyOxD09teWkgLUxKiGLrxB8hbU07/yNlkf3+AderQFmMic34z2ntToi
-         Nczx3/kcycbXixGwuwfB6kLMJK9lgadz+5WCoedAisOsLnR29CoKFDTK2G8iPlyqaqKo
-         Z4Kw==
-X-Gm-Message-State: ANoB5pnyhPYVlRsrEQspboiWIqDfzvpBWVlRvDyO84rAVXVLQNb6tgta
-        BblEzWho+hTPZ5Qwku46I7m9ag==
-X-Google-Smtp-Source: AA0mqf6HuubEdSO6ViNbsmRGhbOFKBkYZ1FySXG5n3yoR1Uww9vgN0+1tuohDwdiPwnjF6shxTfySA==
-X-Received: by 2002:a05:600c:3acc:b0:3cf:9ac8:c537 with SMTP id d12-20020a05600c3acc00b003cf9ac8c537mr16411148wms.14.1670951987318;
-        Tue, 13 Dec 2022 09:19:47 -0800 (PST)
-Received: from blmsp ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05600c22d200b003c6bd12ac27sm13255188wmg.37.2022.12.13.09.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:19:46 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:19:46 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
- level interrupt
-Message-ID: <20221213171946.ejrb2glgo77jueff@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-5-msp@baylibre.com>
- <20221130171715.nujptzwnut7silbm@pengutronix.de>
- <20221201082521.3tqevaygz4nhw52u@blmsp>
- <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
- <20221201101220.r63fvussavailwh5@blmsp>
- <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
- <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1ABLNKqAitVQcKI2X5OFSDZh4I8+RKHdjqd+qpiEoKc=;
+        b=Gv+/Y+tchiN8FKdK3kX/BWN7DFmCnySNW4eBZot/zO8JcWG62ZbzbE/QmmALon9fmh
+         PRZr8hX4q8AT4m1XkdfK85XgcirdmfzxwAgTiUKSacGXse6LA4dpd08Yiv+05zSIZVbp
+         1QE24Y6gNodYfMp49mjC0oD0ZT8uOxq95ZFZrlf6bpg6H7LHTuUSjKBW/bhHQysL27pY
+         2WnDXDj4dVfnGtIpjrqo3HAMhiGIxpG8KHRadJYbU12MfXlcnxc/bJenylY+JpfuKcoi
+         oEdHIell6B8C7xD+8FbQYFlQEBIFmXhJM406dk/roAoNA2A7gYGgdwNuKOJoK9/S+Nqy
+         lhDA==
+X-Gm-Message-State: ANoB5plcsqaVj2HRtgrOi0A8y/Qyz9IZqJWxD5ADbO0WdtNS/HAcaJYF
+        g0vNQ4Kk7QEG6ARzglKia1VwDA5iacEVtQ==
+X-Google-Smtp-Source: AA0mqf6BQkmTU2iY0firZnQfs2ZH90dGlKq5If+wOgVKCEukXfy1WFg1P0CBq0aXJUS68kf1Ni7XZg==
+X-Received: by 2002:a05:622a:59ca:b0:3a4:3137:79b6 with SMTP id gc10-20020a05622a59ca00b003a4313779b6mr28783590qtb.24.1670952380931;
+        Tue, 13 Dec 2022 09:26:20 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id a10-20020ac844aa000000b003434d3b5938sm229241qto.2.2022.12.13.09.26.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 09:26:20 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id 186so120371ybe.8;
+        Tue, 13 Dec 2022 09:26:20 -0800 (PST)
+X-Received: by 2002:a81:148c:0:b0:3e5:f2ca:7be8 with SMTP id
+ 134-20020a81148c000000b003e5f2ca7be8mr24224685ywu.358.1670952078434; Tue, 13
+ Dec 2022 09:21:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221201165951.5a4srb7zjrsdr3vd@blmsp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 13 Dec 2022 18:21:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXXXN9g8o1j7k-TC=F-kuyf-KngFSKi7z9z0SY9BLxmHA@mail.gmail.com>
+Message-ID: <CAMuHMdXXXN9g8o1j7k-TC=F-kuyf-KngFSKi7z9z0SY9BLxmHA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce
+ ALTERNATIVE_3() macro
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Hi Prabhakar,
 
-On Thu, Dec 01, 2022 at 05:59:53PM +0100, Markus Schneider-Pargmann wrote:
-> On Thu, Dec 01, 2022 at 12:00:33PM +0100, Marc Kleine-Budde wrote:
-> > On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
-> > > > > For the upcoming receive side patch I already added a hrtimer. I may try
-> > > > > to use the same timer for both directions as it is going to do the exact
-> > > > > same thing in both cases (call the interrupt routine). Of course that
-> > > > > depends on the details of the coalescing support. Any objections on
-> > > > > that?
-> > > > 
-> > > > For the mcp251xfd I implemented the RX and TX coalescing independent of
-> > > > each other and made it configurable via ethtool's IRQ coalescing
-> > > > options.
-> > > > 
-> > > > The hardware doesn't support any timeouts and only FIFO not empty, FIFO
-> > > > half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
-> > > > limited. I think the mcan core has the same limitations.
-> > > 
-> > > Yes and no, the mcan core provides watermark levels so it has more
-> > > options, but there is no hardware timer as well (at least I didn't see
-> > > anything usable).
-> > 
-> > Are there any limitations to the water mark level?
-> 
-> Anything specific? I can't really see any limitation. You can set the
-> watermark between 1 and 32. I guess we could also always use it instead
-> of the new-element interrupt, but I haven't tried that yet. That may
-> simplify the code.
+On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Introduce ALTERNATIVE_3() macro.
+>
+> A vendor wants to replace an old_content, but another vendor has used
+> ALTERNATIVE_2() to patch its customized content at the same location.
+> In this case, this vendor can use macro ALTERNATIVE_3() and then replace
+> ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
+>
+> While at it update comment above ALTERNATIVE_2() macro and make it generic
+> so that the comment holds good for any new addition of ALTERNATIVE_X()
+> macros.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v4->v5
+> * Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
+> * Updated comment for ALTERNATIVE_x() as suggested by Heiko
 
-Just a quick comment here after trying this, I decided against it.
-- I can't modify the watermark levels once the chip is active.
-- Using interrupt (un)masking I can change the behavior for tx and rx
-  with a single register write instead of two to the two fifo
-  configuration registers.
+Thanks for the update!
 
-You will see this in the second part of the series then.
+> --- a/arch/riscv/include/asm/alternative-macros.h
+> +++ b/arch/riscv/include/asm/alternative-macros.h
+> @@ -50,8 +50,17 @@
+>         ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+>  .endm
+>
+> +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,   \
+> +                               new_c_2, vendor_id_2, errata_id_2, enable_2,    \
+> +                               new_c_3, vendor_id_3, errata_id_3, enable_3
+> +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,      \
+> +                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
+> +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
+> +.endm
+> +
+>  #define __ALTERNATIVE_CFG(...)         ALTERNATIVE_CFG __VA_ARGS__
+>  #define __ALTERNATIVE_CFG_2(...)       ALTERNATIVE_CFG_2 __VA_ARGS__
+> +#define __ALTERNATIVE_CFG_3(...)       ALTERNATIVE_CFG_3 __VA_ARGS__
+>
+>  #else /* !__ASSEMBLY__ */
+>
+> @@ -98,6 +107,13 @@
+>         __ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)   \
+>         ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+>
+> +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,        \
+> +                                  new_c_2, vendor_id_2, errata_id_2, enable_2, \
+> +                                  new_c_3, vendor_id_3, errata_id_3, enable_3) \
+> +       __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
+> +                                   new_c_2, vendor_id_2, errata_id_2, enable_2)        \
+> +       ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
+> +
+>  #endif /* __ASSEMBLY__ */
+>
+>  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k) \
+> @@ -108,6 +124,13 @@
+>         __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
+>                                    new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
+>
+> +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,               \
+> +                                 new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,                \
+> +                                 new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)                \
+> +       __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
+> +                                  new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),   \
+> +                                  new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
+> +
+>  #else /* CONFIG_RISCV_ALTERNATIVE */
 
-Best,
-Markus
+To avoid breaking the build for K210 (and VexRiscv), you need to provide
+_ALTERNATIVE_CFG_3() for the !CONFIG_RISCV_ALTERNATIVE case, too:
+
+@@ -144,6 +144,9 @@
+ #define _ALTERNATIVE_CFG_2(old_c, ...) \
+        ALTERNATIVE_CFG old_c
+
++#define _ALTERNATIVE_CFG_3(old_c, ...) \
++       ALTERNATIVE_CFG old_c
++
+ #else /* !__ASSEMBLY__ */
+
+ #define __ALTERNATIVE_CFG(old_c)       \
+@@ -155,6 +158,9 @@
+ #define _ALTERNATIVE_CFG_2(old_c, ...) \
+        __ALTERNATIVE_CFG(old_c)
+
++#define _ALTERNATIVE_CFG_3(old_c, ...) \
++       __ALTERNATIVE_CFG(old_c)
++
+ #endif /* __ASSEMBLY__ */
+ #endif /* CONFIG_RISCV_ALTERNATIVE */
+
+Else it fails (on riscv/for-next) with:
+
+arch/riscv/mm/pmem.c: In function ‘arch_wb_cache_pmem’:
+arch/riscv/include/asm/alternative-macros.h:198:8: error: expected
+string literal before ‘_ALTERNATIVE_CFG_3’
+  198 |        _ALTERNATIVE_CFG_3(old_content, new_content_1,
+vendor_id_1, errata_id_1, CONFIG_k_1, \
+      |        ^~~~~~~~~~~~~~~~~~
+arch/riscv/include/asm/errata_list.h:128:14: note: in expansion of
+macro ‘ALTERNATIVE_3’
+  128 | asm volatile(ALTERNATIVE_3(      \
+      |              ^~~~~~~~~~~~~
+arch/riscv/mm/pmem.c:13:2: note: in expansion of macro ‘ALT_CMO_OP’
+   13 |  ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size, 0, 0);
+      |  ^~~~~~~~~~
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
