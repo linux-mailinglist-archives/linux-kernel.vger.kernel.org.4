@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753ED64B95C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810EB64B961
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbiLMQOQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Dec 2022 11:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S236033AbiLMQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236008AbiLMQOM (ORCPT
+        with ESMTP id S235670AbiLMQOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:14:12 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371061CFCC;
-        Tue, 13 Dec 2022 08:14:10 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5469260002;
-        Tue, 13 Dec 2022 16:14:07 +0000 (UTC)
-Message-ID: <6b5e878265958fb0201178fc3c1d75ef06c826ec.camel@hadess.net>
-Subject: Re: [Regression] Logitech BT mouse unusable after commit
- 532223c8ac57 (still in 6.1-rc8)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Date:   Tue, 13 Dec 2022 17:14:06 +0100
-In-Reply-To: <b356b5684cc631513c0498f18d7c185b77416f85.camel@hadess.net>
-References: <2262737.ElGaqSPkdT@kreacher>
-         <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
-         <2145955.irdbgypaU6@kreacher>
-         <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
-         <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
-         <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
-         <cd8b2a2160f5d36d1b73bc0567cd0f6e7e5751c4.camel@hadess.net>
-         <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
-         <91367d07a72ecb2065faebe974c54ebd966e0d59.camel@hadess.net>
-         <CAJZ5v0ghW2DdC0quVQ-+Oad7bR95Pyp4Uhd9=XUYk9SQrXKj5w@mail.gmail.com>
-         <b356b5684cc631513c0498f18d7c185b77416f85.camel@hadess.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Tue, 13 Dec 2022 11:14:55 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006B320984
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:14:53 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3c090251d59so198788707b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:14:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f1nD9sEqUn0kZvdyrOVwMupeHs9n9TUcPbvvCTtNHKY=;
+        b=Dcg+fvf5E73fyEBvAWU3Q9s+yoVXu4xkzlDFKkK6XjenGPZH+qPhP787QtMpRHBe6+
+         AJkLvvbBr648QYu5qDnZx9EhqHEMMXgCE9eq1F45KD19dbZMHYxhYj0zjusaUcSXueaW
+         O5bUKkSuKhwU6lhynhlcCjan0b0vEurCg2y6f92+lj7Ktbz/K/zHAT/JI8mf1suAGVVZ
+         ZCdfJdu5A5SRUz7UzJ/Wpz8MCvexDVHVd9+IEbm/8Ok1Yp8Dk7QDnHQ5gmf2MMlrl2QY
+         RFJY0mymmScFWzWBVBkb7z9G9xc6KKwOwARGpaP/CaiQx3P9z9k3+ISZFUUPfGsAIF+J
+         JwlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f1nD9sEqUn0kZvdyrOVwMupeHs9n9TUcPbvvCTtNHKY=;
+        b=XeIGWtRXLnRNj7j02/wQ68q3/r1U5SR0D1vcOOsbu6auC02tkrjE+nB9PRo658tJZN
+         InE6OtSr867goI7wMqEK4TmOVljGQytJ9pis3hkwLvtksM0droROYHmxuQpZJ+eNbitu
+         Mb6757QpS2zzh+QMFmkqRu6Z9w0v+OV8tnCsmA3dr19eRyTFRVwGQN012cjbU8vZfWr6
+         /cvYIp9h716UQw+/geYEd1mntTSf8gTfaQbayEnabkh/sylpcncfo6gWpfINjnI6IRCu
+         Dw4SepUQZtaGz7lqHdPvFNIWvikoCcT6pgNHeFJr0x9JgpRXpD/1NxM23gLFjFG40Wlx
+         v6NQ==
+X-Gm-Message-State: ANoB5pnVQZgfTAOC1VAnwTd04hPh1yD91xIJA5k97Tw8OFCN+BvUdTEC
+        6iQBRNihcSCvXOwjQixhJDVDQA==
+X-Google-Smtp-Source: AA0mqf6B6+EebPR/YduhnWildkkZiZCvGs0caCcK8P0VZGLAC6YkISifHPK3S4LdJUq4lOEdOZxtIQ==
+X-Received: by 2002:a05:7500:5c1b:b0:eb:3b43:9eb7 with SMTP id fd27-20020a0575005c1b00b000eb3b439eb7mr2217849gab.5.1670948093136;
+        Tue, 13 Dec 2022 08:14:53 -0800 (PST)
+Received: from localhost ([107.116.82.99])
+        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006fa4cac54a5sm8142328qkb.72.2022.12.13.08.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 08:14:52 -0800 (PST)
+Date:   Tue, 13 Dec 2022 17:14:48 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: memcg reclaim demotion wrt. isolation
+Message-ID: <Y5ik+CCmvapf87Mb@cmpxchg.org>
+References: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-08 at 16:20 +0100, Bastien Nocera wrote:
-> On Wed, 2022-12-07 at 18:44 +0100, Rafael J. Wysocki wrote:
-> > On Wed, Dec 7, 2022 at 6:19 PM Bastien Nocera <hadess@hadess.net>
-> > wrote:
-> > > 
-> > > On Wed, 2022-12-07 at 12:07 +0100, Rafael J. Wysocki wrote:
-> > > > # hidpp-list-features /dev/hidraw1
-> > > > Bluetooth Mouse M336/M337/M535 (046d:b016) is a HID++ 4.5
-> > > > device
-> > > > Feature 0x01: [0x0001] Feature set
-> > > > Feature 0x02: [0x0003] Device FW version
-> > > > Feature 0x03: [0x0005] Device name
-> > > > Feature 0x04: [0x0020] Reset
-> > > > Feature 0x05: [0x1e00] Enable hidden features (hidden)
-> > > > Feature 0x06: [0x1800] Generic Test (hidden, internal)
-> > > > Feature 0x07: [0x1000] Battery status
-> > > > Feature 0x08: [0x1b04] Reprog controls v4
-> > > > Feature 0x09: [0x2100] Vertical scrolling
-> > > > Feature 0x0a: [0x2200] Mouse pointer
-> > > > Feature 0x0b: [0x2205] Pointer speed
-> > > > Feature 0x0c: [0x18b1] ? (hidden, internal)
-> > > > Feature 0x0d: [0x2121] Hi-res wheel
-> > > > Feature 0x0e: [0x1f03] ? (hidden, internal)
-> > > 
-> > > Would you be able to enable debugging for the hid subsystem to
-> > > get
-> > > some
-> > > debug data when getting the version from the device fails?
-> > 
-> > I guess I could, but I think that the device is just quirky.
-> > 
-> > At least the BT layer appears to think that it is connected.
-> > 
-> > Anyway, what exactly do you need?
-> > 
-> > > I can't see any problems in there that wouldn't also have
-> > > impacted
-> > > all
-> > > the other Logitech Bluetooth devices listed in the support
-> > > devices
-> > > list.
-> > > 
-> > > If the problem is a timeout, maybe we should lower the timeouts
-> > > we
-> > > currently have (5*HZ = 5 seconds, right?), so we can retry 5
-> > > times
-> > > one
-> > > second instead.
-> > 
-> > No, it doesn't take 5 sec to get a response from it.  It rather
-> > looks
-> > like __hidpp_send_report() returns an error.
+On Tue, Dec 13, 2022 at 04:41:10PM +0100, Michal Hocko wrote:
+> Hi,
+> I have just noticed that that pages allocated for demotion targets
+> includes __GFP_KSWAPD_RECLAIM (through GFP_NOWAIT). This is the case
+> since the code has been introduced by 26aa2d199d6f ("mm/migrate: demote
+> pages during reclaim"). I suspect the intention is to trigger the aging
+> on the fallback node and either drop or further demote oldest pages.
 > 
-> Adding "debug" on the kernel command-line should be enough to get
-> debug
-> out of hidpp_send_message_sync():
-> https://stackoverflow.com/a/63682160
-> 
-> Either that or turn all the dbg_hid() into hid_err() if you're going
-> to
-> be compiling the kernel.
-> 
-> We're mainly interested in the error code from the device, as that's
-> what I'm guessing is caused the error to propagate.
+> This makes sense but I suspect that this wasn't intended also for
+> memcg triggered reclaim. This would mean that a memory pressure in one
+> hierarchy could trigger paging out pages of a different hierarchy if the
+> demotion target is close to full.
 
-Can you also check whether you had:
-https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=8b7e58409b1813c58eea542d9f3b8db35b4ac1f7
-in your git tree?
+This is also true if you don't do demotion. If a cgroup tries to
+allocate memory on a full node (i.e. mbind()), it may wake kswapd or
+enter global reclaim directly which may push out the memory of other
+cgroups, regardless of the respective cgroup limits.
 
-Would be great to know whether that commit helps at all.
-
-Cheers
-
-> > > Still, as I mentioned earlier, I can't reproduce the problem on
-> > > another
-> > > Bluetooth Classic device...
-> 
-
+The demotion allocations don't strike me as any different. They're
+just allocations on behalf of a cgroup. I would expect them to wake
+kswapd and reclaim physical memory as needed.
