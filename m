@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB75064B116
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9F864B11A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234817AbiLMIZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:25:49 -0500
+        id S234775AbiLMI0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:26:10 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbiLMIZI (ORCPT
+        with ESMTP id S234752AbiLMIZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:25:08 -0500
+        Tue, 13 Dec 2022 03:25:10 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6D8713DF1;
-        Tue, 13 Dec 2022 00:25:06 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FBA713E01;
+        Tue, 13 Dec 2022 00:25:07 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
   by mx.socionext.com with ESMTP; 13 Dec 2022 17:25:05 +0900
 Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id EEBA82058B4F;
-        Tue, 13 Dec 2022 17:25:04 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:04 +0900
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 755CC2059054;
+        Tue, 13 Dec 2022 17:25:05 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:05 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 74B70A855F;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id CCA1BA855C;
         Tue, 13 Dec 2022 17:25:04 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -30,9 +30,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 09/17] dt-bindings: soc: socionext: Add UniPhier system controller
-Date:   Tue, 13 Dec 2022 17:24:41 +0900
-Message-Id: <20221213082449.2721-10-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 10/17] dt-bindings: soc: socionext: Add UniPhier SoC-glue logic
+Date:   Tue, 13 Dec 2022 17:24:42 +0900
+Message-Id: <20221213082449.2721-11-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
 References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
@@ -46,141 +46,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree binding schema for the system controller implemented on
+Add devicetree binding schema for the SoC-glue logic implemented on
 Socionext Uniphier SoCs.
 
-This system controller has multiple functions such as clock control,
-reset control, internal watchdog timer, thermal management, and so on.
+This SoC-glue logic is a set of miscellaneous function registers
+handling signals for specific devices outside system components,
+and also has multiple functions such as I/O pinmux, usb-phy, debug,
+clock-mux for a specific SoC, and so on.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../socionext/socionext,uniphier-sysctrl.yaml | 104 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 105 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+ .../socionext,uniphier-soc-glue.yaml          | 115 ++++++++++++++++++
+ 1 file changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
 
-diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
 new file mode 100644
-index 000000000000..3acb14201d1a
+index 000000000000..4b6852db4747
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
-@@ -0,0 +1,104 @@
++++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
+@@ -0,0 +1,115 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-sysctrl.yaml#
++$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-soc-glue.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Socionext UniPhier system controller
++title: Socionext UniPhier SoC-glue logic
 +
 +maintainers:
 +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 +
 +description: |+
-+  System controller implemented on Socionext UniPhier SoCs has multiple
-+  functions such as clock control, reset control, internal watchdog timer,
-+  thermal management, and so on.
++  SoC-glue logic implemented on Socionext UniPhier SoCs is a collection of
++  miscellaneous function registers handling signals outside system components.
 +
 +properties:
 +  compatible:
 +    items:
 +      - enum:
-+          - socionext,uniphier-ld4-sysctrl
-+          - socionext,uniphier-pro4-sysctrl
-+          - socionext,uniphier-pro5-sysctrl
-+          - socionext,uniphier-pxs2-sysctrl
-+          - socionext,uniphier-sld8-sysctrl
-+          - socionext,uniphier-ld11-sysctrl
-+          - socionext,uniphier-ld20-sysctrl
-+          - socionext,uniphier-pxs3-sysctrl
-+          - socionext,uniphier-nx1-sysctrl
++          - socionext,uniphier-ld4-soc-glue
++          - socionext,uniphier-pro4-soc-glue
++          - socionext,uniphier-pro5-soc-glue
++          - socionext,uniphier-pxs2-soc-glue
++          - socionext,uniphier-sld8-soc-glue
++          - socionext,uniphier-ld11-soc-glue
++          - socionext,uniphier-ld20-soc-glue
++          - socionext,uniphier-pxs3-soc-glue
++          - socionext,uniphier-nx1-soc-glue
 +      - const: simple-mfd
 +      - const: syscon
 +
 +  reg:
 +    maxItems: 1
 +
++patternProperties:
++  pinctrl:
++    $ref: /schemas/pinctrl/socionext,uniphier-pinctrl.yaml#
++
++  usb-hub:
++    $ref: /schemas/phy/socionext,uniphier-usb2-phy.yaml#
++
 +  clock-controller:
 +    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
 +
-+  reset-controller:
-+    $ref: /schemas/reset/socionext,uniphier-reset.yaml#
-+
-+  watchdog:
-+    $ref: /schemas/watchdog/socionext,uniphier-wdt.yaml#
-+
-+  thermal-sensor:
-+    $ref: /schemas/thermal/socionext,uniphier-thermal.yaml#
-+
 +allOf:
 +  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: socionext,uniphier-ld4-sysctrl
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - socionext,uniphier-pro4-soc-glue
++                - socionext,uniphier-ld11-soc-glue
 +    then:
 +      properties:
-+        watchdog: false
++        usb-hub: false
 +
 +  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - socionext,uniphier-ld4-sysctrl
-+              - socionext,uniphier-pro4-sysctrl
-+              - socionext,uniphier-sld8-sysctrl
-+              - socionext,uniphier-ld11-sysctrl
++      not:
++        properties:
++          compatible:
++            contains:
++              const: socionext,uniphier-pro4-soc-glue
 +    then:
 +      properties:
-+        thermal-sensor: false
-+
-+additionalProperties: false
++        clock-controller: false
 +
 +required:
 +  - compatible
 +  - reg
 +
++additionalProperties: false
++
 +examples:
 +  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    syscon@61840000 {
-+        compatible = "socionext,uniphier-ld20-sysctrl",
++    syscon@5f800000 {
++        compatible = "socionext,uniphier-pro4-soc-glue",
 +                     "simple-mfd", "syscon";
-+        reg = <0x61840000 0x4000>;
++        reg = <0x5f800000 0x2000>;
++
++        pinctrl {
++            compatible = "socionext,uniphier-pro4-pinctrl";
++        };
++
++        usb-hub {
++            compatible = "socionext,uniphier-pro4-usb2-phy";
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            phy@0 {
++                reg = <0>;
++                #phy-cells = <0>;
++            };
++
++            phy@1 {
++                reg = <1>;
++                #phy-cells = <0>;
++            };
++
++            phy@2 {
++                reg = <2>;
++                #phy-cells = <0>;
++            };
++
++            phy@3 {
++                reg = <3>;
++                #phy-cells = <0>;
++            };
++        };
 +
 +        clock-controller {
-+            compatible = "socionext,uniphier-ld20-clock";
++            compatible = "socionext,uniphier-pro4-sg-clock";
 +            #clock-cells = <1>;
 +        };
-+
-+        reset-controller {
-+            compatible = "socionext,uniphier-ld20-reset";
-+            #reset-cells = <1>;
-+        };
-+
-+        watchdog {
-+            compatible = "socionext,uniphier-wdt";
-+        };
-+
-+        thermal-sensor {
-+            compatible = "socionext,uniphier-ld20-thermal";
-+            interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-+            #thermal-sensor-cells = <0>;
-+        };
 +    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0d8faba73fe8..8cec8ea46dd1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3103,6 +3103,7 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
- F:	Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
- F:	Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/soc/socionext/socionext,uniphier*.yaml
- F:	arch/arm/boot/dts/uniphier*
- F:	arch/arm/include/asm/hardware/cache-uniphier.h
- F:	arch/arm/mach-uniphier/
 -- 
 2.25.1
 
