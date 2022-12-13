@@ -2,125 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA6164B875
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A3464B87C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236168AbiLMPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S235811AbiLMPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbiLMPcV (ORCPT
+        with ESMTP id S235646AbiLMPdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:32:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D9C13F6A;
-        Tue, 13 Dec 2022 07:32:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDB896156A;
-        Tue, 13 Dec 2022 15:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFE9C433EF;
-        Tue, 13 Dec 2022 15:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670945537;
-        bh=kVDKUdti33XTefbEJEXfmxK8dV0SRSUu09JS0+ypmzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=teSjOeLv3+CS6aZ4cX3lc8WrGB3OSj1wLBy6NRgyKtcAMSGFv3GE2y1vk+wDo6W9h
-         YooBWKCL/5JJokzBkUmenE32QoX92rc7xL9vkdw+bNK1WxRxB/8QuzbBjOQdLA0YmY
-         +XN+9uTiUu4VFZogHFfBlDIests+oEVsjMfuH0pEYC/+E+M/z2rSNC6xMvoBY3iJ6S
-         LlBBmU5IXLwOoyn8rj9F+t5cqoZ/titQNrRWBVpLabUDhfnRVqT6lMMHNjf72ebIyF
-         tEbS43edLE6/h+oT7uAa060SUSKr5UDpsq6nvJ9pQgOW477j+JuHQj7A4RNLttKkBN
-         8NFCHueOkltZw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p57Gt-0005HU-0a; Tue, 13 Dec 2022 16:32:43 +0100
-Date:   Tue, 13 Dec 2022 16:32:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
-Message-ID: <Y5ibG29yKQgD54Dn@hovoldconsulting.com>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-2-bmasney@redhat.com>
- <Y5iSDehp72mQPc+h@hovoldconsulting.com>
- <Y5iXjTQnEtMCZy7W@hovoldconsulting.com>
- <114e960f-3b63-8c8f-9d4a-87173049d730@linaro.org>
+        Tue, 13 Dec 2022 10:33:40 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70D2DD4;
+        Tue, 13 Dec 2022 07:33:39 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id c190-20020a4a4fc7000000b004a3addd10b5so1911930oob.1;
+        Tue, 13 Dec 2022 07:33:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gPuWVdCsiQ6yJaMOr3TcVxzSaa6VY+lACVWvBUw8UU8=;
+        b=pWnkMArzh0FeJgL1GHIDLXUSY9cOJrhNDR9CRx1V4pmRmv87B2Tx1KAqlX0FRyWZzf
+         6C8mWUiAJLV5U6B+WV8GjYOJJ2RqkOuoNPyFgtUzvrgoV+mJcCufYvNexWd+LGon6aob
+         +zgkQVW46qZfl6DcNhthVinXmEjn6thOWvb5fSV768BNVX4eZy9KIOJWkswkq3wuMSHr
+         EsY3sFvq6XhMIDYEUm6Oep2uz95vCEDW/1U7hRoVTnu9npLgGu8D6swKuHvKDZtyrH7u
+         /KjrcwTvLPHfjAX2++TRLs00roO0VwZaDeA/kN33PWq3DTEqm04pYGTOmO1M0ie766Ec
+         4yuA==
+X-Gm-Message-State: ANoB5plSC/owkyLjWDqex2tZo+XWG8i7p7WJXIhnBxvVDciWjA8PigzV
+        Q3lClrCu+1Sl3Af19s5pkg==
+X-Google-Smtp-Source: AA0mqf6/cNRZZAe9sBYIs77njH/ABSum2Z8DkxhvWkhi8MAVGXguXvDpaGNKXfdFxIewdxdJrvcGPw==
+X-Received: by 2002:a4a:e54d:0:b0:4a0:7f83:8f68 with SMTP id s13-20020a4ae54d000000b004a07f838f68mr8457556oot.0.1670945618708;
+        Tue, 13 Dec 2022 07:33:38 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w20-20020a4ad034000000b004a0b424f99dsm1213292oor.43.2022.12.13.07.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 07:33:38 -0800 (PST)
+Received: (nullmailer pid 1367550 invoked by uid 1000);
+        Tue, 13 Dec 2022 15:33:37 -0000
+Date:   Tue, 13 Dec 2022 09:33:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-msm@vger.kernel.org,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH 01/12] dt-bindings: watchdog: qcom-wdt: require fallback
+ for IPQ4019
+Message-ID: <167094561706.1367236.4736487890422958676.robh@kernel.org>
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <114e960f-3b63-8c8f-9d4a-87173049d730@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 04:29:04PM +0100, Konrad Dybcio wrote:
+
+On Mon, 12 Dec 2022 17:35:21 +0100, Krzysztof Kozlowski wrote:
+> The device specific compatibles ("qcom,kpss-wdt-ipq4019") should be
+> follwed by fallback "qcom,kpss-wdt", which is actually used by Linux
+> driver for binding.
 > 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On 13.12.2022 16:17, Johan Hovold wrote:
-> > On Tue, Dec 13, 2022 at 03:54:05PM +0100, Johan Hovold wrote:
-> >> On Mon, Dec 12, 2022 at 01:23:11PM -0500, Brian Masney wrote:
-> >>> According to the downstream 5.4 kernel sources for the sa8540p,
-> >>> i2c@894000 is labeled i2c bus 21, not 5. The interrupts and clocks
-> >>> also match. Let's go ahead and correct the name that's used in the
-> >>> three files where this is listed.
-> >>>
-> >>> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> >>> Fixes: 152d1faf1e2f3 ("arm64: dts: qcom: add SC8280XP platform")
-> >>> Fixes: ccd3517faf183 ("arm64: dts: qcom: sc8280xp: Add reference device")
-> >>> Fixes: 32c231385ed43 ("arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s devicetree")
-> >>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> index 109c9d2b684d..875cc91324ce 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> @@ -827,7 +827,7 @@ qup2_uart17: serial@884000 {
-> >>>  				status = "disabled";
-> >>>  			};
-> >>>  
-> >>> -			qup2_i2c5: i2c@894000 {
-> >>> +			qup2_i2c21: i2c@894000 {
-> >>
-> >> Note that the node is labelled qup2_i2c5 and not qup_i2c5.
-> >>
-> >> That is, the QUP nodes are labelled using two indices, and specifically
-> >>
-> >> 	qup2_i2c5
-> >>
-> >> would be another name for
-> >>
-> >> 	qup_i2c21
-> >>
-> >> if we'd been using such a flat naming scheme (there are 8 engines per
-> >> QUP).
-> >>
-> >> So there's nothing wrong with how these nodes are currently named, but
-> >> mixing the two scheme as you are suggesting would not be correct.
-> > 
-> > It appears sc8280xp is the only qcom platform using a qup prefix (even
-> > if some older platform use a blsp equivalent), and we're not even using
-> > it consistently as we, for example, have both
-> > 
-> > 	qup2_uart17, and
-> > 	qup2_i2c5
-> > 
-> > (where the former should have been qup2_uart1).
-> > 
-> > So either we fix up the current labels or just drop the qup prefixes and
-> > use a flat naming scheme (e.g. uart17 and i2c21).
 
-> Oh, I didn't notice that! I suppose sticking with i2cN as we've been
-> doing ever since i2c-geni was introduced sounds like the best option..
-
-Yeah, sounds good to me.
-
-Johan
+Acked-by: Rob Herring <robh@kernel.org>
