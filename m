@@ -2,387 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADD664B8AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C630164B8B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbiLMPkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S235678AbiLMPky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiLMPkj (ORCPT
+        with ESMTP id S231939AbiLMPkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:40:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDC36350;
-        Tue, 13 Dec 2022 07:40:38 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDEuUOs013522;
-        Tue, 13 Dec 2022 15:40:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=KmdS9rUzjesq1B709Sm7Kwl2XLfu6My20QnZdfuetHQ=;
- b=XvsEjWBbXYIcaSRMji2zFA1RCNs9YKD1LNZx5CguOA4zMGj/xiWG4Vt8BjGdv4L8PUhZ
- iASavKteoyuxXSuzj+I9nzqO8GJ6TpRqoObdrgrvkTDEJiBtKZRwgQ7MmqGEP81Xr9AV
- +MdtDibxmHbOCFcNKLPuYMYMYcNMo8W0yARxrem2pnFwsv2uFJQSpAez35MLY5ICFrsi
- uMu12KhD/VBaut0Tu2IetrWp6yuHd7eIaiCEzHz4p49B6ho5MOjV7kHt6PEPIZ2sauEJ
- MGnl7WyOxFaf7VfeTVFVWCcC8XEnMRKndIVVjaFQxinAtPXYszaTH2lWXsOF2vFpQhgf JA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3meukp9cen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 15:40:18 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD5UJt5007832;
-        Tue, 13 Dec 2022 15:40:16 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3mchcf4dmf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 15:40:15 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDFeC3443712988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Dec 2022 15:40:12 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E40FA20040;
-        Tue, 13 Dec 2022 15:40:11 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B1652004E;
-        Tue, 13 Dec 2022 15:40:11 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Dec 2022 15:40:11 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, will@kernel.org,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: [PATCH v2] iommu: Allow .iotlb_sync_map to fail and handle s390's -ENOMEM return
-Date:   Tue, 13 Dec 2022 16:40:11 +0100
-Message-Id: <20221213154011.2889260-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Dec 2022 10:40:52 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6156635E;
+        Tue, 13 Dec 2022 07:40:51 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id r130so138848oih.2;
+        Tue, 13 Dec 2022 07:40:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bjG59bmhQu/+STmt0KXnh69qXoRzwuR4Txvh999wJ34=;
+        b=Vv2O3+KBE7SbXTnpAiYXxr1SO2yjLHCRWbZdMnRzs3a5AcnV7BLVRPMLHxU1z5iiwM
+         FzbxuaKp/KAtV0Dye+iVDCpQGlp9E9MVJXmAF4k4d9hip50LdO3i12Hkc6tli/NLgI16
+         blSYaBchEGIQkVETiH4EOEVmqkGcY/n9g5uaxaWbRwa4oXrDPUPZn6YJHROKDX+p0hFd
+         XHMlzBWcoDHEwkM4dYxoYhqa4EqMo/OCWggr+YLhaFdeRnOS8Maa3rv7+Vb1y5VUsKhW
+         VWCdmNZ7kLXHVzS6p3dwBzClItTMSIMrKmVFRP6St6YI3obvRMiz7f6MhZVZzPoPUcIU
+         FspA==
+X-Gm-Message-State: ANoB5pnusauX02zoldDvBD0RckCJmq67xOR9fnwMgpqntZK+MsAcmu45
+        Ih1+bppxfeskIwT/dfM/sg==
+X-Google-Smtp-Source: AA0mqf72M8eSkNaPG65e/s6kbNgNgJC0EGqkK5ROexTW8KUCln/+8A9rd91RwD3jyu9INPwEc6ngrg==
+X-Received: by 2002:a05:6808:1926:b0:35e:47a5:d591 with SMTP id bf38-20020a056808192600b0035e47a5d591mr14742314oib.22.1670946050855;
+        Tue, 13 Dec 2022 07:40:50 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i15-20020a056808054f00b0035468f2d410sm4656516oig.55.2022.12.13.07.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 07:40:50 -0800 (PST)
+Received: (nullmailer pid 1471363 invoked by uid 1000);
+        Tue, 13 Dec 2022 15:40:49 -0000
+Date:   Tue, 13 Dec 2022 09:40:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 06/12] dt-bindings: watchdog: qcom-wdt: merge MSM timer
+Message-ID: <20221213154049.GA1426116-robh@kernel.org>
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BiLhIZJFhEWVB7e9rF2_Nm6oCHIaTyaK
-X-Proofpoint-ORIG-GUID: BiLhIZJFhEWVB7e9rF2_Nm6oCHIaTyaK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- malwarescore=0 mlxlogscore=999 suspectscore=0 bulkscore=0 spamscore=0
- mlxscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212130137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On s390 .iotlb_sync_map is used to sync mappings to an underlying
-hypervisor by letting the hypervisor inspect the synced IOVA range and
-updating its shadow table. This however means that it can fail as the
-hypervisor may run out of resources. This can be due to the hypervisor
-being unable to pin guest pages, due to a limit on concurrently mapped
-addresses such as vfio_iommu_type1.dma_entry_limit or other resources.
-Either way such a failure to sync a mapping should result in
-a DMA_MAPPING_EROR.
+On Mon, Dec 12, 2022 at 05:35:26PM +0100, Krzysztof Kozlowski wrote:
+> Merge Qualcomm MSM timer bindings into watchdog, because the timer
+> compatibles are already included here and the hardware is quite similar.
+> 
+> While converting the MSM timer bindings, adjust clock-frequency
+> property to take only one frequency, instead of two, because:
+> 1. DT schema does not allow to frequencies,
+> 2. The Linux timer driver reads only first frequency.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
+>  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 47 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> deleted file mode 100644
+> index 5e10c345548f..000000000000
+> --- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -* MSM Timer
+> -
+> -Properties:
+> -
+> -- compatible : Should at least contain "qcom,msm-timer". More specific
+> -               properties specify which subsystem the timers are paired with.
+> -
+> -               "qcom,kpss-timer" - krait subsystem
+> -               "qcom,scss-timer" - scorpion subsystem
+> -
+> -- interrupts : Interrupts for the debug timer, the first general purpose
+> -               timer, and optionally a second general purpose timer, and
+> -               optionally as well, 2 watchdog interrupts, in that order.
+> -
+> -- reg : Specifies the base address of the timer registers.
+> -
+> -- clocks: Reference to the parent clocks, one per output clock. The parents
+> -          must appear in the same order as the clock names.
+> -
+> -- clock-names: The name of the clocks as free-form strings. They should be in
+> -               the same order as the clocks.
+> -
+> -- clock-frequency : The frequency of the debug timer and the general purpose
+> -                    timer(s) in Hz in that order.
+> -
+> -Optional:
+> -
+> -- cpu-offset : per-cpu offset used when the timer is accessed without the
+> -               CPU remapping facilities. The offset is
+> -               cpu-offset + (0x10000 * cpu-nr).
+> -
+> -Example:
+> -
+> -       timer@200a000 {
+> -               compatible = "qcom,scss-timer", "qcom,msm-timer";
+> -               interrupts = <1 1 0x301>,
+> -                            <1 2 0x301>,
+> -                            <1 3 0x301>,
+> -                            <1 4 0x301>,
+> -                            <1 5 0x301>;
+> -               reg = <0x0200a000 0x100>;
+> -               clock-frequency = <19200000>,
+> -                                 <32768>;
+> -               clocks = <&sleep_clk>;
+> -               clock-names = "sleep";
+> -               cpu-offset = <0x40000>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index b7fc57f4800e..697caf1937cc 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -10,6 +10,9 @@ maintainers:
+>    - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+>  
+>  properties:
+> +  $nodename:
+> +    pattern: "^(watchdog|timer)@[0-9a-f]+$"
+> +
+>    compatible:
+>      oneOf:
+>        - items:
+> @@ -48,6 +51,20 @@ properties:
+>    clocks:
+>      maxItems: 1
+>  
+> +  clock-names:
+> +    items:
+> +      - const: sleep
+> +
+> +  clock-frequency:
+> +    description:
+> +      The frequency of the general purpose timer in Hz in that order.
 
-Now especially when running with batched IOTLB flushes for unmap it may
-be that some IOVAs have already been invalidated but not yet synced via
-.iotlb_sync_map. Thus if the hypervisor indicates running out of
-resources, first do a global flush allowing the hypervisor to free
-resources associated with these mappings and only if that also fails
-report this error to callers.
+'in that order'?
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-v1 -> v2:
-- Add missing return in gart_iommu_sync_map() (Jason)
+> +
+> +  cpu-offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Per-CPU offset used when the timer is accessed without the CPU remapping
+> +      facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
+> +
+>    interrupts:
+>      minItems: 1
+>      maxItems: 5
+> @@ -67,12 +84,27 @@ allOf:
+>              const: qcom,kpss-wdt
+>      then:
+>        properties:
+> +        clock-frequency: false
+> +        cpu-offset: false
+>          interrupts:
+>            minItems: 1
+>            items:
+>              - description: Bark
+>              - description: Bite
+>  
+> +    else:
+> +      properties:
+> +        interrupts:
+> +          minItems: 3
+> +          items:
+> +            - description: Debug
+> +            - description: First general purpose timer
+> +            - description: Second general purpose timer
+> +            - description: First watchdog
+> +            - description: Second watchdog
 
- drivers/iommu/amd/iommu.c   |  5 +++--
- drivers/iommu/apple-dart.c  |  5 +++--
- drivers/iommu/intel/iommu.c |  5 +++--
- drivers/iommu/iommu.c       | 20 ++++++++++++++++----
- drivers/iommu/msm_iommu.c   |  5 +++--
- drivers/iommu/mtk_iommu.c   |  5 +++--
- drivers/iommu/s390-iommu.c  | 29 ++++++++++++++++++++++++-----
- drivers/iommu/sprd-iommu.c  |  5 +++--
- drivers/iommu/tegra-gart.c  |  5 +++--
- include/linux/iommu.h       |  4 ++--
- 10 files changed, 63 insertions(+), 25 deletions(-)
+Okay, here they are. No need to set it to 2 then change to 5 in the 
+series.
 
-diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index d3b39d0416fa..35476eb389a1 100644
---- a/drivers/iommu/amd/iommu.c
-+++ b/drivers/iommu/amd/iommu.c
-@@ -2189,14 +2189,15 @@ static int amd_iommu_attach_device(struct iommu_domain *dom,
- 	return ret;
- }
- 
--static void amd_iommu_iotlb_sync_map(struct iommu_domain *dom,
--				     unsigned long iova, size_t size)
-+static int amd_iommu_iotlb_sync_map(struct iommu_domain *dom,
-+				    unsigned long iova, size_t size)
- {
- 	struct protection_domain *domain = to_pdomain(dom);
- 	struct io_pgtable_ops *ops = &domain->iop.iop.ops;
- 
- 	if (ops->map_pages)
- 		domain_flush_np_cache(domain, iova, size);
-+	return 0;
- }
- 
- static int amd_iommu_map_pages(struct iommu_domain *dom, unsigned long iova,
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index 4f4a323be0d0..4a76f4d95459 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -344,10 +344,11 @@ static void apple_dart_iotlb_sync(struct iommu_domain *domain,
- 	apple_dart_domain_flush_tlb(to_dart_domain(domain));
- }
- 
--static void apple_dart_iotlb_sync_map(struct iommu_domain *domain,
--				      unsigned long iova, size_t size)
-+static int apple_dart_iotlb_sync_map(struct iommu_domain *domain,
-+				     unsigned long iova, size_t size)
- {
- 	apple_dart_domain_flush_tlb(to_dart_domain(domain));
-+	return 0;
- }
- 
- static phys_addr_t apple_dart_iova_to_phys(struct iommu_domain *domain,
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 48cdcd0a5cf3..8299517e0f8b 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4699,8 +4699,8 @@ static bool risky_device(struct pci_dev *pdev)
- 	return false;
- }
- 
--static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
--				       unsigned long iova, size_t size)
-+static int intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
-+				      unsigned long iova, size_t size)
- {
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	unsigned long pages = aligned_nrpages(iova, size);
-@@ -4710,6 +4710,7 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 
- 	xa_for_each(&dmar_domain->iommu_array, i, info)
- 		__mapping_notify_one(info->iommu, dmar_domain, pfn, pages);
-+	return 0;
- }
- 
- const struct iommu_ops intel_iommu_ops = {
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 65a3b3d886dc..7e72ec9ab367 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -2300,8 +2300,17 @@ static int _iommu_map(struct iommu_domain *domain, unsigned long iova,
- 	int ret;
- 
- 	ret = __iommu_map(domain, iova, paddr, size, prot, gfp);
--	if (ret == 0 && ops->iotlb_sync_map)
--		ops->iotlb_sync_map(domain, iova, size);
-+	if (ret == 0 && ops->iotlb_sync_map) {
-+		ret = ops->iotlb_sync_map(domain, iova, size);
-+		if (ret)
-+			goto out_err;
-+	}
-+
-+	return ret;
-+
-+out_err:
-+	/* undo mappings already done */
-+	iommu_unmap(domain, iova, size);
- 
- 	return ret;
- }
-@@ -2449,8 +2458,11 @@ static ssize_t __iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
- 			sg = sg_next(sg);
- 	}
- 
--	if (ops->iotlb_sync_map)
--		ops->iotlb_sync_map(domain, iova, mapped);
-+	if (ops->iotlb_sync_map) {
-+		ret = ops->iotlb_sync_map(domain, iova, mapped);
-+		if (ret)
-+			goto out_err;
-+	}
- 	return mapped;
- 
- out_err:
-diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-index 16179a9a7283..415b7008dd2f 100644
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -484,12 +484,13 @@ static int msm_iommu_map(struct iommu_domain *domain, unsigned long iova,
- 	return ret;
- }
- 
--static void msm_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--			       size_t size)
-+static int msm_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size)
- {
- 	struct msm_priv *priv = to_msm_priv(domain);
- 
- 	__flush_iotlb_range(iova, size, SZ_4K, false, priv);
-+	return 0;
- }
- 
- static size_t msm_iommu_unmap(struct iommu_domain *domain, unsigned long iova,
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 2ab2ecfe01f8..d437946231bf 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -749,12 +749,13 @@ static void mtk_iommu_iotlb_sync(struct iommu_domain *domain,
- 	mtk_iommu_tlb_flush_range_sync(gather->start, length, dom->bank);
- }
- 
--static void mtk_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--			       size_t size)
-+static int mtk_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size)
- {
- 	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
- 
- 	mtk_iommu_tlb_flush_range_sync(iova, size, dom->bank);
-+	return 0;
- }
- 
- static phys_addr_t mtk_iommu_iova_to_phys(struct iommu_domain *domain,
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index ed33c6cce083..6ba38b4f5b37 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -210,6 +210,14 @@ static void s390_iommu_release_device(struct device *dev)
- 		__s390_iommu_detach_device(zdev);
- }
- 
-+
-+static int zpci_refresh_all(struct zpci_dev *zdev)
-+{
-+	return zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
-+				  zdev->end_dma - zdev->start_dma + 1);
-+
-+}
-+
- static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
-@@ -217,8 +225,7 @@ static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
--		zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
--				   zdev->end_dma - zdev->start_dma + 1);
-+		zpci_refresh_all(zdev);
- 	}
- 	rcu_read_unlock();
- }
-@@ -242,20 +249,32 @@ static void s390_iommu_iotlb_sync(struct iommu_domain *domain,
- 	rcu_read_unlock();
- }
- 
--static void s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
-+static int s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 				      unsigned long iova, size_t size)
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
- 	struct zpci_dev *zdev;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(zdev, &s390_domain->devices, iommu_list) {
- 		if (!zdev->tlb_refresh)
- 			continue;
--		zpci_refresh_trans((u64)zdev->fh << 32,
--				   iova, size);
-+		ret = zpci_refresh_trans((u64)zdev->fh << 32,
-+					 iova, size);
-+		/*
-+		 * let the hypervisor disover invalidated entries
-+		 * allowing it to free IOVAs and unpin pages
-+		 */
-+		if (ret == -ENOMEM) {
-+			ret = zpci_refresh_all(zdev);
-+			if (ret)
-+				break;
-+		}
- 	}
- 	rcu_read_unlock();
-+
-+	return ret;
- }
- 
- static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
-diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
-index fadd2c907222..08c25f6e7157 100644
---- a/drivers/iommu/sprd-iommu.c
-+++ b/drivers/iommu/sprd-iommu.c
-@@ -329,8 +329,8 @@ static size_t sprd_iommu_unmap(struct iommu_domain *domain, unsigned long iova,
- 	return 0;
- }
- 
--static void sprd_iommu_sync_map(struct iommu_domain *domain,
--				unsigned long iova, size_t size)
-+static int sprd_iommu_sync_map(struct iommu_domain *domain,
-+			       unsigned long iova, size_t size)
- {
- 	struct sprd_iommu_domain *dom = to_sprd_domain(domain);
- 	unsigned int reg;
-@@ -342,6 +342,7 @@ static void sprd_iommu_sync_map(struct iommu_domain *domain,
- 
- 	/* clear IOMMU TLB buffer after page table updated */
- 	sprd_iommu_write(dom->sdev, reg, 0xffffffff);
-+	return 0;
- }
- 
- static void sprd_iommu_sync(struct iommu_domain *domain,
-diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
-index e5ca3cf1a949..19b79150e459 100644
---- a/drivers/iommu/tegra-gart.c
-+++ b/drivers/iommu/tegra-gart.c
-@@ -252,10 +252,11 @@ static int gart_iommu_of_xlate(struct device *dev,
- 	return 0;
- }
- 
--static void gart_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
--				size_t size)
-+static int gart_iommu_sync_map(struct iommu_domain *domain, unsigned long iova,
-+			       size_t size)
- {
- 	FLUSH_GART_REGS(gart_handle);
-+	return 0;
- }
- 
- static void gart_iommu_sync(struct iommu_domain *domain,
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 3c9da1f8979e..359f471f9ef8 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -300,8 +300,8 @@ struct iommu_domain_ops {
- 			      struct iommu_iotlb_gather *iotlb_gather);
- 
- 	void (*flush_iotlb_all)(struct iommu_domain *domain);
--	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
--			       size_t size);
-+	int (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
-+			      size_t size);
- 	void (*iotlb_sync)(struct iommu_domain *domain,
- 			   struct iommu_iotlb_gather *iotlb_gather);
- 
--- 
-2.34.1
-
+> +      required:
+> +        - clock-frequency
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -86,3 +118,20 @@ examples:
+>        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+>        timeout-sec = <10>;
+>      };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    watchdog@200a000 {
+> +      compatible = "qcom,kpss-wdt-ipq8064", "qcom,kpss-timer", "qcom,msm-timer";
+> +      interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
+> +                   <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
+> +                   <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
+> +                   <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
+> +                   <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
+> +      reg = <0x0200a000 0x100>;
+> +      clock-frequency = <25000000>;
+> +      clocks = <&sleep_clk>;
+> +      clock-names = "sleep";
+> +      cpu-offset = <0x80000>;
+> +    };
+> -- 
+> 2.34.1
+> 
+> 
