@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2BF64B133
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCB264B136
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbiLMIbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S234303AbiLMIbm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Dec 2022 03:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiLMIas (ORCPT
+        with ESMTP id S234770AbiLMIbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:30:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2D613F57;
-        Tue, 13 Dec 2022 00:28:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2860B810AA;
-        Tue, 13 Dec 2022 08:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E8C3C433F2;
-        Tue, 13 Dec 2022 08:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670920129;
-        bh=biF+eTAkqIF3JO1B3nBjssgb0I7rUJZqnOdeA52gK48=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QrK3NRELFIITs1X8Gw7MJg3X3dF0hB/xwQREu98b7mfLZPkM3w/fUW8HrhBM12OCI
-         GXkSMuybgH9ndTcCMbkOagzkLXcm68Utxdt8TSo8LK7L6ynXowVoOWC7sXlu0l2hQN
-         PmDCk2wFybWtlwlhiLu81x0unvD7yNaMPWyT/q1+dv1tN5vEf+O19ybixDuf03lel/
-         L0Fx7j+41aEDox76It7LB58bRCXSlUJKHu72Tr2wj4kTWm8EfDgOMdeo8NznA8yxZu
-         8rLhKvL9nsrks5imK16kbsGH6L+BtOPC0dIk8zeOctmy3wGffCt+4S6kBf5vC4d+D+
-         5fR++QaSixYiQ==
-Received: by mail-ej1-f47.google.com with SMTP id x22so34658881ejs.11;
-        Tue, 13 Dec 2022 00:28:49 -0800 (PST)
-X-Gm-Message-State: ANoB5pmH49akZC9SZqpbl5GkTnq/u6E4uaSWLtqwq5OL+V+cyLYLW4h/
-        MnLplb62DEEoQuVN3HWMABOeOQqi/9KlYE4ENxo=
-X-Google-Smtp-Source: AA0mqf4vJcEo1LSRY4RhLmFU2YbQkyl5LsUhYjyJyozawpCFk4qzUpBunnKcYc+d3Bkt4qORmVm+XeLuIBwoCK+0dLg=
-X-Received: by 2002:a17:906:a198:b0:7b4:bc42:3b44 with SMTP id
- s24-20020a170906a19800b007b4bc423b44mr75084269ejy.101.1670920127837; Tue, 13
- Dec 2022 00:28:47 -0800 (PST)
+        Tue, 13 Dec 2022 03:31:09 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5C21A80D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:30:12 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-310-7JytmWPuMGiigtX7_hd_5g-1; Tue, 13 Dec 2022 08:30:09 +0000
+X-MC-Unique: 7JytmWPuMGiigtX7_hd_5g-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 13 Dec
+ 2022 08:30:08 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 13 Dec 2022 08:30:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Tejun Heo' <tj@kernel.org>, Jiri Slaby <jirislaby@kernel.org>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Subject: RE: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
+ prints
+Thread-Topic: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
+ prints
+Thread-Index: AQHY7hGH734dfSyX20WOi86L/FtKtq4rTpIAgD+71dKAALHkcA==
+Date:   Tue, 13 Dec 2022 08:30:08 +0000
+Message-ID: <f5220f08bd7f45248d718f1919503261@AcuMS.aculab.com>
+References: <20221031114520.10518-1-jirislaby@kernel.org>
+ <Y1++fLJXkeZgtXR2@infradead.org> <Y2AMcSPAJpj6obSA@slm.duckdns.org>
+ <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
+ <Y2FNa4bGhJoevRKT@slm.duckdns.org>
+ <2b975ee3117e45aaa7882203cf9a4db8@AcuMS.aculab.com>
+ <Y2Kaghnu/sPvl0+g@slm.duckdns.org> <Y2KePvYRRMOrqzOe@slm.duckdns.org>
+ <320c939e-a3f0-1b1e-77e4-f3ecca00465d@kernel.org>
+ <Y5ehU524daymEKgf@slm.duckdns.org>
+In-Reply-To: <Y5ehU524daymEKgf@slm.duckdns.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220901171252.2148348-1-song@kernel.org> <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 13 Dec 2022 00:28:34 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5xb2T5FBXUqG2S+AXBvDYSkLVVvUyDamjrbLQwe-3kVQ@mail.gmail.com>
-Message-ID: <CAPhsuW5xb2T5FBXUqG2S+AXBvDYSkLVVvUyDamjrbLQwe-3kVQ@mail.gmail.com>
-Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module removal
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 4:55 AM Miroslav Benes <mbenes@suse.cz> wrote:
->
-> Hi,
->
-> first thank you for taking over and I also appologize for not replying
-> much sooner.
->
-> On Thu, 1 Sep 2022, Song Liu wrote:
->
-> > From: Miroslav Benes <mbenes@suse.cz>
+From: Tejun Heo <htejun@gmail.com> On Behalf Of 'Tejun Heo'
+> Sent: 12 December 2022 21:47
+> To: Jiri Slaby <jirislaby@kernel.org>
+> Cc: David Laight <David.Laight@ACULAB.COM>; Christoph Hellwig <hch@infradead.org>; linux-
+> kernel@vger.kernel.org; Martin Liska <mliska@suse.cz>; Josef Bacik <josef@toxicpanda.com>; Jens Axboe
+> <axboe@kernel.dk>; cgroups@vger.kernel.org; linux-block@vger.kernel.org
+> Subject: Re: [PATCH] block/blk-iocost (gcc13): cast enum members to int in prints
+> 
+> On Mon, Dec 12, 2022 at 01:14:31PM +0100, Jiri Slaby wrote:
+> > > If so, my suggestion is just sticking with the old behavior until we switch
+> > > to --std=g2x and then make one time adjustment at that point.
 > >
-> > Josh reported a bug:
-> >
-> >   When the object to be patched is a module, and that module is
-> >   rmmod'ed and reloaded, it fails to load with:
-> >
-> >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> >   The livepatch module has a relocation which references a symbol
-> >   in the _previous_ loading of nfsd. When apply_relocate_add()
-> >   tries to replace the old relocation with a new one, it sees that
-> >   the previous one is nonzero and it errors out.
-> >
-> >   On ppc64le, we have a similar issue:
-> >
-> >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> >
-> > He also proposed three different solutions. We could remove the error
-> > check in apply_relocate_add() introduced by commit eda9cec4c9a1
-> > ("x86/module: Detect and skip invalid relocations"). However the check
-> > is useful for detecting corrupted modules.
-> >
-> > We could also deny the patched modules to be removed. If it proved to be
-> > a major drawback for users, we could still implement a different
-> > approach. The solution would also complicate the existing code a lot.
-> >
-> > We thus decided to reverse the relocation patching (clear all relocation
-> > targets on x86_64). The solution is not
-> > universal and is too much arch-specific, but it may prove to be simpler
-> > in the end.
-> >
-> > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> > Signed-off-by: Song Liu <song@kernel.org>
->
-> Petr has commented on the code aspects. I will just add that s390x was not
-> dealt with at the time because there was no live patching support for
-> s390x back then if I remember correctly and my notes do not lie. The same
-> applies to powerpc32. I think that both should be fixed as well with this
-> patch. It might also help to clean up the ifdeffery in the patch a bit.
+> > So is the enum split OK under these circumstances?
+> 
+> Oh man, it's kinda crazy that the compiler is changing in a way that the
+> same piece of code can't be compiled the same way across two adjoining
+> versions of the same compiler. But, yeah, if that's what gcc is gonna do and
+> splitting enums is the only way to be okay across the compiler versions,
+> there isn't any other choice we can make.
 
-After reading the code (no testing), I think we don't need any logic for
-ppc32 and s390.
+It is also a silent code-breaker.
+Compile this for 32bit x86:
 
-We need clear_relocate_add() to handle module reload failure.
-The failure happens when we
+enum { a = 1, b = ~0ull};
+extern int foo(int, ...);
+int f(void)
+{
+    return foo(0, a, 2);
+}
 
-1) call apply_relocate_add() on klp load (or module first load,
-   if klp was loaded first);
-2) do nothing when the module is unloaded;
-3) call apply_relocate_add() on module reload, which failed.
+gcc13 pushes an extra zero onto the stack between the 1 and 2.
 
-This failure happens in the sanity check in
-apply_relocate_add().
+	David
 
-For x86, the check is something like:
-                                if (*(s32 *)loc != 0)
-                                        goto invalid_relocation;
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-For ppc64, the check is in restore_r2():
-
-        if (*instruction != PPC_RAW_NOP()) {
-                pr_err("%s: Expected nop after call, got %08x at %pS\n",
-                        me->name, *instruction, instruction);
-                return 0;
-        }
-
-I don't think we have similar checks for ppc32 and s390, so
-clear_relocate_add() is not needed for the two.
-
-OTOH, we can argue that clear_relocate_add() should undo
-everything apply_relocate_add() did. But I do think that
-will be an overkill.
-
-WDYT?
-
-Thanks,
-Song
