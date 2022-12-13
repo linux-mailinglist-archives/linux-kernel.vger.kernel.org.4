@@ -2,207 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E89164B011
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B708764B018
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbiLMGyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S234619AbiLMG7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiLMGyR (ORCPT
+        with ESMTP id S234613AbiLMG7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:54:17 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BC02DD6;
-        Mon, 12 Dec 2022 22:54:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=tJc0C+VnMuXijCnhz8V7XfDaJJMUgV2yyf/tTbhpF2A=; b=KWpayS/2cVmMcuSb9pzBn/FcaH
-        YUE2cEb+w/fgUiZy60lHgq7ZEeor19l78LbtE320I/gpLZA1c/eqf7cNDd98NRSHh852K08tHtbZ9
-        YrT0R9QQwL6kAm6/bRjWfmkhzqWa4NI2fZ/fNgocQMXlCYBbKqd7RignCr0NC7ybfos/GllkdzUvE
-        jFN8yrHW5TxV9zm0oQkLdTpV0MYYp/fS376moiCk3TtCx46o0NwtShslYsyLRWO9Npq208x0UqViT
-        LC+oQkI4Vd4Y58+4ml0FobBdWhngsp5epooyx6eyOPN4IYTAFcBYnm2TtlJmjUO59tLLhrcjz5gP8
-        YKRLncjg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4zB3-00Buir-TP; Tue, 13 Dec 2022 06:54:10 +0000
-Message-ID: <35654230-fdd3-0a94-5de2-ab5b03efa0ae@infradead.org>
-Date:   Mon, 12 Dec 2022 22:54:08 -0800
+        Tue, 13 Dec 2022 01:59:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9491D17E20
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670914687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TG6nTIySLJL4GzMcoFkoHrZJOcHOyrIknDZjMAhUKq0=;
+        b=G/kna0llW/rX0exl6hO8JfMxQcA7Ic27cKyK/YC1OMivds3007l9PkqiXavZnTh9T74k/N
+        2y6Pkr0YFc09zlMPiJ6BcnNB5W7U8522zhSzfvjq2c6M/3p+O/6Rtryr0vR3bX8HW6jZ/D
+        AueXsPvH8xsxzUfbLXwh/ZDQ/qaVdgY=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-iGdcunWeMAG6J87tDA4prQ-1; Tue, 13 Dec 2022 01:58:06 -0500
+X-MC-Unique: iGdcunWeMAG6J87tDA4prQ-1
+Received: by mail-ot1-f70.google.com with SMTP id bm9-20020a056830374900b0066e7ffcb95dso8104941otb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:58:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TG6nTIySLJL4GzMcoFkoHrZJOcHOyrIknDZjMAhUKq0=;
+        b=FwKnO0oHIOi9nQz/vBmnwByz0hXF7+jCQjjrg9uwE/Z085D1KpzR5mjzzRMqeaGcIx
+         DPgtb5vGK6Q7M6QC0X9hE76F/t4AlfxBr+h2eJR7O6bViRcOKfqlFhHesY6mEA1R4ZyQ
+         gYVtTYgKLAAPjMrLi1A6lMOPa4Cta1FvT5c6R+eAJTRRT4+QRQBC+3N4k9f4U95XOz83
+         BJ9hkyVx++sVE45pzZOEs+JodMTLHPLpZIIzTdesB+JF7/17D5j7fY+K+vgQbF0tefp7
+         Tc0KYBlrfpBx6VwvpRiyYvkfHeQHxPHtKBNrkzXwPGoAIMsE3/4AJDgHjjWJbV3ATPgW
+         nqRQ==
+X-Gm-Message-State: ANoB5pkTJtcbLzpnvDqkbFXsAL6QPk93pZ11skwCB6EnCBkx+Y+1pwky
+        IzX7ZRgAq7aUvn44vTt/0MZVcrUS/t1QvyQUqc73KxXzNov1dRMRsAqQm7UlIYTCcg5QT0YRoch
+        yMg3/gTznrCDD69ScTca9Fxz3kOrwnhsZcbu70ODl
+X-Received: by 2002:a05:6870:170e:b0:144:a97b:1ae2 with SMTP id h14-20020a056870170e00b00144a97b1ae2mr124204oae.35.1670914685835;
+        Mon, 12 Dec 2022 22:58:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4q5+B7Fl7DK/u/JIISxL//DMMmbkyJdDsxO+tjxYnaAJ9f8ZhI/Xt7Ljn+PCpZVIIixCW/Btptl5YKy40YUOc=
+X-Received: by 2002:a05:6870:170e:b0:144:a97b:1ae2 with SMTP id
+ h14-20020a056870170e00b00144a97b1ae2mr124202oae.35.1670914685564; Mon, 12 Dec
+ 2022 22:58:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/2] docs: fault-injection: Add requirements of error
- injectable functions
-Content-Language: en-US
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     bpf@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-References: <167081319306.387937.10079195394503045678.stgit@devnote3>
- <167081321427.387937.15475445689482551048.stgit@devnote3>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <167081321427.387937.15475445689482551048.stgit@devnote3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212091029.54390-1-jasowang@redhat.com> <20221212042144-mutt-send-email-mst@kernel.org>
+ <1670902391.9610498-1-xuanzhuo@linux.alibaba.com> <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
+ <20221213013231-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221213013231-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 13 Dec 2022 14:57:54 +0800
+Message-ID: <CACGkMEukRrOWghcBXiqPrOtNbdjdDJUW7-cg9PsdtsVs1SuCyQ@mail.gmail.com>
+Subject: Re: [PATCH net] virtio-net: correctly enable callback during start_xmit
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Tue, Dec 13, 2022 at 2:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Tue, Dec 13, 2022 at 11:43:36AM +0800, Jason Wang wrote:
+> > On Tue, Dec 13, 2022 at 11:38 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > >
+> > > On Mon, 12 Dec 2022 04:25:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > > On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
+> > > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
+> > > > > virtqueue callback via the following statement:
+> > > > >
+> > > > >         do {
+> > > > >            ......
+> > > > >     } while (use_napi && kick &&
+> > > > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > >
+> > > > > This will cause a missing call to virtqueue_enable_cb_delayed() when
+> > > > > kick is false. Fixing this by removing the checking of the kick from
+> > > > > the condition to make sure callback is enabled correctly.
+> > > > >
+> > > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
+> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > ---
+> > > > > The patch is needed for -stable.
+> > > >
+> > > > stable rules don't allow for theoretical fixes. Was a problem observed?
+> >
+> > Yes, running a pktgen sample script can lead to a tx timeout.
+>
+> Since April 2021 and we only noticed now? Are you sure it's the
+> right Fixes tag?
 
-On 12/11/22 18:46, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Add a section about the requirements of the error injectable functions
-> and the type of errors.
-> Since this section must be read before using ALLOW_ERROR_INJECTION()
-> macro, that section is referred from the comment of the macro too.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Link: https://lore.kernel.org/all/20221211115218.2e6e289bb85f8cf53c11aa97@kernel.org/T/#u
-> ---
->  Documentation/fault-injection/fault-injection.rst |   65 +++++++++++++++++++++
->  include/asm-generic/error-injection.h             |    6 +-
->  2 files changed, 69 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/fault-injection/fault-injection.rst
-> index 17779a2772e5..da6c5796b1f8 100644
-> --- a/Documentation/fault-injection/fault-injection.rst
-> +++ b/Documentation/fault-injection/fault-injection.rst
-> @@ -233,6 +233,71 @@ proc entries
->  	This feature is intended for systematic testing of faults in a single
->  	system call. See an example below.
->  
-> +
-> +Error Injectable Functions
-> +--------------------------
-> +
-> +This part is for the kenrel developers considering to add a function to
+Well, reverting a7766ef18b33 makes pktgen work again.
 
-                        kernel developers considering adding a function
+The reason we doesn't notice is probably because:
 
-> +ALLOW_ERROR_INJECTION() macro.
+1) We don't support BQL, so no bulk dequeuing (skb list) in normal traffic
+2) When burst is enabled for pktgen, it can do bulk xmit via skb list by its own
 
-   using the ALLOW_ERROR_INJECTION() macro.
+>
+> > > >
+> > > > > ---
+> > > > >  drivers/net/virtio_net.c | 4 ++--
+> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > > index 86e52454b5b5..44d7daf0267b 100644
+> > > > > --- a/drivers/net/virtio_net.c
+> > > > > +++ b/drivers/net/virtio_net.c
+> > > > > @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+> > > > >
+> > > > >             free_old_xmit_skbs(sq, false);
+> > > > >
+> > > > > -   } while (use_napi && kick &&
+> > > > > -          unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > > +   } while (use_napi &&
+> > > > > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > >
+> > > >
+> > > > A bit more explanation pls.  kick simply means !netdev_xmit_more -
+> > > > if it's false we know there will be another packet, then transmissing
+> > > > that packet will invoke virtqueue_enable_cb_delayed. No?
+> > >
+> > > It's just that there may be a next packet, but in fact there may not be.
+> > > For example, the vq is full, and the driver stops the queue.
+> >
+> > Exactly, when the queue is about to be full we disable tx and wait for
+> > the next tx interrupt to re-enable tx.
+> >
+> > Thanks
+>
+> OK, it's a good idea to document that.
 
-> +
-> +Requirements for the Error Injectable Functions
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +Since the function-level error injection forcibly changes the code path
-> +and returns an error even if the input and conditions are proper, this can
-> +cause unexpected kernel crash if you allow error injection on the function
-> +which is NOT error injectable. Thus, you (and reviewers) must ensure;
-> +
-> +- The function returns an error code if it fails, and the callers must check
-> +  it correctly (need to recover from it).
-> +
-> +- The function does not execute any code which can change any state before
-> +  the first error return. The state includes global or local, or input
-> +  variable. For example, clear output address storage (e.g. `*ret = NULL`),
-> +  increments/decrements counter, set a flag, preempt/irq disable or get
+Will do.
 
-     increment/decrement a counter,
+> And we should enable callbacks at that point, not here on data path.
 
-> +  a lock (if those are recovered before returning error, that will be OK.)
-> +
-> +The first requirement is important, and it will result in that the release
-> +(free objects) functions are usually harder to inject errors than allocate
-> +functions. If errors of such release functions are not correctly handled
-> +it will cause a memory leak easily (the caller will confuse that the object
-> +has been released or corrupted.)
-> +
-> +The second one is for the caller which expects the function should always
-> +does something. Thus if the function error injection skips whole of the
+I'm not sure I understand here. Are you suggesting removing the
+!user_napi check here?
 
-   do something.                                        skips all of the
+                if (!use_napi &&
+                    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
+                        /* More just got used, free them then recheck. */
+                        free_old_xmit_skbs(sq, false);
+                        if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
+                                netif_start_subqueue(dev, qnum);
+                                virtqueue_disable_cb(sq->vq);
+                        }
+                }
 
-> +function, the expectation is betrayed and causes an unexpected error.
-> +
-> +Type of the Error Injectable Functions
-> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +Each error injectable functions will have the error type specified by the
+Btw, it doesn't differ too much as kick is always true without pktgen
+and that may even need more comments or make the code even harder to
+read. We need a patch for -stable at least so I prefer to let this
+patch go first and do optimization on top.
 
-                         function
+Thanks
 
-> +ALLOW_ERROR_INJECTION() macro. You have to choose it carefully if you add
-> +a new error injectable function. If the wrong error type is chosen, the
-> +kernel may crash because it may not be able to handle the error.
-> +There are 4 types of errors defined in include/asm-generic/error-injection.h
-> +
-> +EI_ETYPE_NULL
-> +  This function will return `NULL` if it fails. e.g. return an allocateed
+>
+>
+> > >
+> > > Thanks.
+> > >
+> > > >
+> > > >
+> > > >
+> > > >
+> > > >
+> > > > >     /* timestamp packet in software */
+> > > > >     skb_tx_timestamp(skb);
+> > > > > --
+> > > > > 2.25.1
+> > > >
+> > > > _______________________________________________
+> > > > Virtualization mailing list
+> > > > Virtualization@lists.linux-foundation.org
+> > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> > >
+>
 
-                                                                  allocated
-
-> +  object address.
-> +
-> +EI_ETYPE_ERRNO
-> +  This function will return an `-errno` error code if it fails. e.g. return
-> +  -EINVAL if the input is wrong. This will include the functions which will
-> +  return an address which encodes `-errno` by ERR_PTR() macro.
-> +
-> +EI_ETYPE_ERRNO_NULL
-> +  This function will return an `-errno` or `NULL` if it fails. If the caller
-> +  of this function checks the return value with IS_ERR_OR_NULL() macro, this
-> +  type will be appropriate.
-> +
-> +EI_ETYPE_TRUE
-> +  This function will return `true` (non-zero positive value) if it fails.
-> +
-> +If you specifies a wrong type, for example, EI_TYPE_ERRNO for the function
-
-          specify
-
-> +which returns an allocated object, it may cause a problem because the returned
-> +value is not an object address and the caller can not access to the address.
-> +
-> +
->  How to add new fault injection capability
->  -----------------------------------------
->  
-> diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-> index c0b9d3217ed9..b05253f68eaa 100644
-> --- a/include/asm-generic/error-injection.h
-> +++ b/include/asm-generic/error-injection.h
-> @@ -19,8 +19,10 @@ struct pt_regs;
->  
->  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
->  /*
-> - * Whitelist generating macro. Specify functions which can be
-> - * error-injectable using this macro.
-> + * Whitelist generating macro. Specify functions which can be error-injectable
-> + * using this macro. If you unsure what is required for the error-injectable
-
-                        If you are unsure ...
-
-> + * functions, please read Documentation/fault-injection/fault-injection.rst
-> + * 'Error Injectable Functions' section.
->   */
->  #define ALLOW_ERROR_INJECTION(fname, _etype)				\
->  static struct error_injection_entry __used				\
-> 
-
--- 
-~Randy
