@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A8764AE5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A376664AE5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 04:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234254AbiLMDky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 22:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S234288AbiLMDor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 22:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiLMDku (ORCPT
+        with ESMTP id S229557AbiLMDoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 22:40:50 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EDF1B9CE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:40:49 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id j16so10892870qtv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:40:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tUAqA2SlkGJGoP8jdNp8BFCeN3i3DSiZETy07vaICDs=;
-        b=g9Nl4T/+fTHSkFjHq2JeyH2Z1NmJhIvGaWhttKU1xSkd8QffENkiRwL1EFi8dsGs1n
-         zpDjgklpa4gBd1ZEL6VEnRPTQ5RtKrdkKHENJrwDOWxEAnh8oW5CRMFuErOtRa+54qtF
-         4HWD5YH8xkBqOV50nhvtn1xHXJhKz74isoqRg=
+        Mon, 12 Dec 2022 22:44:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD4193EF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:43:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670903029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=256Ct247/EiVmrEdEn67dwnBON0/XMOLy97CHVgBe6k=;
+        b=Vc6lLK8a+z+WlUFUabX1w1MrSDLlvjnp0C1eRAMnA6wwhmCPd2THr6yF+ancbtJoKFVCUP
+        B4pQ4wwLyNU1POSGqinSuTU9FdT5K6LLTQhay07wF0fNkwBwJjImnSBUawyVKbdBZDCWph
+        F3UYRGNTqN+qrtbnfB8QeUizZlRm828=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-675-VY0JqwBvPnuoeasAf2w0kg-1; Mon, 12 Dec 2022 22:43:47 -0500
+X-MC-Unique: VY0JqwBvPnuoeasAf2w0kg-1
+Received: by mail-ot1-f70.google.com with SMTP id l31-20020a9d1b22000000b0066c48e9249fso7930358otl.5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:43:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tUAqA2SlkGJGoP8jdNp8BFCeN3i3DSiZETy07vaICDs=;
-        b=IfS2IsbDwEvk73w9AAHMx+eb4gNDzqh81mHNSSYluz/i9GlvJDSv7svcnnUkhoXSD/
-         ViVbCEyARNxg/3ngffhvWMyp/sjaWVacEjKImbaK6D0iMGNLcrrOS31lwdiL01zDcu4/
-         kPrNHOcAPVaw2wsV1tbVTSNvFEAO1THbkzgh+WUO3T+aDPn/5jDbI3zYdZ1+94nqlr1x
-         Y+uvkzyQ9ZpUDAagsn9q3Nzn2zmJ4ol1YYKqu+Mk3/2Wt8kS+dZEY/Zn/Pyp8Yof1RXc
-         UgL+FTFQYGqFxf/xzBBYJhLiQYQUhmEXq46EFTAR953xrlmVh5bCsFneLmlRLGUJjywG
-         Yr8g==
-X-Gm-Message-State: ANoB5pk1ixSZqJAYPq+DIvy97r7OHRInGFsb11besu+PLAKTTS/SmbGI
-        WFKTxpTFmRRtWAxKq51J6ozvbGVD7O5X3ihL
-X-Google-Smtp-Source: AA0mqf53l0VOcl/lVZHxjY+HDvXIWXQS3fRJTvn40qTwSx1ZLfV32iYpZzLvTO7sZFPv5j+B+Iyx9A==
-X-Received: by 2002:a05:622a:90f:b0:3a6:2170:b0a1 with SMTP id bx15-20020a05622a090f00b003a62170b0a1mr29476477qtb.6.1670902847508;
-        Mon, 12 Dec 2022 19:40:47 -0800 (PST)
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
-        by smtp.gmail.com with ESMTPSA id g8-20020ac84b68000000b003a4c3c4d2d4sm6856423qts.49.2022.12.12.19.40.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Dec 2022 19:40:45 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id h16so10892493qtu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 19:40:45 -0800 (PST)
-X-Received: by 2002:ac8:4988:0:b0:3a7:ef7b:6aa5 with SMTP id
- f8-20020ac84988000000b003a7ef7b6aa5mr7555265qtq.436.1670902844805; Mon, 12
- Dec 2022 19:40:44 -0800 (PST)
+        bh=256Ct247/EiVmrEdEn67dwnBON0/XMOLy97CHVgBe6k=;
+        b=J+xDpwXN0y/2aBq3zJejZTxi/2Z0Au0+g+gIlww/+nD8ZIBFbZ3O/nWipAVXblElpK
+         Eywp7BKJ2KaXeOtMX+tshIs4FJ02wCbctCZ7p3pjHZR6Uwul0vt/iQpXVTFSanaZUFVW
+         uD8m5sw8Y+v4bvqQfMulh+AQ2S/A/Veb+IXyEdxwyw/+AerofBrJvXNwvWQ4iXTxIeq7
+         CTIqUqLoIeREzO3IV1ywv7CCexgc4+0LIib1fg+2qhxkTM6rN3wotuehIpw323AuZA0u
+         4t/XiiN8fpIqBWPA2BTyhbtbpvKOc6zJE8+QMPPSQVm5UclHllCqwEv9MorLlvM2IMTw
+         ysUA==
+X-Gm-Message-State: ANoB5pmsQLh2GpA/ysYRQBMfRZHO9V+DzRZZQ/3ejC8E0zgShAvsIqo1
+        ZhZQ65YBT6ML6oM10U75Cmn99cPZ8Lvs3H6Kk80k3jEKn+T5AYyOyNeU1S1A5/Wwct0Tx6rucpU
+        clU7YAVNJUqd/NpI7RpfBjSpTilYzSd2MbbgO9Wyw
+X-Received: by 2002:a05:6808:114c:b0:35e:7a42:7ab5 with SMTP id u12-20020a056808114c00b0035e7a427ab5mr78514oiu.280.1670903027122;
+        Mon, 12 Dec 2022 19:43:47 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4i4kic2ykAAWbr0s266j2XeYnzV4cUv9APvGz4jsQq5Lkz/4gL5C2yVDhzy6BQW2tEKIdWrVGMCJkUIbL2Bvk=
+X-Received: by 2002:a05:6808:114c:b0:35e:7a42:7ab5 with SMTP id
+ u12-20020a056808114c00b0035e7a427ab5mr78511oiu.280.1670903026927; Mon, 12 Dec
+ 2022 19:43:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20221212131915.176194-1-brauner@kernel.org>
-In-Reply-To: <20221212131915.176194-1-brauner@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Dec 2022 19:40:29 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj+tqv2nyUZ5T5EwYWzDAAuhxQ+-DA2nC9yYOTUo5NOPg@mail.gmail.com>
-Message-ID: <CAHk-=wj+tqv2nyUZ5T5EwYWzDAAuhxQ+-DA2nC9yYOTUo5NOPg@mail.gmail.com>
-Subject: Re: [GIT PULL] fs idmapped updates for v6.2
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221212091029.54390-1-jasowang@redhat.com> <20221212042144-mutt-send-email-mst@kernel.org>
+ <1670902391.9610498-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1670902391.9610498-1-xuanzhuo@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 13 Dec 2022 11:43:36 +0800
+Message-ID: <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
+Subject: Re: [PATCH net] virtio-net: correctly enable callback during start_xmit
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,27 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 5:19 AM Christian Brauner <brauner@kernel.org> wrote:
+On Tue, Dec 13, 2022 at 11:38 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
 >
-> Please note the tag contains all other branches for this cycle merged in.
+> On Mon, 12 Dec 2022 04:25:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
+> > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
+> > > virtqueue callback via the following statement:
+> > >
+> > >         do {
+> > >            ......
+> > >     } while (use_napi && kick &&
+> > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > >
+> > > This will cause a missing call to virtqueue_enable_cb_delayed() when
+> > > kick is false. Fixing this by removing the checking of the kick from
+> > > the condition to make sure callback is enabled correctly.
+> > >
+> > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > > The patch is needed for -stable.
+> >
+> > stable rules don't allow for theoretical fixes. Was a problem observed?
 
-Well, considering that the explanation basically assumed I had already
-merged those (and I had), I wish you also had made the diffstat and
-the shortlog reflect that.
+Yes, running a pktgen sample script can lead to a tx timeout.
 
-As it was, now the diffstat and shortlog ends up containing not what
-this last pull request brought in, but what they *all* brought in...
+> >
+> > > ---
+> > >  drivers/net/virtio_net.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > index 86e52454b5b5..44d7daf0267b 100644
+> > > --- a/drivers/net/virtio_net.c
+> > > +++ b/drivers/net/virtio_net.c
+> > > @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+> > >
+> > >             free_old_xmit_skbs(sq, false);
+> > >
+> > > -   } while (use_napi && kick &&
+> > > -          unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > +   } while (use_napi &&
+> > > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > >
+> >
+> > A bit more explanation pls.  kick simply means !netdev_xmit_more -
+> > if it's false we know there will be another packet, then transmissing
+> > that packet will invoke virtqueue_enable_cb_delayed. No?
+>
+> It's just that there may be a next packet, but in fact there may not be.
+> For example, the vq is full, and the driver stops the queue.
 
-I'm also not super-happy with how ugly your history for this branch
-was. You had literally merged the acl rework branch three times - at
-different points of that branch.
+Exactly, when the queue is about to be full we disable tx and wait for
+the next tx interrupt to re-enable tx.
 
-Do we have other ugly history in the tree? Yes. But we've been getting
-better. This was _not_ one of those "getting better" moments.
+Thanks
 
-Oh well. I can see what you wanted to do, and I agree with the end
-result, I just don't particularly like how this was done.
+>
+> Thanks.
+>
+> >
+> >
+> >
+> >
+> >
+> > >     /* timestamp packet in software */
+> > >     skb_tx_timestamp(skb);
+> > > --
+> > > 2.25.1
+> >
+> > _______________________________________________
+> > Virtualization mailing list
+> > Virtualization@lists.linux-foundation.org
+> > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+>
 
-I've pulled it.
-
-             Linus
