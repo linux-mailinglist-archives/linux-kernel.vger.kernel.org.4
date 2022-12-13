@@ -2,213 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5F864B3B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC3564B3DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbiLMLDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 06:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S235300AbiLMLLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 06:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbiLMLCy (ORCPT
+        with ESMTP id S235297AbiLMLKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:02:54 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAC011164
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:02:47 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id u19so17083956ejm.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:02:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IQ1cU6HaRiZd2oaHJNwIBTgfx+qQipJfi6liPtZV9A8=;
-        b=LhaEzW475ydrk+K+WcZDtR1DW46YBskNG+u1Hq5urOdDmTVyMKmeSMYZuiXGCG5/QY
-         DweSEcRxM0ZjXiFzwQanSoDzPpddScoQPVxXGracyBbTlOWC8ySqOhpqgkmla4wMFm9+
-         uPAQ3nvPG5hsv7AK8MIjhsmhskv2KGLeWb2c3WViZS2Hr63wczTcVNXo5o19TyeSU2hX
-         MkJyazyb0l6+035FgVjDLohtaT2drXWGPAszT5G6DJb5svkL+hDYCI+64jYK8MDP8tIw
-         iJ6trgwupISP30xVSlO3cwYaf/2/KvIHCY8YqGHYHZcTUofiekbPbuC7LYH67GPm6tzL
-         O9HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IQ1cU6HaRiZd2oaHJNwIBTgfx+qQipJfi6liPtZV9A8=;
-        b=QIAGToQDcaHL2CW2JyINcWzm1LKNmVVluYQJAn4F2VuZ6L6QgCHwVDldKHgmnZ6rZw
-         EML/35Bmv2nbnbhUUN5tMUy5pnriVDkPGvsJ7evI/zQ1tCRdWkWDu9IqrIajc/QO2f+x
-         D0K69VoPqssKaJn6ENqwCZcjAsI+RTJ0gIUukKu3PpH6jh+P/Y9ehbJkUjlKCaRd+3X2
-         BPuqfcF6n13/iOozEvudc/5PelvpKDY6PB12IHl2k1TRMVTxBaZQHaP0fajg1d94/O+s
-         jFIUcVfxluHCI7YaF5B4TCDliQWMpMDmaOaAk+gjpshw7i5iR6mnLKLcX+iAfLuV2y0g
-         ndjg==
-X-Gm-Message-State: ANoB5pn6MUvsX8VW0jD7UG0yAb5/P5Rnh0rT7Qayz/wUjBjpcfBZ9Fmm
-        YvsaugF4Lumy2gQClJOA5MkmgrHugtXtjoamOmo=
-X-Google-Smtp-Source: AA0mqf7amJrs0pLWsSO3ihGM3wzALu7QIKv9vyrIllw3wDUYt0tKgh9ups0gafqXCr+n9j2BzcSr5n3foaqXX7f9ZRM=
-X-Received: by 2002:a17:907:728c:b0:7c1:10cf:b81c with SMTP id
- dt12-20020a170907728c00b007c110cfb81cmr8911388ejc.315.1670929366153; Tue, 13
- Dec 2022 03:02:46 -0800 (PST)
+        Tue, 13 Dec 2022 06:10:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55142AE45;
+        Tue, 13 Dec 2022 03:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+nRf/6V6wXsRw4fo3uuanPnY17TIgFQIAFrRDe+Tsy0=; b=UCFo+1waL8A3D+bUWjAD0OTxvs
+        kKvdiOplI6Qsuga3/0/V9jlGiqqk062VFJJ9jzstVBML5kh7q63Ngvb4aEfkABooxLviTdSoml0S9
+        9KdCu69mDfHMpRyjoMiuXv4yiiXYdCdRAHd43e6YcnfMu0KNQbOjO3Z0nDU1hdMGEzvzLCK1AXDGc
+        u71v5UHhxUAqSNQRjDJpB5997o0e8SxsTYpON+84bNjpqieH5/NMcrE9xgYpz9lLYW6ViYuGK7ZR6
+        6HgZV9NsxyhBziXdLBKmRROiYyMXDmB7T4YxM+s7ztwOELSslilLpmU4wxdil3UTcoq6qBtS0Xue3
+        V+qGpHcA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p53Aq-00C9Ic-SI; Tue, 13 Dec 2022 11:10:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D8E330015E;
+        Tue, 13 Dec 2022 12:02:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1247E201FEA66; Tue, 13 Dec 2022 12:02:44 +0100 (CET)
+Date:   Tue, 13 Dec 2022 12:02:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@google.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        brho@google.com, bristot@redhat.com, bsegall@google.com,
+        daniel@iogearbox.net, derkling@google.com,
+        dietmar.eggemann@arm.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, dvernet@meta.com, haoluo@google.com,
+        joshdon@google.com, juri.lelli@redhat.com, kernel-team@meta.com,
+        linux-kernel@vger.kernel.org, martin.lau@kernel.org,
+        mgorman@suse.de, mingo@redhat.com, pjt@google.com,
+        riel@surriel.com, rostedt@goodmis.org, tj@kernel.org,
+        torvalds@linux-foundation.org, vincent.guittot@linaro.org,
+        vschneid@redhat.com, posk@posk.io
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example
+ scheduler
+Message-ID: <Y5hb05fll8jXc0Ck@hirez.programming.kicks-ass.net>
+References: <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net>
+ <20221212210547.1105894-1-posk@google.com>
 MIME-Version: 1.0
-References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
- <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
- <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info> <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
- <20221212101449.4e465181@xps-13> <CALHCpMimCqZB0bnHaOdCzucey+92NcRRZXCHXYYH5c9vj0nZaQ@mail.gmail.com>
- <20221212173730.64224599@xps-13> <b75a8769-0cc8-beb3-931a-6755aede3af0@inbox.ru>
- <20221213104643.052d4a06@xps-13>
-In-Reply-To: <20221213104643.052d4a06@xps-13>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Tue, 13 Dec 2022 14:02:34 +0300
-Message-ID: <CALHCpMhOku2b+1y5Z=N5RJ6SvCvNakD2rSyRAqp6Gz3JWVvXGg@mail.gmail.com>
-Subject: Re: nvmem-cells regression after adding 'call of_platform_populate()
- for MTD partitions'
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212210547.1105894-1-posk@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I looked closer at commit 658c4448bbbf and bcdf0315a61a, 5db1c2dbc04c16 com=
-mits.
-Looks like we have two different features binded to one property - "compati=
-ble".
+On Mon, Dec 12, 2022 at 01:05:47PM -0800, Peter Oskolkov wrote:
+> Peter Zijlstra wrote:
+> 
+> > I long for the UMCG patches -- that
+> > at least was somewhat sane and trivially composes, unlike all this
+> > madness.
+> 
+> A surprise, to be sure, but a welcome one!
 
-From one side it is the ability to forward the subnode of the mtd
-partition to the nvmem subsystem (658c4448bbbf and ac42c46f983e).
-And from another side is the ability to use custom initialization of
-the mtd partition (bcdf0315a61a and 5db1c2dbc04c16).
+Well, I did somewhat like it as I put significant effort into it. In
+fact I was >.< near to merging the lot when you changed your mind and
+went the syscall route.
 
-What I mean:
-According to ac42c46f983e I can create DT like this:
- - |
-    partitions {
-        compatible =3D "fixed-partitions";
-        #address-cells =3D <1>;
-        #size-cells =3D <1>;
+At that point something happened (I fell ill or a holiday or something)
+but it basically got snowed under as I had already been ignoring the
+inbox while doing the UMCG thing and I just never managed to get back to
+it (like a 1000 other things :/ -- this maintainer thing really is like
+drinking from a firehose).
 
-        partition@0 {
-            compatible =3D "nvmem-cells";
-            reg =3D <0x40000 0x10000>;
-            #address-cells =3D <1>;
-            #size-cells =3D <1>;
-            macaddr_gmac1: macaddr_gmac1@0 {
-                reg =3D <0x0 0x6>;
-            };
-        };
-    };
-
-
-And according to 5db1c2dbc04c16 I can create DT like this:
- - |
-    partitions {
-        compatible =3D "fixed-partitions";
-        #address-cells =3D <1>;
-        #size-cells =3D <1>;
-
-        partition@0 {
-            compatible =3D "u-boot,env";
-            reg =3D <0x40000 0x10000>;
-        };
-    };
-
-But I can not use them both, because only one "compatible" property allowed=
-.
-This will be incorrect:
- - |
-    partitions {
-        compatible =3D "fixed-partitions";
-        #address-cells =3D <1>;
-        #size-cells =3D <1>;
-
-        partition@0 {
-            compatible =3D "u-boot,env";  # from ac42c46f983e
-            compatible =3D "nvmem-cells"; # from 5db1c2dbc04c
-            reg =3D <0x40000 0x10000>;
-            #address-cells =3D <1>;
-            #size-cells =3D <1>;
-            macaddr_gmac1: macaddr_gmac1@0 {
-                reg =3D <0x0 0x6>;
-            };
-        };
-    };
-
-> compatible: Duplicate property name
-
-=D0=B2=D1=82, 13 =D0=B4=D0=B5=D0=BA. 2022 =D0=B3. =D0=B2 12:46, Miquel Rayn=
-al <miquel.raynal@bootlin.com>:
->
-> Hi Maxim,
->
-> fido_max@inbox.ru wrote on Mon, 12 Dec 2022 20:57:49 +0300:
->
-> > Hi, Miquel!
-> >
-> > On 12.12.2022 19:37, Miquel Raynal wrote:
-> >
-> > > Let me try to recap the situation for all the people I just involved:
-> > >
-> > > * An Ethernet driver gets its mac address from an nvmem cell. The
-> > >    Ethernet controller DT node then has an "nvmem-cells" property
-> > >    pointing towards an nvmem cell.
-> > > * The nvmem cell comes from an mtd partition.
-> > > * The mtd partition is flagged with a particular compatible
-> > >    (which is also named "nvmem-cells") to tell the kernel that the no=
-de
-> > >    produces nvmem cells.
-> > > * The mtd partition itself has no driver, but is the child node of a
-> > >    "partitions" container which has one (in this case,
-> > >    "fixed-partitions", see the snippet below).
-> > >
-> > > Because the "nvmem-cells" property of the Ethernet node points at the
-> > > nvmem-cell node, the core create a device link between the Ethernet
-> > > controller (consumer) and the mtd partition (producer).
-> > >
-> > > The device link in this case will never be satisfied because no drive=
-r
-> > > matches the "nvmem-cells" compatible of the partition node.
-> > >
-> > > Reverting commit bcdf0315a61a ("mtd: call of_platform_populate() for =
-MTD
-> > > partitions") would IMHO not make much sense, the problem comes from t=
-he
-> > > device link side and even there, there is nothing really "wrong",
-> > > because I really expect the mtd device to be ready before the
-> > > Ethernet controller probe, the device link is legitimate.
-> > >
-> > > So I would like to explore other alternatives. Here are a bunch of
-> > > ideas, but I'm open:
-> >
-> > How about to create simple driver with compatible=3D"nvmem-cell" and to=
- move all the suff from main mtd driver which serves nvmem-cell to the prob=
-e function?
->
-> This is probably worth the try but I doubt you can make it work without
-> regressions because IIRC the nvmem registration happens no matter the
-> compatible (not mentioning the user-otp and factory-otp cases). You can
-> definitely try this out if you think you can come up with something
-> though.
->
-> But I would like to hear from the device-link gurus :) because even if
-> we fix mtd with a "trick" like above, I guess we'll very likely find
-> other corner cases like that and I am interested in understanding the
-> rationale of what could be a proper fix.
->
-> Thanks,
-> Miqu=C3=A8l
