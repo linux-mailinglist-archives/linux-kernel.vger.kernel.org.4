@@ -2,156 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA5164B595
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F3964B685
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235387AbiLMNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S235661AbiLMNph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbiLMNCQ (ORCPT
+        with ESMTP id S234932AbiLMNpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:02:16 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC090FACF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j4so4855227lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
-        b=v3fQlf2kgSS+AJzKkGbQbQVxCdOzB79tHBy13LmzAC6tYjbvJD2/3NLM3k3N7C1s1C
-         fbi8XkxaQfqTRPtEEAWsCNSkbLZT0Lr16P/d85zsDuUCOfJo8NWwY2Sogcds8MRuDAVW
-         ikR8fOeVjci1sJjgcql5bKdLLhRUl2NRUmCYDkdjqWimEH2I7MVLAwHV9yHC6YaIid6T
-         lEA3KVr9Z8TL6FK2o0Qv+FpL+I1zqlcVC2VqdC6fRV6+K4eBfWCnij2ecsMIW+4o8jwH
-         S8Z7PVUeKsSMsSAsFM0FAgDdBajAbRjANH4oNaaf6uC0uiHpQxnWF7I2dEFPR3yLwa41
-         Pssw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yJFdztr0qedU/6yc4umoLlymnyA12ouaQhrBPqCHMjk=;
-        b=ENYa+EmSYEiwFIJWxTOo3dpUaDdyScPJ/8c2d0LhlEeY0RR9xnYsOvPRo/OQVJj28U
-         EqhQXpcUMYmX8NhX9YOk8aNJMnhiYVlel+LbDE/geupvp23qi4NAA+pm/01oNylIKN97
-         qaagz/MCHpspPOlIbCL4WkAUBEnMa4e/A8bDZvCZFRKa/wa/eUIqmEYhX5HxZmDpUp5y
-         72//JkQAAdWkVEHgq7OD8SrTCeE8qYKjnrYqu4iqmQTOkLCijd78JKaq2F5A79GdRCza
-         jjnYsgevu/hIvwDBz/Fr2JAh4xFjFlyfIXARaUzsU7xWWHShPlAxed8m6CGraQON/4Xo
-         7gUA==
-X-Gm-Message-State: ANoB5pmb5ZbYXbkis6zycwxfK0neGTXGHyYlZWPSvoZW+bGWMznhP5G2
-        4N5PzLy4UYSJyqtT99nBP3hVNw==
-X-Google-Smtp-Source: AA0mqf6NbjEsBWAPSxu32rWUqrPPN0YATuL85yOo7kXNM8FUMipRROZsB4b08JOvaexQsUYWdpUQSQ==
-X-Received: by 2002:a05:6512:b8c:b0:4b5:7d49:4a05 with SMTP id b12-20020a0565120b8c00b004b57d494a05mr7830468lfv.0.1670936532229;
-        Tue, 13 Dec 2022 05:02:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y12-20020a19914c000000b004b55a1c4649sm363680lfj.38.2022.12.13.05.02.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 05:02:11 -0800 (PST)
-Message-ID: <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
-Date:   Tue, 13 Dec 2022 14:02:10 +0100
+        Tue, 13 Dec 2022 08:45:35 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53162B23;
+        Tue, 13 Dec 2022 05:45:34 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDD2QXT010257;
+        Tue, 13 Dec 2022 13:45:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eUgPrthoCID6QwmABsTsBu6qOsnjoUKBNQdpMF81+W4=;
+ b=DOTv2MvLjSpqYEV438WPXJiOF4v3r4AoVwb1uUsd5r0e6lA18xhhWnG9bMNEkfmV9wIZ
+ fFGHaVU/S2fft1VGalvyFSyHfdNhqoEyO5sMBULsooW3/OpAF7AD7I8fohteDEjEvVrT
+ h/Rqo3pd9Ark/i08dPipDXsTYEQkPMZhl1XdO8n1EyJYcVKoF4U55qxEA5IuSaDlBB3V
+ DjW08B6oItIGOhHccxEexQCQd48n6XEceJU0wGHkyYgs73kQoXE8pnE4EVyE4av8h856
+ E568UdMl2kBazEjen3i7ycjnJPamSiSjtyc5mU8enec4Tm6xfVs6bz9D07KgPqkoD7uz 6Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre449n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 13:45:06 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDD6KLS019710;
+        Tue, 13 Dec 2022 13:45:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mejre448u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 13:45:05 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD5UCPh028384;
+        Tue, 13 Dec 2022 13:45:04 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3mchr648eq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 13:45:03 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDDj1Bv46793140
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Dec 2022 13:45:01 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB79D2004B;
+        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4711C20043;
+        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
+Received: from localhost (unknown [9.43.37.38])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Dec 2022 13:45:01 +0000 (GMT)
+Date:   Tue, 13 Dec 2022 15:53:48 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH v1 06/10] powerpc/bpf: Perform complete extra passes to
+ update addresses
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Stanislav Fomichev <sdf@google.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
+References: <fa025537f584599c0271fc129c5cf4f57fbe7505.1669881248.git.christophe.leroy@csgroup.eu>
+        <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <c13ebeb4d5d169bda6d1d60ccaa6cc956308308d.1669881248.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Content-Language: en-US
-To:     Brian Masney <bmasney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com,
-        linux-spi@vger.kernel.org,
-        Javier Martinez Canillas <fmartine@redhat.com>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-5-bmasney@redhat.com>
- <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com> <Y5hvlX35nr8xQKEd@x1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y5hvlX35nr8xQKEd@x1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1670926819.9nqhz2fj7v.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7UTJ-JytMBoZWiQz5BZHWlwz3MrF3EJl
+X-Proofpoint-ORIG-GUID: 3yIsWCYYIwCAqrzqIKaNf220JG_gsuBE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212130120
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 13:27, Brian Masney wrote:
-> + Mark Brown and linux-spi list
-> 
-> On Tue, Dec 13, 2022 at 12:46:18PM +0530, Shazad Hussain wrote:
->> On 12/12/2022 11:53 PM, Brian Masney wrote:
->>> Add the missing nodes for the spi buses that's present on this SoC.
->>>
->>> This work was derived from various patches that Qualcomm delivered
->>> to Red Hat in a downstream kernel.
->>>
->>> Signed-off-by: Brian Masney <bmasney@redhat.com>
->>> ---
->>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 384 +++++++++++++++++++++++++
->>>   1 file changed, 384 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->>> index 392a1509f0be..b50db09feae2 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->>> @@ -829,6 +829,22 @@ qup2_i2c16: i2c@880000 {
->>>   				status = "disabled";
->>>   			};
->>> +			qup2_spi16: spi@880000 {
->>> +				compatible = "qcom,geni-spi";
->>> +				reg = <0 0x00880000 0 0x4000>;
->>> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
->>> +				clock-names = "se";
->>> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
->>> +				#address-cells = <1>;
->>> +				#size-cells = <0>;
->>> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->>> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
->>> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
->>> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
->>> +				spi-max-frequency = <50000000>;
->>
->> This is device property not host and same applicable for all below spi
->> nodes.
->> Also FYI let's enable below SPI for Qdrive usecases once spidev compatible
->> name is confirmed.
->> SE9  0x00A84000
->> SE22 0x00898000
-> 
-> I talked to Javier Martinez Canillas yesterday about the spidev driver
-> and I think I now have a better understanding of what we need to do.
-> Quick background for Mark. For this automotive program, Qualcomm will be
-> delivering to Red Hat and our customers parts of the media stack in
-> userspace. This will be closed source, proprietary code that parts of it
-> will need to interface with SPI.
-> 
-> We can't add a generic qcom,spidev compatible to the spidev driver since
-> this is just a software abstraction. Instead, each type of device will
-> need to have it's own compatible that uniquely describes the type of
-> device. So you might have a compatible like qcom,spi-video-codec. There
-> will need to be a DT binding added that describes the hardware. I suspect
-> that a SPI device can simply be added to trivial-devices.yaml. Once the
-> DT binding is accepted, the compatible can be added to the spidev.c
-> driver. If an in-kernel driver is written in the future, then the 
-> compatible can be moved from spidev to the new driver.
-> 
-> Mark: Is my understanding above correct? If so, will it be a problem to
-> get a compatible added to spidev.c if the corresponding userspace code is
-> closed source and proprietary?
+Christophe Leroy wrote:
+> BPF core calls the jit compiler again for an extra pass in order
+> to properly set subprog addresses.
+>=20
+> Unlike other architectures, powerpc only updates the addresses
+> during that extra pass. It means that holes must have been left
+> in the code in order to enable the maximum possible instruction
+> size.
+>=20
+> In order avoid waste of space, and waste of CPU time on powerpc
+> processors on which the NOP instruction is not 0-cycle, perform
+> two real additional passes.
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/net/bpf_jit_comp.c | 85 ---------------------------------
+>  1 file changed, 85 deletions(-)
+>=20
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
+omp.c
+> index 43e634126514..8833bf23f5aa 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -23,74 +23,6 @@ static void bpf_jit_fill_ill_insns(void *area, unsigne=
+d int size)
+>  	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
+>  }
+> =20
+> -/* Fix updated addresses (for subprog calls, ldimm64, et al) during extr=
+a pass */
+> -static int bpf_jit_fixup_addresses(struct bpf_prog *fp, u32 *image,
+> -				   struct codegen_context *ctx, u32 *addrs)
+> -{
+> -	const struct bpf_insn *insn =3D fp->insnsi;
+> -	bool func_addr_fixed;
+> -	u64 func_addr;
+> -	u32 tmp_idx;
+> -	int i, j, ret;
+> -
+> -	for (i =3D 0; i < fp->len; i++) {
+> -		/*
+> -		 * During the extra pass, only the branch target addresses for
+> -		 * the subprog calls need to be fixed. All other instructions
+> -		 * can left untouched.
+> -		 *
+> -		 * The JITed image length does not change because we already
+> -		 * ensure that the JITed instruction sequence for these calls
+> -		 * are of fixed length by padding them with NOPs.
+> -		 */
+> -		if (insn[i].code =3D=3D (BPF_JMP | BPF_CALL) &&
+> -		    insn[i].src_reg =3D=3D BPF_PSEUDO_CALL) {
+> -			ret =3D bpf_jit_get_func_addr(fp, &insn[i], true,
+> -						    &func_addr,
+> -						    &func_addr_fixed);
 
-qcom,spi-video-codec is still not specific enough. You need to describe
-real device behind spidev. To be clear - you do not describe userspace,
-but the device.
+I don't see you updating calls to bpf_jit_get_func_addr() in=20
+bpf_jit_build_body() to set extra_pass to true. Afaics, that's required=20
+to get the correct address to be branched to for subprogs.
 
-Best regards,
-Krzysztof
+
+- Naveen
 
