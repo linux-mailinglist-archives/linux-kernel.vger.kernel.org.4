@@ -2,121 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE6364B588
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD4F64B584
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbiLMM5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S234951AbiLMM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235326AbiLMM44 (ORCPT
+        with ESMTP id S235008AbiLMM4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:56:56 -0500
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947721D330
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:56:46 -0800 (PST)
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 3797B802AF22
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:56:35 +0000 (UTC)
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id AC0351003F8E5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:56:04 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 54pIpey0Y4SsW54pIpjGDm; Tue, 13 Dec 2022 12:56:04 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=IrHbzJzg c=1 sm=1 tr=0 ts=63987664
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=sHyYjHe8cH0A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KmriVnZ8IRPqExdPVufgPv3XR6BEgHzR3Vs3WpvJgHM=; b=GEMPopC8YDb88If9BTlT6BIRi1
-        /5PyRZDpZAInjE+BiRsr2AJmbYNH4m+ncX9c6bhKjGLqKPwm6c5xSCVpOvnd1Gm4wXy2PmleF0UJj
-        pSgnK1pYbRw6dJJx52cAMxCKxOPp66BGFs0Px4BpEOTn8NQW1LW/rUurhnHT5dUgdeCntf2XbsKVs
-        O9iSaDfTHj0nAOZvlbiqz41UctxVaqp/6kXtbnJ9aEt36PYOgWvhwk7UhyIvxuBPahce7lqGuhd+R
-        MtrgoE77ydIxnUi8A7T9b7i85QSYEs3v9kxpnVFQuIkKBYTTkxYU89FqYM56bqatATt4h3MAxsBH/
-        iek+tjCA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:32852 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1p54pH-002MoZ-89;
-        Tue, 13 Dec 2022 05:56:03 -0700
-Subject: Re: [PATCH 5.15 000/123] 5.15.83-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221212130926.811961601@linuxfoundation.org>
-In-Reply-To: <20221212130926.811961601@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <33b7e250-8abe-fdd6-de91-1b211dfae48d@w6rz.net>
-Date:   Tue, 13 Dec 2022 04:55:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 13 Dec 2022 07:56:13 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856E1CFE8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:56:12 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so4749759lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:56:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lDRj4WOJbdPREIb749HQ13QxtWlONFuq1JzJNUeCNpg=;
+        b=ZuxwNkHLhVTyZ+XWGzpS4XUn5GkDdTwsn1UUUqZAkdeppV42d4iiQ4FRASXlz+kXOm
+         JCSGK66De/Iab54DK4uSgVwabKTt8UPksrkd5dZLs5FSj8fIapmgV81+5HgRvFc7PkaA
+         XQRfT6ZxKL6f1tgRNvx9+DEi+vDXINQ0PAcKtFs8m+Rw/ICfyjiijtDWNKWIt94N5gwq
+         qX2kl19sNyG3zrAKxOBC1Fl+RInNIM2m2pLbOxoLeJ6A4AAXb2e/zHlOtto/YDJw0P4b
+         6juNPTYJdETjVs7JYgtAiLJJ1mRB6OOmsVZw8xG5W/NoRep3/+aosohbPRjakWwyG26x
+         Uvqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lDRj4WOJbdPREIb749HQ13QxtWlONFuq1JzJNUeCNpg=;
+        b=TEJpVOFHYTKi25bpUPpuTVW3+kVwrwMyFQbWIGSjrV59sIEl0K/4GiubM9ssIx0poO
+         efqWHcdIzOJIHuKpbHooZC6pJmTUT2x7w5x6F9i+4gQel7RFBJKOvJl8wvQkXLJWv62O
+         7E2r2W3qVTY9kgbcCj6HBq5S7PFqkQ0Goq1lpTNm2H4gXeQsHmhT7FQD7NE85ojbUNlg
+         7DqBzhS8XvPaEL4Nljinube+C0wyDITyHKO9pBiN37aISBs0ZU5K2dmuBJ3A1n0Oi4IK
+         f0bqJa9VTpE2UYVz8tWdhL9mGXC4k1+2f6TZ/3ZB7Fnu74QYUrg7tnIcYNWG5Lzelxhk
+         ygCA==
+X-Gm-Message-State: ANoB5pkT6QBCU9XBN0jO4JmHmbHCB4gJs6vK3+TEYG6pY8eJx+92bMAW
+        jUYbWDNfvTstb+KWJu63RZSDNw==
+X-Google-Smtp-Source: AA0mqf7tAGagkXyfYUWEQTPUGp7HeBrp1ETg+KFiqpiNIBrJzlVTmS8z4SbTF9vzXQsDugimHZXx0w==
+X-Received: by 2002:ac2:5fc1:0:b0:4aa:54a:3a6e with SMTP id q1-20020ac25fc1000000b004aa054a3a6emr5018196lfg.41.1670936170600;
+        Tue, 13 Dec 2022 04:56:10 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a19-20020ac25e73000000b00492e3a8366esm361281lfr.9.2022.12.13.04.56.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 04:56:10 -0800 (PST)
+Message-ID: <39ff2174-6d04-ec21-b762-377ed28088cb@linaro.org>
+Date:   Tue, 13 Dec 2022 13:56:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1p54pH-002MoZ-89
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:32852
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, andersson@kernel.org
+References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+ <20221213123823.455731-4-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213123823.455731-4-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 5:16 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.83 release.
-> There are 123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.83-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 13/12/2022 13:38, Bhupesh Sharma wrote:
+> Add USB superspeed qmp phy node to dtsi.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
+>  1 file changed, 36 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index e4ce135264f3d..9c5c024919f92 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		usb_qmpphy: phy@1615000 {
+> +			compatible = "qcom,sm6115-qmp-usb3-phy";
+> +			reg = <0x01615000 0x200>;
+> +			#clock-cells = <1>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +			clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> +				 <&gcc GCC_AHB2PHY_USB_CLK>;
+> +			clock-names = "com_aux",
+> +				      "ref",
+> +				      "cfg_ahb";
+> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> +			reset-names = "phy", "phy_phy";
+> +			status = "disabled";
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hm, you add a disabled PHY which is used by existing controller. The
+controller is enabled in board DTS, but new PHY node isn't. Aren't you
+now breaking it?
 
-Tested-by: Ron Economos <re@w6rz.net>
+> +
+> +			usb_ssphy: phy@1615200 {
+> +				reg = <0x01615200 0x200>,
+> +				      <0x01615400 0x200>,
+> +				      <0x01615c00 0x400>,
+> +				      <0x01615600 0x200>,
+> +				      <0x01615800 0x200>,
+> +				      <0x01615a00 0x100>;
+> +				#phy-cells = <0>;
+> +				#clock-cells = <1>;
+> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +				clock-names = "pipe0";
+> +				clock-output-names = "usb3_phy_pipe_clk_src";
+> +			};
+> +		};
+> +
+> +
+
+Just one blank line.
+
+>  		qfprom@1b40000 {
+>  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+>  			reg = <0x01b40000 0x7000>;
+> @@ -1023,8 +1057,8 @@ usb_dwc3: usb@4e00000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x04e00000 0xcd00>;
+>  				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+> -				phys = <&usb_hsphy>;
+> -				phy-names = "usb2-phy";
+> +				phys = <&usb_hsphy>, <&usb_ssphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+>  				iommus = <&apps_smmu 0x120 0x0>;
+>  				snps,dis_u2_susphy_quirk;
+>  				snps,dis_enblslpm_quirk;
+
+Best regards,
+Krzysztof
 
