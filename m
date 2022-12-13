@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08C064BB4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC4A64BB5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbiLMRpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S234987AbiLMRsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbiLMRp3 (ORCPT
+        with ESMTP id S236363AbiLMRsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:45:29 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA743205F5;
-        Tue, 13 Dec 2022 09:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=z0omR0ISWAA4du1XKL80E5Cf5YbDXbqPmELEAXHKvQo=; b=oEeJCQRTr3YsEUk4WlvGuWYrWO
-        MmgYaL2cPSShnoGVDBLrFUmnaAJapVRvgMNLCrsoAysmkulQQV4JNQduZVticVd/l67BlfPCFan9k
-        f1+BrhK5ZSCAnpthmveiFJ98zTsYarYTTx0k/YplqYLnItSSIKOaEDd8YVlNZYwaj3svQY+v4oWSD
-        U7NRAB78y4u6BCMR4ymIphcrEeh8QShAKSOyxoCfl7Ossfcyr0FzXNe4kjTXAep8YvaEV1g7MJaDg
-        riGz3On3drqZLxqx99C5PN6peFFhyj0WB08lrEgaWCAZC0CoH6w4f/xDLKcHvhVD8/Y4g4pEAnYPT
-        669iiaiA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35696)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p59LJ-0007QC-0d; Tue, 13 Dec 2022 17:45:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p59LH-0006d0-Vw; Tue, 13 Dec 2022 17:45:23 +0000
-Date:   Tue, 13 Dec 2022 17:45:23 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     "Seija K." <doremylover123@gmail.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] arch: change variable types to match those of what is
- assigned to them
-Message-ID: <Y5i6M/9XEr0zvenj@shell.armlinux.org.uk>
-References: <CAA42iKx2f2LsAQ9C5rxnCTPhOB6n+L35Winc5WK1K2EySAjvXA@mail.gmail.com>
+        Tue, 13 Dec 2022 12:48:11 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DF462DD;
+        Tue, 13 Dec 2022 09:48:08 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5097E18839A2;
+        Tue, 13 Dec 2022 17:48:06 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 439F02500015;
+        Tue, 13 Dec 2022 17:48:06 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 3C8599EC0027; Tue, 13 Dec 2022 17:48:06 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id D160791201DF;
+        Tue, 13 Dec 2022 17:48:05 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 net-next 0/3] mv88e6xxx: Add MAB offload support
+Date:   Tue, 13 Dec 2022 18:46:47 +0100
+Message-Id: <20221213174650.670767-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA42iKx2f2LsAQ9C5rxnCTPhOB6n+L35Winc5WK1K2EySAjvXA@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:35:35PM -0500, Seija K. wrote:
-> There are many places where "int len = strlen(foo);" is written, just
-> for len to be passed as a parameter of size_t. This causes truncation
-> and then expansion back from int to size_t. Not to mention this is
-> poor logic and needless truncations can add extra unneeded
-> instructions.
-> 
-> This patch aims to fix the worst offenders.
+This patchset adds MAB [1] offload support in mv88e6xxx.
 
-I suggested to test _not_ on the mailing lists, because it adds
-unnecessary noise - and remember that your email needlessly gets
-sent to thousands of recipients.
+Patch #1: Correct default return value for mv88e6xxx_port_bridge_flags.
 
-Yet again, the patch is mangled, but is better than the last one.
+Patch #2: Change chip lock handling in ATU interrupt handler.
+
+Patch #3: The MAB implementation for mv88e6xxx.
+
+LOG:
+        V2:     -FID reading patch already applied, so dropped here. [1]
+                -Patch #2 here as separate patch instead of part of MAB
+                 implementation patch.
+                -Check if fid is MV88E6XXX_FID_STANDALONE, and not if
+                 fid is zero, as that is the correct check. Do not
+                 report an error.
+
+[1] https://git.kernel.org/netdev/net-next/c/4bf24ad09bc0
+
+Hans J. Schultz (3):
+  net: dsa: mv88e6xxx: change default return of
+    mv88e6xxx_port_bridge_flags
+  net: dsa: mv88e6xxx: disable hold of chip lock for handling
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
+
+ drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
+ drivers/net/dsa/mv88e6xxx/chip.c        | 20 +++---
+ drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 22 +++++--
+ drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
+ 6 files changed, 147 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+
