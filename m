@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1ABF64AFBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1784A64AFC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbiLMGSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S234424AbiLMGUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbiLMGSQ (ORCPT
+        with ESMTP id S233965AbiLMGUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:18:16 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76701CFEE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:18:15 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so2445983pjs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:18:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iTFwDLlgOeHNI6Dm6jsm1vXO5FMUxek2Gk3N4ANJmq0=;
-        b=L7TybuH5LCvauKz7RjNOVfsdBWSD+n0aqdrISEaq2OHQfkDU9FKrTF8LZcCDdD21ff
-         7gypu6ZBfxRWGxy93IrFWhnnkdFkMhtkhlP+ThDrDhUyvSmL4bJ72VoxqY/y4tFcZalz
-         LH1eV5OaG0EzHxfHQIxEmkskjAQ0pv6eNmBlWfMfU9W1SArcQC3szuAi9JoND4OCOlWk
-         gv8H6aumST9gVWpB6QlAIpQbr9JzqvKmwfT3TqFpAjj/JRZSCzhnHj+C6NObq4m+D3zM
-         72r6PdB0AInVk0rsLcPhr9tthOCBGTUvXQRnIwhyk5CQn0Ez7a3r2e92ytRu1yzAKmOB
-         AHMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iTFwDLlgOeHNI6Dm6jsm1vXO5FMUxek2Gk3N4ANJmq0=;
-        b=j8Qm7hM3l6wuX46ZGR9XAlTbPQRSw3CnufuiUsbi01FLNu/71s4+5pZ+i57HaSjpYh
-         zphO01TxVOKZrIaJzhD4d2JTzYpc0RLvbXo4k9oEl0cuMQ54jkq7JGWkyMWdsHR/oCmD
-         6yaQWdaMfxLQQnx51Z6vz6fRMFcK3ZI+0G01CsY3rr+vftSb7US4sfd90kMREJsdT3RF
-         cMpMI3RLNYZotw8ec9DZqiGOA/MmZdcGcejV/AUF06604JvUPadkFLZm6AHSrGlWj1Z3
-         9wFHCeZA/xROzxpvHbJxkZrO+d8ZMqWRdsoc44jYNzEbGvzbMKL53F3woM6/EwmpJCmC
-         1FsA==
-X-Gm-Message-State: ANoB5pmPoWjcyH0bFW25Aai0pdDZs24aOtETj7w9ty5C43untTIR88c0
-        IDCLS+1AHYSahnu6hVPcSCjysA==
-X-Google-Smtp-Source: AA0mqf6QQtTaJV0DxtM+FDl7C4MFq1SNb6ynvXzoEP/xJIaw5VGSi0FaAUA8wDa6ThumgMSNngqUBA==
-X-Received: by 2002:a17:902:d509:b0:189:b0fe:d70f with SMTP id b9-20020a170902d50900b00189b0fed70fmr24668449plg.60.1670912295171;
-        Mon, 12 Dec 2022 22:18:15 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id jj12-20020a170903048c00b0018996404dd5sm7500941plb.109.2022.12.12.22.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 22:18:14 -0800 (PST)
-In-Reply-To: <20221130023515.20217-1-palmer@rivosinc.com>
-References: <20221130023515.20217-1-palmer@rivosinc.com>
-Subject: Re: [PATCH 1/2] RISC-V: Align the shadow stack
-Message-Id: <167091227726.18364.8127808951641932846.b4-ty@rivosinc.com>
-Date:   Mon, 12 Dec 2022 22:17:57 -0800
-MIME-Version: 1.0
+        Tue, 13 Dec 2022 01:20:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED8D1CB34
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:20:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED2E561314
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31FA7C433F0;
+        Tue, 13 Dec 2022 06:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670912418;
+        bh=lXO8/1CnS/fPdHOgjcDQhLRQhUXmhy2+rqnlrKJDH8s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DyqzVKfskC3sGktrinycjG3OGMb0LUcoGXB2/cNUCD4nUNO7G7Q9gcupYF4d23uGa
+         QzMSUthLyQGnmvHQmpvbV8YJTiRT1CJiiTu1IWnpbGApejoL7jnAxrCzK5cvlQ7QkR
+         mvN8bwitXb64Z8H+VZKnAhBsI/ul3W8+HfNvx6yu8tbRfJdX4S267+axJkR22qVD+s
+         sxr7O7o3RVkVnlT+T2Dkcz1DSfI2tXE9jgVg8RdMiZMMXeKrMvCUBJHSR7d7Pfm/mE
+         32C6/tV1kFdD9sLAuM0JahCo5mPrye+WPRxvYvV2sNBOjaA2c9H7BpO1afmZubmuyw
+         pO6U3lTupfBqw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15B13C00445;
+        Tue, 13 Dec 2022 06:20:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>, jszhang@kernel.org,
-        linux-riscv@lists.infradead.org, guoren@kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] RISC-V: Align the shadow stack
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167091241808.24276.8153329766826159166.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Dec 2022 06:20:18 +0000
+References: <20221130023515.20217-1-palmer@rivosinc.com>
+In-Reply-To: <20221130023515.20217-1-palmer@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, jszhang@kernel.org,
+        guoren@kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 29 Nov 2022 18:35:14 -0800, Palmer Dabbelt wrote:
+Hello:
+
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Tue, 29 Nov 2022 18:35:14 -0800 you wrote:
 > The standard RISC-V ABIs all require 16-byte stack alignment.  We're
 > only calling that one function on the shadow stack so I doubt it'd
 > result in a real issue, but might as well keep this lined up.
 > 
+> Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 > 
+> [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [1/2] RISC-V: Align the shadow stack
+    https://git.kernel.org/riscv/c/b003b3b77d65
+  - [2/2] RISC-V: Add some comments about the shadow and overflow stacks
+    https://git.kernel.org/riscv/c/de57ecc47610
 
-[1/2] RISC-V: Align the shadow stack
-      https://git.kernel.org/palmer/c/c3ec1e8964fb
-[2/2] RISC-V: Add some comments about the shadow and overflow stacks
-      https://git.kernel.org/palmer/c/de57ecc47610
-
-Best regards,
+You are awesome, thank you!
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
