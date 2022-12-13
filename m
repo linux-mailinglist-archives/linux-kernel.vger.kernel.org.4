@@ -2,81 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F358264BD12
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7532464BD16
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbiLMTR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
+        id S236605AbiLMTTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236872AbiLMTRf (ORCPT
+        with ESMTP id S236727AbiLMTSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:17:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68445120A8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:17:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E767AB815B1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B4CC433EF;
-        Tue, 13 Dec 2022 19:17:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670959050;
-        bh=oQXZwLpEHai9jIJPJXjlwzNaTMDa9dkWWo0SoGbc+jw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c3hwuUoTS1nYS74nAYE15G6ufa1d8mbLQGLmD0fIG3cSe19dTDwanL2uGifbWSDQA
-         6Dnn+NMMr4QtV4gse2Jsjb0y5gPXG3ixDuEEBCSXAlIlkq2ni+KPgKGGlBle2vCrNc
-         7ZKlPNkCnsV5CojmO7mSa61aOiNgpgbYd6oi8TPrFYZv8Hh7+iAJtpaSyRTq2yDU3P
-         kl1vtvkeXvL5cAjPARciDVEWFfFyXHWB4SFt4HAX9zYYXMV+x7zzN/UvtifQTs4ami
-         uHqdk8UNPxzVZ6g+YRFjyXoGAmCBhW/Hz2wlV5WL7NDcT2di2SfNGPtpvtj5ge/yzu
-         +EKgtvV0EudxQ==
-Date:   Tue, 13 Dec 2022 11:17:28 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        Tue, 13 Dec 2022 14:18:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60FE22510
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:18:12 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p5An1-00046O-Uz; Tue, 13 Dec 2022 20:18:08 +0100
+Received: from pengutronix.de (hardanger.fritz.box [IPv6:2a03:f580:87bc:d400:154c:16df:813d:4fb3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7131713E196;
+        Tue, 13 Dec 2022 19:18:07 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 20:18:07 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] f2fs: add support for counting time of submit discard
- cmd
-Message-ID: <Y5jPyEiAtDPx7VSI@google.com>
-References: <0cc89bf7-ea7c-d6e9-5ba9-548181de4c82@kernel.org>
- <20221213122121.18685-1-frank.li@vivo.com>
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221213191807.kdpfhh2eo5ujtqgq@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+ <20221201101220.r63fvussavailwh5@blmsp>
+ <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
+ <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+ <20221213171946.ejrb2glgo77jueff@blmsp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="73dyuhnoq6p7v3ny"
 Content-Disposition: inline
-In-Reply-To: <20221213122121.18685-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221213171946.ejrb2glgo77jueff@blmsp>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13, Yangtao Li wrote:
-> Hi Jaegeuk,
-> 
-> >>> Again, w'd better to consider this functionality only when DEBUG_FS 
-> >>> is enabled.
-> >> 
-> >> BTW, why can't we use iostat to get the discard latencies?
-> > 
-> > Agreed.
-> 
-> Let me spend some time on this. So, I guess this patch can't catch up with the merge window.
-> And I still have some patches that have not been picked, can you take a look, hope they can
-> catch up with the window.
-> 
-> How long is the 6.2 merge window left and when will you send the f2fs 6.2 pull request?
 
-I cut off the patches for this merge window. Please consider next release.
-BTW, could you please send a patch set instead of random posts? It's quite hard
-to find which one was merged or not.
+--73dyuhnoq6p7v3ny
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+On 13.12.2022 18:19:46, Markus Schneider-Pargmann wrote:
+> Hi Marc,
+>=20
+> On Thu, Dec 01, 2022 at 05:59:53PM +0100, Markus Schneider-Pargmann wrote:
+> > On Thu, Dec 01, 2022 at 12:00:33PM +0100, Marc Kleine-Budde wrote:
+> > > On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
+> > > > > > For the upcoming receive side patch I already added a hrtimer. =
+I may try
+> > > > > > to use the same timer for both directions as it is going to do =
+the exact
+> > > > > > same thing in both cases (call the interrupt routine). Of cours=
+e that
+> > > > > > depends on the details of the coalescing support. Any objection=
+s on
+> > > > > > that?
+> > > > >=20
+> > > > > For the mcp251xfd I implemented the RX and TX coalescing independ=
+ent of
+> > > > > each other and made it configurable via ethtool's IRQ coalescing
+> > > > > options.
+> > > > >=20
+> > > > > The hardware doesn't support any timeouts and only FIFO not empty=
+, FIFO
+> > > > > half full and FIFO full IRQs and the on chip RAM for mailboxes is=
+ rather
+> > > > > limited. I think the mcan core has the same limitations.
+> > > >=20
+> > > > Yes and no, the mcan core provides watermark levels so it has more
+> > > > options, but there is no hardware timer as well (at least I didn't =
+see
+> > > > anything usable).
+> > >=20
+> > > Are there any limitations to the water mark level?
+> >=20
+> > Anything specific? I can't really see any limitation. You can set the
+> > watermark between 1 and 32. I guess we could also always use it instead
+> > of the new-element interrupt, but I haven't tried that yet. That may
+> > simplify the code.
+>=20
+> Just a quick comment here after trying this, I decided against it.
+> - I can't modify the watermark levels once the chip is active.
+> - Using interrupt (un)masking I can change the behavior for tx and rx
+>   with a single register write instead of two to the two fifo
+>   configuration registers.
 
-> 
-> Thx,
-> Yangtao
+Makes sense.
+
+> You will see this in the second part of the series then.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--73dyuhnoq6p7v3ny
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYz+wACgkQrX5LkNig
+0101Tgf/Q0VDS3beXweKnmW9HqfmcKbFGCg8iHZ7p5AO5PQSX0aRM2m+73ZkzSON
+HbRst8mGO6Q3BQ0yZiz500wCK8jyHeoQEmKHneLwYvc/e1yJO9KW2Zh61+mYwTxr
+yp7SF7Uw5iaoQY70w5iIukCuY6lHp+zlQuNsxLSTUvgx1Om89Ub2cMUjXVg1YxSo
+2NoPjFRcibDoa+9OzEu3duo2uHV3cnS9MTyhqHhF8uOimuRKXxihVq3YT0YAs9Ef
+3ils96dmIAg1VB2gnvGm2nitlgg7+Vsqw8QyO6R730y5hwhei9eENb7JRTHp1JU+
+QzaRhlwVsQtPzALvmzCNvkURTCu4qA==
+=JtNz
+-----END PGP SIGNATURE-----
+
+--73dyuhnoq6p7v3ny--
