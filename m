@@ -2,147 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EF264BDA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A431364BDAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236696AbiLMTzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:55:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S236708AbiLMTz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236735AbiLMTzL (ORCPT
+        with ESMTP id S236595AbiLMTzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:55:11 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115B626572;
-        Tue, 13 Dec 2022 11:55:10 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j4so6823130lfk.0;
-        Tue, 13 Dec 2022 11:55:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nk3UifPWZ8X9jtpCKSxbryHT9Gexr5oq8yB6NwibN9U=;
-        b=kemGwEJvt2zd6KBzrqEHTXqhqYMo0suffwvPbd2M1aN+H95ddC4bOnIAsVOr3cMo8o
-         yWIp2zZ+ho46O0SrFNgYOz0Ln2mMlz6IXIDUiRgqPD4NgRn6CgHflkgfQLSPgBmdkJvI
-         fNEejwpFG6MzxN9pXoXpfDZdBDHESaloM0SWssnhRRbrFhPx9A+WlUC4pxD49e7JJ1lY
-         WrSCCsapw28AlaYeM+ut2dGp7GMbtcozMVpVY4wZW+6xFxtiCgOyWbbGd8EW/Fjb1RK2
-         zA0fmeksK7R5yFVrc81xpO+LuGvsTRT0a3v5R3a3xsC4S4RGFarf5p8HN0ibI6xHEWD3
-         Kz9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nk3UifPWZ8X9jtpCKSxbryHT9Gexr5oq8yB6NwibN9U=;
-        b=GnwSmT0ZKQSNheMxf49qZhC68uUr00UUeMokTdLTbWIFeCJliBfqCJ9J8DY8haiZQk
-         v7qDoEiDNvOVG+4O54WOGlzuzrA5csJHIxbZfd4iKmGv5+NoHwUE/fYmxRsMJvmLra6J
-         8arhsNlHm7x6RXFXwuV9h95LalDfLElQ4Vv6l21vWPKrRfJjv/la2RzhzjRCh3gDo0/d
-         m9z5VW9iU7ebmiCpC2zJJTD0cqn4BsHUcrW7Yava5MNWHDc5PSTNchztXYO0JLLhA+z5
-         y/pwajK71XRdExys3u6hCGHGDdyU4+hKq5Wh/G0Ek/VPS/AmNXxynu2RJQWlWodci+0k
-         PZwQ==
-X-Gm-Message-State: ANoB5pkiv/V3UgXXL2n3Z926DtgJvqyuBjhSVtU9r6NYgL1mujtZpZ9m
-        ymzlBCVjQpPQZAfxfZNIiui3C1OwmyVPsQ/T3w==
-X-Google-Smtp-Source: AA0mqf79C7AC3F6i3PzYfN/nJFEFP2hYsBNPvmmImhudch/GOumKMTpC2rBPdTzoRO8xQ6CvE/fdFQaYdUYQgmJPjnI=
-X-Received: by 2002:a05:6512:238c:b0:4b5:87b5:75bf with SMTP id
- c12-20020a056512238c00b004b587b575bfmr4503074lfv.493.1670961308268; Tue, 13
- Dec 2022 11:55:08 -0800 (PST)
+        Tue, 13 Dec 2022 14:55:55 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071221A39C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:55:51 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDJWxL1003226;
+        Tue, 13 Dec 2022 19:55:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=Nz+oMYUXNSwyCA0OyESTudg6sgnwGqY9qJUO8ezl8Nw=;
+ b=ZPWOCOilWr/t9aVbJfGz6uXNjRx9UHG2tCS9tKpnlRDmRaxwC9nxrMr9A5SS09uzpj1X
+ JhTWSJvq1FIbhbCfGNxojsK6UuMFnwRC+26qJJKXeDL2nn5e95KQzqDYOVwhbd0CAYf0
+ 1PfjXKQlkc4DmhwAYVZk1LQlrrLbIckQco+VEUrEzzZXJeK+5KPkswUamGPJyEgZCydI
+ Z5Rlf0G3C/URzJfnP3ZUTI1nYd5awKSC3WClCUe6XoTVgGgrsCpEJRV4/ZOGxeVTdd1t
+ ZcfOFxTeNWLMegZ74AY6zLGcY/k5q3rXXSuuDTgILvn8qMlQ2iVeDaIXpI52YtsS/W82 tw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn9regx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 19:55:46 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BDJXqR6005073;
+        Tue, 13 Dec 2022 19:55:46 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3meyn9regp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 19:55:46 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDEIv6N030674;
+        Tue, 13 Dec 2022 19:55:44 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3mchr5uc1t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 19:55:44 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BDJtfxp45154804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Dec 2022 19:55:41 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C719F20049;
+        Tue, 13 Dec 2022 19:55:41 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAB7220043;
+        Tue, 13 Dec 2022 19:55:39 +0000 (GMT)
+Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.94.137])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 13 Dec 2022 19:55:39 +0000 (GMT)
+Date:   Wed, 14 Dec 2022 01:25:36 +0530
+From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+To:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH] staging: vme_user: Add spaces around "<<"
+Message-ID: <Y5jYuKfm9d59h6bd@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
 MIME-Version: 1.0
-References: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
- <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com>
-In-Reply-To: <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com>
-From:   "Seija K." <doremylover123@gmail.com>
-Date:   Tue, 13 Dec 2022 14:54:57 -0500
-Message-ID: <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
-Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
- controller's ring buffer
-To:     Daniele Palmas <dnlplm@gmail.com>
-Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QOYFX_owzdf7nkxvyQ0tO-mlaAu_4mnM
+X-Proofpoint-ORIG-GUID: 3--nR4D5iiyuJWz4qmn2BRjZkrGbVidw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0
+ phishscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212130171
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, I did.
+Add spaces around the "<<" in adherence to the Linux kernel coding-style.
+The issues were reported by checkpatch.pl.
 
-On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
->
-> Hello Seija,
->
-> Il giorno mar 13 dic 2022 alle ore 18:44 Seija K.
-> <doremylover123@gmail.com> ha scritto:
-> >
-> > When a packet larger than MTU arrives in Linux from the modem, it is
-> > discarded with -EOVERFLOW error (Babble error).
-> >
-> > This is seen on USB3.0 and USB2.0 buses.
-> >
-> > This is because the MRU (Max Receive Size) is not a separate entity
-> > from the MTU (Max Transmit Size), and the received packets can be
-> > larger than those transmitted.
-> >
-> > Following the babble error, there was an endless supply of zero-length
-> > URBs that were rejected with -EPROTO (increasing the rx input error
-> > counter each time).
-> >
-> > This is only seen on USB3.0. These continue to come ad infinitum until
-> > the modem is shut down.
-> >
-> > There appears to be a bug in the core USB handling code in Linux that
-> > doesn't deal with network MTUs smaller than 1500 bytes well.
-> >
-> > By default, the dev->hard_mtu (the real MTU) is in lockstep with
-> > dev->rx_urb_size (essentially an MRU), and the latter is causing
-> > trouble.
-> >
-> > This has nothing to do with the modems; the issue can be reproduced by
-> > getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
-> > with size greater than 1406.
-> >
-> > Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-> >
-> > Co-Authored-By: TarAldarion <gildeap@tcd.ie>
-> > ---
-> > drivers/net/usb/qmi_wwan.c | 7 +++++++
-> > 1 file changed, 7 insertions(+)
-> >
-> > diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> > index 554d4e2a84a4..39db53a74b5a 100644
-> > --- a/drivers/net/usb/qmi_wwan.c
-> > +++ b/drivers/net/usb/qmi_wwan.c
-> > @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
-> > struct usb_interface *intf)
-> > }
-> > dev->net->netdev_ops = &qmi_wwan_netdev_ops;
-> > dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
-> > + /* LTE Networks don't always respect their own MTU on the receiving side;
-> > + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
-> > + * far-end networks. Make the receive buffer large enough to accommodate
-> > + * them, and add four bytes so MTU does not equal MRU on network
-> > + * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
-> > + */
-> > + dev->rx_urb_size = ETH_DATA_LEN + 4;
->
-> Did you test this change with QMAP?
->
-> To support qmap dl aggregated blocks qmi_wwan relies on the
-> usbnet_change_mtu behavior of changing the rx_urb_size.
->
-> Thanks,
-> Daniele
->
-> > err:
-> > return status;
-> > }
-> > --
-> > 2.38.2
+Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+---
+ drivers/staging/vme_user/vme.h | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
+index 98da8d039d60..a74724457d29 100644
+--- a/drivers/staging/vme_user/vme.h
++++ b/drivers/staging/vme_user/vme.h
+@@ -54,20 +54,20 @@ enum vme_resource_type {
+ #define VME_R_ROBIN_MODE	0x1
+ #define VME_PRIORITY_MODE	0x2
+ 
+-#define VME_DMA_PATTERN			(1<<0)
+-#define VME_DMA_PCI			(1<<1)
+-#define VME_DMA_VME			(1<<2)
+-
+-#define VME_DMA_PATTERN_BYTE		(1<<0)
+-#define VME_DMA_PATTERN_WORD		(1<<1)
+-#define VME_DMA_PATTERN_INCREMENT	(1<<2)
+-
+-#define VME_DMA_VME_TO_MEM		(1<<0)
+-#define VME_DMA_MEM_TO_VME		(1<<1)
+-#define VME_DMA_VME_TO_VME		(1<<2)
+-#define VME_DMA_MEM_TO_MEM		(1<<3)
+-#define VME_DMA_PATTERN_TO_VME		(1<<4)
+-#define VME_DMA_PATTERN_TO_MEM		(1<<5)
++#define VME_DMA_PATTERN			(1 << 0)
++#define VME_DMA_PCI			(1 << 1)
++#define VME_DMA_VME			(1 << 2)
++
++#define VME_DMA_PATTERN_BYTE		(1 << 0)
++#define VME_DMA_PATTERN_WORD		(1 << 1)
++#define VME_DMA_PATTERN_INCREMENT	(1 << 2)
++
++#define VME_DMA_VME_TO_MEM		(1 << 0)
++#define VME_DMA_MEM_TO_VME		(1 << 1)
++#define VME_DMA_VME_TO_VME		(1 << 2)
++#define VME_DMA_MEM_TO_MEM		(1 << 3)
++#define VME_DMA_PATTERN_TO_VME		(1 << 4)
++#define VME_DMA_PATTERN_TO_MEM		(1 << 5)
+ 
+ struct vme_dma_attr {
+ 	u32 type;
+-- 
+2.31.1
+
