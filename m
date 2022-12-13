@@ -2,176 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A73864B042
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773CF64B050
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbiLMHQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 02:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S234550AbiLMHTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 02:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiLMHQk (ORCPT
+        with ESMTP id S233753AbiLMHTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 02:16:40 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9F16489
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:16:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BbKOaiZp1OHHYGDhwA8RvZNwi7WclsuS23BoZGgYQJ4uK8o8rXlL+9b8z4SQ7R1hLZVf+o9As9BVNEmnaRwnNpGruBEjTTXkehXFsnhJlylGcwOTHaSVEmeiZVr8g+MrOmPYA0O8yAvU5Wmm5sq+RegfH6ubxq1oZkZk3opZFtpIQiZ5zFZA+pnNY8W3UHjwPTD3gdx9ErTz16MRcA4ksGy7lt46ID4NCKuJpKJK15kr0d7WmNlhwowLk0fj/zZTDpehyZd/8k0wJIsxvAhQmG0BR06w5pnZ6oK1f7RmS08veLi12Ch5gVTmY97uH40WLRCEC0Aylx/9fkxNaVG9yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5UTrk22fcqRCRP2DO8efONbvSqECO9AEARhvPb2xNEE=;
- b=h8uBmO9PVmJkc0zGAa0Mm6Kg6FRKK4L6Kv1bm+ULypSRF3qrFpHlDZIw5onRk6p2v57rmlMjXfsHL3ccwYZxNMOSXB89fRZaiZxTUq4UM7HGvi6RWevQI0YdX0zVlOv3hh+2cfJEonHce2qMz+TC1PEXZNBG6yja9Q49HmHsaUnzNPOhYdWRPjm8nwJkAztPPfTa62jzUI4kEVlLcfveDLjh6GBpBfZA79+T2IMddSwNGD7YN4651P5TTWNoftO7zODU3F/8AdTt9F9FSEEe5MFNdq9tTO5VBoL18a6mwaCwmswSNVUhPMLI9GGvMAvdPdymqUoflsAK4ID/bgfUOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5UTrk22fcqRCRP2DO8efONbvSqECO9AEARhvPb2xNEE=;
- b=vlHz6tGFgfyLJxeL1shQyUBNspFr5Vy+/vGck6p85PGN39Qjems6AyxcUf//o6Jb4CH0hjMb2AK2tHJIL7fglMrMeL9qrIS+iWPBQUZcAGB6Ea+Dm2NIuOG5xn9RnUtTlZBLSp5AUU7z9dNVmDEMFLjh+b27mIUeOm7gAsK0SXE=
-Received: from BLAPR05CA0008.namprd05.prod.outlook.com (2603:10b6:208:36e::11)
- by IA1PR12MB7759.namprd12.prod.outlook.com (2603:10b6:208:420::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
- 2022 07:16:37 +0000
-Received: from BL02EPF0000C409.namprd05.prod.outlook.com
- (2603:10b6:208:36e:cafe::cf) by BLAPR05CA0008.outlook.office365.com
- (2603:10b6:208:36e::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.6 via Frontend
- Transport; Tue, 13 Dec 2022 07:16:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL02EPF0000C409.mail.protection.outlook.com (10.167.241.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5924.9 via Frontend Transport; Tue, 13 Dec 2022 07:16:36 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 13 Dec
- 2022 01:16:36 -0600
-Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Tue, 13 Dec 2022 01:16:30 -0600
-From:   V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
-        <Sunil-kumar.Dommati@amd.com>, <venkataprasad.potturu@amd.com>,
-        <ssabakar@amd.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        "Bard Liao" <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: SOF: amd: Enable cache for AMD Rembrandt platform
-Date:   Tue, 13 Dec 2022 12:46:37 +0530
-Message-ID: <20221213071640.3038853-1-Vsujithkumar.Reddy@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 13 Dec 2022 02:19:05 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6254610050;
+        Mon, 12 Dec 2022 23:19:04 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BD29wAh027003;
+        Tue, 13 Dec 2022 07:18:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6qGTJOWPaIZECVkkJTVgj51Er97rmWLBc69TPGqYejk=;
+ b=gxNgwfUlIOP8DEtkxRVZPF/uZ0ugV/KpK/E0lchRl9l3xqg/j1ak2/qysHDqZfbVVekM
+ x3MesMUUrVyss5xEcEP50EU780FgAnPleT566GFjUNHe2Mp9awId8+c5X+omup2+0X1d
+ Nhy+nkveDuVKLYG3ir5cjr7llIVyYtdvSwA+32jWYoc9iI4Hp79BMv3c8CVCZyjEwiAM
+ CByqeo6amzd4JQUi4lGpS8eKO9mqCO5rAgkng/W0bIDkn9Y6PRIsEemOKzOV3wR26ZnW
+ dW/iwMbqzntU/RFLRwjj6qNPgjH5kl10Ffcq9225HtZW3VniSfcmGEZkfNqyuYptsa6I JQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3megc5rr8r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 07:18:59 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BD7IuBT017871
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 07:18:56 GMT
+Received: from [10.252.221.242] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 12 Dec
+ 2022 23:18:52 -0800
+Message-ID: <4891c42a-c320-4316-7eac-4e8d33bad5c0@quicinc.com>
+Date:   Tue, 13 Dec 2022 12:48:48 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C409:EE_|IA1PR12MB7759:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1cab2fce-c168-4378-2cc1-08dadcd9f8fb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Xv3DS4qcS7XsAwOKrCgMrpKUqSCU/YGUEr3Lhvpz7iHVGHdEkUCbOdHe8bZ0sZ0khuC2WAai3CI0WDk9VKqzo8LbYx20dtOAZ/VlLy+GkCBk2oZyyk0wnk37nFpkzRTbKd9cF4+QpaGW1RRbqUzTaRbSeDuG2Wxrj/lD9LQnwU3pSHZQ+rPhUuPyHc1fc5mO7opIY0KHU5br48G9rFnuM173oa/+PcAFD6sY0ajZJ9AVlAki5QgI+n47VcHnXdR/tL4Vu/JGEqZTa4coKNLMp9eq1KB3IJwut6B148X+E2V+6aj24urwUy9Mxu4F+7TyxsI9vuf+ZGRCg4yFBxsH4Gc2AExab2asCRUFQO4I3RRZ/8rF5cuMdIgXZ9VfE39ZW6TQa0s9+hFLi+i33RrRpaZTN0tpjn93Z7ZMWzEerTnqi/4qbmiqjfEKJ2DMqwl4bYPHgSBj2TAzbjD4TGdFReVdbKp+J34vm1jd3MUe81BTrtkdlzmbsKKQcacFJbN1Wq0/o2EJouTBs+fXWaUHQUyU96SE7+ckAf8aaPvCav+MXFSd4F3sggf4OsgTrQcews8UwheMAngFSAYtQO3tPN//CyeLcJbniM/cmdArZrYVL6bXvm1rmI74dGYFPQnLDUyFpWo9gsrYztylE4S8xa0Zn+jdmZKT38uWImG7pDMNqMtM1igW97F5trCo/n6TbMiXWuGNp4bEvoSh77a3Eb2SzTj1FIBFVLegjzgPjio=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(186003)(81166007)(8936002)(478600001)(26005)(82740400003)(83380400001)(70206006)(70586007)(356005)(36756003)(86362001)(4326008)(40460700003)(47076005)(2616005)(426003)(7696005)(41300700001)(1076003)(82310400005)(336012)(5660300002)(7416002)(110136005)(54906003)(2906002)(36860700001)(40480700001)(8676002)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 07:16:36.9102
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cab2fce-c168-4378-2cc1-08dadcd9f8fb
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C409.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7759
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
+ qup2_i2c18 nodes
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <johan+linaro@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ahalaney@redhat.com>, <echanude@redhat.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-4-bmasney@redhat.com>
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+In-Reply-To: <20221212182314.1902632-4-bmasney@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yWpnZGVNeUbZLRKI2FzrQHluWfZ32o11
+X-Proofpoint-GUID: yWpnZGVNeUbZLRKI2FzrQHluWfZ32o11
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-12_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212130066
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable DSP cache for ACP memory
 
-Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
----
- sound/soc/sof/amd/acp-dsp-offset.h | 4 ++++
- sound/soc/sof/amd/acp-loader.c     | 7 +++++++
- sound/soc/sof/amd/acp.h            | 2 ++
- 3 files changed, 13 insertions(+)
 
-diff --git a/sound/soc/sof/amd/acp-dsp-offset.h b/sound/soc/sof/amd/acp-dsp-offset.h
-index de5726251dc6..920155dee819 100644
---- a/sound/soc/sof/amd/acp-dsp-offset.h
-+++ b/sound/soc/sof/amd/acp-dsp-offset.h
-@@ -85,4 +85,8 @@
- 
- #define ACP_SCRATCH_REG_0			0x10000
- #define ACP6X_DSP_FUSION_RUNSTALL		0x0644
-+
-+/* Cache window registers */
-+#define ACP_DSP0_CACHE_OFFSET0			0x0420
-+#define ACP_DSP0_CACHE_SIZE0			0x0424
- #endif
-diff --git a/sound/soc/sof/amd/acp-loader.c b/sound/soc/sof/amd/acp-loader.c
-index 090c8b18c83c..a4bce5a3ae48 100644
---- a/sound/soc/sof/amd/acp-loader.c
-+++ b/sound/soc/sof/amd/acp-loader.c
-@@ -151,6 +151,7 @@ static void configure_pte_for_fw_loading(int type, int num_pages, struct acp_dev
- int acp_dsp_pre_fw_run(struct snd_sof_dev *sdev)
- {
- 	struct pci_dev *pci = to_pci_dev(sdev->dev);
-+	const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
- 	struct acp_dev_data *adata;
- 	unsigned int src_addr, size_fw;
- 	u32 page_count, dma_size;
-@@ -183,6 +184,12 @@ int acp_dsp_pre_fw_run(struct snd_sof_dev *sdev)
- 	if (ret < 0)
- 		dev_err(sdev->dev, "acp dma transfer status: %d\n", ret);
- 
-+	if (desc->rev > 3) {
-+		/* Cache Window enable */
-+		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_DSP0_CACHE_OFFSET0, desc->sram_pte_offset);
-+		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_DSP0_CACHE_SIZE0, SRAM1_SIZE | BIT(31));
-+	}
-+
- 	/* Free memory once DMA is complete */
- 	dma_size =  (PAGE_ALIGN(sdev->basefw.fw->size) >> PAGE_SHIFT) * ACP_PAGE_SIZE;
- 	dma_free_coherent(&pci->dev, dma_size, adata->bin_buf, adata->sha_dma_addr);
-diff --git a/sound/soc/sof/amd/acp.h b/sound/soc/sof/amd/acp.h
-index 09e16ef8afa0..4314094a97fd 100644
---- a/sound/soc/sof/amd/acp.h
-+++ b/sound/soc/sof/amd/acp.h
-@@ -72,6 +72,8 @@
- #define EXCEPT_MAX_HDR_SIZE			0x400
- #define AMD_STACK_DUMP_SIZE			32
- 
-+#define SRAM1_SIZE				0x13A000
-+
- enum clock_source {
- 	ACP_CLOCK_96M = 0,
- 	ACP_CLOCK_48M,
--- 
-2.25.1
+On 12/12/2022 11:53 PM, Brian Masney wrote:
+> Add the necessary nodes in order to get qup1_i2c15 and qup2_i2c18
+> functioning on the automotive board and exposed to userspace.
+> 
+> This work was derived from various patches that Qualcomm delivered
+> to Red Hat in a downstream kernel. This change was validated by using
+> i2c-tools 4.3.3 on CentOS Stream 9:
+> 
+> [root@localhost ~]# i2cdetect -l
+> i2c-15  i2c             Geni-I2C                                I2C adapter
+> i2c-18  i2c             Geni-I2C                                I2C adapter
+> 
+> [root@localhost ~]# i2cdetect -a -y 15
+> Warning: Can't use SMBus Quick Write command, will skip some addresses
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:
+> 10:
+> 20:
+> 30: -- -- -- -- -- -- -- --
+> 40:
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60:
+> 70:
+> 
+> Bus 18 has the same output. I validated that we get the same output on
+> the downstream kernel.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
+>   arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 46 +++++++++++++++++++++++
+>   1 file changed, 46 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> index d70859803fbd..6dc3f3ff8ece 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+> @@ -17,6 +17,8 @@ / {
+>   	compatible = "qcom,sa8540p-ride", "qcom,sa8540p";
+>   
+>   	aliases {
+> +		i2c15 = &qup1_i2c15;
+> +		i2c18 = &qup2_i2c18;
 
+I was listing out all the i2c devices to be enabled apart from above and 
+below are applicable for Qdrive3 as well:
+i2c0  980000
+i2c1  984000
+i2c12 0x00A90000
+
+-Shazad
+
+>   		serial0 = &qup2_uart17;
+>   	};
+>   
+> @@ -188,10 +190,28 @@ &pcie3a_phy {
+>   	status = "okay";
+>   };
+>   
+> +&qup1 {
+> +	status = "okay";
+> +};
+> +
+> +&qup1_i2c15 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&qup1_i2c15_default>;
+> +
+> +	status = "okay";
+> +};
+> +
+>   &qup2 {
+>   	status = "okay";
+>   };
+>   
+> +&qup2_i2c18 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&qup2_i2c18_default>;
+> +
+> +	status = "okay";
+> +};
+> +
+>   &qup2_uart17 {
+>   	compatible = "qcom,geni-debug-uart";
+>   	status = "okay";
+> @@ -313,4 +333,30 @@ wake-pins {
+>   			bias-pull-up;
+>   		};
+>   	};
+> +
+> +	qup1_i2c15_default: qup1-i2c15-state {
+> +		mux-pins {
+> +			pins = "gpio36", "gpio37";
+> +			function = "qup15";
+> +		};
+> +
+> +		config-pins {
+> +			pins = "gpio36", "gpio37";
+> +			drive-strength = <0x02>;
+> +			bias-pull-up;
+> +		};
+> +	};
+> +
+> +	qup2_i2c18_default: qup2-i2c18-state {
+> +		mux-pins {
+> +			pins = "gpio66", "gpio67";
+> +			function = "qup18";
+> +		};
+> +
+> +		config-pins {
+> +			pins = "gpio66", "gpio67";
+> +			drive-strength = <0x02>;
+> +			bias-pull-up;
+> +		};
+> +	};
+>   };
