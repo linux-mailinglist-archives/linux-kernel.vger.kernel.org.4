@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE9B64B533
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6153964B542
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235773AbiLMM3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S235291AbiLMMg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235698AbiLMM3U (ORCPT
+        with ESMTP id S235336AbiLMMgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:29:20 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F2C1F2CE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:29:19 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id f3so10317993pgc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:29:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PE+N1Gt7gGhT7n4RSqzdZOvLJC2LaUfbxIBsv2ZH22E=;
-        b=c0vjS0nWa0vtcHTHwwgvDJUpfJLA8wLcA+h4xzxkUaFFMu7alJOjtQOFHBtfipU2ro
-         lcC50Ke9qOuIC7bXqZsGxdNFgRJiAvn7SJwAHDoZHFB0+9ob5y5MWPnjXME2MPWBqtUe
-         br0mKI+1reVRTjp6rBFCa04joQZBwKYtnnEa0P0+kALh6PtsDVSigsTr8yzjhG00FMoX
-         5ICrfB9iLhfZdqDs25kzK2gnSz7VK4+jfMhSc99zZ0US/08IKupYykB5YN3ED03vsJWK
-         xSzWQTKXZN8DTt2FjXPWttv6E+waW+bIsajy0SFBAUJzg+H+5f+hAV7ap5l9bIGX7xxu
-         etqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PE+N1Gt7gGhT7n4RSqzdZOvLJC2LaUfbxIBsv2ZH22E=;
-        b=G6q0cruL4K49PWuoSPFxm+FMc9o4qfCaIDi4thF56loLiBlwcqZx4J2GfldUU2yd8F
-         Oxf237p2pNhf2EDT6aHD87Pu1R6xpJ/QmO/S8RU3U8aw5znWU8joLBEnn+GXODzzUwdp
-         FpT42OuQa+caoLYcr9s3cJd35hXhi2lHFHLzluvorvCWIx5SP555I60cO+xQ/Ykjlpng
-         wshay1ZecHhwubY0mL/eG9pSvDXPxfGFFydF0+7uL1bwt7+cA2rP1C19+7xIiCEoUwE+
-         gpMw6otFEeaVH5b4JlXy13LBCyIz3TRcocS+76Wp0UH78aWVYgJb90jJ20WYW25Ofk7L
-         OnYg==
-X-Gm-Message-State: ANoB5pkNqQ7Qr2HiB6hHOvE2h3i41bVmbah9QKTMr2rVWyrA/nARRItp
-        aKzWxNF+z+0k6v+cq3ovRcx1Tw==
-X-Google-Smtp-Source: AA0mqf42wIJlaGrjyscSyxfrsCX6wYLLGGWN2fZBuQgon8p4dxNSQ3PcWR2HLv9MPBgwK7o5KQZ2og==
-X-Received: by 2002:a62:e21a:0:b0:576:d2cc:1ad2 with SMTP id a26-20020a62e21a000000b00576d2cc1ad2mr20161699pfi.6.1670934559070;
-        Tue, 13 Dec 2022 04:29:19 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1c60:4bad:5c3:ab51:3d81:6264])
-        by smtp.gmail.com with ESMTPSA id y10-20020aa793ca000000b0057555d35f79sm7602468pff.101.2022.12.13.04.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 04:29:18 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     vkoul@kernel.org, linux-phy@lists.infradead.org
-Cc:     shawn.guo@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org
-Subject: [PATCH 3/3] phy: qcom-qmp-usb: Add Qualcomm SM6115 / SM4250 USB3 PHY support
-Date:   Tue, 13 Dec 2022 17:58:43 +0530
-Message-Id: <20221213122843.454845-4-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221213122843.454845-1-bhupesh.sharma@linaro.org>
-References: <20221213122843.454845-1-bhupesh.sharma@linaro.org>
+        Tue, 13 Dec 2022 07:36:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624C418B10
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:36:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7D3C614C6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B1AC433D2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670934983;
+        bh=0Xw+Dqf9EeRU735a3/tFqNdCp+AD7AJJJF6DkxVcHkA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=erPv/EQS8CdtXSVv5QdpauwXWq5Gd8wAPzPJ8T0Kp9UirIMcPwbzfsBe8YwvD5p3o
+         cLY6iH0wt4cDR80M0l05EDO8gyzJ1KnzS6wnqUQzx73KDyRvxDHDkk09OWvHEkBLy9
+         fOGuN2GYg9ffzXyM9gi4e6MahaHI3ApQcOuY7XHSTHnytrov9Rmtbc60XOPJcwUbov
+         PKDu6wbnfE6IlHa54SBhr5wjNQZY/1UHMUnOXb9vRfb2TuKRIaEFd06yW+SSnxx4b3
+         ZABZ87B17Kkr4u/7L3S+md5hdIfrORgPMHqz05ep2fkIg/kxylFtvVR+YXOSKCuXXV
+         MNd2otzoBjOSA==
+Received: by mail-lf1-f51.google.com with SMTP id bp15so4625222lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:36:23 -0800 (PST)
+X-Gm-Message-State: ANoB5pmy5BB1dCO7UxhOPpFIT925P9A5wQJB1ceQiPs2Meo4eVUWw96x
+        Pzt5TY6tCF8ZRsJYRvZ2lPPMU0+d/TziysMKFkQ=
+X-Google-Smtp-Source: AA0mqf5Rv7sK6jU2Bfo5hGdRVw8IW6AsCRcC1gxd4lb5J7HqVSXSGtZ4ePkevgylC/0l0DZIv+RmwcRQnFQYq7RjZ/Y=
+X-Received: by 2002:a19:6b19:0:b0:4a2:740b:5b02 with SMTP id
+ d25-20020a196b19000000b004a2740b5b02mr30598166lfa.122.1670934981185; Tue, 13
+ Dec 2022 04:36:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20221209112500.GA3116@willie-the-truck> <CAHk-=wj-8gKB5SG0w_M2fK0KYyhZbNzDZ1W9H5pmisWzJ0XJEw@mail.gmail.com>
+ <20221213121118.GB5719@willie-the-truck>
+In-Reply-To: <20221213121118.GB5719@willie-the-truck>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 13 Dec 2022 13:36:09 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
+Message-ID: <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
+Subject: Re: [GIT PULL] arm64 updates for 6.2
+To:     Will Deacon <will@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        maz@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +64,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable SM6115 / SM4250 USB3 PHY support by adding the
-qmp_phy_cfg data. Since this PHY is the same as the
-one used on QCM2290, reuse the QCM2290 qmp_phy_cfg data
-already available.
+l
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue, 13 Dec 2022 at 13:11, Will Deacon <will@kernel.org> wrote:
+>
+> Hi Linus,
+>
+> [+Ard]
+>
+> On Mon, Dec 12, 2022 at 10:05:07AM -0800, Linus Torvalds wrote:
+> > On Fri, Dec 9, 2022 at 3:25 AM Will Deacon <will@kernel.org> wrote:
+> > >
+> > > Dynamic SCS:
+> > >         * Support for dynamic shadow call stacks to allow switching at
+> > >           runtime between Clang's SCS implementation and the CPU's
+> > >           pointer authentication feature when it is supported (complete
+> > >           with scary DWARF parser!)
+> >
+> > I've pulled this thing, but this part makes me nervous. There's some
+> > bad history with debug information not being 100% reliable probably
+> > simply because it gets very little correctness testing.
+>
+> Hey, I did use the word "scary"! This is, at least, very easy to back
+> out (it's effectively an optimisation) if the DWARF info ends up being
+> too unreliable and causes issues in practice. We're also only looking
+> at .eh_frame here, which should hopefully get a lot more correctness
+> testing when compared to the .debug sections due to exception unwinding.
+>
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 7a847ffe46daf..8ede8a6ab5e02 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2622,6 +2622,9 @@ static const struct of_device_id qmp_usb_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sdx65-qmp-usb3-uni-phy",
- 		.data = &sdx65_usb3_uniphy_cfg,
-+	}, {
-+		.compatible = "qcom,sm6115-qmp-usb3-phy",
-+		.data = &qcm2290_usb3phy_cfg,
- 	}, {
- 		.compatible = "qcom,sm8150-qmp-usb3-phy",
- 		.data = &sm8150_usb3phy_cfg,
--- 
-2.38.1
+Indeed. And this is Clang 15+ at the moment, for precisely this reason.
 
+> > It might be worth thinking about at least verifying the information
+> > using something like objtool, so that you at least catch problem cases
+> > at *build* time rather than runtime.
+>
+> Checking that the DWARF data looks sensible at build time isn't a bad
+> idea, but see below as I think we can probably still produce a functional
+> kernel Image in this case.
+>
+> > For example, that whole
+> >
+> >     default:
+> >         pr_err("unhandled opcode: %02x in FDE frame %lx\n",
+> > opcode[-1], (uintptr_t)frame);
+> >         return -ENOEXEC;
+> >
+> > really makes me go "this should have been verified at build time, it's
+> > much too late to notice now that you don't understand the dwarf data".
+>
+> This isn't actually as bad as it looks -- the patching operation here
+> only kicks in on CPUs which do not implement the pointer authentication
+> instructions (i.e. where the CPU executes these as NOPs). Therefore, if
+> patching bails out half way due to the "unhandled opcode" above, we
+> should be ok, albeit missing some SCS coverage.
+
+Indeed.
+
+> I say "should" because
+> if we fail within a frame after patching in the SCS "push" but before
+> patching in the "pop", then we'd end up with a corrupt SCS pointer.
+>
+> Ard -- do you think we could tweak the patching so that we patch the push
+> and the pop together (e.g. by tracking the two locations on a per-frame
+> basis and postponing the text poking until just before we return from
+> scs_handle_fde_frame())?
+>
+
+The push and the pop are not necessarily balanced (there may be more
+than one pop for each push), and the opcode we look for
+(DW_CFA_negate_ra_state) may occur in places which are not actually a
+pop, so tracking these is not as straight-forward as this.
+
+What we could do is track the push and the first pop on a first pass,
+and if we don't encounter any unexpected opcodes, patch the push and
+do a second pass starting from the first pop. Or just simply run it
+twice and do no patching the first time around (the DWARF frames are
+not very big)
