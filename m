@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5B864C057
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD90664C059
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiLMXRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S236841AbiLMXRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbiLMXRE (ORCPT
+        with ESMTP id S235640AbiLMXRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:17:04 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015C7654B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670973424; x=1702509424;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h+DzqhlFrgg17qtACPb6XXF/U+neyYFLDo+kd4/I+o8=;
-  b=dbODmfnHf1jSaYXeGJH142u3T7dUj3O6+6khzRLGSO3Lefgx0NKPVkpJ
-   r/7bT3Rux/iSvukdHbFT4EtpYTQJj9Dy+0tdynZGywkJF9UPYbLAsnS0u
-   cFJ07IRJWFRiK2cbWaUTApX0XoMNU1vbnZgUIlOZHFShRCOfH1Z+OvaqG
-   NMzlww3FIBUl0lyP1ra6BXBpW2CE/uDiFdSi8jrofj0xjJzbjEBLnKDVQ
-   0DU8tzrLCDM9jkJPkiOP7DqeSl9VwNS3i3fyG0Q8A9sl5sSD2Egmz5zcA
-   kmkxUHPN8VPg4++wCMkyqZDKICIU3EnRmgcF869mON9PfGis6O6oKaO+x
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="316962534"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="316962534"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 15:17:03 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="773124263"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="773124263"
-Received: from snjones-mobl1.amr.corp.intel.com (HELO [10.212.218.27]) ([10.212.218.27])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 15:17:03 -0800
-Message-ID: <6eed73b1-adee-caf7-e02f-4d2b08f1aefe@intel.com>
-Date:   Tue, 13 Dec 2022 15:17:02 -0800
+        Tue, 13 Dec 2022 18:17:32 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FE164F1;
+        Tue, 13 Dec 2022 15:17:32 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDLniE2027653;
+        Tue, 13 Dec 2022 23:17:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=VLS6umlWEiAumMvWikmLxOElRoOqJhSWWdxzwzSWWN0=;
+ b=n635dJkg82/QElfbKXvBeJcsx+edmknl1sKtXVAMMFJAY/yMP2sjQTtQKkqkau7DMBqY
+ wzh1AMKyW7tIVGcCR1fQPtKYyRUw1WVwaav3036YtqKq3IbBs6wvE9ghN8+kzwHy8A4/
+ MdTKkx+nWUBDMVYktsi2g2t4VSs2c/VpjPr4qre5SPfD0ZgGdI6UhCc44ObIJapO91OZ
+ gBaDi1hEujnFTekh0bcCdsLnOFmBCsRT708m1eJvcCh/JLMDmsjRjHFn6Q6X1YibdkKI
+ 6LOfzRHZkwh6pqnHIIG9KHJEb4a/4LFY1Ef18w9TFLhx9UMT2qk19BewjWFWRsCGbJSc Hw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3meyfaggyu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 23:17:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BDNHPg1011233
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 23:17:25 GMT
+Received: from [10.111.167.12] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
+ 2022 15:17:23 -0800
+Message-ID: <9c5935f2-38ef-d187-585e-9797aa1b854f@quicinc.com>
+Date:   Tue, 13 Dec 2022 15:17:21 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/4] x86/tdx: Disable NOTIFY_ENABLES
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH -next] drm/msm/dpu: Fix some kernel-doc comments
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
- <20221209132524.20200-5-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221209132524.20200-5-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Yang Li <yang.lee@linux.alibaba.com>, <robdclark@gmail.com>
+CC:     <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
+        <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20221115014902.45240-1-yang.lee@linux.alibaba.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221115014902.45240-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: k9HQGMqfptHnzzEmDKDu43iNucbCRY18
+X-Proofpoint-GUID: k9HQGMqfptHnzzEmDKDu43iNucbCRY18
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 clxscore=1011 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212130200
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/22 05:25, Kirill A. Shutemov wrote:
-> == Background ==
-> 
-> There is a class of side-channel attacks against SGX enclaves called
-> "SGX Step"[1]. These attacks create lots of exceptions inside of
-> enclaves. Basically, run an in-enclave instruction, cause an exception.
-> Over and over.
-> 
-> There is a concern that a VMM could attack a TDX guest in the same way
-> by causing lots of #VE's. The TDX architecture includes new
-> countermeasures for these attacks. It basically counts the number of
-> exceptions and can send another *special* exception once the number of
-> VMM-induced #VE's hits a critical threshold[2].
-> 
-> == Problem ==
-> 
-> But, these special exceptions are independent of any action that the
-> guest takes. They can occur anywhere that the guest executes. This
-> includes sensitive areas like the entry code. The (non-paranoid) #VE
-> handler is incapable of handling exceptions in these areas.
-> 
-> == Solution ==
-> 
-> Fortunately, the special exceptions can be disabled by the guest via
-> write to NOTIFY_ENABLES TDCS field. NOTIFY_ENABLES is disabled by
-> default, but might be enabled by a bootloader, firmware or an earlier
-> kernel before the current kernel runs.
-> 
-> Disable NOTIFY_ENABLES feature explicitly and unconditionally. Any
-> NOTIFY_ENABLES-based #VE's that occur before this point will end up
-> in the early #VE exception handler and die due to unexpected exit
-> reason.
-> 
-> [1] https://github.com/jovanbulck/sgx-step
-> [2] https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html#safety-against-ve-in-kernel-code
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Reviewed-by: Dave Hansen <dave.hansen@intel.com>
+
+On 11/14/2022 5:49 PM, Yang Li wrote:
+> Make the description of @init to @p in dpu_encoder_phys_wb_init()
+> and remove @wb_roi in dpu_encoder_phys_wb_setup_fb() to clear the below
+> warnings:
+> 
+> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:139: warning: Excess function parameter 'wb_roi' description in 'dpu_encoder_phys_wb_setup_fb'
+> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:699: warning: Function parameter or member 'p' not described in 'dpu_encoder_phys_wb_init'
+> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:699: warning: Excess function parameter 'init' description in 'dpu_encoder_phys_wb_init'
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3067
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+
+Fixes: d7d0e73f7de3 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for 
+writeback")
+
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> index 7cbcef6efe17..62f6ff6abf41 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+> @@ -132,7 +132,6 @@ static void dpu_encoder_phys_wb_set_qos(struct dpu_encoder_phys *phys_enc)
+>    * dpu_encoder_phys_wb_setup_fb - setup output framebuffer
+>    * @phys_enc:	Pointer to physical encoder
+>    * @fb:		Pointer to output framebuffer
+> - * @wb_roi:	Pointer to output region of interest
+>    */
+>   static void dpu_encoder_phys_wb_setup_fb(struct dpu_encoder_phys *phys_enc,
+>   		struct drm_framebuffer *fb)
+> @@ -692,7 +691,7 @@ static void dpu_encoder_phys_wb_init_ops(struct dpu_encoder_phys_ops *ops)
+>   
+>   /**
+>    * dpu_encoder_phys_wb_init - initialize writeback encoder
+> - * @init:	Pointer to init info structure with initialization params
+> + * @p:	Pointer to init info structure with initialization params
+>    */
+>   struct dpu_encoder_phys *dpu_encoder_phys_wb_init(
+>   		struct dpu_enc_phys_init_params *p)
