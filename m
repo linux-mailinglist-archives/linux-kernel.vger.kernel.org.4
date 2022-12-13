@@ -2,185 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357F164B096
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4806364B09C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 08:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbiLMHtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 02:49:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S234709AbiLMHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 02:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiLMHtL (ORCPT
+        with ESMTP id S234689AbiLMHuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 02:49:11 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8000E13D01
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:49:10 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so2648926pje.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:49:10 -0800 (PST)
+        Tue, 13 Dec 2022 02:50:22 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088713F7F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:50:19 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id x11so2461359ljh.7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 23:50:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dl3Yao6mN2AiSPWnXX8BOx2+Ij0ONLiwggaARdAt/rY=;
-        b=BF6k7/wCZJJeVxACOt4nifXw3+9QOrchqEkwguMyLH9KMLyKBzoTjrJOHvJn6OgLKJ
-         B6qpK9Ui9Qomqp1FshqQPWe713zL2W3CbZ4e3iNV6mDsT8lzwwm33pwMNluRWMNv+63/
-         KcN6ZybzVkfi+Vj4164zGqEhyhYQdzUJn7df3ZS3uyqbHxQO+ix6+v2oQl1FLlYm61jq
-         QVHrjItXSh2K+Xpvh/LMFNjjElVXq119hLWpnRPYD2Kx8NzbqmOJpThq2wfnHfv/147X
-         jLKB7EdtKMtLd9B6/SCHmMskYvAP8IHxZj59dCtpSX53oJgfuGzHHUsvkuZM/MsH7LH1
-         EZWg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7iZB0Z1Q5CE+H3OL4aZrZbM8R0KsjYsEMH0TW8UzXLo=;
+        b=VPae7pDsz+OQHASONsyLL23oKLeCq2/hkZrhrJKVwBS2UrCgfjoPYWO7OR77Ps4zSI
+         RJMwGYp//01hUOVf74fsPbAabFJd4jy2gnmTjf0IYMRl88HUUjxHwDeif5XZijisqL09
+         TLPcDXJkJOdLSr3Eg0z2sjQgbRJxzwdyDhDKbhdE/2H33XA0+hYIOozldeP5SAFDgTSR
+         sPUYXDzigHShg8WF7ieOiUc3ZXcQaxlvI5NroJrQ8HVg9vHS0ZApd7W5gqRUR7V3rn/f
+         z2oAzHkU7KQwUg+ofy1tlhOwX8u3X2HZ3GC/A5S+HSpMQLUG2VmsEz8PQmiFFWn6J927
+         LZ0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dl3Yao6mN2AiSPWnXX8BOx2+Ij0ONLiwggaARdAt/rY=;
-        b=E34lc3aVaSwrkx2g6LkPgTUITnC7rTU6cZYrp0aZ5wsVHjJfYTYkNUCtZJxwfsXLzH
-         sgOB1weevmL45rJfLoLztNJYiRyKqdAYLofAN06T00CILTUoly7WeejkOBEnuXnLnsqH
-         W2hSApK+0TAHdPicHJj23fvZgTlBFWL3dQPvIsMz0k6p2RLRU2mD+A5Z7NELByNTHCQg
-         vGB8PKuazPXieDSWqSnYnLTIy3PN4abtb35OW+0Ocraa+7jIXVf7hAdgMoYLHe2/dhIV
-         XpiqZRojzMqm1IdUhErZaS3P2SEWr4WC2IasloomqSkSP3XRgC2xIMJOsKdI+bz9SUWO
-         OjCw==
-X-Gm-Message-State: ANoB5pkkQ7i4f8kRvNnyh2FlDb9pMQOGPDMnPETtnFEWNDckkovUYdyk
-        WeENTculxeiXTrQBe9WNQoEQGPXFp6AGFLDHNQ7mcA==
-X-Google-Smtp-Source: AA0mqf5/FDPvLYc/mxAtrbLrcnbPofqKLabduN34kSKBzNK6U2S3XMzJH70onUnjgE/t15YXkH/N083y3c/M+TEQY6I=
-X-Received: by 2002:a17:90a:8b06:b0:219:41ef:a812 with SMTP id
- y6-20020a17090a8b0600b0021941efa812mr233907pjn.153.1670917749693; Mon, 12 Dec
- 2022 23:49:09 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7iZB0Z1Q5CE+H3OL4aZrZbM8R0KsjYsEMH0TW8UzXLo=;
+        b=rpGgi0HQMlF+DFfp6V6IVlGf9d6HLXcCxBHMpbQmUEuIenq1ISIkROArd0Roejl3Jr
+         unhC0dqemljRrC8wJOyNMzKza1iup7yolJTCCZFFps1fhE+hmWwG7GzDhLNVNzWPHrAX
+         ZbkKPqxAS1YDzWIh9Zn54bJg5CtcPnXYiofBV3CYF9D+fZgCWippGvGqfXz0FnZGpIIN
+         k/HJh5DM9TKKrlTDOiBSpiq2FXC190DMABC+0e1nZeXdLVfixlLDtEqXKnQjVmz3G/uA
+         jR5Igtz7CmvyuRgC3T3zjrCGN41JGqzNyCjqBKztrz6KJxqXzV7vAsYIJwbdASFjiaZC
+         bI6A==
+X-Gm-Message-State: ANoB5pl7klf3rfdIqtczn8IVfEWz+n16zHB3fXb6N7ZV3uLUeO3vYlUW
+        Z139HHJq6ezTE2KZN2Se5ullLQ==
+X-Google-Smtp-Source: AA0mqf5nxUYPiaQbarDHk5mufFAu/s0JMQQ1bzvU3duUeUWzup6xGLcqzdZt01PaJVdzC5yyUd/YPA==
+X-Received: by 2002:a2e:b634:0:b0:27a:131:2649 with SMTP id s20-20020a2eb634000000b0027a01312649mr4812473ljn.35.1670917818055;
+        Mon, 12 Dec 2022 23:50:18 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s1-20020a05651c048100b0027710117ebdsm167406ljc.121.2022.12.12.23.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 23:50:17 -0800 (PST)
+Message-ID: <49834ea3-7fc2-d2cf-36a7-b509d36f260f@linaro.org>
+Date:   Tue, 13 Dec 2022 08:50:16 +0100
 MIME-Version: 1.0
-References: <20221202223533.1785418-1-almasrymina@google.com>
- <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz> <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
- <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Mon, 12 Dec 2022 23:48:57 -0800
-Message-ID: <CAAPL-u-cvVuhMJa48zEzFf_e3Gsttq4J7KFm=rva=E++m2zBLQ@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, fvdl@google.com,
-        bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
+ glue driver
+To:     Chester Lin <clin@suse.com>
+Cc:     =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jan Petrous <jan.petrous@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        s32@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        ghennadi.procopciuc@oss.nxp.com
+References: <20221128054920.2113-1-clin@suse.com>
+ <20221128054920.2113-3-clin@suse.com>
+ <4a7a9bf7-f831-e1c1-0a31-8afcf92ae84c@linaro.org>
+ <560c38a5-318a-7a72-dc5f-8b79afb664ca@suse.de>
+ <9778695f-f8a9-e361-e28f-f99525c96689@linaro.org>
+ <Y42jqDiiq+rOurV+@linux-8mug>
+ <3908e923-a063-0377-1854-ccbb3ecc704d@linaro.org>
+ <Y5fnjhugp8cQSzwM@linux-8mug>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y5fnjhugp8cQSzwM@linux-8mug>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 10:32 PM Huang, Ying <ying.huang@intel.com> wrote:
->
-> Mina Almasry <almasrymina@google.com> writes:
->
-> > On Mon, Dec 12, 2022 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
-> >>
-> >> On Fri 02-12-22 14:35:31, Mina Almasry wrote:
-> >> > The nodes= arg instructs the kernel to only scan the given nodes for
-> >> > proactive reclaim. For example use cases, consider a 2 tier memory system:
-> >> >
-> >> > nodes 0,1 -> top tier
-> >> > nodes 2,3 -> second tier
-> >> >
-> >> > $ echo "1m nodes=0" > memory.reclaim
-> >> >
-> >> > This instructs the kernel to attempt to reclaim 1m memory from node 0.
-> >> > Since node 0 is a top tier node, demotion will be attempted first. This
-> >> > is useful to direct proactive reclaim to specific nodes that are under
-> >> > pressure.
-> >> >
-> >> > $ echo "1m nodes=2,3" > memory.reclaim
-> >> >
-> >> > This instructs the kernel to attempt to reclaim 1m memory in the second tier,
-> >> > since this tier of memory has no demotion targets the memory will be
-> >> > reclaimed.
-> >> >
-> >> > $ echo "1m nodes=0,1" > memory.reclaim
-> >> >
-> >> > Instructs the kernel to reclaim memory from the top tier nodes, which can
-> >> > be desirable according to the userspace policy if there is pressure on
-> >> > the top tiers. Since these nodes have demotion targets, the kernel will
-> >> > attempt demotion first.
-> >> >
-> >> > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> >> > reclaim""), the proactive reclaim interface memory.reclaim does both
-> >> > reclaim and demotion. Reclaim and demotion incur different latency costs
-> >> > to the jobs in the cgroup. Demoted memory would still be addressable
-> >> > by the userspace at a higher latency, but reclaimed memory would need to
-> >> > incur a pagefault.
-> >> >
-> >> > The 'nodes' arg is useful to allow the userspace to control demotion
-> >> > and reclaim independently according to its policy: if the memory.reclaim
-> >> > is called on a node with demotion targets, it will attempt demotion first;
-> >> > if it is called on a node without demotion targets, it will only attempt
-> >> > reclaim.
-> >> >
-> >> > Acked-by: Michal Hocko <mhocko@suse.com>
-> >> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >>
-> >> After discussion in [1] I have realized that I haven't really thought
-> >> through all the consequences of this patch and therefore I am retracting
-> >> my ack here. I am not nacking the patch at this statge but I also think
-> >> this shouldn't be merged now and we should really consider all the
-> >> consequences.
-> >>
-> >> Let me summarize my main concerns here as well. The proposed
-> >> implementation doesn't apply the provided nodemask to the whole reclaim
-> >> process. This means that demotion can happen outside of the mask so the
-> >> the user request cannot really control demotion targets and that limits
-> >> the interface should there be any need for a finer grained control in
-> >> the future (see an example in [2]).
-> >> Another problem is that this can limit future reclaim extensions because
-> >> of existing assumptions of the interface [3] - specify only top-tier
-> >> node to force the aging without actually reclaiming any charges and
-> >> (ab)use the interface only for aging on multi-tier system. A change to
-> >> the reclaim to not demote in some cases could break this usecase.
-> >>
-> >
-> > I think this is correct. My use case is to request from the kernel to
-> > do demotion without reclaim in the cgroup, and the reason for that is
-> > stated in the commit message:
-> >
-> > "Reclaim and demotion incur different latency costs to the jobs in the
-> > cgroup. Demoted memory would still be addressable by the userspace at
-> > a higher latency, but reclaimed memory would need to incur a
-> > pagefault."
-> >
-> > For jobs of some latency tiers, we would like to trigger proactive
-> > demotion (which incurs relatively low latency on the job), but not
-> > trigger proactive reclaim (which incurs a pagefault). I initially had
-> > proposed a separate interface for this, but Johannes directed me to
-> > this interface instead in [1]. In the same email Johannes also tells
-> > me that meta's reclaim stack relies on memory.reclaim triggering
-> > demotion, so it seems that I'm not the first to take a dependency on
-> > this. Additionally in [2] Johannes also says it would be great if in
-> > the long term reclaim policy and demotion policy do not diverge.
-> >
-> > [1] https://lore.kernel.org/linux-mm/Y35fw2JSAeAddONg@cmpxchg.org/
-> > [2] https://lore.kernel.org/linux-mm/Y36fIGFCFKiocAd6@cmpxchg.org/
->
-> After these discussion, I think the solution maybe use different
-> interfaces for "proactive demote" and "proactive reclaim".  That is,
-> reconsider "memory.demote".  In this way, we will always uncharge the
-> cgroup for "memory.reclaim".  This avoid the possible confusion there.
-> And, because demotion is considered aging, we don't need to disable
-> demotion for "memory.reclaim", just don't count it.
+On 13/12/2022 03:46, Chester Lin wrote:
+> Hi Krzysztof,
+> 
+> Sorry for the late reply.
+> 
+> On Mon, Dec 05, 2022 at 09:55:40AM +0100, Krzysztof Kozlowski wrote:
+>> On 05/12/2022 08:54, Chester Lin wrote:
+>>>>>>> +examples:
+>>>>>>> +  - |
+>>>>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>>>>>> +
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_AXI
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_PCS
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RGMII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RMII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_MII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_PCS
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RGMII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RMII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_MII
+>>>>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TS
+>>>>>>
+>>>>>> Why defines? Your clock controller is not ready? If so, just use raw
+>>>>>> numbers.
+>>>>>
+>>>>> Please compare v1: There is no Linux-driven clock controller here but 
+>>>>> rather a fluid SCMI firmware interface. Work towards getting clocks into 
+>>>>> a kernel-hosted .dtsi was halted in favor of (downstream) TF-A, which 
+>>>>> also explains the ugly examples here and for pinctrl.
+>>>>
+>>>> This does not explain to me why you added defines in the example. Are
+>>>> you saying these can change any moment?
+>>>>
+>>>
+>>> Actually these GMAC-related SCMI clock IDs changed once in NXP's downstream TF-A,
+>>> some redundant TS clock IDs were removed and the rest of clock IDs were all moved
+>>> forward. 
+>>
+>> This is not accepted. Your downstream TF-A cannot change bindings. As an
+>> upstream contributor you should push this back and definitely not try to
+>> upstream such approach.
+>>
+>>> Apart from GMAC-related IDs, some other clock IDs were also appended
+>>> in both base-clock IDs and platform-specific clock IDs [The first plat ID =
+>>> The last base ID + 1]. Due to the current design of the clk-scmi driver and the
+>>> SCMI clock protocol, IIUC, it's better to keep all clock IDs in sequence without
+>>> a blank in order to avoid query miss, which could affect the probe speed.
+>>
+>> You miss here broken ABI! Any change in IDs causes all DTBs to be
+>> broken. Downstream, upstream, other projects, everywhere.
+>>
+>> Therefore thank you for clarifying that we need to be more careful about
+>> stuff coming from (or for) NXP. Here you need to drop all defines and
+>> all your patches must assume the ID is fixed. Once there, it's
+>> unchangeable without breaking the ABI.
+>>
+> 
+> Please accept my apologies for submitting these bad patches. We were just
+> confused since we thought that this approach might be acceptable because
+> there were some similar examples got merged in the kernel tree:
 
-+1 on memory.demote.
+How are these related to the talk of ABI break?
 
-> Best Regards,
-> Huang, Ying
->
+> 
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml#L57
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml#L55
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/sound/intel,keembay-i2s.yaml#L73
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/pwm/intel,keembay-pwm.yaml#L39
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/watchdog/intel,keembay-wdt.yaml#L46
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/pci/intel,keembay-pcie.yaml#L75
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml#L282
+
+How are these even relevant here? The support for this platform is
+incomplete, right? These are just few scattered pieces - only bindings -
+without drivers and DTS. It proves nothing. You cannot take some
+incomplete platform and build on top of it theory that you can keep
+changing ABI!
+
+And anyway it is entirely independent problem. You just said you want to
+change defines which is not allowed. ABI break. No one changes the
+Keembay defines, whatever they are (you even do not know what they are...).
+
+> 
+> The defines in these yaml files are not actually referred by kernel DTs or
+> drivers so I assume that they should be provided by firmware as pure integer
+> numbers and the clk-scmi driver should just take them to ask firmware for doing
+> clk stuff.
+
+
+Best regards,
+Krzysztof
+
