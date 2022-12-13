@@ -2,78 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B7B64BA1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AD264BA26
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiLMQrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S235817AbiLMQrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbiLMQqU (ORCPT
+        with ESMTP id S235815AbiLMQrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:46:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698221E3A
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=2fASWcD3MDWnHKMm2m0npaho2EJ4dCmlsjEfJBSNCFo=; b=uKKPjR5vkDUE9jWxBL+DVkrQ9d
-        rseeItl2hbeJ/CaHjOse/jUUT+w1bD8MG2b3baWA8Xnd4c+T8MOQE4y7hT+Nr5L4AJBKydRxybkoj
-        C3uYO0YpS4UpVFRHLv2yIKhf6d0+02bJcANIruCIILmS8HiDfkc6FRxhuuhNwtKIMKiZhQfXr0ZYC
-        ACdPGaVJ4x5EnwgcxdFgttm1dLaCcCqluXLNZMIyAS7NT749PrJHTYkVPTnfyYx6dU90C9nYRvANu
-        Ym7VtB0X4xZ9VoNlydmnNi5j9Sl55EMjIgDBuflqhoX7OWt9qCbmCGyPW9VlHC9TMgnzALysh0uaN
-        0gtOYSbw==;
-Received: from [2001:4bb8:192:2f53:30b:ddad:22aa:f9f9] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p58Pf-0032nk-Pc; Tue, 13 Dec 2022 16:45:52 +0000
-Date:   Tue, 13 Dec 2022 17:45:49 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Joel Becker <jlbec@evilplan.org>
-Subject: [GIT PULL] configfs updates for Linux 6.2
-Message-ID: <Y5isPdnDCpJ4cL7g@infradead.org>
+        Tue, 13 Dec 2022 11:47:33 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5186274
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:47:32 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id q186so304533oia.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qSpFPtYtqwbwgpaDfxY9bLElKawGst3mkzumQCRtMZA=;
+        b=wIx4THjTYQlEWvPxkWO+P3LDsGYG4ruw+vvWGQUALXmocOx0dFmaxHmpWsSyhfqF4j
+         BLUoMsmXXhxOHM3/EKYxEHMN1VS6IZbZDejmkxkWCI29/Xn+2Jvt+00oJVrYzP0jXqQY
+         If+RdOBdAfIiRqQyOZVPwBe9ucM7lkUBxrFQqNZi8Y6fxyOsp5LSg5rIxecI0hDNWVzX
+         xjWcfbo2stwN3mao7J0SZCmpEUsBpbs1IJ9M8E+dru5YbIxa9KXFZySmG4STMiis30UV
+         UvGT15tzZmbmecAMOGfyM9Bfsh488bKi/MgcdjAEqX5lqpPl8UlLeBNfUkKn9qj4Wde8
+         50aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qSpFPtYtqwbwgpaDfxY9bLElKawGst3mkzumQCRtMZA=;
+        b=ydOhBGqt7nlTc+wUOifVttg4oVf+idNuz35og7bAaSvf/RQnfLBV8vrUWEAiljt0Fk
+         VDnT0WgJBDAMlj4WfvQg5X0VnxLesi96zxUSxp6nYX1cyriTO20BY5ZMVjmCGnYcYQFP
+         /T7bMXFEIHLtGxdbRLcvLZR2Dg3utGFj0f7hs1T2OiB93rMSFtqcCF+DkhhrOL4fZ5D1
+         Wy0ooQtXg3XwMAbUkTBFDKJrIwXcHQIoybY8947zWyW5z15ktXN1NVzjO/F90+1OPo85
+         vIYUVJzlyI5OAW7CvBWJH5rJPFaNRhYRbyDnJCf3s3rn+PvgJyPzwGLgxPzLi8MEqF6S
+         iZdQ==
+X-Gm-Message-State: ANoB5plMIq1TtxhkZD7dn3gIPeGNV6NGB4H8seTBkPN4GHasr+F32xDC
+        wi9+hr54DmbpxYvXF9vXoKLZEJcMAehUQP6yyKUhHg==
+X-Google-Smtp-Source: AA0mqf6jtP/Q7Vai7aVv/JUuh7ElYcHVEWWCl+v9EAaFTC3NMUdDiFEkCdNpneIMvVEwl8DQasl6+DXuTdTgKXwAvIc=
+X-Received: by 2002:a54:4018:0:b0:35c:3e72:94b7 with SMTP id
+ x24-20020a544018000000b0035c3e7294b7mr259644oie.67.1670950052019; Tue, 13 Dec
+ 2022 08:47:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213150304.4189760-1-robert.foss@linaro.org>
+In-Reply-To: <20221213150304.4189760-1-robert.foss@linaro.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 13 Dec 2022 22:16:55 +0530
+Message-ID: <CAMi1Hd1Ei5SbT8DHacFq6sJXCsjWdeY3OyeE_RnWnkxNp6i9Qw@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/bridge: lt9611: Fix PLL being unable to lock
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     stable <stable@vger.kernel.org>, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
+On Tue, 13 Dec 2022 at 20:33, Robert Foss <robert.foss@linaro.org> wrote:
+>
+> This fixes PLL being unable to lock, and is derived from an equivalent
+> downstream commit.
+>
+> Available LT9611 documentation does not list this register, neither does
+> LT9611UXC (which is a different chip).
+>
+> This commit has been confirmed to fix HDMI output on DragonBoard 845c.
+>
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+Cc: <stable@vger.kernel.org>    [v5.10+]
+Reviewed-by: Amit Pundir <amit.pundir@linaro.org>
 
-are available in the Git repository at:
-
-  git://git.infradead.org/users/hch/configfs.git tags/configfs-6.2-2022-12-13
-
-for you to fetch changes up to 77992f896745c63ae64bfccfdc429ab7b3d88da5:
-
-  configfs: remove mentions of committable items (2022-12-02 11:11:27 +0100)
-
-----------------------------------------------------------------
-configfs updates for Linux 6.2
-
- - fix a memory leak in configfs_create_dir (Chen Zhongjin)
- - remove mentions of committable items that were implemented
-   (Bartosz Golaszewski)
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      configfs: remove mentions of committable items
-
-Chen Zhongjin (1):
-      configfs: fix possible memory leak in configfs_create_dir()
-
- Documentation/filesystems/configfs.rst | 48 ----------------------------------
- fs/configfs/dir.c                      |  2 ++
- include/linux/configfs.h               |  3 ---
- 3 files changed, 2 insertions(+), 51 deletions(-)
+> Suggested-by: Amit Pundir <amit.pundir@linaro.org>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>  drivers/gpu/drm/bridge/lontium-lt9611.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
+> index ffcdc8dba3798..3ce4e495aee50 100644
+> --- a/drivers/gpu/drm/bridge/lontium-lt9611.c
+> +++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
+> @@ -259,6 +259,7 @@ static int lt9611_pll_setup(struct lt9611 *lt9611, const struct drm_display_mode
+>                 { 0x8126, 0x55 },
+>                 { 0x8127, 0x66 },
+>                 { 0x8128, 0x88 },
+> +               { 0x812a, 0x20 },
+>         };
+>
+>         regmap_multi_reg_write(lt9611->regmap, reg_cfg, ARRAY_SIZE(reg_cfg));
+> --
+> 2.34.1
+>
