@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7E464B29D
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:46:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE3C64B29E
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbiLMJqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S234733AbiLMJrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234733AbiLMJqX (ORCPT
+        with ESMTP id S234980AbiLMJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:46:23 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35891706C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:46:22 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id u12so14980161wrr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:46:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6HCpfsDxKsbRWDniMvTsAcm6k9bqzut02W2Q+dej5cA=;
-        b=Ex6palua+CAb8sAnNRSs8QCJJYJy/CXh6vu8iuxELmuLYIDrF2/RExi4CYvGIwjJVb
-         0Hw8S/7m4UBgKH+bGVe+zuk8w2F7mFhNNeHeX6LVfeyQY5x3cnou27cfkigKZrENvKBz
-         LX8clCm2xYOgwgxlVTiZEEtbOr3jJ1dLVrGoE6s3UPIvxdMR9U2X4lxGEf6qw9kIOdYD
-         K+ksfEaTBuwkypOmNmDFRZz5c/4gWAgs5j5mnkV4YFuQmGeJELWnGZ41hrzsIeZ+TXtt
-         quGHmeCbmOcVfzAXWOBWrrgDYUWcXplwtQ/ZI6tst+MM7yleBo+Dyn7REujufWRh+W+H
-         fTeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6HCpfsDxKsbRWDniMvTsAcm6k9bqzut02W2Q+dej5cA=;
-        b=KQfumZwbt3p3wOte1qBiG0xPdWkwm+tv05JAi77bpUivBVfYAPBF6WMf0GNHpyZGtB
-         FQjZ9H9ieYcQwjhZZBdtuhmvPRhv8qwBLmXh9QEyYPLtb2xLp0M4PuoLgFlyeSJ+FJVh
-         jp+jfeO/LcTlASu1Qdmh1QGrlhUNk9qbo6tje9U62xeLSVug9urQk2qWKmFKAvI2+khV
-         Lb/cYzc6TJAyz/tyLcdtgttvZbcllyRmvNEZ22dID1RYY83QE5U0Cs6AiqMG9rKgbr+z
-         Z4fi9Te3BFXtQQ/JszTJEB+/gEaeC8PnEn7+6ziHmKh7F8hIdi4q8hf4zMQtc+iIMUMq
-         Fi/A==
-X-Gm-Message-State: ANoB5pk7CRwTQ112VtTqvjT0VxXBN9gWYLf5JzG7beP1eLpEdeB9iEIf
-        IETcY7XgoLdle9Va5XMc3FcAJg==
-X-Google-Smtp-Source: AA0mqf62OayQR32aHZW7SQ2L2Smz6e0kOzvNE3xqgzO1KHXWbyXt8wEW/lnneYLd3l0I3gIKF9q7mQ==
-X-Received: by 2002:a5d:5a19:0:b0:242:8177:6291 with SMTP id bq25-20020a5d5a19000000b0024281776291mr15276191wrb.1.1670924781185;
-        Tue, 13 Dec 2022 01:46:21 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d618d000000b002422816aa25sm12963005wru.108.2022.12.13.01.46.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 01:46:20 -0800 (PST)
-Message-ID: <84c81594-0106-536c-5e04-1afb24953727@linaro.org>
-Date:   Tue, 13 Dec 2022 10:46:18 +0100
+        Tue, 13 Dec 2022 04:46:53 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E4217E34
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:46:51 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 87CBB240007;
+        Tue, 13 Dec 2022 09:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670924809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXJzSwNcbsXGXw+er67BUwq5ojiISWwUZ3aea+WpOLs=;
+        b=Vrg8UKM8sm9AissTWxmh62QMeWakR3niVsOJHhKGNCHzJLe2GUPnprQqlq1XsPyDY++J8y
+        k43/SvNndYsAh/k1NTrGZ8yzSR81oU1ngtDy3i/VzPu18we2P3Yok8Pd6Vl/OgGNKK07a8
+        560/I//6C6KkuOuIv7nXP0Vjg/PjiH9rX8V5TEH3LjZzN2W2QVZGM6m4qAT0iTdLwIBm+Y
+        ZNd2ja9G/q9LtNChFMy7yYUGsO3uFn2xl1UdOwe3lQph92fr0qyGZUOXmZIOASMwL3Czhg
+        e1TeR8LfM8gw4j9LsdcrxC6T6iCb9UGsFEFHqHR7xUwMofoyIxMYmSzcvhmfrQ==
+Date:   Tue, 13 Dec 2022 10:46:43 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Maxim Kochetkov <fido_max@inbox.ru>
+Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: nvmem-cells regression after adding 'call
+ of_platform_populate() for MTD partitions'
+Message-ID: <20221213104643.052d4a06@xps-13>
+In-Reply-To: <b75a8769-0cc8-beb3-931a-6755aede3af0@inbox.ru>
+References: <CALHCpMgSZOZdOGpLwTYf0sFD5EMNL7CuqHuFJV_6w5VPSWZnUw@mail.gmail.com>
+        <CALHCpMgEZjnR39upkR6iozSk-b5A_GHRo9rcDSPXzzQi6x_qCw@mail.gmail.com>
+        <b1b7935d-0785-2e57-bad9-ab2476f0acf2@leemhuis.info>
+        <CALHCpMhsM2j=bSXEDC9BWYpOAyvCccgJpJmqXfiRTHvp6=y3tA@mail.gmail.com>
+        <20221212101449.4e465181@xps-13>
+        <CALHCpMimCqZB0bnHaOdCzucey+92NcRRZXCHXYYH5c9vj0nZaQ@mail.gmail.com>
+        <20221212173730.64224599@xps-13>
+        <b75a8769-0cc8-beb3-931a-6755aede3af0@inbox.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH 03/14] KVM: selftests: Fix divide-by-zero bug in
- memslot_perf_test
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ricardo Koller <ricarkol@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Raghavendra Rao Ananta <rananta@google.com>
-References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-4-seanjc@google.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221213001653.3852042-4-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/22 01:16, Sean Christopherson wrote:
-> Check that the number of pages per slot is non-zero in get_max_slots()
-> prior to computing the remaining number of pages.  clang generates code
-> that uses an actual DIV for calculating the remaining, which causes a #DE
-> if the total number of pages is less than the number of slots.
-> 
->    traps: memslot_perf_te[97611] trap divide error ip:4030c4 sp:7ffd18ae58f0
->           error:0 in memslot_perf_test[401000+cb000]
-> 
-> Fixes: a69170c65acd ("KVM: selftests: memslot_perf_test: Report optimal memory slots")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   tools/testing/selftests/kvm/memslot_perf_test.c | 3 +++
->   1 file changed, 3 insertions(+)
+Hi Maxim,
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+fido_max@inbox.ru wrote on Mon, 12 Dec 2022 20:57:49 +0300:
 
+> Hi, Miquel!
+>=20
+> On 12.12.2022 19:37, Miquel Raynal wrote:
+>=20
+> > Let me try to recap the situation for all the people I just involved:
+> >=20
+> > * An Ethernet driver gets its mac address from an nvmem cell. The
+> >    Ethernet controller DT node then has an "nvmem-cells" property
+> >    pointing towards an nvmem cell.
+> > * The nvmem cell comes from an mtd partition.
+> > * The mtd partition is flagged with a particular compatible
+> >    (which is also named "nvmem-cells") to tell the kernel that the node
+> >    produces nvmem cells.
+> > * The mtd partition itself has no driver, but is the child node of a
+> >    "partitions" container which has one (in this case,
+> >    "fixed-partitions", see the snippet below).
+> >=20
+> > Because the "nvmem-cells" property of the Ethernet node points at the
+> > nvmem-cell node, the core create a device link between the Ethernet
+> > controller (consumer) and the mtd partition (producer).
+> >=20
+> > The device link in this case will never be satisfied because no driver
+> > matches the "nvmem-cells" compatible of the partition node.
+> >=20
+> > Reverting commit bcdf0315a61a ("mtd: call of_platform_populate() for MTD
+> > partitions") would IMHO not make much sense, the problem comes from the
+> > device link side and even there, there is nothing really "wrong",
+> > because I really expect the mtd device to be ready before the
+> > Ethernet controller probe, the device link is legitimate.
+> >=20
+> > So I would like to explore other alternatives. Here are a bunch of
+> > ideas, but I'm open: =20
+>=20
+> How about to create simple driver with compatible=3D"nvmem-cell" and to m=
+ove all the suff from main mtd driver which serves nvmem-cell to the probe =
+function?
 
+This is probably worth the try but I doubt you can make it work without
+regressions because IIRC the nvmem registration happens no matter the
+compatible (not mentioning the user-otp and factory-otp cases). You can
+definitely try this out if you think you can come up with something
+though.
+
+But I would like to hear from the device-link gurus :) because even if
+we fix mtd with a "trick" like above, I guess we'll very likely find
+other corner cases like that and I am interested in understanding the
+rationale of what could be a proper fix.
+
+Thanks,
+Miqu=C3=A8l
