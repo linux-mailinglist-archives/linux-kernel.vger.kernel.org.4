@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584C064BB93
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C1D64BB96
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236420AbiLMSHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S235172AbiLMSH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236361AbiLMSG7 (ORCPT
+        with ESMTP id S236423AbiLMSHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:06:59 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5C6240B3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:06:47 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p8so6193835lfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:06:47 -0800 (PST)
+        Tue, 13 Dec 2022 13:07:46 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13159E4D;
+        Tue, 13 Dec 2022 10:07:37 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3bfd998fa53so203612257b3.5;
+        Tue, 13 Dec 2022 10:07:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ADpodWKXROZu/3D+Zxer6l8IxEoAVXT4LlWfeI8NjbI=;
-        b=QMwjkoir1ul5Xka1V9XDto/QZCV7qWabFkeYDzEs08Sz4QgXBTb4jSc9cV1CPDuyLV
-         vY2O+dpeDflpgh5YtGadK9EZq5ssrGI35o0sEMYYG/0GMWeTaIB9I+IRC6FFsjYeHbBP
-         q+bxHCtxCkgYU8XEjq4KswgR53edjv9dX8uI35aE8H+vfsqepB4WatzI3mMUidU3S45F
-         /fH195BOCSnIN3we/1EfobW1JA5DnqCHAIiTbWSitLaqqy6XJwuUZy9v4/BBFx504nd/
-         8Y2dGs5+idsYlxw5SjuAdIQunN607EQ00Gzk7p0AkawzRInKtShLO6VTe8ohqJxFsDDx
-         ETbg==
+        bh=C89klaJYnYqVPt72HuSAj6C0KHKkDw4EdmizFmt/dYY=;
+        b=QZNinhaUVjRgKa73IrmjBKG7NReEZV4m1uchhSGuGYFpetecMcx2J9lCjlWLDAwvQ1
+         INXFmcEVYPOKVf8frp0GI1qjR/ASnDRpo8UOHOH9oNXMocDdLrJTy823WkqwC20ZEmcP
+         KYN85fSzWc0odgZKO+Q/GfjFozhdK4nAHZmEu1TUAfmF3Ee86372btH/So7Eozz6ZXRu
+         X7XWaLv6BrJhOj0HbznsJMBTkLQaKbil8j9Lizoqtzl7yzLHFOzvpTDAP16bODKTuC3r
+         jJQgmfEzzpVEx68JVA5aqKKnPOwN7DTmuAAU1of8eWa3cZCOx3aBiAFn9+TZRmDZjn9B
+         Xa6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ADpodWKXROZu/3D+Zxer6l8IxEoAVXT4LlWfeI8NjbI=;
-        b=4EODBKan2S565ZRaanyMdQEdo6WZT12x3KjfFVoidOL3ZOhjacjmNbh2KxDVt/SDdr
-         tN32Ew6soqH3xlhpbURyfph/HwQUGLVTA5bK4zVCFPgoqDISBdZycx6q1H93aXiqjpaT
-         KYY9gQ4r7/LNANJ8J9iegv3TsBaKaurtR7b/ZjmgTv6UMtGGGggSavRZalweq0WIAzuz
-         WV3F0Nb6XGl4JILevcgI3Wbg84UZl3dWgC9fO/BIJOQtmp50Bpj3lUg1e0Z5/M8Nne6s
-         LmkP8ChPuSRrfrapk7fvj6LRkTgM9HWhUWpuB7SE9pbvOEbvUf8PFuXWZ5TIUqJq7j1b
-         k8cA==
-X-Gm-Message-State: ANoB5pmMW3YIY+ClZBVM2MXJtJQlJ3TWsW0DYaCbqxshcQ9Xm3WyXm+Y
-        8u14OUPqDQ7LfMr+kRkCef460g==
-X-Google-Smtp-Source: AA0mqf7sUGungFI5a/97OKrQx5IbqK4ZIfMYj93YgT+DCO0eJ3Yh2Ot1uIneRrVv+5l1e8oxTpvp+g==
-X-Received: by 2002:a05:6512:15a7:b0:4b6:e494:a98d with SMTP id bp39-20020a05651215a700b004b6e494a98dmr4223840lfb.44.1670954806151;
-        Tue, 13 Dec 2022 10:06:46 -0800 (PST)
-Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id v10-20020ac2560a000000b00497aa190523sm454543lfd.248.2022.12.13.10.06.44
+        bh=C89klaJYnYqVPt72HuSAj6C0KHKkDw4EdmizFmt/dYY=;
+        b=cBOXpEM2I3LzpUxIPwblRwvWOSOTXOH5mGNWzP1tMRNCUh51/P87bbZm6S5FODid0r
+         m5c6V0frzl8kMQS2TX94384LG7Zhp5HfoQMDhFHIMXxxmVqGI8crhvr7XIe2F4vGSb3a
+         WRFX3G0e0BtPraE2ayQ1SkB3zzG5anaUyKkv9A/3/PxN83EQs3N5dHbI401R1xsRbKU0
+         uLvsqrYRaU9rDNSlfTFxQWV3hzvZV9udxFIyPVj0Gxbsj6kJyMv1Ac6Oa+YsMKin/1T/
+         G+vuFKx9PGu5b0Lg9Wu/LmGEDTKj8FbaxeFdTp61vmhCgUH42GUYmqFSWgFq7V/CqF8l
+         g5lA==
+X-Gm-Message-State: ANoB5pn/eueHw0rcnLiOUX/AGoEVfewKynb+mYlUTRHUJZzRYJVoCruh
+        qzeZHIgY9wdwd3Srk9JgqeY=
+X-Google-Smtp-Source: AA0mqf6ZOKTYxzndQpxZP3egcIfH1WZvDNMa8114teS8rzLykaNhY1IS/MMVtWXYhlkxmUih4iBQEQ==
+X-Received: by 2002:a05:7500:2c0d:b0:ea:3678:ead5 with SMTP id ep13-20020a0575002c0d00b000ea3678ead5mr2180795gab.0.1670954856032;
+        Tue, 13 Dec 2022 10:07:36 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id i8-20020a05620a404800b006feea093006sm8382944qko.124.2022.12.13.10.07.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:06:45 -0800 (PST)
-Message-ID: <1a950cde-6713-a14e-f899-3450dbad5312@linaro.org>
-Date:   Tue, 13 Dec 2022 19:06:44 +0100
+        Tue, 13 Dec 2022 10:07:35 -0800 (PST)
+Message-ID: <87f7c713-3dae-daa2-d72a-3df8f77a614d@gmail.com>
+Date:   Tue, 13 Dec 2022 10:07:31 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/4] dt-bindings: i2c: qcom,i2c-cci: Fall back to common
- compatibles
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 00/98] 5.10.159-rc2 review
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221213115628.105149-1-konrad.dybcio@linaro.org>
- <b8be66e0-f987-b3ec-b78e-5be8bf54b05e@linaro.org>
- <b289a9c5-54de-5ca4-b247-90751be05fa9@linaro.org>
-In-Reply-To: <b289a9c5-54de-5ca4-b247-90751be05fa9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221213150409.357752716@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221213150409.357752716@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/13/22 07:05, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.159 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 15 Dec 2022 15:03:44 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.159-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-On 13.12.2022 18:01, Konrad Dybcio wrote:
-> 
-> 
-> On 13.12.2022 17:58, Krzysztof Kozlowski wrote:
->> On 13/12/2022 12:56, Konrad Dybcio wrote:
->>> Almost every compatible string in the CCI driver is a duplicate. Adjust
->>> the bindings to include a common (first-soc-implementing-vX) compatible
->>> to remove the need to keep adding superfluous compatible strings.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>  .../devicetree/bindings/i2c/qcom,i2c-cci.yaml | 25 +++++++++++++------
->>>  1 file changed, 17 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> index cf9f8fda595f..65cf7860a9a0 100644
->>> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
->>> @@ -12,14 +12,23 @@ maintainers:
->>>  
->>>  properties:
->>>    compatible:
->>> -    enum:
->>> -      - qcom,msm8226-cci
->>> -      - qcom,msm8916-cci
->>> -      - qcom,msm8974-cci
->>> -      - qcom,msm8996-cci
->>> -      - qcom,sdm845-cci
->>> -      - qcom,sm8250-cci
->>> -      - qcom,sm8450-cci
->>> +    oneOf:
->>
->> Except missing test,
-> Hm? I tested this locally with dt_binding_check and it passed..
-Eh, looks like I didn't hit save before running it or something,
-I see it now, sorry bout that..
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Konrad
-> 
-> how about also adding a comment to the driver, that
->> list of compatibles should not grow when not needed?
-> Sure.
-> 
-> Konrad
->>
->> Best regards,
->> Krzysztof
->>
