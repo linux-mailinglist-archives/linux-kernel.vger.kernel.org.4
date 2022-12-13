@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DD264B673
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D746364B677
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLMNj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S235649AbiLMNkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiLMNjy (ORCPT
+        with ESMTP id S234969AbiLMNkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:39:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24A18B41;
-        Tue, 13 Dec 2022 05:39:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 408A22F4;
-        Tue, 13 Dec 2022 05:40:33 -0800 (PST)
-Received: from [10.57.9.141] (unknown [10.57.9.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 041D13F71E;
-        Tue, 13 Dec 2022 05:39:50 -0800 (PST)
-Message-ID: <c0ebfb40-382d-8d38-a8e7-8fbaad871937@arm.com>
-Date:   Tue, 13 Dec 2022 13:39:49 +0000
+        Tue, 13 Dec 2022 08:40:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA7065E9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:40:09 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p55Vu-0005RL-99; Tue, 13 Dec 2022 14:40:06 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7718:f6d6:39bc:6089])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 75E3013DE99;
+        Tue, 13 Dec 2022 13:40:02 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 14:39:54 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: devlink: add missing toc entry for
+ etas_es58x devlink doc
+Message-ID: <20221213133954.f2msxale6a37bvvo@pengutronix.de>
+References: <20221213153708.4f38a7cf@canb.auug.org.au>
+ <20221213051136.721887-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] perf stat: Do not delay the workload with --delay
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kevin Nomura <nomurak@google.com>
-References: <20221212230820.901382-1-namhyung@kernel.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20221212230820.901382-1-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w6xxpeurpmpzifqw"
+Content-Disposition: inline
+In-Reply-To: <20221213051136.721887-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,129 +58,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--w6xxpeurpmpzifqw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 12/12/2022 23:08, Namhyung Kim wrote:
-> The -D/--delay option is to delay the measure after the program starts.
-> But the current code goes to sleep before starting the program so the
-> program is delayed too.  This is not the intention, let's fix it.
-> 
-> Before:
-> 
->   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
->   Events disabled
->   Events enabled
-> 
->    Performance counter stats for 'system wide':
-> 
->        4,326,949,337      cycles
-> 
->          4.007494118 seconds time elapsed
-> 
->   real	0m7.474s
->   user	0m0.356s
->   sys	0m0.120s
-> 
-> It ran the workload for 4 seconds and gave the 3 second delay.  So it
-> should skip the first 3 second and measure the last 1 second only.  But
-> as you can see, it delays 3 seconds and ran the workload after that for
-> 4 seconds.  So the total time (real) was 7 seconds.
-> 
-> After:
-> 
->   $ time sudo ./perf stat -a -e cycles -D 3000 sleep 4
->   Events disabled
->   Events enabled
-> 
->    Performance counter stats for 'system wide':
-> 
->        1,063,551,013      cycles
-> 
->          1.002769510 seconds time elapsed
-> 
->   real	0m4.484s
->   user	0m0.385s
->   sys	0m0.086s
-> 
-> The bug was introduced when it changed enablement of system-wide events
-> with a command line workload.  But it should've considered the initial
-> delay case.  The code was reworked since then (in bb8bc52e7578) so I'm
-> afraid it won't be applied cleanly.
-> 
-> Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+On 13.12.2022 14:11:36, Vincent Mailhol wrote:
+> toc entry is missing for etas_es58x devlink doc and triggers this warning:
+>=20
+>   Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn'=
+t included in any toctree
+>=20
+> Add the missing toc entry.
+>=20
+> Fixes: 9f63f96aac92 ("Documentation: devlink: add devlink documentation f=
+or the etas_es58x driver")
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Looks like the same fix as here, but it was only partially applied:
+Added to linux-can-next + added Reported-bys.
 
-https://lore.kernel.org/linux-perf-users/20220801112726.GA73228@leoy-ThinkPad-X240s/T/#mce4ad6b17a5fa15970765bb01e7b691c7326fbb0
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> Cc: Thomas Richter <tmricht@linux.ibm.com>
-> Reported-by: Kevin Nomura <nomurak@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-stat.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index d040fbcdcc5a..b39bf785a16e 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -540,26 +540,14 @@ static int enable_counters(void)
->  			return err;
->  	}
->  
-> -	if (stat_config.initial_delay < 0) {
-> -		pr_info(EVLIST_DISABLED_MSG);
-> -		return 0;
-> -	}
-> -
-> -	if (stat_config.initial_delay > 0) {
-> -		pr_info(EVLIST_DISABLED_MSG);
-> -		usleep(stat_config.initial_delay * USEC_PER_MSEC);
-> -	}
-> -
->  	/*
->  	 * We need to enable counters only if:
->  	 * - we don't have tracee (attaching to task or cpu)
->  	 * - we have initial delay configured
->  	 */
-> -	if (!target__none(&target) || stat_config.initial_delay) {
-> +	if (!target__none(&target)) {
->  		if (!all_counters_use_bpf)
->  			evlist__enable(evsel_list);
-> -		if (stat_config.initial_delay > 0)
-> -			pr_info(EVLIST_ENABLED_MSG);
->  	}
->  	return 0;
->  }
-> @@ -930,14 +918,27 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
->  			return err;
->  	}
->  
-> -	err = enable_counters();
-> -	if (err)
-> -		return -1;
-> +	if (stat_config.initial_delay) {
-> +		pr_info(EVLIST_DISABLED_MSG);
-> +	} else {
-> +		err = enable_counters();
-> +		if (err)
-> +			return -1;
-> +	}
->  
->  	/* Exec the command, if any */
->  	if (forks)
->  		evlist__start_workload(evsel_list);
->  
-> +	if (stat_config.initial_delay > 0) {
-> +		usleep(stat_config.initial_delay * USEC_PER_MSEC);
-> +		err = enable_counters();
-> +		if (err)
-> +			return -1;
-> +
-> +		pr_info(EVLIST_ENABLED_MSG);
-> +	}
-> +
->  	t0 = rdclock();
->  	clock_gettime(CLOCK_MONOTONIC, &ref_time);
->  
+--w6xxpeurpmpzifqw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYgKcACgkQrX5LkNig
+012cpAf5AWekrtzeWWKnbboxA4/JV7pG8JDakQ/HiPdwx/xc+BPMgLxiLNzI07hv
+GP4plhwz5D6ADoRXVwJukGoKoqFqjHifSV8OZHSzu9+nVHHh3dh+NX95RsGqFpq/
+Jd/ehYHOAR1XNtgmENtd/GnF8XQLa9ofmi73K+tRgDVitJWRHF9oJx8M0Ao98hAs
+vM5HIbbR9mriV0aaN7e/8fjkEq3w6QPZPvk2AQBzr4YlkakWW5EnhT9jtnWcUf+b
+vGhg9bUNRSbkA8DCCuMvtNP3CiYeK6UkduPFW5IZY8lBAcXVSq5wbnerPl1yMzYp
+eEEb+8yGadFrB/oL+6ONfKxWsqHUfA==
+=0c5t
+-----END PGP SIGNATURE-----
+
+--w6xxpeurpmpzifqw--
