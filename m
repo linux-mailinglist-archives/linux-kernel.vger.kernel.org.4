@@ -2,166 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF00D64BF15
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF6A64BF1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbiLMWGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S236809AbiLMWHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236813AbiLMWGi (ORCPT
+        with ESMTP id S236628AbiLMWHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:06:38 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B4EEE3D;
-        Tue, 13 Dec 2022 14:06:36 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id m4so1344998pls.4;
-        Tue, 13 Dec 2022 14:06:36 -0800 (PST)
+        Tue, 13 Dec 2022 17:07:49 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB80B12AB0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:07:46 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id z26so7308313lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:07:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=3P8+fmlFT4yhtE4PFHqszJb/OdQRA5x5lH9d2KNq6fg=;
-        b=VDgCfOPPh3Dez2V702FiW9sWEczCvVpOadPaJjKhQyxQ+cDVzaUSnvRGyHzasyV8YE
-         onfVcH71E8dx5ZCBL0Fn8EjDSfvhQ1FsFFK4k9qig2n7zJw9JydGDP9FH6Cvhd3MSRqd
-         1lmT5jwGpDC4HoM7TZqdhc5ptbd/hzV0wcPRrTSTSq8f4SUjAG4A4h/TVJOwSbpPwkGh
-         TTgd8BwWWHx6wB8wuBfirhcUD0IQ66VuSNt9ogoMkqepSxPw+xeq8Sf2Oc0n6QOvNAtT
-         f5YUH9K30XHxAET1u0bjHllNnx3p/PzYgZtvLLplXUoLdqRh1USs4tiZw4aqDPdkmwaW
-         q4VA==
+        bh=wHUnqLw96+ngp6Xno9gf3PyYozaeRIXvoO7s/Oinps0=;
+        b=igrOr2o5GAVw2Rall5ObRaZUP4UxSsd7ZVPg2xSJ2ZpQc6D7BY6WC2vHNKs48xDiOn
+         w94aMUby95vy7IaefMNGYJibV5azwMVVYeskonJDlwsJyisJqXSZ+YeaNp4J1zwDyuUa
+         Xp83Z4YdwgpdSngFC53KmQDxF9qbpwQgjXKLIVS4k3s37eQx0OXnTnh8iRg6yS4suVos
+         yfSfXAC+6rUt3QQFC99BVn8vkCRcXXWV0z6u+3gSG8ukI3+RzXBnm8lT720HezQEI6OZ
+         F/P/rQvGesHQbGFzs4zCdigd0fUw0DDUDsjBEvB37XYSTurE+at0wokPvnN1YnaFJvG9
+         xffw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3P8+fmlFT4yhtE4PFHqszJb/OdQRA5x5lH9d2KNq6fg=;
-        b=KqIgqazbnTO/V75+hzgX7HO7H6NPT14Q7UcTcoU/qmUQGaDAAwF2C/f+ljk4G1/Hhb
-         tbryPfvgtv9FRPQKrkOg1RWHzqY4+rHSeckARfID7PVUhBCb/PQmZO1XTasXyGeV4wP2
-         YQeACo2fBiYdDXJgBQL8MqhlsY6Cf5QEmaGO1/amKw87TUka/nISZwawAAuo3Bd8Q9Y5
-         Q2/kXOGWVDPW0JHFupRqRVTbSzMABRZWFFHfv4TTdQxTUxA+3W3XnzLF4rPy1Bjjsi4E
-         ncmNgV2Qprp0dsgDNWVFitpxUzo5leIKPIgV0hR5tYVYQbZZKSaZ7HOQvEoe0SMmEcOH
-         +fnw==
-X-Gm-Message-State: ANoB5pnkXDMSQU+/IloHIb6uNYJxfC8NKTmFibhKoLp8GtSEE3uSB+fj
-        mQEhUc7Exif+mV31tExWcRjDue34+co=
-X-Google-Smtp-Source: AA0mqf5+My1KMnfxezazmOJwrZzXmTiSo0UQgisY3Zj4etX6aQs0nTfM1azYODLSujjXbo1mcsHkMg==
-X-Received: by 2002:a17:903:4cd:b0:189:c57c:9a19 with SMTP id jm13-20020a17090304cd00b00189c57c9a19mr20114453plb.58.1670969195803;
-        Tue, 13 Dec 2022 14:06:35 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.42.38])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a170902650500b00186a437f4d7sm369916plk.147.2022.12.13.14.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 14:06:35 -0800 (PST)
-Message-ID: <e94f4967a770b7004686155291c885e61a3403b2.camel@gmail.com>
-Subject: Re: [PATCH v2 net-next 2/3] net: dsa: mv88e6xxx: disable hold of
- chip lock for handling
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     "Hans J. Schultz" <netdev@kapio-technology.com>,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Tue, 13 Dec 2022 14:06:33 -0800
-In-Reply-To: <20221213174650.670767-3-netdev@kapio-technology.com>
-References: <20221213174650.670767-1-netdev@kapio-technology.com>
-         <20221213174650.670767-3-netdev@kapio-technology.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        bh=wHUnqLw96+ngp6Xno9gf3PyYozaeRIXvoO7s/Oinps0=;
+        b=czy9NoNYyTW+Uk6sxw+uM9Z8dZPM2InB+kcewWnxyJl70jjAA2mNwLj/AzCrtOE/zD
+         SB33gQ7fjfx9qSDc7hsc2hVB4T1VcbjCNJ+UUb8bNyBY+syW9zMxFaFQjUksWc7LF3cr
+         X7YO7+CpUF0utaaIQDlaZxJiZNDDdAITGZ/ubdhJVi3s1SSd5nQmPnbduYYZSChCJJPU
+         lnerGeQHsGqdTAR4UKQlbPUz9eck0n0eGn3lyQOr4VttFla9AmYwRgVD01ZZKrrZP/fs
+         IWTQ9ZG914fB/tiGMNHTizD4Is8CQPs1T3Kkb7X2fO1oUOPCQWT+GPdoYoGmaIR6PguA
+         1jbQ==
+X-Gm-Message-State: ANoB5pk998dPFaEF7PLPuBsar0HnhzhdsVzuSFm+F0oSiXjtTqQJC6a9
+        0qzNXgkoGaITwTjJCLa44Eayfw==
+X-Google-Smtp-Source: AA0mqf7ehK46F6iool0O7jW35L3u8rQcwD6kafvrqVI+B60Y6ZdK4Ce0X/YC0MCcDAh1XjizP0eE3g==
+X-Received: by 2002:a05:6512:acf:b0:4a4:68b9:19f6 with SMTP id n15-20020a0565120acf00b004a468b919f6mr7176732lfu.30.1670969264760;
+        Tue, 13 Dec 2022 14:07:44 -0800 (PST)
+Received: from ?IPv6:::1? (dzccz6yfpdgdc5vwjcs5y-3.rev.dnainternet.fi. [2001:14ba:a085:4d00:8c19:462c:c647:13f2])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056512215100b00498f77cfa63sm526359lfr.280.2022.12.13.14.07.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Dec 2022 14:07:44 -0800 (PST)
+Date:   Wed, 14 Dec 2022 00:07:41 +0200
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, airlied@gmail.com
+CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v12_4/5=5D_drm/msm/dp=3A_parser_link?= =?US-ASCII?Q?-frequencies_as_property_of_dp=5Fout_endpoint?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1670967848-31475-5-git-send-email-quic_khsieh@quicinc.com>
+References: <1670967848-31475-1-git-send-email-quic_khsieh@quicinc.com> <1670967848-31475-5-git-send-email-quic_khsieh@quicinc.com>
+Message-ID: <19FF7ADA-F116-4C0E-9930-617FF1EE3801@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-13 at 18:46 +0100, Hans J. Schultz wrote:
-> As functions called under the interrupt handler will need to take the
-> netlink lock, we need to release the chip lock before calling those
-> functions as otherwise double lock deadlocks will occur as userspace
-> calls towards the driver often take the netlink lock and then the
-> chip lock.
->=20
-> The deadlock would look like:
->=20
-> Interrupt handler: chip lock taken, but cannot take netlink lock as
->                    userspace config call has netlink lock.
-> Userspace config: netlink lock taken, but cannot take chip lock as
->                    the interrupt handler has the chip lock.
->=20
-> Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
 
-Just to confirm, in order to see the deadlocks I would imagine you need
-something in the tracepoints that is taking the netlink lock?
 
-If so you might want to reference the commit that switched out the
-dev_err_ratelimited for the tracepoints 8646384d80f3 ("net: dsa:
-mv88e6xxx: replace ATU violation prints with trace points") so that
-this patch can be found an applied to any kernels that pull in those
-tracepoints.
+On 13 December 2022 23:44:07 EET, Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>=
+ wrote:
+>Add capability to parser and retrieve max DP link supported rate from
+>link-frequencies property of dp_out endpoint=2E
+>
+>Changes in v6:
+>-- second patch after split parser patch into two patches
+>
+>Changes in v7:
+>-- without checking cnt against DP_MAX_NUM_DP_LANES to retrieve link rate
+>
+>Changes in v9:
+>-- separate parser link-frequencies out of data-lanes
+>
+>Changes in v10:
+>-- add dp_parser_link_frequencies()
+>
+>Changes in v11:
+>-- return 0 if(!endpoint)
+>
+>Changes in v12:
+>-- replace khz with kbytes at dp_parser=2Eh
+>
+>Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
 
-> ---
->  drivers/net/dsa/mv88e6xxx/global1_atu.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv=
-88e6xxx/global1_atu.c
-> index 61ae2d61e25c..34203e112eef 100644
-> --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-> @@ -409,11 +409,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread=
-_fn(int irq, void *dev_id)
-> =20
->  	err =3D mv88e6xxx_g1_read_atu_violation(chip);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
-> =20
->  	err =3D mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_OP, &val);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
-> =20
->  	err =3D mv88e6xxx_g1_atu_fid_read(chip, &fid);
->  	if (err)
-> @@ -421,11 +421,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread=
-_fn(int irq, void *dev_id)
-> =20
->  	err =3D mv88e6xxx_g1_atu_data_read(chip, &entry);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
-> =20
->  	err =3D mv88e6xxx_g1_atu_mac_read(chip, &entry);
->  	if (err)
-> -		goto out;
-> +		goto out_unlock;
-> +
-> +	mv88e6xxx_reg_unlock(chip);
-> =20
->  	spid =3D entry.state;
-> =20
-> @@ -449,13 +451,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread=
-_fn(int irq, void *dev_id)
->  						   fid);
->  		chip->ports[spid].atu_full_violation++;
->  	}
-> -	mv88e6xxx_reg_unlock(chip);
-> =20
->  	return IRQ_HANDLED;
-> =20
-> -out:
-> +out_unlock:
->  	mv88e6xxx_reg_unlock(chip);
-> =20
-> +out:
->  	dev_err(chip->dev, "ATU problem: error %d while handling interrupt\n",
->  		err);
->  	return IRQ_HANDLED;
 
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Reviewed-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
+
+
+>---
+> drivers/gpu/drm/msm/dp/dp_parser=2Ec | 27 +++++++++++++++++++++++++++
+> drivers/gpu/drm/msm/dp/dp_parser=2Eh |  2 ++
+> 2 files changed, 29 insertions(+)
+
+
+--=20
+With best wishes
+Dmitry
