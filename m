@@ -2,97 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62B064BD53
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4722664BD56
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236821AbiLMTbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S236834AbiLMTbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236267AbiLMTbC (ORCPT
+        with ESMTP id S236267AbiLMTbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:31:02 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC9E24085;
-        Tue, 13 Dec 2022 11:31:01 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id n3so2904545pfq.10;
-        Tue, 13 Dec 2022 11:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sXb/rEJk2v1xayTt6fq4DLeZdX5JWv1TpuzsNKAsI7M=;
-        b=G7J7io0xWPaTvvK6zYRTl01FHKEjCE7q/Jaq0JD7R1g3OdahdIZtirguReRInIrPRH
-         lZsfSIG+8+OSKwrxDm0SlrqyJmOeSXBDZrO8SkfI4g6JjRukQH28HHKsxVX/gSYqaybD
-         hxxQOSwBU4s3Sc7AvEyaQxh8DY45WGklrYMAn2GHRlP8xHqIqTs1JTT5nO6YSg9E9p2w
-         fic1D5sGqkASXcthzYQanLnBIebq2BxRY4h0k/r/Sbgjb+opKe973QztrDdQbHiBgwbJ
-         Yg/P5MaegIvmBAoR2/1zusmab90D83KH1vTve3IBK1wCcxqZ9z0CYdq5ekniAUS5kP7n
-         q8wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sXb/rEJk2v1xayTt6fq4DLeZdX5JWv1TpuzsNKAsI7M=;
-        b=19d8AlXAXm9gpJtZa3xBPfL6SQsQUhLHclLDmW9Jdnckq/muVFYE6d7YYQmjXytd4Q
-         ysMwPrcMDf5TSCavn8omVsCFGbn9ckGBnC89Or0DJjgmOiNLtxif4ivO8eSqg3yOQsQR
-         eIsoDQOdJmmXTG94KD2Frk9a3cj9Xaw8YQIHm9VHRaK+R+S0D1s9u0hjuLRKBBKlFSCU
-         x/PmvLhB9tTFamB2dIjpaOFbn5MDiEizqWIG6hsbCP6ABF+/PjSke2JmtLBCG5E8e06O
-         V9HXdp/aZH6LqaBuiTHv+g230KKGyHp1HNjNCmdA3dZOFK57HmsCIWzqahJ4JwS2I97H
-         Bobg==
-X-Gm-Message-State: ANoB5pl2uenaJlEcTY8JK8g3u6SK6h/DN7R/jdQCZLG8xCL8oZkkGFh9
-        yifdUGneRhxUZKd6Sq8ZTmk=
-X-Google-Smtp-Source: AA0mqf4LR0w9Q2cfjZcReFSGVhRaqHyqmcRJT4oMpOm+Bbkp1P5i0Ew5juN6Qehq6v8vhXbEJ9/Biw==
-X-Received: by 2002:a05:6a00:4482:b0:576:95ec:bc93 with SMTP id cu2-20020a056a00448200b0057695ecbc93mr20756659pfb.23.1670959861145;
-        Tue, 13 Dec 2022 11:31:01 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:c415])
-        by smtp.gmail.com with ESMTPSA id i63-20020a62c142000000b00572198393c2sm7986815pfg.194.2022.12.13.11.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 11:31:00 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 13 Dec 2022 09:30:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
-Subject: Re: [PATCH-block v3 2/2] blk-cgroup: Flush stats at blkgs
- destruction path
-Message-ID: <Y5jS825K7ej0jEV+@slm.duckdns.org>
-References: <20221213184446.50181-1-longman@redhat.com>
- <20221213184446.50181-3-longman@redhat.com>
+        Tue, 13 Dec 2022 14:31:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102BD24085;
+        Tue, 13 Dec 2022 11:31:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B204AB815BA;
+        Tue, 13 Dec 2022 19:31:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56862C43392;
+        Tue, 13 Dec 2022 19:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670959903;
+        bh=MIb0vB7MRAZr9GxU2bjkcrUiXnT7auWLqHlL2N0BTp4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ruIiTNcCq1XV+RLd13TjcNnOMOy7/PI2eauysDoZR9onsyoky3dKj+fgfezxcTmkb
+         iDI/x9tAzqLSMzbyzDXEHRR/KW8IMXkjm2s2hGFUz/8Bbg/u51G83YfptfVVVBVd0K
+         uidK7eur+qRwQpOE88L2suob2AeXlLTJFXKswIgexDCCm9OLi6WeFVYXYpTjij2N15
+         tIsDV7xVIP5G2ZByUQlSySgwjgSwNSBsQ07D1eXqJUzyHQhTW3sB1VQ1Ef5gPJT4IB
+         zaGhDE5RCTYnLKbJHj2NYGI3w7o/C7Vt2naWCDlVfbTcr3bQJxhSpOba0aMU0q/GiY
+         abzGmXKCorxxA==
+Received: by mail-lf1-f51.google.com with SMTP id 1so6666122lfz.4;
+        Tue, 13 Dec 2022 11:31:43 -0800 (PST)
+X-Gm-Message-State: ANoB5pn0r5H1eqWlGPWtNkFoOB1acVjL1kvYGhrwEw38hPauNA9NnP4j
+        /HQiJaToCqM4DqRIUv29Yerj2uSWahcztdLsgsA=
+X-Google-Smtp-Source: AA0mqf4CXogzuZ3skCV0VYovX4ADm0Z9qdamjOFIrkEGw9zfpHbMeoBbxOXTlZturUa7NoZ8KBPTCT67r6Pqw/nZnO0=
+X-Received: by 2002:a05:6512:2c87:b0:4a2:4282:89c7 with SMTP id
+ dw7-20020a0565122c8700b004a2428289c7mr27966486lfb.437.1670959901273; Tue, 13
+ Dec 2022 11:31:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213184446.50181-3-longman@redhat.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220901171252.2148348-1-song@kernel.org> <Y3expGRt4cPoZgHL@alley>
+ <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com> <Y5Me5dTGv+GznvtO@alley>
+In-Reply-To: <Y5Me5dTGv+GznvtO@alley>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 13 Dec 2022 11:31:29 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5eVyb10VM6WsHS_Y4uwDK3pS_9uuL-cKdOdMo+1p-peA@mail.gmail.com>
+Message-ID: <CAPhsuW5eVyb10VM6WsHS_Y4uwDK3pS_9uuL-cKdOdMo+1p-peA@mail.gmail.com>
+Subject: Re: powerpc-part: was: Re: [PATCH v6] livepatch: Clear relocation
+ targets on a module removal
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 01:44:46PM -0500, Waiman Long wrote:
-> +	/*
-> +	 * Flush all the non-empty percpu lockless lists so as to release
-> +	 * the blkg references held by those lists which, in turn, may
-> +	 * allow the blkgs to be freed and release their references to
-> +	 * blkcg speeding up its freeing.
-> +	 */
+On Fri, Dec 9, 2022 at 3:41 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+> Hi,
+>
+> this reply is only about the powerpc-specific part.
+>
+> Also adding Kamalesh and Michael into Cc who worked on the related
+> commit a443bf6e8a7674b86221f49 ("powerpc/modules: Add REL24 relocation
+> support of livepatch symbols").
+>
+>
+> On Mon 2022-11-28 17:57:06, Song Liu wrote:
+> > On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
+> > >
+> > > > --- a/arch/powerpc/kernel/module_64.c
+> > > > +++ b/arch/powerpc/kernel/module_64.c
+>
+> I put back the name of the modified file so that it is easier
+> to know what changes we are talking about.
+>
+> [...]
+> > > > +#ifdef CONFIG_LIVEPATCH
+> > > > +void clear_relocate_add(Elf64_Shdr *sechdrs,
+> > > > +                    const char *strtab,
+> > > > +                    unsigned int symindex,
+> > > > +                    unsigned int relsec,
+> > > > +                    struct module *me)
+> > > > +{
+> > > > +     unsigned int i;
+> > > > +     Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+> > > > +     Elf64_Sym *sym;
+> > > > +     unsigned long *location;
+> > > > +     const char *symname;
+> > > > +     u32 *instruction;
+> > > > +
+> > > > +     pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
+> > > > +              sechdrs[relsec].sh_info);
+> > > > +
+> > > > +     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> > > > +             location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+> > > > +                     + rela[i].r_offset;
+> > > > +             sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+> > > > +                     + ELF64_R_SYM(rela[i].r_info);
+> > > > +             symname = me->core_kallsyms.strtab
+> > > > +                     + sym->st_name;
+>
+> The above calculation is quite complex. It seems to be copied from
+> apply_relocate_add(). If I maintained this code I would want to avoid
+> the duplication. definitely.
+>
 
-Can you mention the possible deadlock explicitly? This sounds more like an
-optimization.
+Back to this one...
 
-Thanks.
+If we go with option 2 that clear_relocate_add() only does things
+needed to make the next apply_relocate_add() succeed, we are
+not likely to have one write_relocate_add(), which is shared by
+apply_relocate_add() and clear_relocate_add(). To avoid
+duplication, shall we have two helpers to calculate location and
+sym? Or maybe one more to calculate symname? I personally
+don't like such one liner helper with multiple arguments, such as
 
--- 
-tejun
+static unsigned long *get_location(Elf64_Shdr *sechdrs,
+           unsigned int relsec, unsigned int idx)
+{
+    Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+
+    return (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+         + rela[idx].r_offset;
+}
+
+Then use it as
+     location = get_location(sechdrs, relsec, i);
+
+We also need get_sym(), which is similar to get_location.
+
+We can probably pass in different arguments. But I don't find
+any options that I like. I think duplicate some code is better in
+this case. However, if you do think these helpers are better,
+or have other suggestions, I won't insist further.
+
+Thanks,
+Song
