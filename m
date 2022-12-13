@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C2964BC36
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5655F64BC37
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbiLMSkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S236625AbiLMSlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiLMSkm (ORCPT
+        with ESMTP id S236595AbiLMSlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:40:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9D01097;
-        Tue, 13 Dec 2022 10:40:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9123C616DA;
-        Tue, 13 Dec 2022 18:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDB3C433D2;
-        Tue, 13 Dec 2022 18:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670956840;
-        bh=VNLhR2HNLIpNsJL8tOPByX6zJS1xk+en02wwUBFSSGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W7ISJ+8iOF+4KJ6D3whbyQ5TVmXgvmyBa/CUYnM/T+2OTYuVMa78jvd5loDrvDHnZ
-         tV89BHGhjrPd/7gzGP6JLx9daFg5q8mMtNE8DRJp2Z+T12ZL9+VK71KY+qRkra4mh5
-         Z0DqStswT8YJtJSFtjjTxSK5STFvPRV8hJL4C19o=
-Date:   Tue, 13 Dec 2022 19:40:36 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Seija K." <doremylover123@gmail.com>
-Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
- controller's ring buffer
-Message-ID: <Y5jHJJS31+6Smk5L@kroah.com>
-References: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
+        Tue, 13 Dec 2022 13:41:03 -0500
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F0725292
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:40:55 -0800 (PST)
+Received: from imladris.home.surriel.com ([10.0.13.28] helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1p5ACn-00072R-0m;
+        Tue, 13 Dec 2022 13:40:41 -0500
+Message-ID: <52c9d084d9852cc7c769dbb76f03a13df014c37f.camel@surriel.com>
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler
+ class
+From:   Rik van Riel <riel@surriel.com>
+To:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Date:   Tue, 13 Dec 2022 13:40:40 -0500
+In-Reply-To: <Y5jAc/Gs4gVRzkDe@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+         <20221130082313.3241517-15-tj@kernel.org>
+         <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
+         <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
+         <Y5haDh3sYUFcXkBx@hirez.programming.kicks-ass.net>
+         <Y5jAc/Gs4gVRzkDe@slm.duckdns.org>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-J5NzES9P4xwtTmKA+te4"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 12:14:28PM -0500, Seija K. wrote:
-> When a packet larger than MTU arrives in Linux from the modem,
-> it is discarded with -EOVERFLOW error (Babble error).
-> 
-> This is seen on USB3.0 and USB2.0 buses.
-> 
-> This is because the MRU (Max Receive Size) is not a separate entity
-> from the MTU (Max Transmit Size),
-> and the received packets can be larger than those transmitted.
-> 
-> Following the babble error, there was an endless supply of zero-length URBs,
-> which are rejected with -EPROTO (increasing the rx input error counter
-> each time).
-> 
-> This is only seen on USB3.0.
-> These continue to come ad infinitum until the modem is shut down.
-> 
-> There appears to be a bug in the core USB handling code in Linux
-> that doesn't deal well with network MTUs smaller than 1500 bytes.
-> 
-> By default, the dev->hard_mtu (the real MTU)
-> is in lockstep with dev->rx_urb_size (essentially an MRU),
-> and the latter is causing trouble.
-> 
-> This has nothing to do with the modems,
-> as the issue can be reproduced by getting a USB-Ethernet dongle,
-> setting the MTU to 1430, and pinging with size greater than 1406.
-> 
-> Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-> Co-Authored-By: TarAldarion <gildeap@tcd.ie>
-> 
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 554d4e2a84a4..39db53a74b5a 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
-> struct usb_interface *intf)
-> }
-> dev->net->netdev_ops = &qmi_wwan_netdev_ops;
-> dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
-> + /* LTE Networks don't always respect their own MTU on receive side;
-> + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
-> + * far-end network. Make the receive buffer large enough to accommodate
-> + * them, and add four bytes so MTU does not equal MRU on network
-> + * with 1500 MTU otherwise usbnet_change_mtu() will change both.
-> + */
-> + dev->rx_urb_size = ETH_DATA_LEN + 4;
-> err:
-> return status;
-> }
 
-Hi,
+--=-J5NzES9P4xwtTmKA+te4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Tue, 2022-12-13 at 08:12 -1000, Tejun Heo wrote:
+> Hello,
+>=20
+> On Tue, Dec 13, 2022 at 11:55:10AM +0100, Peter Zijlstra wrote:
+> > On Mon, Dec 12, 2022 at 11:33:12AM -1000, Tejun Heo wrote:
+> >=20
+> > > Here, the way it's handled is a bit different, SCX has
+> > > a watchdog mechanism implemented in "[PATCH 18/31] sched_ext:
+> > > Implement
+> > > runnable task stall watchdog", so if SCX tasks hang for whatever
+> > > reason
+> > > including being starved by CFS, it will get aborted and all tasks
+> > > will be
+> > > handed back to CFS. IOW, it's treated like any other BPF
+> > > scheduler errors
+> > > that can lead to stalls and recovered the same way.
+> >=20
+> > That all sounds quite terrible.. :/
+>=20
+> The main source of difference is that we can't implicitly trust the
+> BPF
+> scheduler and if it malfunctions or on user request, the system
+> should
+> always be recoverable, so there are some extra things which are
+> inherently
+> necessary to support that.
+>=20
+That makes me wonder whether loading an SCX policy
+should just have that policy take over all of the
+SCHED_OTHER tasks by default, and have a failure of
+the policy just return those tasks to CFS?
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Having the two be operative at the same time seems
+to be a cause of hard to resolve issues, while simply
+running all non-RT tasks under the loadable policy
+could simplify both internal kernel interfaces, as
+well as externally visible effects?
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+--=20
+All Rights Reversed.
 
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file,
-  Documentation/process/submitting-patches.rst for how to do this
-  correctly.
+--=-J5NzES9P4xwtTmKA+te4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+-----BEGIN PGP SIGNATURE-----
 
-thanks,
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmOYxygACgkQznnekoTE
+3oPFQgf8DXDaQVDEPmB52FNhGpq0/9CS1pbuYsFWFntBlTO9Rh4wj4pr19aZg8i1
+D3RflOvjgZASN82WRgKdh6sHWKgwQMeCUcpQy9Exly2vsWFHgFwHx7p+j3udjyc3
+LCDz8dRRoN4s17ahTvCitZk2YKLz7IV4igYANkl/u2q7X9nXFKFX8CW7CWRHlrkS
+3CtxEt3A4wwUgp3NXiiKWsEGxkNmvAQJSzzglSnfp65lyvLfV4JHAznWHFXHie4r
+VeTivRteu11k1CF81NyWIg/eKnlbz1LjE4zeWpKlZCq1mUuCISiTWhfg8g7OW/jS
+LhguLYFv6LRNAukNTvxMxUvJ1RNCxA==
+=f/5v
+-----END PGP SIGNATURE-----
 
-greg k-h's patch email bot
+--=-J5NzES9P4xwtTmKA+te4--
