@@ -2,160 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663EA64B46C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D28564B4C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbiLMLsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 06:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S235479AbiLMMGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234581AbiLMLss (ORCPT
+        with ESMTP id S235556AbiLMMGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 06:48:48 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F75FADE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 03:48:45 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NWcDz0cZyz15NKj;
-        Tue, 13 Dec 2022 19:47:47 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 13 Dec 2022 19:48:43 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>
-CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>, David Hildenbrand <david@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH -next resend v3] mm: hwposion: support recovery from ksm_might_need_to_copy()
-Date:   Tue, 13 Dec 2022 20:05:23 +0800
-Message-ID: <20221213120523.141588-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221213030557.143432-1-wangkefeng.wang@huawei.com>
-References: <20221213030557.143432-1-wangkefeng.wang@huawei.com>
+        Tue, 13 Dec 2022 07:06:02 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15846CE15
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:05:53 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id 6so1449848vkz.0
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=atw8GONqw/Dh7pq6QHVWIz9UCL87+NRHru4MFr8q3M0=;
+        b=WFt1B+cWMhNV3g3tNeb9DZBCPWih6xNa/J52tJN63PmLonaLlv1MBCSPBY8s0r8JNM
+         YwR8QE/k0AKCoiFJKaJt9brz3BSIsYH39rNEEURZstZ3GXk1NWb/6IcPM/rrpJ+jC6D3
+         shiB/TOhAYfeirGXDPi2TIpR+qd+Ici8rAXefBxOovcoje9+1u/pusfliJI0CH9UceEo
+         xfby/0x77Al1dGitrnP4nXTEEz5U459djCVjg3R2CJ0GoOtda3S4NxFLfk8hAV5NT/kk
+         xMK33ksZGewtgNNCsUd4OxFz9YxY8Oqy2cDia0n9+O16lkdhisXGMbMbisjAmBI2hy9x
+         BeSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=atw8GONqw/Dh7pq6QHVWIz9UCL87+NRHru4MFr8q3M0=;
+        b=tO6+tnGBVFlRgeNSco9+2Hzd6GcZ+io7W0URzm1z9HffwKJr7LhH8gXh7yqMXwhcOP
+         1wcKUBbalF2L041VENSlq0NkQBX/diQvea0vXgN/vQddyoiFrtXfqKuMgJ9bqyJwv2my
+         fU2zv1vgdHyNoRtN8DGrmH5kETlA7KJoA8GT4KKFYbyGyNGfDmSIi0BnkAs/D8G1jW9U
+         NfsSKwSbxMfJv+yUYzAqAWP+ke5y3zOMgaRSmQU+oxrfY2EywHO5pUje56tL5d4fiLMg
+         +SK5Y4mHS/8OMrrSbAXJ40S8PBJIWdk/3NjyN4uWNqehUznKwCIKNGNoyt7nk5vjD0jT
+         wK1Q==
+X-Gm-Message-State: ANoB5pnlV+uiHdyW8/rx/rRqhEeXi7LJkoQyYAgZQRgslmV26fCZyuwU
+        z9qThEH6ibjp+BcBIWG+76SfNPLP56gf03iddmHpAA==
+X-Google-Smtp-Source: AA0mqf5a1GFQo2eP5jLkOjw6izO0mJUysgNLBd4enZUUtJ7H0Xb/tIZVo0F7k32YOP9NQVmd9MHHeZTMwi2Qf+M/4ZM=
+X-Received: by 2002:a1f:edc6:0:b0:3bc:b66b:fe7 with SMTP id
+ l189-20020a1fedc6000000b003bcb66b0fe7mr36936238vkh.20.1670933151953; Tue, 13
+ Dec 2022 04:05:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212130912.069170932@linuxfoundation.org>
+In-Reply-To: <20221212130912.069170932@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 13 Dec 2022 17:35:40 +0530
+Message-ID: <CA+G9fYujR8JmdS7sJzSOpD-SoJU+FnM_uHp1uKLE6GVT_3k6dw@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/38] 4.14.302-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the kernel copy a page from ksm_might_need_to_copy(), but runs
-into an uncorrectable error, it will crash since poisoned page is
-consumed by kernel, this is similar to Copy-on-write poison recovery,
-When an error is detected during the page copy, return VM_FAULT_HWPOISON
-in do_swap_page(), and install a hwpoison entry in unuse_pte() when
-swapoff, which help us to avoid system crash. Note, memory failure on
-a KSM page will be skipped, but still call memory_failure_queue() to
-be consistent with general memory failure process.
+On Mon, 12 Dec 2022 at 19:23, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.302 release.
+> There are 38 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.302-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v3 resend: 
-- enhance unuse_pte() if ksm_might_need_to_copy() return -EHWPOISON
-- fix issue found by lkp 
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
- mm/ksm.c      |  8 ++++++--
- mm/memory.c   |  3 +++
- mm/swapfile.c | 20 ++++++++++++++------
- 3 files changed, 23 insertions(+), 8 deletions(-)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index dd02780c387f..83e2f74ae7da 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
- 		new_page = NULL;
- 	}
- 	if (new_page) {
--		copy_user_highpage(new_page, page, address, vma);
--
-+		if (copy_mc_user_highpage(new_page, page, address, vma)) {
-+			put_page(new_page);
-+			new_page = ERR_PTR(-EHWPOISON);
-+			memory_failure_queue(page_to_pfn(page), 0);
-+			return new_page;
-+		}
- 		SetPageDirty(new_page);
- 		__SetPageUptodate(new_page);
- 		__SetPageLocked(new_page);
-diff --git a/mm/memory.c b/mm/memory.c
-index aad226daf41b..5b2c137dfb2a 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		if (unlikely(!page)) {
- 			ret = VM_FAULT_OOM;
- 			goto out_page;
-+		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
-+			ret = VM_FAULT_HWPOISON;
-+			goto out_page;
- 		}
- 		folio = page_folio(page);
- 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 908a529bca12..0efb1c2c2415 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1763,12 +1763,15 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 	struct page *swapcache;
- 	spinlock_t *ptl;
- 	pte_t *pte, new_pte;
-+	bool hwposioned = false;
- 	int ret = 1;
- 
- 	swapcache = page;
- 	page = ksm_might_need_to_copy(page, vma, addr);
- 	if (unlikely(!page))
- 		return -ENOMEM;
-+	else if (unlikely(PTR_ERR(page) == -EHWPOISON))
-+		hwposioned = true;
- 
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
- 	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
-@@ -1776,15 +1779,19 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		goto out;
- 	}
- 
--	if (unlikely(!PageUptodate(page))) {
--		pte_t pteval;
-+	if (hwposioned || !PageUptodate(page)) {
-+		swp_entry_t swp_entry;
- 
- 		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
--		pteval = swp_entry_to_pte(make_swapin_error_entry());
--		set_pte_at(vma->vm_mm, addr, pte, pteval);
--		swap_free(entry);
-+		if (hwposioned) {
-+			swp_entry = make_hwpoison_entry(swapcache);
-+			page = swapcache;
-+		} else {
-+			swp_entry = make_swapin_error_entry();
-+		}
-+		new_pte = swp_entry_to_pte(swp_entry);
- 		ret = 0;
--		goto out;
-+		goto setpte;
- 	}
- 
- 	/* See do_swap_page() */
-@@ -1816,6 +1823,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		new_pte = pte_mksoft_dirty(new_pte);
- 	if (pte_swp_uffd_wp(*pte))
- 		new_pte = pte_mkuffd_wp(new_pte);
-+setpte:
- 	set_pte_at(vma->vm_mm, addr, pte, new_pte);
- 	swap_free(entry);
- out:
--- 
-2.35.3
+NOTE:
+same arm tinyconfig build warnings / errors as on the linux-4.19.y kernel.
 
+## Build
+* kernel: 4.14.302-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 30e132795eb838b35e2ecd48395d47a0a4a6de7c
+* git describe: v4.14.301-39-g30e132795eb8
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.301-39-g30e132795eb8
+
+## Test Regressions (compared to v4.14.301)
+
+## Metric Regressions (compared to v4.14.301)
+
+## Test Fixes (compared to v4.14.301)
+
+## Metric Fixes (compared to v4.14.301)
+
+## Test result summary
+total: 89742, pass: 77542, fail: 1617, skip: 9655, xfail: 928
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 306 passed, 7 failed
+* arm64: 53 total, 50 passed, 3 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 51 total, 50 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
