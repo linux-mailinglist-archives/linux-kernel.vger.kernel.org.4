@@ -2,79 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1196C64AF47
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68CA64AF5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 06:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiLMFWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 00:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S231426AbiLMFgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 00:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbiLMFWq (ORCPT
+        with ESMTP id S229570AbiLMFgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 00:22:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDFEFCB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 21:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:To:From:Date:Reply-To:Cc:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=sZPQ3spBdxnXS/pJhPHx16e4yKZseMO1oagGTXQ1r3w=; b=IEyZ43f8OVy6cHkWQldumvUl1Z
-        TvUVnEdtJmY16qbOrFZdbMhfC/uXzZo/8oEjaFv19P9QBTxR310FWoZ8ZnyffYhqjEAW3c3Jv+kCY
-        6N3CisOVWA+oOoUE027AL2TJe1UYxY8MFYWBJg8KXRu0MkJC0SxUvvU0nrNgD040aso/sddkNncC+
-        +d9Hhu4YqPm7HItsborNfF7TM4bxovKTSnr8jkfD3plNhdFzyjEbpsKEBsFBKPiUgQO/gV6tu/CEd
-        WKeil2c/lSWs5McnZLirDjmRHWKVE9C+sAfv70SvV5DkXRiEZz/MvdXiFVBfknkVrImwm0eLX5wTB
-        89K//qyg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4xkY-00BBi0-Ug; Tue, 13 Dec 2022 05:22:42 +0000
-Date:   Mon, 12 Dec 2022 21:22:42 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
-        peterz@infradead.org
-Subject: [GIT PULL] sysctl changes for v6.2-rc1
-Message-ID: <Y5gMIvLH0KKJgTY0@bombadil.infradead.org>
+        Tue, 13 Dec 2022 00:36:17 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9713E16;
+        Mon, 12 Dec 2022 21:36:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670909777; x=1702445777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=liEEZEKTglWJ0qgi+YWfT/4zgdb8ql5I6ijkBiYHO9c=;
+  b=PfleHhoHKodcotL3Mo47NYJXozQDkhMTevk4NehTWe0+6rmIaHOajotL
+   uRz9fbL8dhvV7pCjBICY4Fkh0/WVhSSumf7sTl7aXYiFyOCgihxfKQ6VK
+   u9CbYpwqFG0lm7tt7NI991nfBBTjmiAc4ifPdniH4IrmShrJ9UbN+2BJ1
+   5Qkv1q6D9Cdih2jCMgNOYrkMrNU79UsomXgAvF2jiPnmfEpSVtHmQLYwh
+   tzOcwNgn2UHvBZW+uPemWwDghF/WFHHxPBEoCVW/XEZMjjRUIW5cDehPi
+   D6DNgv1dPOX7eXaaWZmVkhxi6qyTMINEgPzsVzIPP/t4Asttl6LUy7d+/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="301461473"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="301461473"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 21:36:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="755248060"
+X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
+   d="scan'208";a="755248060"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Dec 2022 21:36:11 -0800
+Date:   Tue, 13 Dec 2022 13:26:20 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     matthew.gerlach@linux.intel.com
+Cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v6 3/4] fpga: dfl: add basic support for DFHv1
+Message-ID: <Y5gM/L3wufo0/m0y@yilunxu-OptiPlex-7050>
+References: <20221209214523.3484193-1-matthew.gerlach@linux.intel.com>
+ <20221209214523.3484193-4-matthew.gerlach@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221209214523.3484193-4-matthew.gerlach@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 81e7cfa3a9eb4ba6993a9c71772fdab21bc5d870:
+On 2022-12-09 at 13:45:22 -0800, matthew.gerlach@linux.intel.com wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-  Merge tag 'erofs-for-6.1-rc6-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs (2022-11-15 10:30:34 -0800)
+[...]
+ 
+>  /*
+>   * when create sub feature instances, for private features, it doesn't need
+>   * to provide resource size and feature id as they could be read from DFH
+> @@ -1023,39 +1125,69 @@ static int
+>  create_feature_instance(struct build_feature_devs_info *binfo,
+>  			resource_size_t ofst, resource_size_t size, u16 fid)
+>  {
+> -	unsigned int irq_base, nr_irqs;
+>  	struct dfl_feature_info *finfo;
+> +	resource_size_t start, end;
+> +	int dfh_psize = 0;
+>  	u8 revision = 0;
+> +	u64 v, addr_off;
+> +	u8 dfh_ver = 0;
+>  	int ret;
+> -	u64 v;
+>  
+>  	if (fid != FEATURE_ID_AFU) {
+>  		v = readq(binfo->ioaddr + ofst);
+>  		revision = FIELD_GET(DFH_REVISION, v);
+> -
+> +		dfh_ver = FIELD_GET(DFH_VERSION, v);
+>  		/* read feature size and id if inputs are invalid */
+>  		size = size ? size : feature_size(v);
+>  		fid = fid ? fid : feature_id(v);
+> +		if (dfh_ver == 1) {
+> +			dfh_psize = dfh_get_psize(binfo->ioaddr + ofst, size);
+> +			if (dfh_psize < 0) {
+> +				dev_err(binfo->dev,
+> +					"failed to read size of DFHv1 parameters %d\n",
+> +					dfh_psize);
+> +				return dfh_psize;
+> +			}
+> +			dev_dbg(binfo->dev, "dfhv1_psize %d\n", dfh_psize);
+> +		}
+>  	}
+>  
+>  	if (binfo->len - ofst < size)
+>  		return -EINVAL;
+>  
+> -	ret = parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
+> -	if (ret)
+> -		return ret;
+> -
+> -	finfo = kzalloc(sizeof(*finfo), GFP_KERNEL);
+> +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
 
-are available in the Git repository at:
+Please use size_add(). See Documentation/process/deprecated.rst for
+details.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-6.2-rc1
+Others look good to me.
 
-for you to fetch changes up to 0dff89c4488f90c01807d9c12023433703206523:
-
-  sched: Move numa_balancing sysctls to its own file (2022-11-20 20:55:26 -0800)
-
-----------------------------------------------------------------
-sysctl changes for v6.2-rc1
-
-Only step forward on the sysctl cleanups for this cycle. This
-has been on linux-next since September and this time it goes
-with a "Yeah, think so, it just moves stuff around a bit" from
-Peter Zijlstra.
-
-----------------------------------------------------------------
-Kefeng Wang (1):
-      sched: Move numa_balancing sysctls to its own file
-
- include/linux/sched/sysctl.h |  6 ------
- kernel/sched/core.c          | 13 ++++++++++++-
- kernel/sched/fair.c          | 18 +++++++++++++++---
- kernel/sysctl.c              | 19 -------------------
- 4 files changed, 27 insertions(+), 29 deletions(-)
-
+Yilun
