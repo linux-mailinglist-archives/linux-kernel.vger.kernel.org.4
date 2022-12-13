@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4532C64AC15
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558AF64AC24
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbiLMARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S234045AbiLMARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234058AbiLMARA (ORCPT
+        with ESMTP id S234064AbiLMARB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:17:00 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C301CB0E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:16:58 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id i4-20020a17090332c400b0018f82951826so3910558plr.20
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:16:58 -0800 (PST)
+        Mon, 12 Dec 2022 19:17:01 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD7D1B1DF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:17:00 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id d7-20020a170902b70700b0018f4bf00569so4485723pls.4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:17:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=DOvY7w0rRl2MxDLB0k3o2yUeh+erpcmsWDFuA702T6s=;
-        b=l9bHJR0oKKynBT27/jXjQ30QimwweOaqtl3QWSLCU6FiFSKCA3rrt+E957wr1zpBhD
-         p4waCGA7XG6QFQxmIYOYBakT8OP8vBme+ryoiFdvRCbt7Q2ZtXp4RLmkXlcugdy8NM6J
-         MYhNQigzo87mMoFsVV3kq1X4lwNDqM8YgTEc4/zV1HBrccTtlep12cAiKHftvJ9PO0k2
-         dGucFeV2hflrJde6Dcxo9dBUuMVUPRQOUE5HkYqU6f8H7eZCPwsf2UIaBzMv3IzDH+uX
-         QKFy0hRnovAJqXB4b5KB6Lo+KRVs0lKzNC9qMNzoduiGQCZghvBOB/ql+Wco/Cgp8R+b
-         el5g==
+        bh=50NFsGS1gSOqQ2w00aLYWRGBkzdJNxkXiT3Fli6/1cM=;
+        b=RntXhatCOZ04vpV0zIzdgaGWEbEYWk8Tq2GqIJpFXE4mrCLaeCAJtuH3Pg5qOsSZzA
+         1Gqy/YZa0zBtj07ZFJ3tG6JMU4KCwOCm/T5sRILXI0FlH/D3wvVplQBIPjqei4UiNSPI
+         a4CMtR25N2guRMk4/FjZQT66KbdmGZvSmJlduBn3hy8nk92rzsUvPrUX7aO4GCwcug4r
+         IISJJpierbdfQO0Tx5DjkAG7XdtEDOe0ET8V9SUwuL6ZIfaqYtasTr4PpcRAdWCxFgWs
+         Kkr9KxexYZ3AH7JENAv+5XPPnw2pUX56FhSnDCQabgZG3QL18mqbMFLUmMRLOpQWMQ2/
+         O29g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DOvY7w0rRl2MxDLB0k3o2yUeh+erpcmsWDFuA702T6s=;
-        b=H02gZLfINWPvRgaltAE9MsTJuORN0aRt1Sbr0SziEyQ799SvZg6dpWLkQuHY2NpG/M
-         TR9xR7eYX5vRUgeTnvlvbeBu4+7nkH/3oWfT5Sq76SwUNPAZs7bQDCE2GT7HderjMdNK
-         v6JdCnxxUdOdesr5jctkeOmsXFRHJA+OyhdwOe3F8gaN1+TDtL4OZG9nX3qcGmNsoXGB
-         a4gsH+JcssjAbDQ7i6cdoN5v3Zq6qlkRVsTj7+EyUypKOww4GP6E+5vSTYFAyCKsfDQI
-         QaQg/wiV0Mplx+pApt/eUfMXWmYrY2bzGcx/BnnHRSCgILzJZvMaMR/BsMApbG+TH+pR
-         tW1w==
-X-Gm-Message-State: ANoB5pkQChayC2e6ZtPk1EqfmVfsLM9DW+uaCSgvUkxFnd853Dg0stnL
-        xmE2+AzbeZ0hs+943JOSYkySl3FZCRk=
-X-Google-Smtp-Source: AA0mqf4hBxtcZbd9UejO8wqEoLXBgUBqlQprFxOUH1fTAJDZ9Y1ut6pSZnFL0fRAkhQQsou2JfJD4SuBkEo=
+        bh=50NFsGS1gSOqQ2w00aLYWRGBkzdJNxkXiT3Fli6/1cM=;
+        b=wKGXAfsXE90Wf+8ZbClHIl2UVGcvApGSyFzX89sqdRcP3NBLtJgRfBdv7jMw7OPHrl
+         ivL1/Ky8jlaArGRiYuJDRGjMXXOZH35/TcOSGtQhzVZMeN8N9OBnV3jAdf5CGBUaMhtF
+         xwrChMU3xktk5v+4At3641aJOc/orvL8jWWu9S+m5C2SYH5JvIXJBKHxD1asAqfmMHET
+         Eiu4Rvk9nk5XkXqnP9s2R/X+Ul0DQVgZUDQL4kyXLQEuuD1T1dMUwTr+WGfnzAwdOVtr
+         BCGXQOpoUFkWb0RVeQTHVF2ZNX1f/+t1kqPenO2P3gnVAI2hMZW5XLeoluiT7D6SeS3m
+         gkYQ==
+X-Gm-Message-State: ANoB5pnJ+Po1DfdsIA7VqW4dl+RBTvvjb8t/j7nnw9t+52BixcvPJdX8
+        17Edj+udjqXYe4Qt6JWJpZFmqvgs9YE=
+X-Google-Smtp-Source: AA0mqf4F87lnfsrUQXXGQjwWJclGxioxHjaqJbg+kPkH4OzPOkmZnoLhZ3jfHM5GA0UKCp57pLd7VyYImGw=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:9629:0:b0:576:8cdd:3f26 with SMTP id
- r9-20020aa79629000000b005768cdd3f26mr26606972pfg.59.1670890618334; Mon, 12
- Dec 2022 16:16:58 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:2ecb:b0:219:5b3b:2b9f with SMTP id
+ h11-20020a17090a2ecb00b002195b3b2b9fmr4271pjs.2.1670890619791; Mon, 12 Dec
+ 2022 16:16:59 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 13 Dec 2022 00:16:40 +0000
+Date:   Tue, 13 Dec 2022 00:16:41 +0000
 In-Reply-To: <20221213001653.3852042-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221213001653.3852042-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221213001653.3852042-2-seanjc@google.com>
-Subject: [PATCH 01/14] KVM: selftests: Define literal to asm constraint in
- aarch64 as unsigned long
+Message-ID: <20221213001653.3852042-3-seanjc@google.com>
+Subject: [PATCH 02/14] KVM: selftests: Delete dead code in x86_64/vmx_tsc_adjust_test.c
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -86,40 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define a literal '0' asm input constraint to aarch64/page_fault_test's
-guest_cas() as an unsigned long to make clang happy.
+Delete an unused struct definition in x86_64/vmx_tsc_adjust_test.c.
 
-  tools/testing/selftests/kvm/aarch64/page_fault_test.c:120:16: error:
-    value size does not match register size specified by the constraint
-    and modifier [-Werror,-Wasm-operand-widths]
-                       :: "r" (0), "r" (TEST_DATA), "r" (guest_test_memory));
-                               ^
-  tools/testing/selftests/kvm/aarch64/page_fault_test.c:119:15: note:
-    use constraint modifier "w"
-                       "casal %0, %1, [%2]\n"
-                              ^~
-                              %w0
-
-Fixes: 35c581015712 ("KVM: selftests: aarch64: Add aarch64/page_fault_test")
-Cc: Ricardo Koller <ricarkol@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/aarch64/page_fault_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-index 95d22cfb7b41..beb944fa6fd4 100644
---- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-+++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-@@ -117,7 +117,7 @@ static void guest_cas(void)
- 	GUEST_ASSERT(guest_check_lse());
- 	asm volatile(".arch_extension lse\n"
- 		     "casal %0, %1, [%2]\n"
--		     :: "r" (0), "r" (TEST_DATA), "r" (guest_test_memory));
-+		     :: "r" (0ul), "r" (TEST_DATA), "r" (guest_test_memory));
- 	val = READ_ONCE(*guest_test_memory);
- 	GUEST_ASSERT_EQ(val, TEST_DATA);
- }
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+index 5943187e8594..ff8ecdf32ae0 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+@@ -49,11 +49,6 @@ enum {
+ 	NUM_VMX_PAGES,
+ };
+ 
+-struct kvm_single_msr {
+-	struct kvm_msrs header;
+-	struct kvm_msr_entry entry;
+-} __attribute__((packed));
+-
+ /* The virtual machine object. */
+ static struct kvm_vm *vm;
+ 
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
