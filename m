@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15EA64BD8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC63A64BD94
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 20:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiLMTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 14:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S236573AbiLMTua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 14:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbiLMTtD (ORCPT
+        with ESMTP id S236671AbiLMTuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 14:49:03 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF341A07D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:49:02 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id v11so4459814ljk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6VB334Z5ylGFHFbDqZH/w67NqwCvKwIWzx6/5zIn1zg=;
-        b=xWHLQgnQ5QyduBhTr0fPPDJE9kbNggvfgqxrOFX8eBeyTafL8hG+GNfv5g9Z5BB/m/
-         gzyZzL70TSZ6bAe90RrBODWKg0Vj5dJhtBXE4G3x/7I5QvBlJBS48yvomo5oz+kJyzSj
-         R5OEuq7HQFi6pYTFlPhvbUvvaCTdpF8tgX5nqvIouaShqS/zC4DwIC27AcrrG0nZx7XN
-         CBXs/9XZQdnVyFcPjJpH91C4nSKgZBGjMKqpDl9nA36oNh2s1G83/SAjG9h9ih1N6RHX
-         Uv43ReWCaQFfXS6wBe1/1jbxqtBSlLQvFZuH2K2XkcOwiZ5QZif+k9iWtwuz8tNc/5KV
-         rNow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6VB334Z5ylGFHFbDqZH/w67NqwCvKwIWzx6/5zIn1zg=;
-        b=D4VsxRoQ33mt1z9uYT9orVlu7Nrnb5qd4TxauCahpHDvP7O63x9FM3W7oxTkkVw5+R
-         U40ZEgt2/KqPQavZW4ScCblr5g7af/SBDMqKCRJ6W+0v6GPTdwyvx4Qf+eowQd2t6/bV
-         1EAfTN4S8QHe5k4CyyY4EUIV9zSBWV5DwIhC3jixCqYsflATLmHmOCu6H819vVE4aF7U
-         MGQoxpwSEPqf59nds3DMiFhNXaHoJZfqKPnxUJByTHYpF4ZM+li7EV9A3zG+e4wEvUyM
-         SkpYI48kTWWO+DUz9QpOHi8ZX7TRJRptTgc5O8f5oKaiUxxQIWgNezl1Dggoua7Fvi+w
-         5nJQ==
-X-Gm-Message-State: ANoB5pmSs3NSEFVX83UNzPg9+KQsTXVJTatl5WmVFIfLJlxIFXGWRSyI
-        o8JamtkN1yUEeIPLtzaJyZU5oA==
-X-Google-Smtp-Source: AA0mqf40atQtjOzvx8pqPudCBx580m5yGd+KEZWkxc8Bvz3e+6GUxtm3Be/2ORduxhVplxgyDF+zvQ==
-X-Received: by 2002:a05:651c:1592:b0:26f:db35:d203 with SMTP id h18-20020a05651c159200b0026fdb35d203mr5159745ljq.15.1670960940642;
-        Tue, 13 Dec 2022 11:49:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z20-20020a2eb534000000b0027b50ed9df2sm383263ljm.17.2022.12.13.11.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 11:49:00 -0800 (PST)
-Message-ID: <e8c5821c-2da5-d1ee-0d74-84e76af76696@linaro.org>
-Date:   Tue, 13 Dec 2022 20:48:59 +0100
+        Tue, 13 Dec 2022 14:50:22 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85AAB2656F
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 11:50:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77B9D2F4;
+        Tue, 13 Dec 2022 11:50:57 -0800 (PST)
+Received: from [192.168.89.251] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF80B3F73B;
+        Tue, 13 Dec 2022 11:50:15 -0800 (PST)
+Message-ID: <3a11ed33-0a3d-2668-ab2b-c44eea7eddbe@arm.com>
+Date:   Tue, 13 Dec 2022 19:50:18 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 1/1] dt-bindings: mfd: x-powers,axp152: Document the
- AXP1530 variant
+ Thunderbird/102.2.2
+Subject: Re: [for-next][PATCH 02/11] tracing: Add __cpumask to denote a trace
+ event field that is a cpumask_t
 Content-Language: en-US
-To:     Martin Botka <martin.botka@somainline.org>, martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221213182743.3087889-1-martin.botka@somainline.org>
- <20221213182743.3087889-2-martin.botka@somainline.org>
- <1e0d86ee-a832-642d-c835-df1f6505940e@linaro.org>
- <C2E9D93B-96DF-49BB-B75F-27D621BF2501@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <C2E9D93B-96DF-49BB-B75F-27D621BF2501@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Douglas Raillard <douglas.raillard@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Valentin Schneider <vschneid@redhat.com>
+References: <20221124145019.782980678@goodmis.org>
+ <20221124145045.743308431@goodmis.org>
+ <6dda5e1d-9416-b55e-88f3-31d148bc925f@arm.com>
+ <20221212111256.3cf68f3e@gandalf.local.home>
+ <8448372a-6911-e920-b630-15af850adcae@arm.com>
+ <20221212185330.639bf491@gandalf.local.home>
+ <764f8b9a-2111-c260-7f2c-89eb9f0ac7a3@arm.com>
+In-Reply-To: <764f8b9a-2111-c260-7f2c-89eb9f0ac7a3@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 20:43, Martin Botka wrote:
-> That is very much my bad.
+On 13-12-2022 14:20, Douglas Raillard wrote:
+>
+> The only case I can think of where parsing would not follow regular C abstract declaration syntax is a type like that:
 > 
-> I understand the purpose of them :)
-> 
-> I just straight up forgot to add them.
+>      __data_loc int [3][]
 
-Sure, happens, no worries.
+After some experimentation, I came to the conclusion that "__data_loc <type> [] <id>" can indeed support any C type if they
+need to be added in the future. I would heavily suggest that any future extension works as the following, to avoid messing up
+the grammar in a subtle way that would prevent some types to be expressible, or make it a nightmare to implement.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The recipe to parse that with stock C parser is:
+* consume "__data_loc"
+* parse "<type> []" as a func prototype parameter declaration
+  (declaration using an abstract declarator, i.e. not introducing any identifier)
+* parse "<id>" as an identifier.
 
-Best regards,
-Krzysztof
+> The outer-most array is by definition the dynamic one, so "[]". In normal C, [3] and [] would be swapped as
+> the outer-most array comes first. That's not too bad though as it is not ambiguous and easy to fixup directly
+> in the parse tree.
+
+Simply swapping is wrong in the general case. The correct modification of the "<type> []" parse tree is doing a
+"barrel shift" on nested array sizes. If the type is "int [1][2][]", it needs to be turned into "int [][1][2]".
+The now-top-level sizeless array is the dynamic array. Note that pointers level are transparent,
+so "int (*[1])[2][]" needs to be turned into "int (*[])[1][2]"
+
+-- Douglas
+
+
 
