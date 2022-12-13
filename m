@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B00C64B9EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B618864B9F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiLMQiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S236142AbiLMQkr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 13 Dec 2022 11:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbiLMQiM (ORCPT
+        with ESMTP id S234710AbiLMQko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:38:12 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EDBB1C1;
-        Tue, 13 Dec 2022 08:38:11 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso179821oth.5;
-        Tue, 13 Dec 2022 08:38:11 -0800 (PST)
+        Tue, 13 Dec 2022 11:40:44 -0500
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E93E3F;
+        Tue, 13 Dec 2022 08:40:43 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id h11so16225669wrw.13;
+        Tue, 13 Dec 2022 08:40:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZjI88ca8YV9FnmaROJGLMTJcQPCidHIJLaiq64mk2fw=;
-        b=m3Jb7Ck9qvL2P7CZfRH2ZpZswqxc1pN4FPSIBihVQ7AD2pxIhbmjHgw+8tynuXCsxi
-         cMuSxki1r9yMBLNnVhGyv3IlNObYlqNPfgBhwUAa2nNi8Gsu56Zd6rWoQlD+A4pb0uJl
-         VJQ7O8KuPmLK198CExWxKqDhHHuk/wWYU4w+NyL8spHZDZyfkUtX9DXwjptdJKB3Mdhu
-         uDOAV5H2IyQp+sso/sxrK2ByDlHNfd2o3/YKa9kNo+x+Sr+S16wosdlRJIXSP//WG1p/
-         MgaBuiV0NDr5pEw+dN7cQs53I2q/IO1/5eL6CCX9xQc6FUkwrPmFNn+wHYyHG88dU8Sc
-         Ep4w==
-X-Gm-Message-State: ANoB5plQ6q9qKn/KJ2u7CBo1/M9jlUj6vfXNZqSmaeAACNq6ROpuscQ7
-        cLnVOgSwT9n+b5hlntgr87wxnaFtlw==
-X-Google-Smtp-Source: AA0mqf6yiROdGm5NNVlBvSvfqyiQxqC2PPbW0NBL/ngLGZuGz3DsBVC5/iz0eZWQfegxhqTjTmY0Cw==
-X-Received: by 2002:a9d:6006:0:b0:670:6246:8106 with SMTP id h6-20020a9d6006000000b0067062468106mr10467047otj.4.1670949490580;
-        Tue, 13 Dec 2022 08:38:10 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056830208600b0066ea5d4f349sm1361066otq.18.2022.12.13.08.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 08:38:10 -0800 (PST)
-Received: (nullmailer pid 2018850 invoked by uid 1000);
-        Tue, 13 Dec 2022 16:38:09 -0000
-Date:   Tue, 13 Dec 2022 10:38:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <20221213163809.GA2016314-robh@kernel.org>
-References: <20221213060204.27286-1-alexghiti@rivosinc.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3F6Co5g0HJu8PhXSFObDaybergLnWCfKZDoB5ZDhG3Q=;
+        b=eCxGXZLa3sVxIyXAkNErluuOgcRVRZ00PSLFWEhVPkhApLCMcdDyFLcdsLWDkU/KuD
+         uF2n3p2a7o/Mx1sV17jeu2EfItcHKJ3AFz6BWnsgAFDaygBdhghwSNTJqCDJH8j1Zj+P
+         WLk+3fJvKwWNGPM+pJVw0U/tz0OKUvDvxk4svLQ9TrjRMZokAnaEkXwkHGeAdxbjeWKo
+         LPM42HxLudrVyYDWk6/LHo33d8W+IaNV7EUHY86O6K3/ibeq1h2z3QgEkgKqvlwnI8z4
+         ij8B2n9ywQId5AjMW806eaHs8rHSyg5Qln5Ctnjr5FDsqEzj8kDg3b1yr/vuM0i53I9t
+         iR6Q==
+X-Gm-Message-State: ANoB5pmUxs3deR0WIUX90yxF4IUZT+CAq5a7vRlN3DdVrPdxlGNS45RF
+        6sXae6DkNEvhjR23o6v2YbHiWxKAihbiLJuoyXk=
+X-Google-Smtp-Source: AA0mqf7UN3ZVN8sgqMJf56eMQQKmcmbQrP0Dtm+uIEySSUo8URwHqE1Xm/cPFTx1fF4j4DQMuqczt/M6XlNDCLi7H3E=
+X-Received: by 2002:adf:dec2:0:b0:242:6f04:93a9 with SMTP id
+ i2-20020adfdec2000000b002426f0493a9mr9406130wrn.685.1670949641783; Tue, 13
+ Dec 2022 08:40:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213060204.27286-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220729161244.10522-1-adrian.herrera@arm.com>
+ <20220729161244.10522-2-adrian.herrera@arm.com> <e3e123db-5321-c96e-1753-27059c729640@arm.com>
+ <Y5iPsjF/lEsEldU8@kernel.org>
+In-Reply-To: <Y5iPsjF/lEsEldU8@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 13 Dec 2022 08:40:31 -0800
+Message-ID: <CAM9d7cj=Pu2QAONzd2JSVzd_X9DakeV=khcFGD_d-ES5zrx+KQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf stat: fix unexpected delay behaviour
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     James Clark <james.clark@arm.com>,
+        =?UTF-8?Q?Adri=C3=A1n_Herrera_Arcila?= <adrian.herrera@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        leo.yan@linaro.org, songliubraving@fb.com, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:02:04AM +0100, Alexandre Ghiti wrote:
-> During the early page table creation, we used to set the mapping for
-> PAGE_OFFSET to the kernel load address: but the kernel load address is
-> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> PAGE_OFFSET is).
-> 
-> But actually we don't have to establish this mapping (ie set va_pa_offset)
-> that early in the boot process because:
-> 
-> - first, setup_vm installs a temporary kernel mapping and among other
->   things, discovers the system memory,
-> - then, setup_vm_final creates the final kernel mapping and takes
->   advantage of the discovered system memory to create the linear
->   mapping.
-> 
-> During the first phase, we don't know the start of the system memory and
-> then until the second phase is finished, we can't use the linear mapping at
-> all and phys_to_virt/virt_to_phys translations must not be used because it
-> would result in a different translation from the 'real' one once the final
-> mapping is installed.
-> 
-> So here we simply delay the initialization of va_pa_offset to after the
-> system memory discovery. But to make sure noone uses the linear mapping
-> before, we add some guard in the DEBUG_VIRTUAL config.
-> 
-> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-> in a better TLB utilization.
-> 
-> Note that we rely on the firmware to protect itself using PMP.
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
-> 
-> v3:
-> - Change the comment about initrd_start VA conversion so that it fits
->   ARM64 and RISCV64 (and others in the future if needed), as suggested
->   by Rob
-> 
-> v2:
-> - Add a comment on why RISCV64 does not need to set initrd_start/end that
->   early in the boot process, as asked by Rob
-> 
-> Note that this patch is rebased on top of:
-> [PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-> 
->  arch/riscv/include/asm/page.h | 16 ++++++++++++++++
->  arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
->  arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
->  drivers/of/fdt.c              | 11 ++++++-----
+Hi,
 
-Acked-by: Rob Herring <robh@kernel.org> # DT bits
+On Tue, Dec 13, 2022 at 6:44 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Mon, Aug 01, 2022 at 09:20:37AM +0100, James Clark escreveu:
+> >
+> >
+> > On 29/07/2022 17:12, Adrián Herrera Arcila wrote:
+> > > The described --delay behaviour is to delay the enablement of events, but
+> > > not the execution of the command, if one is passed, which is incorrectly
+> > > the current behaviour.
+> > >
+> > > This patch decouples the enablement from the delay, and enables events
+> > > before or after launching the workload dependent on the options passed
+> > > by the user. This code structure is inspired by that in perf-record, and
+> > > tries to be consistent with it.
+> > >
+> > > Link: https://lore.kernel.org/linux-perf-users/7BFD066E-B0A8-49D4-B635-379328F0CF4C@fb.com
+> > > Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+> > > Signed-off-by: Adrián Herrera Arcila <adrian.herrera@arm.com>
+> > > ---
+> > >  tools/perf/builtin-stat.c | 56 ++++++++++++++++++++++-----------------
+> > >  1 file changed, 32 insertions(+), 24 deletions(-)
+> >
+> > Looks good to me. Fixes the counter delay issue and the code is pretty
+> > similar to perf record now. Although I would wait for Leo's or Song's
+> > comment as well because they were involved.
+>
+> I think I didn't notice Leo's ack, it still applies, so I'm doing it
+> now.
 
->  4 files changed, 57 insertions(+), 11 deletions(-)
+I think the BPF counters should be enabled/disabled together.
+
+Thanks,
+Namhyung
