@@ -2,200 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDA464B6EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB0D64B6AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235852AbiLMOKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S235781AbiLMOB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbiLMOJS (ORCPT
+        with ESMTP id S235236AbiLMOBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:09:18 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC0420BE7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:09:13 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso307978otn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/49i19ww7B/xcmBcFjP0U5z4N9HY5b8Hm8g3kdlG5g=;
-        b=hf1kzp+NfEnJnMm4M2VpOttjLAl+nFQGQlH1GlyTF9rPOV0mEt4UTUxrElHLLepo+m
-         cWxSmm8Azkpl+WJGFkt5f8WuumXgVt1Jbw69fwg9t37lNPOVaJOSOrHWLyrHXsOCw4vi
-         k4YUJNmfyKbWkNhpsJfHCDfeBplpcI9Co2rr6c18BSpkyhYWmA60Z/K7rTZhBy7BlwZc
-         ZMZbuRuB9aVodNhrHde4kutbg4d57Mg/UrfPKhEyn5X36Lwx6BuqzywlbAtEYPzdDFeX
-         N0rUOi5Fy259ReXgdCdjsXEstDbsQgFWgVXp1W1mqTnCoTSBdL1YihTcxhdKk8MxfdbV
-         atrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6/49i19ww7B/xcmBcFjP0U5z4N9HY5b8Hm8g3kdlG5g=;
-        b=2syLJpcc5BDW5J8nXToSy3PJ0dj0bFk74pxYXo3PtiEy0/4hO13lNC5ss8pJNSYoT3
-         oZGur09Vkqn5ax+DSoSPPYh6axVrUF2UjtioyXgOsjQnCHQPRk1V2epoieUwWO3MRoBo
-         VaBJ6FLpEVakmzpfMZM2JnFVxnPVuJKI1jis+kjV8xfF7gm0GktRCo9zwNh284uktTI+
-         52JmltgDAc6zDJlJ3tfy0e2ngcvXAUFH+6KXArsep75jZP0c6Lvvjp/YaKihp5CS2r41
-         RzuhM0JivhXiHnH7xTlLM/KNQeEIEtj36zNv+B3QNe6gRZvCouV8KK/jMcVc/uhCcpGz
-         IvHQ==
-X-Gm-Message-State: ANoB5pmWRgPfbiifblMWpRLip3JFzyrKSMqxhmsI8g+hd7+zwRvu1fbY
-        0tj7uksIIJ3OggjpQNKaYsCZq3Ff9teA3MhW
-X-Google-Smtp-Source: AA0mqf4MGueTut2qLTFaHdf+Zme8qgmXQUV5NUInn//zVT1CrEtYI77vWxcW8B/cVk6VB1BC84VA7g==
-X-Received: by 2002:a05:7500:5696:b0:ea:f6ed:7d50 with SMTP id ca22-20020a057500569600b000eaf6ed7d50mr1807617gab.14.1670940065724;
-        Tue, 13 Dec 2022 06:01:05 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-50-193.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.50.193])
-        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b006fcaa1eab0esm783696qkb.123.2022.12.13.06.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:01:04 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p55qB-009VAx-P5;
-        Tue, 13 Dec 2022 10:01:03 -0400
-Date:   Tue, 13 Dec 2022 10:01:03 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <Y5iFnw5i3vI9iMFY@ziepe.ca>
-References: <Y4+U3VR2LeEh2S7B@ziepe.ca>
- <20221207075415.GB2283@lst.de>
- <Y5CWVu08abcOuEQH@ziepe.ca>
- <20221207135203.GA22803@lst.de>
- <Y5CsH5PqMYAWYatw@ziepe.ca>
- <20221207163857.GB2010@lst.de>
- <Y5DOAKArjyfb6Mcz@ziepe.ca>
- <20221207183333.GA7049@lst.de>
- <Y5DyorZJPdtN5WcX@ziepe.ca>
- <20221212075046.GB11162@lst.de>
+        Tue, 13 Dec 2022 09:01:23 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6191EAD7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:01:22 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C43141EC06D7;
+        Tue, 13 Dec 2022 15:01:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670940080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=RlETWsJF/qf3+oSYZr5dCO2mk2rbFBrnrhMYfaNCAes=;
+        b=k8bcraQo9z6aULuwhiNvYc9zSlPpFKhLtPCg301mPiWKAY5rQNJbuV8fD7BG7OK0Bvbctk
+        Y47Tx8CayLo6DGYUc8GwQ1F0vYR4EHst4TtaGKYe1LAxXDqw/x86jDANfG3CRQjHuTIjLT
+        XDQDl+j6+oIJH/XT3RyribRH9boPYo4=
+Date:   Tue, 13 Dec 2022 15:01:16 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/cpu for v6.2
+Message-ID: <Y5iFrMDV+YOdncjA@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221212075046.GB11162@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 08:50:46AM +0100, Christoph Hellwig wrote:
-> On Wed, Dec 07, 2022 at 04:08:02PM -0400, Jason Gunthorpe wrote:
-> > However hisilicon managed to do their implementation without this, or
-> > rather you could say their "controlling function" is a single MMIO BAR
-> > page in their PCI VF and their "controlled function" is the rest of
-> > the PCI VF.
-> 
-> Eww.  So you need to carefully filter the BAR and can't actually do
-> any DMA at all?  I'm not sure that is actually practical, especially
-> not for something with a lot of state.
+Hi Linus,
 
-Indeed, but it is what they did and the HW should be supported by the
-kernel, IMO.
+please pull the x86/cpu pile of changes for 6.2.
 
-> > If the kernel knows this information then we can find a way for the
-> > vfio_device to have pointers to both controlling and controlled
-> > objects. I have a suggestion below.
-> 
-> So now we need to write a vfio shim for every function even if there
-> is absolutely nothing special about that function?  Migrating really
-> is the controlling functions behavior, and writing a new vfio bit
-> for every controlled thing just does not scale.
+Thx.
 
-Huh? "does not scale?" We are looking at boilerplates of around 20-30
-lines to make a VFIO driver for a real PCI device. Why is that even
-something we should worry about optimizing?
+---
 
-And when you get into exciting future devices like SIOV you already
-need to make a special VFIO driver anyhow.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-> Yes, and that's the problem, because they are associated with the
-> controlled function, and now we have a communication problem between
-> that vfio driver binding to the controlled function and the drive
-> that actually controlls live migration that is associated with the
-> controlling function.  In other words: you've created a giant mess.
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-So far 100% of the drivers that have been presented, including the two
-RFC ones, have entanglements between live migration and vfio. Shifting
-things to dev/live_migration doesn't make the "communication problem"
-away, it just shifted it into another subsystem.
+are available in the Git repository at:
 
-This is my point, I've yet to even see a driver that meets your
-theoretical standard that it can exist without vfio entanglement. So
-I'd be much more interested in this idea if we had a stable of drivers
-that obviously were harmed by VFIO. We don't have that, and I don't
-even think that we ever will, considering both RFC drivers have
-devices that also stepped on the mlx5 FLR problem too.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cpu_for_v6.2
 
-The FLR thing actually makes sense, becauase it is not actually the
-controlling function that is doing the live migration inside the
-devices. The controlling function is just a *proxy* to deliver
-commands to the controlled function. So FLR on the controlled device
-effects commands being executed on the controlling function. It is a
-pain.
+for you to fetch changes up to 7882b69eb6cdf6288a89d831d95c8547400a8b4d:
 
-As it is, live migration is only useful with VFIO, so they are put
-together to keep things simpler. The only complexity is the
-controlled/controlling issue and for all existing SRIOV PF/VF
-relationships we have an OK solution (at least it isn't buggy).
+  x86/mtrr: Make message for disabled MTRRs more descriptive (2022-12-05 11:08:25 +0100)
 
-nvme's higher flexability needs more work, but that doesn't mean the
-idea is so wrong. I think you are reall overstating the "mess"
+----------------------------------------------------------------
+- Split MTRR and PAT init code to accomodate at least Xen PV and TDX
+guests which do not get MTRRs exposed but only PAT. (TDX guests do not
+support the cache disabling dance when setting up MTRRs so they fall
+under the same category.) This is a cleanup work to remove all the ugly
+workarounds for such guests and init things separately (Juergen Gross)
 
-> I'm not proposing to ignore them.  But they should not be needed most
-> of the time.
+- Add two new Intel CPUs to the list of CPUs with "normal" Energy
+Performance Bias, leading to power savings
 
-I'm not seeing that in the drivers I've looked at.
+- Do not do bus master arbitration in C3 (ARB_DISABLE) on modern Centaur
+CPUs
 
-> > Which is really why this is in VFIO in the first place. It actually is
-> > coupled in practice, if not in theory.
-> 
-> So you've created a long term userspace API around working around
-> around buggy and/or misdesigned early designs and now want to force
-> it down everyones throat?
+----------------------------------------------------------------
+Borislav Petkov (2):
+      x86/bugs: Use sysfs_emit()
+      x86/cpuid: Carve out all CPUID functionality
 
-No, we coupled live migration and VFIO because they are never useful
-apart, and we accept that we must find reasonable solutions to linking
-the controlling/controlled device because it is necessary in all cases
-we've seen.
+Juergen Gross (22):
+      x86/mtrr: Add comment for set_mtrr_state() serialization
+      x86/mtrr: Remove unused cyrix_set_all() function
+      x86/mtrr: Replace use_intel() with a local flag
+      x86/mtrr: Rename prepare_set() and post_set()
+      x86/mtrr: Split MTRR-specific handling from cache dis/enabling
+      x86/mtrr: Move cache control code to cacheinfo.c
+      x86/mtrr: Disentangle MTRR init from PAT init
+      x86/mtrr: Remove set_all callback from struct mtrr_ops
+      x86/mtrr: Simplify mtrr_bp_init()
+      x86/mtrr: Get rid of __mtrr_enabled bool
+      x86/mtrr: Let cache_aps_delayed_init replace mtrr_aps_delayed_init
+      x86/mtrr: Add a stop_machine() handler calling only cache_cpu_init()
+      x86: Decouple PAT and MTRR handling
+      x86/cacheinfo: Switch cache_ap_init() to hotplug callback
+      x86/mtrr: Simplify mtrr_ops initialization
+      x86/cpufeatures: Add X86_FEATURE_XENPV to disabled-features.h
+      x86/cpu: Remove unneeded 64-bit dependency in arch_enter_from_user_mode()
+      x86/cpu: Drop 32-bit Xen PV guest code in update_task_stack()
+      x86/cpu: Remove X86_FEATURE_XENPV usage in setup_cpu_entry_area()
+      x86/cpu: Switch to cpu_feature_enabled() for X86_FEATURE_XENPV
+      x86/pat: Handle TDX guest PAT initialization
+      x86/mtrr: Make message for disabled MTRRs more descriptive
 
-> > If we accept that drivers/vfio can be the "live migration subsystem"
-> > then lets go all the way and have the controlling driver to call
-> > vfio_device_group_register() to create the VFIO char device for the
-> > controlled function.
-> 
-> While creating the VFs from the PF driver makes a lot more sense,
-> remember that vfio is absolutely not the only use case for VFs.
-> There are plenty use cases where you want to use them with the normal
-> kernel driver as well.  So the interface to create VFs needs a now
-> to decide if it should be vfio exported, or use the normal kernel
-> binding.
+Srinivas Pandruvada (1):
+      x86/intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
 
-Yes, that is why this problem has been open for so long. Fixing it
-well requires some reconsideration of how the driver core works :(
+Tony W Wang-oc (1):
+      x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
 
-It is worse than just VFIO vs one kernel driver, like mlx5 could spawn
-a controlled function that is NVMe, VDPA, mlx5, virtio-net, VFIO,
-etc.
+ arch/x86/include/asm/cacheinfo.h         |  13 +++
+ arch/x86/include/asm/cpuid.h             | 141 +++++++++++++++++++++++-
+ arch/x86/include/asm/disabled-features.h |   8 +-
+ arch/x86/include/asm/entry-common.h      |   4 +-
+ arch/x86/include/asm/memtype.h           |   5 +-
+ arch/x86/include/asm/msr-index.h         |   1 +
+ arch/x86/include/asm/mtrr.h              |  16 +--
+ arch/x86/include/asm/processor.h         | 133 +----------------------
+ arch/x86/include/asm/switch_to.h         |   7 +-
+ arch/x86/kernel/acpi/cstate.c            |  24 +++--
+ arch/x86/kernel/cpu/amd.c                |   2 +-
+ arch/x86/kernel/cpu/bugs.c               | 105 +++++++++---------
+ arch/x86/kernel/cpu/cacheinfo.c          | 179 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/common.c             |   2 +-
+ arch/x86/kernel/cpu/hygon.c              |   2 +-
+ arch/x86/kernel/cpu/intel_epb.c          |   7 +-
+ arch/x86/kernel/cpu/mtrr/amd.c           |   8 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c       |   8 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c         |  42 +-------
+ arch/x86/kernel/cpu/mtrr/generic.c       | 107 ++----------------
+ arch/x86/kernel/cpu/mtrr/mtrr.c          | 173 ++++-------------------------
+ arch/x86/kernel/cpu/mtrr/mtrr.h          |  15 +--
+ arch/x86/kernel/process_64.c             |   4 +-
+ arch/x86/kernel/setup.c                  |  14 +--
+ arch/x86/kernel/smpboot.c                |   9 +-
+ arch/x86/kernel/topology.c               |   2 +-
+ arch/x86/mm/cpu_entry_area.c             |   8 +-
+ arch/x86/mm/pat/memtype.c                | 157 ++++++++++-----------------
+ arch/x86/power/cpu.c                     |   3 +-
+ include/linux/cpuhotplug.h               |   1 +
+ 30 files changed, 538 insertions(+), 662 deletions(-)
 
-When we create the function we really want to tell the device what
-kind of function it is, and that also tells the kernel what driver
-should be bound to it.
+-- 
+Regards/Gruss,
+    Boris.
 
-mlx5 even has weird limitations, like a controlled function that is
-live migration capable has fewer features than a function that is
-not. So the user must specify what parameters it wants the controlled
-function to have..
-
-Jason
+https://people.kernel.org/tglx/notes-about-netiquette
