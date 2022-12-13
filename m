@@ -2,550 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245A64BDD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665FF64BDDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237040AbiLMURc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        id S237596AbiLMUWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbiLMUQ7 (ORCPT
+        with ESMTP id S236745AbiLMUVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:16:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835D326567;
-        Tue, 13 Dec 2022 12:15:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670962550; x=1702498550;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ihGPdmu2hyvK7jpftGzxTnFURjdU3WQV6NNETXvBpHg=;
-  b=m9GkypkzC/vaTbyKBIm/mo5BeDtn0dSMLolD4L5h4v1AwAIR8Bq8WxNK
-   WZs1lKNX5czH3RD8c/xVbchwn1m/vgkh9PSV9ocJthHaLqEotieIxRx57
-   HTsWo+DhmgOUcgoVW1SUyen9zHgWRadRExm7cfFLFDJF1Sg3/L/eabEaa
-   B1bkX1znhaDICihO/bpSkByRmGxU/gE1zBdLQl5BKyrji/C5usHSnEH8R
-   ZwrpHA7h2QZQWJx8DkwBGnpw8KXNxtnst7bJvaIc115f55983578Cha+/
-   k97l9G2XEqN74M7Rqn65ifDi7/5JrqogpOoi8UtkdsJbgfS+bqiq+g2hI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="320092515"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="320092515"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 12:15:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="773086757"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="773086757"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 13 Dec 2022 12:15:49 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 13 Dec 2022 12:15:49 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 12:15:49 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 13 Dec 2022 12:15:48 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l0x7kjkT4A45zNFfbiQCMQM0iIRKCOD8kA9uaAHzRZbUdvsNswdbeUzmSuuh5PV67GfsPvdMBejYS8LhpNXHULzAudYlsdY6a8nDTS2TBv2J309YTpyzK2uRbyC9+evf2ONqoTQ+9yKCTvAcRJwjg+Hx3LCwU+sCVpjDZJWSHZjRymJXfcNmNjo1hGDNjMq2Q+M7XzaivLwyQWgvEQ1GYbTLhkV4lnH3reOvSPB6dWHwLu7S8tFMCzLo7j+janXQQGu5drYqxDrRR5oaAIJbcfGxHSD5yxDG6calppLWZvZCvVsXkfbuT1oO3thtjsXZI2C8osaYRM7IZskrfDrrxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0WQph06gf9M5IXH6b5ZajZmJHOKSN34kGTvfUesmfXM=;
- b=VeHAvLoQH3eMtW8Upv7koXgDDvcfaRY0xIjMo5v163XZxukk7MeQm5u3wo4zZ5ynM2f5Nt2WeGyEl2kd2qAihbQ3ZcgnxOKUcqGxetbwBEfmhD5iwe34NJPgo9Eu1TlmHpucTmd0zyjS8PmOMVgcm3QsH2UO1/r3ZxKnbdt/Cl24K98jus0PpEs/tWkKuILCzZdxm8pTEynJS9tLQI0Pg9ZUruAcYJfCRRct/t2Q8+V0/tG4sZklHke6PxUo2+qnawkPvdmANZoc4weHfRNadWvNI4an3roUQMMR0vjJB/H9KFXDpOOf90uq7jcs8Z/juJCDEsSiubr6V04/qatcaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by DM6PR11MB4578.namprd11.prod.outlook.com
- (2603:10b6:5:2a7::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
- 2022 20:15:45 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
- 20:15:45 +0000
-Date:   Tue, 13 Dec 2022 12:15:42 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>
-CC:     Davidlohr Bueso <dave@stgolabs.net>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: RE: [PATCH V4 3/9] cxl/mem: Wire up event interrupts
-Message-ID: <6398dd6ed80fa_b05d1294fc@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221212070627.1372402-1-ira.weiny@intel.com>
- <20221212070627.1372402-4-ira.weiny@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221212070627.1372402-4-ira.weiny@intel.com>
-X-ClientProxiedBy: SJ0PR05CA0044.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::19) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Tue, 13 Dec 2022 15:21:54 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA0C2791D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:18:55 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h16so8012627wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DdPGwnHVcPtYyMt3MrhvxEjvQ4s6Eib4j5KCNAxoOwA=;
+        b=qsFxQFry5mILcXIT4Bd2F6nDdAxJNxOjfwc1/g5uw8BwhhLINvF4j+O496cTEhrCYb
+         3giv7n4Ts/ZM5rnLotQH3t82XP+wiuXZselkm516bb8hjgjfq2vbGAf1CzBORYdgpAXb
+         1yb/H92D+wlK07tNzEoM8gccJRZAZpihCHH+YdDg5+6RdZpE69beQB4lEAZVbETbOc3p
+         Tp62rRFZwDgvxN7XH+YUG16OGbOcj0QFtnb++haX2bBey7LJW/zxNu5OPtOA56hKDH98
+         pEcL4b94h2UXjsIjd5cjcJMleqwpcS1iCpATaSc5kj734sJqRRlMjGD5zR371E0UEdOx
+         viCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DdPGwnHVcPtYyMt3MrhvxEjvQ4s6Eib4j5KCNAxoOwA=;
+        b=zWAQvgm414SltAzmpuOqrwlt15FSUxFnnvu8rhB/vFkhyQKZfMcIqUsre8HXl3imKU
+         SXfG3ERmC4mV8Xl8YM1KTZOR5aRjC9sqqrfzREPxTf5NzJe3YNxfwPHjEgHMMJdZNvZG
+         jNl0mtU5OtpWDdUrR/s7anv5pDo2RrQLmu8YbzSwH4Dye2TlytP6ez46axPEzTw6XTdD
+         hDSny0O5YvXF/0pTktfuRtvRcgNSy1yCQet8TCDftfjcdwlq1KTZTcYKQ6Jm/hEBwHkA
+         WbagdfEBD5gbhsxIoM3ClxAaL9NcQbL20TZte5ZEb2984ew6uQLA80x/DuC10rkiKZR3
+         lGEQ==
+X-Gm-Message-State: ANoB5pmOGkZY+9uk/S03mN3V5D1hg1Fz6u/1EHTNBFRow04ZtYg2W9ye
+        nHFI7nz5zWawWgPUNMD0J3lZhUZ5dKWx0UGBoDFT1g==
+X-Google-Smtp-Source: AA0mqf6bunHhJ+W3cdKvhJ5Fhxb3bCtPNjpRfGK1BXiz2CO/kIRDd4QnBVW6hbL4wy87qsIqKDT2FyOA/Y+n56dMMzg=
+X-Received: by 2002:adf:dbd2:0:b0:236:3cf5:4528 with SMTP id
+ e18-20020adfdbd2000000b002363cf54528mr59267457wrj.355.1670962733865; Tue, 13
+ Dec 2022 12:18:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|DM6PR11MB4578:EE_
-X-MS-Office365-Filtering-Correlation-Id: 696bcefc-3156-493e-3658-08dadd46d122
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A39IU6JXBox7PJmz4dBxODmbTuZUSpt/rWi4ijlA3hNtaa5wSBCaF7xFWbuAm1Oo2b76N88AgR6gn+NRIg8a/up6SrHTyWZseZXWrv5RJBLqAH0phgAZkvlQsAVORt0ZgASemjbERg46eZCyUS0qiehahY+1hwwUtACKf6PnWe7ZUlCBqHGaCtnyIFqcFa2UNjP09TvOrOZEj8X2qHA4XHJQHkZc5J1YV1/AxwLx5UvRci9w1DVGpmM6/37f/XYlLaCI4yunVBZ/kK3pzkeu659TgsLRiQ3ACK8tj+YIDqS0Lbo7Xd6hAZ/2SrprrErfQ7hm3r0C5cR2YDQDVli29ISvI0Q3snH6ma08rIcYan5HyHL50cQNAP64CUkWsWVG/V51n7oVSeSbkcznXhF8IaRuJua/gJoBv8zN29E/PIGLDNsKEipZ1hQJXC94fHBcDaH0UKvakqCT/gOJ4/9q2y0u0i+pOivkw2QNvqtWFwbBC8xaADXF29gsUuiAY8nLjYc6xpvNKjsmP8Qr+QrqdwmeQUIHDtWTqv2AsoNdwiSi58VNEyoiVaRxjAxty3+1QiCPbZjVUUo2KZn36Pr5IJH3ey8X2OWmZd7mhBhGEBZ6km/dfVe4zoNlLBDkqTlC/u12cr0TGG9u1pTHyFJz9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199015)(6862004)(8936002)(5660300002)(41300700001)(4326008)(30864003)(66556008)(8676002)(66476007)(66946007)(6200100001)(478600001)(9686003)(54906003)(316002)(2906002)(6486002)(186003)(86362001)(6512007)(6666004)(26005)(6506007)(83380400001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wYlJJy4Ex2xLLymcsdv3EkmgqOmngNogtuzpGf3zcgtRvFh/Wc1o+NV9PH6i?=
- =?us-ascii?Q?AQ1yRIovyKwD0yeMsbGWrfv+ywpt1N/H2hiAoATfpABp5ydcCX18Ygg+wmK7?=
- =?us-ascii?Q?M+Qe/3OQGrTJgn+KUw+fcc4LdJ2kd5wj7w6T1xoSDbNcoUGJ4ldinlzbEV8c?=
- =?us-ascii?Q?YI3d/0VVOCJTLaskUyqyBnfXyKdxUl42OGG3A6I+hRQ2eGGK5/p5G/vdO9ah?=
- =?us-ascii?Q?1haAIeZI9sSvmaLMsfaazVIjl26XICuv8/UCt74xZNfR46f/TIFYM1Akw7Jt?=
- =?us-ascii?Q?DmcQ+nSR9ulDCFtHhTSzi07p1sm0yNYc81jEEStAtRwjEzpFwzCan6UHE4R6?=
- =?us-ascii?Q?3m3DsodTdW841XbGHr8filcoHh8u4wkKSIKnOROtXX3HGAaGktbJirpnuSrg?=
- =?us-ascii?Q?TuP38AF2bUzWcVaoJrDYgOxfD64B2a/AZRin14A7HisfYmLL1rhN1zaYaeZs?=
- =?us-ascii?Q?rDc1GWi16GXc2o2oqGQXRAjaUbfyyTVuKMFT+HkZJBmUsD8D3e93Bad6DAz3?=
- =?us-ascii?Q?DXer+zrQUemxz35njQG8NMfTB2RNlnENWHlvXGQl0RetucEmi7sNn8kJDoq4?=
- =?us-ascii?Q?3kTQ74njEMuiHDrj612fe5P3WyhkTCQnML5+cOevKHrDUXKPIMm+QOHZBPQy?=
- =?us-ascii?Q?CfwO5XSwJ/zv09UI0wOZvgXiQVPhBJauPrD1JRl5LGmA1wKwxFsjBf2z9kjo?=
- =?us-ascii?Q?63wjF9FlK8qCesj0FxRrOx5Hmi4xJw5B5Bc6b0WXvySFEomIEia8XX9xRDah?=
- =?us-ascii?Q?pqvcCEdOmbYXuLEIqwX9CJ9KRXaQ/Uugm9QuSiEY2DrsfEbMQGE99jIzD8uY?=
- =?us-ascii?Q?gBJWegwF/8z4hX/5HW6suLH3yuJggMhlZEJpWJM5kCXAlQLUHoJFUsnXmnig?=
- =?us-ascii?Q?ZB868ZAgVNZLAEcqO9lvfe0/Y9X2RrYxJa7rrXvRDbhSl+P2oHykmkn7ZWvM?=
- =?us-ascii?Q?aUbI9vGBMxFvGQsnndIIoTc+BU2n9BG80ibq6UVFmLvQ4uZAZga4xcimH3Ks?=
- =?us-ascii?Q?m3VZUNpV2pnjFBT7eKBKZcyqEdHX3aPv+vImGerzzBkkOStmdr5rUnSMTqS+?=
- =?us-ascii?Q?5pvl5f6yThvOu9Jcu9gTNVbrZnG8Tkv9G8IzfTnyLMgxUsLFkzDHm3cJAlKp?=
- =?us-ascii?Q?ZfHSYA9k3ws3c2YDMIlc4IcHhM3FlJGA0IZ1VBs/IDfgeZUW+azxFdhNBrkc?=
- =?us-ascii?Q?o2KD975sMP164DFEYtuMEplmS9L4XSPf4ihTMxxBLnlibDQnHiFCqxLMSC8r?=
- =?us-ascii?Q?Y5SNjx4KFJpMzte9cFoS7vuBPv36yef669nCTKdbl7Ym1OoFD9xSM0hWLphv?=
- =?us-ascii?Q?ptrnyjSb00ASS9/Ho/6N/G9qC8nEVFppsphqFmSOfucjsrxjdvlEMFpE3hGc?=
- =?us-ascii?Q?xPyoidovh06Hp5PWXuVfxvOfaKDsC4HQQ8EgdcZbxbzOwajtkwP8uzU3PpHs?=
- =?us-ascii?Q?27OxpfWDRoI8kSwycfjYhNR85adUuclwC0h2V1J0IyH+rFbqcsjhRhc73Zle?=
- =?us-ascii?Q?WNuBz+/Jb5KoZM6NSNPaAuDZX3MODtHVEeU+LTBt3Spo9wvIqe2FknubR9OM?=
- =?us-ascii?Q?1wpf+kX50jgmRa3vKoQWVO/vU1nUE0Z4uLhKXK+eppDaXzy/lFMhsj7+lRJb?=
- =?us-ascii?Q?HQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 696bcefc-3156-493e-3658-08dadd46d122
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 20:15:45.4975
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hm1pZUkkfx7XJjqZ/vBVkFipdqVH/mf3v5Oo38D8JkWsMLW/ZungiqZV6PnIRHdAT7ZZDgrzHoq39uRPENjMMZtHrIN9R2MD0LvdiLAw6gk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4578
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-12-jthoughton@google.com> <Y5jTTYwzFHgmm5l6@monkey>
+In-Reply-To: <Y5jTTYwzFHgmm5l6@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 13 Dec 2022 15:18:41 -0500
+Message-ID: <CADrL8HVuZBiNxeanhk1UGWZRc+J=PPffuTrdBSSU6bFqMpXWWw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 11/47] hugetlb: add hugetlb_pmd_alloc and hugetlb_pte_alloc
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ira.weiny@ wrote:
-> From: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> Currently the only CXL features targeted for irq support require their
-> message numbers to be within the first 16 entries.  The device may
-> however support less than 16 entries depending on the support it
-> provides.
-> 
-> Attempt to allocate these 16 irq vectors.  If the device supports less
-> then the PCI infrastructure will allocate that number.  Upon successful
-> allocation, users can plug in their respective isr at any point
-> thereafter.
-> 
-> CXL device events are signaled via interrupts.  Each event log may have
-> a different interrupt message number.  These message numbers are
-> reported in the Get Event Interrupt Policy mailbox command.
-> 
-> Add interrupt support for event logs.  Interrupts are allocated as
-> shared interrupts.  Therefore, all or some event logs can share the same
-> message number.
-> 
-> In addition all logs are queried on any interrupt in order of the most
-> to least severe based on the status register.
-> 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> 
-> ---
-> Changes from V3:
-> 	Adjust based on changes in patch 1
-> 	Consolidate event setup into cxl_event_config()
-> 	Consistently use cxl_event_* for function names
-> 	Remove cxl_event_int_is_msi()
-> 	Ensure DCD log is ignored in status
-> 	Simplify event status loop logic
-> 	Dan
-> 		Fail driver load if the irq's are not allocated
-> 		move cxl_event_config_msgnums() to pci.c
-> 		s/CXL_PCI_REQUIRED_VECTORS/CXL_PCI_DEFAULT_MAX_VECTORS
-> 		s/devm_kmalloc/devm_kzalloc
-> 		Fix up pci_alloc_irq_vectors() comment
-> 		Pass pdev to cxl_alloc_irq_vectors()
-> 		Check FW irq policy prior to configuration
-> 	Jonathan
-> 		Use FIELD_GET instead of manual masking
-> ---
->  drivers/cxl/cxl.h    |   4 +
->  drivers/cxl/cxlmem.h |  19 ++++
->  drivers/cxl/cxlpci.h |   6 ++
->  drivers/cxl/pci.c    | 208 +++++++++++++++++++++++++++++++++++++++++--
->  4 files changed, 231 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 5974d1082210..b3964149c77b 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -168,6 +168,10 @@ static inline int ways_to_eiw(unsigned int ways, u8 *eiw)
->  				 CXLDEV_EVENT_STATUS_FAIL |	\
->  				 CXLDEV_EVENT_STATUS_FATAL)
->  
-> +/* CXL rev 3.0 section 8.2.9.2.4; Table 8-52 */
-> +#define CXLDEV_EVENT_INT_MODE_MASK	GENMASK(1, 0)
-> +#define CXLDEV_EVENT_INT_MSGNUM_MASK	GENMASK(7, 4)
-> +
->  /* CXL 2.0 8.2.8.4 Mailbox Registers */
->  #define CXLDEV_MBOX_CAPS_OFFSET 0x00
->  #define   CXLDEV_MBOX_CAP_PAYLOAD_SIZE_MASK GENMASK(4, 0)
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index dd9aa3dd738e..bd8bfbe61ec8 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -194,6 +194,23 @@ struct cxl_endpoint_dvsec_info {
->  	struct range dvsec_range[2];
->  };
->  
-> +/**
-> + * Event Interrupt Policy
-> + *
-> + * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
-> + */
-> +enum cxl_event_int_mode {
-> +	CXL_INT_NONE		= 0x00,
-> +	CXL_INT_MSI_MSIX	= 0x01,
-> +	CXL_INT_FW		= 0x02
-> +};
-> +struct cxl_event_interrupt_policy {
-> +	u8 info_settings;
-> +	u8 warn_settings;
-> +	u8 failure_settings;
-> +	u8 fatal_settings;
-> +} __packed;
-> +
->  /**
->   * struct cxl_event_state - Event log driver state
->   *
-> @@ -288,6 +305,8 @@ enum cxl_opcode {
->  	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
->  	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
->  	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
-> +	CXL_MBOX_OP_GET_EVT_INT_POLICY	= 0x0102,
-> +	CXL_MBOX_OP_SET_EVT_INT_POLICY	= 0x0103,
->  	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
->  	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
->  	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index 77dbdb980b12..a8ea04f536ab 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -53,6 +53,12 @@
->  #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->  #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->  
-> +/*
-> + * NOTE: Currently all the functions which are enabled for CXL require their
-> + * vectors to be in the first 16.  Use this as the default max.
-> + */
-> +#define CXL_PCI_DEFAULT_MAX_VECTORS 16
-> +
->  /* Register Block Identifier (RBI) */
->  enum cxl_regloc_type {
->  	CXL_REGLOC_RBI_EMPTY = 0,
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index a2d8382bc593..d42d87faddb8 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -445,6 +445,201 @@ static int cxl_mem_alloc_event_buf(struct cxl_dev_state *cxlds)
->  	return 0;
->  }
->  
-> +static int cxl_alloc_irq_vectors(struct pci_dev *pdev)
-> +{
-> +	int nvecs;
-> +
-> +	/*
-> +	 * CXL requires MSI/MSIX support.
+On Tue, Dec 13, 2022 at 2:32 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 10/21/22 16:36, James Houghton wrote:
+> > These functions are used to allocate new PTEs below the hstate PTE. This
+> > will be used by hugetlb_walk_step, which implements stepping forwards in
+> > a HugeTLB high-granularity page table walk.
+> >
+> > The reasons that we don't use the standard pmd_alloc/pte_alloc*
+> > functions are:
+> >  1) This prevents us from accidentally overwriting swap entries or
+> >     attempting to use swap entries as present non-leaf PTEs (see
+> >     pmd_alloc(); we assume that !pte_none means pte_present and
+> >     non-leaf).
+> >  2) Locking hugetlb PTEs can different than regular PTEs. (Although, as
+> >     implemented right now, locking is the same.)
+> >  3) We can maintain compatibility with CONFIG_HIGHPTE. That is, HugeTLB
+> >     HGM won't use HIGHPTE, but the kernel can still be built with it,
+> >     and other mm code will use it.
+> >
+> > When GENERAL_HUGETLB supports P4D-based hugepages, we will need to
+> > implement hugetlb_pud_alloc to implement hugetlb_walk_step.
+> >
+> > Signed-off-by: James Houghton <jthoughton@google.com>
+> > ---
+> >  include/linux/hugetlb.h |  5 +++
+> >  mm/hugetlb.c            | 94 +++++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 99 insertions(+)
+> >
+> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> > index d30322108b34..003255b0e40f 100644
+> > --- a/include/linux/hugetlb.h
+> > +++ b/include/linux/hugetlb.h
+> > @@ -119,6 +119,11 @@ void hugetlb_pte_copy(struct hugetlb_pte *dest, const struct hugetlb_pte *src)
+> >
+> >  bool hugetlb_pte_present_leaf(const struct hugetlb_pte *hpte, pte_t pte);
+> >
+> > +pmd_t *hugetlb_pmd_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> > +             unsigned long addr);
+> > +pte_t *hugetlb_pte_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> > +             unsigned long addr);
+> > +
+> >  struct hugepage_subpool {
+> >       spinlock_t lock;
+> >       long count;
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index a0e46d35dabc..e3733388adee 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -341,6 +341,100 @@ static bool has_same_uncharge_info(struct file_region *rg,
+> >  #endif
+> >  }
+> >
+> > +pmd_t *hugetlb_pmd_alloc(struct mm_struct *mm, struct hugetlb_pte *hpte,
+> > +             unsigned long addr)
+>
+> A little confused as there are no users yet ... Is hpte the 'hstate PTE'
+> that we are trying to allocate ptes under?  For example, in the case of
+> a hugetlb_pmd_alloc caller hpte would be a PUD or CONT_PMD size pte?
 
-Spec reference please.
+The hpte is the level above the level we're trying to allocate (not
+necessarily the 'hstate PTE'). I'll make that clear in the comments
+for both functions.
 
-"Per CXL 3.0 3.1.1 CXL.io Endpoint a function on a CXL device must not
-generate INTx messages if that function participates in CXL.cache or
-CXL.mem."
+So consider allocating 4K PTEs for a 1G HugeTLB page:
+- With the hstate 'PTE' (PUD), we make a hugetlb_pte with that PUD
+(let's call it 'hpte')
+- We call hugetlb_pmd_alloc(hpte) which will leave 'hpte' the same,
+but the pud_t that hpte->ptep points to is no longer a leaf.
+- We call hugetlb_walk_step(hpte) to step down a level to get a PMD,
+changing hpte. The hpte->ptep is now pointing to a blank pmd_t.
+- We call hugetlb_pte_alloc(hpte) to allocate a bunch of PTEs and
+populate the pmd_t.
+- We call hugetlb_walk_step(hpte) to step down again.
 
-> +	 *
-> +	 * Additionally pci_alloc_irq_vectors() handles calling
-> +	 * pci_free_irq_vectors() automatically despite not being called
-> +	 * pcim_*.  See pci_setup_msi_context().
-> +	 */
-> +	nvecs = pci_alloc_irq_vectors(pdev, 1, CXL_PCI_DEFAULT_MAX_VECTORS,
-> +				      PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> +	if (nvecs < 1) {
-> +		dev_dbg(&pdev->dev, "Failed to alloc irq vectors: %d\n", nvecs);
-> +		return -ENXIO;
-> +	}
-> +	return 0;
-> +}
-> +
-> +struct cxl_dev_id {
-> +	struct cxl_dev_state *cxlds;
-> +};
-> +
-> +static irqreturn_t cxl_event_thread(int irq, void *id)
-> +{
-> +	struct cxl_dev_id *dev_id = id;
-> +	struct cxl_dev_state *cxlds = dev_id->cxlds;
-> +	u32 status;
-> +
-> +	do {
-> +		/*
-> +		 * CXL 3.0 8.2.8.3.1: The lower 32 bits are the status;
-> +		 * ignore the reserved upper 32 bits
-> +		 */
-> +		status = readl(cxlds->regs.status + CXLDEV_DEV_EVENT_STATUS_OFFSET);
-> +		/* Ignore logs unknown to the driver */
-> +		status &= CXLDEV_EVENT_STATUS_ALL;
-> +		if (!status)
-> +			break;
-> +		cxl_mem_get_event_records(cxlds, status);
-> +		cond_resched();
-> +	} while (status);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int cxl_event_req_irq(struct cxl_dev_state *cxlds, u8 setting)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	struct cxl_dev_id *dev_id;
-> +	int irq;
-> +
-> +	if (FIELD_GET(CXLDEV_EVENT_INT_MODE_MASK, setting) != CXL_INT_MSI_MSIX)
-> +		return -ENXIO;
-> +
-> +	/* dev_id must be globally unique and must contain the cxlds */
-> +	dev_id = devm_kzalloc(dev, sizeof(*dev_id), GFP_KERNEL);
-> +	if (!dev_id)
-> +		return -ENOMEM;
-> +	dev_id->cxlds = cxlds;
-> +
-> +	irq =  pci_irq_vector(pdev,
-> +			      FIELD_GET(CXLDEV_EVENT_INT_MSGNUM_MASK, setting));
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	return devm_request_threaded_irq(dev, irq, NULL, cxl_event_thread,
-> +					 IRQF_SHARED, NULL, dev_id);
-> +}
-> +
-> +static int cxl_event_get_int_policy(struct cxl_dev_state *cxlds,
-> +				    struct cxl_event_interrupt_policy *policy)
-> +{
-> +	struct cxl_mbox_cmd mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_GET_EVT_INT_POLICY,
-> +		.payload_out = policy,
-> +		.size_out = sizeof(*policy),
-> +	};
-> +	int rc;
-> +
-> +	rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> +	if (rc < 0)
-> +		dev_err(cxlds->dev, "Failed to get event interrupt policy : %d",
-> +			rc);
-> +
-> +	return rc;
-> +}
-> +
-> +static int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
-> +				    struct cxl_event_interrupt_policy *policy)
-> +{
-> +	struct cxl_mbox_cmd mbox_cmd;
-> +	int rc;
-> +
-> +	policy->info_settings = CXL_INT_MSI_MSIX;
-> +	policy->warn_settings = CXL_INT_MSI_MSIX;
-> +	policy->failure_settings = CXL_INT_MSI_MSIX;
-> +	policy->fatal_settings = CXL_INT_MSI_MSIX;
+This is basically what hugetlb_hgm_walk does (in the next patch). We
+only change 'hpte' when we do a step, and that is when we populate
+'shift'. The 'sz' parameter for hugetlb_walk_step is what
+architectures can use to populate hpte->shift appropriately (ignored
+for x86).
 
-I prefer this syntax for command payload initialization if only because
-it 0-fills all fields:
+For arm64, we can use 'sz' to populate hpte->shift with what the
+caller wants when we are free to choose (like if all the PTEs are
+none, we can do CONT_PTE_SHIFT). See [1]'s implementation of
+hugetlb_walk_step for what I *think* is correct for arm64.
 
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index d42d87faddb8..e8b4bd5e517f 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -541,10 +541,12 @@ static int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
-        struct cxl_mbox_cmd mbox_cmd;
-        int rc;
- 
--       policy->info_settings = CXL_INT_MSI_MSIX;
--       policy->warn_settings = CXL_INT_MSI_MSIX;
--       policy->failure_settings = CXL_INT_MSI_MSIX;
--       policy->fatal_settings = CXL_INT_MSI_MSIX;
-+       *policy = (struct cxl_event_interrupt_policy) {
-+               .info_settings = CXL_INT_MSI_MSIX,
-+               .warn_settings = CXL_INT_MSI_MSIX,
-+               .failure_settings = CXL_INT_MSI_MSIX,
-+               .fatal_settings = CXL_INT_MSI_MSIX,
-+       };
- 
-        mbox_cmd = (struct cxl_mbox_cmd) {
-                .opcode = CXL_MBOX_OP_SET_EVT_INT_POLICY,
+[1] https://github.com/48ca/linux/commit/bf3b8742e95c58c2431c80c5bed5cb5cb95885af
 
-...but that can be a follow-on fixup because I am not seeing much else
-to need respinning this patch.
+>
+> > +{
+> > +     spinlock_t *ptl = hugetlb_pte_lockptr(mm, hpte);
+> > +     pmd_t *new;
+> > +     pud_t *pudp;
+> > +     pud_t pud;
+> > +
+> > +     if (hpte->level != HUGETLB_LEVEL_PUD)
+> > +             return ERR_PTR(-EINVAL);
+>
+> Ah yes, it is PUD level.  However, I guess CONT_PMD would also be valid
+> on arm64?
 
-> +
-> +	mbox_cmd = (struct cxl_mbox_cmd) {
-> +		.opcode = CXL_MBOX_OP_SET_EVT_INT_POLICY,
-> +		.payload_in = policy,
-> +		.size_in = sizeof(*policy),
-> +	};
-> +
-> +	rc = cxl_internal_send_cmd(cxlds, &mbox_cmd);
-> +	if (rc < 0) {
-> +		dev_err(cxlds->dev, "Failed to set event interrupt policy : %d",
-> +			rc);
-> +		return rc;
-> +	}
-> +
-> +	/* Retrieve final interrupt settings */
-> +	return cxl_event_get_int_policy(cxlds, policy);
-> +}
-> +
-> +static int cxl_event_irqsetup(struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_event_interrupt_policy policy;
-> +	int rc;
-> +
-> +	rc = cxl_event_config_msgnums(cxlds, &policy);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc = cxl_event_req_irq(cxlds, policy.info_settings);
-> +	if (rc) {
-> +		dev_err(cxlds->dev, "Failed to get interrupt for event Info log\n");
-> +		return rc;
-> +	}
-> +
-> +	rc = cxl_event_req_irq(cxlds, policy.warn_settings);
-> +	if (rc) {
-> +		dev_err(cxlds->dev, "Failed to get interrupt for event Warn log\n");
-> +		return rc;
-> +	}
-> +
-> +	rc = cxl_event_req_irq(cxlds, policy.failure_settings);
-> +	if (rc) {
-> +		dev_err(cxlds->dev, "Failed to get interrupt for event Failure log\n");
-> +		return rc;
-> +	}
-> +
-> +	rc = cxl_event_req_irq(cxlds, policy.fatal_settings);
-> +	if (rc) {
-> +		dev_err(cxlds->dev, "Failed to get interrupt for event Fatal log\n");
-> +		return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static bool cxl_event_int_is_fw(u8 setting)
-> +{
-> +	u8 mode = FIELD_GET(CXLDEV_EVENT_INT_MODE_MASK, setting);
-> +
-> +	return mode == CXL_INT_FW;
-> +}
-> +
-> +static int cxl_event_config(struct pci_host_bridge *host_bridge,
-> +			    struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_event_interrupt_policy policy;
-> +	int rc;
-> +
-> +	/*
-> +	 * When BIOS maintains CXL error reporting control, it will process
-> +	 * event records.  Only one agent can do so.
-> +	 */
-> +	if (!host_bridge->native_cxl_error)
-> +		return 0;
-> +
-> +	rc = cxl_event_get_int_policy(cxlds, &policy);
-> +	if (rc)
-> +		return rc;
-> +
-> +	if (cxl_event_int_is_fw(policy.info_settings) ||
-> +	    cxl_event_int_is_fw(policy.warn_settings) ||
-> +	    cxl_event_int_is_fw(policy.failure_settings) ||
-> +	    cxl_event_int_is_fw(policy.fatal_settings)) {
-> +		dev_err(cxlds->dev, "FW still in control of Event Logs despite _OSC settings\n");
-> +		return -EBUSY;
-> +	}
-> +
-> +	rc = cxl_event_irqsetup(cxlds);
-> +	if (rc)
-> +		return rc;
-> +
-> +	cxl_mem_get_event_records(cxlds, CXLDEV_EVENT_STATUS_ALL);
-> +
-> +	return 0;
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct pci_host_bridge *host_bridge = pci_find_host_bridge(pdev->bus);
-> @@ -519,6 +714,10 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	rc = cxl_alloc_irq_vectors(pdev);
-> +	if (rc)
-> +		return rc;
-> +
->  	cxlmd = devm_cxl_add_memdev(cxlds);
->  	if (IS_ERR(cxlmd))
->  		return PTR_ERR(cxlmd);
-> @@ -527,12 +726,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> -	/*
-> -	 * When BIOS maintains CXL error reporting control, it will process
-> -	 * event records.  Only one agent can do so.
-> -	 */
-> -	if (host_bridge->native_cxl_error)
-> -		cxl_mem_get_event_records(cxlds, CXLDEV_EVENT_STATUS_ALL);
-> +	rc = cxl_event_config(host_bridge, cxlds);
-> +	if (rc)
-> +		return rc;
+The level is always PGD, P4D, PUD, PMD, or PTE. CONT_PTE is on
+HUGETLB_LEVEL_PTE, CONT_PMD is on HUGETLB_LEVEL_PMD.
 
-In the future, it would help me if these kinds of policy changes mid
-patch set, if they cannot be avoided, are at least declared in the
-changelog. It saps some reviewer resources to invalidate previous
-understanding within the same review session.
+These functions are supposed to be used for all architectures (in
+their implementations of 'hugetlb_walk_step'; that's why they're not
+static, actually. I'll make that clear in the commit description).
+
+>
+> > +
+> > +     pudp = (pud_t *)hpte->ptep;
+> > +retry:
+> > +     pud = *pudp;
+>
+> We might want to consider a READ_ONCE here.  I am not an expert on such
+> things, but recall a similar as pointed out in the now obsolete commit
+> 27ceae9833843.
+
+Agreed. Will try to change all PTE reading to use READ_ONCE, though
+they can be easy to miss... :(
+
+Thanks very much for the reviews so far, Mike!
+
+- James
+
+>
+> --
+> Mike Kravetz
+>
