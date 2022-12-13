@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2844064AD45
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B79664AD47
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 02:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234508AbiLMBlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 20:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S234181AbiLMBmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 20:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234219AbiLMBkm (ORCPT
+        with ESMTP id S234323AbiLMBly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 20:40:42 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9CF1B1D4;
-        Mon, 12 Dec 2022 17:40:26 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 12 Dec 2022 20:41:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274DE1B1D4
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 17:41:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWLm81wSdz4xGH;
-        Tue, 13 Dec 2022 12:40:24 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670895625;
-        bh=5Wl7AcR10V9XvhyKuijI2Nb2Lac+cY7HeWrUdeDmjCk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AnIpkE9adSEnTffnZIK0efsbrAE3QP5bzYjh13f6ACTxvBwUrijp9EOeYiT815Qvz
-         HkvNrLwTxnLpI3RnXfznvMPqNINNO8zNDzhv6ey5kcbaSgnEqJkA4qRKFUD1r+vG1M
-         E1dl6FO1skm2uztavYzoqda75gzUlISAfPyNqynhXCi/DqpWdZK0pti1Du+yWpBiTV
-         lW5G5Uf49z/9cFwXgDs1MxXW7HCgthOGsMJSVSRtdaTm6VNlr35pOdXDxskohzqL2e
-         1AIiDDIS19NI3j+g68YG3DdXZoelIJUvdJGj5AAqR77++KKs4xe2zhWZiG/Hx4BaTB
-         Y26l0YlF/jf4A==
-Date:   Tue, 13 Dec 2022 12:40:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20221213124023.40476af0@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7F9B612BE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3ABBC433D2;
+        Tue, 13 Dec 2022 01:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670895713;
+        bh=iBJ1gFaWA6XHrDu7utx1m9eYCwImkczuDB8uIaGi7GM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PxrfqvszjiwvDrdf+9C7gHgtSp7EDjv+WkbrNIaKfYvpQ7/BDg3l01uPJWUzYqlKY
+         Yn+xL2ufpvWSL6S/UFtu9TevZHVlzPuGoPH/aXcJxxfFm+syVauSOwoMn7zZ7Gy0gK
+         BgGljCNtPomAKxSFF8m8SmSNWoVvJfw+TXTODGuVHGL6B21QW+CDNrWeft39xpdv7Z
+         OstILjVYzV6Imr7u3PyyTIlF7796E6oIhvrHsNHfOqaMt1kDHQe4IFPopuV9TwD700
+         BqAOHw4iOT+HkaMe+KpgommwOM2vmePotbgc0VYrkrzmEKKoexU3dmZXztF61ZkBAI
+         T/ShPItVlRG7A==
+Date:   Mon, 12 Dec 2022 17:41:51 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] f2fs: don't call f2fs_issue_discard_timeout() when
+ discard_cmd_cnt is 0 in f2fs_put_super()
+Message-ID: <Y5fYXwWu91cxskFj@google.com>
+References: <974f5013-b6af-a39e-0b0f-2ce86253eaeb@kernel.org>
+ <20221212141429.6329-1-frank.li@vivo.com>
+ <2f100a4a-592d-f098-b204-efeef58341ee@kernel.org>
+ <Y5evHVvzGC/8lMfK@google.com>
+ <a364cb12-3241-50a7-fdd5-323825d0a911@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.jJexiWS6+SUx0U7XEJLdyF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a364cb12-3241-50a7-fdd5-323825d0a911@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.jJexiWS6+SUx0U7XEJLdyF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/13, Chao Yu wrote:
+> On 2022/12/13 6:45, Jaegeuk Kim wrote:
+> > On 12/12, Chao Yu wrote:
+> > > On 2022/12/12 22:14, Yangtao Li wrote:
+> > > > Hi Chao,
+> > > > 
+> > > > > The difference here is, if we use f2fs_realtime_discard_enable() in
+> > > > > f2fs_put_super(), we will only write checkpoint w/ CP_TRIMMED flag
+> > > > > when discard option is enable and device supports discard.
+> > > > 
+> > > > > But actually, if discard option is disabled, we still needs to give
+> > > > > put_super() a chance to write checkpoint w/ CP_TRIMMED flag.
+> > > > 
+> > > > Why do we still have to set the CP_TRIMMED flag when the discard opt is not set.
+> > > > Did I miss something?
+> > > 
+> > > Hi Yangtao,
+> > > 
+> > > I guess it's up to scenario. e.g.
+> > > 
+> > > mount w/ nodiscard and use FITRIM to trigger in-batch discard,
+> > > if we set CP_TRIMMED flag during umount, next time, after mount
+> > > w/ discard, it doesn't to issue redundant discard.
+> > 
+> > If fitrim was called with a range, we can get a wrong FI_TRIMMED flag. Isn't it
+> 
+> We can set CP_TRIMMED flag only if fitrim was called on full range w/ 4k granularity,
+> due to it will check sbi->discard_blks variable to make sure there is no range we
+> haven't trimmed.
+> 
+> > better to get a full discard range after remount even though some are redundant?
+> 
+> If nodiscard is set, and sbi->discard_blks becomes zero, it says a full range fitrim
+> was been triggered.
 
-Hi all,
+That gives another assumption, and I prefer to make it simple.
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
-
-In file included from include/linux/uaccess.h:11,
-                 from include/linux/sched/task.h:11,
-                 from include/linux/sched/signal.h:9,
-                 from include/linux/rcuwait.h:6,
-                 from include/linux/percpu-rwsem.h:7,
-                 from include/linux/fs.h:33,
-                 from include/linux/highmem.h:5,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/blkdev.h:9,
-                 from drivers/scsi/scsi_ioctl.c:9:
-drivers/scsi/scsi_ioctl.c: In function 'sg_scsi_ioctl':
-arch/x86/include/asm/uaccess.h:46:9: error: cast specifies array type
-   46 |         (__force __typeof__(ptr))__ptrval;                         =
-     \
-      |         ^
-arch/x86/include/asm/uaccess.h:107:38: note: in definition of macro '__type=
-fits'
-  107 |         __builtin_choose_expr(sizeof(x)<=3Dsizeof(type),(unsigned t=
-ype)0,not)
-      |                                      ^
-arch/x86/include/asm/uaccess.h:130:18: note: in expansion of macro '__intty=
-pe'
-  130 |         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);       =
-     \
-      |                  ^~~~~~~~~
-arch/x86/include/asm/uaccess.h:162:9: note: in expansion of macro 'do_get_u=
-ser_call'
-  162 |         do_get_user_call(get_user,x,untagged_ptr(current->mm, ptr))=
-;    \
-      |         ^~~~~~~~~~~~~~~~
-arch/x86/include/asm/uaccess.h:162:37: note: in expansion of macro 'untagge=
-d_ptr'
-  162 |         do_get_user_call(get_user,x,untagged_ptr(current->mm, ptr))=
-;    \
-      |                                     ^~~~~~~~~~~~
-drivers/scsi/scsi_ioctl.c:522:13: note: in expansion of macro 'get_user'
-  522 |         if (get_user(opcode, sic->data))
-      |             ^~~~~~~~
-
-Caused by commit
-
-  ce66a02538f3 ("x86/mm: Fix sparse warnings in untagged_ptr()")
-
-(the scsi code above has not changed since at least February ...)
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.jJexiWS6+SUx0U7XEJLdyF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOX2AcACgkQAVBC80lX
-0Gyglwf9HEPXL5503VmH+Ll1M8xSbCzgSDqmIkqsNKFbqPKTKwIM5Lh6g5cepESq
-qlcs9ly8RibB9vuH+I+2GMJvS2HTUaNXKgfrOVvDx/SrfUeK6XRFrHj1prEpLP/6
-XXtrXTRY+AlnAJiLL6NI9MqNtnCM52zlCmZhTlf2/S7kpemFlzLJi3MqSl5btCD1
-1a/edWOgy0fhwmh1SCqO0OZiOtP3XoivJJ6Mlyeayr3/6EzxERgh88vD6OsKMorR
-xmivxSfZIE0I/8LGZwpQlkkpMp7gry3lRHOP9ahE/sNsZx3tRqdpOV5Qd85I0j7s
-vI1cd+WY/+d60cVoy/eWiPyl3ciUdA==
-=QbK1
------END PGP SIGNATURE-----
-
---Sig_/.jJexiWS6+SUx0U7XEJLdyF--
+> 
+> So, previous check condition has no problem, right?
+> 
+> 	if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
+> 					!sbi->discard_blks && !dropped) {
+> 
+> Thanks,
+> 
+> > 
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > Thx,
+> > > > Yangtao
