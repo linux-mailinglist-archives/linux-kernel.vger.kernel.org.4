@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A885E64AC3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D02864AC43
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 01:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiLMASU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 19:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S233624AbiLMAWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 19:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbiLMARb (ORCPT
+        with ESMTP id S234193AbiLMAW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 19:17:31 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DBE1CB2C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:17:21 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id x79-20020a633152000000b004785d1cf6bbso8490449pgx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:17:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=sNSL8jiUwkIgQF+f7LKM6ExXdf/VymBG2POuUwuNLgE=;
-        b=X3XOty/l01/xeN/hKkn1EpgJ33YKq3U2qtH9GiJ5/B0nOJ0DB+hLmj4UfSSjeoJtZB
-         r3WCB8nZwf1VlN7+893cXq/5kUvyTwTDCZxL2nIPUKLALlzRPBZMfeoH0Ua0SHFxAPI3
-         /Uv3ZxCaECDcW2eeqyV8ZVWd1hAjmNuzXaMV7oaRBjF3tNInWHVE7czGbwWdAPA4Hukj
-         Vcsk24frgaF7Oql5xOx7BPdx2Nha0adydl6KmebMs/wKPMnAOgI3pEI6XB3jQLbLNFR9
-         iwyZylWx8ZK0kgB1K5whCjACIx96wIRJdQeYwYX5foAv7IbCJ4PHaibz2NHGhj7JHDYg
-         U68w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sNSL8jiUwkIgQF+f7LKM6ExXdf/VymBG2POuUwuNLgE=;
-        b=3wlVJkBeoFNp5/c8TaOBeJKFjd1sUYrDM5R1qWKraU3L6TM56tdKUTesF/nexx7Xe1
-         m3MlTfMuuGdDZnFDbbYfrDMuyua4C0ogSTTiGkATwAFsqcOP04Yi3UR1tOw+o27t/0eR
-         IhiJuxnlY70kX/eSgSYNOEvmDZB9fRPjPEwnqbh/636XuqyVyIiJSEBnDDCncG8ehTXS
-         qfkaS2I/hNqS9Hiqqk3ylBQN/4mREIyIjRj6/ULIXD9jRXuiM3xo3kLh9eXN56IwNYwY
-         ajR0lVeVgOA5b+lgUmBP5Fsws7eSO/h3EGsxyanLa7/bvrXqgFngM4VjCxMai9Tnj4qG
-         DWmw==
-X-Gm-Message-State: ANoB5pmnWoza4++o75WeddvpOYfHxBhJt+HK+ZMokZnWpaq2/pa2+qrt
-        qyOwtECJ4mdauHW6B8xB6lh62O9XJzg=
-X-Google-Smtp-Source: AA0mqf6O/+6Xz33uYXNagfPhZfGdLb4gsoDNpenMWb9N8M3Pf/4lwZ6k3UWvF8FLs6w60jREU9TzRW9INS4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1d98:b0:578:2fb3:b373 with SMTP id
- z24-20020a056a001d9800b005782fb3b373mr577725pfw.33.1670890641355; Mon, 12 Dec
- 2022 16:17:21 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 13 Dec 2022 00:16:53 +0000
-In-Reply-To: <20221213001653.3852042-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221213001653.3852042-1-seanjc@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221213001653.3852042-15-seanjc@google.com>
-Subject: [PATCH 14/14] KVM: selftests: Enable RSEQ test for RISC-V
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ricardo Koller <ricarkol@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Raghavendra Rao Ananta <rananta@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 12 Dec 2022 19:22:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36B91EC4F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 16:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670890758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gI+6HXmXS35AZXXUiiiCAtaTnfFzC0toG7xNuA9nRrA=;
+        b=ATIOjkr9MCaTNB0eEFnwbOr/qS9G3kpwPaDL5450i5DGGgtsKhiytihZ2x5El3NeP1szpv
+        G/0/ZhbWbBzvBTuSAuz8Z9uIqAEqxYd8VhYA0S+P7LlU/qz2AmxJh+RUtEgpaz1W0nsIa1
+        7BBDrrhsgXkvqUi/E/OsgkcQTkJTp2I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-244-vE5xQ8OyP5a4p8qoy9ut0A-1; Mon, 12 Dec 2022 19:19:11 -0500
+X-MC-Unique: vE5xQ8OyP5a4p8qoy9ut0A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4248185A78B;
+        Tue, 13 Dec 2022 00:19:10 +0000 (UTC)
+Received: from [10.22.11.98] (unknown [10.22.11.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B0B6414152F4;
+        Tue, 13 Dec 2022 00:19:09 +0000 (UTC)
+Message-ID: <81f14365-a153-44aa-8ee7-4910f6988d7c@redhat.com>
+Date:   Mon, 12 Dec 2022 19:19:05 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH-block v2 3/3] blk-cgroup: Flush stats at blkgs destruction
+ path
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
+References: <20221211222058.2946830-1-longman@redhat.com>
+ <20221211222058.2946830-4-longman@redhat.com>
+ <Y5eqAtwnpfEUG0EL@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y5eqAtwnpfEUG0EL@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the RSEQ test for RISC-V, which according to HAVE_RSEQ is supported
-by the kernel and thus should be tested.  The RSEQ test was added shortly
-before RISC-V selftests support landed, i.e. was likely overlooked during
-merging.
 
-Note, the RSEQ test currently doesn't compile with clang due to an issue
-in the base RSEQ test code.  Given that clang is constantly broken for KVM
-selftests, enable the RSEQ test and deal with its broken clang state in a
-separate commit/series.
+On 12/12/22 17:24, Tejun Heo wrote:
+> On Sun, Dec 11, 2022 at 05:20:58PM -0500, Waiman Long wrote:
+>> As noted by Michal, the blkg_iostat_set's in the lockless list
+>> hold reference to blkg's to protect against their removal. Those
+>> blkg's hold reference to blkcg. When a cgroup is being destroyed,
+>> cgroup_rstat_flush() is only called at css_release_work_fn() which is
+>> called when the blkcg reference count reaches 0. This circular dependency
+>> will prevent blkcg from being freed until some other events cause
+>> cgroup_rstat_flush() to be called to flush out the pending blkcg stats.
+>>
+>> To prevent this delayed blkcg removal, add a new cgroup_rstat_css_flush()
+>> function to flush stats for a given css and cpu and call it at the blkgs
+>> destruction path, blkcg_destroy_blkgs(), whenever there are still some
+>> pending stats to be flushed. This will ensure that blkcg reference
+>> count can reach 0 ASAP.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+>
+> But a nit below
+>
+>> +	/*
+>> +	 * Flush all the non-empty percpu lockless lists.
+>> +	 */
+> Can you please explain the deadlock that's being avoided in the above
+> comment? ie. it should say why this flush is necessary.
 
-  In file included from rseq_test.c:23:
-  In file included from ./../rseq/rseq.c:33:
-  In file included from ../rseq/rseq.h:97:
-  ../rseq/rseq-riscv.h:657:17: error: invalid input constraint 'er' in asm
-                                      [off]                       "er" (off),
-                                                                ^
+Sure. I will expand the comment to elaborate a bit more.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/rseq_test.c | 2 --
- 1 file changed, 2 deletions(-)
+Cheers,
+Longman
 
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 34c3df9b4e81..3045fdf9bdf5 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -22,8 +22,6 @@
- 
- #include "../rseq/rseq.c"
- 
--TEST_UNSUPPORTED(riscv);
--
- /*
-  * Any bug related to task migration is likely to be timing-dependent; perform
-  * a large number of migrations to reduce the odds of a false negative.
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
+>
+>> +	for_each_possible_cpu(cpu) {
+>> +		struct llist_head *lhead = per_cpu_ptr(blkcg->lhead, cpu);
+>> +
+>> +		if (!llist_empty(lhead))
+>> +			cgroup_rstat_css_cpu_flush(&blkcg->css, cpu);
+>> +	}
 
