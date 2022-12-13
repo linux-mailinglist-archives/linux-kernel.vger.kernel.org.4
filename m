@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8415D64BBD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7E264BBDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiLMSW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S236497AbiLMSXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiLMSWy (ORCPT
+        with ESMTP id S236460AbiLMSX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:22:54 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B482248
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:22:50 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r18so388759pgr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:22:50 -0800 (PST)
+        Tue, 13 Dec 2022 13:23:29 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68417F01B;
+        Tue, 13 Dec 2022 10:23:28 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id gh17so38641521ejb.6;
+        Tue, 13 Dec 2022 10:23:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vbt0meIgNn6WBG4YKbNfGi1T3PYNH2tI0RABGm6MAIY=;
-        b=clVFCd5NAswd0cV5yiJ07YbrMqm/CoMDjz7XOZ2ww7a9GYyW5vk4yywNHRG5Ad+WXB
-         hbq44pfn7aYqEIVVmUQsFM6Y8CxcJlw3QXr/qCvnKCNZBr8PzznZVoNkfZNbn1xITgwW
-         +nBS4O9SzJ/7RuXokUHopQoBRfoB75i29p7cO2lqearialjc2gIWpVxIy1tX/nmDQgwc
-         W58XTPAQZgCLDbxqZzXtl1PCpopHaxD1OtIsbXSLCYd76Ow533MgDCL5mG6/XVENGbWF
-         ZfNmBf8gS0lPgVdqVkKxH6lghccfPJyKH2BL2/y9fbgiRx549qyPOE9NiT9AsmrxddrV
-         KhUQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TwSscO4PEOQF6eSJjMD8VMf0/HEneWx4N+6zCukP0wU=;
+        b=aISaR1NtmUs7HLwylIB8pt6NezUoA9MqVwdl1HaqJxF+w6X3F0mTpCZgmb7+ljxrwt
+         k4mwmFp6zMZQoYd4d0MLWDhpRsmzhWmA7uNk49EqQ/4f95adDVJba25WIv06vO/8B37F
+         3rQEgux0qYjlZlOY8C/LpUBSTkO2e4XEo4Qors0OnlJ4ZXcCCEZ09tDy4wki9a8n3oqZ
+         KAFAm4JLpVSyfKKOLgkjkz+hJkpdUb7X4gZVASHRv/fMuCBj1pGXjEbibY7iRj2v+cH1
+         XEQWyPWpUU3PMQ2kw+m/mUXlkfTDD5AdjFHNzMt8Q8D2uGIT29xXaWjzHWZkrlREu5Vm
+         5tBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vbt0meIgNn6WBG4YKbNfGi1T3PYNH2tI0RABGm6MAIY=;
-        b=FvH8gYnPIeH63ZFQjVe0hKr1tfEWLjAsqujuPG9+bvjrtVKn2CJqZ0qk3y3wCwdwKA
-         Vg8/lD6dqnOj/rEZIo9OhrpLZQTZXsZA+DKRD8Zrzu/kGWFlRzoANFAUk5ccMH8RcmJF
-         ORZZoTWri8E+LmQzKYb5zgpDjIr/9hMZxmk+xx12sJWJ6IzbmiZ29i0Kg0O3IL7xWJTk
-         MR91yOWPzn1H6uCiNWRJBa5W07sO17Ukl5WOQ9gpJcm5zqghIdbGJMble6jMz1paUBXh
-         mRwOma0N5lttQpvEly3fiGDRDVVY/xDcmZFEjhedu6fJju5BH5gC1Hiy1lfEHFiWBHyQ
-         aZEA==
-X-Gm-Message-State: ANoB5plCgsIwHPht4m1AajnZwEFIV7bKGj8AoYkmQstvb+zwZ0ciLYzb
-        DXSpGb5R+34Dy/neZ5tvm1DcrpAjjW2+bH1+
-X-Google-Smtp-Source: AA0mqf6Soby8rd6m9EytXXHvJpT4TDAOmpLAofqH3m8MSRCn4y3bZNlZuKdxW3txtw47z8Dx4bLf1w==
-X-Received: by 2002:aa7:9697:0:b0:576:9252:d06 with SMTP id f23-20020aa79697000000b0057692520d06mr371181pfk.0.1670955769814;
-        Tue, 13 Dec 2022 10:22:49 -0800 (PST)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id g74-20020a62524d000000b0056bb4bbfb9bsm8195038pfb.95.2022.12.13.10.22.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 10:22:49 -0800 (PST)
-Date:   Tue, 13 Dec 2022 10:22:45 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     James Clark <james.clark@arm.com>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/1] KVM: arm64: PMU: Fix PMCR_EL0 reset value
-Message-ID: <Y5jC9bAJ08xW1ZIA@google.com>
-References: <20221209164446.1972014-1-james.clark@arm.com>
- <20221209164446.1972014-2-james.clark@arm.com>
- <Y5N3R+w3GF94hxHa@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TwSscO4PEOQF6eSJjMD8VMf0/HEneWx4N+6zCukP0wU=;
+        b=KnxeC6JvPHPdHLdKGo8CeWB33VBlFNMPwcVJLrVAnH+3Bon/UysNeYtD6yzF9yZ6Im
+         hxWd874XEDQY8ZRrjVeNbzl+oZkeQtMkfLmSO2SxRrWx8MJdj3RffCFzAU7zhjoIDkjQ
+         o5uE1adqB/0C45ZnpJskH5ZhxfO0TEwM4bX9OGdWEZ8RZkV+x5t5Q+L+gGBpP29e92u/
+         XNyDCpcsU8D7uN+LddesqD8mCqOiP8H8j4Wd1kbYrBEaOPuf/C0FyQGOS1SN/s1vPSN8
+         JYHAsWExZ77fh++Mz1KZhuUJSOuUXw97SZXDVm3BjOW/oJ1MRgPGB38DoWOpZZGC7Zof
+         qs6Q==
+X-Gm-Message-State: ANoB5pnH4YznKazvLaHDKGfdMKAv44AgcfwwoPdsbfvu9YQaX4CZsrFK
+        2z32z7/7CheruAeyVEGF8zOdWG/ebA+8nlY/gI0=
+X-Google-Smtp-Source: AA0mqf6GxPasT+P+nG824mqg/9ow4VA7kyhlgtwQwUoxZsf7IYyHCjz2Wn/JsjLxWfg3FzF5J+K6Q0rdfOkZ7s7yol0=
+X-Received: by 2002:a17:906:694a:b0:7c0:9d50:5144 with SMTP id
+ c10-20020a170906694a00b007c09d505144mr31755625ejs.590.1670955806889; Tue, 13
+ Dec 2022 10:23:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5N3R+w3GF94hxHa@google.com>
-X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URI_DOTEDU,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+References: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
+In-Reply-To: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
+From:   Daniele Palmas <dnlplm@gmail.com>
+Date:   Tue, 13 Dec 2022 19:23:13 +0100
+Message-ID: <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com>
+Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
+ controller's ring buffer
+To:     "Seija K." <doremylover123@gmail.com>
+Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 05:58:31PM +0000, Oliver Upton wrote:
-> On Fri, Dec 09, 2022 at 04:44:46PM +0000, James Clark wrote:
-> > ARMV8_PMU_PMCR_N_MASK is an unshifted value which results in the wrong
-> > reset value for PMCR_EL0, so shift it to fix it.
-> 
-> That's just mean. *_MASK tends to be a shifted mask, although it would
-> appear that asm/perf_event.h does not follow this convention. Fixing
-> that would be nice (as I'm sure somebody else will get burned by this),
-> but for the sake of an immediate fix:
+Hello Seija,
+
+Il giorno mar 13 dic 2022 alle ore 18:44 Seija K.
+<doremylover123@gmail.com> ha scritto:
 >
+> When a packet larger than MTU arrives in Linux from the modem, it is
+> discarded with -EOVERFLOW error (Babble error).
+>
+> This is seen on USB3.0 and USB2.0 buses.
+>
+> This is because the MRU (Max Receive Size) is not a separate entity
+> from the MTU (Max Transmit Size), and the received packets can be
+> larger than those transmitted.
+>
+> Following the babble error, there was an endless supply of zero-length
+> URBs that were rejected with -EPROTO (increasing the rx input error
+> counter each time).
+>
+> This is only seen on USB3.0. These continue to come ad infinitum until
+> the modem is shut down.
+>
+> There appears to be a bug in the core USB handling code in Linux that
+> doesn't deal with network MTUs smaller than 1500 bytes well.
+>
+> By default, the dev->hard_mtu (the real MTU) is in lockstep with
+> dev->rx_urb_size (essentially an MRU), and the latter is causing
+> trouble.
+>
+> This has nothing to do with the modems; the issue can be reproduced by
+> getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
+> with size greater than 1406.
+>
+> Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+>
+> Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+> ---
+> drivers/net/usb/qmi_wwan.c | 7 +++++++
+> 1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 554d4e2a84a4..39db53a74b5a 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+> struct usb_interface *intf)
+> }
+> dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+> dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
+> + /* LTE Networks don't always respect their own MTU on the receiving side;
+> + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
+> + * far-end networks. Make the receive buffer large enough to accommodate
+> + * them, and add four bytes so MTU does not equal MRU on network
+> + * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
+> + */
+> + dev->rx_urb_size = ETH_DATA_LEN + 4;
 
-Even kvm-unit-tests does this:
+Did you test this change with QMAP?
 
-arm/pmu.c:
-#define PMU_PMCR_N_SHIFT   11
-#define PMU_PMCR_N_MASK    0x1f
+To support qmap dl aggregated blocks qmi_wwan relies on the
+usbnet_change_mtu behavior of changing the rx_urb_size.
 
+Thanks,
+Daniele
 
-> > This fixes the following error when running qemu:
-> > 
-> >   $ qemu-system-aarch64 -cpu host -machine type=virt,accel=kvm -kernel ...
-> > 
-> >   target/arm/helper.c:1813: pmevcntr_rawwrite: Assertion `counter < pmu_num_counters(env)' failed.
-> > 
-> > Fixes: 292e8f149476 ("KVM: arm64: PMU: Simplify PMCR_EL0 reset handling")
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> 
-> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-> 
+> err:
+> return status;
+> }
 > --
-> Thanks,
-> Oliver
-> 
-> > ---
-> >  arch/arm64/kvm/sys_regs.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> > index d5ee52d6bf73..c6cbfe6b854b 100644
-> > --- a/arch/arm64/kvm/sys_regs.c
-> > +++ b/arch/arm64/kvm/sys_regs.c
-> > @@ -646,7 +646,7 @@ static void reset_pmcr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *r)
-> >  		return;
-> >  
-> >  	/* Only preserve PMCR_EL0.N, and reset the rest to 0 */
-> > -	pmcr = read_sysreg(pmcr_el0) & ARMV8_PMU_PMCR_N_MASK;
-> > +	pmcr = read_sysreg(pmcr_el0) & (ARMV8_PMU_PMCR_N_MASK << ARMV8_PMU_PMCR_N_SHIFT);
-> >  	if (!kvm_supports_32bit_el0())
-> >  		pmcr |= ARMV8_PMU_PMCR_LC;
-> >  
-> > -- 
-> > 2.25.1
-> > 
-> _______________________________________________
-> kvmarm mailing list
-> kvmarm@lists.cs.columbia.edu
-> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+> 2.38.2
