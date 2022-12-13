@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0368664B200
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC4B64B1FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234975AbiLMJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S234878AbiLMJN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234948AbiLMJMj (ORCPT
+        with ESMTP id S234949AbiLMJMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Dec 2022 04:12:39 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D07C115E;
-        Tue, 13 Dec 2022 01:09:59 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 72FB36602C2F;
-        Tue, 13 Dec 2022 09:09:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670922597;
-        bh=O7J/BSi0dbHIU33pWdlPZo0iXo43ZFxCG6/Ttxq4/ck=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i+K4L1Oph/RgbQBE0z/4ckzGYkFAG8RaTNi/LDc8P6hK/etjso8EfpuR/atFD+Rr/
-         BJFy9PZiYYMQiXvGob/kwdmmqEynZ2r5WexpfOKTqWgbvmsgD+fX29O57qh7y+g13n
-         wfF+rXmODa/2YpgE0XnRlEE7k7SkFaTqAIcc4gpkT9IR9AiNBZ7oAyv03dQlJcgbAb
-         sJzelPcYLLqLAezFwq7Bm6qoCdbDdV2Cca5J7599+NpBs/Axk9sWE7XSAtKcaQYqD9
-         YB0fGL0ZvcYp3zayeCGXcKw+UQuAPg+H0qjEsPTw7kUM9+19NRgIZBbsKyghrpVdiA
-         xW/7ORMf4netQ==
-Message-ID: <7e668b90-e3e6-5d25-e894-f754662405af@collabora.com>
-Date:   Tue, 13 Dec 2022 10:09:54 +0100
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C685F5C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:09:58 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id u12so14885050wrr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:09:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xIVTOIopR7ny8mcBhxoHaQP+arorKf3xecWG15pp+jM=;
+        b=bPG86XW4UqHnuiZQmj4O5NsaRIDZgwHODuYofxhGUYzZIdoAzRWFWk9lYAgCgaANd7
+         JuN7L/Z8kxVEkwEKN7433JrTqm2eGwWsttm0Nt85wuIF7NLH9I01zShZatV0TpUKVLdf
+         wL7r/54HvLRvAWKUKcBd819GopB83N7t5bE0yWKfomZ6zX61gcS8rYwkUgkFndiO781f
+         oV7TGowwux0Aj08awrA8nNF4wPJvrrjZNNy0vNkUqgW2jgBsd30A5o6v2LGk1E1880AG
+         cUyKSmjqEk9sfp4hd7ai3/xY7qEIH6iKb3QhgI+CIoelk9Zn1DMHdfh5iu5Ev6F2mukw
+         o/nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xIVTOIopR7ny8mcBhxoHaQP+arorKf3xecWG15pp+jM=;
+        b=fTVKVhk9VFLO+8ryu5ccWLAEFK8/PBi0O6eApjXVrkNcxVA6ueY79GMoGQl83VXWpM
+         /1hYUZIXe7IWF85Z/ZgrS9wnjwXcVLxelQtWq4FfxxBfWQoheEkeo1/etegMgUp7/Z5C
+         Thi6/6BPNQFExRbX5tqz5W5HGvkBAqhMPhGNGevj6jgX7KPMkC1TDIYdbexLHwmQ0prs
+         o1iBF+xLGNFtJuCBU5l39J0P13H3oOpzdzOV7G7AToov+2HjEFVQAFU+wRKFOWL24MlP
+         Krv9SWxHUHLH/3SzJRffQ3vdOKLaFpCd6yxmQS++JFnNARxTclmrMxAC8b41MGxlsV0X
+         ld1A==
+X-Gm-Message-State: ANoB5pnEjpDysCjwaVlhscHK/o9Nj0JQjw+5RxfHI+gVQiVqipXrKIKG
+        EWh02XaOrl1mO9Tey4EmkgvMCw==
+X-Google-Smtp-Source: AA0mqf4TeeujeK7g7Ukb5t7AN0/Qzgr/psCWg0qZdf/wnN6uNbR5ryi28sAc6N7an4/szN0P7dmdqQ==
+X-Received: by 2002:adf:dd51:0:b0:242:17a6:8bad with SMTP id u17-20020adfdd51000000b0024217a68badmr11838383wrm.60.1670922597306;
+        Tue, 13 Dec 2022 01:09:57 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id d8-20020a5d5388000000b0024258722a7fsm11022984wrv.37.2022.12.13.01.09.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 01:09:56 -0800 (PST)
+Message-ID: <68cf70aa-ec3b-6a90-f2b1-865275bb20ab@linaro.org>
+Date:   Tue, 13 Dec 2022 10:09:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/5] media: mediatek: vcodec: add params to record lat and
- core lat_buf count
+ Thunderbird/102.4.2
+Subject: Re: linux-next: Signed-off-by missing for commit in the thermal tree
 Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221210073218.17350-1-yunfei.dong@mediatek.com>
- <20221210073218.17350-2-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221210073218.17350-2-yunfei.dong@mediatek.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221213084838.33d6678c@canb.auug.org.au>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221213084838.33d6678c@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/12/22 08:32, Yunfei Dong ha scritto:
-> Using lat_buf to share decoder information between lat and core work
-> queue, adding params to record the buf count.
+On 12/12/2022 22:48, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->   .../platform/mediatek/vcodec/vdec_msg_queue.c | 32 ++++++++++++++++++-
->   .../platform/mediatek/vcodec/vdec_msg_queue.h |  9 ++++++
->   2 files changed, 40 insertions(+), 1 deletion(-)
+> Commit
 > 
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-> index dc2004790a47..af7ddba1923a 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-> @@ -52,6 +52,30 @@ static struct list_head *vdec_get_buf_list(int hardware_index, struct vdec_lat_b
->   	}
->   }
->   
-> +static void vdec_msg_queue_inc(struct vdec_msg_queue *msg_queue, int hardware_index)
-> +{
-> +	mutex_lock(&msg_queue->list_cnt_mutex);
+>    c64c9a768c09 ("Revert "thermal/sysfs: Remove unnecessary check in trip_point_hyst_show()"")
+> 
+> is missing a Signed-off-by from its author and committer.
+> 
+> Reverts are commits (and change the code) and so need Signed-off-by tags.
 
-I doubt that you need to use this mutex, as you're using atomics...
+Fixed, thanks
 
-> +
-> +	if (hardware_index == MTK_VDEC_CORE)
-> +		atomic_inc(&msg_queue->core_list_cnt);
-> +	else
-> +		atomic_inc(&msg_queue->lat_list_cnt);
-> +
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-This branch (with the relevant appropriate changes) can be simplified as
-
-	atomic_inc(&msg_queue->list_cnt[hardware_index]);
-
-...where list_cnt is an array, and hardware_index is an enumeration.	
-
-> +	mutex_unlock(&msg_queue->list_cnt_mutex);
-> +}
-> +
-> +static void vdec_msg_queue_dec(struct vdec_msg_queue *msg_queue, int hardware_index)
-> +{
-> +	mutex_lock(&msg_queue->list_cnt_mutex);
-> +
-> +	if (hardware_index == MTK_VDEC_CORE)
-> +		atomic_dec(&msg_queue->core_list_cnt);
-> +	else
-> +		atomic_dec(&msg_queue->lat_list_cnt);
-
-Same here.
-
-> +
-> +	mutex_unlock(&msg_queue->list_cnt_mutex);
-> +}
-> +
-
-Regards,
-Angelo
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
