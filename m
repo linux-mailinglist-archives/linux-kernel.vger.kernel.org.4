@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED8F64B17B
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DC464B17F
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234842AbiLMIsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S234946AbiLMItM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234836AbiLMIr5 (ORCPT
+        with ESMTP id S234890AbiLMIsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:47:57 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFC419295;
-        Tue, 13 Dec 2022 00:47:54 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id i12so10017975qvs.2;
-        Tue, 13 Dec 2022 00:47:54 -0800 (PST)
+        Tue, 13 Dec 2022 03:48:09 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F521A81C;
+        Tue, 13 Dec 2022 00:48:05 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id u10so10011369qvp.4;
+        Tue, 13 Dec 2022 00:48:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0IkJx54HRS4gC3tlvf+EndDwlHYwUBiKJIT7qZaR0yU=;
-        b=OBd77Op7nnNLGdcv9mxdSKPDDuCzcqdUI40Jvqyf0o3P5Z3qN+JPGnbYiRZejrbJh8
-         ewB38+lAwxBcSQ5SfxiGr6BnQG0Q/ntLbTYw81KpOmMAj1mUcLYlCuz7d9KT7e75fjHu
-         RorivOHjgHQAvvxzhXWDcYsivW6ibBBos0ZXyZWKEy1ZLFyI+inc4I52bGEDekQOMV3v
-         iuOjPnIHujZh8ij8H78NxuPcbAtdLBQk70K6Sg5wsq6+r1nZx5DBxVmenQVne/gf+1mb
-         jPEISWy1FQJJv/RJuKXv8xHaKuBhIIxpQci0RI4rVxZe8ROVBQ1yIMe3Ln7zgqPALjzo
-         mAcg==
+        bh=GN+jg9ZJM7i1S+TQO5N0RRq+cKGpJr3XmNoDbFuv9gk=;
+        b=Ko/QGv6+VKzFuCh0TvVZKj1/AEbESFGUtsnTW0z9VNep5yY0kqwSm2FfBeh7BI+xQp
+         HdPWHEoW0lOotoh52y1Z+DVWdeyerlgQgCO1EPYFGeZ1on/7mTab+k+gsObPilV0hIf7
+         zEGFW2nDNxQE4Rmw9gTG8/sOkoLJII9rUMCU867LFuVQW1KzjvN2xkvuBuVg4bthNzCu
+         fzWi8ATM7pKBSWNdPXvxexPPTeQ9NDT4L+MzAOjeV5QHBcO92piQ4mxOoVPetDF1r2Vx
+         eW5kKS4E7wVN2QyIw/FrQwHyRG7eOCJuiisDbfJiN5eAxb2ClXM6oSomtOnt2K0lTY6R
+         vFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0IkJx54HRS4gC3tlvf+EndDwlHYwUBiKJIT7qZaR0yU=;
-        b=cZTP3FH9Q6aa9po4jGgpKpMHdQDQUgBUjR+UWjntsI5tLRl2TTIepw5OQMwLhN/xV5
-         bPHyQ0qFahNybDZ+5ffWOrbl9CEGF+k3e+uJVk8v1d+2d+d8pQWkE68aND01hOeV1aUo
-         M/HPbWYlScMikmbrGyoRwQ0oNBxetE7RytWJb4kEk/JU3VxnzjlieLg1xkByy71f6uxv
-         djD0pYjT+wZS6pHlU4PoO1irVpJ47NYPIQUzWI421JcpjqbeS0x1mzFYYQJcdxubMFQM
-         ruL6tIdAcCdl5roCqZmUxS7zDMF/3CI7mwlQgWWwWVBhBftJiVhKiKW9gEz+Vsqroiro
-         ndbw==
-X-Gm-Message-State: ANoB5plhwkMojRkXsVmjUz+hVmkPvdIV/hond1rYFBSq2+/Fw7c5W0XR
-        NU2v4VkvqFuIh+sIolD/d+6AdrdVHlEf8bccS/YLlxhoCW4=
-X-Google-Smtp-Source: AA0mqf6CDzM9Tu8alIrdmXEbgSGfYihUlAE+rQBJq1qx8i28ypjdE91oJpVXS0Jul6GfPHdWeTsf400qmMM8nnu1no0=
-X-Received: by 2002:a05:6214:2dc1:b0:4c7:63c0:a357 with SMTP id
- nc1-20020a0562142dc100b004c763c0a357mr16288907qvb.123.1670921273299; Tue, 13
- Dec 2022 00:47:53 -0800 (PST)
+        bh=GN+jg9ZJM7i1S+TQO5N0RRq+cKGpJr3XmNoDbFuv9gk=;
+        b=k0Trz20j0UyATyoJaZJD9S0mp5JUDkOoPxjuQ1m1esFBKUCNcvdzTNxHRa2SqzBwNZ
+         DnHt1fBSfnS90bNXHiZjY+7m2GCEBo51RodW5TCtxXEpM4WNpDRqac0bHoUOWTjEaVwC
+         B5M6SYq3s+VLrLRJFx6mGcaMEmyktmYrDH8CrpNr7P9RGkrOsN0czbpyblL3xT8LvUHU
+         Jja05sjp3t+hrFU6nmMakWqX88vVN44hVKvklott8PNYZ2tBpSOXEy22yUx7q5SxfDfz
+         bIZ02G28Y+mYagOiQ60HGXUo0XaQvYrG4j9XmC2YLklPu1UNGyPT2ORS7PFsxGYAP2rK
+         n2Pg==
+X-Gm-Message-State: ANoB5pld1r4p8Et8JvnSWlBvPgOnrKjrtC07yeP/ki7DlLcS2Y5zcVj1
+        mJy2Nfj/2qStRPIVHF8hTLO5K8HiKsiGP0/2lzw=
+X-Google-Smtp-Source: AA0mqf4h3gWgS/b8baEhvko/WJRgmJ4yFdmBkWcXMtfCvyEpn2Jyz7Xe5+Q75GiUvEpr77sK2EkDMNVpkMama7IVou8=
+X-Received: by 2002:a05:6214:2e90:b0:4e3:3041:6b91 with SMTP id
+ oc16-20020a0562142e9000b004e330416b91mr268454qvb.82.1670921284126; Tue, 13
+ Dec 2022 00:48:04 -0800 (PST)
 MIME-Version: 1.0
 References: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
- <20221019110647.11076-19-victor.shih@genesyslogic.com.tw> <e935fe27-ea94-366f-4fd4-f40b05af30b8@intel.com>
-In-Reply-To: <e935fe27-ea94-366f-4fd4-f40b05af30b8@intel.com>
+ <20221019110647.11076-20-victor.shih@genesyslogic.com.tw> <c364e412-b91c-b838-9923-bee94677d398@intel.com>
+In-Reply-To: <c364e412-b91c-b838-9923-bee94677d398@intel.com>
 From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Tue, 13 Dec 2022 16:47:40 +0800
-Message-ID: <CAK00qKC-8GwkQLPnacwBMtuAsG--_t7R65g-tuHbzwmudzYr=A@mail.gmail.com>
-Subject: Re: [PATCH V5 18/26] mmc: sdhci-uhs2: add uhs2_control() to
- initialise the interface
+Date:   Tue, 13 Dec 2022 16:47:51 +0800
+Message-ID: <CAK00qKDOQVYirLzJFUNTOyg-q3EAi=Lhk3=cHQV6nyBJ_NDn2w@mail.gmail.com>
+Subject: Re: [PATCH V5 19/26] mmc: sdhci-uhs2: add request() and others
 To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
         linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
@@ -78,202 +77,1008 @@ Hi, Adrian
 On Wed, Nov 2, 2022 at 1:15 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
 >
 > On 19/10/22 14:06, Victor Shih wrote:
-> > This is a sdhci version of mmc's uhs2_set_reg operation.
-> > UHS-II interface (related registers) will be initialised here.
+> > This is a sdhci version of mmc's request operation.
+> > It covers both UHS-I and UHS-II.
 > >
 > > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 > > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
 > > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 > > ---
-> >  drivers/mmc/host/sdhci-uhs2.c | 103 ++++++++++++++++++++++++++++++++++
-> >  drivers/mmc/host/sdhci.c      |  12 ++++
-> >  drivers/mmc/host/sdhci.h      |   1 +
-> >  3 files changed, 116 insertions(+)
+> >  drivers/mmc/host/sdhci-uhs2.c | 475 ++++++++++++++++++++++++++++++++++
+> >  drivers/mmc/host/sdhci.c      |  91 ++++---
+> >  drivers/mmc/host/sdhci.h      |  17 ++
+> >  3 files changed, 550 insertions(+), 33 deletions(-)
 > >
 > > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-> > index afaca5d96938..c9d59b8ac37f 100644
+> > index c9d59b8ac37f..41b089ccc200 100644
 > > --- a/drivers/mmc/host/sdhci-uhs2.c
 > > +++ b/drivers/mmc/host/sdhci-uhs2.c
-> > @@ -350,6 +350,53 @@ static void __sdhci_uhs2_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
-> >       spin_unlock_irqrestore(&host->lock, flags);
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/delay.h>
+> >  #include <linux/ktime.h>
+> >  #include <linux/module.h>
+> > +#include <linux/mmc/mmc.h>
+> >
+> >  #include "sdhci.h"
+> >  #include "sdhci-uhs2.h"
+> > @@ -537,6 +538,479 @@ static int sdhci_uhs2_control(struct mmc_host *mmc, enum sd_uhs2_operation op)
+> >       return err;
 > >  }
 > >
-> > +static void sdhci_uhs2_set_config(struct sdhci_host *host)
+> > +/*****************************************************************************\
+> > + *                                                                           *
+> > + * Core functions                                                            *
+> > + *                                                                           *
+> > +\*****************************************************************************/
+> > +
+> > +static void sdhci_uhs2_prepare_data(struct sdhci_host *host,
+> > +                                 struct mmc_command *cmd)
 > > +{
-> > +     u32 value;
-> > +     u16 sdhci_uhs2_set_ptr = sdhci_readw(host, SDHCI_UHS2_SET_PTR);
-> > +     u16 sdhci_uhs2_gen_set_reg = (sdhci_uhs2_set_ptr + 0);
-> > +     u16 sdhci_uhs2_phy_set_reg = (sdhci_uhs2_set_ptr + 4);
-> > +     u16 sdhci_uhs2_tran_set_reg = (sdhci_uhs2_set_ptr + 8);
-> > +     u16 sdhci_uhs2_tran_set_1_reg = (sdhci_uhs2_set_ptr + 12);
+> > +     struct mmc_data *data = cmd->data;
 > > +
-> > +     /* Set Gen Settings */
-> > +     sdhci_writel(host, host->mmc->uhs2_caps.n_lanes_set <<
-> > +             SDHCI_UHS2_GEN_SET_N_LANES_POS, sdhci_uhs2_gen_set_reg);
+> > +     sdhci_initialize_data(host, data);
 > > +
-> > +     /* Set PHY Settings */
-> > +     value = (host->mmc->uhs2_caps.n_lss_dir_set <<
-> > +                     SDHCI_UHS2_PHY_SET_N_LSS_DIR_POS) |
-> > +             (host->mmc->uhs2_caps.n_lss_sync_set <<
-> > +                     SDHCI_UHS2_PHY_SET_N_LSS_SYN_POS);
-> > +     if (host->mmc->flags & MMC_UHS2_SPEED_B)
-> > +             value |= 1 << SDHCI_UHS2_PHY_SET_SPEED_POS;
-> > +     sdhci_writel(host, value, sdhci_uhs2_phy_set_reg);
+> > +     sdhci_prepare_dma(host, data);
 > > +
-> > +     /* Set LINK-TRAN Settings */
-> > +     value = (host->mmc->uhs2_caps.max_retry_set <<
-> > +                     SDHCI_UHS2_TRAN_SET_RETRY_CNT_POS) |
-> > +             (host->mmc->uhs2_caps.n_fcu_set <<
-> > +                     SDHCI_UHS2_TRAN_SET_N_FCU_POS);
-> > +     sdhci_writel(host, value, sdhci_uhs2_tran_set_reg);
-> > +     sdhci_writel(host, host->mmc->uhs2_caps.n_data_gap_set,
-> > +                  sdhci_uhs2_tran_set_1_reg);
+> > +     sdhci_writew(host, data->blksz, SDHCI_UHS2_BLOCK_SIZE);
+> > +     sdhci_writew(host, data->blocks, SDHCI_UHS2_BLOCK_COUNT);
 > > +}
 > > +
-> > +static int sdhci_uhs2_check_dormant(struct sdhci_host *host)
+> > +#if IS_ENABLED(CONFIG_MMC_SDHCI_EXTERNAL_DMA)
+> > +static void sdhci_uhs2_external_dma_prepare_data(struct sdhci_host *host,
+> > +                                              struct mmc_command *cmd)
 > > +{
-> > +     u32 val;
-> > +     /* 100ms */
-> > +     int timeout = 100000;
-> > +
-> > +     if (read_poll_timeout_atomic(sdhci_readl, val, (val & SDHCI_UHS2_IN_DORMANT_STATE),
-> > +                                  100, timeout, true, host, SDHCI_PRESENT_STATE)) {
-> > +             pr_warn("%s: UHS2 IN_DORMANT fail in 100ms.\n", mmc_hostname(host->mmc));
-> > +             sdhci_dumpregs(host);
-> > +             return -EIO;
+> > +     if (!sdhci_external_dma_setup(host, cmd)) {
+> > +             __sdhci_external_dma_prepare_data(host, cmd);
+> > +     } else {
+> > +             sdhci_external_dma_release(host);
+> > +             pr_err("%s: Cannot use external DMA, switch to the DMA/PIO which standard SDHCI provides.\n",
+> > +                    mmc_hostname(host->mmc));
+> > +             sdhci_uhs2_prepare_data(host, cmd);
 > > +     }
-> > +     return 0;
+> > +}
+> > +#else
+> > +static inline void sdhci_uhs2_external_dma_prepare_data(struct sdhci_host *host,
+> > +                                                     struct mmc_command *cmd)
+> > +{
+> > +     /* This should never happen */
+> > +     WARN_ON_ONCE(1);
 > > +}
 > > +
-> >  /*****************************************************************************\
-> >   *                                                                           *
-> >   * MMC callbacks                                                             *
-> > @@ -435,6 +482,61 @@ static int sdhci_uhs2_enable_clk(struct mmc_host *mmc)
-> >       return 0;
-> >  }
-> >
-> > +static int sdhci_uhs2_do_detect_init(struct mmc_host *mmc);
+> > +static inline void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
+> > +                                                struct mmc_command *cmd)
+> > +{
+> > +}
+> > +#endif /* CONFIG_MMC_SDHCI_EXTERNAL_DMA */
+>
+> Let's skip external DMA support to start with.
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
 > > +
-> > +static int sdhci_uhs2_control(struct mmc_host *mmc, enum sd_uhs2_operation op)
+> > +static void sdhci_uhs2_finish_data(struct sdhci_host *host)
+> > +{
+> > +     struct mmc_data *data = host->data;
+> > +
+> > +     __sdhci_finish_data_common(host);
+> > +
+> > +     /*
+> > +      *  FIXME: Is this condition needed?
+> > +         if (host->mmc->flags & MMC_UHS2_INITIALIZED)
+> > +      */
+>
+> No
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +     __sdhci_finish_mrq(host, data->mrq);
+> > +}
+> > +
+> > +static void sdhci_uhs2_set_transfer_mode(struct sdhci_host *host,
+> > +                                      struct mmc_command *cmd)
+> > +{
+> > +     u16 mode;
+> > +     struct mmc_data *data = cmd->data;
+> > +     u16 arg;
+> > +
+> > +     if (!data) {
+> > +             /* clear Auto CMD settings for no data CMDs */
+> > +             arg = cmd->uhs2_cmd->arg;
+> > +             if ((((arg & 0xF) << 8) | ((arg >> 8) & 0xFF)) ==
+>
+> Please don't open code byte-swapping
+>
+> This should be an inline function so it can be used again
+> further below:
+>
+> #define UHS2_ARG_IOADR_MASK 0xfff
+>
+> static inline u16 uhs2_dev_cmd(struct mmc_command *cmd)
+> {
+>         return be16_to_cpu((__be16)cmd->uhs2_cmd->arg) & UHS2_ARG_IOADR_MASK;
+> }
+>
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +                    UHS2_DEV_CMD_TRANS_ABORT) {
+>
+> Please wrap at 100 columns instead of 80, here and elsewhere.
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +                     mode =  0;
+> > +             } else {
+> > +                     mode = sdhci_readw(host, SDHCI_UHS2_TRANS_MODE);
+> > +                     if (cmd->opcode == MMC_STOP_TRANSMISSION ||
+> > +                         cmd->opcode == MMC_ERASE)
+> > +                             mode |= SDHCI_UHS2_TRNS_WAIT_EBSY;
+> > +                     else
+> > +                             /* send status mode */
+> > +                             if (cmd->opcode == MMC_SEND_STATUS)
+> > +                                     mode = 0;
+> > +             }
+> > +
+> > +             if (IS_ENABLED(CONFIG_MMC_DEBUG))
+>
+> Please don't use CONFIG_MMC_DEBUG
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +                     DBG("UHS2 no data trans mode is 0x%x.\n", mode);
+> > +
+> > +             sdhci_writew(host, mode, SDHCI_UHS2_TRANS_MODE);
+> > +             return;
+> > +     }
+> > +
+> > +     WARN_ON(!host->data);
+> > +
+> > +     mode = SDHCI_UHS2_TRNS_BLK_CNT_EN | SDHCI_UHS2_TRNS_WAIT_EBSY;
+> > +     if (data->flags & MMC_DATA_WRITE)
+> > +             mode |= SDHCI_UHS2_TRNS_DATA_TRNS_WRT;
+> > +
+> > +     if (data->blocks == 1 &&
+> > +         data->blksz != 512 &&
+> > +         cmd->opcode != MMC_READ_SINGLE_BLOCK &&
+> > +         cmd->opcode != MMC_WRITE_BLOCK) {
+> > +             mode &= ~SDHCI_UHS2_TRNS_BLK_CNT_EN;
+> > +             mode |= SDHCI_UHS2_TRNS_BLK_BYTE_MODE;
+> > +     }
+> > +
+> > +     if (host->flags & SDHCI_REQ_USE_DMA)
+> > +             mode |= SDHCI_UHS2_TRNS_DMA;
+> > +
+> > +     if ((host->mmc->uhs2_ios.is_2L_HD_mode) && !cmd->uhs2_tmode0_flag)
+> > +             mode |= SDHCI_UHS2_TRNS_2L_HD;
+> > +
+> > +     sdhci_writew(host, mode, SDHCI_UHS2_TRANS_MODE);
+> > +
+> > +     if (IS_ENABLED(CONFIG_MMC_DEBUG))
+>
+> Please don't use CONFIG_MMC_DEBUG
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             DBG("UHS2 trans mode is 0x%x.\n", mode);
+> > +}
+> > +
+> > +static void __sdhci_uhs2_send_command(struct sdhci_host *host,
+> > +                                   struct mmc_command *cmd)
+> > +{
+> > +     int i, j;
+> > +     int cmd_reg;
+> > +
+> > +     if (host->mmc->flags & MMC_UHS2_INITIALIZED) {
+>
+> Not necessary to check MMC_UHS2_INITIALIZED here
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             if (!cmd->uhs2_cmd) {
+> > +                     pr_err("%s: fatal error, no uhs2_cmd!\n",
+> > +                            mmc_hostname(host->mmc));
+> > +                     return;
+> > +             }
+> > +     }
+> > +
+> > +     i = 0;
+> > +     sdhci_writel(host,
+> > +                  ((u32)cmd->uhs2_cmd->arg << 16) |
+> > +                             (u32)cmd->uhs2_cmd->header,
+> > +                  SDHCI_UHS2_CMD_PACKET + i);
+> > +     i += 4;
+> > +
+> > +     /*
+> > +      * Per spec, playload (config) should be MSB before sending out.
+> > +      * But we don't need convert here because had set payload as
+> > +      * MSB when preparing config read/write commands.
+> > +      */
+> > +     for (j = 0; j < cmd->uhs2_cmd->payload_len / sizeof(u32); j++) {
+> > +             sdhci_writel(host, *(cmd->uhs2_cmd->payload + j),
+> > +                          SDHCI_UHS2_CMD_PACKET + i);
+> > +             i += 4;
+> > +     }
+> > +
+> > +     for ( ; i < SDHCI_UHS2_CMD_PACK_MAX_LEN; i += 4)
+> > +             sdhci_writel(host, 0, SDHCI_UHS2_CMD_PACKET + i);
+> > +
+> > +     if (IS_ENABLED(CONFIG_MMC_DEBUG)) {
+>
+> Please don't use CONFIG_MMC_DEBUG
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             DBG("UHS2 CMD packet_len = %d.\n", cmd->uhs2_cmd->packet_len);
+> > +             for (i = 0; i < cmd->uhs2_cmd->packet_len; i++)
+> > +                     DBG("UHS2 CMD_PACKET[%d] = 0x%x.\n", i,
+> > +                         sdhci_readb(host, SDHCI_UHS2_CMD_PACKET + i));
+> > +     }
+> > +
+> > +     cmd_reg = cmd->uhs2_cmd->packet_len <<
+> > +             SDHCI_UHS2_COMMAND_PACK_LEN_SHIFT;
+> > +     if ((cmd->flags & MMC_CMD_MASK) == MMC_CMD_ADTC)
+> > +             cmd_reg |= SDHCI_UHS2_COMMAND_DATA;
+> > +     if (cmd->opcode == MMC_STOP_TRANSMISSION)
+> > +             cmd_reg |= SDHCI_UHS2_COMMAND_CMD12;
+> > +
+> > +     /* UHS2 Native ABORT */
+> > +     if ((cmd->uhs2_cmd->header & UHS2_NATIVE_PACKET) &&
+> > +         ((((cmd->uhs2_cmd->arg & 0xF) << 8) |
+> > +         ((cmd->uhs2_cmd->arg >> 8) & 0xFF)) == UHS2_DEV_CMD_TRANS_ABORT))
+>
+>  From above, can use (uhs2_dev_cmd(cmd) == UHS2_DEV_CMD_TRANS_ABORT)
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             cmd_reg |= SDHCI_UHS2_COMMAND_TRNS_ABORT;
+> > +
+> > +     /* UHS2 Native DORMANT */
+> > +     if ((cmd->uhs2_cmd->header & UHS2_NATIVE_PACKET) &&
+> > +         ((((cmd->uhs2_cmd->arg & 0xF) << 8) |
+> > +          ((cmd->uhs2_cmd->arg >> 8) & 0xFF)) ==
+> > +                             UHS2_DEV_CMD_GO_DORMANT_STATE))
+>
+>  From above, can use (uhs2_dev_cmd(cmd) == UHS2_DEV_CMD_GO_DORMANT_STATE)
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             cmd_reg |= SDHCI_UHS2_COMMAND_DORMANT;
+> > +
+> > +     DBG("0x%x is set to UHS2 CMD register.\n", cmd_reg);
+> > +
+> > +     sdhci_writew(host, cmd_reg, SDHCI_UHS2_COMMAND);
+> > +}
+> > +
+> > +static bool sdhci_uhs2_send_command(struct sdhci_host *host,
+> > +                                 struct mmc_command *cmd)
+> > +{
+> > +     int flags;
+> > +     u32 mask;
+> > +     unsigned long timeout;
+> > +
+> > +     WARN_ON(host->cmd);
+> > +
+> > +     /* Initially, a command has no error */
+> > +     cmd->error = 0;
+> > +
+> > +     if (!(host->mmc->flags & MMC_UHS2_SUPPORT))
+> > +             return sdhci_send_command(host, cmd);
+>
+> No check necessary, can remove, and please do not export
+> sdhci_send_command().
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +
+> > +     if (cmd->opcode == MMC_STOP_TRANSMISSION)
+> > +             cmd->flags |= MMC_RSP_BUSY;
+> > +
+> > +     mask = SDHCI_CMD_INHIBIT;
+> > +
+> > +     if (sdhci_readl(host, SDHCI_PRESENT_STATE) & mask)
+> > +             return false;
+> > +
+> > +     host->cmd = cmd;
+> > +     host->data_timeout = 0;
+> > +     if (sdhci_data_line_cmd(cmd)) {
+> > +             WARN_ON(host->data_cmd);
+> > +             host->data_cmd = cmd;
+> > +             __sdhci_uhs2_set_timeout(host);
+> > +     }
+> > +
+> > +     if (cmd->data) {
+> > +             if (host->use_external_dma)
+>
+> Let's skip external DMA support for now
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +                     sdhci_uhs2_external_dma_prepare_data(host, cmd);
+> > +             else
+> > +                     sdhci_uhs2_prepare_data(host, cmd);
+> > +     }
+> > +
+> > +     sdhci_uhs2_set_transfer_mode(host, cmd);
+> > +
+> > +     if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
+> > +             WARN_ONCE(1, "Unsupported response type!\n");
+> > +             /*
+> > +              * This does not happen in practice because 136-bit response
+> > +              * commands never have busy waiting, so rather than complicate
+> > +              * the error path, just remove busy waiting and continue.
+> > +              */
+> > +             cmd->flags &= ~MMC_RSP_BUSY;
+> > +     }
+> > +
+> > +     if (!(cmd->flags & MMC_RSP_PRESENT))
+> > +             flags = SDHCI_CMD_RESP_NONE;
+> > +     else if (cmd->flags & MMC_RSP_136)
+> > +             flags = SDHCI_CMD_RESP_LONG;
+> > +     else if (cmd->flags & MMC_RSP_BUSY)
+> > +             flags = SDHCI_CMD_RESP_SHORT_BUSY;
+> > +     else
+> > +             flags = SDHCI_CMD_RESP_SHORT;
+> > +
+> > +     if (cmd->flags & MMC_RSP_CRC)
+> > +             flags |= SDHCI_CMD_CRC;
+> > +     if (cmd->flags & MMC_RSP_OPCODE)
+> > +             flags |= SDHCI_CMD_INDEX;
+> > +
+> > +     timeout = jiffies;
+> > +     if (host->data_timeout)
+> > +             timeout += nsecs_to_jiffies(host->data_timeout);
+> > +     else if (!cmd->data && cmd->busy_timeout > 9000)
+> > +             timeout += DIV_ROUND_UP(cmd->busy_timeout, 1000) * HZ + HZ;
+> > +     else
+> > +             timeout += 10 * HZ;
+> > +     sdhci_mod_timer(host, cmd->mrq, timeout);
+> > +
+> > +     if (host->use_external_dma)
+> > +             sdhci_external_dma_pre_transfer(host, cmd);
+> > +
+> > +     __sdhci_uhs2_send_command(host, cmd);
+> > +
+> > +     return true;
+> > +}
+> > +
+> > +static bool sdhci_uhs2_send_command_retry(struct sdhci_host *host,
+> > +                                  struct mmc_command *cmd,
+> > +                                  unsigned long flags)
+> > +     __releases(host->lock)
+> > +     __acquires(host->lock)
+> > +{
+> > +     struct mmc_command *deferred_cmd = host->deferred_cmd;
+> > +     int timeout = 10; /* Approx. 10 ms */
+> > +     bool present;
+> > +
+> > +     while (!sdhci_uhs2_send_command(host, cmd)) {
+> > +             if (!timeout--) {
+> > +                     pr_err("%s: Controller never released inhibit bit(s).\n",
+> > +                            mmc_hostname(host->mmc));
+> > +                     sdhci_dumpregs(host);
+> > +                     cmd->error = -EIO;
+> > +                     return false;
+> > +             }
+> > +
+> > +             spin_unlock_irqrestore(&host->lock, flags);
+> > +
+> > +             usleep_range(1000, 1250);
+> > +
+> > +             present = host->mmc->ops->get_cd(host->mmc);
+> > +
+> > +             spin_lock_irqsave(&host->lock, flags);
+> > +
+> > +             /* A deferred command might disappear, handle that */
+> > +             if (cmd == deferred_cmd && cmd != host->deferred_cmd)
+> > +                     return true;
+> > +
+> > +             if (sdhci_present_error(host, cmd, present))
+> > +                     return false;
+> > +     }
+> > +
+> > +     if (cmd == host->deferred_cmd)
+> > +             host->deferred_cmd = NULL;
+> > +
+> > +     return true;
+> > +}
+> > +
+> > +static void __sdhci_uhs2_finish_command(struct sdhci_host *host)
+> > +{
+> > +     struct mmc_command *cmd = host->cmd;
+> > +     u8 resp;
+> > +     u8 ecode;
+> > +     bool bReadA0 = 0;
+> > +     int i;
+> > +
+> > +     if (host->mmc->flags & MMC_UHS2_INITIALIZED) {
+> > +             resp = sdhci_readb(host, SDHCI_UHS2_RESPONSE + 2);
+> > +             if (resp & UHS2_RES_NACK_MASK) {
+> > +                     ecode = (resp >> UHS2_RES_ECODE_POS) &
+> > +                             UHS2_RES_ECODE_MASK;
+> > +                     pr_err("%s: NACK is got, ECODE=0x%x.\n",
+> > +                            mmc_hostname(host->mmc), ecode);
+> > +             }
+> > +             bReadA0 = 1;
+> > +     }
+> > +
+> > +     if (cmd->uhs2_resp &&
+> > +         cmd->uhs2_resp_len && cmd->uhs2_resp_len <= 20) {
+> > +             /* Get whole response of some native CCMD, like
+> > +              * DEVICE_INIT, ENUMERATE.
+> > +              */
+> > +             for (i = 0; i < cmd->uhs2_resp_len; i++)
+> > +                     cmd->uhs2_resp[i] =
+> > +                             sdhci_readb(host, SDHCI_UHS2_RESPONSE + i);
+> > +     } else {
+> > +             /* Get SD CMD response and Payload for some read
+> > +              * CCMD, like INQUIRY_CFG.
+> > +              */
+> > +             /* Per spec (p136), payload field is divided into
+> > +              * a unit of DWORD and transmission order within
+> > +              * a DWORD is big endian.
+> > +              */
+> > +             if (!bReadA0)
+> > +                     sdhci_readl(host, SDHCI_UHS2_RESPONSE);
+> > +             for (i = 4; i < 20; i += 4) {
+> > +                     cmd->resp[i / 4 - 1] =
+> > +                             (sdhci_readb(host,
+> > +                                          SDHCI_UHS2_RESPONSE + i) << 24) |
+> > +                             (sdhci_readb(host,
+> > +                                          SDHCI_UHS2_RESPONSE + i + 1)
+> > +                                     << 16) |
+> > +                             (sdhci_readb(host,
+> > +                                          SDHCI_UHS2_RESPONSE + i + 2)
+> > +                                     << 8) |
+> > +                             sdhci_readb(host, SDHCI_UHS2_RESPONSE + i + 3);
+> > +             }
+> > +     }
+> > +}
+> > +
+> > +static void sdhci_uhs2_finish_command(struct sdhci_host *host)
+> > +{
+> > +     struct mmc_command *cmd = host->cmd;
+> > +
+> > +     /* FIXME: Is this check necessary? */
+>
+> No
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +     if (!(host->mmc->flags & MMC_UHS2_SUPPORT)) {
+> > +             sdhci_finish_command(host);
+>
+> Please do not export sdhci_finish_command()
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +             return;
+> > +     }
+> > +
+> > +     __sdhci_uhs2_finish_command(host);
+> > +
+> > +     host->cmd = NULL;
+> > +
+> > +     if (cmd->mrq->cap_cmd_during_tfr && cmd == cmd->mrq->cmd)
+> > +             mmc_command_done(host->mmc, cmd->mrq);
+> > +
+> > +     /*
+> > +      * The host can send and interrupt when the busy state has
+> > +      * ended, allowing us to wait without wasting CPU cycles.
+> > +      * The busy signal uses DAT0 so this is similar to waiting
+> > +      * for data to complete.
+> > +      *
+> > +      * Note: The 1.0 specification is a bit ambiguous about this
+> > +      *       feature so there might be some problems with older
+> > +      *       controllers.
+> > +      */
+> > +     if (cmd->flags & MMC_RSP_BUSY) {
+> > +             if (cmd->data) {
+> > +                     DBG("Cannot wait for busy signal when also doing a data transfer");
+> > +             } else if (!(host->quirks & SDHCI_QUIRK_NO_BUSY_IRQ) &&
+> > +                        cmd == host->data_cmd) {
+> > +                     /* Command complete before busy is ended */
+> > +                     return;
+> > +             }
+> > +     }
+> > +
+> > +     /* Processed actual command. */
+> > +     if (host->data && host->data_early)
+> > +             sdhci_uhs2_finish_data(host);
+> > +
+> > +     if (!cmd->data)
+> > +             __sdhci_finish_mrq(host, cmd->mrq);
+> > +}
+> > +
+> > +void sdhci_uhs2_request(struct mmc_host *mmc, struct mmc_request *mrq)
 > > +{
 > > +     struct sdhci_host *host = mmc_priv(mmc);
+> > +     struct mmc_command *cmd;
 > > +     unsigned long flags;
-> > +     int err = 0;
-> > +     u16 sdhci_uhs2_set_ptr = sdhci_readw(host, SDHCI_UHS2_SET_PTR);
-> > +     u16 sdhci_uhs2_phy_set_reg = (sdhci_uhs2_set_ptr + 4);
+> > +     bool present;
 > > +
-> > +     DBG("Begin %s, act %d.\n", __func__, op);
+> > +     /* FIXME: check more flags? */
 >
-> DBG already has __func__.  Please also check other DBG that
-> have duplicate __func__
+> No, it's fine.
 >
 
-I will update it in the patch#17 of the new [PATCH V6].
+I will update it in the patch#18 of the new [PATCH V6].
 
+> > +     if (!(sdhci_uhs2_mode(host))) {
+> > +             sdhci_request(mmc, mrq);
+> > +             return;
+> > +     }
+>
+> We need to clear the stop cmd and sbc to prevent the
+> driver using them.
+>
+>         mrq->stop = NULL;
+>         mrq->sbc = NULL;
+>         if (mrq->data)
+>                 mrq->data->stop = NULL;
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> > +
+> > +     /* Firstly check card presence */
+> > +     present = mmc->ops->get_cd(mmc);
 > > +
 > > +     spin_lock_irqsave(&host->lock, flags);
->
-> This all relates to initialization or reinitialization, so I suspect
-> the spinlock is not needed here.  What could it be racing with?
->
-
-I will delete it and update it in the patch#17 of the new [PATCH V6].
-
 > > +
-> > +     switch (op) {
-> > +     case UHS2_PHY_INIT:
-> > +             err = sdhci_uhs2_do_detect_init(mmc);
-> > +             break;
-> > +     case UHS2_SET_CONFIG:
-> > +             sdhci_uhs2_set_config(host);
-> > +             break;
-> > +     case UHS2_ENABLE_INT:
-> > +             sdhci_clear_set_irqs(host, 0, SDHCI_INT_CARD_INT);
-> > +             break;
-> > +     case UHS2_DISABLE_INT:
-> > +             sdhci_clear_set_irqs(host, SDHCI_INT_CARD_INT, 0);
-> > +             break;
-> > +     case UHS2_SET_SPEED_B:
-> > +             sdhci_writeb(host, 1 << SDHCI_UHS2_PHY_SET_SPEED_POS,
-> > +                          sdhci_uhs2_phy_set_reg);
-> > +             break;
-> > +     case UHS2_CHECK_DORMANT:
-> > +             err = sdhci_uhs2_check_dormant(host);
-> > +             break;
-> > +     case UHS2_DISABLE_CLK:
-> > +             err = sdhci_uhs2_disable_clk(mmc);
-> > +             break;
-> > +     case UHS2_ENABLE_CLK:
-> > +             err = sdhci_uhs2_enable_clk(mmc);
-> > +             break;
-> > +     case UHS2_POST_ATTACH_SD:
-> > +             host->ops->uhs2_post_attach_sd(host);
-> > +             break;
-> > +     default:
-> > +             pr_err("%s: input sd uhs2 operation %d is wrong!\n",
-> > +                    mmc_hostname(host->mmc), op);
-> > +             err = -EIO;
-> > +             break;
-> > +     }
+> > +     if (sdhci_present_error(host, mrq->cmd, present))
+> > +             goto out_finish;
+> > +
+> > +     cmd = mrq->cmd;
+> > +
+> > +     if (!sdhci_uhs2_send_command(host, cmd))
+> > +             goto out_finish;
 > > +
 > > +     spin_unlock_irqrestore(&host->lock, flags);
 > > +
-> > +     return err;
+> > +     return;
+> > +
+> > +out_finish:
+> > +     sdhci_finish_mrq(host, mrq);
+> > +     spin_unlock_irqrestore(&host->lock, flags);
 > > +}
+> > +EXPORT_SYMBOL_GPL(sdhci_uhs2_request);
+> > +
+> > +int sdhci_uhs2_request_atomic(struct mmc_host *mmc, struct mmc_request *mrq)
+> > +{
+> > +     struct sdhci_host *host = mmc_priv(mmc);
+> > +     struct mmc_command *cmd;
+> > +     unsigned long flags;
+> > +     int ret = 0;
+> > +
+> > +     if (!host->mmc->flags & MMC_UHS2_SUPPORT)
+> > +             return sdhci_request_atomic(mmc, mrq);
+> > +
+> > +     spin_lock_irqsave(&host->lock, flags);
+> > +
+> > +     if (sdhci_present_error(host, mrq->cmd, true)) {
+> > +             sdhci_finish_mrq(host, mrq);
+> > +             goto out_finish;
+> > +     }
+> > +
+> > +     cmd = mrq->cmd;
+> > +
+> > +     /*
+> > +      * The HSQ may send a command in interrupt context without polling
+> > +      * the busy signaling, which means we should return BUSY if controller
+> > +      * has not released inhibit bits to allow HSQ trying to send request
+> > +      * again in non-atomic context. So we should not finish this request
+> > +      * here.
+> > +      */
+> > +     if (!sdhci_uhs2_send_command(host, cmd))
+> > +             ret = -EBUSY;
+> > +
+> > +out_finish:
+> > +     spin_unlock_irqrestore(&host->lock, flags);
+> > +     return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(sdhci_uhs2_request_atomic);
 > > +
 > >  /*****************************************************************************\
 > >   *                                                                           *
 > >   * Driver init/exit                                                          *
-> > @@ -589,6 +691,7 @@ static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
-> >       host->mmc_host_ops.start_signal_voltage_switch =
+> > @@ -692,6 +1166,7 @@ static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
 > >               sdhci_uhs2_start_signal_voltage_switch;
 > >       host->mmc_host_ops.uhs2_set_ios = sdhci_uhs2_set_ios;
-> > +     host->mmc_host_ops.uhs2_control = sdhci_uhs2_control;
+> >       host->mmc_host_ops.uhs2_control = sdhci_uhs2_control;
+> > +     host->mmc_host_ops.request = sdhci_uhs2_request;
 > >
 > >       if (!host->mmc_host_ops.uhs2_detect_init)
 > >               host->mmc_host_ops.uhs2_detect_init = sdhci_uhs2_do_detect_init;
 > > diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> > index de47c71995fb..b9db2e976010 100644
+> > index b9db2e976010..407169468927 100644
 > > --- a/drivers/mmc/host/sdhci.c
 > > +++ b/drivers/mmc/host/sdhci.c
-> > @@ -236,6 +236,18 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
-> >  }
-> >  EXPORT_SYMBOL_GPL(sdhci_reset);
+> > @@ -47,8 +47,6 @@
+> >  static unsigned int debug_quirks = 0;
+> >  static unsigned int debug_quirks2;
 > >
-> > +void sdhci_clear_set_irqs(struct sdhci_host *host, u32 clear, u32 set)
-> > +{
-> > +     u32 ier;
-> > +
-> > +     ier = sdhci_readl(host, SDHCI_INT_ENABLE);
-> > +     ier &= ~clear;
-> > +     ier |= set;
-> > +     sdhci_writel(host, ier, SDHCI_INT_ENABLE);
-> > +     sdhci_writel(host, ier, SDHCI_SIGNAL_ENABLE);
-> > +}
-> > +EXPORT_SYMBOL_GPL(sdhci_clear_set_irqs);
->
-> This might as well be in sdhci-uhs2.c since that is the only
-> place that calls it.  Then there is no need to export it.
->
-
-I will update it in the patch#17 of the new [PATCH V6].
-
-> > +
-> >  static bool sdhci_do_reset(struct sdhci_host *host, u8 mask)
+> > -static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd);
+> > -
+> >  void sdhci_dumpregs(struct sdhci_host *host)
 > >  {
-> >       if (host->quirks & SDHCI_QUIRK_NO_CARD_NO_RESET) {
+> >       SDHCI_DUMP("============ SDHCI REGISTER DUMP ===========\n");
+> > @@ -147,10 +145,11 @@ void sdhci_enable_v4_mode(struct sdhci_host *host)
+> >  }
+> >  EXPORT_SYMBOL_GPL(sdhci_enable_v4_mode);
+> >
+> > -static inline bool sdhci_data_line_cmd(struct mmc_command *cmd)
+> > +bool sdhci_data_line_cmd(struct mmc_command *cmd)
+> >  {
+> >       return cmd->data || cmd->flags & MMC_RSP_BUSY;
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_data_line_cmd);
+> >
+> >  static void sdhci_set_card_detection(struct sdhci_host *host, bool enable)
+> >  {
+> > @@ -409,7 +408,7 @@ static void sdhci_reinit(struct sdhci_host *host)
+> >               mmc_detect_change(host->mmc, msecs_to_jiffies(200));
+> >  }
+> >
+> > -static void __sdhci_led_activate(struct sdhci_host *host)
+> > +void __sdhci_led_activate(struct sdhci_host *host)
+> >  {
+> >       u8 ctrl;
+> >
+> > @@ -420,8 +419,9 @@ static void __sdhci_led_activate(struct sdhci_host *host)
+> >       ctrl |= SDHCI_CTRL_LED;
+> >       sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
+> >  }
+> > +EXPORT_SYMBOL_GPL(__sdhci_led_activate);
+>
+> The LED functions like __sdhci_led_activate() are not being used
+> and don't need to be exported.
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> >
+> > -static void __sdhci_led_deactivate(struct sdhci_host *host)
+> > +void __sdhci_led_deactivate(struct sdhci_host *host)
+> >  {
+> >       u8 ctrl;
+> >
+> > @@ -432,6 +432,7 @@ static void __sdhci_led_deactivate(struct sdhci_host *host)
+> >       ctrl &= ~SDHCI_CTRL_LED;
+> >       sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
+> >  }
+> > +EXPORT_SYMBOL_GPL(__sdhci_led_deactivate);
+> >
+> >  #if IS_REACHABLE(CONFIG_LEDS_CLASS)
+> >  static void sdhci_led_control(struct led_classdev *led,
+> > @@ -510,14 +511,15 @@ static inline void sdhci_led_deactivate(struct sdhci_host *host)
+> >
+> >  #endif
+> >
+> > -static void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq,
+> > -                         unsigned long timeout)
+> > +void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq,
+> > +                  unsigned long timeout)
+> >  {
+> >       if (sdhci_data_line_cmd(mrq->cmd))
+> >               mod_timer(&host->data_timer, timeout);
+> >       else
+> >               mod_timer(&host->timer, timeout);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_mod_timer);
+> >
+> >  static void sdhci_del_timer(struct sdhci_host *host, struct mmc_request *mrq)
+> >  {
+> > @@ -1098,8 +1100,7 @@ static void sdhci_set_timeout(struct sdhci_host *host, struct mmc_command *cmd)
+> >               __sdhci_set_timeout(host, cmd);
+> >  }
+> >
+> > -static void sdhci_initialize_data(struct sdhci_host *host,
+> > -                               struct mmc_data *data)
+> > +void sdhci_initialize_data(struct sdhci_host *host, struct mmc_data *data)
+> >  {
+> >       WARN_ON(host->data);
+> >
+> > @@ -1112,6 +1113,7 @@ static void sdhci_initialize_data(struct sdhci_host *host,
+> >       host->data_early = 0;
+> >       host->data->bytes_xfered = 0;
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_initialize_data);
+> >
+> >  static inline void sdhci_set_block_info(struct sdhci_host *host,
+> >                                       struct mmc_data *data)
+> > @@ -1134,12 +1136,8 @@ static inline void sdhci_set_block_info(struct sdhci_host *host,
+> >       }
+> >  }
+> >
+> > -static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+> > +void sdhci_prepare_dma(struct sdhci_host *host, struct mmc_data *data)
+> >  {
+> > -     struct mmc_data *data = cmd->data;
+> > -
+> > -     sdhci_initialize_data(host, data);
+> > -
+> >       if (host->flags & (SDHCI_USE_SDMA | SDHCI_USE_ADMA)) {
+> >               struct scatterlist *sg;
+> >               unsigned int length_mask, offset_mask;
+> > @@ -1224,6 +1222,16 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+> >       }
+> >
+> >       sdhci_set_transfer_irqs(host);
+> > +}
+> > +EXPORT_SYMBOL_GPL(sdhci_prepare_dma);
+> > +
+> > +static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+> > +{
+> > +     struct mmc_data *data = cmd->data;
+> > +
+> > +     sdhci_initialize_data(host, data);
+> > +
+> > +     sdhci_prepare_dma(host, data);
+> >
+> >       sdhci_set_block_info(host, data);
+> >  }
+> > @@ -1266,8 +1274,7 @@ static struct dma_chan *sdhci_external_dma_channel(struct sdhci_host *host,
+> >       return data->flags & MMC_DATA_WRITE ? host->tx_chan : host->rx_chan;
+> >  }
+> >
+> > -static int sdhci_external_dma_setup(struct sdhci_host *host,
+> > -                                 struct mmc_command *cmd)
+> > +int sdhci_external_dma_setup(struct sdhci_host *host, struct mmc_command *cmd)
+> >  {
+> >       int ret, i;
+> >       enum dma_transfer_direction dir;
+> > @@ -1320,8 +1327,9 @@ static int sdhci_external_dma_setup(struct sdhci_host *host,
+> >
+> >       return ret;
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_external_dma_setup);
+> >
+> > -static void sdhci_external_dma_release(struct sdhci_host *host)
+> > +void sdhci_external_dma_release(struct sdhci_host *host)
+> >  {
+> >       if (host->tx_chan) {
+> >               dma_release_channel(host->tx_chan);
+> > @@ -1335,9 +1343,10 @@ static void sdhci_external_dma_release(struct sdhci_host *host)
+> >
+> >       sdhci_switch_external_dma(host, false);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_external_dma_release);
+> >
+> > -static void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
+> > -                                           struct mmc_command *cmd)
+> > +void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
+> > +                                    struct mmc_command *cmd)
+> >  {
+> >       struct mmc_data *data = cmd->data;
+> >
+> > @@ -1348,6 +1357,7 @@ static void __sdhci_external_dma_prepare_data(struct sdhci_host *host,
+> >
+> >       sdhci_set_block_info(host, data);
+> >  }
+> > +EXPORT_SYMBOL(__sdhci_external_dma_prepare_data);
+> >
+> >  static void sdhci_external_dma_prepare_data(struct sdhci_host *host,
+> >                                           struct mmc_command *cmd)
+> > @@ -1362,8 +1372,8 @@ static void sdhci_external_dma_prepare_data(struct sdhci_host *host,
+> >       }
+> >  }
+> >
+> > -static void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
+> > -                                         struct mmc_command *cmd)
+> > +void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
+> > +                                  struct mmc_command *cmd)
+> >  {
+> >       struct dma_chan *chan;
+> >
+> > @@ -1374,6 +1384,7 @@ static void sdhci_external_dma_pre_transfer(struct sdhci_host *host,
+> >       if (chan)
+> >               dma_async_issue_pending(chan);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_external_dma_pre_transfer);
+> >
+> >  #else
+> >
+> > @@ -1425,11 +1436,11 @@ static inline bool sdhci_auto_cmd23(struct sdhci_host *host,
+> >       return mrq->sbc && (host->flags & SDHCI_AUTO_CMD23);
+> >  }
+> >
+> > -static inline bool sdhci_manual_cmd23(struct sdhci_host *host,
+> > -                                   struct mmc_request *mrq)
+> > +bool sdhci_manual_cmd23(struct sdhci_host *host, struct mmc_request *mrq)
+> >  {
+> >       return mrq->sbc && !(host->flags & SDHCI_AUTO_CMD23);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_manual_cmd23);
+>
+> Also don't see sdhci_manual_cmd23() being used.
+> Please check what is being exported.
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> >
+> >  static inline void sdhci_auto_cmd_select(struct sdhci_host *host,
+> >                                        struct mmc_command *cmd,
+> > @@ -1541,7 +1552,7 @@ static void sdhci_set_mrq_done(struct sdhci_host *host, struct mmc_request *mrq)
+> >       WARN_ON(i >= SDHCI_MAX_MRQS);
+> >  }
+> >
+> > -static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+> > +void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+> >  {
+> >       if (host->cmd && host->cmd->mrq == mrq)
+> >               host->cmd = NULL;
+> > @@ -1565,15 +1576,17 @@ static void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+> >       if (!sdhci_has_requests(host))
+> >               sdhci_led_deactivate(host);
+> >  }
+> > +EXPORT_SYMBOL_GPL(__sdhci_finish_mrq);
+> >
+> > -static void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+> > +void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq)
+> >  {
+> >       __sdhci_finish_mrq(host, mrq);
+> >
+> >       queue_work(host->complete_wq, &host->complete_work);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_finish_mrq);
+> >
+> > -static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
+> > +void __sdhci_finish_data_common(struct sdhci_host *host)
+> >  {
+> >       struct mmc_command *data_cmd = host->data_cmd;
+> >       struct mmc_data *data = host->data;
+> > @@ -1607,6 +1620,14 @@ static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
+> >               data->bytes_xfered = 0;
+> >       else
+> >               data->bytes_xfered = data->blksz * data->blocks;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__sdhci_finish_data_common);
+> > +
+> > +static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
+> > +{
+> > +     struct mmc_data *data = host->data;
+> > +
+> > +     __sdhci_finish_data_common(host);
+> >
+> >       /*
+> >        * Need to send CMD12 if -
+> > @@ -1645,12 +1666,13 @@ static void __sdhci_finish_data(struct sdhci_host *host, bool sw_data_timeout)
+> >       }
+> >  }
+> >
+> > -static void sdhci_finish_data(struct sdhci_host *host)
+> > +void sdhci_finish_data(struct sdhci_host *host)
+> >  {
+> >       __sdhci_finish_data(host, false);
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_finish_data);
+>
+> Also don't see sdhci_finish_data() being used.
+> Please check what is being exported.
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> >
+> > -static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+> > +bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+> >  {
+> >       int flags;
+> >       u32 mask;
+> > @@ -1692,8 +1714,6 @@ static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+> >                       sdhci_prepare_data(host, cmd);
+> >       }
+> >
+> > -     sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT);
+> > -
+> >       sdhci_set_transfer_mode(host, cmd);
+> >
+> >       if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
+> > @@ -1737,13 +1757,16 @@ static bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+> >       if (host->use_external_dma)
+> >               sdhci_external_dma_pre_transfer(host, cmd);
+> >
+> > +     sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT);
+>
+> If this move of "sdhci_writel(host, cmd->arg, SDHCI_ARGUMENT)"
+> is intentional, it should be a separate patch.
+>
+> > +
+> >       sdhci_writew(host, SDHCI_MAKE_CMD(cmd->opcode, flags), SDHCI_COMMAND);
+> >
+> >       return true;
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_send_command);
+>
+> It is not necessary to export sdhci_send_command()
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> >
+> > -static bool sdhci_present_error(struct sdhci_host *host,
+> > -                             struct mmc_command *cmd, bool present)
+> > +bool sdhci_present_error(struct sdhci_host *host,
+> > +                      struct mmc_command *cmd, bool present)
+> >  {
+> >       if (!present || host->flags & SDHCI_DEVICE_DEAD) {
+> >               cmd->error = -ENOMEDIUM;
+> > @@ -1752,6 +1775,7 @@ static bool sdhci_present_error(struct sdhci_host *host,
+> >
+> >       return false;
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_present_error);
+> >
+> >  static bool sdhci_send_command_retry(struct sdhci_host *host,
+> >                                    struct mmc_command *cmd,
+> > @@ -1815,7 +1839,7 @@ static void sdhci_read_rsp_136(struct sdhci_host *host, struct mmc_command *cmd)
+> >       }
+> >  }
+> >
+> > -static void sdhci_finish_command(struct sdhci_host *host)
+> > +void sdhci_finish_command(struct sdhci_host *host)
+> >  {
+> >       struct mmc_command *cmd = host->cmd;
+> >
+> > @@ -1868,6 +1892,7 @@ static void sdhci_finish_command(struct sdhci_host *host)
+> >                       __sdhci_finish_mrq(host, cmd->mrq);
+> >       }
+> >  }
+> > +EXPORT_SYMBOL_GPL(sdhci_finish_command);
+>
+> It is not necessary to export sdhci_finish_command()
+>
+
+I will update it in the patch#18 of the new [PATCH V6].
+
+> >
+> >  static u16 sdhci_get_preset_value(struct sdhci_host *host)
+> >  {
 > > diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> > index 22d7f47862ae..f049331bd0bc 100644
+> > index f049331bd0bc..1a9924e7972d 100644
 > > --- a/drivers/mmc/host/sdhci.h
 > > +++ b/drivers/mmc/host/sdhci.h
-> > @@ -869,6 +869,7 @@ void sdhci_request(struct mmc_host *mmc, struct mmc_request *mrq);
-> >  int sdhci_request_atomic(struct mmc_host *mmc, struct mmc_request *mrq);
-> >  void sdhci_set_bus_width(struct sdhci_host *host, int width);
-> >  void sdhci_reset(struct sdhci_host *host, u8 mask);
-> > +void sdhci_clear_set_irqs(struct sdhci_host *host, u32 clear, u32 set);
-> >  void sdhci_set_uhs_signaling(struct sdhci_host *host, unsigned timing);
-> >  int sdhci_execute_tuning(struct mmc_host *mmc, u32 opcode);
-> >  void sdhci_enable_preset_value(struct sdhci_host *host, bool enable);
+> > @@ -850,8 +850,25 @@ static inline void sdhci_read_caps(struct sdhci_host *host)
+> >       __sdhci_read_caps(host, NULL, NULL, NULL);
+> >  }
+> >
+> > +bool sdhci_data_line_cmd(struct mmc_command *cmd);
+> >  void sdhci_runtime_pm_bus_on(struct sdhci_host *host);
+> >  void sdhci_runtime_pm_bus_off(struct sdhci_host *host);
+> > +void sdhci_mod_timer(struct sdhci_host *host, struct mmc_request *mrq, unsigned long timeout);
+> > +void sdhci_initialize_data(struct sdhci_host *host, struct mmc_data *data);
+> > +void sdhci_prepare_dma(struct sdhci_host *host, struct mmc_data *data);
+> > +#if IS_ENABLED(CONFIG_MMC_SDHCI_EXTERNAL_DMA)
+> > +int sdhci_external_dma_setup(struct sdhci_host *host, struct mmc_command *cmd);
+> > +void sdhci_external_dma_release(struct sdhci_host *host);
+> > +void __sdhci_external_dma_prepare_data(struct sdhci_host *host, struct mmc_command *cmd);
+> > +void sdhci_external_dma_pre_transfer(struct sdhci_host *host, struct mmc_command *cmd);
+> > +#endif
+> > +bool sdhci_manual_cmd23(struct sdhci_host *host, struct mmc_request *mrq);
+> > +void __sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq);
+> > +void sdhci_finish_mrq(struct sdhci_host *host, struct mmc_request *mrq);
+> > +void __sdhci_finish_data_common(struct sdhci_host *host);
+> > +bool sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd);
+> > +void sdhci_finish_command(struct sdhci_host *host);
+> > +bool sdhci_present_error(struct sdhci_host *host, struct mmc_command *cmd, bool present);
+> >  u16 sdhci_calc_clk(struct sdhci_host *host, unsigned int clock,
+> >                  unsigned int *actual_clock);
+> >  void sdhci_set_clock(struct sdhci_host *host, unsigned int clock);
 >
 
 Thanks, Victor Shih
