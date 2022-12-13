@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B85C64B9FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125FF64B9FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:42:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235883AbiLMQmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S236171AbiLMQms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236175AbiLMQmO (ORCPT
+        with ESMTP id S236175AbiLMQmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:42:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F2764E6;
-        Tue, 13 Dec 2022 08:42:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D25526160D;
-        Tue, 13 Dec 2022 16:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C5EC433D2;
-        Tue, 13 Dec 2022 16:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670949729;
-        bh=H/loUsa51Ym3ortfT1MNfYEs/AlpDljAaLTIMLqtEV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N+QQfONcp6tuGfLtJYpM+7FuUSEYnSgji/3RK7ZPOXq08JHEe1DaV+yST6qsjLMhj
-         RpLZ5DEObzsGYt56Le4oaxKGzrMSOx5CHVoo8SyuueO5uKY2ijEUkf36911OmGNNbX
-         j0MsuPG/99W9KG1GYm54n6v63d63orluPpV/id7Jgk7QKif+WSmnXHNTvQ44GAFGBN
-         Tjhp6EWrJe6fO4bdVAjvKPjKfv3zwebP9TGgjkCnxhTs6df9X9itR47R5YHMMk9YsX
-         vvVecUymAa2X+ltthxlSyVvhWfO7FQPqfxQF/MLz26KMMsIsC+tIBLkO+tLFFS1ZYw
-         bcj9/bj/NKHmw==
-Date:   Tue, 13 Dec 2022 09:42:07 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] kbuild: ensure Make >= 3.82 is used
-Message-ID: <Y5irX4Uajdc6ngoc@dev-arch.thelio-3990X>
-References: <20221211030352.2622425-1-masahiroy@kernel.org>
- <Y5djBr9rVhSq8+iK@dev-arch.thelio-3990X>
- <Y5f4ZgyK7QlqYu31@bergen.fjasle.eu>
- <Y5hOUYUYmwGioGiP@fjasle.eu>
+        Tue, 13 Dec 2022 11:42:40 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42706283
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=YMCKa70hO2og8rNvNG5HsTDbzJi+PBGe30FejVIjU1k=; b=VuhhdN/Na6Jt0sZxnXuAlweCx3
+        TvLg4Kgb4B8iKQ3RQx2/BNI05WvHhG6uHhO3fDI0eFgckDkjLm5AFPVeIKhvveCkxMWFxX7H41YJW
+        ZiK3Trv94cOgEalRhkff3e+8KNECKL13oFEF2IVEb2R8b7cm9mMkbp+8eYx9vmPY+ZkTt6yyDFfrb
+        soQDus7gr2R/PtZG7cM2ZLMXfNzjcXVCHob1y3vOD5ZTFoHmk1rnGmKkCQRKlEO7Qr5G4Ho5EX7Ts
+        xoSGCvBPEr4Dzr/HV8qGdiD5wtm9jMY7Qkfsad5D7aF/tVbiy3xQU+83FYLAzV/6mbkoBcdOtCfrU
+        d708/dhA==;
+Received: from [2001:4bb8:192:2f53:30b:ddad:22aa:f9f9] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p58MX-002zdu-JM; Tue, 13 Dec 2022 16:42:38 +0000
+Date:   Tue, 13 Dec 2022 17:42:35 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+Subject: [GIT PULL] dma-mapping updates for Linux 6.2
+Message-ID: <Y5ire5HIAi/kc3cg@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5hOUYUYmwGioGiP@fjasle.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:05:05AM +0100, Nicolas Schier wrote:
-> On Tue, Dec 13, 2022 at 04:58:30AM +0100 Nicolas Schier wrote:
-> > On Mon 12 Dec 2022 10:21:10 GMT, Nathan Chancellor wrote:
-> > > On Sun, Dec 11, 2022 at 12:03:52PM +0900, Masahiro Yamada wrote:
-> > > > Documentation/process/changes.rst notes the minimal GNU Make version,
-> > > > but it is not checked anywhere.
-> > > > 
-> > > > We could check $(MAKE_VERSION), but another simple way is to check
-> > > > $(.FEATURES) since the feature list always grows although this way
-> > > > is not always possible. For example Make 4.0 through 4.2 have the
-> > > > same set of $(.FEATURES).
-> > > > 
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > 
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > 
-> > Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> > 
-> > > > ---
-> > > > 
-> > > > Changes in v3:
-> > > >   - Check the version in a different way
-> > > > 
-> > > >  Makefile | 5 +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git a/Makefile b/Makefile
-> > > > index 2dda1e9a717a..66dfc5751470 100644
-> > > > --- a/Makefile
-> > > > +++ b/Makefile
-> > > > @@ -11,6 +11,11 @@ NAME = Hurr durr I'ma ninja sloth
-> > > >  # Comments in this file are targeted only to the developer, do not
-> > > >  # expect to learn how to build the kernel reading this file.
-> > > >  
-> > > > +# Ensure Make >= 3.82
-> > > > +ifeq ($(filter undefine,$(.FEATURES)),)
-> > > > +$(error Make $(MAKE_VERSION) is too old)
-> > > 
-> > > Would it make sense to state what version is needed, similar to the
-> > > Kconfig checks for compiler and binutils?
-> > 
-> > Checking against 'undefine' (introduced in make-3.82~38) is quite a 
-> > nice way, I think.  Otherwise we needed something like
-> > $(filter 3.82% 3.9% 4.% 5.% ..., $(MAKE_VERSION)).
-> > 
-> 
-> Nathan, sorry, I somehow I read your question completely wrong.  I would also
-> appreciate if the minimum make version would be shown in the error message.
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-No worries, I have done that many a time :) I see Masahiro updated this
-to v4 with this feedback taken into consideration so I am glad to see
-we are all in agreement.
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-Cheers,
-Nathan
+are available in the Git repository at:
+
+  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-6.2-2022-12-13
+
+for you to fetch changes up to ffcb754584603adf7039d7972564fbf6febdc542:
+
+  dma-mapping: reject __GFP_COMP in dma_alloc_attrs (2022-11-21 09:37:20 +0100)
+
+----------------------------------------------------------------
+dma-mapping updates for Linux 2.6
+
+ - reduce the swiotlb buffer size on allocation failure
+   (Alexey Kardashevskiy)
+ - clean up passing of bogus GFP flags to the dma-coherent allocator
+   (Christoph Hellwig)
+
+----------------------------------------------------------------
+Alexey Kardashevskiy (1):
+      swiotlb: reduce the swiotlb buffer size on allocation failure
+
+Christoph Hellwig (7):
+      media: videobuf-dma-contig: use dma_mmap_coherent
+      RDMA/hfi1: don't pass bogus GFP_ flags to dma_alloc_coherent
+      RDMA/qib: don't pass bogus GFP_ flags to dma_alloc_coherent
+      cnic: don't pass bogus GFP_ flags to dma_alloc_coherent
+      s390/ism: don't pass bogus GFP_ flags to dma_alloc_coherent
+      ALSA: memalloc: don't pass bogus GFP_ flags to dma_alloc_*
+      dma-mapping: reject __GFP_COMP in dma_alloc_attrs
+
+ arch/arm/mm/dma-mapping.c                     | 17 --------
+ drivers/infiniband/hw/hfi1/init.c             | 21 ++-------
+ drivers/infiniband/hw/qib/qib_iba6120.c       |  2 +-
+ drivers/infiniband/hw/qib/qib_init.c          | 21 ++-------
+ drivers/iommu/dma-iommu.c                     |  3 --
+ drivers/media/v4l2-core/videobuf-dma-contig.c | 22 ++++------
+ drivers/net/ethernet/broadcom/cnic.c          |  6 +--
+ drivers/s390/net/ism_drv.c                    |  3 +-
+ kernel/dma/mapping.c                          |  8 ++++
+ kernel/dma/swiotlb.c                          | 63 +++++++++++++++++----------
+ sound/core/memalloc.c                         |  5 +--
+ 11 files changed, 69 insertions(+), 102 deletions(-)
