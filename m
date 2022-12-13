@@ -2,108 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D411164BF35
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36ACB64BF38
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbiLMWQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S236073AbiLMWQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLMWQU (ORCPT
+        with ESMTP id S229532AbiLMWQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:16:20 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2086F261E;
-        Tue, 13 Dec 2022 14:16:19 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 3DA93419E9E1;
-        Tue, 13 Dec 2022 22:16:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3DA93419E9E1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1670969773;
-        bh=VHdI9Xh1NeCJLb26KKJ6iPHrz7yjmrTEO99iPDQ8hOs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mnxsAh0bWjBhi8jpakZlMTltzOdtMY8Hl7y+QB5nDB7Wy3p2vddA/8zfqAuPeGnwC
-         hm5z/9G8k3w8+6vs9bkz5ej8HTm0j9TtIWT97YSArkyf7bDjXuOUFSPwLRYqF8EgFF
-         7BM9jXbNdmCPKFKU5BWgEKV3FdSP6X655J9mR6jc=
+        Tue, 13 Dec 2022 17:16:38 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55838193F3
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:16:36 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id cf42so7383125lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 14:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qwTfzPVAukeSo9de2K3wL2rXG0t+xWNA7VPZ779aEaM=;
+        b=Q26p9NKClGPwIX+bpk9mYpBBk5EoqUgHHaFCELzFQyHIu0si/92T6tlDy8BtIbuKQg
+         G8NA8TLQN5IB+QRFPm+G/RCDWIzO7QPCZ5VoY3Jh8gyyzimvzbq/9zrgLh1DjUE+53Qy
+         GNOmw9c9t++B7anPUr8jCEqO10JnRvXcQX8r9rlstTxNio9dLboEd0i/LcmFZ7Xy96Kr
+         zrzEY6TDuMnfh375G+6cB46dh074iRpfJ4kAe2UJ5iOI91oYTp59CgBw7i8gUhbXu3AG
+         JHrP2oWZl003Bhz983ZevnJQVAufzDIJ8JmIa6EYh6j7Vc81UEA3KoPv4NNpPOLabPnl
+         r+cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qwTfzPVAukeSo9de2K3wL2rXG0t+xWNA7VPZ779aEaM=;
+        b=1U6M7s0vvrPgMFQtgsZBjEDYi1rDvEDu9P4bvkosPZ9TPc1s2FOzRxIojoJnsM9+G4
+         UAI+p4aedjxlv8+rUCr4MXraviCW+Yzog62e6cAGOz/DrTrwDKIF+EKnvdJr+Z3Eaxhs
+         Z5iUoLuPXhtpuXY+czhWaFGVfVMmXTQMiJa8pGhG+Bac9Klg5l41FuzLbZ6+Y3tQNuGJ
+         PKvuaEla/xKEl4B37VHjfTRK0VGBi83bmv32V6op037er+N2i+PfMFVJDCKHEnTjc+ux
+         m31yzbK/EOjpbTSoHfAj7ZWVc+cyWmdjjoOxqezQYr3l9JpcuPQMUlhBvzXPudopdBTW
+         BM7Q==
+X-Gm-Message-State: ANoB5pmsxLpNsUoq0kfgk1mEL5xa7C9A7MkT2lCkTzdWSf5hHiLW07MB
+        RDbtQbjqJKH4RraUOgzaDNiV1zzSxvCGEbNgNfTVfQ==
+X-Google-Smtp-Source: AA0mqf7ZFrQzu5I8zJUQI0vCSYilqn2GB6iXOQlE2rnMeIeDxt/SDrvtOZpcY9CcgELjDzgUaKaXcA==
+X-Received: by 2002:ac2:54ad:0:b0:4b5:7bfe:4e44 with SMTP id w13-20020ac254ad000000b004b57bfe4e44mr5618365lfk.6.1670969794701;
+        Tue, 13 Dec 2022 14:16:34 -0800 (PST)
+Received: from ?IPv6:::1? (dzccz6yfpdgdc5vwjcs5y-3.rev.dnainternet.fi. [2001:14ba:a085:4d00:8c19:462c:c647:13f2])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056512215100b00498f77cfa63sm528948lfr.280.2022.12.13.14.16.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Dec 2022 14:16:34 -0800 (PST)
+Date:   Wed, 14 Dec 2022 00:16:31 +0200
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Eric Chanudet <echanude@redhat.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        Brian Masney <bmasney@redhat.com>
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: pm8450a: add rtc node
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221213181855.ylkb3dglw3bkwor5@echanude>
+References: <20221213005539.1133443-1-echanude@redhat.com> <219F5CF2-BA91-4749-A32C-84BCF541ECE0@linaro.org> <20221213181855.ylkb3dglw3bkwor5@echanude>
+Message-ID: <6F3DC711-88FE-423E-A025-B6AF526B89F2@linaro.org>
 MIME-Version: 1.0
-Date:   Wed, 14 Dec 2022 01:16:13 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Peter Jones <pjones@redhat.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 00/24] x86_64: Improvements at compressed kernel stage
-In-Reply-To: <20221213181336.fjyxagxkjtq3jchl@redhat.com>
-References: <cover.1668958803.git.baskov@ispras.ru>
- <20221213180317.qoy2l3mcpjparocq@redhat.com>
- <20221213181336.fjyxagxkjtq3jchl@redhat.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <e28ce5943937225517d460dabda6f8e5@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-13 21:13, Peter Jones wrote:
-> On Tue, Dec 13, 2022 at 01:03:17PM -0500, Peter Jones wrote:
->> On Tue, Nov 22, 2022 at 02:12:09PM +0300, Evgeniy Baskov wrote:
->> > This patchset is aimed
->> > * to improve UEFI compatibility of compressed kernel code for x86_64
->> > * to setup proper memory access attributes for code and rodata sections
->> > * to implement W^X protection policy throughout the whole execution
->> >   of compressed kernel for EFISTUB code path.
->> 
->> Hi Evgeniy,
->> 
->> I've tested this patch set on hardware and QEMU+MU firmware, and it
->> works for me with a couple of minor issues:
->> 
->> - on one machine that has the DXE protocol but not the EFI one, we get
->>   an error because the firmware doesn't support EFI_MEMORY_RP
->> - on QEMU I'm seeing the size of "(unsigned long)_head - image_base"
->>   wind up as 0, which leads to an EFI_INVALID_PARAMETER on the
->>   clear_memory_attributes() call.
->> 
->> In both cases the system winds up working, but with unnecessary 
->> console
->> output.
-> 
-> I just realized I've overstated here - I haven't actually hit the first
-> problem on x86, only on ARM, where we don't currently use this code.  I
-> discovered it in grub, and checked your patch set to see if you had the
-> same issue I did.  That said, "in both cases the system winds up
-> working" is probably still true - in that the edk2 code supports
-> EFI_MEMORY_RP on x86 but not ARM, so x86 won't hit the issue when using
-> DXE unless someone cooks up another implementation.  Nevertheless I
-> believe the patch to fix it is correct and should be applied.
-> 
-> Thanks!
 
-Hi,
 
-Thank you for testing and fixes!
+On 13 December 2022 20:18:55 EET, Eric Chanudet <echanude@redhat=2Ecom> wr=
+ote:
+>On Tue, Dec 13, 2022 at 04:18:00AM +0300, Dmitry Baryshkov wrote:
+>> >diff --git a/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi b/arch/arm64/boot=
+/dts/qcom/pm8450a=2Edtsi
+>> >index 34fc72896761=2E=2Eaf761dbfbc66 100644
+>> >--- a/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi
+>> >+++ b/arch/arm64/boot/dts/qcom/pm8450a=2Edtsi
+>> >@@ -13,6 +13,14 @@ pm8450a: pmic@0 {
+>> > 		#address-cells =3D <1>;
+>> > 		#size-cells =3D <0>;
+>> >=20
+>> >+		rtc@6000 {
+>> >+			compatible =3D "qcom,pm8941-rtc";
+>> >+			reg =3D <0x6000>;
+>> >+			reg-names =3D "rtc", "alarm";
+>> >+			interrupts =3D <0x0 0x61 0x1 IRQ_TYPE_NONE>;
+>>=20
+>>=20
+>> 0x60?
+>
+>Checking downstream it uses 0x61 for the ppid=2E This is also the case
+>for all other descriptions of that RTC I could find=2E On the other hand,
+>that does not describe the "alarm" register bank at 0x6100=2E
+>Should it be added, if anything to match reg-names?
 
-I have also discovered one issue with v3, that can only be hit when
-booting with grub -- there's one kernel_add_identity_map() missing in
-the get_acpi_srat_table() function, before header->length is read.
-So I'll prepare the v4 soon and include your new patches there.
+Definitely yes=2E I think otherwise it breaks the idea of reg-names=2E
 
-Thanks,
-Evgeniy Baskov
+>
+>I tried a quick test of the alarm on sa8540p-ride:
+>$ echo $(date '+%s' -d '+ 10 seconds') > /sys/class/rtc/rtc0/wakealarm
+>It logged the interrupt:
+>172:          3          0          0          0          0          0   =
+       0          0  pmic_arb 101777441 Edge      pm8xxx_rtc_alarm
+>
+
+--=20
+With best wishes
+Dmitry
