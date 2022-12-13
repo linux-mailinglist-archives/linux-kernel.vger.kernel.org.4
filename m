@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415AB64BDB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233ED64BDBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 21:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbiLMUDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 15:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        id S235820AbiLMUHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 15:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiLMUDJ (ORCPT
+        with ESMTP id S236458AbiLMUHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 15:03:09 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020B4C0C
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:03:09 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so4721226pjs.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:03:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SlLKeNs0EWVsu+ptfdWBNmvU18ZVhMR61XWdAxFV9XQ=;
-        b=Jgh2h70gyFoI+vZEt+HRyYhvy8YXmJruypdwVRYeOAtwakBPLsrcx6y+QvB3hUhUNm
-         v/DiIWAZ3oh+MtBheCrEL++Gyb7HLAT1gDnpqMiVuiB04sbr6RL+4HisIMlXsah7jJHs
-         BQh9UrAAjRfz+6OEQK8DW+ZocCeLgGW7E9/YuE4vDZ2U7pCZP9xxdvcW7BRNNE9/dvXk
-         UHFZHnLNmVVz3QPKDVMD9nL2tc1Un2n3p3lY72Vrrn4IEro5ne4Mp2Xd+uRIFimABqMP
-         9hVMz9Et/jMsgOYssc4gfckHfVOAIkEUwXeMIcmjytkpiwFO3ZODSvpun/Uk3hH9yVpu
-         tYKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SlLKeNs0EWVsu+ptfdWBNmvU18ZVhMR61XWdAxFV9XQ=;
-        b=Qhfcg9v9wDG2jPZv0EDMVhTkyLQaVfjwf247SRWu2+bJ5UEf5NUtcididsk7UrHTn5
-         NKt38lNyLthjtBLcptOI4gbK3yB7IqwsYOc49ei8N9Owcs+mj/wDK1KX796TGohAcp5V
-         Kpn3Ihs7wqv5QIWtNp2CjtDvTs2pScILxs2hA2a4zPnVuLSJZ6wX9uU7b2RITvwEusuP
-         ahmNhqEDAz6alD0gt7xEhP2uO/QgLxHxWwyFn3zySqZnZ8vaBGmjgfozlIdb/iSvORKs
-         1oeB/gl+5gq7zX9wqm9Lv2dCSA6zo+68SxkDE3/A5Xaam0+xalxFzLLx25ZpFDkWi+Ov
-         FKbg==
-X-Gm-Message-State: ANoB5pn8keGPsNvqSznyApMU1sTvY/d5w8DiOS9XqlprqASPkMGQwqa/
-        hOpOXmbwNUj8H1qi9wU6QLJdUw==
-X-Google-Smtp-Source: AA0mqf43rfeTLye05owqv8MbDwr9r9xovoe2k6ziCGD54isSIqaMDQrLxrh/vw468kpaItrUN7BQ5g==
-X-Received: by 2002:a17:902:7b96:b0:189:858f:b5c0 with SMTP id w22-20020a1709027b9600b00189858fb5c0mr428994pll.0.1670961788301;
-        Tue, 13 Dec 2022 12:03:08 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170903124500b00189667acf19sm289595plh.95.2022.12.13.12.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 12:03:07 -0800 (PST)
-Date:   Tue, 13 Dec 2022 20:03:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ricardo Koller <ricarkol@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Raghavendra Rao Ananta <rananta@google.com>
-Cc:     David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH 06/14] KVM: selftests: Rename UNAME_M to ARCH_DIR, fill
- explicitly for x86
-Message-ID: <Y5jadzKz6Qi9MiI9@google.com>
-References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-7-seanjc@google.com>
+        Tue, 13 Dec 2022 15:07:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB22E290;
+        Tue, 13 Dec 2022 12:07:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5830161714;
+        Tue, 13 Dec 2022 20:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E063C433EF;
+        Tue, 13 Dec 2022 20:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670962055;
+        bh=GYYlwzxQ3UCGDe4WcOmFtXm8+K3DpY1ve1L3XVCcVmU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KofgOd1F40PH4rNxNB0DqLPpABTiEpu0ZdQZ0akIFU8PBSgL3kPKuUnREhGzShzOk
+         FQwMU4YkKA2TvR4n/jIe3pvx/HJ/8ZRVqfuvdhLAHCUBcHELvXNzUKjfHM0H8IUZh4
+         e/jT0oU0+NDN2xcx3k7cUBz9z5VLF+DZ9cmaP4RM2Idw9PY3/MjNwad4YucEnp9de+
+         +48UKgpJEsTXQ6ElCMOmcZx9u5WAzJS6Fb1uJ6JGCBHjZH2tOpfoMOZwdu+DKKrPTk
+         9aY1pJj2bhTEpBEZV+ZauufRAStYboO9PUduehSn3xb6WqxOuLXVNMoXOVnDYZs5DF
+         cvtWPVNOvpfiQ==
+Date:   Tue, 13 Dec 2022 14:07:33 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+Message-ID: <20221213200733.GA201693@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213001653.3852042-7-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221213195313.GA200257@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+David
-
-On Tue, Dec 13, 2022, Sean Christopherson wrote:
-> Rename UNAME_M to ARCH_DIR and explicitly set it directly for x86.  At
-> this point, the name of the arch directory really doesn't have anything
-> to do with `uname -m`, and UNAME_M is unnecessarily confusing given that
-> its purpose is purely to identify the arch specific directory.
+On Tue, Dec 13, 2022 at 01:53:13PM -0600, Bjorn Helgaas wrote:
+> On Tue, Dec 13, 2022 at 10:03:10PM +0300, Serge Semin wrote:
+> > On Tue, Dec 13, 2022 at 05:48:53PM +0100, Thierry Reding wrote:
+> > > On Tue, Dec 13, 2022 at 10:21:03AM -0600, Bjorn Helgaas wrote:
+> > > > On Mon, Dec 05, 2022 at 09:57:38AM +1100, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > > > 
+> > > > >   Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+> > > > > 
+> > > > > between commit:
+> > > > > 
+> > > > >   5c3741492d2e ("dt-bindings: PCI: tegra234: Add ECAM support")
+> > > > > 
+> > > > > from the arm-soc tree and commit:
+> > > > > 
+> > > > >   4cc13eedb892 ("dt-bindings: PCI: dwc: Add reg/reg-names common properties")
+> > > > > 
+> > > > > from the pci tree.
+> > > > > 
+> > > > > I didn't know how to fix this up, so I just used the latter (and so lost
+> > > > > the addition of "ecam").
+> > > > 
+> > > > Did I miss a suggested resolution for this?
+> > 
+> > > We had a brief discussion about this in another thread. So basically
+> > > Stephen's resolution is fine here and the plan is to instead add the
+> > > ECAM bits that the Tegra patch does in a separate patch on top of
+> > > Serge's patch. I should get around to sending that patch tomorrow.
+> > 
+> > Actually the discussion still goes. I haven't got a respond to my
+> > last suggestion which seems to me more reasonable than extending the
+> > DT-bindings with another vendor-specific reg-name. @Bjorn, please join
+> > the discussion here:
+> > https://lore.kernel.org/linux-pci/20221114155333.234496-2-jonathanh@nvidia.com/
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-> -# No change necessary for x86_64
-> -UNAME_M := $(shell uname -m)
-> -
-> -# Set UNAME_M for arm64 compile/install to work
-> -ifeq ($(ARCH),arm64)
-> -	UNAME_M := aarch64
-> -endif
-> -# Set UNAME_M s390x compile/install to work
-> -ifeq ($(ARCH),s390)
-> -	UNAME_M := s390x
-> -endif
-> -# Set UNAME_M riscv compile/install to work
-> -ifeq ($(ARCH),riscv)
-> -	UNAME_M := riscv
-> +ifeq ($(ARCH),x86)
+> Sorry, it's really too late for discussion.  I need to send the v6.2
+> pull request today or at the very latest, tomorrow, so the only thing
+> to decide is how to resolve the merge conflict in the simplest
+> possible way.  Unless there's a very compelling reason to resolve it
+> differently than Stephen did, that's going to be the answer.
 
-As discovered by by David, this breaks doing "ARCH=x86_64 make", which is an
-allowed/supported variant in the kernel proper, so this needs to be:
+To be more specific, the current answer is this (which is the same as
+what's in next-20221213):
 
-  ifneq (,$(filter $(ARCH),x86 x86_64))
+  https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/tree/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml?id=f64171fdd171
 
-or alternatively
+If you think it needs to be different, please respond with a patch and
+explanation.
 
-  ifeq ($(ARCH),x86_64)
-  ARCH := x86
-  endif
-
-Hmm, unless there's a reason to keep ARCH=x86_64, the latter appears to be the
-better option as lib.mak doesn't play nice with x86_64 either, e.g. `ARCH=x86_64
-LLVM=1 make` fails.  That's arguably a lib.mak bug, but it's trivial to handle
-in KVM's makefile so forcing lib.mak to handle both seems unnecessary.
-
-I'll also add a comment to call out that $(ARCH) follows the kernel's terminology
-for arch/*, whereas for whatever reason KVM selftests effectively uses `uname -m`
-terminology.
-
-One last thought/question, what do y'all think about renaming directories to
-follow the kernel proper?  I.e. aarch64=>arm64, s390x=>s390, and x86_64=>x86.
-Then $(ARCH_DIR) would go away.  The churn would be unfortunate, but it would be
-nice to align with arch/ and tools/arch/.
-
-> +	ARCH_DIR := x86_64
-> +else ifeq ($(ARCH),arm64)
-> +	ARCH_DIR := aarch64
-> +else ifeq ($(ARCH),s390)
-> +	ARCH_DIR := s390x
-> +else ifeq ($(ARCH),riscv)
-> +	ARCH_DIR := riscv
-> +else
-> +$(error Unknown architecture '$(ARCH)')
->  endif
+Bjorn
