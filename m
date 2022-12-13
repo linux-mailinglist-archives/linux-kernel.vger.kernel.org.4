@@ -2,157 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D9464B240
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D3064B241
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbiLMJWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S234841AbiLMJW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiLMJVk (ORCPT
+        with ESMTP id S234996AbiLMJWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:21:40 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2C423C;
-        Tue, 13 Dec 2022 01:21:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670923299; x=1702459299;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lFIERIufb6+u1QPc+oZnH/HkpfTZ0dBxzw8JMYgcWzI=;
-  b=U32we2owV2BFXDxE7+Mo1AZDS4rDx3Cq+2DEzHJ4NG0AxjR1X2ZESNxW
-   YFSJX5CATdir1DJWgjdMliOtU2RLzMLxD7R8FrHNDyrH2L/TaTHLVPtH2
-   ExOOG3tSef3glmL9M+BWEPR0DpwVP+KHroFjPxfc/U9VPzuvdJajx+d65
-   jN5ncAFNrt6N5sbvo/9GPpnfDg5mVmnsXMO6oX6NO2Syc++vwbcXTS8LR
-   QDow8jDZCUq9cqCKIJBeV9AiCn1OUemEiDJI3jKhq3zMvKcToLr7JbIEe
-   8ClR2fK39cnG14AOpMylRl7TRZ3i26DqxBcVb7K4KTYI4HZfT4VwEQmsI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="297766663"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="297766663"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 01:21:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="790833550"
-X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="790833550"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Dec 2022 01:21:31 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 13 Dec 2022 11:21:30 +0200
-Date:   Tue, 13 Dec 2022 11:21:30 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        RD Babiera <rdbabiera@google.com>
-Subject: Re: [PATCH v1] usb: typec: altmodes/displayport: Add hpd sysfs
- attribute
-Message-ID: <Y5hEGqbIF9rLg8AG@kuha.fi.intel.com>
-References: <20221211193755.1392128-1-badhri@google.com>
+        Tue, 13 Dec 2022 04:22:17 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25715BFB
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:22:16 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3e78d07ab4fso183762877b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:22:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HBVWcvC1u9pZZ+RLRidAY3qDuAjsE1IgCmnlft6y5gA=;
+        b=D9xzxVM6u/qGZ1rHp1JhPMXBxCGZtD7foj/3zej4cipPsElJbjyc/XcC94GX9aIOOT
+         z6sWUQLmMeHVughuq7k7+IRSkiyQIRtdVJQ8+afJorVc7L+cyWshvdhVJKASkWpIu0J8
+         ZaFnqzlA79slFpYFxLDoYBP+l/D0f0HPim/0Beex52mt/lkXfkDpbZHNwQ/Wfxtj4aaD
+         sD33FmQ7ajRIW5cXbJ/duAKO4FmMmV1NxY17eEQiiDETdKczAJDJQrubBohquY6Y9Ge/
+         p6K3XTjHjD5kpZ+Cv+53vA9+iHW2mNjshoxvwYQGPr7mEgPufTT601MZXBZymh0/PCa5
+         DSRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HBVWcvC1u9pZZ+RLRidAY3qDuAjsE1IgCmnlft6y5gA=;
+        b=PpIusw2IZYLPuNLuIBePpqQAn5VTpKgEus0qIt13cmb4noxtFhaShIxSkH3Ys7ghD/
+         VNJhy/ohpy+CSGRtrC5O1W6RItRmXeVtVDLXrb72Fe+PFzJPxZ3jg5Ul9ek0vQVYiESc
+         ZP4dhVpOs4NN7A8Xp1gsfo6mEu8YGrrKvT39CsPwW8HsEyXH4nMlTOoct7DdhJVWD0Re
+         09bWRyyWRguInTIOMdRU3HFNUkE54aysn9IyawZ3OaECWlhYwAEU2dtQ1x1KgTj5mTNn
+         UcYb+KxymCv+sXFHKa5EGTmfaaEMvs97a/5DzkFa5ZmZ7dnuchCuWRW7WX2CQ9+gestx
+         NFRA==
+X-Gm-Message-State: ANoB5pl0A58N+lHj5h6d6f+LbxXXBSfLut3ZV5r8Fn5itCCNBISvtWDT
+        m23mGELaZGEjhDeUjfQJJvSQ87RJE7TZslG1FL2Xcg==
+X-Google-Smtp-Source: AA0mqf4qLj/Z38psyROEDntD7BWmQ6BmvZhUitJMG118kXs8N9Obmriyo497ti72O/iSoZkHde1mhe+kvJEkiehpZvg=
+X-Received: by 2002:a81:6fd5:0:b0:402:3dcf:a262 with SMTP id
+ k204-20020a816fd5000000b004023dcfa262mr5023789ywc.31.1670923335392; Tue, 13
+ Dec 2022 01:22:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211193755.1392128-1-badhri@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
+ <20221205105931.410686-4-vadym.kochan@plvision.eu> <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
+ <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com> <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ <69dd8714-4be1-6b1b-fa07-04c790a6c6fc@intel.com> <VI1P190MB0317DADE7450282444BFED32951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ <44f642bc-8810-80d9-368a-15994de7f50d@intel.com> <VI1P190MB03171A8F65844DB789D85B0495E29@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+In-Reply-To: <VI1P190MB03171A8F65844DB789D85B0495E29@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 13 Dec 2022 10:22:03 +0100
+Message-ID: <CACRpkdabqqttBmPTQZmV_78oEL7+pgGaKzJcL4CFUA4SU1=tzQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Hu Ziji <huziji@marvell.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 11:37:55AM -0800, Badhri Jagan Sridharan wrote:
-> Exporsing HotPlugDetect(HPD) helps userspace to infer HPD
-> state as defined by VESA DisplayPort Alt Mode on USB Type-C Standard.
-> This allows userspace to notify users for self help, for instance,
-> to hint user that the display port cable is probably detached (or)
-> the display port sink (viz., monitors ect.,) is un-powered.
-> Also helps to debug issues reported from field.
-> 
-> This change adds an additional attribute "hpd" to the existing
-> "displayport" attributes.
-> 
-> VESA DisplayPort Alt Mode on USB Type-C Standard defines how
-> HotPlugDetect(HPD) shall be supported on the USB-C connector
-> when operating in DisplayPort Alt Mode. This is a read only
-> node which reflects the current state of HPD.
-> 
-> Valid values:
->  - 1 when HPD’s logical state is high (HPD_High)
->  - 0 when HPD’s logical state is low (HPD_Low)
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+On Mon, Dec 12, 2022 at 12:40 PM Vadym Kochan <vadym.kochan@plvision.eu> wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> The main restriction is that only lower 2GB can be used for DMA.
+>
+> I already did send solution based on reserved memory, I can send it again in context of this series.
+> Also what about the solution which Linus suggested ?
+>
+> [cut]
+>
+> Let's just create a new quirk:
+>
+> SDHCI_QUIRK_31BIT_DMA_ROOF
+>
+> Define the semantics such that this will allow DMA for buffers that are below
+> the 31st bit, but does not have the semantics to limit scatter-gather buffers to
+> be 32-bit aligned.
+>
+> [/cut]
 
-> ---
->  .../ABI/testing/sysfs-driver-typec-displayport    | 15 +++++++++++++++
->  drivers/usb/typec/altmodes/displayport.c          | 10 ++++++++++
->  2 files changed, 25 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-typec-displayport b/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> index 231471ad0d4b..256c87c5219a 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> +++ b/Documentation/ABI/testing/sysfs-driver-typec-displayport
-> @@ -47,3 +47,18 @@ Description:
->  		USB SuperSpeed protocol. From user perspective pin assignments C
->  		and E are equal, where all channels on the connector are used
->  		for carrying DisplayPort protocol (allowing higher resolutions).
-> +
-> +What:		/sys/bus/typec/devices/.../displayport/hpd
-> +Date:		Dec 2022
-> +Contact:	Badhri Jagan Sridharan <badhri@google.com>
-> +Description:
-> +		VESA DisplayPort Alt Mode on USB Type-C Standard defines how
-> +		HotPlugDetect(HPD) shall be supported on the USB-C connector when
-> +		operating in DisplayPort Alt Mode. This is a read only node which
-> +		reflects the current state of HPD.
-> +
-> +		Valid values:
-> +			- 1: when HPD’s logical state is high (HPD_High) as defined
-> +			     by VESA DisplayPort Alt Mode on USB Type-C Standard.
-> +			- 0 when HPD’s logical state is low (HPD_Low) as defined by
-> +			     VESA DisplayPort Alt Mode on USB Type-C Standard.
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index de66a2949e33..06fb4732f8cd 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -146,6 +146,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  		if (dp->hpd != hpd) {
->  			drm_connector_oob_hotplug_event(dp->connector_fwnode);
->  			dp->hpd = hpd;
-> +			sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
->  		}
->  	}
->  
-> @@ -508,9 +509,18 @@ static ssize_t pin_assignment_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RW(pin_assignment);
->  
-> +static ssize_t hpd_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct dp_altmode *dp = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", dp->hpd);
-> +}
-> +static DEVICE_ATTR_RO(hpd);
-> +
->  static struct attribute *dp_altmode_attrs[] = {
->  	&dev_attr_configuration.attr,
->  	&dev_attr_pin_assignment.attr,
-> +	&dev_attr_hpd.attr,
->  	NULL
->  };
->  
-> 
-> base-commit: 81c25247a2a03a0f97e4805d7aff7541ccff6baa
-> -- 
-> 2.39.0.rc1.256.g54fd8350bd-goog
+One does not exclude the other, so you could technically let buffers below
+2^31 pass directly to the DMA engine, but bounce any request above that
+limit to a low memory bounce buffer.
 
-thanks,
+As Adrian points out there is also the code complexity question, the solution
+should be simple and elegant, if possible. I think always using a bounce
+buffer might be both nice and efficient.
 
--- 
-heikki
+Yours,
+Linus Walleij
