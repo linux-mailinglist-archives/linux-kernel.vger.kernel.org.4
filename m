@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB9C64BAB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0884B64BAB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbiLMROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:14:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S235918AbiLMROo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234027AbiLMROI (ORCPT
+        with ESMTP id S235492AbiLMROm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:14:08 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534FFB491
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:14:07 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id l10so446394plb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:14:07 -0800 (PST)
+        Tue, 13 Dec 2022 12:14:42 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72FA6D11E;
+        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id 1so6021684lfz.4;
+        Tue, 13 Dec 2022 09:14:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Dwsi4XK3nypjad6xn89/3e9RdwQ2gxMpiVm425namZk=;
-        b=bhNjhbviV/wfSfKS13Fws26P5KRs9qbgQCtrwQChwkOQvxooc002D2czyQGQbytYPB
-         LolVht+FJ7xstmMWPAX23Y30qyN6mMHEu77143uOi/4hLsMmFp5OXUg0ESXfOjUErwXj
-         nxg00ndEFcEHo6vb9RSYhGRSbfP6XH4XylFuRNt0IuFe2nV+VNJX/DGRUG6NRI37YEYQ
-         D6q+Q89r6OPau3zhY7M9BeFWVRYepxS6imVF9kXC/F2uUG0PeYgXBMJJ2zc+kBQJmDCN
-         0kFn9g0sYgJFVysA0v3GhPfSDHhwRcd/i0fi4UevAnohPDe80Sd807YgfgzsKANJ/sPT
-         x4AA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
+        b=JxA3KmNK35szjBBUByLal17A0FbCxzcqofjBf+uM6nv+XLGYinzDArtPX+8hC8cQpE
+         vlxHaAKjqRlzcs6sFkPobj4VwjxIz0tnLJ3oYgC+fOL1AjNYhTxBdQTRTTx+Ab107VJA
+         UZ2PzT2RIu/f+GcTJd670CbihwwUyWLYDJQCry2Z1evNCm7l1xKDUfhP3QYq7jmHOB7O
+         rThlshfL1xpXbaA2CZGhtXd6w4oIKAu4P2w8CJELyxfjrAXBQgpBh7yiMF/cpYG4MXbG
+         TwoKVxk71nkTr4V7H9GlIxEW92XK6FSJylPLsMIIDUzetz4OGOxvtRTxjasWO26WJqx/
+         WsIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dwsi4XK3nypjad6xn89/3e9RdwQ2gxMpiVm425namZk=;
-        b=s08z9/GUW+BsCtXfr7+8c4KI0IBtHiE4BNlwQ7siODT4w4n8III4fjymF3C4y71lLI
-         ZnLpeJmLLFb+U/K84mdJhajjkI3paQ4kvPYglQ9dwqdEm0IFuZyKHWgYcQz3eGL8bcaK
-         K4Qet8yFHHkZ8tcU0CnqGqZiQyN6r+g9v8WSUGTWXegt6Z7n6Z+/garHnXanaBm1N4Ol
-         GMWKtuYp8v74A0yR5IVj1A0/tJPkkSjN3XoFMuMizOmJN1cAogdORZrVjoTI2s+tvedb
-         mI/132e3p5Pdgpmkd459ZLoCosZAl3oxumxgCzrtAoGtZx3pl452aEJPg8x/sI5Xuzn+
-         ubyg==
-X-Gm-Message-State: ANoB5pkK2yubSpBUoxzpg+iQ/OhpziCwXExoToGSXTO6oBpf341AFE9g
-        78yo3LHS9e7UCVAYjxd6tDFQ
-X-Google-Smtp-Source: AA0mqf4VEGrh9kRZw/kVcazlPNbSmzR1tCkBU8kk1z9hAaDmC9KFy+HjK81iS3KAvR1FjSKvFYoKDA==
-X-Received: by 2002:a17:902:d4d1:b0:189:e7e:784c with SMTP id o17-20020a170902d4d100b001890e7e784cmr31284779plg.21.1670951646763;
-        Tue, 13 Dec 2022 09:14:06 -0800 (PST)
-Received: from thinkpad ([27.111.75.5])
-        by smtp.gmail.com with ESMTPSA id i14-20020a17090332ce00b001869394a372sm123384plr.201.2022.12.13.09.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:14:05 -0800 (PST)
-Date:   Tue, 13 Dec 2022 22:43:56 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 03/13] arm64: dts: qcom: sdm845: Fix the base
- addresses of LLCC banks
-Message-ID: <20221213171356.GD4862@thinkpad>
-References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
- <20221212123311.146261-4-manivannan.sadhasivam@linaro.org>
- <038e6569-9f8f-3b59-0243-af6dcf0c2d80@linaro.org>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ShqzOYw9CTrQG80APThrcA9ZR189RHfBmK2AcE3YXP8=;
+        b=R+6WH1KfEe0mWeztOg/1BIt8brqfXfqXNpZVEXj9jVhz7I3TjU1gQ7U2BEPXkH85VZ
+         nABYp0m6U+ZWJKRiaI9fsbm5bj29rx7Z0qzbImlTqwJyGeUzq1POBC7LeRIwp1NTpJ7U
+         W4673RvHLxCWeD8mQ4ylV1KpPoKe9LsG7NBLMO1AoEPimySTrYNh00k5jBghD7LJVOBZ
+         /M7qCrxT2ogAL8mdBuj8uLwJXny5cM6RiVkuOiYLKQu78UbqEALvzHX/zxMJRiMCcKGQ
+         0fShNBJBfyihlbu956j7PuK9dzFTJCvKA0TS9Rbnn1q9VadSJyVq7I+miladqOvvY0T/
+         yvwg==
+X-Gm-Message-State: ANoB5pnR+jOzJgCVeuQdTTmcYLBLkF2NSWgESpcK9SAQoRVdD7U3XXgv
+        C+jS2aaxm8mJYXrW0WgpapBtKjG/JXZxq2Cblw==
+X-Google-Smtp-Source: AA0mqf7+TK47LFZIJKhvzbdAU9vOoLQfGZHFr3/k0sb53fqlpg43oLLPILn5kGReDkcHH1K9hwESHKXGuyfl8Y11Z10=
+X-Received: by 2002:a05:6512:3b20:b0:4b4:d3aa:8f8c with SMTP id
+ f32-20020a0565123b2000b004b4d3aa8f8cmr27004428lfv.94.1670951679752; Tue, 13
+ Dec 2022 09:14:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <038e6569-9f8f-3b59-0243-af6dcf0c2d80@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Seija K." <doremylover123@gmail.com>
+Date:   Tue, 13 Dec 2022 12:14:28 -0500
+Message-ID: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
+Subject: [PATCH] net: Fix for packets being rejected in the xHCI controller's
+ ring buffer
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:27:45PM +0100, Krzysztof Kozlowski wrote:
-> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
-> > The LLCC block has several banks each with a different base address
-> > and holes in between. So it is not a correct approach to cover these
-> > banks with a single offset/size. Instead, the individual bank's base
-> > address needs to be specified in devicetree with the exact size.
-> > 
-> > Also, let's get rid of reg-names property as it is not needed anymore.
-> > The driver is expected to parse the reg field based on index to get the
-> > addresses of each LLCC banks.
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.4
-> 
-> No, you cannot backport it. You will break users.
-> 
+When a packet larger than MTU arrives in Linux from the modem,
+it is discarded with -EOVERFLOW error (Babble error).
 
-If the driver change gets backported, it will break users, isn't it?
+This is seen on USB3.0 and USB2.0 buses.
 
-> > Fixes: ba0411ddd133 ("arm64: dts: sdm845: Add device node for Last level cache controller")
-> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 65032b94b46d..683b861e060d 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -2132,8 +2132,9 @@ uart15: serial@a9c000 {
-> >  
-> >  		llcc: system-cache-controller@1100000 {
-> >  			compatible = "qcom,sdm845-llcc";
-> > -			reg = <0 0x01100000 0 0x31000>, <0 0x01300000 0 0x50000>;
-> > -			reg-names = "llcc_base", "llcc_broadcast_base";
-> 
-> Once property was made required, you cannot remove it. What if other
-> bindings user depends on it?
-> 
-> Please instead keep/update the reg-names and/or mark it as deprecated.
-> It must stay in DTS for some time.
-> 
+This is because the MRU (Max Receive Size) is not a separate entity
+from the MTU (Max Transmit Size),
+and the received packets can be larger than those transmitted.
 
-Fair enough. I will mark it as deprecated in binding and will keep it in dts.
+Following the babble error, there was an endless supply of zero-length URBs,
+which are rejected with -EPROTO (increasing the rx input error counter
+each time).
 
-Thanks,
-Mani
+This is only seen on USB3.0.
+These continue to come ad infinitum until the modem is shut down.
 
-> Best regards,
-> Krzysztof
-> 
+There appears to be a bug in the core USB handling code in Linux
+that doesn't deal well with network MTUs smaller than 1500 bytes.
 
--- 
-மணிவண்ணன் சதாசிவம்
+By default, the dev->hard_mtu (the real MTU)
+is in lockstep with dev->rx_urb_size (essentially an MRU),
+and the latter is causing trouble.
+
+This has nothing to do with the modems,
+as the issue can be reproduced by getting a USB-Ethernet dongle,
+setting the MTU to 1430, and pinging with size greater than 1406.
+
+Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 554d4e2a84a4..39db53a74b5a 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+struct usb_interface *intf)
+}
+dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
++ /* LTE Networks don't always respect their own MTU on receive side;
++ * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
++ * far-end network. Make the receive buffer large enough to accommodate
++ * them, and add four bytes so MTU does not equal MRU on network
++ * with 1500 MTU otherwise usbnet_change_mtu() will change both.
++ */
++ dev->rx_urb_size = ETH_DATA_LEN + 4;
+err:
+return status;
+}
