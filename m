@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AE164C09A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3097A64C09C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237056AbiLMX1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S236710AbiLMX1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237009AbiLMX1Q (ORCPT
+        with ESMTP id S237050AbiLMX1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:27:16 -0500
+        Tue, 13 Dec 2022 18:27:25 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E34C750
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:27:15 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 203-20020a2502d4000000b006f94ab02400so18470207ybc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:27:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BFD1AA1C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:27:24 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a5-20020a25af05000000b006e450a5e507so18865330ybh.22
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:27:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIVRe/cOjz9L4S8nY/UBbQxzSd/MuoYQzSglM53rsyM=;
-        b=MpdcS79Frn7RTmMinJubNMYt88+6lL4Cqi6ZXslqSjEcj3Cc+ffaIF61e32yPrqXKr
-         oEEqe5WgQXYXZIwaecs50menBnE+KS4PInPrB6VEHfGFllC3dcUZC0AjLUmtokz7oV3/
-         RhB14QI8hD+y2MaD0x09hL0YwxrlvEqzZQhSdQkJ66qn7bh41UNsjNYQ7gEdWFbaCi8b
-         tXu8U1lQ///G1A7PA4TPQ5zf42wdDIUAdN19sx5NEmRQrmaqgG7w95voh5PLKyRm/2QZ
-         IrA88MyZRV0FXu4tk++gTPp87PNt4e1V5zu0CGP6d4B3B7TJdjLJUdI6eQBowjNRtpwJ
-         Ftsg==
+        bh=Nto1ePcvoNdo0gJd4FRIsAa3aTl5xw4C0we0lXrYi4o=;
+        b=oaxFlW2ge9haPbT6hCAVVmPuTox9DW+MdJNbZ0iwTokh/4XBkQYtfdusDGVsroQCBm
+         9cjRzTm2cTtoTugbzyCsz2kAHTjET5PTm0Qk0Vytd93WKj/92dwBthyYMEWpJ4MTqXXZ
+         Kgspw5ZoKtAmQTgags/2mTbzHSF1im/xe5z7xwqmMxY+MpgtR2QCiepGpC+pSAjeR62r
+         af+wkR/DSxLYLJ6v8UzQYo8yEedKseMcvnt7JbQHB+veoq0VjssEp6Vl9Tr9PuxO2F17
+         A3OnHm0NqQzzvD7NNSu2YgWdnWtZRBASIIw6rkBU4yPgO0G6Iw9CrmSsI4xx9udJ5Lje
+         3Bjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIVRe/cOjz9L4S8nY/UBbQxzSd/MuoYQzSglM53rsyM=;
-        b=JKR943rlUGOJbhj5zf9+IqpuWs9UQ774X0BshXIvkSMQWaF7zbJiNM5TNTfqCq+1ja
-         isbHJOCfzrbedXnSDWVHyCdNLz/tsQCGpHjXSNCv3KLSPu8pXRht1sFtqSoNQLFQD5/V
-         eo0nbSjZ6ya8ojZ4gpLc+K+DYF2kgZ8Nr2+/eRsJqJuMTgsCIPrZ03XQsQ1aEJphVH1a
-         FyMOXba81LVSR29ONm+FACNb5i0lGAwTyC3QdHKKd7FisnEWsFJvPJipOC6O0RUSHAzO
-         kkJf1h9FiZB0dJpRjXqA+R9+d3lzGctL+o46PPBqTVTVzeaLrnIn6iK2/4DY+ikcO6kW
-         MzSg==
-X-Gm-Message-State: ANoB5pnOOo4gowiO3rD9uL9sW9Gf4bJezUMM1zeUMfQg0d6/NtdatNBp
-        kD44zjAU7Ua9Z0czt0XhWyLlEXJLFADZ
-X-Google-Smtp-Source: AA0mqf4ivmvAS6D5iJ1XqzGr6XWwaMuvq3r8JjefQy94X3aXoM7+6W4WRDSUNklgvLh5Ob22rdse41dAXKme
+        bh=Nto1ePcvoNdo0gJd4FRIsAa3aTl5xw4C0we0lXrYi4o=;
+        b=w/R9dBGV9L9rCXXExogH0ox5L+JbF1lxguj/gfXbQES2jsV4GxS+ZkO5q8yCuYis0/
+         KduJcKnFOEgzK6IEcTqKeEsB3dmq9c8OIC4TJcVEV+9SYFThuljJsP/a7AoA+dkUXwqy
+         Oh9jawDIRw0K4ySFeOHx01agWJDQt477kD0pvIRRnkaOEmiJJZnopRtQhutg7RL2dhSX
+         m7Jd6fX7A6PhWKAuar7TpVSMR4aEax/xZuyvNMu86BeIWd2h3MVLm6Cvz8pMgFGwh2oL
+         s7KG/lQpRm2YoPCX8ZjPgFHeoxBaeCzqtybT1KJeO1YYx4Re1aQxpjMkzM/DWU3ltvAb
+         BVFw==
+X-Gm-Message-State: ANoB5pkmo90Gq9lVLZtOagV/XzLuMYo8HBdWlP/v0d6w9eBo1FmEOzM0
+        BGXMRFXSTo1xu/3KALeR/+9ZDADk+Rvz
+X-Google-Smtp-Source: AA0mqf7zKBCVtwi4aB0KEabefvL0KR/RBin8ahJp49ddNoCoU3ThDFo9mNYaPbpMu1R7lGgciCKfGEWA/gYy
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6268:b448:f7f4:4c2])
- (user=irogers job=sendgmr) by 2002:a81:4e09:0:b0:370:202b:f085 with SMTP id
- c9-20020a814e09000000b00370202bf085mr26434974ywb.502.1670974035210; Tue, 13
- Dec 2022 15:27:15 -0800 (PST)
-Date:   Tue, 13 Dec 2022 15:26:47 -0800
+ (user=irogers job=sendgmr) by 2002:a5b:f42:0:b0:6fd:e4ef:5b1d with SMTP id
+ y2-20020a5b0f42000000b006fde4ef5b1dmr25692919ybr.99.1670974043252; Tue, 13
+ Dec 2022 15:27:23 -0800 (PST)
+Date:   Tue, 13 Dec 2022 15:26:48 -0800
 In-Reply-To: <20221213232651.1269909-1-irogers@google.com>
-Message-Id: <20221213232651.1269909-2-irogers@google.com>
+Message-Id: <20221213232651.1269909-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20221213232651.1269909-1-irogers@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH v1 1/5] perf build: Fix python/perf.so library's name
+Subject: [PATCH v1 2/5] perf trace-event: Add libtraceevent version tools to header
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,7 +85,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,53 +93,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Python 3.3 extensions have a suffix encoding platform and
-version information. For example, the perf extension was previously
-perf.so but now maybe perf.cpython-310-x86_64-linux-gnu.so. Compute
-the extension using Python and then use this in the target name. Doing
-this avoids the "perf.so" target always being rebuilt.
+Allow comparisons like:
+\#if MAKE_LIBTRACEEVENT_VERSION(1, 3, 0) <= LIBTRACEEVENT_VERSION
+
+Based on previously reverted:
+https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 4 +++-
- tools/perf/Makefile.perf   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ tools/perf/util/trace-event.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 52a4dc029111..83ed969b95b4 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -871,6 +871,7 @@ define disable-python_code
-   NO_LIBPYTHON := 1
- endef
+diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
+index add6c5d9531c..1fbf4c3f8809 100644
+--- a/tools/perf/util/trace-event.h
++++ b/tools/perf/util/trace-event.h
+@@ -6,6 +6,19 @@
+ #include <stdio.h>
+ #include <linux/types.h>
  
-+PYTHON_EXTENSION_SUFFIX := '.so'
- ifdef NO_LIBPYTHON
-   $(call disable-python,Python support disabled by user)
- else
-@@ -889,7 +890,8 @@ else
-       else
-          LDFLAGS += $(PYTHON_EMBED_LDFLAGS)
-          EXTLIBS += $(PYTHON_EMBED_LIBADD)
--         LANG_BINDINGS += $(obj-perf)python/perf.so
-+         PYTHON_EXTENSION_SUFFIX := $(shell $(PYTHON) -c 'from importlib import machinery; print(machinery.EXTENSION_SUFFIXES[0])')
-+         LANG_BINDINGS += $(obj-perf)python/perf$(PYTHON_EXTENSION_SUFFIX)
-          CFLAGS += -DHAVE_LIBPYTHON_SUPPORT
-          $(call detected,CONFIG_LIBPYTHON)
-       endif
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 98f629bbd1aa..9b7886ce0674 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -647,7 +647,7 @@ all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS)
- # Create python binding output directory if not already present
- _dummy := $(shell [ -d '$(OUTPUT)python' ] || mkdir -p '$(OUTPUT)python')
- 
--$(OUTPUT)python/perf.so: $(PYTHON_EXT_SRCS) $(PYTHON_EXT_DEPS) $(LIBPERF)
-+$(OUTPUT)python/perf$(PYTHON_EXTENSION_SUFFIX): $(PYTHON_EXT_SRCS) $(PYTHON_EXT_DEPS) $(LIBPERF)
- 	$(QUIET_GEN)LDSHARED="$(CC) -pthread -shared" \
-         CFLAGS='$(CFLAGS)' LDFLAGS='$(LDFLAGS)' \
- 	  $(PYTHON_WORD) util/setup.py \
++#ifdef HAVE_LIBTRACEEVENT
++#include <traceevent/event-parse.h>
++#endif
++
++#define MAKE_LIBTRACEEVENT_VERSION(a, b, c) ((a)*255*255+(b)*255+(c))
++#ifndef LIBTRACEEVENT_VERSION
++/*
++ * If LIBTRACEEVENT_VERSION wasn't computed then set to version 1.1.0 that
++ * previously shipped with the Linux kernel tools.
++ */
++#define LIBTRACEEVENT_VERSION MAKE_LIBTRACEEVENT_VERSION(1, 1, 0)
++#endif
++
+ struct evlist;
+ struct machine;
+ struct perf_sample;
 -- 
 2.39.0.314.g84b9a713c41-goog
 
