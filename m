@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBC464B787
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3A64B789
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235950AbiLMOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S235973AbiLMOhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiLMOhT (ORCPT
+        with ESMTP id S235954AbiLMOhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:37:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE4821269
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670942185;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 13 Dec 2022 09:37:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE75B13CE5;
+        Tue, 13 Dec 2022 06:37:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8ADEE1FDB8;
+        Tue, 13 Dec 2022 14:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670942252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YeA7rNz9YtNXa30NSFNa5/BE9ikSCHuGqIiQHRpjT3Q=;
-        b=XoZhwFEhfIlyDaNVvorvRncIsGCxsgoCnax4fRxpGxFcCDXjZVaD/1IajgtRwAmkeBBt9+
-        HqAp3GcSs5P9cTQg/dZl79ErziplesEPuTUN6lsRECKkx79evCQUO+a/nTudxfwttKt2XN
-        1L0+0Nf1lltjbZl7sgK7lNS4yBrhmuE=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-599-o7pu4dDPNkqtLyAUoWGeaQ-1; Tue, 13 Dec 2022 09:36:23 -0500
-X-MC-Unique: o7pu4dDPNkqtLyAUoWGeaQ-1
-Received: by mail-il1-f197.google.com with SMTP id j11-20020a056e02218b00b00304b148969dso5330627ila.13
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YeA7rNz9YtNXa30NSFNa5/BE9ikSCHuGqIiQHRpjT3Q=;
-        b=SOEaxbIfddpl9TBkKep7/Jwko+mojCfWY7Xlmn+AwXoc4z4CneyOoxJ8BHycoRf9y/
-         sygIMn6BKEBoSV0H591st7CY/l1OSs8ZUcr3hjUzR75luCJw1Cm1SmI7uex7TDZ0w8GQ
-         yR/9eO541sFa+QUeOgDDv16pIxLcckx8Hn41DgH+e/wGG3puiB8+UP+43iPjEJ90piJs
-         Z+ZuFxQOAqcJu+n3JVTZ8Ff45QcP84X/NS69/aYzSbNUN8wTdg2L4WVvW95YVJDZEdMs
-         IOa7f7o124vnex/dwkKejArwRiWw3wTV0pckFWWmaT62p40DdAmlRA66B7F3VSshKDgF
-         sCfA==
-X-Gm-Message-State: ANoB5pmhL4tNw7NDTzJ220nt6Yswf3c862mmCfJfNS13PGGhpmhY4gSi
-        UJZ7MwtCBydHYLUTzCwTr+K64RU45BP2ahIpx+n9fb3b4353gnpTzn7PI5cjQ1b4k3NcWsSNX5H
-        AZaxInkyntZfYIFiWDDGpTqod
-X-Received: by 2002:a5e:d903:0:b0:6de:d90e:ee05 with SMTP id n3-20020a5ed903000000b006ded90eee05mr10135414iop.2.1670942182512;
-        Tue, 13 Dec 2022 06:36:22 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5mLwxzWPfSBfxmcsXPVziNTpTyuENiy9aAV9FJntRMZ3j2oQKc8i8SHP3epsMHh0EojGMExA==
-X-Received: by 2002:a5e:d903:0:b0:6de:d90e:ee05 with SMTP id n3-20020a5ed903000000b006ded90eee05mr10135404iop.2.1670942182262;
-        Tue, 13 Dec 2022 06:36:22 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id y18-20020a027312000000b003760a908bfasm875133jab.169.2022.12.13.06.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:36:21 -0800 (PST)
-Date:   Tue, 13 Dec 2022 09:36:19 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Message-ID: <Y5iN48rA899u1++7@x1>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-5-bmasney@redhat.com>
- <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com>
- <Y5hvlX35nr8xQKEd@x1>
- <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
- <13238048-f07c-3e8d-f170-5330ce94767c@redhat.com>
+        bh=yCoPhJw+GKmzrg8p4DH4Ya6d+PQIKemaInJPhpeXlHU=;
+        b=eMnP3IdpmRft/ER7oin2HnZdMR5P7VHO5Sw/nEemsxB2Ij/yJwJfX7Qw5GQMBH5u6Fzp9j
+        B/k+nQ8blMON5hd8beazuYDg55xA4qnleqSX2yPUaX1FJkK9+lFf9Ix1dIM9V3mpRRdKVk
+        2q5tMlDY577z7rViBRwn73TM11qdHPY=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6DB002C142;
+        Tue, 13 Dec 2022 14:37:32 +0000 (UTC)
+Date:   Tue, 13 Dec 2022 15:37:32 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@kernel.org,
+        jikos@kernel.org, x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <Y5iOLMTLaMyqsgbL@alley>
+References: <20220901171252.2148348-1-song@kernel.org>
+ <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz>
+ <CAPhsuW5xb2T5FBXUqG2S+AXBvDYSkLVVvUyDamjrbLQwe-3kVQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <13238048-f07c-3e8d-f170-5330ce94767c@redhat.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAPhsuW5xb2T5FBXUqG2S+AXBvDYSkLVVvUyDamjrbLQwe-3kVQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 02:08:47PM +0100, Javier Martinez Canillas wrote:
-> On 12/13/22 14:02, Krzysztof Kozlowski wrote:
-> > On 13/12/2022 13:27, Brian Masney wrote:
-> > qcom,spi-video-codec is still not specific enough. You need to describe
-> > real device behind spidev. To be clear - you do not describe userspace,
-> > but the device.
-> > 
+On Tue 2022-12-13 00:28:34, Song Liu wrote:
+> On Fri, Dec 9, 2022 at 4:55 AM Miroslav Benes <mbenes@suse.cz> wrote:
+> >
+> > Hi,
+> >
+> > first thank you for taking over and I also appologize for not replying
+> > much sooner.
+> >
+> > On Thu, 1 Sep 2022, Song Liu wrote:
+> >
+> > > From: Miroslav Benes <mbenes@suse.cz>
+> > >
+> > > Josh reported a bug:
+> > >
+> > >   When the object to be patched is a module, and that module is
+> > >   rmmod'ed and reloaded, it fails to load with:
+> > >
+> > >   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > >
+> > >   The livepatch module has a relocation which references a symbol
+> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >   tries to replace the old relocation with a new one, it sees that
+> > >   the previous one is nonzero and it errors out.
+> > >
+> > >   On ppc64le, we have a similar issue:
+> > >
+> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > >
+> > > He also proposed three different solutions. We could remove the error
+> > > check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> > > ("x86/module: Detect and skip invalid relocations"). However the check
+> > > is useful for detecting corrupted modules.
+> > >
+> > > We could also deny the patched modules to be removed. If it proved to be
+> > > a major drawback for users, we could still implement a different
+> > > approach. The solution would also complicate the existing code a lot.
+> > >
+> > > We thus decided to reverse the relocation patching (clear all relocation
+> > > targets on x86_64). The solution is not
+> > > universal and is too much arch-specific, but it may prove to be simpler
+> > > in the end.
+> > >
+> > > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> > > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> > > Signed-off-by: Song Liu <song@kernel.org>
+> >
+> > Petr has commented on the code aspects. I will just add that s390x was not
+> > dealt with at the time because there was no live patching support for
+> > s390x back then if I remember correctly and my notes do not lie. The same
+> > applies to powerpc32. I think that both should be fixed as well with this
+> > patch. It might also help to clean up the ifdeffery in the patch a bit.
 > 
-> Agree.
+> After reading the code (no testing), I think we don't need any logic for
+> ppc32 and s390.
 > 
-> I believe Brian just used "qcom,spi-video-codec" as an example but is only
-> a make up name to illustrate the concept. QC needs to determine what would
-> be the correct <vendor,device> tuple for the IP block that the user-space
-> driver will drive.
+> We need clear_relocate_add() to handle module reload failure.
+> 
+> I don't think we have similar checks for ppc32 and s390, so
+> clear_relocate_add() is not needed for the two.
+> 
+> OTOH, we can argue that clear_relocate_add() should undo
+> everything apply_relocate_add() did. But I do think that
+> will be an overkill.
 
-Yes, that was just an example.
+It is true that we do not need to clear the relocations if the values
+are not checked in apply_relocated_add().
 
-Shazad: Is this thread clear about what QC needs for spidev? I'll let QC
-take care of sending patch(es) to add the various compatibles since I'm
-not sure what hardware will be backed by spidev.
+I do not have strong opinion whether we should do it or not.
 
-I'll take care of making sure that sc8280xp.dtsi gets the spi controller
-nodes added.
+One one hand, the clearing code might introduce a bug if it modifies
+some wrong location. So, it might do more harm then good.
 
-Brian
+One the other hand, it feels bad when a code is jumping to a
+non-existing address. I know, nobody should call this code.
+But it is still a kind of a security hole.
 
+Well, I think that we could keep the clearing functions empty
+on ppc32 and s390 in this patch(set). It won't be worse than
+it is now. And perfection is the enemy of good.
+
+Best Regards,
+Petr
