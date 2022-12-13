@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC6864BF66
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7F464BF73
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236734AbiLMWei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S236896AbiLMWfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbiLMWeb (ORCPT
+        with ESMTP id S236890AbiLMWfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:34:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DF514019;
-        Tue, 13 Dec 2022 14:34:30 -0800 (PST)
+        Tue, 13 Dec 2022 17:35:42 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1339EDFF4;
+        Tue, 13 Dec 2022 14:35:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10136B815E0;
-        Tue, 13 Dec 2022 22:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77DAC433EF;
-        Tue, 13 Dec 2022 22:34:26 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 17:34:25 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        rcu@vger.kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH] ftrace: Prevent RCU stall on PREEMPT_VOLUNTARY kernels
-Message-ID: <20221213173425.609618fb@gandalf.local.home>
-In-Reply-To: <07b8285c-abfc-dcc6-5a20-b6f8c9bc7e1e@igalia.com>
-References: <20221115204847.593616-1-gpiccoli@igalia.com>
-        <20221116153620.353819e9c6acb1bf39adeca2@kernel.org>
-        <07b8285c-abfc-dcc6-5a20-b6f8c9bc7e1e@igalia.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 61C79CE17D2;
+        Tue, 13 Dec 2022 22:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7AC52C433D2;
+        Tue, 13 Dec 2022 22:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670970938;
+        bh=lGVRNVRhf5M7Vz650NbhzXQVyemLgroJQWakWG1/Xbc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dic1OL//vR+fAE+Jv8pRR9YmXq6BLp2PszcfP4mxkIAPkjMmqKoLxZEksU6IvGqRx
+         pP2yTmw4KQoMMWaIzMjY0DpcRVkeyVGUVqqOLSinT9TKyAQ+nmJgjCQm6gfawsqgiv
+         pRMOfYESTswLfZFJUF/5Spwl7H8JTm5Ht8Wbn3EMqhSiMzODp3CVLZgAi1hC5Rp5yO
+         P+E/CbM22SmpwvtSKoyIOSmEmDkbpWcU4Vg+FdFRNxRNSQIot+wxMP4dNyTLyCQd4p
+         xKDEx46PfCzjHigHFb5cKSviNcCu45DY3MM6j0llywG0Msd8JQajrstbQUtB0euzoS
+         Y/hHur1KFL8oA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 68EE9C41612;
+        Tue, 13 Dec 2022 22:35:38 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity: susbsytem updates for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <7b388195aa5e10f1da934ed251809a6f21bf427e.camel@linux.ibm.com>
+References: <7b388195aa5e10f1da934ed251809a6f21bf427e.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
+X-PR-Tracked-Message-Id: <7b388195aa5e10f1da934ed251809a6f21bf427e.camel@linux.ibm.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.2
+X-PR-Tracked-Commit-Id: b6018af440a07bd0d74b58c4e18045f4a8dbfe6b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 717e6eb49bdd98357d14c90d60a3409196b33cfc
+Message-Id: <167097093842.5412.12310501870234717256.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 22:35:38 +0000
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 19:04:41 -0300
-"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
+The pull request you sent on Tue, 13 Dec 2022 15:20:04 -0500:
 
-> Hi Steve, sorry to annoy, just a regular ping to see if we can get this
-> into 6.2 (if too late, not a huge deal).
+> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v6.2
 
-Thanks for the ping. For some reason this patch didn't make it into my
-internal Patchwork, so I missed it (even though I did reply to you, I just
-assumed it was in my patchwork).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/717e6eb49bdd98357d14c90d60a3409196b33cfc
 
-It's not too late. I have some last minute patches I'm still testing. I'll
-queue this one up.
+Thank you!
 
-BTW, we now have a kernel ftrace mailing list that you can Cc (but still Cc
-LKML). 
-
-  linux-trace-kernel@vger.kernel.org
-
--- Steve
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
