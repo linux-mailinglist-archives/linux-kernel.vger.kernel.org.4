@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16F064BBB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801E464BBAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbiLMSNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S235440AbiLMSNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbiLMSNj (ORCPT
+        with ESMTP id S236256AbiLMSNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:13:39 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DAC15814
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:13:38 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d7so636740pll.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:13:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bsAx81CS2oGtFlCOIKJ8N6Se9n8UswnoX6gUXWJhq9s=;
-        b=VuOVc9dMuIMJz0Dd34VYPlU6ugaxmknQDoMrG5R7uQ5/qpQpbyKwiY7mNU+QgDUtCK
-         VkpAdxjZCrFA2AMI7fBHmIIkmi/kUbLQPoxtN0WcjCl9Wu9pcPv2N9pbGogcYhmmgu9x
-         wuB1AkD9GkJYjpTrvyeJmuVJOnt7HPvElLbG7uivUVNghl8B8jEXZeTqTyTxUsFVtTS7
-         U2qeQkM3IsBjwUJnG2ATPrYF+QYaYNX0X/Kt4O3HyDCyAcRLNQkML35HHbvsC19YHzyq
-         Ue5043VbSlz6zLlvo1tcJHA0EmlHu3Ecg/ObI9fgQ6NOjD18pG5cCS68BdXHOs+DiSuR
-         0Q4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bsAx81CS2oGtFlCOIKJ8N6Se9n8UswnoX6gUXWJhq9s=;
-        b=bhe5wpq1WUJxJONuD5diJr9bpzTH6u8De7mbXDCchLhQ7GFJzMo1yfL1if3vL+aJ9t
-         ic+ydCyzAgexdbYyJXB0TwW7fSjDhLjAsBLAJrPnrLBogkng/q5OqVrSu+25aO3BtfRo
-         63+b5gha2MKAbsF0iojv5k5wIak0CuyhPCFj7lDzC0ElMIXE7tvAkzsjcvZdAX9coSB3
-         2RHrV7edISzxGeki7++UbdNKZ8I9Z1rxqU3jAowgEaqT8XfttC636LccZc2DXYLPAKBp
-         X1/T7gvVx1u74k5e3DKxlUleTKSjOrMdAra8a/gBN6A5z8O8aEG2OfeYYWtjxkXWwyX5
-         T9gQ==
-X-Gm-Message-State: ANoB5pk7PskcERrHY3kXkLjbyG7mwlsdG32q6RnR0fexHP3CfeVm9n0B
-        Dq2Eq0a7PzkcUhAe8Q2tp8yt5BpBfPL6jA1hy2YinA==
-X-Google-Smtp-Source: AA0mqf4/WHF+AYjmztxjz2jxNUncNhbMJ1aubsknOZGZah2GaEZhPlFE9bFEzQuI53SC2AwxWPH0+sI2DPdk1GSfNbM=
-X-Received: by 2002:a17:90a:6708:b0:219:2b00:8d23 with SMTP id
- n8-20020a17090a670800b002192b008d23mr412904pjj.167.1670955217708; Tue, 13 Dec
- 2022 10:13:37 -0800 (PST)
-MIME-Version: 1.0
-References: <20221213115617.25086-1-yc.hung@mediatek.com>
-In-Reply-To: <20221213115617.25086-1-yc.hung@mediatek.com>
-From:   Curtis Malainey <cujomalainey@google.com>
-Date:   Tue, 13 Dec 2022 10:13:26 -0800
-Message-ID: <CAOReqxihOWVh0rGqwqCJ3SEOnEpH3RDQv-U1PEQJ6Tj5e02Vag@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: SOF: mediatek: initialize panic_info to zero
-To:     YC Hung <yc.hung@mediatek.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chao Song <chao.song@intel.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chunxu.li@mediatek.com, Trevor Wu <trevor.wu@mediatek.com>,
-        Curtis Malainey <cujomalainey@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 13:13:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62FBDF04;
+        Tue, 13 Dec 2022 10:13:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 434C261638;
+        Tue, 13 Dec 2022 18:13:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A6A10C433EF;
+        Tue, 13 Dec 2022 18:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670955214;
+        bh=m1ksPm9cm8rw6iNUF/v2I55H7JacOD8i4PV09IoeNxc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dQbZzJMfoeGdcNEJGJzU90q9UDW7R8dpYc0gY81vc0rWUVeN95L41NWYLl2/dgtwX
+         nBLNoiETUxzpoSLTopWYjeMJIf0uUHw5fkWeSnwKGdp/kmlGt+OMT3nYPNAglyRP3C
+         hyUOR+yIQQtlkiL85gug8u8P/IGdGItHL8wOxu+8DTz0i26U1uAO9BVCUTE45mu+Ic
+         qahzhgQMK6Qv7IpC3c7G8dZB+0nSk3otEz/Df9gTed3MSTusmnKJaWR79ZtKZkSMhd
+         go7g7F9aapndRDL5y00M+6uEY0NjPvrf7CWfiXTSEVYIj7N/sP4zsJZXrpN88+E33E
+         SMPBqOuFsmdXw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9434EC00445;
+        Tue, 13 Dec 2022 18:13:34 +0000 (UTC)
+Subject: Re: [GIT PULL] SELinux patches for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAHC9VhSmJHDRroUJifUuDNF+KvVPVtW17CuMzb_RrUKBBkTabA@mail.gmail.com>
+References: <CAHC9VhSmJHDRroUJifUuDNF+KvVPVtW17CuMzb_RrUKBBkTabA@mail.gmail.com>
+X-PR-Tracked-List-Id: <selinux.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAHC9VhSmJHDRroUJifUuDNF+KvVPVtW17CuMzb_RrUKBBkTabA@mail.gmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20221212
+X-PR-Tracked-Commit-Id: 048be156491ff1aeb0fe5ff0862644d38cd39015
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 57888f7b952d3f2696f82a701f1b3d9de7e346d3
+Message-Id: <167095521459.23919.6377615402983045765.pr-tracker-bot@kernel.org>
+Date:   Tue, 13 Dec 2022 18:13:34 +0000
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 3:56 AM YC Hung <yc.hung@mediatek.com> wrote:
->
-> Coverity spotted that panic_info is not initialized to zero in
-> mtk_adsp_dump. Using uninitialized value panic_info.linenum when
-> calling snd_sof_get_status. Fix this coverity by initializing
-> panic_info struct as zero.
->
-> Signed-off-by: YC Hung <yc.hung@mediatek.com>
+The pull request you sent on Mon, 12 Dec 2022 22:05:32 -0500:
 
-Reviewed-by: Curtis Malainey <cujomalainey@chromium.org>
+> https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20221212
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/57888f7b952d3f2696f82a701f1b3d9de7e346d3
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
