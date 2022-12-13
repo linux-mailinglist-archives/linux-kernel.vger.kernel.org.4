@@ -2,120 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6C164B5C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E9764B5CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 14:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbiLMNJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 08:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S235557AbiLMNMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 08:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiLMNJf (ORCPT
+        with ESMTP id S235523AbiLMNL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 08:09:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E36E23
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670936932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c5GbNffUHKoYDGS5GasSK3TAuvDPgSfJHeVsYif+NA4=;
-        b=RPwLQ02YOU4bjE+8YoitHT2agEHnvcirARBYg/kMrTrHp+xUBEfm6yhxtEQ+2NjX03JNXP
-        pJLV8QqlAmW6sg9f0KhXf0fYMAFJFfSEeUqEuZU9te+m+Fs7umoe2mNKrX2ydRpWKeyl9t
-        3BG4iIjyGixtFy1st2HRPoAzef9B5vY=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-131-ODvOl5QoNEu2wwID0VxOzQ-1; Tue, 13 Dec 2022 08:08:50 -0500
-X-MC-Unique: ODvOl5QoNEu2wwID0VxOzQ-1
-Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso4802363wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 05:08:50 -0800 (PST)
+        Tue, 13 Dec 2022 08:11:56 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461F02657;
+        Tue, 13 Dec 2022 05:11:52 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id kw15so36330650ejc.10;
+        Tue, 13 Dec 2022 05:11:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OCA9EB9LKetY79m77VlC6M0hSYOaeN1AdMgT0kQGhBw=;
+        b=NocRLvvbdUDm8VP8WWAbrIKzt9Ttkh86KrkRUEvDXfOzDQrlO6S0vzZrT4rSdwl6Zr
+         N28JSQykgjRG5VfferltdhL2kKckxJ3izRwjg0TQ785MAxIoMgNE6Kuc50l2n6AU//7B
+         xe7jgmLI3msRWFalxO0dwOyCdcM61k82t02MSTTPQg1FqZ2vKnaMZN84H4Pk9mob7ovu
+         p2KcIqko4eoK1wxo15ZN/7PjNMxV1czwLuomaaWZRnuOgjg3VFe2caB2h6YSRQgcIzgb
+         e9bnB2ldzN+RBT3WvwrBxmjCJZ3G1qH7CPia561dlztbbil/Fn6/QM1llVdUhL6Jo6G1
+         KZ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5GbNffUHKoYDGS5GasSK3TAuvDPgSfJHeVsYif+NA4=;
-        b=E1Zp8hhbUJEKxKJSDoixpC6/dIvCDrgxFaO8BBYPNz28qYw4sFvBISlsYQHI70UzM8
-         1BRhclWUDx41tWlqMCu+OR/FBPBllfP01NOpgmlnYLgPDiuEAPM6ywWP+lAGagdXl3jG
-         0MESWK7HUoskZsbXCmm6fWoCWiL8XFfSrrt3BJ52P4fFg0fsonEKchiOgmhwiK+eGG28
-         bVjDG6tqu7nK4BPgz0QjGSdCp6m9kUu+0S155VAdF7x4oAQ3zdSsEixgpXn2XbF8Z0YB
-         U96KlQs5JQ5IEKwNjy70hMNGARLFws50MLcRgplWvAnGKiRZjev1HECUJJ5c+BnaLm8B
-         Gn0w==
-X-Gm-Message-State: ANoB5plSA5vE7Gfo7aRlsBFTer0cdH+sm8DXOctk9Y0Ce0FSGHeF4WIU
-        NsVI3HcB/AW0KLnLHw0wuUgBqxaXmajuS8dPF04KfGOhqKMEhoipQHlpKH0wVPVWm1d9bap/8Dx
-        bksQVhEkhTkWHF4WDFaf4M6PK
-X-Received: by 2002:a5d:6591:0:b0:242:1ce4:bf47 with SMTP id q17-20020a5d6591000000b002421ce4bf47mr10987290wru.59.1670936929899;
-        Tue, 13 Dec 2022 05:08:49 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7QYjlCoBgHey0f9pw7o07HPD1UnRbeqZ7uQNwA3VRyD2bIAB+tFnoLU8ojHCD6OQfLwLyCtQ==
-X-Received: by 2002:a5d:6591:0:b0:242:1ce4:bf47 with SMTP id q17-20020a5d6591000000b002421ce4bf47mr10987284wru.59.1670936929645;
-        Tue, 13 Dec 2022 05:08:49 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g14-20020adffc8e000000b002421ed1d8c8sm11421142wrr.103.2022.12.13.05.08.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 05:08:48 -0800 (PST)
-Message-ID: <13238048-f07c-3e8d-f170-5330ce94767c@redhat.com>
-Date:   Tue, 13 Dec 2022 14:08:47 +0100
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OCA9EB9LKetY79m77VlC6M0hSYOaeN1AdMgT0kQGhBw=;
+        b=LcmdsKwef2mY7KkGxBHL9iKf/WUK+Zt8RRCjUbCByNiGbGg+s9Rvq4eEqb8mx4crWO
+         zRNPJNu9pcp7DSaCz1iRGrjD5t5a7nCexi04vAjsxqZX0hq5E4CkesqpzMwZPwxc1WOj
+         aw9oqW2k8L5HF6OfGaQesQx99Pzs4arZznXwOH7QhdMfxrkr799hnKMEdPPUrW9F7m4W
+         7eR6d8XEQx57g4l89ZcVL7q0VCYYaHKJz8tKsDL+ncChOYbOIDDXSHzLzVUrOpRMTCvx
+         L91vPjw/07C7tWNJZEj80MLK++CkPKnExr6QDcj34k5IZw0AiavIrWBQJxMXDgcatJUB
+         6fqQ==
+X-Gm-Message-State: ANoB5pnN2WgB8KBEtLVNFNrwWxQUmA+uiYXeNzzcvD6hEYha4a2NKMMQ
+        ZDNt1i4EmcrqAxQP4ebeTSBKJNtIQR9jTUUTn6JrlEca5cNWsA==
+X-Google-Smtp-Source: AA0mqf7zwtPyaBWk8dtksho1p5lOuaxcfg1Dfk+alO3fwAnrdFkEUODM9qdE2N2Ib5BUn8ermKofd++RsgFwzRxNNFs=
+X-Received: by 2002:a17:906:c358:b0:7c1:15ff:ce80 with SMTP id
+ ci24-20020a170906c35800b007c115ffce80mr8762394ejb.172.1670937110471; Tue, 13
+ Dec 2022 05:11:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Brian Masney <bmasney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, linux-spi@vger.kernel.org
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-5-bmasney@redhat.com>
- <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com> <Y5hvlX35nr8xQKEd@x1>
- <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Tue, 13 Dec 2022 21:11:14 +0800
+Message-ID: <CAO4mrffvqv1TrMO2A9rmysq4QrGcn8PdrzNWpLDjP_u_3U-7Cw@mail.gmail.com>
+Subject: BUG: unable to handle kernel paging request in tcp_write_wakeup
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        bpf@vger.kernel.org, syzbot <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+Dear Linux Developers,
 
-Long time no see :)
+Recently, when using our tool to fuzz kernel, the following crash was triggered.
 
-On 12/13/22 14:02, Krzysztof Kozlowski wrote:
-> On 13/12/2022 13:27, Brian Masney wrote:
+HEAD commit: 76dcd734eca
+git tree: linux-next
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1mHUUrG4QFkrmP3xw7QgiytT7xWE6lbPy/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1jH4qV5XblPADvMDUlvS7DwtW0FroMoVB/view?usp=share_link
 
-[...]
+Unfortunately, I do not have a reproducer for this crash. My manual
+investigation found that the value of %rax may be invalid. When adding
+statistics to net_statistics of the current network namespace, the
+value of net->mib (which is %rax) is invalid. I'm wondering if sk or
+net is freed, which causes an invalid address of mib.
 
-> 
-> qcom,spi-video-codec is still not specific enough. You need to describe
-> real device behind spidev. To be clear - you do not describe userspace,
-> but the device.
-> 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
 
-Agree.
+BUG: unable to handle page fault for address: ffff88800167981d
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0003) - permissions violation
+PGD 7201067 P4D 7201067 PUD 7202067 PMD 80000000016001e1
+Oops: 0003 [#1] PREEMPT SMP
+CPU: 0 PID: 1425 Comm: systemd-udevd Not tainted 6.1.0-rc8 #3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:tcp_xmit_probe_skb net/ipv4/tcp_output.c:4024 [inline]
+RIP: 0010:tcp_write_wakeup+0x450/0x710 net/ipv4/tcp_output.c:4078
+Code: fd 44 89 6d 2c 49 8d 7c 24 30 e8 9b 93 49 fd 49 8b 5c 24 30 48
+8d bb c8 01 00 00 e8 8a 93 49 fd 48 8b 83 c8 01 00 00 49 63 cf <65> 48
+ff 04 c8 49 8d bc 24 90 05 00 00 e8 ee 8e 49 fd 45 8b 84 24
+RSP: 0018:ffffc90000003cb8 EFLAGS: 00010246
+RAX: ffffffff83a794b5 RBX: ffff88800bbe8040 RCX: 000000000000006d
+RDX: 0000000000000855 RSI: 0000000000000000 RDI: ffff88800bbe8208
+RBP: ffff88800bb1a000 R08: 000188800bbe820f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 000188800bb1a02c R12: ffff8880368d00c0
+R13: 00000000ffffffff R14: ffff88800bb1a028 R15: 000000000000006d
+FS:  00007fa45b07c8c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800167981d CR3: 000000000ac20000 CR4: 00000000003506f0
+Call Trace:
+ <IRQ>
+ tcp_send_probe0+0x2c/0x2b0 net/ipv4/tcp_output.c:4093
+ tcp_probe_timer net/ipv4/tcp_timer.c:393 [inline]
+ tcp_write_timer_handler+0x322/0x4c0 net/ipv4/tcp_timer.c:624
+ tcp_write_timer+0xb9/0x160 net/ipv4/tcp_timer.c:637
+ call_timer_fn+0x2e/0x240 kernel/time/timer.c:1474
+ expire_timers+0x116/0x240 kernel/time/timer.c:1519
+ __run_timers+0x368/0x410 kernel/time/timer.c:1790
+ run_timer_softirq+0x2e/0x60 kernel/time/timer.c:1803
+ __do_softirq+0xf2/0x2c9 kernel/softirq.c:571
+ __irq_exit_rcu kernel/softirq.c:650 [inline]
+ irq_exit_rcu+0x41/0x70 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x8d/0xb0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:check_kcov_mode kernel/kcov.c:173 [inline]
+RIP: 0010:write_comp_data kernel/kcov.c:236 [inline]
+RIP: 0010:__sanitizer_cov_trace_const_cmp4+0x14/0xa0 kernel/kcov.c:304
+Code: 12 4d 89 44 fa 18 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00
+00 4c 8b 04 24 65 48 8b 14 25 80 ac 01 00 65 8b 05 04 22 da 7e <a9> 00
+01 ff 00 74 10 a9 00 01 00 00 74 6e 83 ba c4 0a 00 00 00 74
+RSP: 0018:ffffc9000059ba10 EFLAGS: 00000246
+RAX: 0000000080000000 RBX: ffff8880090653c0 RCX: 0000000000000000
+RDX: ffff888009b60e80 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff818fa64f R09: ffffc9000059ba30
+R10: 0001ffffffffffff R11: 00018880095f63f0 R12: 0000000000000001
+R13: ffff8880095f63a8 R14: 0000000000000000 R15: ffff8880095f63a8
+ selinux_inode_permission+0x6f/0x400 security/selinux/hooks.c:3073
+ security_inode_permission+0x72/0xc0 security/security.c:1326
+ inode_permission+0xc5/0x460 fs/namei.c:533
+ may_lookup fs/namei.c:1715 [inline]
+ link_path_walk+0x1b2/0x7e0 fs/namei.c:2262
+ path_lookupat+0x8b/0x3c0 fs/namei.c:2473
+ filename_lookup+0x133/0x310 fs/namei.c:2503
+ vfs_statx+0xa3/0x460 fs/stat.c:229
+ vfs_fstatat fs/stat.c:267 [inline]
+ vfs_lstat include/linux/fs.h:3304 [inline]
+ __do_sys_newlstat fs/stat.c:423 [inline]
+ __se_sys_newlstat+0x6c/0x270 fs/stat.c:417
+ __x64_sys_newlstat+0x2d/0x40 fs/stat.c:417
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa459eef335
+Code: 69 db 2b 00 64 c7 00 16 00 00 00 b8 ff ff ff ff c3 0f 1f 40 00
+83 ff 01 48 89 f0 77 30 48 89 c7 48 89 d6 b8 06 00 00 00 0f 05 <48> 3d
+00 f0 ff ff 77 03 f3 c3 90 48 8b 15 31 db 2b 00 f7 d8 64 89
+RSP: 002b:00007ffeff53e148 EFLAGS: 00000246 ORIG_RAX: 0000000000000006
+RAX: ffffffffffffffda RBX: 000055cd6b8d7780 RCX: 00007fa459eef335
+RDX: 00007ffeff53e180 RSI: 00007ffeff53e180 RDI: 000055cd6b8d6780
+RBP: 00007ffeff53e240 R08: 00007fa45a1ae248 R09: 0000000000001010
+R10: 0000000000000020 R11: 0000000000000246 R12: 000055cd6b8d6780
+R13: 000055cd6b8d67a0 R14: 000055cd6b8cabbb R15: 000055cd6b8cabc0
+ </TASK>
+Modules linked in:
+CR2: ffff88800167981d
+---[ end trace 0000000000000000 ]---
+RIP: 0010:tcp_xmit_probe_skb net/ipv4/tcp_output.c:4024 [inline]
+RIP: 0010:tcp_write_wakeup+0x450/0x710 net/ipv4/tcp_output.c:4078
+Code: fd 44 89 6d 2c 49 8d 7c 24 30 e8 9b 93 49 fd 49 8b 5c 24 30 48
+8d bb c8 01 00 00 e8 8a 93 49 fd 48 8b 83 c8 01 00 00 49 63 cf <65> 48
+ff 04 c8 49 8d bc 24 90 05 00 00 e8 ee 8e 49 fd 45 8b 84 24
+RSP: 0018:ffffc90000003cb8 EFLAGS: 00010246
+RAX: ffffffff83a794b5 RBX: ffff88800bbe8040 RCX: 000000000000006d
+RDX: 0000000000000855 RSI: 0000000000000000 RDI: ffff88800bbe8208
+RBP: ffff88800bb1a000 R08: 000188800bbe820f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 000188800bb1a02c R12: ffff8880368d00c0
+R13: 00000000ffffffff R14: ffff88800bb1a028 R15: 000000000000006d
+FS:  00007fa45b07c8c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88800167981d CR3: 000000000ac20000 CR4: 00000000003506f0
+----------------
+Code disassembly (best guess):
+   0: fd                   std
+   1: 44 89 6d 2c           mov    %r13d,0x2c(%rbp)
+   5: 49 8d 7c 24 30       lea    0x30(%r12),%rdi
+   a: e8 9b 93 49 fd       callq  0xfd4993aa
+   f: 49 8b 5c 24 30       mov    0x30(%r12),%rbx
+  14: 48 8d bb c8 01 00 00 lea    0x1c8(%rbx),%rdi
+  1b: e8 8a 93 49 fd       callq  0xfd4993aa
+  20: 48 8b 83 c8 01 00 00 mov    0x1c8(%rbx),%rax
+  27: 49 63 cf             movslq %r15d,%rcx
+* 2a: 65 48 ff 04 c8       incq   %gs:(%rax,%rcx,8) <-- trapping instruction
+  2f: 49 8d bc 24 90 05 00 lea    0x590(%r12),%rdi
+  36: 00
+  37: e8 ee 8e 49 fd       callq  0xfd498f2a
+  3c: 45                   rex.RB
+  3d: 8b                   .byte 0x8b
+  3e: 84                   .byte 0x84
+  3f: 24                   .byte 0x24
 
-I believe Brian just used "qcom,spi-video-codec" as an example but is only
-a make up name to illustrate the concept. QC needs to determine what would
-be the correct <vendor,device> tuple for the IP block that the user-space
-driver will drive.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Best,
+Wei
