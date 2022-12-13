@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC2F64B118
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB75064B116
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiLMIZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S234817AbiLMIZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiLMIZI (ORCPT
+        with ESMTP id S234740AbiLMIZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 13 Dec 2022 03:25:08 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E508713D60;
-        Tue, 13 Dec 2022 00:25:07 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6D8713DF1;
+        Tue, 13 Dec 2022 00:25:06 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
   by mx.socionext.com with ESMTP; 13 Dec 2022 17:25:05 +0900
 Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id EB1042059054;
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id EEBA82058B4F;
         Tue, 13 Dec 2022 17:25:04 +0900 (JST)
 Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 13 Dec 2022 17:25:04 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5056CA855C;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 74B70A855F;
         Tue, 13 Dec 2022 17:25:04 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -30,9 +30,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 08/17] dt-bindings: nvmem: Fix node descriptions in uniphier-efuse example
-Date:   Tue, 13 Dec 2022 17:24:40 +0900
-Message-Id: <20221213082449.2721-9-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v3 09/17] dt-bindings: soc: socionext: Add UniPhier system controller
+Date:   Tue, 13 Dec 2022 17:24:41 +0900
+Message-Id: <20221213082449.2721-10-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
 References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
@@ -46,132 +46,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to adding dt-bindings for SoC-dependent controllers, rename the
-parent node to the generic name in the example.
+Add devicetree binding schema for the system controller implemented on
+Socionext Uniphier SoCs.
 
-And drop a parent node of the nvmem as it is not directly necessary here.
+This system controller has multiple functions such as clock control,
+reset control, internal watchdog timer, thermal management, and so on.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../nvmem/socionext,uniphier-efuse.yaml       | 101 ++++++++----------
- 1 file changed, 46 insertions(+), 55 deletions(-)
+ .../socionext/socionext,uniphier-sysctrl.yaml | 104 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 2 files changed, 105 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
 
-diff --git a/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml b/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
-index 2578e39deda9..a1dea3d7669c 100644
---- a/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml
-@@ -31,65 +31,56 @@ unevaluatedProperties: false
- 
- examples:
-   - |
--    // The UniPhier eFuse should be a subnode of a "soc-glue" node.
-+    efuse@100 {
-+        compatible = "socionext,uniphier-efuse";
-+        reg = <0x100 0x28>;
+diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+new file mode 100644
+index 000000000000..3acb14201d1a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-sysctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Socionext UniPhier system controller
++
++maintainers:
++  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++description: |+
++  System controller implemented on Socionext UniPhier SoCs has multiple
++  functions such as clock control, reset control, internal watchdog timer,
++  thermal management, and so on.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - socionext,uniphier-ld4-sysctrl
++          - socionext,uniphier-pro4-sysctrl
++          - socionext,uniphier-pro5-sysctrl
++          - socionext,uniphier-pxs2-sysctrl
++          - socionext,uniphier-sld8-sysctrl
++          - socionext,uniphier-ld11-sysctrl
++          - socionext,uniphier-ld20-sysctrl
++          - socionext,uniphier-pxs3-sysctrl
++          - socionext,uniphier-nx1-sysctrl
++      - const: simple-mfd
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  clock-controller:
++    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
++
++  reset-controller:
++    $ref: /schemas/reset/socionext,uniphier-reset.yaml#
++
++  watchdog:
++    $ref: /schemas/watchdog/socionext,uniphier-wdt.yaml#
++
++  thermal-sensor:
++    $ref: /schemas/thermal/socionext,uniphier-thermal.yaml#
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: socionext,uniphier-ld4-sysctrl
++    then:
++      properties:
++        watchdog: false
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - socionext,uniphier-ld4-sysctrl
++              - socionext,uniphier-pro4-sysctrl
++              - socionext,uniphier-sld8-sysctrl
++              - socionext,uniphier-ld11-sysctrl
++    then:
++      properties:
++        thermal-sensor: false
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    syscon@61840000 {
++        compatible = "socionext,uniphier-ld20-sysctrl",
++                     "simple-mfd", "syscon";
++        reg = <0x61840000 0x4000>;
++
++        clock-controller {
++            compatible = "socionext,uniphier-ld20-clock";
++            #clock-cells = <1>;
++        };
++
++        reset-controller {
++            compatible = "socionext,uniphier-ld20-reset";
++            #reset-cells = <1>;
++        };
++
++        watchdog {
++            compatible = "socionext,uniphier-wdt";
++        };
++
++        thermal-sensor {
++            compatible = "socionext,uniphier-ld20-thermal";
++            interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
++            #thermal-sensor-cells = <0>;
++        };
 +    };
- 
--    soc-glue@5f900000 {
--        compatible = "simple-mfd";
-+    efuse@200 {
-+        compatible = "socionext,uniphier-efuse";
-+        reg = <0x200 0x68>;
-         #address-cells = <1>;
-         #size-cells = <1>;
--        ranges = <0x0 0x5f900000 0x2000>;
- 
--        efuse@100 {
--            compatible = "socionext,uniphier-efuse";
--            reg = <0x100 0x28>;
-+        /* Data cells */
-+        usb_rterm0: trim@54,4 {
-+            reg = <0x54 1>;
-+            bits = <4 2>;
-         };
--
--        efuse@200 {
--            compatible = "socionext,uniphier-efuse";
--            reg = <0x200 0x68>;
--            #address-cells = <1>;
--            #size-cells = <1>;
--
--            /* Data cells */
--            usb_rterm0: trim@54,4 {
--                reg = <0x54 1>;
--                bits = <4 2>;
--            };
--            usb_rterm1: trim@55,4 {
--                reg = <0x55 1>;
--                bits = <4 2>;
--            };
--            usb_rterm2: trim@58,4 {
--                reg = <0x58 1>;
--                bits = <4 2>;
--            };
--            usb_rterm3: trim@59,4 {
--                reg = <0x59 1>;
--                bits = <4 2>;
--            };
--            usb_sel_t0: trim@54,0 {
--                reg = <0x54 1>;
--                bits = <0 4>;
--            };
--            usb_sel_t1: trim@55,0 {
--                reg = <0x55 1>;
--                bits = <0 4>;
--            };
--            usb_sel_t2: trim@58,0 {
--                reg = <0x58 1>;
--                bits = <0 4>;
--            };
--            usb_sel_t3: trim@59,0 {
--                reg = <0x59 1>;
--                bits = <0 4>;
--            };
--            usb_hs_i0: trim@56,0 {
--                reg = <0x56 1>;
--                bits = <0 4>;
--            };
--            usb_hs_i2: trim@5a,0 {
--                reg = <0x5a 1>;
--                bits = <0 4>;
--            };
-+        usb_rterm1: trim@55,4 {
-+            reg = <0x55 1>;
-+            bits = <4 2>;
-+        };
-+        usb_rterm2: trim@58,4 {
-+            reg = <0x58 1>;
-+            bits = <4 2>;
-+        };
-+        usb_rterm3: trim@59,4 {
-+            reg = <0x59 1>;
-+            bits = <4 2>;
-+        };
-+        usb_sel_t0: trim@54,0 {
-+            reg = <0x54 1>;
-+            bits = <0 4>;
-+        };
-+        usb_sel_t1: trim@55,0 {
-+            reg = <0x55 1>;
-+            bits = <0 4>;
-+        };
-+        usb_sel_t2: trim@58,0 {
-+            reg = <0x58 1>;
-+            bits = <0 4>;
-+        };
-+        usb_sel_t3: trim@59,0 {
-+            reg = <0x59 1>;
-+            bits = <0 4>;
-+        };
-+        usb_hs_i0: trim@56,0 {
-+            reg = <0x56 1>;
-+            bits = <0 4>;
-+        };
-+        usb_hs_i2: trim@5a,0 {
-+            reg = <0x5a 1>;
-+            bits = <0 4>;
-         };
-     };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0d8faba73fe8..8cec8ea46dd1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3103,6 +3103,7 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
+ F:	Documentation/devicetree/bindings/gpio/socionext,uniphier-gpio.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
++F:	Documentation/devicetree/bindings/soc/socionext/socionext,uniphier*.yaml
+ F:	arch/arm/boot/dts/uniphier*
+ F:	arch/arm/include/asm/hardware/cache-uniphier.h
+ F:	arch/arm/mach-uniphier/
 -- 
 2.25.1
 
