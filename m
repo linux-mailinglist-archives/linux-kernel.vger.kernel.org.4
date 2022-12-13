@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2A064B577
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3099764B578
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbiLMMvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S235180AbiLMMwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234568AbiLMMvO (ORCPT
+        with ESMTP id S234798AbiLMMw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:51:14 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5282C1B7B8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:51:13 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so4809148lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eOxjDrTHxpSWumKUdsc7nE4CcukLk4b683+Xlv43EZM=;
-        b=ugKRlDhG3kWpQVGWkk90fS0D0RGWt2TEmmj+urzJNWRc0XDEz4PoxPp6MopG3bwbok
-         WQ1o28m+dbI79ZgFq/wBhKEA5dOGeABoIaDjH4kEPjxSky6RYqd3qkQF5GgHcvG3Q4+U
-         dMudw4WsIFhyX9M3JiexFIW4Lc1825fCkKFuulV4m7qqiKDt1EuuqtpzIYJy3LbbS31j
-         l1JRsIPmGDIzuamJqlutVQ4xSnmNccI5Xz1Wgc4ctLjsPZTr6B/Ps/cm39nc2HP7iWxL
-         kLtqN0axfbvqI0GpHYKrnEteGLdbs2vVi9ojrE2dCY6NSoA2wj3xgIAN7WjBXZCRbXZF
-         oS1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOxjDrTHxpSWumKUdsc7nE4CcukLk4b683+Xlv43EZM=;
-        b=PbxTCFG0l4xcpT/P+gWJ/gm0ZwEj95+cNhpvyjhimA1kiuRAl6xZaVKeq4pu7y1qPJ
-         kDbBOH4SfUlbYybU+Xar6U9Tse4Gm2qeGRX8/jLffMMvx8XE/+ydd3ycnkSOjXGF6h1L
-         py2ciA3JkNyDx2ZV4RqOcu9UPaCcX75N1KIN1CIQ19/3sD8yTQ946SNclFpDjPfBj8ot
-         yzUJhxDt0pM0x9N9E4vFfItFWRVu+qn/Df5aruZh1Zq9s/OlY7aUYa03sfaImW+57w7s
-         wYEXsFyz8txJVEd5n0d+7IAmw/1X52Hl2Uj2/zWKJRVeVr3Hmr0HOG9V4IQl52rxjuwU
-         IHDQ==
-X-Gm-Message-State: ANoB5plYDJSmvOWYA+43QWMPLeyzuWqfTj1R3vE2lmN/lSFwBGZD6hCv
-        9t/gpJT1oQeVV3seHB8j+eEA4g==
-X-Google-Smtp-Source: AA0mqf4Ba82TJ0eerrezZlwQ1/ehmzzqB7vA8mCwmd6GKbCo1awVPmXLvc9jn8eKasilrr81MsTrmw==
-X-Received: by 2002:a05:6512:1021:b0:4a4:7031:2300 with SMTP id r1-20020a056512102100b004a470312300mr4915161lfr.43.1670935871698;
-        Tue, 13 Dec 2022 04:51:11 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o17-20020ac25b91000000b00497a0ea92desm356690lfn.135.2022.12.13.04.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 04:51:11 -0800 (PST)
-Message-ID: <0152d45d-75ed-db44-69b2-d7736600f120@linaro.org>
-Date:   Tue, 13 Dec 2022 13:51:09 +0100
+        Tue, 13 Dec 2022 07:52:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B211A1AA2E
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:52:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 628BDB811B9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 12:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6367C433D2;
+        Tue, 13 Dec 2022 12:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670935946;
+        bh=YDbdK/6Mmdgi3to1CDFzj3V50/m14VqpiVePGSRQyu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dod63C9BETC3Bmw/6LnQYjUNny6Og/QnogfDFw0MACXguAWg7RIYEYDxj7cpEThhn
+         jZB1CvyNa9LXdkdJ7/GgZYm21C98ST4IPnbTA3F3h97Khx8zClFGxZvXuehxarVB1i
+         hmSiHWJbghTNUeFqY5s3Q/M+54VLxaSBXPep8zrACRAPSPylb7WdrlLIt+001HdgSL
+         Fer5UweSQieBPj5WV2YrXJ+z8UHJH4q9Ku56H3SJRvgHPFcRWg7gYuOmo4/MB3xSjt
+         2+5HVBntJVGw60VrSLUSK7QJWUYPzBvBhq++OduVys2INUH7ac8aqYihJzEv/xh/pV
+         VhMUNibZZ9jkg==
+Date:   Tue, 13 Dec 2022 12:52:20 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        maz@kernel.org
+Subject: Re: [GIT PULL] arm64 updates for 6.2
+Message-ID: <20221213125219.GC5719@willie-the-truck>
+References: <20221209112500.GA3116@willie-the-truck>
+ <CAHk-=wj-8gKB5SG0w_M2fK0KYyhZbNzDZ1W9H5pmisWzJ0XJEw@mail.gmail.com>
+ <20221213121118.GB5719@willie-the-truck>
+ <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm6115: Cleanup USB node names
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, andersson@kernel.org
-References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
- <20221213123823.455731-2-bhupesh.sharma@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213123823.455731-2-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFf0CYxL28T65WxXUbTwZHJET5Az+oDSxO04zsvkJqwSw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 13:38, Bhupesh Sharma wrote:
-> There is only one USB controller present on SM6115 / SM4250
-> Qualcomm SoC, so drop the numbering used with USB nodes
-
-The node names remain unaffected, so please mention you do it only for
-the labels. Labels do not matter for the code, has no impact.
-
-> in the dtsi and the related sm4250-oneplus-billie2.dts.
+On Tue, Dec 13, 2022 at 01:36:09PM +0100, Ard Biesheuvel wrote:
+> On Tue, 13 Dec 2022 at 13:11, Will Deacon <will@kernel.org> wrote:
+> > Ard -- do you think we could tweak the patching so that we patch the push
+> > and the pop together (e.g. by tracking the two locations on a per-frame
+> > basis and postponing the text poking until just before we return from
+> > scs_handle_fde_frame())?
+> >
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts | 4 ++--
->  arch/arm64/boot/dts/qcom/sm6115.dtsi                | 8 ++++----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> index a3f1c7c41fd73..fa57f4bf58256 100644
-> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> @@ -225,11 +225,11 @@ &ufs_mem_phy {
->  	status = "okay";
->  };
->  
-> -&usb_1 {
-> +&usb {
->  	status = "okay";
->  };
+> The push and the pop are not necessarily balanced (there may be more
+> than one pop for each push), and the opcode we look for
+> (DW_CFA_negate_ra_state) may occur in places which are not actually a
+> pop, so tracking these is not as straight-forward as this.
 
-Best regards,
-Krzysztof
+Duh, yes, of course. You only _execute_ one of the pops for a given run
+through the function, but there could be numerous return points. So my
+idea doesn't work at all :)
 
+> What we could do is track the push and the first pop on a first pass,
+> and if we don't encounter any unexpected opcodes, patch the push and
+> do a second pass starting from the first pop. Or just simply run it
+> twice and do no patching the first time around (the DWARF frames are
+> not very big)
+
+Doing a dry-run first sounds fairly easy to implement, so it would probably
+be a good starting point. It also means that if anybody complains about the
+overhead, then we can get them to work on doing it at build time instead!
+
+Will
