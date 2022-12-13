@@ -2,110 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5960064AFFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8DF64AFFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiLMGkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S234602AbiLMGmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiLMGka (ORCPT
+        with ESMTP id S231888AbiLMGmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:40:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6077BE0E;
-        Mon, 12 Dec 2022 22:40:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A24761330;
-        Tue, 13 Dec 2022 06:40:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 389E7C433D2;
-        Tue, 13 Dec 2022 06:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670913628;
-        bh=jb4WvD/Lz4Ywp31spUGOBKaoeKuHgB6FtTjgVpaXqY4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CSxCFSJzyZSW8MFu7sBHzMLw9t3gdWBmmoJtW2jLDan2z8ydq6jFHjBb3D2OpaAjK
-         Z+01ztD5zV0Gewn2zWseoKcK5xCtvz8djL0V8AxHDgsIpsRxZ/oPlV305CSNaCkdju
-         xXSHaX2caT6+QrHJebzPz1QCKuenF3EEmqPhzCem0uDR1SjZhkMXv6lrB1ePTQwljr
-         4cQmm9vhz/AWsTLYCyc9WCa1KjcxqKcHYC9IqZaanrxBvDN4QlxJqUqizw/Hr9e0h5
-         f4z+LVyHRAFs5EJSVTZZeGhm+JK2B3Qqcm/pxsgV1tP0s+w0wXSco5jCWPSSqlOBsS
-         AWOARcr9dXv/g==
-Date:   Mon, 12 Dec 2022 22:40:26 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     syzbot <syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com>
-Cc:     clm@fb.com, dsterba@suse.com, glider@google.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KMSAN: uninit-value in longest_match
-Message-ID: <Y5geWpk1WfgwjzuA@sol.localdomain>
-References: <0000000000004f995905ef61a764@google.com>
+        Tue, 13 Dec 2022 01:42:40 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC15322D;
+        Mon, 12 Dec 2022 22:42:36 -0800 (PST)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2BD6gDld018514;
+        Tue, 13 Dec 2022 15:42:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BD6gDld018514
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1670913734;
+        bh=uof4Oi5ZlD/xu/NRlW/T86pqlgXeRWN0YTEJnxzGLus=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AVSpwQNJLuaosDl98MioEZ2C3qUhLdyq9+9Me4XhbsmjbPB7aWVh0nXe6VQvIIs6h
+         zSEdjPlvpk/klF3tyLYvdDRJHiEzuZWTpXxHUaqATZD4yNZiQnu96H6ggPtbivT6at
+         yQ2CYLoHTyFQKuVS7PwrZiWxHna72ZERGEXtZYk9+6FLOUqd+jR5Dm90kEyvnduHYK
+         CRQ+Jvyz0mtgbj99rStP6AzMIRGp3TbzIeP3boDt11iwte4aqB/GrB05t3KmYahxeZ
+         wT3OYAYnur7NwmNAgLupBudz5npAt9xEOr/sECtcqeSZWB04rZ2PMq7UnxDDtsVK6L
+         sE2RteoC+d/ag==
+X-Nifty-SrcIP: [209.85.167.180]
+Received: by mail-oi1-f180.google.com with SMTP id q186so13399546oia.9;
+        Mon, 12 Dec 2022 22:42:13 -0800 (PST)
+X-Gm-Message-State: ANoB5pnIExTONrsyLDE/3UgcpqkEbL9CrGglttlQyp2AChRoYJbSJZQ8
+        ria0Poaw/+uWjGK/8NIP3c0TPPeFAD+qgoHkCBY=
+X-Google-Smtp-Source: AA0mqf6ynR5REOf0PBjTspgI+eSKGT0FaXuNT7P+tPKp7jhMgInWEwXVviDRyA3kr2DMx8/bPvU6u9lsNmF0946ORwM=
+X-Received: by 2002:a05:6808:aaf:b0:354:94a6:a721 with SMTP id
+ r15-20020a0568080aaf00b0035494a6a721mr73151oij.194.1670913732802; Mon, 12 Dec
+ 2022 22:42:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004f995905ef61a764@google.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221211094919.2717594-1-masahiroy@kernel.org> <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
+In-Reply-To: <Y5f8/BCOpJAqKgcd@bergen.fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 13 Dec 2022 15:41:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
+Message-ID: <CAK7LNASE5rMVXPryqs_VYh2fy47CUeNiV=90dJVCP359p-LWdg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: do not sort after reading modules.order
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:19:41AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    30d2727189c5 kmsan: fix memcpy tests
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=117d38f5880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a2144983ada8b4f3
-> dashboard link: https://syzkaller.appspot.com/bug?extid=14d9e7602ebdf7ec0a60
-> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/1e8c2d419c2e/disk-30d27271.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/9e8a728a72a9/vmlinux-30d27271.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/89f71c80c707/bzImage-30d27271.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com
-> 
-> =====================================================
-> BUG: KMSAN: uninit-value in longest_match+0xc88/0x1220 lib/zlib_deflate/deflate.c:668
->  longest_match+0xc88/0x1220 lib/zlib_deflate/deflate.c:668
->  deflate_fast+0x1838/0x2280 lib/zlib_deflate/deflate.c:954
->  zlib_deflate+0x1783/0x22b0 lib/zlib_deflate/deflate.c:410
->  zlib_compress_pages+0xd34/0x1f90 fs/btrfs/zlib.c:178
->  compression_compress_pages fs/btrfs/compression.c:77 [inline]
->  btrfs_compress_pages+0x325/0x440 fs/btrfs/compression.c:1208
->  compress_file_range+0x11ac/0x3510 fs/btrfs/inode.c:730
->  async_cow_start+0x33/0xd0 fs/btrfs/inode.c:1458
->  btrfs_work_helper+0x55a/0x990 fs/btrfs/async-thread.c:280
->  process_one_work+0xb27/0x13e0 kernel/workqueue.c:2289
->  worker_thread+0x1076/0x1d60 kernel/workqueue.c:2436
->  kthread+0x31b/0x430 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+On Tue, Dec 13, 2022 at 1:18 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Sun 11 Dec 2022 18:49:18 GMT, Masahiro Yamada wrote:
+> > modules.order lists modules in the deterministic order (that is why
+> > "modules order"), and there is no duplication in the list.
+>
+> Isn't a subdirectory's modules.order just created by
+> concatenation of $(obj-m) (w/ respect to mentioned subdirs)?
 
-zlib has long been known to use initialized values in longest_match().  This
-issue is mentioned in the zlib FAQ.  I personally consider this to be a bug, as
-the code could be written in a way such that it doesn't use uninitialized
-memory.  However, zlib considers it to be "safe" and "working as intended".
+Not $(obj-m) directly.
 
-Note that the copy of zlib in Linux is not really being maintained, and it is
-based on a 25-year old version of zlib.  However, upstream zlib does not change
-much anyway (it's very hard to get changes accepted into it), and as far as I
-can tell even the latest version of upstream zlib has this same issue.
+The magic is $^, which is a deduplicated list
+of prerequisites.
 
-So I suppose the way to resolve this syzbot report is to just add
-__no_kmsan_checks to longest_match().  The real issue, though, is that zlib
-hasn't kept up with the times (nor has Linux kept up with zlib).
 
-- Eric
+> Thus, "no duplication" seems to be true, as long as there is no obj-m
+> containing duplicated entries.  Do we ensure unique entries in obj-m
+> only?
+
+
+The entries in modules.order must be unique.
+Moreover, the basename of modules must be unique.
+
+scripts/modules-check.sh is a stronger check.
+
+
+You might be interested in these commits:
+
+d724b578a1f746db6fc1fd5e4cbba554a855dc8d
+3a48a91901c516a46a3406ea576798538a8d94d2
+
+
+
+
+>
+> Kind regards,
+> Nicolas
+>
+> >
+> > $(sort ) is pointless.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/Makefile.modfinal | 2 +-
+> >  scripts/Makefile.modinst  | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> > index 25bedd83644b..4705d32388f3 100644
+> > --- a/scripts/Makefile.modfinal
+> > +++ b/scripts/Makefile.modfinal
+> > @@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
+> >  include $(srctree)/scripts/Makefile.lib
+> >
+> >  # find all modules listed in modules.order
+> > -modules :=3D $(sort $(shell cat $(MODORDER)))
+> > +modules :=3D $(shell cat $(MODORDER))
+> >
+> >  __modfinal: $(modules)
+> >       @:
+> > diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> > index a4c987c23750..f4cff42069ad 100644
+> > --- a/scripts/Makefile.modinst
+> > +++ b/scripts/Makefile.modinst
+> > @@ -9,7 +9,7 @@ __modinst:
+> >  include include/config/auto.conf
+> >  include $(srctree)/scripts/Kbuild.include
+> >
+> > -modules :=3D $(sort $(shell cat $(MODORDER)))
+> > +modules :=3D $(shell cat $(MODORDER))
+> >
+> >  ifeq ($(KBUILD_EXTMOD),)
+> >  dst :=3D $(MODLIB)/kernel
+> > --
+> > 2.34.1
+>
+> --
+> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+>      -- frykten for herren er opphav til kunnskap --
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
