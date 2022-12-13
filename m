@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A875464C07E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD1A64C082
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 00:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbiLMXXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 18:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S236816AbiLMXXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 18:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237028AbiLMXWt (ORCPT
+        with ESMTP id S237009AbiLMXW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 18:22:49 -0500
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B552AC6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:22:39 -0800 (PST)
+        Tue, 13 Dec 2022 18:22:58 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7681362D1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 15:22:41 -0800 (PST)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 396AF202EB;
-        Wed, 14 Dec 2022 00:22:37 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3D61C202EE;
+        Wed, 14 Dec 2022 00:22:39 +0100 (CET)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -52,9 +52,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 5/6] drm/msm/dsi: Flip greater-than check for slice_count and slice_per_intf
-Date:   Wed, 14 Dec 2022 00:22:06 +0100
-Message-Id: <20221213232207.113607-6-marijn.suijten@somainline.org>
+Subject: [RFC PATCH 6/6] drm/msm/dpu: Disallow unallocated (DSC) resources to be returned
+Date:   Wed, 14 Dec 2022 00:22:07 +0100
+Message-Id: <20221213232207.113607-7-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221213232207.113607-1-marijn.suijten@somainline.org>
 References: <20221213232207.113607-1-marijn.suijten@somainline.org>
@@ -68,35 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to downstream /and the comment copied from it/ this comparison
-should be the other way around.  In other words, when the panel driver
-requests to use more slices per packet than what could be sent over this
-interface, it is bumped down to only use a single slice per packet (and
-strangely not the number of slices that could fit on the interface).
+In the event that the topology requests resources that have not been
+created by the system (because they are typically not represented in
+dpu_mdss_cfg ^1), the resource(s) in global_state (in this case DSC
+blocks) remain NULL but will still be returned out of
+dpu_rm_get_assigned_resources, where the caller expects to get an array
+containing num_blks valid pointers (but instead gets these NULLs).
 
-Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
+To prevent this from happening, where null-pointer dereferences
+typically result in a hard-to-debug platform lockup, num_blks shouldn't
+increase past NULL blocks and will print an error and break instead.
+After all, max_blks represents the static size of the maximum number of
+blocks whereas the actual amount varies per platform.
+
+In the specific case of DSC initial resource allocation should behave
+more like LMs and CTLs where NULL resources are skipped.  The current
+hardcoded mapping of DSC blocks should be loosened separately as DPU
+5.0.0 introduced a crossbar where DSC blocks can be "somewhat" freely
+bound to any PP and CTL, but that hardcoding currently means that we
+will return an error when the topology reserves a DSC that isn't
+available, instead of looking for the next free one.
+
+^1: which can happen after a git rebase ended up moving additions to
+_dpu_cfg to a different struct which has the same patch context.
+
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index 0686c35a6fd4..9bdfa0864cdf 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -855,11 +855,11 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
- 	 */
- 	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->slice_width);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+index 73b3442e7467..dcbf03d2940a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+@@ -496,6 +496,11 @@ static int _dpu_rm_reserve_dsc(struct dpu_rm *rm,
  
--	/* If slice_per_pkt is greater than slice_per_intf
-+	/* If slice_count is greater than slice_per_intf
- 	 * then default to 1. This can happen during partial
- 	 * update.
- 	 */
--	if (slice_per_intf > dsc->slice_count)
-+	if (dsc->slice_count > slice_per_intf)
- 		dsc->slice_count = 1;
+ 	/* check if DSC required are allocated or not */
+ 	for (i = 0; i < num_dsc; i++) {
++		if (!rm->dsc_blks[i]) {
++			DPU_ERROR("DSC %d does not exist\n", i);
++			return -EIO;
++		}
++
+ 		if (global_state->dsc_to_enc_id[i]) {
+ 			DPU_ERROR("DSC %d is already allocated\n", i);
+ 			return -EIO;
+@@ -660,6 +665,11 @@ int dpu_rm_get_assigned_resources(struct dpu_rm *rm,
+ 				  blks_size, enc_id);
+ 			break;
+ 		}
++		if (!hw_blks[i]) {
++			DPU_ERROR("No more resource %d available to assign to enc %d\n",
++				  type, enc_id);
++			break;
++		}
+ 		blks[num_blks++] = hw_blks[i];
+ 	}
  
- 	total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
 -- 
 2.38.1
 
