@@ -2,97 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4D464BB39
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E2664BB3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbiLMRlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S236224AbiLMRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236031AbiLMRkx (ORCPT
+        with ESMTP id S236121AbiLMRlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:40:53 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA1923178;
-        Tue, 13 Dec 2022 09:40:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=j0UALbMgWQAz5SBhNk+ZMMQCCxLWBTsG/ugs2SigX6o=; b=vCmNDThnkvzF3Biq7JJkRv7Xcg
-        aTFh6YkGjF35i1JLHTPvsrfPImXzCU7eOVVkI/ZQoHnryV9KObeBeF/Eco9A0EFzhx2sVqgfHikFN
-        GFL8t6pu9lATlmlSrs1lodMlJxNjllhEH1o0R8Rky9dSL3CmoJTck11v2E+9/bZ8UmsissbqOmLhz
-        IBbnVgBSTY6DLUII/lQ0zgx9PzhtML+pHEAH44iirFg7apYqSOtWv/rjVdw6/HhOHvJ3XTm0Eg1Yy
-        6woAwfosCYydMeZ+y+A3knS3QIhyABCHUz1pXK/XMm0fVUtjihuxzZ5VANIsdS+ws3rdyMZ9hJoqR
-        1jbBmqIA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p59Gm-003nu3-Vf; Tue, 13 Dec 2022 17:40:45 +0000
-Message-ID: <33fd0ddb-c2dc-c403-a742-bac32d24825c@infradead.org>
-Date:   Tue, 13 Dec 2022 09:40:44 -0800
+        Tue, 13 Dec 2022 12:41:07 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD0223380;
+        Tue, 13 Dec 2022 09:41:05 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id z26so6113276lfu.8;
+        Tue, 13 Dec 2022 09:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MHaXp0mzcSuAY+PnbsFakfY5htA6vqOLH6b5U9mLwcc=;
+        b=eFJhfcBGzq8f6RGA6enz6RIwE8LfAwfADKdybqzk3CgbVYrvl01QdNWjemVZFcsE7M
+         Y/MJUMX2XhFpU7lLjKx0tC+jeHa8+tQeR8GWsJ3mtZZKVjMeyk3TH3tADN6UgTeIE/re
+         QnmiPbdtsP1jbBxzA6pza7vA93pzFGjZYTaEvUROCTUm2TW0+pG79wWrH/0qH7LOaebY
+         uSCQvRVBUPzUdaqUzxfxodQmvWVNt587TVsZ6UPV9AVrnhlIhmPrrs+yvm8CdGDuL1Sq
+         ddlWo1l4pv55OczEgyhluKwjJPXNMoT5Dk/Mho9Y4m8A4FywmYEO7/g/LwaF2iiToVlP
+         lsXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHaXp0mzcSuAY+PnbsFakfY5htA6vqOLH6b5U9mLwcc=;
+        b=Q85q7rqS38xpFIS4mZdHClilcF5XgJ+2NtvoikWSw2oCLWp1vuZoGzclHnK3znZ7gg
+         geONnOAhx1Cctji2Tnc/AorY//X9lI5JGz8ZnmG21Z367zYQhS2qqnNj3NVBWtX5U08f
+         nfmHczANFyGQzcu/ARMlXsxYAspOTscMSAS8J/8rrsdl2kb6hIyztUb282TUuNVpZiH9
+         M6GDkrHh+GBFZvKEK7Ln/rW7CYxwD/tCRG6uyTMzkMTqKtaZ0hTD7lBpNKF4ydL7/k+4
+         EK0jv9sIr8RrKCJVfN78gT4+TGwzfAFWkRTzHN2y8zg9LGO9b31WAcK24CMVp6fVucEo
+         qUGg==
+X-Gm-Message-State: ANoB5plD4lovsuFwjw3+6/qIQfuf0+9QSku0pzEPShI90AXTRrAVl5zF
+        7pW2HNlm+qqcE8m4GsxY+SxlMOPtbNFDiej+MQ==
+X-Google-Smtp-Source: AA0mqf4Bt4AkLkOAt1FeVPZCQFKvprAuuHSRUV1xyeyvcISgkqdJKoJJX2eNqY43NDlO2hMXPYDO7QYCCAK7cna+Zfk=
+X-Received: by 2002:a05:6512:3907:b0:4aa:cd5c:4c52 with SMTP id
+ a7-20020a056512390700b004aacd5c4c52mr26090068lfu.374.1670953263883; Tue, 13
+ Dec 2022 09:41:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] arch: change variable types to match those of what is
- assigned to them
-Content-Language: en-US
-To:     "Seija K." <doremylover123@gmail.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <CAA42iKx2f2LsAQ9C5rxnCTPhOB6n+L35Winc5WK1K2EySAjvXA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAA42iKx2f2LsAQ9C5rxnCTPhOB6n+L35Winc5WK1K2EySAjvXA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   "Seija K." <doremylover123@gmail.com>
+Date:   Tue, 13 Dec 2022 12:40:52 -0500
+Message-ID: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
+Subject: [PATCH] net: Fix for packets being rejected in the xHCI controller's
+ ring buffer
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When a packet larger than MTU arrives in Linux from the modem, it is
+discarded with -EOVERFLOW error (Babble error).
 
-Please look at
-  https://lore.kernel.org/lkml/CAA42iKx2f2LsAQ9C5rxnCTPhOB6n+L35Winc5WK1K2EySAjvXA@mail.gmail.com/T/#u
+This is seen on USB3.0 and USB2.0 buses.
 
-and see if that matches what you thought you sent as a patch.
+This is because the MRU (Max Receive Size) is not a separate entity
+from the MTU (Max Transmit Size), and the received packets can be
+larger than those transmitted.
 
-The gmail web interface is notorious for dropping tabs in emails.
+Following the babble error, there was an endless supply of zero-length
+URBs that were rejected with -EPROTO (increasing the rx input error
+counter each time).
 
+This is only seen on USB3.0. These continue to come ad infinitum until
+the modem is shut down.
 
-On 12/13/22 09:35, Seija K. wrote:
-> There are many places where "int len = strlen(foo);" is written, just
-> for len to be passed as a parameter of size_t. This causes truncation
-> and then expansion back from int to size_t. Not to mention this is
-> poor logic and needless truncations can add extra unneeded
-> instructions.
-> 
-> This patch aims to fix the worst offenders.
-> 
-> Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-> ---
->  arch/arm/mm/mmu.c                      | 30 +++++++++++++-------------
->  arch/arm/probes/kprobes/test-core.c    |  8 +++----
->  arch/arm/vfp/vfpmodule.c               |  4 ++--
->  arch/arm/xen/p2m.c                     |  4 ++--
->  arch/mips/alchemy/common/irq.c         |  2 +-
->  arch/mips/alchemy/common/prom.c        |  2 +-
->  arch/mips/alchemy/devboards/bcsr.c     |  2 +-
->  arch/mips/alchemy/devboards/platform.c |  8 +++----
->  arch/mips/ar7/prom.c                   |  4 ++--
->  arch/mips/boot/compressed/dbg.c        | 14 +++++-------
->  arch/mips/fw/arc/cmdline.c             |  4 ++--
->  arch/xtensa/platforms/iss/console.c    |  4 ++--
->  12 files changed, 41 insertions(+), 45 deletions(-)
-> 
+There appears to be a bug in the core USB handling code in Linux that
+doesn't deal with network MTUs smaller than 1500 bytes well.
 
+By default, the dev->hard_mtu (the real MTU) is in lockstep with
+dev->rx_urb_size (essentially an MRU), and the latter is causing
+trouble.
 
+This has nothing to do with the modems; the issue can be reproduced by
+getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
+with size greater than 1406.
+
+Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+
+Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+---
+drivers/net/usb/qmi_wwan.c | 7 +++++++
+1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 554d4e2a84a4..39db53a74b5a 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+struct usb_interface *intf)
+}
+dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
++ /* LTE Networks don't always respect their own MTU on the receiving side;
++ * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
++ * far-end networks. Make the receive buffer large enough to accommodate
++ * them, and add four bytes so MTU does not equal MRU on network
++ * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
++ */
++ dev->rx_urb_size = ETH_DATA_LEN + 4;
+err:
+return status;
+}
 -- 
-~Randy
+2.38.2
