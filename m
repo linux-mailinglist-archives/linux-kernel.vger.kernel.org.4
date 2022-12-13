@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DB164B0D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4029E64B0DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 09:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234714AbiLMILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 03:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S234739AbiLMIMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 03:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiLMILN (ORCPT
+        with ESMTP id S234733AbiLMIMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 03:11:13 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B6317E34
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:11:12 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so2701254pje.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 00:11:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LdixbUsDgZBRFhhWcpEMBV8T7dpZCUPI7rjUYbSLzrM=;
-        b=udcno0lDcEMVMXQpTnhDi/Iy/Bnh+y+OyDrCwV/6DKlKH/rDyWjlhUElau3iKhH9gc
-         iLXIP1e+JK+6T3aI+Z5doWUSOiwMAIMj8kIAc8wSJzw8DsjbnHJhPZtaQ7pnH0III6z9
-         8isv63T3WDzVyOYEZBiY0B+/knY2IQREMpo4MYikJc2BxXtGulXDOLbPQU51EzYdy+UM
-         HhYDCSEfnQ5q1j8wbx6MBB78q5HsirhWKOHmB1o0e6Hm1iVpW2ir+DxNEDxls/vP6Ptt
-         7+Hf+4cJQ20dK10UViRSN9xhQt3TryrXvWWbJsYEubrszJ7ZiVTcTKWmclgCmygNsjK8
-         4XUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LdixbUsDgZBRFhhWcpEMBV8T7dpZCUPI7rjUYbSLzrM=;
-        b=X31MGpmBXlZ9Qjzjm8buq2+QpgCgJ+IWQxpCyvAiIQBHrM9tse2DW4DsLkZW1ASya4
-         +KtR0opz4A4hAt038mNpcAXSZlOlaooun7At0Da0sF/LcVYx2biiiuEE3jVVHCI5tCdB
-         FfZE6/DPlgYaLsfLokZes+o2hdvnfp6BaJtwaBW0lCYEFriu5tNSQ8cvqd9nQFwoC5+P
-         lMiGRlmVz3I8t8E8UerTEpuotB/ESVMBTtvz3LDo50xUkJqtvYZ9b1uODR58Wwaqm7OK
-         sC47VH1PJgfqs2Go4L4zVaRSWVORcl5d0IL9MDwmeEn9ljtS4WA7tiIjEfdhs4IlPPDe
-         EvdA==
-X-Gm-Message-State: ANoB5pkuHgt0W3upD7tR6T8ujwUQU5cdtwj1jUijB9TqXtsR3NplWUa8
-        Uh7gzXBpXnDy0EluPUWlQrhMdFs+iCss5JKu
-X-Google-Smtp-Source: AA0mqf5Ta1p1en6UFwTxcEdNJFP03V1wR+0fMQiNUSSbVS6Z/nSmWTedseocX/UQj6mYupQ3CAkGBA==
-X-Received: by 2002:a17:90b:198e:b0:219:cb6d:7b0b with SMTP id mv14-20020a17090b198e00b00219cb6d7b0bmr19147590pjb.44.1670919072227;
-        Tue, 13 Dec 2022 00:11:12 -0800 (PST)
-Received: from niej-dt-7B47.. (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id m6-20020a17090a34c600b00219025945dcsm6747757pjf.19.2022.12.13.00.11.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 00:11:11 -0800 (PST)
-From:   Jun Nie <jun.nie@linaro.org>
-To:     tytso@mit.edu, jaegeuk@kernel.org, ebiggers@kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fscrypt: Fix null pointer when defer i_crypt_info
-Date:   Tue, 13 Dec 2022 16:11:03 +0800
-Message-Id: <20221213081103.2182231-1-jun.nie@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 13 Dec 2022 03:12:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3028175B6;
+        Tue, 13 Dec 2022 00:12:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7117F612EA;
+        Tue, 13 Dec 2022 08:12:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B9EC433EF;
+        Tue, 13 Dec 2022 08:12:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670919147;
+        bh=r6fxTGbOxB5OEKw0ORyhNh6d7z2J6me2vEr4MUZNLpY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gzQrcpqb+sxzGsT5EN4QOkYE71GnNZ59mrs7L2JqLvCveLlq4yMRDpCBUxGDB5ifx
+         4HPJ4J4HmhnexPjoRoedHiAmoNnAGnSaN3Gs8tBnsebhzKNYSFoFQEmPuzUz4vauBj
+         vO9EY6nKUAydivBQ8jMm2a+RdYn96HCZLRvVZ5AP3scCzlZyBGKK8yqFUNPZ92JLO4
+         jviOdBd4qy2AQw6rynZLt80cSFsqm4QdzdLtYI/QbUU9wdHYkdcrkZfejq1Gmc28TX
+         ofuTVUenVY3pPZVIrYPVe1zQU5irjdPxJvgmOXqxWowgK1VI0FREi40Byb8Vg6dane
+         qoDDjrBXxEQtg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p50PE-0004fM-0b; Tue, 13 Dec 2022 09:12:52 +0100
+Date:   Tue, 13 Dec 2022 09:12:52 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sc8280xp: correct SPMI bus address
+ cells
+Message-ID: <Y5g0BAc1ix1+j3r3@hovoldconsulting.com>
+References: <20221212133303.39610-1-krzysztof.kozlowski@linaro.org>
+ <20221212133303.39610-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212133303.39610-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,81 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot report below bug[1]. Fix it with checking null pointer before
-deferring i_crypt_info.
+On Mon, Dec 12, 2022 at 02:33:01PM +0100, Krzysztof Kozlowski wrote:
+> The SPMI bus uses two address cells and zero size cells (secoond reg
+> entry - SPMI_USID - is not the size):
+> 
+>   spmi@c440000: #address-cells:0:0: 2 was expected
+> 
+> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 27f5c2f82338..3cb4ca6c53eb 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1947,8 +1947,8 @@ spmi_bus: spmi@c440000 {
+>  			interrupts-extended = <&pdc 1 IRQ_TYPE_LEVEL_HIGH>;
+>  			qcom,ee = <0>;
+>  			qcom,channel = <0>;
+> -			#address-cells = <1>;
+> -			#size-cells = <1>;
+> +			#address-cells = <2>;
+> +			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+>  		};
 
-[1]
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 3 PID: 456 Comm: repro Not tainted 6.1.0+gc0daf896 #169
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-RIP: 0010:fscrypt_limit_io_blocks+0xfa/0x2c0
-Call Trace:
- <TASK>
- ext4_iomap_begin+0x6c5/0x7e0
- ? asym_cpu_capacity_scan+0x6b0/0x6b0
- ? ext4_iomap_begin_report+0x6b0/0x6b0
- ? __sanitizer_cov_trace_const_cmp1+0x1a/0x20
- ? ext4_commit_super+0x3c1/0x560
- ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
- ? ext4_handle_error+0x3bf/0x6b0
- ? ext4_iomap_begin_report+0x6b0/0x6b0
- iomap_iter+0x538/0xc80
- iomap_bmap+0x1ed/0x2d0
- ? iomap_to_fiemap+0x220/0x220
- ? rwsem_down_read_slowpath+0xc00/0xc00
- ? __ext4_iget+0x19c/0x4370
- ext4_bmap+0x288/0x470
- ? mpage_prepare_extent_to_map+0xd80/0xd80
- bmap+0xb1/0x120
- jbd2_journal_init_inode+0x7d/0x3f0
- ? up_write+0x6c/0xb0
- ? jbd2_journal_init_dev+0x130/0x130
- ? register_shrinker+0x33/0x160
- ext4_fill_super+0xa467/0xc650
- ? __sanitizer_cov_trace_const_cmp4+0x16/0x20
- ? ext4_reconfigure+0x2ad0/0x2ad0
- ? snprintf+0xbb/0xf0
- ? vsprintf+0x40/0x40
- ? up_write+0x6c/0xb0
- ? __sanitizer_cov_trace_cmp4+0x16/0x20
- ? set_blocksize+0x2f0/0x380
- get_tree_bdev+0x438/0x740
- ? get_tree_bdev+0x438/0x740
- ? ext4_reconfigure+0x2ad0/0x2ad0
- ext4_get_tree+0x1d/0x30
- vfs_get_tree+0x88/0x2e0
- path_mount+0x6ca/0x1ec0
- ? putname+0x110/0x150
- ? finish_automount+0x790/0x790
- ? putname+0x115/0x150
- __x64_sys_mount+0x2aa/0x340
- ? copy_mnt_ns+0xab0/0xab0
- ? __sanitizer_cov_trace_cmp4+0x16/0x20
- ? exit_to_user_mode_prepare+0x40/0x120
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fixes: 5fee36095cda ("fscrypt: add inline encryption support")
-Reported-by: syzbot+ba9dac45bc76c490b7c3@syzkaller.appspotmail.com
-Signed-off-by: Jun Nie <jun.nie@linaro.org>
----
- fs/crypto/inline_crypt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/crypto/inline_crypt.c b/fs/crypto/inline_crypt.c
-index cea8b14007e6..fec859e83774 100644
---- a/fs/crypto/inline_crypt.c
-+++ b/fs/crypto/inline_crypt.c
-@@ -232,7 +232,7 @@ void fscrypt_destroy_inline_crypt_key(struct super_block *sb,
- 
- bool __fscrypt_inode_uses_inline_crypto(const struct inode *inode)
- {
--	return inode->i_crypt_info->ci_inlinecrypt;
-+	return inode->i_crypt_info && inode->i_crypt_info->ci_inlinecrypt;
- }
- EXPORT_SYMBOL_GPL(__fscrypt_inode_uses_inline_crypto);
- 
--- 
-2.34.1
-
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
