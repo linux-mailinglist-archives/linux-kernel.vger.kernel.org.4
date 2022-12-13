@@ -2,167 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F3E64B94A
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCAD64B956
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235792AbiLMQJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:09:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S235926AbiLMQNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234989AbiLMQJV (ORCPT
+        with ESMTP id S235790AbiLMQNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:09:21 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7982C26DB;
-        Tue, 13 Dec 2022 08:09:20 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id a9so235864pld.7;
-        Tue, 13 Dec 2022 08:09:20 -0800 (PST)
+        Tue, 13 Dec 2022 11:13:18 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73371A05D
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:13:16 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id bp15so5666766lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4tFhyWdl5CQaHxKakHlBhtPo8vjJLnu37GaGjpzYKLY=;
-        b=MuupRT6NiaoDaeXjN5QATL127R0tKhTu1TE4P+2wLMod31puoEKkRyT9g+l7oFEyxT
-         6RY/0hHTBc5pnb13fkPSpkP/PNCzPwZgE297i5Fif0mo3y9FwWaSFt/oNTuMxo3RgW+d
-         C/pN1LoNKRhqC7FRvaclEuxEGsk5cDOsEBFbzxkxCbNOvj/Wl83NoBV9DlAo2wQ1AI+2
-         Xy7iIqnsmpU+RVnVp42k5gJ3bD4jnabkUm9nnOjtj3r4GtRCrZK0sDLim5y236F403W3
-         ma2Phc24WjBxSuLjsmiwNENoXZzzzuRoOuS0WZZkbCnGa1VdRvmnzOs7FXP09gorlJL9
-         F96w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uTHFFzZQr0D0s/TddQwmyWpE56rA5HP2motUuyby9M0=;
+        b=ldysZifELvLGnjG6hYBNuNfpC+0HP54PjSah4EQ5n5X2+eeYz8u8jG0mPdZtK/eTmR
+         4HsyVpMnS4Hxfp4lQatvpvMxOYxa9trXrlZFOp3HHk+D8XAAvZ2XbUVu/5QGMMYO0hh9
+         5ga6z4Z6UG3fR2/sb9E2kVZMduFS7XzDYRwUj/Mc7TkkDQ3lf+r8Kb4ut27tEKvilYAp
+         xpD80fhJvPlX/ScsqY3h3oQAOEYlB95wUJi961h8q4dMSAXzoTCqBnrMK3Y72yKhQL93
+         gftJJvyhbUGZN37TsaSrpdiLbWALvHRXXn+DfJszgg4m2B3cZzlGaNxo4gFn1FiSLCaI
+         GqLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4tFhyWdl5CQaHxKakHlBhtPo8vjJLnu37GaGjpzYKLY=;
-        b=hz4VPde3I1V+DNyDLE1YNHnte23mo8JSd5NpBjOF5BENjXKnUnnXSvnUkObytY43X9
-         edSftxe4DktEiiXT/B8LR7Ga1+2FV9OIwxke+5BlBx+V6PG6iBrWxNRnK146uZ5E3LXy
-         szpzqhHXKmMaRKLRnS9WKziYdeGL2hFKChjm8V1zeTzSvSXPBf2NYTGTDNcG0tMQQDAD
-         MJ8ywYsP0qYleJZEybuJxZp4gWfdsVx6C4U9Z9TUtXuKkeO9gHGSB8Vrg90lCDU0Kfqr
-         gCTeZ0020O65kUU7wcy3ngwjaWz67hPMketzXP80g6AkeiBUr46T1gSK0YxP6j2pu8lb
-         eCUw==
-X-Gm-Message-State: ANoB5pmzLUtC3bfcK5l53UDRtiJ4yrnFVgYgJd61S/9cNBaDGHYiBxN1
-        Utt8sZwcseel7904tbqcJq0=
-X-Google-Smtp-Source: AA0mqf6XfsBTBfgwkOKZ89PyM+a95m8MvihGTHWxpAjBz/a9DFWDfJ1AFIzpueCySw4Gs2ZJOX7RKw==
-X-Received: by 2002:a17:902:d192:b0:189:c19a:2cd9 with SMTP id m18-20020a170902d19200b00189c19a2cd9mr18084608plb.25.1670947759749;
-        Tue, 13 Dec 2022 08:09:19 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.42.38])
-        by smtp.googlemail.com with ESMTPSA id x15-20020a170902ec8f00b00189371b5971sm44851plg.220.2022.12.13.08.09.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 08:09:19 -0800 (PST)
-Message-ID: <08bd63d5de4ea8814ddd58c51ca6d1c17d0990e6.camel@gmail.com>
-Subject: Re: [PATCH intel-next 4/5] i40e: pull out rx buffer allocation to
- end of i40e_clean_rx_irq()
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Tirthendu Sarkar <tirthendu.sarkar@intel.com>, tirtha@gmail.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com
-Date:   Tue, 13 Dec 2022 08:09:15 -0800
-In-Reply-To: <20221213105023.196409-5-tirthendu.sarkar@intel.com>
-References: <20221213105023.196409-1-tirthendu.sarkar@intel.com>
-         <20221213105023.196409-5-tirthendu.sarkar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uTHFFzZQr0D0s/TddQwmyWpE56rA5HP2motUuyby9M0=;
+        b=ApkPY2vCi7mSPSZ+4FI97cmLajqmegVvgFAOr/8mDOWE32kqBWtz4f5hjwi7HvO0o5
+         jAiXJ8NyLIPOJV8J0kqGww99uhKke82Bfg9etdnuSZsWzpGeAlq/jx6DIvH+Ozqs6GmF
+         7nSmnW7kWhGmi/ReFzxWjesgIdMwSK6VcEuRcIhDi9IAbCybiMfq1sDdALYMTR9G+8K+
+         cYIhJShxC3MxonDonNcU6ryYRyoQZOipchLwq5oeqM1OlmE1ZMiGKWpi2HO6mzF38fAW
+         GJKsLCwhuKjwhGkGpm/dM4TLC3AAS5CjomFYzcw09Wv7g8t04ES+YICV2J8i89/FYvd/
+         g+uQ==
+X-Gm-Message-State: ANoB5pnegCOjD6VAmTropJpILYSsdnRe438NWPYmzYwU004qCoS8XJky
+        6wYQbboyqfbrD2p1TAZfCVJ2LQ==
+X-Google-Smtp-Source: AA0mqf56BC3tFEz26JjphXioBNUiiagbJ08QbY1qKzcbJQ8xTgAcKWEhWw0FXQonhqJWpolB6cPrcg==
+X-Received: by 2002:a05:6512:6d1:b0:4b1:8830:85e8 with SMTP id u17-20020a05651206d100b004b1883085e8mr6855783lff.26.1670947995148;
+        Tue, 13 Dec 2022 08:13:15 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a2-20020a2eb542000000b0026df5232c7fsm309641ljn.42.2022.12.13.08.13.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 08:13:14 -0800 (PST)
+Message-ID: <183329b4-b99c-862b-02fe-651e5f68707e@linaro.org>
+Date:   Tue, 13 Dec 2022 17:13:13 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 06/12] dt-bindings: watchdog: qcom-wdt: merge MSM timer
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+ <20221213154049.GA1426116-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213154049.GA1426116-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-13 at 16:20 +0530, Tirthendu Sarkar wrote:
-> Previously i40e_alloc_rx_buffers() was called for every 32 cleaned
-> buffers. For multi-buffers this may not be optimal as there may be more
-> cleaned buffers in each i40e_clean_rx_irq() call. So this is now pulled
-> out of the loop and moved to the end of i40e_clean_rx_irq().
->=20
-> As a consequence instead of counting the number of buffers to be cleaned,
-> I40E_DESC_UNUSED() can be used to call i40e_alloc_rx_buffers().
->=20
-> Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+On 13/12/2022 16:40, Rob Herring wrote:
+> On Mon, Dec 12, 2022 at 05:35:26PM +0100, Krzysztof Kozlowski wrote:
+>> Merge Qualcomm MSM timer bindings into watchdog, because the timer
+>> compatibles are already included here and the hardware is quite similar.
+>>
+>> While converting the MSM timer bindings, adjust clock-frequency
+>> property to take only one frequency, instead of two, because:
+>> 1. DT schema does not allow to frequencies,
+>> 2. The Linux timer driver reads only first frequency.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
+>>  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
+>>  2 files changed, 49 insertions(+), 47 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>> deleted file mode 100644
+>> index 5e10c345548f..000000000000
+>> --- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>> +++ /dev/null
+>> @@ -1,47 +0,0 @@
+>> -* MSM Timer
+>> -
+>> -Properties:
+>> -
+>> -- compatible : Should at least contain "qcom,msm-timer". More specific
+>> -               properties specify which subsystem the timers are paired with.
+>> -
+>> -               "qcom,kpss-timer" - krait subsystem
+>> -               "qcom,scss-timer" - scorpion subsystem
+>> -
+>> -- interrupts : Interrupts for the debug timer, the first general purpose
+>> -               timer, and optionally a second general purpose timer, and
+>> -               optionally as well, 2 watchdog interrupts, in that order.
+>> -
+>> -- reg : Specifies the base address of the timer registers.
+>> -
+>> -- clocks: Reference to the parent clocks, one per output clock. The parents
+>> -          must appear in the same order as the clock names.
+>> -
+>> -- clock-names: The name of the clocks as free-form strings. They should be in
+>> -               the same order as the clocks.
+>> -
+>> -- clock-frequency : The frequency of the debug timer and the general purpose
+>> -                    timer(s) in Hz in that order.
+>> -
+>> -Optional:
+>> -
+>> -- cpu-offset : per-cpu offset used when the timer is accessed without the
+>> -               CPU remapping facilities. The offset is
+>> -               cpu-offset + (0x10000 * cpu-nr).
+>> -
+>> -Example:
+>> -
+>> -       timer@200a000 {
+>> -               compatible = "qcom,scss-timer", "qcom,msm-timer";
+>> -               interrupts = <1 1 0x301>,
+>> -                            <1 2 0x301>,
+>> -                            <1 3 0x301>,
+>> -                            <1 4 0x301>,
+>> -                            <1 5 0x301>;
+>> -               reg = <0x0200a000 0x100>;
+>> -               clock-frequency = <19200000>,
+>> -                                 <32768>;
+>> -               clocks = <&sleep_clk>;
+>> -               clock-names = "sleep";
+>> -               cpu-offset = <0x40000>;
+>> -       };
+>> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> index b7fc57f4800e..697caf1937cc 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> @@ -10,6 +10,9 @@ maintainers:
+>>    - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+>>  
+>>  properties:
+>> +  $nodename:
+>> +    pattern: "^(watchdog|timer)@[0-9a-f]+$"
+>> +
+>>    compatible:
+>>      oneOf:
+>>        - items:
+>> @@ -48,6 +51,20 @@ properties:
+>>    clocks:
+>>      maxItems: 1
+>>  
+>> +  clock-names:
+>> +    items:
+>> +      - const: sleep
+>> +
+>> +  clock-frequency:
+>> +    description:
+>> +      The frequency of the general purpose timer in Hz in that order.
+> 
+> 'in that order'?
 
-I suspect this will lead to performance issues on systems configured
-with smaller ring sizes. Specifically with this change you are limiting
-things to only allocating every 64 (NAPI_POLL_WEIGHT/budget) packets.
+Left over, as I initial binding had here two frequencies. I'll remove it.
 
-> ---
->  drivers/net/ethernet/intel/i40e/i40e_txrx.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/et=
-hernet/intel/i40e/i40e_txrx.c
-> index e01bcc91a196..dc9dc0acdd37 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> @@ -2425,7 +2425,6 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_r=
-ing, int budget,
->  			     unsigned int *rx_cleaned)
->  {
->  	unsigned int total_rx_bytes =3D 0, total_rx_packets =3D 0, frame_sz =3D=
- 0;
-> -	u16 cleaned_count =3D I40E_DESC_UNUSED(rx_ring);
->  	unsigned int offset =3D rx_ring->rx_offset;
->  	struct sk_buff *skb =3D rx_ring->skb;
->  	u16 ntp =3D rx_ring->next_to_process;
-> @@ -2450,13 +2449,6 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_=
-ring, int budget,
->  		unsigned int size;
->  		u64 qword;
-> =20
-> -		/* return some buffers to hardware, one at a time is too slow */
-> -		if (cleaned_count >=3D I40E_RX_BUFFER_WRITE) {
-> -			failure =3D failure ||
-> -				  i40e_alloc_rx_buffers(rx_ring, cleaned_count);
-> -			cleaned_count =3D 0;
-> -		}
-> -
->  		rx_desc =3D I40E_RX_DESC(rx_ring, ntp);
-> =20
->  		/* status_error_len will always be zero for unused descriptors
-> @@ -2479,7 +2471,6 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_r=
-ing, int budget,
->  			rx_buffer =3D i40e_rx_bi(rx_ring, ntp);
->  			I40E_INC_NEXT(ntp, ntc, rmax);
->  			i40e_reuse_rx_page(rx_ring, rx_buffer);
-> -			cleaned_count++;
->  			continue;
->  		}
-> =20
-> @@ -2531,7 +2522,6 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_r=
-ing, int budget,
->  		}
-> =20
->  		i40e_put_rx_buffer(rx_ring, rx_buffer);
-> -		cleaned_count++;
-> =20
->  		I40E_INC_NEXT(ntp, ntc, rmax);
->  		if (i40e_is_non_eop(rx_ring, rx_desc))
-> @@ -2558,6 +2548,8 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_r=
-ing, int budget,
->  	rx_ring->next_to_process =3D ntp;
->  	rx_ring->next_to_clean =3D ntc;
-> =20
-> +	failure =3D i40e_alloc_rx_buffers(rx_ring, I40E_DESC_UNUSED(rx_ring));
-> +
->  	i40e_finalize_xdp_rx(rx_ring, xdp_xmit);
->  	rx_ring->skb =3D skb;
+> 
+>> +
+>> +  cpu-offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Per-CPU offset used when the timer is accessed without the CPU remapping
+>> +      facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
+>> +
+>>    interrupts:
+>>      minItems: 1
+>>      maxItems: 5
+>> @@ -67,12 +84,27 @@ allOf:
+>>              const: qcom,kpss-wdt
+>>      then:
+>>        properties:
+>> +        clock-frequency: false
+>> +        cpu-offset: false
+>>          interrupts:
+>>            minItems: 1
+>>            items:
+>>              - description: Bark
+>>              - description: Bite
+>>  
+>> +    else:
+>> +      properties:
+>> +        interrupts:
+>> +          minItems: 3
+>> +          items:
+>> +            - description: Debug
+>> +            - description: First general purpose timer
+>> +            - description: Second general purpose timer
+>> +            - description: First watchdog
+>> +            - description: Second watchdog
+> 
+> Okay, here they are. No need to set it to 2 then change to 5 in the 
+> series.
 
-I am not a fan of this "failure" approach either. I hadn't noticed it
-before but it is problematic. It would make much more sense to take an
-approach similar to what we did for Tx where we kick the ring
-periodically if it looks like it is stuck, in this case empty.
+My previous patch where you noticed the difference sets it to maxItems:5
+in top-level and only specific variant has two described interrupts.
 
-The problem is if you have memory allocation issues the last thing you
-probably need is a NIC deciding to become memory hungry itself and
-sticking in an allocation loop.
+So if I understand your comment correctly, it is okay and I will just
+fix the clock-frequency description ("in that order").
+
+Best regards,
+Krzysztof
+
