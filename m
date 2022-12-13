@@ -2,200 +2,456 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227C664B563
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C032064B562
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiLMMqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:46:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S234310AbiLMMqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiLMMp4 (ORCPT
+        with ESMTP id S230349AbiLMMp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:45:56 -0500
+        Tue, 13 Dec 2022 07:45:59 -0500
 Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C020288;
-        Tue, 13 Dec 2022 04:45:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917ED1D2;
+        Tue, 13 Dec 2022 04:45:58 -0800 (PST)
 Received: from local
         by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
          (Exim 4.94.2)
         (envelope-from <daniel@makrotopia.org>)
-        id 1p54f8-0002G7-NG; Tue, 13 Dec 2022 13:45:34 +0100
-Date:   Tue, 13 Dec 2022 12:45:27 +0000
+        id 1p54fU-0002GH-NI; Tue, 13 Dec 2022 13:45:56 +0100
+Date:   Tue, 13 Dec 2022 12:45:42 +0000
 From:   Daniel Golle <daniel@makrotopia.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Richard Weinberger <richard@nod.at>,
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
         Matthew Wilcox <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
- init/do_mounts.c
-Message-ID: <Y5hz5+yXWDadDhRB@makrotopia.org>
-References: <cover.1668644705.git.daniel@makrotopia.org>
- <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
- <Y3XM62P7CaeKXFsz@infradead.org>
- <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
- <Y3zCdJr5dKsADsnM@infradead.org>
- <Y5NpsmN/npnG8lxY@makrotopia.org>
- <Y5buTVuu0pfqBQh+@infradead.org>
- <Y5cKSRmZ45OJq6Qq@makrotopia.org>
- <Y5ggLBy+XBjl/vYj@infradead.org>
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 1/2] init: move block device helpers from init/do_mounts.c
+Message-ID: <Y5hz9nuq7tECYcyt@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5ggLBy+XBjl/vYj@infradead.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 10:48:12PM -0800, Christoph Hellwig wrote:
-> On Mon, Dec 12, 2022 at 11:02:33AM +0000, Daniel Golle wrote:
-> > The thing is that there isn't anything extraordinarily complex here,
-> > just dynamically partitioning a block device based on a well-known
-> > format.
-> 
-> Yes, but a completely non-standard format that nests inside an
-> partition.
+In init/do_mounts.c there are helper functions devt_from_partuuid,
+devt_from_partlabel and devt_from_devname. In order to make these
+functions available to other users, move them to block/bdev.c.
 
-The reason for this current discussion (see subject line) is exactly
-that you didn't like the newly introduced partition type GUID which
-then calls the newly introduced partition parser taking care of the
-uImage.FIT content of a partition.
-Instead you suggested to implement it as a small stackable block
-driver, which I did (and will post as RFC in a moment from now).
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ block/bdev.c           | 166 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/blkdev.h |  15 ++++
+ init/do_mounts.c       | 166 +----------------------------------------
+ 3 files changed, 183 insertions(+), 164 deletions(-)
 
-This block driver (if built-into the kernel and relied upon to expose
-the block device used as root filesystem) will need to identify the
-lower device it should work on. And for that the helper functions such
-as devt_from_devname() need to be available for that driver.
+diff --git a/block/bdev.c b/block/bdev.c
+index d699ecdb3260..92e3e5c81337 100644
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@ -1092,3 +1092,169 @@ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
+ 
+ 	blkdev_put_no_open(bdev);
+ }
++
++struct uuidcmp {
++	const char *uuid;
++	int len;
++};
++
++/**
++ * match_dev_by_uuid - callback for finding a partition using its uuid
++ * @dev:	device passed in by the caller
++ * @data:	opaque pointer to the desired struct uuidcmp to match
++ *
++ * Returns 1 if the device matches, and 0 otherwise.
++ */
++static int match_dev_by_uuid(struct device *dev, const void *data)
++{
++	struct block_device *bdev = dev_to_bdev(dev);
++	const struct uuidcmp *cmp = data;
++
++	if (!bdev->bd_meta_info ||
++	    strncasecmp(cmp->uuid, bdev->bd_meta_info->uuid, cmp->len))
++		return 0;
++	return 1;
++}
++
++/**
++ * devt_from_partuuid - looks up the dev_t of a partition by its UUID
++ * @uuid_str:	char array containing ascii UUID
++ *
++ * The function will return the first partition which contains a matching
++ * UUID value in its partition_meta_info struct.  This does not search
++ * by filesystem UUIDs.
++ *
++ * If @uuid_str is followed by a "/PARTNROFF=%d", then the number will be
++ * extracted and used as an offset from the partition identified by the UUID.
++ *
++ * Returns the matching dev_t on success or 0 on failure.
++ */
++dev_t devt_from_partuuid(const char *uuid_str, int *root_wait)
++{
++	struct uuidcmp cmp;
++	struct device *dev = NULL;
++	dev_t devt = 0;
++	int offset = 0;
++	char *slash;
++
++	cmp.uuid = uuid_str;
++
++	slash = strchr(uuid_str, '/');
++	/* Check for optional partition number offset attributes. */
++	if (slash) {
++		char c = 0;
++
++		/* Explicitly fail on poor PARTUUID syntax. */
++		if (sscanf(slash + 1, "PARTNROFF=%d%c", &offset, &c) != 1)
++			goto clear_root_wait;
++		cmp.len = slash - uuid_str;
++	} else {
++		cmp.len = strlen(uuid_str);
++	}
++
++	if (!cmp.len)
++		goto clear_root_wait;
++
++	dev = class_find_device(&block_class, NULL, &cmp, &match_dev_by_uuid);
++	if (!dev)
++		return 0;
++
++	if (offset) {
++		/*
++		 * Attempt to find the requested partition by adding an offset
++		 * to the partition number found by UUID.
++		 */
++		devt = part_devt(dev_to_disk(dev),
++				 dev_to_bdev(dev)->bd_partno + offset);
++	} else {
++		devt = dev->devt;
++	}
++
++	put_device(dev);
++	return devt;
++
++clear_root_wait:
++	pr_err("VFS: PARTUUID= is invalid.\n"
++	       "Expected PARTUUID=<valid-uuid-id>[/PARTNROFF=%%d]\n");
++	if (root_wait && *root_wait) {
++		pr_err("Disabling rootwait; root= is invalid.\n");
++		*root_wait = 0;
++	}
++	return 0;
++}
++EXPORT_SYMBOL_GPL(devt_from_partuuid);
++
++/**
++ * match_dev_by_label - callback for finding a partition using its label
++ * @dev:	device passed in by the caller
++ * @data:	opaque pointer to the label to match
++ *
++ * Returns 1 if the device matches, and 0 otherwise.
++ */
++static int match_dev_by_label(struct device *dev, const void *data)
++{
++	struct block_device *bdev = dev_to_bdev(dev);
++	const char *label = data;
++
++	if (!bdev->bd_meta_info || strcmp(label, bdev->bd_meta_info->volname))
++		return 0;
++	return 1;
++}
++
++dev_t devt_from_partlabel(const char *label)
++{
++	struct device *dev;
++	dev_t devt = 0;
++
++	dev = class_find_device(&block_class, NULL, label, &match_dev_by_label);
++	if (dev) {
++		devt = dev->devt;
++		put_device(dev);
++	}
++
++	return devt;
++}
++EXPORT_SYMBOL_GPL(devt_from_partlabel);
++
++dev_t devt_from_devname(const char *name)
++{
++	dev_t devt = 0;
++	int part;
++	char s[32];
++	char *p;
++
++	if (strlen(name) > 31)
++		return 0;
++	strcpy(s, name);
++	for (p = s; *p; p++) {
++		if (*p == '/')
++			*p = '!';
++	}
++
++	devt = blk_lookup_devt(s, 0);
++	if (devt)
++		return devt;
++
++	/*
++	 * Try non-existent, but valid partition, which may only exist after
++	 * opening the device, like partitioned md devices.
++	 */
++	while (p > s && isdigit(p[-1]))
++		p--;
++	if (p == s || !*p || *p == '0')
++		return 0;
++
++	/* try disk name without <part number> */
++	part = simple_strtoul(p, NULL, 10);
++	*p = '\0';
++	devt = blk_lookup_devt(s, part);
++	if (devt)
++		return devt;
++
++	/* try disk name without p<part number> */
++	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
++		return 0;
++	p[-1] = '\0';
++	return blk_lookup_devt(s, part);
++}
++EXPORT_SYMBOL_GPL(devt_from_devname);
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index fb27dfaaaf85..b45cdcdccc6d 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1494,6 +1494,9 @@ int truncate_bdev_range(struct block_device *bdev, fmode_t mode, loff_t lstart,
+ 		loff_t lend);
+ 
+ #ifdef CONFIG_BLOCK
++dev_t devt_from_partuuid(const char *uuid_str, int *root_wait);
++dev_t devt_from_partlabel(const char *label);
++dev_t devt_from_devname(const char *name);
+ void invalidate_bdev(struct block_device *bdev);
+ int sync_blockdev(struct block_device *bdev);
+ int sync_blockdev_range(struct block_device *bdev, loff_t lstart, loff_t lend);
+@@ -1502,6 +1505,18 @@ void sync_bdevs(bool wait);
+ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat);
+ void printk_all_partitions(void);
+ #else
++static inline dev_t devt_from_partuuid(const char *uuid_str, int *root_wait)
++{
++	return MKDEV(0, 0);
++}
++static inline dev_t devt_from_partlabel(const char *label);
++{
++	return MKDEV(0, 0);
++}
++static inline dev_t devt_from_devname(const char *name);
++{
++	return MKDEV(0, 0);
++}
+ static inline void invalidate_bdev(struct block_device *bdev)
+ {
+ }
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index 811e94daf0a8..d55e34994f18 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <linux/module.h>
+ #include <linux/sched.h>
++#include <linux/blkdev.h>
+ #include <linux/ctype.h>
+ #include <linux/fd.h>
+ #include <linux/tty.h>
+@@ -60,169 +61,6 @@ static int __init readwrite(char *str)
+ __setup("ro", readonly);
+ __setup("rw", readwrite);
+ 
+-#ifdef CONFIG_BLOCK
+-struct uuidcmp {
+-	const char *uuid;
+-	int len;
+-};
+-
+-/**
+- * match_dev_by_uuid - callback for finding a partition using its uuid
+- * @dev:	device passed in by the caller
+- * @data:	opaque pointer to the desired struct uuidcmp to match
+- *
+- * Returns 1 if the device matches, and 0 otherwise.
+- */
+-static int match_dev_by_uuid(struct device *dev, const void *data)
+-{
+-	struct block_device *bdev = dev_to_bdev(dev);
+-	const struct uuidcmp *cmp = data;
+-
+-	if (!bdev->bd_meta_info ||
+-	    strncasecmp(cmp->uuid, bdev->bd_meta_info->uuid, cmp->len))
+-		return 0;
+-	return 1;
+-}
+-
+-/**
+- * devt_from_partuuid - looks up the dev_t of a partition by its UUID
+- * @uuid_str:	char array containing ascii UUID
+- *
+- * The function will return the first partition which contains a matching
+- * UUID value in its partition_meta_info struct.  This does not search
+- * by filesystem UUIDs.
+- *
+- * If @uuid_str is followed by a "/PARTNROFF=%d", then the number will be
+- * extracted and used as an offset from the partition identified by the UUID.
+- *
+- * Returns the matching dev_t on success or 0 on failure.
+- */
+-static dev_t devt_from_partuuid(const char *uuid_str)
+-{
+-	struct uuidcmp cmp;
+-	struct device *dev = NULL;
+-	dev_t devt = 0;
+-	int offset = 0;
+-	char *slash;
+-
+-	cmp.uuid = uuid_str;
+-
+-	slash = strchr(uuid_str, '/');
+-	/* Check for optional partition number offset attributes. */
+-	if (slash) {
+-		char c = 0;
+-
+-		/* Explicitly fail on poor PARTUUID syntax. */
+-		if (sscanf(slash + 1, "PARTNROFF=%d%c", &offset, &c) != 1)
+-			goto clear_root_wait;
+-		cmp.len = slash - uuid_str;
+-	} else {
+-		cmp.len = strlen(uuid_str);
+-	}
+-
+-	if (!cmp.len)
+-		goto clear_root_wait;
+-
+-	dev = class_find_device(&block_class, NULL, &cmp, &match_dev_by_uuid);
+-	if (!dev)
+-		return 0;
+-
+-	if (offset) {
+-		/*
+-		 * Attempt to find the requested partition by adding an offset
+-		 * to the partition number found by UUID.
+-		 */
+-		devt = part_devt(dev_to_disk(dev),
+-				 dev_to_bdev(dev)->bd_partno + offset);
+-	} else {
+-		devt = dev->devt;
+-	}
+-
+-	put_device(dev);
+-	return devt;
+-
+-clear_root_wait:
+-	pr_err("VFS: PARTUUID= is invalid.\n"
+-	       "Expected PARTUUID=<valid-uuid-id>[/PARTNROFF=%%d]\n");
+-	if (root_wait)
+-		pr_err("Disabling rootwait; root= is invalid.\n");
+-	root_wait = 0;
+-	return 0;
+-}
+-
+-/**
+- * match_dev_by_label - callback for finding a partition using its label
+- * @dev:	device passed in by the caller
+- * @data:	opaque pointer to the label to match
+- *
+- * Returns 1 if the device matches, and 0 otherwise.
+- */
+-static int match_dev_by_label(struct device *dev, const void *data)
+-{
+-	struct block_device *bdev = dev_to_bdev(dev);
+-	const char *label = data;
+-
+-	if (!bdev->bd_meta_info || strcmp(label, bdev->bd_meta_info->volname))
+-		return 0;
+-	return 1;
+-}
+-
+-static dev_t devt_from_partlabel(const char *label)
+-{
+-	struct device *dev;
+-	dev_t devt = 0;
+-
+-	dev = class_find_device(&block_class, NULL, label, &match_dev_by_label);
+-	if (dev) {
+-		devt = dev->devt;
+-		put_device(dev);
+-	}
+-
+-	return devt;
+-}
+-
+-static dev_t devt_from_devname(const char *name)
+-{
+-	dev_t devt = 0;
+-	int part;
+-	char s[32];
+-	char *p;
+-
+-	if (strlen(name) > 31)
+-		return 0;
+-	strcpy(s, name);
+-	for (p = s; *p; p++) {
+-		if (*p == '/')
+-			*p = '!';
+-	}
+-
+-	devt = blk_lookup_devt(s, 0);
+-	if (devt)
+-		return devt;
+-
+-	/*
+-	 * Try non-existent, but valid partition, which may only exist after
+-	 * opening the device, like partitioned md devices.
+-	 */
+-	while (p > s && isdigit(p[-1]))
+-		p--;
+-	if (p == s || !*p || *p == '0')
+-		return 0;
+-
+-	/* try disk name without <part number> */
+-	part = simple_strtoul(p, NULL, 10);
+-	*p = '\0';
+-	devt = blk_lookup_devt(s, part);
+-	if (devt)
+-		return devt;
+-
+-	/* try disk name without p<part number> */
+-	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
+-		return 0;
+-	p[-1] = '\0';
+-	return blk_lookup_devt(s, part);
+-}
+-#endif /* CONFIG_BLOCK */
+ 
+ static dev_t devt_from_devnum(const char *name)
+ {
+@@ -284,7 +122,7 @@ dev_t name_to_dev_t(const char *name)
+ 		return Root_RAM0;
+ #ifdef CONFIG_BLOCK
+ 	if (strncmp(name, "PARTUUID=", 9) == 0)
+-		return devt_from_partuuid(name + 9);
++		return devt_from_partuuid(name + 9, &root_wait);
+ 	if (strncmp(name, "PARTLABEL=", 10) == 0)
+ 		return devt_from_partlabel(name + 10);
+ 	if (strncmp(name, "/dev/", 5) == 0)
+-- 
+2.39.0
 
-> 
-> > Using initramfs implies that we would need a 2nd copy of the standard C
-> > library and libfdt, both alone will already occupy more than just a
-> > single 64kB block of flash.
-> 
-> Why do you need libfdt?
-
-uImage.FIT is based on FDT, so the easiest way to parse this format
-without reinventing the wheel is using libfdt.
-
-> And with a simple statically linked kpartx you won't pull in much of
-> libc either.
-
-Well, enough to have kpartx and libfdt covered. I still assume that's
-more than 64KiB of compressed bytecode in total.
-
-> 
-> > I understand that from the point of view of
-> > classic x86 servers or even embedded devices with eMMC this seems
-> > negligible. However, keep in mind that a huge number of existing
-> > devices and also new designs of embedded devices often boot from just a
-> > few megabytes of NOR flash, and there every byte counts.
-> 
-> So I've worked quite a bit on really small deeply embedded systems,
-> and for those I wouldn't even think of using strange image formats
-> or the rather wasteful GPT partition format.
-> There we wouldn't dare to use paritions or weird image formats, but
-
-Well, the reality as of today is that even the smallest of all embedded
-devices will need updated firmware at some point.
-
-Using an image format which allows to dynamically partition a firmware
-image into kernel and rootfs parts is needed **especially** on devices
-with very little storage space -- it's there that we cannot afford to
-use hard-coded MTD partition sizes either limiting or overestimating
-the future kernel size.
-
-And having a unified format which serves a whole range of devices does
-make that easier -- surely, on NOR flash, there would not be a GPT
-partition; mtdblock on top of an MTD partition is used in that case.
-
-> 
-> > > What is the point of the uImage.FIT?
-> > 
-> > It is the format used by Das U-Boot, which is by far the most common
-> > bootloader found on small embedded devices running Linux.
-> > Is is already used by Das U-Boot to validate and load kernel,
-> > devicetree, initramfs, ... to RAM before launching Linux.
-> > I've included a link to the documentation[1] which gives insights
-> > regarding the motivation to create such a format.
-> 
-> That doesn't explain why you'd want to use it.  Nor how people
-> came up with it.
-
-I didn't want to quote all the history here, but it is explained rather
-well in their documentation I had linked there.
-
-> 
-> > In fact, that's only one out of three possible uses in which parsing
-> > the contained sub-image boundaries can be useful:
-> >  * On devices with NOR flash uImage.FIT is stored in an MTD partition,
-> >    hence the uImage.FIT partition parser (or small stackable block
-> >    driver) would then operate on top of /dev/mtdblockX.
-> > 
-> >  * On devices with NAND flash uImage.FIT is stored in a UBI volume,
-> >    hence in this case /dev/ubiblockX needs to be processed.
-> 
-> And all the mtdblock / ubiblock is due to the lack of a native
-> mtd/ubi backend for squashfs?  Why can't we take the block layer
-> out of the loop entirely?
-
-A block representation is the common denominator of all the
-above. Sure, I could implement splitting MTD devices according to
-uImage.FIT and then add MTD support to squashfs. Then implement
-splitting of UBI volumes and add UBI support to squashfs.
-
-However, simply using mtdblock on NOR and ubiblock on NAND seem
-well-suited and hence there wasn't ever a need to implement
-MTD or UBI support for any **read-only** filesystem.
-Afaik that is what mtdblock and ubiblock are intended to be used
-for.
-
-> > I hope this explains my motivation. Please ask should there by any
-> > doubts or if any of my explainations above are not clear.
-> 
-> None of this explains the silly nesting inside the GPT partition.
-> It is not needed for the any use cases and the root probem here.
-
-So where would you store the uImage (which will have to exist
-even to just load kernel and DTB in U-Boot, even without containing
-the root filesystem) on devices with eMMC then?
-
-I did consider block2mtd on eMMC and gluebi (which is deprecated) on
-UBI, but in order to mount the filesystem I'd then use mtdblock further
-down the road, and that'd actually be silly.
-
-> Without that you could simply implement a parition format, with that
-> you get into crazy nesting behavior.  Note that it would have
-> any benefit over just not doing this silly image.
-
-Are you suggesting to come up with an entirely new type of partition
-table only for that purpose? Which will require its own tools and
-implementation in both, U-Boot and Linux? What would be the benefit
-over just using GPT partitioning?
-
-I'm not saying that this cannot be done (and I will do it if you
-convince me that it'd be needed).
-
-> 
-> Maybe someone just needs to go back and come up wit ha scheme that
-> actually works and implement that in uboot as well.
-
-In terms of "works" both are working very well, the uImage.FIT
-partition parser as well as the tiny stackable block driver you had
-asked me to write instead. I've tested both on multiple devices by now,
-the former is even used in production on one of the currently most
-popular devices running OpenWrt (according to update backend stats).
-
-
-Thank you for your patience!
-
-
-Daniel
