@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D155F64B827
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBE464B832
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiLMPNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S235908AbiLMPQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiLMPNp (ORCPT
+        with ESMTP id S235161AbiLMPQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:13:45 -0500
+        Tue, 13 Dec 2022 10:16:49 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D1D1B7B8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:13:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF0A1C90C
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670944382;
+        s=mimecast20190719; t=1670944559;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Cai/kPU6Om0Z3mVznNAip1TeRWzCftfKM6SJg/6GxNA=;
-        b=aFhCjEujZsDDY+q/j8K+SC14nfElygtjVS4Ty7Qnja2kgxI/Lp0fNsSTe9yGX4KBOKKPX6
-        Qn5puWaQzvq9bLBzFqYK9ZGjTu2sCDsHu8cngIEiFMNJ8/8WDUqjbetjyPCWLtF9CJVquL
-        TX78kZqEaZ1eQ2HI5Jv62tb3uMgRO+c=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lbIEUOJRndagsIzbonwHHIU2DwYDRVtl3eIrtsPjZPY=;
+        b=GwANtzz8KT+9GNg+InszRY9Cd7hir4e+Fnxza4V2QTm95kJFklS2P4gxqVhpvbSp7NQXgp
+        P36cImgL4RTUhWfq3yWymC2XoE59yo0avdBpZNaeuJU/pjwEd99czaccv0aQaf+HUo/Y3r
+        M0tUfhw0kr87ZVlcAfSKNT43SW5lw5g=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-124-aCMoXCHRP3WBfrsIqx7wjg-1; Tue, 13 Dec 2022 10:13:00 -0500
-X-MC-Unique: aCMoXCHRP3WBfrsIqx7wjg-1
-Received: by mail-yb1-f200.google.com with SMTP id n197-20020a25d6ce000000b00702558fba96so16969053ybg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:13:00 -0800 (PST)
+ us-mta-86-beU0L6fgMVuEFOAIZV7Ccg-1; Tue, 13 Dec 2022 10:15:58 -0500
+X-MC-Unique: beU0L6fgMVuEFOAIZV7Ccg-1
+Received: by mail-wr1-f71.google.com with SMTP id r6-20020adfbb06000000b002455227c5c5so2923472wrg.20
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:15:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cai/kPU6Om0Z3mVznNAip1TeRWzCftfKM6SJg/6GxNA=;
-        b=PFzYSaZpcOkyZe7rYHkmWj44eU/7QKtYaYtoS7lZk/7Urp/eeHqJKJ73pc8QAp1qw0
-         l7OIGLF23jkmzebaCODoK+/mZFDeLOXfj9RlFZPaxPmU3tYitk68wBKUiosAY4le4wqZ
-         mKVQ8ehChynKc6aB6yzEiSDVxdibhwaR1q3+IS9fGryhrbYVOu/pmJC222PiXXrLucGU
-         DCvYYGZigFBdOyb/Q7HcR3qm4FdC1AtGv9bZdLyocaGoV3knkhTpDF02cm+iKsUWcykz
-         /F+84RW8H5dPVQSvXJ9HMVM4/BVDQYFu4EHGlKbGESPfnjLECZyvMgoaOZKWQ8EZLRo+
-         WhLw==
-X-Gm-Message-State: ANoB5pkOj9EAaBsLhQucQxQlbHiT508hpKH/vtRDKckN7a5LdwKne6j9
-        9p20vLgOgtZ127s6MWyvv+0Id2ij5XrCSBDqFvjyoZx6ObDw9NqPVKTN3j5wIoBBaFbGaG+4Vzy
-        L+mXgClCAuLEAL8NgDkKQTENR
-X-Received: by 2002:a05:7500:5282:b0:eb:1a6a:f948 with SMTP id x2-20020a057500528200b000eb1a6af948mr873492gaa.64.1670944379834;
-        Tue, 13 Dec 2022 07:12:59 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5NzRdu025y2d4748W73kp+EyLMKIiqfTuukd8+EaVyn+tsGlN9uJXSm8luhzEZD8YdS96gmQ==
-X-Received: by 2002:a05:7500:5282:b0:eb:1a6a:f948 with SMTP id x2-20020a057500528200b000eb1a6af948mr873472gaa.64.1670944379479;
-        Tue, 13 Dec 2022 07:12:59 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id bm18-20020a05620a199200b006ff8c632259sm5657149qkb.42.2022.12.13.07.12.58
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lbIEUOJRndagsIzbonwHHIU2DwYDRVtl3eIrtsPjZPY=;
+        b=GgEHsbZYUHDVaQLDqjjs7jNGfQNdZYQNhP472AUXH+zuyWA5dOCqzlmAbrkdMETMMp
+         gsK0skALXMJ/5G6f9cTjVE9fCUPR2WXejlbSC+c/f0Xkut97jAWr+/8AjKtQanu3GtmH
+         bKxzXP22mmPb8Lc0wBfh6kRNeWkyXgW0Lc+WrAlqnhghZ3s1otahbn0XG20brptmZwnK
+         ZyQ4Bd5HvY2+b6GQLxEulkjBOIMOdSEnxOsSANYxp46MV8iVaKMDp8mAxM9ZSD07EVDl
+         WEJVXnDNa5h9vMAraq+NFbPSaXK7oX0M23QAP7WMiNvYfEN1VVcCnZW7iJVETQLjaUAo
+         08IA==
+X-Gm-Message-State: ANoB5pmfkGq0z/3KnOuj45BBEbU06KYPpAgi1CCJBBZ15EGR+JuY6sQ8
+        vQQ2IdgD1A7+gBZyvMxF/kjwb0j1YsCAhJnAbYPuTiWzmFmRq2X2RDmhAkHANRWaSC4B4BdjV7Z
+        MbbHceyRolXA0UbHpci+B2omN
+X-Received: by 2002:a05:600c:3483:b0:3cf:67ad:6284 with SMTP id a3-20020a05600c348300b003cf67ad6284mr15434368wmq.4.1670944556680;
+        Tue, 13 Dec 2022 07:15:56 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5/4uv+DoAXL906JZYpQZXcgVQ0peFwD4X+zA8ZABwsdTnKHC0INZm4AdCdMnQv41hdJWFMMQ==
+X-Received: by 2002:a05:600c:3483:b0:3cf:67ad:6284 with SMTP id a3-20020a05600c348300b003cf67ad6284mr15434352wmq.4.1670944556447;
+        Tue, 13 Dec 2022 07:15:56 -0800 (PST)
+Received: from redhat.com ([2.52.138.183])
+        by smtp.gmail.com with ESMTPSA id ay13-20020a05600c1e0d00b003c6bd91caa5sm13651091wmb.17.2022.12.13.07.15.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:12:58 -0800 (PST)
-Date:   Tue, 13 Dec 2022 10:12:57 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
-Message-ID: <Y5iWeTk2zOp9rInx@x1>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-2-bmasney@redhat.com>
- <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+        Tue, 13 Dec 2022 07:15:55 -0800 (PST)
+Date:   Tue, 13 Dec 2022 10:15:52 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net
+Subject: Re: [PATCH net] virtio-net: correctly enable callback during
+ start_xmit
+Message-ID: <20221213100901-mutt-send-email-mst@kernel.org>
+References: <20221212091029.54390-1-jasowang@redhat.com>
+ <20221212042144-mutt-send-email-mst@kernel.org>
+ <1670902391.9610498-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEu=1CcoNvvV9M+QrG5sLUBoPYkZ3DvUe+pLc1fSvgLuHA@mail.gmail.com>
+ <20221213013231-mutt-send-email-mst@kernel.org>
+ <CACGkMEukRrOWghcBXiqPrOtNbdjdDJUW7-cg9PsdtsVs1SuCyQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5iSDehp72mQPc+h@hovoldconsulting.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+In-Reply-To: <CACGkMEukRrOWghcBXiqPrOtNbdjdDJUW7-cg9PsdtsVs1SuCyQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -83,37 +85,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 03:54:05PM +0100, Johan Hovold wrote:
-> Note that the node is labelled qup2_i2c5 and not qup_i2c5.
+On Tue, Dec 13, 2022 at 02:57:54PM +0800, Jason Wang wrote:
+> On Tue, Dec 13, 2022 at 2:38 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Tue, Dec 13, 2022 at 11:43:36AM +0800, Jason Wang wrote:
+> > > On Tue, Dec 13, 2022 at 11:38 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > > >
+> > > > On Mon, 12 Dec 2022 04:25:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > > > > On Mon, Dec 12, 2022 at 05:10:29PM +0800, Jason Wang wrote:
+> > > > > > Commit a7766ef18b33("virtio_net: disable cb aggressively") enables
+> > > > > > virtqueue callback via the following statement:
+> > > > > >
+> > > > > >         do {
+> > > > > >            ......
+> > > > > >     } while (use_napi && kick &&
+> > > > > >                unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > > >
+> > > > > > This will cause a missing call to virtqueue_enable_cb_delayed() when
+> > > > > > kick is false. Fixing this by removing the checking of the kick from
+> > > > > > the condition to make sure callback is enabled correctly.
+> > > > > >
+> > > > > > Fixes: a7766ef18b33 ("virtio_net: disable cb aggressively")
+> > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > ---
+> > > > > > The patch is needed for -stable.
+> > > > >
+> > > > > stable rules don't allow for theoretical fixes. Was a problem observed?
+> > >
+> > > Yes, running a pktgen sample script can lead to a tx timeout.
+> >
+> > Since April 2021 and we only noticed now? Are you sure it's the
+> > right Fixes tag?
 > 
-> That is, the QUP nodes are labelled using two indices, and specifically
+> Well, reverting a7766ef18b33 makes pktgen work again.
 > 
-> 	qup2_i2c5
+> The reason we doesn't notice is probably because:
 > 
-> would be another name for
+> 1) We don't support BQL, so no bulk dequeuing (skb list) in normal traffic
+> 2) When burst is enabled for pktgen, it can do bulk xmit via skb list by its own
 > 
-> 	qup_i2c21
+> >
+> > > > >
+> > > > > > ---
+> > > > > >  drivers/net/virtio_net.c | 4 ++--
+> > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > > > index 86e52454b5b5..44d7daf0267b 100644
+> > > > > > --- a/drivers/net/virtio_net.c
+> > > > > > +++ b/drivers/net/virtio_net.c
+> > > > > > @@ -1834,8 +1834,8 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+> > > > > >
+> > > > > >             free_old_xmit_skbs(sq, false);
+> > > > > >
+> > > > > > -   } while (use_napi && kick &&
+> > > > > > -          unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > > > +   } while (use_napi &&
+> > > > > > +            unlikely(!virtqueue_enable_cb_delayed(sq->vq)));
+> > > > > >
+> > > > >
+> > > > > A bit more explanation pls.  kick simply means !netdev_xmit_more -
+> > > > > if it's false we know there will be another packet, then transmissing
+> > > > > that packet will invoke virtqueue_enable_cb_delayed. No?
+> > > >
+> > > > It's just that there may be a next packet, but in fact there may not be.
+> > > > For example, the vq is full, and the driver stops the queue.
+> > >
+> > > Exactly, when the queue is about to be full we disable tx and wait for
+> > > the next tx interrupt to re-enable tx.
+> > >
+> > > Thanks
+> >
+> > OK, it's a good idea to document that.
 > 
-> if we'd been using such a flat naming scheme (there are 8 engines per
-> QUP).
+> Will do.
 > 
-> So there's nothing wrong with how these nodes are currently named, but
-> mixing the two scheme as you are suggesting would not be correct.
+> > And we should enable callbacks at that point, not here on data path.
+> 
+> I'm not sure I understand here. Are you suggesting removing the
+> !user_napi check here?
+> 
+>                 if (!use_napi &&
+>                     unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
+>                         /* More just got used, free them then recheck. */
+>                         free_old_xmit_skbs(sq, false);
+>                         if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
+>                                 netif_start_subqueue(dev, qnum);
+>                                 virtqueue_disable_cb(sq->vq);
+>                         }
+>                 }
 
-Hi Johan,
 
-What would I use for the name in the aliases section? Right now I have:
+At least, I suggest calling virtqueue_enable_cb_delayed around
+this area of code. I have not really thought all this path through
+and how all the corner cases interact.
 
-    aliases {
-        i2c18 = &qup2_i2c18;
-    }
 
-So qup2_i2c18 becomes qup2_i2c2. Would I use the flat naming scheme for
-the alias like so?
 
-    aliases {
-        i2c18 = &qup2_i2c2;
-    }
+> Btw, it doesn't differ too much as kick is always true without pktgen
+> and that may even need more comments or make the code even harder to
+> read. We need a patch for -stable at least so I prefer to let this
+> patch go first and do optimization on top.
+> 
+> Thanks
 
-Brian
+There's a chance of perf regression here too.  Let's write the full
+patch first of all. If you want to make it a 2 patch series that is fine
+but it is here since 2021 I don't see why we should rush a fix. Worry
+about backporting later.
+
+> >
+> >
+> > > >
+> > > > Thanks.
+> > > >
+> > > > >
+> > > > >
+> > > > >
+> > > > >
+> > > > >
+> > > > > >     /* timestamp packet in software */
+> > > > > >     skb_tx_timestamp(skb);
+> > > > > > --
+> > > > > > 2.25.1
+> > > > >
+> > > > > _______________________________________________
+> > > > > Virtualization mailing list
+> > > > > Virtualization@lists.linux-foundation.org
+> > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> > > >
+> >
 
