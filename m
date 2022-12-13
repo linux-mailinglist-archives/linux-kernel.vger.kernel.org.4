@@ -2,190 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3646A64BB00
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F65564BB15
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 18:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbiLMRaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 12:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S235996AbiLMRbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 12:31:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiLMRaK (ORCPT
+        with ESMTP id S236323AbiLMRal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 12:30:10 -0500
-Received: from CO1PR02CU002-vft-obe.outbound.protection.outlook.com (mail-westus2azon11020014.outbound.protection.outlook.com [52.101.46.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A425D22BED;
-        Tue, 13 Dec 2022 09:30:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZjoRiF9P0XhMHo/ju5OWtgh1Q3gRvnoX6qIIxnmc8K6htdPQDmNCi41C5WIXK4j5s76L+24B0A/nZ1VLbjqRzneAN/r5SOe5WCv0zNrv1ggmsna3iMe8nxzggXdCFSpZrZvTG4+c0MG3j5BxGglVgeiNRh+DGAREcaBumt/4G479p84LxPkC4TZgMnro8QjpEEO+f7TwOnI3u35LnbDRX8AWLdUZ0TwZFGIrjrusjtHgtsMfeK2yJo42FEc8AP3wg/SqO+BZusUktSOhlCBpJafAA0PxDd+DPRYQhvJ3lzxCBSgNW4+eOT7Zivqe1Lj5+VvgEGQvZKp1MRZFlJzU0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EfNzmAgtS2G7InUCiqCMUVR7OQcAZQhtkwb35IGbUpo=;
- b=SD+xL/2UovUThGDE+zQ03o0sR/x3lDQpfApEcsBVVa6s7aldWdjywAyI5Lea8A9L/P1e++HW66AaxoB/ZeBw2bBJcDDDIFvzEJzRzph+ev9JFBGk88CNCfE5JAjVDgyqtC4YuEcWd+vyGWI5ujKnixLT2034dl9jL/+oLS/3Obm1/ddxBoGfL0UUojesEamwrFcUwUXugKl7Ao0Cx77pP5Q/YItCN1FyZ+G8Wwd3t+Zsaf/GXeiZCNiRGSiEVMxssrSBj1LnK7iASrTh2CdCw1FkYEVHE8PNW22ufpAMbj6p1wFqmmmm1vWpIljYMfpAHX5rJkdVR3X4+0yAqCQyrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EfNzmAgtS2G7InUCiqCMUVR7OQcAZQhtkwb35IGbUpo=;
- b=GuOuhBK2wS9kF7ozyEgLhRKGtXIGQbblcQj7pk56TztzptSK+uVBCXV/6YuUg01rloMvNwyxeUUUI54U+IPf7FvsX7YsgWsxnllddfJh3dLEMeO2eNrz8YIO6kgzx+ydDgwnKcC6O+Yh8+/C0qZs6eaGnnlq5ZnR0b2Vmpvjqwc=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DS7PR21MB3479.namprd21.prod.outlook.com (2603:10b6:8:90::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.2; Tue, 13 Dec
- 2022 17:30:07 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%8]) with mapi id 15.20.5944.002; Tue, 13 Dec 2022
- 17:30:06 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V2 07/18] clocksource: hyper-v: decrypt hyperv tsc
- page in sev-snp enlightened guest
-Thread-Topic: [RFC PATCH V2 07/18] clocksource: hyper-v: decrypt hyperv tsc
- page in sev-snp enlightened guest
-Thread-Index: AQHY+8ngUVhmmnBNCk6VoJ0gSzEd765sOGFQ
-Date:   Tue, 13 Dec 2022 17:30:06 +0000
-Message-ID: <BYAPR21MB16887BAC34B73C9D9BA9FC33D7E39@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-8-ltykernel@gmail.com>
-In-Reply-To: <20221119034633.1728632-8-ltykernel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=62760ebd-8162-43c1-b90a-c9684783e3ed;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-13T17:26:04Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS7PR21MB3479:EE_
-x-ms-office365-filtering-correlation-id: f682d1f2-47d3-47e9-074a-08dadd2fad3b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6NLqHZwlaHwyhXavYL+pePxsQgyLWQdVirOdrLaKKNwbSnmlHQvPd7d8NxFesvTE4tP5++M0WMZ9uoShRwQ0HozxHxv5ZSXgZTPDw/fkro7UUXm+AjYA6VIMrtcUtGCRW82xD53UlDU2k3vzExyv/GlxeD66rvuIiNZzevyBHICtqgwtQEMSHXFjw6l1ZtKA+wdc2/w4/7zFhg6JUt9lAyYeoWtbrJLpurtK3JiX74MNfuup/rWztxG8GfbFGyWFD1GFaissZhh6CUJB44zAf1TRCxmFZocLcChZDvLicMjGtyr9PtFqovPJKpy2DdmRl+X+ANstRhLjRsoJhVuS5xHNv7NdJDDplyKDR+N+5uRJwsDV1xqr5fzZn9xeNgqBrCq7a7f6JDFqzW5wp21yAR2PePThV2h3LEK38OyfJbHlCmJXLglU2AvzQKMZ8x/iRIGw6vI332PeRMTIz0vJKo4ng4lNyyHuL9daAim7Wbh6onw9KmtEu615O3uMnOQL3xmnuNFI9B/l8VxPy1+dt8ftmfs6NAr6bU6K8Bhg7kRKWRKzSnHpUpKl86NGjkPZbJFCQtIHOROSGoS7oOX+Mzc3/s/RdQMKTcBWLHAzpqlbuhrsUFs/MYifjJ7e2Jbkpvfz8wsWESDX+kWxgoaz+6FgRGQulZ/q8VoQdUnmsKemOMEQFQrgniR463dQXYNRD4WqHkoRfx9xG3agnJphONxTARu8Y1mNUUZ8OR2jzCL05L4kftYuHl+/tPBh0WABqQgDtqxSQEAXSnVH6OMfeA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(366004)(39860400002)(396003)(451199015)(110136005)(316002)(8990500004)(54906003)(2906002)(7416002)(33656002)(7406005)(86362001)(8936002)(52536014)(5660300002)(41300700001)(66476007)(38070700005)(921005)(64756008)(8676002)(66446008)(4326008)(66946007)(38100700002)(76116006)(66556008)(82960400001)(82950400001)(122000001)(55016003)(10290500003)(71200400001)(6506007)(478600001)(186003)(7696005)(26005)(83380400001)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LiPv8GNCU+y167vVBslqGcZdVIJQfDkke8aFZ6fPNR9gag44OGHc+rLo6y1e?=
- =?us-ascii?Q?h7OAHjlIoKHOMO8WWI7TutUXPd5P8tMIRAKN5BgMF0DVlU3NY+c74fl9a7Yi?=
- =?us-ascii?Q?Ov/h9+Zyt2kYX9tl6h1V7cI1xXiEMfXBjF6Ra0sTOiucEyN0T4A+0GRWHJ/B?=
- =?us-ascii?Q?6qskPP2j4KeHYulrMbXKK5QRqhmBnV/sX7XQMWMB0YMFs3Tc0GAF22N2k5Oz?=
- =?us-ascii?Q?gIQgAtSO+7HkbYRqnl3P+r7zkuGsoTFzc18ftSL09xFBZ4WoVfTu5E06iawx?=
- =?us-ascii?Q?G6wNipOlHJAq6ju5jkfgYSjmcBAs8PteqBi0YTlY0h8iWVrZsBBDvnQU8fvy?=
- =?us-ascii?Q?tJiTf+Z2yoEkeupv0u5N/o6WdhEmlPFOhAmUkMXaFbajX7pfQwtM7dGpWaVc?=
- =?us-ascii?Q?UlTvUUfXN1eGledhMwewryLVz4U3zPAfh6vgZP5cMftz3VO8VsR0BincvO/D?=
- =?us-ascii?Q?jHaAR5mQuKu11PO/oAoEWea6CawF6NbRTqF7jrJsQSVI1TsPRyHWgyK1Y1bZ?=
- =?us-ascii?Q?+22TLTH9Ex7VCOOdTf4HoehLJCzNS7L8aW63M9zmNjfkJwBoXo3hfIko8Ufs?=
- =?us-ascii?Q?AF9GdFZK36TMnK8WRu6qRsbZj6OwvNWuU99n92gR8GbIY/CSipDmSW0tlKku?=
- =?us-ascii?Q?aIJO/fl8zYl83aF/FdbqokydWZOkSkTGsWgpam7csfQ2S4P31TlrE1St011B?=
- =?us-ascii?Q?DZNZ7yLLqpwCtYo2NuhI2MaYYHHKITNpq7T5TbEjVT/LDvWmcO3IWDDKFxOF?=
- =?us-ascii?Q?Vk6yxcjb+9hIjO+PunTeTOTktmNlouxslGrq/5ICyeLvsFIfhAbf4hO2qIzK?=
- =?us-ascii?Q?Rd2IU0EZL4k/GHUCwvpA7Jh8VP7tx2JbngS/zCmLt6ytlF8PySI6qtyIzfWA?=
- =?us-ascii?Q?MF+sH2EHRq/jqpsYCSt4H/zqNpv7DKvZSL1/fhzwQ+EK7j/yAAnkBxO9XXmy?=
- =?us-ascii?Q?79B5VFwC33eYIiWrqJYoPZSOvZd3rLoMjJTmA5DoOlg0yt67mACgsQHWNUd0?=
- =?us-ascii?Q?5D2idsAeeO4mfZ12Yy9kOxkX3Bqj+Svo3S/P/C7SckhFss+gTFrWO5oSDnxb?=
- =?us-ascii?Q?x4kYw3jEZBgWVD7ow2boJpmky69rBwre0IE0DHumCIHgUSA7TOJBu7kLi7wm?=
- =?us-ascii?Q?BkCxp1JFkYjQqZ6ZbSn7tKJiSPP1rzv8S0k87xiKAP9nMgpjhtJFyJEhuyCK?=
- =?us-ascii?Q?t4wYROAC1l7Y8h4K3WJoqGpQi79GdKpyVBofu28VdjIEY4pSLwAi5SaJw41n?=
- =?us-ascii?Q?GFjS4KaCxreM9AQI16dpmqWgbk/pjUNcgL0B36IUbRuF/gDBvBejRpHgLARv?=
- =?us-ascii?Q?mydbDpAIZjMB6/dJKwqL5mU4TVmH9lycZGNnXC9/3W0ScVxkDp/Rf/YX2/CK?=
- =?us-ascii?Q?eZMTHP/ehjrrfjh4KCBvG9Tf7DrI70O4TWl8x2mYULlqneAmfV7yujH9V+95?=
- =?us-ascii?Q?XiOMmK6foK9CId862vU7ld61ex5eawii8IBkSl0gHUiaNv1s4k2cVy9LBmNt?=
- =?us-ascii?Q?2u90zpUgzTCSy8M4tFoU1vOp/AXfnwRM7Fd3KnAeM5l8sjYtciHtbzfOC60N?=
- =?us-ascii?Q?PRN0npQHKTDkl/13i/PiC/haVF05hvinDGlSI6+rT9jKQVtVNkDwjBEM8dZV?=
- =?us-ascii?Q?Dw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 13 Dec 2022 12:30:41 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FF223164
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:30:31 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so316386pgh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 09:30:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0WZ8TzLeB/rXEyvbeXV/qGpfj1Y7zlME5zl3wBjcFAc=;
+        b=bktt6gT2sTs0BE6pOcUBqBlAW366m7cOGpI7lNvmKJ2gQvmVP5YetN8VGcER95at7k
+         yCTVz5xUUPJQPRaLHTIjodfpAJBVnFrUuo0RkoNjE2GNcMvk4Vrsb/h5NlwGQv/eFbKc
+         nM5/nSIaHkuptZEWZgj1RT0MHxZmOISbsZwzvo3xTO9s4HcDII/Fa/NIzkq+0PFn7P3s
+         e6KRs3cGb9ddIjT+R2CvenJZc9x4GyuFk8wfb9ROyfVWhnnOJRxxy6aBnEdk1BWuVBiy
+         bzVQYiLqEcJHWuASXvXV8xfxTTKYsq19yQpeMsoxkpVeE9W4ZgWwutWmprmFcHOzJ/JY
+         DX1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0WZ8TzLeB/rXEyvbeXV/qGpfj1Y7zlME5zl3wBjcFAc=;
+        b=w+ktlJupWATlYinR83x9mFuOWV5yds/Fk6KEse+Ad3H+LvLUFEoSG/8vD4g51uYb2s
+         ENVFGXTq1+yDTmoHQMF2QKqlcKJJxGRsGQOFxUutENKqFdQ+0SGDanz4KeTOrNo6l3pP
+         HTfP0TVAJ+rpzyqm2TxawSxIsfEpcjkcJFJCwd71jJ8K7tyBUFwuDlloQYHVjaqiR34d
+         p/1thEwrQFT2ER6oxZs7rlCxJWMsRiEUyaG9LQ3ZbJms3zgDbb7H8jhgmsGCrIaUJkw7
+         Wmc9AItjHy+vnwp36o7JgZSIlvrItsczNqHKyTpw0II6izeTSk2J98NN3a/oIkcv+h/q
+         2oOg==
+X-Gm-Message-State: ANoB5pmYjTix2zZwNThmcWmIcLdfj1BVPIsJOhnLfW3AyPVlJoa1+8dV
+        rVI+v/l4/ypK4cBOm1RTAmsg
+X-Google-Smtp-Source: AA0mqf5hOA2kJpq7spRZKe/QPabg82P2ViwApCpt/T8KEC2ikfNo0EJ8y0+3viN8q36+EET3TjfGQg==
+X-Received: by 2002:a05:6a00:1696:b0:56e:dca8:ba71 with SMTP id k22-20020a056a00169600b0056edca8ba71mr26551604pfc.32.1670952630686;
+        Tue, 13 Dec 2022 09:30:30 -0800 (PST)
+Received: from thinkpad ([27.111.75.5])
+        by smtp.gmail.com with ESMTPSA id b133-20020a621b8b000000b005776867a97dsm7931860pfb.29.2022.12.13.09.30.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:30:29 -0800 (PST)
+Date:   Tue, 13 Dec 2022 23:00:23 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com, quic_saipraka@quicinc.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: arm: msm: Fix register regions
+ used for LLCC banks
+Message-ID: <20221213173023.GG4862@thinkpad>
+References: <20221212123311.146261-1-manivannan.sadhasivam@linaro.org>
+ <20221212123311.146261-3-manivannan.sadhasivam@linaro.org>
+ <aa692a69-fc8d-472e-e5ae-276c3d6d7d78@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f682d1f2-47d3-47e9-074a-08dadd2fad3b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2022 17:30:06.5562
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BeN2rht3ASDr1sUTRp/Bj9LSR/ec5TGGoGeyFqZVxVfqE749L40YVN4MjaAnPwZJeuIqDT/hEGfS034S14EShUmuqR2P37EDbTJbE68sVXo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3479
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aa692a69-fc8d-472e-e5ae-276c3d6d7d78@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Friday, November 18, 2022 7:46=
- PM
->
+On Tue, Dec 13, 2022 at 05:24:45PM +0100, Krzysztof Kozlowski wrote:
+> On 12/12/2022 13:33, Manivannan Sadhasivam wrote:
+> > Register regions of the LLCC banks are located at separate addresses.
+> > Currently, the binding just lists the LLCC0 base address and specifies
+> > the size to cover all banks. This is not the correct approach since,
+> > there are holes and other registers located in between.
+> > 
+> > So let's specify the base address of each LLCC bank and get rid of
+> > reg-names property as it is not needed anymore. It should be noted that
+> > the bank count differs for each SoC, so that also needs to be taken into
+> > account in the binding.
+> > 
+> > Cc: <stable@vger.kernel.org> # 4.19
+> > Fixes: 7e5700ae64f6 ("dt-bindings: Documentation for qcom, llcc")
+> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  .../bindings/arm/msm/qcom,llcc.yaml           | 97 ++++++++++++++++---
+> >  1 file changed, 83 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+> > index d1df49ffcc1b..260bc87629a7 100644
+> > --- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+> > @@ -33,14 +33,8 @@ properties:
+> >        - qcom,sm8550-llcc
+> >  
+> >    reg:
+> > -    items:
+> > -      - description: LLCC base register region
+> > -      - description: LLCC broadcast base register region
+> > -
+> > -  reg-names:
+> > -    items:
+> > -      - const: llcc_base
+> > -      - const: llcc_broadcast_base
+> > +    minItems: 2
+> > +    maxItems: 9
+> >  
+> >    interrupts:
+> >      maxItems: 1
+> > @@ -48,7 +42,76 @@ properties:
+> >  required:
+> >    - compatible
+> >    - reg
+> > -  - reg-names
+> > +
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,sc7180-llcc
+> > +              - qcom,sm6350-llcc
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          items:
+> > +            - description: LLCC0 base register region
+> > +            - description: LLCC broadcast base register region
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,sc7280-llcc
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          items:
+> > +            - description: LLCC0 base register region
+> > +            - description: LLCC1 base register region
+> > +            - description: LLCC broadcast base register region
+> 
+> This will break all existing users (all systems, bootloaders/firmwares),
+> so you need to explain that in commit msg - why breaking is allowed, who
+> is or is not going to be affected etc. Otherwise judging purely by
+> bindings this is an ABI break.
+> 
+> Reason "This is not the correct approach since, there are holes and
+> other registers located in between." is not enough, because this
+> suggests previous approach was just not the best and you have something
+> better. Better is not a reason for ABI break.
+> 
 
-Previous patches to the Hyper-V clocksource driver have not been very
-consistent in the Subject line prefix, but let's use
-"clocksource/drivers/hyper-v:" since it has been used the most.
+Maybe I need to reword the commit message a bit. But clearly the binding was
+wrong for rest of the SoCs other than SDM845 as the total size of the LLCC
+region includes registers of other peripherals like memory controller.
 
-> Hyper-V tsc page is shared with hypervisor and it should be decrypted
-> in sev-snp enlightened guest when it's used.
->=20
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  drivers/clocksource/hyperv_timer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyp=
-erv_timer.c
-> index bb47610bbd1c..aa68eebed5ee 100644
-> --- a/drivers/clocksource/hyperv_timer.c
-> +++ b/drivers/clocksource/hyperv_timer.c
-> @@ -364,7 +364,7 @@ EXPORT_SYMBOL_GPL(hv_stimer_global_cleanup);
->  static union {
->  	struct ms_hyperv_tsc_page page;
->  	u8 reserved[PAGE_SIZE];
-> -} tsc_pg __aligned(PAGE_SIZE);
-> +} tsc_pg __bss_decrypted __aligned(PAGE_SIZE);
->=20
->  struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
->  {
-> --
-> 2.25.1
+In that case, will you let the binding to be wrong or fix it?
 
+Thanks,
+Mani
+
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,sc8180x-llcc
+> > +              - qcom,sc8280xp-llcc
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          items:
+> > +            - description: LLCC0 base register region
+> > +            - description: LLCC1 base register region
+> > +            - description: LLCC2 base register region
+> > +            - description: LLCC3 base register region
+> > +            - description: LLCC4 base register region
+> > +            - description: LLCC5 base register region
+> > +            - description: LLCC6 base register region
+> > +            - description: LLCC7 base register region
+> > +            - description: LLCC broadcast base register region
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,sdm845-llcc
+> > +              - qcom,sm8150-llcc
+> > +              - qcom,sm8250-llcc
+> > +              - qcom,sm8350-llcc
+> > +              - qcom,sm8450-llcc
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          items:
+> > +            - description: LLCC0 base register region
+> > +            - description: LLCC1 base register region
+> > +            - description: LLCC2 base register region
+> > +            - description: LLCC3 base register region
+> > +            - description: LLCC broadcast base register region
+> >  
+> >  additionalProperties: false
+> >  
+> > @@ -56,9 +119,15 @@ examples:
+> >    - |
+> >      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> >  
+> > -    system-cache-controller@1100000 {
+> > -      compatible = "qcom,sdm845-llcc";
+> > -      reg = <0x1100000 0x200000>, <0x1300000 0x50000> ;
+> > -      reg-names = "llcc_base", "llcc_broadcast_base";
+> > -      interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+> > +    soc {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        system-cache-controller@1100000 {
+> > +          compatible = "qcom,sdm845-llcc";
+> 
+> Inconsistent indentation for DTS example. Use 4 spaces for it.
+> 
+> > +          reg = <0 0x01100000 0 0x50000>, <0 0x01180000 0 0x50000>,
+> > +                <0 0x01200000 0 0x50000>, <0 0x01280000 0 0x50000>,
+> > +                <0 0x01300000 0 0x50000>;
+> > +          interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+> > +        };
+> >      };
+> 
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
