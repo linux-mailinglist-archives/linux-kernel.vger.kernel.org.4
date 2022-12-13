@@ -2,169 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2C264B8F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2423E64B901
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbiLMPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S235561AbiLMPzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236349AbiLMPwI (ORCPT
+        with ESMTP id S236250AbiLMPzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:52:08 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3FDB10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:52:04 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id s186so161357oia.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:52:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L4S6IY7Es8dJWmI1zKzaLLFQ5iuTC9RKmLux8vmUzGE=;
-        b=D9wU+Rg0YiCXNDBHDRj9XnWXn3dXydF8CYKT0c16X8a2mXyqOCqGHg5BOfRFQnFjCm
-         RzxmAz7r3BjFENEC+pP0YeTEF966HzzlsS/mCur6gIGC4sxcWhPy3VKxyjg3/6ms5Jcr
-         oB1g90yKF9g8uG2mQnBNyo4ZFSyc2Hw5fuaoXdoMdpV+pv2osMbc3pku+BtNq62B74N5
-         qo94fR1kbFFgT2hWxA58Z+U51bc+PnI6Q5v0Sf3mEW6/67CABSEyYA3HRv97nVVEs6SB
-         mm9Wbej0OKS5qOxue2tJcn2NE2G5v+VOR9ttXlJVRrK0vb9raj/YoNxjPWQSf5qDOwkn
-         a/sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L4S6IY7Es8dJWmI1zKzaLLFQ5iuTC9RKmLux8vmUzGE=;
-        b=1x3j7B60OuJgU3ZZzxIRMwW8sIxVc0W2E9Vd4x9O5HDhp5NbegLN/1lsHGQTYUreDR
-         c6Tn2pVNJjtnujOz9Xi+grDdCRj1KT+vqFhnlpxi3U2gNJAVH23xlheistQgvGykvWw2
-         fYqZ52/vs/kgqXovRYdF9zEWy8JTDu9xVRtsH+q+DhfpP4q5AV6yPJNFiIWbVtBeVRNa
-         bVjfbRb8ElHaLOuYvBqD7e6MyobGChW7dIIRR7VZJKE6UkqTN5KuYxnoXmrExvro4zU3
-         e6YfPGPgvqYQuQpOWV8ir3hRS5qRrLTSj4mp4n6IY/IXss63dhw8Y7OoDbEgW/Ablexv
-         vSaw==
-X-Gm-Message-State: ANoB5pkDxt6NnVZZA3673Atf8LdKBAW80MEXL6aYZZppxTKblaOmfnP2
-        qN5O73CLyeukMOQGQ7nrg4cFWOUOGcozwZ6/TaAI5w==
-X-Google-Smtp-Source: AA0mqf6TruzSZYgUeKTJod8DzV8p0+JYiry+zrVHJx1IjNq3sPx4471W+oNLLG+dJPMsU9fXrn/5oUmSuQpee25Di7M=
-X-Received: by 2002:a54:4817:0:b0:35e:5a1b:825c with SMTP id
- j23-20020a544817000000b0035e5a1b825cmr236167oij.155.1670946723985; Tue, 13
- Dec 2022 07:52:03 -0800 (PST)
+        Tue, 13 Dec 2022 10:55:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C5718E2B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 07:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670946884;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=le5VOhgAJo7w8+98IyRq0qg/O2EwJ6fbgWW2g/QrJps=;
+        b=Pyz3SzJRTeUi4qEzWNd4/glwcguEyDWz2V6acuWokXtx/wqLcdguENzPAa0JRsQtu7xSnW
+        iwf0Yld7+2ksrzAoplbrZKQQzmkpdDeqZA7IuaGa8BEO+aNxaToz+IOFmHnavo6mKiczzU
+        tb9y9+qI/BJx3BbgNmYrvtHjc5lsiRg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-HpUQz0CAPHKoJ8luzCTZZA-1; Tue, 13 Dec 2022 10:54:41 -0500
+X-MC-Unique: HpUQz0CAPHKoJ8luzCTZZA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1ED9858F17;
+        Tue, 13 Dec 2022 15:54:40 +0000 (UTC)
+Received: from [10.22.32.205] (unknown [10.22.32.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C9065492C18;
+        Tue, 13 Dec 2022 15:54:39 +0000 (UTC)
+Message-ID: <da5bc530-5075-e17f-aed4-7a4b1f86932f@redhat.com>
+Date:   Tue, 13 Dec 2022 10:54:37 -0500
 MIME-Version: 1.0
-References: <20221115112720.911158-1-treapking@chromium.org>
-In-Reply-To: <20221115112720.911158-1-treapking@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 13 Dec 2022 16:51:52 +0100
-Message-ID: <CAG3jFys7gbB7tyLmpByZcamAXMSRWdEY_4rjCXWwXtT67DFLdQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: it6505: Add caching for EDID
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        allen chen <allen.chen@ite.com.tw>,
-        linux-kernel@vger.kernel.org, David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH-tip] sched: Fix use-after-free bug in dup_user_cpus_ptr()
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Wenjie Li <wenjieli@qti.qualcomm.com>,
+        =?UTF-8?B?RGF2aWQgV2FuZyDnjovmoIc=?= <wangbiao3@xiaomi.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221128014441.1264867-1-longman@redhat.com>
+ <20221201134445.GC28489@willie-the-truck>
+ <330989bf-0015-6d4c-9317-bfc9dba30b65@redhat.com>
+ <20221202101835.GA29522@willie-the-truck>
+ <e9c7a920-4801-59fd-2429-361c54523d8e@redhat.com>
+ <20221213125404.GD5719@willie-the-truck>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221213125404.GD5719@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 at 12:27, Pin-yen Lin <treapking@chromium.org> wrote:
->
-> Add caching when EDID is read, and invalidate the cache until the
-> bridge detects HPD low or sink count changes on HPD_IRQ.
->
-> It takes 1.2s for IT6505 bridge to read a 3-block EDID, and skipping
-> one EDID read would be a notable difference on user experience.
->
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
->
-> ---
->
->  drivers/gpu/drm/bridge/ite-it6505.c | 26 ++++++++++++++++++++------
->  1 file changed, 20 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 21a9b8422bda..4b818f31668f 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -457,6 +457,8 @@ struct it6505 {
->
->         /* it6505 driver hold option */
->         bool enable_drv_hold;
-> +
-> +       struct edid *cached_edid;
->  };
->
->  struct it6505_step_train_para {
-> @@ -2244,6 +2246,13 @@ static void it6505_plugged_status_to_codec(struct it6505 *it6505)
->                                    status == connector_status_connected);
->  }
->
-> +
-> +static void it6505_remove_edid(struct it6505 *it6505)
-> +{
-> +       kfree(it6505->cached_edid);
-> +       it6505->cached_edid = NULL;
-> +}
-> +
->  static int it6505_process_hpd_irq(struct it6505 *it6505)
->  {
->         struct device *dev = &it6505->client->dev;
-> @@ -2270,6 +2279,7 @@ static int it6505_process_hpd_irq(struct it6505 *it6505)
->                 it6505_reset_logic(it6505);
->                 it6505_int_mask_enable(it6505);
->                 it6505_init(it6505);
-> +               it6505_remove_edid(it6505);
->                 return 0;
->         }
->
-> @@ -2353,6 +2363,7 @@ static void it6505_irq_hpd(struct it6505 *it6505)
->                         it6505_video_reset(it6505);
->         } else {
->                 memset(it6505->dpcd, 0, sizeof(it6505->dpcd));
-> +               it6505_remove_edid(it6505);
->
->                 if (it6505->hdcp_desired)
->                         it6505_stop_hdcp(it6505);
-> @@ -3016,16 +3027,18 @@ static struct edid *it6505_bridge_get_edid(struct drm_bridge *bridge,
->  {
->         struct it6505 *it6505 = bridge_to_it6505(bridge);
->         struct device *dev = &it6505->client->dev;
-> -       struct edid *edid;
->
-> -       edid = drm_do_get_edid(connector, it6505_get_edid_block, it6505);
-> +       if (!it6505->cached_edid) {
-> +               it6505->cached_edid = drm_do_get_edid(connector, it6505_get_edid_block,
-> +                                                     it6505);
->
-> -       if (!edid) {
-> -               DRM_DEV_DEBUG_DRIVER(dev, "failed to get edid!");
-> -               return NULL;
-> +               if (!it6505->cached_edid) {
-> +                       DRM_DEV_DEBUG_DRIVER(dev, "failed to get edid!");
-> +                       return NULL;
-> +               }
->         }
->
-> -       return edid;
-> +       return drm_edid_duplicate(it6505->cached_edid);
->  }
->
->  static const struct drm_bridge_funcs it6505_bridge_funcs = {
-> @@ -3367,6 +3380,7 @@ static void it6505_i2c_remove(struct i2c_client *client)
->         drm_dp_aux_unregister(&it6505->aux);
->         it6505_debugfs_remove(it6505);
->         it6505_poweroff(it6505);
-> +       it6505_remove_edid(it6505);
->  }
->
->  static const struct i2c_device_id it6505_id[] = {
-> --
-> 2.38.1.493.g58b659f92b-goog
->
+On 12/13/22 07:54, Will Deacon wrote:
+> On Fri, Dec 02, 2022 at 09:30:56AM -0500, Waiman Long wrote:
+>> On 12/2/22 05:18, Will Deacon wrote:
+>>> On Thu, Dec 01, 2022 at 12:03:39PM -0500, Waiman Long wrote:
+>>>> On 12/1/22 08:44, Will Deacon wrote:
+>>>>> On Sun, Nov 27, 2022 at 08:44:41PM -0500, Waiman Long wrote:
+>>>>>> Since commit 07ec77a1d4e8 ("sched: Allow task CPU affinity to be
+>>>>>> restricted on asymmetric systems"), the setting and clearing of
+>>>>>> user_cpus_ptr are done under pi_lock for arm64 architecture. However,
+>>>>>> dup_user_cpus_ptr() accesses user_cpus_ptr without any lock
+>>>>>> protection. When racing with the clearing of user_cpus_ptr in
+>>>>>> __set_cpus_allowed_ptr_locked(), it can lead to user-after-free and
+>>>>>> double-free in arm64 kernel.
+>>>>>>
+>>>>>> Commit 8f9ea86fdf99 ("sched: Always preserve the user requested
+>>>>>> cpumask") fixes this problem as user_cpus_ptr, once set, will never
+>>>>>> be cleared in a task's lifetime. However, this bug was re-introduced
+>>>>>> in commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
+>>>>>> do_set_cpus_allowed()") which allows the clearing of user_cpus_ptr in
+>>>>>> do_set_cpus_allowed(). This time, it will affect all arches.
+>>>>>>
+>>>>>> Fix this bug by always clearing the user_cpus_ptr of the newly
+>>>>>> cloned/forked task before the copying process starts and check the
+>>>>>> user_cpus_ptr state of the source task under pi_lock.
+>>>>>>
+>>>>>> Note to stable, this patch won't be applicable to stable releases.
+>>>>>> Just copy the new dup_user_cpus_ptr() function over.
+>>>>>>
+>>>>>> Fixes: 07ec77a1d4e8 ("sched: Allow task CPU affinity to be restricted on asymmetric systems")
+>>>>>> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+>>>>>> CC: stable@vger.kernel.org
+>>>>>> Reported-by: David Wang 王标 <wangbiao3@xiaomi.com>
+>>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>>>> ---
+>>>>>>     kernel/sched/core.c | 32 ++++++++++++++++++++++++++++----
+>>>>>>     1 file changed, 28 insertions(+), 4 deletions(-)
+>>>>> As per my comments on the previous version of this patch:
+>>>>>
+>>>>> https://lore.kernel.org/lkml/20221201133602.GB28489@willie-the-truck/T/#t
+>>>>>
+>>>>> I think there are other issues to fix when racing affinity changes with
+>>>>> fork() too.
+>>>> It is certainly possible that there are other bugs hiding somewhere:-)
+>>> Right, but I actually took the time to hit the same race for the other
+>>> affinity mask field so it seems a bit narrow-minded for us just to fix the
+>>> one issue.
+>> I focused on this particular one because of a double-free bug report from
+>> David. What other fields have you found to be subjected to data race?
+> See my other report linked above where we race on 'task_struct::cpus_mask'.
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+So you are referring to the fact a task structure may be changed while 
+it is being copied to a child process at the same time. I think it is a 
+hard problem to fix as I am not aware of a way to freeze the content of 
+the task structure while the copying is in progress. There are just too 
+many fields in the task structures that can be changed in many different 
+contexts from different CPUs.
+
+Anyway, this dup_user_cpus_ptr() bug is not related to racing in this 
+copying process, it is caused by a race after that. I think it may be 
+worthwhile to put a note about possible race in the dup_task_struct() 
+process but I can't think of a good way to fix it.
+
+Cheers,
+Longman
+
