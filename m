@@ -2,100 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563B164B9DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A7664B9DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbiLMQfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S236100AbiLMQfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbiLMQfJ (ORCPT
+        with ESMTP id S234735AbiLMQfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:35:09 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DE8115B;
-        Tue, 13 Dec 2022 08:35:08 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1445ca00781so13221616fac.1;
-        Tue, 13 Dec 2022 08:35:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJVQxyn8gXiSA1AhPudrUs7ABz5sBN5zDoG4vdYkTS8=;
-        b=5ByTtm4girwObHUaNkTIi6XjpuLWWirygVFZAGoa7HUMCGYl/nYrebd3f/iLFCNT06
-         4YRb0X848wdUZZGOqMbZM4jajNafuLWJYO6qs4rNBES5QgxzZHqO/v+i9FOJ5q4TJdbV
-         sjJ8dRk9uQbq4V3n7UJttZ2HP0Tx/eJ02WIKmJVRLIkwBAN2hO5YnJ93xrPpb35xGGKQ
-         vtaB+y8wvzHlMiBOq1EF8hB7SN3Q4heTs/ys4sVfYXvIphBrhZYkJyK7qpt8Q0Ja1WGN
-         +DLkhgpy7G/h2XxhALx/QYYbZ4x1N/dYFhRnlwnjja1lvp9YrRcY6Irob2+M9yjSX5ja
-         dJ2w==
-X-Gm-Message-State: ANoB5pkpSqVTUyV4u1voDIZzK61/zDVDJZIrX8ZSjDlGuOuQLBS2FhFr
-        BeS2TdgbOwCi/AijcnyiBQ==
-X-Google-Smtp-Source: AA0mqf6gAyXmBROc/uHUvFJFQsXUK5ZsOJyrNY4N5rAb+6eVQ/bZLAv3s7BlqspIZ6lr1OzI3lo9/g==
-X-Received: by 2002:a05:6870:4608:b0:13b:e0a:20e6 with SMTP id z8-20020a056870460800b0013b0e0a20e6mr10759985oao.34.1670949307632;
-        Tue, 13 Dec 2022 08:35:07 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k16-20020a056870819000b0014866eb34cesm1570367oae.48.2022.12.13.08.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 08:35:07 -0800 (PST)
-Received: (nullmailer pid 2014809 invoked by uid 1000);
-        Tue, 13 Dec 2022 16:35:06 -0000
-Date:   Tue, 13 Dec 2022 10:35:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Georgi Djakov <quic_c_gdjako@quicinc.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: Re: [RFC v2 1/2] dt-bindings: iommu: Document iova-best-fit property
- for IOMMU masters
-Message-ID: <20221213163506.GA2011062-robh@kernel.org>
-References: <20221212215138.17897-1-quic_c_gdjako@quicinc.com>
+        Tue, 13 Dec 2022 11:35:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2CD6175
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:35:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE138615FD
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:35:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82E0C433D2;
+        Tue, 13 Dec 2022 16:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670949321;
+        bh=qihIQCMPrJTCAef4qkglbnoZxzlmXFeUf906h3WI2bE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fO1G6bGV/KeloymJW66oTo+yy+4yiT37YGEdNR/LT98AlF2QyOlkQ4lyIzmmC9Yja
+         YOMMnFWSG203NY/ONt2prT6lxOZ7dDs76fJ4cV9KlRU9lNIMTFQqee3CuTxvGGo5NQ
+         dx9q+nHopU1j+ic41SEa4x8AxO5czV+M4yY/zXLn32x4e9JwgBEkZAg9Aho7/3SDye
+         MCUA7Lg5uMvgdGaHcRZaFOpW+bWxkcnTVNd1eKn+ATVb1Vww+u+adQt9TcwZ4L0ox1
+         Gu2W+dwVSoudhK9Qx6pFfylt/zuhILMN/mvj9FPRYb4BGTMcbiN5PU6HASzBE7Z7Od
+         8cbCBwqUtCjnQ==
+Date:   Tue, 13 Dec 2022 16:35:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu =?utf-8?B?KOS/nuWutumRqyk=?= <Jiaxin.Yu@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "ajye_huang@compal.corp-partner.google.com" 
+        <ajye_huang@compal.corp-partner.google.com>,
+        Chunxu Li =?utf-8?B?KOadjuaYpeaXrSk=?= <Chunxu.Li@mediatek.com>,
+        Allen-KH Cheng =?utf-8?B?KOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "kuninori.morimoto.gx@renesas.com" <kuninori.morimoto.gx@renesas.com>,
+        "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH v2 1/3] ASoC: hdmi-codec: Add event handler for hdmi TX
+Message-ID: <Y5ipwqzHKTK8UdlC@sirena.org.uk>
+References: <20221125094413.4940-1-jiaxin.yu@mediatek.com>
+ <20221125094413.4940-2-jiaxin.yu@mediatek.com>
+ <Y4Cysgk5Gic5ae9B@sirena.org.uk>
+ <18c82f6f723cd97a9d6b9a7ff16c6ed62fd005d6.camel@mediatek.com>
+ <Y4Y/vEWe3dw0FPQH@sirena.org.uk>
+ <cf9ea98a3263ffb8fc8b542888ad0ad680facfc7.camel@mediatek.com>
+ <Y4jHAJgmz/P58Q/C@sirena.org.uk>
+ <7023a2c7b471d6888d9079563a6c01f22599201f.camel@mediatek.com>
+ <Y43e+EsNCrCpZSIH@sirena.org.uk>
+ <dc50d0b21795acbcc44c77e5fd81e7cb92c65c67.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/zKtWsydBRDCvDgl"
 Content-Disposition: inline
-In-Reply-To: <20221212215138.17897-1-quic_c_gdjako@quicinc.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <dc50d0b21795acbcc44c77e5fd81e7cb92c65c67.camel@mediatek.com>
+X-Cookie: Edwin Meese made me wear CORDOVANS!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 01:51:37PM -0800, Georgi Djakov wrote:
-> Document the "iova-best-fit" device-tree property, which is used to
-> describe that the iommu master is constrained on memory and the system
-> must put more effort when allocating IOVAs to avoid holes/gaps in
-> memory. This improves the memory utilization and helps with memory
-> fragmentation issues in some cases, but it could take longer to allocate
-> an IOVA compared with the default "first-fit" algorithm.
-> 
-> Signed-off-by: Georgi Djakov <quic_c_gdjako@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/iommu/iommu.txt | 4 ++++
->  1 file changed, 4 insertions(+)
 
-No new properties in common .txt files. Schemas only.
+--/zKtWsydBRDCvDgl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, this looks like kernel policy which doesn't belong in DT.
+On Tue, Dec 13, 2022 at 02:23:32PM +0000, Jiaxin Yu (=E4=BF=9E=E5=AE=B6=E9=
+=91=AB) wrote:
+> On Mon, 2022-12-05 at 12:07 +0000, Mark Brown wrote:
+> > On Mon, Dec 05, 2022 at 09:34:17AM +0000, Jiaxin Yu (=E4=BF=9E=E5=AE=B6=
+=E9=91=AB) wrote:
 
-> diff --git a/Documentation/devicetree/bindings/iommu/iommu.txt b/Documentation/devicetree/bindings/iommu/iommu.txt
-> index 26ba9e530f13..ca1b4813c5bf 100644
-> --- a/Documentation/devicetree/bindings/iommu/iommu.txt
-> +++ b/Documentation/devicetree/bindings/iommu/iommu.txt
-> @@ -88,6 +88,10 @@ prevent any driver from properly setting up the translations.
->  
->  Optional properties:
->  --------------------
-> +- iova-best-fit: When present, the best-fit algorithm will be used, instead
-> +  of first-fit. This reduces memory fragmentation when allocating IOVAs in
-> +  some cases, but may also increase the time it takes to allocate an IOVA.
-> +
->  - pasid-num-bits: Some masters support multiple address spaces for DMA, by
->    tagging DMA transactions with an address space identifier. By default,
->    this is 0, which means that the device only has one address space.
-> 
+> > No, I mean that if you want to control the enable and disable of the
+> > output path you should implement a DAPM widget.
+
+> May I ask which driver file to add a new DAPM widget? Is it the bridge
+> ic driver like it6505.c? Or is it linke the "SDB" added in this patch?
+
+I would expect this to follow a similar pattern to everything else with
+hdmi-codec.c and have the actual ASoC stuff in there with a callback
+exposed to the rest of the world.
+
+> Yes, I should add a new set of events, such as:
+
+> enum {
+>     HDMI_CODEC_TRIGGER_EVENT_STOP,
+>     HDMI_CODEC_TRIGGER_EVENT_START,
+>     HDMI_CODEC_TRIGGER_EVENT_SUSPEND,
+>     HDMI_CODEC_TRIGGER_EVENT_RESUME,
+> }
+
+> Then provide handles for these events in the it6505 driver. Am I right?
+
+I'd expect more like on/off for a DAPM widget (the DAPM callbacks are
+pre/post on/off) but yes.
+
+--/zKtWsydBRDCvDgl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOYqcEACgkQJNaLcl1U
+h9BIcwf+IZPAQvqXRw2Cg6HsT7fk7Rmm2c4pKUU8NYJA7vobVG315cVSIGTIXIqD
+ImaHqf5kMeCNdt5eX5Hox3j5q3b2drkrcyHP6rj44Bb7lzqhHadpfXi9XaX7DT4d
+FrmlVfM2gwCXMSKbsKKPHXdqABIi86R5bN79MxoAhgbfisu5OmIrm6ZvYYvLXSlC
+nAXcEMeIKZGzhSQIEZCAQ0koNeKZAdmHz435pKjqYWCMbzCsTvXDOJq5GBB8rsiH
+lsuMIxHbyBoPUZdhuPj0WAzBMgAY9Kir3RQ1+Xd3epA9LYpWHn+bqotaAqEIlP7Y
+1c1+QoUZgnbL7M8UCa5+mryUEIhzGA==
+=uzkH
+-----END PGP SIGNATURE-----
+
+--/zKtWsydBRDCvDgl--
