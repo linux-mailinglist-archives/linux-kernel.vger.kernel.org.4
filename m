@@ -2,212 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A2564B513
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C4264B51A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235635AbiLMMXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S235654AbiLMMYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiLMMXH (ORCPT
+        with ESMTP id S235618AbiLMMYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:23:07 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15884FFB;
-        Tue, 13 Dec 2022 04:23:06 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4NWd1g1B4Dz9smY;
-        Tue, 13 Dec 2022 13:23:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wQpv-BK6o0IO; Tue, 13 Dec 2022 13:23:03 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4NWd1g0GVNz9sm8;
-        Tue, 13 Dec 2022 13:23:03 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EDEC78B773;
-        Tue, 13 Dec 2022 13:23:02 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id a2dakGG70529; Tue, 13 Dec 2022 13:23:02 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.67])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B11108B766;
-        Tue, 13 Dec 2022 13:23:02 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BDCMosN630599
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 13 Dec 2022 13:22:50 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BDCMnIC630590;
-        Tue, 13 Dec 2022 13:22:49 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH] [REBASED for 4.14] once: add DO_ONCE_SLOW() for sleepable contexts
-Date:   Tue, 13 Dec 2022 13:22:40 +0100
-Message-Id: <df44c3cd06ae0155f04f9d87fff35db67761beea.1670934155.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.38.1
+        Tue, 13 Dec 2022 07:24:37 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2084.outbound.protection.outlook.com [40.107.8.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C50F1A825;
+        Tue, 13 Dec 2022 04:24:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ezch7fZVEzl/yszfK8MqCmZnFSaa/hhqLjjBkfmern6ZUpfQsYehAS7xUqP76C0SCSkCnZfoYgd/6vAUZwhY50ZEd2dJpWfaOGwF8UUG91ykY9dcAmk8uWrnD2xTMyidiI2DstqL9CEx5LQ1stAQefGYF3AI0fiNQ0+yHho35v3FqPvNs74QhIfT7HeT7zBLFPSCeVvJEoXklWjpMMCRv2CugWV3646I2/Ln9f2eBaqGcgrkP8OkhrJECom+M2iqkF4/GYEVNYI5zIzS4cVzeqqYN9wgO/JTHWFbGdgh2c1BostoXBHu/wFpZuM//h/UqDJ7MZHsqFewZFMk8yCJ0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m9l36Vhq3JyGMCrdSPAOC0EBoTUN5Ij3qw3mtgku6e8=;
+ b=m+sXDlFhZzWU8eav9Y+zdc/YtXcnP6ZIk6wzfAqtn0ArhJpm9U0G3i0jWnhGTX2Vd/NurB0q1cVIwu1AmZ2H8wAmY7Tqh/tw6sZ968sMamAOzKm+iH63VX58/arSyZg0nyzSPJUrBRGDgvATskw8R9XaUHY0fzsbM+mbenZw9K8XagTmEWCSPGgNpGdQav5W2SdYKvpkSOwzYJVgy7cZUJ4KEirWABROGpSK2qdM/YW+8JUT4AXKmPE0Ryf8Wtt6Y+VNMr4BapbsiLuBwItjUIR9xBllZfHCGEx7VLH5/8zgZxwSJ0M+x+I60AHZBuXTwZ+165rKds3iWQ7L3rSjAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m9l36Vhq3JyGMCrdSPAOC0EBoTUN5Ij3qw3mtgku6e8=;
+ b=peaLmWt1vuWFbCV9r+zrAOmnAHzsYDcWcZY39rb56O48jUHENatvoPGT2G7pZZIZ2jnS6au1bdnRJUcrxbbxS0Wo19YRR5RgfGTcidiioIigQYV4rJiesZJs32RrlcVTlTnyHFcp25wmh0HexAHOSgwiOiAhbonkjxs0piTxvEg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
+ by DU2PR04MB8728.eurprd04.prod.outlook.com (2603:10a6:10:2df::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Tue, 13 Dec
+ 2022 12:24:34 +0000
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::7686:5382:16d5:c6de]) by AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::7686:5382:16d5:c6de%8]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 12:24:34 +0000
+From:   Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        pmenzel@molgen.mpg.de, amitkumar.karwar@nxp.com,
+        rohit.fule@nxp.com, sherry.sun@nxp.com
+Cc:     neeraj.sanjaykale@nxp.com, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org
+Subject: [PATCH v4 2/2] tools: Add identifier for NXP UART BT devices
+Date:   Tue, 13 Dec 2022 17:54:15 +0530
+Message-Id: <1670934255-4147-1-git-send-email-neeraj.sanjaykale@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0029.apcprd02.prod.outlook.com
+ (2603:1096:4:195::6) To AM9PR04MB8603.eurprd04.prod.outlook.com
+ (2603:10a6:20b:43a::10)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1670934159; l=5194; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=l/gW9uV8JB+UhiaHzRrRgcxXXLZq3Tnd8dyGrCC7WSQ=; b=3X9VI7eJm5NqUCwR9bw3dR0g6EqtdvEC+5pulqUc5uMYk1TxKqxmRogKnpF5UF/QPd1Ps57wnCmV 8KMtUWLzBbSTHeNxuUHDDtReljWOh85skZtePeE4r5iff+reV2fa
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8603:EE_|DU2PR04MB8728:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8c0c481-4163-46e1-6f49-08dadd04fe10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u+2szEkse5049S3S57BNRBah6ePNtc/IVI3HN87HdQFREKI5Gb0yhshyqFVlRzM3ROjK18v40O0FHSmMnSLlgMOco66ZeuHE5lDuq3XEfyHvwpUd/9sOWVtlxwdYzSnN3/TL3PM9sYllQyqvNuXjvvq2+c4LTmdScIdASRJLxIvVraHIya1PB+euR8Zy6f56US2hi3bqzWvYWEVlW74++S3Zu/xI7DsM/qWRlVuyjczOABFZ7gncCDtvS+VQyBz6zDat0Rm6ZPW/1YT/dZ2Dt824sa+YBXkioWsrcFGi+g2hUIZ0+Tpca9Xb9CwehiKiml4lllvmQEXwGqBG0aJyQuJfwPmH+t17bSfsvELGIPdhQGCGd2fh4Q2xVVmlj+G9XbeWK5eMHo+eVHu6T84eEubMbvs8mKgfoPr3HcQo7ZGSV/f4uZZ2c6bQEHuJSlMWxx+MDTFjMWI1fgNxfgvEDGdff0DUiaCq0xUFDqkK+q+YqecflNIYvJLEKLV67f2yYxxnuNaQ0FwBVms7WubpQsemFAVQKOg/gQV+yQGkIa/W+Rc7C67TL1VgrJpeGx4rrDwMOGkudcyQ8Pet1PGqTcFGWRsZu/wHmCyT1tkYp4SJUoLQyMopUTFFHeSrpBvL/+x6BekJaMGkoQ9itoNM1RSa2Xk+BK/dVIb1zhO/l2qBXhjKljLfSGFzPR3uqDSlQ42h57bLoOU7q4q7VIV4Lg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199015)(2616005)(86362001)(478600001)(6636002)(316002)(36756003)(6666004)(38100700002)(6506007)(52116002)(6512007)(26005)(38350700002)(186003)(2906002)(4744005)(6486002)(8676002)(8936002)(66946007)(41300700001)(66476007)(5660300002)(4326008)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A6naCr4acojiVIPNhlQcjh8FfRUrLGrQnOfKUoge5R4/4931C+vm6/+NpCtH?=
+ =?us-ascii?Q?dCXSxmoylNKDrSjGdm5BENPn45PYRXWQbvepnq9XDEild5GiTFdDKjD5rSof?=
+ =?us-ascii?Q?CmqIzKqr1W+x9jqmq7RIqL4U9jAKzP29OqNAo9MQ63/Sqi0e9wPPYHZFLQHV?=
+ =?us-ascii?Q?T3DqGJnnD5viUcItBd+JSjGw2Fc/hiZtLnbwiBYgd1msmIkNphNr+fbvoDQx?=
+ =?us-ascii?Q?xEPXyrU06+EEzymdws5mJiXUkatjEm6Oun8rHCOnK0EhdsY4Zi85AsEZRTD5?=
+ =?us-ascii?Q?uKNJFvYdgAuBiMR+Mj5iYEFDNv7wGTK+D1sL9Ck+hITHPdAsExTmstvZfZOG?=
+ =?us-ascii?Q?yY1na5ZIM76BRDMX3+uu/DwvLGtu9mkMtP4JeadoTWY+F4MeOUtVKEXRnOD/?=
+ =?us-ascii?Q?CqZGMZOe1ghkJdANNFyxvdakt2ffMAonzlJDe+w5cpICAfoAJAzz1hqaAYgk?=
+ =?us-ascii?Q?LbneV1JK8Ga5TH0WCWevhIxn/m6kHmlpyVRce64ULhPcWMhDpv9tDDc6Z0OB?=
+ =?us-ascii?Q?FsC0wlbccpqd+KxFBDoN3BP/GdonSQKJMzE4/y1wh9IcwZj9oVc/lzClvS09?=
+ =?us-ascii?Q?YjlmOyLmP4fRAwMtLLkazdk05mCG0CVq7ZYjre9AMK6EfZ/M1uegpiVm4Zet?=
+ =?us-ascii?Q?Kvm7q9P0TmEiP0WmU2EewFWGmVhTG8YiVqwoI45lMEuZ075Tegg3HiYarq9w?=
+ =?us-ascii?Q?ufXAUQQbpVlTJv/RxjnQIrMMIbCVKtZRjzTv3uQEWXRxWa+PvcbTKw+auY02?=
+ =?us-ascii?Q?zX3Bi1umXZIBY3sekV+7XIp7Iqm4BNw/TLFrXHNnozFLWU4MVaNROOONvHHI?=
+ =?us-ascii?Q?708wCiZcBmnTMhXSmGIniUZcmZbVT2M6afXtEbYKxhks4EV35DwhzEs/nTvV?=
+ =?us-ascii?Q?eBFJOnVVYPuiVIGvygwrlHNI3g6NRFJEd/LfpE0kUQJv9jVv4MTwVBEx+/Xx?=
+ =?us-ascii?Q?9BoJEaM8jNtgN3fixVYY6BZ6z1kO6R81kS2whD821DrJyWDJNil6BmOq/3Xs?=
+ =?us-ascii?Q?KH8rQd6Ax1TGXQV6qNnPCU/L9DbFsqJdq+56RlgbrrDUh6jyLEkn8l+L7KFS?=
+ =?us-ascii?Q?AuXMsrl0DSZQQj+tObeRLsl9g6gDZGtvy9IHkYjdaQWsTveLM33pS3ad85sZ?=
+ =?us-ascii?Q?LKCEbbg6ksDKeJ69IwIyxeALsHW5vJ9HM9HdIYmTHeCkDInPovsR8uZN3W3q?=
+ =?us-ascii?Q?Gzms6HagsQTW0+tOc+03TMxJpXwYYRvvgKNjG1Prw+qnDzKKhUyj0JjwUxd0?=
+ =?us-ascii?Q?yHtOhVjaxmuwg9g560bPeiu1cyEzztkAG2V3k+/6rYuscr4bsPCCBDZOPLlT?=
+ =?us-ascii?Q?oTaFqfR02OK1jlkIA1Y0ZV1lbKeqGt9d3uqP1UmrfYBZ9gg1ZcMOhg7S1/Rh?=
+ =?us-ascii?Q?B9vc5K9dnKPt5OBNAnF9LwMvcgdnTQZW5VOvoc/tThUPqlwXuady0ZxyT2bH?=
+ =?us-ascii?Q?HJOY0PKspUrL1laRLFqW0MpFjA+YHApB0xs+KNTRA5RSdkjhYYfHcyHVlhRc?=
+ =?us-ascii?Q?++12+5gOqI8tcXv/kVLyX8iJXMviZXds7+xiJGk4Ttz97px/Ql2iYogotVLi?=
+ =?us-ascii?Q?mpVnJdASH7AITbI9+bGqDNDv6qku6VQ1a61k2ZxJxLV4SWNyAc5oC6UsOcPe?=
+ =?us-ascii?Q?3g=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8c0c481-4163-46e1-6f49-08dadd04fe10
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 12:24:34.2037
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MojdYneY+Cvx3FkjtVug4NPQ7l/MjFWJ5tISuvxIj9Nqt+btNSijO81V2MtF/kX9yDeD9p1AfF6E34umyrU8oDYwtmhZSnc7YnryKkC4K3I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8728
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
-
-[ Upstream commit 62c07983bef9d3e78e71189441e1a470f0d1e653 ]
-
-Christophe Leroy reported a ~80ms latency spike
-happening at first TCP connect() time.
-
-This is because __inet_hash_connect() uses get_random_once()
-to populate a perturbation table which became quite big
-after commit 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
-
-get_random_once() uses DO_ONCE(), which block hard irqs for the duration
-of the operation.
-
-This patch adds DO_ONCE_SLOW() which uses a mutex instead of a spinlock
-for operations where we prefer to stay in process context.
-
-Then __inet_hash_connect() can use get_random_slow_once()
-to populate its perturbation table.
-
-Fixes: 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
-Fixes: 190cc82489f4 ("tcp: change source port randomizarion at connect() time")
-Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Link: https://lore.kernel.org/netdev/CANn89iLAEYBaoYajy0Y9UmGFff5GPxDUoG-ErVB2jDdRNQ5Tug@mail.gmail.com/T/#t
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Willy Tarreau <w@1wt.eu>
-Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Add identifiers for hci_nxp to support NXP UART BT devices for btattach
 ---
- include/linux/once.h       | 28 ++++++++++++++++++++++++++++
- lib/once.c                 | 30 ++++++++++++++++++++++++++++++
- net/ipv4/inet_hashtables.c |  4 ++--
- 3 files changed, 60 insertions(+), 2 deletions(-)
+ tools/btattach.c  | 1 +
+ tools/hciattach.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/include/linux/once.h b/include/linux/once.h
-index 6790884d3c57..bb091119b754 100644
---- a/include/linux/once.h
-+++ b/include/linux/once.h
-@@ -5,10 +5,18 @@
- #include <linux/types.h>
- #include <linux/jump_label.h>
+diff --git a/tools/btattach.c b/tools/btattach.c
+index 4ce1be7..8a30c5b 100644
+--- a/tools/btattach.c
++++ b/tools/btattach.c
+@@ -212,6 +212,7 @@ static const struct {
+ 	{ "ag6xx", HCI_UART_AG6XX },
+ 	{ "nokia", HCI_UART_NOKIA },
+ 	{ "mrvl",  HCI_UART_MRVL  },
++	{ "nxp",   HCI_UART_NXP   },
+ 	{ }
+ };
  
-+/* Helpers used from arbitrary contexts.
-+ * Hard irqs are blocked, be cautious.
-+ */
- bool __do_once_start(bool *done, unsigned long *flags);
- void __do_once_done(bool *done, struct static_key *once_key,
- 		    unsigned long *flags);
+diff --git a/tools/hciattach.h b/tools/hciattach.h
+index 26c0d54..d62cabf 100644
+--- a/tools/hciattach.h
++++ b/tools/hciattach.h
+@@ -32,6 +32,7 @@
+ #define HCI_UART_AG6XX	9
+ #define HCI_UART_NOKIA	10
+ #define HCI_UART_MRVL	11
++#define HCI_UART_NXP	12
  
-+/* Variant for process contexts only. */
-+bool __do_once_slow_start(bool *done);
-+void __do_once_slow_done(bool *done, struct static_key *once_key,
-+			 struct module *mod);
-+
- /* Call a function exactly once. The idea of DO_ONCE() is to perform
-  * a function call such as initialization of random seeds, etc, only
-  * once, where DO_ONCE() can live in the fast-path. After @func has
-@@ -52,9 +60,29 @@ void __do_once_done(bool *done, struct static_key *once_key,
- 		___ret;							     \
- 	})
- 
-+/* Variant of DO_ONCE() for process/sleepable contexts. */
-+#define DO_ONCE_SLOW(func, ...)						     \
-+	({								     \
-+		bool ___ret = false;					     \
-+		static bool ___done = false;				     \
-+		static struct static_key ___once_key = STATIC_KEY_INIT_TRUE; \
-+		if (static_key_true(&___once_key)) {		     \
-+			___ret = __do_once_slow_start(&___done);	     \
-+			if (unlikely(___ret)) {				     \
-+				func(__VA_ARGS__);			     \
-+				__do_once_slow_done(&___done, &___once_key,  \
-+						    THIS_MODULE);	     \
-+			}						     \
-+		}							     \
-+		___ret;							     \
-+	})
-+
- #define get_random_once(buf, nbytes)					     \
- 	DO_ONCE(get_random_bytes, (buf), (nbytes))
- #define get_random_once_wait(buf, nbytes)                                    \
- 	DO_ONCE(get_random_bytes_wait, (buf), (nbytes))                      \
- 
-+#define get_random_slow_once(buf, nbytes)				     \
-+	DO_ONCE_SLOW(get_random_bytes, (buf), (nbytes))
-+
- #endif /* _LINUX_ONCE_H */
-diff --git a/lib/once.c b/lib/once.c
-index bfb7420d0de3..76c7bbc0aa40 100644
---- a/lib/once.c
-+++ b/lib/once.c
-@@ -61,3 +61,33 @@ void __do_once_done(bool *done, struct static_key *once_key,
- 	once_disable_jump(once_key);
- }
- EXPORT_SYMBOL(__do_once_done);
-+
-+static DEFINE_MUTEX(once_mutex);
-+
-+bool __do_once_slow_start(bool *done)
-+	__acquires(once_mutex)
-+{
-+	mutex_lock(&once_mutex);
-+	if (*done) {
-+		mutex_unlock(&once_mutex);
-+		/* Keep sparse happy by restoring an even lock count on
-+		 * this mutex. In case we return here, we don't call into
-+		 * __do_once_done but return early in the DO_ONCE_SLOW() macro.
-+		 */
-+		__acquire(once_mutex);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+EXPORT_SYMBOL(__do_once_slow_start);
-+
-+void __do_once_slow_done(bool *done, struct static_key *once_key,
-+			 struct module *mod)
-+	__releases(once_mutex)
-+{
-+	*done = true;
-+	mutex_unlock(&once_mutex);
-+	once_disable_jump(once_key);
-+}
-+EXPORT_SYMBOL(__do_once_slow_done);
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 48c7a3a51fc1..590801a7487f 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -638,8 +638,8 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	if (likely(remaining > 1))
- 		remaining &= ~1U;
- 
--	net_get_random_once(table_perturb,
--			    INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
-+	get_random_slow_once(table_perturb,
-+			     INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
- 	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
- 
- 	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
+ #define HCI_UART_RAW_DEVICE	0
+ #define HCI_UART_RESET_ON_INIT	1
 -- 
-2.38.1
+2.7.4
 
