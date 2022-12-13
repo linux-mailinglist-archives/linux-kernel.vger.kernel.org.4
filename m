@@ -2,91 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84F464BF02
+	by mail.lfdr.de (Postfix) with ESMTP id 639F364BF01
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 23:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbiLMWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 17:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S236532AbiLMWCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 17:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237100AbiLMWBh (ORCPT
+        with ESMTP id S237164AbiLMWBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 17:01:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD385F71;
-        Tue, 13 Dec 2022 14:00:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 13 Dec 2022 17:01:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F13EB;
+        Tue, 13 Dec 2022 14:00:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC85A61745;
-        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 22635C433F2;
-        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670968817;
-        bh=c7NQwUHD8mv5j/vpuyEPTKkX2njMoVjr9Iw3J+9RtzU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mIuTUnRc2wSatw0i/1uXf7E7+jOCKVEsPp7WeM10ihiQtqc3HznsW+Bc7ydUhLMRJ
-         5J88uQ55zzuBZvRaBC0P7xfqZQL8qR4Z97XYb93G2Ljr7I43yBMLJCMgWLuZttAJok
-         6iTfxwmGzsWFIaDvqsggIMyC7YGuhK5MQq32UTZWCBRWChuVcvbj4ZbXnDN05JcZOu
-         7D2ED68vEOR2EQBWpzbMRP5H25CmCcsGqFQXf6CuT3RjI9QXScCegyvt3yGh+duJv6
-         nqTDx0FOQg43893cQ7/k0jp/PXskAMn68YB93WU3Q/2vUtF8RC5EZpKsFWBO9qNtxv
-         YG5XCDKoe9aRQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 03A9DC41612;
-        Tue, 13 Dec 2022 22:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NWsrC2Dlkz4xYQ;
+        Wed, 14 Dec 2022 09:00:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1670968844;
+        bh=dnKDY1oXjcC0Tv/ElhCbaTcvHEJsm3IIOdeK96sWOaY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KOjC+qxk0SniGC3699LJGn3Mg13cGc6AbZqjHItVe0afRcsZhGlepkXm823jdSow3
+         fxDbJxNyhhACD9dP+5wteSajpQeL4k2s1CPW2IPz8c3ss2A1VrA+67Lt9qpIoyDqal
+         HmD7qTWzBAQXGL7kMDaaLDMuSSBcT8erlr39fryDQcqWma+kPbPqoj0m9uiSWWeSPK
+         gZtzXJwFRZUpKeLryTkoQ3DKE4IsWd2iwiJ4wdo5Yo+Mj0f2csW+0lmYao+19FAhME
+         7s8OUbl+9wwmHuxBc/gm/KmpMek204qf5H4Id/wkIdjU1eZFc2k+XqoWuhPx7TdC4L
+         C078cxdVu37Dw==
+Date:   Wed, 14 Dec 2022 09:00:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-misc-fixes tree with Linus'
+ tree
+Message-ID: <20221214090042.1da0da04@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] libbpf: Optimized return value in libbpf_strerror
- when errno is libbpf errno
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167096881701.16694.14250332414378810386.git-patchwork-notify@kernel.org>
-Date:   Tue, 13 Dec 2022 22:00:17 +0000
-References: <20221210082045.233697-1-liuxin350@huawei.com>
-In-Reply-To: <20221210082045.233697-1-liuxin350@huawei.com>
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Yyb61wh00qLWsTl=2x39==M";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/Yyb61wh00qLWsTl=2x39==M
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Hi all,
 
-On Sat, 10 Dec 2022 16:20:45 +0800 you wrote:
-> This is a small improvement in libbpf_strerror. When libbpf_strerror
-> is used to obtain the system error description, if the length of the
-> buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
-> ERANGE.
-> 
-> However, this processing is not performed when the error code
-> customized by libbpf is obtained. Make some minor improvements here,
-> return -ERANGE and set errno to ERANGE when buf is not enough for
-> custom description.
-> 
-> [...]
+Today's linux-next merge of the drm-misc-fixes tree got a conflict in:
 
-Here is the summary with links:
-  - [bpf-next,v3] libbpf: Optimized return value in libbpf_strerror when errno is libbpf errno
-    https://git.kernel.org/bpf/bpf-next/c/c2614f627941
+  drivers/dma-buf/dma-buf.c
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+between commit:
 
+  28743e25fa1c ("dma-buf: Remove obsoleted internal lock")
 
+from Linus' tree and commit:
+
+  f728a5ea27c9 ("dma-buf: fix dma_buf_export init order v2")
+
+from the drm-misc-fixes tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/dma-buf/dma-buf.c
+index b6c36914e7c6,eb6b59363c4f..000000000000
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@@ -658,23 -655,24 +660,23 @@@ struct dma_buf *dma_buf_export(const st
+  	init_waitqueue_head(&dmabuf->poll);
+  	dmabuf->cb_in.poll =3D dmabuf->cb_out.poll =3D &dmabuf->poll;
+  	dmabuf->cb_in.active =3D dmabuf->cb_out.active =3D 0;
+ -	mutex_init(&dmabuf->lock);
++ 	INIT_LIST_HEAD(&dmabuf->attachments);
+ =20
+  	if (!resv) {
+- 		resv =3D (struct dma_resv *)&dmabuf[1];
+- 		dma_resv_init(resv);
++ 		dmabuf->resv =3D (struct dma_resv *)&dmabuf[1];
++ 		dma_resv_init(dmabuf->resv);
++ 	} else {
++ 		dmabuf->resv =3D resv;
+  	}
+- 	dmabuf->resv =3D resv;
+ =20
+- 	file =3D dma_buf_getfile(dmabuf, exp_info->flags);
+- 	if (IS_ERR(file)) {
+- 		ret =3D PTR_ERR(file);
++ 	ret =3D dma_buf_stats_setup(dmabuf, file);
++ 	if (ret)
+  		goto err_dmabuf;
+- 	}
+ =20
++ 	file->private_data =3D dmabuf;
++ 	file->f_path.dentry->d_fsdata =3D dmabuf;
+  	dmabuf->file =3D file;
+ =20
+- 	INIT_LIST_HEAD(&dmabuf->attachments);
+-=20
+  	mutex_lock(&db_list.lock);
+  	list_add(&dmabuf->list_node, &db_list.head);
+  	mutex_unlock(&db_list.lock);
+
+--Sig_/Yyb61wh00qLWsTl=2x39==M
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOY9goACgkQAVBC80lX
+0GxE4wf/YfEkxbiaehvNd37ZMtx4/2ICMz4VIuMhpjRmPrbP99hv6PHome3nja0A
+4ZVm0zvHSQmrDzNEMQnONhqqZ1kxc9WW5/6Nz0yos/mUUCnAxv6TiadvmxSpOivL
+uV2KW/dorfwLYkmjkycrCq/YYBN9boB3eTShqyBAY/cx4XWc7+klNd0uv+IuNgxN
+/HMZAv2m6C8Lb5W4HbUhUKp99xKRh4Wf08tZu8Gxe8MDwMA4xP/gW3ZBj6EflRT0
+MFm+yvyf3Fmpb8zFAAY+b4tnUyGakJDiX8OX+o4Djtu4jIf40IFE/8ZmcmCQ+B2V
+XWVlge0T8cQ+WrnZ3cXQE+sMhqTacQ==
+=fKvB
+-----END PGP SIGNATURE-----
+
+--Sig_/Yyb61wh00qLWsTl=2x39==M--
