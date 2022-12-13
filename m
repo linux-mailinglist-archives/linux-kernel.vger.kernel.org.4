@@ -2,157 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474CE64BBA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7541D64BBA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236457AbiLMSMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S236473AbiLMSMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbiLMSMD (ORCPT
+        with ESMTP id S236320AbiLMSMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:12:03 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534682228D
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:12:02 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id t17so4243186pjo.3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:12:02 -0800 (PST)
+        Tue, 13 Dec 2022 13:12:07 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C2923EAC;
+        Tue, 13 Dec 2022 10:12:06 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4488657pjt.0;
+        Tue, 13 Dec 2022 10:12:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYi2wzTmS91DztQJWezxrVaIvtUxCOobhUQC7IX33rE=;
-        b=kzONbnqS8z1JFK2IXGaoi5GJ1pMCpT4PlXC5FNkIw6q63bTQvlcxZVIW6PmmNPFJ7k
-         N2G7aePg8uGeKvZTxGksUo3W5fmyABmk90UxNaawnPN/wgR22eBiFbXGa0UUlXTFqVXG
-         6HK26llME9zlneTl7iwUD8/2W4Inh5m6n25C4rMGRVU9sXr3B350R73dLotmClxPqqHN
-         xbb6Q9ZqogS3kOrCcqeKYy7uBWf7Se7vxfBXeJzGi0cJuv/YWQjOSpRzlf7NXDXBhFdA
-         zUKIrHHDTuRH+THLudLnEaEAA05w+JB1aaMxDrhwRckrbW/BLDveKaq+RgRmQuGm4GUW
-         7bNQ==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0m3R6rCXT8yOLMVNuxnRvaS71+8kQVchp2Qkxuqcwfk=;
+        b=n86cgql6kHCsrBKnQ4bscxkuG73FtW7lOCaFQ6Qb3fwnYKycpXfEY8A7rirgqseVtc
+         QfQu/NdnPL6YTdczS7W/vRmc6CwCs01yeC4vj0RLteIAPgarJ3HLlreh/ACQiIxJQaoA
+         uYSF5JycwpdVSvXhjE+bGYOuq5Tj8IAZ053npUPYDOkNZvqNdhUCi59NzYnCpuphVY8P
+         ULuHUzSjTDX4nbdtcP4fs06cFWkDmUqhWnPSbszVYfvuvWYyChRZtJDYmgrZsdpBqd44
+         LKEFxikap3qjUVYnTvVwP15ZOpiBxLNrC1QmA3I6A9nJhbApuG/H2leZmcG8PnUT7tA1
+         UeYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYi2wzTmS91DztQJWezxrVaIvtUxCOobhUQC7IX33rE=;
-        b=AdJqHmIdQcqObEmnKF5VLQDeotgappQ7MiFIzd5+WHGLkk16x8tY+wqD88RkFAcjBr
-         D21myJEtIjEpKkDofT70zSFxN1MvpA5hh+LO4ar2WU3H5n42/UbAE+gmEDmLiyBid+R5
-         zFKgNHVTjceDZibsdhi8iyMcjaCaPW2V7pfPmUjr0FF59FzPEe9MFNP0HgjQuelOBOXz
-         6VkD3VZNUjTji7jIjJmMw1ATOucHFjQK28Rx5L4YvwRnA2C3t+Kx6ZKGZfB6m0UXw+Rs
-         Xuv7P0s3Kc5Zlx6CWjF+RdByTDbgoAcBelkWhFbC2XjTYQezUzsfxZlJy76CN6NFe8Xl
-         sfng==
-X-Gm-Message-State: ANoB5pmqGuQPgPPwnIbq6qnNYEIkpiFKV2xX9PaExM1yK2E/MX4SwlVw
-        ckbzlKV231AxDwpgdg8JfVtIKg==
-X-Google-Smtp-Source: AA0mqf44lsJ2QxarRPDgYalommUaCZ6IBecGxCtP56AfA+m5g0H4m391m+K+ZKD138lxt5j/42c8nQ==
-X-Received: by 2002:a17:902:c381:b0:189:a3de:ea2d with SMTP id g1-20020a170902c38100b00189a3deea2dmr373519plg.2.1670955121681;
-        Tue, 13 Dec 2022 10:12:01 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b00186ff402508sm154628plf.281.2022.12.13.10.12.00
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0m3R6rCXT8yOLMVNuxnRvaS71+8kQVchp2Qkxuqcwfk=;
+        b=lJDq2ns/ENkljx56jO/mbXAHKdSJqMUS1Jztm36PAhqE8eIZBnR4Eqdh58fpam/GGB
+         opPPgyb/lSiBgxTy+4QTKUpj+J8ztZ8JNqF487k/7AfY5q/4Wnvbl7M8q0lfdPfzEt7I
+         sf3H8OKg4JB4hw6atVxgszl7ZCwFGmvivMxnA26NUzN9qPcXIOFnGdM0MzRdYGZefMQJ
+         RopN+p6LceiYI75I7t6TtZ4UsH3MlhD0EHXkyrBXcVgZIke8ZSo5p2Aew1Kr6gR1tksw
+         9XYJmJ838jq2GP2ia9ppoN65rmkPLrqB8cioQ90aus6EiFea8AdL+JGS0ePmk63HzoiT
+         iIRg==
+X-Gm-Message-State: ANoB5pkiowOQZncgCAev+RQ2UWiafoTeWQ5fPyNhHYxnSeQxAT0WRoXz
+        CTqh7U3eyUcP8zfwuU9gdj8=
+X-Google-Smtp-Source: AA0mqf4sox4u+FcwG0+cMcPftuNagVjj7o32wteyPgZTvcm1x2qcdb7XQmevivDgZ4OgWumoJOIVOA==
+X-Received: by 2002:a17:90b:19d7:b0:219:ccbc:ed8e with SMTP id nm23-20020a17090b19d700b00219ccbced8emr21746861pjb.20.1670955125497;
+        Tue, 13 Dec 2022 10:12:05 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id q8-20020a17090a1b0800b0021937b2118bsm7437756pjq.54.2022.12.13.10.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 10:12:00 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:11:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH 1/2] kvm: x86/mmu: Reduce the update to the spte in
- FNAME(sync_page)
-Message-ID: <Y5jAbS4kwRAdrWwM@google.com>
-References: <20221212153205.3360-1-jiangshanlai@gmail.com>
- <20221212153205.3360-2-jiangshanlai@gmail.com>
+        Tue, 13 Dec 2022 10:12:04 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 13 Dec 2022 08:12:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+        pjt@google.com, derkling@google.com, haoluo@google.com,
+        dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+        riel@surriel.com, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y5jAc/Gs4gVRzkDe@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <Y5ckYyz14bxCvv40@hirez.programming.kicks-ass.net>
+ <Y5eeGMpr/SuyGBQO@slm.duckdns.org>
+ <Y5haDh3sYUFcXkBx@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212153205.3360-2-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5haDh3sYUFcXkBx@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Hello,
+
+On Tue, Dec 13, 2022 at 11:55:10AM +0100, Peter Zijlstra wrote:
+> On Mon, Dec 12, 2022 at 11:33:12AM -1000, Tejun Heo wrote:
 > 
-> Sometimes when the guest updates its pagetable, it adds only new gptes
-> to it without changing any existed one, so there is no point to update
-> the sptes for these existed gptes.
->
-> Also when the sptes for these unchanged gptes are updated, the AD
-> bits are also removed since make_spte() is called with prefetch=true
-> which might result unneeded TLB flushing.
-
-If either of the proposed changes is kept, please move this to a separate patch.
-Skipping updates for PTEs with the same protections is separate logical change
-from skipping updates when making the SPTE writable.
-
-Actually, can't we just pass @prefetch=false to make_spte()?  FNAME(prefetch_invalid_gpte)
-has already verified the Accessed bit is set in the GPTE, so at least for guest
-correctness there's no need to access-track the SPTE.  Host page aging is already
-fuzzy so I don't think there are problems there.
-
-> Do nothing if the permissions are unchanged or only write-access is
-> being added.
-
-I'm pretty sure skipping the "make writable" case is architecturally wrong.  On a
-#PF, any TLB entries for the faulting virtual address are required to be removed.
-That means KVM _must_ refresh the SPTE if a vCPU takes a !WRITABLE fault on an
-unsync page.  E.g. see kvm_inject_emulated_page_fault().
-
-> Only update the spte when write-access is being removed.  Drop the SPTE
-> otherwise.
-
-Correctness aside, there needs to be far more analysis and justification for a
-change like this, e.g. performance numbers for various workloads.
-
-> ---
->  arch/x86/kvm/mmu/paging_tmpl.h | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+> > > But this.. afaict that means that:
+> > > 
+> > >  - the whole EXT thing is incompatible with SCHED_CORE
+> > 
+> > Can you expand on why this would be? I didn't test against SCHED_CORE, so am
+> > sure things might be broken but can't think of a reason why it'd be
+> > fundamentally incompatible.
 > 
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index e5662dbd519c..613f043a3e9e 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -1023,7 +1023,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->  	for (i = 0; i < SPTE_ENT_PER_PAGE; i++) {
->  		u64 *sptep, spte;
->  		struct kvm_memory_slot *slot;
-> -		unsigned pte_access;
-> +		unsigned old_pte_access, pte_access;
->  		pt_element_t gpte;
->  		gpa_t pte_gpa;
->  		gfn_t gfn;
-> @@ -1064,6 +1064,23 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->  			continue;
->  		}
->  
-> +		/*
-> +		 * Drop the SPTE if the new protections would result in access
-> +		 * permissions other than write-access is changing.  Do nothing
-> +		 * if the permissions are unchanged or only write-access is
-> +		 * being added.  Only update the spte when write-access is being
-> +		 * removed.
-> +		 */
-> +		old_pte_access = kvm_mmu_page_get_access(sp, i);
-> +		if (old_pte_access == pte_access ||
-> +		    (old_pte_access | ACC_WRITE_MASK) == pte_access)
-> +			continue;
-> +		if (old_pte_access != (pte_access | ACC_WRITE_MASK)) {
-> +			drop_spte(vcpu->kvm, &sp->spt[i]);
-> +			flush = true;
-> +			continue;
-> +		}
-> +
->  		/* Update the shadowed access bits in case they changed. */
->  		kvm_mmu_page_set_access(sp, i, pte_access);
->  
-> -- 
-> 2.19.1.6.gb485710b
+> For starters, SCHED_CORE doesn't use __pick_next_task() (much). But I
+
+SCX implements ->pick_task() and the CORE selection path calls ->balance()
+and then ->pick_task(). That should work, right? Will test later.
+
+> think you're going to have more trouble with prio_less() (which is the
+> 3rd implementation of the scheduling function :/)
+
+Can't it take the same approach as CFS? The BPF scheduler is gonna be the
+one defining the relative priorities among SCX tasks, so that's where the
+decision belongs.
+
+> > >  - the whole EXT thing can be trivially starved by the presence of a
+> > >    single CFS/BATCH/IDLE task.
+> > 
+> > It's a simliar situation w/ RT vs. CFS, which is resolved via RT having
+> > starvation avoidance.
 > 
+> That is a horrible situation as is, FIFO/RR are very crap scheduling
+> policies for a number of reasons but we're stuck with them due to
+> history and POSIX :-(, that is not something you should justify anything
+> with.
+> 
+> In fact, it should be an example of what to avoid.
+> 
+> Specifically, FIFO/RR fail at the fundamentals of OS
+> abstractions -- they provide neither resource distribution nor
+> isolation.
+> 
+> > Here, the way it's handled is a bit different, SCX has
+> > a watchdog mechanism implemented in "[PATCH 18/31] sched_ext: Implement
+> > runnable task stall watchdog", so if SCX tasks hang for whatever reason
+> > including being starved by CFS, it will get aborted and all tasks will be
+> > handed back to CFS. IOW, it's treated like any other BPF scheduler errors
+> > that can lead to stalls and recovered the same way.
+> 
+> That all sounds quite terrible.. :/
+
+The main source of difference is that we can't implicitly trust the BPF
+scheduler and if it malfunctions or on user request, the system should
+always be recoverable, so there are some extra things which are inherently
+necessary to support that.
+
+> When the scheduler isn't available it should be an error to switch a
+> task to the policy, when there are tasks in the policy, it must not go
+> away.
+
+Yeah, this part is an interface design choice. Currently, when the BPF
+scheduler fails or is not present for any reason, SCX falls back to CFS
+because that seemed like the least invasive way to go about it, but it's
+trivial to just let SCX do dumb FIFO scheduling with the global DSQ instead,
+which in fact is already used during transition to guarantee forward
+progress.
+
+Thanks.
+
+-- 
+tejun
