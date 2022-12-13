@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810EB64B961
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5A64B964
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiLMQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S236050AbiLMQPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:15:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235670AbiLMQOz (ORCPT
+        with ESMTP id S235670AbiLMQPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:14:55 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006B320984
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:14:53 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3c090251d59so198788707b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1nD9sEqUn0kZvdyrOVwMupeHs9n9TUcPbvvCTtNHKY=;
-        b=Dcg+fvf5E73fyEBvAWU3Q9s+yoVXu4xkzlDFKkK6XjenGPZH+qPhP787QtMpRHBe6+
-         AJkLvvbBr648QYu5qDnZx9EhqHEMMXgCE9eq1F45KD19dbZMHYxhYj0zjusaUcSXueaW
-         O5bUKkSuKhwU6lhynhlcCjan0b0vEurCg2y6f92+lj7Ktbz/K/zHAT/JI8mf1suAGVVZ
-         ZCdfJdu5A5SRUz7UzJ/Wpz8MCvexDVHVd9+IEbm/8Ok1Yp8Dk7QDnHQ5gmf2MMlrl2QY
-         RFJY0mymmScFWzWBVBkb7z9G9xc6KKwOwARGpaP/CaiQx3P9z9k3+ISZFUUPfGsAIF+J
-         JwlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f1nD9sEqUn0kZvdyrOVwMupeHs9n9TUcPbvvCTtNHKY=;
-        b=XeIGWtRXLnRNj7j02/wQ68q3/r1U5SR0D1vcOOsbu6auC02tkrjE+nB9PRo658tJZN
-         InE6OtSr867goI7wMqEK4TmOVljGQytJ9pis3hkwLvtksM0droROYHmxuQpZJ+eNbitu
-         Mb6757QpS2zzh+QMFmkqRu6Z9w0v+OV8tnCsmA3dr19eRyTFRVwGQN012cjbU8vZfWr6
-         /cvYIp9h716UQw+/geYEd1mntTSf8gTfaQbayEnabkh/sylpcncfo6gWpfINjnI6IRCu
-         Dw4SepUQZtaGz7lqHdPvFNIWvikoCcT6pgNHeFJr0x9JgpRXpD/1NxM23gLFjFG40Wlx
-         v6NQ==
-X-Gm-Message-State: ANoB5pnVQZgfTAOC1VAnwTd04hPh1yD91xIJA5k97Tw8OFCN+BvUdTEC
-        6iQBRNihcSCvXOwjQixhJDVDQA==
-X-Google-Smtp-Source: AA0mqf6B6+EebPR/YduhnWildkkZiZCvGs0caCcK8P0VZGLAC6YkISifHPK3S4LdJUq4lOEdOZxtIQ==
-X-Received: by 2002:a05:7500:5c1b:b0:eb:3b43:9eb7 with SMTP id fd27-20020a0575005c1b00b000eb3b439eb7mr2217849gab.5.1670948093136;
-        Tue, 13 Dec 2022 08:14:53 -0800 (PST)
-Received: from localhost ([107.116.82.99])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006fa4cac54a5sm8142328qkb.72.2022.12.13.08.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 08:14:52 -0800 (PST)
-Date:   Tue, 13 Dec 2022 17:14:48 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: memcg reclaim demotion wrt. isolation
-Message-ID: <Y5ik+CCmvapf87Mb@cmpxchg.org>
-References: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
+        Tue, 13 Dec 2022 11:15:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68F9201BE;
+        Tue, 13 Dec 2022 08:15:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4AC615E9;
+        Tue, 13 Dec 2022 16:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE93C433D2;
+        Tue, 13 Dec 2022 16:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670948118;
+        bh=+QlZzhxjAQK3WvK5wUerkvR6XOsjNy3x6wxOqXFZ3Z0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zkh7T53mq8kuAhCzmfvGE8uli/Lybl0VCSbfHOtooH09ILeIVnRomD1Iwp5ebWH32
+         Kv8xTVE9dbS0TvybihHRZkKcZ3lw6KUSylbqRTue5Y/g4bcETEHL15N/Itlgn+kSKk
+         2+luENT0w+I47NhwAzg6UFiFSRU9evuvu44EoSf0Zr4UoRO0sDrYDjCZNq8Z2ZqulD
+         wqxJuovFS+hHrbxwoej//3w+MNcQniFDXRFBlaDS2OsalIb+HeZAaJA+orPX/9lqqi
+         jHBxuAsERp1J2NiltKKExsyZbQXIv3Ysth0MYu1rCIvJeOXdoIdRzPRl3o7kHbGmjm
+         0kOa8uflTsqvA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p57wW-0005m6-Ej; Tue, 13 Dec 2022 17:15:44 +0100
+Date:   Tue, 13 Dec 2022 17:15:44 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
+Message-ID: <Y5ilMI1QYsx1uaNe@hovoldconsulting.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-2-bmasney@redhat.com>
+ <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+ <Y5iWeTk2zOp9rInx@x1>
+ <Y5iaDP+nV9B59U2b@hovoldconsulting.com>
+ <03252ccd-e200-a112-b4dd-ba9fbf25c480@quicinc.com>
+ <Y5icyo7I5ZGAL02q@hovoldconsulting.com>
+ <Y5idf5dP2ttBSOUa@hovoldconsulting.com>
+ <c2be661a-87e4-864e-3571-75032484f66f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c2be661a-87e4-864e-3571-75032484f66f@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 04:41:10PM +0100, Michal Hocko wrote:
-> Hi,
-> I have just noticed that that pages allocated for demotion targets
-> includes __GFP_KSWAPD_RECLAIM (through GFP_NOWAIT). This is the case
-> since the code has been introduced by 26aa2d199d6f ("mm/migrate: demote
-> pages during reclaim"). I suspect the intention is to trigger the aging
-> on the fallback node and either drop or further demote oldest pages.
+On Tue, Dec 13, 2022 at 04:44:15PM +0100, Konrad Dybcio wrote:
 > 
-> This makes sense but I suspect that this wasn't intended also for
-> memcg triggered reclaim. This would mean that a memory pressure in one
-> hierarchy could trigger paging out pages of a different hierarchy if the
-> demotion target is close to full.
+> 
+> On 13.12.2022 16:42, Johan Hovold wrote:
+> > On Tue, Dec 13, 2022 at 04:39:54PM +0100, Johan Hovold wrote:
+> >> On Tue, Dec 13, 2022 at 09:04:39PM +0530, Shazad Hussain wrote:
+> >>> On 12/13/2022 8:58 PM, Johan Hovold wrote:
+> > 
+> >>>>> So qup2_i2c18 becomes qup2_i2c2. Would I use the flat naming scheme for
+> >>>>> the alias like so?
+> >>>>>
+> >>>>>      aliases {
+> >>>>>          i2c18 = &qup2_i2c2;
+> >>>>>      }
+> >>>>
+> >>>> Or perhaps the i2c controllers should use a zero-based index instead of
+> >>>> being named after the serial engines (e.g. as we do for the console
+> >>>> uart).
+> >>>>
+> >>>> How are they named in the schematics?
+> >>>
+> >>> We should use from 0 to N.
+> >>
+> >> With N being 23 after the number of serial engines, or the number of
+> >> available i2c buses on a particular board minus one?
+> > 
+> > Looks like the more recent Qualcomm platforms use aliases that reflect
+> > the engine number (i.e. 0 to 23) for i2c and spi.
+> IMO it makes the most sense, as it tells the userspace "hello, this
+> device is connected to the physical I2Cn on the SoC" as opposed to
+> "hello, this device is connected to the nth enabled bus on this
+> particular board".
 
-This is also true if you don't do demotion. If a cgroup tries to
-allocate memory on a full node (i.e. mbind()), it may wake kswapd or
-enter global reclaim directly which may push out the memory of other
-cgroups, regardless of the respective cgroup limits.
+But I guess it still depends on the board. I wouldn't expect a product
+with four serial ports to use the engine numbers on labels for the
+connectors for example.
 
-The demotion allocations don't strike me as any different. They're
-just allocations on behalf of a cgroup. I would expect them to wake
-kswapd and reclaim physical memory as needed.
+Johan
