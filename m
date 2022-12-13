@@ -2,155 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD4F64B584
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECF664B47C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 12:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234951AbiLMM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:56:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S235368AbiLMLwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 06:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiLMM4N (ORCPT
+        with ESMTP id S234707AbiLMLwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:56:13 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856E1CFE8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:56:12 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g7so4749759lfv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lDRj4WOJbdPREIb749HQ13QxtWlONFuq1JzJNUeCNpg=;
-        b=ZuxwNkHLhVTyZ+XWGzpS4XUn5GkDdTwsn1UUUqZAkdeppV42d4iiQ4FRASXlz+kXOm
-         JCSGK66De/Iab54DK4uSgVwabKTt8UPksrkd5dZLs5FSj8fIapmgV81+5HgRvFc7PkaA
-         XQRfT6ZxKL6f1tgRNvx9+DEi+vDXINQ0PAcKtFs8m+Rw/ICfyjiijtDWNKWIt94N5gwq
-         qX2kl19sNyG3zrAKxOBC1Fl+RInNIM2m2pLbOxoLeJ6A4AAXb2e/zHlOtto/YDJw0P4b
-         6juNPTYJdETjVs7JYgtAiLJJ1mRB6OOmsVZw8xG5W/NoRep3/+aosohbPRjakWwyG26x
-         Uvqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lDRj4WOJbdPREIb749HQ13QxtWlONFuq1JzJNUeCNpg=;
-        b=TEJpVOFHYTKi25bpUPpuTVW3+kVwrwMyFQbWIGSjrV59sIEl0K/4GiubM9ssIx0poO
-         efqWHcdIzOJIHuKpbHooZC6pJmTUT2x7w5x6F9i+4gQel7RFBJKOvJl8wvQkXLJWv62O
-         7E2r2W3qVTY9kgbcCj6HBq5S7PFqkQ0Goq1lpTNm2H4gXeQsHmhT7FQD7NE85ojbUNlg
-         7DqBzhS8XvPaEL4Nljinube+C0wyDITyHKO9pBiN37aISBs0ZU5K2dmuBJ3A1n0Oi4IK
-         f0bqJa9VTpE2UYVz8tWdhL9mGXC4k1+2f6TZ/3ZB7Fnu74QYUrg7tnIcYNWG5Lzelxhk
-         ygCA==
-X-Gm-Message-State: ANoB5pkT6QBCU9XBN0jO4JmHmbHCB4gJs6vK3+TEYG6pY8eJx+92bMAW
-        jUYbWDNfvTstb+KWJu63RZSDNw==
-X-Google-Smtp-Source: AA0mqf7tAGagkXyfYUWEQTPUGp7HeBrp1ETg+KFiqpiNIBrJzlVTmS8z4SbTF9vzXQsDugimHZXx0w==
-X-Received: by 2002:ac2:5fc1:0:b0:4aa:54a:3a6e with SMTP id q1-20020ac25fc1000000b004aa054a3a6emr5018196lfg.41.1670936170600;
-        Tue, 13 Dec 2022 04:56:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a19-20020ac25e73000000b00492e3a8366esm361281lfr.9.2022.12.13.04.56.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 04:56:10 -0800 (PST)
-Message-ID: <39ff2174-6d04-ec21-b762-377ed28088cb@linaro.org>
-Date:   Tue, 13 Dec 2022 13:56:09 +0100
+        Tue, 13 Dec 2022 06:52:03 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB94FAF2;
+        Tue, 13 Dec 2022 03:52:01 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NWcJl1072z15NJj;
+        Tue, 13 Dec 2022 19:51:03 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 13 Dec
+ 2022 19:51:59 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <weiyongjun1@huawei.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>,
+        <f.fainelli@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lizetao1@huawei.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: [PATCH net v2] r6040: Fix kmemleak in probe and remove
+Date:   Tue, 13 Dec 2022 20:56:14 +0800
+Message-ID: <20221213125614.927754-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <7f35ca55-cbed-98ac-4988-1b783db21dc5@huawei.com>
+References: <7f35ca55-cbed-98ac-4988-1b783db21dc5@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, andersson@kernel.org
-References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
- <20221213123823.455731-4-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213123823.455731-4-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 13:38, Bhupesh Sharma wrote:
-> Add USB superspeed qmp phy node to dtsi.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
->  1 file changed, 36 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index e4ce135264f3d..9c5c024919f92 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
->  			status = "disabled";
->  		};
->  
-> +		usb_qmpphy: phy@1615000 {
-> +			compatible = "qcom,sm6115-qmp-usb3-phy";
-> +			reg = <0x01615000 0x200>;
-> +			#clock-cells = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-> +				 <&gcc GCC_AHB2PHY_USB_CLK>;
-> +			clock-names = "com_aux",
-> +				      "ref",
-> +				      "cfg_ahb";
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
-> +				 <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
-> +			reset-names = "phy", "phy_phy";
-> +			status = "disabled";
+There is a memory leaks reported by kmemleak:
 
-Hm, you add a disabled PHY which is used by existing controller. The
-controller is enabled in board DTS, but new PHY node isn't. Aren't you
-now breaking it?
+  unreferenced object 0xffff888116111000 (size 2048):
+    comm "modprobe", pid 817, jiffies 4294759745 (age 76.502s)
+    hex dump (first 32 bytes):
+      00 c4 0a 04 81 88 ff ff 08 10 11 16 81 88 ff ff  ................
+      08 10 11 16 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+      [<ffffffff827e20ee>] phy_device_create+0x4e/0x90
+      [<ffffffff827e6072>] get_phy_device+0xd2/0x220
+      [<ffffffff827e7844>] mdiobus_scan+0xa4/0x2e0
+      [<ffffffff827e8be2>] __mdiobus_register+0x482/0x8b0
+      [<ffffffffa01f5d24>] r6040_init_one+0x714/0xd2c [r6040]
+      ...
 
-> +
-> +			usb_ssphy: phy@1615200 {
-> +				reg = <0x01615200 0x200>,
-> +				      <0x01615400 0x200>,
-> +				      <0x01615c00 0x400>,
-> +				      <0x01615600 0x200>,
-> +				      <0x01615800 0x200>,
-> +				      <0x01615a00 0x100>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <1>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
-> +
+The problem occurs in probe process as follows:
+  r6040_init_one:
+    mdiobus_register
+      mdiobus_scan    <- alloc and register phy_device,
+                         the reference count of phy_device is 3
+    r6040_mii_probe
+      phy_connect     <- connect to the first phy_device,
+                         so the reference count of the first
+                         phy_device is 4, others are 3
+    register_netdev   <- fault inject succeeded, goto error handling path
 
-Just one blank line.
+    // error handling path
+    err_out_mdio_unregister:
+      mdiobus_unregister(lp->mii_bus);
+    err_out_mdio:
+      mdiobus_free(lp->mii_bus);    <- the reference count of the first
+                                       phy_device is 1, it is not released
+                                       and other phy_devices are released
+  // similarly, the remove process also has the same problem
 
->  		qfprom@1b40000 {
->  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->  			reg = <0x01b40000 0x7000>;
-> @@ -1023,8 +1057,8 @@ usb_dwc3: usb@4e00000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x04e00000 0xcd00>;
->  				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
-> -				phys = <&usb_hsphy>;
-> -				phy-names = "usb2-phy";
-> +				phys = <&usb_hsphy>, <&usb_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
->  				iommus = <&apps_smmu 0x120 0x0>;
->  				snps,dis_u2_susphy_quirk;
->  				snps,dis_enblslpm_quirk;
+The root cause is traced to the phy_device is not disconnected when
+removes one r6040 device in r6040_remove_one() or on error handling path
+after r6040_mii probed successfully. In r6040_mii_probe(), a net ethernet
+device is connected to the first PHY device of mii_bus, in order to
+notify the connected driver when the link status changes, which is the
+default behavior of the PHY infrastructure to handle everything.
+Therefore the phy_device should be disconnected when removes one r6040
+device or on error handling path.
 
-Best regards,
-Krzysztof
+Fix it by adding phy_disconnect() when removes one r6040 device or on
+error handling path after r6040_mii probed successfully.
+
+Fixes: 3831861b4ad8 ("r6040: implement phylib")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+v1 -> v2: change the subject prefix "PATCH" to "PATCH net" and change
+the goto label name "err_out_r6040_mii_remove" to "err_out_phy_disconnect"
+
+ drivers/net/ethernet/rdc/r6040.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/rdc/r6040.c b/drivers/net/ethernet/rdc/r6040.c
+index eecd52ed1ed2..f4d434c379e7 100644
+--- a/drivers/net/ethernet/rdc/r6040.c
++++ b/drivers/net/ethernet/rdc/r6040.c
+@@ -1159,10 +1159,12 @@ static int r6040_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	err = register_netdev(dev);
+ 	if (err) {
+ 		dev_err(&pdev->dev, "Failed to register net device\n");
+-		goto err_out_mdio_unregister;
++		goto err_out_phy_disconnect;
+ 	}
+ 	return 0;
+ 
++err_out_phy_disconnect:
++	phy_disconnect(dev->phydev);
+ err_out_mdio_unregister:
+ 	mdiobus_unregister(lp->mii_bus);
+ err_out_mdio:
+@@ -1186,6 +1188,7 @@ static void r6040_remove_one(struct pci_dev *pdev)
+ 	struct r6040_private *lp = netdev_priv(dev);
+ 
+ 	unregister_netdev(dev);
++	phy_disconnect(dev->phydev);
+ 	mdiobus_unregister(lp->mii_bus);
+ 	mdiobus_free(lp->mii_bus);
+ 	netif_napi_del(&lp->napi);
+-- 
+2.31.1
 
