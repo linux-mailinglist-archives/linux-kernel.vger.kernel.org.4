@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5414764B984
+	by mail.lfdr.de (Postfix) with ESMTP id 09A4A64B983
 	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 17:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiLMQWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 11:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S235658AbiLMQWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 11:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235717AbiLMQWA (ORCPT
+        with ESMTP id S235691AbiLMQV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 11:22:00 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E12218A3
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:21:59 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d7so268295pll.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 08:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ncjGKUv9rVKBS01SubO64Vlg5d0EAsJr2WrmHlvF8aI=;
-        b=cnUqemJOaNWoqJLcIuYLWCoRsH9YB2t97z2oa9JSDcYgoo0bvs3Kj5CADWkH1OBeYk
-         rKCZqnz0LFuYMj8Zzm4oHFWfOGN/TIxEjZr4pGWj6UrjzQB7hJvdC2oyXLIFkJ5fWqf/
-         plp009WBpFJF/9BWluCVyOS9kYOIJUGyGnoswOrW45HsmdRhlH9EJvKVuPQOJUTrEqwg
-         V06kj/pi4+vrfAYBTkVDyhWhB+boE4BJ+SL6Q8v2pAlOEdCdiStLZRAJ2HeKJRb0Q06v
-         IuvfHh1x64RMZCWb+xo50o5sBxXzR0Giz3UyzA0KxixIScFccjVRbwnuEYxFl/LJXhLB
-         C7jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ncjGKUv9rVKBS01SubO64Vlg5d0EAsJr2WrmHlvF8aI=;
-        b=MBXYkcy+00GfX6oRmiOn0niLmzle8cnLnOHnwZ4Jz8NThfJGNMzkUyB5K4MXZ0bsZj
-         fFaxT4EVNmpuAQpP8JSOK3aiu7UX5J5JRpmRDg7uKoMAHqVmAeIabZIBc6+4RG4/Ksml
-         VSMXCNxz+NbmGyWarUaOzwhHQrwBANBqycfniDbYnv8D+tO15UkEy2YbQv57InxeAF3B
-         rxLt5Etvk7Sqv5y9GaovxW+/BB3QG84QFuz3uPXQOIEyU0uJtU3hvlrX587+PEzTV5sh
-         llFA1u0dWqpdurctyDzzj2Mr0GV6+cfeGjG2HZ+dZzU9RMsjFNB/oAJ3cdmmE0LuTAUL
-         q3ng==
-X-Gm-Message-State: ANoB5pkmE4iV0vigUppyGsB+AmOt3o5Y9EjpTu2hCZUkwEGpJTJIclxG
-        j0BFzEpHhKJHEWqReXx4BQHKcg==
-X-Google-Smtp-Source: AA0mqf6q98v/+SKapWr16Y/du8552JbDbZLpSka+p8FGxLVAGnmPE2jwQ0akSy8RoMFoGgo7+YOjZg==
-X-Received: by 2002:a05:6a21:3942:b0:a4:c01c:5e1e with SMTP id ac2-20020a056a21394200b000a4c01c5e1emr25872268pzc.47.1670948518785;
-        Tue, 13 Dec 2022 08:21:58 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id b27-20020aa7951b000000b00574c54423d3sm8096315pfp.145.2022.12.13.08.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 08:21:58 -0800 (PST)
-In-Reply-To: <20221201135128.1482189-1-alexghiti@rivosinc.com>
-References: <20221201135128.1482189-1-alexghiti@rivosinc.com>
-Subject: Re: [PATCH 0/1] riscv: Fix P4D_SHIFT definition for 3-level page table mode
-Message-Id: <167094850229.7325.7145229658614333981.b4-ty@rivosinc.com>
-Date:   Tue, 13 Dec 2022 08:21:42 -0800
+        Tue, 13 Dec 2022 11:21:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35433218A4;
+        Tue, 13 Dec 2022 08:21:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB21615DB;
+        Tue, 13 Dec 2022 16:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC71AC433EF;
+        Tue, 13 Dec 2022 16:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670948518;
+        bh=Jk85M6LBW3nYMcfFJnJRi+cnyvWHxdySu0OtkbTJtqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HDlhvcn+PZXyb6Wblwz3d1R3uGiy7rey5CJRz1fBELd4XzT3rMmdh5rs7PDsDHDbP
+         Oedvmp8l8ua+Fs8U+nof3cLEk/NIrXSbTVJQlNbkR3RrC3Tc7YJtviivQR3tVaiz51
+         V6SpILsaBpTFiPVS51k9sRilAs/Ii6nrH0zfcZt7Jzy15yVRc8K2t1OgvsELKmrI6S
+         tGG9ybDu0Fyv3Ck7DuGeYkYxyuASMxixknSmZ7g/dxgfSVgKw/c0x8KPDP/KxAuFLY
+         SKEQft681VGwGRrowJyIaXXguRK5zSoJ38RT5xssNKbCSo0ZnbioTWHMnD2NVw7dd5
+         U5B2CCn67ds7A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p582y-0005rW-39; Tue, 13 Dec 2022 17:22:24 +0100
+Date:   Tue, 13 Dec 2022 17:22:24 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
+Message-ID: <Y5imwEsHGdSc/z4L@hovoldconsulting.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-2-bmasney@redhat.com>
+ <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+ <Y5iXjTQnEtMCZy7W@hovoldconsulting.com>
+ <114e960f-3b63-8c8f-9d4a-87173049d730@linaro.org>
+ <Y5ibG29yKQgD54Dn@hovoldconsulting.com>
+ <Y5ihczgZs1RBJ0IN@x1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>, linux-mm@kvack.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5ihczgZs1RBJ0IN@x1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 14:51:27 +0100, Alexandre Ghiti wrote:
-> +cc linux-mm since I'm struggling to know how bad is this issue and
-> if this should be picked for 6.1-rc8 or not.
-> 
-> I tested this fix on an Ubuntu kernel in sv39 mode without any issue
-> but the version without the fix seems to work fine too, either this is
-> not a real issue or I don't exercise the right thing to make it visible.
-> 
-> [...]
+On Tue, Dec 13, 2022 at 10:59:47AM -0500, Brian Masney wrote:
 
-Applied, thanks!
+> I noticed another inconsistency with sc8280xp.dtsi compared to other
+> platforms. I left off all of the pin mappings in sc8280xp.dtsi and
+> added them to the sa8540-ride.dts file since the existing sc8280xp.dtsi
+> file contains no pin mappings. Other platforms such as sm8450.dtsi,
+> sm8350.dtsi, and sm8250.dtsi contain the geni pin mappings. My
+> understanding is that these geni pins are fixed within the SoC and
+> don't change with the different boards. Should I also add the geni
+> pin mappings to sc8280xp.dtsi?
 
-[1/1] riscv: Fix P4D_SHIFT definition for 3-level page table mode
-      https://git.kernel.org/palmer/c/71fc3621efc3
+The pins are fixed but the pin configuration is still board specific.
 
-Best regards,
--- 
-Palmer Dabbelt <palmer@rivosinc.com>
+This came up earlier and we decided that keeping all pin configuration
+in the board dts was the way to go (e.g. for consistency and as it
+allows the integrator to easily review the actual configuration).
+
+Johan
