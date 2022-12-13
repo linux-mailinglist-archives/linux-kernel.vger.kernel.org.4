@@ -2,143 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C01564B77F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBC464B787
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 15:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiLMOgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 09:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S235950AbiLMOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 09:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbiLMOgI (ORCPT
+        with ESMTP id S229786AbiLMOhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 09:36:08 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFC720BFA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:05 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id kw15so36924430ejc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LoBGLUjEyhQfXWIWPOu9C92qTSNRy93bFCVJA1Gy7YQ=;
-        b=A9+F+Qfs1V94/OeuF0azEIfhIkJi+LCS+d3Cs11+Nwe+721/Z9kPMq2qwYD6CWLhp7
-         xjy4l9MDJSxb5AwXA6oXMgl0/A8whNjolgrz2x9VQtDgLXTsT8oDiDcUz6Ca9mq1MNb4
-         P12dtwtMiMZQBdZz0Ow2u4D0VNu0bWqYtRQcw=
+        Tue, 13 Dec 2022 09:37:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE4821269
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670942185;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YeA7rNz9YtNXa30NSFNa5/BE9ikSCHuGqIiQHRpjT3Q=;
+        b=XoZhwFEhfIlyDaNVvorvRncIsGCxsgoCnax4fRxpGxFcCDXjZVaD/1IajgtRwAmkeBBt9+
+        HqAp3GcSs5P9cTQg/dZl79ErziplesEPuTUN6lsRECKkx79evCQUO+a/nTudxfwttKt2XN
+        1L0+0Nf1lltjbZl7sgK7lNS4yBrhmuE=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-599-o7pu4dDPNkqtLyAUoWGeaQ-1; Tue, 13 Dec 2022 09:36:23 -0500
+X-MC-Unique: o7pu4dDPNkqtLyAUoWGeaQ-1
+Received: by mail-il1-f197.google.com with SMTP id j11-20020a056e02218b00b00304b148969dso5330627ila.13
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:36:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LoBGLUjEyhQfXWIWPOu9C92qTSNRy93bFCVJA1Gy7YQ=;
-        b=THmGI8FvkJVIv+/Xz6suF6aO0X5hw3UgC0OSn9yZOQAPqfdj8xX1F/G7YKkVkKEmSe
-         FBYOxDYPfUZrvw75UCVH9LFuPNOkw2QHFwkEX+0wNu3d/s5rsy5dUX3BFZYxc2zz2PKO
-         0sSCdx52BDaR4VU0O3CKHF32dhO60wospMbWqjHB7UxI2JCAnPfRFuSjunTeMRFvwgcw
-         YfmizbjQc7IYV0OdOPtW5rfaid2/FXmXaaXeYRnK3czB8Juqykb5VBFWTJngBX5VGPQy
-         t7e3ZoacXJa2AN5yHdqyggk6uD8CWvDfDIGT9IHggQJnseS5JKOD2RGWze9pobNsNFJe
-         +uOQ==
-X-Gm-Message-State: ANoB5pltR2VquBZBRq2ltAbj/vt+7dURghFsJQgcVU69gTMMnLxH3eWf
-        /gpNkv4RmpQn9YAlWk6AK72YHQ==
-X-Google-Smtp-Source: AA0mqf6RdH1mZDqyzcy4filvbzKOY19S4yxBwVauYac4/dNFu+WtMWhDlHsBJg4Rb277UyI22owjEA==
-X-Received: by 2002:a17:906:a410:b0:7c0:e5ca:411c with SMTP id l16-20020a170906a41000b007c0e5ca411cmr15851856ejz.17.1670942163897;
-        Tue, 13 Dec 2022 06:36:03 -0800 (PST)
-Received: from alco.roam.corp.google.com ([100.104.168.209])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b00781dbdb292asm4613960ejc.155.2022.12.13.06.36.03
+        bh=YeA7rNz9YtNXa30NSFNa5/BE9ikSCHuGqIiQHRpjT3Q=;
+        b=SOEaxbIfddpl9TBkKep7/Jwko+mojCfWY7Xlmn+AwXoc4z4CneyOoxJ8BHycoRf9y/
+         sygIMn6BKEBoSV0H591st7CY/l1OSs8ZUcr3hjUzR75luCJw1Cm1SmI7uex7TDZ0w8GQ
+         yR/9eO541sFa+QUeOgDDv16pIxLcckx8Hn41DgH+e/wGG3puiB8+UP+43iPjEJ90piJs
+         Z+ZuFxQOAqcJu+n3JVTZ8Ff45QcP84X/NS69/aYzSbNUN8wTdg2L4WVvW95YVJDZEdMs
+         IOa7f7o124vnex/dwkKejArwRiWw3wTV0pckFWWmaT62p40DdAmlRA66B7F3VSshKDgF
+         sCfA==
+X-Gm-Message-State: ANoB5pmhL4tNw7NDTzJ220nt6Yswf3c862mmCfJfNS13PGGhpmhY4gSi
+        UJZ7MwtCBydHYLUTzCwTr+K64RU45BP2ahIpx+n9fb3b4353gnpTzn7PI5cjQ1b4k3NcWsSNX5H
+        AZaxInkyntZfYIFiWDDGpTqod
+X-Received: by 2002:a5e:d903:0:b0:6de:d90e:ee05 with SMTP id n3-20020a5ed903000000b006ded90eee05mr10135414iop.2.1670942182512;
+        Tue, 13 Dec 2022 06:36:22 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5mLwxzWPfSBfxmcsXPVziNTpTyuENiy9aAV9FJntRMZ3j2oQKc8i8SHP3epsMHh0EojGMExA==
+X-Received: by 2002:a5e:d903:0:b0:6de:d90e:ee05 with SMTP id n3-20020a5ed903000000b006ded90eee05mr10135404iop.2.1670942182262;
+        Tue, 13 Dec 2022 06:36:22 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id y18-20020a027312000000b003760a908bfasm875133jab.169.2022.12.13.06.36.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 06:36:03 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Tue, 13 Dec 2022 15:35:31 +0100
-Subject: [PATCH v2 2/2] media: uvcvideo: Do not alloc dev->status
+        Tue, 13 Dec 2022 06:36:21 -0800 (PST)
+Date:   Tue, 13 Dec 2022 09:36:19 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
+        echanude@redhat.com, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
+Message-ID: <Y5iN48rA899u1++7@x1>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-5-bmasney@redhat.com>
+ <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com>
+ <Y5hvlX35nr8xQKEd@x1>
+ <77c29d8c-34b3-f508-26bf-22520ccc1f2a@linaro.org>
+ <13238048-f07c-3e8d-f170-5330ce94767c@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-uvc-race-v2-2-54496cc3b8ab@chromium.org>
-References: <20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org>
-In-Reply-To: <20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org>
-To:     Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1689; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=jEDQuOW3z7ZGcsKin4RTBJvSelqdlHZ1geiYjpdBLTo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmI3O4ptcgGHWc6J12tWDekLKnqXOo3j3z7Rmykia
- fM6ORvGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5iNzgAKCRDRN9E+zzrEiFvcEA
- CRu/tDiApvFvJAFb1Ou/ogsX4eEXmPAA4FtTn3zf36wW/CYBD3IefrmVoFpPkS1vS50bXAbNZO4gEG
- YBw2ZUKrDBFcwgKx01rQD9CDjIZBWR+yyP7SnKw8TMMcIsvK6nkgUdwotVDWvJC/gBWr3qCdrwo38l
- LtHT+kfE1PBU027stWfi3t0SzBk620H27apN5mmbcrXN5SKx/g61r/9dwZGRWGJqAAFtJi5ETOmwfD
- xKePSptFpzgeVQxpGskAZYlD+KyoYzzlcOQMQ+CiCVRckf1GD+iZdpo2wuWSE3E0W/nTsq3Sl0Sj5t
- c7Ny3sOMd1vkTfGhxl7ftL5y85B14Ilp17tqbpD5s9SqCRcNCyu6Al5Zn2+AKpuXtiZFu5KkLjBCVJ
- e95B6qrk35kQyrEb73wS9iChL/KNYgrdoVyITF+j5OHxruVFeYa2Wi4H2evV245EDo07y/qL7O3++1
- OpC3WHZ0mYJk/rFS8eWfUTMqiBzfha7iTCx3u7r5AZXr/DZ8ngyDkBehsMNY4w51rZ7e05kVp87cKJ
- EJvUimG4v+ZCaFVF2RrNCsDZtoFbDPD8Q+OnK4TYyDtmipeGdtF0hmUXi6a5xDLxvXaCRDG0/fN/8Q
- mwxYI/uW9XzF1H5HGCc4EhYdkQf6FgPzX6vtW5Jc7cUCY/QH98gAAektEAFA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13238048-f07c-3e8d-f170-5330ce94767c@redhat.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UVC_MAX_STATUS_SIZE is 16, simplify the code by inlining dev->status.
+On Tue, Dec 13, 2022 at 02:08:47PM +0100, Javier Martinez Canillas wrote:
+> On 12/13/22 14:02, Krzysztof Kozlowski wrote:
+> > On 13/12/2022 13:27, Brian Masney wrote:
+> > qcom,spi-video-codec is still not specific enough. You need to describe
+> > real device behind spidev. To be clear - you do not describe userspace,
+> > but the device.
+> > 
+> 
+> Agree.
+> 
+> I believe Brian just used "qcom,spi-video-codec" as an example but is only
+> a make up name to illustrate the concept. QC needs to determine what would
+> be the correct <vendor,device> tuple for the IP block that the user-space
+> driver will drive.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- drivers/media/usb/uvc/uvc_status.c | 9 +--------
- drivers/media/usb/uvc/uvcvideo.h   | 2 +-
- 2 files changed, 2 insertions(+), 9 deletions(-)
+Yes, that was just an example.
 
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 09a5802dc974..52999b3b7c48 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -259,15 +259,9 @@ int uvc_status_init(struct uvc_device *dev)
- 
- 	uvc_input_init(dev);
- 
--	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
--	if (dev->status == NULL)
--		return -ENOMEM;
--
- 	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (dev->int_urb == NULL) {
--		kfree(dev->status);
-+	if (!dev->int_urb)
- 		return -ENOMEM;
--	}
- 
- 	pipe = usb_rcvintpipe(dev->udev, ep->desc.bEndpointAddress);
- 
-@@ -296,7 +290,6 @@ void uvc_status_unregister(struct uvc_device *dev)
- void uvc_status_cleanup(struct uvc_device *dev)
- {
- 	usb_free_urb(dev->int_urb);
--	kfree(dev->status);
- }
- 
- int uvc_status_start(struct uvc_device *dev, gfp_t flags)
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index 6a9b72d6789e..ccc7e3b60bf1 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -559,7 +559,7 @@ struct uvc_device {
- 	/* Status Interrupt Endpoint */
- 	struct usb_host_endpoint *int_ep;
- 	struct urb *int_urb;
--	u8 *status;
-+	u8 status[UVC_MAX_STATUS_SIZE];
- 	bool flush_status;
- 	struct input_dev *input;
- 	char input_phys[64];
+Shazad: Is this thread clear about what QC needs for spidev? I'll let QC
+take care of sending patch(es) to add the various compatibles since I'm
+not sure what hardware will be backed by spidev.
 
--- 
-2.39.0.rc1.256.g54fd8350bd-goog-b4-0.11.0-dev-696ae
+I'll take care of making sure that sc8280xp.dtsi gets the spi controller
+nodes added.
+
+Brian
+
