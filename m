@@ -2,270 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCDA64AF91
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE39264AF96
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 07:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbiLMGCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 01:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S234340AbiLMGGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 01:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiLMGCL (ORCPT
+        with ESMTP id S232252AbiLMGGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 01:02:11 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C18F1A229
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:02:08 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f13-20020a1cc90d000000b003d08c4cf679so7130311wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
-        b=vc8g3zNJxla5Lu/ywNXhJjUsY9bXfhfc8KpUh13qP29TW4YJ5dQGPv5FrUJxxPQG1v
-         MboByqV0lgAf3XJyYdhtDWlqw61zAsWwA2WT+63dchCj9Br5c7aximvszctGPDUbOeNL
-         MyPgO//PoJss6rf1JaUmGr3ObCBAj1fkCnvx+5U6cETGGcC/J+WcICg0pH1mVSBk+wRa
-         M/EdOR71AMuD/yU4+XCBJ55k9r7JC2TBbr/vhPhvR9fs6VV7vfewwT6d7c3kaj+X2FQT
-         3qckEJ47EFitMhTB8zi/+X8IgNJgzBUrZVGm9pAseoMjGs2XZRN6YXrx0z+02h5/uaRF
-         CWZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
-        b=qKpqWDNYsRQ0ae1p49Pm5O3QhIOEn8/Xq765GyhaYS6R+Dg8JSr50PLhT+JqCxtHSM
-         joqurzTTRJ9dasPj5NIuUhRAMwJsQ2TT1TQjwPH7HQLDU36xdtz8HA3BkI8CTNT/6Oy9
-         0SemY6dFqYf0uC1utGs+T8qbzCKlbsSXX7I0RGk5PVwQuk5IxhtskAZbCx7/+Lrcefsb
-         DapkKhLhdmlGk8/5FkcQCUDwkxHtzxwJlBEeBiZiFyhjwIB5NZBwoLztP5V7e9qbpiPq
-         ihBx9vWsgyQ3McTGz5psVlUD87PbRJzs1oOIrzpu9A0cIjLgkbF/46o97ONNUuGVBGx3
-         g2IQ==
-X-Gm-Message-State: ANoB5plHWDF7TCSYYL47hoU4fizjTl5PD/8e/uq/Y1bdalaFZA7VHBXl
-        kMbLqeiIBcd4m3DD/hp8AhKHsg==
-X-Google-Smtp-Source: AA0mqf5Ry0vlp2BK7V379Xx5gkMXHrMs/RTW3fKIYILszorgAJaEo6oj6pK+bCwVFcMzRaV2QP1hqA==
-X-Received: by 2002:a05:600c:2101:b0:3cf:e850:4451 with SMTP id u1-20020a05600c210100b003cfe8504451mr14455165wml.9.1670911326540;
-        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
-Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003b47ff307e1sm12611234wms.31.2022.12.12.22.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v3] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Tue, 13 Dec 2022 07:02:04 +0100
-Message-Id: <20221213060204.27286-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 13 Dec 2022 01:06:41 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678D17438
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 22:06:37 -0800 (PST)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221213060635epoutp01061af106137ed48c692ef08e4edc4f58~wRT5JZUNW1618016180epoutp01a
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 06:06:35 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221213060635epoutp01061af106137ed48c692ef08e4edc4f58~wRT5JZUNW1618016180epoutp01a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1670911595;
+        bh=jXp+vX7rVAyMq/vBMAWOKcFxPyQtORN2x4GNSC7SbZo=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=tqmn2nTQgak67wwF65B2QL3zdXfm+WXgpNHtYX7S1m0BOEnGQ2R+9EmJ/Yk4jmUNm
+         voMIxmKE86EYTkQh2UfFTxc57wHNIOe6ZlBcVhnXAa0BcytGrRgew/Nthfdglyi26F
+         LjSWSmDKMINSIFITzQ0EAk0SG5afv5LL58aM6zLI=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221213060635epcas1p1583c4a337957ff6ef9a851a7ac7ea1ed~wRT41iPG01705317053epcas1p1Y;
+        Tue, 13 Dec 2022 06:06:35 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.242]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4NWSgH1BmMz4x9QC; Tue, 13 Dec
+        2022 06:06:35 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E3.7E.20046.B6618936; Tue, 13 Dec 2022 15:06:35 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221213060634epcas1p4a676afb07176433f37cda80713955173~wRT4VdChR0963309633epcas1p4h;
+        Tue, 13 Dec 2022 06:06:34 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221213060634epsmtrp1a40980ff4bf04a60d7b5775dbc8141b7~wRT4UvhP33265732657epsmtrp1I;
+        Tue, 13 Dec 2022 06:06:34 +0000 (GMT)
+X-AuditID: b6c32a39-b6cf5a8000004e4e-19-6398166b5753
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D6.DC.18644.A6618936; Tue, 13 Dec 2022 15:06:34 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221213060634epsmtip1d6dbb751c082204149586c5ba41f1d2f~wRT4INVR92365423654epsmtip1J;
+        Tue, 13 Dec 2022 06:06:34 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     <linkinjeon@kernel.org>
+Cc:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sj1557.seo@samsung.com>
+In-Reply-To: <PUZPR04MB6316B3802565F2A09DD0D47A81E39@PUZPR04MB6316.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 0/7] exfat: code optimizations
+Date:   Tue, 13 Dec 2022 15:06:34 +0900
+Message-ID: <11ef301d90eb9$0d9a3990$28ceacb0$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQFudLtrOaxngaEJdxHnDHYK+qVAswGhgxb+rzN8JwA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCJsWRmVeSWpSXmKPExsWy7bCmnm622Ixkgzt9LBYTpy1lttiz9ySL
+        xeVdc9gstvw7wurA4rFpVSebR9+WVYwenzfJBTBHNTDaJBYlZ2SWpSqk5iXnp2TmpdsqhYa4
+        6VooKWTkF5fYKkUbGhrpGRqY6xkZGekZW8ZaGZkqKeQl5qbaKlXoQvUqKRQlFwDV5lYWAw3I
+        SdWDiusVp+alOGTll4KcqFecmFtcmpeul5yfq6RQlphTCjRCST+hkTnj+o5rbAU/2SseXHzI
+        0sC4ka2LkZNDQsBE4tndHtYuRi4OIYEdjBInv05ghHA+MUrM6NnNBuF8ZpT4/e0lM0xLT/9J
+        FojELkaJ81NXQlW9ZJR4deEYC0gVm4CuxJMbP8E6RASkJeZdnMIEYjMLxEss3nEcbDmnQKzE
+        0m2XwGxhAVOJWx2zwHpZBFQlvl1oB4vzClhJLJ51kh3CFpQ4OfMJC8QceYntb+dAXaQgsfvT
+        UVaIXVYSt9YsZ4aoEZGY3dnGDHKchMBHdonpXQfZIRpcJHY2rWCFsIUlXh3fAhWXknjZ3wZl
+        dzNK/DnHC9E8gVGi5c5ZqAZjiU+fPwNDiQNog6bE+l36EGFFiZ2/5zJC2IISp691Qx3BJ/Hu
+        KyiEOYDivBIdbUIQJSoS3z/sZJnAqDwLyWuzkLw2C8kLsxCWLWBkWcUollpQnJueWmxYYIoc
+        45sYwSlUy3IH4/S3H/QOMTJxMB5ilOBgVhLhVdWYlizEm5JYWZValB9fVJqTWnyIcSIjMLQn
+        MkuJJucD03heSbyhmZmlhaWRiaGxmaEhYWETYwMDI2C6Nbc0NyZC2NLAxMzIxMLY0thMSZx3
+        +pSOZCGB9MSS1OzU1ILUIpijmDg4pRqYDuYfjp/bGX0/9Ip7DOPuANFTfGs2lwWqaN790VV9
+        PH/KFCGnYw2MW6MO/5wt3tx3zOHzlfQw5RCPev7P6o2F3le3zvDdaMuSFvWFIXZZy499M5IT
+        yjZGvlJblugeymsrbRi+t64yhEHE5GPInPSfs8/afopwnvLk9hrflFUXbm+05zjXe+oh1/W2
+        k/eOq23yuNaUcslaMyzkRPGB1efOHYs69mvr4pUXFQ+kfLK/lzKxz+3Z9szIU+dlnf9skbx/
+        NUuJxTeRUXCGoEzPtSv58WYajQcexqXWm9keXxnT9L6jaFHUrr8eRnIcmfN0xTgunJUqvHct
+        pD57gvqTNA3v991Mc7bM8n7jnRVz/M5dJZbijERDLeai4kQAlrxJT4cEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSnG6W2Ixkg569ShYTpy1lttiz9ySL
+        xeVdc9gstvw7wurA4rFpVSebR9+WVYwenzfJBTBHcdmkpOZklqUW6dslcGVc33GNreAne8WD
+        iw9ZGhg3snUxcnJICJhI9PSfZOli5OIQEtjBKLFm5iGgBAdQQkri4D5NCFNY4vDhYoiS54wS
+        s55dZQbpZRPQlXhy4yeYLSIgLTHv4hQmEJtZIFHizJI2VhBbSGAdo8SnjyIgNqdArMTSbZfA
+        9goLmErc6pjFAmKzCKhKfLvQDhbnFbCSWDzrJDuELShxcuYTFoiZ2hK9D1sZIWx5ie1v5zBD
+        3K8gsfvTUVaIG6wkbq1ZzgxRIyIxu7ONeQKj8Cwko2YhGTULyahZSFoWMLKsYpRMLSjOTc8t
+        Niwwykst1ytOzC0uzUvXS87P3cQIjgwtrR2Me1Z90DvEyMTBeIhRgoNZSYRXVWNashBvSmJl
+        VWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1MBv5fFCuXbUv/xXLC
+        y6bl4KRYHdeyDJ23FYJ2yaUP1nsF9kgJ/nnseb23r3i+vcRGV7WqNQ5RbHMPfdk8eZ5EZ2WB
+        yW/d5UUSHvdTogOKV+smHtxjYdDWYj3vaiy7lpe06GHt9DMlyW/ftG38NHvvioyMo3sfhX71
+        6720M8qpJcRU/1hwYMhetv1MJ/YeOGdw69Knjaa1ZQxzk1Y8XuI6w7Vsy7FKrVSuqiOhJrFa
+        ypdiDTomLu8xN37k/0VJ3TLtzpRzLh0vZ9+I/lR6MLW9t+VU8sUVWyKtPRbemt708L9NRM6Z
+        w7t4zwjrL3M6XXqA93pqpc+kT9fr/Hd0ltiu2d4tdtF2hsTDCer/sg4osRRnJBpqMRcVJwIA
+        A2k71vsCAAA=
+X-CMS-MailID: 20221213060634epcas1p4a676afb07176433f37cda80713955173
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221213023709epcas1p2076929f25729ec924f96d191cd025de4
+References: <CGME20221213023709epcas1p2076929f25729ec924f96d191cd025de4@epcas1p2.samsung.com>
+        <PUZPR04MB6316B3802565F2A09DD0D47A81E39@PUZPR04MB6316.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the early page table creation, we used to set the mapping for
-PAGE_OFFSET to the kernel load address: but the kernel load address is
-always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-PAGE_OFFSET is).
+> This patchset is some minor code optimizations, no functional changes.
+> 
+> Changes for v2:
+>   - [6/7] [7/7] Fix return value type of exfat_sector_to_cluster()
 
-But actually we don't have to establish this mapping (ie set va_pa_offset)
-that early in the boot process because:
+Looks good. Thanks.
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
 
-- first, setup_vm installs a temporary kernel mapping and among other
-  things, discovers the system memory,
-- then, setup_vm_final creates the final kernel mapping and takes
-  advantage of the discovered system memory to create the linear
-  mapping.
-
-During the first phase, we don't know the start of the system memory and
-then until the second phase is finished, we can't use the linear mapping at
-all and phys_to_virt/virt_to_phys translations must not be used because it
-would result in a different translation from the 'real' one once the final
-mapping is installed.
-
-So here we simply delay the initialization of va_pa_offset to after the
-system memory discovery. But to make sure noone uses the linear mapping
-before, we add some guard in the DEBUG_VIRTUAL config.
-
-Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-in a better TLB utilization.
-
-Note that we rely on the firmware to protect itself using PMP.
-
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
-
-v3:
-- Change the comment about initrd_start VA conversion so that it fits
-  ARM64 and RISCV64 (and others in the future if needed), as suggested
-  by Rob
-
-v2:
-- Add a comment on why RISCV64 does not need to set initrd_start/end that
-  early in the boot process, as asked by Rob
-
-Note that this patch is rebased on top of:
-[PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-
- arch/riscv/include/asm/page.h | 16 ++++++++++++++++
- arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              | 11 ++++++-----
- 4 files changed, 57 insertions(+), 11 deletions(-)
-
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index ac70b0fd9a9a..f3af526a149f 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
- #define PTE_FMT "%08lx"
- #endif
- 
-+#ifdef CONFIG_64BIT
-+/*
-+ * We override this value as its generic definition uses __pa too early in
-+ * the boot process (before kernel_map.va_pa_offset is set).
-+ */
-+#define MIN_MEMBLOCK_ADDR      0
-+#endif
-+
- #ifdef CONFIG_MMU
- extern unsigned long riscv_pfn_base;
- #define ARCH_PFN_OFFSET		(riscv_pfn_base)
-@@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
- #define is_linear_mapping(x)	\
- 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-+#else
-+void *linear_mapping_pa_to_va(unsigned long x);
-+#endif
- #define kernel_mapping_pa_to_va(y)	({						\
- 	unsigned long _y = y;								\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-@@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
- 	})
- #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
-+#else
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x);
-+#endif
- #define kernel_mapping_va_to_pa(y) ({						\
- 	unsigned long _y = y;							\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 1b76d3fe4e26..58bcf395efdc 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
- 	phys_ram_end = memblock_end_of_DRAM();
- 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
- 		phys_ram_base = memblock_start_of_DRAM();
-+
-+	/*
-+	 * Any use of __va/__pa before this point is wrong as we did not know the
-+	 * start of DRAM before.
-+	 */
-+	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
-+	riscv_pfn_base = PFN_DOWN(phys_ram_base);
-+
- 	/*
- 	 * memblock allocator is not aware of the fact that last 4K bytes of
- 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-@@ -672,9 +680,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
- 
- static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- {
--	/* Upgrade to PMD_SIZE mappings whenever possible */
--	base &= PMD_SIZE - 1;
--	if (!base && size >= PMD_SIZE)
-+	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
-+		return PGDIR_SIZE;
-+
-+	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
-+		return P4D_SIZE;
-+
-+	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
-+		return PUD_SIZE;
-+
-+	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
- 		return PMD_SIZE;
- 
- 	return PAGE_SIZE;
-@@ -983,11 +998,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	set_satp_mode();
- #endif
- 
--	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
-+	kernel_map.va_pa_offset = 0UL;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
--
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
- 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
-diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
-index 19cf25a74ee2..5ae4bd166e25 100644
---- a/arch/riscv/mm/physaddr.c
-+++ b/arch/riscv/mm/physaddr.c
-@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
- 	return __va_to_pa_nodebug(x);
- }
- EXPORT_SYMBOL(__phys_addr_symbol);
-+
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((unsigned long)(x) - kernel_map.va_pa_offset);
-+}
-+EXPORT_SYMBOL(linear_mapping_va_to_pa);
-+
-+void *linear_mapping_pa_to_va(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
-+}
-+EXPORT_SYMBOL(linear_mapping_pa_to_va);
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 7b571a631639..c45aaa3458a7 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
- static void __early_init_dt_declare_initrd(unsigned long start,
- 					   unsigned long end)
- {
--	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
--	 * enabled since __va() is called too early. ARM64 does make use
--	 * of phys_initrd_start/phys_initrd_size so we can skip this
--	 * conversion.
-+	/*
-+	 * __va() is not yet available this early on some platforms. In that
-+	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
-+	 * and does the VA conversion itself.
- 	 */
--	if (!IS_ENABLED(CONFIG_ARM64)) {
-+	if (!IS_ENABLED(CONFIG_ARM64) &&
-+	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
- 		initrd_start = (unsigned long)__va(start);
- 		initrd_end = (unsigned long)__va(end);
- 		initrd_below_start_ok = 1;
--- 
-2.37.2
+> 
+> Yuezhang Mo (7):
+>   exfat: remove call ilog2() from exfat_readdir()
+>   exfat: remove unneeded codes from __exfat_rename()
+>   exfat: remove unnecessary arguments from exfat_find_dir_entry()
+>   exfat: remove argument 'size' from exfat_truncate()
+>   exfat: remove i_size_write() from __exfat_truncate()
+>   exfat: fix overflow in sector and cluster conversion
+>   exfat: reuse exfat_find_location() to simplify exfat_get_dentry_set()
+> 
+>  fs/exfat/dir.c      | 38 +++++++++++++++-----------------------
+>  fs/exfat/exfat_fs.h | 19 ++++++++++++-------
+>  fs/exfat/file.c     | 12 +++++-------
+>  fs/exfat/inode.c    |  4 ++--
+>  fs/exfat/namei.c    | 19 +++----------------
+>  5 files changed, 37 insertions(+), 55 deletions(-)
+> 
+> --
+> 2.25.1
 
