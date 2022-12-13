@@ -2,115 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C776864BC31
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C2964BC36
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 19:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbiLMSiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 13:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S236448AbiLMSkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 13:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235699AbiLMSh6 (ORCPT
+        with ESMTP id S235529AbiLMSkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 13:37:58 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62DEBD
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:37:58 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id d123so2179750iof.6
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 10:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zVw/Ub8n925hTRnFdUzvOTA/UBWQnS0OdDCK00ziL7s=;
-        b=XrBbWdcrYPzuedqF0FgemXWCGtU7UrqvPAsmrbFXqGYJ28FAp6XGTo5oEn8x273sqU
-         1n/9Yzgl1P7zdafD9gaHuWhGonKRYglyMefa//+e41c5/9SaL5CtXhV701foySxdl0f5
-         yRDHeGzCpWk0jJ3+phN5yr8QuFGKRgubk9o+Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVw/Ub8n925hTRnFdUzvOTA/UBWQnS0OdDCK00ziL7s=;
-        b=BfzIPNa12WjNqw4csEhI2LBAAq7/1k8UmCgivhJdHlm50K92pq27Acf5yHFTB1YaMp
-         DlUv6eM5zGAdp9BCy6MtnQbizgPPD6a7d+OOeaDzEsz9+2afVrhLVUd9tcCjGys5iAT6
-         Yf7SDq8+L802PMQFp+07Qt+ynDCAYWzUEfahX8RrUFrvLSBXjUlpPleIhSMfI6TI2m8q
-         Z3cuml6mKwzeR25N3ROQioJqjPmgN5ImfRx+XW2hSrPh7MsPXaQ6+iLaZOXmnIPFgUmh
-         36gmdgxMjdF1WGVPInk8lW8ZeJ4iZ7eHiSJM5LCh8Q6+YEHJ7ERLj56yQcBJYPcFgizM
-         w9Uw==
-X-Gm-Message-State: ANoB5pkY6/Y3Xm8vbV6DV2R1DpfvRnowva2rQDmUaXym5F4UnDvxMtNW
-        bA2BYxbdQpehAmoeFQOMgT5Lw9xrleHI2N50
-X-Google-Smtp-Source: AA0mqf7aJOMAxmp4CXqLPZfMIko49C01+d4Mm/IeX3PQ/xS4thygg7ozqQaxaFm0a2G0H35SvgIdew==
-X-Received: by 2002:a6b:500e:0:b0:6e2:d3f7:3b60 with SMTP id e14-20020a6b500e000000b006e2d3f73b60mr2036775iob.2.1670956677330;
-        Tue, 13 Dec 2022 10:37:57 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q18-20020a0566022f1200b006e2f42a30c2sm3596261iow.35.2022.12.13.10.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 10:37:56 -0800 (PST)
-Message-ID: <2ee34e21-44bd-71e7-6da2-f4bea9a35452@linuxfoundation.org>
-Date:   Tue, 13 Dec 2022 11:37:56 -0700
+        Tue, 13 Dec 2022 13:40:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9D01097;
+        Tue, 13 Dec 2022 10:40:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9123C616DA;
+        Tue, 13 Dec 2022 18:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDB3C433D2;
+        Tue, 13 Dec 2022 18:40:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670956840;
+        bh=VNLhR2HNLIpNsJL8tOPByX6zJS1xk+en02wwUBFSSGg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W7ISJ+8iOF+4KJ6D3whbyQ5TVmXgvmyBa/CUYnM/T+2OTYuVMa78jvd5loDrvDHnZ
+         tV89BHGhjrPd/7gzGP6JLx9daFg5q8mMtNE8DRJp2Z+T12ZL9+VK71KY+qRkra4mh5
+         Z0DqStswT8YJtJSFtjjTxSK5STFvPRV8hJL4C19o=
+Date:   Tue, 13 Dec 2022 19:40:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Seija K." <doremylover123@gmail.com>
+Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
+ controller's ring buffer
+Message-ID: <Y5jHJJS31+6Smk5L@kroah.com>
+References: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] kselftest/alsa: Increase kselftest timeout
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221213183242.1908249-1-nfraprado@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221213183242.1908249-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA42iKz_+MobnyyGi_7vQMwyqmK9=A9w3vWYa8QFVwwUzfrTAw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 11:32, Nícolas F. R. A. Prado wrote:
-> The default timeout for kselftests is 45 seconds, but pcm-test can take
-> longer than that to run depending on the number of PCMs present on a
-> device.
+On Tue, Dec 13, 2022 at 12:14:28PM -0500, Seija K. wrote:
+> When a packet larger than MTU arrives in Linux from the modem,
+> it is discarded with -EOVERFLOW error (Babble error).
 > 
-> As a data point, running pcm-test on mt8192-asurada-spherion takes about
-> 1m15s.
+> This is seen on USB3.0 and USB2.0 buses.
 > 
-> Set the timeout to 10 minutes, which should give enough slack to run the
-> test even on devices with many PCMs.
+> This is because the MRU (Max Receive Size) is not a separate entity
+> from the MTU (Max Transmit Size),
+> and the received packets can be larger than those transmitted.
 > 
+> Following the babble error, there was an endless supply of zero-length URBs,
+> which are rejected with -EPROTO (increasing the rx input error counter
+> each time).
+> 
+> This is only seen on USB3.0.
+> These continue to come ad infinitum until the modem is shut down.
+> 
+> There appears to be a bug in the core USB handling code in Linux
+> that doesn't deal well with network MTUs smaller than 1500 bytes.
+> 
+> By default, the dev->hard_mtu (the real MTU)
+> is in lockstep with dev->rx_urb_size (essentially an MRU),
+> and the latter is causing trouble.
+> 
+> This has nothing to do with the modems,
+> as the issue can be reproduced by getting a USB-Ethernet dongle,
+> setting the MTU to 1430, and pinging with size greater than 1406.
+> 
+> Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+> Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+> 
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 554d4e2a84a4..39db53a74b5a 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+> struct usb_interface *intf)
+> }
+> dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+> dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
+> + /* LTE Networks don't always respect their own MTU on receive side;
+> + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
+> + * far-end network. Make the receive buffer large enough to accommodate
+> + * them, and add four bytes so MTU does not equal MRU on network
+> + * with 1500 MTU otherwise usbnet_change_mtu() will change both.
+> + */
+> + dev->rx_urb_size = ETH_DATA_LEN + 4;
+> err:
+> return status;
+> }
 
-10 minutes is way too long.
+Hi,
 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
->   tools/testing/selftests/alsa/settings | 1 +
->   1 file changed, 1 insertion(+)
->   create mode 100644 tools/testing/selftests/alsa/settings
-> 
-> diff --git a/tools/testing/selftests/alsa/settings b/tools/testing/selftests/alsa/settings
-> new file mode 100644
-> index 000000000000..a62d2fa1275c
-> --- /dev/null
-> +++ b/tools/testing/selftests/alsa/settings
-> @@ -0,0 +1 @@
-> +timeout=600
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Adding timeouts like this especially 10 minutes will increase the time
-it takes to run tests. We run the risk of people not wanting to run tests
-anymore.
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file,
+  Documentation/process/submitting-patches.rst for how to do this
+  correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
--- Shuah
 
-
+greg k-h's patch email bot
