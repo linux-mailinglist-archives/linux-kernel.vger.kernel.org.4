@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF10764B56E
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4715E64B572
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 13:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbiLMMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 07:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S235409AbiLMMtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 07:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbiLMMro (ORCPT
+        with ESMTP id S235406AbiLMMtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 07:47:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CB21008;
-        Tue, 13 Dec 2022 04:47:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6BA8B811B9;
-        Tue, 13 Dec 2022 12:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8A4C433EF;
-        Tue, 13 Dec 2022 12:47:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670935660;
-        bh=C0kWfzBMeUnkMCqjJc8AA1etPAtrgwywD/A/JsLxtAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nUa9dHjgNMtaO5Rte1RyIlkjg7PjS9qLM5wvmaPtlIm1i+M9BtZ2oLTLpADlhDu3o
-         x1m2S4yg9KCU9g/fw7NRbXQjMa0ezQBmBpZfj9x9GIjN2oGNqXIYNFRS7/VW/K9gJR
-         r7+ipzGE9olQsN3hF39wOKbfLDJI6d3MFKIfCMh9AZjM5RPWhXW9mm2JpICki85o2f
-         iQ52HZAkGfoQnBgWsoKGf5uX809LMyrMCQWivN2P21DRritJ6ctRyYTKZ5wTtsDxPR
-         Yf+LYN33DOt5nLomrpDTGVVFV3tfp4KdO1fxgFVyI0ikrgItl2w+JXPTU+2KPpk9MA
-         J/osE4R5HaU8Q==
-Date:   Tue, 13 Dec 2022 12:47:34 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com, linux-spi@vger.kernel.org,
-        Javier Martinez Canillas <fmartine@redhat.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Message-ID: <Y5h0ZiGaPg2tx0qs@sirena.org.uk>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-5-bmasney@redhat.com>
- <c1c7b1eb-08e7-2ba5-d89a-e0be8f76fd69@quicinc.com>
- <Y5hvlX35nr8xQKEd@x1>
+        Tue, 13 Dec 2022 07:49:12 -0500
+Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F61C13E9B
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:10 -0800 (PST)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197]) by mx-outbound10-83.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Tue, 13 Dec 2022 12:49:08 +0000
+Received: by mail-pg1-f197.google.com with SMTP id g1-20020a636b01000000b00479222d9875so7075528pgc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 04:49:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vLc9KUPPcfPmJRkVZ9SzdiZuUqpVIHZA1Sml1/BlenA=;
+        b=XpKOWhRGTDSr5jAXwnG90EKsthoHokOx6CPQ4vtl35ZodA2iOXdTANmWpNYwm7miDe
+         RuM9IQe3LuJxytqt2HaeI8F9sdsaagwSEXZVCcqN7e5a7p/JL1eja1LVUmmKt21eb+7a
+         Et8YJHqJuSJ665HKlEQP9WXpglpQt8VPbMgsU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vLc9KUPPcfPmJRkVZ9SzdiZuUqpVIHZA1Sml1/BlenA=;
+        b=b1D20X49/ITgJMaCyw3QspYx2wYb3oY2SNxolkIWn05HdJffgWWTfTzCgVDjs64v3S
+         RqY55MmBbuZW5NUzoK1Rfll/woQVhl8SAF6DNcOZ+nKD572Meph/fqP8aIPeSWnITCoJ
+         gL/9laz4l64rE4D05pHfKhj1nOs2Dv0iLIyzakOPWIctlzaR+IyUmsuLWsK4qPMW1Ql5
+         nyYQJIZOs7mtzGe5Ad557omPWPp1aKHzoRXGLSwb3GzPQYtFop+1eklIja5EsDErUqF2
+         YaAz2jXu1b//YaXEGUuR/RuRH49fNEmsi83/zr6pCaIau4XofO5KM6+/YpCa4Xvp0a4i
+         b5RA==
+X-Gm-Message-State: ANoB5pkOl1eVuO9WKYaVUlZEgNEJ2DX5u6lfWr0g6AqHzPz8BOYypvXz
+        HbeF6lAyIbyIc0uvvN8Lz6zFzeM3lUhD/AMWeuXSQuZ47zHvRzDw+ZcVqDfVKt2lOZlBeFRhTgQ
+        SZjI8c5W0I/O9MQnwWd3XKRH2ZylZBidTItc4G1LD85mIbOjeTf0TycuSGZr0
+X-Received: by 2002:aa7:858a:0:b0:575:de28:b1f4 with SMTP id w10-20020aa7858a000000b00575de28b1f4mr17867561pfn.16.1670935747443;
+        Tue, 13 Dec 2022 04:49:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf51MQfHwJ6t4Lvah3KwdrYDJWVHA2Kmc4GYcnXbMwC/zZ+eRo+9tBgoS8nc/AgolPiROKnrIA==
+X-Received: by 2002:aa7:858a:0:b0:575:de28:b1f4 with SMTP id w10-20020aa7858a000000b00575de28b1f4mr17867540pfn.16.1670935747043;
+        Tue, 13 Dec 2022 04:49:07 -0800 (PST)
+Received: from LAP568U.mistral.in ([106.51.227.150])
+        by smtp.gmail.com with ESMTPSA id y15-20020aa7942f000000b0057622e8e82csm7605485pfo.191.2022.12.13.04.49.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 04:49:06 -0800 (PST)
+From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
+X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sinthu Raja <sinthu.raja@ti.com>
+Subject: [PATCH 0/2] phy: ti: j721e-wiz: Add support to manage type-C swap on Lane2 and lane3
+Date:   Tue, 13 Dec 2022 18:18:52 +0530
+Message-Id: <20221213124854.3779-1-sinthu.raja@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wyNsimEDc1OgCcyo"
-Content-Disposition: inline
-In-Reply-To: <Y5hvlX35nr8xQKEd@x1>
-X-Cookie: Edwin Meese made me wear CORDOVANS!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-BESS-ID: 1670935747-302643-5374-5503-1
+X-BESS-VER: 2019.1_20221212.2317
+X-BESS-Apparent-Source-IP: 209.85.215.197
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.244774 [from 
+        cloudscan16-224.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi All,
+This series of patch add support to enable lane2 and lane3 swap by
+configuring the LN23 bit. Also, it's possible that the Type-C plug orientation
+on the DIR line will be implemented through hardware design. In that
+situation, there won't be an external GPIO line available, but the
+driver still needs to address this since the DT won't use the
+typec-gpio-dir property. Update code to handle if typec-gpio-dir property
+is not specified in DT.
 
---wyNsimEDc1OgCcyo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sinthu Raja (2):
+  phy: ti: j721e-wiz: Manage TypeC lane swap if typec-gpio-dir not
+    specified
+  phy: ti: j721e-wiz: Add support to enable LN23 Type-C swap
 
-On Tue, Dec 13, 2022 at 07:27:01AM -0500, Brian Masney wrote:
+ drivers/phy/ti/phy-j721e-wiz.c | 90 ++++++++++++++++++++++++----------
+ 1 file changed, 65 insertions(+), 25 deletions(-)
 
-> We can't add a generic qcom,spidev compatible to the spidev driver since
-> this is just a software abstraction. Instead, each type of device will
-> need to have it's own compatible that uniquely describes the type of
-> device. So you might have a compatible like qcom,spi-video-codec. There
-> will need to be a DT binding added that describes the hardware. I suspect
-> that a SPI device can simply be added to trivial-devices.yaml. Once the
-> DT binding is accepted, the compatible can be added to the spidev.c
-> driver. If an in-kernel driver is written in the future, then the=20
-> compatible can be moved from spidev to the new driver.
+-- 
+2.36.1
 
-> Mark: Is my understanding above correct? If so, will it be a problem to
-> get a compatible added to spidev.c if the corresponding userspace code is
-> closed source and proprietary?
-
-No restriction on what the userspace is.
-
---wyNsimEDc1OgCcyo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOYdGUACgkQJNaLcl1U
-h9CzHwf+JP5CRJsjmYyyOlQmaCl1IOkTdl4br1Sd0Op4ooGVbIFEieXnBYfuUNon
-mPjbGv0f9Pn24dLxRMprh//Yh+Fv40ri4NEAVxq9OyShVcpg69lqzBdVlU8aGgds
-ljdMeZk7F3SqvHDKMzmL/cWho+aEh8ANg103ipEEq9nEYZZMXcyCLzPExqWcGw/3
-9djKGOGHrBl0b7LiCrQhQkbBh2I20mPKxGInjDdpyM0ck9AtFvhEsnii9DS7/Xsv
-DRPUvphwzRjpZBNLMXAaDJNcPQcJFh98VCm32/nBVHyT18bNHWo1aQzNAqoIqNqV
-FtASMiphe8tykKruLxRsrCwQOT9yJQ==
-=TKvN
------END PGP SIGNATURE-----
-
---wyNsimEDc1OgCcyo--
