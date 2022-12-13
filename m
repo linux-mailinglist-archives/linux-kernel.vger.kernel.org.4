@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275DB64B86F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330F764B874
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbiLMPar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:30:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S235941AbiLMPcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiLMPal (ORCPT
+        with ESMTP id S235886AbiLMPcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:30:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 537461DA65;
-        Tue, 13 Dec 2022 07:30:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A74D62F4;
-        Tue, 13 Dec 2022 07:31:20 -0800 (PST)
-Received: from [10.57.9.141] (unknown [10.57.9.141])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E9843F71E;
-        Tue, 13 Dec 2022 07:30:38 -0800 (PST)
-Message-ID: <634087f2-1a7a-0f61-51e8-9e6068d59e9d@arm.com>
-Date:   Tue, 13 Dec 2022 15:30:37 +0000
+        Tue, 13 Dec 2022 10:32:15 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11EC1F605;
+        Tue, 13 Dec 2022 07:32:12 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id f7so18242200edc.6;
+        Tue, 13 Dec 2022 07:32:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9LFcn2LS2h1mCkUkoHgPOjFPfjs4oxAUSgVBVj57pOE=;
+        b=bwnC1QCUTzSNR0jnSkHm6+NJvylAT9qlE995YBiYZths7yzrOPGvqQLltEoONhJ2la
+         GflqEwoVSojbh60Z0i73QDq8c/1RO0QSMenTMRqDWjDd+ngpMibFdBlnslXzUTDlHH2N
+         svMaYW6+fZrBRJK2/mDNV1/rVtViogyVXdvXYhF+S3i/oIa8TmTydJfWi2ly3GtH6+Mb
+         G0ZcpiHYvHSplWtGeQuMcqUVA8ycgFMhuTQ//DBDnN6Ctj3SBr+L2DNfltRja0fiZJFM
+         XqFuJTBPm4t3pDIErWBXEa50bq2HgMiHyDNPVL+kJBXM2pc4RfcycXqZrLYhx5JVV1KV
+         3oXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9LFcn2LS2h1mCkUkoHgPOjFPfjs4oxAUSgVBVj57pOE=;
+        b=Hu0cCr8nFJuHtIh6/H6E0ixP9um/GCjipMYouJlB3K8Ii8ELtTdEGY5O0rHrbSRTsS
+         +wZA5Essdx8s5LLdsSxPSiQrie/gbwcydlCMEYCUz3DluOumWEShgyFe82SkYXlRuoy9
+         K2VJGIySMzmAuJV3+ZfLKY+x5T9N9ENKjgtQ+f7JMKsiSSGTYvQeWZdyEkKlEuE03NuC
+         ZkhUbuW/DqvSfY9iV/VrzIacbo/QLMUrV4NE5jEiJH/Nk1aNewZnOmi+DbLLhMTxnCN3
+         CeJjHfuK7SIjRRHvbMJNM22eMg+4sKCYAg12w4G1PcGfzZeMp1GDxtXcI+BMetqSok0k
+         lF7g==
+X-Gm-Message-State: ANoB5pkqObT/uC+Lrk/y3oyYbENngOcKwXh6xdrxiKbKWyR7E0Hu1qd0
+        MQ/O8jFFqL8jLqA04nUEcC+cZCyQxWwO0nUGCyw=
+X-Google-Smtp-Source: AA0mqf679IR0szw2P7LGnGsO9Uvt78/3pJf6iUxIbum7zMS/JIZHte0W9eaVemwbp9x2EKxXCQd99qUcs19KL2jT5S0=
+X-Received: by 2002:aa7:d841:0:b0:46d:692e:8572 with SMTP id
+ f1-20020aa7d841000000b0046d692e8572mr7127576eds.25.1670945531147; Tue, 13 Dec
+ 2022 07:32:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 0/4] Add VG register attr test with kernel version and
- feature detection
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20221213114739.2312862-1-james.clark@arm.com>
- <Y5iRhKrIb5pXOaKk@kernel.org>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <Y5iRhKrIb5pXOaKk@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221212130924.863767275@linuxfoundation.org> <Y5hqsggURI1Me1ik@debian>
+In-Reply-To: <Y5hqsggURI1Me1ik@debian>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Tue, 13 Dec 2022 15:31:35 +0000
+Message-ID: <CADVatmPM4Q5A9jVO6-ixhqa2HWh4rWPKNpfwy75u69My=3Xhjw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/106] 5.10.159-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,79 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 13 Dec 2022 at 12:06, Sudip Mukherjee (Codethink)
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi Greg,
+>
+> On Mon, Dec 12, 2022 at 02:09:03PM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.10.159 release.
+> > There are 106 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 14 Dec 2022 13:08:57 +0000.
+> > Anything received after that time might be too late.
+>
+> Build test (gcc version 11.3.1 20221127):
+> mips: 63 configs -> no failure
+> arm: 104 configs -> no failure
+> arm64: 3 configs -> no failure
+> x86_64: 4 configs -> no failure
+> alpha allmodconfig -> no failure
+> powerpc allmodconfig -> no failure
+> riscv allmodconfig -> no failure
+> s390 allmodconfig -> no failure
+> xtensa allmodconfig -> no failure
+>
+> Boot test:
+> x86_64: Booted on my test laptop. No regression.
+> x86_64: Booted on qemu. No regression. [1]
+>
+> arm64: Booted on rpi4b (4GB model).
+> Regression noticed:
+> Failed to start Network Manager
+>
+> Will try a bisect and find which commit caused it.
+
+Bisect pointed to 60aefe77fb48 ("net: broadcom: Add
+PTP_1588_CLOCK_OPTIONAL dependency for BCMGENET under ARCH_BCM2835")
 
 
-On 13/12/2022 14:51, Arnaldo Carvalho de Melo wrote:
-> Em Tue, Dec 13, 2022 at 11:47:35AM +0000, James Clark escreveu:
->> I didn't get any feedback on the RFC version of this that I posted a
->> while back [1]. I'd still like to add the test, especially now that
->> 6.1 has been released with this new feature, so I've rebased it onto
->> perf/core and double checked that it's still working.
->>
->> Applies to perf/core (0c3852adae83)
-> 
-> I'm applying this locally, would this be testable on a Firefly (roc-rk3399-pc):
-
-Thanks Arnaldo. It doesn't look like rk3399 has SVE, so
-test-record-user-regs-no-sve-aarch64 will run to check that the kernel
-won't give you the new register. So I suppose the answer to the question
-is partially.
-
-For test-record-user-regs-sve-aarch64, I've been running it on a
-Graviton 3 on AWS which has SVE:
-
-  ubuntu@ip-10-252-130-213:~/linux$ head /proc/cpuinfo
-  processor	: 0
-  BogoMIPS	: 2100.00
-  Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp
-asimdhp cpuid asimdrdm jscvt fcma lrcpc dcpop sha3 sm3 sm4 asimddp
-sha512 sve asimdfhm dit uscat ilrcpc flagm ssbs paca pacg dcpodp svei8mm
-svebf16 i8mm bf16 dgh rng
-  CPU implementer	: 0x41
-  CPU architecture: 8
-  CPU variant	: 0x1
-  CPU part	: 0xd40
-  CPU revision	: 1
-
-  processor	: 1
-
-> 
-> acme@roc-rk3399-pc:~$ head /proc/cpuinfo
-> processor	: 0
-> BogoMIPS	: 48.00
-> Features	: fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-> CPU implementer	: 0x41
-> CPU architecture: 8
-> CPU variant	: 0x0
-> CPU part	: 0xd03
-> CPU revision	: 4
-> 
-> processor	: 1
-> acme@roc-rk3399-pc:~$
-> 
-> - Arnaldo
->  
->> Thanks
->> James
->>
->> [1]: https://lore.kernel.org/bpf/20220927154104.869029-1-james.clark@arm.com/
->>
->> James Clark (4):
->>   perf test: Add ability to test exit code for attr tests
->>   perf test: Add mechanism for skipping attr tests on auxiliary vector
->>     values
->>   perf test: Add mechanism for skipping attr tests on kernel versions
->>   perf test arm64: Add attr tests for new VG register
->>
->>  tools/perf/tests/attr.py                      | 71 +++++++++++++++++--
->>  .../attr/test-record-user-regs-no-sve-aarch64 |  9 +++
->>  .../test-record-user-regs-old-sve-aarch64     | 10 +++
->>  .../attr/test-record-user-regs-sve-aarch64    | 14 ++++
->>  4 files changed, 99 insertions(+), 5 deletions(-)
->>  create mode 100644 tools/perf/tests/attr/test-record-user-regs-no-sve-aarch64
->>  create mode 100644 tools/perf/tests/attr/test-record-user-regs-old-sve-aarch64
->>  create mode 100644 tools/perf/tests/attr/test-record-user-regs-sve-aarch64
->>
->> -- 
->> 2.25.1
-> 
+-- 
+Regards
+Sudip
