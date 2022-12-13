@@ -2,116 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6DB64B834
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A2664B83A
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 16:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbiLMPRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 10:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S236084AbiLMPS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 10:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235161AbiLMPRL (ORCPT
+        with ESMTP id S236059AbiLMPSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:17:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BFA2098F;
-        Tue, 13 Dec 2022 07:17:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60247B811D8;
-        Tue, 13 Dec 2022 15:17:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06486C433D2;
-        Tue, 13 Dec 2022 15:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670944628;
-        bh=5QESWjudrIWVHyOcAlkl6YNsgZ0EkNBCvncmf6xjMOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YUgRo65BwCx+hSWdf1niQ24ejHfuX4ek/krmnbk5Y1v1j7WdpaDyYAIBnIJj631Uz
-         tzFdIJaiqguVn0mMztziVjKpKZ9SzAJCUT7DtLRyV5f5pK0Ti7TBD2/fnJfbSgtDHD
-         msSLKTxGrOOgqXA++cj7KQRxIDpiM6wgfQmPSuLr7JRVis7xxDKtyGykNnhzGz0UHZ
-         +FGOdLP5p6Q9XiE3SOpNvkWWrFC59lUTz0TBeCTf1OEOXT73s3L9XONWvnoWZgJqn7
-         03StvfYEVoWTs9WX463dfh0WKMGkvtrL5cRTUkqaIyOYHx55fktwPVZUp7c+zC/KBl
-         P/nK0WdI9kkXw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p572D-00053B-7H; Tue, 13 Dec 2022 16:17:33 +0100
-Date:   Tue, 13 Dec 2022 16:17:33 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: sc8280xp: rename i2c5 to i2c21
-Message-ID: <Y5iXjTQnEtMCZy7W@hovoldconsulting.com>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-2-bmasney@redhat.com>
- <Y5iSDehp72mQPc+h@hovoldconsulting.com>
+        Tue, 13 Dec 2022 10:18:23 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70A62F4;
+        Tue, 13 Dec 2022 07:18:21 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 742D910000B;
+        Tue, 13 Dec 2022 15:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670944699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+HWnn08PjLLDbhCwtfb3QzgnentKEZAH00Y/K1KoyXk=;
+        b=lmr66kCX3bSlqTg89RmtNk9FZDsIno3YzQBsQVkx/53C7Rq/hQc32BZxHYT/nEUAAVdNrW
+        oV6JPpORQa+EgVI/SoJOWRq1ohfF6nmSMQ5AqoC+FsGio5tfIUVoCQvpSCcOV8QeU8GNw0
+        adkw+fDmDCLjWZTIWKFKJkWfECdg0qThp3ibitNL/NWecCAIth8C6ENrwJqqc4oc0pITmd
+        p7A/v6mOaNynTRRa3OV38ri4NHoOAv1lXHavO+/pvCgJt5t1TFLnydQVVcM056CdeV/Z+H
+        ftMwulbmQlTGXUI7jnGcZoANvpCQEy/SaxpXpUlPzWjN3l2pea0ax5IVpwfNHQ==
+Date:   Tue, 13 Dec 2022 16:18:19 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rtc: abx80x: Add nvmem support
+Message-ID: <Y5iXu9pZjWiumfcx@mail.local>
+References: <20221205151918.1264917-1-sean.anderson@seco.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5iSDehp72mQPc+h@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205151918.1264917-1-sean.anderson@seco.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 03:54:05PM +0100, Johan Hovold wrote:
-> On Mon, Dec 12, 2022 at 01:23:11PM -0500, Brian Masney wrote:
-> > According to the downstream 5.4 kernel sources for the sa8540p,
-> > i2c@894000 is labeled i2c bus 21, not 5. The interrupts and clocks
-> > also match. Let's go ahead and correct the name that's used in the
-> > three files where this is listed.
-> > 
-> > Signed-off-by: Brian Masney <bmasney@redhat.com>
-> > Fixes: 152d1faf1e2f3 ("arm64: dts: qcom: add SC8280XP platform")
-> > Fixes: ccd3517faf183 ("arm64: dts: qcom: sc8280xp: Add reference device")
-> > Fixes: 32c231385ed43 ("arm64: dts: qcom: sc8280xp: add Lenovo Thinkpad X13s devicetree")
+On 05/12/2022 10:19:18-0500, Sean Anderson wrote:
+> This adds support for the 256-byte internal RAM. There are two windows
+> which can be used to access this RAM: 64 bytes at 0x40 (the "standard"
+> address space) and 128 bytes at 0x80 (the "alternate" address space). We
+> use the standard address space because it is also accessible over SPI
+> (if such a port is ever done). We are limited to 32-byte reads for SMBus
+> compatibility, so there's no advantage to using the alternate address
+> space.
 > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > index 109c9d2b684d..875cc91324ce 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> > @@ -827,7 +827,7 @@ qup2_uart17: serial@884000 {
-> >  				status = "disabled";
-> >  			};
-> >  
-> > -			qup2_i2c5: i2c@894000 {
-> > +			qup2_i2c21: i2c@894000 {
+> There are some reserved bits in the EXTRAM register, and the datasheet
+> doesn't say what to do with them. I've opted to skip a read/modify/write
+> and just write the whole thing. If this driver is ever converted to
+> regmap, this would be a good place to use regmap_update_bits.
 > 
-> Note that the node is labelled qup2_i2c5 and not qup_i2c5.
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
 > 
-> That is, the QUP nodes are labelled using two indices, and specifically
+> Changes in v2:
+> - Fix building on non-arm platforms
 > 
-> 	qup2_i2c5
+>  drivers/rtc/rtc-abx80x.c | 87 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
 > 
-> would be another name for
-> 
-> 	qup_i2c21
-> 
-> if we'd been using such a flat naming scheme (there are 8 engines per
-> QUP).
-> 
-> So there's nothing wrong with how these nodes are currently named, but
-> mixing the two scheme as you are suggesting would not be correct.
+> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> index 9b0138d07232..e606bf126dc3 100644
+> --- a/drivers/rtc/rtc-abx80x.c
+> +++ b/drivers/rtc/rtc-abx80x.c
+> @@ -11,6 +11,7 @@
+>   */
+>  
+>  #include <linux/bcd.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> @@ -87,6 +88,16 @@
+>  #define ABX8XX_TRICKLE_STANDARD_DIODE	0x8
+>  #define ABX8XX_TRICKLE_SCHOTTKY_DIODE	0x4
+>  
+> +#define ABX8XX_REG_EXTRAM	0x3f
+> +#define ABX8XX_EXTRAM_XADS	GENMASK(1, 0)
+> +
+> +#define ABX8XX_SRAM_BASE	0x40
+> +#define ABX8XX_SRAM_WIN_SIZE	0x40
+> +#define ABX8XX_RAM_SIZE		256
+> +
+> +#define NVMEM_ADDR_LOWER	GENMASK(5, 0)
+> +#define NVMEM_ADDR_UPPER	GENMASK(7, 6)
+> +
+>  static u8 trickle_resistors[] = {0, 3, 6, 11};
+>  
+>  enum abx80x_chip {AB0801, AB0803, AB0804, AB0805,
+> @@ -673,6 +684,78 @@ static int abx80x_setup_watchdog(struct abx80x_priv *priv)
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_NVMEM
+> +static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
+> +			     void *val, size_t bytes, bool write)
+> +{
+> +	int ret;
+> +
+> +	while (bytes) {
+> +		u8 extram, reg, len, lower, upper;
+> +
+> +		lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
+> +		upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
+> +		extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
+> +		reg = ABX8XX_SRAM_BASE + lower;
+> +		len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
+> +		len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
+> +
+> +		ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
+> +						extram);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (write)
+> +			ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
+> +							     len, val);
+> +		else
+> +			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
+> +							    len, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		offset += len;
+> +		val += len;
+> +		bytes -= len;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int abx80x_nvmem_read(void *priv, unsigned int offset, void *val,
+> +			     size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, false);
+> +}
+> +
+> +static int abx80x_nvmem_write(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	return abx80x_nvmem_xfer(priv, offset, val, bytes, true);
+> +}
+> +
+> +static int abx80x_setup_nvmem(struct abx80x_priv *priv)
+> +{
+> +	struct device *dev = &priv->client->dev;
+> +	struct nvmem_config config = {
+> +		.dev = dev,
+> +		.type = NVMEM_TYPE_BATTERY_BACKED,
+> +		.reg_read = abx80x_nvmem_read,
+> +		.reg_write = abx80x_nvmem_write,
+> +		.size = ABX8XX_RAM_SIZE,
+> +		.priv = priv,
+> +	};
+> +
+> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(&priv->client->dev,
+> +						   &config));
 
-It appears sc8280xp is the only qcom platform using a qup prefix (even
-if some older platform use a blsp equivalent), and we're not even using
-it consistently as we, for example, have both
+Is there any reason why you are not using devm_rtc_nvmem_register ?
 
-	qup2_uart17, and
-	qup2_i2c5
 
-(where the former should have been qup2_uart1).
-
-So either we fix up the current labels or just drop the qup prefixes and
-use a flat naming scheme (e.g. uart17 and i2c21).
-
-Either way, there's no need for any Fixes tags as this isn't a bug.
-
-Johan
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
