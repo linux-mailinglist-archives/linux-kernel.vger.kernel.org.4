@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F3C64B258
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB15F64B25B
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 10:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234793AbiLMJ3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 04:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S234902AbiLMJ3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 04:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbiLMJ27 (ORCPT
+        with ESMTP id S234816AbiLMJ3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 04:28:59 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980613B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 01:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670923738; x=1702459738;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Bp30MA4PgsFJjTtXWD8JVLEk7r0vjtZzmIyP/wIb+WM=;
-  b=GlfzAoK6hCpz+G6PX46+uVcX2yzq57w6jPcdkb8TfRqLTO/XHE+aYgwN
-   2HF0Uz6gJnBNFHODCQzj2tcFTQ9xPmKsKK0DijFkDuBttk0VzthUn/AOb
-   z/R7ZoXERW1zvuDv5/DbSIZUAadJXpsF+WHg5uDL3NdEBmFnocL/c4fb/
-   e2H4jIctriQsLfCbcchgakJkE4TphtbB2GRUTHfhCiTR8GXzZowMnrfii
-   MediMfyDmHpBWI7uoSRgW8l+xfMmO5bwiOQM9c81UKtfvyn17Kifm8Auy
-   hkw6QiFSMJSQ5qVdn6M+Trc8W/i9rK7ToLh628TYGpIJFgn/+9gUSYFF5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="345147830"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="345147830"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 01:28:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="679238977"
-X-IronPort-AV: E=Sophos;i="5.96,241,1665471600"; 
-   d="scan'208";a="679238977"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.28.83]) ([10.213.28.83])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 01:28:56 -0800
-Message-ID: <53e7e660-9ee0-1177-b34a-365c1397ec3b@intel.com>
-Date:   Tue, 13 Dec 2022 10:28:53 +0100
+        Tue, 13 Dec 2022 04:29:05 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA00E627C;
+        Tue, 13 Dec 2022 01:29:03 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWY7k2zvHzRpt4;
+        Tue, 13 Dec 2022 17:28:02 +0800 (CST)
+Received: from [10.174.178.165] (10.174.178.165) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 13 Dec 2022 17:29:01 +0800
+Message-ID: <7f35ca55-cbed-98ac-4988-1b783db21dc5@huawei.com>
+Date:   Tue, 13 Dec 2022 17:29:00 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [Intel-gfx] [PATCH 1/5] linux/minmax.h: add non-atomic version of
- xchg
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20221209154843.4162814-1-andrzej.hajda@intel.com>
- <b0c38501-440f-42a3-ae0f-dd95527b0e56@app.fastmail.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <b0c38501-440f-42a3-ae0f-dd95527b0e56@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] r6040: Fix kmemleak in probe and remove
+To:     Li Zetao <lizetao1@huawei.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221213101723.348289-1-lizetao1@huawei.com>
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+In-Reply-To: <20221213101723.348289-1-lizetao1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.165]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.12.2022 18:16, Arnd Bergmann wrote:
-> On Fri, Dec 9, 2022, at 16:48, Andrzej Hajda wrote:
->> The pattern of setting variable with new value and returning old
->> one is very common in kernel. Usually atomicity of the operation
->> is not required, so xchg seems to be suboptimal and confusing in
->> such cases. Since name xchg is already in use and __xchg is used
->> in architecture code, proposition is to name the macro exchange.
->>
->> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+
+On 2022/12/13 18:17, Li Zetao wrote:
+> There is a memory leaks reported by kmemleak:
 > 
-> While I generally don't like type invariant calling conventions
-> of xchg() and cmpxchg(), having a new function that has a similar
-> name without being able to tell which one is which from the
-> name seems more confusing.
+>   unreferenced object 0xffff888116111000 (size 2048):
+>     comm "modprobe", pid 817, jiffies 4294759745 (age 76.502s)
+>     hex dump (first 32 bytes):
+>       00 c4 0a 04 81 88 ff ff 08 10 11 16 81 88 ff ff  ................
+>       08 10 11 16 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+>       [<ffffffff827e20ee>] phy_device_create+0x4e/0x90
+>       [<ffffffff827e6072>] get_phy_device+0xd2/0x220
+>       [<ffffffff827e7844>] mdiobus_scan+0xa4/0x2e0
+>       [<ffffffff827e8be2>] __mdiobus_register+0x482/0x8b0
+>       [<ffffffffa01f5d24>] r6040_init_one+0x714/0xd2c [r6040]
+>       ...
 > 
-> Since __xchg() is only used on 11 architectures as an internal
+> The problem occurs in probe process as follows:
+>   r6040_init_one:
+>     mdiobus_register
+>       mdiobus_scan    <- alloc and register phy_device,
+>                          the reference count of phy_device is 3
+>     r6040_mii_probe
+>       phy_connect     <- connect to the first phy_device,
+>                          so the reference count of the first
+>                          phy_device is 4, others are 3
+>     register_netdev   <- fault inject succeeded, goto error handling path
+> 
+>     // error handling path
+>     err_out_mdio_unregister:
+>       mdiobus_unregister(lp->mii_bus);
+>     err_out_mdio:
+>       mdiobus_free(lp->mii_bus);    <- the reference count of the first
+>                                        phy_device is 1, it is not released
+>                                        and other phy_devices are released
+>   // similarly, the remove process also has the same problem
+> 
+> The root cause is traced to the phy_device is not disconnected when
+> removes one r6040 device in r6040_remove_one() or on error handling path
+> after r6040_mii probed successfully. In r6040_mii_probe(), a net ethernet
+> device is connected to the first PHY device of mii_bus, in order to
+> notify the connected driver when the link status changes, which is the
+> default behavior of the PHY infrastructure to handle everything.
+> Therefore the phy_device should be disconnected when removes one r6040
+> device or on error handling path.
+> 
+> Fix it by adding phy_disconnect() when removes one r6040 device or on
+> error handling path after r6040_mii probed successfully.
+> 
+> Fixes: 3831861b4ad8 ("r6040: implement phylib")
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> ---
+>  drivers/net/ethernet/rdc/r6040.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Quite big number for 'only' :)
 
-> name for the backing of arch_xchg() or arch_xchg_relaxed(),
-> maybe we can instead rename those to __arch_xchg() and use the
-> __xchg() name for the new non-atomic version?
+Please use [PATCH net] ... format in title.
 
-I will try, but even compile test will be some challenge, need to find 
-cross-compilers for these archs.
-
-Btw exchange is not totally new name, for example C++ uses it [1].
-
-[1]: https://en.cppreference.com/w/cpp/utility/exchange
-
-Regards
-Andrzej
 
 > 
->> +/**
->> + * exchange - set variable pointed by @ptr to @val, return old value
->> + * @ptr: pointer to affected variable
->> + * @val: value to be written
->> + *
->> + * This is non-atomic variant of xchg.
->> + */
->> +#define exchange(ptr, val) ({		\
->> +	typeof(ptr) __ptr = ptr;	\
->> +	typeof(*__ptr) __t = *__ptr;	\
-> 
-> I think you can better express this using __auto_type than typeof(),
-> it is now provided by all supported compilers now.
-> 
->       Arnd
+> diff --git a/drivers/net/ethernet/rdc/r6040.c b/drivers/net/ethernet/rdc/r6040.c
+> index eecd52ed1ed2..95b682597da1 100644
+> --- a/drivers/net/ethernet/rdc/r6040.c
+> +++ b/drivers/net/ethernet/rdc/r6040.c
+> @@ -1159,10 +1159,12 @@ static int r6040_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  	err = register_netdev(dev);
+>  	if (err) {
+>  		dev_err(&pdev->dev, "Failed to register net device\n");
+> -		goto err_out_mdio_unregister;
+> +		goto err_out_r6040_mii_remove;
 
+better to use something like 'err_out_phy_disconnect'
+
+>  	}
+>  	return 0;
+>  
+> +err_out_r6040_mii_remove:
+> +	phy_disconnect(dev->phydev);
+>  err_out_mdio_unregister:
+>  	mdiobus_unregister(lp->mii_bus);
+>  err_out_mdio:
+> @@ -1186,6 +1188,7 @@ static void r6040_remove_one(struct pci_dev *pdev)
+>  	struct r6040_private *lp = netdev_priv(dev);
+>  
+>  	unregister_netdev(dev);
+> +	phy_disconnect(dev->phydev);
+>  	mdiobus_unregister(lp->mii_bus);
+>  	mdiobus_free(lp->mii_bus);
+>  	netif_napi_del(&lp->napi);
