@@ -2,79 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC8464ADFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE1864ADE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Dec 2022 03:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiLMC6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Dec 2022 21:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S234298AbiLMCtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Dec 2022 21:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiLMC6j (ORCPT
+        with ESMTP id S233798AbiLMCtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Dec 2022 21:58:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18256140B8;
-        Mon, 12 Dec 2022 18:58:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HpZ9jX3u4847/+62/XiO19y9qAcrk3g+ILqUmJpDZtY=; b=veZwu5/Eb8m4aS4Crkb0P1/wsj
-        YwFyUxJIwfc2OqEiXDFLmJA8cFBdMJqRuNev+HB8RKnzra5xMT6eJLcEZ6eePLlqpzWZ2xsld4jal
-        5fqZn1xhl9wrhVl231xMS0ycXCdwNfpPVOC93J/d9cQBUix9ODwvoOkpo4az+hEolyTZtToMVojY6
-        pq0mJHfJAAfaaHdcnwMkuptqDPF3k0YGBnPBwGoK/+i6GP5BORIkaTZjCAyaidOU7IWUE6UvEz+Q/
-        c81Lk0bOtzmThZITeObp4DSLwpdT+A69GP1S4aNYrv9MP+pEtDwCzEpLagcIbveKniTxAKwALLzSl
-        9Spt2ozw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p4vV5-00A3qb-71; Tue, 13 Dec 2022 02:58:35 +0000
-Date:   Mon, 12 Dec 2022 18:58:35 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     david@redhat.com, Petr Mladek <pmladek@suse.com>,
-        prarit@redhat.com, mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y5fqW7hQy+WbTh3R@bombadil.infradead.org>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y45MXVrGNkY/bGSl@alley>
- <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
- <Y5CuCVe02W5Ni/Fc@alley>
- <Y5FPkEgEbDlVXkRK@bombadil.infradead.org>
- <0017c9ce-7e92-6010-7bc9-716131a25ec5@suse.com>
+        Mon, 12 Dec 2022 21:49:11 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D1E1DA46
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Dec 2022 18:49:09 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NWNGJ4J12zRpt2;
+        Tue, 13 Dec 2022 10:48:08 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 13 Dec 2022 10:49:07 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>
+CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>, David Hildenbrand <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next v3] mm: hwposion: support recovery from ksm_might_need_to_copy()
+Date:   Tue, 13 Dec 2022 11:05:57 +0800
+Message-ID: <20221213030557.143432-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0017c9ce-7e92-6010-7bc9-716131a25ec5@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 12:29:02PM +0100, Petr Pavlu wrote:
-> On 12/8/22 03:44, Luis Chamberlain wrote:
-> > On Wed, Dec 07, 2022 at 04:15:21PM +0100, Petr Mladek wrote:
-> >> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > 
-> > Queued onto modules-next.
-> 
-> Thanks both.
+When the kernel copy a page from ksm_might_need_to_copy(), but runs
+into an uncorrectable error, it will crash since poisoned page is
+consumed by kernel, this is similar to Copy-on-write poison recovery,
+When an error is detected during the page copy, return VM_FAULT_HWPOISON
+in do_swap_page(), and install a hwpoison entry in unuse_pte() when
+swapoff, which help us to avoid system crash. Note, memory failure on
+a KSM page will be skipped, but still call memory_failure_queue() to
+be consistent with general memory failure process.
 
-I'm **terribly sorry** for dropping this to Linus' pull request late
-but I kept trying to justify a few things and I couldn't do it, and
-so I'll reply to this patch with my last minute observations soon.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/ksm.c      |  8 ++++++--
+ mm/memory.c   |  3 +++
+ mm/swapfile.c | 19 +++++++++++++------
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-I figured it was better to be safe than sorry and the potential for
-yet *more* regressions was *real* and I really wanted to avoid us
-having to crunch / race for a fix over the holidays.
+diff --git a/mm/ksm.c b/mm/ksm.c
+index dd02780c387f..83e2f74ae7da 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
+ 		new_page = NULL;
+ 	}
+ 	if (new_page) {
+-		copy_user_highpage(new_page, page, address, vma);
+-
++		if (copy_mc_user_highpage(new_page, page, address, vma)) {
++			put_page(new_page);
++			new_page = ERR_PTR(-EHWPOISON);
++			memory_failure_queue(page_to_pfn(page), 0);
++			return new_page;
++		}
+ 		SetPageDirty(new_page);
+ 		__SetPageUptodate(new_page);
+ 		__SetPageLocked(new_page);
+diff --git a/mm/memory.c b/mm/memory.c
+index aad226daf41b..5b2c137dfb2a 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		if (unlikely(!page)) {
+ 			ret = VM_FAULT_OOM;
+ 			goto out_page;
++		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
++			ret = VM_FAULT_HWPOISON;
++			goto out_page;
+ 		}
+ 		folio = page_folio(page);
+ 
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 908a529bca12..06aaca111233 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1763,12 +1763,15 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 	struct page *swapcache;
+ 	spinlock_t *ptl;
+ 	pte_t *pte, new_pte;
++	bool hwposioned = false;
+ 	int ret = 1;
+ 
+ 	swapcache = page;
+ 	page = ksm_might_need_to_copy(page, vma, addr);
+ 	if (unlikely(!page))
+ 		return -ENOMEM;
++	else if (unlikely(PTR_ERR(page) == -EHWPOISON))
++		hwposioned = true;
+ 
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+ 	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
+@@ -1776,13 +1779,17 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		goto out;
+ 	}
+ 
+-	if (unlikely(!PageUptodate(page))) {
+-		pte_t pteval;
++	if (hwposioned || !PageUptodate(page)) {
++		swp_entry_t swp_entry;
+ 
+ 		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
+-		pteval = swp_entry_to_pte(make_swapin_error_entry());
+-		set_pte_at(vma->vm_mm, addr, pte, pteval);
+-		swap_free(entry);
++		if (hwposioned) {
++			swp_entry = make_hwpoison_entry(swapcache);
++			page = swapcache;
++		} else {
++			swp_entry = make_swapin_error_entry();
++		}
++		new_pte = swp_entry_to_pte(swp_entry);
+ 		ret = 0;
+ 		goto out;
+ 	}
+@@ -1816,9 +1823,9 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		new_pte = pte_mksoft_dirty(new_pte);
+ 	if (pte_swp_uffd_wp(*pte))
+ 		new_pte = pte_mkuffd_wp(new_pte);
++out:
+ 	set_pte_at(vma->vm_mm, addr, pte, new_pte);
+ 	swap_free(entry);
+-out:
+ 	pte_unmap_unlock(pte, ptl);
+ 	if (page != swapcache) {
+ 		unlock_page(page);
+-- 
+2.35.3
 
-I will leave the fix as-is now in modules-next though, so it can get
-more testing, but indeed, I don't feel quite ready for the masses
-specially before the holidays.
-
-  Luis
