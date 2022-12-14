@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE48B64C499
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE5C64C49C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237419AbiLNIGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S237408AbiLNIGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiLNIGI (ORCPT
+        with ESMTP id S237394AbiLNIGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:06:08 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF6E1DDF4;
-        Wed, 14 Dec 2022 00:06:07 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 124so3940113pfy.0;
-        Wed, 14 Dec 2022 00:06:07 -0800 (PST)
+        Wed, 14 Dec 2022 03:06:14 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E5D1DDF4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:06:12 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id s25so5898307lji.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:06:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=00263fAplAvONCnwITwPxudPU1CVcj7eiSkLTlLI7Fk=;
-        b=LF1Edmtd2eN21kNuE5gUmccfLa3czY9OYPEAE9XxXacWrtvk/vaV/BIEmOlZidvMlW
-         pGOOVUV/Oje9anH22oPtOJyrLxtQ+GZ5fO1UN5FV1hT/FJDyU73X9QVsduVilBCS8BhH
-         TFW7c/PPnP+uPU6TZCQGOJrudcle2AuccA8xvWg0X9vnKvYDWMqLbmpAF/A9RsiQ/qep
-         4UYfa2nQFE/mhQstf+bHUFhonTH8uSQDso2NoPuEU9NG+/7LBITmCDtOYVBil2BGyVyS
-         TU2Ragm6bhaSct+h9QTHbsPYhAz89s9NjyU7dE4/6pK2Kp5TA9mgFooCNhmOlwopRuMZ
-         /qRw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ekJvCFBAUBvty7SAV1eGHEEOeCneFptl9FWN+37m0+U=;
+        b=oNAidUI3eefQHODYG30eOAYutA+0TvIR7AXLlEC/P6qRMMNSMXBxu3e7Zr5u0PptcW
+         eG3cDd/rQ/5dfCEeYjPkkrFN9aoA4ADlLIaIelAyjiQ1otiBHPH7M5quDEPxZRbGZKX2
+         UnRVU3zNY7/51Z9M3V4mcV63tTV6CyUl3YPsGHS6ACwVr1SS5mJRv2+hEReTeULMbkdP
+         pLJaR1tfvn0c15xt7vIlBN2J4WUaor3ZRzcTZevSOGpMSrCbrrXasonsli0OeoFgS9Ap
+         UqADxAKuvgoubJdHgnQSZRK5CnNxPiXr8mf8eQonvjkru+ckxG6l3fLeDtriWJkacLI5
+         C8Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=00263fAplAvONCnwITwPxudPU1CVcj7eiSkLTlLI7Fk=;
-        b=mIBDL3ymqBiutl/x0Om5M7u0JbNDUuyb1f8JwvKLg+gtD4cQUKEtHyCdSnPjaf0vq8
-         pmsh2rJ1lJ1jJMwS4SrB2WUTVktNWoTCRpIB0+zEzk/pb4A430h7w0nmedA4ZQJVb8zo
-         t3/j/7LBl0SBo0+Q8VaMCQnZblysiZ3FoSuRCgsO3LU3qG+xYotWpTgpI+NO5WaYCyfY
-         iXHxZ8z71Fi7L8bFEH+gh2kiID78U5qMmDD7LL8hcMxu+YJevK99jPbe7B4sZV7Fh9Z3
-         7nxG3R6NemBZiiCtEyqnOpcP00CbetsCv5nAu4qHKO+paDJltjQjLQ/bkWHKLFq+xLTp
-         ENaQ==
-X-Gm-Message-State: ANoB5pkOuUn0Pc5KyzwHudfngxeWy29xgqWHp8DZGsg6gqv+cvo4dmft
-        LfcbWvdRVOvOVQtZZF8MoSpN1UBUIqgwFI5bw3I=
-X-Google-Smtp-Source: AA0mqf5/lelgMvxCc0V/D9A7RuvHgQ9oKJBkHFquAGkc4BvH7uyrswV4h+uxoBrZNVnJLFp28cT0iiRyZTJamCa1KiQ=
-X-Received: by 2002:a63:e4a:0:b0:477:6cd0:9a04 with SMTP id
- 10-20020a630e4a000000b004776cd09a04mr75767633pgo.433.1671005167478; Wed, 14
- Dec 2022 00:06:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ekJvCFBAUBvty7SAV1eGHEEOeCneFptl9FWN+37m0+U=;
+        b=eZ7iCEg1Rh0sNsi3zdIGPyBdpH/CYdRzh3QrJnv5/v/pQ3nkHKrJPuSA994bTCTgaZ
+         r7mtmpi68Z+Trd43lDSXvhaxPxBNjbuhLpmplF/bPeJfq7xSG8uoxhpFMsJoJOvmVl2F
+         ocppDnwJWc7WZWup9lROK8JzUxAsC86IgFt9uqXwujNkmOLSvwHU9DbANcjEWZWhF6YE
+         aMbXwPta062cslfJ76jJqjN35E/k0yObH5SURkwB7iQJF7hKlWmIMXQoRZCgUdm08XD7
+         VLV20HYmowTUGTSk8CDvrdYiDbHjQ6ewQIVnho2dMC6KL8FugYb8/cOvnr+KymxHAAFB
+         Sg0w==
+X-Gm-Message-State: ANoB5pmSfzmCsCzRnDlsc+Bzu0QLToKEbz6/tOW9ijCvIYTvB46TFxI0
+        p1PEm+B9pkkvAgO97Tgz2rM8sA==
+X-Google-Smtp-Source: AA0mqf6nhE1kxI0HlUaXo15VVyULmxvNEfOIWIaUmc1dr89nTxvWpV/+lPf3GP1nc6kEzBHZILe9+Q==
+X-Received: by 2002:a05:651c:50e:b0:26f:eac4:10ca with SMTP id o14-20020a05651c050e00b0026feac410camr7829713ljp.21.1671005171183;
+        Wed, 14 Dec 2022 00:06:11 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y15-20020a2e95cf000000b0027741daec09sm509910ljh.107.2022.12.14.00.06.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 00:06:10 -0800 (PST)
+Message-ID: <49b6b5f0-02d5-5840-3d0b-f7eff1555133@linaro.org>
+Date:   Wed, 14 Dec 2022 09:06:09 +0100
 MIME-Version: 1.0
-References: <20221213060912.654668-1-seanjc@google.com> <20221213060912.654668-6-seanjc@google.com>
-In-Reply-To: <20221213060912.654668-6-seanjc@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Wed, 14 Dec 2022 16:05:55 +0800
-Message-ID: <CAJhGHyAJj6MGNMgu1i_zFt=0gEqCs1qT8c1ShE97qsZESTptXQ@mail.gmail.com>
-Subject: Re: [PATCH 5/7] x86/entry: KVM: Use dedicated VMX NMI entry for
- 32-bit kernels too
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
+ dedicated SYSREG compatibles to Exynos850
+To:     Sriranjani P <sriranjani.p@samsung.com>,
+        'Rob Herring' <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        alim.akhtar@samsung.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20221207105032.103510-1-sriranjani.p@samsung.com>
+ <CGME20221207105043epcas5p306086213835a5287f39de9016dcd43d2@epcas5p3.samsung.com>
+ <20221207105032.103510-2-sriranjani.p@samsung.com>
+ <20221209211004.GA3847427-robh@kernel.org>
+ <051901d90f76$4e557040$eb0050c0$@samsung.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <051901d90f76$4e557040$eb0050c0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 2:11 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Use a dedicated entry for invoking the NMI handler from KVM VMX's VM-Exit
-> path for 32-bit even though using a dedicated entry for 32-bit isn't
-> strictly necessary.  Exposing a single symbol will allow KVM to reference
-> the entry point in assembly code without having to resort to more #ifdefs
-> (or #defines).  identry.h is intended to be included from asm files only
-> once, and so simply including idtentry.h in KVM assembly isn't an option.
->
-> Bypassing the ESP fixup and CR3 switching in the standard NMI entry code
-> is safe as KVM always handles NMIs that occur in the guest on a kernel
-> stack, with a kernel CR3.
->
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/idtentry.h | 16 ++++++----------
->  arch/x86/kernel/nmi.c           |  8 ++++----
->  arch/x86/kvm/vmx/vmx.c          |  4 ++--
->  3 files changed, 12 insertions(+), 16 deletions(-)
->
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 72184b0b2219..b241af4ce9b4 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -582,18 +582,14 @@ DECLARE_IDTENTRY_RAW(X86_TRAP_MC, xenpv_exc_machine_check);
->
->  /* NMI */
->
-> -#if defined(CONFIG_X86_64) && IS_ENABLED(CONFIG_KVM_INTEL)
-> +#if IS_ENABLED(CONFIG_KVM_INTEL)
->  /*
-> - * Special NOIST entry point for VMX which invokes this on the kernel
-> - * stack. asm_exc_nmi() requires an IST to work correctly vs. the NMI
-> - * 'executing' marker.
-> - *
-> - * On 32bit this just uses the regular NMI entry point because 32-bit does
-> - * not have ISTs.
-> + * Special entry point for VMX which invokes this on the kernel stack, even for
-> + * 64-bit, i.e. without using an IST.  asm_exc_nmi() requires an IST to work
-> + * correctly vs. the NMI 'executing' marker.  Used for 32-bit kernels as well
-> + * to avoid more ifdeffery.
->   */
-> -DECLARE_IDTENTRY(X86_TRAP_NMI,         exc_nmi_noist);
-> -#else
-> -#define asm_exc_nmi_noist              asm_exc_nmi
-> +DECLARE_IDTENTRY(X86_TRAP_NMI,         exc_nmi_kvm_vmx);
+On 14/12/2022 05:41, Sriranjani P wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Rob Herring [mailto:robh@kernel.org]
+>> Sent: 10 December 2022 02:40
+>> To: Sriranjani P <sriranjani.p@samsung.com>
+>> Cc: krzysztof.kozlowski+dt@linaro.org; devicetree@vger.kernel.org;
+>> alim.akhtar@samsung.com; pankaj.dubey@samsung.com;
+>> ravi.patel@samsung.com; linux-kernel@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org
+>> Subject: Re: [PATCH v2 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
+>> dedicated SYSREG compatibles to Exynos850
+>>
+>> On Wed, Dec 07, 2022 at 04:20:29PM +0530, Sriranjani P wrote:
+>>> Exynos850 has two different SYSREGs, hence add dedicated compatibles
+>>> for them and deprecate usage of generic Exynos850 compatible alone.
+>>>
+>>> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+>>> ---
+>>>  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 ++++++++++++---
+>>>  1 file changed, 12 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.
+>>> yaml
+>>> b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.
+>>> yaml index 4954790eda6c..a37452965100 100644
+>>> ---
+>>> a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.
+>>> yaml
+>>> +++
+>> b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sys
+>>> +++ reg.yaml
+>>> @@ -17,7 +17,6 @@ properties:
+>>>                - samsung,exynos3-sysreg
+>>>                - samsung,exynos4-sysreg
+>>>                - samsung,exynos5-sysreg
+>>> -              - samsung,exynos850-sysreg
+>>>                - samsung,exynosautov9-sysreg
+>>>                - tesla,fsd-cam-sysreg
+>>>                - tesla,fsd-fsys0-sysreg @@ -33,9 +32,17 @@ properties:
+>>>            - const: samsung,exynos5433-sysreg
+>>>            - const: syscon
+>>>        - items:
+>>> -          - const: samsung,exynos5433-sysreg
+>>> +          - enum:
+>>> +              - const: samsung,exynos5433-sysreg
+>>
+>> This says the compatible entry is "const: samsung,exynos5433-sysreg".
+>>
+>> That should be a schema warning. You did test this, right?
+> Thanks for pointing it out, somehow dtbs check not showed any error. Will
+> fix it in the next version.
 
-Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
+To test binding please run dt_binding_check instead.
+
+Best regards,
+Krzysztof
+
