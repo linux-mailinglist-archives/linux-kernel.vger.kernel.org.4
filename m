@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AC964C123
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C616F64C127
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbiLNA0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 19:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S237452AbiLNA1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 19:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbiLNAZ7 (ORCPT
+        with ESMTP id S237117AbiLNA0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 19:25:59 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D2015FF8
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:25:49 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso5452972pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:25:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zkhwTELNviBJt4KKaWThjN1KoC/lySaQISrCOJ56+sI=;
-        b=XDBWLXIEbtHnQNkEFxWRj1y8VIpUYZWcaAQ+fW2/lfGYWwpALXjfV6yAqBHUL/sKh7
-         2JLQtI3xUgT97uZyxN2VfzMHkHBGBJ2G56836atarOWHyktRsxyPGUDCiBTIcPrxjWKp
-         4v6I/HnZ2/H+ncRnCnJ/ZzzSaZEK6g50NmjHM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zkhwTELNviBJt4KKaWThjN1KoC/lySaQISrCOJ56+sI=;
-        b=DI4oQrM7bmR0ffzJbYhOKUzYOh12770KFEpWUpmc8XphdArW7+/zmu1ehxHVgCHvvB
-         Dw3kEubGxiRDrKge+P6jTbYSp5YGcXCp4/GFeWGt4ApYyVrh0iIjpgMLnVmBXP0odreG
-         yayDeum5u5yWs1ta0EIe/nDRB/8c9zaRyMUGlFhO7wpNydOqr5teJtkDZeYcOCTmYy8u
-         U6ZfnJUklBow9ctpv2jUlIlQzmQT3t9hTPSk/ANtokfXX1rZY3jno9BpNu/OJMe7EFQi
-         VAPz+pKEEOm+gA4JDCTF9EuPXLrV2wLee4Fq6D9b/PwNhH0MhpmBsv+baklz5Kf/yFes
-         wnRw==
-X-Gm-Message-State: ANoB5pmuws4Jhrbmdw/f3zdTLJP8JwATsFNpJtHRi6umki4pqHywWmhV
-        ZcMwqaTAOugfsKPyu3tNC8cWvg==
-X-Google-Smtp-Source: AA0mqf5uegftvDafiprhva4ZzjYmUt1OusSDYFAkM3Il7bquEsKE9KE6XaofbT2iAZyU+xQHtVsxJQ==
-X-Received: by 2002:a05:6a20:a681:b0:ac:1266:bda with SMTP id ba1-20020a056a20a68100b000ac12660bdamr29926220pzb.7.1670977549302;
-        Tue, 13 Dec 2022 16:25:49 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id az4-20020a056a02004400b00478c48cf73csm7429960pgb.82.2022.12.13.16.25.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 16:25:48 -0800 (PST)
-Date:   Wed, 14 Dec 2022 09:25:44 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: zram: zsmalloc: Add an additional
- co-maintainer
-Message-ID: <Y5kYCGKMC5xTyYb7@google.com>
-References: <20221213170731.796121-1-minchan@kernel.org>
+        Tue, 13 Dec 2022 19:26:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53414B1E8;
+        Tue, 13 Dec 2022 16:26:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F710B81609;
+        Wed, 14 Dec 2022 00:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B43C433EF;
+        Wed, 14 Dec 2022 00:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670977603;
+        bh=NDgzNzla8xVcW0uTm0lMUqLVpqM6P7lvLIQIDHm7YwY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hv51f69k1nOkqwhvVxLbREu63I/O7Y+KIgmKi81hYB/T91GuYo8bAuLiEJUFSQGSM
+         dg42kpX9k2E9HlVKit9ZurnhoiUDRyaBB//FB1AbkTEUBSd3y2VWW6wzAXU9AKE3XA
+         g9HMVocOgpwn5qzUivFll8Ki+HeILE2cs26K2W3qM6mGWJzp0VMVM6HY80/9Nxh28p
+         9rKGd9c/YS7lvKDtl1z/ceTz3kM3UEftxKAc4j2jHs/KV/3E+rgiw7tzZmd4U76+8Z
+         /v4kZM7Sytcm5Il+qUxoXcqnQiMlURELN5b4Dwgcj5uJiSxufbTzWwvB71l6OBNUWm
+         VNMmGmDCah4Aw==
+Date:   Tue, 13 Dec 2022 18:26:42 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     mani@kernel.org, allenbh@gmail.com, bhelgaas@google.com,
+        dave.jiang@intel.com, imx@lists.linux.dev, jdmason@kudzu.us,
+        kw@linux.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
+        ntb@lists.linux.dev
+Subject: Re: [PATCH v16 7/7] PCI: endpoint: pci-epf-vntb: fix sparse build
+ warning at ntb->reg
+Message-ID: <20221214002642.GA216337@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213170731.796121-1-minchan@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221102141014.1025893-8-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/12/13 09:07), Minchan Kim wrote:
-> Move Sergey to co-maintainer for zram/zsmalloc since he has helped
-> to contribute/review those areas actively for eight years, which
-> is quite helpful. Since Nitin has been inactive for several years,
-> it's time to move his name into CREDITS.
+On Wed, Nov 02, 2022 at 10:10:14AM -0400, Frank Li wrote:
+> From: Frank Li <frank.li@nxp.com>
 > 
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
+>   pci-epf-vntb.c:1128:33: sparse:     expected void [noderef] __iomem *base
+>   pci-epf-vntb.c:1128:33: sparse:     got struct epf_ntb_ctrl *reg
+> 
+> Add __iomem type convert in vntb_epf_peer_spad_read() and
+> vntb_epf_peer_spad_write().
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+I don't understand all the bits and pieces here, but I'm a little
+dubious about adding all these "(void __iomem *)"casts.  There are
+very few of them in drivers/pci/, and I doubt this driver is so unique
+that it needs them.
 
-Thank you!
+> @@ -1121,7 +1121,7 @@ static u32 vntb_epf_spad_read(struct ntb_dev *ndev, int idx)
+>  	struct epf_ntb *ntb = ntb_ndev(ndev);
+>  	int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count * sizeof(u32);
+>  	u32 val;
+> -	void __iomem *base = ntb->reg;
+> +	void __iomem *base = (void __iomem *)ntb->reg;
+>  
+>  	val = readl(base + off + ct + idx * sizeof(u32));
+>  	return val;
+> @@ -1132,7 +1132,7 @@ static int vntb_epf_spad_write(struct ntb_dev *ndev, int idx, u32 val)
+>  	struct epf_ntb *ntb = ntb_ndev(ndev);
+>  	struct epf_ntb_ctrl *ctrl = ntb->reg;
+>  	int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
+> -	void __iomem *base = ntb->reg;
+> +	void __iomem *base = (void __iomem *)ntb->reg;
+>  
+>  	writel(val, base + off + ct + idx * sizeof(u32));
+
+These things look gratuitously different to begin with:
+
+  int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count * sizeof(u32);
+  int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
+
+They're doing the same thing, and they should do it the same way.
+
+Since db_data[] and db_offset[] are never referenced except to be
+initialized to zero, I'm guessing the point of vntb_epf_spad_read()
+and vntb_epf_spad_write() is to read/write things in those arrays?
+
+You access other things in ntb->reg directly by dereferencing a
+pointer, e.g.,
+
+  ntb->reg->link_status |= LINK_STATUS_UP;
+  addr = ntb->reg->addr;
+  ctrl->command_status = COMMAND_STATUS_OK;
+
+Why don't you just compute the appropriate *index* and access the
+array directly instead of using readl() and writel()?
+
+Bjorn
