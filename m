@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CA364C51E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9208D64C529
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237759AbiLNIc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S237502AbiLNIij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbiLNIcv (ORCPT
+        with ESMTP id S229739AbiLNIih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:32:51 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D82C60C5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:32:50 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id qk9so42774382ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:32:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TwUMu2azzipq45IwQjtmcCDGi09cxl5lBCyxvhXvDUI=;
-        b=qiDm5J9XGRu+Px/wzUOGgM5s6Nwx/c7lf9skC//hTRRfTOer14reYby3/VSTDZIETg
-         h6bYXf6fymtIbh/MAs3KQsrZB8gpvlzuWKTbrUIvrn0HtRNro/cjFt3G7i8hz5puGfTD
-         55SMYFcUJDl5TGZdR0IgHvMFcHlxIMCAwYkY9iXK3P5O8BgIRNloFpHQxy9y2Skei/2u
-         /wUkeRrRLmAwG1ylwmfypfugptDKxHugbi4d97Nh0jnW4/SIGrbcG5oL2enJrWwcnzT4
-         lm72Y6wDPRXZBa+Udu/iF4CLIEdavkkqIJuI/5d8qNP1Tq14MYZSk7Sv3RRwEp0rIrP4
-         BrHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TwUMu2azzipq45IwQjtmcCDGi09cxl5lBCyxvhXvDUI=;
-        b=sE/UuMxl+sQ3EEwG/G1/Uvoudq9HYnxBKw+u2ubck9BistSo3ALxAkzRzWdrDgJh8Q
-         Nby6HkbMzjlMz7xoAgUGHGSh6UajG3fbD5kXYLmIyPGPguJYODYJ200rg6vid2hSWGFL
-         8eJgPrgQEKjhUPyV5F45nEb2jRdlHjs9WdVIscApk4PvuDvOHzz9ZgipHJ8DSGSpt4OU
-         e0f2uPCVrdcIJqZPZST4zpC9GLpBKqlVjBBUI0tOcFBS1b9hycHS5dMbzMrc4Vqu9WRJ
-         AFysU6wvuA58WEAd+PTOWzSOTY3rEnxBQux3RiYxro8QmeE/ds5e0sptk5Kq1yjZPiAa
-         k/MQ==
-X-Gm-Message-State: ANoB5pnI4PHo+8YZ8OiG7AyMR1qQ8kB+LkW8OFitseMIm85/Ym7LI9Ve
-        LSz6zhTFzOiw8CmU/jz/y9g8gA==
-X-Google-Smtp-Source: AA0mqf4UkhwNzLmopxuJ6G8JXG8IJsRsGhBNWdFj1CJ2U5Y2qlvwvamXR4Vzha9eUI74RaQkj7rdHA==
-X-Received: by 2002:a17:906:2bd7:b0:7c1:4c46:30a0 with SMTP id n23-20020a1709062bd700b007c14c4630a0mr15273928ejg.65.1671006768834;
-        Wed, 14 Dec 2022 00:32:48 -0800 (PST)
-Received: from blmsp ([185.238.219.41])
-        by smtp.gmail.com with ESMTPSA id z20-20020a1709060ad400b0077077c62cadsm5539676ejf.31.2022.12.14.00.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 00:32:48 -0800 (PST)
-Date:   Wed, 14 Dec 2022 09:32:47 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Message-ID: <20221214083247.u7ixomwsu46dbfxm@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-4-msp@baylibre.com>
- <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
- <20221202083740.moa7whqd52oasbar@blmsp>
- <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
- <20221213171309.c4nrdhwjj2ivrqim@blmsp>
- <20221213191717.422omlznn2cjjwjz@pengutronix.de>
+        Wed, 14 Dec 2022 03:38:37 -0500
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BA164DB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:38:33 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 2B4FD3F3E7;
+        Wed, 14 Dec 2022 09:38:30 +0100 (CET)
+Date:   Wed, 14 Dec 2022 09:38:28 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 5/6] drm/msm/dsi: Flip greater-than check for
+ slice_count and slice_per_intf
+Message-ID: <20221214083828.3jblczd5h5vyp3o5@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>, Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221213232207.113607-1-marijn.suijten@somainline.org>
+ <20221213232207.113607-6-marijn.suijten@somainline.org>
+ <c5e33d9f-0dc4-fdd2-244a-3d463be1c4e8@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213191717.422omlznn2cjjwjz@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <c5e33d9f-0dc4-fdd2-244a-3d463be1c4e8@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-On Tue, Dec 13, 2022 at 08:17:17PM +0100, Marc Kleine-Budde wrote:
-> On 13.12.2022 18:13:09, Markus Schneider-Pargmann wrote:
-> > > > The tcan mram size is limited to 2048 so I would like to avoid limiting
-> > > > the possible sizes of the tx fifos.
-> > > 
-> > > What FIFO sizes are you using currently?
-> > 
-> > I am currently using 13 for TXB, TXE and RXF0.
+On 2022-12-14 01:02:14, Konrad Dybcio wrote:
 > 
-> Have you CAN-FD enabled?
+> 
+> On 14.12.2022 00:22, Marijn Suijten wrote:
+> > According to downstream /and the comment copied from it/ this comparison
+> > should be the other way around.  In other words, when the panel driver
+> > requests to use more slices per packet than what could be sent over this
+> > interface, it is bumped down to only use a single slice per packet (and
+> > strangely not the number of slices that could fit on the interface).
+> > 
+> > Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
 
-yes, it is enabled.
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Best,
-Markus
+> > ---
+> Missing s-o-b
+
+Thanks for catching, checkpatch would've pointed this out (in addition
+to a typo in the cover letter) if I had ran it.
+
+> >  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > index 0686c35a6fd4..9bdfa0864cdf 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> > @@ -855,11 +855,11 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
+> >  	 */
+> >  	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->slice_width);
+> >  
+> > -	/* If slice_per_pkt is greater than slice_per_intf
+> > +	/* If slice_count is greater than slice_per_intf
+> >  	 * then default to 1. This can happen during partial
+> >  	 * update.
+> >  	 */
+> > -	if (slice_per_intf > dsc->slice_count)
+> > +	if (dsc->slice_count > slice_per_intf)
+> >  		dsc->slice_count = 1;
+> >  
+> >  	total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
