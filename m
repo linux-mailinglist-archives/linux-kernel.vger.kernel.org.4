@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241A364CFDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8170664CFDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbiLNTDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S239049AbiLNTDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239005AbiLNTDV (ORCPT
+        with ESMTP id S239009AbiLNTDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Dec 2022 14:03:21 -0500
 Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDD62A945
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DFC2A953
         for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:03:19 -0800 (PST)
 Received: from TimeMachine.lan (adsl-d248.84-47-10.t-com.sk [84.47.10.248])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 5A31B202F5;
-        Wed, 14 Dec 2022 20:03:17 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 3EC7D20370;
+        Wed, 14 Dec 2022 20:03:18 +0100 (CET)
 From:   Martin Botka <martin.botka@somainline.org>
 To:     martin.botka1@gmail.com
 Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -34,9 +34,9 @@ Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/3] mfd: ax20x: Add suppport for AXP1530 PMIC
-Date:   Wed, 14 Dec 2022 20:03:04 +0100
-Message-Id: <20221214190305.3354669-3-martin.botka@somainline.org>
+Subject: [PATCH v5 3/3] regulator: axp20x: Add support for AXP1530 variant
+Date:   Wed, 14 Dec 2022 20:03:05 +0100
+Message-Id: <20221214190305.3354669-4-martin.botka@somainline.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221214190305.3354669-1-martin.botka@somainline.org>
 References: <20221214190305.3354669-1-martin.botka@somainline.org>
@@ -51,217 +51,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AXP1530 is a PMIC chip produced by X-Powers and an be connected via
-I2C bus.
-Where AXP313A seems to be closely related so the same driver can be used and
-seen it only paired with H616 SoC.
+AXP1530 has a few regulators that are controlled via I2C Bus.
+
+Add support for them.
 
 Signed-off-by: Martin Botka <martin.botka@somainline.org>
 ---
- drivers/mfd/axp20x-i2c.c   |  2 ++
- drivers/mfd/axp20x.c       | 62 ++++++++++++++++++++++++++++++++++++++
- include/linux/mfd/axp20x.h | 32 ++++++++++++++++++++
- 3 files changed, 96 insertions(+)
+ drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
-index 8fd6727dc30a..6bfb931a580e 100644
---- a/drivers/mfd/axp20x-i2c.c
-+++ b/drivers/mfd/axp20x-i2c.c
-@@ -60,6 +60,7 @@ static void axp20x_i2c_remove(struct i2c_client *i2c)
- #ifdef CONFIG_OF
- static const struct of_device_id axp20x_i2c_of_match[] = {
- 	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
-+	{ .compatible = "x-powers,axp1530", .data = (void *)AXP1530_ID},
- 	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
- 	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
- 	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
-@@ -73,6 +74,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
- 
- static const struct i2c_device_id axp20x_i2c_id[] = {
- 	{ "axp152", 0 },
-+	{ "axp1530", 0 },
- 	{ "axp202", 0 },
- 	{ "axp209", 0 },
- 	{ "axp221", 0 },
-diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-index 880c41fa7021..6caa7e87ad80 100644
---- a/drivers/mfd/axp20x.c
-+++ b/drivers/mfd/axp20x.c
-@@ -34,6 +34,7 @@
- 
- static const char * const axp20x_model_names[] = {
- 	"AXP152",
-+	"AXP1530",
- 	"AXP202",
- 	"AXP209",
- 	"AXP221",
-@@ -66,6 +67,24 @@ static const struct regmap_access_table axp152_volatile_table = {
- 	.n_yes_ranges	= ARRAY_SIZE(axp152_volatile_ranges),
+diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
+index d260c442b788..9420839ff4f9 100644
+--- a/drivers/regulator/axp20x-regulator.c
++++ b/drivers/regulator/axp20x-regulator.c
+@@ -1001,6 +1001,40 @@ static const struct regulator_desc axp813_regulators[] = {
+ 		    AXP22X_PWR_OUT_CTRL2, AXP22X_PWR_OUT_DC1SW_MASK),
  };
  
-+static const struct regmap_range axp1530_writeable_ranges[] = {
-+	regmap_reg_range(AXP1530_ON_INDICATE, AXP1530_FREQUENCY),
++static const struct linear_range axp1530_dcdc1_ranges[] = {
++	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
++	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
++	REGULATOR_LINEAR_RANGE(1600000, 0x58, 0x6A, 100000),
 +};
 +
-+static const struct regmap_range axp1530_volatile_ranges[] = {
-+	regmap_reg_range(AXP1530_ON_INDICATE, AXP1530_FREQUENCY),
++static const struct linear_range axp1530_dcdc2_ranges[] = {
++	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
++	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
 +};
 +
-+static const struct regmap_access_table axp1530_writeable_table = {
-+	.yes_ranges = axp1530_writeable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(axp1530_writeable_ranges),
++static const struct linear_range axp1530_dcdc3_ranges[] = {
++	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
++	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x66, 20000),
 +};
 +
-+static const struct regmap_access_table axp1530_volatile_table = {
-+	.yes_ranges = axp1530_volatile_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(axp1530_volatile_ranges),
++static const struct regulator_desc axp1530_regulators[] = {
++	AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", axp1530_dcdc1_ranges,
++					0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
++					BIT(0)),
++	AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", axp1530_dcdc2_ranges,
++					0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
++					BIT(1)),
++	AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", axp1530_dcdc3_ranges,
++					0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
++					BIT(2)),
++	AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
++					AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
++					BIT(3)),
++	AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
++					AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
++					BIT(4)),
 +};
 +
- static const struct regmap_range axp20x_writeable_ranges[] = {
- 	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
- 	regmap_reg_range(AXP20X_CHRG_CTRL1, AXP20X_CHRG_CTRL2),
-@@ -245,6 +264,15 @@ static const struct regmap_config axp152_regmap_config = {
- 	.cache_type	= REGCACHE_RBTREE,
- };
- 
-+static const struct regmap_config axp1530_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.wr_table = &axp1530_writeable_table,
-+	.volatile_table = &axp1530_volatile_table,
-+	.max_register = AXP1530_FREQUENCY,
-+	.cache_type = REGCACHE_RBTREE,
-+};
-+
- static const struct regmap_config axp20x_regmap_config = {
- 	.reg_bits	= 8,
- 	.val_bits	= 8,
-@@ -304,6 +332,16 @@ static const struct regmap_irq axp152_regmap_irqs[] = {
- 	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
- };
- 
-+static const struct regmap_irq axp1530_regmap_irqs[] = {
-+	INIT_REGMAP_IRQ(AXP1530, KEY_L2H_EN, 0, 7),
-+	INIT_REGMAP_IRQ(AXP1530, KEY_H2L_EN, 0, 6),
-+	INIT_REGMAP_IRQ(AXP1530, POKSIRQ_EN, 0, 5),
-+	INIT_REGMAP_IRQ(AXP1530, POKLIRQ_EN, 0, 4),
-+	INIT_REGMAP_IRQ(AXP1530, DCDC3_UNDER, 0, 3),
-+	INIT_REGMAP_IRQ(AXP1530, DCDC2_UNDER, 0, 2),
-+	INIT_REGMAP_IRQ(AXP1530, TEMP_OVER, 0, 0),
-+};
-+
- static const struct regmap_irq axp20x_regmap_irqs[] = {
- 	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
- 	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
-@@ -514,6 +552,18 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
- 	.num_regs		= 3,
- };
- 
-+static const struct regmap_irq_chip axp1530_regmap_irq_chip = {
-+	.name = "axp1530_irq_chip",
-+	.status_base = AXP1530_IRQ_STATUS1,
-+	.ack_base = AXP1530_IRQ_STATUS1,
-+	.mask_base = AXP1530_IRQ_ENABLE1,
-+	.mask_invert = true,
-+	.init_ack_masked = true,
-+	.irqs = axp1530_regmap_irqs,
-+	.num_irqs = ARRAY_SIZE(axp1530_regmap_irqs),
-+	.num_regs = 1,
-+};
-+
- static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
- 	.name			= "axp20x_irq_chip",
- 	.status_base		= AXP20X_IRQ1_STATE,
-@@ -683,6 +733,12 @@ static const struct mfd_cell axp152_cells[] = {
- 	},
- };
- 
-+static struct mfd_cell axp1530_cells[] = {
-+	{
-+		.name = "axp20x-regulator",
-+	},
-+};
-+
- static const struct resource axp288_adc_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(AXP288_IRQ_GPADC, "GPADC"),
- };
-@@ -874,6 +930,12 @@ int axp20x_match_device(struct axp20x_dev *axp20x)
- 		axp20x->regmap_cfg = &axp152_regmap_config;
- 		axp20x->regmap_irq_chip = &axp152_regmap_irq_chip;
+ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
+ {
+ 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
+@@ -1040,6 +1074,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
+ 		def = 3000;
+ 		step = 150;
  		break;
 +	case AXP1530_ID:
-+		axp20x->nr_cells = ARRAY_SIZE(axp1530_cells);
-+		axp20x->cells = axp1530_cells;
-+		axp20x->regmap_cfg = &axp1530_regmap_config;
-+		axp20x->regmap_irq_chip = &axp1530_regmap_irq_chip;
++		/*
++		 * Do not set the DCDC frequency on AXP1530
++		 */
++		return 0;
++		break;
+ 	default:
+ 		dev_err(&pdev->dev,
+ 			"Setting DCDC frequency for unsupported AXP variant\n");
+@@ -1220,6 +1260,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
+ 	bool drivevbus = false;
+ 
+ 	switch (axp20x->variant) {
++	case AXP1530_ID:
++		regulators = axp1530_regulators;
++		nregulators = AXP1530_REG_ID_MAX;
 +		break;
  	case AXP202_ID:
  	case AXP209_ID:
- 		axp20x->nr_cells = ARRAY_SIZE(axp20x_cells);
-diff --git a/include/linux/mfd/axp20x.h b/include/linux/mfd/axp20x.h
-index 9ab0e2fca7ea..cad25754500f 100644
---- a/include/linux/mfd/axp20x.h
-+++ b/include/linux/mfd/axp20x.h
-@@ -12,6 +12,7 @@
- 
- enum axp20x_variants {
- 	AXP152_ID = 0,
-+	AXP1530_ID,
- 	AXP202_ID,
- 	AXP209_ID,
- 	AXP221_ID,
-@@ -45,6 +46,18 @@ enum axp20x_variants {
- #define AXP152_DCDC_FREQ		0x37
- #define AXP152_DCDC_MODE		0x80
- 
-+#define AXP1530_ON_INDICATE		0x00
-+#define AXP1530_OUTPUT_CONTROL	0x10
-+#define AXP1530_DCDC1_CONRTOL	0x13
-+#define AXP1530_DCDC2_CONRTOL	0x14
-+#define AXP1530_DCDC3_CONRTOL	0x15
-+#define AXP1530_ALDO1_CONRTOL	0x16
-+#define AXP1530_DLDO1_CONRTOL	0x17
-+#define AXP1530_OUTOUT_MONITOR	0x1D
-+#define AXP1530_IRQ_ENABLE1		0x20
-+#define AXP1530_IRQ_STATUS1		0x21
-+#define AXP1530_FREQUENCY		0x87
-+
- #define AXP20X_PWR_INPUT_STATUS		0x00
- #define AXP20X_PWR_OP_MODE		0x01
- #define AXP20X_USB_OTG_STATUS		0x02
-@@ -287,6 +300,15 @@ enum axp20x_variants {
- #define AXP288_FG_TUNE5             0xed
- 
- /* Regulators IDs */
-+enum {
-+	AXP1530_DCDC1 = 0,
-+	AXP1530_DCDC2,
-+	AXP1530_DCDC3,
-+	AXP1530_LDO1,
-+	AXP1530_LDO2,
-+	AXP1530_REG_ID_MAX,
-+};
-+
- enum {
- 	AXP20X_LDO1 = 0,
- 	AXP20X_LDO2,
-@@ -440,6 +462,16 @@ enum {
- 	AXP152_IRQ_GPIO0_INPUT,
- };
- 
-+enum axp1530_irqs {
-+	AXP1530_IRQ_TEMP_OVER,
-+	AXP1530_IRQ_DCDC2_UNDER = 2,
-+	AXP1530_IRQ_DCDC3_UNDER,
-+	AXP1530_IRQ_POKLIRQ_EN,
-+	AXP1530_IRQ_POKSIRQ_EN,
-+	AXP1530_IRQ_KEY_L2H_EN,
-+	AXP1530_IRQ_KEY_H2L_EN,
-+};
-+
- enum {
- 	AXP20X_IRQ_ACIN_OVER_V = 1,
- 	AXP20X_IRQ_ACIN_PLUGIN,
+ 		regulators = axp20x_regulators;
 -- 
 2.38.1
 
