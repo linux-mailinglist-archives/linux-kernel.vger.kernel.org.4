@@ -2,77 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D5664C2AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 04:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FB664C281
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 04:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbiLNDRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 22:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S237188AbiLNDHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 22:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237285AbiLNDRC (ORCPT
+        with ESMTP id S237034AbiLNDH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 22:17:02 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C027B16
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:17:00 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id g10so1966798plo.11
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:17:00 -0800 (PST)
+        Tue, 13 Dec 2022 22:07:29 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2096.outbound.protection.outlook.com [40.107.20.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F94123E98;
+        Tue, 13 Dec 2022 19:07:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OcfP8wtxDLDr/0nVTerbm3Rv5F+iweYDb5+cB4X0Fvspv75NMDwlPjBl2u0YpS9EKWaHdReuOk3aFjG4SNn/IOsjX721garRMaptyefrR7tA/ritbCp4STOlSGlk79uiuROFusjIlbPYAaMp56AZ6cyD71nHsUkt2ULbPuufMhgkqnvCdOtAF229PeuIqTlW6AaHrUP4lVd6+90vvud4xv2huK0AIhP86CJbBxKyQgtC3YYJrXVJRQ5W7VLD1m+71XuUj3BTyl/qovZpJL1tZNgWp+Np+7cZXLSg7bV9F1lSRu8ecGUU/92rZmSGfKYkBuRme+Pyfr3QjRUtWYWp5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zNhgg++7XYZCxDQ3exuoFAjdW8gkfiAkvkYfHpL0q7U=;
+ b=kub6RHJxu497je3lcqLxUSCKfvdEHHs/LBxzHier/NuotZCRUqNCLL5j80tl0Pf/47dvBGfmFpBFQorS6ODAqxjjLhJ7YjCWSeLc6i/LRQ4khMWR7MtnSTnTmeDFOhWNu7cM4SDmOB+6Opw5jUfC8Srd4Uq+HAC09VV08frs5Wmq4LPqQSQAb3J+GEl0yxnHlTADDQRaLIinnFiW2Ysc8ZK5Y6QjmYjeHhbEzBVqDm8wQP7WeV2LgiPk9FG0AKranytVlHzxWQf6EhW+liJ663jvFlfzZKCpoQHxAltr6uS+CUsZIebbCG6evUI/5MKt/qtqGIcJIG8DiBz55HY2vA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.94) smtp.rcpttodomain=kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjoUL1OFj4FUNqJzzW9IevB/AH024BCp8wmz9LscwDA=;
-        b=Bg2FP3HI+WEXQvFSI0TqRDR4m1oL6bTW0FrDv+c06vvkLtYqiPJUmZJOJY2IMmpDYc
-         yXF9WSsfJFZ4TmnRaKa9iPxJs+F9fa8zvzoMt56jjv5GEo8FeuedhMqnveEOPS0H45xF
-         h6gy3Jvx/IX4vtLEw5bgy8x7gV8C6DNdcLW63QrZTuifecsh8DcXZNEXxNpWT3ubHbg3
-         zhbz/ILvgzd4clijyw47zUgkuPYbpjd0sTL275TrBb1IkI5D5Cn+h6MElaLkd1JK4qOi
-         JliqwHIwsfx819pNkqf0AGpV50Ph7FIdWiBi2XPnhyrD0D4BqVz8Qzp7RHtsIhxM+he/
-         AEZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zjoUL1OFj4FUNqJzzW9IevB/AH024BCp8wmz9LscwDA=;
-        b=0MWsc/QcLuyfgo/Exbw7t23CjGw4csjcFRTvyKRi5UndH/0r4c2pO75KTYkaHv7a5R
-         HMgJ51e3HcC9dj/7HHPTzVsOZbdfxANHQqDvi/2+VzM2+zBL9+GWTzHl+4JSxNHLQnP+
-         HGmrqPlQoXpxY+8b8TZlsRORHI3ur2bxxkrpRF4FB9L/pyfDCUYl8x9K/MYXO1Y692Jo
-         5O1CQfuZaiYYo8ZAOP6SOiw9b0iqxduHkHaLYXHTgfn3wT0i5XU4T8+6XfrJeKoxCwv5
-         QPZ0JVu4j7bIJ29ORPt7lw3XfFMwLvGIzCYKDmIzM7tWkHjs1Q4L+J5cNMjSJDu7CjwM
-         2x/g==
-X-Gm-Message-State: ANoB5pk+D8tvfRpEzitKkGYVpR+6PB8SPMF+81SLgefvXXh5YoeKpXJt
-        iOKeKWzCWY/61zCqQYmBnPHYi9cKFm6+VA==
-X-Google-Smtp-Source: AA0mqf69EfFCdvv9HMZYDsuIdsnWrILf95v4hW03+BwNiLvXJbkkqznMV4X41PRmPP8P8TG5vY/Lfg==
-X-Received: by 2002:a05:6a20:13a3:b0:a5:df86:f0e1 with SMTP id w35-20020a056a2013a300b000a5df86f0e1mr34252993pzh.16.1670987819802;
-        Tue, 13 Dec 2022 19:16:59 -0800 (PST)
-Received: from MBP ([39.170.101.209])
-        by smtp.gmail.com with ESMTPSA id n6-20020a63ee46000000b0047681fa88d1sm7472285pgk.53.2022.12.13.19.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 19:16:58 -0800 (PST)
-References: <20221115140233.21981-1-schspa@gmail.com>
- <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
- <m2bko8c0yh.fsf@gmail.com> <m2pmcoag55.fsf@gmail.com>
- <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
-User-agent: mu4e 1.8.10; emacs 29.0.60
-From:   Schspa Shi <schspa@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
-        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
-        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] umh: fix UAF when the process is being killed
-Date:   Wed, 14 Dec 2022 10:28:11 +0800
-In-reply-to: <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
-Message-ID: <m2v8me8yjj.fsf@gmail.com>
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zNhgg++7XYZCxDQ3exuoFAjdW8gkfiAkvkYfHpL0q7U=;
+ b=MxXKutgrx4yBHUsURBfcLLnGMAzHv3E62VE8K4N+742jiLFcIlzsx6we6cETN9SX1Xz2KLKxoZCd1GiTgDLtqWajM61pOuHPUa0azKATNh6OMSyTbTcPrPRJJuYxpU+t6fTDzfwUWSJIrvux/KKJaDBtuRSzAkN1sDLDrW0uUKg=
+Received: from DB6PR1001CA0042.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:55::28)
+ by AM6PR0602MB3733.eurprd06.prod.outlook.com (2603:10a6:209:20::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 14 Dec
+ 2022 03:07:22 +0000
+Received: from DB5EUR02FT062.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:4:55:cafe::be) by DB6PR1001CA0042.outlook.office365.com
+ (2603:10a6:4:55::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19 via Frontend
+ Transport; Wed, 14 Dec 2022 03:07:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.94)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.94 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.94; helo=aherlnxbspsrv01.lgs-net.com; pr=C
+Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.94) by
+ DB5EUR02FT062.mail.protection.outlook.com (10.13.59.53) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5901.21 via Frontend Transport; Wed, 14 Dec 2022 03:07:21 +0000
+From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Qing-wu.Li@leica-geosystems.com.cn, 18701859600@163.com,
+        bsp-development.geo@leica-geosystems.com
+Subject: [PATCH V4 0/1] clk: imx8mp: Alias M7 SRC/DIV to M7 CORE
+Date:   Wed, 14 Dec 2022 04:07:18 +0100
+Message-Id: <20221214030719.4123889-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR02FT062:EE_|AM6PR0602MB3733:EE_
 Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 1df697b8-11d3-48ff-ad82-08dadd8051ae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xLKJ3Yt+XsXz2oYuZnCIZgsaR3zwcQV7aKkLt0uwbMlvkMdMwI50MmR9L6MGFvdV74dnz5SsvRgTNAOvWnhIutAoUcnnKICkglS7aQEPnZQupbcki7ECutiv2kIDhWFNEQQ7OId91RyJwzKEf8/x3lBwqydSVd70bQjTaobT+S8LvPzhKScQ5M02vNMKhO5R+dM7UDnEyoMv1RV3ARYWcK8CNJSvay20nWCetjCL6SJRJWL+9sPp8npSuhkxWteZXmJ+EeyqM2ucoZaDm3gF0CnyaKjGodmELooLaqVyQVrgqKcxn1VF9PdQmskhTkL0626PeGaVugS1Y/7eq5LKkfLxFZwJv923LGow35Un7j3QQUl9tcz2SIDTU/cCBiwg2ZqPxevai767l8nqsVHiYTXn6WeuZV5YAoBmhsE5KEEIhusy0VPAR1mz+bowlOfNO79mi4pB9uFm1Gq1bhC11K8m1lUNv+izDoCud01oecky+mJeSxKiwntbpNVQA4hYSStBcSQBi2nyy+0IX9WU3+G24+4ncmAcc9Q52/0UHgdPByXwVwu+ALVRajZRwV+6cJTAn2k1x/QpXTcZs1/wPXuH1IlXaGrc4U+pNC+KoL/N0bGeiCyzbAP7mvwdqwmlX5+/7AaOpINORaagswQoHbbXKnJBeS68lNSECrP6c60P3I4YF4ucrLvhhI2/58H/VRqwk+ZcDDrSD25kgbjamndVLLusDhiuYcwYm22wx59RiScB6XvgAIsajqjY19A6
+X-Forefront-Antispam-Report: CIP:193.8.40.94;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom50.leica-geosystems.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(451199015)(40470700004)(46966006)(36840700001)(356005)(82740400003)(6512007)(81166007)(82310400005)(558084003)(40460700003)(9316004)(6486002)(86362001)(921005)(316002)(36736006)(478600001)(118246002)(8936002)(7416002)(956004)(47076005)(2906002)(41300700001)(5660300002)(70206006)(4326008)(8676002)(336012)(36860700001)(70586007)(6506007)(40480700001)(107886003)(6666004)(186003)(26005)(2616005)(1076003)(36756003)(32563001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 03:07:21.6051
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1df697b8-11d3-48ff-ad82-08dadd8051ae
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.94];Helo=[aherlnxbspsrv01.lgs-net.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR02FT062.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0602MB3733
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,36 +95,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in V4:
+  Remove the blank line.
+  Add Reviewed-by: Marco Felsch.
 
-Luis Chamberlain <mcgrof@kernel.org> writes:
+LI Qingwu (1):
+  clk: imx8mp: Alias M7 SRC/DIV to M7 CORE
 
-> On Mon, Dec 12, 2022 at 09:38:31PM +0800, Schspa Shi wrote:
->> I'd like to upload a V2 patch with the new solution if you prefer the
->> following way.
->> 
->> diff --git a/kernel/umh.c b/kernel/umh.c
->> index 850631518665..8023f11fcfc0 100644
->> --- a/kernel/umh.c
->> +++ b/kernel/umh.c
->> @@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
->>                 /* umh_complete() will see NULL and free sub_info */
->>                 if (xchg(&sub_info->complete, NULL))
->>                         goto unlock;
->> +               /*
->> +                * kthreadd (or new kernel thread) will call complete()
->> +                * shortly.
->> +                */
->> +               wait_for_completion(&done);
->>         }
->
-> Yes much better. Did you verify it fixes the splat found by the bots?
->
-
-Yes, it will fix it.
-
->   Luis
-
+ drivers/clk/imx/clk-imx8mp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 -- 
-BRs
-Schspa Shi
+2.25.1
+
