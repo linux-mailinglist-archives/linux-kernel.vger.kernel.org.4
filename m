@@ -2,134 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BA364D1DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 22:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFB064D1CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 22:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiLNVgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 16:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S229739AbiLNV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 16:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLNVgL (ORCPT
+        with ESMTP id S229500AbiLNV24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 16:36:11 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2AFE099;
-        Wed, 14 Dec 2022 13:36:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXTFL4TWHz4xN4;
-        Thu, 15 Dec 2022 08:36:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671053766;
-        bh=oWX9mpT17ur8DOuIMsmVAj3LF7Xrb3G66buPkRIts6g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XxhZFerTuwoJSOPVskTHWstoGlXXDWtpamlomjI8VzzJ4I/IpY+sUIq9X6h1i1N3N
-         XcG1YD5sSfEF5ARU/o0F0HK7Edmmn+CF0W4mRg1UhQdosWd9gZTo+0Qq6oqNfiHKKs
-         78txaUt3igsqdnlzI3+XhzRHdL2b/13SfkjWXern7YYtGtulcGhiCQKijMRMndo9WN
-         vbjXEaP6Jhxi1FzWes2iHMg06/RZ33Nm+t83nF5arPsGSV7a7r0X9/NQY61sMJzx/o
-         gTehgJ1nUf2nTabPqTXNJIGhpkmOhqzx3Gys61xLxiVvdgTdQpsdneDH1zywB8QHXD
-         BmGAhyaxXoR3g==
-Date:   Thu, 15 Dec 2022 08:36:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the gfs2 tree with Linus' tree
-Message-ID: <20221215083604.5a920366@canb.auug.org.au>
+        Wed, 14 Dec 2022 16:28:56 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7917316;
+        Wed, 14 Dec 2022 13:28:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671053335; x=1702589335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BfyZ0wbnXjjKIR9uhDPYIesZqV9+mxpLj1ZhNhI6kxY=;
+  b=dALwBPuE6ZF1B4iHZeRrdFgFwBAG0qf7aHiUw4IMRfQGSnjeYvwUVzur
+   csTIYIUXh2qo+XAtNawXvzb7jZkkMkrlZsFezH+KPaAyzeoFaU9s3nNn6
+   +gbjDtd9Mi/7o4+jwVX83JSmQLkc68mFu2IBfcQD6LKqOC5wyqWIEQ3pj
+   diueNQMzy7dKoqki7vnzjmQ1/4OiEWCPcCwdY1Z9HOy9R+CGlSq5cw9gI
+   k9hPHTM3HunjB6vFqmnHI2irc/A65f/9uXUlbN5FfPUJkOlJrnbWRrYzC
+   ZxEyzdbi/ZBym1FqADEFoVsaMau3n3AMaRr7opwOtqlSuewQzgH8Bd/rl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="301927111"
+X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
+   d="scan'208";a="301927111"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 13:28:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="599341833"
+X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
+   d="scan'208";a="599341833"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga003.jf.intel.com with ESMTP; 14 Dec 2022 13:28:54 -0800
+Date:   Wed, 14 Dec 2022 13:37:07 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Zhang Chen <chen.zhang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Chao Gao <chao.gao@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 3/9] KVM: x86: Add a kvm-only leaf for BHI_CTRL
+Message-ID: <20221214213707.GC16072@ranerica-svr.sc.intel.com>
+References: <20221210160046.2608762-1-chen.zhang@intel.com>
+ <20221210160046.2608762-4-chen.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OlyzdxKkZQrSlonkAmdxxpo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210160046.2608762-4-chen.zhang@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OlyzdxKkZQrSlonkAmdxxpo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Dec 11, 2022 at 12:00:40AM +0800, Zhang Chen wrote:
+> KVM needs to check if guests can see BHI_CTRL. If a guest is using
+> BHB-clearing sequence and cannot see BHI_CTRL and the host enumerates BHI,
+> KVM is responsible for setting BHI_DIS_S for the guest.
+> 
+> This allows VM migration from parts doesn't enumerate BHI to those
+> that enumerate BHI.
 
-Hi all,
-
-Today's linux-next merge of the gfs2 tree got a conflict in:
-
-  include/linux/iomap.h
-
-between commit:
-
-  d7b64041164c ("iomap: write iomap validity checks")
-
-from Linus' tree and commit:
-
-  2057bcfa562b ("iomap: Move page_done callback under the folio lock")
-
-from the gfs2 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/iomap.h
-index 0983dfc9a203,bd6d80453726..000000000000
---- a/include/linux/iomap.h
-+++ b/include/linux/iomap.h
-@@@ -137,24 -127,7 +137,24 @@@ static inline bool iomap_inline_data_va
-  struct iomap_page_ops {
-  	int (*page_prepare)(struct inode *inode, loff_t pos, unsigned len);
-  	void (*page_done)(struct inode *inode, loff_t pos, unsigned copied,
-- 			struct page *page);
-+ 			struct folio *folio);
- +
- +	/*
- +	 * Check that the cached iomap still maps correctly to the filesystem's
- +	 * internal extent map. FS internal extent maps can change while iomap
- +	 * is iterating a cached iomap, so this hook allows iomap to detect that
- +	 * the iomap needs to be refreshed during a long running write
- +	 * operation.
- +	 *
- +	 * The filesystem can store internal state (e.g. a sequence number) in
- +	 * iomap->validity_cookie when the iomap is first mapped to be able to
- +	 * detect changes between mapping time and whenever .iomap_valid() is
- +	 * called.
- +	 *
- +	 * This is called with the folio over the specified file position held
- +	 * locked by the iomap code.
- +	 */
- +	bool (*iomap_valid)(struct inode *inode, const struct iomap *iomap);
-  };
- =20
-  /*
-
---Sig_/OlyzdxKkZQrSlonkAmdxxpo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaQcQACgkQAVBC80lX
-0Gxuvwf/ZHQnUbXgGATt/q76ZBDvsJLMm1ytfetRt/ELFDA04SBfVtBMkNIRtbXV
-iyqIo2k4RJPzkJgKpmCPUxE8YF3iGoub7JDcCZ3ZKlkT3q+Ef4PvEhWlcfdtFYc+
-doRcAsVxCrmne8J2nPcWlepvuSvenCOU+cnx5YnCqn6C+EB5utw6/H587y3+QDZt
-ldOGzuixVnQf+lSYOWMNoLdAaMfZvCp/+SIOkw9igboafgfYXHZcsTkBS4iESe1c
-4Bd5wt+4tucN9UDWVa8BZ0oHMRJlOcujJh0UrVjRaT0k5lhJnmIBjGNawOpF913B
-gOCmWdSxZ+LKnZt6ELBtuOoBTMplhg==
-=XwHo
------END PGP SIGNATURE-----
-
---Sig_/OlyzdxKkZQrSlonkAmdxxpo--
+Similar comment as in patch 2.
