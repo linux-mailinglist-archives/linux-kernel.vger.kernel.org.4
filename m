@@ -2,184 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5E264D0FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CFF64D113
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiLNUTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S229947AbiLNUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiLNUSE (ORCPT
+        with ESMTP id S229803AbiLNUVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:18:04 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDF331DCD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:07:06 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so379977pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:07:06 -0800 (PST)
+        Wed, 14 Dec 2022 15:21:20 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51592379E8;
+        Wed, 14 Dec 2022 12:09:54 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id g10so4504474plo.11;
+        Wed, 14 Dec 2022 12:09:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H0jYvI03VngWHu7dv8MwY4kRlHri3j1nty37BsCfhkQ=;
-        b=46XbYZJeaKRa9E5a8YT6WBW/S5cjoRCJg3WvQEEmcG5KYcc/uzhiaXHwUqzdDVpZsX
-         fHPQ9apRLqrATuBdCBihKxeQYIaxRCX9rfYNCqwlWkq1N8Qs4/B1wMFj67vupVddXoZ1
-         bwFV0Dud8NTrIXb4LahhAXgaeihIMGWNzZoKBNmyIEs+k1y3sSnpoL6G+y1sclYWBo4H
-         rydajxgOARcVlJzK8JFJCt0plT1rBmcjkAghPPgggs/OqkdbuwBd5VoK1gzt3aG534GB
-         koIV9aYcXpvJPHX9dtJ/frB7JUHYzjjyC1FJ3uT8tdw+V7yJMi7L3nwKSI0hLO7X7OUn
-         Ph5Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pI3vYgj87GpH5rV3K/kao89jRRk98rHJYR6hE8WV8xw=;
+        b=IreMzc2KbRYLlOMcEzGb3vJ41bZYTqutGK2Gn3bTB2t8gaqfKNUv8kLiJudTOmbh3X
+         2m79QBJwCd4gBGsAqPoYrUisGl0V0vkGM2dceULhOtcaG6xvbnzRp4zveOwPh2omAqnQ
+         VAIXlPsAAcvNNJmSfra0AbzbLxll0iU3b+2AS6+RN0+rt6IRfcBc5NCJirHxMpfixPDy
+         E4PrFyUGDfOTrTunHf/vpH5N8lQPB7eYlOEBXe0Q8cdp2l99Drfh6ZBzhRVXfP7vJSzu
+         /m441rTdpXB8Im59HCMYPVdQp5cpCjZ2XB7S22F4BxwrAR3/xigZiStrJc+fyYdqOzN3
+         NAhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H0jYvI03VngWHu7dv8MwY4kRlHri3j1nty37BsCfhkQ=;
-        b=KNU5U1XNxFh/Sa164yvKIyBqk4E9TqKHUYUacOZTjg62IbOjS26Nk9EQv3PJYD2BjC
-         eFgeYBYvWNTiAthPw5lPjZdssZRuD9D0Y77TxthJhIWoXKWdxQHgABWhY08QjMt2jLAP
-         YhGjGquHeuRWFOvrolYzUE0jTteudlSgrR8V8rKPTG/3MO9zP0fETlfDPxCWVrqUGnSz
-         jKt6Eo+NFQKHqyYZY7ebB+NIiPQdMv8S6Nciz/ed77swdYHP3Wj+3pDPmPyeuwkUlaaw
-         NHKF8sChMLClSmaUz1VIf615SXdu0suzM+MYQQANroVrhOe2zjEchgKXavp4/14eClL0
-         wK7w==
-X-Gm-Message-State: ANoB5pnJMmoxoeiyvYKZKfc0OVD2nCGDFMUzq8ZPB80CtlD59zJVliW2
-        6RiRhXzSOBKgZJymkBuRzjMzaQ==
-X-Google-Smtp-Source: AA0mqf4GmD3hP0v0HXminWT9iyK39VmpjnKmBUJRfdH6u+Khbcr+wl9iTbxT4trCZ9j1EpYsfw4jEQ==
-X-Received: by 2002:a05:6a20:6f08:b0:a2:df6d:e56b with SMTP id gt8-20020a056a206f0800b000a2df6de56bmr9291155pzb.14.1671048425738;
-        Wed, 14 Dec 2022 12:07:05 -0800 (PST)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id o131-20020a62cd89000000b00573eb4a775esm279621pfg.17.2022.12.14.12.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 12:07:05 -0800 (PST)
-Message-ID: <8fe9cfaf-2cbc-8de6-3928-067de9113bfc@rivosinc.com>
-Date:   Wed, 14 Dec 2022 12:07:03 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pI3vYgj87GpH5rV3K/kao89jRRk98rHJYR6hE8WV8xw=;
+        b=ZTo43Qf/e5XfVoYFV4woVfPYUGbD6UaayX6x0KMI7Uz+JlLmmOdNMEkFQlOtHAXA6Y
+         VsI/kKU24kWxi0/hb6p1O/ybDn/TWUBveWrVwB6PMifW/AUc+halOMBODn5Ofz1Xzz5+
+         k6Oxu2UyOoqsKICrk7P62nw2UPn4ELA3qtiROgwk2wMGT6wH1ScnW0A3wut0of/ihUT6
+         tafXAsz0C9oeGehGxsvJHBYyKrFbdtjs8PErVvvd0p5VYldypCXf7Fr9B4dDBBhvXrxz
+         mfW+GKfVtJh+TVeGGzP53IJUwOfK0dsJxqO6aLaTsWJIKRNvyMl36CDO9xZ2T19NGurZ
+         Ty/Q==
+X-Gm-Message-State: ANoB5pmp/qwaUGHkfzPEmU9WwGmaDkj9bCHwK+dLSvkMzu3QlxkO/Nqh
+        jp0FzENTKWAENx0WAla1obw=
+X-Google-Smtp-Source: AA0mqf7LWQiAlwg8VKStf9ILHylnpHN7LLaGTlQUEsGard9suuvLM0P5Nj2yTVjuijM5NUyZfq0JSw==
+X-Received: by 2002:a05:6a20:c197:b0:a8:a203:ec90 with SMTP id bg23-20020a056a20c19700b000a8a203ec90mr8983497pzb.0.1671048593441;
+        Wed, 14 Dec 2022 12:09:53 -0800 (PST)
+Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
+        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b0018980f14940sm2252037plg.178.2022.12.14.12.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 12:09:52 -0800 (PST)
+Date:   Thu, 15 Dec 2022 09:09:46 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [next] pcmcia: synclink_cs: replace 1-element array with
+ flex-array member
+Message-ID: <Y5otilaHc6HBPCAF@mail.google.com>
+References: <Y5mMWEtHWKOiPVU+@mail.google.com>
+ <202212141124.736E3DE2A8@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: RISCV Vector unit disabled by default for new task (was Re:
- [PATCH v12 17/17] riscv: prctl to enable vector commands)
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>, fweimer@redhat.com,
-        Andrew Waterman <andrew@sifive.com>, stillson@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
-        atishp@atishpatra.org, guoren@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, arnd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bjorn@kernel.org, libc-alpha@sourceware.org,
-        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
-        linux@rivosinc.com
-References: <mhng-975b1d7b-7b3f-4e88-804c-8b22787f9588@palmer-ri-x1c9>
- <e9cf13a9-561a-3438-00f0-41fe2631888d@rivosinc.com>
- <Y5irn63DQkwumfvW@bruce.bluespec.com>
-From:   Vineet Gupta <vineetg@rivosinc.com>
-In-Reply-To: <Y5irn63DQkwumfvW@bruce.bluespec.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212141124.736E3DE2A8@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 08:43, Darius Rad wrote:
-> On Fri, Dec 09, 2022 at 11:42:19AM -0800, Vineet Gupta wrote:
->> But keeping the V unit disabled by default and using prctl as a gatekeeper
->> to enable it feels unnecessary and tedious.
->> Here's my reasoning below (I'm collating comments from prior msgs as well).
-> Please reference the previous discussion [1] which has covered topics that
-> have not been discussed recently.
->
-> [1] https://lists.infradead.org/pipermail/linux-riscv/2021-September/thread.html#8361
+On Wed, Dec 14, 2022 at 11:29:37AM -0800, Kees Cook wrote:
+> On Wed, Dec 14, 2022 at 09:42:00PM +1300, Paulo Miguel Almeida wrote:
+> > One-element arrays are deprecated, and we are replacing them with
+> > flexible array members instead. So, replace one-element array with
+> > flexible-array member in struct RXBUF and refactor the rest of the code
+> > accordingly.
+> > 
+> > It's worth mentioning that doing a build before/after this patch
+> > results in no binary output differences.
+> > 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [1].
+> > 
+> > Link: https://github.com/KSPP/linux/issues/79
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+> > 
+> > Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> > ---
+> >  drivers/char/pcmcia/synclink_cs.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+> > index b2735be81ab2..1ab2d552f498 100644
+> > --- a/drivers/char/pcmcia/synclink_cs.c
+> > +++ b/drivers/char/pcmcia/synclink_cs.c
+> > @@ -105,7 +105,7 @@ static MGSL_PARAMS default_params = {
+> >  typedef struct {
+> >  	int count;
+> >  	unsigned char status;
+> > -	char data[1];
+> > +	char data[];
+> >  } RXBUF;
+> >  
+> >  /* The queue of BH actions to be performed */
+> > @@ -2611,7 +2611,8 @@ static int mgslpc_proc_show(struct seq_file *m, void *v)
+> >  static int rx_alloc_buffers(MGSLPC_INFO *info)
+> >  {
+> >  	/* each buffer has header and data */
+> > -	info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+> > +	info->rx_buf_size = max(offsetof(typeof(RXBUF), data) + 1, sizeof(RXBUF))
+> > +		+ info->max_frame_size;
+> 
+> It seems like there is an existing size bug here, and likely should be
+> fixed separately?
+> 
+> i.e. this was already allocating 1 byte "too much". I'd expect this
+> first:
+> 
+> -	info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+> +	info->rx_buf_size = sizeof(RXBUF) - 1 + info->max_frame_size;
+> 
+> and then the next patch:
+> 
+> -	char data[1];
+> +	char data[];
+> ...
+> -	info->rx_buf_size = sizeof(RXBUF) - 1 + info->max_frame_size;
+> +	info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+> 
+> The above would induce a binary output change, and the second would not.
+> 
+> Though this results in what you had for the v2 patch (but I can't
+> believe it had no binary changes...)
+> 
+> -- 
+> Kees Cook
 
-I sure read thru that thread, and many more :-) to get context.
-The highlight is we should something because AVX/AMX do so (or failed to 
-do so).
-But on the flip side ARM SVE is not disabling this by default.
-Your other concerns seems to be potential power implications for leaving 
-it on and sharing of V unit across harts (see more on that below)
-Maybe leaving it on all the time will be motivation for hw designers to 
-be more considerate of the idle power draw.
+Hi Kees, Hi Andy, Thanks for taking the time to review this patch.
 
->
->> 2. People want the prctl gatekeeping for ability to gracefully handle memory
->> allocation failure for the extra V-state within kernel. But that is only
->> additional 4K (for typical 128 wide V regs) per task.
-> But vector state scales up to as much as 256k.  Are you suggesting that
-> there is no possibility that future systems would support more than
-> VLEN=128?
+As both of you had similar points, I will reply them here.
 
-I mentioned "typical". And below also said that memory allocation 
-concerns are moot, since fork/execve failures due to failing to allocate 
-would take care of those anyways.
+The reasons why it had no binary changes was because of the combination
+of this 2 things:
 
->> If that is failing,
->> the system is not doing well anyways. Besides it is not an issue at all
->> since ENOMEM in clone/execve for the additional space should handle the
->> failure anyways. Only very sophisticated apps would downgrade from executing
->> V to Scalar code if the prctl failed.
-> This seems unlikely.  As vector support does not exist in any present
-> hardware, and the vector extension is only optional in the RISC-V profiles
-> that include it, I would think that it is almost certain that any
-> application that supports V would have a fallback path for when the V
-> extension is not available.
+1) Existing padding - so sizeof(RXBUF) returned 8 bytes in both cases.
 
-For specialized cases sure we would expect fat binaries with IFUNC based 
-dispatches (glibc mem*/str* are obvious examples). But with newer 
-compilers autovec is increasing becoming default even at medium 
-optimization levels such as -O2. So V code littered all over is just a 
-matter of time for the profiles/variants which allow V. For less capable 
-systems w/o V this is all but moot discussion since kernel itself need 
-not be built with V enabled.
+pahole -C RXBUF gcc/before/drivers/char/pcmcia/synclink_cs.ko
+typedef struct {
+	int                        count;                /*     0     4 */
+	unsigned char              status;               /*     4     1 */
+	char                       data[1];              /*     5     1 */
 
+	/* size: 8, cachelines: 1, members: 3 */
+	/* padding: 2 */
+	/* last cacheline: 8 bytes */
+} RXBUF;
 
-> Another motivation for requiring that user space request use of the vector
-> extension is that the vector unit may be shared between multiple harts
-> and/or have power or performance implications in the system.  By requiring
-> that user space request access, it allows the system to decline that
-> access, and user space can handle this gracefully.
+pahole -C RXBUF gcc/after/drivers/char/pcmcia/synclink_cs.ko
+typedef struct {
+	int                        count;                /*     0     4 */
+	unsigned char              status;               /*     4     1 */
+	char                       data[];               /*     5     0 */
 
-But in this specific example won't the prctl cause more pain. So 2 
-concurrent processes on 2 different harts with shared V unit. One sends 
-prctl to enable and other wants to disable, what would the kernel do. 
-Will it just be whoever ends up running later wins. Granted I'm not too 
-familiar with how such a cross-hart sharing would work in a Vector 
-instructions being part of ISA  (vs. Vector accelerator with job 
-push/pull approach)
+	/* size: 8, cachelines: 1, members: 3 */
+	/* padding: 3 */
+	/* last cacheline: 8 bytes */
+} RXBUF;
 
-Honestly I'm sympathetic to your power concerns with keeping V enabled 
-all the time. But the mechanics of implementing this prctl makes me 
-wary. Assuming this is done from dynamic loader, it implies loader 
-itself needs to be built with V disabled. This also leaves bunch of perf 
-on table since loader does tons of of string and memory operations which 
-could potentially benefit from V enabled code, granted it is not deal 
-breaker.
+2) RXBUF (as implemented now) is just  like a pair of lenses from which a
+developer can have access to one of the circular buffers in MGSLPC_INFO
+struct called 'rx_buf'. 
 
+2611 static int rx_alloc_buffers(MGSLPC_INFO *info)
+2612 {
+2613         /* each buffer has header and data */
+2614         info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+2615
+2616         /* calculate total allocation size for 8 buffers */
+2617         info->rx_buf_total_size = info->rx_buf_size * 8;
+2618
+2619         /* limit total allocated memory */
+2620         if (info->rx_buf_total_size > 0x10000)
+2621                 info->rx_buf_total_size = 0x10000;
+2622
+2623         /* calculate number of buffers */
+2624         info->rx_buf_count = info->rx_buf_total_size / info->rx_buf_size;
+2625
+2626         info->rx_buf = kmalloc(info->rx_buf_total_size, GFP_KERNEL);
 
+To be honest, char data[_1_] in RXBUF was never required to be there.
+The code base seems to make sure that it doesn't run past its limits by
+keeping track of size buffer on MGSLPC_INFO->rx_buf_size (and sometimes
+RXBUF->count)
 
-> If we add a mechanism for user space to request access to the vector
-> extension, and it turns out that it was unnecessary, the worst that has
-> happened is a slight inconvenience.
->
-> If we do not add such a mechanism, and later determine that it is
-> necessary, we have a much greater problem.  There would be backward
-> compatibility issues with the ABI, and such a mechanism could probably not
-> be fully implemented at all due to the desire to support potential future
-> legacy vector code.
+(Addressing one point made by Andy about using of of the macros in
+overflow.h)
+	struct_size(buf, data, 1) would return 9 bytes which could
+	potentially break the existing driver as it produces binary
+	changes.
 
-Very true, but this in itself is not sufficient of a reason to warrant 
-adding it now.
+Let me know your thoughts
 
-> This is a similar problem on x86.  According to some, it was handled poorly
-> with AVX-512 by missing this type of mechanism, and improved with AMX [2].
-> There is opportunity to learn from that experience and do things better on
-> RISC-V.
->
-> [2] https://lore.kernel.org/lkml/87k0ntazyn.ffs@nanos.tec.linutronix.de/
+thanks!
 
-Right, but then why did ARM SVE guys chose to not take this path.
-
--Vineet
+- Paulo A.
