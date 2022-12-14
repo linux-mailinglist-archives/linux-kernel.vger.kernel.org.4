@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035BC64D159
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E850E64D15B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiLNUhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S230178AbiLNUhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiLNUgU (ORCPT
+        with ESMTP id S229694AbiLNUhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:36:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ABA231EC5;
-        Wed, 14 Dec 2022 12:33:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37578FEC;
-        Wed, 14 Dec 2022 12:33:58 -0800 (PST)
-Received: from [10.57.88.237] (unknown [10.57.88.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A97943F71E;
-        Wed, 14 Dec 2022 12:33:15 -0800 (PST)
-Message-ID: <3f3112e4-65ff-105d-8cd7-60495ec9054a@arm.com>
-Date:   Wed, 14 Dec 2022 20:33:10 +0000
+        Wed, 14 Dec 2022 15:37:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9105D2CCB2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:35:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C60E661B6F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 20:35:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42506C433EF;
+        Wed, 14 Dec 2022 20:35:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="XdXTJEUQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1671050104;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dFBxeFzvH1aLBNLvlk/1oGmODUMx+CtKGa0LfopZasM=;
+        b=XdXTJEUQaKDyU5YAn7RoWZ+llxELNzQUbOQFcO23WOBch0OteVyN31N8WTqHgmHvMSFtKq
+        oZ7dqfThYFLdb9UewGlWfHAPSbNp9nMXLyvN0Tk/x3Bu+V/9zUMITniXG2k7nEXipnGngA
+        d6uBgDmyfHhwW6pqV55IBiFILjPL844=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3f7e27a6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 14 Dec 2022 20:35:04 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] x86: lib: Separate instruction decoder MMIO type from MMIO trace
+Date:   Wed, 14 Dec 2022 13:34:54 -0700
+Message-Id: <20221214203454.337299-1-Jason@zx2c4.com>
+In-Reply-To: <Y5oy0vwZQAwzkDkr@zx2c4.com>
+References: <Y5oy0vwZQAwzkDkr@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH] arm64: dts: ls1028a: mark ARM SMMU as DMA coherent
-Content-Language: en-GB
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     devicetree@vger.kernel.org, iommu@lists.linux.dev,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-References: <20221208151514.3840720-1-vladimir.oltean@nxp.com>
- <2a188b8a-ab16-d5d4-ed5f-f8eec236e4ca@arm.com>
- <20221214165356.6tbzmfyoifqt4cwk@skbuf>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20221214165356.6tbzmfyoifqt4cwk@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,238 +58,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-14 16:53, Vladimir Oltean wrote:
-> Hi Robin,
-> 
-> On Thu, Dec 08, 2022 at 07:01:16PM +0000, Robin Murphy wrote:
->> It's more just good fortune that it ever worked properly at all.
-> 
-> Thanks for the response. I don't know much about IOMMUs or the ARM SMMU,
-> I'm trying to understand what you've said. I hope you don't mind a few
-> foolish questions.
-> 
->> We have to make the DT authoritative about coherency because cases exist where
->> the ID register is misconfigured.
-> 
-> Which ID register? The ARM_SMMU_ID0_CTTW bit in ARM_SMMU_GR0_ID0, as
-> read by arm_smmu_device_cfg_probe()?
+Both mmiotrace.h and insn-eval.h define various MMIO_ enum constants.
+Rename the insn ones to have a INSN_ prefix, so that the headers can be
+used from the same source file.
 
-Yes.
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+This doesn't fix any existing compile error that I'm aware of, but if
+this makes it into 6.2, it would avoid me having to carry it in a series
+I'm working on, where the clash does result in a compile error.
 
-> I tried to find more about this bit (driver suggests it's bit 14), but I'm a bit lost.
-> First of all, I don't know where to find the ID0 register for MMU-500.
-> I looked at the register summary here and didn't find it:
-> https://developer.arm.com/documentation/ddi0517/f/programmers-model/register-summary/global-address-space-0-registers-summary?lang=en
-> Then I googled it and found this page, where it just says that at bit 14
-> there's indeed something named CTTW (unexplained) which is hardcoded to 0:
-> https://developer.arm.com/documentation/ddi0517/e/programmers-model/memory-model/reset-values?lang=en
-> I did however download the SMMU v2 arch spec PDF at
-> https://developer.arm.com/documentation/ihi0062/latest
-> 
-> and there, I did find it. But I'm not sure why the MMU-500 says it
-> *should* be hardcoded to 0? Is this what you call "misconfigured"?
+Changes v1->v2:
+- 'Tis the season! Keep those reverse Christmas trees nicely ornamented.
 
-For some reason, SMMU TRMs seem to have a tradition of describing their 
-implementation of architectural registers in weird and unexpected 
-places... Anyway that appears to be a documentation bug, since the 
-actual SMMU_IDR0.CTTW value should reflect whatever is sampled on the 
-cfg_cttw input at reset, per:
 
-https://developer.arm.com/documentation/ddi0517/f/signal-descriptions/miscellaneous-signals/tie-off-signals
+ arch/x86/coco/tdx/tdx.c          | 26 +++++++++++++-------------
+ arch/x86/include/asm/insn-eval.h | 18 +++++++++---------
+ arch/x86/kernel/sev.c            | 18 +++++++++---------
+ arch/x86/lib/insn-eval.c         | 20 ++++++++++----------
+ 4 files changed, 41 insertions(+), 41 deletions(-)
 
-> On my hardware (both LS1028A and LS1088A), it reads:
-> 
-> $ dmesg | grep smmu
-> [    4.825109] arm-smmu 5000000.iommu: probing hardware configuration...
-> [    4.831625] arm-smmu 5000000.iommu: SMMUv2 with:
-> [    4.836293] arm-smmu 5000000.iommu: GR0_ID0: 0x7c013e80
-> [    4.841569] arm-smmu 5000000.iommu:  stage 1 translation
-> [    4.846931] arm-smmu 5000000.iommu:  stage 2 translation
-> [    4.852293] arm-smmu 5000000.iommu:  nested translation
-> [    4.857573] arm-smmu 5000000.iommu:  stream matching with 128 register groups
-> [    4.864776] arm-smmu 5000000.iommu:  64 context banks (0 stage-2 only)
-> [    4.871372] arm-smmu 5000000.iommu:  Supported page sizes: 0x61311000
-> [    4.877868] arm-smmu 5000000.iommu:  Stage-1: 48-bit VA -> 48-bit IPA
-> [    4.884375] arm-smmu 5000000.iommu:  Stage-2: 48-bit IPA -> 48-bit PA
-> [    4.893113] arm-smmu 5000000.iommu:  preserved 0 boot mappings
-> 
-> On the other hand, in the verbal (no registers) documentation of the
-> MMU-500 integration in my SoCs, it does say that "The SMMU supports cache
-> coherency for page table walks and DVM transactions for page table cache
-> maintenance operations."
-> 
-> Does looking at the CTTW bit make any sense for MMU-500?
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index cfd4c95b9f04..669d9e4f2901 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -386,8 +386,8 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ {
+ 	unsigned long *reg, val, vaddr;
+ 	char buffer[MAX_INSN_SIZE];
++	enum insn_mmio_type mmio;
+ 	struct insn insn = {};
+-	enum mmio_type mmio;
+ 	int size, extend_size;
+ 	u8 extend_val = 0;
+ 
+@@ -402,10 +402,10 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 		return -EINVAL;
+ 
+ 	mmio = insn_decode_mmio(&insn, &size);
+-	if (WARN_ON_ONCE(mmio == MMIO_DECODE_FAILED))
++	if (WARN_ON_ONCE(mmio == INSN_MMIO_DECODE_FAILED))
+ 		return -EINVAL;
+ 
+-	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
++	if (mmio != INSN_MMIO_WRITE_IMM && mmio != INSN_MMIO_MOVS) {
+ 		reg = insn_get_modrm_reg_ptr(&insn, regs);
+ 		if (!reg)
+ 			return -EINVAL;
+@@ -426,23 +426,23 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 
+ 	/* Handle writes first */
+ 	switch (mmio) {
+-	case MMIO_WRITE:
++	case INSN_MMIO_WRITE:
+ 		memcpy(&val, reg, size);
+ 		if (!mmio_write(size, ve->gpa, val))
+ 			return -EIO;
+ 		return insn.length;
+-	case MMIO_WRITE_IMM:
++	case INSN_MMIO_WRITE_IMM:
+ 		val = insn.immediate.value;
+ 		if (!mmio_write(size, ve->gpa, val))
+ 			return -EIO;
+ 		return insn.length;
+-	case MMIO_READ:
+-	case MMIO_READ_ZERO_EXTEND:
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ:
++	case INSN_MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		/* Reads are handled below */
+ 		break;
+-	case MMIO_MOVS:
+-	case MMIO_DECODE_FAILED:
++	case INSN_MMIO_MOVS:
++	case INSN_MMIO_DECODE_FAILED:
+ 		/*
+ 		 * MMIO was accessed with an instruction that could not be
+ 		 * decoded or handled properly. It was likely not using io.h
+@@ -459,15 +459,15 @@ static int handle_mmio(struct pt_regs *regs, struct ve_info *ve)
+ 		return -EIO;
+ 
+ 	switch (mmio) {
+-	case MMIO_READ:
++	case INSN_MMIO_READ:
+ 		/* Zero-extend for 32-bit operation */
+ 		extend_size = size == 4 ? sizeof(*reg) : 0;
+ 		break;
+-	case MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_ZERO_EXTEND:
+ 		/* Zero extend based on operand size */
+ 		extend_size = insn.opnd_bytes;
+ 		break;
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		/* Sign extend based on operand size */
+ 		extend_size = insn.opnd_bytes;
+ 		if (size == 1 && val & BIT(7))
+diff --git a/arch/x86/include/asm/insn-eval.h b/arch/x86/include/asm/insn-eval.h
+index f07faa61c7f3..54368a43abf6 100644
+--- a/arch/x86/include/asm/insn-eval.h
++++ b/arch/x86/include/asm/insn-eval.h
+@@ -32,16 +32,16 @@ int insn_fetch_from_user_inatomic(struct pt_regs *regs,
+ bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
+ 			   unsigned char buf[MAX_INSN_SIZE], int buf_size);
+ 
+-enum mmio_type {
+-	MMIO_DECODE_FAILED,
+-	MMIO_WRITE,
+-	MMIO_WRITE_IMM,
+-	MMIO_READ,
+-	MMIO_READ_ZERO_EXTEND,
+-	MMIO_READ_SIGN_EXTEND,
+-	MMIO_MOVS,
++enum insn_mmio_type {
++	INSN_MMIO_DECODE_FAILED,
++	INSN_MMIO_WRITE,
++	INSN_MMIO_WRITE_IMM,
++	INSN_MMIO_READ,
++	INSN_MMIO_READ_ZERO_EXTEND,
++	INSN_MMIO_READ_SIGN_EXTEND,
++	INSN_MMIO_MOVS,
+ };
+ 
+-enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes);
++enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes);
+ 
+ #endif /* _ASM_X86_INSN_EVAL_H */
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index a428c62330d3..679026a640ef 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -1536,32 +1536,32 @@ static enum es_result vc_handle_mmio_movs(struct es_em_ctxt *ctxt,
+ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ {
+ 	struct insn *insn = &ctxt->insn;
++	enum insn_mmio_type mmio;
+ 	unsigned int bytes = 0;
+-	enum mmio_type mmio;
+ 	enum es_result ret;
+ 	u8 sign_byte;
+ 	long *reg_data;
+ 
+ 	mmio = insn_decode_mmio(insn, &bytes);
+-	if (mmio == MMIO_DECODE_FAILED)
++	if (mmio == INSN_MMIO_DECODE_FAILED)
+ 		return ES_DECODE_FAILED;
+ 
+-	if (mmio != MMIO_WRITE_IMM && mmio != MMIO_MOVS) {
++	if (mmio != INSN_MMIO_WRITE_IMM && mmio != INSN_MMIO_MOVS) {
+ 		reg_data = insn_get_modrm_reg_ptr(insn, ctxt->regs);
+ 		if (!reg_data)
+ 			return ES_DECODE_FAILED;
+ 	}
+ 
+ 	switch (mmio) {
+-	case MMIO_WRITE:
++	case INSN_MMIO_WRITE:
+ 		memcpy(ghcb->shared_buffer, reg_data, bytes);
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, false);
+ 		break;
+-	case MMIO_WRITE_IMM:
++	case INSN_MMIO_WRITE_IMM:
+ 		memcpy(ghcb->shared_buffer, insn->immediate1.bytes, bytes);
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, false);
+ 		break;
+-	case MMIO_READ:
++	case INSN_MMIO_READ:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1572,7 +1572,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_READ_ZERO_EXTEND:
++	case INSN_MMIO_READ_ZERO_EXTEND:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1581,7 +1581,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 		memset(reg_data, 0, insn->opnd_bytes);
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_READ_SIGN_EXTEND:
++	case INSN_MMIO_READ_SIGN_EXTEND:
+ 		ret = vc_do_mmio(ghcb, ctxt, bytes, true);
+ 		if (ret)
+ 			break;
+@@ -1600,7 +1600,7 @@ static enum es_result vc_handle_mmio(struct ghcb *ghcb, struct es_em_ctxt *ctxt)
+ 		memset(reg_data, sign_byte, insn->opnd_bytes);
+ 		memcpy(reg_data, ghcb->shared_buffer, bytes);
+ 		break;
+-	case MMIO_MOVS:
++	case INSN_MMIO_MOVS:
+ 		ret = vc_handle_mmio_movs(ctxt, bytes);
+ 		break;
+ 	default:
+diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
+index 21104c41cba0..558a605929db 100644
+--- a/arch/x86/lib/insn-eval.c
++++ b/arch/x86/lib/insn-eval.c
+@@ -1595,16 +1595,16 @@ bool insn_decode_from_regs(struct insn *insn, struct pt_regs *regs,
+  * Returns:
+  *
+  * Type of the instruction. Size of the memory operand is stored in
+- * @bytes. If decode failed, MMIO_DECODE_FAILED returned.
++ * @bytes. If decode failed, INSN_MMIO_DECODE_FAILED returned.
+  */
+-enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
++enum insn_mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ {
+-	enum mmio_type type = MMIO_DECODE_FAILED;
++	enum insn_mmio_type type = INSN_MMIO_DECODE_FAILED;
+ 
+ 	*bytes = 0;
+ 
+ 	if (insn_get_opcode(insn))
+-		return MMIO_DECODE_FAILED;
++		return INSN_MMIO_DECODE_FAILED;
+ 
+ 	switch (insn->opcode.bytes[0]) {
+ 	case 0x88: /* MOV m8,r8 */
+@@ -1613,7 +1613,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0x89: /* MOV m16/m32/m64, r16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_WRITE;
++		type = INSN_MMIO_WRITE;
+ 		break;
+ 
+ 	case 0xc6: /* MOV m8, imm8 */
+@@ -1622,7 +1622,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0xc7: /* MOV m16/m32/m64, imm16/imm32/imm64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_WRITE_IMM;
++		type = INSN_MMIO_WRITE_IMM;
+ 		break;
+ 
+ 	case 0x8a: /* MOV r8, m8 */
+@@ -1631,7 +1631,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0x8b: /* MOV r16/r32/r64, m16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_READ;
++		type = INSN_MMIO_READ;
+ 		break;
+ 
+ 	case 0xa4: /* MOVS m8, m8 */
+@@ -1640,7 +1640,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 	case 0xa5: /* MOVS m16/m32/m64, m16/m32/m64 */
+ 		if (!*bytes)
+ 			*bytes = insn->opnd_bytes;
+-		type = MMIO_MOVS;
++		type = INSN_MMIO_MOVS;
+ 		break;
+ 
+ 	case 0x0f: /* Two-byte instruction */
+@@ -1651,7 +1651,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 		case 0xb7: /* MOVZX r32/r64, m16 */
+ 			if (!*bytes)
+ 				*bytes = 2;
+-			type = MMIO_READ_ZERO_EXTEND;
++			type = INSN_MMIO_READ_ZERO_EXTEND;
+ 			break;
+ 
+ 		case 0xbe: /* MOVSX r16/r32/r64, m8 */
+@@ -1660,7 +1660,7 @@ enum mmio_type insn_decode_mmio(struct insn *insn, int *bytes)
+ 		case 0xbf: /* MOVSX r32/r64, m16 */
+ 			if (!*bytes)
+ 				*bytes = 2;
+-			type = MMIO_READ_SIGN_EXTEND;
++			type = INSN_MMIO_READ_SIGN_EXTEND;
+ 			break;
+ 		}
+ 		break;
+-- 
+2.39.0
 
-In general, yes. The result above does imply that NXP have inadvertently 
-set cfg_cttw wrong. For the avoidance of doubt, here's another MMU-500 
-showing SMMU_IDR0.CTTW set:
-
-[    3.014972] arm-smmu arm-smmu.0.auto: probing hardware configuration...
-[    3.014974] arm-smmu arm-smmu.0.auto: SMMUv2 with:
-[    3.014976] arm-smmu arm-smmu.0.auto:        stage 2 translation
-[    3.014977] arm-smmu arm-smmu.0.auto:        coherent table walk
-[    3.014979] arm-smmu arm-smmu.0.auto:        stream matching with 128 
-register groups
-[    3.014981] arm-smmu arm-smmu.0.auto:        128 context banks (128 
-stage-2 only)
-[    3.014984] arm-smmu arm-smmu.0.auto:        Supported page sizes: 
-0x60211000
-[    3.014986] arm-smmu arm-smmu.0.auto:        Stage-2: 48-bit IPA -> 
-48-bit PA
-
->> You've been telling Linux that that is the case, and now the message
->> is finally getting through to VFIO. If we weren't also lazy in
->> io-pgtable-arm about what shareability attribute to use for IOMMU_CACHE,
->> you would have actually had the broken VFIO behaviour that that check
->> is now defending against.
-> 
-> lazy in io-pgtable-arm == ??
-> 
-> I assume you're talking about something which is (not) done in
-> arm_lpae_prot_to_pte()? Could you please clarify, as I didn't understand?
-
-Strictly, a Cacheable mapping for a non-coherent device should probably 
-have the Non-Shareable attribute, but since we assume that a 
-non-coherent interconnect would ignore the shareability anyway, we don't 
-bother, and just always use Inner-Shareable since that's the right value 
-for when it *will* matter. Also io-pgtable couldn't make that decision 
-itself, since it doesn't know anything about the intended use of the 
-mapping other than an input address, and output address, and some 
-abstract iommu_prot flags.
-
-> IIUC (and I've been wrong before), the IOMMU_CACHE "prot" flag means
-> that memory mapped by the IOMMU for DMA is coherent w.r.t. CPU caches,
-> and VFIO specifically needs it because:
-> 
-> 	 * VFIO always sets IOMMU_CACHE because we offer no way for userspace to
-> 	 * restore cache coherency.
-> 
-> i.o.w. user space can't execute cache invalidation instructions (DC CIVAC etc),
-> which would make cache-coherent DMA transactions the only viable possibility.
-> Right?
-
-Yes, userspace is in general not allowed to bypass CPU coherency for 
-security reasons, so the only way it's viable for a device to operate 
-directly on userspace mappings is if that device can snoop caches as 
-well. Of course it's technically a bit different when that "userspace" 
-is a virtual machine manager that's then going to hand control of the 
-device to a VM that *can* do its own non-coherent cache maintenance, but 
-I don't think we can easily make that distinction at the VFIO level.
-
->> I'd argue that you do want to make the DT change, because it's the truth
->> of the hardware. Even if you did want to keep doing the significant
->> extra work of maintaining non-coherent pagetables (there is a dubious
->> snoop latency vs. TLB miss rate argument), that would be better achieved
->> at the level of the io_pgtable_cfg, not by lying about the entire SMMU.
-> 
-> I do agree that we could set the dma-coherent property in the SMMU node
-> to skip some of the wmb() instructions in the TLB invalidation procedures
-> for stage 1/stage 2 translations. I wasn't trying to make any argument
-> in favor of manually maintaining the cache coherency with the page tables.
-
-FWIW it's not about the TLB maintenance in the driver, it's io-pgtable's 
-cache maintenance on PTE updates, and even more so the synchronisation 
-thereof, that gets pretty involved.
-
-> I'm just not exactly clear what does the page table walk of the SMMU TCU
-> have to do with the cache coherence of the DMA transactions forwarded/translated
-> by the TBUs. I mean, I saw the comment below:
-> 
-> 	/* Assume that a coherent TCU implies coherent TBUs */
-> 
-> but I simply don't understand what is it that gives this assumption any
-> grounds.
-
-In short, it's based on how people tend to design SoCs in practice; I'm 
-yet to come across any system where it doesn't hold.
-
->> However, since Jason refactored things at the VFIO end too, it looks like
->> this should now be consistently checked for every individual device
->> bound to a VFIO driver, so we might be able to do a bit better, as
->> below.
-> 
-> hmm, the change in vfio_group_find_or_alloc() between iommu_capable(dev->bus)
-> and device_iommu_capable(dev) took place in commit a9cf69d0e7f2 ("Merge
-> tag 'vfio-v6.0-rc1' of https://github.com/awilliam/linux-vfio"), says my
-> git blame. Pretty strange. I had to use git log --graph to find your
-> commit specifically: 3b498b665621 ("vfio: Use device_iommu_capable()").
-
-That's because that line does actually belong to the merge commit, where 
-Linus resolved the conflict between my IOMMU patch changing the call and 
-Jason's VFIO patch moving the callsite.
-
->> I'd be rather surprised if anyone ever genuinely built this
->> topology, but it does happen to be the one other combination that's easy
->> to infer with reasonable confidence.
-> 
-> this topology == ?
-> non-coherent SMMU page table walks but cache coherent DMA traffic of
-> SMMU upstream device?
-
-Yes.
-
-> Feasible or not, VFIO doesn't have a problem working with that device
-> even if the SMMU doesn't do coherent walking of its translation tables,
-> no?
-
-As you've quoted from the SoC documentation and demonstrated with this 
-patch, this SMMU *is* coherent for both pagetable walks and client 
-translation, and that's what matters in terms of VFIO not being 
-completely broken. It makes no difference what pagetable walk attributes 
-Linux actually uses, the underlying hardware is there to make 
-IOMMU_CACHE snoop, which in this one weird corner case means that a 
-couple of assumptions based on incorrect information cancel out, and 
-something that seemingly shouldn't work, does.
-
->>
->> Thanks,
->> Robin.
->>
->> ----->8-----
->> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
->> index 30dab1418e3f..a5ad9d6b51cf 100644
->> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
->> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
->> @@ -1320,7 +1320,8 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
->>   	switch (cap) {
->>   	case IOMMU_CAP_CACHE_COHERENCY:
->>   		/* Assume that a coherent TCU implies coherent TBUs */
->> -		return cfg->smmu->features & ARM_SMMU_FEAT_COHERENT_WALK;
->> +		return cfg->smmu->features & ARM_SMMU_FEAT_COHERENT_WALK ||
->> +			device_get_dma_attr(dev) == DEV_DMA_COHERENT;
-> 
-> So this works for enetc, thanks. However, do we need to also consider
-> handling DEV_DMA_NOT_SUPPORTED, and thus, testing != DEV_DMA_NON_COHERENT
-> could be better than == DEV_DMA_COHERENT?
-
-If firmware says the device can't access memory, can we make its memory 
-accesses coherent?... Since it's likely to have a pretty bad time with 
-VFIO either way, I think we can dodge getting philosophical here :)
-
-> But from your response and the explanation in commit df198b37e72c
-> ("iommu/arm-smmu: Report IOMMU_CAP_CACHE_COHERENCY better"), I'm not
-> clear why we would keep looking at the COHERENT_WALK feature at all?
-
-Because if the SMMU is coherent, then a stage 1 translation with 
-IOMMU_CACHE can output cache-snooping attributes even if the device 
-can't do so natively.
-
-Of course that isn't necessarily true for stage 2 (without venturing 
-into S2CR attribute overrides), so we're still some way off giving an 
-accurate answer here, but as the original commit said, the aim was not 
-to be right, just less wrong.
-
-I'll try to improve the comment when I spin this tweak into a proper patch.
-
-Thanks,
-Robin.
-
-> It seems to my layman eyes that we are artificially coupling 2 concepts
-> that have nothing in common, and bad reporting for one of them is
-> causing trouble with the other.
-> 
->>   	case IOMMU_CAP_NOEXEC:
->>   		return true;
->>   	default:
-> 
-> Thanks!
