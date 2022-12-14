@@ -2,162 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C265A64D188
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:56:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D24F64D18C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiLNU4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:56:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S229690AbiLNU5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiLNU4B (ORCPT
+        with ESMTP id S229477AbiLNU5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:56:01 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CDF1CFFE;
-        Wed, 14 Dec 2022 12:55:59 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DE4203F353;
-        Wed, 14 Dec 2022 21:55:57 +0100 (CET)
-Date:   Wed, 14 Dec 2022 21:55:56 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arm64: dts: qcom: Use labels with generic node names
- for ADC channels
-Message-ID: <20221214205556.jdbcv3e4fkvm7f3y@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jonathan Cameron <jic23@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221209215308.1781047-1-marijn.suijten@somainline.org>
- <3d5b29f3-8d8d-93a7-a485-5261e2d8891d@linaro.org>
- <20221210165434.3hhen5mgtvflghks@SoMainline.org>
- <0bc1eba8-bc26-0bdb-16bf-78160c27c57b@linaro.org>
+        Wed, 14 Dec 2022 15:57:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10E4F192B5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:57:30 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 752D3FEC;
+        Wed, 14 Dec 2022 12:58:10 -0800 (PST)
+Received: from [10.57.88.237] (unknown [10.57.88.237])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D92533F71E;
+        Wed, 14 Dec 2022 12:57:28 -0800 (PST)
+Message-ID: <ce1b6720-b460-8e10-7885-31a8b6263908@arm.com>
+Date:   Wed, 14 Dec 2022 20:57:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bc1eba8-bc26-0bdb-16bf-78160c27c57b@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] dma-direct: Optimize get_required_mask
+Content-Language: en-GB
+To:     Luben Tuikov <luben.tuikov@amd.com>, iommu@lists.linux.dev
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Alex Deucher <Alexander.Deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221214180025.163207-1-luben.tuikov@amd.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221214180025.163207-1-luben.tuikov@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-12 09:48:26, Krzysztof Kozlowski wrote:
-> On 10/12/2022 17:54, Marijn Suijten wrote:
-> > On 2022-12-10 12:02:03, Krzysztof Kozlowski wrote:
-> >> On 09/12/2022 22:53, Marijn Suijten wrote:
-> >>> As discussed in [1] the DT should use labels to describe ADC
-> >>> channels, with generic node names, since the IIO drivers now
-> >>> moved to the fwnode API where node names include the `@xx`
-> >>> address suffix.
-> >>> 
-> >>> Especially for the ADC5 driver that uses extend_name - which
-> >>> cannot be removed for compatibility reasons - this results in
-> >>> sysfs files with the @xx name that wasn't previously present, and
-> >>> leads to an unpleasant file-browsing experience.
-> >>> 
-> >>> Also remove all the unused channel labels in pm660.dtsi.
-> >>> 
-> >>> [1]:
-> >>> https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
-> >>>
-> >>>
-> >>> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >> 
-> >> The talk was in context of bindings, not about changing all
-> >> existing users thus affecting DTS.
-> > 
-> > And as a consequence, DTS.  The already-merged transition from OF to 
-> > fwnode resulted in `@xx` to be included in the ADC channel name - and
-> > in the case of ADC5 even in sysfs filenames - so this seems like a 
-> > necessary change to make.
-> > 
-> > At the very least I would have changed the bindings submitted or 
-> > co-authored /by myself/ since I initially decided to rely on this
-> > (now obviously) wrong behaviour, and should have used labels from the
-> > get go.
-> > 
-> >> What's more, to me "skin-temp-thermistor" is quite generic name,
-> >> maybe "thermistor" would be more and reflects the purpose of the
-> >> node, so it was more or less fine.
-> > 
-> > Are you suggesting to not use "adc-chan", but "thermistor" as node
-> > name (and still use skin_temp as label)?
+On 2022-12-14 18:00, Luben Tuikov wrote:
+> Optimize dma_direct_get_required_mask(), in that we don't need to multiply by
+> two if we don't subtract 1 from the exponent. That is,
 > 
-> No, I am just saying that some of the names were correct, so the
-> reasoning in commit msg is not entirely accurate.
+>      (1 << (n - 1)) * 2 - 1 <==>
+>      2^(n-1) * 2^1 - 1       = (by rule of exponents)
+>      2^n - 1                 <==>
+>      (1 << n) - 1.
 
-The commit msg doesn't state that any of these names was wrong, rather
-that the label property should be used to convey a name to the driver.
+...except when n==64 (for the actual code below), in which case the 
+result of the shift becomes undefined.
 
-If you think multiple /node names/ are acceptable, please discuss in
-that direction.  Do we use a predetermined set of names (adc-chan@xx,
-thermistor@xx, ...) or do you have another suggestion?
+Robin.
 
-> > Or to keep the fully-written-out "thermistor" word in the label?
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Alex Deucher <Alexander.Deucher@amd.com>
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: iommu@lists.linux.dev
+> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+> Signed-off-by: Luben Tuikov <luben.tuikov@amd.com>
+> ---
+>   kernel/dma/direct.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> No, I don't refer to labels. Labels don't matter, they are being removed
-> entirely during DTS build.
-
-Ugh, I knew this was becoming a problem, even in an earlier IIO
-discussions with Jonathan it was sometimes hard to keep apart:
-
-I am /not/ referring to DTS labels, but to the `label =` node
-attribute/property, which is read by the driver (which isn't removed,
-how else would the driver fish this value out at runtime...).
-
-After all none of this patch has any DTS labels, in fact a bunch of
-unused ones in pm660 have been removed... but this patch /does add/ the
-`label =` property to many nodes.
-
-> >> Anyway I am against such changes without expressing it in the
-> >> bindings.
-> > 
-> > As expressed in [1] I suggested and am all for locking this change
-> > in via bindings, and you are right to expect that to have gone paired
-> > with this patch.
+> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+> index 63859a101ed831..bb416a3949dac0 100644
+> --- a/kernel/dma/direct.c
+> +++ b/kernel/dma/direct.c
+> @@ -41,7 +41,7 @@ u64 dma_direct_get_required_mask(struct device *dev)
+>   	phys_addr_t phys = (phys_addr_t)(max_pfn - 1) << PAGE_SHIFT;
+>   	u64 max_dma = phys_to_dma_direct(dev, phys);
+>   
+> -	return (1ULL << (fls64(max_dma) - 1)) * 2 - 1;
+> +	return (1ULL << fls64(max_dma)) - 1;
+>   }
+>   
+>   static gfp_t dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
 > 
-> Yes, I expect such changes to have both binding and DTS change together.
-> 
-> > 
-> > I'll submit that as the leading patch to this in v2, with the
-> > wildcard pattern changed to adc-chan (or something else pending the
-> > discussion above), and should I then also require the label property
-> > via `label: true`?
-> 
-> I don't think label is required.
-
-My commit message explains why the ADC5/VADC driver should really
-receive a label property instead of using the node name.
-
-- Marijn
+> base-commit: e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
