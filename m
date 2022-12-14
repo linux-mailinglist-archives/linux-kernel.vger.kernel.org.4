@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EE164C1E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E3764C1E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbiLNBdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 20:33:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S236847AbiLNBfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 20:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbiLNBdw (ORCPT
+        with ESMTP id S236790AbiLNBfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 20:33:52 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1198CE0ED
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:33:50 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p36so8012876lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:33:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gh19k+3D0iyWw5+2LHF1TTPwIx7bHWW/g8vFNpbEwZU=;
-        b=Uj/Ddmhhjx2tsaz+uPMxNNAM0Xda+GisrgHFW3qdOHw3v0Gc+UoIi27Wrs6gqmQsk2
-         swVV71rfcw/uS9l9OOAyeyWEjUlraDkwlurudEIpdzHVWsKz43wGItV+ktVB/G905UG8
-         DoCESPs72Z7I4xbqPW/aB+VKVmaSnQ3VFKLtZ01Ndq/wnXCKz2r1atG5w4GxDCfp+a7L
-         RTeF+fNQ4183pwfgSSFVAOXr0LPr3W3/RGgRbwZJNlhb0tB7tlBvMUXLFkkf09Xlu9lp
-         cdcRFEeNK+elvfAgq83Cv+5k6UaM1SGhyGdQ/kUiVFZnlea/VkzK/iv3xh4yx3zq3Ptw
-         aivQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gh19k+3D0iyWw5+2LHF1TTPwIx7bHWW/g8vFNpbEwZU=;
-        b=NbwsdSWX44rS1WzxS2QtMNjTGK2E5txT2MLRL/WuJuKZo0/YxAR9PMCeisMVd+avqk
-         U7Lzd6l2Woi+uEXwTB+3F2zah3dya2tRrWeRjnJTpzdviLPHLqNiVw5VJJ8TEoTNndGx
-         sMyUPX7QbcKTqxN6EdTcjIK6l7ql8FskvA8/Rk2enKEiJwBjXntpB/joGCK9nEB/Ft2M
-         Zb1jJ2TgE9VAZ+RA2lRzV9oHiXhSKeGrS6cnPjgaeC8pDkh/u6m8NdOkRPSKwCBWnViD
-         Mp8ZSwC+XOuuNqHgu42LPFQYMkrJrv6/rPbSB++jzxfXFl/yqY1u43gxjUQtLUzYQFe+
-         R2sg==
-X-Gm-Message-State: ANoB5pkxbAzSbW7C7rExYtCSiqbjYqL3SCVITR3K/bgIwjYvx49Kvyes
-        Nov8JPMbj0GLou2Ch70KNpbuXlizksj1GxgnvEBIHA==
-X-Google-Smtp-Source: AA0mqf7+Jp17vrMF2kFO1S4fGbZzejFoCO/2ti2leZM1vfO9+Of5CPHvLhny2c8pCRvJr+Gb6sPZ1pWVdsBq049FSzg=
-X-Received: by 2002:a05:6512:344e:b0:4b7:207:6dcf with SMTP id
- j14-20020a056512344e00b004b702076dcfmr316405lfr.632.1670981628283; Tue, 13
- Dec 2022 17:33:48 -0800 (PST)
+        Tue, 13 Dec 2022 20:35:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2042ADA;
+        Tue, 13 Dec 2022 17:35:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1686E617BC;
+        Wed, 14 Dec 2022 01:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F97C433EF;
+        Wed, 14 Dec 2022 01:35:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670981714;
+        bh=InZ0Yk/rNc1Gi7tVUXOaAYsQddfKxjS2U9stB0Jg02w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O7t02eoj6huI37qEVBZ+w9JV0ZAAYdbvSd6cBMhS5FrtDtmaHqtBCGpss8V9slFM4
+         +lBH+cr1CqsQUKRMj9t2iM6ApULGbqgLNNpkoYq8myOhnxxGZ0U0zlsrIpRU7N8Qqh
+         Fo5UFz3Jj3sM1yPjrSkv16CzuMJDHz1kHFhUlWegzHCwsafeaiHwj6X4PzuUqXK5aP
+         jK1tC2aejiIccqJHpQGw77c1BzTQ4SX7pQ+v0Aw+87fFWmGDl9A9aDuz5BUP6+gnDg
+         2GT7SU2h/UfNwWy8X872oB6AzHLGiFMk8qfssJZJHqGraTbLgPg9Op/DbI1v26zxg9
+         AmW6v643M4/QQ==
+Date:   Tue, 13 Dec 2022 17:35:12 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Pranavi Somisetty <pranavi.somisetty@amd.com>
+Cc:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <git@amd.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
+        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
+Subject: Re: [LINUX RFC PATCH] net: macb: Add support for partial store and
+ forward
+Message-ID: <20221213173512.7902e7df@kernel.org>
+In-Reply-To: <20221213121245.13981-1-pranavi.somisetty@amd.com>
+References: <20221213121245.13981-1-pranavi.somisetty@amd.com>
 MIME-Version: 1.0
-References: <20221213081103.2182231-1-jun.nie@linaro.org> <Y5jKfdDrJkdKtEbC@sol.localdomain>
-In-Reply-To: <Y5jKfdDrJkdKtEbC@sol.localdomain>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Wed, 14 Dec 2022 09:33:41 +0800
-Message-ID: <CABymUCMtTmSiZQNV9tXTYp90Jk3M37QiF4z5UbrukB43wSx-mw@mail.gmail.com>
-Subject: Re: [PATCH] fscrypt: Fix null pointer when defer i_crypt_info
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     tytso@mit.edu, jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Biggers <ebiggers@kernel.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=B8=89 02:54=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Dec 13, 2022 at 04:11:03PM +0800, Jun Nie wrote:
-> > syzbot report below bug[1]. Fix it with checking null pointer before
-> > deferring i_crypt_info.
-> >
->
-> Thanks, but this has already been fixed upstream by commit 105c78e12468
-> ("ext4: don't allow journal inode to have encrypt flag").
->
-> Also, I don't think adding a NULL check to __fscrypt_inode_uses_inline_cr=
-ypto()
-> is a good idea because it is only meant to be called when the inode's enc=
-ryption
-> key has already been set up.  Instead of making the function return a
-> potentially-incorrect result, it was better to address the root cause of =
-why it
-> was being called at an inappropriate time in the first place.
->
-> - Eric
+On Tue, 13 Dec 2022 05:12:45 -0700 Pranavi Somisetty wrote:
+> From: Maulik Jodhani <maulik.jodhani@xilinx.com>
+> 
+> - Validate FCS in receive interrupt handler if Rx checksum offloading
+>   is disabled
+> - Get rx-watermark value from DT
 
-Thanks for the information! Do you know what's the plan/schedule of
-back porting,
-such as linux-5.15.y branch?
+Sounds like two separate changes, please split into two patches
 
-- Jun
+> @@ -1375,6 +1385,16 @@ static int gem_rx(struct macb_queue *queue, struct napi_struct *napi,
+>  				 bp->rx_buffer_size, DMA_FROM_DEVICE);
+>  
+>  		skb->protocol = eth_type_trans(skb, bp->dev);
+> +
+> +		/* Validate MAC fcs if RX checsum offload disabled */
+> +		if (!(bp->dev->features & NETIF_F_RXCSUM)) {
+
+RXCSUM is for L4 (TCP/UDP) checksums, FCS is simply assumed 
+to be validated by HW.
+
+> +			if (macb_validate_hw_csum(skb)) {
+> +				netdev_err(bp->dev, "incorrect FCS\n");
+
+This can flood logs, and is likely unnecessary since we have a
+dedicated statistics for crc errors (rx_crc_errors).
+
+> +				bp->dev->stats.rx_dropped++;
+
+CRC errors are errors not drops see the comment above struct
+rtnl_link_stats64 for more info.
+
+> +				break;
+> +			}
+> +		}
+
+> @@ -3812,10 +3862,29 @@ static void macb_configure_caps(struct macb *bp,
+>  				const struct macb_config *dt_conf)
+>  {
+>  	u32 dcfg;
+> +	int retval;
+>  
+>  	if (dt_conf)
+>  		bp->caps = dt_conf->caps;
+>  
+> +	/* By default we set to partial store and forward mode for zynqmp.
+> +	 * Disable if not set in devicetree.
+> +	 */
+> +	if (bp->caps & MACB_CAPS_PARTIAL_STORE_FORWARD) {
+> +		retval = of_property_read_u16(bp->pdev->dev.of_node,
+> +					      "rx-watermark",
+> +					      &bp->rx_watermark);
+
+is this property documented in the bindings?
