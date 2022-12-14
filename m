@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F47264C657
+	by mail.lfdr.de (Postfix) with ESMTP id D3B9B64C658
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiLNJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
+        id S238020AbiLNJvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237999AbiLNJux (ORCPT
+        with ESMTP id S238017AbiLNJvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:50:53 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CA9DEB4;
-        Wed, 14 Dec 2022 01:50:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671011442; x=1702547442;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=69zno3M60qAV367e6Uw903iTsxOyrn8t8oVcNIbb1Mc=;
-  b=AnFzmL8RPY+52E46cpliy4k9zX52mgvr8EWZT6bgtfZ7/j3yHKssvmoS
-   5cFqMwdf16k8z3nWDNOT67IPs89YsEmoJcHUWGT7BPPMQeKOvVEWI/voB
-   uF/mrFz9sjD1ieab07KDh3ygPyuhk1ppHETIwMQ0vLz4t5SxBGsqMS+bU
-   5PjeOlSfnMN+VG4it7b34025J4dkgWh8ODN766tCR9w9z98AI62NMZTUA
-   F/Hte0NWiOFYNKgq+kUS1awGGIo3VH/tSSgtygt+Kt0K0EpaZkGWzL8oT
-   It+WFZvbeNufAae5GF7xzDZ5HWL5mSShZoxIHiq+2RyScrTmYPmjkXpuP
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,244,1665417600"; 
-   d="scan'208";a="218870767"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:42 +0800
-IronPort-SDR: hgUrkFkkkP2XXm213beGnsCwtSMjo6N4P8PNWK9LTIJ+Jtj1REvpvDM8JuOXQy97rger7pgQOT
- lVJlde8jHHMNWTy5nbAo4wexFPaD5ya30qDibXkPWltyhDmQPHd3jlllERlnGy772iUAA7g51D
- T6q5clHY3VOBrDF4slXuDnP9IP0GnEldnpOZC068FLb6TDrj6kpYlgdfDDtJbH5EpaZV099pK1
- y2H42nMK+KWBi+PU81k60036ClUwS+ne+T9iBJah/a+87qcaM3JQ1H9/1LReuheUgOK9/5u/tQ
- VAM=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:09:05 -0800
-IronPort-SDR: NwO40jDqDkRlof8sYwhctsynsU2NrjjaLOkxMfISI/LVXPwwMx1KdIVpMBtH8o3tHfDIkhNGJB
- MWcaPbVEYtO8oESXXu3RXKgNkKE98kSUwGBG77WaxL9S7Tc7NRJ7f9GSdZnrRqiW0wYk1OIvBs
- tUJKzp1/FTdTg98csbRzjV9H679iY+4DsMAae7C4PL4rBc6TcVc+NSEwD0um2/6lTvqd7nE63+
- Acwbmj7lc2J+Nt02O64eaE8sBAmGoj+jTWOoF5/dOijstTPqt4V4DL3WfN6P5QwKryA0etVnuW
- 13o=
-WDCIronportException: Internal
-Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
-  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:41 -0800
-From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
-To:     martin.petersen@oracle.com
-Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH v6 4/4] ufs: core: Remove ufshcd_map_desc_id_to_length function
-Date:   Wed, 14 Dec 2022 11:50:27 +0200
-Message-Id: <1671011427-26184-5-git-send-email-Arthur.Simchaev@wdc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
-References: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 04:51:03 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E21621E38
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:50:49 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b13so9512934lfo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rcWSN//JeQmgBND6AUI/VMRHM2NmUklHc+x2zZ4EJT8=;
+        b=f6Hgr9Kk6otW+ghrw1Q9z5cx3WleBccvOr/+gCWHxz3RNHREWN0ois+5aHmbUWzTaZ
+         NXK/+q2XW4Tp6TssRggurTYw5qm5g8L4a5SI7fXaYxQ6NbNbnN7u0aqNjfB5BmrzLcIE
+         ecQVnrlQcAGpa2ObzYFsnItuBuzJp4As+dnF+57CPuq0tSLeCxpiJpuu4PGlHQzQRx0K
+         AHtguup6mmL+FePuZwXa0ubkfovXTfe1Zb37lxYN/GpkWNj07f1qf6Jk7tX9LTLfwPuG
+         8xnyTZoM+OdgWhVVZuyH6YKroCBgWCxnvqtKD4UDxVrUXlEIbshZApTOwzdzhsIJsdcm
+         ia7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcWSN//JeQmgBND6AUI/VMRHM2NmUklHc+x2zZ4EJT8=;
+        b=taJfJLy6GmeUP3xEJuUYh8WxCQWa3N5lydBkw7pnu+TX3nCrjzw7jPwiAEsFvg2FcA
+         NhNHd0vrmur4ZK9z0z3d3DkiKEI2RzVixI3eJVLSHyeUtcNllXZialdIon/O/iPt88/q
+         X40kf1hzEP/3SzgEFug2H7orTo91t70IDZNvmoFBbTj4+T1ZiMvsfSpIBKQ9qgxHX6QL
+         dgdpapI6h0hEFiNO4WmgiT/YUs8B8MvoxxW3PO8nwnUVoT+7PjOvKOxyrz1uJfq6f4jG
+         cNTqtJMZ6EBfIHOBKA3zm1usdNvhK1BSDjHjS2khfK8vxYYWWp6CUvsqkiDUcsb5DxbA
+         nSMQ==
+X-Gm-Message-State: ANoB5pmdfa9ouiEGnj22iB4w89UaE3dwxcgpoTfPDGExhNli0C/S2VaE
+        MRur6zjLxxCIJwxqUDbqDt/OVQ==
+X-Google-Smtp-Source: AA0mqf5StJ7nFxoBNOXexnamJw08OKfURdTtDU4kjwbpt6W2AVPUIwrbDi2hIBCG90qP6jyRnQ3GQw==
+X-Received: by 2002:ac2:560b:0:b0:4b5:9b8f:cc89 with SMTP id v11-20020ac2560b000000b004b59b8fcc89mr5760847lfd.55.1671011448038;
+        Wed, 14 Dec 2022 01:50:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y12-20020a19914c000000b004b55a1c4649sm744022lfj.38.2022.12.14.01.50.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 01:50:47 -0800 (PST)
+Message-ID: <c4bf26a4-16bb-6ed8-ae70-1947998e32cc@linaro.org>
+Date:   Wed, 14 Dec 2022 10:50:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 3/4] dt-bindings: arm: qcom: Document xiaomi,laurel_sprout
+ board
+Content-Language: en-US
+To:     Lux Aliaga <they@mint.lgbt>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214093248.153245-1-they@mint.lgbt>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214093248.153245-1-they@mint.lgbt>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There shouldn't be any restriction of the descriptor size
-(not the descriptor id for that matter) up to QUERY_DESC_MAX_SIZE.
-According to the spec, the caller can use any descriptor size,
-and it is up to the device to return the actual size.
-Therefore there shouldn't be any sizes hardcoded in the kernel,
-nor any need to cache it, hence ufshcd_map_desc_id_to_length function is
-redundant. Always read the descriptors with QUERY_DESC_MAX_SIZE size.
+On 14/12/2022 10:32, Lux Aliaga wrote:
+> Document the Xiaomi Mi A3 (xiaomi-laurel_sprout) smartphone which is
+> based on the Snapdragon 665 SoC.
+> 
+> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> index 1b5ac6b02bc5..a72fbb6b4b2c 100644
+> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> @@ -693,6 +693,7 @@ properties:
+>        - items:
+>            - enum:
+>                - sony,pdx201
+> +              - xiaomi,laurel_sprout
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Suggested-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
----
- drivers/ufs/core/ufs_bsg.c |  1 -
- drivers/ufs/core/ufshcd.c  | 23 +++++++++++------------
- 2 files changed, 11 insertions(+), 13 deletions(-)
+Invalid character - underscore. Use hyphen.
 
-diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-index 7eec38c..dc441ac 100644
---- a/drivers/ufs/core/ufs_bsg.c
-+++ b/drivers/ufs/core/ufs_bsg.c
-@@ -16,7 +16,6 @@ static int ufs_bsg_get_query_desc_size(struct ufs_hba *hba, int *desc_len,
- 				       struct utp_upiu_query *qr)
- {
- 	int desc_size = be16_to_cpu(qr->length);
--	int desc_id = qr->idn;
- 
- 	if (desc_size <= 0)
- 		return -EINVAL;
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 99806c7..0a33e53 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3395,12 +3395,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 	if (desc_id >= QUERY_DESC_IDN_MAX || !param_size)
- 		return -EINVAL;
- 
--	if (param_offset >= buff_len) {
--		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
--			__func__, param_offset, desc_id, buff_len);
--		return -EINVAL;
--	}
--
- 	/* Check whether we need temp memory */
- 	if (param_offset != 0 || param_size < buff_len) {
- 		desc_buf = kzalloc(buff_len, GFP_KERNEL);
-@@ -3413,15 +3407,23 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 
- 	/* Request for full descriptor */
- 	ret = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,
--					desc_id, desc_index, 0,
--					desc_buf, &buff_len);
--
-+					    desc_id, desc_index, 0,
-+					    desc_buf, &buff_len);
- 	if (ret) {
- 		dev_err(hba->dev, "%s: Failed reading descriptor. desc_id %d, desc_index %d, param_offset %d, ret %d\n",
- 			__func__, desc_id, desc_index, param_offset, ret);
- 		goto out;
- 	}
- 
-+	/* Update descriptor length */
-+	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
-+
-+	if (param_offset >= buff_len) {
-+		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
-+			__func__, param_offset, desc_id, buff_len);
-+		return -EINVAL;
-+	}
-+
- 	/* Sanity check */
- 	if (desc_buf[QUERY_DESC_DESC_TYPE_OFFSET] != desc_id) {
- 		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header\n",
-@@ -3430,9 +3432,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	/* Update descriptor length */
--	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
--
- 	if (is_kmalloc) {
- 		/* Make sure we don't copy more data than available */
- 		if (param_offset >= buff_len)
--- 
-2.7.4
+Best regards,
+Krzysztof
 
