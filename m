@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E35264C651
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD3064C64F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237976AbiLNJuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S238014AbiLNJun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiLNJue (ORCPT
+        with ESMTP id S237975AbiLNJuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:50:34 -0500
+        Wed, 14 Dec 2022 04:50:35 -0500
 Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD1E5FDE;
-        Wed, 14 Dec 2022 01:50:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCBF1147F;
+        Wed, 14 Dec 2022 01:50:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671011433; x=1702547433;
-  h=from:to:cc:subject:date:message-id;
-  bh=lNdVFhzpDK6ZRn8cspcCrkrVHGXbdDJwrbhpIaJaCdQ=;
-  b=n6qF0oq/znFodv2R2F59uhFp1M5Y7p5gJg4SHFshhF4LhhshYHUAGWPS
-   8kGX1RShpYE1KRUZjOcd8aYC+WSY7ZMgBzpbNvTTlyTJPMva7eLxlfw78
-   Z1jeXQkwXi0wIBlc+Oqs/vnZtuedWVB4eWiXuBvySt5P9p6iC0sjaMhDQ
-   eV2TJsOpUnWqWqiNJY/f4cBaKzQPwMpFrSa9oKRimd6RrXyCBm+3XBttE
-   j3GR6yoUA35IlyPjXDLmKHR/JKI4nHdb3vcoIvWl2aZei5YeLoRLLvpCa
-   AMC+taCHcORMByv3Fe03fz6J0ZxabpbgRuKcyU8DoNfzOPiYE7HIwLS7y
+  t=1671011434; x=1702547434;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=RBpmj1MhSQxHo6w1QqeXk+NMU5iMKvHbRg1xIDkWq6k=;
+  b=g8mU9xI63uthJCgIN2zQkDY390H5OmTpyTPsoDc8XmMS6ODJYslbzAaD
+   PNGkRk5E1OHsJzUlLcaxxUzEbrjlbyeSMmf05FqfZJaS2ir37x3v4uB4+
+   4+ZPUOaJmAnypt943EKuI6NGUK6KnSipwUCAszUtnp0pkr97VFDiy+NbZ
+   V7YIn9PhfNtlAajVHhN1WNTU5W8F6MK6SDQhc0GwzAzqaFaPOexeONp6j
+   KoFkAC++mqD1sNNie4h/y6jBJLFAJbGSU4HaOCtkp3YLFP4vRQ0AW16QP
+   ecY8fYqww3M9QK4Yv5o3KXDA9TXAx5/E3qL6ENXKn4jMvQawzuQVuZz5I
    g==;
 X-IronPort-AV: E=Sophos;i="5.96,244,1665417600"; 
-   d="scan'208";a="218870759"
+   d="scan'208";a="218870760"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:32 +0800
-IronPort-SDR: /I1FWXGPu9AqshsQT94/g2+hAhQ0RX77yJafqF5xnAl2+ohoXqxFOpskM7c6t8JyS7gf2IjsJZ
- a1ALsS18GQROmgACUTv/3qjCwPme6+gmDHUBkr2V89MrfUOJ3vqGV0MA3S7ZIHAUlRS6JqkpUE
- E8gxiscBUOl1jpRTOE/sW1eo4m8Z6tdsVbw2tVVT8EUJrJ07CI2bgI3LukD66EOHbFk4A07WFn
- iVDw3yFnzwCHfG0Pub0uMAV3BWAvfdK2dJBVUK2Ttn2EWDtVpZQ8427AfekYQzA4BEtVAum4VV
- y+I=
+  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:34 +0800
+IronPort-SDR: L4M2FQe/TtGdKPIoC6W+qegQv0BLXemwVwuJnkFBVIHKs7HWtpPhHVwsYt1zwSJPGmp+87+CG6
+ 2kFfomFQSeD7tDCdcH9Ahks4gIpdVGda+P4eJKgZ/hZgThkbyo9joEFgTlLJUScJNOjBmIIX4s
+ TZR0Uvez3/vEd7o222yP2iW4M65X4UdXE9P6Vo5Mcl2da3nVIwIPf0sIdaJnbH/7defVgvVU3j
+ FVImpCRp2ttp5UlnDYLOAi994meCFAAJ8HjljTSF56pvPRVrh8P0i2JEtiE60ZgILOqpVfyuTT
+ a5s=
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:08:54 -0800
-IronPort-SDR: u8LeKzOHkfCLvuTPtI/isU3jvNZSZRjgKTAjliABEYcgBLqVFrsl/1Nt6Ff3ivgo0+4dG1yEV7
- a3vPnNSmgQNKSAbSCTdo47UEPlZaMG7jVQjbkii47P5OWw1h9IqJ/QY1tmzSIJIhKjmeY28nKa
- W8FDo5pOCRmeNQJ2QGkVwwZB7HACrdt39P1hzGfNFPvTI+pMJCsgb1O4IeHVfe34G5WHTLUmw+
- NhqsfPyR6FojWX5jYubvMVDU9NZ2mFvn3t+qW4qVk101NOYIkJgLAb2uwiNyw603YDcVlzMQwM
- jYM=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:08:57 -0800
+IronPort-SDR: eyZtjl+ghJwRAOL0EVhvFS7HnUTXI9QD2YdusFGCwGAEHDn3S0a2lAv6kHjFKXr/Nxim2zq0nG
+ Sam3DOL3fS597AP/F6EiDd28JutHWwkvREacU4sSPytnwR9Ru/DHZfDbbAAse8nZ9J+mZ5IC8n
+ jf2rc7S1ZN/Q7wXwLxkZx4ueFBpN6gl00auxLX1kEhPZLPDXpRMv4mqu+jVFIgYo0Tb0km7kzC
+ Dq58qgQXSPE3KFoXKzc6NWr74XKtkwcneaLuybPGD5EAP/mT7f15F7BvUz0HHJD3zufCi/McKX
+ btQ=
 WDCIronportException: Internal
 Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
-  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:31 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:33 -0800
 From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
 To:     martin.petersen@oracle.com
 Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH v6 0/4] ufs: core: Always read the descriptors with max length
-Date:   Wed, 14 Dec 2022 11:50:23 +0200
-Message-Id: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
+Subject: [PATCH v6 1/4] ufs: core: Remove redundant wb check
+Date:   Wed, 14 Dec 2022 11:50:24 +0200
+Message-Id: <1671011427-26184-2-git-send-email-Arthur.Simchaev@wdc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
+References: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -64,45 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v5--v6:
-  Add Bart's "Reviewed-by" to patch 2 and 4
+We used to use the extended-feature field in the device descriptor,
+as an indication that the device supports ufs2.2 or later.
+Remove that as this check is specifically done few lines above.
 
-v4--v5:
-  Change patch 2 according to Bart's comment
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+---
+ drivers/ufs/core/ufshcd.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-v3--v4:
-  Add "Reviewed-by" to patch's commits
-  Use kzalloc instead of kmalloc in drivers/ufs/core/ufshcd.c - patch 2/4
-
-v2--v3:
-  Based on Bean's comments:
-  1)Use kzalloc instead of kmalloc in ufshcd_set_active_icc_lvl - patch 2/4
-  2)Delete  UFS_RPMB_UNIT definition - patch 2/4
-  3)Delete len description - patch 3/4
-
-v1--v2:
-  Fix argument warning in ufshpb.c
-
-Read any descriptor with a maximum size of QUERY_DESC_MAX_SIZE.
-According to the spec the device rerurns the actual size.
-Thus can improve code readability and save CPU cycles.
-While at it, cleanup few leftovers around the descriptor size parameter.
-
-Suggested-by: Bean Huo <beanhuo@micron.com>
-
-Arthur Simchaev (4):
-  ufs:core: Remove redundant wb check
-  ufs:core: Remove redundant desc_size variable from hba
-  ufs: core: Remove len parameter from ufshcd_set_active_icc_lvl
-  ufs: core: Remove ufshcd_map_desc_id_to_length function
-
- drivers/ufs/core/ufs_bsg.c     |   7 +--
- drivers/ufs/core/ufshcd-priv.h |   3 --
- drivers/ufs/core/ufshcd.c      | 100 ++++++++++-------------------------------
- drivers/ufs/core/ufshpb.c      |   5 +--
- include/ufs/ufshcd.h           |   1 -
- 5 files changed, 26 insertions(+), 90 deletions(-)
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c63cd8b..c43dc2e 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -7616,10 +7616,6 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, const u8 *desc_buf)
+ 	     (hba->dev_quirks & UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES)))
+ 		goto wb_disabled;
+ 
+-	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
+-	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+-		goto wb_disabled;
+-
+ 	ext_ufs_feature = get_unaligned_be32(desc_buf +
+ 					DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+ 
 -- 
 2.7.4
 
