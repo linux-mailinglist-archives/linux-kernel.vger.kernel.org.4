@@ -2,250 +2,512 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FC464CD49
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8468F64CD5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238902AbiLNPsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S237905AbiLNPt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiLNPrd (ORCPT
+        with ESMTP id S238580AbiLNPs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:47:33 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC4A27FE6;
-        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id f184-20020a4a58c1000000b004a3c01646a0so2310106oob.12;
-        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
-        b=VknEFKrJmu9Pr/B/X9LlnnHGqp1nZzP9w+qqAkBG+UBa5JNhLLcWpOlBltqY/z9/7+
-         yd/oHDf6H8tbtxDUCWGQbI2O9B7Cq+P/cB0vV0cIuUDigV1N/ZMx5dtjATaUcwo+Zrjl
-         pmdtVyaS8CoZuYBs9Kqfs1DR/B5acRfI25qWN6pkBgKx8b1DrswACaCx29NwOzKrtjYj
-         GMdHgzxZIefyoePCFeX3IxhD5rOIoyFRtUMWQ3yPdmM/KVlwUPT8od2t7PxnIcfW4PLG
-         3ztosdgEWlInX6BtPzv4V7SZx3DXs5KGg3hQsA93dc30TbVwo8p0iGSxREgbbRITpz74
-         IU+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MB+cjJ0APVSPLYKSXokJmYfJJzb5hyUnGFn3uvrOCQs=;
-        b=gJSFFXFO0IF56KU5C3PhOBBKUC5CCCJX0g1n6EL4TWuaRxI6spTFWE1dC9LqtvM4uh
-         bkdrpXOGgHSCGK7ZtQiqjwb7SrmbgC4HgikinJc/bS0fbF/fFrpmVSF+OKaz2JeJNJAt
-         7Veor+PQn8vK91kTmKT6J9oJ8OZ3EKPmjTgdhDBI2+Fy4NO7U+tBPurecFA7M3yu+gGH
-         PDkKs5qW48VfmpzovIyvDw1bVWwUp+AIj6W0ht9AIKKsWaNbF5LsshLyRF4TR34Q00r1
-         MBWR3ysNw0cAMO/HN7ESaTVCimbcZrACYh9gUxnhbF4CdgTOQo625JjsESmqhVEvjseC
-         QFFA==
-X-Gm-Message-State: ANoB5plWAiyiI7vMPOkGQW+T6H38IIy8U9DdPTldcBUkaNvcBJ+RiUqa
-        fWsx0XmVox36DHMI8L5ivtk=
-X-Google-Smtp-Source: AA0mqf4haL+cQbuRxCnem1h+c5sf2MFQ7DNmFMcC4n1xjH0BM9e9aVMOR8ADEbdobsXs41hj7MitqA==
-X-Received: by 2002:a4a:e511:0:b0:4a0:9e4e:11ac with SMTP id r17-20020a4ae511000000b004a09e4e11acmr11549450oot.7.1671032837009;
-        Wed, 14 Dec 2022 07:47:17 -0800 (PST)
-Received: from localhost.localdomain (108-228-232-20.lightspeed.sndgca.sbcglobal.net. [108.228.232.20])
-        by smtp.gmail.com with ESMTPSA id v9-20020a4ae049000000b004a3543fbfbbsm2386367oos.14.2022.12.14.07.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 07:47:16 -0800 (PST)
-From:   "Derek J. Clark" <derekjohn.clark@gmail.com>
-To:     linux@roeck-us.net
-Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (oxp-sensors) Add AYANEO AIR and AIR Pro
-Date:   Wed, 14 Dec 2022 07:47:13 -0800
-Message-Id: <20221214154713.100648-1-derekjohn.clark@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y5lBue87IXkhNs42@debian.me>
-References: <Y5lBue87IXkhNs42@debian.me>
+        Wed, 14 Dec 2022 10:48:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203D023382;
+        Wed, 14 Dec 2022 07:47:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D7961B09;
+        Wed, 14 Dec 2022 15:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A65BC433EF;
+        Wed, 14 Dec 2022 15:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671032876;
+        bh=RuuriLlBrqwRVEHDnnrfeGE0ZdoqGk+2KpBpzVwdnH0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bidLZI5Hx2tPEONMpzi7Dwqhtq+8KONJVpRMQi4lFMzizdO/Or+sFakgOrkZQDncZ
+         Z5vl4DhpHyU1dQtpMlfhQMj1vwK9Hrg9aU3n0rmBi2GUjO6zN4h4beZdBEmR4oMtsP
+         UyOzOykF8sEwze1u6mDDsXpJPTyGFuXE/pjb/Dvs=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.15.83
+Date:   Wed, 14 Dec 2022 16:47:13 +0100
+Message-Id: <16710328334016@kroah.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the AYANEO AIR and AYANEO AIR Pro models of handheld
-devices. These devices use the same EC registers and logic as the One X
-Player mini AMD. Previous AYANEO models are not supported as they use a
-different EC and do not have the necessary fan speed write enable and
-setting registers. Tihe driver is tested on Aya Neo AIR while AIR Pro
-model EC functionality and DMI data were verified using command line
-tools by another user.
+I'm announcing the release of the 5.15.83 kernel.
 
-The added devices are:
-- AYANEO AIR (AMD 5560U)
-- AYANEO AIR Pro (AMD 5560U)
-- AYANEO AIR Pro (AMD 5825U)
+All users of the 5.15 kernel series must upgrade.
 
-Signed-off-by: Derek J. Clark <derekjohn.clark@gmail.com>
----
- Documentation/hwmon/oxp-sensors.rst | 19 ++++++----
- MAINTAINERS                         |  1 +
- drivers/hwmon/oxp-sensors.c         | 54 ++++++++++++++++++++++++-----
- 3 files changed, 59 insertions(+), 15 deletions(-)
+The updated 5.15.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 39c588ec5c50..a53c961065b2 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -3,18 +3,21 @@
- Kernel driver oxp-sensors
- =========================
- 
--Author:
-+Authors:
-+    - Derek John Clark <derekjohn.clark@gmail.com>
-     - Joaquín Ignacio Aramendía <samsagax@gmail.com>
- 
--Description:
-+Description
- ------------
- 
--One X Player devices from One Netbook provide fan readings and fan control
--through its Embedded Controller.
-+Handheld devices from One Netbook and Aya Neo provide fan readings and fan
-+control through their embedded controllers.
- 
--Currently only supports AMD boards from the One X Player and AOK ZOE lineup.
--Intel boards could be supported if we could figure out the EC registers and
--values to write to since the EC layout and model is different.
-+Currently only supports AMD boards from One X Player, AOK ZOE, and some Aya
-+Neo devices. One X PLayer Intel boards could be supported if we could figure
-+out the EC registers and values to write to since the EC layout and model is
-+different. Aya Neo devices preceding the AIR may not be usable as the EC model
-+is different and do not appear to have manual control capabiltities.
- 
- Supported devices
- -----------------
-@@ -22,6 +25,8 @@ Supported devices
- Currently the driver supports the following handhelds:
- 
-  - AOK ZOE A1
-+ - Aya Neo AIR
-+ - Aya Neo AIR Pro
-  - OneXPlayer AMD
-  - OneXPlayer mini AMD
-  - OneXPlayer mini AMD PRO
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90220659206c..8bce95170f12 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15346,6 +15346,7 @@ F:	drivers/mtd/nand/onenand/
- F:	include/linux/mtd/onenand*.h
- 
- ONEXPLAYER FAN DRIVER
-+M:	Derek John Clark <derekjohn.clark@gmail.com>
- M:	Joaquín Ignacio Aramendía <samsagax@gmail.com>
- L:	linux-hwmon@vger.kernel.org
- S:	Maintained
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index f84ec8f8eda9..7adc0199ea66 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -1,12 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Platform driver for OXP Handhelds that expose fan reading and control
-- * via hwmon sysfs.
-+ * Platform driver for Handhelds that expose fan reading and control via
-+ * hwmon sysfs.
-  *
-- * Old boards have the same DMI strings and they are told appart by the
-- * boot cpu vendor (Intel/AMD). Currently only AMD boards are supported
-- * but the code is made to be simple to add other handheld boards in the
-- * future.
-+ * Old OXP boards have the same DMI strings and they are told appart by
-+ * the boot cpu vendor (Intel/AMD). Currently only AMD boards are
-+ * supported but the code is made to be simple to add other handheld
-+ * boards in the future.
-  * Fan control is provided via pwm interface in the range [0-255].
-  * Old AMD boards use [0-100] as range in the EC, the written value is
-  * scaled to accommodate for that. Newer boards like the mini PRO and
-@@ -42,6 +42,8 @@ static bool unlock_global_acpi_lock(void)
- 
- enum oxp_board {
- 	aok_zoe_a1 = 1,
-+	aya_neo_air,
-+	aya_neo_air_pro,
- 	oxp_mini_amd,
- 	oxp_mini_amd_pro,
- };
-@@ -60,6 +62,20 @@ static const struct dmi_system_id dmi_table[] = {
- 		},
- 		.driver_data = (void *) &(enum oxp_board) {aok_zoe_a1},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {aya_neo_air},
-+	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "AYANEO"),
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "AIR Pro"),
-+		},
-+		.driver_data = (void *) &(enum oxp_board) {aya_neo_air_pro},
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-@@ -161,8 +177,19 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
- 			if (ret)
- 				return ret;
--			if (board == oxp_mini_amd)
-+			switch (board) {
-+			case aok_zoe_a1:
-+				break;
-+			case aya_neo_air:
-+			case aya_neo_air_pro:
-+			case oxp_mini_amd:
- 				*val = (*val * 255) / 100;
-+				break;
-+			case oxp_mini_amd_pro:
-+				break;
-+			default:
-+				break;
-+			}
- 			return 0;
- 		case hwmon_pwm_enable:
- 			return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
-@@ -191,8 +218,19 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_pwm_input:
- 			if (val < 0 || val > 255)
- 				return -EINVAL;
--			if (board == oxp_mini_amd)
-+			switch (board) {
-+			case aok_zoe_a1:
-+				break;
-+			case aya_neo_air:
-+			case aya_neo_air_pro:
-+			case oxp_mini_amd:
- 				val = (val * 100) / 255;
-+				break;
-+			case oxp_mini_amd_pro:
-+				break;
-+			default:
-+				break;
-+			}
- 			return write_to_ec(dev, OXP_SENSOR_PWM_REG, val);
- 		default:
- 			break;
--- 
-2.38.1
+thanks,
+
+greg k-h
+
+------------
+
+ MAINTAINERS                                                |    7 
+ Makefile                                                   |    6 
+ arch/arm/boot/dts/imx7s.dtsi                               |    4 
+ arch/arm/boot/dts/rk3036-evb.dts                           |    3 
+ arch/arm/boot/dts/rk3188-radxarock.dts                     |    2 
+ arch/arm/boot/dts/rk3188.dtsi                              |    3 
+ arch/arm/boot/dts/rk3288-evb-act8846.dts                   |    2 
+ arch/arm/boot/dts/rk3288-firefly.dtsi                      |    3 
+ arch/arm/boot/dts/rk3288-miqi.dts                          |    3 
+ arch/arm/boot/dts/rk3288-rock2-square.dts                  |    3 
+ arch/arm/boot/dts/rk3288-vmarc-som.dtsi                    |    1 
+ arch/arm/boot/dts/rk3xxx.dtsi                              |    7 
+ arch/arm/include/asm/perf_event.h                          |    2 
+ arch/arm/include/asm/pgtable-nommu.h                       |    6 
+ arch/arm/include/asm/pgtable.h                             |   16 
+ arch/arm/mm/nommu.c                                        |   19 
+ arch/arm64/boot/dts/rockchip/rk3308-roc-cc.dts             |    2 
+ arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi         |    1 
+ arch/s390/kvm/vsie.c                                       |    4 
+ block/Makefile                                             |    2 
+ drivers/bluetooth/btusb.c                                  |    5 
+ drivers/clk/clk-devres.c                                   |   91 
+ drivers/gpio/gpio-amd8111.c                                |    4 
+ drivers/gpio/gpio-rockchip.c                               |    1 
+ drivers/gpio/gpiolib.c                                     |   59 
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c                     |   24 
+ drivers/gpu/drm/bridge/analogix/anx7625.c                  |    4 
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c                  |    6 
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c                      |    4 
+ drivers/gpu/drm/drm_gem_shmem_helper.c                     |   18 
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg.c                        |    6 
+ drivers/gpu/drm/vmwgfx/vmwgfx_scrn.c                       |    4 
+ drivers/hid/hid-core.c                                     |    3 
+ drivers/hid/hid-ids.h                                      |    4 
+ drivers/hid/hid-ite.c                                      |    5 
+ drivers/hid/hid-lg4ff.c                                    |    6 
+ drivers/hid/hid-quirks.c                                   |    3 
+ drivers/media/common/videobuf2/videobuf2-core.c            |  102 
+ drivers/media/v4l2-core/v4l2-dv-timings.c                  |   20 
+ drivers/mmc/host/mtk-sd.c                                  |    6 
+ drivers/net/can/usb/esd_usb2.c                             |    6 
+ drivers/net/dsa/sja1105/sja1105_devlink.c                  |    2 
+ drivers/net/dsa/sja1105/sja1105_main.c                     |    2 
+ drivers/net/ethernet/aeroflex/greth.c                      |    1 
+ drivers/net/ethernet/broadcom/Kconfig                      |    3 
+ drivers/net/ethernet/cavium/thunder/nicvf_main.c           |    4 
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c |    4 
+ drivers/net/ethernet/hisilicon/hisi_femac.c                |    2 
+ drivers/net/ethernet/hisilicon/hix5hd2_gmac.c              |    2 
+ drivers/net/ethernet/intel/e1000e/netdev.c                 |    4 
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c             |   12 
+ drivers/net/ethernet/intel/i40e/i40e_main.c                |   19 
+ drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c         |    2 
+ drivers/net/ethernet/intel/igb/igb_ethtool.c               |    2 
+ drivers/net/ethernet/marvell/mvneta.c                      |    2 
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c       |    7 
+ drivers/net/ethernet/microchip/encx24j600-regmap.c         |    4 
+ drivers/net/ethernet/microchip/sparx5/sparx5_main.c        |    3 
+ drivers/net/ethernet/microsoft/mana/gdma.h                 |    9 
+ drivers/net/ethernet/microsoft/mana/mana_en.c              |   16 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c      |    8 
+ drivers/net/ieee802154/ca8210.c                            |    2 
+ drivers/net/ieee802154/cc2520.c                            |    2 
+ drivers/net/macsec.c                                       |    1 
+ drivers/net/mdio/fwnode_mdio.c                             |   25 
+ drivers/net/mdio/of_mdio.c                                 |    3 
+ drivers/net/phy/mdio_device.c                              |    2 
+ drivers/net/phy/mxl-gpy.c                                  |   11 
+ drivers/net/plip/plip.c                                    |    4 
+ drivers/net/thunderbolt.c                                  |    1 
+ drivers/net/usb/qmi_wwan.c                                 |    1 
+ drivers/net/vmxnet3/vmxnet3_drv.c                          |   27 
+ drivers/net/xen-netback/common.h                           |   14 
+ drivers/net/xen-netback/interface.c                        |   22 
+ drivers/net/xen-netback/netback.c                          |  229 
+ drivers/net/xen-netback/rx.c                               |   10 
+ drivers/net/xen-netfront.c                                 |    6 
+ drivers/nvme/host/core.c                                   |    8 
+ drivers/regulator/slg51000-regulator.c                     |    2 
+ drivers/regulator/twl6030-regulator.c                      |   15 
+ drivers/rtc/rtc-cmos.c                                     |  179 
+ drivers/rtc/rtc-mc146818-lib.c                             |   70 
+ drivers/s390/net/qeth_l2_main.c                            |   16 
+ drivers/soundwire/intel.c                                  |    1 
+ drivers/spi/spi-mt65xx.c                                   |    8 
+ drivers/usb/dwc3/gadget.c                                  |    3 
+ drivers/video/fbdev/core/fbcon.c                           |    2 
+ fs/Makefile                                                |    2 
+ fs/btrfs/send.c                                            |   24 
+ fs/cifs/connect.c                                          |    1 
+ fs/file.c                                                  |   11 
+ fs/io-wq.c                                                 | 1398 -
+ fs/io-wq.h                                                 |  160 
+ fs/io_uring.c                                              |11110 ------------
+ include/asm-generic/tlb.h                                  |    4 
+ include/linux/cgroup.h                                     |    1 
+ include/linux/clk.h                                        |  109 
+ include/linux/mc146818rtc.h                                |    3 
+ io_uring/Makefile                                          |    6 
+ io_uring/io-wq.c                                           | 1398 +
+ io_uring/io-wq.h                                           |  160 
+ io_uring/io_uring.c                                        |11112 +++++++++++++
+ kernel/cgroup/cgroup-internal.h                            |    1 
+ kernel/sched/core.c                                        |    2 
+ mm/gup.c                                                   |    2 
+ mm/khugepaged.c                                            |   47 
+ mm/memcontrol.c                                            |   15 
+ mm/mmu_gather.c                                            |    4 
+ net/9p/trans_fd.c                                          |    6 
+ net/9p/trans_xen.c                                         |    9 
+ net/bluetooth/6lowpan.c                                    |    1 
+ net/bluetooth/af_bluetooth.c                               |    4 
+ net/bluetooth/hci_core.c                                   |    3 
+ net/can/af_can.c                                           |    4 
+ net/dsa/tag_hellcreek.c                                    |    3 
+ net/dsa/tag_ksz.c                                          |    3 
+ net/dsa/tag_sja1105.c                                      |    3 
+ net/ipv4/fib_frontend.c                                    |    3 
+ net/ipv4/fib_semantics.c                                   |    1 
+ net/ipv4/ip_gre.c                                          |   48 
+ net/ipv6/ip6_output.c                                      |    5 
+ net/mac802154/iface.c                                      |    1 
+ net/netfilter/nf_conntrack_netlink.c                       |   19 
+ net/netfilter/nft_set_pipapo.c                             |    5 
+ net/nfc/nci/ntf.c                                          |    6 
+ net/tipc/link.c                                            |    4 
+ net/tipc/node.c                                            |   12 
+ net/unix/diag.c                                            |   20 
+ sound/core/seq/seq_memory.c                                |   11 
+ sound/soc/codecs/rt711-sdca-sdw.c                          |    2 
+ sound/soc/codecs/wm8962.c                                  |    8 
+ sound/soc/soc-pcm.c                                        |    2 
+ tools/testing/selftests/net/fcnal-test.sh                  |   11 
+ tools/testing/selftests/net/fib_tests.sh                   |   37 
+ tools/testing/selftests/net/pmtu.sh                        |   10 
+ tools/testing/selftests/net/rtnetlink.sh                   |    2 
+ 136 files changed, 13901 insertions(+), 13161 deletions(-)
+
+Akihiko Odaki (2):
+      e1000e: Fix TX dispatch condition
+      igb: Allocate MSI-X vector when testing
+
+Alexandra Winter (1):
+      s390/qeth: fix use-after-free in hsci
+
+Anastasia Belova (1):
+      HID: hid-lg4ff: Add check for empty lbuf
+
+Andreas Kemnade (1):
+      regulator: twl6030: fix get status of twl6032 regulators
+
+Ankit Patel (1):
+      HID: usbhid: Add ALWAYS_POLL quirk for some mice
+
+Artem Chernyshev (3):
+      net: dsa: ksz: Check return value
+      net: dsa: hellcreek: Check return value
+      net: dsa: sja1105: Check return value
+
+Bartosz Golaszewski (2):
+      gpiolib: improve coding style for local variables
+      gpiolib: check the 'ngpios' property in core gpiolib code
+
+Chancel Liu (1):
+      ASoC: wm8962: Wait for updated value of WM8962_CLOCKING1 register
+
+Chen Zhongjin (1):
+      Bluetooth: Fix not cleanup led when bt_init fails
+
+Dan Carpenter (2):
+      net: mvneta: Prevent out of bounds read in mvneta_config_rss()
+      net: mvneta: Fix an out of bounds check
+
+Daniel Díaz (1):
+      selftests/net: Find nettest in current directory
+
+Davide Tronchin (1):
+      net: usb: qmi_wwan: add u-blox 0x1342 composition
+
+Dawei Li (1):
+      drm/vmwgfx: Fix race issue calling pin_user_pages
+
+Dominique Martinet (1):
+      9p/xen: check logical size for buffer size
+
+Emeel Hakim (1):
+      macsec: add missing attribute validation for offload
+
+Eric Dumazet (1):
+      ipv6: avoid use-after-free in ip6_fragment()
+
+FUKAUMI Naoki (1):
+      arm64: dts: rockchip: keep I2S1 disabled for GPIO function on ROCK Pi 4 series
+
+Filipe Manana (1):
+      btrfs: send: avoid unaligned encoded writes when attempting to clone range
+
+Francesco Dolcini (1):
+      Revert "ARM: dts: imx7: Fix NAND controller size-cells"
+
+Frank Jungclaus (1):
+      can: esd_usb: Allow REC and TEC to return to zero
+
+GUO Zihua (1):
+      9p/fd: Use P9_HDRSZ for header size
+
+Gaosheng Cui (1):
+      mmc: mtk-sd: Fix missing clk_disable_unprepare in msdc_of_clock_parse()
+
+Giulio Benetti (1):
+      ARM: 9266/1: mm: fix no-MMU ZERO_PAGE() implementation
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.83
+
+Guillaume BRUN (1):
+      drm: bridge: dw_hdmi: fix preference of RGB modes over YUV420
+
+Haiyang Zhang (1):
+      net: mana: Fix race on per-CQ variable napi work_done
+
+Hangbin Liu (1):
+      ip_gre: do not report erspan version on GRE interface
+
+Hans Verkuil (2):
+      media: videobuf2-core: take mmap_lock in vb2_get_unmapped_area()
+      media: v4l2-dv-timings.c: fix too strict blanking sanity checks
+
+Hans de Goede (1):
+      HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch V 10
+
+Harshit Mogalapalli (1):
+      io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
+
+Hauke Mehrtens (1):
+      ca8210: Fix crash by zero initializing data
+
+Heiko Carstens (1):
+      s390/qeth: fix various format strings
+
+Hsin-Yi Wang (1):
+      drm/bridge: anx7625: Fix edid_read break case in sp_tx_edid_read()
+
+Ido Schimmel (2):
+      ipv4: Fix incorrect route flushing when source address is deleted
+      ipv4: Fix incorrect route flushing when table ID 0 is used
+
+Ismael Ferreras Morezuelas (1):
+      Bluetooth: btusb: Add debug message for CSR controllers
+
+Jann Horn (4):
+      fs: use acquire ordering in __fget_light()
+      mm/khugepaged: take the right locks for page table retraction
+      mm/khugepaged: fix GUP-fast interaction by sending IPI
+      mm/khugepaged: invoke MMU notifiers in shmem/file collapse paths
+
+Jens Axboe (1):
+      io_uring: move to separate directory
+
+Jisheng Zhang (1):
+      net: stmmac: fix "snps,axi-config" node property parsing
+
+Johan Jonker (4):
+      ARM: dts: rockchip: fix ir-receiver node names
+      arm64: dts: rockchip: fix ir-receiver node names
+      ARM: dts: rockchip: rk3188: fix lcdc1-rgb24 node name
+      ARM: dts: rockchip: disable arm_global_timer on rk3066 and rk3188
+
+John Starks (1):
+      mm/gup: fix gup_pud_range() for dax
+
+Juergen Gross (3):
+      xen/netback: do some code cleanup
+      xen/netback: don't call kfree_skb() with interrupts disabled
+      xen/netback: fix build warning
+
+Kees Cook (2):
+      ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+      NFC: nci: Bounds check struct nfc_target arrays
+
+Konrad Dybcio (1):
+      regulator: slg51000: Wait after asserting CS pin
+
+Kuniyuki Iwashima (1):
+      af_unix: Get user_ns from in_skb in unix_diag_get_exact().
+
+Lin Liu (1):
+      xen-netfront: Fix NULL sring after live migration
+
+Liu Jian (2):
+      net: hisilicon: Fix potential use-after-free in hisi_femac_rx()
+      net: hisilicon: Fix potential use-after-free in hix5hd2_rx()
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: Fix crash when replugging CSR fake controllers
+
+Masahiro Yamada (1):
+      block: move CONFIG_BLOCK guard to top Makefile
+
+Mateusz Jończyk (3):
+      rtc: mc146818-lib: extract mc146818_avoid_UIP
+      rtc: cmos: avoid UIP when writing alarm time
+      rtc: cmos: avoid UIP when reading alarm time
+
+Michael Walle (1):
+      net: phy: mxl-gpy: fix version reporting
+
+Michal Jaron (1):
+      i40e: Fix not setting default xps_cpus after reset
+
+Oleksij Rempel (1):
+      net: mdiobus: fwnode_mdiobus_register_phy() rework error handling
+
+Oliver Hartkopp (1):
+      can: af_can: fix NULL pointer dereference in can_rcv_filter
+
+Pablo Neira Ayuso (1):
+      netfilter: ctnetlink: fix compilation warning after data race fixes in ct mark
+
+Pankaj Raghav (1):
+      nvme initialize core quirks before calling nvme_init_subsystem
+
+Prike Liang (1):
+      drm/amdgpu/sdma_v4_0: turn off SDMA ring buffer in the s2idle suspend
+
+Przemyslaw Patynowski (1):
+      i40e: Disallow ip4 and ip6 l4_4_bytes
+
+Qiheng Lin (1):
+      net: microchip: sparx5: Fix missing destroy_workqueue of mact_queue
+
+Qiqi Zhang (1):
+      drm/bridge: ti-sn65dsi86: Fix output polarity setting bug
+
+Radu Nicolae Pirea (OSS) (1):
+      net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing()
+
+Rob Clark (2):
+      drm/shmem-helper: Remove errant put in error path
+      drm/shmem-helper: Avoid vm_open error paths
+
+Ronak Doshi (2):
+      vmxnet3: correctly report encapsulated LRO packet
+      vmxnet3: use correct intrConf reference when using extended queues
+
+Ross Lagerwall (1):
+      xen/netback: Ensure protocol headers don't fall in the non-linear area
+
+Sebastian Reichel (2):
+      arm: dts: rockchip: fix node name for hym8563 rtc
+      arm: dts: rockchip: remove clock-frequency from rtc
+
+Shuming Fan (1):
+      ASoC: rt711-sdca: fix the latency time of clock stop prepare state machine transitions
+
+Sjoerd Simons (1):
+      soundwire: intel: Initialize clock stop timeout
+
+Srinivasa Rao Mandadapu (1):
+      ASoC: soc-pcm: Add NULL check in BE reparenting
+
+Stefano Brivio (1):
+      netfilter: nft_set_pipapo: Actually validate intervals in fields after the first one
+
+Sylwester Dziedziuch (1):
+      i40e: Fix for VF MAC address 0
+
+Tejun Heo (1):
+      memcg: fix possible use-after-free in memcg_write_event_control()
+
+Tetsuo Handa (1):
+      fbcon: Use kzalloc() in fbcon_prepare_logo()
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Disable GUSB2PHYCFG.SUSPHY for End Transfer
+
+Thomas Huth (1):
+      KVM: s390: vsie: Fix the initialization of the epoch extension (epdx) field
+
+Tomislav Novak (1):
+      ARM: 9251/1: perf: Fix stacktraces for tracepoint events in THUMB2 kernels
+
+Uwe Kleine-König (3):
+      clk: generalize devm_clk_get() a bit
+      clk: Provide new devm_clk helpers for prepared and enabled clocks
+      clk: Fix pointer casting to prevent oops in devm_clk_release()
+
+Valentina Goncharenko (2):
+      net: encx24j600: Add parentheses to fix precedence
+      net: encx24j600: Fix invalid logic in reading of MISTAT register
+
+Wang ShaoBo (1):
+      Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
+
+Wang Yufen (1):
+      gpio/rockchip: fix refcount leak in rockchip_gpiolib_register()
+
+Wei Yongjun (1):
+      mac802154: fix missing INIT_LIST_HEAD in ieee802154_if_add()
+
+Xin Long (1):
+      tipc: call tipc_lxc_xmit without holding node_read_lock
+
+Xiongfeng Wang (1):
+      gpio: amd8111: Fix PCI device reference count leak
+
+Yang Yingliang (2):
+      net: mdiobus: fix double put fwnode in the error path
+      net: plip: don't call kfree_skb/dev_kfree_skb() under spin_lock_irq()
+
+Yongqiang Liu (1):
+      net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
+
+Yuan Can (1):
+      dpaa2-switch: Fix memory leak in dpaa2_switch_acl_entry_add() and dpaa2_switch_acl_entry_remove()
+
+YueHaibing (2):
+      net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency for BCMGENET under ARCH_BCM2835
+      tipc: Fix potential OOB in tipc_link_proto_rcv()
+
+Zack Rusin (1):
+      drm/vmwgfx: Don't use screen objects when SEV is active
+
+Zeng Heng (3):
+      cifs: fix use-after-free caused by invalid pointer `hostname`
+      gpiolib: fix memory leak in gpiochip_setup_dev()
+      net: mdio: fix unbalanced fwnode reference count in mdio_device_release()
+
+Zhang Changzhong (1):
+      ethernet: aeroflex: fix potential skb leak in greth_init_rings()
+
+ZhangPeng (1):
+      HID: core: fix shift-out-of-bounds in hid_report_raw_event
+
+Zhengchao Shao (3):
+      selftests: rtnetlink: correct xfrm policy rule in kci_test_ipsec_offload
+      net: dsa: sja1105: fix memory leak in sja1105_setup_devlink_regions()
+      net: thunderbolt: fix memory leak in tbnet_open()
+
+Zhichao Liu (1):
+      spi: mediatek: Fix DEVAPC Violation at KO Remove
+
+Ziyang Xuan (2):
+      ieee802154: cc2520: Fix error return code in cc2520_hw_init()
+      octeontx2-pf: Fix potential memory leak in otx2_init_tc()
 
