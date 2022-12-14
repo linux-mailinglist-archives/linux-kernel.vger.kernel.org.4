@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D752964CCB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 250A964CCB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238722AbiLNOx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S238723AbiLNOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:55:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238720AbiLNOxz (ORCPT
+        with ESMTP id S238510AbiLNOzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:53:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C9326A9E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:53:54 -0800 (PST)
+        Wed, 14 Dec 2022 09:55:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B655291
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:55:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 694E8B818E4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54770C433EF;
-        Wed, 14 Dec 2022 14:53:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCC3461AED
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:55:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D06EC433EF;
+        Wed, 14 Dec 2022 14:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671029632;
-        bh=w5xhvVMm8HcONvBFdH0GaBJz/7H0mrmGXMjWGZuBv8Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Nl26XP32SxbpeOA3E7n4KLxmMIyuxGZPgbGDEYUueETTuCIhMhZz1JUnrIC/ufWYP
-         8eetISDpNIk5bH/qt3D8VjaKqGpE5y0dmyOrKWFqQwCm0nbH9ug1SYHO8ZOGcT5+u3
-         RgII5HQxOL9HrcZK0ndL1oL+FWTfyd3eddZQwlgwjkP0bQFBOo2Jacz/0bdh1YfskP
-         ft7jQhHjFtklBVqVd/3x2oMu/YT60dGF7vSL7pxRYfguRXIpRQUbvY3vtJ8ST4tiJY
-         B9YsN3HSFf6rs3juaYnTCTB0TM2ZItJ0FTBGIB0XvT4yvXUzHoZ4Bi8Yg5frCjljIC
-         7JS8QxUyvDb5Q==
+        s=k20201202; t=1671029735;
+        bh=aIUcjrJWe/6VmRdzbrNHy/Um1b3+Ap5nYjNpcz68YL4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nhl8mHS31fNXTMyQ8ogmJdLMpsCqlNgnkJQqSSydv/p+ybPcYFhDkLPMpqbb+q8Cs
+         /eELwqr/DLYbNISJPVqCHuE/18y0dYVWDQTn0W/aOb06Lx4ItwaxPj5oeplz4iBgIS
+         ITqVeh35ra3Did8HNBSuga4e5m2RZ7SKpJ01oaxKIU3GAZjyBwXhFqzAVSilmyiyWi
+         sip1Y1Xk03RU+VM6QDs/wKL3avAGu7EDPTdhu46SqytN8R7NljaZuWuD4F+9Ll1RuQ
+         Ro6TbvM/xKQJRflWCHMedDl9uL4S6wQ+lbXOp0o8P0hEBhhkXVIDrZEYrf07M3F/vp
+         zglhhGdeEBrLA==
+Date:   Wed, 14 Dec 2022 14:55:29 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     YC Hung <yc.hung@mediatek.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chao Song <chao.song@intel.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        chunxu.li@mediatek.com, Trevor Wu <trevor.wu@mediatek.com>,
-        Curtis Malainey <cujomalainey@chromium.org>
-In-Reply-To: <20221213115617.25086-1-yc.hung@mediatek.com>
-References: <20221213115617.25086-1-yc.hung@mediatek.com>
-Subject: Re: [PATCH] ASoC: SOF: mediatek: initialize panic_info to zero
-Message-Id: <167102962807.215050.16757916120691616071.b4-ty@kernel.org>
-Date:   Wed, 14 Dec 2022 14:53:48 +0000
+To:     Zenghui Yu <yuzenghui@huawei.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        oleg@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+        wanghaibin.wang@huawei.com, zhouquan65@huawei.com,
+        sundongxu3@huawei.com
+Subject: Re: [PATCH] arm64: ptrace: Use ARM64_SME to guard the SME register
+ enumerations
+Message-ID: <Y5nj4WmHNUCSaDMZ@sirena.org.uk>
+References: <20221214135943.379-1-yuzenghui@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-7e003
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BQNb7uFIp4syjj72"
+Content-Disposition: inline
+In-Reply-To: <20221214135943.379-1-yuzenghui@huawei.com>
+X-Cookie: I disagree with unanimity.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,38 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 19:56:17 +0800, YC Hung wrote:
-> Coverity spotted that panic_info is not initialized to zero in
-> mtk_adsp_dump. Using uninitialized value panic_info.linenum when
-> calling snd_sof_get_status. Fix this coverity by initializing
-> panic_info struct as zero.
-> 
-> 
 
-Applied to
+--BQNb7uFIp4syjj72
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Wed, Dec 14, 2022 at 09:59:43PM +0800, Zenghui Yu wrote:
+> We currently guard REGSET_{SSVE, ZA} using ARM64_SVE for no good reason.
+> Both enumerations would be pointless without ARM64_SME and create two emp=
+ty
+> entries in aarch64_regsets[] which would then become part of a process's
+> native regset view (they should be ignored though).
+>=20
+> Switch to use ARM64_SME instead.
 
-Thanks!
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-[1/1] ASoC: SOF: mediatek: initialize panic_info to zero
-      commit: 7bd220f2ba9014b78f0304178103393554b8c4fe
+--BQNb7uFIp4syjj72
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-----BEGIN PGP SIGNATURE-----
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOZ4+AACgkQJNaLcl1U
+h9AHugf8CQA2r2CrjsV36di5ZaKR8pSFVsOrEianE/2KcHDA2BlWDR73Q23W/wRR
+idVbYoj+TB6BqMt+DWKwxgBWkNG0IFDf6MBOouQBKyHR1vUVypg7bWVwbcbw2yQA
+8YsnXtbCn4QYzXo2C5wQFhZCx7t2+LlsdGixZGAR1bzrADXRPMVOOtRfVgC1HvUU
+vUGlj0Y8XGpUBACrMQ98aYXmYBq/Y5FELEDHIVi4+X1R1GTAGyzbggSsF1vYAp+4
+6ZHxOJmyiNAERCwILkT9Q4kCvf7O8AfUvcPMcgCQHaEPA9uFCWchSQ5dzzeDm5/u
+wsyWRqSVjisM0YrPVEn6Ip6X51DUGA==
+=svIo
+-----END PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--BQNb7uFIp4syjj72--
