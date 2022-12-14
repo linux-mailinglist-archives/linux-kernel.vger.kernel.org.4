@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA6764CDF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5397364CE0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238969AbiLNQ1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S239039AbiLNQbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238774AbiLNQ1p (ORCPT
+        with ESMTP id S239000AbiLNQb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:27:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32195F98;
-        Wed, 14 Dec 2022 08:27:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B57661B45;
-        Wed, 14 Dec 2022 16:27:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA2EC433D2;
-        Wed, 14 Dec 2022 16:27:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671035261;
-        bh=sJ2dZlXlxbHZMLCuBdc37LA6k6jU4IYfv3YtQbdOTxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ocgdoyR03oml0AaBujgZuxX24w3KfCJBJBtRhcGRkOM71IEswAY7PsZUiZ5hGTI7X
-         AxPuWvAwN8nOAJzT9VxaMMtNIwLXR3qMsfJerjzkMM7g3dxg4QG7vS7kSfzVrDXAep
-         yh2ZpQdpghtbnmE8IDFPMV9AdM016IP0jLocXdmdBejeFpebKythqNPw06OfsaQTVH
-         TDtM45gPZWpXPrkHuF1QEtxcl8rwmP0jrGPBWp6ptWTLiaE1mnw6P/pO2P/D77UPOS
-         D3djAjY4oMrIZ8P3R+YegTOR4+8ETiOV0ox8aqnJMs/DqW9Wu1AF0ASjyssNKBnyHD
-         Qq9qhL+G5yO/A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A591A40367; Wed, 14 Dec 2022 13:27:38 -0300 (-03)
-Date:   Wed, 14 Dec 2022 13:27:38 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] tools: perf: Use "grep -E" instead of "egrep"
-Message-ID: <Y5n5esPQ0QkBpgda@kernel.org>
-References: <1668762999-9297-1-git-send-email-yangtiezhu@loongson.cn>
- <CAP-5=fXR58DQFkUW81KUs_f9cLTX=L28H1hkxXVzX3dUdRLBjw@mail.gmail.com>
- <ab41b1fe-4a59-2a6b-ee9f-785c98c48df5@loongson.cn>
- <CAP-5=fWtFktYKch+4Sv4zSHoW8SO96yEsyQgDKApyR20UjXhSA@mail.gmail.com>
+        Wed, 14 Dec 2022 11:31:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD83A6160
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671035442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MvzKkMsF15Ii2v8T6zm7fsybd7ToFL1MzDuE6XhV9TM=;
+        b=X42KlIpvwyLDWyE7XyyY2ikOE6OeBIM8rQSv9Nnl9MKRzfQru/IN3/bzNAO9QQ7koPgsUo
+        BplRZMqNoGjRSjCyn07qrG595kw6XlcSBlLdASfv0Cy+Nw5zlDM3zhH/DrLa9THpwPXUlb
+        MJ/Mvdyb9R+gbUpg3K+ydACDKEyGzLw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-247-f45xvxT8NXCBWf_Tz3vnyQ-1; Wed, 14 Dec 2022 11:30:29 -0500
+X-MC-Unique: f45xvxT8NXCBWf_Tz3vnyQ-1
+Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so917962wmb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:30:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MvzKkMsF15Ii2v8T6zm7fsybd7ToFL1MzDuE6XhV9TM=;
+        b=yXakH7oT2hkrCO8RfCpinX//nygrKP7rQ1hagsLvW+iwqy/mZH0wJToeIfT2Us+kOn
+         5Hgt+1PIIeZPkEMWfX3OMtmxJeWTpALuLaxtm2n+EG2ciLUpRNBc+nJnaQx2iBiRxPoD
+         cydlZm6c+dRB+vXoJ3JXJKe1Ugc+vAqOiatX2DcXs1MaJ+kOT3eLILeqOo6osMH5rE+X
+         kV6/HlOt8bZA3SB+O7ivKVmi70sS49u7WSCSi00NcTNgCTvFPB2gmDqTGucbSAmhXzoX
+         zEN/LHxhn0x56JJDZWiQc81CvJKOO3tIC6dWr9/bbicLt/tQSS25AxQ8HCTykNEBr3A8
+         rw/w==
+X-Gm-Message-State: ANoB5pnX5AmC8HOA38rdMQGlz3qEl8UghOF2k9ld/BcU9o2yWVsOiyF5
+        lw3SvxAn8sslNXd0FA7XJaxHHBE1UElEaApKcwWnKvkqjo2q88vboCV1/2jdnf3WhRtOHLP3H3z
+        frtj1fMVDJLoyH3Ae6Ov80IqR
+X-Received: by 2002:a5d:470a:0:b0:242:d4f:96c with SMTP id y10-20020a5d470a000000b002420d4f096cmr15025768wrq.0.1671035428443;
+        Wed, 14 Dec 2022 08:30:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4GfaS136t9dUD0TzONcVTtwml5/pPsXD/CEUDFgE57pufF23Sy+4PdxYOWCLOsS1OfTnwS5w==
+X-Received: by 2002:a5d:470a:0:b0:242:d4f:96c with SMTP id y10-20020a5d470a000000b002420d4f096cmr15025759wrq.0.1671035428229;
+        Wed, 14 Dec 2022 08:30:28 -0800 (PST)
+Received: from step1.redhat.com (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b002422816aa25sm3791759wrr.108.2022.12.14.08.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 08:30:27 -0800 (PST)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
+        stefanha@redhat.com, netdev@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [RFC PATCH 0/6] vdpa_sim: add support for user VA
+Date:   Wed, 14 Dec 2022 17:30:19 +0100
+Message-Id: <20221214163025.103075-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.38.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fWtFktYKch+4Sv4zSHoW8SO96yEsyQgDKApyR20UjXhSA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Nov 21, 2022 at 08:52:47AM -0800, Ian Rogers escreveu:
-> On Sun, Nov 20, 2022 at 6:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> >
-> >
-> >
-> > On 11/20/2022 02:17 AM, Ian Rogers wrote:
-> > > On Fri, Nov 18, 2022 at 1:17 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> > >>
-> > >> The latest version of grep claims the egrep is now obsolete so the build
-> > >> now contains warnings that look like:
-> > >>         egrep: warning: egrep is obsolescent; using grep -E
-> > >> fix this up by moving the related file to use "grep -E" instead.
-> > >>
-> > >>   sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/perf`
-> > >>
-> > >> Here are the steps to install the latest grep:
-> > >>
-> > >>   wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
-> > >>   tar xf grep-3.8.tar.gz
-> > >>   cd grep-3.8 && ./configure && make
-> > >>   sudo make install
-> > >>   export PATH=/usr/local/bin:$PATH
-> > >>
-> > >> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > >
-> > > Hi Tiezhu,
-> > >
-> > > installing a newer grep tool in order to build/test perf is somewhat
-> > > burdensome, as such I don't think we should merge this change. Looking
-> > > at my Debian derived distro. I have grep 3.7, so I'd need to do this.
-> > > I imagine the majority of people are using a grep earlier than 3.8. I
-> > > agree there is a problem perhaps we can:
-> > >  - rewrite to just need grep and not egrep;
-> > >  - rewrite in a stable language with regex support, perhaps python;
-> > >  - have a grep/egrep wrapper that selects based on version number.
-> > >
-> >
-> > Hi Ian,
-> >
-> > I found this issue on Linux From Scratch system which uses grep 3.8 [0],
-> > we can see the following NEWS in grep-3.8 release announcement [1]:
-> >
-> > "The egrep and fgrep commands, which have been deprecated since
-> >   release 2.5.3 (2007), now warn that they are obsolescent and should
-> >   be replaced by grep -E and grep -F."
-> >
-> > Additionally, the next grep rpm/deb version is 3.8 on Fedora [2]
-> > and Debian [3], so use "grep -E" instead of "egrep" so we won't see
-> > the warning for various versions of grep.
-> >
-> > [0] https://linuxfromscratch.org/~thomas/multilib/chapter06/grep.html
-> > [1] https://savannah.gnu.org/forum/forum.php?forum_id=10227
-> > [2] https://packages.fedoraproject.org/pkgs/grep/grep/fedora-rawhide.html
-> > [3] https://packages.debian.org/sid/grep
-> >
-> > Thanks,
-> > Tiezhu
-> 
-> Thanks Tiezhu,
-> 
-> My grep is 3.7 and has -E support. In the changelog I see:
-> 
-> ```
-> 2021-08-14  Jim Meyering  <meyering@fb.com>
-> 
->        version 3.7
->        * NEWS: Record release date.
-> ```
-> 
-> So I'm guessing 3.8 is newer than is necessary for this change, but
-> demonstrates the warning issue your change addresses. Arnaldo's build
-> compatibility scripts should be able to spot further issues.
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
+This series adds support for the use of user virtual addresses in the
+vDPA simulator devices.
 
-Thanks, applied.
+The main reason for this change is to lift the pinning of all guest memory.
+Especially with virtio devices implemented in software.
 
-- Arnaldo
+The next step would be to generalize the code in vdpa-sim to allow the
+implementation of in-kernel software devices. Similar to vhost, but using vDPA
+so we can reuse the same software stack (e.g. in QEMU) for both HW and SW
+devices.
+
+For example, we have never merged vhost-blk, and lately there has been interest.
+So it would be nice to do it directly with vDPA to reuse the same code in the
+VMM for both HW and SW vDPA block devices.
+
+The main problem (addressed by this series) was due to the pinning of all
+guest memory, which thus prevented the overcommit of guest memory.
+
+There are still some TODOs to be fixed, but I would like to have your feedback
+on this RFC.
+
+Thanks,
+Stefano
+
+Note: this series is based on Linux v6.1 + couple of fixes (that I needed to
+run libblkio tests) already posted but not yet merged.
+
+Tree available here: https://gitlab.com/sgarzarella/linux/-/tree/vdpa-sim-use-va
+
+Stefano Garzarella (6):
+  vdpa: add bind_mm callback
+  vhost-vdpa: use bind_mm device callback
+  vringh: support VA with iotlb
+  vdpa_sim: make devices agnostic for work management
+  vdpa_sim: use kthread worker
+  vdpa_sim: add support for user VA
+
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |   7 +-
+ include/linux/vdpa.h                 |   8 +
+ include/linux/vringh.h               |   5 +-
+ drivers/vdpa/mlx5/core/resources.c   |   3 +-
+ drivers/vdpa/mlx5/net/mlx5_vnet.c    |   2 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     | 132 +++++++++++++-
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |   6 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c |   6 +-
+ drivers/vhost/vdpa.c                 |  22 +++
+ drivers/vhost/vringh.c               | 250 +++++++++++++++++++++------
+ 10 files changed, 370 insertions(+), 71 deletions(-)
+
+-- 
+2.38.1
 
