@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09B364D09C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6299664D0AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiLNUE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S229863AbiLNUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiLNUDk (ORCPT
+        with ESMTP id S229834AbiLNUE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:03:40 -0500
+        Wed, 14 Dec 2022 15:04:58 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C182ED42
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:58:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339F5303D0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:59:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D4mbWoI/BMsxaMSLndE9NzSrR7QAr2JilFiw1m28l/E=; b=FH/mTlfjS7KPLhJKuJ5YOFmSqd
-        R6yFovbOxTsT717WdxIUe0ntmN9V5tF3bQoEe/l1FXtwPM+HqM8Ayk7DB114Hn3NYcbfoZUr22y91
-        GANrMH9Wr7tM1cA/UKHCuruxbTgMWUgKYD00AWfqOEBRXfd/Pr4z9Z8uS5wlfZR9fD/8K7drcKMiS
-        jr/RpYkPJ0rA34kx38DtvUPw5Y5J7b+ABfgsAWYhaxHR6wCWSShbHSuNExJX9yXCthlIDL0PONKKG
-        M8BCnFmUMZolbnVbNPDASsfsA8cbcIDsgbPOiOnfW5RQz5OnhjneTVsa5wP3JVncG0CqWt9YlNCi3
-        rBDex6cA==;
+        bh=FCkmKp6qRdzY4218z4Qz5n+H1gb6si/dZrIGWhAOD+4=; b=XJFCP3G4532SsqnxWYSLuQzarv
+        t1bZPK+0E3nbXA1g+EMo22YjF4fORvKqH49lpnkiYB7oN3NuLQsWewuKPz8+UKxv2fBvOC9sCsEa8
+        oQS64dKZSIYL3xyKqviULqT3LAppShx3A1JJ8hr0Gx3BqxhcVZcVztjXV7V+hOvnoYoM6INWIzART
+        ClENptA9GIrKA++8nbfYDnLQnLxEkW1ltLCUkiQI7S9Jjo326tU/4nh9Up6AMzkyoBfg1RBcKn1C1
+        8Z6VVZ0G6XP3sRObNfH186VUAL3KJx8y76oiPzK8DK/WG6OOCuFUtZdA7SQw76Dj2f1A3b/BnlR9L
+        Mko8w2Fg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5Xt8-002O5K-Oy; Wed, 14 Dec 2022 19:57:58 +0000
-Date:   Wed, 14 Dec 2022 11:57:58 -0800
+        id 1p5Xup-002P2m-O8; Wed, 14 Dec 2022 19:59:43 +0000
+Date:   Wed, 14 Dec 2022 11:59:43 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Schspa Shi <schspa@gmail.com>, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
         syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
         syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
-        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] umh: fix UAF when the process is being killed
-Message-ID: <Y5oqxh2jnarlEKNG@bombadil.infradead.org>
-References: <20221115140233.21981-1-schspa@gmail.com>
- <m2zgc2vzwx.fsf@gmail.com>
- <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
- <m2bko8c0yh.fsf@gmail.com>
- <m2pmcoag55.fsf@gmail.com>
- <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com,
+        syzbot+c92c6a251d49ceceb625@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2] umh: fix out of scope usage when the process is being
+ killed
+Message-ID: <Y5orL90JpH6LUd4D@bombadil.infradead.org>
+References: <20221214134656.21228-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+In-Reply-To: <20221214134656.21228-1-schspa@gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -61,122 +54,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter, Ingo, Steven would like you're review.
-
-On Tue, Dec 13, 2022 at 03:03:53PM -0800, Luis Chamberlain wrote:
-> On Mon, Dec 12, 2022 at 09:38:31PM +0800, Schspa Shi wrote:
-> > I'd like to upload a V2 patch with the new solution if you prefer the
-> > following way.
-> > 
-> > diff --git a/kernel/umh.c b/kernel/umh.c
-> > index 850631518665..8023f11fcfc0 100644
-> > --- a/kernel/umh.c
-> > +++ b/kernel/umh.c
-> > @@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
-> >                 /* umh_complete() will see NULL and free sub_info */
-> >                 if (xchg(&sub_info->complete, NULL))
-> >                         goto unlock;
-> > +               /*
-> > +                * kthreadd (or new kernel thread) will call complete()
-> > +                * shortly.
-> > +                */
-> > +               wait_for_completion(&done);
-> >         }
+On Wed, Dec 14, 2022 at 09:46:56PM +0800, Schspa Shi wrote:
+> When the process is killed, wait_for_completion_state will return with
+> -ERESTARTSYS, and the completion variable in the stack will be unavailable,
+> even freed. If the user-mode thread is complete at the same time, there
+> will be a race to use a unavailable variable.
 > 
-> Yes much better. Did you verify it fixes the splat found by the bots?
+> Please refer to the following scenarios.
+>             T1                                  T2
+> ------------------------------------------------------------------
+> call_usermodehelper_exec
+>                                    call_usermodehelper_exec_async
+>                                    << do something >>
+>                                    umh_complete(sub_info);
+>                                    comp = xchg(&sub_info->complete, NULL);
+>                                    /* we got the completion */
+>                                    << context switch >>
+> 
+>     << Being killed >>
+> 	retval = wait_for_completion_state(sub_info->complete, state);
+> 	if (!retval)
+> 		goto wait_done;
+> 
+> 	if (wait & UMH_KILLABLE) {
+> 		/* umh_complete() will see NULL and free sub_info */
+> 		if (xchg(&sub_info->complete, NULL))
+> 			goto unlock;
+>         << we can't got the completion, because T2 take it already >>
+> 	}
+> 	....
+> 	return retval;
+> }
+> 
+> /**
+>  * the completion variable in stack is end of life cycle.
+>  * and maybe freed due to process is recycled.
+>  */
+>                                    -------- BUG here----------
+>                                    if (comp)
+>                                        complete(comp);
+> 
+> To fix it, we can add an additional wait_for_completion to ensure the
+> completion object is completely unused. And this is what
+> kthread_create_on_node does to handle this race.
+> 
+> Reported-by: syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com
+> Reported-by: syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com
+> Reported-by: syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+> Reported-by: syzbot+c92c6a251d49ceceb625@syzkaller.appspotmail.com
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
 
-Wait, I'm not sure yet why this would fix it... I first started thinking
-that this may be a good example of a Coccinelle SmPL rule, something like:
+Please fix the commit log a bit more with the cotext I provided, *if*
+on the other thread the community agrees with the approach to be
+compartamentalized. I am still not sure why this would fix the
+UAF after thinking about it some more, and the issue would mean
+there likely could be a generic fix / issue to consider.
 
-	DECLARE_COMPLETION_ONSTACK(done);
-	foo *foo;
-	...
-	foo->completion = &done;
-	...
-	queue_work(system_unbound_wq, &foo->work);
-	....
-	ret = wait_for_completion_state(&done, state);
-	...
-	if (!ret)
-		S
-	...
-	+wait_for_completion(&done);
+So for now I'd like more review of this race and the proposed fix
+as I mentioned in the follow-up threaad in your v1 patch. Let's
+follow up there and see how that discussion goes.
 
-But that is pretty complex, and while it may be useful to know how many
-patterns we have like this, it begs the question if generalizing this
-inside the callers is best for -ERESTARTSYS condition is best. What
-do folks think?
-
-The rationale here is that if you queue stuff and give access to the
-completion variable but its on-stack obviously you can end up with the
-queued stuff complete() on a on-stack variable. The issue seems to
-be that wait_for_completion_state() for -ERESTARTSYS still means
-that the already scheduled queue'd work is *about* to run and
-the process with the completion on-stack completed. So we race with
-the end of the routine and the completion on-stack.
-
-It makes me wonder if wait_for_completion() above really is doing
-something more, if it is just helping with timing and is still error
-prone.
-
-The queued work will try the the completion as follows:
-
-static void umh_complete(struct subprocess_info *sub_info)
-{
-	struct completion *comp = xchg(&sub_info->complete, NULL);              
-	/*
-	 * See call_usermodehelper_exec(). If xchg() returns NULL
-	 * we own sub_info, the UMH_KILLABLE caller has gone away
-	 * or the caller used UMH_NO_WAIT.
-	 */
-	if (comp)
-		complete(comp);
-	else
-		call_usermodehelper_freeinfo(sub_info);
-}
-
-So the race is getting -ERESTARTSYS on the process with completion
-on-stack and the above running complete(comp). Why would sprinkling
-wait_for_completion(&done) *after* wait_for_completion_state(&done, state)
-fix this UAF?
-												    }   
-diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
-index d57a5c1c1cd9..aa7031faca04 100644
---- a/kernel/sched/completion.c
-+++ b/kernel/sched/completion.c
-@@ -205,8 +205,10 @@ int __sched wait_for_completion_interruptible(struct completion *x)
- {
- 	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_INTERRUPTIBLE);
- 
--	if (t == -ERESTARTSYS)
-+	if (t == -ERESTARTSYS) {
-+		wait_for_completion(x);
- 		return t;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL(wait_for_completion_interruptible);
-@@ -243,8 +245,10 @@ int __sched wait_for_completion_killable(struct completion *x)
- {
- 	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, TASK_KILLABLE);
- 
--	if (t == -ERESTARTSYS)
-+	if (t == -ERESTARTSYS) {
-+		wait_for_completion(x);
- 		return t;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL(wait_for_completion_killable);
-@@ -253,8 +257,10 @@ int __sched wait_for_completion_state(struct completion *x, unsigned int state)
- {
- 	long t = wait_for_common(x, MAX_SCHEDULE_TIMEOUT, state);
- 
--	if (t == -ERESTARTSYS)
-+	if (t == -ERESTARTSYS) {
-+		wait_for_completion(x);
- 		return t;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL(wait_for_completion_state);
+  Luis
