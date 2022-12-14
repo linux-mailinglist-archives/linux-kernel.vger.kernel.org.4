@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850B564C1AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A354B64C1EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237649AbiLNBKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 20:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S236925AbiLNBqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 20:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236705AbiLNBKL (ORCPT
+        with ESMTP id S229870AbiLNBqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 20:10:11 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557BA2253B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:10:10 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NWy1c43YRzlW11;
-        Wed, 14 Dec 2022 09:09:08 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 14 Dec 2022 09:10:06 +0800
-Message-ID: <8693c37b-f709-4c63-eac6-418c32b80e7e@huawei.com>
-Date:   Wed, 14 Dec 2022 09:10:06 +0800
+        Tue, 13 Dec 2022 20:46:30 -0500
+X-Greylist: delayed 1876 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 17:46:28 PST
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 282851CFEA
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=5ip81
+        +wNz5xtBTBVts1Fb1RLCzaC6pg2EyPJm4Juic8=; b=WEOsSfCUJD0aqoNqa9gyi
+        zDrK9ScOUzX3F9KIH7ev+bBMnNOouQ9wRY6ki/oEBZYLLRFa/ljjipw9ZAuzNkOv
+        7VgYDPCGBxDRTsgj57247iUifpDQcz/GzSqySG0HpY6PS4Ml+5AhGJwhuVh7b58v
+        inMlebLPIF68I1w7v8+0G0=
+Received: from localhost.localdomain (unknown [117.136.79.146])
+        by smtp2 (Coremail) with SMTP id DMmowADHz7MtI5lj3iuJEw--.5203S2;
+        Wed, 14 Dec 2022 09:13:20 +0800 (CST)
+From:   Lixue Liang <lianglixuehao@126.com>
+To:     anthony.l.nguyen@intel.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jesse.brandeburg@intel.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        richardcochran@gmail.com, ast@kernel.org,
+        lianglixue@greatwall.com.cn, intel-wired-lan@lists.osuosl.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v7] igb: Assign random MAC address instead of fail in case of invalid one
+Date:   Wed, 14 Dec 2022 01:12:14 +0000
+Message-Id: <20221214011214.51836-1-lianglixuehao@126.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH -next 1/8] mm: memory_hotplug: add pfn_to_online_folio()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        SeongJae Park <sj@kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>,
-        <vishal.moola@gmail.com>
-References: <20221213092735.187924-1-wangkefeng.wang@huawei.com>
- <20221213092735.187924-2-wangkefeng.wang@huawei.com>
- <f07d1c95-f13c-682b-0519-0b137ccdc631@redhat.com>
- <801ccbe2-08b8-e1cb-9aee-614d59a807d2@huawei.com>
- <Y5iQkmjj1ISoTWAF@casper.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <Y5iQkmjj1ISoTWAF@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-CM-TRANSID: DMmowADHz7MtI5lj3iuJEw--.5203S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZw1ruFWxAr17Ar43tF4xJFb_yoW5uF4Upa
+        y0gF43Wryktr47Zw4kWw4xZF95W3WDJ3yfGa9xZw1F9FnIv34DArW8K343Jry0qrZYkayx
+        Jr17ZFZ7ua1qva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UR89NUUUUU=
+X-Originating-IP: [117.136.79.146]
+X-CM-SenderInfo: xold0w5ol03vxkdrqiyswou0bp/xtbBGgnXFl-HaSMZAgAAsb
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lixue Liang <lianglixue@greatwall.com.cn>
 
-On 2022/12/13 22:47, Matthew Wilcox wrote:
-> On Tue, Dec 13, 2022 at 08:13:31PM +0800, Kefeng Wang wrote:
->> On 2022/12/13 19:40, David Hildenbrand wrote:
->>> On 13.12.22 10:27, Kefeng Wang wrote:
->>>> Introduce a wrapper function pfn_to_online_folio(), which calls
->>>> pfn_to_online_page() and returns the folio of the page found,
->>>> or null if no page.
->>>>
->>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>> ---
->>>>    include/linux/memory_hotplug.h | 7 +++++++
->>>>    1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/include/linux/memory_hotplug.h
->>>> b/include/linux/memory_hotplug.h
->>>> index 9fcbf5706595..e841e4fb52a7 100644
->>>> --- a/include/linux/memory_hotplug.h
->>>> +++ b/include/linux/memory_hotplug.h
->>>> @@ -265,6 +265,13 @@ static inline void
->>>> pgdat_kswapd_unlock(pg_data_t *pgdat) {}
->>>>    static inline void pgdat_kswapd_lock_init(pg_data_t *pgdat) {}
->>>>    #endif /* ! CONFIG_MEMORY_HOTPLUG */
->>>>    +static inline struct folio *pfn_to_online_folio(unsigned long pfn)
->>>> +{
->>>> +    struct page *page = pfn_to_online_page(pfn);
->>>> +
->>>> +    return page ? page_folio(page) : NULL;
->>>> +}
->>> Who guarantees that page_folio() is safe and stable at that point?
->>>
->>> IIRC, that's very tricky. We could have the page concurrently getting
->>> freed and the folio dissolved.
->> So the caller should consider this,  lock or get the folio in the caller?
-> The caller only has a pfn; it doesn't have the folio at the time of
-> the call.  David is right, this function cannot safely exist.
-Thanks fro all the advises from David/Matthew/SeongJae,  will rethink 
-this converting.
->
+Add the module parameter "allow_invalid_mac_address" to control the
+behavior. When set to true, a random MAC address is assigned, and the
+driver can be loaded, allowing the user to correct the invalid MAC address.
+
+Signed-off-by: Lixue Liang <lianglixue@greatwall.com.cn>
+---
+Changelog:
+* v7:
+  - To group each parameter together
+Suggested-by Tony Nguyen <anthony.l.nguyen@intel.com>
+* v6:
+  - Modify commit messages and naming of module parameters
+  - [PATCH v6] link:
+    https://lore.kernel.org/netdev/20220610023922.74892-1-lianglixuehao@126.com/
+Suggested-by Paul <pmenzel@molgen.mpg.de>
+* v5:
+  - Through the setting of module parameters, it is allowed to complete
+    the loading of the igb network card driver with an invalid MAC address.
+  - [PATCH v5] link:
+    https://lore.kernel.org/netdev/20220609083904.91778-1-lianglixuehao@126.com/
+Suggested-by <alexander.duyck@gmail.com>
+* v4:
+  - Change the igb_mian in the title to igb
+  - Fix dev_err message: replace "already assigned random MAC address"
+    with "Invalid MAC address. Assigned random MAC address"
+  - [PATCH v4] link:
+    https://lore.kernel.org/netdev/20220601150428.33945-1-lianglixuehao@126.com/
+Suggested-by Tony <anthony.l.nguyen@intel.com>
+
+* v3:
+  - Add space after comma in commit message
+  - Correct spelling of MAC address
+  - [PATCH v3] link:
+    https://lore.kernel.org/netdev/20220530105834.97175-1-lianglixuehao@126.com/
+Suggested-by Paul <pmenzel@molgen.mpg.de>
+
+* v2:
+  - Change memcpy to ether_addr_copy
+  - Change dev_info to dev_err
+  - Fix the description of the commit message
+  - Change eth_random_addr to eth_hw_addr_random
+  - [PATCH v2] link:
+    https://lore.kernel.org/netdev/20220512093918.86084-1-lianglixue@greatwall.com.cn/
+Reported-by: kernel test robot <lkp@intel.com>
+
+ drivers/net/ethernet/intel/igb/igb_main.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index f8e32833226c..8ff0c698383c 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -241,6 +241,10 @@ static int debug = -1;
+ module_param(debug, int, 0);
+ MODULE_PARM_DESC(debug, "Debug level (0=none,...,16=all)");
+ 
++static bool allow_invalid_mac_address;
++module_param(allow_invalid_mac_address, bool, 0);
++MODULE_PARM_DESC(allow_invalid_mac_address, "Allow NIC driver to be loaded with invalid MAC address");
++
+ struct igb_reg_info {
+ 	u32 ofs;
+ 	char *name;
+@@ -3358,9 +3362,16 @@ static int igb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	eth_hw_addr_set(netdev, hw->mac.addr);
+ 
+ 	if (!is_valid_ether_addr(netdev->dev_addr)) {
+-		dev_err(&pdev->dev, "Invalid MAC Address\n");
+-		err = -EIO;
+-		goto err_eeprom;
++		if (!allow_invalid_mac_address) {
++			dev_err(&pdev->dev, "Invalid MAC address\n");
++			err = -EIO;
++			goto err_eeprom;
++		} else {
++			eth_hw_addr_random(netdev);
++			ether_addr_copy(hw->mac.addr, netdev->dev_addr);
++			dev_err(&pdev->dev,
++				"Invalid MAC address. Assigned random MAC address\n");
++		}
+ 	}
+ 
+ 	igb_set_default_mac_filter(adapter);
+-- 
+2.27.0
+
