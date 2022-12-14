@@ -2,102 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CDC64C91D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72EC64C923
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbiLNMgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S238454AbiLNMjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238424AbiLNMf5 (ORCPT
+        with ESMTP id S238297AbiLNMil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:35:57 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B8213F93;
-        Wed, 14 Dec 2022 04:34:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671021254; x=1702557254;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gLUmLxK/mwLgHaeh9UkBdZ9YGpWxeUp7JgHpb5LXdic=;
-  b=Kc8ofrMAROV/GHCMIe845KKqAg5nG5w1Sq/xbiwHeOMaSpdGs3MH4Ymn
-   8IB/0AHC8yQfmPyhOFGvJVhzU5pIfpCq6H2QMm4jNQxEaMgp8PPs2UzTa
-   w5JSmGofyNpS17+oUB4KYI9zInMwvH5hXuq3PVsO+tKdh/D2KZrGzuHCs
-   nCWEEHARafv+Q7TQuS9/oy92jX5yGcn9tkUjyRZ6yLGweD4u/EPgoMtPO
-   ReSnscCE7Wkljehw/o9uKBLN7NG5ZoWe19l1h2XENkemLYckAghrm5GtZ
-   Jp2UUgyI6b9H4/1bLzmWY7vUYGc0qPPejd2LX09kBnQcW2ZvngTBnjpN7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="345460237"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="345460237"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 04:34:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="823243981"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="823243981"
-Received: from joe-255.igk.intel.com (HELO localhost) ([172.22.229.67])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 04:34:00 -0800
-Date:   Wed, 14 Dec 2022 13:33:58 +0100
-From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     david.keisarschm@mail.huji.ac.il,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        dri-devel@lists.freedesktop.org, Song Liu <song@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-mtd@lists.infradead.org, Stanislav Fomichev <sdf@google.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Christoph Lameter <cl@linux.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Richard Weinberger <richard@nod.at>, x86@kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>, ilay.bahat1@gmail.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        David Rientjes <rientjes@google.com>,
-        Yonghong Song <yhs@fb.com>, Paolo Abeni <pabeni@redhat.com>,
-        intel-gfx@lists.freedesktop.org, Petr Mladek <pmladek@suse.com>,
-        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Hannes Reinecke <hare@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        aksecurity@gmail.com, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/5] Renaming weak prng invocations -
- prandom_bytes_state, prandom_u32_state
-Message-ID: <20221214123358.GA1062210@linux.intel.com>
-References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
- <b3caaa5ac5fca4b729bf1ecd0d01968c09e6d083.1670778652.git.david.keisarschm@mail.huji.ac.il>
- <Y5c8KLzJFz/XZMiM@zx2c4.com>
+        Wed, 14 Dec 2022 07:38:41 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CC23BC3;
+        Wed, 14 Dec 2022 04:37:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1671021430; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=HLzDDpFo+NMrWAFFyUZ9LuVUJTHVwxs+VXTyDfaqs9Q=;
+        b=xop6fV11aNUmenrUx59Oup4N5Niw2ZMg1q1ul/H5H7lsj2z9Ci1uiyTU528q8AiTyTzSCP
+        gX69xAHuHtARmUqSyjNNI+M61CdYnQeokcms2dEbkWQmRs8yugxr9XwDNztgvl89Cy9d/I
+        IpUOFSv9WkaFsPih5Lo7Ai3EzrPj3vI=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH] clk: ingenic: jz4760: Update M/N/OD calculation algorithm
+Date:   Wed, 14 Dec 2022 13:37:04 +0100
+Message-Id: <20221214123704.7305-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5c8KLzJFz/XZMiM@zx2c4.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,14 +43,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 03:35:20PM +0100, Jason A. Donenfeld wrote:
-> Please CC me on future revisions.
-> 
-> As of 6.2, the prandom namespace is *only* for predictable randomness.
-> There's no need to rename anything. So nack on this patch 1/5.
+The previous algorithm was pretty broken.
 
-It is not obvious (for casual developers like me) that p in prandom
-stands for predictable. Some renaming would be useful IMHO.
+- The inner loop had a '(m > m_max)' condition, and the value of 'm'
+  would increase in each iteration;
 
-Regards
-Stanislaw
+- Each iteration would actually multiply 'm' by two, so it is not needed
+  to re-compute the whole equation at each iteration;
+
+- It would loop until (m & 1) == 0, which means it would loop at most
+  once.
+
+- The outer loop would divide the 'n' value by two at the end of each
+  iteration. This meant that for a 12 MHz parent clock and a 1.2 GHz
+  requested clock, it would first try n=12, then n=6, then n=3, then
+  n=1, none of which would work; the only valid value is n=2 in this
+  case.
+
+Simplify this algorithm with a single for loop, which decrements 'n'
+after each iteration, addressing all of the above problems.
+
+Fixes: bdbfc029374f ("clk: ingenic: Add support for the JZ4760")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/clk/ingenic/jz4760-cgu.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
+index ecd395ac8a28..e407f00bd594 100644
+--- a/drivers/clk/ingenic/jz4760-cgu.c
++++ b/drivers/clk/ingenic/jz4760-cgu.c
+@@ -58,7 +58,7 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
+ 		       unsigned long rate, unsigned long parent_rate,
+ 		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
+ {
+-	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 2;
++	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 1;
+ 
+ 	/* The frequency after the N divider must be between 1 and 50 MHz. */
+ 	n = parent_rate / (1 * MHZ);
+@@ -66,19 +66,17 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
+ 	/* The N divider must be >= 2. */
+ 	n = clamp_val(n, 2, 1 << pll_info->n_bits);
+ 
+-	for (;; n >>= 1) {
+-		od = (unsigned int)-1;
++	rate /= MHZ;
++	parent_rate /= MHZ;
+ 
+-		do {
+-			m = (rate / MHZ) * (1 << ++od) * n / (parent_rate / MHZ);
+-		} while ((m > m_max || m & 1) && (od < 4));
+-
+-		if (od < 4 && m >= 4 && m <= m_max)
+-			break;
++	for (m = m_max; m >= m_max && n >= 2; n--) {
++		m = rate * n / parent_rate;
++		od = m & 1;
++		m <<= od;
+ 	}
+ 
+ 	*pm = m;
+-	*pn = n;
++	*pn = n + 1;
+ 	*pod = 1 << od;
+ }
+ 
+-- 
+2.35.1
+
