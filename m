@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D99E64C94A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C3664C94E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238243AbiLNMwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:52:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S237739AbiLNMxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbiLNMwW (ORCPT
+        with ESMTP id S229479AbiLNMxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:52:22 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48DDEA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:52:20 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j4so10335098lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:52:20 -0800 (PST)
+        Wed, 14 Dec 2022 07:53:42 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B768C2615
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:53:41 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id c1so10263015lfi.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:53:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bOzLANzPj3qqEgUCYYhmz4gk7XnLzZTtTOuImpLgf1Q=;
-        b=g882j4BHETUyLzMuaQ1dl9SK2tMiL5X1K95rHl30cRk8TwVVTCTGS6Nz5+rBn/6Km4
-         S2f3eLMcig+X5LDwTd30zOWTTJ+rnbjB9621TB/ob/OSV/kFk1NvGAhrEUKOHnKlhoB3
-         gnNXWmWSv0T1WY48yxj+4QaB3ZcSB3BWp/xTNTZmtTuIBEeolcsuxpMsczbfLBhggSY4
-         2lJU9ENlv/n2ZxswSYkkT12k9D52/I1G5n6F7zZf0DNm81YveLzqg3g9CqUKxFCJMKC+
-         0t5pQ7shMGAjY9CfT7pTix/tx1wIcJtDzHyDYUywwDC5CGWluaFFkhTwyeSkR87Gk8Cm
-         Xeuw==
+        bh=XK95zLBX9Dtieu1aqBT/9HXsnzsIwMAqX7jYd/9IRMA=;
+        b=Tw1gNdqSJGWzoTjJm1lgEogkgPhRAY7KSerdf8VkmwzSGABPwrJzcGirLVqSoPw27G
+         mKIU2AxuV6q813f3xULTZQQBUlb8XSxhZaeFtTWs4Z9yyPH5nZYstDspcYHm7JqSBgca
+         aUiLt2hEm4/wpzndv2MFkr1RhfztFMos0VcKNIbnjrqiYBUYl9a0sXh72UQdsI88NYWN
+         a1N7Q5Wan85/XtfCTBDBdoVmxn8lVpg69NmcEMg0NZlgr1iAtKWSwEUurazhUU3cokC3
+         B7X9mwGN8Nz1XLv1Ej8ddFQqoATKIITxLybaY3J5YW37EuU+ohyYPx3+j+62NUXaFLuY
+         dbTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bOzLANzPj3qqEgUCYYhmz4gk7XnLzZTtTOuImpLgf1Q=;
-        b=zaP2adiHkT8dOWz5AvPaBTF0DRjcXFbiu2DfJ2wdlgg6rwm16GwwPQhDfjjwTI9rNA
-         LSnkilC0qp8H9wgvTMV7KnRUOFyJ2CgRhK/yVEUsKPc7SVIh0mfdu8QGY/qyNMCs4mYG
-         wApBiywFT7jXvz5vCdqBMgZtl3aWJkoGBE3V3SYuVOWgeeS3os/Ildt3I3Qle1GsqF4U
-         HlLQH6NgKgB+LwxRcLDSh4EjdNUet1HA2B1uqTh7ol0dRM17u3gd6pXdG+olms2xcFqd
-         ET5zT2bhMya00rWDNWWpVw1Q7BfGBTyOUrSoLErW1dCL0OW0ygMMcIk6PGgA986Lzizt
-         MU+w==
-X-Gm-Message-State: ANoB5pmPdogNYBcrY5XYmaAfYXUMFtmW6dZa9P3qZ9nIPmhhM7xSI9nb
-        Uv6syQ9v74wkVIl5TYj8/rfGlQ==
-X-Google-Smtp-Source: AA0mqf4dF4ukgIzu7bnEA0PtZdeNo5htPr4cov7SEOn6tQOU7yoos5cHOcoiiKc7qq/yhV+2jCQ4yw==
-X-Received: by 2002:a05:6512:1599:b0:4b6:f119:c820 with SMTP id bp25-20020a056512159900b004b6f119c820mr3177858lfb.40.1671022339165;
-        Wed, 14 Dec 2022 04:52:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac25b8b000000b00492b494c4e8sm794858lfn.298.2022.12.14.04.52.18
+        bh=XK95zLBX9Dtieu1aqBT/9HXsnzsIwMAqX7jYd/9IRMA=;
+        b=UGLzdKLwk6SGbWqfckCzr+1VidlDDz8+9g7WFRPUPzRugBuyEgU8rHlfyvCbT2CzeQ
+         5AI0MVefVWEh6jiwy9DFgnBLPK5v3xJgGp/38qQy5qBvYevsoZLai5LPr6NibSxXb7Hu
+         +K05nAB0xtwBcR31mTg9OKJR2VazdrSD7U9M6q+b82teF+/o4i6/tNk7wihYwFafMEY9
+         I4SsxAN6ndeNgc0PXQekRBgNlV5Clb4IJDYRCKE8soyAZxwyMBcbWPWnT2FUSvUqetRW
+         ubiLjRbem/yD25Vin3ZmPmTUq6EucJCPsyekIXjcTDFnGXfELY+cRgUiQKjDDsYmMUVT
+         rL/Q==
+X-Gm-Message-State: ANoB5plUD6kyM+SSVMr64r4P2Z/oBnC45Dj2p3W2H/5bjkI1Kvh+cYwt
+        vms+NKSzFGGkB/009VQ9U7aL6A==
+X-Google-Smtp-Source: AA0mqf6iiztO0ZW8Bq4J+cymQz8gXYvbwZweyy6yLRNNGO4+febt/gdFadXTAHSOU4TxpKIHcy2lsA==
+X-Received: by 2002:a05:6512:3050:b0:4b5:1545:222b with SMTP id b16-20020a056512305000b004b51545222bmr7985241lfb.47.1671022420105;
+        Wed, 14 Dec 2022 04:53:40 -0800 (PST)
+Received: from [192.168.1.101] (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id u15-20020ac258cf000000b004a47e7b91c4sm793797lfo.195.2022.12.14.04.53.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 04:52:18 -0800 (PST)
-Message-ID: <eca6f882-ad01-5b41-bb7e-552193e4a903@linaro.org>
-Date:   Wed, 14 Dec 2022 13:52:17 +0100
+        Wed, 14 Dec 2022 04:53:39 -0800 (PST)
+Message-ID: <db668bab-ab6e-32a0-872b-5118a6f5cdaa@linaro.org>
+Date:   Wed, 14 Dec 2022 13:53:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
+ Thunderbird/102.6.0
 Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
  qup2_i2c18 nodes
 Content-Language: en-US
-To:     Brian Masney <bmasney@redhat.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        quic_shazhuss@quicinc.com
+To:     Brian Masney <bmasney@redhat.com>, quic_shazhuss@quicinc.com
 Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, johan+linaro@kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -69,7 +67,7 @@ Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 References: <20221212182314.1902632-1-bmasney@redhat.com>
  <20221212182314.1902632-4-bmasney@redhat.com>
  <309b3fad-933c-6c45-5cd7-4e082da62c15@linaro.org> <Y5nB1epKN4nbk3ma@x1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 In-Reply-To: <Y5nB1epKN4nbk3ma@x1>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
@@ -82,7 +80,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 13:30, Brian Masney wrote:
+
+
+On 14.12.2022 13:30, Brian Masney wrote:
 > On Tue, Dec 13, 2022 at 03:48:27PM +0100, Konrad Dybcio wrote:
 >>> +	qup1_i2c15_default: qup1-i2c15-state {
 >>> +		mux-pins {
@@ -141,6 +141,9 @@ On 14/12/2022 13:30, Brian Masney wrote:
 >             bias-pull-up;
 >         };
 >     };
+Unless you made a typo somewhere, I genuinely have no explanation for this..
+
+Konrad
 > 
 > 
 > Shazad: 'i2cdetect -a -y $BUSNUM) shows that all 5 buses have the same
@@ -162,9 +165,13 @@ On 14/12/2022 13:30, Brian Masney wrote:
 > buses. I checked them against what's in the downstream kernel and I also
 > checked them against what's in upstream's
 > drivers/pinctrl/qcom/pinctrl-sc8280xp.c. This is the pin mapping that I
-
-What's the base of this kernel? Are you sure you have d21f4b7ffc22?
-
-Best regards,
-Krzysztof
-
+> have:
+> 
+>     i2c0: gpio135, gpio136
+>     i2c1: gpio158, gpio159
+>     i2c12: gpio0, gpio1
+>     i2c15: gpio36, gpio37
+>     i2c18: gpio66, gpio67
+> 
+> Brian
+> 
