@@ -2,242 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694A64D000
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CDA64D008
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiLNTTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S238759AbiLNTVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239187AbiLNTSo (ORCPT
+        with ESMTP id S237464AbiLNTVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:18:44 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEF82B624
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:18:18 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id ay32so3278926qtb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QyIMB4aEXbSB/ScB2Z9iWYKFxuCY76NBvLKj0Z9Cka8=;
-        b=lqVQ04g+K8H0vQxnHcPEdP0C8ZtjVr94RzJUqtsq6gCo8F0KEKdnd5us4urq3FADUE
-         SHp0jzKfwNPNmj2EC1hKU6sesci1Y31JqlPkJmq1RkImcw4USFqVulx8nvA1UU3ztibc
-         XNviS3yO9XTrX60oOEZhB42pcBzjbdatOqQG5lTJKc89ZuOYq8avkrRODG5KOz47mrbz
-         4eFWv5Us+85f2enJ0/Qm6Ldids0pj8PwL9iVqTd/UWMLptdsT/hPK4mcHwx10bnaMmjL
-         XxOsovwM2TiQ7g4DIoLz2JBUJW4tgYTr+KfJgj6YOKj8vVd64bOjqeYetWe+vr1ofZYl
-         c0Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QyIMB4aEXbSB/ScB2Z9iWYKFxuCY76NBvLKj0Z9Cka8=;
-        b=2+aSXZ3J3ozKgP7cWiHeP15gmnwgyOgA/zNVGSSLk67CZMfKGsi9j8A35iz+ZdjWob
-         +OBSW5leHHtjirgI7XNcLxzZqvWeAYHfcV3cT8+of+6rW/VO4ujAEvQ6PNCS0WgUqd3Z
-         pn+sg8E3ICjWFtEEEztms5BD3puyyCFdM//z6UjoB2Xl2xKKVPyR1s9g9B0xtfCg18eE
-         QlvsI9vdYP8xGOwdklk7q8yqnyntlnB1d31iqpycHE00cgFDiQti8B+LuV/OuScHzkN3
-         7QeiM4Ef8wLEvZK7AUM/3oOmskU6aNy1KAWq1DTnpQl/0EASzp7Dt++XcAofR1NtqL4G
-         pdyw==
-X-Gm-Message-State: ANoB5plivgh8AomybT7knNwpWXT+wWYotnZtY/BZQ7JjSMMVaqNfO2km
-        2HtjJF/sdwp922OaAjbyjinLQw==
-X-Google-Smtp-Source: AA0mqf6X0Y/BkSyGzWCp0VIlRyouMIyhiy8Ec9HnM6lvFzcvoh5fTt/W+N7JigU0Ax3eab/Yu4VVbA==
-X-Received: by 2002:a05:622a:4d89:b0:3a5:c024:7ed4 with SMTP id ff9-20020a05622a4d8900b003a5c0247ed4mr12046055qtb.17.1671045497992;
-        Wed, 14 Dec 2022 11:18:17 -0800 (PST)
-Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
-        by smtp.gmail.com with ESMTPSA id ca20-20020a05622a1f1400b003a5fb681ae7sm2182617qtb.3.2022.12.14.11.18.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Dec 2022 11:18:17 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] hfsplus: fix uninit-value in hfsplus_delete_cat()
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20221214103707.3893954-1-chenxiaosong2@huawei.com>
-Date:   Wed, 14 Dec 2022 11:18:14 -0800
-Cc:     roman.gushchin@linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Wed, 14 Dec 2022 14:21:34 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49A3DE94;
+        Wed, 14 Dec 2022 11:21:33 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0FF8C20393;
+        Wed, 14 Dec 2022 20:21:32 +0100 (CET)
+Date:   Wed, 14 Dec 2022 20:21:30 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0A20C187-6B3E-4C97-8D5C-6AE066781B6E@dubeyko.com>
-References: <20221214103707.3893954-1-chenxiaosong2@huawei.com>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dt-bindings: arm: qcom: add board-id/msm-id for MSM8956,
+ SDM636 and SM4250
+Message-ID: <20221214192130.pv2yf2x5kz7mlggo@SoMainline.org>
+References: <20221214150605.173346-1-krzysztof.kozlowski@linaro.org>
+ <20221214152915.wshz4odyqcupo6xw@SoMainline.org>
+ <65ccd0c9-8bd9-fc3c-ef33-78b905adf294@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65ccd0c9-8bd9-fc3c-ef33-78b905adf294@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-12-14 17:45:49, Krzysztof Kozlowski wrote:
+> On 14/12/2022 16:29, Marijn Suijten wrote:
+> > On 2022-12-14 16:06:05, Krzysztof Kozlowski wrote:
+> >> Allow qcom,board-id and qcom,msm-id leagcy properties on these older
+> >> platforms: MSM8956, SDM636 and SM4250.  Also mention more OnePlus
+> >> devices using modified qcom,board-id field.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > 
+> >> ---
+> >>  Documentation/devicetree/bindings/arm/qcom.yaml | 5 +++++
+> >>  1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+> >> index d45e2129fce3..cfb7f5caf606 100644
+> >> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
+> >> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+> >> @@ -925,15 +925,18 @@ allOf:
+> >>                - qcom,apq8026
+> >>                - qcom,apq8094
+> >>                - qcom,apq8096
+> >> +              - qcom,msm8956
+> > 
+> > I am certain this (and msm8976) were added in [1] but it somehow got
+> > lost when that was merged as 05c0c38dc752 ("dt-bindings: arm: qcom:
+> > Document msm8956 and msm8976 SoC and devices")?
+> > 
+> > Should we also add qcom,msm8976 or only when a user for that board is
+> > added?
+> 
+> Bjorn,
+> You need to fix your scripts. It's not the first time when applied patch
+> is changed and its pieces are gone.
 
+That is quite unfortunate, and it had me puzzled for a second...
 
-> On Dec 14, 2022, at 2:37 AM, ChenXiaoSong <chenxiaosong2@huawei.com> =
-wrote:
->=20
-> Syzkaller reported BUG as follows:
->=20
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->  BUG: KMSAN: uninit-value in hfsplus_subfolders_dec
->                              fs/hfsplus/catalog.c:248 [inline]
->  BUG: KMSAN: uninit-value in hfsplus_delete_cat+0x1207/0x14d0
->                              fs/hfsplus/catalog.c:419
->   hfsplus_subfolders_dec fs/hfsplus/catalog.c:248 [inline]
->   hfsplus_delete_cat+0x1207/0x14d0 fs/hfsplus/catalog.c:419
->   hfsplus_rmdir+0x141/0x3d0 fs/hfsplus/dir.c:425
->   hfsplus_rename+0x102/0x2e0 fs/hfsplus/dir.c:545
->   vfs_rename+0x1e4c/0x2800 fs/namei.c:4779
->   do_renameat2+0x173d/0x1dc0 fs/namei.c:4930
->   __do_sys_renameat2 fs/namei.c:4963 [inline]
->   __se_sys_renameat2 fs/namei.c:4960 [inline]
->   __ia32_sys_renameat2+0x14b/0x1f0 fs/namei.c:4960
->   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->   entry_SYSENTER_compat_after_hwframe+0x70/0x82
->=20
->  Uninit was stored to memory at:
->   hfsplus_subfolders_inc fs/hfsplus/catalog.c:232 [inline]
->   hfsplus_create_cat+0x19e3/0x19f0 fs/hfsplus/catalog.c:314
->   hfsplus_mknod+0x1fd/0x560 fs/hfsplus/dir.c:494
->   hfsplus_mkdir+0x54/0x60 fs/hfsplus/dir.c:529
->   vfs_mkdir+0x62a/0x870 fs/namei.c:4036
->   do_mkdirat+0x466/0x7b0 fs/namei.c:4061
->   __do_sys_mkdirat fs/namei.c:4076 [inline]
->   __se_sys_mkdirat fs/namei.c:4074 [inline]
->   __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4074
->   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->   entry_SYSENTER_compat_after_hwframe+0x70/0x82
->=20
->  Uninit was created at:
->   __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5581
->   alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
->   alloc_slab_page mm/slub.c:1794 [inline]
->   allocate_slab+0x1b5/0x1010 mm/slub.c:1939
->   new_slab mm/slub.c:1992 [inline]
->   ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
->   __slab_alloc mm/slub.c:3279 [inline]
->   slab_alloc_node mm/slub.c:3364 [inline]
->   slab_alloc mm/slub.c:3406 [inline]
->   __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
->   kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
->   alloc_inode_sb include/linux/fs.h:3125 [inline]
->   hfsplus_alloc_inode+0x56/0xc0 fs/hfsplus/super.c:627
->   alloc_inode+0x83/0x440 fs/inode.c:259
->   iget_locked+0x2a1/0xe20 fs/inode.c:1286
->   hfsplus_iget+0x5f/0xb60 fs/hfsplus/super.c:64
->   hfsplus_btree_open+0x13b/0x1cf0 fs/hfsplus/btree.c:150
->   hfsplus_fill_super+0x12b0/0x2a80 fs/hfsplus/super.c:473
->   mount_bdev+0x508/0x840 fs/super.c:1401
->   hfsplus_mount+0x49/0x60 fs/hfsplus/super.c:641
->   legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
->   vfs_get_tree+0xa1/0x500 fs/super.c:1531
->   do_new_mount+0x694/0x1580 fs/namespace.c:3040
->   path_mount+0x71a/0x1eb0 fs/namespace.c:3370
->   do_mount fs/namespace.c:3383 [inline]
->   __do_sys_mount fs/namespace.c:3591 [inline]
->   __se_sys_mount+0x734/0x840 fs/namespace.c:3568
->   __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
->   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
->   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
->   entry_SYSENTER_compat_after_hwframe+0x70/0x82
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->=20
-> Fix this by initializing 'subfolders' of 'struct hfsplus_inode_info'
-> in hfsplus_iget().
->=20
-> Link: =
-https://syzkaller.appspot.com/bug?id=3D981f82f21b973f2f5663dfea581ff8cee1d=
-dfef2
-> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> ---
-> fs/hfsplus/super.c | 1 +
-> 1 file changed, 1 insertion(+)
->=20
-> diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
-> index 122ed89ebf9f..612c07857667 100644
-> --- a/fs/hfsplus/super.c
-> +++ b/fs/hfsplus/super.c
-> @@ -72,6 +72,7 @@ struct inode *hfsplus_iget(struct super_block *sb, =
-unsigned long ino)
-> 	mutex_init(&HFSPLUS_I(inode)->extents_lock);
-> 	HFSPLUS_I(inode)->flags =3D 0;
-> 	HFSPLUS_I(inode)->extent_state =3D 0;
-> +	HFSPLUS_I(inode)->subfolders =3D 0;
-> 	HFSPLUS_I(inode)->rsrc_inode =3D NULL;
-> 	atomic_set(&HFSPLUS_I(inode)->opencnt, 0);
->=20
+> >>                - qcom,msm8992
+> >>                - qcom,msm8994
+> >>                - qcom,msm8996
+> >>                - qcom,msm8998
+> >>                - qcom,sdm630
+> >>                - qcom,sdm632
+> >> +              - qcom,sdm636
+> >>                - qcom,sdm845
+> >>                - qcom,sdx55
+> >>                - qcom,sdx65
+> >> +              - qcom,sm4250
+> > 
+> > qcom,sm6115 could be added as well unless you rather leave that to the
+> > person(s) adding the board compatible later on.
+> 
+> There is no board, I think, so I did not add compatible.
 
-Looks good. Thanks for the fix.
+Correct, it's still in progress before being uptreamed.  Given that
+Konrad already has patches to add the names here when he does, it makes
+sense to leave this.
 
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-
-But we have more fields in struct hfsplus_inode_info:
-
-struct hfsplus_inode_info {=09
-atomic_t opencnt;
-/*
- * Extent allocation information, protected by extents_lock.
- */
-u32 first_blocks;=09
-u32 clump_blocks;
-u32 alloc_blocks;
-u32 cached_start;
-u32 cached_blocks;
-hfsplus_extent_rec first_extents;
-hfsplus_extent_rec cached_extents;
-unsigned int extent_state;
-struct mutex extents_lock;
-/*
- * Immutable data.
- */=09
-struct inode *rsrc_inode;=09
-__be32 create_date;
-/*
- * Protected by sbi->vh_mutex.
- */=09
-u32 linkid;=09
-/*
- * Accessed using atomic bitops.
- */=09
-unsigned long flags;=09
-/*
- * Protected by i_mutex.
- */=09
-sector_t fs_blocks;=09
-u8 userflags;		/* BSD user file flags */
-u32 subfolders;		/* Subfolder count (HFSX only) */
-struct list_head open_dir_list;
-spinlock_t open_dir_lock;
-loff_t phys_size;
-struct inode vfs_inode;
-};
-
-I believe we need to set initialized more fields in hfsplus_iget() =
-method.
-Could you add the initialization of other missed fields?
-
-Thanks,
-Slava.
-
-> --=20
-> 2.31.1
->=20
-
+- Marijn
