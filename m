@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BDD64CF10
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADDD64CF0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbiLNSCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:02:13 -0500
+        id S237658AbiLNSCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:02:16 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238488AbiLNSBx (ORCPT
+        with ESMTP id S238571AbiLNSCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:01:53 -0500
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB011220C2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:01:51 -0800 (PST)
+        Wed, 14 Dec 2022 13:02:03 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E4C1DF1D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:02:00 -0800 (PST)
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 8D454201894
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:01:50 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 251375C10D0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:01:59 +0000 (UTC)
 Received: from pdx1-sub0-mail-a305.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 2B4642015F7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:01:50 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671040910; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id B47375C17C8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:01:58 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1671040918; a=rsa-sha256;
         cv=none;
-        b=buRXdRzQMKm0vngaI84TTRgeBams5ZWpbf16jZ6Y35+bNeHONvbv+92x2rTNlQ2SkQENeX
-        sUoQcmhxBdxixHtFXoCH9RJWmeXGoU3bFbic4t23RezBxUvBVBnjIQzV3llAFWGmTAYT6V
-        238uU8qwmLIRs29LeNmvur6rqnI3PcNcWYS4R5bD67aL9SVhtT8qu9BIGwDqbcmMB1vt9w
-        Gx2T5sCPzAEt8teq61oyoccO7+2AXXB3GncCoWMThhTgHMXS03SGgjz9M2MrfUatYdjzt4
-        sJylPKpLxolYDnST7ct/PctrsQiTz4om458hXZ8d+LD+uDoiRVU9K0VsAYudkA==
+        b=Wlzw7axj+BechNiYnQdHj1VPJxQ8RBmWilpv2C5dnetduK2wtTmneuV5FiT0WfCLR8DST2
+        DTuQ71bHdYx/hTOv+IlTzuRUeYe3Hk3XGVngxLuN+dt3wTzTc2TXxKspi+ORRm9Np/Wvpv
+        oerbrMDB3aOxFZczG26jzNon51TP83N0i9W37xMUr+EcoLgUcZnw+U+WHm4COF+pmaHQA8
+        Sx7nepIJX/i0E0WNzK51VFSuxv5ryAC1rspRjGjIPbJ1Xhfp6hGgkHI0D6LaUa4JUujR3o
+        DqLIiGJalKYPWn3746wz+1Mg3DdXExLeu/t2AazI4wiuPFvcqsXJ7/npKQROWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1671040910;
+        s=arc-2022; t=1671040918;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=nzCxD9ep+HzlNnesq87i3wkKKSLnVJxdvoCsaYb8DkE=;
-        b=ZlxtOw25aVMk87QlCyBtudooKQ5k/2XX6qSYgAkfIyHc3RrAqbHKvFaCkxN+baPVxZO5zG
-        PzNnzsExvpBpZIEy3GN6E0hsrU9ak3eKIaxy5b0pWrD/NdWBHLmQS2VwucM1ieTf7Y0BWq
-        yvgwRx5YP+LDsqBl1ksQEZfcN5yDydQOAbHK98lorBK86c/c8L5aSvXTOJxahZf40MB00Z
-        hR05PMrrG/hvKvCCPQvzqoa+Rgg18HuiTcKkk6YqBY0bl7Qr6hLYdW/HyCryySqGPNxfpi
-        k7fKpFn3fBoJjCbA0YLqSDtxj7ovC260O0NFZpYIrdtRGxTZzQT/sVctbUQyxg==
+        bh=G41YyEQdAvdLNdmcCgSApXt2iuCmtnH5EcY+eahbXKU=;
+        b=2K+JEDl78m3MVcmCwhdijea1XA4TBSIfnOgprBiMf2NMmM5+1bMHTMZD0uSsjGUiU+H/T/
+        5z4Iq1k5qp6YHupuXAF6mYq5zBmdHuausXrWpM6MrTy96eL/lsOV6P4aZ/ItqE0iomCpav
+        KpWDpwqXdtfUw4P5pFlErjKI8mVyoH4/T4X/5pY+fjyXvQxe5wFKolIFb0dv6cq6hmLvIy
+        OEF0yGNfUBr4roHPcK8A58mxkmfXEn0YVcpwymE7UDofnuPqUnRdnpAruDDNdmLhQ82PDb
+        lVr5CkYUisY2eqj2hbsPnFY/FBkgg1+LiPXqu70AwV9PVAvBaXqqe7dHUWuCZg==
 ARC-Authentication-Results: i=1;
-        rspamd-747d4f8b9f-4b2ws;
+        rspamd-747d4f8b9f-jf9vq;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MailChannels-Auth-Id: dreamhost
-X-Society-Celery: 4f36f8d16e602aa7_1671040910419_3400174159
-X-MC-Loop-Signature: 1671040910419:1363196436
-X-MC-Ingress-Time: 1671040910419
+X-Print-Trouble: 0f577f9f36c7a614_1671040918972_1424129892
+X-MC-Loop-Signature: 1671040918972:567794265
+X-MC-Ingress-Time: 1671040918972
 Received: from pdx1-sub0-mail-a305.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.97.74.58 (trex/6.7.1);
-        Wed, 14 Dec 2022 18:01:50 +0000
+        by 100.97.48.82 (trex/6.7.1);
+        Wed, 14 Dec 2022 18:01:58 +0000
 Received: from kmjvbox (c-73-70-108-208.hsd1.ca.comcast.net [73.70.108.208])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4NXNV50sQszZT
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:01:48 -0800 (PST)
+        by pdx1-sub0-mail-a305.dreamhost.com (Postfix) with ESMTPSA id 4NXNVF3HKVzj9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:01:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1671040909;
-        bh=nzCxD9ep+HzlNnesq87i3wkKKSLnVJxdvoCsaYb8DkE=;
+        s=dreamhost; t=1671040917;
+        bh=G41YyEQdAvdLNdmcCgSApXt2iuCmtnH5EcY+eahbXKU=;
         h=Date:From:To:Cc:Subject:Content-Type;
-        b=OW9k8ELEAyWo+0pl83ai3xFagV5qPlnhBJEtud7VRNpzpUw4wqpMU8MMjnrnVczuo
-         JTzHJ6L0ry5Mc0/ItMtQ7l1hJfUYum5eDEp/MJzqTrNP7ctgqz2agBAj+5Zdw72tMj
-         AKsS43GKUbyW3dWNHcPVuW+wocpy+QINo+Q0VIvg=
+        b=o+H50Bvqh65TWxi6MQInHB3ASJ0s2PbHm75XsoPD8JF6Z9CzxDz+ZtvnA+N1fAvGU
+         ZwVoiKaZ0quAQnXCWJ5fNGxJijxKseL9s2BPeaoy5IxQKTj+JqfhZ18n6hjGI2x6X9
+         OIxAjF10fl755W7/J3wvypLQOfPdNzIyrcTNNbUE=
 Received: from johansen (uid 1000)
         (envelope-from kjlx@templeofstupid.com)
         id e0042
         by kmjvbox (DragonFly Mail Agent v0.12);
-        Wed, 14 Dec 2022 10:01:47 -0800
-Date:   Wed, 14 Dec 2022 10:01:47 -0800
+        Wed, 14 Dec 2022 10:01:55 -0800
+Date:   Wed, 14 Dec 2022 10:01:55 -0800
 From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+To:     Jan Beulich <jbeulich@suse.com>
 Cc:     Krister Johansen <kjlx@templeofstupid.com>,
-        Juergen Gross <jgross@suse.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
@@ -89,21 +88,25 @@ Cc:     Krister Johansen <kjlx@templeofstupid.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Anthony Liguori <aliguori@amazon.com>,
         David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
+        Brendan Gregg <brendan@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Subject: Re: [PATCH linux-next v2] x86/xen/time: prefer tsc as clocksource
  when it is invariant
-Message-ID: <20221214180147.GA1953@templeofstupid.com>
+Message-ID: <20221214180155.GB1953@templeofstupid.com>
 References: <20221208163650.GA3225@templeofstupid.com>
  <1e6c1b08-d573-fba9-61fd-d40a74427d46@oracle.com>
  <20221212155730.GA1973@templeofstupid.com>
  <20221212160524.GB1973@templeofstupid.com>
- <d1a2b785-edc7-b7da-d2f2-123d1555022e@oracle.com>
- <20221212220959.GB1935@templeofstupid.com>
- <9dfe87f0-fc95-6c28-6695-62f1f5403df6@oracle.com>
+ <1eb6048b-bf23-78a0-9c3c-54bbd12c3864@suse.com>
+ <20221212220519.GA1935@templeofstupid.com>
+ <60582b25-4fb9-a2c8-9db3-9b5593f039c1@suse.com>
+ <20221213185842.GA1987@templeofstupid.com>
+ <9bec6472-1f61-8b36-102d-7f7c884be869@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9dfe87f0-fc95-6c28-6695-62f1f5403df6@oracle.com>
+In-Reply-To: <9bec6472-1f61-8b36-102d-7f7c884be869@suse.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
@@ -114,81 +117,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 04:25:32PM -0500, Boris Ostrovsky wrote:
+On Wed, Dec 14, 2022 at 09:17:24AM +0100, Jan Beulich wrote:
+> On 13.12.2022 19:58, Krister Johansen wrote:
+> > On Tue, Dec 13, 2022 at 08:23:29AM +0100, Jan Beulich wrote:
+> >> On 12.12.2022 23:05, Krister Johansen wrote:
+> >>> On Mon, Dec 12, 2022 at 05:46:29PM +0100, Jan Beulich wrote:
+> >>>> On 12.12.2022 17:05, Krister Johansen wrote:
+> >>>>> Both the Intel SDM[4] and the Xen tsc documentation explain that marking
+> >>>>> a tsc as invariant means that it should be considered stable by the OS
+> >>>>> and is elibile to be used as a wall clock source.  The Xen documentation
+> >>>>> further clarifies that this is only reliable on HVM and PVH because PV
+> >>>>> cannot intercept a cpuid instruction.
+> >>>>
+> >>>> Without meaning to express a view on the argumentation as a whole, this
+> >>>> PV aspect is suspicious. Unless you open-code a use of the CPUID insn
+> >>>> in the kernel, all uses of CPUID are going to be processed by Xen by
+> >>>> virtue of the respective pvops hook. Documentation says what it says
+> >>>> for environments where this might not be the case.
+> >>>
+> >>> Thanks, appreciate the clarification here. Just restating this for my
+> >>> own understanding: your advice would be to drop this check below?
+> >>
+> >> No, I'm unconvinced of if/where this transformation is really appropriate.
+> > 
+> > Ah, I see.  You're saying that you're not convinced that this code
+> > should ever lower the priority of xen clocksource in favor of the tsc?
+> > If so, are you willing to say a bit more about what you find to be
+> > unconvincing?
 > 
-> On 12/12/22 5:09 PM, Krister Johansen wrote:
-> > On Mon, Dec 12, 2022 at 01:48:24PM -0500, Boris Ostrovsky wrote:
-> > > On 12/12/22 11:05 AM, Krister Johansen wrote:
-> > > > diff --git a/arch/x86/include/asm/xen/cpuid.h b/arch/x86/include/asm/xen/cpuid.h
-> > > > index 6daa9b0c8d11..d9d7432481e9 100644
-> > > > --- a/arch/x86/include/asm/xen/cpuid.h
-> > > > +++ b/arch/x86/include/asm/xen/cpuid.h
-> > > > @@ -88,6 +88,12 @@
-> > > >     *             EDX: shift amount for tsc->ns conversion
-> > > >     * Sub-leaf 2: EAX: host tsc frequency in kHz
-> > > >     */
-> > > > +#define XEN_CPUID_TSC_EMULATED       (1u << 0)
-> > > > +#define XEN_CPUID_HOST_TSC_RELIABLE  (1u << 1)
-> > > > +#define XEN_CPUID_RDTSCP_INSTR_AVAIL (1u << 2)
-> > > > +#define XEN_CPUID_TSC_MODE_DEFAULT   (0)
-> > > > +#define XEN_CPUID_TSC_MODE_EMULATE   (1u)
-> > > > +#define XEN_CPUID_TSC_MODE_NOEMULATE (2u)
-> > > This file is a copy of Xen public interface so this change should go to Xen first.
-> > Ok, should I split this into a separate patch on the linux side too?
+> With the not-for-PV justification not really applicable, the main question
+> is how else you mean to justify that aspect. Once limited back to HVM/PVH,
+> it may all be okay.
+
+Got it.  I think I can provide an answer for this.
+
+> >> My comment was merely to indicate that the justification for ...
+> >>
+> >>>>> +	if (!(xen_hvm_domain() || xen_pvh_domain()))
+> >>>>> +		return 0;
+> >>
+> >> ... this isn't really correct.
+> > 
+> > The rationale for this bit of code was the justification that turns
+> > out to be incorrect.  That sounds to me like I have unnessary code,
+> > unless I was right by mistake?
 > 
-> Yes. Once the Xen patch has been accepted you will either submit the same patch for Linux or sync Linux file with Xen (if there are more differences).
+> The PV clock interface was specifically introduced because the TSC could
+> not be reliably used by PV domains. This may have been purely due to
+> limitations of the TSC at the time, so taking into account more modern
+> stability guarantees may make it okay to be used by PV as well. But
+> migration needs to be considered, and validity (for PV) of the deriving
+> of the two synthetic feature bits you use also needs to be checked
 
-Thanks.  Based upon the feedback I received from you and Jan, I may try
-to shrink the check in xen_tsc_safe_clocksource() down a bit.  In that
-case, I may only need to refer to a single field in the leaf that
-provides this information.  In that case, are you alright with dropping
-the change to the header and referring to the value directly, or would
-you prefer that I proceed with adding these to the public API?
+The current incarnation of the patch confines itself to just cases where
+tsc_mode is never emulate.  In mode default, a non-virtualized tsc is
+only selected if the host tsc is safe (this is also derived from the
+CPUID[80000007].EDX[8] -- tsc invariant bit), and the domain is either
+hvm with tsc scaling support, or a domain where the guest tsc frequency
+matches the host tsc frequency.
 
-> > > > +static int __init xen_tsc_safe_clocksource(void)
-> > > > +{
-> > > > +	u32 eax, ebx, ecx, edx;
-> > > > +
-> > > > +	if (!(xen_hvm_domain() || xen_pvh_domain()))
-> > > > +		return 0;
-> > > > +
-> > > > +	if (!(boot_cpu_has(X86_FEATURE_CONSTANT_TSC)))
-> > > > +		return 0;
-> > > > +
-> > > > +	if (!(boot_cpu_has(X86_FEATURE_NONSTOP_TSC)))
-> > > > +		return 0;
-> > > > +
-> > > > +	if (check_tsc_unstable())
-> > > > +		return 0;
-> > > > +
-> > > > +	cpuid(xen_cpuid_base() + 3, &eax, &ebx, &ecx, &edx);
-> > > > +
-> > > > +	if (eax & XEN_CPUID_TSC_EMULATED)
-> > > > +		return 0;
-> > > > +
-> > > > +	if (ebx != XEN_CPUID_TSC_MODE_NOEMULATE)
-> > > > +		return 0;
-> > > Why is the last test needed?
-> > I was under the impression that if the mode was 0 (default) it would be
-> > possible for the tsc to become emulated in the future, perhaps after a
-> > migration.  The presence of the tsc_mode noemulate meant that we could
-> > count on the falseneess of the XEN_CPUID_TSC_EMULATED check remaining
-> > constant.
-> 
-> This will filter out most modern processors with TSC scaling support where in default mode we don't intercept RDTCS after migration. But I don't think we have proper interface to determine this so we don't have much choice but to indeed make this check.
+For the PV case, or any case I think, the administrator would have had
+to take an explicit action to ensure that no virutalize is enabled on
+the tsc, and the underlying feature flags would have either been
+inherited from the base cpu, or explicitly added by intervention. I
+presume that we'd want to honor these settings if they were enabled
+manually?
 
-Yes, if this remains a single boot-time check, I'm not sure that knowing
-whether the processor supports tsc scaling helps us.  If tsc_mode is
-default, there's always a possibility of the tsc becoming emulated later
-on as part of migration, correct?
+I may once again be misreading the documentation, but my interpretation
+of the requirements around migration was that if you set no-emulate on
+the tsc it was up to you to ensure that the target system for the
+migration either had the same tsc frequency, or supported scaling.
 
-The other thing that might be possible here is to add a background
-timer that periodically checks if the tsc is still not emulated, and if
-it suddenly becomes so, change the rating again to prefer the xen
-clocksource.  I had written this off initially as an impractical
-solution, since it seemed like a lot more mechanism and because it meant
-the performance characteristics of the system would change without user
-intervention.  However, if this seems like a good idea, I'm not opposed
-to giving it a try.
+> (I find X86_FEATURE_NONSTOP_TSC particularly interesting, because PV domains
+> don't really have any notion of "C states"). Note that e.g.
+> early_init_intel() derives the two bits from CPUID[80000007].EDX[8],
+> which is an opt-in feature for all guest types as per the present CPUID
+> policy logic in the hypervisor, but then goes on and sets
+> X86_FEATURE_NONSTOP_TSC_S3 (which you don't use in your patch, so just to
+> point out a possible pitfall) purely based on family/model information.
+
+Thanks for pointing this out.  It looks like it's specific to Intel Atom
+systems that have a tsc that does not stop during suspend.  If this is
+set, then the clocksource is eligible to be used to for suspend timing.
+Since we don't set this, it looks like there's no behavior change.  E.g.
+the tsc remains ineligible for consideration as a suspend clocksource.
 
 -K
+
+
