@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E946364C8E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4183464C8E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbiLNMWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S237557AbiLNMWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:22:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238422AbiLNMVa (ORCPT
+        with ESMTP id S238301AbiLNMVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:21:30 -0500
+        Wed, 14 Dec 2022 07:21:31 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01056434;
-        Wed, 14 Dec 2022 04:18:46 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB8Jb7002827;
-        Wed, 14 Dec 2022 12:18:44 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1361B481;
+        Wed, 14 Dec 2022 04:18:51 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB8clI005634;
+        Wed, 14 Dec 2022 12:18:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Egmllpt2UyN9IAHOZOSTcs5pT7E8UwSPc2rT9k6nNbI=;
- b=HO2tf17HfsFEiq9y433eS7nKSVqsituiacvSWnZDzh1OY+CDC0IuIo+mCkWVtnDpKqgA
- VxQBrGtWjCwvmLx9Rabil7COVn3Gl5UdXvi8RWniVNACR7J32CPRiXUvGwTI/u8TuOie
- mGqnpes9w80tNkWfFs1m3/o1vtgS705c52HkDodxYk0HtGeV7AlUJFXBB5+xFFprZ2Sm
- vUQMlvxOinDXEgnBCflgFTodcMQh0MvuaO/S962egy2ODhdctEiuAFpIyA6BE8ywOQuA
- q99ZWg7D7fsUq4bTEyMVsFMsAFC/UErTVK5KPij1DWKqXyTukdZAvggq45kno3cPnels Cw== 
+ bh=E/fAdF/zkHo45BBMEQJvly0JrNdpGoTOtqVn/he4rmM=;
+ b=oQwsLXvgmzC2HaFhna8X4JX4tZ5u3PpGwZOeMmrW3Jqe6AXUWmaWPHyKP/lYOkh8L3ex
+ PX9pJmN5a4mADDcKpM3kWGHpLJVauA1wkbdDzmiJIgxFZ8vWkuLuwG4K4qIR7pjeiSxU
+ e9GjfP6fqBL40U3VJxwiNwCjBCN+yrGWuq3EJk2xJkKYrVGPwUIvRjLGcCmFnyDT0lru
+ zqh5uml7MdG1cK6vxMWF7KGQdit3PfE/0EUdWu/kXEIcEL1YLqIoSrjGsD8thjCxLtuL
+ nT/M5mWU7i+n+zEdtj0CRIGOlds+pyNRaQIYpDrKWLwJuNQ0mznXSEUdD62p8stoORrF 5w== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkh25w-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rrh2p9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 12:18:43 +0000
+        Wed, 14 Dec 2022 12:18:48 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BECIg8Z008224
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BECIlNn008261
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 12:18:43 GMT
+        Wed, 14 Dec 2022 12:18:47 GMT
 Received: from youghand-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 14 Dec 2022 04:18:40 -0800
+ 15.2.986.36; Wed, 14 Dec 2022 04:18:45 -0800
 From:   Youghandhar Chintala <quic_youghand@quicinc.com>
 To:     <ath11k@lists.infradead.org>
 CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Youghandhar Chintala <quic_youghand@quicinc.com>
-Subject: [PATCH 1/2] dt: bindings: add dt entry for XO calibration support
-Date:   Wed, 14 Dec 2022 17:48:17 +0530
-Message-ID: <20221214121818.12928-2-quic_youghand@quicinc.com>
+Subject: [PATCH 2/2] wifi: ath11k: PMIC XO cal data support
+Date:   Wed, 14 Dec 2022 17:48:18 +0530
+Message-ID: <20221214121818.12928-3-quic_youghand@quicinc.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221214121818.12928-1-quic_youghand@quicinc.com>
 References: <20221214121818.12928-1-quic_youghand@quicinc.com>
@@ -57,15 +57,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Suugf6ft3ZNri_ua_9WRjZ_MTG1c_Udf
-X-Proofpoint-GUID: Suugf6ft3ZNri_ua_9WRjZ_MTG1c_Udf
+X-Proofpoint-GUID: Dl14QDdgvcQP8mRvsIbbi4iU6akxwUp3
+X-Proofpoint-ORIG-GUID: Dl14QDdgvcQP8mRvsIbbi4iU6akxwUp3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_05,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 phishscore=0 malwarescore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2022-12-14_04,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2212140096
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -76,28 +76,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt binding to get XO calibration data support for Wi-Fi RF clock.
+PMIC XO is the clock source for Wi-Fi RF clock in integrated Wi-Fi
+chipset ex: WCN6750. Due to board layout errors XO frequency drifts
+can cause Wi-Fi RF clock inaccuracy.
+XO calibration test tree in Factory Test Mode is used to find the
+best frequency offset(for example +/-2 KHz )by programming XO trim
+register. This ensure system clock stays within required 20 ppm
+WLAN RF clock.
+
+Retrieve the XO trim offset via system firmware (e.g., device tree),
+especially in the case where the device doesn't have a useful EEPROM
+on which to store the calibrated XO offset (e.g., for integrated Wi-Fi).
+Calibrated XO offset is sent to firmware, which compensate the clock drift
+by programing the XO trim register.
+
+Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
 
 Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
 ---
- .../devicetree/bindings/net/wireless/qcom,ath11k.yaml         | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/wireless/ath/ath11k/ahb.c  |  8 ++++++++
+ drivers/net/wireless/ath/ath11k/core.h |  3 +++
+ drivers/net/wireless/ath/ath11k/qmi.c  | 24 ++++++++++++++++++++++++
+ drivers/net/wireless/ath/ath11k/qmi.h  |  4 +++-
+ 4 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-index f7cf135aa37f..205ee949daba 100644
---- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-@@ -41,6 +41,10 @@ properties:
-         * reg
-         * reg-names
+diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
+index d34a4d6325b2..89580b4e47a9 100644
+--- a/drivers/net/wireless/ath/ath11k/ahb.c
++++ b/drivers/net/wireless/ath/ath11k/ahb.c
+@@ -1039,6 +1039,14 @@ static int ath11k_ahb_fw_resources_init(struct ath11k_base *ab)
+ 	ab_ahb->fw.iommu_domain = iommu_dom;
+ 	of_node_put(node);
  
-+  xo-cal-data:
-+    description:
-+      XO cal offset to be configured in XO trim register
++	ret = of_property_read_u32(pdev->dev.of_node, "xo-cal-data", &ab->xo_cal_data);
++	if (ret) {
++		ath11k_dbg(ab, ATH11K_DBG_AHB, "failed to get xo-cal-data property\n");
++		return 0;
++	}
++	ab->xo_cal_supported = true;
++	ath11k_dbg(ab, ATH11K_DBG_AHB, "xo cal data 0x%x\n", ab->xo_cal_data);
 +
-   qcom,ath11k-calibration-variant:
-     $ref: /schemas/types.yaml#/definitions/string
-     description:
+ 	return 0;
+ 
+ err_iommu_unmap:
+diff --git a/drivers/net/wireless/ath/ath11k/core.h b/drivers/net/wireless/ath/ath11k/core.h
+index 22460b0abf03..783398e98915 100644
+--- a/drivers/net/wireless/ath/ath11k/core.h
++++ b/drivers/net/wireless/ath/ath11k/core.h
+@@ -969,6 +969,9 @@ struct ath11k_base {
+ 		const struct ath11k_pci_ops *ops;
+ 	} pci;
+ 
++	bool xo_cal_supported;
++	u32 xo_cal_data;
++
+ 	/* must be last */
+ 	u8 drv_priv[] __aligned(sizeof(void *));
+ };
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 145f20a681bd..67f386b001ab 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1451,6 +1451,24 @@ static struct qmi_elem_info qmi_wlanfw_wlan_mode_req_msg_v01_ei[] = {
+ 		.offset		= offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
+ 					   hw_debug),
+ 	},
++	{
++		.data_type  = QMI_OPT_FLAG,
++		.elem_len   = 1,
++		.elem_size  = sizeof(u8),
++		.array_type = NO_ARRAY,
++		.tlv_type   = 0x11,
++		.offset     = offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
++				       xo_cal_data_valid),
++	},
++	{
++		.data_type  = QMI_UNSIGNED_1_BYTE,
++		.elem_len   = 1,
++		.elem_size  = sizeof(u8),
++		.array_type = NO_ARRAY,
++		.tlv_type   = 0x11,
++		.offset     = offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
++				       xo_cal_data),
++	},
+ 	{
+ 		.data_type	= QMI_EOTI,
+ 		.array_type	= NO_ARRAY,
+@@ -2610,6 +2628,12 @@ static int ath11k_qmi_wlanfw_mode_send(struct ath11k_base *ab,
+ 	req.hw_debug_valid = 1;
+ 	req.hw_debug = 0;
+ 
++	if (ab->xo_cal_supported) {
++		req.xo_cal_data_valid = 1;
++		req.xo_cal_data = ab->xo_cal_data;
++	}
++	ath11k_dbg(ab, ATH11K_DBG_QMI, "xo_cal_supported %d\n", ab->xo_cal_supported);
++
+ 	ret = qmi_txn_init(&ab->qmi.handle, &txn,
+ 			   qmi_wlanfw_wlan_mode_resp_msg_v01_ei, &resp);
+ 	if (ret < 0)
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.h b/drivers/net/wireless/ath/ath11k/qmi.h
+index 2ec56a34fa81..db61ce0d5689 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.h
++++ b/drivers/net/wireless/ath/ath11k/qmi.h
+@@ -450,7 +450,7 @@ struct qmi_wlanfw_m3_info_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+-#define QMI_WLANFW_WLAN_MODE_REQ_MSG_V01_MAX_LEN	11
++#define QMI_WLANFW_WLAN_MODE_REQ_MSG_V01_MAX_LEN	17
+ #define QMI_WLANFW_WLAN_MODE_RESP_MSG_V01_MAX_LEN	7
+ #define QMI_WLANFW_WLAN_CFG_REQ_MSG_V01_MAX_LEN		803
+ #define QMI_WLANFW_WLAN_CFG_RESP_MSG_V01_MAX_LEN	7
+@@ -470,6 +470,8 @@ struct qmi_wlanfw_wlan_mode_req_msg_v01 {
+ 	u32 mode;
+ 	u8 hw_debug_valid;
+ 	u8 hw_debug;
++	u8 xo_cal_data_valid;
++	u8 xo_cal_data;
+ };
+ 
+ struct qmi_wlanfw_wlan_mode_resp_msg_v01 {
 -- 
 2.38.0
 
