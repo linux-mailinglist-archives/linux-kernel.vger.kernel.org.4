@@ -2,234 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FFD64CC61
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7EB64CC64
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238432AbiLNOek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:34:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S238624AbiLNOfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238624AbiLNOeh (ORCPT
+        with ESMTP id S238650AbiLNOfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:34:37 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F0B112E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:34:35 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id fc4so44889161ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NpdIC9yfEfML+JTsasPerHswhdeXgtUUncwQhuMnyqE=;
-        b=XLKf1zw+Pg5X/5RU+NqTJXZbD6289aN9/me5ZGVd8EVaQRYyJ2A1JlBdG/Z3vsSDhk
-         Qmz9aiiZNObRESdS/CH7NwQdJvzHJFIDjkC0casil4G4a0N9QFE5mfSjYWXd8ZJ15YF4
-         rGJgGKsHjpVfDDZj6p5BrCfquqIHmoSjSxlcAftAz1JUO8wSbof7/g91hgr1+XKPPePu
-         kfMlDQb3+qMJ6DUrRCH6VLm3UIt74/cQiWtTtE3ylBHYgQVQ6Aor3fbMntGxp9AmnQtV
-         ejTOcc664SpZgkLUI0eTSEsPKw0r8GbVeA1KvrhoplnpFLRnnWk+D6rtNKmjsnXEgo5H
-         Iehw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpdIC9yfEfML+JTsasPerHswhdeXgtUUncwQhuMnyqE=;
-        b=Z728rwdo0xPdKA2MG5N630R5l6T4d039VuKjoCcVHL01PjWlzKh9T6cV6n8ZDAKGRe
-         Ga3lV19KadNnZVBXtoITeP8MIVvZavbfJGmKncdCpuUjPo3wlngYlusM9sg1AwVokyqG
-         qp6Gh8INE+hsD3l+WjIte9NBKV7nZf65aqgFRPDxCuSoJAdUIBEMUGkFX4GCIiJM67dW
-         MhUISEWOh9RhBgedh0Ec09mOOUiC/80Tu1sVFe5V1d3yje15SQ3bdY2FxmIC53qcafom
-         0gTHJoXHJOSMfnN2ApEz8RgR6qXZJUbH6uf6GKQR81XSvum60DKSKacRYkAUQ3x7bmG4
-         sfOw==
-X-Gm-Message-State: ANoB5pnpaXwdf7o3aA6jVuxsOn9zO9p1t3O0YDrUb0e0eHhqRjqfYnQJ
-        rAH8pjXoGiugosbvxcNGgnC7tA==
-X-Google-Smtp-Source: AA0mqf6CmxqK+9dd28/XPm5VnoWGfEXLHPyKVsjaVNohL2FH1YAqanoPm55ZEQuTbm9gGFjhahizfg==
-X-Received: by 2002:a17:906:1d01:b0:7c1:36:9002 with SMTP id n1-20020a1709061d0100b007c100369002mr20212671ejh.67.1671028474394;
-        Wed, 14 Dec 2022 06:34:34 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id ko5-20020a170907986500b007bd1ef2cccasm5896464ejc.48.2022.12.14.06.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 06:34:33 -0800 (PST)
-Date:   Wed, 14 Dec 2022 15:34:32 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce
- ALTERNATIVE_3() macro
-Message-ID: <20221214143432.4micw2gipvhfqwoa@kamzik>
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdXXXN9g8o1j7k-TC=F-kuyf-KngFSKi7z9z0SY9BLxmHA@mail.gmail.com>
- <CA+V-a8s9iAtFVzdA4R_tSMuBTkoY3JmZ12MJw__Pgfyetsz34g@mail.gmail.com>
+        Wed, 14 Dec 2022 09:35:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE56BF2;
+        Wed, 14 Dec 2022 06:35:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4999061ACE;
+        Wed, 14 Dec 2022 14:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F887C433EF;
+        Wed, 14 Dec 2022 14:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671028501;
+        bh=m98RlXJ/WE9s7A2/YHKpBSHyNKsZEnL4fFE9zIp3ocE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DDM5pcZ0jlu38c7MLCTaHrXajkeM7tOgeVuIkw0XTQvpfpl5DlhG5EvxTtf+TYmjt
+         mrbTx5R6devy6Dax4iPppell2fc+Rj1nfJmcBGnQDfUuY5eO6hNHKtfCrbE0ED0REz
+         JkbAuYp3h6YElz/KFQ3dXPofd4Y3MmqqZGQ04ROx47diVl54m8KNOpIQwzIqcN5gCz
+         rW9x0O1hKzcg/VatoVfkINLqisaYjUrpNIcN9sqcfYpOUjmRguwT0AAi6V96+EEzNa
+         gRkLLStL0AS0wT8tf73rvaXmpb1YLvdmN90Q2XUKaL61GlkpkvXm4PvyzbXLGV+bfk
+         qnKMEj+pft67A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 84C0940367; Wed, 14 Dec 2022 11:34:58 -0300 (-03)
+Date:   Wed, 14 Dec 2022 11:34:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Thomas Richter <tmricht@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        svens@linux.ibm.com
+Subject: Re: [PATCH 2/2] perf/test: Fix perf test 89 on x86
+Message-ID: <Y5nfEu+3sU/Hcoon@kernel.org>
+References: <20221213105729.1447368-1-tmricht@linux.ibm.com>
+ <20221213105729.1447368-2-tmricht@linux.ibm.com>
+ <Y5iQXJaQOrhjLZQW@kernel.org>
+ <f5e69102-ed17-1f2d-3a09-3c7968b611ff@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+V-a8s9iAtFVzdA4R_tSMuBTkoY3JmZ12MJw__Pgfyetsz34g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <f5e69102-ed17-1f2d-3a09-3c7968b611ff@linux.ibm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 05:49:32PM +0000, Lad, Prabhakar wrote:
-> Hi Geert,
-> 
-> Thank you for the review.
-> 
-> On Tue, Dec 13, 2022 at 5:21 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Introduce ALTERNATIVE_3() macro.
-> > >
-> > > A vendor wants to replace an old_content, but another vendor has used
-> > > ALTERNATIVE_2() to patch its customized content at the same location.
-> > > In this case, this vendor can use macro ALTERNATIVE_3() and then replace
-> > > ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
-> > >
-> > > While at it update comment above ALTERNATIVE_2() macro and make it generic
-> > > so that the comment holds good for any new addition of ALTERNATIVE_X()
-> > > macros.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > > v4->v5
-> > > * Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
-> > > * Updated comment for ALTERNATIVE_x() as suggested by Heiko
-> >
-> > Thanks for the update!
-> >
-> > > --- a/arch/riscv/include/asm/alternative-macros.h
-> > > +++ b/arch/riscv/include/asm/alternative-macros.h
-> > > @@ -50,8 +50,17 @@
-> > >         ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
-> > >  .endm
-> > >
-> > > +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,   \
-> > > +                               new_c_2, vendor_id_2, errata_id_2, enable_2,    \
-> > > +                               new_c_3, vendor_id_3, errata_id_3, enable_3
-> > > +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,      \
-> > > +                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
-> > > +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
-> > > +.endm
-> > > +
-> > >  #define __ALTERNATIVE_CFG(...)         ALTERNATIVE_CFG __VA_ARGS__
-> > >  #define __ALTERNATIVE_CFG_2(...)       ALTERNATIVE_CFG_2 __VA_ARGS__
-> > > +#define __ALTERNATIVE_CFG_3(...)       ALTERNATIVE_CFG_3 __VA_ARGS__
-> > >
-> > >  #else /* !__ASSEMBLY__ */
-> > >
-> > > @@ -98,6 +107,13 @@
-> > >         __ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)   \
-> > >         ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
-> > >
-> > > +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,        \
-> > > +                                  new_c_2, vendor_id_2, errata_id_2, enable_2, \
-> > > +                                  new_c_3, vendor_id_3, errata_id_3, enable_3) \
-> > > +       __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
-> > > +                                   new_c_2, vendor_id_2, errata_id_2, enable_2)        \
-> > > +       ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
-> > > +
-> > >  #endif /* __ASSEMBLY__ */
-> > >
-> > >  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k) \
-> > > @@ -108,6 +124,13 @@
-> > >         __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-> > >                                    new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
-> > >
-> > > +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,               \
-> > > +                                 new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,                \
-> > > +                                 new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)                \
-> > > +       __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
-> > > +                                  new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),   \
-> > > +                                  new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
-> > > +
-> > >  #else /* CONFIG_RISCV_ALTERNATIVE */
-> >
-> > To avoid breaking the build for K210 (and VexRiscv), you need to provide
-> > _ALTERNATIVE_CFG_3() for the !CONFIG_RISCV_ALTERNATIVE case, too:
-> >
-> Thanks for testing this.
-> 
-> > @@ -144,6 +144,9 @@
-> >  #define _ALTERNATIVE_CFG_2(old_c, ...) \
-> >         ALTERNATIVE_CFG old_c
-> >
-> > +#define _ALTERNATIVE_CFG_3(old_c, ...) \
-> > +       ALTERNATIVE_CFG old_c
-> > +
-> >  #else /* !__ASSEMBLY__ */
-> >
-> >  #define __ALTERNATIVE_CFG(old_c)       \
-> > @@ -155,6 +158,9 @@
-> >  #define _ALTERNATIVE_CFG_2(old_c, ...) \
-> >         __ALTERNATIVE_CFG(old_c)
-> >
-> > +#define _ALTERNATIVE_CFG_3(old_c, ...) \
-> > +       __ALTERNATIVE_CFG(old_c)
-> > +
-> >  #endif /* __ASSEMBLY__ */
-> >  #endif /* CONFIG_RISCV_ALTERNATIVE */
-> >
-> > Else it fails (on riscv/for-next) with:
-> >
-> I'll include the above hunk in next version.
+Em Wed, Dec 14, 2022 at 11:40:32AM +0100, Thomas Richter escreveu:
+> On 12/13/22 15:46, Arnaldo Carvalho de Melo wrote:
+> > Em Tue, Dec 13, 2022 at 11:57:29AM +0100, Thomas Richter escreveu:
+> >> perf test '89: probe libc's inet_pton & backtrace it with ping'
+> >> fails on x86. Debugging revealed a changed stack trace for the
+> >> ping command using probes:
 
-Yes, those two hunks are in my example in [1] as well.
+> >> ping 35729 [002]  8006.365063: probe_libc:inet_pton: (3ff9603e7c0)
+> >>                   12be50 __GI___inet_pton+0x0 (/usr/lib64/libc.so.6)
+> >>                   4fca main+0x139b (/usr/bin/ping)
 
-[1] https://lore.kernel.org/all/20221129150053.50464-1-ajones@ventanamicro.com/
+> >> The line getaddrinfo.... in the call stack is gone.
+> >> It was introduced with glibc version 2.36.8 released
+> >> with Fedora 37.
 
-Thanks,
-drew
+> >> Output before on x86
+> >>  # ./perf test 89
+> >>  89: probe libc's inet_pton & backtrace it with ping   : FAILED!
+> >>  #
 
-> 
-> > arch/riscv/mm/pmem.c: In function ‘arch_wb_cache_pmem’:
-> > arch/riscv/include/asm/alternative-macros.h:198:8: error: expected
-> > string literal before ‘_ALTERNATIVE_CFG_3’
-> >   198 |        _ALTERNATIVE_CFG_3(old_content, new_content_1,
-> > vendor_id_1, errata_id_1, CONFIG_k_1, \
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > arch/riscv/include/asm/errata_list.h:128:14: note: in expansion of
-> > macro ‘ALTERNATIVE_3’
-> >   128 | asm volatile(ALTERNATIVE_3(      \
-> >       |              ^~~~~~~~~~~~~
-> > arch/riscv/mm/pmem.c:13:2: note: in expansion of macro ‘ALT_CMO_OP’
-> >    13 |  ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size, 0, 0);
-> >       |  ^~~~~~~~~~
-> >
-> > Gr{oetje,eeting}s,
-> >
-> >                         Geert
-> >
-> > --
-> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> >
-> > In personal conversations with technical people, I call myself a hacker. But
-> > when I'm talking to journalists I just say "programmer" or something like that.
-> >                                 -- Linus Torvalds
+> >> Output after on x86:
+> >>  # ./perf test 89
+> >>  89: probe libc's inet_pton & backtrace it with ping   : Ok
+> >>  #
+
+> > Not having at the current state of that script, that $expected may be a
+> > subset of the actual backtrace, i.e. will this continue working with
+> > the systems where that getaddrinfo line appear?
+ 
+> No, that is not the case.
+> Taking this into account requires a larger rework of the call stack
+> checking. Not just simple line by line matching which is done now.
+> It also raises the question of how far to go back
+> in glibc history. Different versions of glibc have different call stacks.
+ 
+> I will rethink this...
+
+One possibility is to have the options on a temp file, the previous one,
+then if it fails, remove the getaddrinfo line and try again, if it
+works, its the new glibc, test result is Ok.
+
+Add a commment stating that from circa glibc versiuon 2.36.8 the
+getaddrinfo isn't there anymore.
+
+- Arnaldo
