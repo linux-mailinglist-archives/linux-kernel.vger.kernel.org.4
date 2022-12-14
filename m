@@ -2,107 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F9864C63D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70AB64C63C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbiLNJsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S237839AbiLNJsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiLNJse (ORCPT
+        with ESMTP id S229757AbiLNJsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:48:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7711164
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:47:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671011272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XpyPWrof9YGyhLIHZW+hprXwCnTR/L0ZFYZQ7acgHqY=;
-        b=KN8xHkcMNfbzcc1A5qy9UvZBQyCsP2luxrV0ja1ucBAgyulJSF1HtjhYAw9Hj9FWm5P/x3
-        we+hZ2MQMTznON98tQqXqfdIGciXvvkX6Muhkmw2c8fgB0S5GViyy+3OrKBB0EXg0GKeV4
-        eceXgtGCBPTRh3hty7q7ZXcQyhka4A0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-665-I7V76jiRMw-fljtAW46_2A-1; Wed, 14 Dec 2022 04:47:51 -0500
-X-MC-Unique: I7V76jiRMw-fljtAW46_2A-1
-Received: by mail-wm1-f72.google.com with SMTP id o34-20020a05600c512200b003d07ee4a667so1385384wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:47:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpyPWrof9YGyhLIHZW+hprXwCnTR/L0ZFYZQ7acgHqY=;
-        b=r7G4nytQmWy2esGuMr0xNQKJS7JdAf+CjhYaK+JBO7s1eq64ptl78SQj8O7i+bjAH/
-         urXRDHSWP6SGBJ2AfxtXIyMM7CiGPH8fKgE59vQc8pCiMD9T9w8JcO+U/GovEGdnTd4Q
-         E0KmX52cB879schg2suf1w2mXLs9qSbiOoZlLHW6nRWB50rU5eG3BB2OoEzHeaWyl5dV
-         0JxS53ARQz22+ys8jdvwxy0Woqys3PXeR8NifF3UPkcDsiCNvcEit0qJhCmTWaKrBs0z
-         Wo8MaK5Q9+jYGC2NLxKzeA9VvPqTFMvZ7CAbnsucUgN4FwyyLh7vAMXKrTMEsHwwp00s
-         ks2g==
-X-Gm-Message-State: ANoB5pkqdvsT/xEHYTNx1R1xoCsdujgstOrmLoLz3lobdRuBIVVvWOeK
-        ODo0Dm5JueamoKINB27h6DAvk3ULAPIjgAvlIIOwEx0pIXx51iUKp/yMfudtHKBOC4Qm38Bh5Nb
-        01gbsjtUsPWSE6tqYu2e8nblq
-X-Received: by 2002:a5d:5f07:0:b0:250:22e4:b89e with SMTP id cl7-20020a5d5f07000000b0025022e4b89emr7232194wrb.65.1671011270593;
-        Wed, 14 Dec 2022 01:47:50 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5FSldeehkRbpkeky01V8o2IWPnGBQEL4yjGgH9Qh6faFVIGJUrOc8mHaClJ/z2esWUu/jBQg==
-X-Received: by 2002:a5d:5f07:0:b0:250:22e4:b89e with SMTP id cl7-20020a5d5f07000000b0025022e4b89emr7232183wrb.65.1671011270431;
-        Wed, 14 Dec 2022 01:47:50 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id c24-20020adfa318000000b0022cc3e67fc5sm2398247wrb.65.2022.12.14.01.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 01:47:49 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>, Tariq Toukan <tariqt@nvidia.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH] lib/cpumask: update comment for cpumask_local_spread()
-In-Reply-To: <20221213043248.2025029-1-yury.norov@gmail.com>
-References: <20221213043248.2025029-1-yury.norov@gmail.com>
-Date:   Wed, 14 Dec 2022 09:47:47 +0000
-Message-ID: <xhsmh359i71vg.mognet@vschneid.remote.csb>
+        Wed, 14 Dec 2022 04:48:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497935FDE;
+        Wed, 14 Dec 2022 01:47:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9D04618B8;
+        Wed, 14 Dec 2022 09:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB066C433EF;
+        Wed, 14 Dec 2022 09:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671011277;
+        bh=UodjR3AssLTk+DhzR2XZAUn0vUG5IFVWg5o01B3CUrM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F++yXQevhUPn6jfi1j78hVDYpaGOI3WfEUlPRyE+5F++0Gg+02lD65eBoWtz1hMlw
+         /+HqpxXga4zJTDrpN5mtoIk3bKrUYtxOpFRKyHNDyDOsAoSCadRUfRJAMJny7AUvPw
+         4Mp2RXeMnvjSluKYcozDIUtKcxHOxHqHWyzlvecFAeC13cY6TDX0a+GJGDCYXCVUOS
+         hz+OnapB7KD3iLVDelZvCLL1lEVBF/9fv7VRMasQxZXMviT40QXzwI8eQMvvHJepar
+         /IPtDrC0+E/toFGBzDfkWRWWdxt5twdbdFt77bgAQgSwNhWS2AyzXi2ck9oAHX7BgO
+         Zn4NR3getB4Ow==
+Date:   Wed, 14 Dec 2022 09:47:52 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: Re: [PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+Message-ID: <Y5mbyICg22UVFASw@google.com>
+References: <20221116205822.1128275-1-Naresh.Solanki@9elements.com>
+ <20221116205822.1128275-3-Naresh.Solanki@9elements.com>
+ <Y3YJ2EkYNW+gA+/R@google.com>
+ <5d9e41b8-7b2a-d60b-3e92-641cea5a9f4a@9elements.com>
+ <Y5HXWk4d5J9VgFBV@google.com>
+ <921915e5-6b36-9d2d-ebd7-632403e3086a@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <921915e5-6b36-9d2d-ebd7-632403e3086a@9elements.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/22 20:32, Yury Norov wrote:
-> Now that we have an iterator-based alternative for a very common case
-> of using cpumask_local_spread for all cpus in a row, it's worth to
-> mention it in comment to cpumask_local_spread().
->
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->
-> Hi Tariq, Valentin,
->
-> I rebased your iterators patches on top of cpumask_local_spread() rework.
-> (Rebase is not plain simple.) The result is on bitmap-for-next branch,
-> and in -next too.
->
+On Wed, 14 Dec 2022, Naresh Solanki wrote:
 
-I had a look, LGTM.
+> Hi Lee
+> 
+> On 08-12-2022 05:53 pm, Lee Jones wrote:
+> > On Fri, 18 Nov 2022, Naresh Solanki wrote:
+> > 
+> > > 
+> > > 
+> > > On 17-11-2022 03:45 pm, Lee Jones wrote:
+> > > > On Wed, 16 Nov 2022, Naresh Solanki wrote:
+> > > > 
+> > > > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > > > 
+> > > > > Implement a regulator driver with IRQ support for fault management.
+> > > > > Written against documentation [1] and [2] and tested on real hardware.
+> > > > > 
+> > > > > Every channel has its own regulator supplies nammed 'vss1-supply' and
+> > > > > 'vss2-supply'. The regulator supply is used to determine the output
+> > > > > voltage, as the smart switch provides no output regulation.
+> > > > > The driver requires the 'shunt-resistor-micro-ohms' property to be
+> > > > > present in Device Tree to properly calculate current related
+> > > > > values.
+> > > > > 
+> > > > > Datasheet links:
+> > > > > 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+> > > > > 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+> > > > > 
+> > > > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> > > > > Co-developed-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> > > > > Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> > > > > ---
+> > > > >    drivers/mfd/Kconfig         |  12 +++++
+> > > > >    drivers/mfd/Makefile        |   1 +
+> > > > >    drivers/mfd/max597x.c       |  93 +++++++++++++++++++++++++++++++++
+> > > > >    include/linux/mfd/max597x.h | 101 ++++++++++++++++++++++++++++++++++++
+> > > > >    4 files changed, 207 insertions(+)
+> > > > >    create mode 100644 drivers/mfd/max597x.c
+> > > > >    create mode 100644 include/linux/mfd/max597x.h
+> > > > 
+> > > > Ignoring my comments won't make them go away. :)
+> > > > 
+> > > > Please tell me why you need a whole new driver, instead of adding
+> > > > support to simple-mfd-i2c?
+> > > > 
+> > > I felt current implementation to be simpler, clearer & straight forward.
+> > 
+> > If you can make it work with simple-mfd-i2c, please do so.
+> simple-mfd-i2c doesn't has mechanism to pass device type(max5978 vs
+> max5970).
 
-> This patch adds a note on alternative approach in cpumask_local_spread()
-> comment, as we discussed before.
->
-> I'm going to send pull request with cpumask_local_spread() rework by the
-> end of this week. If you want, I can include your patches in the request.
-> Otherwise please consider appending this patch to your series.
->
+`git grep silergy,sy7636a -- drivers/mfd`
 
-It would probably make sense to send it all together, especially since you
-went through the trouble of rebasing the patches :)
+> > No need to submit an entirely new driver for these simple use-cases.
 
-Thanks!
-
+-- 
+Lee Jones [李琼斯]
