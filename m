@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D38564C828
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C703E64C82B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiLNLiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S237450AbiLNLjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLNLij (ORCPT
+        with ESMTP id S229592AbiLNLjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:38:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C56B101EA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671017872;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xbb/OYb347XWt0aChq9WW/A++3VBOQvZVK9Cr0CpKIU=;
-        b=fnYFrtlD2KM89R7dQsQecr5VwkrbotjkfV6/lnkl+5ztwv1AIP3q4i4PFClt8lUh13i+RJ
-        hT190SbNrFXEFGVBAuXypsJko1Jf2gQOUVV+ovkVXYRwuEH6O15cgMsH95566d5nntVbId
-        EF6loVpT+9V3KcDCTuyLlxLL0Cxe4bU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-480-I4V8OfhpPHqnwS5s_K5SWg-1; Wed, 14 Dec 2022 06:37:49 -0500
-X-MC-Unique: I4V8OfhpPHqnwS5s_K5SWg-1
-Received: by mail-wm1-f70.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so4090069wmg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:37:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xbb/OYb347XWt0aChq9WW/A++3VBOQvZVK9Cr0CpKIU=;
-        b=U4vt+fc98BdvLyy4VzFOL5yPnOM0OVrfwE2aFnHmGl9REu3/hVL+BLS5EvyCXJHVM/
-         jRCjqD9M6YqizWdDXUwL/zA50+h5Cz/DqDmABM4P5AfpLc2MmEzTvkbHIel698Lg1B8+
-         pb0OOf1pxFR/CU74TePf155nm3kakMUp+UHmyHvUpnC8UmPSKO5sp4Z8mcYl7ClVlliA
-         S9ISZYAIYg18CpkXdJNJ1WBwVol8fgRB1O7iMBCNCaDPvfdhHWcxnAyehJVUceDdwN12
-         LNTLwQXZdvgK1LgG/EV0F/DZ8DFmp4xmNzuAFIqzwbr9Ycg7hxcOU7sDvM0Lv4hHOnx6
-         trrg==
-X-Gm-Message-State: ANoB5plwLQByxxEoL5XIurbrzJYEwOagNBY7ZumNT+n/CGFc/jY3Vy+D
-        Om5l0bfroMPfK//metF8LBufP3F2HNeMhxKOrFZKf/UltBfnS34MGms7KlaLIvmfBnbJO/3xJIH
-        x2qrdXV589GQjSPzjLRRkZUIJ
-X-Received: by 2002:a05:600c:1e8c:b0:3d2:381f:2db5 with SMTP id be12-20020a05600c1e8c00b003d2381f2db5mr2852485wmb.22.1671017868267;
-        Wed, 14 Dec 2022 03:37:48 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7+/bU1un/JpJM4ymOe9NfhDvrRwq4OTL101Vo082S4gqBPPhwQb2YjlTNDwe3J9cq8jj9gYA==
-X-Received: by 2002:a05:600c:1e8c:b0:3d2:381f:2db5 with SMTP id be12-20020a05600c1e8c00b003d2381f2db5mr2852461wmb.22.1671017868013;
-        Wed, 14 Dec 2022 03:37:48 -0800 (PST)
-Received: from redhat.com (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c4ecc00b003cf9bf5208esm2429840wmq.19.2022.12.14.03.37.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 03:37:47 -0800 (PST)
-Date:   Wed, 14 Dec 2022 06:37:44 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Conghui <conghui.chen@intel.com>
-Cc:     wsa@kernel.org, asowang@redhat.com, viresh.kumar@linaro.org,
-        linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221214063352-mutt-send-email-mst@kernel.org>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
+        Wed, 14 Dec 2022 06:39:15 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F742E87;
+        Wed, 14 Dec 2022 03:39:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671017953; x=1702553953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HIQ2CVubamspPVoCrqEnnVpkpn4eO9oQvSkp8p5F0Hs=;
+  b=ODGJvIayLolWrrZalyutcdNwE8jZXdERt4kSPpMV0Hv/A/yXgeEs1hWd
+   YubYaisI6DM/j9i3udw0aGdtsTa5J23QNXxXh9Uam816jbs44zBIdq3fJ
+   4FQBVy7r+NoAEXqmvU+1yQdbByfMI7TdpL53FOXIlcU2WjIw9d3DxKMUm
+   bGQY71JFoTe0+OB3QqSossS7QeOBAHvZCjhXxNHG1aCzfTcO+vC4cn2O1
+   Ggt8zT/s+5hZu4V0WnmQSEhgoQgZ6KLi3oYG95aX6h3guuCe5+5QBQhHt
+   EmwIFx3RkZbJhagIpEBPjXJHsLF56Wiqh54hgR4bCXIpcbVWFjbuDjvxo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380584184"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="380584184"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 03:39:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="791276457"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="791276457"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2022 03:39:05 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p5Q6K-009mSh-01;
+        Wed, 14 Dec 2022 13:39:04 +0200
+Date:   Wed, 14 Dec 2022 13:39:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: Dubious usage of VM_SHARED in atomisp_fops.c
+Message-ID: <Y5m117tMRfo4Gnm3@smile.fi.intel.com>
+References: <fbefc16e-84d3-8afc-8c8e-4229bded0c8a@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221214053631.3225164-1-conghui.chen@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fbefc16e-84d3-8afc-8c8e-4229bded0c8a@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:36:31PM +0800, Conghui wrote:
-> This updates the maintainer for virtio i2c drvier
+On Wed, Dec 14, 2022 at 11:22:39AM +0100, David Hildenbrand wrote:
 
-I got that, but what is going on here exactly?
-I generally expect a new maintainer to be active in the
-project for a while first.
-I don't see contributions or reviews for this driver or
-for that matter for any virtio or i2c drivers from Jian Jun Chen.
-It looks like you are no longer interested in maintaining
-this? In that case pls just send a patch removing yourself.
+...
 
-Jian Jun Chen, if you are interested in reviewing
-patches please start doing so, you don't need to
-be listed as a maintainer for this to happen.
-Once you do this for a while and write some patches,
-you can become a maintainer, this is not a high bar
-to clear.
+> the other one would be to remove this driver. Judging
+> that the driver already was marked broken in 2020 (ad85094b293e ("Revert
+> "media: staging: atomisp: Remove driver"")), maybe it's time for the driver
+> to go.
 
-> Signed-off-by: Conghui <conghui.chen@intel.com>
-> Acked-by: Jian Jun Chen <jian.jun.chen@intel.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a8c8f6b42436..44747f4641a6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21920,7 +21920,7 @@ F:	include/uapi/linux/virtio_snd.h
->  F:	sound/virtio/*
->  
->  VIRTIO I2C DRIVER
-> -M:	Conghui Chen <conghui.chen@intel.com>
-> +M:	Jian Jun Chen <jian.jun.chen@intel.com>
->  M:	Viresh Kumar <viresh.kumar@linaro.org>
->  L:	linux-i2c@vger.kernel.org
->  L:	virtualization@lists.linux-foundation.org
-> -- 
-> 2.25.1
+Not an option at all. As Hans explained.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
