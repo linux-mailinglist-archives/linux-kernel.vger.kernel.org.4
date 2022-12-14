@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D7A64C59A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCBF64C5A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbiLNJLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S237348AbiLNJOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiLNJLM (ORCPT
+        with ESMTP id S237868AbiLNJOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:11:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6AD1DD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=J9zy1I1jvlVgO4gzWDG/fOFo9/RhHbRmxr5v73Xv7gw=; b=oMRZQuRTOV1r55GY3GDiNpot78
-        YV423zDDRBUOUvXbu/ES3QOoWo+D7G/ZEmV4z5HkDVM2fzgocVhNEEkRmh6MHxwvhfd56nfuqV0yQ
-        hgBx+t/2NhPLzUqMVmF/+szA7pZz6ERJ9BoL6XxrFGnqIw/OElmzUVLW11ReeeuUwFFr/nBS/AXS0
-        L83UKKPFejjhH0zCqd2bn7aiMBblLX1i79qpcKsKJivAywur0kmbfObV46a72fOlRHxExY0AcAf+Z
-        gEzf87rH77AOPvVt+pJPK4aBr0lhpjB2ct4vUKqX2lIWWbbK/rKKUp5/JtCdElvlTVCZ9PR/qF7d1
-        kP5qVSgw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5NnD-00D4Ly-6P; Wed, 14 Dec 2022 09:11:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8705530036B;
-        Wed, 14 Dec 2022 10:11:01 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2AA54202344B3; Wed, 14 Dec 2022 10:11:01 +0100 (CET)
-Date:   Wed, 14 Dec 2022 10:11:01 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
+        Wed, 14 Dec 2022 04:14:12 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21E71E716
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:14:09 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ud5so42974332ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:14:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uWkMxa5MLgkbzdYiOGyURygCOSuCzD/0jnB9r1qxWTs=;
+        b=TcGAPjxR9F6gw8xpoGK2DjJ+OF1X1Kwmirxn+f1vVC6ZrCogbLdvYMSA45jSe5obuT
+         auY5It6QRqAisUJ0D0lKegv8tJKrxhiEU3UMMnsXw9navQBet5mrgf3zrBj4O6s/szRB
+         F0ONb8u0wLbZa7QxTpsQ6bNk8X14u0Xf8B7hS/scpjMsPG13JkyGmjXvElukHQix7+zn
+         wEo5+GIceH543hYpmLLOa7lmNoqvhEI6dNY/xg8dlxDX5tRduSUZOjSAPR3YUPu0dzP9
+         1SW2Gh1WF3jwREjOXZ2b3/OpBcsl2O+7uJVbhyAIwpX+Ap+37eEAXlu9d0tR/R3siZGl
+         hZtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uWkMxa5MLgkbzdYiOGyURygCOSuCzD/0jnB9r1qxWTs=;
+        b=RN4i8f9GHHvzi5uMzcs+Zya8iwrSyYOy8lJCApJetGnhBEykMs3KlxGzH68MhzcN5y
+         Z7MFF9yfD8t7joJ45JEgVZ4l80JDHHLD6wn8iuXjtYJRP2Adn5dR27ZvotLYPYw4SCbL
+         W9EJ6Emh+kfy9gJ8Q+bSIBHbpQ/3JmOILZwnmV8ktGLh8E5Hi8ilu1wq7h0p0JPsOjKv
+         xPLNKlwxJrsaH2OxqrE4siIL16BTuskhRJT9UX2eTYJERFC7FWDPX/bi+sLVXykNWx6y
+         BuI5Y4cIcqDTOTsH9P0fcKawmWzQKTmD7GgtYOeP4ehsoTbS4J9JT222/Wt0ff6U5Hn1
+         Rl/g==
+X-Gm-Message-State: ANoB5pkl/HQAWrCtXV1d4DAUYMK8W78PFBmBsF794d4R+e4OHcYe2SJw
+        brZCfo106hvyhdyuWeJGSP9MXA==
+X-Google-Smtp-Source: AA0mqf5Hh2vYaRSCkuOt0e+bO9Bytz2NDRllVNqTlpXkMHlnUyydFlzhOsdwMBeV0ocC3UEihjU6JA==
+X-Received: by 2002:a17:906:1f53:b0:7bc:bf97:169c with SMTP id d19-20020a1709061f5300b007bcbf97169cmr19058269ejk.77.1671009248480;
+        Wed, 14 Dec 2022 01:14:08 -0800 (PST)
+Received: from blmsp ([185.238.219.9])
+        by smtp.gmail.com with ESMTPSA id k24-20020a17090632d800b007ad94fd48dfsm5529083ejk.139.2022.12.14.01.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 01:14:08 -0800 (PST)
+Date:   Wed, 14 Dec 2022 10:14:06 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Make const-safe
-Message-ID: <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
-References: <20221212144946.2657785-1-willy@infradead.org>
+Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
+Message-ID: <20221214091406.g6vim5hvlkm34naf@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-3-msp@baylibre.com>
+ <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221212144946.2657785-1-willy@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 02:49:46PM +0000, Matthew Wilcox (Oracle) wrote:
-> With a modified container_of() that preserves constness, the compiler
-> finds some pointers which should have been marked as const.  task_of()
-> also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
-> that cfs_rq_of() can take a const argument.  No change to generated code.
+Hi Marc,
 
-More const more better I suppose.. Thanks!
+On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
+> > Currently the driver waits to wakeup the queue until the interrupt for
+> > the transmit event is received and acknowledged. If we want to use the
+> > hardware FIFO, this is too late.
+> > 
+> > Instead release the queue as soon as the transmit was transferred into
+> > the hardware FIFO. We are then ready for the next transmit to be
+> > transferred.
+> 
+> If you want to really speed up the TX path, remove the worker and use
+> the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
+> 
+> Extra bonus if you implement xmit_more() and transfer more than 1 skb
+> per SPI transfer.
 
-Happen to have a sha for the container_of() commit handy?
+Just a quick question here, I mplemented a xmit_more() call and I am
+testing it right now, but it always returns false even under high
+pressure. The device has a txqueuelen set to 1000. Do I need to turn
+some other knob for this to work?
+
+Thanks,
+Markus
