@@ -2,259 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F4A64C2FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEE764C30D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237400AbiLNEE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        id S237334AbiLNEI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 23:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbiLNEEs (ORCPT
+        with ESMTP id S237451AbiLNEIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:04:48 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF3B1AA24
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:47 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id r18so1184859pgr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xQt5vmWNOYImcx88xRRm26FyZREKL6BjzFiX1hvI6Vg=;
-        b=VjmDhHepmfUEnQccFYiwt7Dlq6KQP7BINTCd7o2YXW6vaaQR3dSwPKux5kqY2OlGyY
-         NZPqSRPzrAJLAehjaxEjwszjuIEjhSN5jjKswrrBoIag4XsoCdW+MRYKi8sUYunWVVtd
-         5BWz50E9diQghXUIf60DxCQdAXZTRHWPe4zhI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xQt5vmWNOYImcx88xRRm26FyZREKL6BjzFiX1hvI6Vg=;
-        b=S2zBphw0huUNMOn6VNwL9iOHTJawuEFKn+WAKSAD2+h3gMvKPlTUrO1i1kITGWXZ/E
-         I4aFIYlXid06RDJQRLAeLRp7FPk9GllAqaFRWfGLa+PNW2JX9eEVVrEbKQEezJPnq2RS
-         38UqV0VLnlcMMQWk2ZvpBulbDjaVa8CQJ8Vx7wyKmWzECBMUbhwhIw/ARmr173P2Xj+R
-         3l+xQie77hJlh/CgGRtLO0I+LF9g09sBbVc3EdWL43Xle5jTR4cmPvexdMuftgF/2qAJ
-         PiDgvboJSljN6mIFaqZdiNC9Bdstnn/v522cP2ZQZIYHyKU1jSMwVZK7HSMoSmsV3eML
-         87rw==
-X-Gm-Message-State: ANoB5ply/2eK15pqimbeBXmJX+GK5K3JVU+UO4DVnAZc359PND9dUE9H
-        P7TuhVTEFQmz3hUSVWhzs4/GnQ==
-X-Google-Smtp-Source: AA0mqf5RjmddANWQHs4HCwxfe9mmCGS3+IpZPehGLaE6VCHmIZnfsaOnk1CL1tLvvtYmVc9gCps7Fg==
-X-Received: by 2002:aa7:8252:0:b0:574:c62c:2f55 with SMTP id e18-20020aa78252000000b00574c62c2f55mr21575418pfn.3.1670990686523;
-        Tue, 13 Dec 2022 20:04:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d206-20020a621dd7000000b0056bc742d21esm8654559pfd.176.2022.12.13.20.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 20:04:46 -0800 (PST)
-Date:   Tue, 13 Dec 2022 20:04:45 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        David Gow <davidgow@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "haifeng.xu" <haifeng.xu@shopee.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Li <xin3.li@intel.com>
-Subject: [GIT PULL] kernel hardening updates for v6.2-rc1
-Message-ID: <202212131955.22F9FD9AB@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 23:08:43 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BB6D2ED;
+        Tue, 13 Dec 2022 20:08:41 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE3oJmv026035;
+        Wed, 14 Dec 2022 04:08:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=+QGfhuusRgaYAJxvaVImjvCkuiYU+EOv+jzC4ezRLZQ=;
+ b=Schtrp9TcSO9NQaT5PKpnsrgQTE4zdX5B5NXIZZ66GW0oDRSCr5X0VHVgRfkglLL16r3
+ wfjYOrb2BOSkSLk1nGqh4leoq436K0fZBx9zGX9q6U/B+/dNWbda++m7SzcmQjZ3SUB4
+ XV3LDGIuA680EvjtO3gmmOkoiwqGDGV6FaCb6zQ8FvbqOh8QDoHBDzPmftejQ8kKZ88I
+ cGjXVdeubIBKcpnKs6iqQrSc/4XZ+xvC1aYa67Tlkz0XH89LClJT6S9EFVuYDLs5sNfU
+ /4A/YvMxfg76TiyVVymDuswnZ410rBfOE3HJ36mYY2zNnxaW4ZAbGtjlpVvuI6iXiKuE Lg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkg1e8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 04:08:20 +0000
+Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2BE48JEU024461;
+        Wed, 14 Dec 2022 04:08:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 3mck6m3hc1-1;
+        Wed, 14 Dec 2022 04:08:19 +0000
+Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BE45uWa019716;
+        Wed, 14 Dec 2022 04:08:18 GMT
+Received: from stor-presley.qualcomm.com (wsp769891wss.qualcomm.com [192.168.140.85] (may be forged))
+        by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 2BE48Il3024455;
+        Wed, 14 Dec 2022 04:08:18 +0000
+Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
+        id 9CB1A20DF0; Tue, 13 Dec 2022 20:08:18 -0800 (PST)
+From:   Can Guo <quic_cang@quicinc.com>
+To:     quic_asutoshd@quicinc.com, bvanassche@acm.org, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Can Guo <quic_cang@quicinc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 1/3] ufs: core: Add Event Specific Interrupt configuration vendor specific ops
+Date:   Tue, 13 Dec 2022 20:06:00 -0800
+Message-Id: <1670990763-30806-2-git-send-email-quic_cang@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1670990763-30806-1-git-send-email-quic_cang@quicinc.com>
+References: <1670990763-30806-1-git-send-email-quic_cang@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _9zkmuENL6K-W9XUQwD48HH-eZ09j8_F
+X-Proofpoint-GUID: _9zkmuENL6K-W9XUQwD48HH-eZ09j8_F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_01,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 clxscore=1011 phishscore=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140031
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+As Event Specific Interrupt message format is not defined in UFSHCI JEDEC
+specs, and the ESI handling highly depends on how the format is designed,
+hence add a vendor specific ops such that SoC vendors can configure their
+own ESI handlers. If ESI vops is not provided or returning error, go with
+the legacy (central) interrupt way.
 
-Please pull these hardening updates for v6.2-rc1. This tree's various
-collected improvements, noted below, have been in -next for a while
-now. The only merge note I have is that this tree's ksize() work depends
-on behavioral changes in the slab and netdev trees, but those trees have
-now been merged into your tree, so there should be no surprises.
+Signed-off-by: Can Guo <quic_cang@quicinc.com>
+---
+ drivers/ufs/core/ufshcd-priv.h | 8 ++++++++
+ drivers/ufs/core/ufshcd.c      | 5 +++++
+ include/ufs/ufshcd.h           | 2 ++
+ 3 files changed, 15 insertions(+)
 
-Thanks!
-
--Kees
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.2-rc1
-
-for you to fetch changes up to d272e01fa0a2f15c5c331a37cd99c6875c7b7186:
-
-  ksmbd: replace one-element arrays with flexible-array members (2022-12-02 13:14:29 -0800)
-
-----------------------------------------------------------------
-hardening updates for v6.2-rc1
-
-- Convert flexible array members, fix -Wstringop-overflow warnings,
-  and fix KCFI function type mismatches that went ignored by
-  maintainers (Gustavo A. R. Silva, Nathan Chancellor, Kees Cook).
-
-- Remove the remaining side-effect users of ksize() by converting
-  dma-buf, btrfs, and coredump to using kmalloc_size_roundup(),
-  add more __alloc_size attributes, and introduce full testing
-  of all allocator functions. Finally remove the ksize() side-effect
-  so that each allocation-aware checker can finally behave without
-  exceptions.
-
-- Introduce oops_limit (default 10,000) and warn_limit (default off)
-  to provide greater granularity of control for panic_on_oops and
-  panic_on_warn (Jann Horn, Kees Cook).
-
-- Introduce overflows_type() and castable_to_type() helpers for
-  cleaner overflow checking.
-
-- Disable structleak plugin in FORTIFY KUnit test (Anders Roxell).
-
-- Adjust orphan linker section checking to respect CONFIG_WERROR
-  (Xin Li).
-
-- Make sure siginfo is cleared for forced SIGKILL (haifeng.xu).
-
-- Improve code generation for strscpy() and update str*() kern-doc.
-
-- Convert strscpy and sigphash tests to KUnit, and expand memcpy
-  tests.
-
-- Always use a non-NULL argument for prepare_kernel_cred().
-
-- Fix um vs FORTIFY warnings for always-NULL arguments.
-
-----------------------------------------------------------------
-Anders Roxell (1):
-      lib: fortify_kunit: build without structleak plugin
-
-Gustavo A. R. Silva (2):
-      mm/pgtable: Fix multiple -Wstringop-overflow warnings
-      ksmbd: replace one-element arrays with flexible-array members
-
-Jann Horn (1):
-      exit: Put an upper limit on how often we can oops
-
-Kees Cook (27):
-      overflow: Fix kern-doc markup for functions
-      overflow: Refactor test skips for Clang-specific issues
-      fortify: Capture __bos() results in const temp vars
-      string: Rewrite and add more kern-doc for the str*() functions
-      kunit/memcpy: Add dynamic size and window tests
-      string: Add __realloc_size hint to kmemdup()
-      string: Convert strscpy() self-test to KUnit
-      fortify: Short-circuit known-safe calls to strscpy()
-      siphash: Convert selftest to KUnit
-      fortify: Do not cast to "unsigned char"
-      cred: Do not default to init_cred in prepare_kernel_cred()
-      dma-buf: Proactively round up to kmalloc bucket size
-      btrfs: send: Proactively round up to kmalloc bucket size
-      coredump: Proactively round up to kmalloc bucket size
-      overflow: Introduce overflows_type() and castable_to_type()
-      Merge branch 'for-linus/hardening' into for-next/hardening
-      driver core: Add __alloc_size hint to devm allocators
-      kunit/fortify: Validate __alloc_size attribute results
-      mm: Make ksize() a reporting-only function
-      panic: Separate sysctl logic from CONFIG_SMP
-      exit: Expose "oops_count" to sysfs
-      exit: Allow oops_limit to be disabled
-      panic: Consolidate open-coded panic_on_warn checks
-      panic: Introduce warn_limit
-      panic: Expose "warn_count" to sysfs
-      um: virt-pci: Avoid GCC non-NULL warning
-      hpet: Replace one-element array with flexible-array member
-
-Nathan Chancellor (3):
-      vmlinux.lds.h: Fix placement of '.data..decrypted' section
-      drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
-      drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
-
-Nick Desaulniers (1):
-      overflow: disable failing tests for older clang versions
-
-Xin Li (1):
-      kbuild: upgrade the orphan section warning to an error if CONFIG_WERROR is set
-
-haifeng.xu (1):
-      signal: Initialize the info in ksignal
-
- Documentation/ABI/testing/sysfs-kernel-oops_count |   6 +
- Documentation/ABI/testing/sysfs-kernel-warn_count |   6 +
- Documentation/admin-guide/sysctl/kernel.rst       |  19 +
- Documentation/core-api/kernel-api.rst             |   9 +
- Documentation/driver-api/basics.rst               |   3 -
- MAINTAINERS                                       |   6 +-
- Makefile                                          |   2 +-
- arch/arm/boot/compressed/Makefile                 |   2 +-
- arch/arm64/kernel/vdso/Makefile                   |   2 +-
- arch/arm64/kernel/vdso32/Makefile                 |   2 +-
- arch/um/drivers/virt-pci.c                        |   9 +-
- arch/x86/boot/compressed/Makefile                 |   2 +-
- arch/x86/mm/pgtable.c                             |  22 +-
- drivers/base/firmware_loader/main.c               |   2 +-
- drivers/dma-buf/dma-resv.c                        |   9 +-
- drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c         |   5 +-
- drivers/gpu/drm/i915/i915_user_extensions.c       |   2 +-
- drivers/gpu/drm/i915/i915_utils.h                 |   4 -
- drivers/gpu/drm/sti/sti_dvo.c                     |   5 +-
- drivers/gpu/drm/sti/sti_hda.c                     |   5 +-
- drivers/gpu/drm/sti/sti_hdmi.c                    |   5 +-
- fs/btrfs/send.c                                   |  11 +-
- fs/cifs/cifs_spnego.c                             |   2 +-
- fs/cifs/cifsacl.c                                 |   2 +-
- fs/coredump.c                                     |   7 +-
- fs/ksmbd/smb2pdu.c                                |   4 +-
- fs/ksmbd/smb2pdu.h                                |   2 +-
- fs/ksmbd/smb_common.c                             |   2 +-
- fs/ksmbd/smb_common.h                             |  12 +-
- fs/nfs/flexfilelayout/flexfilelayout.c            |   4 +-
- fs/nfs/nfs4idmap.c                                |   2 +-
- fs/nfsd/nfs4callback.c                            |   2 +-
- include/asm-generic/vmlinux.lds.h                 |   2 +-
- include/linux/compiler.h                          |   1 +
- include/linux/device.h                            |   7 +-
- include/linux/fortify-string.h                    | 161 +++++++-
- include/linux/hpet.h                              |   2 +-
- include/linux/overflow.h                          |  85 +++--
- include/linux/panic.h                             |   1 +
- include/linux/string.h                            |   2 +-
- init/Kconfig                                      |  15 +-
- kernel/cred.c                                     |  15 +-
- kernel/exit.c                                     |  60 +++
- kernel/kcsan/report.c                             |   3 +-
- kernel/panic.c                                    |  45 ++-
- kernel/sched/core.c                               |   3 +-
- kernel/signal.c                                   |   1 +
- lib/Kconfig.debug                                 |  28 +-
- lib/Makefile                                      |   7 +-
- lib/fortify_kunit.c                               | 255 +++++++++++++
- lib/memcpy_kunit.c                                | 205 +++++++++++
- lib/overflow_kunit.c                              | 428 +++++++++++++++++++++-
- lib/{test_siphash.c => siphash_kunit.c}           | 165 ++++-----
- lib/string.c                                      |  82 -----
- lib/strscpy_kunit.c                               | 142 +++++++
- lib/test_strscpy.c                                | 150 --------
- lib/ubsan.c                                       |   3 +-
- mm/kasan/kasan_test.c                             |  19 +-
- mm/kasan/report.c                                 |   4 +-
- mm/kfence/report.c                                |   3 +-
- mm/slab_common.c                                  |  26 +-
- net/dns_resolver/dns_key.c                        |   2 +-
- scripts/kernel-doc                                |   6 +-
- 63 files changed, 1601 insertions(+), 504 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-oops_count
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-warn_count
- rename lib/{test_siphash.c => siphash_kunit.c} (60%)
- create mode 100644 lib/strscpy_kunit.c
- delete mode 100644 lib/test_strscpy.c
-
+diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+index ff03aa5..802029e 100644
+--- a/drivers/ufs/core/ufshcd-priv.h
++++ b/drivers/ufs/core/ufshcd-priv.h
+@@ -276,6 +276,14 @@ static inline int ufshcd_vops_get_outstanding_cqs(struct ufs_hba *hba,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int ufshcd_mcq_vops_config_esi(struct ufs_hba *hba)
++{
++	if (hba->vops && hba->vops->config_esi)
++		return hba->vops->config_esi(hba);
++
++	return -EOPNOTSUPP;
++}
++
+ extern const struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+ 
+ /**
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index e9d6891..3762dca 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -8375,6 +8375,11 @@ static int ufshcd_alloc_mcq(struct ufs_hba *hba)
+ 
+ static void ufshcd_config_mcq(struct ufs_hba *hba)
+ {
++	int ret;
++
++	ret = ufshcd_mcq_vops_config_esi(hba);
++	dev_info(hba->dev, "ESI %sconfigured\n", ret ? "is not " : "");
++
+ 	ufshcd_enable_intr(hba, UFSHCD_ENABLE_MCQ_INTRS);
+ 	ufshcd_mcq_make_queues_operational(hba);
+ 	ufshcd_mcq_config_mac(hba, hba->nutrs);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index f20557b..7f0139b 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -302,6 +302,7 @@ struct ufs_pwr_mode_info {
+  * @get_hba_mac: called to get vendor specific mac value, mandatory for mcq mode
+  * @op_runtime_config: called to config Operation and runtime regs Pointers
+  * @get_outstanding_cqs: called to get outstanding completion queues
++ * @config_esi: called to config Event Specific Interrupt
+  */
+ struct ufs_hba_variant_ops {
+ 	const char *name;
+@@ -345,6 +346,7 @@ struct ufs_hba_variant_ops {
+ 	int	(*op_runtime_config)(struct ufs_hba *hba);
+ 	int	(*get_outstanding_cqs)(struct ufs_hba *hba,
+ 				       unsigned long *ocqs);
++	int	(*config_esi)(struct ufs_hba *hba);
+ };
+ 
+ /* clock gating state  */
 -- 
-Kees Cook
+2.7.4
+
