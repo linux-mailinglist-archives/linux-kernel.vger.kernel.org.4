@@ -2,149 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDBA64C81D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D38564C828
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238191AbiLNLgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S238026AbiLNLiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238009AbiLNLf5 (ORCPT
+        with ESMTP id S229592AbiLNLij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:35:57 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74141ADAB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:35:55 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEBMKVn017349;
-        Wed, 14 Dec 2022 11:35:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=QOFehjMfijkWTE7+vL1yB2+QrFjOga00vBG7DEY35dk=;
- b=I9cxCbOVRf2kYXNDZXM+WYvhfdMNdvYtmWJv9RSQaRwKfoQ8T5c5XPVazqdzHHIFKwyS
- hhvtf4EovjYCuHA2SSU8le+lfLYnfyK9SK3CoTmTLC0u9GrQi5Ey6A+fO6IotG7SID3b
- QRqRIwqS5+t2XftjoZzKAW2K0mRctujL3Q2hEfAanth1iW5i9t+7uFQJUuhcRp1ts/Kz
- WS2Xq4Lj864IbxwafvD9+3ypVI0d1y9THsLtEvVfuaeKbSfJxUN4utE7WT8U/18iWDEG
- HFhtHBhx/IqMOCkdftLzV2NNhpYWjB4oOsxMWrtBy1J2KI9B132gPYgexn2FfYAAIeO8 8Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfdj08ae3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 11:35:51 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEBPBIx032473;
-        Wed, 14 Dec 2022 11:35:50 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfdj08adf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 11:35:50 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDK6cBf029153;
-        Wed, 14 Dec 2022 11:35:48 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mf0518u6c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 11:35:48 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEBZjaD19399166
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 11:35:45 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B66D520040;
-        Wed, 14 Dec 2022 11:35:45 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B6C120043;
-        Wed, 14 Dec 2022 11:35:42 +0000 (GMT)
-Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.67.101])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 14 Dec 2022 11:35:41 +0000 (GMT)
-Date:   Wed, 14 Dec 2022 17:05:38 +0530
-From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Subject: staging: vme_user: Replace the "<<" with BIT macro
-Message-ID: <Y5m1CvaAc2Z8LO2k@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
+        Wed, 14 Dec 2022 06:38:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C56B101EA
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:37:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671017872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xbb/OYb347XWt0aChq9WW/A++3VBOQvZVK9Cr0CpKIU=;
+        b=fnYFrtlD2KM89R7dQsQecr5VwkrbotjkfV6/lnkl+5ztwv1AIP3q4i4PFClt8lUh13i+RJ
+        hT190SbNrFXEFGVBAuXypsJko1Jf2gQOUVV+ovkVXYRwuEH6O15cgMsH95566d5nntVbId
+        EF6loVpT+9V3KcDCTuyLlxLL0Cxe4bU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-480-I4V8OfhpPHqnwS5s_K5SWg-1; Wed, 14 Dec 2022 06:37:49 -0500
+X-MC-Unique: I4V8OfhpPHqnwS5s_K5SWg-1
+Received: by mail-wm1-f70.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so4090069wmg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:37:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xbb/OYb347XWt0aChq9WW/A++3VBOQvZVK9Cr0CpKIU=;
+        b=U4vt+fc98BdvLyy4VzFOL5yPnOM0OVrfwE2aFnHmGl9REu3/hVL+BLS5EvyCXJHVM/
+         jRCjqD9M6YqizWdDXUwL/zA50+h5Cz/DqDmABM4P5AfpLc2MmEzTvkbHIel698Lg1B8+
+         pb0OOf1pxFR/CU74TePf155nm3kakMUp+UHmyHvUpnC8UmPSKO5sp4Z8mcYl7ClVlliA
+         S9ISZYAIYg18CpkXdJNJ1WBwVol8fgRB1O7iMBCNCaDPvfdhHWcxnAyehJVUceDdwN12
+         LNTLwQXZdvgK1LgG/EV0F/DZ8DFmp4xmNzuAFIqzwbr9Ycg7hxcOU7sDvM0Lv4hHOnx6
+         trrg==
+X-Gm-Message-State: ANoB5plwLQByxxEoL5XIurbrzJYEwOagNBY7ZumNT+n/CGFc/jY3Vy+D
+        Om5l0bfroMPfK//metF8LBufP3F2HNeMhxKOrFZKf/UltBfnS34MGms7KlaLIvmfBnbJO/3xJIH
+        x2qrdXV589GQjSPzjLRRkZUIJ
+X-Received: by 2002:a05:600c:1e8c:b0:3d2:381f:2db5 with SMTP id be12-20020a05600c1e8c00b003d2381f2db5mr2852485wmb.22.1671017868267;
+        Wed, 14 Dec 2022 03:37:48 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7+/bU1un/JpJM4ymOe9NfhDvrRwq4OTL101Vo082S4gqBPPhwQb2YjlTNDwe3J9cq8jj9gYA==
+X-Received: by 2002:a05:600c:1e8c:b0:3d2:381f:2db5 with SMTP id be12-20020a05600c1e8c00b003d2381f2db5mr2852461wmb.22.1671017868013;
+        Wed, 14 Dec 2022 03:37:48 -0800 (PST)
+Received: from redhat.com (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c4ecc00b003cf9bf5208esm2429840wmq.19.2022.12.14.03.37.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 03:37:47 -0800 (PST)
+Date:   Wed, 14 Dec 2022 06:37:44 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Conghui <conghui.chen@intel.com>
+Cc:     wsa@kernel.org, asowang@redhat.com, viresh.kumar@linaro.org,
+        linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Jian Jun Chen <jian.jun.chen@intel.com>
+Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
+Message-ID: <20221214063352-mutt-send-email-mst@kernel.org>
+References: <20221214053631.3225164-1-conghui.chen@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TiYLQ2KMN6sxUrw0goJiuYU3I1F6Thc-
-X-Proofpoint-ORIG-GUID: YuUDho1Nf5CCc9byMvlQpkLRDI4RhDL-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_04,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221214053631.3225164-1-conghui.chen@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the "<<" operator with BIT macro, in accordance to the
-checkpatch.pl script and Linux kernel coding-style guidelines.
-Issues reported by checkpatch.pl:
-	CHECK: Prefer using the BIT macro
+On Wed, Dec 14, 2022 at 01:36:31PM +0800, Conghui wrote:
+> This updates the maintainer for virtio i2c drvier
 
-Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
----
- drivers/staging/vme_user/vme.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+I got that, but what is going on here exactly?
+I generally expect a new maintainer to be active in the
+project for a while first.
+I don't see contributions or reviews for this driver or
+for that matter for any virtio or i2c drivers from Jian Jun Chen.
+It looks like you are no longer interested in maintaining
+this? In that case pls just send a patch removing yourself.
 
-diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
-index 98da8d039d60..faa9816046a9 100644
---- a/drivers/staging/vme_user/vme.h
-+++ b/drivers/staging/vme_user/vme.h
-@@ -2,6 +2,8 @@
- #ifndef _VME_H_
- #define _VME_H_
- 
-+#include <linux/bitops.h>
-+
- /* Resource Type */
- enum vme_resource_type {
- 	VME_MASTER,
-@@ -54,20 +56,20 @@ enum vme_resource_type {
- #define VME_R_ROBIN_MODE	0x1
- #define VME_PRIORITY_MODE	0x2
- 
--#define VME_DMA_PATTERN			(1<<0)
--#define VME_DMA_PCI			(1<<1)
--#define VME_DMA_VME			(1<<2)
-+#define VME_DMA_PATTERN		BIT(0)
-+#define VME_DMA_PCI			BIT(1)
-+#define VME_DMA_VME			BIT(2)
- 
--#define VME_DMA_PATTERN_BYTE		(1<<0)
--#define VME_DMA_PATTERN_WORD		(1<<1)
--#define VME_DMA_PATTERN_INCREMENT	(1<<2)
-+#define VME_DMA_PATTERN_BYTE		BIT(0)
-+#define VME_DMA_PATTERN_WORD		BIT(1)
-+#define VME_DMA_PATTERN_INCREMENT	BIT(2)
- 
--#define VME_DMA_VME_TO_MEM		(1<<0)
--#define VME_DMA_MEM_TO_VME		(1<<1)
--#define VME_DMA_VME_TO_VME		(1<<2)
--#define VME_DMA_MEM_TO_MEM		(1<<3)
--#define VME_DMA_PATTERN_TO_VME		(1<<4)
--#define VME_DMA_PATTERN_TO_MEM		(1<<5)
-+#define VME_DMA_VME_TO_MEM		BIT(0)
-+#define VME_DMA_MEM_TO_VME		BIT(1)
-+#define VME_DMA_VME_TO_VME		BIT(2)
-+#define VME_DMA_MEM_TO_MEM		BIT(3)
-+#define VME_DMA_PATTERN_TO_VME		BIT(4)
-+#define VME_DMA_PATTERN_TO_MEM		BIT(5)
- 
- struct vme_dma_attr {
- 	u32 type;
--- 
-2.31.1
+Jian Jun Chen, if you are interested in reviewing
+patches please start doing so, you don't need to
+be listed as a maintainer for this to happen.
+Once you do this for a while and write some patches,
+you can become a maintainer, this is not a high bar
+to clear.
+
+> Signed-off-by: Conghui <conghui.chen@intel.com>
+> Acked-by: Jian Jun Chen <jian.jun.chen@intel.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a8c8f6b42436..44747f4641a6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21920,7 +21920,7 @@ F:	include/uapi/linux/virtio_snd.h
+>  F:	sound/virtio/*
+>  
+>  VIRTIO I2C DRIVER
+> -M:	Conghui Chen <conghui.chen@intel.com>
+> +M:	Jian Jun Chen <jian.jun.chen@intel.com>
+>  M:	Viresh Kumar <viresh.kumar@linaro.org>
+>  L:	linux-i2c@vger.kernel.org
+>  L:	virtualization@lists.linux-foundation.org
+> -- 
+> 2.25.1
 
