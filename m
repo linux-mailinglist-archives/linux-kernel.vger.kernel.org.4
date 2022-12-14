@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C703E64C82B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F2E64C83D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:42:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbiLNLjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S229662AbiLNLmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLNLjP (ORCPT
+        with ESMTP id S237453AbiLNLlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:39:15 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F742E87;
-        Wed, 14 Dec 2022 03:39:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671017953; x=1702553953;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HIQ2CVubamspPVoCrqEnnVpkpn4eO9oQvSkp8p5F0Hs=;
-  b=ODGJvIayLolWrrZalyutcdNwE8jZXdERt4kSPpMV0Hv/A/yXgeEs1hWd
-   YubYaisI6DM/j9i3udw0aGdtsTa5J23QNXxXh9Uam816jbs44zBIdq3fJ
-   4FQBVy7r+NoAEXqmvU+1yQdbByfMI7TdpL53FOXIlcU2WjIw9d3DxKMUm
-   bGQY71JFoTe0+OB3QqSossS7QeOBAHvZCjhXxNHG1aCzfTcO+vC4cn2O1
-   Ggt8zT/s+5hZu4V0WnmQSEhgoQgZ6KLi3oYG95aX6h3guuCe5+5QBQhHt
-   EmwIFx3RkZbJhagIpEBPjXJHsLF56Wiqh54hgR4bCXIpcbVWFjbuDjvxo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380584184"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="380584184"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 03:39:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="791276457"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="791276457"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2022 03:39:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p5Q6K-009mSh-01;
-        Wed, 14 Dec 2022 13:39:04 +0200
-Date:   Wed, 14 Dec 2022 13:39:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: Dubious usage of VM_SHARED in atomisp_fops.c
-Message-ID: <Y5m117tMRfo4Gnm3@smile.fi.intel.com>
-References: <fbefc16e-84d3-8afc-8c8e-4229bded0c8a@redhat.com>
+        Wed, 14 Dec 2022 06:41:51 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E7210B5B;
+        Wed, 14 Dec 2022 03:41:47 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h11so18963007wrw.13;
+        Wed, 14 Dec 2022 03:41:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mnLxEEtkwDMb5Dhb/JDaNIG/lWifqcCuQhOSzipR1SA=;
+        b=isJHvU1ub3SUdofMT6POFlCZBGQXJa/2ddC2lMYjMnh/iQF2KhgRYYlVNRuWh8NhIl
+         bwmLlXU1ijTvdXFPjjsUyYDC0ZY4mGF2oF8uD1oFNZzVZPx7RzUw+4T6XaamOr0zBCjD
+         Zw9jr/oa4vsEG3BOM92wPawkF0dwycFYuLCKoo8BQIxQU0Zog4XSR4s/foTLjPlr/xLb
+         ciEGmD7ticxAPu4Wf6RUpFZBv3rGXo8V/ELVCccNNUqPB5YyL9Nht+lv3HhhoGhM1Q1d
+         zSgw3UYbpGee8w+5OFryehiIHOPjuO8CYY/lKEWr5rQ5v23BKvijpXSONFid6y6Ohu/y
+         /sag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mnLxEEtkwDMb5Dhb/JDaNIG/lWifqcCuQhOSzipR1SA=;
+        b=dTdJHoXiyJ3ZZxEY8bMXHPME23aA3G0y2IbeIXa5T0zZG6J3ji92CVCpT58vwPzfnc
+         XBRXPTcmvINP9IAFri1yW52wG0F693W0LAl6zCH9VdtzDed0RnhXsUTfFwnpIiZrV7Hu
+         6baIuMgZBynAoSmhqMV4OvtpWOwmijZlBKVGpW6xSJrSCn/GUGGhIA80VpH5SSjWj9l4
+         N9GTza6VOf8eM2cVWF0TnPZWjpzq/3vm3Cd5a1usu0LQG5iJopaXljmg63H73fgAiH6e
+         ymqAGEduKPW0LxxDfZ6jlKCHJhz8p8SH5KSRz7sF8yd2rOYvLvhakUxyjqFtFtWZz5rv
+         7U1w==
+X-Gm-Message-State: ANoB5pkaiO3yhv3Z5AHCasL6UjEGzQCqmNl0j99Ltc2cL8CNxenpLT2u
+        ldy3kf75jusbxpP1+Mr3rnY=
+X-Google-Smtp-Source: AA0mqf6LMR9JT6vXFGbcDlR6xl7ICd1sc9wv75CHxh3AxPEJE63o9fesiJccg7qeGveiU+No4CkZmw==
+X-Received: by 2002:a5d:670c:0:b0:242:203c:9ed4 with SMTP id o12-20020a5d670c000000b00242203c9ed4mr16122441wru.55.1671018106380;
+        Wed, 14 Dec 2022 03:41:46 -0800 (PST)
+Received: from localhost.localdomain (2a02-8428-46a0-7c01-bc7c-15f1-6c3b-ad74.rev.sfr.net. [2a02:8428:46a0:7c01:bc7c:15f1:6c3b:ad74])
+        by smtp.gmail.com with ESMTPSA id b8-20020a05600003c800b0024258722a7fsm2697405wrg.37.2022.12.14.03.41.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 03:41:45 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, paul@crapouillou.net,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christophe Branchereau <cbranchereau@gmail.com>
+Subject: [PATCH v2 0/2] Add support for the AUO A030JTN01 TFT LCD
+Date:   Wed, 14 Dec 2022 12:41:40 +0100
+Message-Id: <20221214114142.204041-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fbefc16e-84d3-8afc-8c8e-4229bded0c8a@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:22:39AM +0100, David Hildenbrand wrote:
+Changes since v1:
+ reworked the dt-bindings to add a spi node, dropped properties already 
+ present in panel-common.yaml
 
-...
+Christophe Branchereau (1):
+  drm/panel: Add driver for the AUO A030JTN01 TFT LCD
 
-> the other one would be to remove this driver. Judging
-> that the driver already was marked broken in 2020 (ad85094b293e ("Revert
-> "media: staging: atomisp: Remove driver"")), maybe it's time for the driver
-> to go.
+Paul Cercueil (1):
+  dt-bindings: display/panel: Add AUO A030JTN01
 
-Not an option at all. As Hans explained.
+ .../bindings/display/panel/auo,a030jtn01.yaml |  61 ++++
+ drivers/gpu/drm/panel/Kconfig                 |   8 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-auo-a030jtn01.c   | 295 ++++++++++++++++++
+ 4 files changed, 365 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/auo,a030jtn01.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-auo-a030jtn01.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
