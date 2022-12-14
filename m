@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F16664C301
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F4A64C2FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237406AbiLNEFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S237400AbiLNEE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 23:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237376AbiLNEEy (ORCPT
+        with ESMTP id S237370AbiLNEEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:04:54 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97F01AA24
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:52 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id t2so2100287ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:52 -0800 (PST)
+        Tue, 13 Dec 2022 23:04:48 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF3B1AA24
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:47 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id r18so1184859pgr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:04:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wx7mIQInd8F9awOuQhbgVjGvlIaXKEnGL5UrWxuNsQk=;
-        b=ha97pxPv5fjgDvqCEl/5DHjEqCZb9feeBFOib4dYmuPGyGDCdLoRO+LqO34I8jb78G
-         O+Gj6bTSiharTDObB1FxTncmYJkjM74jYLJZqPOM4IT+2/VhKw4OSshWgL1sTsfGrdZG
-         2wbbjoxi5YGNEpz80g1+RzwN6QcX07R9R98FU=
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xQt5vmWNOYImcx88xRRm26FyZREKL6BjzFiX1hvI6Vg=;
+        b=VjmDhHepmfUEnQccFYiwt7Dlq6KQP7BINTCd7o2YXW6vaaQR3dSwPKux5kqY2OlGyY
+         NZPqSRPzrAJLAehjaxEjwszjuIEjhSN5jjKswrrBoIag4XsoCdW+MRYKi8sUYunWVVtd
+         5BWz50E9diQghXUIf60DxCQdAXZTRHWPe4zhI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wx7mIQInd8F9awOuQhbgVjGvlIaXKEnGL5UrWxuNsQk=;
-        b=unJ4clBd4ClPtHG6iOzINzjwJYlpRwUezSaYvK7jiCpFJ/3bry3jLHIi9Gx6KIszzV
-         b5BRDPvxSqNiFG6FCwPNYMHqjSIevg31OLBi+9HQbQD5+WG0LLtSV4Cfx4+AKYjCnyAs
-         kYJvVbt36dR2la5xnFd5uYgrktvi5V+P1V7CcAiETX0NO9ihDstINzcOfTQly8JQ9UgK
-         4Yuzr2tnEl36WCAjDsyzaPA1F8LULiyWLW3g/ySRK+/QiIEdwKHGmTIgJTWb9p25XXQr
-         TteqPGNfakWUKtq2c9IJWjMbiL6Irnj9lCNIk6IakHfc8OB6LxK4ZpBrfim/2ZijBwZy
-         Fdxg==
-X-Gm-Message-State: AFqh2krbhOAN1pi1CFhSlpMtDYKJEZ2MQPt+mCrmiUsAhFhFGvzjDkDk
-        2yYfYVQ2eiLrF4PHh564xVbwNBXDVfIrLZstJHbe6g==
-X-Google-Smtp-Source: AMrXdXugtz/B4fcnA3n8EdJICjnDI1z5vkPnsndLNriA+ziXN3xsqyX7wRUa+38gN5Ju7un5x216VAh7DyIPsUsfFnA=
-X-Received: by 2002:a17:90a:d781:b0:221:425b:736b with SMTP id
- z1-20020a17090ad78100b00221425b736bmr114434pju.17.1670990692315; Tue, 13 Dec
- 2022 20:04:52 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQt5vmWNOYImcx88xRRm26FyZREKL6BjzFiX1hvI6Vg=;
+        b=S2zBphw0huUNMOn6VNwL9iOHTJawuEFKn+WAKSAD2+h3gMvKPlTUrO1i1kITGWXZ/E
+         I4aFIYlXid06RDJQRLAeLRp7FPk9GllAqaFRWfGLa+PNW2JX9eEVVrEbKQEezJPnq2RS
+         38UqV0VLnlcMMQWk2ZvpBulbDjaVa8CQJ8Vx7wyKmWzECBMUbhwhIw/ARmr173P2Xj+R
+         3l+xQie77hJlh/CgGRtLO0I+LF9g09sBbVc3EdWL43Xle5jTR4cmPvexdMuftgF/2qAJ
+         PiDgvboJSljN6mIFaqZdiNC9Bdstnn/v522cP2ZQZIYHyKU1jSMwVZK7HSMoSmsV3eML
+         87rw==
+X-Gm-Message-State: ANoB5ply/2eK15pqimbeBXmJX+GK5K3JVU+UO4DVnAZc359PND9dUE9H
+        P7TuhVTEFQmz3hUSVWhzs4/GnQ==
+X-Google-Smtp-Source: AA0mqf5RjmddANWQHs4HCwxfe9mmCGS3+IpZPehGLaE6VCHmIZnfsaOnk1CL1tLvvtYmVc9gCps7Fg==
+X-Received: by 2002:aa7:8252:0:b0:574:c62c:2f55 with SMTP id e18-20020aa78252000000b00574c62c2f55mr21575418pfn.3.1670990686523;
+        Tue, 13 Dec 2022 20:04:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d206-20020a621dd7000000b0056bc742d21esm8654559pfd.176.2022.12.13.20.04.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 20:04:46 -0800 (PST)
+Date:   Tue, 13 Dec 2022 20:04:45 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        David Gow <davidgow@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "haifeng.xu" <haifeng.xu@shopee.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Xin Li <xin3.li@intel.com>
+Subject: [GIT PULL] kernel hardening updates for v6.2-rc1
+Message-ID: <202212131955.22F9FD9AB@keescook>
 MIME-Version: 1.0
-References: <20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org> <20221212-uvc-race-v2-1-54496cc3b8ab@chromium.org>
-In-Reply-To: <20221212-uvc-race-v2-1-54496cc3b8ab@chromium.org>
-From:   Yunke Cao <yunkec@chromium.org>
-Date:   Wed, 14 Dec 2022 13:04:41 +0900
-Message-ID: <CAEDqmY41RGc2eq6EE46cxA2qZOBimQQuR3anPovYd350pU8i4w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] media: uvcvideo: Fix race condition with usb_kill_urb
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,101 +71,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 11:36 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> usb_kill_urb warranties that all the handlers are finished when it
-> returns, but does not protect against threads that might be handling
-> asynchronously the urb.
->
-> For UVC, the function uvc_ctrl_status_event_async() takes care of
-> control changes asynchronously.
->
->  If the code is executed in the following order:
->
-> CPU 0                                   CPU 1
-> =====                                   =====
-> uvc_status_complete()
->                                         uvc_status_stop()
-> uvc_ctrl_status_event_work()
->                                         uvc_status_start() -> FAIL
->
-> Then uvc_status_start will keep failing and this error will be shown:
->
-> <4>[    5.540139] URB 0000000000000000 submitted while active
-> drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
->
-> Let's improve the current situation, by not re-submiting the urb if
-> we are stopping the status event. Also process the queued work
-> (if any) during stop.
->
-> CPU 0                                   CPU 1
-> =====                                   =====
-> uvc_status_complete()
->                                         uvc_status_stop()
->                                         uvc_status_start()
-> uvc_ctrl_status_event_work() -> FAIL
->
-> Hopefully, with the usb layer protection this should be enough to cover
-> all the cases.
->
-> Cc: stable@vger.kernel.org
-> Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
->  drivers/media/usb/uvc/uvc_status.c | 6 ++++++
->  drivers/media/usb/uvc/uvcvideo.h   | 1 +
->  3 files changed, 10 insertions(+)
->
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index c95a2229f4fa..5160facc8e20 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
->
->         uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
->
-> +       if (dev->flush_status)
-> +               return;
-> +
->         /* Resubmit the URB. */
->         w->urb->interval = dev->int_ep->desc.bInterval;
->         ret = usb_submit_urb(w->urb, GFP_KERNEL);
-> diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-> index 7518ffce22ed..09a5802dc974 100644
-> --- a/drivers/media/usb/uvc/uvc_status.c
-> +++ b/drivers/media/usb/uvc/uvc_status.c
-> @@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
->         if (dev->int_urb == NULL)
->                 return 0;
->
-> +       dev->flush_status = false;
->         return usb_submit_urb(dev->int_urb, flags);
->  }
->
->  void uvc_status_stop(struct uvc_device *dev)
->  {
-> +       struct uvc_ctrl_work *w = &dev->async_ctrl;
-> +
-> +       dev->flush_status = true;
->         usb_kill_urb(dev->int_urb);
-> +       if (cancel_work_sync(&w->work))
-> +               uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
->  }
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index df93db259312..6a9b72d6789e 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -560,6 +560,7 @@ struct uvc_device {
->         struct usb_host_endpoint *int_ep;
->         struct urb *int_urb;
->         u8 *status;
-> +       bool flush_status;
->         struct input_dev *input;
->         char input_phys[64];
->
->
-> --
-> 2.39.0.rc1.256.g54fd8350bd-goog-b4-0.11.0-dev-696ae
+Hi Linus,
 
-Reviewed-by: Yunke Cao <yunkec@chromium.org>
+Please pull these hardening updates for v6.2-rc1. This tree's various
+collected improvements, noted below, have been in -next for a while
+now. The only merge note I have is that this tree's ksize() work depends
+on behavioral changes in the slab and netdev trees, but those trees have
+now been merged into your tree, so there should be no surprises.
+
+Thanks!
+
+-Kees
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.2-rc1
+
+for you to fetch changes up to d272e01fa0a2f15c5c331a37cd99c6875c7b7186:
+
+  ksmbd: replace one-element arrays with flexible-array members (2022-12-02 13:14:29 -0800)
+
+----------------------------------------------------------------
+hardening updates for v6.2-rc1
+
+- Convert flexible array members, fix -Wstringop-overflow warnings,
+  and fix KCFI function type mismatches that went ignored by
+  maintainers (Gustavo A. R. Silva, Nathan Chancellor, Kees Cook).
+
+- Remove the remaining side-effect users of ksize() by converting
+  dma-buf, btrfs, and coredump to using kmalloc_size_roundup(),
+  add more __alloc_size attributes, and introduce full testing
+  of all allocator functions. Finally remove the ksize() side-effect
+  so that each allocation-aware checker can finally behave without
+  exceptions.
+
+- Introduce oops_limit (default 10,000) and warn_limit (default off)
+  to provide greater granularity of control for panic_on_oops and
+  panic_on_warn (Jann Horn, Kees Cook).
+
+- Introduce overflows_type() and castable_to_type() helpers for
+  cleaner overflow checking.
+
+- Disable structleak plugin in FORTIFY KUnit test (Anders Roxell).
+
+- Adjust orphan linker section checking to respect CONFIG_WERROR
+  (Xin Li).
+
+- Make sure siginfo is cleared for forced SIGKILL (haifeng.xu).
+
+- Improve code generation for strscpy() and update str*() kern-doc.
+
+- Convert strscpy and sigphash tests to KUnit, and expand memcpy
+  tests.
+
+- Always use a non-NULL argument for prepare_kernel_cred().
+
+- Fix um vs FORTIFY warnings for always-NULL arguments.
+
+----------------------------------------------------------------
+Anders Roxell (1):
+      lib: fortify_kunit: build without structleak plugin
+
+Gustavo A. R. Silva (2):
+      mm/pgtable: Fix multiple -Wstringop-overflow warnings
+      ksmbd: replace one-element arrays with flexible-array members
+
+Jann Horn (1):
+      exit: Put an upper limit on how often we can oops
+
+Kees Cook (27):
+      overflow: Fix kern-doc markup for functions
+      overflow: Refactor test skips for Clang-specific issues
+      fortify: Capture __bos() results in const temp vars
+      string: Rewrite and add more kern-doc for the str*() functions
+      kunit/memcpy: Add dynamic size and window tests
+      string: Add __realloc_size hint to kmemdup()
+      string: Convert strscpy() self-test to KUnit
+      fortify: Short-circuit known-safe calls to strscpy()
+      siphash: Convert selftest to KUnit
+      fortify: Do not cast to "unsigned char"
+      cred: Do not default to init_cred in prepare_kernel_cred()
+      dma-buf: Proactively round up to kmalloc bucket size
+      btrfs: send: Proactively round up to kmalloc bucket size
+      coredump: Proactively round up to kmalloc bucket size
+      overflow: Introduce overflows_type() and castable_to_type()
+      Merge branch 'for-linus/hardening' into for-next/hardening
+      driver core: Add __alloc_size hint to devm allocators
+      kunit/fortify: Validate __alloc_size attribute results
+      mm: Make ksize() a reporting-only function
+      panic: Separate sysctl logic from CONFIG_SMP
+      exit: Expose "oops_count" to sysfs
+      exit: Allow oops_limit to be disabled
+      panic: Consolidate open-coded panic_on_warn checks
+      panic: Introduce warn_limit
+      panic: Expose "warn_count" to sysfs
+      um: virt-pci: Avoid GCC non-NULL warning
+      hpet: Replace one-element array with flexible-array member
+
+Nathan Chancellor (3):
+      vmlinux.lds.h: Fix placement of '.data..decrypted' section
+      drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
+      drm/sti: Fix return type of sti_{dvo,hda,hdmi}_connector_mode_valid()
+
+Nick Desaulniers (1):
+      overflow: disable failing tests for older clang versions
+
+Xin Li (1):
+      kbuild: upgrade the orphan section warning to an error if CONFIG_WERROR is set
+
+haifeng.xu (1):
+      signal: Initialize the info in ksignal
+
+ Documentation/ABI/testing/sysfs-kernel-oops_count |   6 +
+ Documentation/ABI/testing/sysfs-kernel-warn_count |   6 +
+ Documentation/admin-guide/sysctl/kernel.rst       |  19 +
+ Documentation/core-api/kernel-api.rst             |   9 +
+ Documentation/driver-api/basics.rst               |   3 -
+ MAINTAINERS                                       |   6 +-
+ Makefile                                          |   2 +-
+ arch/arm/boot/compressed/Makefile                 |   2 +-
+ arch/arm64/kernel/vdso/Makefile                   |   2 +-
+ arch/arm64/kernel/vdso32/Makefile                 |   2 +-
+ arch/um/drivers/virt-pci.c                        |   9 +-
+ arch/x86/boot/compressed/Makefile                 |   2 +-
+ arch/x86/mm/pgtable.c                             |  22 +-
+ drivers/base/firmware_loader/main.c               |   2 +-
+ drivers/dma-buf/dma-resv.c                        |   9 +-
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c         |   5 +-
+ drivers/gpu/drm/i915/i915_user_extensions.c       |   2 +-
+ drivers/gpu/drm/i915/i915_utils.h                 |   4 -
+ drivers/gpu/drm/sti/sti_dvo.c                     |   5 +-
+ drivers/gpu/drm/sti/sti_hda.c                     |   5 +-
+ drivers/gpu/drm/sti/sti_hdmi.c                    |   5 +-
+ fs/btrfs/send.c                                   |  11 +-
+ fs/cifs/cifs_spnego.c                             |   2 +-
+ fs/cifs/cifsacl.c                                 |   2 +-
+ fs/coredump.c                                     |   7 +-
+ fs/ksmbd/smb2pdu.c                                |   4 +-
+ fs/ksmbd/smb2pdu.h                                |   2 +-
+ fs/ksmbd/smb_common.c                             |   2 +-
+ fs/ksmbd/smb_common.h                             |  12 +-
+ fs/nfs/flexfilelayout/flexfilelayout.c            |   4 +-
+ fs/nfs/nfs4idmap.c                                |   2 +-
+ fs/nfsd/nfs4callback.c                            |   2 +-
+ include/asm-generic/vmlinux.lds.h                 |   2 +-
+ include/linux/compiler.h                          |   1 +
+ include/linux/device.h                            |   7 +-
+ include/linux/fortify-string.h                    | 161 +++++++-
+ include/linux/hpet.h                              |   2 +-
+ include/linux/overflow.h                          |  85 +++--
+ include/linux/panic.h                             |   1 +
+ include/linux/string.h                            |   2 +-
+ init/Kconfig                                      |  15 +-
+ kernel/cred.c                                     |  15 +-
+ kernel/exit.c                                     |  60 +++
+ kernel/kcsan/report.c                             |   3 +-
+ kernel/panic.c                                    |  45 ++-
+ kernel/sched/core.c                               |   3 +-
+ kernel/signal.c                                   |   1 +
+ lib/Kconfig.debug                                 |  28 +-
+ lib/Makefile                                      |   7 +-
+ lib/fortify_kunit.c                               | 255 +++++++++++++
+ lib/memcpy_kunit.c                                | 205 +++++++++++
+ lib/overflow_kunit.c                              | 428 +++++++++++++++++++++-
+ lib/{test_siphash.c => siphash_kunit.c}           | 165 ++++-----
+ lib/string.c                                      |  82 -----
+ lib/strscpy_kunit.c                               | 142 +++++++
+ lib/test_strscpy.c                                | 150 --------
+ lib/ubsan.c                                       |   3 +-
+ mm/kasan/kasan_test.c                             |  19 +-
+ mm/kasan/report.c                                 |   4 +-
+ mm/kfence/report.c                                |   3 +-
+ mm/slab_common.c                                  |  26 +-
+ net/dns_resolver/dns_key.c                        |   2 +-
+ scripts/kernel-doc                                |   6 +-
+ 63 files changed, 1601 insertions(+), 504 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-oops_count
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-warn_count
+ rename lib/{test_siphash.c => siphash_kunit.c} (60%)
+ create mode 100644 lib/strscpy_kunit.c
+ delete mode 100644 lib/test_strscpy.c
+
+-- 
+Kees Cook
