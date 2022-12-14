@@ -2,357 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E730B64C60C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B79264C610
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbiLNJeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S237930AbiLNJfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbiLNJeB (ORCPT
+        with ESMTP id S237896AbiLNJfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:34:01 -0500
-Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BA59589
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:34:00 -0800 (PST)
-Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
-        by amity.mint.lgbt (Postfix) with ESMTP id 4NX9D6704Dz1S5Cp
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:33:58 -0500 (EST)
-Authentication-Results: amity.mint.lgbt (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mint.lgbt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
-        content-transfer-encoding:mime-version:x-mailer:message-id:date
-        :subject:to:from; s=dkim; t=1671010438; x=1671874439; bh=+4eI0BR
-        yErHUQAcVy7S9osoMtm4H8W2qLOP03Y0Xnss=; b=NJGUE+Ua9zbQR6hPluyKHpd
-        r95fOcgWsaG6tDFR6pkJpQy0W2aUz0Hahha/73Wm0JMKI9jAl6pMB/cwGCSW5oSr
-        yveU223alxRHIwn/3KA79zmbFhETb4/gmVew1o6efM53gzVeNbtRGcGCeXq9Mnsz
-        UqIKCQQxUn2wptJcdv6+e/H9Uuriq9diU8zec2pfA8J8gmcylDWc4P7++/3nBXZr
-        g7VvnqqT6FNDxbnqE9vtS+B+ZNT+TCFsdBkO4FyehSvyW+I+UqzdnwLnb/ZOeriP
-        w/sMvbEGTfGDSYanh8G9qKryc5avM1B57Rv0kQHMW0obcLkkSmXAsw8MdfIPOEA=
-        =
-X-Virus-Scanned: amavisd-new at amity.mint.lgbt
-Received: from amity.mint.lgbt ([127.0.0.1])
-        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PRDeVlhCfIfp for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Dec 2022 04:33:58 -0500 (EST)
-Received: from dorothy.. (unknown [190.196.92.66])
-        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NX9D01JJ5z1S52g;
-        Wed, 14 Dec 2022 04:33:51 -0500 (EST)
-From:   Lux Aliaga <they@mint.lgbt>
-Cc:     Lux Aliaga <they@mint.lgbt>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: qcom: sm6125: Initial support for xiaomi-laurel_sprout
-Date:   Wed, 14 Dec 2022 06:33:41 -0300
-Message-Id: <20221214093342.153479-1-they@mint.lgbt>
-X-Mailer: git-send-email 2.38.1
+        Wed, 14 Dec 2022 04:35:08 -0500
+Received: from mout-b-206.mailbox.org (mout-b-206.mailbox.org [IPv6:2001:67c:2050:102:465::206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF5F13E15;
+        Wed, 14 Dec 2022 01:35:04 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-b-206.mailbox.org (Postfix) with ESMTPS id 4NX9FF23mNz9tNM;
+        Wed, 14 Dec 2022 10:34:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyantec.com; s=default;
+        t=1671010497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=JECLRqzznZVJcQFxEyTyGBYjuCU4Zk5HVm/KjeUQy0I=;
+        b=HwA7McrarJVH/sxyrgRgGr+zC/lc6vUMGrXbB/tPfqGIat/vDLQUeeEN7HVYKH+SAe69/X
+        qkUjLPb4vIccxfoKgCP70xba6gUN+Nf10pRWqM19ElXmkU8Nm4n1bNvBqbvve3Y695x0BD
+        pz/Ine/xCXK3TGkx9zS/MZiJnyH9mWgQQlgvEzNo7jtoEt1Le0Xy8fWBMLfd5O9TyzUvWw
+        gr5JaRxFjsDLYr401Y5/pOY3bS41iBK0M0gjzWxMnsR57EH9ZtMW7d1m6FVowjMTRtdtWb
+        /3LUycOpUR7lQDiXr7CT/8biL9mw+PGZswEr2KRhJklglw+SwcwiS3tuTXjekw==
+Date:   Wed, 14 Dec 2022 10:34:51 +0100
+From:   Finn Behrens <fin@nyantec.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: [PATCH] rust: prelude: prevent doc inline of external imports
+Message-ID: <20221214093451.zdyhmdyxwz73n6pe@imap.mailbox.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit implements support for the Xiaomi Mi A3
-(xiaomi-laurel_sprout). Here's a summary on what's working.
+This shows exactly where the items are from, previously the items from
+macros, alloc and core where shown as a decleration from the kernel crate,
+this shows the correct path.
 
-- dmesg output to bootloader preconfigured display
-- USB
-- UFS
-- SMD RPM regulators
-
-Signed-off-by: Lux Aliaga <they@mint.lgbt>
+Signed-off-by: Finn Behrens <fin@nyantec.com>
 ---
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../dts/qcom/sm6125-xiaomi-laurel_sprout.dts  | 251 ++++++++++++++++++
- 2 files changed, 252 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.=
-dts
+ rust/kernel/prelude.rs | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom=
-/Makefile
-index d7669a7cee9f..7b4fbb4cbb84 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -140,6 +140,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+=3D sdm845-shift-axolotl.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sdm850-lenovo-yoga-c630.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sdm850-samsung-w737.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sm6125-sony-xperia-seine-pdx201.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+=3D sm6125-xiaomi-laurel_sprout.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sm6350-sony-xperia-lena-pdx213.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sm7225-fairphone-fp4.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+=3D sm8150-hdk.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts b/a=
-rch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts
-new file mode 100644
-index 000000000000..edc5f13bae28
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts
-@@ -0,0 +1,251 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Lux Aliaga <they@mint.lgbt>
-+ */
-+
-+/dts-v1/;
-+
-+#include "sm6125.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/input/gpio-keys.h>
-+
-+/ {
-+	/* required for bootloader to select correct board */
-+	qcom,msm-id =3D <0x18a 0x00>; /* sm6125 v1 */
-+	qcom,board-id =3D <0x0b 0x00>;
-+
-+	model =3D "Xiaomi Mi A3";
-+	compatible =3D "xiaomi,laurel_sprout", "qcom,sm6125";
-+	chassis-type =3D "handset";
-+
-+	chosen {
-+		#address-cells =3D <2>;
-+		#size-cells =3D <2>;
-+		ranges;
-+
-+		framebuffer0: framebuffer@5c000000 {
-+			compatible =3D "simple-framebuffer";
-+			reg =3D <0 0x5c000000 0 (1560 * 720 * 4)>;
-+			width =3D <720>;
-+			height =3D <1560>;
-+			stride =3D <(720 * 4)>;
-+			format =3D "a8r8g8b8";
-+		};
-+	};
-+
-+	extcon_usb: extcon-usb {
-+		compatible =3D "linux,extcon-usb-gpio";
-+		id-gpio =3D <&tlmm 102 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	reserved_memory {
-+		#address-cells =3D <2>;
-+		#size-cells =3D <2>;
-+		debug_mem: memory@ffb00000 {
-+			reg =3D <0x0 0xffb00000 0x0 0xc0000>;
-+			no-map;
-+		};
-+
-+		last_log_mem: memory@ffbc0000 {
-+			reg =3D <0x0 0xffbc0000 0x0 0x80000>;
-+			no-map;
-+		};
-+
-+		pstore_mem: ramoops@ffc00000 {
-+			compatible =3D "ramoops";
-+			reg =3D <0x0 0xffc40000 0x0 0xc0000>;
-+			record-size =3D <0x1000>;
-+			console-size =3D <0x40000>;
-+			msg-size =3D <0x20000 0x20000>;
-+		};
-+
-+		cmdline_mem: memory@ffd00000 {
-+			reg =3D <0x0 0xffd40000 0x0 0x1000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible =3D "qcom,rpm-pm6125-regulators";
-+
-+		vreg_s6a: s6 {
-+			regulator-min-microvolt =3D <936000>;
-+			regulator-max-microvolt =3D <1422000>;
-+		};
-+
-+		vreg_l1a: l1 {
-+			regulator-min-microvolt =3D <1200000>;
-+			regulator-max-microvolt =3D <1256000>;
-+		};
-+
-+		vreg_l2a: l2 {
-+			regulator-min-microvolt =3D <1000000>;
-+			regulator-max-microvolt =3D <1056000>;
-+		};
-+
-+		vreg_l3a: l3 {
-+			regulator-min-microvolt =3D <1000000>;
-+			regulator-max-microvolt =3D <1064000>;
-+		};
-+
-+		vreg_l4a: l4 {
-+			regulator-min-microvolt =3D <872000>;
-+			regulator-max-microvolt =3D <976000>;
-+		};
-+
-+		vreg_l5a: l5 {
-+			regulator-min-microvolt =3D <1648000>;
-+			regulator-max-microvolt =3D <3104000>;
-+		};
-+
-+		vreg_l6a: l6 {
-+			regulator-min-microvolt =3D <576000>;
-+			regulator-max-microvolt =3D <656000>;
-+		};
-+
-+		vreg_l7a: l7 {
-+			regulator-min-microvolt =3D <872000>;
-+			regulator-max-microvolt =3D <976000>;
-+		};
-+
-+		vreg_l8a: l8 {
-+			regulator-min-microvolt =3D <400000>;
-+			regulator-max-microvolt =3D <728000>;
-+		};
-+
-+		vreg_l9a: l9 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1896000>;
-+		};
-+
-+		vreg_l10a: l10 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1896000>;
-+		};
-+
-+		vreg_l11a: l11 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1952000>;
-+		};
-+
-+		vreg_l12a: l12 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1996000>;
-+		};
-+
-+		vreg_l13a: l13 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1832000>;
-+		};
-+
-+		vreg_l14a: l14 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1904000>;
-+		};
-+
-+		vreg_l15a: l15 {
-+			regulator-min-microvolt =3D <3104000>;
-+			regulator-max-microvolt =3D <3232000>;
-+		};
-+
-+		vreg_l16a: l16 {
-+			regulator-min-microvolt =3D <1800000>;
-+			regulator-max-microvolt =3D <1904000>;
-+		};
-+
-+		vreg_l17a: l17 {
-+			regulator-min-microvolt =3D <1248000>;
-+			regulator-max-microvolt =3D <1304000>;
-+		};
-+
-+		vreg_l18a: l18 {
-+			regulator-min-microvolt =3D <1200000>;
-+			regulator-max-microvolt =3D <1264000>;
-+		};
-+
-+		vreg_l19a: l19 {
-+			regulator-min-microvolt =3D <1648000>;
-+			regulator-max-microvolt =3D <2952000>;
-+		};
-+
-+		vreg_l20a: l20 {
-+			regulator-min-microvolt =3D <1648000>;
-+			regulator-max-microvolt =3D <2952000>;
-+		};
-+
-+		vreg_l21a: l21 {
-+			regulator-min-microvolt =3D <2600000>;
-+			regulator-max-microvolt =3D <2856000>;
-+		};
-+
-+		vreg_l22a: l22 {
-+			regulator-min-microvolt =3D <2944000>;
-+			regulator-max-microvolt =3D <3304000>;
-+		};
-+
-+		vreg_l23a: l23 {
-+			regulator-min-microvolt =3D <3000000>;
-+			regulator-max-microvolt =3D <3400000>;
-+		};
-+
-+		vreg_l24a: l24 {
-+			regulator-min-microvolt =3D <2944000>;
-+			regulator-max-microvolt =3D <3304000>;
-+		};
-+	};
-+};
-+
-+&hsusb_phy1 {
-+	status =3D "okay";
-+};
-+
-+
-+&sdc2_off_state {
-+	sd-cd {
-+		pins =3D "gpio98";
-+		bias-disable;
-+		drive-strength =3D <2>;
-+	};
-+};
-+
-+&sdc2_on_state {
-+	sd-cd {
-+		pins =3D "gpio98";
-+		bias-pull-up;
-+		drive-strength =3D <2>;
-+	};
-+};
-+
-+&ufs_mem_hc {
-+	vcc-supply =3D <&vreg_l24a>;
-+	vccq2-supply =3D <&vreg_l11a>;
-+	vcc-max-microamp =3D <600000>;
-+	vccq2-max-microamp =3D <600000>;
-+
-+	status =3D "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply =3D <&vreg_l4a>;
-+	vdda-pll-supply =3D <&vreg_l10a>;
-+	vdda-phy-max-microamp =3D <51400>;
-+	vdda-pll-max-microamp =3D <14200>;
-+	vddp-ref-clk-supply =3D <&vreg_l18a>;
-+
-+	status =3D "okay";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges =3D <22 2>, <28 6>;
-+};
-+
-+&usb3 {
-+	status =3D "okay";
-+};
-+
-+&usb3_dwc3 {
-+	extcon =3D <&extcon_usb>;
-+};
---=20
-2.38.1
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 7a90249ee9b9..917721e791b6 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -11,15 +11,21 @@
+ //! use kernel::prelude::*;
+ //! ```
+ 
++#[doc(no_inline)]
+ pub use core::pin::Pin;
+ 
++#[doc(no_inline)]
+ pub use alloc::{boxed::Box, vec::Vec};
+ 
++#[doc(no_inline)]
+ pub use macros::{module, vtable};
+ 
+ pub use super::build_assert;
+ 
+-pub use super::{dbg, pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
++// super::std_vendor is hidden, which makes the macro inline for some reason
++#[doc(no_inline)]
++pub use super::dbg;
++pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
+ 
+ pub use super::static_assert;
+ 
+-- 
+2.31.1
 
