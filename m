@@ -2,176 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BAA64CD08
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617A764CCF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238796AbiLNPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S238734AbiLNPTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238370AbiLNPZO (ORCPT
+        with ESMTP id S238668AbiLNPTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:25:14 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F09EAE73;
-        Wed, 14 Dec 2022 07:25:13 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id kw15so45303436ejc.10;
-        Wed, 14 Dec 2022 07:25:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pyBUH3WX+Oy1sPUYcOHZQQujYgyDt0tZIAPGgn38vpc=;
-        b=j+ECA3ObDcDwKZ/gOsVb6iqxOmK9c6mpjTRYn8FOVx+iVAlCV+OW4eWgiSwyDFfL/d
-         Kykb62y2LxaSy24jDd96VaD1OfZgYM3RUnvek60Mcwtws83ya0qExR1LXyWdYvh5xeJC
-         o1BFo/vtUXtqvvMkXMnDsUeJSj6AXNgtOMT6QhupxaxvdkMkXaE53F7xZu8ROLEky59A
-         w6Cw+alGPhNWOUdEvMP5chTSzc2oQPV+6Ry0uDuLIg9lzHKhc1R5WBDGTIMu4ymNSw7H
-         4d8PEsVGfitbyKdyLRtA1Q6gn38CR722NG5b/ctbp60rU2B/ZgOSflKcwNpQEmg9jrhw
-         bokw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pyBUH3WX+Oy1sPUYcOHZQQujYgyDt0tZIAPGgn38vpc=;
-        b=1PQuge9f3ZAxe7PSXyB4u6P+sDrYQK/3PBNuau7qlewiWd9W6wa3OrpSxjh/7dCkHz
-         pjkUyOwsQIhyIIGs1A1+EGF9uo8dton4FXHsYbbSMWf+V+QRQAX9TSlXwoVsabwqie7Y
-         e4H37oe40YVcVlMCWt9OzipbmIZT4QpvnPSWFkOlR7iew/xR9rYCvqrxZPlusttS6z9h
-         e7MA1AN486r3rCrsKlJPDsOWUeX9C40eL24jM0RqkX/qt6Za5lQl+OP2w8vgygZ/qxmj
-         6dikiCM2nf32iIk1UFtBnMetAghtYZcaUL5ob+MwC5n30kJwSZy45G/KlyGTNyaQEsKp
-         iA8Q==
-X-Gm-Message-State: ANoB5plb5CRPxuFVo+OY42JgIxYQEpl1OGkPYHKLUn222Hl12x1D1bbU
-        PUtW72a8f7Sj/DG5Lso4C9q9Fkj8/my9hunhM/0=
-X-Google-Smtp-Source: AA0mqf7BvOBLnE/e3JdF0ZoLKJyRIBaYiuR33FQeKjpxC/JyHueVYPzmJpbffFlYUxrjFOYCS2qcwLOqdC74OCB369E=
-X-Received: by 2002:a17:906:4792:b0:7c1:3e9e:adc0 with SMTP id
- cw18-20020a170906479200b007c13e9eadc0mr1260307ejc.312.1671031511829; Wed, 14
- Dec 2022 07:25:11 -0800 (PST)
+        Wed, 14 Dec 2022 10:19:30 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D931146C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:19:29 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BEFJ0TX032577
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 10:19:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1671031142; bh=lFLQBDC+4nysDRvLa80at6hXNhWnqYY2vPKTa9emJEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Cg7T1VkQmIjODXICzBsU3oPQ3+4Nrdgp77NNpTvOz7oZvn7zc9u6YUGRAX9dKV9uq
+         K810gweno/UtiNsGoigITcJ7hHszjr8assN99odE23PMvMzAo2aXDTHhQCTdjXxFCr
+         vexJ0nWzK5S4wqNBtLeZKirxNPdX7jBToRHS0p6QFWXeH9UE3zM5j9QYPOmDa8IZ/N
+         59BmtwA5nGqIpE0XZuIKKQKZYn8Bo6qdbUCrEnwAcRsh65UfDFOh7BHfBdUz/wmqwi
+         V8oWrTivAG9O/ktQvyO/jXalg//L/As8xGK7F7cVZbfb0qH6oWQL4WZXLHNsu10OhD
+         CbmVfzRLnDItw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 53D9815C40A2; Wed, 14 Dec 2022 10:19:00 -0500 (EST)
+Date:   Wed, 14 Dec 2022 10:19:00 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     yebin10@huawei.com, jack@suse.cz, linux-kernel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, heng.su@intel.com
+Subject: Re: [Syzkaller & bisect] There is "possible deadlock in ext4_bmap"
+ issue in v6.1 kernel
+Message-ID: <Y5npZPh6HEUOmtut@mit.edu>
+References: <Y5lO7xPYh/c6Qyq/@xpf.sh.intel.com>
 MIME-Version: 1.0
-References: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
- <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com> <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
-In-Reply-To: <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
-From:   Daniele Palmas <dnlplm@gmail.com>
-Date:   Wed, 14 Dec 2022 16:18:12 +0100
-Message-ID: <CAGRyCJGQpdLUzsaqdmbw4E9Sp=im-b6TQFEp1RpG1Wj3x_KVug@mail.gmail.com>
-Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
- controller's ring buffer
-To:     "Seija K." <doremylover123@gmail.com>
-Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5lO7xPYh/c6Qyq/@xpf.sh.intel.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Seija,
+On Wed, Dec 14, 2022 at 12:19:59PM +0800, Pengfei Xu wrote:
+> Hi Ye Bin and ext4 expert,
 
-Il giorno mar 13 dic 2022 alle ore 20:55 Seija K.
-<doremylover123@gmail.com> ha scritto:
-> On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
-> >
-> > Did you test this change with QMAP?
-> >
-> > To support qmap dl aggregated blocks qmi_wwan relies on the
-> > usbnet_change_mtu behavior of changing the rx_urb_size.
-> >
-> > Thanks,
-> > Daniele
->
-> Yes, I did.
->
+Please include the URL to the syzkaller dashboard where these things
+are reported.  The dashboard includes a lot of useful information
+which is not included in your report.
 
-I've applied your change and verified that the rx_urb_size can't be
-changed anymore by modifying the mtu of the wwan netdevice and stays
-fixed to 1504.
+It's also better if you reply to the syzkaller report that was
+originally sent to LKML and/or the linux-ext4 list.
 
-Just a heads-up, that this change is not working fine with qmap setup
-procedure, since the URB size can't be changed anymore to the value of
-the maximum dl aggregated block set through wda_set_data_format.
-
-I know that linking MTU with the rx_urb_size is odd, but this is how
-it's done currently.
-
-Regards,
-Daniele
-
-> On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
-> >
-> > Hello Seija,
-> >
-> > Il giorno mar 13 dic 2022 alle ore 18:44 Seija K.
-> > <doremylover123@gmail.com> ha scritto:
-> > >
-> > > When a packet larger than MTU arrives in Linux from the modem, it is
-> > > discarded with -EOVERFLOW error (Babble error).
-> > >
-> > > This is seen on USB3.0 and USB2.0 buses.
-> > >
-> > > This is because the MRU (Max Receive Size) is not a separate entity
-> > > from the MTU (Max Transmit Size), and the received packets can be
-> > > larger than those transmitted.
-> > >
-> > > Following the babble error, there was an endless supply of zero-length
-> > > URBs that were rejected with -EPROTO (increasing the rx input error
-> > > counter each time).
-> > >
-> > > This is only seen on USB3.0. These continue to come ad infinitum until
-> > > the modem is shut down.
-> > >
-> > > There appears to be a bug in the core USB handling code in Linux that
-> > > doesn't deal with network MTUs smaller than 1500 bytes well.
-> > >
-> > > By default, the dev->hard_mtu (the real MTU) is in lockstep with
-> > > dev->rx_urb_size (essentially an MRU), and the latter is causing
-> > > trouble.
-> > >
-> > > This has nothing to do with the modems; the issue can be reproduced by
-> > > getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
-> > > with size greater than 1406.
-> > >
-> > > Signed-off-by: Seija Kijin <doremylover123@gmail.com>
-> > >
-> > > Co-Authored-By: TarAldarion <gildeap@tcd.ie>
-> > > ---
-> > > drivers/net/usb/qmi_wwan.c | 7 +++++++
-> > > 1 file changed, 7 insertions(+)
-> > >
-> > > diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> > > index 554d4e2a84a4..39db53a74b5a 100644
-> > > --- a/drivers/net/usb/qmi_wwan.c
-> > > +++ b/drivers/net/usb/qmi_wwan.c
-> > > @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
-> > > struct usb_interface *intf)
-> > > }
-> > > dev->net->netdev_ops = &qmi_wwan_netdev_ops;
-> > > dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
-> > > + /* LTE Networks don't always respect their own MTU on the receiving side;
-> > > + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
-> > > + * far-end networks. Make the receive buffer large enough to accommodate
-> > > + * them, and add four bytes so MTU does not equal MRU on network
-> > > + * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
-> > > + */
-> > > + dev->rx_urb_size = ETH_DATA_LEN + 4;
-> >
-> > Did you test this change with QMAP?
-> >
-> > To support qmap dl aggregated blocks qmi_wwan relies on the
-> > usbnet_change_mtu behavior of changing the rx_urb_size.
-> >
-> > Thanks,
-> > Daniele
-> >
-> > > err:
-> > > return status;
-> > > }
-> > > --
-> > > 2.38.2
+						- Ted
