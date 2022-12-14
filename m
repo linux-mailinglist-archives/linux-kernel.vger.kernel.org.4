@@ -2,158 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A1164C34E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7DF64C37C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 06:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbiLNEsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S229973AbiLNFU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 00:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbiLNEsL (ORCPT
+        with ESMTP id S229446AbiLNFUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:48:11 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A20724BF7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:47:59 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221214044756epoutp04e66539183e91ed5575ddebb4c6c665da~wj4gwNuIA0829808298epoutp04F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:47:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221214044756epoutp04e66539183e91ed5575ddebb4c6c665da~wj4gwNuIA0829808298epoutp04F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1670993276;
-        bh=Snt2Sfm19TbPHC6NdC56oxXeITXd+ZYEHuxh4O0JQaQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGcr9c/f9NFEK1PhkYKTY36qLH4XQXnH+axBsW2CL5Zy8zK45YnaQZmbWGzjamFA8
-         gKRLxEUkiynVsK+1rVAc1Ta0Fum/abo7tAsFcDwpReejjdq7H85Gn1cY2WKwduI3L3
-         /uuD9zTGX6WzTNhukLkcqStypi9EyRSnFy2yyqTg=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221214044756epcas5p4f69fab7a4885aaaf88aa169dde8a277c~wj4gC-qAS1170411704epcas5p47;
-        Wed, 14 Dec 2022 04:47:56 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4NX2t21943z4x9Pw; Wed, 14 Dec
-        2022 04:47:54 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        90.A2.01710.87559936; Wed, 14 Dec 2022 13:47:52 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221214044434epcas5p212735c11a8ff9f72e25742e4ac8a7794~wj1ka5Oee2146721467epcas5p2L;
-        Wed, 14 Dec 2022 04:44:34 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221214044434epsmtrp2dd36449de582e766398ef7e7a2834942~wj1kaNC6M2264122641epsmtrp2l;
-        Wed, 14 Dec 2022 04:44:34 +0000 (GMT)
-X-AuditID: b6c32a49-c9ffa700000006ae-f1-63995578725a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        84.F9.18644.2B459936; Wed, 14 Dec 2022 13:44:34 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221214044431epsmtip213b6a0d0359660fa84587f7fa0a2f3a4~wj1h25UlJ2889728897epsmtip2i;
-        Wed, 14 Dec 2022 04:44:31 +0000 (GMT)
-From:   Sriranjani P <sriranjani.p@samsung.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, alim.akhtar@samsung.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        sathya@samsung.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sriranjani P <sriranjani.p@samsung.com>
-Subject: [PATCH v3 4/4] arm64: dts: exynos: add dedicated SYSREG compatibles
- to Exynosautov9
-Date:   Wed, 14 Dec 2022 10:13:42 +0530
-Message-Id: <20221214044342.49766-5-sriranjani.p@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221214044342.49766-1-sriranjani.p@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmpm5F6Mxkg+VXtS0ezNvGZjH/yDlW
-        i74XD5ktNj2+xmpxedccNosZ5/cxWSza+oXd4uGHPewWrXuPsFt8OfKa0eL2m3WsDtwem1Z1
-        snncubaHzWPzknqPvi2rGD0+b5ILYI3KtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0
-        tDBXUshLzE21VXLxCdB1y8wBukxJoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BS
-        oFecmFtcmpeul5daYmVoYGBkClSYkJ2xq+UPY8EEroqlR8oaGNdydDFyckgImEj8unGHGcQW
-        EtjNKLFmRnEXIxeQ/YlRYkL7RkYI5zOjxKk5P1hhOg49P88CkdjFKHF661w2CKeVSeLDotVM
-        IFVsAroSrdc+M4EkRAR2MEq8nnQAzGEWmMIo0f1tPdgsYYE4ibWnf7CB2CwCqhKH174Eu4RX
-        wFbi95pP7BD75CVWbzgAFucUsJOY1zQbbJCEwEt2iQ39CxkhilwkTvz9zwxhC0u8Or4FqllK
-        4vO7vWwQdrrE5iOboZ7Ikehoaoaqt5c4cGUO0EMcQNdpSqzfpQ8RlpWYemod2DfMAnwSvb+f
-        MEHEeSV2zIOx1SQWP+qEsmUk1j76BDXeQ+LXiaXQYJnIKDH38Q6mCYxysxBWLGBkXMUomVpQ
-        nJueWmxaYJiXWg6PtuT83E2M4OSn5bmD8e6DD3qHGJk4GA8xSnAwK4nwqmpMSxbiTUmsrEot
-        yo8vKs1JLT7EaAoMwInMUqLJ+cD0m1cSb2hiaWBiZmZmYmlsZqgkzrt0SkeykEB6Yklqdmpq
-        QWoRTB8TB6dUA9P8bt5iKYv0TLUbL1mufpN22X2GR+nFuUfaC5x6ImY9u/8+lXlP91oefbVK
-        lczvJVtb/Jnenfp29s7RSS69sYXrZ3IobKvmvPHunNKBbFvJex8uuU7ZaGV991pD7om9Z+sC
-        N9gXfliQmDrn/UXThfzr5/jmF35vjq2d2K31bT/Dj7v/n/hWPRZ99nzu4RDxabmLPfbLLF9d
-        d7Vov9byMom2Z9v4z4iyLjxuaCjX1LJ1Ze5730+eeww/s7yY/TEmP2T5QYaKSp3kDuXGIwH1
-        GzbPd9e96KjJKbvg+7niAMV2CQmFxb2RT/m+eT46G5LofHjlX9X/92xumIhIMwu3C1929jxU
-        e7pyxi+nE45TL0spsRRnJBpqMRcVJwIABuvomAcEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFLMWRmVeSWpSXmKPExsWy7bCSvO6mkJnJBgdvylo8mLeNzWL+kXOs
-        Fn0vHjJbbHp8jdXi8q45bBYzzu9jsli09Qu7xcMPe9gtWvceYbf4cuQ1o8XtN+tYHbg9Nq3q
-        ZPO4c20Pm8fmJfUefVtWMXp83iQXwBrFZZOSmpNZllqkb5fAlbGr5Q9jwQSuiqVHyhoY13J0
-        MXJySAiYSBx6fp6li5GLQ0hgB6PE6UXzWCESMhInHyxhhrCFJVb+e84OUdTMJLG34xojSIJN
-        QFei9dpnJpCEiMABRondvUsYQRxmgRmMEn/XzwFyODiEBWIkupcVgDSwCKhKHF77Emwqr4Ct
-        xO81n9ghNshLrN5wACzOKWAnMa9pNhOILQRUs+nZXfYJjHwLGBlWMUqmFhTnpucWGxYY5aWW
-        6xUn5haX5qXrJefnbmIEB6eW1g7GPas+6B1iZOJgPMQowcGsJMKrqjEtWYg3JbGyKrUoP76o
-        NCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQamRZtf7y7vCJvF8OfhsxdZb9Xq
-        Hpz6vEFp9duM/WeDlNZdf7Vcc+7/vX9ro3z1zuXaCItITnsX/2aWsWHgoom3utdolviviBCJ
-        WqfQYZw1e3Fg8AntJ2+fqhWv8lHzPb5lzeqtdsffrPlgWehq5nl7xd6vT3QC3tX8LT9vkSV0
-        5sNUFcP9d1Jszkt8se9ec11HMGrHqdNW92++NDmTvIJJQnnjarsleUZSm/6kVp/eZMKo/3nJ
-        RK/8rzxfepPqs342iHhHCYSH3FXZ0yjpaBh7oD9HekuZRdblk66n2if27z8T5DRn/zK2/sj1
-        9c83/1jgafqzNz3dMX9zFsOLtD6N+EVlz0RW6rT462Wmeq/jVmIpzkg01GIuKk4EAOGGvfu9
-        AgAA
-X-CMS-MailID: 20221214044434epcas5p212735c11a8ff9f72e25742e4ac8a7794
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221214044434epcas5p212735c11a8ff9f72e25742e4ac8a7794
-References: <20221214044342.49766-1-sriranjani.p@samsung.com>
-        <CGME20221214044434epcas5p212735c11a8ff9f72e25742e4ac8a7794@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 00:20:54 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2776026571
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 21:20:53 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so8669594lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 21:20:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NOSsIXm1e7RKG1HNOW6miYlEk//EEdDga29JPVWjyVc=;
+        b=nRSdYgWltkNl1pbDoXuf30xFhE1cbKpCYmGAiT+UdLIgXMCfnhQOFdbRXmQYoMIoo0
+         Tk1z/7UpMOkijB4QY3CL/Eq6fP8SFCwZYX6mfediSpGxT4cwdWf6hjOMj3agWKRehJZK
+         Knq6lwUa7Ptnm6L7CkDJC8VyHBoeJRumfdr5fnHUy75Ppk+L83SpbdjFViaFa/g8dK1v
+         WFPZFS+LYYQJeeNUeK0iceV4yyDIcpL0QTNl5KDndCJwDPoz/XRW7KW6lo7Vnog9kG/E
+         8WhkiEKKwhV4nbH0EKVHXcFrNXAPp/d/XRZMuo5vigv8U6CMgk5HuU3Guspsgiq472SB
+         EJ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NOSsIXm1e7RKG1HNOW6miYlEk//EEdDga29JPVWjyVc=;
+        b=p4ofJh5/IeJICqgOxpGCaOCLGEL7Nn542kD/yk3aJrzNgyL25z637JmO7HfzS6baBw
+         nQ+2oQEaOMM8aTrxeItbHrVnUrKSr+NCU+4OhXgJzLf6r5uy29Om9QIhPEmC7+sOsEmj
+         jE1j7EPNIrG8Gbl1SLgeEBm32v7hGHVGEXFQWK4cJaFxsuVdZCrvR2cOL/eh5QERg2H7
+         OYnWPBC0676suOnmdwdJ1kkZUl36e1UgFo9Gb18kxB9EONHv3khIOv+2PlshD9R2SOok
+         SkRLSbvzBaLs1ZmeMYmG7+4KbXxgU6vhNm0+n/mYLryuVCtQqIRSwqs2M53YVYtJohfL
+         bANA==
+X-Gm-Message-State: ANoB5pmc9cl5s3R7amkqX5Zo684wyfoiyJcz5PujneWrJk84gWwlq0L1
+        DqjgaRZldpaj4sgcVuK1VnPC15TbUskxYZK2Jr/6Ew==
+X-Google-Smtp-Source: AA0mqf57XsAPqawchbV05aowzXHZYQHki1xb/IOjLXg5Grt3gZyzyr0jap/JFwpwmqpVql/CktK1EsmGXpFJJTdj2N8=
+X-Received: by 2002:a19:6b19:0:b0:4a2:740b:5b02 with SMTP id
+ d25-20020a196b19000000b004a2740b5b02mr30747922lfa.122.1670995251431; Tue, 13
+ Dec 2022 21:20:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+ <20221213123823.455731-4-bhupesh.sharma@linaro.org> <39ff2174-6d04-ec21-b762-377ed28088cb@linaro.org>
+ <CAH=2NtwUODvzLx=JThuZpADv+x+NtLx688Ox-95b_T9PtRf4_w@mail.gmail.com> <ecb2c9ff-b092-22fa-c91e-01ead6266457@linaro.org>
+In-Reply-To: <ecb2c9ff-b092-22fa-c91e-01ead6266457@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 14 Dec 2022 10:50:39 +0530
+Message-ID: <CAH=2NtynGaNH+wm-wavj=NsGFQrWVHqjYmivN2nuq-YSXFs0tw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, andersson@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exynosautov9 has several different SYSREGs, so use dedicated compatibles
-for them.
+On Wed, 14 Dec 2022 at 00:29, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 13/12/2022 19:52, Bhupesh Sharma wrote:
+> > Hi Krzysztof,
+> >
+> > On Tue, 13 Dec 2022 at 18:26, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 13/12/2022 13:38, Bhupesh Sharma wrote:
+> >>> Add USB superspeed qmp phy node to dtsi.
+> >>>
+> >>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> >>> ---
+> >>>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
+> >>>  1 file changed, 36 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >>> index e4ce135264f3d..9c5c024919f92 100644
+> >>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >>> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
+> >>>                       status = "disabled";
+> >>>               };
+> >>>
+> >>> +             usb_qmpphy: phy@1615000 {
+> >>> +                     compatible = "qcom,sm6115-qmp-usb3-phy";
+> >>> +                     reg = <0x01615000 0x200>;
+> >>> +                     #clock-cells = <1>;
+> >>> +                     #address-cells = <1>;
+> >>> +                     #size-cells = <1>;
+> >>> +                     ranges;
+> >>> +                     clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> >>> +                              <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> >>> +                              <&gcc GCC_AHB2PHY_USB_CLK>;
+> >>> +                     clock-names = "com_aux",
+> >>> +                                   "ref",
+> >>> +                                   "cfg_ahb";
+> >>> +                     resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> >>> +                              <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> >>> +                     reset-names = "phy", "phy_phy";
+> >>> +                     status = "disabled";
+> >>
+> >> Hm, you add a disabled PHY which is used by existing controller. The
+> >> controller is enabled in board DTS, but new PHY node isn't. Aren't you
+> >> now breaking it?
+> >
+> > The USB controller is connected to two PHYs - one is HS PHY and the other is SS
+> > QMP Phy. So while the exiting board dts describes and uses only the HS
+> > PHY, newer
+> > board dts files (which will soon be sent out as a separate patch),
+>
+> Then I miss how do you narrow the existing DTS to use only one PHY. I
+> don't see anything in this patchset.
+>
+> > will use both the HS and SS
+> > USB PHYs.
+> >
+> > So, this will not break the existing board dts files.
+>
+> I still think it will be. The board boots with USB with one phy enabled
+> and one disabled. The driver gets phys unconditionally and one of them
+> is disabled.
+>
+> Even if Linux implementation will work (devm_usb_get_phy_by_phandle will
+> return -ENXIO or -ENODEV for disabled node), it is still a bit confusing
+> and I wonder how other users of such DTS should behave. Although it will
+> affect only one board, so maybe there are no other users?
 
-Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
----
- arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Ah, now I get your point. So how does the following fix in
+sm4250-oneplus-billie2.dts look like. It allows the base dtsi to carry
+the usb nodes as exposed by the SoC and allows other board dts files
+to use both the USB2 and UBS3 PHYs.
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-index 5dc361734cfe..d3c5cdeff47f 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
-@@ -370,17 +370,20 @@
- 		};
- 
- 		syscon_fsys2: syscon@17c20000 {
--			compatible = "samsung,exynosautov9-sysreg", "syscon";
-+			compatible = "samsung,exynosautov9-fsys2-sysreg",
-+				     "samsung,exynosautov9-sysreg", "syscon";
- 			reg = <0x17c20000 0x1000>;
- 		};
- 
- 		syscon_peric0: syscon@10220000 {
--			compatible = "samsung,exynosautov9-sysreg", "syscon";
-+			compatible = "samsung,exynosautov9-peric0-sysreg",
-+				     "samsung,exynosautov9-sysreg", "syscon";
- 			reg = <0x10220000 0x2000>;
- 		};
- 
- 		syscon_peric1: syscon@10820000 {
--			compatible = "samsung,exynosautov9-sysreg", "syscon";
-+			compatible = "samsung,exynosautov9-peric1-sysreg",
-+				     "samsung,exynosautov9-sysreg", "syscon";
- 			reg = <0x10820000 0x2000>;
- 		};
- 
--- 
-2.17.1
+Please let me know.
 
+--- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
++++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+@@ -232,6 +232,9 @@ &usb {
+ &usb_dwc3 {
+        maximum-speed = "high-speed";
+        dr_mode = "peripheral";
++
++       phys = <&usb_hsphy>;
++       phy-names = "usb2-phy";
+ };
+
+Thanks.
