@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A0B64CE6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C997364CE72
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbiLNQya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S239172AbiLNQzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239181AbiLNQyU (ORCPT
+        with ESMTP id S239193AbiLNQym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:54:20 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7789529377
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:54:18 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j4so11524287lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:54:18 -0800 (PST)
+        Wed, 14 Dec 2022 11:54:42 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CED22873C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:54:40 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id h17so6821928ila.6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:54:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=g4ET78kPouxJtleX0/D8/wwO+/VH2Xj4NPlSa2QjbG8=;
-        b=OmvgWeK7sAu2ooEq8jNreKtk9F8WfhtHysaQaeap4iH6HXijrdKKOljTP1kekfIAbA
-         ivMUf4VB8UWwd0DsoqP7koxDPpDi11yT9YWlSfPGTCmZ4NbkHHSjEBb9yKZ6weEshXGy
-         7l+1ylnLD23leWCXOnmgQf04CASNBXZtlviPkhghJOIqvaZqAVXZKMm5N7hxXgB/MOC/
-         wqjJw6xAkbtCLj63wFoBSUDqXtf3Cs51vCYiC69b7hCemFshprecF2fLtFecBoHsr09i
-         IGAx0tlBeE8omqaee3myITVduyAueDtD6d76yj52JFuFKn3IxJLjTmtEjnrFzLd7Dq4u
-         +4rg==
+        bh=VdMn8MdKqERVq83/l+YeYkH6HVsbE2k4JfbE9pJ1Ypo=;
+        b=D+E7a9btXDFAY4h9/TXp95QlTJDLO1Qdr8/uyyoZeUcYY1BfJx680/GCWVnOYNkdrC
+         uwS3Ihcc6GS/HH9FobTHT4q6/yO/h+HBfyzj5KqJll1QRfuD/cigJ7qaCfbC/qYDusnQ
+         p93GRasXxxai4ma/lZuwCAwp9RWztMdrtx9AesUYzDCJXCmlEp6LHO7VShoahengkD68
+         Hf/JvqDQimnkUXDnJN0+2zEWVpAP3EbQTCR7j9G2i942JRgJLzpPlD0zzTUpMUsDn7PK
+         JBIA/baZ7ShOWi9jmmY46XJNtwUyQq0zo5jo/71jmEjhytxo9rcE5br8fy/UlWnNStMf
+         8xZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g4ET78kPouxJtleX0/D8/wwO+/VH2Xj4NPlSa2QjbG8=;
-        b=p66WM3nRGfKipIqEA9RFCfvmeQ9+D/cIKy9gZevrw4+ob0iB7SA8M5FvkP3E7ITbqh
-         clcmo0eVoZhXl4teDXVLE9+FM+YFdfcSTezHKBrRA8u/Dst8alzCvrveiE3Wso+ohN2R
-         abZKh9Oe/bB/+O+41QaJs9oSP/TJiCCMae8XBEK0OYSz7ryPsZkIQ1kdzpJV7Zs2Ut3V
-         VlyP5F0imIfGefTifi8gRSGuZdQ1SNqBQxaSyGk4eawMRaMF1j2XMKcpJe1lULchuUu3
-         U4qIp5xzq0mYK2nNMhGKPS4HYp2w8i7EVUCSWhsumLulK4sgXVL3AynnWz8jLGMVBbkF
-         Cg1Q==
-X-Gm-Message-State: AFqh2kr3sY39v06Fn+KPSIMU27OvjNQsiiscV/8GgeJiXiW/b8ztBLAm
-        bDjrwiLK3qJ1Hn5KEJtLD6BNaw==
-X-Google-Smtp-Source: AMrXdXtqASp6OIX+87hBDF9GGJ1wVQKIY9LBc+tepjb1mQCkajMrc4FFGfElEhHmybWUHfgbniuOow==
-X-Received: by 2002:a05:6512:3d2a:b0:4ba:555f:4795 with SMTP id d42-20020a0565123d2a00b004ba555f4795mr722550lfv.25.1671036856900;
-        Wed, 14 Dec 2022 08:54:16 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u30-20020ac25bde000000b004b49025f96dsm871295lfn.187.2022.12.14.08.54.15
+        bh=VdMn8MdKqERVq83/l+YeYkH6HVsbE2k4JfbE9pJ1Ypo=;
+        b=n4iJJVVvMXQydWXGc3MVi93xkzgB6UcUHbOxk0GU0j62mjWvzuqwisvnbav4go3OVO
+         jFAQAlIJWc5bLntacQqGv7LmGrB2FTYAOzuB8JCBmU67rkTxkQZ9ka5TR3ehdrpNLVdv
+         SGZbITx2VJNuyjIioqGGSv6lSc4cFz7ozDubB0v9Dqj7MPzu6SjGa6QYr1Z0lHA6j/bG
+         iaZZCMewjb9VTS8kfKD9IDDrKFX8caQ9M7wOtqVSrjqf1NKjD8Fd+cDuQOnjepM+pwHC
+         4ITQ7RP+AeMd/9nJ+yd1tSV2Y46gVeqckIdGZS1k4a0VjAy64/3i7PJUKS+Fl2bHsIE7
+         CAtg==
+X-Gm-Message-State: ANoB5plRmVaZ4m9YUvSje/PJ+GgWTUtnf7ai/Vwi0QQU5w297Lin/cBI
+        MdkPuYHWJOWMrPCJoNaSblBXfQ==
+X-Google-Smtp-Source: AA0mqf7yTYbzA6kWuOn6T+CbG+tkLnt+dK8fzRI3Qj4rvvrUlMRd1H7Wf+1zoOKPsSDPOqMLe3AHuA==
+X-Received: by 2002:a05:6e02:ed0:b0:304:ac4f:a79b with SMTP id i16-20020a056e020ed000b00304ac4fa79bmr1862392ilk.3.1671036879545;
+        Wed, 14 Dec 2022 08:54:39 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id h9-20020a056e020d4900b00300df8bfcf5sm1913591ilj.14.2022.12.14.08.54.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 08:54:16 -0800 (PST)
-Message-ID: <c7cb3be5-150b-a912-8801-670db63bd4ca@linaro.org>
-Date:   Wed, 14 Dec 2022 17:54:15 +0100
+        Wed, 14 Dec 2022 08:54:38 -0800 (PST)
+Message-ID: <5fbaea42-14a7-27a8-cea1-3a59161ceba0@kernel.dk>
+Date:   Wed, 14 Dec 2022 09:54:35 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v2 RESEND 0/5] ARM: dts: nanobone: Fix missing/incorrect
- features
+Subject: Re: [PATCH-block v3 1/2] bdi, blk-cgroup: Fix potential UAF of blkcg
+To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>,
+        Yi Zhang <yi.zhang@redhat.com>
+References: <20221213184446.50181-1-longman@redhat.com>
+ <20221213184446.50181-2-longman@redhat.com>
+ <Y5jSllwwBdmQ1jQz@slm.duckdns.org>
+ <34a8c4a7-a58d-63fc-4599-accf1cbb6aae@redhat.com>
 Content-Language: en-US
-To:     Mark Jackson <mpfj@newflow.co.uk>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221130140547.295859-1-mpfj@newflow.co.uk>
- <CAAbcLfgUmiM=6eTQRRdkgLSEQZEcZwnzq0=Ov58S_osru-_V2Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAAbcLfgUmiM=6eTQRRdkgLSEQZEcZwnzq0=Ov58S_osru-_V2Q@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <34a8c4a7-a58d-63fc-4599-accf1cbb6aae@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 14:35, Mark Jackson wrote:
-> On Wed, 30 Nov 2022 at 14:06, Mark Jackson <mpfj@newflow.co.uk> wrote:
->>
->> This patch series updates the NanoBone DTS file to address various missing or
->> incorrect features.
->>
->> v1 -> v2:
->>   - Move temperature sensor definition under I2C heirarchy
->>
->> Mark Jackson (5):
->>   ARM: dts: am335x-nano: Fix GPIO settings for RTS/CTS pins on UART3 & 4
->>   ARM: dts: am335x-nano: Enable RS485 mode for UART3 & 4
->>   ARM: dts: am335x-nano: Enable I2C temperature sensor
->>   ARM: dts: am335x-nano: Fix GPIO settings for MMC pins
->>   ARM: dts: am335x-nano: Enable USB host
->>
->>  arch/arm/boot/dts/am335x-nano.dts | 32 +++++++++++++++++++++++++------
->>  1 file changed, 26 insertions(+), 6 deletions(-)
->>
->> --
->> 2.34.1
->>
+On 12/13/22 12:53 PM, Waiman Long wrote:
 > 
-> Any update on this patch ?
-> Did it ever get through ?
-> Do I need to re-submit for some reason ?
+> On 12/13/22 14:29, Tejun Heo wrote:
+>> On Tue, Dec 13, 2022 at 01:44:45PM -0500, Waiman Long wrote:
+>>> Commit 59b57717fff8 ("blkcg: delay blkg destruction until after
+>>> writeback has finished") delayed call to blkcg_destroy_blkgs() to
+>>> cgwb_release_workfn(). However, it is done after a css_put() of blkcg
+>>> which may be the final put that causes the blkcg to be freed as RCU
+>>> read lock isn't held.
+>>>
+>>> Another place where blkcg_destroy_blkgs() can be called indirectly via
+>>> blkcg_unpin_online() is from the offline_css() function called from
+>>> css_killed_work_fn(). Over there, the potentially final css_put() call
+>>> is issued after offline_css().
+>>>
+>>> By adding a css_tryget() into blkcg_destroy_blkgs() and warning its
+>>> failure, the following stack trace was produced in a test system on
+>>> bootup.
+>> This doesn't agree with the code anymore. Otherwise
+>>
+>> Acked-by: Tejun Heo <tj@kernel.org>
+> 
+> Sorry, I overlooked the commit log in my update. I will update it if I need another version, or Jens can make the following edit:
+> 
+> css_tryget() -> percpu_ref_is_zero().
 
-It's a merge window and you sent it just before it started.
+Since the other one also needs an edit, would be great if you could
+just send out a v4.
 
-Best regards,
-Krzysztof
+-- 
+Jens Axboe
+
 
