@@ -2,140 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C1A64CF0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BFD64CF09
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbiLNSAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S237538AbiLNSAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238123AbiLNSAn (ORCPT
+        with ESMTP id S229550AbiLNSAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Dec 2022 13:00:43 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2074.outbound.protection.outlook.com [40.107.237.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0086FC3F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:00:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OB/1IW6b9QRz5DN/vs7yxNG6y+bvo9ahCh60+39mQqMm+7EGbZHl6y6plDwJ68/2bLcOLolWV6FhJfdPwGZN/Q5Fy7xjvqhNGkIGSF9dHqDlcc9viJClmsC68ZK6CbqTHZBU44aVuVhqfrvOvW0uY+vdOsmM7UuWFDABiemVlDtjddcHpAA+L1npsqCK+fyi44Mf3aSO6kR6hcOe67b1wcZEYv9CK9QAT6xjvAY7qXy4Ki9c6R48d+sVwFNhj43zTYAVPz7LuDPUYfEyKcG+g5tHPrfnTJsaV+DfhFn+sBEoV75JsABIAAUyF3HZIviOU15R8dAziACy8o21uanucQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NkANwOBVp1EnfJwpcuRP5jhVYFtwDFBD8SeGlFNM9Wg=;
- b=B7dACuQ6U7nyvplfg1NXx5REaq44kbmKdfZMNOp3zvT1PrqyEWHNGeOzIfw1BD/J+meIQsO2EKp4o9eoVLQ/NP+vzqfywcqO/hP5sPMN1o7S86IAIsxpEmWPLCDjsRN4a4Efc2Nr/+ofGJcHSdZP/zUQqDZi/9pfRHRMy3AIAiS7oSc4anVzkZOtEBmXBRM6QSHGabRJ++6LF/k0p8tNvjgnSYKFVz5BCU9SDwcnGLGi/njagHoEpFcsVr9OOsAGPtBVCg/Avw7zAAjeF5HE30ocBPK58hYAHal6WEDdIWVVBfzoLTwzEPFqzSUnc6FfiS61OSeC1r6Pc+BiL2Kq3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NkANwOBVp1EnfJwpcuRP5jhVYFtwDFBD8SeGlFNM9Wg=;
- b=N5sz4bW58LLTEMr4f4Czasbhf/OrhdLdgY7CFNxu9tDIFayNJGdPvhYAAeeb6jqY+BoaujpXVQnVPLXL65MJK6ijLoMQipt9MTX/73p49yWFc6s47XM/u21DKG4rP7M+nPrDiSUdNXeljT8ctBlDsCQG1hOXb9gbmGkIs0HaLGY=
-Received: from MN2PR05CA0045.namprd05.prod.outlook.com (2603:10b6:208:236::14)
- by MN2PR12MB4125.namprd12.prod.outlook.com (2603:10b6:208:1d9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 14 Dec
- 2022 18:00:37 +0000
-Received: from BL02EPF00010209.namprd05.prod.outlook.com
- (2603:10b6:208:236:cafe::3f) by MN2PR05CA0045.outlook.office365.com
- (2603:10b6:208:236::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.6 via Frontend
- Transport; Wed, 14 Dec 2022 18:00:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF00010209.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5924.10 via Frontend Transport; Wed, 14 Dec 2022 18:00:37 +0000
-Received: from localhost.localdomain.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 14 Dec 2022 12:00:34 -0600
-From:   Luben Tuikov <luben.tuikov@amd.com>
-To:     <iommu@lists.linux.dev>
-CC:     Luben Tuikov <luben.tuikov@amd.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dma-direct: Optimize get_required_mask
-Date:   Wed, 14 Dec 2022 13:00:25 -0500
-Message-ID: <20221214180025.163207-1-luben.tuikov@amd.com>
-X-Mailer: git-send-email 2.39.0
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D62118F;
+        Wed, 14 Dec 2022 10:00:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4DA761B7C;
+        Wed, 14 Dec 2022 18:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108B1C433EF;
+        Wed, 14 Dec 2022 18:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671040838;
+        bh=ycP/twmY80DAFepI8zsjXHwKZ9qlK+h73kG8djRCuFQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YwVj7nUssyX3cxXiLDIru4jq6NwZ3wlGHnYRAuD38PmMT47Y5A0CQvyMOxR5JKZHa
+         FnL1OA0EkbbF4TLhsC0mEt1CVazM+SJ8pjn8FAl4x8Fkbj3TY8UJCmfxndIAiWYfyb
+         La902drK8WbLttJbg7KQUHQ9dCS5Z+xmmmu/MNsLKVhs+sda7RjGkzLQAZn47CJR1B
+         fMXWfwRUGnRokdw/VBC6bKfOM2r4EzWoyVZCXvfsWBSu99md2pash3OpZAh+LRDbu6
+         Xe064y9MDwuZq4XetOmIyFG5uVJM3taTXPNB6LXAtX7jFcZUTgTA1qgdRgGJs4OEtj
+         NtZtPgpINq29Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 782AC40367; Wed, 14 Dec 2022 15:00:35 -0300 (-03)
+Date:   Wed, 14 Dec 2022 15:00:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Timothy Hayes <timothy.hayes@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/5] build/libtraceevent resends
+Message-ID: <Y5oPQ0Cf/9JGME3n@kernel.org>
+References: <20221213232651.1269909-1-irogers@google.com>
+ <Y5ncNQfPzq8qBP/f@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-X-check-string-leak: v1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00010209:EE_|MN2PR12MB4125:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6f1c868-49f5-42dd-f7bb-08daddfd1ae1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: juiIG3lUEDGjZFqT2Lf+25nXvPxWYQ+57OKe/0vzTrMpmvZhoeuj3rFLiEVJqvPh0F5aQzx0Q+1zaJvu+2zQjp3qo6ovBvvfByobGzuLGgQbpNMI3qAHn+i7pWAY3EGQwbld8bkVCZqzGHrY1AK13gHQ9n6lFNXYyTB57VNiLR/D55Vw9CjL6dMbrLUyli0fIxN/9Axjy1MXQgBcFthxOURf4iTngwa/y7CFxvOWFeJ44+Uh+8I0VgaV3Oe1aMRIN6eaATDLGa1DDYPhrfykhLaKXrthQhgUyqVFZ8oyGNDh2M5mNjWfpsTzHOl2ZsD2nNG7OsasmA8p5cvXDI4TZStfxGfyumxyi7d4TI6yzSOObLGkL7cMfIs4iYLsm8go43sK2A0MYN7H9pfqrT0E7MurMm/7SO011t3xw+eBiUrjW/bKifjIgnb8ARllqmG3vkMsxUkcu4XA8FKW/iLQg8hKGelzrMOk97YtzhAg3BBv8Ie5w2/qKj205qp00EmVt+yjNhv1ZOjl5ffK9qX3jAMauqmDGlUYa9yDXKr+m2TKqbuX65jB7JaTR5aBpH/TdIaBw5aKcMJX0NaEcTzjMZR5zN/n3aYSInKHBmfYTGyo21bMLMD7WF6tmp/2Vejx82mQ/8agxP6zlhw0vF+qEnXqxOo0Rg0BadNlLx7TPbfr+z/ZaQPEbiQ1/8Zd4KJHkvKyB+245ItrRXIblPrxAqN/M3VAV25mk6b0TaVXhUI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:CA;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199015)(36840700001)(46966006)(40470700004)(82740400003)(40460700003)(36756003)(86362001)(356005)(83380400001)(2616005)(26005)(81166007)(1076003)(6666004)(478600001)(186003)(426003)(16526019)(47076005)(66574015)(336012)(7696005)(36860700001)(54906003)(6916009)(70206006)(4326008)(70586007)(41300700001)(5660300002)(8936002)(2906002)(316002)(44832011)(40480700001)(8676002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 18:00:37.2265
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6f1c868-49f5-42dd-f7bb-08daddfd1ae1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010209.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4125
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5ncNQfPzq8qBP/f@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Optimize dma_direct_get_required_mask(), in that we don't need to multiply by
-two if we don't subtract 1 from the exponent. That is,
+Em Wed, Dec 14, 2022 at 11:22:45AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Dec 13, 2022 at 03:26:46PM -0800, Ian Rogers escreveu:
+> > All patches on the acme perf/core branch.
+> > 
+> > Resend incremental build fix python plugin:
+> > https://lore.kernel.org/lkml/20221205225940.3079667-4-irogers@google.com/
+> > 
+> > Break apart and resend libtraceevent debug logging support:
+> > https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
+> > 
+> > Switch "#if HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE" to "#if
+> > MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <= LIBTRACEEVENT_VERSION",
+> > ensuring trace-event.h is included as discussed on the mailing list.
+> > 
+> > Resend removal of --group option:
+> > https://lore.kernel.org/lkml/20220707195610.303254-1-irogers@google.com/
+> 
+> Thanks, applied.
 
-    (1 << (n - 1)) * 2 - 1 <==>
-    2^(n-1) * 2^1 - 1       = (by rule of exponents)
-    2^n - 1                 <==>
-    (1 << n) - 1.
+Building on arm64:
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Alex Deucher <Alexander.Deucher@amd.com>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: iommu@lists.linux.dev
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Signed-off-by: Luben Tuikov <luben.tuikov@amd.com>
----
- kernel/dma/direct.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+/home/acme/git/perf/tools/perf/util/evsel.c: In function ‘evsel__rawptr’:
+/home/acme/git/perf/tools/perf/util/evsel.c:2787:65: error: operator '<=' has no right operand
+ 2787 | #if MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <= LIBTRACEEVENT_VERSION
+      |                                                                 ^
+error: command '/usr/bin/gcc' failed with exit code 1
+cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
 
-diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
-index 63859a101ed831..bb416a3949dac0 100644
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@ -41,7 +41,7 @@ u64 dma_direct_get_required_mask(struct device *dev)
- 	phys_addr_t phys = (phys_addr_t)(max_pfn - 1) << PAGE_SHIFT;
- 	u64 max_dma = phys_to_dma_direct(dev, phys);
+make[2]: *** [Makefile.perf:651: /tmp/build/perf/python/perf.cpython-310-aarch64-linux-gnu.so] Error 1
+make[2]: *** Waiting for unfinished jobs....
+  LD      /tmp/build/perf/libbpf/staticobjs/libbpf-in.o
+
+Trying to fix...
  
--	return (1ULL << (fls64(max_dma) - 1)) * 2 - 1;
-+	return (1ULL << fls64(max_dma)) - 1;
- }
- 
- static gfp_t dma_direct_optimal_gfp_mask(struct device *dev, u64 dma_mask,
+> - Arnaldo
+> 
+>  
+> > Ian Rogers (5):
+> >   perf build: Fix python/perf.so library's name
+> >   perf trace-event: Add libtraceevent version tools to header
+> >   libtraceevent: Increase libtraceevent logging when verbose
+> >   perf trace-event: Use version check to avoid 1 define
+> >   perf evlist: Remove group option.
+> > 
+> >  tools/perf/Documentation/perf-record.txt      |  4 ----
+> >  tools/perf/Documentation/perf-top.txt         |  7 ++----
+> >  tools/perf/Makefile.config                    |  8 +++----
+> >  tools/perf/Makefile.perf                      |  2 +-
+> >  tools/perf/builtin-record.c                   |  2 --
+> >  tools/perf/builtin-stat.c                     |  6 -----
+> >  tools/perf/builtin-top.c                      |  2 --
+> >  tools/perf/builtin-trace.c                    |  2 +-
+> >  tools/perf/tests/attr/README                  |  2 --
+> >  tools/perf/tests/attr/test-record-group       | 22 -------------------
+> >  tools/perf/tests/attr/test-stat-group         | 17 --------------
+> >  tools/perf/util/data-convert-bt.c             |  3 ++-
+> >  tools/perf/util/debug.c                       | 10 +++++++++
+> >  tools/perf/util/evlist.c                      |  2 +-
+> >  tools/perf/util/evlist.h                      |  2 --
+> >  tools/perf/util/evsel.c                       |  2 +-
+> >  tools/perf/util/python.c                      | 10 +--------
+> >  tools/perf/util/record.c                      |  7 ------
+> >  tools/perf/util/record.h                      |  1 -
+> >  .../util/scripting-engines/trace-event-perl.c |  2 +-
+> >  .../scripting-engines/trace-event-python.c    |  2 +-
+> >  tools/perf/util/sort.c                        |  3 ++-
+> >  tools/perf/util/trace-event.h                 | 13 +++++++++++
+> >  23 files changed, 39 insertions(+), 92 deletions(-)
+> >  delete mode 100644 tools/perf/tests/attr/test-record-group
+> >  delete mode 100644 tools/perf/tests/attr/test-stat-group
+> > 
+> > -- 
+> > 2.39.0.314.g84b9a713c41-goog
+> 
+> -- 
+> 
+> - Arnaldo
 
-base-commit: e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
 -- 
-2.39.0
 
+- Arnaldo
