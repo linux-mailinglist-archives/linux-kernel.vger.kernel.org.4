@@ -2,176 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E398E64CC3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A119A64CC15
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238736AbiLNO1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S238342AbiLNOWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238663AbiLNO1X (ORCPT
+        with ESMTP id S237347AbiLNOWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:27:23 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0410A27CE7;
-        Wed, 14 Dec 2022 06:27:16 -0800 (PST)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB5WdP007022;
-        Wed, 14 Dec 2022 09:26:58 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mf6rn2tqj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 09:26:58 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2BEEQvM1028773
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Dec 2022 09:26:57 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 14 Dec 2022 09:26:56 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 14 Dec 2022 09:26:55 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 14 Dec 2022 09:26:55 -0500
-Received: from IST-LT-40003.ad.analog.com (IST-LT-40003.ad.analog.com [10.25.36.26])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BEEQLNE022112;
-        Wed, 14 Dec 2022 09:26:48 -0500
-From:   Sinan Divarci <Sinan.Divarci@analog.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Sinan Divarci <Sinan.Divarci@analog.com>
-Subject: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
-Date:   Wed, 14 Dec 2022 17:22:06 +0300
-Message-ID: <20221214142206.13288-4-Sinan.Divarci@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221214142206.13288-1-Sinan.Divarci@analog.com>
-References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+        Wed, 14 Dec 2022 09:22:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D79275F9;
+        Wed, 14 Dec 2022 06:22:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C2BB61AAF;
+        Wed, 14 Dec 2022 14:22:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F69C433D2;
+        Wed, 14 Dec 2022 14:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671027768;
+        bh=L/6XW+ZNaYBnNXDgz9LNIZ/Q7OYbAfpqXmx5Wzw2qkE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k7/zSKAJKvG7+Zwh+DD4UGlFvaZgRCvibaA0dl7Kjlnhnsy6KTWrxtQQ19tjTCgoR
+         mHSXJ9tzVfw30SaPC4zisqeZ6adHrRegKJwJC/aQ8cGImGF3wIsMFHyEPbR9yK2UjZ
+         tFR/Hgl34OUOB9K6Llbp9d4jxONI8mBHG0+urs5n7/4PgWtYE/x+ymQTgVtFbGTRff
+         RE5JjZK4Z6a4mv285VRNGlkg8ZjpfWYa+tI9fh6T39MTHmpNnW5U3F5/DoE3hLx5yJ
+         Vl87uKGKHfs5xDtSdzlo6FSKE2G70V0EwIEVry6rHsSaqEI4+T64QdfGmGiUU3g3km
+         ewwjAfGtSd+Lw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 35BAE40367; Wed, 14 Dec 2022 11:22:45 -0300 (-03)
+Date:   Wed, 14 Dec 2022 11:22:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Timothy Hayes <timothy.hayes@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/5] build/libtraceevent resends
+Message-ID: <Y5ncNQfPzq8qBP/f@kernel.org>
+References: <20221213232651.1269909-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: S0M_byp6vi9rnmlHYWIjD3JipbMr1Q7U
-X-Proofpoint-ORIG-GUID: S0M_byp6vi9rnmlHYWIjD3JipbMr1Q7U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
- mlxlogscore=637 impostorscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140114
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213232651.1269909-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding bindings for max31732 quad remote temperature sensor
+Em Tue, Dec 13, 2022 at 03:26:46PM -0800, Ian Rogers escreveu:
+> All patches on the acme perf/core branch.
+> 
+> Resend incremental build fix python plugin:
+> https://lore.kernel.org/lkml/20221205225940.3079667-4-irogers@google.com/
+> 
+> Break apart and resend libtraceevent debug logging support:
+> https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
+> 
+> Switch "#if HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE" to "#if
+> MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <= LIBTRACEEVENT_VERSION",
+> ensuring trace-event.h is included as discussed on the mailing list.
+> 
+> Resend removal of --group option:
+> https://lore.kernel.org/lkml/20220707195610.303254-1-irogers@google.com/
 
-Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
----
- .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+Thanks, applied.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-new file mode 100644
-index 000000000..c701cda95
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-@@ -0,0 +1,83 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2022 Analog Devices Inc.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices MAX31732 Temperature Sensor Device Driver
-+
-+maintainers:
-+  - Sinan Divarci <Sinan.Divarci@analog.com>
-+
-+description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,max31732
-+
-+  reg:
-+    description: I2C address of the Temperature Sensor Device.
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 2
-+
-+  interrupt-names:
-+    description: Name of the interrupt pin of max31732 used for IRQ.
-+    minItems: 1
-+    items:
-+      - enum: [ALARM1, ALARM2]
-+      - enum: [ALARM1, ALARM2]
-+
-+  adi,alarm1-interrupt-mode:
-+    description: |
-+      Enables the ALARM1 output to function in interrupt mode.
-+      Default ALARM1 output function is comparator mode.
-+    type: boolean
-+
-+  adi,alarm2-interrupt-mode:
-+    description: |
-+      Enables the ALARM2 output to function in interrupt mode.
-+      Default ALARM2 output function is comparator mode.
-+    type: boolean
-+
-+  adi,alarm1-fault-queue:
-+    description: The number of consecutive faults required to assert ALARM1.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 6]
-+    default: 1
-+
-+  adi,alarm2-fault-queue:
-+    description: The number of consecutive faults required to assert ALARM2.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [1, 2, 4, 6]
-+    default: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        sensor@1c {
-+            compatible = "adi,max31732";
-+            reg = <0x1c>;
-+            interrupt-parent = <&gpio>;
-+            interrupts = <17 IRQ_TYPE_EDGE_BOTH>, <27 IRQ_TYPE_EDGE_BOTH>;
-+            interrupt-names = "ALARM1", "ALARM2";
-+            adi,alarm1-fault-queue = <4>;
-+            adi,alarm2-fault-queue = <2>;
-+            adi,alarm2-interrupt-mode;
-+      };
-+    };
+- Arnaldo
+
+ 
+> Ian Rogers (5):
+>   perf build: Fix python/perf.so library's name
+>   perf trace-event: Add libtraceevent version tools to header
+>   libtraceevent: Increase libtraceevent logging when verbose
+>   perf trace-event: Use version check to avoid 1 define
+>   perf evlist: Remove group option.
+> 
+>  tools/perf/Documentation/perf-record.txt      |  4 ----
+>  tools/perf/Documentation/perf-top.txt         |  7 ++----
+>  tools/perf/Makefile.config                    |  8 +++----
+>  tools/perf/Makefile.perf                      |  2 +-
+>  tools/perf/builtin-record.c                   |  2 --
+>  tools/perf/builtin-stat.c                     |  6 -----
+>  tools/perf/builtin-top.c                      |  2 --
+>  tools/perf/builtin-trace.c                    |  2 +-
+>  tools/perf/tests/attr/README                  |  2 --
+>  tools/perf/tests/attr/test-record-group       | 22 -------------------
+>  tools/perf/tests/attr/test-stat-group         | 17 --------------
+>  tools/perf/util/data-convert-bt.c             |  3 ++-
+>  tools/perf/util/debug.c                       | 10 +++++++++
+>  tools/perf/util/evlist.c                      |  2 +-
+>  tools/perf/util/evlist.h                      |  2 --
+>  tools/perf/util/evsel.c                       |  2 +-
+>  tools/perf/util/python.c                      | 10 +--------
+>  tools/perf/util/record.c                      |  7 ------
+>  tools/perf/util/record.h                      |  1 -
+>  .../util/scripting-engines/trace-event-perl.c |  2 +-
+>  .../scripting-engines/trace-event-python.c    |  2 +-
+>  tools/perf/util/sort.c                        |  3 ++-
+>  tools/perf/util/trace-event.h                 | 13 +++++++++++
+>  23 files changed, 39 insertions(+), 92 deletions(-)
+>  delete mode 100644 tools/perf/tests/attr/test-record-group
+>  delete mode 100644 tools/perf/tests/attr/test-stat-group
+> 
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+
 -- 
-2.25.1
 
+- Arnaldo
