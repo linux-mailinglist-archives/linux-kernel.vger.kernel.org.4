@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2238C64C559
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C505C64C55E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237834AbiLNI4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S237842AbiLNI5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237818AbiLNI4L (ORCPT
+        with ESMTP id S237325AbiLNI5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:56:11 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD53193E5;
-        Wed, 14 Dec 2022 00:56:10 -0800 (PST)
+        Wed, 14 Dec 2022 03:57:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AED193E5;
+        Wed, 14 Dec 2022 00:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4qLs78eGQyGNi4vbKjmNfC+O4t106kpYiQycgssyLgg=; b=AlMdipXWKjoZvGLLYhBVQtp7cU
-        ++3Di3oxtUj/+FTTQjM/dMkIw7Kr6garFQt0pvSM/zVv0rb8RggX1BiJgX/lQw8HpxczpcUvDDLEB
-        gjTa7HJrbWQh69l2hIQ25pJ2G9Tm9dvKs+/qv7U/RGoxnNW2loI/6P7z3ydQ8FWq433dfEMxQ1glm
-        D0Atos5fdgQ/nV85bKV0BODWhpaUvb7lLK/3iHtjxjkP6zbgTSRODjsC0UGIXVDWOHD/BfbySyNO7
-        60EbEj87UfnkCy8T+pQaQi1O7u2acmmGT0rYV3Ur29WnWo2OytMKZ4ASxaV3yTL//v+DKgouR9X+Z
-        Eqrd+4Qw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5NYL-00D3P5-5R; Wed, 14 Dec 2022 08:55:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8003830030B;
-        Wed, 14 Dec 2022 09:55:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 51696202344B3; Wed, 14 Dec 2022 09:55:38 +0100 (CET)
-Date:   Wed, 14 Dec 2022 09:55:38 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        brho@google.com, pjt@google.com, derkling@google.com,
-        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
-        dskarlat@cs.cmu.edu, riel@surriel.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCHSET RFC] sched: Implement BPF extensible scheduler class
-Message-ID: <Y5mPigH1bPatXNeB@hirez.programming.kicks-ass.net>
-References: <20221130082313.3241517-1-tj@kernel.org>
- <Y5b++AttvjzyTTJV@hirez.programming.kicks-ass.net>
- <CABk29Ntf1ZMAmvkVTzj6=HjanHgn6Qu3-J8gHHyMM30yiHM3_w@mail.gmail.com>
+        bh=+UA0bGsdjGZ9cSI5EhvAhiICSEqFY599X3vnO6vPNp8=; b=C/SwXNY37BskgDiZKGwdrvpdG4
+        On0DmRm99sLiWdIdBMSTn1oSI4VMncAtR+6a1Qjl1oqu21U1J8GonjNni8iZpG+gT9TOR7mbJa2zE
+        IKG+CoWf0GbY2WMh4QPBGUD9jLk7ogHzJ1WgV2p94OBkWl/hSjBKu2I0ZKPx9TO4h7STQtOVcu+7x
+        /SmCWe3hmyhAq4sJPNFIApAbjle29nMfPYdZ4Ht3DD12cuc55cmqDpn9H989fk5pcREm8A+KZLgRK
+        pbpH7I/AdItoJiOCNU6mXDlY5ebSOWRyiI1CDc7GnMp6FvzeRszuQ2dkzi0RQf188/BvTAIotoCbo
+        aseyv0eQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5NZz-00EqzR-OX; Wed, 14 Dec 2022 08:57:31 +0000
+Date:   Wed, 14 Dec 2022 00:57:31 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     gregkh@linuxfoundation.org, mka@chromium.org,
+        dianders@chromium.org, albertccwang@google.com, raychi@google.com,
+        howardyen@google.com, leejj@google.com, hch@infradead.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] usb: core: add implementations for usb
+ suspend/resume hooks
+Message-ID: <Y5mP+yQwlbbZb+9P@infradead.org>
+References: <20221214081456.714859-1-pumahsu@google.com>
+ <20221214081456.714859-3-pumahsu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABk29Ntf1ZMAmvkVTzj6=HjanHgn6Qu3-J8gHHyMM30yiHM3_w@mail.gmail.com>
+In-Reply-To: <20221214081456.714859-3-pumahsu@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -68,32 +53,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 06:11:38PM -0800, Josh Don wrote:
-
-> Improving scheduling performance requires rapid iteration to explore
-> new policies and tune parameters, especially as hardware becomes more
-> heterogeneous, and applications become more complex. Waiting months
-> between evaluating scheduler policy changes is simply not scalable,
-> but this is the reality with large fleets that require time for
-> testing, qualification, and progressive rollout. The security angle
-> should be clear from how involved it was to integrate core scheduling,
-> for example.
-
-Surely you can evaluate stuff on a small subset of machines -- I'm
-fairly sure I've had google and facebook people tell me they do just
-that, roll out the test kernel on tens to hundreds of thousand of
-machines instead of the stupid number and see how it behaves there.
-
-Statistics has something here I think, you can get a reliable
-representation of stuff without having to sample *everyone*.
-
-I was given to believe this was a fairly rapid process.
-
-Just because you guys have more machines than is reasonable, doesn't
-mean we have to put BPF everywhere.
-
-Additionally, we don't merge and ship everybodies random debug patch
-either -- you're free to do whatever you need to iterate on your own and
-then send the patches that result from this experiment upstream. This is
-how development works, no?
-
+Again, this is never actually registered.  It it not tied to an device.
+What is the point of all this?  Are you trying to fool us?
