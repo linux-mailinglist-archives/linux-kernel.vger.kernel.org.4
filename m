@@ -2,164 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513F764C210
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B8564C214
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbiLNCAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 21:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S237018AbiLNCCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 21:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236739AbiLNCAd (ORCPT
+        with ESMTP id S229967AbiLNCCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 21:00:33 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBED413F57
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:00:32 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id 65so3474078pfx.9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tJ4CSVZZ+NoydkcJKVQO6YNOhus6JhiYOMFjQ8jjtjU=;
-        b=m/SKUa27vVBjK1uJ2X221o05KhZ9jtihYba01Ju4Ef9NiQruOgsHzM/Kf1zncuPTTX
-         5WeMUgP2qqB8oX/4aP0MqYeAjg3qs/eM20mosQEYuuuFZnP4JWFMeKxBkG3TuR5NK4vu
-         qFImpcXkZ2530uslsCBedMtoQkMTCMSn577sVPwZQ4PtS7Ixp2wQrQhf3JPXBZeWg99f
-         xhPEhRvSnr9JK20Gn1Xy65nImGw11v7zxUokfH2gN5b0GSEXW//gCO0MyExz+vTrRPRC
-         Muj85AAhNQdYKoc9aj4gGiO9y1whE7GOJaJob8+6UkimVCJbodt1gz6mB2zEZSbiY6zc
-         Q58g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tJ4CSVZZ+NoydkcJKVQO6YNOhus6JhiYOMFjQ8jjtjU=;
-        b=mrVA5o/Diq8WhNJnTkXg8tva+4acx/iMQUZObDzFvk3Sg6qlU6MMXsGSwVpxYQB463
-         a9L4gZThdhtJmh7TRCFJpWgFxGqdTA6iq9oAwIYE7gWKp9LEkQTjMC1NnAmQUAOoVLnp
-         JEO24DoTpOI/bzHJqzjEnUwYngN4nybLcCSwEE8TD+ndehG72+DJFJWb0+i4iBiB7aCf
-         QbACCZsWA4cIZ5B+uWO3lLX674bZ9oVdh56MoCd2Nja0El7IvI652GTHrlW1X77p3KAD
-         6MUWR4ANjVF2AeA8Do7J3M4dwCG6bV0/mThlY7AoN5dWbQJU91qJIMtFDP1uLkBTtkN4
-         wjGg==
-X-Gm-Message-State: ANoB5pmKcUcSe2vBQHYVujyzr3ycsCpxND+cqJ38xDhMVDV91w5qfBH1
-        TM9l2My6u8x43wQgoyO31BeZ6OhbQ6u655SgMId9rg==
-X-Google-Smtp-Source: AA0mqf67HjB2QuUnPoIyEET5gO5fYZFekKta2m+eJepPSJ0NzH0Lf7dZNLdzf8CBGYYlGHlbu/mQbGXA6ehU1ULXrlQ=
-X-Received: by 2002:a63:1247:0:b0:476:ed2a:6216 with SMTP id
- 7-20020a631247000000b00476ed2a6216mr77727663pgs.556.1670983231384; Tue, 13
- Dec 2022 18:00:31 -0800 (PST)
+        Tue, 13 Dec 2022 21:02:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4B913D41;
+        Tue, 13 Dec 2022 18:02:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2A7EB815FC;
+        Wed, 14 Dec 2022 02:02:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C203EC433D2;
+        Wed, 14 Dec 2022 02:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670983338;
+        bh=83ob3N1he1MIOrIIbkVJFs5buErAmrdJMCOKfKXHqb0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bDLXc0RuV61tWZ2TmhA1zZ/K9nn8vhh9b8wz9mlGGOgLzL72MNBrv3mH5M0aHf5I3
+         hYs6hOT0gCeh5AF+RryYv8T3742g9igNINX2g//Q0TC+McJ349jyIEVzFAxIZPfX4E
+         N1Ms8QVMLpeyMvw3A726E4yHJiEUK7ovU2FeXBOiFb6EcuxkjSe2oj3T7gyQfQB65W
+         ihdnMMbu247K8HnVN4q4MpH7jWLJ/OHVUsz/8nMUgIWNMVcXMMGXDkb0I18prIFwR2
+         XONm4gCX+VRwbHTKJW+zbxU6oFygYoN5Fou0uk2HBKR4zgxK7mI9PN+4YcjW2MZ5LE
+         +IzwIELTfXT8g==
+Date:   Tue, 13 Dec 2022 18:02:16 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] net: ksz884x: Remove some unused functions
+Message-ID: <20221213180216.34f1826f@kernel.org>
+In-Reply-To: <20221213035707.118309-1-jiapeng.chong@linux.alibaba.com>
+References: <20221213035707.118309-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20221130082313.3241517-1-tj@kernel.org> <20221130082313.3241517-32-tj@kernel.org>
- <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net> <CABk29Nu5WiCmhNN2jZrTShELbCDOYUziUeW5xojkwB83R+VzEQ@mail.gmail.com>
- <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 13 Dec 2022 18:00:19 -0800
-Message-ID: <CABk29Nu0JJ6xY_2SL0Y=iWstmoiRnRRnQ+Xvm3t_oU4sp72vpg@mail.gmail.com>
-Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example scheduler
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        brho@google.com, pjt@google.com, derkling@google.com,
-        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
-        dskarlat@cs.cmu.edu, riel@surriel.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com, Peter Oskolkov <posk@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > and ignoring
-> > the specifics of this example, the UMCG and sched_ext work are
-> > complementary, but not mutually exclusive. UMCG is about driving
-> > cooperative scheduling within a particular application. UMCG does not
-> > have control over or react to external preemption,
->
-> It can control preemption inside the process, and if you have the degree
-> of control you need to make the whole BPF thing work, you also have the
-> degree of control to ensure you only run the one server task on a CPU
-> and all that no longer matters because there's only the process and you
-> control preemption inside that.
+On Tue, 13 Dec 2022 11:57:07 +0800 Jiapeng Chong wrote:
+> These functions are defined in the ksz884x.c file, but not called
+> elsewhere, so delete these unused functions.
+> 
+> drivers/net/ethernet/micrel/ksz884x.c:2212:20: warning: unused function 'port_cfg_force_flow_ctrl'.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3418
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-To an extent yes, but this doesn't extend to the case where cpu is
-overcommitted. Even if not by other applications, then responding to
-preemption by, for example, kthreads (necessary for microsecond scale
-workloads). But in general the common case is interference from other
-applications, something which is handled by a system level scheduler
-like sched_ext. The application vs system level control is an
-important distinction here.
+# Form letter - net-next is closed
 
-> > nor does it make thread placement decisions.
->
-> It can do that just fine -- inside the process. UMCG has full control
-> over which server task a worker task is associated with, then run a
-> single server task per CPU and have them pinned and you get full
-> placement control.
+We have already submitted the networking pull request to Linus
+for v6.2 and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
 
-Again, this doesn't really scale past single server per cpu. It is not
-feasible to partition systems in this way due to the loss of
-efficiency.
+Please repost when net-next reopens after 6.2-rc1 is cut.
 
-> > sched_ext is considering things more at
-> > the system level: arbitrating fairness and preemption between
-> > processes, deciding when and where threads run, etc., and also being
-> > able to take application-specific hints if desired.
->
-> sched_ext does fundamentally not compose, you cannot run two different
-> schedulers for two different application stacks that happen to co-reside
-> on the same machine.
-
-We're actually already developing a framework (and plan to share) to
-support composing an arbitrary combination of schedulers. Essentially,
-a "scheduler of schedulers". This supports the case, for example, of a
-system that runs most tasks under some default SCX scheduler, but
-allows a particular application or group of applications to utilize a
-bespoke SCX scheduler of their own.
-
-> sched_ext also sits at the very bottom of the class stack (it more or
-> less has to) the result is that in order to use it at all, you have to
-> have control over all runnable tasks in the system (a stray CFS task
-> would interfere quite disastrously) but that is exactly the same
-> constraint you need to make UMCG work.
-
-UMCG still works when mixed with other tasks. You're specifying which
-threads of your application you want running, but no guarantees are
-made that they'll run right now if the system has other work to do.
-
-SCX vs CFS is a more interesting story. Yes it is true that a single
-CFS task could hog a cpu, but since SCX is managing things at a system
-level, we feel that this is something that should be handled by system
-administration. You shouldn't expect to mix cpu bound CFS tasks in the
-same partition as threads running under SCX with good results.
-
-> Conversely, it is very hard to use the BPF thing to do what UMCG can do.
-> Using UMCG I can have a SCHED_DEADLINE server implement a task based
-> pipeline schedule (something that's fairly common and really hard to
-> pull off with just SCHED_DEADLINE itself).
-
-UMCG and SCX are solving different problems though. An application can
-decide execution order or control internal preemption via UMCG, while
-SXC arbitrates allocation of system resources over time.
-
-And, conversely, SCX can do things very difficult or impossible with
-UMCG. For example, implementing core scheduling. Guaranteeing
-microsecond scale tail latency. Applying a new scheduling algorithm
-across multiple independent applications.
-
-> Additionally, UMCG naturally works with things like Proxy Execution,
-> seeing how the server task *is* a proxy for the current active worker
-> task.
-
-Proxy execution should also work with SCX; the enqueue/dequeue
-abstraction can still be used to allow the SCX scheduler to select the
-proxy.
+RFC patches sent for review only are obviously welcome at any time.
