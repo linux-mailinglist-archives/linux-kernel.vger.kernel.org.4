@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD7364C6F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E35C764C6FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiLNKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S229937AbiLNKUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 05:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237440AbiLNKUb (ORCPT
+        with ESMTP id S237645AbiLNKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:20:31 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E5813F0D;
-        Wed, 14 Dec 2022 02:20:30 -0800 (PST)
+        Wed, 14 Dec 2022 05:20:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E9414D1F;
+        Wed, 14 Dec 2022 02:20:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F04CCCE18FF;
-        Wed, 14 Dec 2022 10:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537CEC433D2;
-        Wed, 14 Dec 2022 10:20:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DF4AB8172C;
+        Wed, 14 Dec 2022 10:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064DBC433D2;
+        Wed, 14 Dec 2022 10:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671013227;
-        bh=ctV7YHyh+mUHUVb+WNS0Td3VCfMraV0LfMLGZFLM5yM=;
+        s=k20201202; t=1671013239;
+        bh=cMUFvzdF/SdFZnd5UFrx0zQ0EoQivvDMwDvS/2E4Vfo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mf5HqAOSX2E1VIvOg0Pap+A/XtjXWseXNTrUPqIJ4JaBd8FY00nBxoWly+cb9bRG/
-         PXHlWxc53+QFFe7rj5jNmrChYTLno9PZcgCfy6PmxtYG55QV2Vb0HHFzkPZ/oniwu+
-         ZWjHbiS8YkXpu5m/5PEolDl9hn0izxKOnDD9C38azQ2rHg204b69vAAeXxZKHuuxRu
-         R/PaJK2nQUrCDrUM7xaiVKiKi+nSpNnnSlFtMwB0bPeFABnozsauLbqzv462ucxrt9
-         WnWDynLnbxYBBdBRF8IpBSdm76v6nzVd1jd47MQUDrlOZnksfkLl3RSALYmA7zc4fr
-         LrZj6QrHl5sAA==
-Date:   Wed, 14 Dec 2022 10:20:21 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Jialiang Wang <wangjialiang0806@163.com>, stable@kernel.org,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, niejianglei2021@163.com,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] nfp: fix use-after-free in area_cache_get()
-Message-ID: <Y5mjZWpTgc4oJxDg@google.com>
-References: <20220810073057.4032-1-wangjialiang0806@163.com>
- <Y5CFNqYNMkryiDcP@google.com>
- <Y5HwAWNtH5IfH9OA@corigine.com>
+        b=aycZdjMsq7XiJNYlhdvzvOaElYtQU7bIytNisyHKHfUxu0s1dVhrLdWyLf7ZhFv5a
+         a7Z0aa3boxhHmpcjQNvkK1hFDKBRPv8W2P2t0AKpLWov4dMR7X+ecxkElUmcte9cP6
+         CUXsrHaIbCBRicyXJGIHXgKxKQAlikqD8noilUp3y+3h5oBlUJf0Xk/3JYOmn8MALL
+         qWiUV+CHmlZBQ5ieorMW2t4BtPF+/Im4LvOLEgomuyVc9QsD8Jexkxkyd568L1uvf/
+         Bs4AFAZtsgYoi2zVL81B/UaDgNL/d4zmJPyNHnppEIg1rjCDHG7lZL/OlORuRX3LlB
+         tTGYdctBN7POw==
+Date:   Wed, 14 Dec 2022 11:20:34 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     mst@redhat.com, asowang@redhat.com,
+        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Jian Jun Chen <jian.jun.chen@intel.com>
+Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
+Message-ID: <Y5mjcuCRP45ynJis@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, mst@redhat.com,
+        asowang@redhat.com, Conghui <conghui.chen@intel.com>,
+        linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Jian Jun Chen <jian.jun.chen@intel.com>
+References: <20221214053631.3225164-1-conghui.chen@intel.com>
+ <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OI2D2tNcAW6qK5VE"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5HwAWNtH5IfH9OA@corigine.com>
+In-Reply-To: <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,80 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Stable,
 
-On Thu, 08 Dec 2022, Simon Horman wrote:
-> On Wed, Dec 07, 2022 at 12:21:10PM +0000, Lee Jones wrote:
-> > [Some people who received this message don't often get email from lee@kernel.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > On Wed, 10 Aug 2022, Jialiang Wang wrote:
-> > 
-> > > area_cache_get() is used to distribute cache->area and set cache->id,
-> > >  and if cache->id is not 0 and cache->area->kref refcount is 0, it will
-> > >  release the cache->area by nfp_cpp_area_release(). area_cache_get()
-> > >  set cache->id before cpp->op->area_init() and nfp_cpp_area_acquire().
-> > >
-> > > But if area_init() or nfp_cpp_area_acquire() fails, the cache->id is
-> > >  is already set but the refcount is not increased as expected. At this
-> > >  time, calling the nfp_cpp_area_release() will cause use-after-free.
-> > >
-> > > To avoid the use-after-free, set cache->id after area_init() and
-> > >  nfp_cpp_area_acquire() complete successfully.
-> > >
-> > > Note: This vulnerability is triggerable by providing emulated device
-> > >  equipped with specified configuration.
-> > >
-> > >  BUG: KASAN: use-after-free in nfp6000_area_init (/home/user/Kernel/v5.19
-> > > /x86_64/src/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c:760)
-> > >   Write of size 4 at addr ffff888005b7f4a0 by task swapper/0/1
-> > >
-> > >  Call Trace:
-> > >   <TASK>
-> > >  nfp6000_area_init (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> > > /ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c:760)
-> > >  area_cache_get.constprop.8 (/home/user/Kernel/v5.19/x86_64/src/drivers
-> > > /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:884)
-> > >
-> > >  Allocated by task 1:
-> > >  nfp_cpp_area_alloc_with_name (/home/user/Kernel/v5.19/x86_64/src/drivers
-> > > /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:303)
-> > >  nfp_cpp_area_cache_add (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> > > /ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:802)
-> > >  nfp6000_init (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> > > /netronome/nfp/nfpcore/nfp6000_pcie.c:1230)
-> > >  nfp_cpp_from_operations (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> > > /ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:1215)
-> > >  nfp_pci_probe (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> > > /netronome/nfp/nfp_main.c:744)
-> > >
-> > >  Freed by task 1:
-> > >  kfree (/home/user/Kernel/v5.19/x86_64/src/mm/slub.c:4562)
-> > >  area_cache_get.constprop.8 (/home/user/Kernel/v5.19/x86_64/src/drivers
-> > > /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:873)
-> > >  nfp_cpp_read (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> > > /netronome/nfp/nfpcore/nfp_cppcore.c:924 /home/user/Kernel/v5.19/x86_64
-> > > /src/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:973)
-> > >  nfp_cpp_readl (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> > > /netronome/nfp/nfpcore/nfp_cpplib.c:48)
-> > >
-> > > Signed-off-by: Jialiang Wang <wangjialiang0806@163.com>
-> > 
-> > Any reason why this doesn't have a Fixes: tag applied and/or didn't
-> > get sent to Stable?
-> > 
-> > Looks as if this needs to go back as far as v4.19.
-> > 
-> > Fixes: 4cb584e0ee7df ("nfp: add CPP access core")
-> > 
-> > commit 02e1a114fdb71e59ee6770294166c30d437bf86a upstream.
-> 
-> Hi Lee,
-> 
-> From my side this looks like an oversight.
+--OI2D2tNcAW6qK5VE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Understood, thank you Simon.
+Hi Viresh,
 
-Stable Team, are you prepared to take this patch with the above info?
+> I understand that it is okay to pass the maintainership, within the
+> company, for platform specific parts from one person to another, since
+> they have the best knowledge of the code and are the only one
+> interested in maintaining it too.
+>=20
+> But what is the rule for generic drivers like this one ?
 
--- 
-Lee Jones [李琼斯]
+Dunno if this is really a rule, but if a maintainer steps out and makes
+sure there is someone to pick up the work, this is more than welcome.
+Way better than a stale entry in the MAINTAINERS file.
+
+I mean, it does not limit the chance to have further maintainers, for
+example. I believe in meritocracy here. Those who do and collaborate,
+shall get responsibility. If not, then not. We can fix this, too, if
+needed.
+
+What is the reason for your question?
+
+All the best,
+
+   Wolfram
+
+
+--OI2D2tNcAW6qK5VE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOZo24ACgkQFA3kzBSg
+KbbM9A/3bFT2aF50TuVky2pvvulpZ2yDFxu64+b00PQNkjwC6+PWUVJp+k05OjfP
+BgL7cPHl+1p8+VEVLSJcMXtYTToCOaOV2UTm2f+M4MUoI/DgzWhyouz+3LBFrQJh
+6eu2zAU1VO+FYMhILSzeqpck+6L6k1vZDq5sLa/Kz+jiFbVbvZsj0Y747Bj2L/Ul
+G1ysStKXSuhOvbgTthC1j36D1uy4DA5+PPXadbRhIcsI9N2REwZW/XgmrTmeFJJi
+qWV0scCxeCX5iF5vCD/IgmmFUGbKDUZltIK2KS9d3dI2ZXqsBkzxRTEWzbRaNUt6
+tO9YOHypb5majOsoMSPuflKDFTxexXpSasxm3f9flUBGTorxe4+Vis2UvZ1mNyWj
+xEFQkBVPSi5tYWeUG2NGSEi3vLNaTBkJB6L5Hhf01pHtda4FLdrDTGYM3MEjG9oP
+4AAk7/nLmyP3l1Mjqh5mC5n6IxRh5jtpsXZrQRvwK/lPxu4JZbbPGGMMcOyaEAzq
+9IF1MuJI9o8jIR3+m+O9Ry8/vR+DjN5GgvIa9U0XBMvxbVI8NEjs/2Kebd5WCqNf
+YPDimxB3KkauPe6MxjAfDwmlQMNrKlf73PWXqVxvNd2d4r92HXXAFCShN5hEYjrB
+TY1OdBN/AjWTJnRWU9BrCBwUlfrUV3/MdSB0sv3Y7qk0nPQuWw==
+=uuEC
+-----END PGP SIGNATURE-----
+
+--OI2D2tNcAW6qK5VE--
