@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AA964C92D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C8A64C92B
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238189AbiLNMkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S237949AbiLNMjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238370AbiLNMj1 (ORCPT
+        with ESMTP id S238283AbiLNMj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:39:27 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7EE2183E
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:38:07 -0800 (PST)
+        Wed, 14 Dec 2022 07:39:26 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8CB21E00
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:38:08 -0800 (PST)
 Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id AE0DE85112;
-        Wed, 14 Dec 2022 13:38:05 +0100 (CET)
+        by phobos.denx.de (Postfix) with ESMTPSA id 28B5E85165;
+        Wed, 14 Dec 2022 13:38:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
         s=phobos-20191101; t=1671021486;
-        bh=abd1MpTy2Dv7NXLZctEyPw0kePkmyEM/uEvzbgu2gpY=;
+        bh=6Jupxi3YTw8zb2A9Zvbmvr72UlqBukNaZRCAsj7GqjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=geY+9KKLM0h2RZND9Py7wjG0DwsT68/LnsKJmP7k4omOm3tmyCYT2S1mR2IuRFcRh
-         3GhfNkhi82QkYov0fRY0Ic4RK6ohZLJHLKRlmFYKoT5mD4k9AoFu/ueH90kfnrBmYq
-         mgpWoXBAJFn5gneZiNZErc38qnUJ8APyE/ltUMiX+GY1HOtWbMqLMFjNCuFRYJxSqI
-         8nxFCcjgZzkWNy6rdwps9X/neVdSX6Tg4fd0Psywytstk6s132TtZMPXX4FIobcKB8
-         logZoRTGWjcJVlWT6R1e3pmiYFOrLmNnb7wquV6vBw6hWgUOmY1LeFH1Mg91fww+01
-         k67UudxYytTTg==
+        b=o5UgHlc7BdfCg9o2XR7gT44W6Ksgs3OtjVtv8ynu0m10B2QzPRU+PC/kEWRkvFPfP
+         acl5roqWq/GsUSGan5B3XwKx/OYt2Pt7chpee0qctOneZIh2EKdT+8t3H0H3cIIbfj
+         25DbmW865Sa3PAJ0S+ZrifUDk0UBtKfpQpMuY6+Dw277FYYfsYVpyqohBIR2f9CNsY
+         MGUkEtxm5m/RVsyl4t9dyespT3Zmwpcur3weMXvUgq9H6DbcZs0hwVb/zKcYtK+WdD
+         JEob0lISivpColvXh/iz+g3tB/r/AOcxp82bZgDE+fL9AJQsqO0bQe6xNT3fMlgCd1
+         p0QRaC44qiFAA==
 From:   Lukasz Majewski <lukma@denx.de>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -40,9 +40,9 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Stephen Kitt <steve@sk2.org>
 Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH 2/4] ASoC: wm8940: Rewrite code to set proper clocks
-Date:   Wed, 14 Dec 2022 13:37:41 +0100
-Message-Id: <20221214123743.3713843-3-lukma@denx.de>
+Subject: [PATCH 3/4] ASoC: wm8940: Mute also the speaker output
+Date:   Wed, 14 Dec 2022 13:37:42 +0100
+Message-Id: <20221214123743.3713843-4-lukma@denx.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221214123743.3713843-1-lukma@denx.de>
 References: <20221214123743.3713843-1-lukma@denx.de>
@@ -59,178 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without this change, the wm8940 driver is not working when
-set_sysclk callback (wm8940_set_dai_sysclk) is called with
-frequency not listed in the switch clause.
+Without this change the BTL speaker produces some
+"distortion" noise when test program
+(speaker-test -t waw) is ended with ctrl+c.
 
-This change adjusts this driver to allow non-standard frequency
-set (just after the boot) being adjusted afterwards by the sound
-system core code.
-
-Moreover, support for internal wm8940's PLL is provided, so it
-can generate clocks when HOST system is not able to do it.
-
-Code in this commit is based on previous change done for wm8974
-(SHA1: 51b2bb3f2568e6d9d81a001d38b8d70c2ba4af99).
+As our design uses speaker outputs to drive BTL speaker,
+it was necessary to also mute the speaker via the codec
+internal WM8940_SPKVOL register with setting
+WM8940_SPKMUTE bit.
 
 Signed-off-by: Lukasz Majewski <lukma@denx.de>
 ---
- sound/soc/codecs/wm8940.c | 103 ++++++++++++++++++++++++++++++--------
- 1 file changed, 83 insertions(+), 20 deletions(-)
+ sound/soc/codecs/wm8940.c | 11 ++++++++++-
+ sound/soc/codecs/wm8940.h |  3 +++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/sound/soc/codecs/wm8940.c b/sound/soc/codecs/wm8940.c
-index 0b59020d747f..094e74905df9 100644
+index 094e74905df9..13cb57210b4b 100644
 --- a/sound/soc/codecs/wm8940.c
 +++ b/sound/soc/codecs/wm8940.c
-@@ -37,7 +37,9 @@
- #include "wm8940.h"
- 
- struct wm8940_priv {
--	unsigned int sysclk;
-+	unsigned int mclk;
-+	unsigned int fs;
-+
- 	struct regmap *regmap;
- };
- 
-@@ -387,17 +389,24 @@ static int wm8940_set_dai_fmt(struct snd_soc_dai *codec_dai,
- 	return 0;
- }
- 
-+static int wm8940_update_clocks(struct snd_soc_dai *dai);
- static int wm8940_i2s_hw_params(struct snd_pcm_substream *substream,
- 				struct snd_pcm_hw_params *params,
- 				struct snd_soc_dai *dai)
+@@ -465,9 +465,18 @@ static int wm8940_mute(struct snd_soc_dai *dai, int mute, int direction)
  {
  	struct snd_soc_component *component = dai->component;
-+	struct wm8940_priv *priv = snd_soc_component_get_drvdata(component);
- 	u16 iface = snd_soc_component_read(component, WM8940_IFACE) & 0xFD9F;
- 	u16 addcntrl = snd_soc_component_read(component, WM8940_ADDCNTRL) & 0xFFF1;
- 	u16 companding =  snd_soc_component_read(component,
- 						WM8940_COMPANDINGCTL) & 0xFFDF;
- 	int ret;
+ 	u16 mute_reg = snd_soc_component_read(component, WM8940_DAC) & 0xffbf;
++	u16 spkvol_reg = snd_soc_component_read(component, WM8940_SPKVOL);
++	int ret;
  
-+	priv->fs = params_rate(params);
-+	ret = wm8940_update_clocks(dai);
+-	if (mute)
++	spkvol_reg &= ~WM8940_SPKMUTE;
++	if (mute) {
+ 		mute_reg |= 0x40;
++		spkvol_reg |= WM8940_SPKMUTE;
++	}
++
++	ret = snd_soc_component_write(component, WM8940_SPKVOL, spkvol_reg);
 +	if (ret)
 +		return ret;
-+
- 	/* LoutR control */
- 	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE
- 	    && params_channels(params) == 2)
-@@ -496,7 +505,6 @@ static int wm8940_set_bias_level(struct snd_soc_component *component,
- 				return ret;
- 			}
- 		}
--
- 		/* ensure bufioen and biasen */
- 		pwr_reg |= (1 << 2) | (1 << 3);
- 		/* set vmid to 300k for standby */
-@@ -611,24 +619,6 @@ static int wm8940_set_dai_pll(struct snd_soc_dai *codec_dai, int pll_id,
- 	return 0;
+ 
+ 	return snd_soc_component_write(component, WM8940_DAC, mute_reg);
  }
+diff --git a/sound/soc/codecs/wm8940.h b/sound/soc/codecs/wm8940.h
+index 0d4f53ada2e6..eb051ed29bb8 100644
+--- a/sound/soc/codecs/wm8940.h
++++ b/sound/soc/codecs/wm8940.h
+@@ -95,5 +95,8 @@ struct wm8940_setup_data {
+ #define WM8940_OPCLKDIV_3 2
+ #define WM8940_OPCLKDIV_4 3
  
--static int wm8940_set_dai_sysclk(struct snd_soc_dai *codec_dai,
--				 int clk_id, unsigned int freq, int dir)
--{
--	struct snd_soc_component *component = codec_dai->component;
--	struct wm8940_priv *wm8940 = snd_soc_component_get_drvdata(component);
--
--	switch (freq) {
--	case 11289600:
--	case 12000000:
--	case 12288000:
--	case 16934400:
--	case 18432000:
--		wm8940->sysclk = freq;
--		return 0;
--	}
--	return -EINVAL;
--}
--
- static int wm8940_set_dai_clkdiv(struct snd_soc_dai *codec_dai,
- 				 int div_id, int div)
- {
-@@ -653,6 +643,79 @@ static int wm8940_set_dai_clkdiv(struct snd_soc_dai *codec_dai,
- 	return ret;
- }
++/* Bit definitions */
++#define WM8940_SPKMUTE BIT(6)
++
+ #endif /* _WM8940_H */
  
-+static unsigned int wm8940_get_mclkdiv(unsigned int f_in, unsigned int f_out,
-+				       int *mclkdiv)
-+{
-+	unsigned int ratio = 2 * f_in / f_out;
-+
-+	if (ratio <= 2) {
-+		*mclkdiv = WM8940_MCLKDIV_1;
-+		ratio = 2;
-+	} else if (ratio == 3) {
-+		*mclkdiv = WM8940_MCLKDIV_1_5;
-+	} else if (ratio == 4) {
-+		*mclkdiv = WM8940_MCLKDIV_2;
-+	} else if (ratio <= 6) {
-+		*mclkdiv = WM8940_MCLKDIV_3;
-+		ratio = 6;
-+	} else if (ratio <= 8) {
-+		*mclkdiv = WM8940_MCLKDIV_4;
-+		ratio = 8;
-+	} else if (ratio <= 12) {
-+		*mclkdiv = WM8940_MCLKDIV_6;
-+		ratio = 12;
-+	} else if (ratio <= 16) {
-+		*mclkdiv = WM8940_MCLKDIV_8;
-+		ratio = 16;
-+	} else {
-+		*mclkdiv = WM8940_MCLKDIV_12;
-+		ratio = 24;
-+	}
-+
-+	return f_out * ratio / 2;
-+}
-+
-+static int wm8940_update_clocks(struct snd_soc_dai *dai)
-+{
-+	struct snd_soc_component *codec = dai->component;
-+	struct wm8940_priv *priv = snd_soc_component_get_drvdata(codec);
-+	unsigned int fs256;
-+	unsigned int fpll = 0;
-+	unsigned int f;
-+	int mclkdiv;
-+
-+	if (!priv->mclk || !priv->fs)
-+		return 0;
-+
-+	fs256 = 256 * priv->fs;
-+
-+	f = wm8940_get_mclkdiv(priv->mclk, fs256, &mclkdiv);
-+	if (f != priv->mclk) {
-+		/* The PLL performs best around 90MHz */
-+		fpll = wm8940_get_mclkdiv(22500000, fs256, &mclkdiv);
-+	}
-+
-+	wm8940_set_dai_pll(dai, 0, 0, priv->mclk, fpll);
-+	wm8940_set_dai_clkdiv(dai, WM8940_MCLKDIV, mclkdiv);
-+
-+	return 0;
-+}
-+
-+static int wm8940_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
-+				 unsigned int freq, int dir)
-+{
-+	struct snd_soc_component *codec = dai->component;
-+	struct wm8940_priv *priv = snd_soc_component_get_drvdata(codec);
-+
-+	if (dir != SND_SOC_CLOCK_IN)
-+		return -EINVAL;
-+
-+	priv->mclk = freq;
-+
-+	return wm8940_update_clocks(dai);
-+}
-+
-+
- #define WM8940_RATES SNDRV_PCM_RATE_8000_48000
- 
- #define WM8940_FORMATS (SNDRV_PCM_FMTBIT_S8 |				\
 -- 
 2.20.1
 
