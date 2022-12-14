@@ -2,121 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A9064CD8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66E064CD8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238154AbiLNP6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S237347AbiLNP6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:58:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238122AbiLNP51 (ORCPT
+        with ESMTP id S238491AbiLNP5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:57:27 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D93222B1;
-        Wed, 14 Dec 2022 07:57:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671033434; x=1702569434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5LFXBukgQPsSVobJ4TQvaAaS4znUymOqfbKoEQKnuF8=;
-  b=E+ckExooB4bREp/WKswEEPddfmy6vnU0BLE2og4rz17i9GvWUK+yJU0M
-   Fhe5aMBIMwEN8qyhY6ezagv9DP8KlU0vtmci7WljdbKY9rLLjol2Nk3xy
-   Enh2voNRFcllcGHpbC6l73uDqeofyZz52fYoxRGVBpvaM0RbXN95FDCpj
-   VAluPdVMacqYB0m5W6k60cMbZlnC9cU80KU0KWiZrx4lgRAtVrTwht3TK
-   5o+i2n6Z1kLjdmGOLAKhpGFFpgo+YTtHzrrH9MdFsvHhsnQYaE422npXk
-   ElU0VPEEF6nyiApt091AlCnE1F0MGZuNgQYsqVmHpJkU0iHoWo+oKTTfB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="380640649"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="380640649"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 07:57:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="737738842"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="737738842"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Dec 2022 07:57:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p5U86-009t4i-01;
-        Wed, 14 Dec 2022 17:57:10 +0200
-Date:   Wed, 14 Dec 2022 17:57:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        david.keisarschm@mail.huji.ac.il, dri-devel@lists.freedesktop.org,
-        linux-mtd@lists.infradead.org, linux-scsi@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] Renaming weak prng invocations -
- prandom_bytes_state, prandom_u32_state
-Message-ID: <Y5nyVXv1KpX5baQE@smile.fi.intel.com>
-References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
- <b3caaa5ac5fca4b729bf1ecd0d01968c09e6d083.1670778652.git.david.keisarschm@mail.huji.ac.il>
- <Y5c8KLzJFz/XZMiM@zx2c4.com>
- <20221214123358.GA1062210@linux.intel.com>
- <CANn89iJtK4m1cWvCwp=L_rEOEBa+B1kLZJAw0D9_cYPQcAj+Mw@mail.gmail.com>
- <Y5nxjzV0Mio86NU6@smile.fi.intel.com>
+        Wed, 14 Dec 2022 10:57:30 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF47F22BF2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:57:27 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id s7so3774281plk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Yzm0Z8s50B7PxlfwYMM7oE1GHaBVbWJfzBfeRipGHLY=;
+        b=D5si8z0bqc6iQSOs4DzfBe7ssxqwcUZpw/grziFTWhO9M9XiZ7KIarEabtR90rMCJe
+         b159DFIIX8t3F4lfBIN3fmZZHD7WVptLlehPQYO4LKiecXjdLa+/46Yzk+EGTUd0KqYr
+         6f+QwSb8p9AxW2xcTZdHNyKTg6b4EF4pyv9HIuxrXzCuqKUB5IHSlM7wamT8m+xrQVsc
+         QX9TNjuFRc8bhDqeV7JkA/wzNAENgLawEf/wN8l1K2dNw+Ze8gBFZpDHmGJ9cuWSdtrZ
+         aFVy+LoiJGeXKRJZeW2A6BycPJcmmtMz/X9pGMl4xmNGGpQcLpbHVpBnxU899Sxtyjwu
+         JUSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yzm0Z8s50B7PxlfwYMM7oE1GHaBVbWJfzBfeRipGHLY=;
+        b=SKeN6vWVvkCngxt9ypK6pao9TFPzlVmBPQunWza+WmF5a+2nDelVStd23O80F3W0n+
+         wjiYLqGOk/zx49LuQousmyG23b6Jw+U2P/cUw4GN0ZtkycMf/2x7c2sHz6fH8dcyHrK0
+         oBErnTdIXDQZMGm+dHb73GHgi0ea802rIgZSm1u9zn0XsXvPB5jh6auGAGDsPTPNJrBk
+         JMHzBviHEHLHc+zaD261VeI4oq5YYNrz07eW7Xff0oGXJJIYa8uvCbDX2Qnp9iVCClx4
+         1U+k0zVJqzAIq/ee6ZvGI78+KjpiRfRHQG9w9yedC8OCRAcoDmniwMtlZAxNxVB0dBrI
+         Fo1Q==
+X-Gm-Message-State: ANoB5pmimXcamZyMvbdDqoG9bXzFQDn6HEPR2S6yvYENNdSpTUbl3IPb
+        UPwd3cyzjwURjj+C/vuENh6teQ==
+X-Google-Smtp-Source: AA0mqf5m8YDzq/xZPuLE8hJmVlZd3SUP5u1iUSl4EN1k9vvaqltt4+SSILDlCBaTjX+tS2Bc190uPQ==
+X-Received: by 2002:a17:90a:cf93:b0:219:34cb:477e with SMTP id i19-20020a17090acf9300b0021934cb477emr25649406pju.44.1671033447143;
+        Wed, 14 Dec 2022 07:57:27 -0800 (PST)
+Received: from leoy-yangtze.lan (n058152048149.netvigator.com. [58.152.48.149])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090a2dc700b00219feae9486sm1627127pjm.7.2022.12.14.07.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 07:57:26 -0800 (PST)
+Date:   Wed, 14 Dec 2022 23:57:21 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        =?iso-8859-1?Q?Adri=E1n?= Herrera Arcila 
+        <adrian.herrera@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, songliubraving@fb.com,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org
+Subject: Re: [PATCH 2/2] perf stat: fix unexpected delay behaviour
+Message-ID: <Y5nyYeVWpLA/IH1E@leoy-yangtze.lan>
+References: <20220729161244.10522-1-adrian.herrera@arm.com>
+ <20220729161244.10522-2-adrian.herrera@arm.com>
+ <e3e123db-5321-c96e-1753-27059c729640@arm.com>
+ <Y5iPsjF/lEsEldU8@kernel.org>
+ <CAM9d7cj=Pu2QAONzd2JSVzd_X9DakeV=khcFGD_d-ES5zrx+KQ@mail.gmail.com>
+ <Y5ngs0bh/R8xPFvo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y5nxjzV0Mio86NU6@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5ngs0bh/R8xPFvo@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 05:53:52PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 14, 2022 at 04:15:49PM +0100, Eric Dumazet wrote:
-> > On Wed, Dec 14, 2022 at 1:34 PM Stanislaw Gruszka
-> > <stanislaw.gruszka@linux.intel.com> wrote:
-> > > On Mon, Dec 12, 2022 at 03:35:20PM +0100, Jason A. Donenfeld wrote:
-> > > > Please CC me on future revisions.
-> > > >
-> > > > As of 6.2, the prandom namespace is *only* for predictable randomness.
-> > > > There's no need to rename anything. So nack on this patch 1/5.
+On Wed, Dec 14, 2022 at 11:41:55AM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Dec 13, 2022 at 08:40:31AM -0800, Namhyung Kim escreveu:
+> > Hi,
+> > 
+> > On Tue, Dec 13, 2022 at 6:44 AM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
 > > >
-> > > It is not obvious (for casual developers like me) that p in prandom
-> > > stands for predictable. Some renaming would be useful IMHO.
+> > > Em Mon, Aug 01, 2022 at 09:20:37AM +0100, James Clark escreveu:
+> > > >
+> > > >
+> > > > On 29/07/2022 17:12, Adrián Herrera Arcila wrote:
+> > > > > The described --delay behaviour is to delay the enablement of events, but
+> > > > > not the execution of the command, if one is passed, which is incorrectly
+> > > > > the current behaviour.
+> > > > >
+> > > > > This patch decouples the enablement from the delay, and enables events
+> > > > > before or after launching the workload dependent on the options passed
+> > > > > by the user. This code structure is inspired by that in perf-record, and
+> > > > > tries to be consistent with it.
+> > > > >
+> > > > > Link: https://lore.kernel.org/linux-perf-users/7BFD066E-B0A8-49D4-B635-379328F0CF4C@fb.com
+> > > > > Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+> > > > > Signed-off-by: Adrián Herrera Arcila <adrian.herrera@arm.com>
+> > > > > ---
+> > > > >  tools/perf/builtin-stat.c | 56 ++++++++++++++++++++++-----------------
+> > > > >  1 file changed, 32 insertions(+), 24 deletions(-)
+> > > >
+> > > > Looks good to me. Fixes the counter delay issue and the code is pretty
+> > > > similar to perf record now. Although I would wait for Leo's or Song's
+> > > > comment as well because they were involved.
+> > >
+> > > I think I didn't notice Leo's ack, it still applies, so I'm doing it
+> > > now.
 > > 
-> > Renaming makes backports more complicated, because stable teams will
-> > have to 'undo' name changes.
-> > Stable teams are already overwhelmed by the amount of backports, and
-> > silly merge conflicts.
-> > 
-> > Take another example :
-> > 
-> > u64 timecounter_read(struct timecounter *tc)
-> > 
-> > You would think this function would read the timecounter, right ?
-> > 
-> > Well, it _updates_ many fields from @tc, so a 'better name' would also
-> > be useful.
+> > I think the BPF counters should be enabled/disabled together.
 > 
-> Right, at some point we become into the world of
-> 
-> #define true 0
-> 
-> because... (read below)
-> 
-> > linux kernel is not for casual readers.
-> 
-> P.S. I believe you applied a common sense and in some cases
->      the renames are necessary.
+> Ok, so I removed this one and applied Namhyung's.
 
-And before you become to a wrong conclusion by reading between the lines,
-no, I'm not taking either side (to rename or not to rename) in this case.
+I can guess why Adrián doesn't enable/disable BPF counters together :)
 
--- 
-With Best Regards,
-Andy Shevchenko
+Since 'perf stat' doesn't enable BPF counters with other normal PMU
+events in the first place, I believe this is deliberately by Song's
+patch fa853c4b839e ("perf stat: Enable counting events for BPF
+programs"), it says:
 
+"'perf stat -b' creates per-cpu perf_event and loads fentry/fexit BPF
+programs (monitor-progs) to the target BPF program (target-prog). The
+monitor-progs read perf_event before and after the target-prog, and
+aggregate the difference in a BPF map. Then the user space reads data
+from these maps".
 
+IIUC, when loading eBPF (counter) program, perf tool needs to handle
+eBPF program map specially (so that perf tool can know the latest eBPF
+program's map in kernel).
+
+I don't know anything for eBPF counter, so this is why I am still a bit
+puzzle which way is right to do (bind vs separate eBPF counters).  But
+I personally prefer to let eBPF counter to respect delay, so it's fine
+for me to apply Namhyung's patch.
+
+Thanks,
+Leo
