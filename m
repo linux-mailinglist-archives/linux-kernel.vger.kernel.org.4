@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786FD64C689
+	by mail.lfdr.de (Postfix) with ESMTP id C2B9C64C68A
 	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238071AbiLNKGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        id S238051AbiLNKGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 05:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiLNKGY (ORCPT
+        with ESMTP id S238001AbiLNKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:06:24 -0500
+        Wed, 14 Dec 2022 05:06:27 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ED11A3B3;
-        Wed, 14 Dec 2022 02:06:22 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE8W5Kc030331;
-        Wed, 14 Dec 2022 10:06:17 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A8165B2;
+        Wed, 14 Dec 2022 02:06:25 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE92NuS005294;
+        Wed, 14 Dec 2022 10:06:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=9y/88DdkI/G9hNs9Fl/eOPbhCg58hYvWMInMkUsjCf4=;
- b=DCBtS+gk3gBWSLgSnm7pPoeKvjqtq/Zix0Q4CBwN/TMF0AxfHP2TSYbag58D0axsNUqH
- 8SDR+DqimKfp6RlNYLMfMo2Afg0698yFgyvIKEZDBPhy/u1nVxWraGqElfhVDm0yCPUQ
- xiESyUsrn067Tq8cdmK7rCUePU6p6THSsfNrLSk+V3SP83AKI9HcxgIdwQfOIxX4QYRF
- UGMl2FSIRfjZOZ2SgtxBpuJTj/t/KO9wq55kmL05Sf8wangq0O5SD4CIIcdSf2WqwmMe
- PTI1tvbSYX35IqaBhbHTPMBwsQkdFnrmE5b2RPlb7x3soh0zubm7b9U/PtsdwEMJj+Di Sw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkgn7x-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=gxBmLOOS3k3NkH1NkcW1m1irUL2/tWgn20v3uWZ4hjg=;
+ b=mY5i+1Xg4iUOmzeJR8NYNFK4ioi5HTEKRk3ZA7NEZCk0yJo6gmqHDCTdBoJZK7q9aFDn
+ e1ADlO8i1zxuLHWTuegJWE1HOzegJ0k5z/GtOQISJQzyyiFScucE+sL/FhBBnm9yVgXE
+ RJxxLc3fNs/JmoqankGMrfk5/9D/7s23neZvMlp+/aRRbLPeniQV9K1SmI56XwZrEznT
+ yTRl8ixLn+DgkaOv6qG7a97dNi/On3KTBP1M6Qe/RaCm9PZaSNEOcvFv3gcNx1VoJ235
+ WtCy+cdTDi2V09bRKjfgOMFlechB50PjLX2CR+FX0ZkpQeLJP52HmA27ekyPgabWJmLL tQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rrgn3x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 10:06:17 +0000
+        Wed, 14 Dec 2022 10:06:22 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEA6GGs013183
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEA6Llb011123
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 10:06:16 GMT
+        Wed, 14 Dec 2022 10:06:21 GMT
 Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 14 Dec 2022 02:06:10 -0800
+ 15.2.986.36; Wed, 14 Dec 2022 02:06:15 -0800
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
@@ -48,10 +49,12 @@ CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
         <quic_bjorande@quicinc.com>, <quic_aravindh@quicinc.com>,
         <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>
-Subject: [PATCH v9 00/15] Add PSR support for eDP 
-Date:   Wed, 14 Dec 2022 15:35:37 +0530
-Message-ID: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v9 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and get crtc from connector state instead of dpu_enc
+Date:   Wed, 14 Dec 2022 15:35:38 +0530
+Message-ID: <1671012352-1825-2-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
+References: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -59,15 +62,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: d0YX5aHblkjiz9qdF83x1r6g43DmGk8N
-X-Proofpoint-ORIG-GUID: d0YX5aHblkjiz9qdF83x1r6g43DmGk8N
+X-Proofpoint-GUID: f2voA4xoll_C-0VQLbuHAMfFsxvho0Kg
+X-Proofpoint-ORIG-GUID: f2voA4xoll_C-0VQLbuHAMfFsxvho0Kg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-14_04,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=814
+ suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2212140079
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
@@ -78,107 +81,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v2:
-  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
-  - Don't modify whitespaces.
-  - Set self refresh aware from atomic_check.
-  - Set self refresh aware only if psr is supported.
-  - Provide a stub for msm_dp_display_set_psr.
-  - Move dp functions to bridge code.
+Update crtc retrieval from dpu_enc to dpu_enc connector state,
+since new links get set as part of the dpu enc virt mode set.
+The dpu_enc->crtc cache is no more needed, hence cleaning it as
+part of this change.
 
-Changes in v3:
-  - Change callback names to reflect atomic interfaces.
-  - Move bridge callback change to separate patch as suggested by Dmitry.
-  - Remove psr function declaration from msm_drv.h.
-  - Set self_refresh_aware flag only if psr is supported.
-  - Modify the variable names to simpler form.
-  - Define bit fields for PSR settings.
-  - Add comments explaining the steps to enter/exit psr.
-  - Change DRM_INFO to drm_dbg_db. 
+This patch is dependent on the series:
+https://patchwork.freedesktop.org/series/110969/
 
-Changes in v4:
-  - Move the get crtc functions to drm_atomic.
-  - Add atomic functions for DP bridge too.
-  - Add ternary operator to choose eDP or DP ops.
-  - Return true/false instead of 1/0.
-  - mode_valid missing in the eDP bridge ops.
-  - Move the functions to get crtc into drm_atomic.c.
-  - Fix compilation issues.
-  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
-  - Check for crtc state enable while reserving resources.
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  4 ---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 42 +++++++++--------------------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  8 ------
+ 3 files changed, 13 insertions(+), 41 deletions(-)
 
-Changes in v5:
-  - Move the mode_valid changes into a different patch.
-  - Complete psr_op_comp only when isr is set.
-  - Move the DP atomic callback changes to a different patch.
-  - Get crtc from drm connector state crtc.
-  - Move to separate patch for check for crtc state enable while
-reserving resources.
-
-Changes in v6:
-  - Remove crtc from dpu_encoder_virt struct.
-  - fix crtc check during vblank toggle crtc.
-  - Misc changes. 
-
-Changes in v7:
-  - Add fix for underrun issue on kasan build.
-
-Changes in v8:
-  - Drop the enc spinlock as it won't serve any purpose in
-protetcing conn state.(Dmitry/Doug)
-
-Changes in v9:
-  - Update commit message and fix alignment using spaces.(Marijn)
-  - Misc changes.(Marijn)
-
-Sankeerth Billakanti (1):
-  drm/msm/dp: disable self_refresh_aware after entering psr
-
-Vinod Polimera (14):
-  drm/msm/disp/dpu: clear dpu_assign_crtc and get crtc from connector
-    state instead of dpu_enc
-  drm: add helper functions to retrieve old and new crtc
-  drm/msm/dp: use atomic callbacks for DP bridge ops
-  drm/msm/dp: Add basic PSR support for eDP
-  drm/msm/dp: use the eDP bridge ops to validate eDP modes
-  drm/bridge: use atomic enable/disable callbacks for panel bridge
-  drm/bridge: add psr support for panel bridge callbacks
-  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
-    functions
-  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
-    release shared resources
-  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
-  drm/msm/disp/dpu: get timing engine status from intf status register
-  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
-    disabled
-  drm/msm/disp/dpu: reset the datapath after timing engine disable
-  drm/msm/disp/dpu: clear active interface in the datapath cleanup
-
- drivers/gpu/drm/bridge/panel.c                     |  68 ++++++-
- drivers/gpu/drm/drm_atomic.c                       |  60 ++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  17 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  71 +++----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |   8 -
- .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +-
- drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++
- drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
- drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++
- drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
- drivers/gpu/drm/msm/dp/dp_display.c                |  36 ++--
- drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
- drivers/gpu/drm/msm/dp/dp_drm.c                    | 206 ++++++++++++++++++++-
- drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
- drivers/gpu/drm/msm/dp/dp_link.c                   |  36 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
- drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
- drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 +++
- include/drm/drm_atomic.h                           |   7 +
- 23 files changed, 703 insertions(+), 86 deletions(-)
-
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+index 3f72d38..289d51e 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+@@ -1029,7 +1029,6 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+ 		 */
+ 		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+ 			release_bandwidth = true;
+-		dpu_encoder_assign_crtc(encoder, NULL);
+ 	}
+ 
+ 	/* wait for frame_event_done completion */
+@@ -1099,9 +1098,6 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+ 	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+ 	dpu_crtc->enabled = true;
+ 
+-	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+-		dpu_encoder_assign_crtc(encoder, crtc);
+-
+ 	/* Enable/restore vblank irq handling */
+ 	drm_crtc_vblank_on(crtc);
+ }
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index a585036..b9b254d 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -132,11 +132,6 @@ enum dpu_enc_rc_states {
+  * @intfs_swapped:	Whether or not the phys_enc interfaces have been swapped
+  *			for partial update right-only cases, such as pingpong
+  *			split where virtual pingpong does not generate IRQs
+- * @crtc:		Pointer to the currently assigned crtc. Normally you
+- *			would use crtc->state->encoder_mask to determine the
+- *			link between encoder/crtc. However in this case we need
+- *			to track crtc in the disable() hook which is called
+- *			_after_ encoder_mask is cleared.
+  * @connector:		If a mode is set, cached pointer to the active connector
+  * @crtc_kickoff_cb:		Callback into CRTC that will flush & start
+  *				all CTL paths
+@@ -181,7 +176,6 @@ struct dpu_encoder_virt {
+ 
+ 	bool intfs_swapped;
+ 
+-	struct drm_crtc *crtc;
+ 	struct drm_connector *connector;
+ 
+ 	struct dentry *debugfs_root;
+@@ -1317,7 +1311,7 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+ 		struct dpu_encoder_phys *phy_enc)
+ {
+ 	struct dpu_encoder_virt *dpu_enc = NULL;
+-	unsigned long lock_flags;
++	struct drm_crtc *crtc;
+ 
+ 	if (!drm_enc || !phy_enc)
+ 		return;
+@@ -1325,12 +1319,13 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+ 	DPU_ATRACE_BEGIN("encoder_vblank_callback");
+ 	dpu_enc = to_dpu_encoder_virt(drm_enc);
+ 
+-	atomic_inc(&phy_enc->vsync_cnt);
++	if (!dpu_enc->connector || !dpu_enc->connector->state ||
++	    !dpu_enc->connector->state->crtc)
++		return;
+ 
+-	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+-	if (dpu_enc->crtc)
+-		dpu_crtc_vblank_callback(dpu_enc->crtc);
+-	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
++	atomic_inc(&phy_enc->vsync_cnt);
++	crtc = dpu_enc->connector->state->crtc;
++	dpu_crtc_vblank_callback(crtc);
+ 
+ 	DPU_ATRACE_END("encoder_vblank_callback");
+ }
+@@ -1353,33 +1348,22 @@ static void dpu_encoder_underrun_callback(struct drm_encoder *drm_enc,
+ 	DPU_ATRACE_END("encoder_underrun_callback");
+ }
+ 
+-void dpu_encoder_assign_crtc(struct drm_encoder *drm_enc, struct drm_crtc *crtc)
+-{
+-	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+-	unsigned long lock_flags;
+-
+-	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+-	/* crtc should always be cleared before re-assigning */
+-	WARN_ON(crtc && dpu_enc->crtc);
+-	dpu_enc->crtc = crtc;
+-	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+-}
+-
+ void dpu_encoder_toggle_vblank_for_crtc(struct drm_encoder *drm_enc,
+ 					struct drm_crtc *crtc, bool enable)
+ {
+ 	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+-	unsigned long lock_flags;
++	struct drm_crtc *new_crtc;
+ 	int i;
+ 
+ 	trace_dpu_enc_vblank_cb(DRMID(drm_enc), enable);
+ 
+-	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+-	if (dpu_enc->crtc != crtc) {
+-		spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
++	if (!dpu_enc->connector || !dpu_enc->connector->state)
++		return;
++
++	new_crtc = dpu_enc->connector->state->crtc;
++	if (!new_crtc || new_crtc != crtc) {
+ 		return;
+ 	}
+-	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+ 
+ 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+ 		struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+index 7f3d823..eb9fc7c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+@@ -40,14 +40,6 @@ struct msm_display_info {
+ };
+ 
+ /**
+- * dpu_encoder_assign_crtc - Link the encoder to the crtc it's assigned to
+- * @encoder:	encoder pointer
+- * @crtc:	crtc pointer
+- */
+-void dpu_encoder_assign_crtc(struct drm_encoder *encoder,
+-			     struct drm_crtc *crtc);
+-
+-/**
+  * dpu_encoder_toggle_vblank_for_crtc - Toggles vblank interrupts on or off if
+  *	the encoder is assigned to the given crtc
+  * @encoder:	encoder pointer
 -- 
 2.7.4
 
