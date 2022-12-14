@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F3964C564
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CEE964C565
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237691AbiLNI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S237882AbiLNI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiLNI6q (ORCPT
+        with ESMTP id S236910AbiLNI7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:58:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94A0F02D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:58:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671008283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=832mpI+gR6rtu0NTrZQMBVgIPwRT7EhuSzoHFhXLS+0=;
-        b=hNK84nvEZDkgw6i2HN0RDK6pEC5inFIRRHfCjQFI+ZPKSdqApm7UcUOffhtDT4bfcxM6Z3
-        YYwJjj7RBIgXVSkbvMD63y5n/y3JnuYeQUiCcEPtQKhTUgDaIgpH0i1RItOuGIRJ0gSWuJ
-        Jk3SPZNDu0I/O60mwVmUrJLukhdUO1M=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-670-rs2dNC3gOk29IphQPyuElA-1; Wed, 14 Dec 2022 03:58:01 -0500
-X-MC-Unique: rs2dNC3gOk29IphQPyuElA-1
-Received: by mail-wm1-f70.google.com with SMTP id g9-20020a7bc4c9000000b003d214cffa4eso3890636wmk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:58:01 -0800 (PST)
+        Wed, 14 Dec 2022 03:59:01 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDED1FCC4;
+        Wed, 14 Dec 2022 00:58:59 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so3541316pjb.0;
+        Wed, 14 Dec 2022 00:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJpPmTe/XBClfxdnG0INFkwd4DEdd16k8DnX9kH12Oo=;
+        b=nDsigzCB1W7unRbCm/62QVdANiKye41IPr668xqAA/mAmbC5qg+yVVhU3Rq9BCSfr8
+         vZ1Kljwnw7W0Saf6246IeTK3MFXLQtrk67qxycMVU1luzfjhPkC39F6FRskX2IxhdfMJ
+         4QYcjiQ91bNvBbafQwqk2dsjV0CVjZd3HR9JYjz0YdrUe7hEvTAyiujPZxJSlHKscixR
+         tpD5uRf1c7/GidwqXdFBUx5IS7HRpe6IVxSD+2qg4k7Bd0n2I+CLOwzbIOA+Qn+b07Kd
+         DXTa/HFQtMAb0wDq9cUclcQOSzTPxAlj6tcZSEj5IhTO6gNZngH0Vszu64SfpxesjDSm
+         TsOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=832mpI+gR6rtu0NTrZQMBVgIPwRT7EhuSzoHFhXLS+0=;
-        b=fUIPG8p3oarrhxxr2KVqyLHBLu9FBpSkRX0BSrfgabSLbC9oqf1HpBYNS77kPfJyvt
-         ARRJuhcLw3ra8JFcZj1MiGAara2Q3Lv2NscgeBgMWOIOGfpg16GOxPXZVg5g1OZzF/Xn
-         o76dvD3TvLEHvJB6lMA/YwZCVrIj5dsZhTSxfGqRdoc08o7YlXhZbLS5pngEMV0Ny03T
-         jZny1fifsnvnqsRESPAt2Do3igTEeb4KZcOQYyq+xehWHP/C3imwCHh0mLOKoIIaGzzT
-         wvZW8oB1PxQU1vBUIZ7sgi0Ikn4j3lzKRUf79a576QYFGbBVn4Uhp0M3St9u/wwRbZGI
-         zkng==
-X-Gm-Message-State: ANoB5pn3V7wqOCNvefaAc0rGyYezdhDVOkyavCfZR2vXnt5Efjtraqmn
-        weplAU89uEviVckZASh3g3DFbfwgV1gVs5frWniRY/K1Jlj/daWZIjPWCjm4/nMmo393BgM8NmN
-        C6T2JxVMFHKarR1YvslVs4BTT
-X-Received: by 2002:a05:600c:3d92:b0:3c6:e60f:3f4a with SMTP id bi18-20020a05600c3d9200b003c6e60f3f4amr18216225wmb.1.1671008280664;
-        Wed, 14 Dec 2022 00:58:00 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf53p0lWtwtyxZpsSsSCyKb1X/sJvqIEShJdkD4rFJgOxq6InnJoxKzbHWv/g59LP540LxvirA==
-X-Received: by 2002:a05:600c:3d92:b0:3c6:e60f:3f4a with SMTP id bi18-20020a05600c3d9200b003c6e60f3f4amr18216216wmb.1.1671008280437;
-        Wed, 14 Dec 2022 00:58:00 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id m17-20020a7bce11000000b003d2157627a8sm1685733wmc.47.2022.12.14.00.57.58
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QJpPmTe/XBClfxdnG0INFkwd4DEdd16k8DnX9kH12Oo=;
+        b=4T2pId9gMb1sdUmeWrHLGokL9524SalcGyBqJXCr+pckmhWpgbEJhcQdXoV2DvKeKX
+         rFW3eg8JYJBhXFCTMcaoqSoj/Hx9DPFHvplwyH1SRDyS8VhCv8hFxQF50ZIPuURJcGDs
+         lNM2r3hqIqe+GiI9nNS/ogBfsc6vbiIHY7Z7KneVKI+6uY267JFespddfRz189HrhhQM
+         kT1Bvr9LALsZrub+FTli4kI2EjvIWepMvPHIOD3RvIf7tHhirXu5OPIiJq7zK0MT1rk9
+         sfQLTd7B0/vhdFZF0CJeqICrmUN9vqyN2sU/fhUXj2fdIM/swkcjq5jngNIrW39smAZh
+         Aj+g==
+X-Gm-Message-State: ANoB5pkzxdcUYhSgWHJllD6WSOKoMI8iAmOAutJyl/e8nk/2oLVp4lLa
+        6lDIoEHbL8T/Xv1qNVoBcZ0=
+X-Google-Smtp-Source: AA0mqf4jHLLcFiPuJmR9AvYsVGZxYSKqcp1xdj0nTpCk4d4X5bTvCxT/+wXnw7Fmpm2x/Im3UKD4Tw==
+X-Received: by 2002:a17:902:6b08:b0:186:639f:6338 with SMTP id o8-20020a1709026b0800b00186639f6338mr5984814plk.6.1671008338906;
+        Wed, 14 Dec 2022 00:58:58 -0800 (PST)
+Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902b18f00b00189393ab02csm1327487plr.99.2022.12.14.00.58.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 00:57:59 -0800 (PST)
-Date:   Wed, 14 Dec 2022 09:57:54 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v7] virtio/vsock: replace virtio_vsock_pkt with
- sk_buff
-Message-ID: <20221214085754.6kogsesmqcud5ggn@sgarzare-redhat>
-References: <20221213192843.421032-1-bobby.eshleman@bytedance.com>
+        Wed, 14 Dec 2022 00:58:58 -0800 (PST)
+Date:   Wed, 14 Dec 2022 21:58:52 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        paulo.miguel.almeida.rodenas@gmail.com
+Subject: [PATCH v2] [next] pcmcia: synclink_cs: replace 1-element array with
+ flex-array member
+Message-ID: <Y5mQTOqFOGbJMerV@mail.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213192843.421032-1-bobby.eshleman@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <Y5mMWEtHWKOiPVU+@mail.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,40 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 07:28:42PM +0000, Bobby Eshleman wrote:
->This commit changes virtio/vsock to use sk_buff instead of
->virtio_vsock_pkt. Beyond better conforming to other net code, using
->sk_buff allows vsock to use sk_buff-dependent features in the future
->(such as sockmap) and improves throughput.
->
->This patch introduces the following performance changes:
->
->Tool/Config: uperf w/ 64 threads, SOCK_STREAM
->Test Runs: 5, mean of results
->Before: commit 95ec6bce2a0b ("Merge branch 'net-ipa-more-endpoints'")
->
->Test: 64KB, g2h
->Before: 21.63 Gb/s
->After: 25.59 Gb/s (+18%)
->
->Test: 16B, g2h
->Before: 11.86 Mb/s
->After: 17.41 Mb/s (+46%)
->
->Test: 64KB, h2g
->Before: 2.15 Gb/s
->After: 3.6 Gb/s (+67%)
->
->Test: 16B, h2g
->Before: 14.38 Mb/s
->After: 18.43 Mb/s (+28%)
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
->
->Note: v7 only built, not retested since v6.
+One-element arrays are deprecated, and we are replacing them with
+flexible array members instead. So, replace one-element array with
+flexible-array member in struct RXBUF. No changes were required
+within the source code because of the existing padding in RXBUF struct
 
-I re-tested and everything seems okay:
+It's worth mentioning that doing a build before/after this patch
+results in no binary output differences.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
+
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Changelog:
+
+- v2: removed changes to how the size of RXBUF was calculated. I
+  changed my mind after thinking about the existing padding in the
+  struct. Happy to discuss it if anyone sees it differently.
+
+- v1: https://lore.kernel.org/lkml/Y5mMWEtHWKOiPVU+@mail.google.com/
+---
+ drivers/char/pcmcia/synclink_cs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
+index b2735be81ab2..0b03c6d13d59 100644
+--- a/drivers/char/pcmcia/synclink_cs.c
++++ b/drivers/char/pcmcia/synclink_cs.c
+@@ -105,7 +105,7 @@ static MGSL_PARAMS default_params = {
+ typedef struct {
+ 	int count;
+ 	unsigned char status;
+-	char data[1];
++	char data[];
+ } RXBUF;
+ 
+ /* The queue of BH actions to be performed */
+-- 
+2.38.1
 
