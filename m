@@ -2,202 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BE664C569
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B4164C5A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbiLNJAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S237875AbiLNJLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbiLNJAq (ORCPT
+        with ESMTP id S237872AbiLNJLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:00:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FB4B5F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:00:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0BD161871
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB93C433D2;
-        Wed, 14 Dec 2022 09:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671008444;
-        bh=OUrIeBrSPIOjDM5mNSWxlgtbSOIPYTSg6sFJ0j7pkrE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bkU7NPkSngjxvsPtosTu1P/HAKMg9xmLihYrDwsKkNZLlifhpXuAMwGGG5lTTPQFN
-         CIemETBTjYcW2LJcb2G/9VK996Q5fMYYfcKFGxrrat3MLdm5NCGw5Iw5S5wCVr1rML
-         kM6R71HVjf8mnzj5JeU4wUWcdkEjkSLso7qh/x3hh5Ek0POhl1K7o2MqFvE6i784/f
-         4o4PFX6UktkRziSrhQR0y9dPEmdorz1VFoB5ANm1Ch8uFyO5Ad1EPSQesHYVEB5mH0
-         F7FwK6XYmXalK84oele2Ghc/nQ1B+jIBDNIYqZDbkF0GZ9KCsuc6n2FDOaxAP73PRR
-         2jvqEUFD1kLkw==
-Message-ID: <efb41211-e0aa-96f2-5099-677ca6b6d99b@kernel.org>
-Date:   Wed, 14 Dec 2022 11:00:39 +0200
+        Wed, 14 Dec 2022 04:11:33 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C161E701
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:32 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg10so10740098wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZeychOEoq7Zx2fAKmiJJqkfIh0+9mZMjXMwWbS//l/Q=;
+        b=OXFVZCylX/4bT+jsLBPms7oXz7QPabkjEgubvKA5voELoHfDi00peMTghNLCzd8eaq
+         nP2ibgokYJBj2KWiBZjEhKQ+zdmJm+v6RlifmQdsO8suBtWGnxKbf4CZsTyvWffB4Xzk
+         CP3ibLqZDT/ds1dpodM9ahZo2PdJUUORzc2JLPe003BODyIMy6Euf0GauL3sERFOo6Tk
+         ocbUZXufRgpRSvXRXJdlr5yjxhhP7goz0joVE3Ti48T/ApcY1JbsyFQe1viina/MkBUX
+         uu6xSSyMCQBH1l6fEHWCCwz0qhfylUeTZSHlVGhgvKIfvrRA8OZeVMdqZHiZgovSOzJV
+         hByA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZeychOEoq7Zx2fAKmiJJqkfIh0+9mZMjXMwWbS//l/Q=;
+        b=5oQZGaV3CbNB6/Byf9fCWpoBpegMD35Asl2vT2Qmmw7tiJ3+6t4z2ihYWevIOvq5f0
+         8es5lWZLB+sELPUVHKZrlnZQ6IGhB6fv1lHCqgHU4izhI9yC37UFRnsq72SZTx9G0h8Q
+         eC9hmgfgVXZwgIzQEWCL/B7gp8jcjV1rd4y41gZAte2WNbIlqgoFv+iZq7JeL4PCF9jh
+         zb+uRuLSG9jB3OYjJLd+I++9/77vQ7tsRpiOfiAYCTIHumhiQFkhIYYBbQOCvMpDih8e
+         ompL44piLjjvs6m6UsPN3pEwBfg0UKgjBGHAFJlkJSHv2xTIjXHFcc1nqkFzdqivjFPP
+         5LqQ==
+X-Gm-Message-State: ANoB5pkuadIMySekxA7DZn2z3kJPXL4rAzBRFiPw/ZIYaO2oC4Omd2ZI
+        r3bWMuhCzt6W/2GnqZJdD1BfI53Tsmln7MikuyOwHA==
+X-Google-Smtp-Source: AA0mqf7lFwCf3f1u4ql2QYub40j2Jn+xpyaWCbFrBIxrz+GPM5OrSo5cjZ+bxnr0nuG4jOrNfiMuxCV5PCxKqjmsLpU=
+X-Received: by 2002:a05:600c:3b91:b0:3d0:3d33:a629 with SMTP id
+ n17-20020a05600c3b9100b003d03d33a629mr73994wms.126.1671009090250; Wed, 14 Dec
+ 2022 01:11:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] phy: ti: j721e-wiz: Manage TypeC lane swap if
- typec-gpio-dir not specified
-Content-Language: en-US
-To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sinthu Raja <sinthu.raja@ti.com>
-References: <20221213124854.3779-1-sinthu.raja@ti.com>
- <20221213124854.3779-2-sinthu.raja@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221213124854.3779-2-sinthu.raja@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221124074725.74325-1-haozhe.chang@mediatek.com>
+ <CAMZdPi9JOQpmhQepBMeG5jzncP8t5mp68O2nfSOFUUZ9e_fDsQ@mail.gmail.com> <54c37c8f8eb7f35e4bb983b9104bd232758bae7b.camel@mediatek.com>
+In-Reply-To: <54c37c8f8eb7f35e4bb983b9104bd232758bae7b.camel@mediatek.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Wed, 14 Dec 2022 10:10:54 +0100
+Message-ID: <CAMZdPi8NOfMn99yy043oYGrO1=UrnhhRvpZq-zWe4BfiU_08NA@mail.gmail.com>
+Subject: Re: [PATCH v5] wwan: core: Support slicing in port TX flow of WWAN subsystem
+To:     =?UTF-8?B?SGFvemhlIENoYW5nICjluLjmtanlk7Ip?= 
+        <Haozhe.Chang@mediatek.com>
+Cc:     "stephan@gerhold.net" <stephan@gerhold.net>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?SHVhIFlhbmcgKOadqOWNjik=?= <Hua.Yang@mediatek.com>,
+        "chiranjeevi.rapolu@linux.intel.com" 
+        <chiranjeevi.rapolu@linux.intel.com>,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        =?UTF-8?B?WGlheXUgWmhhbmcgKOW8oOWkj+Wuhyk=?= 
+        <Xiayu.Zhang@mediatek.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "chandrashekar.devegowda@intel.com" 
+        <chandrashekar.devegowda@intel.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "shangxiaojing@huawei.com" <shangxiaojing@huawei.com>,
+        =?UTF-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
+        <Lambert.Wang@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "ricardo.martinez@linux.intel.com" <ricardo.martinez@linux.intel.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sinthu,
+> On Thu, 2022-12-01 at 10:56 +0100, Loic Poulain wrote:
+> > On Thu, 24 Nov 2022 at 08:47, <haozhe.chang@mediatek.com> wrote:
+> > >
+> > > From: haozhe chang <haozhe.chang@mediatek.com>
+> > >
+> > > wwan_port_fops_write inputs the SKB parameter to the TX callback of
+> > > the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+> > > have an MTU less than the size of SKB, causing the TX buffer to be
+> > > sliced and copied once more in the WWAN device driver.
+> > >
+> > > This patch implements the slicing in the WWAN subsystem and gives
+> > > the WWAN devices driver the option to slice(by frag_len) or not. By
+> > > doing so, the additional memory copy is reduced.
+> > >
+> > > Meanwhile, this patch gives WWAN devices driver the option to
+> > > reserve
+> > > headroom in fragments for the device-specific metadata.
+> > >
+> > > Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+> >
+> > Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+>
+> I have submitted patch V6 to add a reviewer, do you have any other
+> suggestions about the patch?
 
-On 13/12/2022 14:48, Sinthu Raja wrote:
-> It's possible that the Type-C plug orientation on the DIR line will be
-> implemented through hardware design. In that situation, there won't be
-> an external GPIO line available, but the driver still needs to address
-> this since the DT won't use the typec-gpio-dir property.
+You normally don't need to resubmit a version just for adding review
+tags, as it is well tracked. You can see status of netdev changes from
+patchwork:
+https://patchwork.kernel.org/project/netdevbpf/list/?series=&submitter=207580&state=*&q=&archive=both&delegate=
 
-The property is actually "typec-dir-gpios"
+Regarding this change you should however resubmit for the net-next
+tree with appropriate subject since it is not a bug fix:
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html?highlight=netdev#how-do-i-indicate-which-tree-net-vs-net-next-my-patch-should-be-in
 
-> 
-> Add code to handle LN10 Type-C swap if typec-gpio-dir property is not
-> specified in DT.
-> 
-> Remove typec-gpio-dir check to use minimum debounce from Type-C spec if
-> it is not provided in DT
+Then it should be picked by netdev maintainer(s). But note that we're
+currently in the Linux 6.2 merge window, so merging for net-next can
+be delayed until the mainline merge window is closed (and net-next
+open):
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html?highlight=netdev#how-often-do-changes-from-these-trees-make-it-to-the-mainline-linus-tree
 
-Why?
-
-> 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> ---
->  drivers/phy/ti/phy-j721e-wiz.c | 65 +++++++++++++++++++++-------------
->  1 file changed, 40 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-> index 141b51af4427..b17eec632d49 100644
-> --- a/drivers/phy/ti/phy-j721e-wiz.c
-> +++ b/drivers/phy/ti/phy-j721e-wiz.c
-> @@ -375,6 +375,7 @@ struct wiz {
->  	struct gpio_desc	*gpio_typec_dir;
->  	int			typec_dir_delay;
->  	u32 lane_phy_type[WIZ_MAX_LANES];
-> +	u32 lane_phy_reg[WIZ_MAX_LANES];
->  	struct clk		*input_clks[WIZ_MAX_INPUT_CLOCKS];
->  	struct clk		*output_clks[WIZ_MAX_OUTPUT_CLOCKS];
->  	struct clk_onecell_data	clk_data;
-> @@ -1231,14 +1232,28 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
->  	int ret;
->  
->  	/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
-> -	if (id == 0 && wiz->gpio_typec_dir) {
-> -		if (wiz->typec_dir_delay)
-> -			msleep_interruptible(wiz->typec_dir_delay);
-> -
-> -		if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
-> -			regmap_field_write(wiz->typec_ln10_swap, 1);
-> -		else
-> -			regmap_field_write(wiz->typec_ln10_swap, 0);
-> +	if (id == 0 && wiz->typec_dir_delay) {
-> +		msleep_interruptible(wiz->typec_dir_delay);
-
-Why do you need to have this debounce delay if there was no GPIO to begin with.
-You need to move the msleep call within the next if {} block.
-
-> +
-> +		if (wiz->gpio_typec_dir) {
-> +			if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
-> +				regmap_field_write(wiz->typec_ln10_swap, 1);
-> +			else
-> +				regmap_field_write(wiz->typec_ln10_swap, 0);
-> +		} else {
-> +			/* if no typec-dir gpio was specified, and USB lines
-> +			 * are connected to Lane 0 then set LN10 SWAP bit to 1.
-> +			 */
-> +			u32 num_lanes = wiz->num_lanes;
-> +			int i;
-> +
-> +			for (i = 0; i < num_lanes; i++) {typec-dir-gpios:
-> +				if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3) \
-> +						&& wiz->lane_phy_reg[i] == 0) {
-> +					regmap_field_write(wiz->typec_ln10_swap, 1);
-> +				}
-> +			}
-> +		}
->  	}
->  
->  	if (id == 0) {
-> @@ -1370,8 +1385,10 @@ static int wiz_get_lane_phy_types(struct device *dev, struct wiz *wiz)
->  		dev_dbg(dev, "%s: Lanes %u-%u have phy-type %u\n", __func__,
->  			reg, reg + num_lanes - 1, phy_type);
->  
-> -		for (i = reg; i < reg + num_lanes; i++)
-> +		for (i = reg; i < reg + num_lanes; i++) {
-> +			wiz->lane_phy_reg[i] = reg;
->  			wiz->lane_phy_type[i] = phy_type;
-> +		}
->  	}
->  
->  	return 0;
-> @@ -1464,24 +1481,22 @@ static int wiz_probe(struct platform_device *pdev)
->  		goto err_addr_to_resource;
->  	}
->  
-> -	if (wiz->gpio_typec_dir) {
-> -		ret = of_property_read_u32(node, "typec-dir-debounce-ms",
-> -					   &wiz->typec_dir_delay);
-> -		if (ret && ret != -EINVAL) {
-> -			dev_err(dev, "Invalid typec-dir-debounce property\n");
-> -			goto err_addr_to_resource;
-> -		}
-> +	ret = of_property_read_u32(node, "typec-dir-debounce-ms",
-> +				   &wiz->typec_dir_delay);
-> +	if (ret && ret != -EINVAL) {
-> +		dev_err(dev, "Invalid typec-dir-debounce property\n");
-> +		goto err_addr_to_resource;
-> +	}
-
-Why do you need to know this debounce value if you don't have a valid GPIO line?
-
->  
-> -		/* use min. debounce from Type-C spec if not provided in DT  */
-> -		if (ret == -EINVAL)
-> -			wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
-> +	/* use min. debounce from Type-C spec if not provided in DT  */
-> +	if (ret == -EINVAL)
-> +		wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
->  
-> -		if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
-> -		    wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
-> -			ret = -EINVAL;
-> -			dev_err(dev, "Invalid typec-dir-debounce property\n");
-> -			goto err_addr_to_resource;
-> -		}
-> +	if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
-> +	    wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
-> +		ret = -EINVAL;
-> +		dev_err(dev, "Invalid typec-dir-debounce property\n");
-> +		goto err_addr_to_resource;
->  	}
-
-All these changes are unnecessary.
-
->  
->  	ret = wiz_get_lane_phy_types(dev, wiz);
-
-cheers,
--roger
+Regards,
+Loic
