@@ -2,129 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A1564C81A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDBA64C81D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238270AbiLNLfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S238191AbiLNLgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238236AbiLNLfS (ORCPT
+        with ESMTP id S238009AbiLNLf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:35:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371A3658B;
-        Wed, 14 Dec 2022 03:35:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5DDCB81699;
-        Wed, 14 Dec 2022 11:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 206B5C433EF;
-        Wed, 14 Dec 2022 11:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671017714;
-        bh=x7XLustHOSDMG59c5AzsLExjEBqxv5w3RXRg+AC/mSs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Ri1Pco7zC/ok/zYT6h2PWNnIHK2RNawvDZX9FiEpoJl+S23tlzZGSIHZBl6yU3/zN
-         GHAHDIO/ww1H6rViDM9KUg4CjJL2XeUOhVyK8eqkMOjl/snhyNWaz4xUl9hHY1l72o
-         KyNC7tzgoEhvKHnz3oKpOk4eijW52/Z4raA8iwN8ltFiYRq1UDS+dEpQw22ThfLET6
-         U6TWWVJnRTe+GVrVBDh0ygY/o0H2HAg65rWExss/baKkJSa/keiRBcS8dsezvWjd2T
-         s1r6ZOyh3RtMNPB+le95RLL+M14nJmp3PGMV0lAr0s6yC5ZrPRIl2Tdh9MgZYCqq+p
-         RWTcUR7hzlLJQ==
-Date:   Wed, 14 Dec 2022 05:35:12 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "mani@kernel.org" <mani@kernel.org>,
-        "allenbh@gmail.com" <allenbh@gmail.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH v16 7/7] PCI: endpoint: pci-epf-vntb: fix
- sparse build warning at ntb->reg
-Message-ID: <20221214113512.GA247043@bhelgaas>
+        Wed, 14 Dec 2022 06:35:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74141ADAB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:35:55 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEBMKVn017349;
+        Wed, 14 Dec 2022 11:35:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=QOFehjMfijkWTE7+vL1yB2+QrFjOga00vBG7DEY35dk=;
+ b=I9cxCbOVRf2kYXNDZXM+WYvhfdMNdvYtmWJv9RSQaRwKfoQ8T5c5XPVazqdzHHIFKwyS
+ hhvtf4EovjYCuHA2SSU8le+lfLYnfyK9SK3CoTmTLC0u9GrQi5Ey6A+fO6IotG7SID3b
+ QRqRIwqS5+t2XftjoZzKAW2K0mRctujL3Q2hEfAanth1iW5i9t+7uFQJUuhcRp1ts/Kz
+ WS2Xq4Lj864IbxwafvD9+3ypVI0d1y9THsLtEvVfuaeKbSfJxUN4utE7WT8U/18iWDEG
+ HFhtHBhx/IqMOCkdftLzV2NNhpYWjB4oOsxMWrtBy1J2KI9B132gPYgexn2FfYAAIeO8 8Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfdj08ae3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 11:35:51 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEBPBIx032473;
+        Wed, 14 Dec 2022 11:35:50 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfdj08adf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 11:35:50 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDK6cBf029153;
+        Wed, 14 Dec 2022 11:35:48 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mf0518u6c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 11:35:48 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEBZjaD19399166
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Dec 2022 11:35:45 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B66D520040;
+        Wed, 14 Dec 2022 11:35:45 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B6C120043;
+        Wed, 14 Dec 2022 11:35:42 +0000 (GMT)
+Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.67.101])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 14 Dec 2022 11:35:41 +0000 (GMT)
+Date:   Wed, 14 Dec 2022 17:05:38 +0530
+From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+To:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Subject: staging: vme_user: Replace the "<<" with BIT macro
+Message-ID: <Y5m1CvaAc2Z8LO2k@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <HE1PR0401MB2331E04D41F5EF9F6F1E326288E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TiYLQ2KMN6sxUrw0goJiuYU3I1F6Thc-
+X-Proofpoint-ORIG-GUID: YuUDho1Nf5CCc9byMvlQpkLRDI4RhDL-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_04,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 12:49:15AM +0000, Frank Li wrote:
-> > 
-> > On Wed, Nov 02, 2022 at 10:10:14AM -0400, Frank Li wrote:
-> > > From: Frank Li <frank.li@nxp.com>
-> > >
-> > >   pci-epf-vntb.c:1128:33: sparse:     expected void [noderef] __iomem
-> > *base
-> > >   pci-epf-vntb.c:1128:33: sparse:     got struct epf_ntb_ctrl *reg
-> > >
-> > > Add __iomem type convert in vntb_epf_peer_spad_read() and
-> > > vntb_epf_peer_spad_write().
-> > 
-> > I don't understand all the bits and pieces here, but I'm a little
-> > dubious about adding all these "(void __iomem *)"casts.  There are
-> > very few of them in drivers/pci/, and I doubt this driver is so unique
-> > that it needs them.
-> 
-> sparse compiler report warning without cast.  I write it at commit message.
+Replace the "<<" operator with BIT macro, in accordance to the
+checkpatch.pl script and Linux kernel coding-style guidelines.
+Issues reported by checkpatch.pl:
+	CHECK: Prefer using the BIT macro
 
-As a matter of fact, I did read your commit message.  My point is that
-I don't think littering the code with casts is the best solution.  I
-wrote more details below; please read the entire email.
+Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+---
+ drivers/staging/vme_user/vme.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
-> > > @@ -1121,7 +1121,7 @@ static u32 vntb_epf_spad_read(struct ntb_dev
-> > *ndev, int idx)
-> > >       struct epf_ntb *ntb = ntb_ndev(ndev);
-> > >       int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count *
-> > sizeof(u32);
-> > >       u32 val;
-> > > -     void __iomem *base = ntb->reg;
-> > > +     void __iomem *base = (void __iomem *)ntb->reg;
-> > >
-> > >       val = readl(base + off + ct + idx * sizeof(u32));
-> > >       return val;
-> > > @@ -1132,7 +1132,7 @@ static int vntb_epf_spad_write(struct ntb_dev
-> > *ndev, int idx, u32 val)
-> > >       struct epf_ntb *ntb = ntb_ndev(ndev);
-> > >       struct epf_ntb_ctrl *ctrl = ntb->reg;
-> > >       int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
-> > > -     void __iomem *base = ntb->reg;
-> > > +     void __iomem *base = (void __iomem *)ntb->reg;
-> > >
-> > >       writel(val, base + off + ct + idx * sizeof(u32));
-> > 
-> > These things look gratuitously different to begin with:
-> > 
-> >   int off = ntb->reg->spad_offset, ct = ntb->reg->spad_count * sizeof(u32);
-> >   int off = ctrl->spad_offset, ct = ctrl->spad_count * sizeof(u32);
-> > 
-> > They're doing the same thing, and they should do it the same way.
-> > 
-> > Since db_data[] and db_offset[] are never referenced except to be
-> > initialized to zero, I'm guessing the point of vntb_epf_spad_read()
-> > and vntb_epf_spad_write() is to read/write things in those arrays?
-> > 
-> > You access other things in ntb->reg directly by dereferencing a
-> > pointer, e.g.,
-> > 
-> >   ntb->reg->link_status |= LINK_STATUS_UP;
-> >   addr = ntb->reg->addr;
-> >   ctrl->command_status = COMMAND_STATUS_OK;
-> > 
-> > Why don't you just compute the appropriate *index* and access the
-> > array directly instead of using readl() and writel()?
-> > 
-> > Bjorn
+diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
+index 98da8d039d60..faa9816046a9 100644
+--- a/drivers/staging/vme_user/vme.h
++++ b/drivers/staging/vme_user/vme.h
+@@ -2,6 +2,8 @@
+ #ifndef _VME_H_
+ #define _VME_H_
+ 
++#include <linux/bitops.h>
++
+ /* Resource Type */
+ enum vme_resource_type {
+ 	VME_MASTER,
+@@ -54,20 +56,20 @@ enum vme_resource_type {
+ #define VME_R_ROBIN_MODE	0x1
+ #define VME_PRIORITY_MODE	0x2
+ 
+-#define VME_DMA_PATTERN			(1<<0)
+-#define VME_DMA_PCI			(1<<1)
+-#define VME_DMA_VME			(1<<2)
++#define VME_DMA_PATTERN		BIT(0)
++#define VME_DMA_PCI			BIT(1)
++#define VME_DMA_VME			BIT(2)
+ 
+-#define VME_DMA_PATTERN_BYTE		(1<<0)
+-#define VME_DMA_PATTERN_WORD		(1<<1)
+-#define VME_DMA_PATTERN_INCREMENT	(1<<2)
++#define VME_DMA_PATTERN_BYTE		BIT(0)
++#define VME_DMA_PATTERN_WORD		BIT(1)
++#define VME_DMA_PATTERN_INCREMENT	BIT(2)
+ 
+-#define VME_DMA_VME_TO_MEM		(1<<0)
+-#define VME_DMA_MEM_TO_VME		(1<<1)
+-#define VME_DMA_VME_TO_VME		(1<<2)
+-#define VME_DMA_MEM_TO_MEM		(1<<3)
+-#define VME_DMA_PATTERN_TO_VME		(1<<4)
+-#define VME_DMA_PATTERN_TO_MEM		(1<<5)
++#define VME_DMA_VME_TO_MEM		BIT(0)
++#define VME_DMA_MEM_TO_VME		BIT(1)
++#define VME_DMA_VME_TO_VME		BIT(2)
++#define VME_DMA_MEM_TO_MEM		BIT(3)
++#define VME_DMA_PATTERN_TO_VME		BIT(4)
++#define VME_DMA_PATTERN_TO_MEM		BIT(5)
+ 
+ struct vme_dma_attr {
+ 	u32 type;
+-- 
+2.31.1
+
