@@ -2,97 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A042864C20E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513F764C210
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbiLNB7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 20:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S236751AbiLNCAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 21:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235762AbiLNB7v (ORCPT
+        with ESMTP id S236739AbiLNCAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 20:59:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693E11276B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:59:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670983144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w8Ekv64Hnz3Pzaf7wbnhuAkFb+qhBlnUSB0ADt/wreE=;
-        b=bX5Ym2/MjxRuFNdxYVxLFdn6jTmIqVfhbZ4qrmFTa8WhIb4BuQ1IUTNXR14CZXrk96Dw8R
-        eDtrEw0nBRll/r7qm93JfwgtmGOvTiV+FHp9LCz/zoFs9IbH9zTqTjLoNHmHYmd8fDLqQu
-        7LeSDbwa4GBER76CWwEqAD0ViIapfNc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-ilEFFrkzO3qCiPUOWk815g-1; Tue, 13 Dec 2022 20:58:57 -0500
-X-MC-Unique: ilEFFrkzO3qCiPUOWk815g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2AF94185A78F;
-        Wed, 14 Dec 2022 01:58:57 +0000 (UTC)
-Received: from [10.22.32.205] (unknown [10.22.32.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 15AE02026D68;
-        Wed, 14 Dec 2022 01:58:56 +0000 (UTC)
-Message-ID: <72fa1665-966a-76e6-be0c-e7fb288b1610@redhat.com>
-Date:   Tue, 13 Dec 2022 20:58:53 -0500
+        Tue, 13 Dec 2022 21:00:33 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBED413F57
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:00:32 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 65so3474078pfx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tJ4CSVZZ+NoydkcJKVQO6YNOhus6JhiYOMFjQ8jjtjU=;
+        b=m/SKUa27vVBjK1uJ2X221o05KhZ9jtihYba01Ju4Ef9NiQruOgsHzM/Kf1zncuPTTX
+         5WeMUgP2qqB8oX/4aP0MqYeAjg3qs/eM20mosQEYuuuFZnP4JWFMeKxBkG3TuR5NK4vu
+         qFImpcXkZ2530uslsCBedMtoQkMTCMSn577sVPwZQ4PtS7Ixp2wQrQhf3JPXBZeWg99f
+         xhPEhRvSnr9JK20Gn1Xy65nImGw11v7zxUokfH2gN5b0GSEXW//gCO0MyExz+vTrRPRC
+         Muj85AAhNQdYKoc9aj4gGiO9y1whE7GOJaJob8+6UkimVCJbodt1gz6mB2zEZSbiY6zc
+         Q58g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tJ4CSVZZ+NoydkcJKVQO6YNOhus6JhiYOMFjQ8jjtjU=;
+        b=mrVA5o/Diq8WhNJnTkXg8tva+4acx/iMQUZObDzFvk3Sg6qlU6MMXsGSwVpxYQB463
+         a9L4gZThdhtJmh7TRCFJpWgFxGqdTA6iq9oAwIYE7gWKp9LEkQTjMC1NnAmQUAOoVLnp
+         JEO24DoTpOI/bzHJqzjEnUwYngN4nybLcCSwEE8TD+ndehG72+DJFJWb0+i4iBiB7aCf
+         QbACCZsWA4cIZ5B+uWO3lLX674bZ9oVdh56MoCd2Nja0El7IvI652GTHrlW1X77p3KAD
+         6MUWR4ANjVF2AeA8Do7J3M4dwCG6bV0/mThlY7AoN5dWbQJU91qJIMtFDP1uLkBTtkN4
+         wjGg==
+X-Gm-Message-State: ANoB5pmKcUcSe2vBQHYVujyzr3ycsCpxND+cqJ38xDhMVDV91w5qfBH1
+        TM9l2My6u8x43wQgoyO31BeZ6OhbQ6u655SgMId9rg==
+X-Google-Smtp-Source: AA0mqf67HjB2QuUnPoIyEET5gO5fYZFekKta2m+eJepPSJ0NzH0Lf7dZNLdzf8CBGYYlGHlbu/mQbGXA6ehU1ULXrlQ=
+X-Received: by 2002:a63:1247:0:b0:476:ed2a:6216 with SMTP id
+ 7-20020a631247000000b00476ed2a6216mr77727663pgs.556.1670983231384; Tue, 13
+ Dec 2022 18:00:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-block v3 2/2] blk-cgroup: Flush stats at blkgs destruction
- path
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        "Dennis Zhou (Facebook)" <dennisszhou@gmail.com>
-References: <20221213184446.50181-1-longman@redhat.com>
- <20221213184446.50181-3-longman@redhat.com>
- <Y5jS825K7ej0jEV+@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y5jS825K7ej0jEV+@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221130082313.3241517-1-tj@kernel.org> <20221130082313.3241517-32-tj@kernel.org>
+ <Y5c0qEuyn8cAvLGQ@hirez.programming.kicks-ass.net> <CABk29Nu5WiCmhNN2jZrTShELbCDOYUziUeW5xojkwB83R+VzEQ@mail.gmail.com>
+ <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y5hiPqaT6UqaUcGK@hirez.programming.kicks-ass.net>
+From:   Josh Don <joshdon@google.com>
+Date:   Tue, 13 Dec 2022 18:00:19 -0800
+Message-ID: <CABk29Nu0JJ6xY_2SL0Y=iWstmoiRnRRnQ+Xvm3t_oU4sp72vpg@mail.gmail.com>
+Subject: Re: [PATCH 31/31] sched_ext: Add a rust userspace hybrid example scheduler
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        brho@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com, Peter Oskolkov <posk@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > and ignoring
+> > the specifics of this example, the UMCG and sched_ext work are
+> > complementary, but not mutually exclusive. UMCG is about driving
+> > cooperative scheduling within a particular application. UMCG does not
+> > have control over or react to external preemption,
+>
+> It can control preemption inside the process, and if you have the degree
+> of control you need to make the whole BPF thing work, you also have the
+> degree of control to ensure you only run the one server task on a CPU
+> and all that no longer matters because there's only the process and you
+> control preemption inside that.
 
-On 12/13/22 14:30, Tejun Heo wrote:
-> On Tue, Dec 13, 2022 at 01:44:46PM -0500, Waiman Long wrote:
->> +	/*
->> +	 * Flush all the non-empty percpu lockless lists so as to release
->> +	 * the blkg references held by those lists which, in turn, may
->> +	 * allow the blkgs to be freed and release their references to
->> +	 * blkcg speeding up its freeing.
->> +	 */
-> Can you mention the possible deadlock explicitly? This sounds more like an
-> optimization.
+To an extent yes, but this doesn't extend to the case where cpu is
+overcommitted. Even if not by other applications, then responding to
+preemption by, for example, kthreads (necessary for microsecond scale
+workloads). But in general the common case is interference from other
+applications, something which is handled by a system level scheduler
+like sched_ext. The application vs system level control is an
+important distinction here.
 
-I am mostly thinking about the optimization aspect. Yes, deadlock in the 
-sense that both blkgs and blkcg remained offline but not freed is 
-possible because of the references hold in those lockless list. It is a 
-problem if blkcg is the only controller in a cgroup. For cgroup that has 
-both the blkcg and memory controllers, it shouldn't be a problem as the 
-cgroup_rstat_flush() call in the release of memory cgroup will clear up 
-blkcg too. Right, I will update the comment to mention that.
+> > nor does it make thread placement decisions.
+>
+> It can do that just fine -- inside the process. UMCG has full control
+> over which server task a worker task is associated with, then run a
+> single server task per CPU and have them pinned and you get full
+> placement control.
 
-Cheers,
-Longman
+Again, this doesn't really scale past single server per cpu. It is not
+feasible to partition systems in this way due to the loss of
+efficiency.
 
+> > sched_ext is considering things more at
+> > the system level: arbitrating fairness and preemption between
+> > processes, deciding when and where threads run, etc., and also being
+> > able to take application-specific hints if desired.
+>
+> sched_ext does fundamentally not compose, you cannot run two different
+> schedulers for two different application stacks that happen to co-reside
+> on the same machine.
+
+We're actually already developing a framework (and plan to share) to
+support composing an arbitrary combination of schedulers. Essentially,
+a "scheduler of schedulers". This supports the case, for example, of a
+system that runs most tasks under some default SCX scheduler, but
+allows a particular application or group of applications to utilize a
+bespoke SCX scheduler of their own.
+
+> sched_ext also sits at the very bottom of the class stack (it more or
+> less has to) the result is that in order to use it at all, you have to
+> have control over all runnable tasks in the system (a stray CFS task
+> would interfere quite disastrously) but that is exactly the same
+> constraint you need to make UMCG work.
+
+UMCG still works when mixed with other tasks. You're specifying which
+threads of your application you want running, but no guarantees are
+made that they'll run right now if the system has other work to do.
+
+SCX vs CFS is a more interesting story. Yes it is true that a single
+CFS task could hog a cpu, but since SCX is managing things at a system
+level, we feel that this is something that should be handled by system
+administration. You shouldn't expect to mix cpu bound CFS tasks in the
+same partition as threads running under SCX with good results.
+
+> Conversely, it is very hard to use the BPF thing to do what UMCG can do.
+> Using UMCG I can have a SCHED_DEADLINE server implement a task based
+> pipeline schedule (something that's fairly common and really hard to
+> pull off with just SCHED_DEADLINE itself).
+
+UMCG and SCX are solving different problems though. An application can
+decide execution order or control internal preemption via UMCG, while
+SXC arbitrates allocation of system resources over time.
+
+And, conversely, SCX can do things very difficult or impossible with
+UMCG. For example, implementing core scheduling. Guaranteeing
+microsecond scale tail latency. Applying a new scheduling algorithm
+across multiple independent applications.
+
+> Additionally, UMCG naturally works with things like Proxy Execution,
+> seeing how the server task *is* a proxy for the current active worker
+> task.
+
+Proxy execution should also work with SCX; the enqueue/dequeue
+abstraction can still be used to allow the SCX scheduler to select the
+proxy.
