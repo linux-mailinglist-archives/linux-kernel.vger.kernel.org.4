@@ -2,103 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE2C64CBD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2C464CBDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238391AbiLNOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:10:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S238591AbiLNOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiLNOK0 (ORCPT
+        with ESMTP id S238540AbiLNOL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:10:26 -0500
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6EC1CB07;
-        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id k3so1275584qki.13;
-        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZOaoIjTxLglAaa4ZBfF7fq+YBzzQI1dyFt1768d7s6Q=;
-        b=buJDK7XncEQgo95HJ4y/PaymrvZ4y5asEKchOP6Xxt/V4IXwlQmCOLbvJyRjy5wmoH
-         Ogk//mGarC8idhWAsPY6VCZ/iTP7vF0WopJGQjM/jmmHIxdd/48Qjbl9gP2R25/y2m3c
-         wZc9MY8OBcp3WtwdksIdSPFgny3Lt2W7AFsTPXnZKIFSS9lfh1CCSp6KCXkQtydDyMZM
-         Z0e/mLWx1aqAS9YAULjDFlpgKdIzMkeFWy4Iy9PW//3fYBj/lzGNl+hf9EngGcqvQWBf
-         SuD6BUbuFcM2vv19FP01AsoGoP5vubhPILV28wmTmCQ6MIcryAUSJkCWywP3FAIUXbfZ
-         aPeA==
-X-Gm-Message-State: ANoB5pnPUbg5VTXV6F8d0nEJEA4fwmjgZd3+Yfw+JLptoWsvKllllNAg
-        WmMYsX2f8AaM/kLy5yVq/hIvAJvN+ro8yd3o5bM=
-X-Google-Smtp-Source: AA0mqf4yN0p9XnWYWoCSWnpNDe91cxcXAlCLQp6mS1ey6TXfOyrXeqP7I6OJ99zfGyO7fmNAUIppldBwc28eaDKDOC8=
-X-Received: by 2002:a05:620a:ec4:b0:6ff:86de:55f with SMTP id
- x4-20020a05620a0ec400b006ff86de055fmr695889qkm.648.1671027024912; Wed, 14 Dec
- 2022 06:10:24 -0800 (PST)
+        Wed, 14 Dec 2022 09:11:56 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A359F2099A;
+        Wed, 14 Dec 2022 06:11:53 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEE1GTT009986;
+        Wed, 14 Dec 2022 14:11:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=BmerlqSR20iXY1AW90rudtU+sgKlczfAG9hYaah/+mE=;
+ b=c93MiR9dxS+hSy5Jx+PYnQqCdTWsbLOqvqJO/AGSVtjpd/JLapUKkA/vJoUGYqLJlesq
+ Aw/Psf11xnEeqpqJdNaScez/7BA03CvIGs67ITrHkXytMP6EoMoE494F+hOQMJSs9zoA
+ ETuKXcNnG8hQ+9J6q6fPTpdU09N3gXAoQDaixMfjxL3oKiofgAwOGldMiB1QgXks0J6E
+ ifkMiI/88fumcTETP93grlVD/eSnrva54zDUKQ9qD6ntplA+I4Ff+aFIFWVMqIXeRFNf
+ oVCGzaMLn97dvEi1JaiHuikUFoKAv8e8THVhBIYRm15utGf9fMXnsuSXU5NGmg08nMnv vQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rehc5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 14:11:50 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEEBnIn023322
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 14:11:49 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 14 Dec 2022 06:11:47 -0800
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [RFC PATCH 1/2] trace: add new file under include/trace/stages/ for perf/bpf
+Date:   Wed, 14 Dec 2022 22:11:41 +0800
+Message-ID: <1671027102-21403-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
-In-Reply-To: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Dec 2022 15:10:13 +0100
-Message-ID: <CAJZ5v0h4RCnGv2C+x1m_Uvu5Hmy273wHDLNzYUuJxT_GFxS5qQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Add ACPI trip points parser helpers
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eSvRr9Ec5rJini9S1MY9AvJvtTLB0ynG
+X-Proofpoint-GUID: eSvRr9Ec5rJini9S1MY9AvJvtTLB0ynG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 impostorscore=0
+ mlxlogscore=889 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2212140112
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 9:59 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Regarding thermal, the ACPI code parsing the trip points is duplicated
-> inside different Intel drivers. The generic ACPI thermal driver also
-> duplicates this code.
->
-> Those ACPI parsing actions are used to define trip points and these
-> ones are defined by, and specific to, the backend driver.
->
-> The different get_trip_* ops, also very similar between each other,
-> are using the specific trip point structure to return the requested
-> trip point information.
->
-> From there, there is nothing new, all this can be converted to the
-> generic trip point.
->
-> The first patch provides the functions to parse trip point description
-> from the ACPI table but based on the generic trip point structure. The
-> other patches convert the different Intel driver to use the ACPI
-> functions along with a migration to the generic trip point.
+when experiment change for trace operation, the files under
+include/trace/stages/ will be changed, perf/bpf trace may compile fail.
 
-First off, please resend this series with CCs to linux-acpi.
+add new file stage_perf_call.h and stage_bpf_call.h under
+include/trace/stages, it will make sure no missing change when expriment.
 
-Second, what does it depend on?  I think that it depends on the new
-material that hasn't been integrated yet, doesn't it?
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+ include/trace/bpf_probe.h              | 51 +-------------------------------
+ include/trace/perf.h                   | 52 +-------------------------------
+ include/trace/stages/stage_bpf_call.h  | 53 +++++++++++++++++++++++++++++++++
+ include/trace/stages/stage_perf_call.h | 54 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 109 insertions(+), 101 deletions(-)
+ create mode 100644 include/trace/stages/stage_bpf_call.h
+ create mode 100644 include/trace/stages/stage_perf_call.h
 
-> Daniel Lezcano (5):
->   thermal/acpi: Add ACPI trip point routines
->   thermal/drivers/intel: Use generic trip points for intel_pch
->   thermal/drivers/intel: Use generic trip points int340x
->   thermal/drivers/intel: Use generic trip points for quark_dts
->   thermal/drivers/intel: Use generic trip points for
->     processor_thermal_device_pci
->
->  drivers/thermal/Kconfig                       |  13 +
->  drivers/thermal/Makefile                      |   1 +
->  .../int340x_thermal/int340x_thermal_zone.c    | 175 +++---------
->  .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
->  .../processor_thermal_device_pci.c            |  53 ++--
->  drivers/thermal/intel/intel_pch_thermal.c     |  88 ++-----
->  .../thermal/intel/intel_quark_dts_thermal.c   |  45 ++--
->  drivers/thermal/thermal_acpi.c                | 249 ++++++++++++++++++
->  include/linux/thermal.h                       |  15 ++
->  9 files changed, 377 insertions(+), 272 deletions(-)
->  create mode 100644 drivers/thermal/thermal_acpi.c
+diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+index 155c495..a6eeb9e 100644
+--- a/include/trace/bpf_probe.h
++++ b/include/trace/bpf_probe.h
+@@ -4,56 +4,7 @@
+ 
+ #ifdef CONFIG_BPF_EVENTS
+ 
+-#undef __entry
+-#define __entry entry
+-
+-#undef __get_dynamic_array
+-#define __get_dynamic_array(field)	\
+-		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
+-
+-#undef __get_dynamic_array_len
+-#define __get_dynamic_array_len(field)	\
+-		((__entry->__data_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_str
+-#define __get_str(field) ((char *)__get_dynamic_array(field))
+-
+-#undef __get_bitmask
+-#define __get_bitmask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_cpumask
+-#define __get_cpumask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_sockaddr
+-#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
+-
+-#undef __get_rel_dynamic_array
+-#define __get_rel_dynamic_array(field)	\
+-		((void *)(&__entry->__rel_loc_##field) +	\
+-		 sizeof(__entry->__rel_loc_##field) +		\
+-		 (__entry->__rel_loc_##field & 0xffff))
+-
+-#undef __get_rel_dynamic_array_len
+-#define __get_rel_dynamic_array_len(field)	\
+-		((__entry->__rel_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_rel_str
+-#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
+-
+-#undef __get_rel_bitmask
+-#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_cpumask
+-#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_sockaddr
+-#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
+-
+-#undef __perf_count
+-#define __perf_count(c)	(c)
+-
+-#undef __perf_task
+-#define __perf_task(t)	(t)
++#include "stages/stage_bpf_call.h"
+ 
+ /* cast any integer, pointer, or small struct to u64 */
+ #define UINTTYPE(size) \
+diff --git a/include/trace/perf.h b/include/trace/perf.h
+index 8f3bf1e..e899bf7 100644
+--- a/include/trace/perf.h
++++ b/include/trace/perf.h
+@@ -4,57 +4,7 @@
+ 
+ #ifdef CONFIG_PERF_EVENTS
+ 
+-#undef __entry
+-#define __entry entry
+-
+-#undef __get_dynamic_array
+-#define __get_dynamic_array(field)	\
+-		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
+-
+-#undef __get_dynamic_array_len
+-#define __get_dynamic_array_len(field)	\
+-		((__entry->__data_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_str
+-#define __get_str(field) ((char *)__get_dynamic_array(field))
+-
+-#undef __get_bitmask
+-#define __get_bitmask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_cpumask
+-#define __get_cpumask(field) (char *)__get_dynamic_array(field)
+-
+-#undef __get_sockaddr
+-#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
+-
+-#undef __get_rel_dynamic_array
+-#define __get_rel_dynamic_array(field)	\
+-		((void *)__entry +					\
+-		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+-		 sizeof(__entry->__rel_loc_##field) +			\
+-		 (__entry->__rel_loc_##field & 0xffff))
+-
+-#undef __get_rel_dynamic_array_len
+-#define __get_rel_dynamic_array_len(field)	\
+-		((__entry->__rel_loc_##field >> 16) & 0xffff)
+-
+-#undef __get_rel_str
+-#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
+-
+-#undef __get_rel_bitmask
+-#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_cpumask
+-#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
+-
+-#undef __get_rel_sockaddr
+-#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
+-
+-#undef __perf_count
+-#define __perf_count(c)	(__count = (c))
+-
+-#undef __perf_task
+-#define __perf_task(t)	(__task = (t))
++#include "stages/stage_perf_call.h"
+ 
+ #undef DECLARE_EVENT_CLASS
+ #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+diff --git a/include/trace/stages/stage_bpf_call.h b/include/trace/stages/stage_bpf_call.h
+new file mode 100644
+index 0000000..b5e2fd5
+--- /dev/null
++++ b/include/trace/stages/stage_bpf_call.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#undef __entry
++#define __entry entry
++
++#undef __get_dynamic_array
++#define __get_dynamic_array(field)	\
++		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
++
++#undef __get_dynamic_array_len
++#define __get_dynamic_array_len(field)	\
++		((__entry->__data_loc_##field >> 16) & 0xffff)
++
++#undef __get_str
++#define __get_str(field) ((char *)__get_dynamic_array(field))
++
++#undef __get_bitmask
++#define __get_bitmask(field) (char *)__get_dynamic_array(field)
++
++#undef __get_cpumask
++#define __get_cpumask(field) (char *)__get_dynamic_array(field)
++
++#undef __get_sockaddr
++#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
++
++#undef __get_rel_dynamic_array
++#define __get_rel_dynamic_array(field)	\
++		((void *)(&__entry->__rel_loc_##field) +	\
++		 sizeof(__entry->__rel_loc_##field) +		\
++		 (__entry->__rel_loc_##field & 0xffff))
++
++#undef __get_rel_dynamic_array_len
++#define __get_rel_dynamic_array_len(field)	\
++		((__entry->__rel_loc_##field >> 16) & 0xffff)
++
++#undef __get_rel_str
++#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
++
++#undef __get_rel_bitmask
++#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
++
++#undef __get_rel_cpumask
++#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
++
++#undef __get_rel_sockaddr
++#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
++
++#undef __perf_count
++#define __perf_count(c)	(c)
++
++#undef __perf_task
++#define __perf_task(t)	(t)
++
+diff --git a/include/trace/stages/stage_perf_call.h b/include/trace/stages/stage_perf_call.h
+new file mode 100644
+index 0000000..c67478c
+--- /dev/null
++++ b/include/trace/stages/stage_perf_call.h
+@@ -0,0 +1,54 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#undef __entry
++#define __entry entry
++
++#undef __get_dynamic_array
++#define __get_dynamic_array(field)	\
++		((void *)__entry + (__entry->__data_loc_##field & 0xffff))
++
++#undef __get_dynamic_array_len
++#define __get_dynamic_array_len(field)	\
++		((__entry->__data_loc_##field >> 16) & 0xffff)
++
++#undef __get_str
++#define __get_str(field) ((char *)__get_dynamic_array(field))
++
++#undef __get_bitmask
++#define __get_bitmask(field) (char *)__get_dynamic_array(field)
++
++#undef __get_cpumask
++#define __get_cpumask(field) (char *)__get_dynamic_array(field)
++
++#undef __get_sockaddr
++#define __get_sockaddr(field) ((struct sockaddr *)__get_dynamic_array(field))
++
++#undef __get_rel_dynamic_array
++#define __get_rel_dynamic_array(field)	\
++		((void *)__entry +					\
++		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
++		 sizeof(__entry->__rel_loc_##field) +			\
++		 (__entry->__rel_loc_##field & 0xffff))
++
++#undef __get_rel_dynamic_array_len
++#define __get_rel_dynamic_array_len(field)	\
++		((__entry->__rel_loc_##field >> 16) & 0xffff)
++
++#undef __get_rel_str
++#define __get_rel_str(field) ((char *)__get_rel_dynamic_array(field))
++
++#undef __get_rel_bitmask
++#define __get_rel_bitmask(field) (char *)__get_rel_dynamic_array(field)
++
++#undef __get_rel_cpumask
++#define __get_rel_cpumask(field) (char *)__get_rel_dynamic_array(field)
++
++#undef __get_rel_sockaddr
++#define __get_rel_sockaddr(field) ((struct sockaddr *)__get_rel_dynamic_array(field))
++
++#undef __perf_count
++#define __perf_count(c)	(__count = (c))
++
++#undef __perf_task
++#define __perf_task(t)	(__task = (t))
++
+-- 
+2.7.4
+
