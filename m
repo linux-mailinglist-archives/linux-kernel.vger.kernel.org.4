@@ -2,167 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4222364C942
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DA664C943
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbiLNMur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+        id S237788AbiLNMux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiLNMuZ (ORCPT
+        with ESMTP id S236681AbiLNMu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:50:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B380EA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:49:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B7C8B818AE
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371E5C433D2;
-        Wed, 14 Dec 2022 12:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671022168;
-        bh=MfURZ9LBGJIdU91BwgSvPBsaxxo8gfXFc4ZKjgaELJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uUap6aiHDZvgbDfx3ZAuiCMW7MxWYq/v3Z7YS+Tpg6e0QdJsDwtQC0E4X+aBSUARX
-         ZuckVeOGUZY1KbnSKt1riHxPHeUqGrvvdA7VWreYeCBPzgfiYIPHA9uDwtFHmakAfX
-         pDN6ReDJycypdCrZgO9GlNCZ5MhJDAwMQDRW6r+3ef+yWwkQFh5HEem6Q7KE9onz1V
-         dOjDre9So8BJTN+Op/fxGSIRrB4nbIDmMWaLS+hgcfqJuXviaayipf/jvy7nefNv0a
-         0YdlWYPcUCnTZwj+fh80mvY/46CqwUPKMO+BJ+hsAU5FVomY0yEqb7hoe5k6Rr9tVb
-         UKDHoVeLCdsyQ==
-Date:   Wed, 14 Dec 2022 13:49:25 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     atomlin@redhat.com, cl@linux.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v9 4/5] tick/nohz_full: Ensure quiet_vmstat() is called
- on exit to user-mode when the idle tick is stopped
-Message-ID: <20221214124925.GB1925147@lothringen>
-References: <20221206161826.698593151@redhat.com>
- <20221206162416.509808578@redhat.com>
+        Wed, 14 Dec 2022 07:50:26 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A686BBC9;
+        Wed, 14 Dec 2022 04:49:56 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8EFAFEC;
+        Wed, 14 Dec 2022 04:50:36 -0800 (PST)
+Received: from [10.57.88.237] (unknown [10.57.88.237])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2339E3F73B;
+        Wed, 14 Dec 2022 04:49:54 -0800 (PST)
+Message-ID: <fb8c5053-6dfc-f512-24a0-d00dd3f759a8@arm.com>
+Date:   Wed, 14 Dec 2022 12:49:47 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206162416.509808578@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 4/4] remoteproc: qcom_q6v5_mss: Use a carveout to
+ authenticate modem headers
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        amit.pundir@linaro.org, regressions@leemhuis.info,
+        sumit.semwal@linaro.org, will@kernel.org, catalin.marinas@arm.com
+References: <20221213140724.8612-1-quic_sibis@quicinc.com>
+ <20221213140724.8612-5-quic_sibis@quicinc.com>
+ <741b64c2-0b09-6475-5736-d2cd3e33c34c@arm.com>
+ <ba258979-0c65-4671-dd01-c1916c26e81b@quicinc.com>
+ <20221213160722.GC4862@thinkpad>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221213160722.GC4862@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:18:30PM -0300, Marcelo Tosatti wrote:
-> From: Aaron Tomlin <atomlin@redhat.com>
+On 2022-12-13 16:07, Manivannan Sadhasivam wrote:
+> On Tue, Dec 13, 2022 at 09:27:04PM +0530, Sibi Sankar wrote:
+>> Hey Robin,
+>>
+>> Thanks for taking time to review the series.
+>>
+>> On 12/13/22 20:37, Robin Murphy wrote:
+>>> On 2022-12-13 14:07, Sibi Sankar wrote:
+>>>> The memory region allocated using dma_alloc_attr with no kernel mapping
+>>>> attribute set would still be a part of the linear kernel map. Any access
+>>>> to this region by the application processor after assigning it to the
+>>>> remote Q6 will result in a XPU violation. Fix this by replacing the
+>>>> dynamically allocated memory region with a no-map carveout and unmap the
+>>>> modem metadata memory region before passing control to the remote Q6.
+>>>>
+>>>> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+>>>> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for
+>>>> mem ownership switch")
+>>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>>> ---
+>>>>
+>>>> The addition of the carveout and memunmap is required only on SoCs that
+>>>> mandate memory protection before transferring control to Q6, hence the
+>>>> driver falls back to dynamic memory allocation in the absence of the
+>>>> modem metadata carveout.
+>>>
+>>> The DMA_ATTR_NO_KERNEL_MAPPING stuff is still broken and pointless, so
+>>> I'd expect to see this solution replacing it, not being added alongside.
+>>> It's just silly to say pass the "I don't need a CPU mapping" flag, then
+>>> manually open-code the same CPU mapping you would have got if you
+>>> hadn't, in a way that only works at all when a cacheable alias exists
+>>> anyway.
+>>
+>> only a subset of SoCs supported by the driver are affected by
+>> the bug i.e. on the others dma_alloc_attr would still work
+>> without problems. I can perhaps drop the NO_KERNEL_MAPPING along
+>> with the vmap/vunmap and simplify things for those SoCs.
+>>
 > 
-> This patch ensures CPU-specific vmstat differentials do not remain
-> when the scheduling-tick is stopped and before exiting to user-mode
-> in the context of nohz_full only.
-> 
-> A trivial test program was used to determine the impact of the proposed
-> changes and under vanilla. The mlock(2) and munlock(2) system calls was
-> used solely to modify vmstat item 'NR_MLOCK'. The following is an average
-> count of CPU-cycles across the aforementioned system calls:
-> 
-> 				  Vanilla                 Modified
-> 
->   Cycles per syscall              8461                    8690    (+2.6%)
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> Or perhaps revert fc156629b23a?
 
-This is missing your Signed-off-by:
+Oh, indeed, if it's already self-contained that's even neater. Basically 
+that whole commit is based on a misunderstanding, doesn't actually do 
+what it thinks it does, and you'd be far better off not maintaining the 
+extra code.
 
-Also can you make this (and also the conditional vmstat_shepherd ignore
-nohz_full CPUs and also the in-place local arming) a Kconfig option perhaps?
-Something like CONFIG_FLUSH_WORK_ON_RESUME_USER (depend on NO_HZ_FULL). I'm using
-"WORK" instead of "VMSTAT" so that we can even add more stuff there later.
-
-This way I'll stop worrying about the potential HPC users who may not care about
-the occasional interrupt and prefer to have reasonably fast syscalls.
-
-Then after some time if nobody complains, we can remove the Kconfig entry.
-
-Thanks.
-
-> ---
->  include/linux/tick.h     |    5 +++--
->  kernel/time/tick-sched.c |   15 +++++++++++++++
->  2 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> Index: linux-2.6/include/linux/tick.h
-> ===================================================================
-> --- linux-2.6.orig/include/linux/tick.h
-> +++ linux-2.6/include/linux/tick.h
-> @@ -11,7 +11,6 @@
->  #include <linux/context_tracking_state.h>
->  #include <linux/cpumask.h>
->  #include <linux/sched.h>
-> -#include <linux/rcupdate.h>
->  
->  #ifdef CONFIG_GENERIC_CLOCKEVENTS
->  extern void __init tick_init(void);
-> @@ -272,6 +271,7 @@ static inline void tick_dep_clear_signal
->  
->  extern void tick_nohz_full_kick_cpu(int cpu);
->  extern void __tick_nohz_task_switch(void);
-> +void __tick_nohz_user_enter_prepare(void);
->  extern void __init tick_nohz_full_setup(cpumask_var_t cpumask);
->  #else
->  static inline bool tick_nohz_full_enabled(void) { return false; }
-> @@ -296,6 +296,7 @@ static inline void tick_dep_clear_signal
->  
->  static inline void tick_nohz_full_kick_cpu(int cpu) { }
->  static inline void __tick_nohz_task_switch(void) { }
-> +static inline void __tick_nohz_user_enter_prepare(void) { }
->  static inline void tick_nohz_full_setup(cpumask_var_t cpumask) { }
->  #endif
->  
-> @@ -308,7 +309,7 @@ static inline void tick_nohz_task_switch
->  static inline void tick_nohz_user_enter_prepare(void)
->  {
->  	if (tick_nohz_full_cpu(smp_processor_id()))
-> -		rcu_nocb_flush_deferred_wakeup();
-> +		__tick_nohz_user_enter_prepare();
->  }
->  
->  #endif
-> Index: linux-2.6/kernel/time/tick-sched.c
-> ===================================================================
-> --- linux-2.6.orig/kernel/time/tick-sched.c
-> +++ linux-2.6/kernel/time/tick-sched.c
-> @@ -26,6 +26,7 @@
->  #include <linux/posix-timers.h>
->  #include <linux/context_tracking.h>
->  #include <linux/mm.h>
-> +#include <linux/rcupdate.h>
->  
->  #include <asm/irq_regs.h>
->  
-> @@ -519,6 +520,20 @@ void __tick_nohz_task_switch(void)
->  	}
->  }
->  
-> +void __tick_nohz_user_enter_prepare(void)
-> +{
-> +	struct tick_sched *ts;
-> +
-> +	if (tick_nohz_full_cpu(smp_processor_id())) {
-> +		ts = this_cpu_ptr(&tick_cpu_sched);
-> +
-> +		if (ts->tick_stopped)
-> +			quiet_vmstat(true);
-> +		rcu_nocb_flush_deferred_wakeup();
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(__tick_nohz_user_enter_prepare);
-> +
->  /* Get the boot-time nohz CPU list from the kernel parameters. */
->  void __init tick_nohz_full_setup(cpumask_var_t cpumask)
->  {
-> 
-> 
+Thanks,
+Robin.
