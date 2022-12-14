@@ -2,176 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D64A64D290
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E7464D293
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiLNWqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 17:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S229537AbiLNWsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 17:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLNWp7 (ORCPT
+        with ESMTP id S229454AbiLNWsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 17:45:59 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840692F667;
-        Wed, 14 Dec 2022 14:45:54 -0800 (PST)
-Received: from [192.168.192.83] (unknown [50.47.134.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2447343598;
-        Wed, 14 Dec 2022 22:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1671057950;
-        bh=jNfxgcjTNSBTXONPgkpyCwV4HUQZqAd+KNcHlXwVZ6Q=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=onvzqVCHIPy+LRzF9Oe4wXUGtti/4LVSxpezkHHt1UmLIImZvny6iQR5/Wy8KPbRs
-         ZrkfS5XnQpWBEiCYCHofH1/Er37gqDCWrJnQ3N9BP/mrcIs3qUxG1CMYnhQgQFc8Za
-         BmEmgjQRYHxvR1yUr80ezHYrPGLmhtUxX1e0Uj3frCBrNWE7FrMLldP6L7dNbguzjr
-         qSKJ7aCNtPbFE/kWDIvgLH2c/eHLxckDMdJdG5C3BVwn7otPDTzelmGYDJjvbhEPZg
-         EGGUsQ86NSbgjC/MNTUbf97l3/MxdhCn9zdr1ptmYmlZ87VPxQ1i1HA5q0sMePlsEK
-         vf/xn9bP+sIww==
-Message-ID: <466869a2-b583-2c7a-5b23-d0ce9797a6bd@canonical.com>
-Date:   Wed, 14 Dec 2022 14:45:46 -0800
+        Wed, 14 Dec 2022 17:48:32 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5D531EEB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:48:31 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id w23so4927573ply.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iMEJ8qWvU17qF8Iw6KkCvqlY5TEaxk9MDPpeFJN2leo=;
+        b=aXfHEhtI9R9soKDZaToBP0eHoF2wK2L4yt464De59nc6HszERIRBsqLpZZ+DFxc96F
+         ErGuCCGWsqQeO+Y1l54z466jTHAlyVTnV523ltKdLyfd0Iho/DTDTk578EVfOjG7+STh
+         xQf2eoCCBBhAtR68zaS7SgJiOTnl2XhSwFrvM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iMEJ8qWvU17qF8Iw6KkCvqlY5TEaxk9MDPpeFJN2leo=;
+        b=PqbFDdN9NL3vFIE7gfn2BtNeiRAvic76JW4+7jvyOAB+9IBMeMOIFLl8nx2A5GqyrZ
+         leS2oupWiBl4ger3oaI7g2anOxYcXCdJ4d1gYkRi4TgaNRipFkQQIywu6Q1uu6p6OtgG
+         8CbSfKw8DJAYL5pPzWWEmwLf3h61d6Olc70OnoAkc9/fOnqmzM4Rnp4eXLHmEPs97tVr
+         SKJdKNQZ5GbxLudz9ZSOHZoWK+aQ7cJ98WvektrRCMmA4WkzkfewCnOhAzwYi4hXfnE9
+         rOMELhNMMDJlrl0rtykIDU/rAlLZVNve1qh2WVpDUS1VZ4wmCxp0ayKvpmhht61XxrIX
+         mFVQ==
+X-Gm-Message-State: ANoB5plBUkVS3nxpT+cuCFXSBCTXxXrfVut33RRQJY50H+CjyuzIn8SC
+        YKyB0SsvwylLae2FGTH04CcekQ==
+X-Google-Smtp-Source: AA0mqf7qKN79UVZEaW0Ls76RahKulLM3pvcDvRzXwGVbF7i+MXNF8rKr0K5wWQE/acWibVQATBg9tQ==
+X-Received: by 2002:a05:6a20:429a:b0:af:89c2:ad01 with SMTP id o26-20020a056a20429a00b000af89c2ad01mr1690943pzj.40.1671058110782;
+        Wed, 14 Dec 2022 14:48:30 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902680800b00172f6726d8esm2327431plk.277.2022.12.14.14.48.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 14:48:29 -0800 (PST)
+Date:   Wed, 14 Dec 2022 14:48:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Kristina Martsenko <kristina.martsenko@arm.com>
+Cc:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Dan Li <ashimida@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Message-ID: <202212141448.03552F3@keescook>
+References: <20220416001103.1524653-1-keescook@chromium.org>
+ <CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com>
+ <202212072221.A9FCC905CF@keescook>
+ <ba52dac5-2ce7-a567-41af-841b857abbed@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [GIT PULL] apparmor changes for v6.2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKLM <linux-kernel@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" 
-        <linux-security-module@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <218cac2c-47ae-435d-d7d0-48e4937a7f99@canonical.com>
- <CAHk-=wiBjnEtm8cFBp=6YNFe51z6Mdb-BbEJyfka9w1fkWfPvg@mail.gmail.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <CAHk-=wiBjnEtm8cFBp=6YNFe51z6Mdb-BbEJyfka9w1fkWfPvg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ba52dac5-2ce7-a567-41af-841b857abbed@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/22 13:54, Linus Torvalds wrote:
-> On Wed, Dec 14, 2022 at 10:36 AM John Johansen
-> <john.johansen@canonical.com> wrote:
->>
->> John Johansen (45):
->>         apparmor: make unpack_array return a trianary value
+On Fri, Dec 09, 2022 at 05:34:41PM +0000, Kristina Martsenko wrote:
+> Subject: [PATCH] lkdtm: cfi: Make PAC test work with GCC 7 and 8
 > 
-> John, this is unacceptable.
+> The CFI test uses the branch-protection=none compiler attribute to
+> disable PAC return address protection on a function. While newer GCC
+> versions support this attribute, older versions (GCC 7 and 8) instead
+> supported the sign-return-address=none attribute, leading to a build
+> failure when the test is built with older compilers. Fix it by checking
+> which attribute is supported and using the correct one.
+> 
+> Fixes: 2e53b877dc12 ("lkdtm: Add CFI_BACKWARD to test ROP mitigations")
+> Reported-by: Daniel Díaz <daniel.diaz@linaro.org>
+> Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
+> Link: https://lore.kernel.org/all/CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com/
+
+Thanks! Added to my tree.
+
+> ---
+>  drivers/misc/lkdtm/cfi.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> index 5245cf6013c9..d4bb8e31a2fe 100644
+> --- a/drivers/misc/lkdtm/cfi.c
+> +++ b/drivers/misc/lkdtm/cfi.c
+> @@ -54,7 +54,11 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+>  # ifdef CONFIG_ARM64_BTI_KERNEL
+>  #  define __no_pac             "branch-protection=bti"
+>  # else
+> -#  define __no_pac             "branch-protection=none"
+> +#  ifdef CONFIG_CC_HAS_BRANCH_PROT_PAC_RET
+> +#   define __no_pac             "branch-protection=none"
+> +#  else
+> +#   define __no_pac             "sign-return-address=none"
+> +#  endif
+>  # endif
+>  # define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
+>  #else
 > 
 
-ack, sorry.
-
-> I noticed it due to the conflict, but this really is garbage.
-> 
-> First off, the word is "ternary" (or possibly "tristate").
-> 
-> Secondly, we don't do types like this
-> 
->      #define tri int
-> 
-
-ack
-
-> and even if we did, that's a *horrible* name not just for a type, but
-> for a #define.
-> 
-> Finally, what the heck is "TRI_TRUE/TRI_NONE/TRI_FALSE"? WTF?
-> 
-> It looks like it is used in one single place - the return value for
-> "unpack_array()" (now renamed "aa_unpack_array()"), and the TRI_FALSE
-> case is basically an error case for an invalid case.
-> 
-> And TRI_NONE is just a *different* failure case ("name does not exist"
-> vs "data is invalid").
-> 
-> And then, to make matters worse, ABSOLUTELY NOBODY CARES ABOUT THE
-> DIFFERENCE. All real users just want to see TRI_TRUE (for "success"),
-> and anything else is an error anyway.
-> 
-right, the end goal being not two invalid cases but a case of this
-is optional but if not present some default data needs to be tied
-in. This can be represented different ways, and using the int as
-you suggest below seems like the right way to go.
-
-It also looks like I kicked out the following patch that used this
-mess, for further revision and sadly didn't drop this one as well.
-
-> Yes, yes, there's that one KUNIT test, which wants to actually see
-> that TRI_FALSE because it's testing that array-out-of-bounds case. It
-> also - for some unfathomable reason - seems to then want to see some
-> particular pointer values in that invalid data after the failure,
-> which seems bogus, but whatever.
-> 
-> In other words, that type is badly done and mis-named to start with,
-> but then the different ternary values themselves are confusingly
-> mis-named too in ways that make no sense.
-> 
-> And to cap it all off, NOBODY CARES about those horrid things anyway.
-> 
-> Anyway, I started out doing the mindless conflict resolution, but then
-> I just couldn't deal with that 'tri' type. There were just too many
-> things wrong with it for me to accept it, and I felt dirty for just
-> editing it.
-> 
-> Then I tried out just making it a
-> 
->       typedef enum { TRI_TRUE/TRI_NONE/TRI_FALSE } ternary_t;
-> 
-> which fixes some of the syntactic issues.
-> 
-> But the whole naming confusion of the values and how NONE-vs-FALSE
-> wasn't actually a useful distinction anyway made me just axe it
-> completely.
-> 
-
-okay
-
-> I'm honestly baffled by why you didn't just make it return the size or
-> a negative error code, like is the norm. The size is limited to 16
-> bits anyway, so returning an 'int' with a negative error would have
-> been very natural.
-
-indeed, tbh I have no clue why. As you say the int type fits right
-in with existing kernel code, and doesn't have any range problems.
-
-> 
-> But just to keep the pattern with some of the other users, and
-> minimize my surgery, I made it just return 'bool'.
-> 
-okay
-
-> I'm sorry to do all that surgery on it, but I just couldn't stomach
-> doing anything else.
-> 
-
-understandable
-
-> The resulting merge diff is fairly messy, and to make matters worse I
-> can't actually *test* any of this. But the code looks more palatable
-
-I will make sure it gets run through all the testing
-
-> to me, and I did try to be careful about my surgery.
-> 
-as always, I have no worries about that
-
-> Apologies if I broke something,
-> 
-
-none, needed. You did what you needed to do. If needed I will follow-up
-with a patch.
-
-
+-- 
+Kees Cook
