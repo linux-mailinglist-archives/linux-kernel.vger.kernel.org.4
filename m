@@ -2,119 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48C964CCA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C3464CCAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbiLNOuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
+        id S238717AbiLNOwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbiLNOu3 (ORCPT
+        with ESMTP id S238726AbiLNOv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:50:29 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FA42F3;
-        Wed, 14 Dec 2022 06:50:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671029429; x=1702565429;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XTkX6HcEGJ1UBW6COm+l+2Y+4S1QKisQtPhX0zyA/4c=;
-  b=ajJ3KAk6t0Lpca42PuzNnOzTw8LloHU1gZ6WSgaULN61VsIwuuajU6zA
-   muAg/w6iKjhtSVfFAHZTGeotfS7/cZwylnTZYOKqWRe0B/9P7oip5PYPj
-   jrj5ir1hTV7XOIOoLAWsesylMjl//iseGVYJ7dq1J3Z9OsHc7FA9wzbxe
-   DPdQv27d/HWaxOS+uShFpeDElNLVTblHrfUAt+RMb6pOzNo3K81+kRd9i
-   T2WY4YTTJ92aDZbXJ1U/SseatWtYsPRORW3ZOSZWrstA3ONksCDIFfE9v
-   relQmzwbvYkar6NKpB48LGKA06ONgab+aaGQkLhHFNyPShPBPi5wY+pn6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="320278599"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="320278599"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 06:50:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="977856375"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="977856375"
-Received: from pnasahl-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.61.89])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 06:50:11 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Marco Pagani <marpagan@redhat.com>
-Subject: [PATCH v2 1/1] fpga: m10bmc-sec: Fix probe rollback
-Date:   Wed, 14 Dec 2022 16:49:52 +0200
-Message-Id: <20221214144952.8392-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 14 Dec 2022 09:51:59 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831E26A99
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:51:58 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id r186-20020a1c44c3000000b003d1e906ca23so1025658wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IiSnpue6iOmz6L8zVrDjfUc0muwFjLoqBWFHi5L4ZfE=;
+        b=ML9PjZ/+nrI9mCEvEcuGQP2u/gxh8PbvEL5mseGdKcyX1oieDAVTtqhfYK3elDITKR
+         ZRAd7iREPbW/9yRoZZVD2Wj68XBEeqAwjJVpJ93KDjjH1ING2UFPC2LYHRX0DzOh3e0F
+         30MJKxc4d4TNsW38G3gwUXT9GbzO8VUI6aNfkWBGHYg/611TBGE5wqRulxs9RwQFONv3
+         tmd4i1gJigFZPZZ3t/VeRIZzc68vCc0YoEzNPOSClleRxgGpLJLncXguboUlRA2pFcGo
+         L73gtLadRq12X5QFgGsrgVU87UEcj6ha1lfEcrdEne9rEnMJUFN57XbTup/jVgMz23xZ
+         gazQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IiSnpue6iOmz6L8zVrDjfUc0muwFjLoqBWFHi5L4ZfE=;
+        b=W7eiDLzHiEi1SqktZfU/cWlxW2lWTqC473P1sH6kOHQAw6R/0smVmYrHWAvEkUgjMR
+         IO1jCoqpoN1o1uBa6PZ94clfuErLuuRpCNNqfOjyPbuqbf4uM8CvcOLZyxri5e4mizRw
+         vjKKlak0w51E7Lg72iOyeVFla95IYNnHKsGpS/DPiI1hHphINkreHD+RhdvByDMBezh2
+         rEDYMMyKL/kMo+DHtZotdVTkEok4QXbQyxxnoHPzl4Jv11ULIeyyZGVo3w2mWB4AMTl8
+         s7zNfF74a1exdFK1hQSGZnOL7hH90ns767ufK2LwuQI6cDGAKz+cXp+pf7ErnrBhlAWG
+         kVjg==
+X-Gm-Message-State: ANoB5pl0lw0JxabSziwTFpUTbX5gPFzfwiqs09cUUbJRb+JfPjRYxj0j
+        RSkc2XbnM4qN49GZWYlMPb4fJA==
+X-Google-Smtp-Source: AA0mqf5viJGPbkA9DJBQc40lI7/cf35dpqsNAmnTgEn4+gdohkG0chrb5zLj/DBXWD7luiB6q7HM6w==
+X-Received: by 2002:a05:600c:2d07:b0:3d1:ee3a:62ae with SMTP id x7-20020a05600c2d0700b003d1ee3a62aemr18698856wmf.8.1671029516593;
+        Wed, 14 Dec 2022 06:51:56 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c4ecc00b003cf9bf5208esm3133352wmq.19.2022.12.14.06.51.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 06:51:56 -0800 (PST)
+Message-ID: <b54c3eb6-6373-3679-4561-272b8f249a7b@linaro.org>
+Date:   Wed, 14 Dec 2022 15:51:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/4] thermal: fix locking regressions in linux-next
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+References: <20221214131617.2447-1-johan+linaro@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221214131617.2447-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Handle probe error rollbacks properly to avoid leaks.
 
-Fixes: 5cd339b370e2 ("fpga: m10bmc-sec: add max10 secure update functions")
-Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-Reviewed-by: Marco Pagani <marpagan@redhat.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
-I don't know if the previous one fell through cracks so resending this.
+Hi Johan,
 
-v2:
-- Resending v1 with Marco's Rev-by
+thanks for your fixes
 
- drivers/fpga/intel-m10-bmc-sec-update.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+On 14/12/2022 14:16, Johan Hovold wrote:
+> This series fixes some of the fallout after the thermal changes that
+> just landed in linux-next.
+> 
+> Lockdep reported a lock inversion in one of the Qualcomm drivers and a
+> closer review revealed that the changes had also broken the sysfs
+> interface for at least three drivers.
+> 
+> Note that a simple revert of the offending patches was not an option as
+> some of the infrastructure that the old implementation relied on has
+> also been removed.
+> 
+> Johan
+> 
+> 
+> Johan Hovold (4):
+>    thermal/drivers/qcom: fix set_trip_temp() deadlock
+>    thermal/drivers/exynos: fix set_trip_temp() deadlock
+>    thermal/drivers/tegra: fix set_trip_temp() deadlock
+>    thermal/drivers/qcom: fix lock inversion
+> 
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 7 ++++++-
+>   drivers/thermal/samsung/exynos_tmu.c        | 2 +-
+>   drivers/thermal/tegra/soctherm.c            | 2 +-
+>   drivers/thermal/thermal_core.c              | 1 +
+>   include/linux/thermal.h                     | 2 ++
+>   5 files changed, 11 insertions(+), 3 deletions(-)
+> 
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 79d48852825e..03f1bd81c434 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -574,20 +574,27 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
- 	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
- 			sec->fw_name_id);
- 	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
--	if (!sec->fw_name)
--		return -ENOMEM;
-+	if (!sec->fw_name) {
-+		ret = -ENOMEM;
-+		goto fw_name_fail;
-+	}
- 
- 	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
- 				       &m10bmc_ops, sec);
- 	if (IS_ERR(fwl)) {
- 		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
--		kfree(sec->fw_name);
--		xa_erase(&fw_upload_xa, sec->fw_name_id);
--		return PTR_ERR(fwl);
-+		ret = PTR_ERR(fwl);
-+		goto fw_uploader_fail;
- 	}
- 
- 	sec->fwl = fwl;
- 	return 0;
-+
-+fw_uploader_fail:
-+	kfree(sec->fw_name);
-+fw_name_fail:
-+	xa_erase(&fw_upload_xa, sec->fw_name_id);
-+	return ret;
- }
- 
- static int m10bmc_sec_remove(struct platform_device *pdev)
 -- 
-2.30.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
