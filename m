@@ -2,161 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC2464CE5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A508364CE89
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiLNQvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S239198AbiLNRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:00:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238759AbiLNQvJ (ORCPT
+        with ESMTP id S239016AbiLNRAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:51:09 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74646E0C4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:51:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671036664; x=1702572664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZSrYxyJvHyYBAqXImstH98UkvPe6TpC/eppsxaUN28c=;
-  b=mj+le5ZMRwcs5BT9UiPBp8jyt3Tfj4NWsixVIefyJuOQty5y1JFyQHqw
-   jryks4kMYJdqdPscXNsJbiYofIHeAt2g/z0Hpeu2W2pHtJwn184YSikhN
-   6cR+jq/Sbw9ZqOHV4WZPnHL/amGEWHzCEo0d4X8aE7T4ae3CUUOwvV87S
-   9f6aHUB6He0Zj25TESRu7K2kwJlmiOu7Jx6LgEzj0Qr5lB8KrGlOYL2at
-   6qqeJRy3fgcueeEE0WA1sbokY/1ny2fwfMJyG9vht858lzu1qNUcMJ5Rq
-   CsDtdxMhzqZbg8Bt7avtfavZnGuPMddyTHIarfLrWFYGyk8jFfID+2y+L
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="318496058"
-X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
-   d="scan'208";a="318496058"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 08:50:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="977897378"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="977897378"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Dec 2022 08:50:48 -0800
-Date:   Wed, 14 Dec 2022 08:59:00 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 5/7] x86/sched: Remove SD_ASYM_PACKING from the "SMT"
- domain
-Message-ID: <20221214165900.GA972@ranerica-svr.sc.intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-6-ricardo.neri-calderon@linux.intel.com>
- <Y5IKuJTjE6Pjrw9I@arm.com>
+        Wed, 14 Dec 2022 12:00:09 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50B020F5B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:00:07 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g7so11492860lfv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lvd2yKCxN/cWI7hKHlLa8cJjk+ps/lRVDsToMSf8tOg=;
+        b=BW3IyTwR01kc+dH1hnbs7li3oFVb2chs6RVIFA2xJhgglw1bx/SZ3Mn7T30fspgpRJ
+         rOgWd+zeyEFpXGQKeD+vfZppdNjsPjdM0CgSpNh+Lvp6HrTOoxMLa1g5eDSoNaqcgv0m
+         oqBED1QZ3UskYFcDkkDDvGrN23dIXwNfH9760TsARKdTaxMXIq/D/TRVj51amENCd587
+         sf8a9rLheuux/ZNC8nujss3cWHG9P3PJYLgCAz4hkAJQCPCZvg6OOiQ4qXZH12FJ2/8V
+         9+cR4I5+sxAD/CEcACJfXfRa2UJ4sAHUikHgMxVD6I9WGCDQLSHQ7Rgqg9Fu3CO8GXeD
+         I40g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lvd2yKCxN/cWI7hKHlLa8cJjk+ps/lRVDsToMSf8tOg=;
+        b=CzNPCM8uzKhOwEBGHIfUUaQt7xC8JBAHXDMmbq83OmeloaTxOizlIEOi/cgYvxDPKq
+         /IBa1+89UBBHcv7qXRaWJz2ZruhJcysgA1oxk7xpQoS+TisfBwkDgpl/2AnDJ/A146jS
+         AUogWLrIXPY1TgwDOobwxMZGRe7OsEMYWmqy6Jdl2xrJC+gHocSkEhmdbwAcejvceeXI
+         hAOz2KRAKlYSesH+qYEm0DR8BDgPVlLPaoyweUGh65PTao+GKMKBQYi2xtR6OLVon5+c
+         s7V9uBlkSNGxMpqTLEvWHw55pKIxGHq6egFay8pYa6rG/PBWYYfhXyGGpoAGICwcD/R4
+         JL0w==
+X-Gm-Message-State: ANoB5pnIacXcog5eOw4OhTdkyQP/6m5B3y/K+2mwlWJqyGg2NcrDt8qu
+        KNcP7TxaDTj4FRmia813MUwJyg==
+X-Google-Smtp-Source: AA0mqf4mABnqZl7/+BzWI1hOTFIk5UPhZ/K7k+NH9eQxXgxiXKyPbLEF853q1jLsfbrbTV5vlrJM3g==
+X-Received: by 2002:a19:6405:0:b0:4b5:b268:dbc8 with SMTP id y5-20020a196405000000b004b5b268dbc8mr5539381lfb.45.1671037205985;
+        Wed, 14 Dec 2022 09:00:05 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id l11-20020ac24a8b000000b004b55e16931fsm865442lfp.259.2022.12.14.09.00.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 09:00:04 -0800 (PST)
+Message-ID: <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
+Date:   Wed, 14 Dec 2022 18:00:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5IKuJTjE6Pjrw9I@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
+Content-Language: en-US
+To:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+ <20221214142206.13288-4-Sinan.Divarci@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214142206.13288-4-Sinan.Divarci@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 04:03:04PM +0000, Ionela Voinescu wrote:
-> Hi Ricardo,
+On 14/12/2022 15:22, Sinan Divarci wrote:
+> Adding bindings for max31732 quad remote temperature sensor
 
-Hi Ionela,
+Full stop.
 
-Thank you very much for your feedback!
-
-> 
-> On Tuesday 22 Nov 2022 at 12:35:30 (-0800), Ricardo Neri wrote:
-> > There is no difference between any of the SMT siblings of a physical core.
-> > asym_packing load balancing is not needed among siblings.
-> > 
-> > When balancing load among physical cores, the scheduler now considers the
-> > state of the siblings when checking the priority of a CPU.
-> > 
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Mel Gorman <mgorman@suse.de>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: x86@kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> > Changes since v1:
-> >  * Introduced this patch.
-> > ---
-> >  arch/x86/kernel/smpboot.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> > index 3f3ea0287f69..c3de98224cb4 100644
-> > --- a/arch/x86/kernel/smpboot.c
-> > +++ b/arch/x86/kernel/smpboot.c
-> > @@ -545,7 +545,7 @@ static int x86_core_flags(void)
-> >  #ifdef CONFIG_SCHED_SMT
-> >  static int x86_smt_flags(void)
-> >  {
-> > -	return cpu_smt_flags() | x86_sched_itmt_flags();
-> > +	return cpu_smt_flags();
-> 
-> Based on:
-> 
-> kernel/sched/topology.c:
-> sd = highest_flag_domain(cpu, SD_ASYM_PACKING);
-> rcu_assign_pointer(per_cpu(sd_asym_packing, cpu), sd);
-> 
-> and described at:
-> 
-> include/linux/sched/sd_flags.h:
-> /*
->  * Place busy tasks earlier in the domain
->  *
->  * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
->  *               up, but currently assumed to be set from the base domain
->  *               upwards (see update_top_cache_domain()).
->  * NEEDS_GROUPS: Load balancing flag.
->  */
-> SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> 
-> doesn't your change result in sd_asym_packing being NULL?
-
-Yes. This is a good catch. Thanks!
+Subject: drop second, redundant "bindings for".
 
 > 
-> The SD_ASYM_PACKING flag requires all children of a domain to have it set
-> as well. So having SMT not setting the flag, while CLUSTER and MC having
-> set the flag would result in a broken topology, right?
+> Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
+> ---
+>  .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> new file mode 100644
+> index 000000000..c701cda95
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX31732 Temperature Sensor Device Driver
 
-I'd say that highest_flag_domain(..., flag) requires all children to have
-`flag`, but clearly the comment you quote allows for SD_ASYM_PACKING to
-be located in upper domains.
+Drop "Device Driver"
 
-Perhaps this can be fixed with a variant of highest_flag_domain() that do
-not require all children to have the flag?
+> +
+> +maintainers:
+> +  - Sinan Divarci <Sinan.Divarci@analog.com>
+> +
+> +description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
 
-Thanks and BR,
-Ricardo
+Drop "Bindings for". Actually, either drop entire description or write
+something else than title.
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31732
+> +
+> +  reg:
+> +    description: I2C address of the Temperature Sensor Device.
+
+Drop description.
+
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    description: Name of the interrupt pin of max31732 used for IRQ.
+
+Drop description.
+
+> +    minItems: 1
+> +    items:
+> +      - enum: [ALARM1, ALARM2]
+> +      - enum: [ALARM1, ALARM2]
+
+This should be fixed, not flexible. Why it's flexible?
+
+lowercase letters only
+
+> +
+> +  adi,alarm1-interrupt-mode:
+> +    description: |
+> +      Enables the ALARM1 output to function in interrupt mode.
+> +      Default ALARM1 output function is comparator mode.
+
+Why this is a property of DT/hardware? Don't encode policy in DT.
+
+> +    type: boolean
+> +
+> +  adi,alarm2-interrupt-mode:
+> +    description: |
+> +      Enables the ALARM2 output to function in interrupt mode.
+> +      Default ALARM2 output function is comparator mode.
+
+Same question.
+
+> +    type: boolean
+> +
+> +  adi,alarm1-fault-queue:
+> +    description: The number of consecutive faults required to assert ALARM1.
+
+Same question - why this number differs with hardware?
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 6]
+> +    default: 1
+> +
+> +  adi,alarm2-fault-queue:
+> +    description: The number of consecutive faults required to assert ALARM2.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [1, 2, 4, 6]
+> +    default: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sensor@1c {
+> +            compatible = "adi,max31732";
+> +            reg = <0x1c>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <17 IRQ_TYPE_EDGE_BOTH>, <27 IRQ_TYPE_EDGE_BOTH>;
+> +            interrupt-names = "ALARM1", "ALARM2";
+> +            adi,alarm1-fault-queue = <4>;
+> +            adi,alarm2-fault-queue = <2>;
+> +            adi,alarm2-interrupt-mode;
+> +      };
+
+Messed indentation.
+
+
+> +    };
+
+Best regards,
+Krzysztof
+
