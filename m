@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612AB64CB6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE85064CB6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238054AbiLNNfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
+        id S238303AbiLNNgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLNNfo (ORCPT
+        with ESMTP id S238219AbiLNNgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:35:44 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5189FE0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:35:41 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id m14so19309548wrh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:35:41 -0800 (PST)
+        Wed, 14 Dec 2022 08:36:36 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5832613B;
+        Wed, 14 Dec 2022 05:36:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yO/it6DJXp58opzX/ToO7OVqJ9wX6hKFVXMEgWfEm9A=;
-        b=TOB9+4TXJwox57SR5ai4OBl9YwUCb20Lc0xZmevqzptn6yBeJ5b5GsBsHcdZYDpl5C
-         0kC2ZIP/E09MliK8iX8VeZJHjOfBMWfbdSMxYPXOcc439iesfxAvtSHAY0OYv1sJq3vl
-         byrzWhbuStlrf8mMZWzT46PWZGFEEi/7kChYVfMUMksed8qTy4Btpf5eMbmx7d14SJjT
-         jbeimh1T2+/uAT6et85Krc1ctpLFN2rvZ5qHdIt4qayhDOQ/wpoXe3UYbwwhrDaD72r+
-         9TRW35Oww5E7E5oZhOknv/8Zq/EnyPNcZ6m8faVCxWlDQ/0GpwRVGdiu9EvtC11GeJA/
-         iBRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yO/it6DJXp58opzX/ToO7OVqJ9wX6hKFVXMEgWfEm9A=;
-        b=y9cuYH/096pd8WhMec4dhSD3rSYkuho0gnQwu2kl94OhCmJ66mftNwx1Hnrj9uYUv9
-         8l1GbuCdGQFXZRtVCVRMsn7lYL8dfbE7ZpFRD+BZc1fEGqz8TTIa7xtfEb/JPdLwdiP+
-         wvp3spaTpZpiu4nNUy8SB09pcjAAiLVeCuDPoeV0PY1C1NqZeaqNKR9gZNmB31cCgABH
-         MX4QzDSHKcGRJ8aKbZr6URh2smfpbVe66gRD5lv6baZzB1/4Nc37NCMSZk/i20pQ2ANh
-         gGDWWiqTyZfw+7CQyyKRJKTBpb4qfo9hKFiX6fhMg+2XxF5Mb/6yY4WzerVNQNvw9DHy
-         wxFg==
-X-Gm-Message-State: ANoB5pm0C37fd7p410Z5ijav3FglyyGtjFVj5ZeihY1j+vt4+CTsu2Ma
-        N7v2n2WD84MOh2lq/KGXfH/k1+JoSW5q7jeZEYhZW1jCIUkPBkry
-X-Google-Smtp-Source: AA0mqf79bjY9YiXeOf4EvoO88hS4D2+yUmG5vJpe/dJFyMZNIiX3tgDIgmMi5J9sK4jUQQTW92rWQteU/+QXFPmOvAc=
-X-Received: by 2002:a5d:4c4e:0:b0:242:48ff:4004 with SMTP id
- n14-20020a5d4c4e000000b0024248ff4004mr16170546wrt.678.1671024939921; Wed, 14
- Dec 2022 05:35:39 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1671024996; x=1702560996;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=zsIf6fMmGrA6HPgd11/NKhffPf9edGm/f/8PsrgH+Fo=;
+  b=JcWpmKa+0jzmv2P5MU1vp7XUsintz6aGs/onVIiyCLqDPTd0k88kN3cS
+   JRTqzehGJ3niR9M8DEn0i26s03I/MPt+RQeehPDHnf0GuZxgNN/jEhnrM
+   vs2Gz7B8XpDYY9uXWSpt7bhxTxTOIGowzI8ChAP61b/VCw6EtIiRw81zF
+   A=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Dec 2022 05:36:36 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 05:36:36 -0800
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 14 Dec 2022 05:36:33 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mathieu.poirier@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH] remoteproc: qcom: pas: Fix subdevice add order
+Date:   Wed, 14 Dec 2022 19:06:23 +0530
+Message-ID: <1671024983-22634-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20221130140547.295859-1-mpfj@newflow.co.uk>
-In-Reply-To: <20221130140547.295859-1-mpfj@newflow.co.uk>
-From:   Mark Jackson <mpfj@newflow.co.uk>
-Date:   Wed, 14 Dec 2022 13:35:28 +0000
-Message-ID: <CAAbcLfgUmiM=6eTQRRdkgLSEQZEcZwnzq0=Ov58S_osru-_V2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 0/5] ARM: dts: nanobone: Fix missing/incorrect features
-To:     =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Mark Jackson <mpfj@newflow.co.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 14:06, Mark Jackson <mpfj@newflow.co.uk> wrote:
->
-> This patch series updates the NanoBone DTS file to address various missing or
-> incorrect features.
->
-> v1 -> v2:
->   - Move temperature sensor definition under I2C heirarchy
->
-> Mark Jackson (5):
->   ARM: dts: am335x-nano: Fix GPIO settings for RTS/CTS pins on UART3 & 4
->   ARM: dts: am335x-nano: Enable RS485 mode for UART3 & 4
->   ARM: dts: am335x-nano: Enable I2C temperature sensor
->   ARM: dts: am335x-nano: Fix GPIO settings for MMC pins
->   ARM: dts: am335x-nano: Enable USB host
->
->  arch/arm/boot/dts/am335x-nano.dts | 32 +++++++++++++++++++++++++------
->  1 file changed, 26 insertions(+), 6 deletions(-)
->
-> --
-> 2.34.1
->
+Currently, the notification like QCOM_SSR_BEFORE_SHUTDOWN is not exactly
+sent before starting shutdown activity on remote subsystem but it is
+getting sent after sysmon shutdown request to remote.
 
-Any update on this patch ?
-Did it ever get through ?
-Do I need to re-submit for some reason ?
+On getting QCOM_SSR_BEFORE_SHUTDOWN, some client want remote subsystem
+to be alive to communicate but as sysmon shutdown request is getting
+sent to remote before QCOM_SSR_BEFORE_SHUTDOWN notification sent to
+kernel client due to which remote is not in a condition to communicate
+with kernel clients.
 
-Regards
-Mark J.
+Fixing the subdevice ordering will fix this as ssr subdevice will be
+first one to get triggered in shutdown/stop path.
+
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+ drivers/remoteproc/qcom_q6v5_pas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6afd094..5e34d59 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -538,7 +538,6 @@ static int adsp_probe(struct platform_device *pdev)
+ 
+ 	qcom_add_glink_subdev(rproc, &adsp->glink_subdev, desc->ssr_name);
+ 	qcom_add_smd_subdev(rproc, &adsp->smd_subdev);
+-	qcom_add_ssr_subdev(rproc, &adsp->ssr_subdev, desc->ssr_name);
+ 	adsp->sysmon = qcom_add_sysmon_subdev(rproc,
+ 					      desc->sysmon_name,
+ 					      desc->ssctl_id);
+@@ -547,6 +546,7 @@ static int adsp_probe(struct platform_device *pdev)
+ 		goto detach_proxy_pds;
+ 	}
+ 
++	qcom_add_ssr_subdev(rproc, &adsp->ssr_subdev, desc->ssr_name);
+ 	ret = rproc_add(rproc);
+ 	if (ret)
+ 		goto detach_proxy_pds;
+-- 
+2.7.4
+
