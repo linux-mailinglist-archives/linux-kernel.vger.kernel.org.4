@@ -2,149 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3055764D44F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60B964D458
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 01:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiLOABv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 19:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S229876AbiLOAJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiLOAAj (ORCPT
+        with ESMTP id S229816AbiLOAId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 19:00:39 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B231C5FB9B;
-        Wed, 14 Dec 2022 15:56:10 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id f18so1459965wrj.5;
-        Wed, 14 Dec 2022 15:56:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nUaYB4mYM1gCXOfo+68xcCeBFVZGQ3PaFqb+K6GJCtg=;
-        b=HEkM75XnY1gKLBNPSXMywD87ktVghvhjnMNiIPF3v+daRENgBk5tmBqIZfv6NfsAS+
-         crGaojmo67uH4di/kyoTFvSXE9g2U1/YAXwZri37aUh1CfhmjV+W4BqFWrlYBAEprcMY
-         v56VIwXrcycWiUTbg/yeKA20NNsX3vVVRYq8RO43cx5iSymYBM71JxvYWLX88uRIQ0UP
-         nYee0ET/0g58lSVZK8emyXw3sCx/6MgJywAAa495kgT+NWzNs1N4bXHBrMoBubMJkOwR
-         9fXtdMTl4p1eWGiRxu5UvAx/I/hJJIjyCIG8G5r5cOMC1zU0FTv/06ugeJJkYa48RMtj
-         d2RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nUaYB4mYM1gCXOfo+68xcCeBFVZGQ3PaFqb+K6GJCtg=;
-        b=M95cUJHDMUMlPXYNtDbwVWwhZhECUZis8mWUmrQnxHEpH6m82obF+/iMOvcU9vI8G9
-         Jt58BXbA/1jU7ck/kQGCCbjY1khrzJmvCGJkWNrh4JVG18HR1OtbUKGoNbT/RJUGvuB8
-         oJaliSK1KR5glcKh/VwJvmV+aXGtNaeI96NCCH2pZykSHAyPRJgHOBY7D1XtcOLp+WNo
-         XZZwO1FXnQMby0zcy7vqRYjF2Lzbv51Gk2T1FBV+GfFdhFvSKkeXfdIbMd8EqSapjcr1
-         8zlsl3xtJhbWVHYaFu9a3wbpVpufa70Mic2f0Um3wkPVzbFBm8UqoYsw6mOwAbof/1FD
-         68eg==
-X-Gm-Message-State: ANoB5pmpaiqN30cCWwTSKE5zLhEyEtFGqwMvMCMqKD54TWdsV075uDne
-        Am71nDLF41NOupsyYyD4sc4=
-X-Google-Smtp-Source: AA0mqf5aeoHs4hzEeRyaOmqpYUikvH6DDBAW6xVPEu0JqDYRI8a+6BmkteGHz5LGP2KZZpxAcuCsxw==
-X-Received: by 2002:a5d:5b1d:0:b0:24b:b74d:8012 with SMTP id bx29-20020a5d5b1d000000b0024bb74d8012mr6793734wrb.18.1671062125288;
-        Wed, 14 Dec 2022 15:55:25 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-18.ip85.fastwebnet.it. [93.42.71.18])
-        by smtp.googlemail.com with ESMTPSA id u2-20020adff882000000b00241d21d4652sm4163549wrp.21.2022.12.14.15.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 15:55:24 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: [PATCH v7 11/11] dt-bindings: net: dsa: qca8k: add LEDs definition example
-Date:   Thu, 15 Dec 2022 00:54:38 +0100
-Message-Id: <20221214235438.30271-12-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221214235438.30271-1-ansuelsmth@gmail.com>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+        Wed, 14 Dec 2022 19:08:33 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDBA188;
+        Wed, 14 Dec 2022 16:00:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXXLN4R4mz4xP9;
+        Thu, 15 Dec 2022 10:55:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671062140;
+        bh=jTiFP2XNbwDthCNXXc3y/X/RTHO54rMp2llmP7AuAv4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=guRFkS1DcmCSAWMfxzKRcaAkjfiW4CyV5Xy8D/f+zltu2C1CusGcMkc0pEal03hBE
+         6v1GxefbOG7wKReZFs1DeXLJ4wfmCg2OZklafqg+ZVRWghRNnk81O1LQWIwL9gX+uF
+         JHj1s2XtXkuTppHwZhOkViDVyQAq+sr8bU+W9xRmzk/mlOCZo2liQ489vNy/lheBZO
+         4C+rk+dz5HDkGGkoNW3YJ4Uxel5m3YIP0XZB2JNc4zyPkUNz9vKQglF3kBbvQCIDYn
+         UPAS41Wx5UILvvNYaq6F/PSiSsoG8XMmnSEWnd+u2BeAUABuNl7o+AjBQ8oYRRuoNd
+         Zz7rK7shQ00Rw==
+Date:   Thu, 15 Dec 2022 10:55:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: please clean up the folio tree
+Message-ID: <20221215105539.72da7ceb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/m/5RI9o4xePV=SssdNMeTRZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LEDs definition example for qca8k using the offload trigger as the
-default trigger and add all the supported offload triggers by the
-switch.
+--Sig_/m/5RI9o4xePV=SssdNMeTRZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- .../devicetree/bindings/net/dsa/qca8k.yaml    | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Hi all,
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-index 978162df51f7..4090cf65c41c 100644
---- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-@@ -65,6 +65,8 @@ properties:
-                  internal mdio access is used.
-                  With the legacy mapping the reg corresponding to the internal
-                  mdio is the switch reg with an offset of -1.
-+                 Each phy have at least 3 LEDs connected and can be declared
-+                 using the standard LEDs structure.
- 
- patternProperties:
-   "^(ethernet-)?ports$":
-@@ -202,6 +204,7 @@ examples:
-     };
-   - |
-     #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
- 
-     mdio {
-         #address-cells = <1>;
-@@ -284,6 +287,27 @@ examples:
- 
-                 internal_phy_port1: ethernet-phy@0 {
-                     reg = <0>;
-+
-+                    leds {
-+                        #address-cells = <1>;
-+                        #size-cells = <0>;
-+
-+                        led@0 {
-+                            reg = <0>;
-+                            color = <LED_COLOR_ID_WHITE>;
-+                            function = LED_FUNCTION_LAN;
-+                            function-enumerator = <1>;
-+                            linux,default-trigger = "netdev";
-+                        };
-+
-+                        led@1 {
-+                            reg = <1>;
-+                            color = <LED_COLOR_ID_AMBER>;
-+                            function = LED_FUNCTION_LAN;
-+                            function-enumerator = <1>;
-+                            linux,default-trigger = "netdev";
-+                        };
-+                    };
-                 };
- 
-                 internal_phy_port2: ethernet-phy@1 {
--- 
-2.37.2
+The folio tree seems to contain a number of commits that duplicate
+commits in Linus' tree.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/m/5RI9o4xePV=SssdNMeTRZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaYnsACgkQAVBC80lX
+0GxXEgf+O7qP8dCM8we1DzXyzqpuUBhbhh1FyIeFErFCJjnFGRW1uvxsbzSklH6a
+b8/tlzmTV9taSFLcNFGSKT9MDOoBE5KJaHWQt2mBcivOJWMhtGkUJGTU73Dl5qdt
+DMXUi+B43rIqV8jTOuvcDPwAAtkacpeWRBrsn3RIs6rDz+LVYjaM8+1+s/cQeTh4
+vRPZUwXzLmuu0L2W9H+5c8VucRIMbnWFAgBRfU1zRrTrfaNGzVjDXDxiQ//GyABI
+y8R2jnTCzZYwKgc9b6UaQRg3BKNUSm6dZxcOOUlNwUFTvAsaQtJDMTW+qFJDd149
+cNybCzjDCrc8DrfcYPlpEjyDp6n8zw==
+=FyEd
+-----END PGP SIGNATURE-----
+
+--Sig_/m/5RI9o4xePV=SssdNMeTRZ--
