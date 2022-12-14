@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046EA64D323
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5084C64D325
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLNXQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 18:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S229763AbiLNXQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 18:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiLNXQ2 (ORCPT
+        with ESMTP id S229780AbiLNXQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:16:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853702CC9B;
-        Wed, 14 Dec 2022 15:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=C4PlJ3Sy7zWtp1PRUv3TzmsgmH1qPuEi2ojtvvgE5Ao=; b=OrKgF8eNHEWDfiaSD2I6V6hj+H
-        BP/ZjuxCLXtd6cJzTazwX/1XnUHqYEV+bisGpK5c3q+6znFwNPIbbGsx/bjfKzhzqwEFhHVD8Q1wT
-        FsYWWJk5kU7zzVb21/+wrwwNgfiXQpEcKf60UWbYde1BJO3bsPglEG3niZLM+5zGjryzkj4JrU0Mm
-        JNYQYxzHWUcGKIqvgWjap/XA/UtFdSyZ+nU+hvPe7+Fi5AZCj01Bbhg2BqfbsYKyE1jY+CRePZC2i
-        sX8aqTk5/A9SCv9j6ihrvVzpaCibkvszVQH/HklNsIsFR0LiRRKNMfJNqUkGWd6STIrK+Z+8cf4/a
-        cLBPkwtA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5az9-004BzT-MS; Wed, 14 Dec 2022 23:16:23 +0000
-Message-ID: <7a2bbeed-59c2-024f-4778-3f4db3d7beaa@infradead.org>
-Date:   Wed, 14 Dec 2022 15:16:22 -0800
+        Wed, 14 Dec 2022 18:16:45 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FFF249B5A;
+        Wed, 14 Dec 2022 15:16:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00A69FEC;
+        Wed, 14 Dec 2022 15:17:22 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2F8A3F5A1;
+        Wed, 14 Dec 2022 15:16:40 -0800 (PST)
+Date:   Wed, 14 Dec 2022 23:16:39 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 09/22] sched/fair: Use IPC class score to select a
+ busiest runqueue
+Message-ID: <Y5pZV0txyK2Fkkg6@arm.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
+ <Y5Gld+cThNOPFvgX@arm.com>
+ <20221214003243.GC30234@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH] mm/mempolicy: Fix memory leak in
- set_mempolicy_home_node system call
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Huang Ying <ying.huang@intel.com>, linux-api@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221214222110.200487-1-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214003243.GC30234@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +60,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ricardo,
 
-
-On 12/14/22 14:21, Mathieu Desnoyers wrote:
-> When encountering any vma in the range with policy other than MPOL_BIND
-> or MPOL_PREFERRED_MANY, an error is returned without issuing a mpol_put
-> on the policy just allocated with mpol_dup().
+On Tuesday 13 Dec 2022 at 16:32:43 (-0800), Ricardo Neri wrote:
+[..]
+> > >  /**
+> > > @@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+> > >  {
+> > >  	struct rq *busiest = NULL, *rq;
+> > >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
+> > > +	int i, busiest_ipcc_delta = INT_MIN;
+> > >  	unsigned int busiest_nr = 0;
+> > > -	int i;
+> > >  
+> > >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+> > >  		unsigned long capacity, load, util;
+> > > @@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+> > >  
+> > >  		case migrate_task:
+> > >  			if (busiest_nr < nr_running) {
+> > > +				struct task_struct *curr;
+> > > +
+> > >  				busiest_nr = nr_running;
+> > >  				busiest = rq;
+> > > +
+> > > +				/*
+> > > +				 * Remember the IPC score delta of busiest::curr.
+> > > +				 * We may need it to break a tie with other queues
+> > > +				 * with equal nr_running.
+> > > +				 */
+> > > +				curr = rcu_dereference(busiest->curr);
+> > > +				busiest_ipcc_delta = ipcc_score_delta(curr,
+> > > +								      env->dst_cpu);
+> > > +			/*
+> > > +			 * If rq and busiest have the same number of running
+> > > +			 * tasks, pick rq if doing so would give rq::curr a
+> > > +			 * bigger IPC boost on dst_cpu.
+> > > +			 */
+> > > +			} else if (sched_ipcc_enabled() &&
+> > > +				   busiest_nr == nr_running) {
+> > > +				struct task_struct *curr;
+> > > +				int delta;
+> > > +
+> > > +				curr = rcu_dereference(rq->curr);
+> > > +				delta = ipcc_score_delta(curr, env->dst_cpu);
+> > > +
+> > > +				if (busiest_ipcc_delta < delta) {
+> > > +					busiest_ipcc_delta = delta;
+> > > +					busiest_nr = nr_running;
+> > > +					busiest = rq;
+> > > +				}
+> > >  			}
+> > >  			break;
+> > >  
+> > 
+> > While in the commit message you describe this as breaking a tie for
+> > asym_packing,
 > 
-> This allows arbitrary users to leak kernel memory.
+> Are you referring to the overall series or this specific patch? I checked
+> commit message and I do not see references to asym_packing.
+
+Sorry, my bad, I was thinking about the cover letter, not the commit
+message. It's under "+++ Balancing load using classes of tasks. Theory
+of operation".
+
 > 
-> Fixes: c6018b4b2549 ("mm/mempolicy: add set_mempolicy_home_node syscall")
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Cc: Ben Widawsky <ben.widawsky@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Feng Tang <feng.tang@intel.com>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Huang Ying <ying.huang@intel.com>
-> Cc: <linux-api@vger.kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: stable@vger.kernel.org # 5.17+
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  mm/mempolicy.c | 1 +
->  1 file changed, 1 insertion(+)
+> > the code here does not only affect asym_packing. If
+> > another architecture would have sched_ipcc_enabled() it would use this
+> > as generic policy, and that might not be desired.
 > 
-> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> index 61aa9aedb728..02c8a712282f 100644
-> --- a/mm/mempolicy.c
-> +++ b/mm/mempolicy.c
-> @@ -1540,6 +1540,7 @@ SYSCALL_DEFINE4(set_mempolicy_home_node, unsigned long, start, unsigned long, le
->  		 * the home node for vmas we already updated before.
->  		 */
->  		if (new->mode != MPOL_BIND && new->mode != MPOL_PREFERRED_MANY) {
-> +			mpol_put(new);
->  			err = -EOPNOTSUPP;
->  			break;
->  		}
+> Indeed, the patchset implements support to use IPCC classes for asym_packing,
+> but it is not limited to it.
+> 
 
--- 
-~Randy
+So is your current intention to support IPC classes only for asym_packing
+for now? What would be the impact on you if you were to limit the
+functionality in this patch to asym_packing only?
+
+> It is true that I don't check here for asym_packing, but it should not be a
+> problem, IMO. I compare two runqueues with equal nr_running, either runqueue
+> is a good choice. This tie breaker is an overall improvement, no?
+> 
+
+It could be, but equally there could be other better policies as well -
+other ways to consider IPC class information to break the tie.
+
+If other architectures start having sched_ipcc_enabled() they would
+automatically use the policy you've decided on here. If other policies
+are better for those architectures this generic policy would be difficult
+to modify to ensure there are no regressions for all other architectures
+that use it, or it would be difficult to work around it.
+
+For this and for future support of IPC classes I am just wondering if we
+can better design how we enable different architectures to have different
+policies.
+
+Thanks,
+Ionela.
+
+> Thanks and BR,
+> Ricardo
