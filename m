@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB4A64CE3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0E564CE41
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbiLNQkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S238772AbiLNQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239095AbiLNQkH (ORCPT
+        with ESMTP id S229649AbiLNQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:40:07 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8586554
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:40:04 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id v2so3686341ioe.4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:40:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WKOOiUPKftict/8DhQFtuAp51sa4ovrd2kJ1MyabHJw=;
-        b=O3GKHlfCENCpCId9rzfgQyNazbXImgRjhe1IswoXuSD+obIOxQMzCJvjjn4DSO8TfB
-         pnhJIYsu7L+bfp85STMCZNRGPLJsWYDIbGEnTiTNqiQ6QQMWtnc1xXP3s/hb29i0HQx8
-         xLGWppNpMlvdaaE09ISsLcVZ+umUpgvV1+VKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WKOOiUPKftict/8DhQFtuAp51sa4ovrd2kJ1MyabHJw=;
-        b=t+siGAKc0sL931k8jeFMtF3tckepu+FVCQCblWua5msCITSbqd7RygcG56iu3leRwY
-         z8XwXthS9bnJki+LEDX5O2QJ04seg3n6af2RxP/xZfObgVeGrkMZ+Ejop7o6+e4fxIGC
-         QOpUcIB0yZFvfAmOEu4Gf4+UXzgwgEJpu/Lujlr838sYUswODkeuMiQwUsr/fXbiO2eW
-         ow/qpCeRnUMF3z0rQFXwcO1XOSwVh8ltdXC499bFTavTPesFaAk+u1nIay2Spn0GtdWr
-         Nwf0mUs+Fq+jKq70cTk5P/HJwrUCpU6Cn5V2hsW/iKy0ywkQh1HDvOpeP+ODWEE7kiYX
-         E3gQ==
-X-Gm-Message-State: ANoB5pmmriDHD6XvyHadLjVJBFFAt4nSlLafPGA1J3+s1urla0KP6I4u
-        BIeiBbc0pybGn/28CD630wEQMQ==
-X-Google-Smtp-Source: AA0mqf4uk2vQ/34IoSVvV22g4d7cg9twWjLWq2DpSCNefcinONz0Gv+PJabIJlO243XLGuqdLtAuPg==
-X-Received: by 2002:a6b:500e:0:b0:6e2:d3f7:3b60 with SMTP id e14-20020a6b500e000000b006e2d3f73b60mr2416935iob.2.1671036003942;
-        Wed, 14 Dec 2022 08:40:03 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c17-20020a023311000000b0038a0182e0casm1939716jae.11.2022.12.14.08.40.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 08:40:03 -0800 (PST)
-Message-ID: <808f35bf-2800-c34b-cae9-4d8eaa11294d@linuxfoundation.org>
-Date:   Wed, 14 Dec 2022 09:40:02 -0700
+        Wed, 14 Dec 2022 11:43:40 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA3B2630;
+        Wed, 14 Dec 2022 08:43:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ta+FkplGhIQKdorRO8rZ4lONlODdKGw1emfoP2dg42Q=; b=JYDzwpAonrVhdqNUlrzeg2/AYt
+        Ee5Z8uENr87qybhJnwlgvbnmQVfAm6sAde48sjjB9Ji6ZRkZeiyGJXYlK/lsiknTzDumZfpmwh/qn
+        groS5dMaDBigUIaxg4Lo9Y4dNm6PGmaHVpt3kRx8JvgSOH9qXIoqTxDw5IaDGPwtLOUMC2FIpLfjR
+        BUa5maQj2iVjl+2P9bv2/kA7C5sv7Y2ym0AIusZG3YDITRkkdJlJlgFi03oNiJVTIMdXLbOZK3xbk
+        rUinHuAfTlsIfOzrjBWQRCSIYmKqnRxFMvKnb77Gdsc6GyE/BHBXL4rJPtOtTdhheYJNSzncy1IAZ
+        qghj2D7Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p5Uqv-000m01-3e; Wed, 14 Dec 2022 16:43:29 +0000
+Date:   Wed, 14 Dec 2022 08:43:29 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
+ init/do_mounts.c
+Message-ID: <Y5n9MYEkrnAF4Ztv@infradead.org>
+References: <cover.1668644705.git.daniel@makrotopia.org>
+ <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
+ <Y3XM62P7CaeKXFsz@infradead.org>
+ <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
+ <Y3zCdJr5dKsADsnM@infradead.org>
+ <Y5NpsmN/npnG8lxY@makrotopia.org>
+ <Y5buTVuu0pfqBQh+@infradead.org>
+ <Y5cKSRmZ45OJq6Qq@makrotopia.org>
+ <Y5ggLBy+XBjl/vYj@infradead.org>
+ <Y5hz5+yXWDadDhRB@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] kselftest/alsa: Increase kselftest timeout
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221214130353.1989075-1-nfraprado@collabora.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221214130353.1989075-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5hz5+yXWDadDhRB@makrotopia.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/14/22 06:03, Nícolas F. R. A. Prado wrote:
-> The default timeout for kselftests is 45 seconds, but that isn't enough
-> time to run pcm-test when there are many PCMs on the device, nor for
-> mixer-test when slower control buses and fancier CODECs are present.
+On Tue, Dec 13, 2022 at 12:45:27PM +0000, Daniel Golle wrote:
+> > Yes, but a completely non-standard format that nests inside an
+> > partition.
 > 
-> As data points, running pcm-test on mt8192-asurada-spherion takes about
-> 1m15s, and mixer-test on rk3399-gru-kevin takes about 2m.
-> 
-> Set the timeout to 4 minutes to allow both pcm-test and mixer-test to
-> run to completion with some slack.
-> 
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
-> Changes in v2:
-> - Reduced timeout from 10 to 4 minutes
-> - Tweaked commit message to also mention mixer-test and run time for
->    mixer-test on rk3399-gru-kevin
-> 
+> The reason for this current discussion (see subject line) is exactly
+> that you didn't like the newly introduced partition type GUID which
+> then calls the newly introduced partition parser taking care of the
+> uImage.FIT content of a partition.
 
-What I have in mind is that the default run can be limited scope.
-Run it on a few controllers and in the report mention that a full
-test can be run as needed.
+Which is the exact nesting I'm complaining about.  Why do you need
+to use your format inside a GPT partition table?  What you're doing
+is bascially nesting a partition table format inside another one,
+which doesn't make any sense at all.
 
-There are a couple of examples of default vs. full test runs - cpu
-and memory hot-lug tests.
+> This block driver (if built-into the kernel and relied upon to expose
+> the block device used as root filesystem) will need to identify the
+> lower device it should work on. And for that the helper functions such
+> as devt_from_devname() need to be available for that driver.
 
-thanks,
--- Shuah
+And devt_from_devname must not be used by more non-init code.  It is
+bad it got exposed at all, but new users are not acceptable.
+
+> A block representation is the common denominator of all the
+> above. Sure, I could implement splitting MTD devices according to
+> uImage.FIT and then add MTD support to squashfs. Then implement
+> splitting of UBI volumes and add UBI support to squashfs.
+
+Implementing MTD and/or UBI support would allow you to build a
+kernel without CONFIG_BLOCK, which will save you a lot more than
+the 64k you were whining about above.
+
+> > None of this explains the silly nesting inside the GPT partition.
+> > It is not needed for the any use cases and the root probem here.
+> 
+> So where would you store the uImage (which will have to exist
+> even to just load kernel and DTB in U-Boot, even without containing
+> the root filesystem) on devices with eMMC then?
+
+Straight on the block device, where else?
+
+> Are you suggesting to come up with an entirely new type of partition
+> table only for that purpose? Which will require its own tools and
+> implementation in both, U-Boot and Linux? What would be the benefit
+> over just using GPT partitioning?
+
+Why do you need another layer of partitioning instead of storing
+all your information either in the uImage, or in some other
+partition format of your choice?
+
+See, if you have GPT, DOS or whatever partitions, you just use
+partitions and store all the bits your care about in them.
+If you want a fancy not invented here syndrome image format you use that.
+But don't use both.
