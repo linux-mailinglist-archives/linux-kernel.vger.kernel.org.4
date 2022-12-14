@@ -2,132 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FDE64CB78
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F169764CB7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiLNNmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S238364AbiLNNnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiLNNmK (ORCPT
+        with ESMTP id S229712AbiLNNnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:42:10 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D6426AC3;
-        Wed, 14 Dec 2022 05:42:06 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4NXGkN0yH9z9snF;
-        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hfhTWXB50so6; Wed, 14 Dec 2022 14:42:04 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4NXGkN05yxz9sn7;
-        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E7C018B773;
-        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id yYyqfqsYJ_Hn; Wed, 14 Dec 2022 14:42:03 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.109])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A4C018B766;
-        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BEDfs3H890976
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 14:41:54 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BEDfqfY890971;
-        Wed, 14 Dec 2022 14:41:52 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-spi@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] spi: fsl_spi: Don't change speed while chipselect is active
-Date:   Wed, 14 Dec 2022 14:41:33 +0100
-Message-Id: <8aab84c51aa330cf91f4b43782a1c483e150a4e3.1671025244.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.38.1
+        Wed, 14 Dec 2022 08:43:42 -0500
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3719B26AB2;
+        Wed, 14 Dec 2022 05:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671025420; x=1702561420;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=j49w88zeX80I/lhexMJ1SYcBIfI9xA/ghlBvzz4brOs=;
+  b=DdIBDmwNAmKKno/3VsmnJ6z5htnd3HMVqp0kO5AFryFkkjan3AdjHgdk
+   wAL275Ifw5OSqC3u5wT2wCESFA1eJJUmJjk6526cxfUWLM7Y9HVdVRe4/
+   w0i6SaWAibs5t/bQve+ExnqfYob5vGUJjV2NZS07Q6Jec0cLUm+MWTjRc
+   8=;
+X-IronPort-AV: E=Sophos;i="5.96,244,1665446400"; 
+   d="scan'208";a="290469028"
+Subject: Re: [PATCH 1/1] i2c: designware: add pinctrl for recovery info as an option
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 13:43:33 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com (Postfix) with ESMTPS id 07414416D6;
+        Wed, 14 Dec 2022 13:43:32 +0000 (UTC)
+Received: from EX19D008UEA001.ant.amazon.com (10.252.134.62) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 14 Dec 2022 13:43:32 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D008UEA001.ant.amazon.com (10.252.134.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
+ Wed, 14 Dec 2022 13:43:32 +0000
+Received: from [10.95.76.42] (10.95.76.42) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Wed, 14 Dec 2022 13:43:29 +0000
+Message-ID: <806e1787-1f6d-7551-52fd-2e1e25aebaef@amazon.com>
+Date:   Wed, 14 Dec 2022 15:43:28 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671025291; l=2546; s=20211009; h=from:subject:message-id; bh=8/jPqVq6+i4ZTuwdyPTYisS3aYHreLAZCFf6R55Qckc=; b=qC4a0ccjJlEsJPlSdNoPiAK0OdPp36lryj0XAXdRWkYMSkTpCRSKsHcmDwFHDrSe4T7embn0AI06 R/d0B4vFB3QmoUTj3Dpc7VRNc76rQnest+fh3CBywicoYi5Lwg4K
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <jarkko.nikula@linux.intel.com>, <mika.westerberg@linux.intel.com>,
+        <jsd@semihalf.com>, <linux-i2c@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@amazon.com>, <ronenk@amazon.com>, <talel@amazon.com>,
+        <jonnyc@amazon.com>, <hanochu@amazon.com>, <farbere@amazon.com>,
+        <itamark@amazon.com>
+References: <20221214102707.60018-1-hhhawa@amazon.com>
+ <Y5m2nux5Q1npXAo+@smile.fi.intel.com>
+Content-Language: en-US
+From:   "Hawa, Hanna" <hhhawa@amazon.com>
+In-Reply-To: <Y5m2nux5Q1npXAo+@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c9bfcb315104 ("spi_mpc83xx: much improved driver") made
-modifications to the driver to not perform speed changes while
-chipselect is active. But those changes where lost with the
-convertion to tranfer_one.
 
-Previous implementation was allowing speed changes during
-message transfer when cs_change flag was set.
-At the time being, core SPI does not provide any feature to change
-speed while chipselect is off, so do not allow any speed change during
-message transfer, and perform the transfer setup in prepare_message
-in order to set correct speed while chipselect is still off.
 
-Reported-by: Herve Codina <herve.codina@bootlin.com>
-Fixes: 64ca1a034f00 ("spi: fsl_spi: Convert to transfer_one")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Tested-by: Herve Codina <herve.codina@bootlin.com>
----
- drivers/spi/spi-fsl-spi.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+On 12/14/2022 1:42 PM, Andy Shevchenko wrote:
+> Can you explain, why pinctrl_bind_pins() is not enough?
+> 
+> (You may also refer to the ab78029ecc34 ("drivers/pinctrl: grab default handles
+>   from device core") for more details.)
 
-diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
-index 731624f157fc..93152144fd2e 100644
---- a/drivers/spi/spi-fsl-spi.c
-+++ b/drivers/spi/spi-fsl-spi.c
-@@ -333,13 +333,26 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
- {
- 	struct mpc8xxx_spi *mpc8xxx_spi = spi_controller_get_devdata(ctlr);
- 	struct spi_transfer *t;
-+	struct spi_transfer *first;
+Thanks for your reviewing and pointing to this function.
+
+No need to recall the devm_pinctrl_get() during the i2c probe, as the 
+pinctrl_bind_pins() is enough to init the pinctrl struct. But still need 
+to set the rinfo->pinctrl with dev->pins->p, will upload new patchset.
+
+The change will look like:
+
+@@ -832,6 +833,9 @@ static int i2c_dw_init_recovery_info(struct 
+dw_i2c_dev *dev)
+         struct i2c_adapter *adap = &dev->adapter;
+         struct gpio_desc *gpio;
+
++       if (dev->dev->pins && dev->dev->pins->p)
++               rinfo->pinctrl = dev->dev->pins->p;
 +
-+	first = list_first_entry(&m->transfers, struct spi_transfer,
-+				 transfer_list);
- 
- 	/*
- 	 * In CPU mode, optimize large byte transfers to use larger
- 	 * bits_per_word values to reduce number of interrupts taken.
-+	 *
-+	 * Some glitches can appear on the SPI clock when the mode changes.
-+	 * Check that there is no speed change during the transfer and set it up
-+	 * now to change the mode without having a chip-select asserted.
- 	 */
--	if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
--		list_for_each_entry(t, &m->transfers, transfer_list) {
-+	list_for_each_entry(t, &m->transfers, transfer_list) {
-+		if (t->speed_hz != first->speed_hz) {
-+			dev_err(&m->spi->dev,
-+				"speed_hz cannot change during message.\n");
-+			return -EINVAL;
-+		}
-+		if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
- 			if (t->len < 256 || t->bits_per_word != 8)
- 				continue;
- 			if ((t->len & 3) == 0)
-@@ -348,7 +361,7 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
- 				t->bits_per_word = 16;
- 		}
- 	}
--	return 0;
-+	return fsl_spi_setup_transfer(m->spi, first);
- }
- 
- static int fsl_spi_transfer_one(struct spi_controller *controller,
--- 
-2.38.1
+         gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+         if (IS_ERR_OR_NULL(gpio))
+                 return PTR_ERR_OR_ZERO(gpio);
 
+Thanks,
+Hanna
