@@ -2,130 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B473764C7F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE4B64C7F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238023AbiLNL2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S238178AbiLNL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiLNL2f (ORCPT
+        with ESMTP id S237912AbiLNL3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:28:35 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09C721A7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:28:33 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id n1so6336226ljg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:28:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hvAroDdwWclT+I1GDECncBtB6bsktnycLSnAVtAlODs=;
-        b=Reb/5qzPI3qaiOQfZcT9RXpEa6WuSyCt1st2wjWRyv2Tg6iQOsWg/LrvuQz8gfck9N
-         T9W5ieky2Z8+iY9+a/v69QRtebr+JzOhCEYSmLFRNE8e/eveWrC+7cXRiShigyZq/wCZ
-         Nco1eJD3WmTXTzHdroV681g5MtC2YHWKi4Tlm+9HbVeVgg1ZyhESuH67yxUBVint+uOe
-         gyYQCNlNlbL984MXe5zm54oI450m8lw0lyGG+H8rfAHkVUofVKMimSdAlHPzkkMuib9n
-         PBECSdvwN3kno4QEBfW+vtJC5gPotDRhEIMH16GIopJo2tl++U6g+5cm1Jkb8tkxgfIc
-         Bw9w==
+        Wed, 14 Dec 2022 06:29:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA643FAD9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671017333;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3XelnpOuY5/WYkqlV/X03EOrEyOH1/4r4MLd+9T0uOI=;
+        b=SJlDy6mCyvJy5iuOW4xooP+23n8z8Kof3FpE9e3G8EJJTeqN5Rl1euka92GQdMUtdrhe/1
+        W3g+BzOotQms0YsfFPamK4upI4gi1OHVMNR8N67i6sAuGLIIljQsqmacT3PgLeGG4b2N+3
+        wnemdh5pXx9CjGu3rE92SeVGWz384+U=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-58-XdAWSywyPbylqHvTG4tUoQ-1; Wed, 14 Dec 2022 06:28:52 -0500
+X-MC-Unique: XdAWSywyPbylqHvTG4tUoQ-1
+Received: by mail-ed1-f71.google.com with SMTP id q10-20020a056402518a00b00472a255eef7so591215edd.15
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:28:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvAroDdwWclT+I1GDECncBtB6bsktnycLSnAVtAlODs=;
-        b=nK4BQZETTfG4jDoO43Z6staBoQbfEvXYRSX6+LAwPCbH80F0ftbL8uql5UroRUmsnV
-         BfozJ+yqDZlZdgZ0Ixq45tKWG/ow3FPmTwH0wy1el38W7z6qF9a/Vhh0lRu816xmch8q
-         p9PCj9GhwH1qaN8okh1cg+QJpsmlmnmauU22nYPb7UmKgxDnMBlqkts6RzdVUzYjC++o
-         NUvxHf9Kp6t5ngFMZ1KBvm7tDS93+OtqrJ0GublWiOVW6TUwOvkMVbW9MHV1+Z/rtXJJ
-         Em12uuOWsPxEJC7wAAtnY6hkuzESxiWoREWoT5nUdA7dqMHgpe6LXAoGG1prw+mrMoSi
-         XWtg==
-X-Gm-Message-State: ANoB5plRNw2VDbKQ/mneFaYkg8bX3gCaQVg0UJZAWGI+GKfr2DtyfARI
-        wyNrB8asp8Nf7T+HOqo/u5djJg==
-X-Google-Smtp-Source: AA0mqf5cBv+2ZGd6dWzFv9AajyDVrzF26X3qOsccWljiZU8RbckicbCeyN6eZKSVMcy7BieAsQmgcQ==
-X-Received: by 2002:a05:651c:238a:b0:27b:4c80:d07b with SMTP id bk10-20020a05651c238a00b0027b4c80d07bmr4178936ljb.52.1671017312137;
-        Wed, 14 Dec 2022 03:28:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z27-20020a2eb53b000000b00279c85d4400sm562101ljm.60.2022.12.14.03.28.30
+        bh=3XelnpOuY5/WYkqlV/X03EOrEyOH1/4r4MLd+9T0uOI=;
+        b=TgO2Fk/qsvxZp6oZbYhXYE54Y+xFMxQL1az50xxqBZQ2uNjvQllL4sqRFYPLPWFUBh
+         y3BWMqAgsQ3PFw6BxOr9GCAb9U3rbx5KDZbrDwkgtIQqR3jC++OODblJkS3uXT9F94lI
+         83chJ7Yb/wyz/kkVLA0qTcL/hQJ6b+S3DfkldTs4We2gj1VHax8P1nbSZP8AAe2/WyYM
+         l93mO5BvpcFyfsHKSYycHd6R5PmoEoJik2LVv2fIZ6EEjXYJmekYG/5HNiLx5iG1Mzix
+         yVzwA/nmYFSwyTvH3umFJSIAoJGdZlSy9/JoIRGUdcXHeyHrLcnqk6/20Cf4PV5AtLva
+         hHqA==
+X-Gm-Message-State: ANoB5pmlh/wTeXJ9Wwc+n1znHYjNoM8HjnS1F6rG0/TBWeEVX83Kj1cj
+        YGlOggcfreBhzI9EBw/F58clQMPx0BItQw6a2Xwaa9fB9NjQcJbeTtY1qUlBW5cR8fZhLlMNsAz
+        fFP2CAPAUGomqHxa0mAwi0FU9
+X-Received: by 2002:a17:907:2e01:b0:7c1:4785:d650 with SMTP id ig1-20020a1709072e0100b007c14785d650mr15753710ejc.26.1671017331311;
+        Wed, 14 Dec 2022 03:28:51 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf51zQh3SZbC7NTgw2aWPtw7FbZNJ77uN6cebDF0KH1vWAazOQTKapn1o/HoydATeVdIirBWLg==
+X-Received: by 2002:a17:907:2e01:b0:7c1:4785:d650 with SMTP id ig1-20020a1709072e0100b007c14785d650mr15753699ejc.26.1671017331116;
+        Wed, 14 Dec 2022 03:28:51 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id qx38-20020a170907b5a600b0078df3b4464fsm5815368ejc.19.2022.12.14.03.28.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 03:28:31 -0800 (PST)
-Message-ID: <1d3c7d01-bfa9-6654-28d9-b9f4964a88a4@linaro.org>
-Date:   Wed, 14 Dec 2022 12:28:30 +0100
+        Wed, 14 Dec 2022 03:28:50 -0800 (PST)
+Message-ID: <8cf30cb2-6dec-b21b-ba15-f21490546426@redhat.com>
+Date:   Wed, 14 Dec 2022 12:28:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] remoteproc: qcom_q6v5_mss: Use a carveout to
- authenticate modem headers
-Content-Language: en-US
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        manivannan.sadhasivam@linaro.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
-        regressions@leemhuis.info, sumit.semwal@linaro.org,
-        will@kernel.org, catalin.marinas@arm.com, robin.murphy@arm.com
-References: <20221213140724.8612-1-quic_sibis@quicinc.com>
- <20221213140724.8612-5-quic_sibis@quicinc.com>
- <8739f59b-c551-2da4-5523-a89f960bd402@linaro.org>
- <f4595a18-23bd-d54f-4e50-c0ed63008225@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f4595a18-23bd-d54f-4e50-c0ed63008225@quicinc.com>
+Subject: Re: [PATCH v2] i2c: designware: Fix unbalanced suspended flag
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, jsd@semihalf.com, wsa@kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221213144524.368297-1-rf@opensource.cirrus.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221213144524.368297-1-rf@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 11:33, Sibi Sankar wrote:
-> 
-> 
-> On 12/14/22 01:17, Krzysztof Kozlowski wrote:
->> On 13/12/2022 15:07, Sibi Sankar wrote:
->>> The memory region allocated using dma_alloc_attr with no kernel mapping
->>> attribute set would still be a part of the linear kernel map. Any access
->>> to this region by the application processor after assigning it to the
->>> remote Q6 will result in a XPU violation. Fix this by replacing the
->>> dynamically allocated memory region with a no-map carveout and unmap the
->>> modem metadata memory region before passing control to the remote Q6.
->>>
->>> Reported-by: Amit Pundir <amit.pundir@linaro.org>
->>> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
->>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->>> ---
->>
->> Thank you for your patch. There is something to discuss/improve.
->>>   
->>>   	return ret < 0 ? ret : 0;
->>> @@ -1882,6 +1899,26 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->>>   	qproc->mpss_phys = qproc->mpss_reloc = r.start;
->>>   	qproc->mpss_size = resource_size(&r);
->>>   
->>> +	if (!child) {
->>> +		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
->>> +	} else {
->>> +		child = of_get_child_by_name(qproc->dev->of_node, "metadata");
->>
->> Bindings do not allow to have child "metadata", do they?
-> 
-> memory-region property was used to specify mba/mpss region in a phandle
-> array only from SC7180 SoC. All the older dtbs in the wild/upstream
-> still had sub-nodes to achieve the same. Patch 3 allows for a sub-set
-> of the SoCs (MSM8996/MSM8998/SDM845) to use metadata as a sub-node so
-> as to not break bindings when newer kernel uses a older dtb.
+Hi Richard,
 
-This does not explain why you extend the driver without extending the
-bindings. You do not do it for legacy stuff but for SC7180. But even for
-legacy devices you cannot add new properties without having it in some
-legacy bindings.
+On 12/13/22 15:45, Richard Fitzgerald wrote:
+> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
+> i2c_mark_adapter_resumed().
+> 
+> dw_i2c_plat_resume() must always be called, so that
+> i2c_mark_adapter_resumed() is called. This is not compatible with
+> DPM_FLAG_MAY_SKIP_RESUME.
+> 
+> The pairing of pm_runtime_force_suspend() and pm_runtime_force_resume()
+> can replace this. If nothing is using the driver, and it is not currently
+> suspended, it will be put into runtime-suspend and will be left in
+> runtime-suspend during the system resume.
+> 
+> pm_runtime_force_suspend() is not compatible with DPM_FLAG_SMART_SUSPEND
+> so this must also be removed. DPM_FLAG_SMART_SUSPEND will set the device
+> back to pm_runtime_active() during resume_noirq if it cannot skip resume.
+> This would lead to the inconsistent state where the driver runtime_suspend
+> has been called (by force_suspend()) but it is marked active (by PM core).
+> 
+> The unbalanced suspended flag was introduced by
+> commit c57813b8b288 ("i2c: designware: Lock the adapter while setting the
+> suspended flag")
+> 
+> Before that commit, the system and runtime PM used the same functions. The
+> DPM_FLAG_MAY_SKIP_RESUME was used to skip the system resume if the driver
+> had been in runtime-suspend. If system resume was skipped, the suspended
+> flag would be cleared by the next runtime resume. The check of the
+> suspended flag was _after_ the call to pm_runtime_get_sync() in
+> i2c_dw_xfer(). So either a system resume or a runtime resume would clear
+> the flag before it was checked.
+> 
+> Having introduced the unbalanced suspended flag with that commit, a further
+> commit 80704a84a9f8 ("i2c: designware: Use the
+> i2c_mark_adapter_suspended/resumed() helpers")
+> 
+> changed from using a local suspended flag to using the
+> i2c_mark_adapter_suspended/resumed() functions. These use a flag that is
+> checked by I2C core code before issuing the transfer to the bus driver, so
+> there was no opportunity for the bus driver to runtime resume itself before
+> the flag check.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Fixes: c57813b8b288 ("i2c: designware: Lock the adapter while setting the suspended flag")
+
+Thank you. I like the new approach in this version.
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
 
 
-Best regards,
-Krzysztof
+
+> ---
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 26 ++++++++++-----------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index ba043b547393..590503e56bd0 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -349,17 +349,7 @@ static int dw_i2c_plat_probe(struct platform_device *pdev)
+>  	adap->dev.of_node = pdev->dev.of_node;
+>  	adap->nr = -1;
+>  
+> -	if (dev->flags & ACCESS_NO_IRQ_SUSPEND) {
+> -		dev_pm_set_driver_flags(&pdev->dev,
+> -					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> -	} else {
+> -		dev_pm_set_driver_flags(&pdev->dev,
+> -					DPM_FLAG_SMART_PREPARE |
+> -					DPM_FLAG_SMART_SUSPEND |
+> -					DPM_FLAG_MAY_SKIP_RESUME);
+> -	}
+> -
+> +	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+>  	device_enable_async_suspend(&pdev->dev);
+>  
+>  	/* The code below assumes runtime PM to be disabled. */
+> @@ -453,10 +443,15 @@ static int dw_i2c_plat_runtime_suspend(struct device *dev)
+>  static int __maybe_unused dw_i2c_plat_suspend(struct device *dev)
+>  {
+>  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = pm_runtime_force_suspend(dev);
+> +	if (ret)
+> +		return ret;
+>  
+>  	i2c_mark_adapter_suspended(&i_dev->adapter);
+>  
+> -	return dw_i2c_plat_runtime_suspend(dev);
+> +	return 0;
+>  }
+>  
+>  static int dw_i2c_plat_runtime_resume(struct device *dev)
+> @@ -474,8 +469,13 @@ static int dw_i2c_plat_runtime_resume(struct device *dev)
+>  static int __maybe_unused dw_i2c_plat_resume(struct device *dev)
+>  {
+>  	struct dw_i2c_dev *i_dev = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	/* Resume if pm_runtime_force_suspend() suspended. */
+> +	ret = pm_runtime_force_resume(dev);
+> +	if (ret)
+> +		return ret;
+>  
+> -	dw_i2c_plat_runtime_resume(dev);
+>  	i2c_mark_adapter_resumed(&i_dev->adapter);
+>  
+>  	return 0;
 
