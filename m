@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9907764CDF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A397A64CDEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239001AbiLNQZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S238965AbiLNQZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiLNQZU (ORCPT
+        with ESMTP id S238547AbiLNQY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:25:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B23F62FD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:24:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671035076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KBre76ofS18R3kxBaLYSoFNysmFxJK5f/1IE6UR16bc=;
-        b=Addu21WdL7KNi+9X8DE307PyqBjPoGLk/jn+6ztpAegCRePZnXWDMfDOYgx/mNPDttnRho
-        RQUQmRxkIT/bu8vTeAAnyfl2Eb+TQJM+XZ1N8iBeBTqZcRFuzO6AN5/dyRT7b3uHq9G0eq
-        1MOEkG06LyrPw2S7OFQxCBB0tMKmSTQ=
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
- [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-195-9EKPNg1lMQ626CFuawtRHA-1; Wed, 14 Dec 2022 11:24:35 -0500
-X-MC-Unique: 9EKPNg1lMQ626CFuawtRHA-1
-Received: by mail-yb1-f197.google.com with SMTP id q4-20020a056902150400b007354e051127so303212ybu.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:24:35 -0800 (PST)
+        Wed, 14 Dec 2022 11:24:57 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AA426AB4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:24:56 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id d13so128585qvj.8
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:24:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qzHb3BYDSLSeUMZDJLd4YwGNahPYdTjmV1gUzzgVQTg=;
+        b=Uh5P7zpQgXEWxW1yCKq8l4r7aYvvs5EwqgE9tk50OnhMd1AWo/TjP9sa2pEdbtd/Gy
+         S91yNAO3GMaFLc4aPQSaT04uSP5SoknrYroFjjzs6baSgHctFlTyXyKzuqgVwk+197WK
+         MaOJxS6w+iPfIv7qVayiZ5+GfYUPZhHD2EzT5lSZnPTn84a8yCFs7G3Ro5nQ+Fu0FARR
+         Fz9hkKGBS+CJASGmO6PIre4+BJq9VXgK4dEr68B5eJajq8nnAUa/5qyXeNmQM3RA35Jq
+         zjymxsb9jbMKA9mX8s5UNTEyYGDZU2FWErkLyHot7dCTfxQHXWZR7oJC8JpOShGqs1xg
+         z04Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KBre76ofS18R3kxBaLYSoFNysmFxJK5f/1IE6UR16bc=;
-        b=ChJXV/HHKJXViBqCgCAqKBBSl62qCvsAxtiWKq9CTJYhrGAX69oKNpbljiv8bxWzfO
-         WzDbgtCcpXU0LgUZzmcO8+v2TBTWW0WK844kxoXf2uhiUXe4XA/7T1SX8cK/VFbuTTFQ
-         rI3hqtn6xBCz2idubdpb8yeR1gP1FMwW1s4zJfHmKl99IAj8lvXtv5pJa6UoiHbBUERA
-         PRQ359u9EnYU3dnnzoE8nsZHRzwCuLo0tn8yoXVo05N78h5uJR7r+hp1cJkmyRfXXU8p
-         5qiSNOpnQ0CiASoTAApSzluZgzpfwLxCf0XQN2avX8Y7ihOAWFvCDxpdeSsUlMXT+QcT
-         e1Gw==
-X-Gm-Message-State: ANoB5pnuDy5Iiog4TQkqU+ml6LcqdmpcT0DzmEYX3aleOxxF08AirqoG
-        wtKmHBANRWnF4UxPqaXYI8JyRSh/w/cH29Xa5jRerxjJjlPXaQSllPF0t83PMLGgVnaIxs3Ca4Q
-        Yq7y7mOnXRZnUfYLsn8AOLw0e
-X-Received: by 2002:a05:7500:79f:b0:eb:900:b86b with SMTP id cx31-20020a057500079f00b000eb0900b86bmr2907186gab.56.1671035074621;
-        Wed, 14 Dec 2022 08:24:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5bIhNsTqRfwBoppu0IUDuVsmJ/FPH+vXpBDKTREuR0ShXKDiUVu3JFNpqSjU4/SW4TtxQ4Aw==
-X-Received: by 2002:a05:7500:79f:b0:eb:900:b86b with SMTP id cx31-20020a057500079f00b000eb0900b86bmr2907172gab.56.1671035074270;
-        Wed, 14 Dec 2022 08:24:34 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b006fa4cac54a5sm10211444qkb.72.2022.12.14.08.24.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:24:33 -0800 (PST)
-Date:   Wed, 14 Dec 2022 11:24:32 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ahalaney@redhat.com, echanude@redhat.com
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
- qup2_i2c18 nodes
-Message-ID: <Y5n4wFqhCdMz5bey@x1>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-4-bmasney@redhat.com>
- <309b3fad-933c-6c45-5cd7-4e082da62c15@linaro.org>
- <Y5nB1epKN4nbk3ma@x1>
- <6ab9171e-127b-12f3-cfe6-0fbf2b37080c@quicinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qzHb3BYDSLSeUMZDJLd4YwGNahPYdTjmV1gUzzgVQTg=;
+        b=ldMxau/Z0j0BF4ZVr+0r8yg+v33I2kOK3P6lo5fcsjAXUy9l6m76Z4YP+jMp2trXIP
+         9Nd9k8ANGqdTOZBKdBzWelfDLdp4HSgsAu9abzGgtPmZGajLskNe6yp0QtelIK9Sq9m7
+         nxMkwpC+0JPj56MTDAgt9dzACxjznU73hJmy2+18bcsTNvLK/bSK9yi1LJSizNJ88UuI
+         KEnJjLZ29PvfUUAcm5CfgMt6YiyK0gHRqFugNNMp6LG+w5setf0hNWJVu5CkFvBX8WVt
+         VBMmzgssaL7w3QfSvXyLvraCm0DrhHUnElSQWih2XlPW3lr2EIg+0nKDKZ1Dio6O1lcU
+         aQuw==
+X-Gm-Message-State: ANoB5pk4yBaLjVQqvfM1e4H+ouJ/ui6gNFmwL5qyoiQcOpcxeimVhBDP
+        an/egujyqXQaMx4ywSBKrkmAPsHW7kxf+Z9VZpltcQ==
+X-Google-Smtp-Source: AA0mqf4I7+dqEp8Ts4WiOrOEP1nUHBKOIsR1x/ajRXrn5iXGgAYO8eATEuZxTtsFodMwxU0WCz/2LbpZOML5tyJc5Pc=
+X-Received: by 2002:ad4:4f85:0:b0:4c7:2ab:b0f3 with SMTP id
+ em5-20020ad44f85000000b004c702abb0f3mr45261640qvb.69.1671035095508; Wed, 14
+ Dec 2022 08:24:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ab9171e-127b-12f3-cfe6-0fbf2b37080c@quicinc.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20221214044058.6289-1-David.Rau.opensource@dm.renesas.com>
+ <Y5nb7ik1cCKo+FlR@sirena.org.uk> <CAG+cZ07erTzV8Re-xo8GixpsEhK28Q6wHxQeE0co+sWgQAFgGA@mail.gmail.com>
+ <Y5nkDEcgbZ2vNEsK@sirena.org.uk>
+In-Reply-To: <Y5nkDEcgbZ2vNEsK@sirena.org.uk>
+From:   Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+Date:   Wed, 14 Dec 2022 17:24:44 +0100
+Message-ID: <CAG+cZ06PHgrLebLESbitdkupYcyZ6twr4uv6iczNxp5ztox-EA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ASoC: da7213: Add support for mono, set frame width
+ to 32 when possible
+To:     Mark Brown <broonie@kernel.org>
+Cc:     David Rau <David.Rau.opensource@dm.renesas.com>, tiwai@suse.com,
+        perex@perex.cz, support.opensource@diasemi.com,
+        lgirdwood@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,27 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 09:06:48PM +0530, Shazad Hussain wrote:
-> >      i2c0_default: i2c0-default-state {
-> >          pins = "gpio135", "gpio136";
-> >          function = "qup15";
-> >          drive-strength = <2>;
-> >          bias-pull-up;
-> >      };
-> > 
-> 
-> This is the default config we should use.
+On Wed, Dec 14, 2022 at 3:56 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Dec 14, 2022 at 03:31:26PM +0100, Piotr Wojtaszczyk wrote:
+> > It was a single patch, with no deps.
+> >
+>
+> It's flagged as patch 2/2?
 
-OK, I'll stick with this config.
+That's wrong tag, initially I submitted this as a single patch to
+`support.opensource@diasemi.com` and now it comes on LKML after
+testing by David Rau.
 
-> > Shazad: 'i2cdetect -a -y $BUSNUM) shows that all 5 buses have the same
-> > addresses listening. Is that expected? That seems a bit odd to me.
-> > 
-> 
-> Brian, even I haven't checked with all enabled, let me check this on other
-> projects and with downstream as well and get back to you.
-
-I'll post my v2 in a little bit so that you can test it.
-
-Brian
-
+--
+Piotr Wojtaszczyk
+Timesys
