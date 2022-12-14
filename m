@@ -2,183 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4100964C33C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A3264C337
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbiLNEou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:44:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S237185AbiLNEn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 23:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236968AbiLNEos (ORCPT
+        with ESMTP id S236968AbiLNEnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:44:48 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3F962C1
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:44:45 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221214044441epoutp0283f72b374dfcbbfc3edf6a2e5902f219~wj1rIjy_s2715827158epoutp02D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:44:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221214044441epoutp0283f72b374dfcbbfc3edf6a2e5902f219~wj1rIjy_s2715827158epoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1670993081;
-        bh=Nj4eOyaIYIxyFmCb03hT1yCV9IhQqWrapJ9UkMtcOI4=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=tUD7Oy9No8HQmSz9w6Me+8j5vLqSffcKgJewz2znK4PXtC6XpLdv/BEf2MnQXwgLm
-         PpqXMkKKboV//q/gw+jJsrssu2U78daw4M4YvnWJ4o9XOr7cqT6OnK8/2z/ewoG5Wq
-         pQo/tEsSDPG+pbLHK/RTw2TRVfGOioou9oNU+ylo=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221214044441epcas5p1652b9874687e222ea4b932624ce30ba5~wj1q2ypPx1275912759epcas5p15;
-        Wed, 14 Dec 2022 04:44:41 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4NX2pH6WR1z4x9QK; Wed, 14 Dec
-        2022 04:44:39 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9F.BA.39477.4B459936; Wed, 14 Dec 2022 13:44:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221214044118epcas5p1031923bfce745b90bd0930632d5e89c8~wjyta9UfF2054120541epcas5p13;
-        Wed, 14 Dec 2022 04:41:18 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221214044118epsmtrp1f2da44ad34a93153b8ea1704d3361182~wjytaPVBc2718327183epsmtrp1O;
-        Wed, 14 Dec 2022 04:41:18 +0000 (GMT)
-X-AuditID: b6c32a4a-007ff70000019a35-6f-639954b47f0f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FD.99.18644.DE359936; Wed, 14 Dec 2022 13:41:18 +0900 (KST)
-Received: from FDSFTE302 (unknown [107.122.81.78]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221214044116epsmtip213ea867997d61490b86aa081fe9c4d5a~wjyryTwzv2904229042epsmtip2w;
-        Wed, 14 Dec 2022 04:41:16 +0000 (GMT)
-From:   "Sriranjani P" <sriranjani.p@samsung.com>
-To:     "'Rob Herring'" <robh@kernel.org>
-Cc:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <pankaj.dubey@samsung.com>,
-        <ravi.patel@samsung.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20221209211004.GA3847427-robh@kernel.org>
-Subject: RE: [PATCH v2 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
- dedicated SYSREG compatibles to Exynos850
-Date:   Wed, 14 Dec 2022 10:11:13 +0530
-Message-ID: <051901d90f76$4e557040$eb0050c0$@samsung.com>
+        Tue, 13 Dec 2022 23:43:25 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE2A60FE
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:43:24 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id cf42so8613804lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 20:43:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ePtSpP/HbBedS26PomtLLslHHJHJCj5dUEEqmQ5fMs4=;
+        b=dQQSHhxq4b0+PXDE0vgYFieN6asUOV9bubVkHrSjANmo1qh/dZNP7TgcGfe1uehreM
+         hSL7v3Ck9YMwRrM15ptA/N1vB9gdkGCgZLSfbsv/34/xZ0m/W9eDEUB0TUa3F11gYUVV
+         2Ms+RK69RdWYFrmynzhyzH/IRHpjuf9kWL4278VwKRbYuDl5mt2aXmXT/Y7u/67TBEkA
+         B2TFYPvh9X7nX4H5MHSXqIgSLYUS8Nh5240LDFWzhIznXNCeWJcqeMjQmJarOLdMY33g
+         gu6x9XRjQdijude3+rkuSAUsCoUeq5flOEak2ugooJbw98yeVvr0iYi1VyRdg2RuREDP
+         RWgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ePtSpP/HbBedS26PomtLLslHHJHJCj5dUEEqmQ5fMs4=;
+        b=keRoD/TvqxjKZ45BnxvrqNbXRe9yspkZU5QIi+1EhKLnRzH3NbtbcGhECBf30J6Vy/
+         SwCrw73YtQD/uFq86535wU7BvaIwQhGvh+On4y1q/DnqrAoi+FlUxUZ1X8nsxp1ZxMT6
+         RYRrdACxyus/PMpQKcjaJz1yyShjupnMsiuViLPbrPNM84yAeuZss1Wu42AjY1wObCdz
+         6od2mXTs+VLS7c5aOsPpdVkscTY+kJ+2np9r09aGMs+VQpMn8OP8FbvMc2phTnpvgWPc
+         5Mpijux0YaosVusNXOLNIwGZzShvVKeJd+cMqE9E9gFUFqH/cuJbO8bfcshvIMSqA3O7
+         i9WQ==
+X-Gm-Message-State: ANoB5pkamrZKFjmpKRLrH6JzWjOBYx/9YD00RATJuYfXdX8XZKyFlcFL
+        aJKYx62nNXRcq6tdO/PhJlUBMvBq1VE3hKzGyNljwQ==
+X-Google-Smtp-Source: AA0mqf7H6b/wLDU/ymtPnzM3dE/TBbaPlmrFJvkxaeAGzVLzeBH0KAomCqO+0tBvHqDEY7QwFKWx2QUFu95xPDkqocM=
+X-Received: by 2002:a05:6512:a83:b0:4aa:f944:f7ec with SMTP id
+ m3-20020a0565120a8300b004aaf944f7ecmr27772242lfu.467.1670993002358; Tue, 13
+ Dec 2022 20:43:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLZYKx+9pYBmb//OFyznS7+M00/rAEXh8oHAbCk0ccBkwrlWaxJUJxA
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmlu6WkJnJBrNWCFs8mLeNzWL+kXOs
-        Fn0vHjJbbHp8jdXi8q45bBYzzu9jsli09Qu7xcMPe9gt/u/Zwe7A6bFpVSebx51re9g8Ni+p
-        9+jbsorR4/MmuQDWqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFsl
-        F58AXbfMHKB7lBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFJgV6xYm5xaV56Xp5
-        qSVWhgYGRqZAhQnZGe0dG1kKHgpW3H9xkaWB8SlvFyMnh4SAicTv6XNZuxi5OIQEdjNKzFr0
-        jAnC+cQoMaF9KzuE85lRYtLTf+wwLWv2fmOBSOxilFjS2AzV/5xRYn77PCaQKjYBfYnXK+az
-        gdgiAqoSTbMegHUwC3QySSy+eYUFJMEpYC7xYdYWMFtYoFRi95d5jCA2C1DDjWUvwZp5BSwl
-        Wl6vYYewBSVOznwCVs8sIC+x/e0cZoiTFCR+Pl0GdAUH0DI3iW//LSBKxCWO/uxhBtkrIbCQ
-        Q6Jx9TyoF1wkpl+/yQRhC0u8Or4FKi4l8bK/DcpOl9h8ZDMrhJ0j0dHUDLXLXuLAlTksILuY
-        BTQl1u/ShwjLSkw9tY4JYi+fRO/vJ1DjeSV2zIOx1SQWP+qEsmUk1j76xDqBUWkWks9mIfls
-        FpIXZiFsW8DIsopRMrWgODc9tdi0wCgvtRwe48n5uZsYwelVy2sH48MHH/QOMTJxMB5ilOBg
-        VhLhVdWYlizEm5JYWZValB9fVJqTWnyI0RQY3BOZpUST84EJPq8k3tDE0sDEzMzMxNLYzFBJ
-        nHfplI5kIYH0xJLU7NTUgtQimD4mDk6pBqYSJ/FprhG7JRkfl1ZlXoredWjLeUMPVsfssyJv
-        8zaIHQp0+McSsqT83u/jK/Inl80xnXU+cuLptUZPpNM/Bp7RTvf+eILn7BcGdodOrqULxI8n
-        lin2BId0ME6cF3Pokt2jnulMTLv7vL4V6nDtKMxbvjw+i2FmpeLsEMvDdQ3sz9+d+/JTL/C2
-        9FmmhFXLJ9+fa1x0OST2/PYzvesSPuwU/n50hTWzxmf1jmVFJ22kjuzel1NtqrNls2Kc+vnr
-        QSEzGO2cS28teGiRyej1RXbd+ZMBKqUukTvamYvcVEvvXBK8cG76Efu5fU+vemuvZXh17qKz
-        wMlNnrMVVN1u92/cH6Rj1Jv3SHM1t9zJDDUlluKMREMt5qLiRADIw8PVOAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJXvdd8MxkgzsTmCwezNvGZjH/yDlW
-        i74XD5ktNj2+xmpxedccNosZ5/cxWSza+oXd4uGHPewW//fsYHfg9Ni0qpPN4861PWwem5fU
-        e/RtWcXo8XmTXABrFJdNSmpOZllqkb5dAldGe8dGloKHghX3X1xkaWB8ytvFyMkhIWAisWbv
-        N5YuRi4OIYEdjBKH589mhUjISJx8sIQZwhaWWPnvOTtE0VNGie6eRUwgCTYBfYnXK+azgdgi
-        AqoSTbMegE1iFpjIJPH+/C9miI53jBJv2x6zgFRxCphLfJi1BcwWFiiW+PxgGZjNAtR9Y9lL
-        sEm8ApYSLa/XsEPYghInZz4Bq2EW0JNYv34OI4QtL7H97Ryo8xQkfj5dBnQ2B9AVbhLf/ltA
-        lIhLHP3ZwzyBUXgWkkmzkEyahWTSLCQtCxhZVjFKphYU56bnFhsWGOWllusVJ+YWl+al6yXn
-        525iBMeYltYOxj2rPugdYmTiYDzEKMHBrCTCq6oxLVmINyWxsiq1KD++qDQntfgQozQHi5I4
-        74Wuk/FCAumJJanZqakFqUUwWSYOTqkGpoqrmctTtNLKFxYvK8pjNc+b23bPZWtD+1WvM/qv
-        HP161noofjD71DttzbJJTj6Xu2SaAw/NODstuWxKQqYUa9RtyU5nsR8CN/pXdPJmPJNZ83WH
-        647mR0Wfpof3tpjeUrPcvVSnc2vcnOUbhAs37a5/3XAxnGumLqceZ5Os+sGOs1m+SaY/Jtww
-        KOb7bqr4adsV5QvlT/gvfmSWE/qqr8nJdfG+xJkir8bpa4QerYkSyq+dLr+kiVdqyYIUOZW7
-        6jfWX9j4YGf7J5sW95s/Dn+2PffskfK8BbWyZ7xCdq1V6pu2/eeS1axxhzt2hjHo5xudlTaL
-        yazR6n786xGT+FRbW6tsnZgnnW2Xz54sUmIpzkg01GIuKk4EAIL9Os0gAwAA
-X-CMS-MailID: 20221214044118epcas5p1031923bfce745b90bd0930632d5e89c8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221207105043epcas5p306086213835a5287f39de9016dcd43d2
-References: <20221207105032.103510-1-sriranjani.p@samsung.com>
-        <CGME20221207105043epcas5p306086213835a5287f39de9016dcd43d2@epcas5p3.samsung.com>
-        <20221207105032.103510-2-sriranjani.p@samsung.com>
-        <20221209211004.GA3847427-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221213123823.455731-1-bhupesh.sharma@linaro.org>
+ <20221213123823.455731-4-bhupesh.sharma@linaro.org> <20bd4594-7302-5823-447f-b980c476323e@linaro.org>
+ <8D9809D9-AB2F-4D9E-9272-2BFC27FF49E5@linaro.org>
+In-Reply-To: <8D9809D9-AB2F-4D9E-9272-2BFC27FF49E5@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 14 Dec 2022 10:13:11 +0530
+Message-ID: <CAH=2NtyyqoX2B32OCbAva_zdq6g+GbvOFMwdcKoMhArv03+Xeg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, andersson@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Rob Herring [mailto:robh@kernel.org]
-> Sent: 10 December 2022 02:40
-> To: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: krzysztof.kozlowski+dt@linaro.org; devicetree@vger.kernel.org;
-> alim.akhtar@samsung.com; pankaj.dubey@samsung.com;
-> ravi.patel@samsung.com; linux-kernel@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org
-> Subject: Re: [PATCH v2 1/4] dt-bindings: soc: samsung: exynos-sysreg: add
-> dedicated SYSREG compatibles to Exynos850
-> 
-> On Wed, Dec 07, 2022 at 04:20:29PM +0530, Sriranjani P wrote:
-> > Exynos850 has two different SYSREGs, hence add dedicated compatibles
-> > for them and deprecate usage of generic Exynos850 compatible alone.
+On Wed, 14 Dec 2022 at 03:48, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+>
+>
+> On 13 December 2022 14:49:05 EET, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 > >
-> > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> > ---
-> >  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 ++++++++++++---
-> >  1 file changed, 12 insertions(+), 3 deletions(-)
 > >
-> > diff --git
-> > a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.
-> > yaml
-> > b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.
-> > yaml index 4954790eda6c..a37452965100 100644
-> > ---
-> > a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.
-> > yaml
-> > +++
-> b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sys
-> > +++ reg.yaml
-> > @@ -17,7 +17,6 @@ properties:
-> >                - samsung,exynos3-sysreg
-> >                - samsung,exynos4-sysreg
-> >                - samsung,exynos5-sysreg
-> > -              - samsung,exynos850-sysreg
-> >                - samsung,exynosautov9-sysreg
-> >                - tesla,fsd-cam-sysreg
-> >                - tesla,fsd-fsys0-sysreg @@ -33,9 +32,17 @@ properties:
-> >            - const: samsung,exynos5433-sysreg
-> >            - const: syscon
-> >        - items:
-> > -          - const: samsung,exynos5433-sysreg
-> > +          - enum:
-> > +              - const: samsung,exynos5433-sysreg
-> 
-> This says the compatible entry is "const: samsung,exynos5433-sysreg".
-> 
-> That should be a schema warning. You did test this, right?
-Thanks for pointing it out, somehow dtbs check not showed any error. Will
-fix it in the next version.
-> 
-> Rob
+> >On 13.12.2022 13:38, Bhupesh Sharma wrote:
+> >> Add USB superspeed qmp phy node to dtsi.
+> >>
+> >> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> >> ---
+> >Please run make dtbs_check before sending dt patches, this one
+> >introduces new errors.
+> >
+> >
+> >>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 38 ++++++++++++++++++++++++++--
+> >>  1 file changed, 36 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >> index e4ce135264f3d..9c5c024919f92 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> >> @@ -579,6 +579,40 @@ usb_hsphy: phy@1613000 {
+> >>                      status = "disabled";
+> >>              };
+> >>
+> >> +            usb_qmpphy: phy@1615000 {
+> >> +                    compatible = "qcom,sm6115-qmp-usb3-phy";
+> >> +                    reg = <0x01615000 0x200>;
+> >> +                    #clock-cells = <1>;
+> >> +                    #address-cells = <1>;
+> >> +                    #size-cells = <1>;
+> >> +                    ranges;
+> >These -cells and ranges properties could go after status=disabled
+> >
+> >Konrad
+> >> +                    clocks = <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> >> +                             <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+> >> +                             <&gcc GCC_AHB2PHY_USB_CLK>;
+> >> +                    clock-names = "com_aux",
+> >> +                                  "ref",
+> >> +                                  "cfg_ahb";
+> >> +                    resets = <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>,
+> >> +                             <&gcc GCC_USB3PHY_PHY_PRIM_SP0_BCR>;
+> >> +                    reset-names = "phy", "phy_phy";
+> >> +                    status = "disabled";
+> >> +
+> >> +                    usb_ssphy: phy@1615200 {
+>
+> We should not introduce additional qmp-with-child PHY nodes.
 
+Not sure I understand your point. Is there some recent change (being
+discussed) regarding the same?
+
+Thanks,
+Bhupesh
+
+>
+> >> +                            reg = <0x01615200 0x200>,
+> >> +                                  <0x01615400 0x200>,
+> >> +                                  <0x01615c00 0x400>,
+> >> +                                  <0x01615600 0x200>,
+> >> +                                  <0x01615800 0x200>,
+> >> +                                  <0x01615a00 0x100>;
+> >> +                            #phy-cells = <0>;
+> >> +                            #clock-cells = <1>;
+> >> +                            clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> >> +                            clock-names = "pipe0";
+> >> +                            clock-output-names = "usb3_phy_pipe_clk_src";
+> >> +                    };
+> >> +            };
+> >> +
+> >> +
+> >>              qfprom@1b40000 {
+> >>                      compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
+> >>                      reg = <0x01b40000 0x7000>;
+> >> @@ -1023,8 +1057,8 @@ usb_dwc3: usb@4e00000 {
+> >>                              compatible = "snps,dwc3";
+> >>                              reg = <0x04e00000 0xcd00>;
+> >>                              interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
+> >> -                            phys = <&usb_hsphy>;
+> >> -                            phy-names = "usb2-phy";
+> >> +                            phys = <&usb_hsphy>, <&usb_ssphy>;
+> >> +                            phy-names = "usb2-phy", "usb3-phy";
+> >>                              iommus = <&apps_smmu 0x120 0x0>;
+> >>                              snps,dis_u2_susphy_quirk;
+> >>                              snps,dis_enblslpm_quirk;
+>
+> --
+> With best wishes
+> Dmitry
