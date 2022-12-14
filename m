@@ -2,112 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB3364CD26
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C405564CD29
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238702AbiLNPgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S238177AbiLNPhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238804AbiLNPf4 (ORCPT
+        with ESMTP id S238805AbiLNPhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:35:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A97162CB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:35:46 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 51DE81FDCF;
-        Wed, 14 Dec 2022 15:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1671032145; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pUv0ZD9S0AfJgVsaPfgue1q7h983DFZ7YFXKqbWqWk=;
-        b=da8b2STZ6liRAYvUX3vud9/he8lHncPlz27t6+fjEs1Dgj6SYfauTzs+bKQk+Cm4p5y7vG
-        UYQ83J09YlpXZcQpt2y5zPIbeSfFpp+KTWqHpuv0DgWPqb8WjNf92P5pm6n98Lh95OKKM0
-        n8NOpTDTu6ot98k/TELSYydU7SGG8fE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1671032145;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pUv0ZD9S0AfJgVsaPfgue1q7h983DFZ7YFXKqbWqWk=;
-        b=b1EisxYg7ncTSkLB1MsjuZfyHsxq/RSD4t3C0sa60hrEUNdcxFzuheqfGFnWBHDTb+vJWB
-        W7BnEJlp2K+boqDQ==
-Received: from ggherdovich.udp.ovpn2.nue.suse.de (unknown [10.163.44.102])
-        by relay2.suse.de (Postfix) with ESMTP id A44432C141;
-        Wed, 14 Dec 2022 15:35:44 +0000 (UTC)
-Message-ID: <4dff11851bf3fd306ff623bbcc29fca4b2e690e1.camel@suse.cz>
-Subject: Re: [PATCH] sched/core: Fix arch_scale_freq_tick() on tickless
- systems
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Yair Podemsky <ypodemsk@redhat.com>, peterz@infradead.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        rafael.j.wysocki@intel.com, jlelli@redhat.com, mtosatti@redhat.com,
-        nsaenz@kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 14 Dec 2022 16:35:42 +0100
-In-Reply-To: <20221130125121.34407-1-ypodemsk@redhat.com>
-References: <20221130125121.34407-1-ypodemsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Wed, 14 Dec 2022 10:37:04 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F520F4A;
+        Wed, 14 Dec 2022 07:37:02 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEETXOg032294;
+        Wed, 14 Dec 2022 15:36:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=K34UEmoqbP0hWiVBhYRS7Hke1YifchYcU0nimLAPkjA=;
+ b=N+OcPXCzcbOAtDBEozHDEsEMlE10THeXOePL9ZeUE4i45KMNyWXjZ9wfsZMqBo2IYTa0
+ CRUqeedDNfGTWdYGtnuqto+6sloMHJ55mgYe7qWO/C9KQfBhUIWZtBVvoq6D4YvIxRmx
+ hAiE1X/TK9knov7dYK7aOyH0TSMyAEEKR52ZRAKvPEZRYbP/QDk9lvvV6nZqUZ2POzq3
+ AQtNZnWY6QXcqxen8wzzQNu5MqbtXgVSL0rsRIliVKYkKSJtLoGpxpoLDRvnpi5NOrfx
+ slYBFT68A8yPAEdkA5mlTifl38gj0CFdqdahRgICOvo2ZSdTmqiGkhSjo7TUQDQR4Ybm RQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6re9jyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 15:36:56 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEFattS008841
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 15:36:55 GMT
+Received: from [10.216.38.200] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 14 Dec
+ 2022 07:36:51 -0800
+Message-ID: <6ab9171e-127b-12f3-cfe6-0fbf2b37080c@quicinc.com>
+Date:   Wed, 14 Dec 2022 21:06:48 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
+ qup2_i2c18 nodes
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ahalaney@redhat.com>,
+        <echanude@redhat.com>
+References: <20221212182314.1902632-1-bmasney@redhat.com>
+ <20221212182314.1902632-4-bmasney@redhat.com>
+ <309b3fad-933c-6c45-5cd7-4e082da62c15@linaro.org> <Y5nB1epKN4nbk3ma@x1>
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+In-Reply-To: <Y5nB1epKN4nbk3ma@x1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PFH_am0EmoDmQGnZn6Wm7Mwmuoc0x-av
+X-Proofpoint-ORIG-GUID: PFH_am0EmoDmQGnZn6Wm7Mwmuoc0x-av
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_07,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140125
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-30 at 14:51 +0200, Yair Podemsky wrote:
-> In order for the scheduler to be frequency invariant we measure the
-> ratio between the maximum cpu frequency and the actual cpu frequency.
-> During long tickless periods of time the calculations that keep track
-> of that might overflow, in the function scale_freq_tick():
-> 
-> if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
-> »       goto error;
-> 
-> eventually forcing the kernel to disable the feature for all cpus,
-> and show the warning message
-> "Scheduler frequency invariance went wobbly, disabling!".
-> Let's avoid that by limiting the frequency invariant calculations
-> to cpus with regular tick.
-> 
-> Fixes: e2b0d619b400 ("x86, sched: check for counters overflow in frequency invariant accounting")
-> Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
-> Suggested-by: "Peter Zijlstra (Intel)" <peterz@infradead.org>
 
-Acked-by: Giovanni Gherdovich <ggherdovich@suse.cz>
 
-> ---
-> V1 -> V2: solution approach was changed from detecting long tickless periods
-> to frequency invariant measurements on housekeeping cpus only.
-> Link: ee89073a1e9de11c7bd7726eb5da71a0e8795099.camel@redhat.com
-> ---
->  kernel/sched/core.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+On 12/14/2022 6:00 PM, Brian Masney wrote:
+> On Tue, Dec 13, 2022 at 03:48:27PM +0100, Konrad Dybcio wrote:
+>>> +	qup1_i2c15_default: qup1-i2c15-state {
+>>> +		mux-pins {
+>>> +			pins = "gpio36", "gpio37";
+>>> +			function = "qup15";
+>>> +		};
+>>> +
+>>> +		config-pins {
+>>> +			pins = "gpio36", "gpio37";
+>>> +			drive-strength = <0x02>;
+>>> +			bias-pull-up;
+>>> +		};
+>>> +	};
+>>
+>> You can drop mux/config-pins and have the pin properties live directly
+>> under the qup1-i2cN-state node.
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index daff72f00385..1bb0a840c817 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5469,7 +5469,9 @@ void scheduler_tick(void)
->  	unsigned long thermal_pressure;
->  	u64 resched_latency;
->  
-> -	arch_scale_freq_tick();
-> +	if (housekeeping_cpu(cpu, HK_TYPE_TICK))
-> +		arch_scale_freq_tick();
-> +
->  	sched_clock_tick();
->  
->  	rq_lock(rq, &rf);
+> Hi Konrad (and Shazad below),
+> 
+> I need to enable 5 i2c buses (0, 1, 12, 15, 18) on this board. I tried
+> the following combinations with the pin mapping configuration and the
+> only one that seems to work reliably for me is what I originally had.
+> 
+> With the following, only 2 out of the 5 buses are detected. There's no
+> i2c mesages in dmesg.
+> 
+>      i2c0_default: i2c0-default-state {
+>          pins = "gpio135", "gpio136";
+>          function = "qup15";
+>      };
+> 
+> Next, I added a drive-strength and bias-pull-up. All 5 buses are
+> detected. One bus throws read errors when I probe it with i2cdetect, two
+> others 'i2cdetect -a -y $BUSNUM' takes ~5 seconds to run, and the
 
+This I have also observed on downstream as well, where scanning all 
+addresses takes some amount of time near to 5-6 seconds.
+
+> remaining two are fast.
+> 
+>      i2c0_default: i2c0-default-state {
+>          pins = "gpio135", "gpio136";
+>          function = "qup15";
+>          drive-strength = <2>;
+>          bias-pull-up;
+>      };
+> 
+
+This is the default config we should use.
+
+> This is the style where i2cdetect seems to be happy for all 5 buses and
+> is fast:
+> 
+>      i2c0_default: i2c0-default-state {
+>          mux-pins {
+>              pins = "gpio135", "gpio136";
+>              function = "qup0";
+>          };
+> 
+>          config-pins {
+>              pins = "gpio135", "gpio136";
+>              drive-strength = <2>;
+>              bias-pull-up;
+>          };
+>      };
+> 
+> 
+> Shazad: 'i2cdetect -a -y $BUSNUM) shows that all 5 buses have the same
+> addresses listening. Is that expected? That seems a bit odd to me.
+> 
+
+Brian, even I haven't checked with all enabled, let me check this on 
+other projects and with downstream as well and get back to you.
+
+-Shazad
+
+> [root@localhost ~]# i2cdetect -a -y 0
+> Warning: Can't use SMBus Quick Write command, will skip some addresses
+>       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+> 00:
+> 10:
+> 20:
+> 30: -- -- -- -- -- -- -- --
+> 40:
+> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+> 60:
+> 70:
+> 
+> I triple checked that I have the QUP pins defined correctly for the 5
+> buses. I checked them against what's in the downstream kernel and I also
+> checked them against what's in upstream's
+> drivers/pinctrl/qcom/pinctrl-sc8280xp.c. This is the pin mapping that I
+> have:
+> 
+>      i2c0: gpio135, gpio136
+>      i2c1: gpio158, gpio159
+>      i2c12: gpio0, gpio1
+>      i2c15: gpio36, gpio37
+>      i2c18: gpio66, gpio67
+> 
+> Brian
+> 
