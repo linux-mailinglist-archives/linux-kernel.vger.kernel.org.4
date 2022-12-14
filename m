@@ -2,198 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9433464C7D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 618A664C7E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238238AbiLNLXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:23:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S237845AbiLNLYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237896AbiLNLXi (ORCPT
+        with ESMTP id S238258AbiLNLYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:23:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7B52ADD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:22:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671016976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yxc01zNwMiugjthmgVOlTrtXQnLfLvXjRGMFtbZZLpc=;
-        b=GJcAeE/PtFpn1/vFz2lK7BDUass2fCIFAvVi8EBj6OqZTconYOfb+By/rmk+gq1GAKOa8b
-        734+aQmBnwNi/m9nC2CtNfqjt7F+Omlx24wbZ5cxu51n+kH6d1Im1NR/kYsVan5x35GoQO
-        +Zsm1ClMCEBcuT2XMJ7yTnKLj1rUEHA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-568-6k2elztTOC2ddxK08xDjpA-1; Wed, 14 Dec 2022 06:22:54 -0500
-X-MC-Unique: 6k2elztTOC2ddxK08xDjpA-1
-Received: by mail-wm1-f69.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso4042295wml.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:22:54 -0800 (PST)
+        Wed, 14 Dec 2022 06:24:07 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690592496E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:24:05 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id qk9so43772305ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:24:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BRQpccloQiMZN4saRLUHMMeZBeRRnRn5nkbaL4W4GdU=;
+        b=mwASJg7dtkUG02UasdQmC3cun9vteqzuLzNZuEfl5IFp8nZSRnBiOd2AN6o8Ptgw2Z
+         pvT8LqBY7JcJpyJZ3CWH4+kS+eUEgoIus89lWz+D4dTLTttUEKVTq+tXpyvgqRSojCb8
+         sQCo88l4SCYGUDiORZXAAU5iWOUKxfJEMKTds=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yxc01zNwMiugjthmgVOlTrtXQnLfLvXjRGMFtbZZLpc=;
-        b=kzUzd5vose4aX2s3YN+hWCFv+u4i/OCXRnd7+FchaGQ66HV56UgsHOItlgcE912lbu
-         NO7SSnccMFJkE+e+KJ9VWFjlbA/bYsV1sDZCEQFqtb5oPSTUiI9NeeBIsFXLYVQkB2ZY
-         XnlGHCb82+amUQtMyS6VjXpJw+jle83M+BCPBA8MBZL5AHXCQu0psmokuuERuXyRUSRJ
-         0L/ZEijJ7m6SyXS374siLwTkhQAV3Oc9zWMuV1GTDK7vLRPSodobp6WL2I+5JRK4ao+o
-         DRzN4I8xTlI2Z13c8N4PF+GC1LLR5NpzDoEDPn4pde87tyCrkS8sgywInkqMLFP+99aW
-         vS3A==
-X-Gm-Message-State: ANoB5plFuHH3hpsknQlfDdBfOqTNmrZNJGhy1Etuwq4MX5coQZ+GlRpn
-        Er9XTzrUhxrd0PlE9zoCz2xubYoA5RgEbUCYQ4akn8rqEiR8VzcfyaH2JeL2JZdQbWZHDn5rUSS
-        VwXJRKoE9XkugBnBoNn0AUANQ5gnRwZuCck+M3pKflRIPtNnYR6hJwxpVE0gxSWTld7SgtMuH
-X-Received: by 2002:a05:600c:1da2:b0:3cf:5fd2:87a0 with SMTP id p34-20020a05600c1da200b003cf5fd287a0mr17488554wms.40.1671016973629;
-        Wed, 14 Dec 2022 03:22:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4UNUk6/OXN07sN3FMRll3MrS2ehO8GnTfEO+JQv3BigUvXvNgLJLKqkas5vWijxjr/1KiucA==
-X-Received: by 2002:a05:600c:1da2:b0:3cf:5fd2:87a0 with SMTP id p34-20020a05600c1da200b003cf5fd287a0mr17488468wms.40.1671016973157;
-        Wed, 14 Dec 2022 03:22:53 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:7700:dd7c:92f8:481f:b96b? (p200300cbc7037700dd7c92f8481fb96b.dip0.t-ipconnect.de. [2003:cb:c703:7700:dd7c:92f8:481f:b96b])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c510300b003cfa3a12660sm8504320wms.1.2022.12.14.03.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 03:22:52 -0800 (PST)
-Message-ID: <10bd4fc0-4fc0-bd98-6926-7d721a3bb12e@redhat.com>
-Date:   Wed, 14 Dec 2022 12:22:49 +0100
+        bh=BRQpccloQiMZN4saRLUHMMeZBeRRnRn5nkbaL4W4GdU=;
+        b=zJADkflvAZkDE/+m9gsYbqR4mYbGBsWYXEhE7R9B1QXXaquoHHUcTFJrlTlYXNm8nI
+         lrQTNqOD+dt4razoqloR93C+Ltu2HIZRvFZZuHCZMK6UFflbYYEeZe9V+C67qM0C+Kzw
+         TunXil8f3RCfY8nipKH7hxc/5ltYzesNqKmtDAIGD26iy+KyhIgdwELxksH3LtSy/7/o
+         l2w41RxsP3eKLCMP2w70QtvidUoz34tDhwlHONlIKu2fo/qbzOumlRtMZubWtyZKeykO
+         +zKxDI3PKiOH6QmfYyFicTQkVlI+KHHv+h2H8qLrVw+CEOKfXP10+hPfZ/pI7zF+S0No
+         Wl1w==
+X-Gm-Message-State: ANoB5pneR+5rYVfkGCsHHEoHy2euwVAl/eYRDjMxsNfkI0no/VDj35/u
+        yc13zdVJ/P+Zag+J92C4zsyVxA==
+X-Google-Smtp-Source: AA0mqf7Lbg5q0PavkIILmyF6Ukl4kk1jJdlArz22SF/saRlUTu0DIqR+15W2gUVLdypqucYC97XfNg==
+X-Received: by 2002:a17:907:9208:b0:7c0:d605:fe42 with SMTP id ka8-20020a170907920800b007c0d605fe42mr15215915ejb.18.1671017044038;
+        Wed, 14 Dec 2022 03:24:04 -0800 (PST)
+Received: from alco.roam.corp.google.com ([100.104.168.209])
+        by smtp.gmail.com with ESMTPSA id g17-20020a17090604d100b007c17b3a4163sm3034995eja.15.2022.12.14.03.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 03:24:03 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 14 Dec 2022 12:23:41 +0100
+Subject: [PATCH] media: uvcvideo: Do not alloc dev->status
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH mm-unstable RFC 00/26] mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all architectures with swap PTEs
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Chris Zankel <chris@zankel.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-References: <20221206144730.163732-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221206144730.163732-1-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20221214-uvc-status-alloc-v1-0-a0098ddc7c93@chromium.org>
+To:     Yunke Cao <yunkec@chromium.org>, Max Staudt <mstaudt@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7349; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=bxfPn7ndbrz/ZOaMZwhhHYT3BZ1JIWXtS1bv+cB42RY=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmbJQXMjwj6w6yc+iZ1CWllvZyH9AaydNC98PtykB
+ ra5QDDKJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5myUAAKCRDRN9E+zzrEiONRD/
+ 43kbS55hMa3GJ7Jutk+c5+EU78NyNML+a4CXq9Huq08vGgih7ggyMFEr3dJDFQIfBOFczn6DqTrRYG
+ dsVnh8fE3AIcrdWVIWzWJ/7UgnpIpE8wrgh5rcxzJszqO59nV35qvhDdsloNjyHHckjg3G6dgMf1W2
+ Z+N0D+rMdfu6xSshXNiL/ZAKEZ3XfDDDKC/HKBq0gJ7Iaw6ibp69bisc6Bp9RNnKl9Ja9nCvyel76D
+ Ax8/rWkAHDSK2C/gZNaHWJBu/vSdHGXA6jD/piT12K+7yn0CuPC2EOZkleK27kBLY5VLxzpF1B8wVs
+ l6Fu5km8y8kY90ArYa3RdxF4qdGqw9/jAP1P0PyDKOfoGaudHYVkj6lIsWAvRMC4eVl/X3FAOWOFnj
+ BSMlj7tTpa1AZMyKI2E1iZKMqZd9s8X6dsUdrdlkiuQBNEMn5INoxuPyQgUJaS6zOR4q7B2AsmiMkz
+ u2y+0WOkkttPdUg+UKS53lDx/bZSOKAHBDZcbqPgxBtfCiwC3lfqfZhBQ3WO0bot/pZ/ePg3TiGmzj
+ 9+mGNddSlv1f25g7CNrzaLSQOkqH8GpQfH+Kbtiq5VGUc7HR/rdVflbC3b81d4mgPeH6IljEP2jsR3
+ U8x57f8bZiNEB5Vx4dTfvxy2F/Z7LohL+5I4RmZA9WfbLlWwV6HGXAl4TEFA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.12.22 15:47, David Hildenbrand wrote:
-> This is the follow-up on [1]:
-> 	[PATCH v2 0/8] mm: COW fixes part 3: reliable GUP R/W FOLL_GET of
-> 	anonymous pages
-> 
-> After we implemented __HAVE_ARCH_PTE_SWP_EXCLUSIVE on most prominent
-> enterprise architectures, implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all
-> remaining architectures that support swap PTEs.
-> 
-> This makes sure that exclusive anonymous pages will stay exclusive, even
-> after they were swapped out -- for example, making GUP R/W FOLL_GET of
-> anonymous pages reliable. Details can be found in [1].
-> 
-> This primarily fixes remaining known O_DIRECT memory corruptions that can
-> happen on concurrent swapout, whereby we can lose DMA reads to a page
-> (modifying the user page by writing to it).
-> 
-> To verify, there are two test cases (requiring swap space, obviously):
-> (1) The O_DIRECT+swapout test case [2] from Andrea. This test case tries
->      triggering a race condition.
-> (2) My vmsplice() test case [3] that tries to detect if the exclusive
->      marker was lost during swapout, not relying on a race condition.
-> 
-> 
-> For example, on 32bit x86 (with and without PAE), my test case fails
-> without these patches:
-> 	$ ./test_swp_exclusive
-> 	FAIL: page was replaced during COW
-> But succeeds with these patches:
-> 	$ ./test_swp_exclusive
-> 	PASS: page was not replaced during COW
-> 
-> 
-> Why implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE for all architectures, even
-> the ones where swap support might be in a questionable state? This is the
-> first step towards removing "readable_exclusive" migration entries, and
-> instead using pte_swp_exclusive() also with (readable) migration entries
-> instead (as suggested by Peter). The only missing piece for that is
-> supporting pmd_swp_exclusive() on relevant architectures with THP
-> migration support.
-> 
-> As all relevant architectures now implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE,,
-> we can drop __HAVE_ARCH_PTE_SWP_EXCLUSIVE in the last patch.
-> 
-> 
-> RFC because some of the swap PTE layouts are really tricky and I really
-> need some feedback related to deciphering these layouts and "using yet
-> unused PTE bits in swap PTEs". I tried cross-compiling all relevant setups
-> (phew, I might only miss some power/nohash variants), but only tested on
-> x86 so far.
+UVC_MAX_STATUS_SIZE is 16, simplify the code by inlining dev->status.
 
-As I was messing with sparc64 either way and got debian to boot under 
-QEMU, I verified that the sparc64 change also seems to work as expected 
-(under sun4u).
+Now that we are at it, remove all the castings.
 
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Max Staudt <mstaudt@google.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/media/usb/uvc/uvc_status.c | 69 ++++++++++++--------------------------
+ drivers/media/usb/uvc/uvcvideo.h   | 22 +++++++++++-
+ 2 files changed, 42 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 7518ffce22ed..adf63e7616c9 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -73,38 +73,24 @@ static void uvc_input_report_key(struct uvc_device *dev, unsigned int code,
+ /* --------------------------------------------------------------------------
+  * Status interrupt endpoint
+  */
+-struct uvc_streaming_status {
+-	u8	bStatusType;
+-	u8	bOriginator;
+-	u8	bEvent;
+-	u8	bValue[];
+-} __packed;
+-
+-struct uvc_control_status {
+-	u8	bStatusType;
+-	u8	bOriginator;
+-	u8	bEvent;
+-	u8	bSelector;
+-	u8	bAttribute;
+-	u8	bValue[];
+-} __packed;
+-
+ static void uvc_event_streaming(struct uvc_device *dev,
+-				struct uvc_streaming_status *status, int len)
++				struct uvc_status *status, int len)
+ {
+-	if (len < 3) {
++	if (len <= offsetof(struct uvc_status, bEvent)) {
+ 		uvc_dbg(dev, STATUS,
+ 			"Invalid streaming status event received\n");
+ 		return;
+ 	}
+ 
+ 	if (status->bEvent == 0) {
+-		if (len < 4)
++		if (len <= offsetof(struct uvc_status, streaming))
+ 			return;
++
+ 		uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
+ 			status->bOriginator,
+-			status->bValue[0] ? "pressed" : "released", len);
+-		uvc_input_report_key(dev, KEY_CAMERA, status->bValue[0]);
++			status->streaming.button ? "pressed" : "released", len);
++		uvc_input_report_key(dev, KEY_CAMERA,
++				     status->streaming.button);
+ 	} else {
+ 		uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
+ 			status->bOriginator, status->bEvent, len);
+@@ -131,7 +117,7 @@ static struct uvc_control *uvc_event_entity_find_ctrl(struct uvc_entity *entity,
+ }
+ 
+ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+-					const struct uvc_control_status *status,
++					const struct uvc_status *status,
+ 					struct uvc_video_chain **chain)
+ {
+ 	list_for_each_entry((*chain), &dev->chains, list) {
+@@ -143,7 +129,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+ 				continue;
+ 
+ 			ctrl = uvc_event_entity_find_ctrl(entity,
+-							  status->bSelector);
++						     status->control.bSelector);
+ 			if (ctrl)
+ 				return ctrl;
+ 		}
+@@ -153,7 +139,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+ }
+ 
+ static bool uvc_event_control(struct urb *urb,
+-			      const struct uvc_control_status *status, int len)
++			      const struct uvc_status *status, int len)
+ {
+ 	static const char *attrs[] = { "value", "info", "failure", "min", "max" };
+ 	struct uvc_device *dev = urb->context;
+@@ -161,24 +147,24 @@ static bool uvc_event_control(struct urb *urb,
+ 	struct uvc_control *ctrl;
+ 
+ 	if (len < 6 || status->bEvent != 0 ||
+-	    status->bAttribute >= ARRAY_SIZE(attrs)) {
++	    status->control.bAttribute >= ARRAY_SIZE(attrs)) {
+ 		uvc_dbg(dev, STATUS, "Invalid control status event received\n");
+ 		return false;
+ 	}
+ 
+ 	uvc_dbg(dev, STATUS, "Control %u/%u %s change len %d\n",
+-		status->bOriginator, status->bSelector,
+-		attrs[status->bAttribute], len);
++		status->bOriginator, status->control.bSelector,
++		attrs[status->control.bAttribute], len);
+ 
+ 	/* Find the control. */
+ 	ctrl = uvc_event_find_ctrl(dev, status, &chain);
+ 	if (!ctrl)
+ 		return false;
+ 
+-	switch (status->bAttribute) {
++	switch (status->control.bAttribute) {
+ 	case UVC_CTRL_VALUE_CHANGE:
+ 		return uvc_ctrl_status_event_async(urb, chain, ctrl,
+-						   status->bValue);
++						   status->control.bValue);
+ 
+ 	case UVC_CTRL_INFO_CHANGE:
+ 	case UVC_CTRL_FAILURE_CHANGE:
+@@ -214,28 +200,22 @@ static void uvc_status_complete(struct urb *urb)
+ 
+ 	len = urb->actual_length;
+ 	if (len > 0) {
+-		switch (dev->status[0] & 0x0f) {
++		switch (dev->status.bStatusType & 0x0f) {
+ 		case UVC_STATUS_TYPE_CONTROL: {
+-			struct uvc_control_status *status =
+-				(struct uvc_control_status *)dev->status;
+-
+-			if (uvc_event_control(urb, status, len))
++			if (uvc_event_control(urb, &dev->status, len))
+ 				/* The URB will be resubmitted in work context. */
+ 				return;
+ 			break;
+ 		}
+ 
+ 		case UVC_STATUS_TYPE_STREAMING: {
+-			struct uvc_streaming_status *status =
+-				(struct uvc_streaming_status *)dev->status;
+-
+-			uvc_event_streaming(dev, status, len);
++			uvc_event_streaming(dev, &dev->status, len);
+ 			break;
+ 		}
+ 
+ 		default:
+ 			uvc_dbg(dev, STATUS, "Unknown status event type %u\n",
+-				dev->status[0]);
++				dev->status.bStatusType);
+ 			break;
+ 		}
+ 	}
+@@ -259,15 +239,9 @@ int uvc_status_init(struct uvc_device *dev)
+ 
+ 	uvc_input_init(dev);
+ 
+-	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
+-	if (dev->status == NULL)
+-		return -ENOMEM;
+-
+ 	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
+-	if (dev->int_urb == NULL) {
+-		kfree(dev->status);
++	if (!dev->int_urb)
+ 		return -ENOMEM;
+-	}
+ 
+ 	pipe = usb_rcvintpipe(dev->udev, ep->desc.bEndpointAddress);
+ 
+@@ -281,7 +255,7 @@ int uvc_status_init(struct uvc_device *dev)
+ 		interval = fls(interval) - 1;
+ 
+ 	usb_fill_int_urb(dev->int_urb, dev->udev, pipe,
+-		dev->status, UVC_MAX_STATUS_SIZE, uvc_status_complete,
++		&dev->status, sizeof(dev->status), uvc_status_complete,
+ 		dev, interval);
+ 
+ 	return 0;
+@@ -296,7 +270,6 @@ void uvc_status_unregister(struct uvc_device *dev)
+ void uvc_status_cleanup(struct uvc_device *dev)
+ {
+ 	usb_free_urb(dev->int_urb);
+-	kfree(dev->status);
+ }
+ 
+ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index df93db259312..cdd2e328acc2 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -527,6 +527,26 @@ struct uvc_device_info {
+ 	const struct uvc_control_mapping **mappings;
+ };
+ 
++struct uvc_status_streaming {
++	u8	button;
++} __packed;
++
++struct uvc_status_control {
++	u8	bSelector;
++	u8	bAttribute;
++	u8	bValue[11];
++} __packed;
++
++struct uvc_status {
++	u8	bStatusType;
++	u8	bOriginator;
++	u8	bEvent;
++	union {
++		struct uvc_status_control control;
++		struct uvc_status_streaming streaming;
++	};
++} __packed;
++
+ struct uvc_device {
+ 	struct usb_device *udev;
+ 	struct usb_interface *intf;
+@@ -559,7 +579,7 @@ struct uvc_device {
+ 	/* Status Interrupt Endpoint */
+ 	struct usb_host_endpoint *int_ep;
+ 	struct urb *int_urb;
+-	u8 *status;
++	struct uvc_status status;
+ 	struct input_dev *input;
+ 	char input_phys[64];
+ 
+
+---
+base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+change-id: 20221214-uvc-status-alloc-93becb783898
+
+Best regards,
 -- 
-Thanks,
-
-David / dhildenb
-
+Ricardo Ribalda <ribalda@chromium.org>
