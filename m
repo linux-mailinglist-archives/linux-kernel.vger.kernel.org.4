@@ -2,181 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8A264C21B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A0DC64C222
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236799AbiLNCEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 21:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S237035AbiLNCHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 21:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbiLNCEq (ORCPT
+        with ESMTP id S236871AbiLNCHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 21:04:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74107637B
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:03:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670983438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZxWgAtzssiZUci/PlwUY7k+wYk7RgEHn1aQq5Ig7ASE=;
-        b=EqjexTW5hBV3c3qvtShzFrHj84rEnHZfrXgIKlGZGARxZxwew+A9TLJBYYFjUA9cIPm00T
-        3Zkvs+VLglPJLqHfR1SQ00q/RBrksZ2q1Uevr79gAXutDWJj4M+lGmUsf6XZ8qhM3zgk/0
-        w0MXJcSMm5pDvIZkpvTzihskIHWY6F0=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-600-2AK7WtD5MxyWTaQ8H1SbVg-1; Tue, 13 Dec 2022 21:03:57 -0500
-X-MC-Unique: 2AK7WtD5MxyWTaQ8H1SbVg-1
-Received: by mail-pf1-f199.google.com with SMTP id b13-20020a056a000a8d00b0057348c50123so3181925pfl.18
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:03:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZxWgAtzssiZUci/PlwUY7k+wYk7RgEHn1aQq5Ig7ASE=;
-        b=lMZQY85zt7rGUDp+gVNrXSDBU8WictQ6IhAcK1iPqLe6DVpuO8ChrCt/jSzsK7Cg7u
-         crdM/nUDZvaPjWrf/h/ee/kz75jrJ9YxZKFHQPK4IuIt5vvI+/PQsCDaF+3I5mHOy5wq
-         3Oko5V++wYJZtAn0UM+4LVLii6yAOATItYmFZRTLYI+q18C2adacCnYcuuhbyzTXQ5L3
-         NesPlhuZxVGg5nSN93vv2BKxz6PliZU3jNmHI8ug5a/f6F/jVwaJ7T9Ef687Es89S+uS
-         osSnngt0Kb3O/h5TCz2Cl+k03MI+B8XUtvM43N3QZdibGw7w94MwTXh7t1X5KAkbl/OF
-         1deg==
-X-Gm-Message-State: ANoB5ply555MtCvViG3HVoMYkN68gAFTNffgDQNOIzI3Ck7CW97gJZir
-        /YbqzjmdosaRYqT6AN5mnoSJm89BMpQyfRoKN/Wm8uKEJf8fM1KhospgnlIrViWjXulv2Di0c91
-        Cb/HD0/tvprRTnVyeT4kKiTmq
-X-Received: by 2002:a17:902:6905:b0:189:340c:20d2 with SMTP id j5-20020a170902690500b00189340c20d2mr24488966plk.23.1670983436073;
-        Tue, 13 Dec 2022 18:03:56 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf58GHtAnUtVx7eHJgWLx44Wxgv4SDCZhO6Z6Z6rNRrAmwxlPG98KL5qMp4Cs3IqOyWZ/lYpmg==
-X-Received: by 2002:a17:902:6905:b0:189:340c:20d2 with SMTP id j5-20020a170902690500b00189340c20d2mr24488949plk.23.1670983435793;
-        Tue, 13 Dec 2022 18:03:55 -0800 (PST)
-Received: from [10.72.13.36] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id j7-20020a170902690700b0017ec1b1bf9fsm516185plk.217.2022.12.13.18.03.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Dec 2022 18:03:55 -0800 (PST)
-Subject: Re: [PATCH v4 2/2] ceph: add ceph specific member support for
- file_lock
-To:     Ilya Dryomov <idryomov@gmail.com>
-Cc:     jlayton@kernel.org, ceph-devel@vger.kernel.org,
-        mchangir@redhat.com, lhenriques@suse.de, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221213121103.213631-1-xiubli@redhat.com>
- <20221213121103.213631-3-xiubli@redhat.com>
- <CAOi1vP-jTA38riQ+E239vz2omTmX7fQvnzf9BcmkLVU_0PyngA@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <e970159b-ec60-434e-59ce-36128fe99bcf@redhat.com>
-Date:   Wed, 14 Dec 2022 10:03:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 13 Dec 2022 21:07:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D43275D6;
+        Tue, 13 Dec 2022 18:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670983648; x=1702519648;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5g2Oe9zCYZKtQPNgkgYOsDcVAbBTFpcRbE/PaSDyVHU=;
+  b=M72iTOAocFIOcKjyTwwCXI5IrZjxZENdm9ldGYvYsCdMGSqhfhXjV3ml
+   WmTp3QlrRotuq3PEUKeBgcc6R2nP6gPysjzf7D9MBESKa7tUfaVkNy2Gv
+   mncFM1WKRAY6T0V+sd8Ptk061oANFzqlJsbtzDHjSZ5+84X778x/4+T7y
+   qCJ649ZCSNdSqvQuS2YftD6TX9I3parEXs2vOyIYlqOhw0Lqh81OqNQGK
+   cAgPknu28tIiB/2IBN8STpmN7kSpqIh1YH0Ym1HdBPX1+p3yqlzaXHr5S
+   Je3cL3pIFwM9m8fP7iRIWBuEIaxiYlCClVsXNMqIDaV1tl81rTJY0MYhm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380497715"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="380497715"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 18:07:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="894105112"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="894105112"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Dec 2022 18:07:27 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        amitk@kernel.org, torvalds@linux-foundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel: Don't set HFI status bit to 1
+Date:   Tue, 13 Dec 2022 18:06:51 -0800
+Message-Id: <20221214020651.1362731-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <CAOi1vP-jTA38riQ+E239vz2omTmX7fQvnzf9BcmkLVU_0PyngA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When CPU doesn't support HFI (Hardware Feedback Interface), don't include
+BIT 26 in the mask to prevent clearing. otherwise this results in:
+    unchecked MSR access error: WRMSR to 0x1b1
+      (tried to write 0x0000000004000aa8)
+      at rIP: 0xffffffff8b8559fe (throttle_active_work+0xbe/0x1b0)
 
-On 14/12/2022 02:05, Ilya Dryomov wrote:
-> On Tue, Dec 13, 2022 at 1:11 PM <xiubli@redhat.com> wrote:
->> From: Xiubo Li <xiubli@redhat.com>
->>
->> When ceph releasing the file_lock it will try to get the inode pointer
->> from the fl->fl_file, which the memory could already be released by
->> another thread in filp_close(). Because in VFS layer the fl->fl_file
->> doesn't increase the file's reference counter.
->>
->> Will switch to use ceph dedicate lock info to track the inode.
->>
->> And in ceph_fl_release_lock() we should skip all the operations if
->> the fl->fl_u.ceph_fl.fl_inode is not set, which should come from
->> the request file_lock. And we will set fl->fl_u.ceph_fl.fl_inode when
->> inserting it to the inode lock list, which is when copying the lock.
->>
->> Cc: stable@vger.kernel.org
->> Cc: Jeff Layton <jlayton@kernel.org>
->> URL: https://tracker.ceph.com/issues/57986
->> Signed-off-by: Xiubo Li <xiubli@redhat.com>
->> ---
->>   fs/ceph/locks.c    | 20 ++++++++++++++++++--
->>   include/linux/fs.h |  3 +++
->>   2 files changed, 21 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
->> index b191426bf880..cf78608a3f9a 100644
->> --- a/fs/ceph/locks.c
->> +++ b/fs/ceph/locks.c
->> @@ -34,18 +34,34 @@ static void ceph_fl_copy_lock(struct file_lock *dst, struct file_lock *src)
->>   {
->>          struct inode *inode = file_inode(dst->fl_file);
->>          atomic_inc(&ceph_inode(inode)->i_filelock_ref);
->> +       dst->fl_u.ceph.fl_inode = igrab(inode);
->>   }
->>
->> +/*
->> + * Do not use the 'fl->fl_file' in release function, which
->> + * is possibly already released by another thread.
->> + */
->>   static void ceph_fl_release_lock(struct file_lock *fl)
->>   {
->> -       struct inode *inode = file_inode(fl->fl_file);
->> -       struct ceph_inode_info *ci = ceph_inode(inode);
->> +       struct inode *inode = fl->fl_u.ceph.fl_inode;
->> +       struct ceph_inode_info *ci;
->> +
->> +       /*
->> +        * If inode is NULL it should be a request file_lock,
->> +        * nothing we can do.
->> +        */
->> +       if (!inode)
->> +               return;
->> +
->> +       ci = ceph_inode(inode);
->>          if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->>                  /* clear error when all locks are released */
->>                  spin_lock(&ci->i_ceph_lock);
->>                  ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
->>                  spin_unlock(&ci->i_ceph_lock);
->>          }
->> +       fl->fl_u.ceph.fl_inode = NULL;
->> +       iput(inode);
->>   }
->>
->>   static const struct file_lock_operations ceph_fl_lock_ops = {
->> diff --git a/include/linux/fs.h b/include/linux/fs.h
->> index 7b52fdfb6da0..6106374f5257 100644
->> --- a/include/linux/fs.h
->> +++ b/include/linux/fs.h
->> @@ -1119,6 +1119,9 @@ struct file_lock {
->>                          int state;              /* state of grant or error if -ve */
->>                          unsigned int    debug_id;
->>                  } afs;
->> +               struct {
->> +                       struct inode *fl_inode;
-> Hi Xiubo,
->
-> Nit: I think it could be just "inode", without the prefix which is
-> already present in the union field name.
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/thermal/intel/therm_throt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Okay, I can fix this in the next version.
-
-Thanks.
-
-- Xiubo
-
-
-> Thanks,
->
->                  Ilya
->
+diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+index 4bb7fddaa143..2e22bb82b738 100644
+--- a/drivers/thermal/intel/therm_throt.c
++++ b/drivers/thermal/intel/therm_throt.c
+@@ -194,7 +194,7 @@ static const struct attribute_group thermal_attr_group = {
+ #define THERM_STATUS_PROCHOT_LOG	BIT(1)
+ 
+ #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+-#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
++#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
+ 
+ /*
+  * Clear the bits in package thermal status register for bit = 1
+@@ -211,6 +211,9 @@ void thermal_clear_package_intr_status(int level, u64 bit_mask)
+ 	} else {
+ 		msr  = MSR_IA32_PACKAGE_THERM_STATUS;
+ 		msr_val = THERM_STATUS_CLEAR_PKG_MASK;
++		if (boot_cpu_has(X86_FEATURE_HFI))
++			msr_val |= BIT(26);
++
+ 	}
+ 
+ 	msr_val &= ~bit_mask;
+-- 
+2.31.1
 
