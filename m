@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB70464CF55
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB19364CF57
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238695AbiLNSXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S238743AbiLNSXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbiLNSW4 (ORCPT
+        with ESMTP id S238500AbiLNSW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:22:56 -0500
+        Wed, 14 Dec 2022 13:22:57 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD5429352;
-        Wed, 14 Dec 2022 10:22:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143052936C;
+        Wed, 14 Dec 2022 10:22:56 -0800 (PST)
 Received: from jupiter.universe (dyndsl-095-033-169-234.ewe-ip-backbone.de [95.33.169.234])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE1596602C67;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B8D636602C68;
         Wed, 14 Dec 2022 18:22:54 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1671042174;
-        bh=++tknHUSAH1WlAB7rUlhaGwZLeMI3KHDV+YrO/4Al3k=;
+        bh=Kjibh8ynGnHRfmJauCFb9dny1B5NdDHrt1LaB5Yq6a0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PZDD1uH8tmQBfJbytVFrgK6CHc+UeKzVAY3sWnMWqOuN3mMPyoDV0RwO8axPjRNhH
-         0xLAvJ3ShVG/cM4+dVaYmmFelHLrfUzxBQhjdaoq4+Fp3MCNMe8lk2zeyhibHR2sg+
-         HdePN+ETGAaMyjNztAe5vf9DoP6NMTKwLdV26sWX9YJ5IfZ4Fgo8mEl7yen784qeoS
-         /Mr3Qsq/WryZ6H4i0i7XkYKR2/JYiHWfB7L7FCotu7deKMrTryCYdzynPAmnKvRUaq
-         KxzwoXFl9+Jr2XF7NFwLZpfLlOjH5mKWxIj2oteNmmao4Eot5sXz7VrcodaguBIePv
-         I5dJJVYXOS+8Q==
+        b=dOtjE7SkBk5LSFwR971pu88WhTBfjg1VNGW5KleMFWsjOwE56ZybfAUgLG10IHpnh
+         i4HjqGGahaObkHwLS8A00/Qtfmz8/IbuA/pi29FUm7JOpueWAPCWpGbyeSr8LJ3U0A
+         JO3ViAWU7seKNEX0D8NjD2PjRFiBHqLkUMS0zu6ZbG26+CrSVC0UjKj/gGFAT9KzFS
+         2DnNIYbnX/8htc19nskEh398yjR9Qznw4jTSrz3kaRMa7OXwl4NfrVSnHFX5/p9RHM
+         kcRGlz0QAIGgVPB2l9b7vHL3Jbt0CWqgPHo4ITP8F2dvM2lQpAuNeLPOCc4uxYN051
+         Z3BMCouc1UDSQ==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id C7BE648011D; Wed, 14 Dec 2022 19:22:48 +0100 (CET)
+        id C9DE648011E; Wed, 14 Dec 2022 19:22:48 +0100 (CET)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -43,13 +43,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Christopher Obbard <chris.obbard@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: [PATCHv6 6/7] arm64: dts: rockchip: Add rock-5a board
-Date:   Wed, 14 Dec 2022 19:22:46 +0100
-Message-Id: <20221214182247.79824-7-sebastian.reichel@collabora.com>
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCHv6 7/7] arm64: dts: rockchip: Add rock-5b board
+Date:   Wed, 14 Dec 2022 19:22:47 +0100
+Message-Id: <20221214182247.79824-8-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221214182247.79824-1-sebastian.reichel@collabora.com>
 References: <20221214182247.79824-1-sebastian.reichel@collabora.com>
@@ -64,46 +63,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add board file for the RK3588s Rock 5A board. While the hardware
-offers plenty of peripherals and connectivity this basic implementation
-just handles things required to access eMMC, UART and Ethernet (i.e.
-enough to successfully boot Linux).
+From: Christopher Obbard <chris.obbard@collabora.com>
 
+Add board file for the RK3588 Rock 5B board. This is a basic
+implementation which just brings up the eMMC and UART which is
+enough to successfully boot Linux.
+
+The ethernet controller is connected via PCIe so support will
+come in a follow-up patch.
+
+Signed-off-by: Christopher Obbard <chris.obbard@collabora.com>
 Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
-Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
  arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../boot/dts/rockchip/rk3588s-rock-5a.dts     | 73 +++++++++++++++++++
- 2 files changed, 74 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      | 44 +++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
 
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 12ed53de11eb..31fa55750a0f 100644
+index 31fa55750a0f..b31aa1b0e9e3 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -73,3 +73,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+@@ -73,4 +73,5 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-rock-5b.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
 new file mode 100644
-index 000000000000..70db09230ec6
+index 000000000000..baf46bd30b38
 --- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
-@@ -0,0 +1,73 @@
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -0,0 +1,44 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +
 +/dts-v1/;
 +
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rockchip.h>
-+#include "rk3588s.dtsi"
++#include "rk3588.dtsi"
 +
 +/ {
-+	model = "Radxa Rock 5A Board";
-+	compatible = "radxa,rock-5a", "rockchip,rk3588s";
++	model = "Radxa Rock 5B Board";
++	compatible = "radxa,rock-5b", "rockchip,rk3588";
 +
 +	aliases {
 +		mmc1 = &sdhci;
@@ -113,41 +115,14 @@ index 000000000000..70db09230ec6
 +	chosen {
 +		stdout-path = "serial2:1500000n8";
 +	};
-+};
 +
-+&gmac1 {
-+	clock_in_out = "output";
-+	phy-handle = <&rgmii_phy1>;
-+	phy-mode = "rgmii-rxid";
-+	pinctrl-0 = <&gmac1_miim
-+		     &gmac1_tx_bus2
-+		     &gmac1_rx_bus2
-+		     &gmac1_rgmii_clk
-+		     &gmac1_rgmii_bus>;
-+	pinctrl-names = "default";
-+	tx_delay = <0x3a>;
-+	status = "okay";
-+};
-+
-+&mdio1 {
-+	rgmii_phy1: ethernet-phy@1 {
-+		/* RTL8211F */
-+		compatible = "ethernet-phy-id001c.c916";
-+		reg = <0x1>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rtl8211f_rst>;
-+		reset-assert-us = <20000>;
-+		reset-deassert-us = <100000>;
-+		reset-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+&pinctrl {
-+	rtl8211f {
-+		rtl8211f_rst: rtl8211f-rst {
-+			rockchip,pins = <3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
++	vcc5v0_sys: vcc5v0-sys-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_sys";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
 +	};
 +};
 +
