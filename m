@@ -2,124 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7504264C1E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EE164C1E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbiLNBdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 20:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
+        id S236753AbiLNBdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 20:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbiLNBdO (ORCPT
+        with ESMTP id S236801AbiLNBdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 20:33:14 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA832AE7
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:33:13 -0800 (PST)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NWyXF0DHlzlWYT;
-        Wed, 14 Dec 2022 09:32:13 +0800 (CST)
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 14 Dec 2022 09:33:11 +0800
-Message-ID: <2b4d03bc-2b6e-45b0-655a-58b66672187e@huawei.com>
-Date:   Wed, 14 Dec 2022 09:33:10 +0800
+        Tue, 13 Dec 2022 20:33:52 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1198CE0ED
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:33:50 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p36so8012876lfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gh19k+3D0iyWw5+2LHF1TTPwIx7bHWW/g8vFNpbEwZU=;
+        b=Uj/Ddmhhjx2tsaz+uPMxNNAM0Xda+GisrgHFW3qdOHw3v0Gc+UoIi27Wrs6gqmQsk2
+         swVV71rfcw/uS9l9OOAyeyWEjUlraDkwlurudEIpdzHVWsKz43wGItV+ktVB/G905UG8
+         DoCESPs72Z7I4xbqPW/aB+VKVmaSnQ3VFKLtZ01Ndq/wnXCKz2r1atG5w4GxDCfp+a7L
+         RTeF+fNQ4183pwfgSSFVAOXr0LPr3W3/RGgRbwZJNlhb0tB7tlBvMUXLFkkf09Xlu9lp
+         cdcRFEeNK+elvfAgq83Cv+5k6UaM1SGhyGdQ/kUiVFZnlea/VkzK/iv3xh4yx3zq3Ptw
+         aivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gh19k+3D0iyWw5+2LHF1TTPwIx7bHWW/g8vFNpbEwZU=;
+        b=NbwsdSWX44rS1WzxS2QtMNjTGK2E5txT2MLRL/WuJuKZo0/YxAR9PMCeisMVd+avqk
+         U7Lzd6l2Woi+uEXwTB+3F2zah3dya2tRrWeRjnJTpzdviLPHLqNiVw5VJJ8TEoTNndGx
+         sMyUPX7QbcKTqxN6EdTcjIK6l7ql8FskvA8/Rk2enKEiJwBjXntpB/joGCK9nEB/Ft2M
+         Zb1jJ2TgE9VAZ+RA2lRzV9oHiXhSKeGrS6cnPjgaeC8pDkh/u6m8NdOkRPSKwCBWnViD
+         Mp8ZSwC+XOuuNqHgu42LPFQYMkrJrv6/rPbSB++jzxfXFl/yqY1u43gxjUQtLUzYQFe+
+         R2sg==
+X-Gm-Message-State: ANoB5pkxbAzSbW7C7rExYtCSiqbjYqL3SCVITR3K/bgIwjYvx49Kvyes
+        Nov8JPMbj0GLou2Ch70KNpbuXlizksj1GxgnvEBIHA==
+X-Google-Smtp-Source: AA0mqf7+Jp17vrMF2kFO1S4fGbZzejFoCO/2ti2leZM1vfO9+Of5CPHvLhny2c8pCRvJr+Gb6sPZ1pWVdsBq049FSzg=
+X-Received: by 2002:a05:6512:344e:b0:4b7:207:6dcf with SMTP id
+ j14-20020a056512344e00b004b702076dcfmr316405lfr.632.1670981628283; Tue, 13
+ Dec 2022 17:33:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-From:   mawupeng <mawupeng1@huawei.com>
-Subject: [Qestion] UCE on pud-sized hugepage lead to kernel panic on lts5.10
-To:     <naoya.horiguchi@nec.com>
-CC:     <mawupeng1@huawei.com>, <catalin.marinas@arm.com>,
-        <gregkh@linuxfoundation.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Content-Language: en-US
+References: <20221213081103.2182231-1-jun.nie@linaro.org> <Y5jKfdDrJkdKtEbC@sol.localdomain>
+In-Reply-To: <Y5jKfdDrJkdKtEbC@sol.localdomain>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Wed, 14 Dec 2022 09:33:41 +0800
+Message-ID: <CABymUCMtTmSiZQNV9tXTYp90Jk3M37QiF4z5UbrukB43wSx-mw@mail.gmail.com>
+Subject: Re: [PATCH] fscrypt: Fix null pointer when defer i_crypt_info
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     tytso@mit.edu, jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On current arm64 stable 5.10(v5.10.158). If a UCE happnes pud-sized
-hugepage, kernel will panic since current memory failure can not handle
-this kind of memory failure since commit 31286a8484a8 ("mm: hwpoison:
-disable memory error handling on 1GB hugepage")
+Eric Biggers <ebiggers@kernel.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=8814=E6=
+=97=A5=E5=91=A8=E4=B8=89 02:54=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, Dec 13, 2022 at 04:11:03PM +0800, Jun Nie wrote:
+> > syzbot report below bug[1]. Fix it with checking null pointer before
+> > deferring i_crypt_info.
+> >
+>
+> Thanks, but this has already been fixed upstream by commit 105c78e12468
+> ("ext4: don't allow journal inode to have encrypt flag").
+>
+> Also, I don't think adding a NULL check to __fscrypt_inode_uses_inline_cr=
+ypto()
+> is a good idea because it is only meant to be called when the inode's enc=
+ryption
+> key has already been set up.  Instead of making the function return a
+> potentially-incorrect result, it was better to address the root cause of =
+why it
+> was being called at an inappropriate time in the first place.
+>
+> - Eric
 
-The latest kernel(v6.0) can handle this UCE since commit 6f4614886baa ("mm,
-hwpoison: enable memory error handling on 1GB hugepage"). We are trying to
-backport this patchset to stable 5.10, however too many other patches
-should be backport since there are huge difference between 5.10 and 6.0.
-The full patch list will be shown at the end of this mail.
+Thanks for the information! Do you know what's the plan/schedule of
+back porting,
+such as linux-5.15.y branch?
 
-We do not think backport all of these patches is doable for stable 5.10. Is
-there any better way to fix this problem.
-
-The kernel panic call trace:
-
-  Kernel panic - not syncing: Fatal hardware error!
-  CPU: 0 PID: 15 Comm: kworker/0:1 Not tainted 5.10.158_stable_5_10 #1
-  Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V3.26.01 06/14/2019
-  Workqueue: kacpi_notify acpi_os_execute_deferred
-  Call trace:
-   dump_backtrace+0x0/0x1ec
-   show_stack+0x20/0x30
-   dump_stack+0xd0/0x128
-   panic+0x154/0x36c
-   __raw_spin_lock_irqsave.constprop.0+0x0/0xb0
-   ghes_proc+0x148/0x200
-   ghes_notify_hed+0x58/0xd4
-   blocking_notifier_call_chain+0x74/0xb0
-   acpi_hed_notify+0x28/0x3c
-   acpi_device_notify+0x24/0x30
-   acpi_ev_notify_dispatch+0x68/0x78
-   acpi_os_execute_deferred+0x24/0x3c
-   process_one_work+0x1d4/0x4b0
-   worker_thread+0x180/0x430
-   kthread+0x118/0x120
-   ret_from_fork+0x10/0x18
-  SMP: stopping secondary CPUs
-  Kernel Offset: 0x4ed64eb80000 from 0xffff800010000000
-  PHYS_OFFSET: 0xffffd24300000000
-  CPU features: 0x00000002,62208a38
-  Memory Limit: none
-  Rebooting in 30 seconds..
-
-Our backport list(bug fixes not included):
-
-  mm,hwpoison: drain pcplists before bailing out for non-buddy zero-refcount page
-  mm,hwpoison: take free pages off the buddy freelists
-  mm,hwpoison: drop unneeded pcplist draining
-  mm,hwpoison: refactor get_any_page
-  mm,hwpoison: disable pcplists before grabbing a refcount
-  mm,hwpoison: remove drain_all_pages from shake_page
-  hugetlb: use page.private for hugetlb specific page flags
-  hugetlb: convert page_huge_active() HPageMigratable flag
-  hugetlb: convert PageHugeTemporary() to HPageTemporary flag
-  hugetlb: convert PageHugeFreed to HPageFreed flag
-  mm,hwpoison: fix race with hugetlb page allocation
-  mm: hugetlb: gather discrete indexes of tail page
-  hugetlb: create remove_hugetlb_page() to separate functionality
-  mm,hwpoison: make get_hwpoison_page() call get_any_page()
-  mm/hwpoison: disable pcp for page_handle_poison()
-  mm/hwpoison: mf_mutex for soft offline and unpoison
-  mm/hwpoison: remove MF_MSG_BUDDY_2ND and MF_MSG_POISONED_HUGE
-  mm/hwpoison: fix unpoison_memory()
-  mm/memory-failure.c: fix race with changing page compound again
-  mm/hwpoison: fix race between hugetlb free/demotion and memory_failure_hugetlb()
-  mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
-  mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
-  mm, hwpoison, hugetlb: support saving mechanism of raw error pages
-  mm/memory-failure.c: simplify num_poisoned_pages_dec
-  mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
-  mm, hwpoison: set PG_hwpoison for busy hugetlb pages
-  mm, hwpoison: make __page_handle_poison returns int
-  mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
-
+- Jun
