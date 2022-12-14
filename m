@@ -2,154 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E197864C850
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7997F64C853
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238075AbiLNLpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S238285AbiLNLpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238119AbiLNLon (ORCPT
+        with ESMTP id S238290AbiLNLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:44:43 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E92F25C7A;
-        Wed, 14 Dec 2022 03:44:42 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB8Uor012535;
-        Wed, 14 Dec 2022 11:44:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=SW5iqd+KDcgWcYcEwbk23fdI3WvkO5WeEgdmPPrepJk=;
- b=o52Trk8fLWDnagUhts7IcteOqEt1GHa73az7/g0rJLcC0vLxyHVyviZEMHT4w//+pYrW
- IdJnk4X43NyybkJnYpimquzzF2QO+73swjC3YwJVW1Qz1CuhygVMWvvEzgPluvzEzbZO
- 4LjUPOKIZkg7RZeT35m1oUpXdGaX+XOroXmt08tt5zQPiRWhFmYjx+E9cCxTReCySwJ9
- cmppYh9KUfK8E+2s6DPYerDWqTDI0f0/KQWjqK9FDLCC489AOZd9tCmngaEwu/1E/4Rj
- BiLp4Z4r8Ri0Foba4tYyMFQ0OC0VtFqVATqLE70X+i/ftIRdwhNEmYElfBzySqmPDPzQ yg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rd127n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 11:44:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEBiQ6p006803
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 11:44:26 GMT
-Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 14 Dec
- 2022 03:44:21 -0800
-Message-ID: <72fc8328-6e15-3a83-ad0b-905b2cc7a560@quicinc.com>
-Date:   Wed, 14 Dec 2022 17:14:18 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: Introduce a carveout for modem
- metadata
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <manivannan.sadhasivam@linaro.org>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <konrad.dybcio@somainline.org>, <amit.pundir@linaro.org>,
-        <regressions@leemhuis.info>, <sumit.semwal@linaro.org>,
-        <will@kernel.org>, <catalin.marinas@arm.com>,
-        <robin.murphy@arm.com>
-References: <20221213140724.8612-1-quic_sibis@quicinc.com>
- <20221213140724.8612-2-quic_sibis@quicinc.com>
- <f23f3db8-08a7-78a9-a516-de211c53b6f4@linaro.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <f23f3db8-08a7-78a9-a516-de211c53b6f4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IGITdU3h6r3P2BDkK9fgadS7wc_TNPSo
-X-Proofpoint-ORIG-GUID: IGITdU3h6r3P2BDkK9fgadS7wc_TNPSo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_04,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=791 suspectscore=0
- spamscore=0 adultscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212140091
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 06:44:58 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CBB20F7A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:44:56 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id v188-20020a1cacc5000000b003cf76c4ae66so7102093wme.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:44:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ehicEisSO5hD1eBR93dUbONfvJrO435zMk4POVy4+EE=;
+        b=RBpknXW1ddt3hmjv/UiNbTT0l3oTS279CCyh9CKM/+v5f2urrOtfUkVsgtBYwGIDKN
+         z8SqjflDXC+2NGNrT4mXb6IbgdqBqzqO5AfDbUO6C2gfKLqFtlHiobvP8OPY7iPWsSXv
+         eJSXxD8yEHuJ/IHhJFaN7PWTNCo5A1B2Kp/5S7YU9i+ME0Ma75M7v+RYGeUVuRQJZ1ui
+         eaCWvDo4zhFO9RU1X5wSqIf5LMjXEuqFt0fPFAhtAgApBi/0fV7iJ1djwNRq/2OLGCk5
+         o8sZZNN5SnRI02NQIRTakOuMyRZMveXg0nRoJaJkhksfEKWLORPerKbGEWJ8/quOmWK8
+         rbiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ehicEisSO5hD1eBR93dUbONfvJrO435zMk4POVy4+EE=;
+        b=Dbr3+PpYgIfAa+yi8/WDaHwIxAjX9HQvMgplXTrKr3C5lEkE135OdP4J0mfe/4L/fX
+         qdiKezNy+hhqna2rWLBUaKQbaZUJkPXzQEk8v6KkkwdMhdlEHyT7NE4JiFUnAh2RyaGs
+         Y/F7EDVX42Zrqx5ynsJ7KHhmTmwe88q4fo27YgbROe+rp0Osw3hO/bFzioI8H5AOkNwC
+         ezVMDiXE9IuYNHPcraklvRfEnGTgVwfUcFQ1UgUmI0wlGAlU+t0OAoszB/+PQKgNs+4P
+         CTzAvzY5hsm7mcL1WzbPJEPY0EoLe5UlAJjRjyt7FJDcmS8Zz1lZ/C0CyAO3Y5wLovfn
+         2vDw==
+X-Gm-Message-State: ANoB5pmwwQ4pJ5jLBr37T7+seNhpqvQGcCas0dhIfHTKgqk/I5DJVH9k
+        K6u4OyP0/tBCGfEiwIznAWem1Cb2mDnlSb/4uQ==
+X-Google-Smtp-Source: AA0mqf4Zxe45jDZVMvbT61VJL5gyjByFSFutPJmGf66pY3nsPK9DVU+q4HigBTuf6Js+/K6YBIXlVnLMXn9g9L0C7w==
+X-Received: from peternewman-vh.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:30cc])
+ (user=peternewman job=sendgmr) by 2002:a5d:5a95:0:b0:250:90fa:3e3 with SMTP
+ id bp21-20020a5d5a95000000b0025090fa03e3mr552847wrb.653.1671018295255; Wed,
+ 14 Dec 2022 03:44:55 -0800 (PST)
+Date:   Wed, 14 Dec 2022 12:44:46 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221214114447.1935755-1-peternewman@google.com>
+Subject: [PATCH v5 0/1] Subject: x86/resctrl: Fix task CLOSID update race
+From:   Peter Newman <peternewman@google.com>
+To:     reinette.chatre@intel.com, fenghua.yu@intel.com
+Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
+        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
+        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, x86@kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Reinette, Fenghua,
+
+Now that we know there is a full barrier in context switch and that
+smp_mb() on every task in a group update isn't nearly as expensive as
+task_call_func(), I can present you a much smaller fix.
+
+The diffs are small enough to go down to a single patch. The changelogs
+are not much simpler, but hopefully this isn't as big of a concern.
+
+This patch is different enough that I thought it necessary to remove
+James's Reviewed-By.
+
+Updates in v5:
+ - Just put an smp_mb() between CLOSID/RMID stores and task_curr() calls
+ - Add a diagram detailing the race to the changelog
+Updates in v4:
+ - Reorder the patches so that justification for sending more IPIs can
+   reference the patch fixing __rdtgroup_move_task().
+ - Correct tense of wording used in changelog and comments
+Updates in v3:
+ - Split the handling of multi-task and single-task operations into
+   separate patches, now that they're handled differently.
+ - Clarify justification in the commit message, including moving some of
+   it out of inline code comment.
+Updates in v2:
+ - Following Reinette's suggestion: use task_call_func() for single
+   task, IPI broadcast for group movements.
+ - Rebased to v6.1-rc4
+
+v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
+v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
+v3: https://lore.kernel.org/lkml/20221115141953.816851-1-peternewman@google.com/
+v4: https://lore.kernel.org/lkml/20221129111055.953833-1-peternewman@google.com/
+
+Thank you for your careful reviews and feedback so far.
+
+-Peter
+
+Peter Newman (1):
+  x86/resctrl: Fix task CLOSID/RMID update race
+
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 
-On 12/14/22 16:57, Krzysztof Kozlowski wrote:
-> On 13/12/2022 15:07, Sibi Sankar wrote:
->> Introduce a new carveout for modem metadata. This will serve as a
->> replacement for the memory region used by MSA to authenticate modem
->> ELF headers.
->>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi    | 6 ++++++
->>   arch/arm64/boot/dts/qcom/msm8996.dtsi                  | 9 +++++++++
->>   arch/arm64/boot/dts/qcom/msm8998.dtsi                  | 9 +++++++++
->>   arch/arm64/boot/dts/qcom/sc7180-idp.dts                | 7 ++++++-
->>   arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi           | 7 ++++++-
->>   arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 7 ++++++-
->>   arch/arm64/boot/dts/qcom/sdm845.dtsi                   | 9 +++++++++
->>   7 files changed, 51 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
->> index 5b47b8de69da..4242f8587c19 100644
->> --- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
->> @@ -127,6 +127,12 @@
->>   			reg = <0x0 0xf6f00000 0x0 0x100000>;
->>   			no-map;
->>   		};
->> +
->> +		/delete-node/ memory@91700000;
->> +		mdata_mem: memory@f7100000 {
->> +			reg = <0x0 0xf7100000 0x0 0x4000>;
->> +			no-map;
->> +		};
->>   	};
->>   
->>   	vph_pwr: vph-pwr-regulator {
->> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> index cc65f52bb80f..3f5fb08e2341 100644
->> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
->> @@ -462,6 +462,11 @@
->>   			reg = <0x0 0x91500000 0x0 0x200000>;
->>   			no-map;
->>   		};
->> +
->> +		mdata_mem: memory@91700000 {
->> +			reg = <0x0 0x91700000 0x0 0x4000>;
->> +			no-map;
->> +		};
->>   	};
->>   
->>   	rpm-glink {
->> @@ -2458,6 +2463,10 @@
->>   				memory-region = <&mpss_mem>;
->>   			};
->>   
->> +			metadata {
-> 
-> Does it pass dtbs_check?
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-^^ portion of the bindings aren't in yaml yet please see patch 3.
-
-> 
-> Best regards,
-> Krzysztof
-> 
