@@ -2,452 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CEB64CEF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF1B64CEF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiLNRpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 12:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S237180AbiLNRrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLNRpc (ORCPT
+        with ESMTP id S229561AbiLNRrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:45:32 -0500
-Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE1329370
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:45:30 -0800 (PST)
-Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
-        by amity.mint.lgbt (Postfix) with ESMTP id 4NXN7F3BpJz1S5Cp
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:45:29 -0500 (EST)
-Authentication-Results: amity.mint.lgbt (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mint.lgbt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
-        content-transfer-encoding:content-type:in-reply-to:references:to
-        :from:content-language:subject:user-agent:mime-version:date
-        :message-id; s=dkim; t=1671039927; x=1671903928; bh=w6bOKPtV2u1s
-        oTaKXMKuoV+EbJB0jG44bMMMfyoSbq0=; b=PXUFB0vl1gm97M6+IXnuTowKdydi
-        KMxHdhSW+j+CatTgLZ7tE3piL8P1YZi753f/H/qOIS1shRtbYVaV1tcIC3gZZrjo
-        nnOfiX4u4h9jfSg8xpobvV43+47ta44v6+hxZ2+rU/mdIrFY9neFG+iF4Oez6dVm
-        Z2Ej377sMK/0G/DHAz7bIsvvYDaMssnHaLTdv5nmHSWrnhcPUgxGRNiyRpPyBoHj
-        WLMsML5HZPk6Cgx6qeSHNKVaaZ4Jh+Gi2wVEq+/hpf2qA/TpQt6d6Jb9diuOAtf9
-        dLeVPgXI8ozOWmVj5OrAXnY/3J5fyF2+u7C8aplePpf4CGbKbgtCT+Lj4w==
-X-Virus-Scanned: amavisd-new at amity.mint.lgbt
-Received: from amity.mint.lgbt ([127.0.0.1])
-        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id o6yWxU3cemwR for <linux-kernel@vger.kernel.org>;
-        Wed, 14 Dec 2022 12:45:27 -0500 (EST)
-Received: from [192.168.4.25] (unknown [190.196.92.66])
-        by amity.mint.lgbt (Postfix) with ESMTPSA id 4NXN735T1Qz1S52g;
-        Wed, 14 Dec 2022 12:45:19 -0500 (EST)
-Message-ID: <cd025494-862b-70ec-a008-4be219f7f72f@mint.lgbt>
-Date:   Wed, 14 Dec 2022 14:45:16 -0300
+        Wed, 14 Dec 2022 12:47:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A16284
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671039987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MRU/7YOQt2xy6rWvIiu4YOafJ8TK5XKhpXf423rIVa8=;
+        b=KJOqLkvRRyEtnh8BZAxyCweUMn67kgNTs5f+Nu7BzFzvmbhtRw2qPgoj082BYu/gKaQzdL
+        LuAyJtFRiWeGXC7J0ByTmWdssJUNYqGZZQX0T+MTLwD5NvvRbBKFpzHqphNxPo1nLaeI7F
+        ptOkl7BNu59EFtW5xs2Q1OS3sG5buJ0=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-517-bIugAmTfM0mDJcBmKfLhMA-1; Wed, 14 Dec 2022 12:46:18 -0500
+X-MC-Unique: bIugAmTfM0mDJcBmKfLhMA-1
+Received: by mail-io1-f69.google.com with SMTP id j5-20020a5d9d05000000b006e2f0c28177so4267454ioj.17
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:46:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MRU/7YOQt2xy6rWvIiu4YOafJ8TK5XKhpXf423rIVa8=;
+        b=acGlVSyL0JE2kC22CLcWpP3iFlFlBltdC6OfLMwxq6znLg3xMEPBoPN0pZcL6lGVrm
+         njCOVikbpyRKgs0MExyQAeDiGavsVDez0NRVSMadKKlbhHHBLBdEVJ3P26r1bQdVbd7N
+         51X5EZWLgd/cIHZ2cn1JgVG0Bm+fADZoWRUmoPiJHdg09lG536Pg/WvobR3ASrh4IRUs
+         CY5GBd/HT0EM2u9Agy+SMI36rbiYdAe0/cWutpJ9fUxTENxkaDgslZxO9ovS5ywjcb0V
+         SEVfGjvlrgSyUIgQGo3yas8jPlyELUQsHaq01NOu4xnICFScynXlUh6cjruwS0fc3PgA
+         9/Tg==
+X-Gm-Message-State: ANoB5pkn2F/TWdh0qIdlkBWr85oo4FZye06ZSI84/xkw1dA6u6e8zdH3
+        23y6HjFl2WTYL0H8ISSJ2UWR3SAYwWvtWBXVEfACXZfeD6ZybfKEUz1gJXKJEYsIoif0ZuAZFRL
+        2gJXTuqDq8tGBho1TBSqXYBFg
+X-Received: by 2002:a92:d644:0:b0:302:3883:e567 with SMTP id x4-20020a92d644000000b003023883e567mr12733990ilp.29.1671039977125;
+        Wed, 14 Dec 2022 09:46:17 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4SQFXckK9/JRL6xKFoc8c9f5Tf7g8nePOQ32v8JjKhIjrT887ZPaM+qLxN/EXk8MQ3BE7Eqw==
+X-Received: by 2002:a92:d644:0:b0:302:3883:e567 with SMTP id x4-20020a92d644000000b003023883e567mr12733970ilp.29.1671039976890;
+        Wed, 14 Dec 2022 09:46:16 -0800 (PST)
+Received: from x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id t11-20020a02b18b000000b0038ab4a09610sm1898401jah.112.2022.12.14.09.46.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 09:46:16 -0800 (PST)
+From:   Brian Masney <bmasney@redhat.com>
+To:     catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] arm64: defconfig: enable crypto userspace API
+Date:   Wed, 14 Dec 2022 12:46:07 -0500
+Message-Id: <20221214174607.2948497-1-bmasney@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6125: Initial support for
- xiaomi-laurel_sprout
-Content-Language: en-US
-From:   Lux Aliaga <they@mint.lgbt>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221214093342.153479-1-they@mint.lgbt>
- <ea20c58f-3a53-7cdd-8669-228c4acac49a@linaro.org>
- <5a511002-5cd2-b95b-a45a-faaf78e2f4a7@mint.lgbt>
-In-Reply-To: <5a511002-5cd2-b95b-a45a-faaf78e2f4a7@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ok. I think that comment is incorrect. Changing the node name on=20
-extcon_usb breaks the "extcon" property in &usb3_dwc3, even after=20
-changing the reference.
+Enable CONFIG_CRYPTO_USER so that libkcapi can be used. This was tested
+using kcapi-rng on a Qualcomm SA8540p automotive development board.
 
-On 14/12/2022 14:26, Lux Aliaga wrote:
-> I'm a bit confused at the "Node name: usb-id" comment. Should I change=20
-> "extcon_usb" or "extcon-usb" to usb-id?
->
-> On 14/12/2022 06:52, Krzysztof Kozlowski wrote:
->> On 14/12/2022 10:33, Lux Aliaga wrote:
->>> This commit implements support for the Xiaomi Mi A3
->>> (xiaomi-laurel_sprout). Here's a summary on what's working.
->>>
->>> - dmesg output to bootloader preconfigured display
->>> - USB
->>> - UFS
->>> - SMD RPM regulators
->>>
->>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
->>> ---
->>> =C2=A0 arch/arm64/boot/dts/qcom/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
->>> =C2=A0 .../dts/qcom/sm6125-xiaomi-laurel_sprout.dts=C2=A0 | 251=20
->>> ++++++++++++++++++
->>> =C2=A0 2 files changed, 252 insertions(+)
->>> =C2=A0 create mode 100644=20
->>> arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile=20
->>> b/arch/arm64/boot/dts/qcom/Makefile
->>> index d7669a7cee9f..7b4fbb4cbb84 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -140,6 +140,7 @@ dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D=20
->>> sdm845-shift-axolotl.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sdm850-lenovo-y=
-oga-c630.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sdm850-samsung-=
-w737.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sm6125-sony-xpe=
-ria-seine-pdx201.dtb
->>> +dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sm6125-xiaomi-laurel_=
-sprout.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sm6350-sony-xpe=
-ria-lena-pdx213.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sm7225-fairphon=
-e-fp4.dtb
->>> =C2=A0 dtb-$(CONFIG_ARCH_QCOM)=C2=A0=C2=A0=C2=A0 +=3D sm8150-hdk.dtb
->>> diff --git=20
->>> a/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts=20
->>> b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts
->>> new file mode 100644
->>> index 000000000000..edc5f13bae28
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/sm6125-xiaomi-laurel_sprout.dts
->>> @@ -0,0 +1,251 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2022, Lux Aliaga <they@mint.lgbt>
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "sm6125.dtsi"
->>> +#include <dt-bindings/gpio/gpio.h>
->>> +#include <dt-bindings/input/input.h>
->>> +#include <dt-bindings/input/gpio-keys.h>
->>> +
->>> +/ {
->>> +=C2=A0=C2=A0=C2=A0 /* required for bootloader to select correct boar=
-d */
->>> +=C2=A0=C2=A0=C2=A0 qcom,msm-id =3D <0x18a 0x00>; /* sm6125 v1 */
->>> +=C2=A0=C2=A0=C2=A0 qcom,board-id =3D <0x0b 0x00>;
->>> +
->>> +=C2=A0=C2=A0=C2=A0 model =3D "Xiaomi Mi A3";
->>> +=C2=A0=C2=A0=C2=A0 compatible =3D "xiaomi,laurel_sprout", "qcom,sm61=
-25";
->>> +=C2=A0=C2=A0=C2=A0 chassis-type =3D "handset";
->>> +
->>> +=C2=A0=C2=A0=C2=A0 chosen {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ranges;
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 framebuffer0: framebuffer=
-@5c000000 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
-ompatible =3D "simple-framebuffer";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0 0x5c000000 0 (1560 * 720 * 4)>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 w=
-idth =3D <720>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 h=
-eight =3D <1560>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 s=
-tride =3D <(720 * 4)>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 f=
-ormat =3D "a8r8g8b8";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0 extcon_usb: extcon-usb {
->> Node name: usb-id
->>
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "linux,ext=
-con-usb-gpio";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 id-gpio =3D <&tlmm 102 GP=
-IO_ACTIVE_HIGH>;
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0 reserved_memory {
->> No underscores in node names. Use same node name as other boards, don'=
-t
->> invent own stuff.
->>
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 debug_mem: memory@ffb0000=
-0 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0x0 0xffb00000 0x0 0xc0000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 n=
-o-map;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 last_log_mem: memory@ffbc=
-0000 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0x0 0xffbc0000 0x0 0x80000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 n=
-o-map;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pstore_mem: ramoops@ffc00=
-000 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
-ompatible =3D "ramoops";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0x0 0xffc40000 0x0 0xc0000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-ecord-size =3D <0x1000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
-onsole-size =3D <0x40000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 m=
-sg-size =3D <0x20000 0x20000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cmdline_mem: memory@ffd00=
-000 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0x0 0xffd40000 0x0 0x1000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 n=
-o-map;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +};
->>> +
->>> +&rpm_requests {
->>> +=C2=A0=C2=A0=C2=A0 regulators-0 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "qcom,rpm-=
-pm6125-regulators";
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_s6a: s6 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <936000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1422000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l1a: l1 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1200000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1256000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l2a: l2 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1000000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1056000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l3a: l3 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1000000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1064000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l4a: l4 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <872000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <976000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l5a: l5 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1648000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <3104000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l6a: l6 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <576000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <656000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l7a: l7 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <872000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <976000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l8a: l8 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <400000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <728000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l9a: l9 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1896000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l10a: l10 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1896000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l11a: l11 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1952000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l12a: l12 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1996000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l13a: l13 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1832000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l14a: l14 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1904000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l15a: l15 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <3104000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <3232000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l16a: l16 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1800000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1904000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l17a: l17 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1248000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1304000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l18a: l18 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1200000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <1264000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l19a: l19 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1648000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <2952000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l20a: l20 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <1648000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <2952000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l21a: l21 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <2600000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <2856000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l22a: l22 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <2944000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <3304000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l23a: l23 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <3000000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <3400000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vreg_l24a: l24 {
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-min-microvolt =3D <2944000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-egulator-max-microvolt =3D <3304000>;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +};
->>> +
->>> +&hsusb_phy1 {
->>> +=C2=A0=C2=A0=C2=A0 status =3D "okay";
->>> +};
->>> +
->>> +
->>> +&sdc2_off_state {
->>> +=C2=A0=C2=A0=C2=A0 sd-cd {
->> Does not look like you tested the DTS against bindings. Please run `ma=
-ke
->> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
->> for instructions).
->>
->> that's missing -pins suffix but most likely it does not match other DT=
-S
->> neither. So probably was based on some old kernel.
->>
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pins =3D "gpio98";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bias-disable;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drive-strength =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +};
->>> +
->>> +&sdc2_on_state {
->>> +=C2=A0=C2=A0=C2=A0 sd-cd {
->> Same problems.
->>
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pins =3D "gpio98";
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bias-pull-up;
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 drive-strength =3D <2>;
->>> +=C2=A0=C2=A0=C2=A0 };
->>> +};
->> Best regards,
->> Krzysztof
->>
---=20
-Lux Aliaga
-https://nixgoat.me/
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 851e8f9be06d..cbe4ed6403d0 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1370,6 +1370,7 @@ CONFIG_9P_FS=y
+ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_SECURITY=y
++CONFIG_CRYPTO_USER=y
+ CONFIG_CRYPTO_ECHAINIV=y
+ CONFIG_CRYPTO_MICHAEL_MIC=m
+ CONFIG_CRYPTO_ANSI_CPRNG=y
+-- 
+2.38.1
 
