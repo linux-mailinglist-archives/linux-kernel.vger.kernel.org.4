@@ -2,93 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09DD64C9BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E1064C9C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238474AbiLNNH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S238523AbiLNNIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238502AbiLNNHw (ORCPT
+        with ESMTP id S238469AbiLNNIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:07:52 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E5F15838
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:07:46 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bp15so10292183lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:07:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UxFvJ5yILEbKmEb0g4GXgsQ6Gn2FjkzpKDnB0GaBVKA=;
-        b=QLPQMJNQVxwwGYrpuGhINVtm2ygZjDhGgsSXw1S47NWf6fSUfbfJOgTumt7Lhu4iFy
-         qys2EJnQ/2AFBLjbkDI3DaMVw4M0Fs+nqoY3HQXG0Jrsruvs+EJ3SC7/1XPayEBuQ1CN
-         hjUw5vY4I1exDTQpKDKoIexXAWcU3Vvh+eYTqRawBqE1wNpMzaIarr4Ch09lyJXuhR6r
-         rn9/v/zA9li6/yzw8KQZ67dI1Jxs37/jcqDxx0UU3zejowES3WmJOD+dd4EYv7G60dHp
-         ANbksW0WXMPO3JyX7CDiBPJgTAScH2ajwu7MxYC4soYzJk8BZrPX3P0k0ywNe7Q8scd/
-         siIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UxFvJ5yILEbKmEb0g4GXgsQ6Gn2FjkzpKDnB0GaBVKA=;
-        b=mnU1BYrhhhrz5NGEjeDNh8I7FoPcoaG5G5fAmEr99GiRvx6GtjWyvcB1kVf4iszeAy
-         V54Uv8bqeOtZvMRMnh6QCPUqSnThSFjyiqqiT2A+Pm0otK3krFh66h7A2gV3jtUBJOx6
-         /TkpsGiCilDfVPlG/l4zU+OU0dPNsMCFmt/5t7ttF8Whr7bSBKX0P9XqYt4gtxvlXHZr
-         Ee2HGAw6xh3A6s10++qMacfjA5TwN5z7W8cffD03kgNjIaKwZpvJniOXLasxOP4m+o0B
-         Z+o1z9TUayPphkx96tLwXppfmmg41suUN0+MVrfuETDBRXJn/Gkafkvn0MqZffKQ6uoZ
-         Fkjg==
-X-Gm-Message-State: ANoB5pmMUQaKn/NdUeKXuwT7Kh+oXmYXbLxLQx527XkCU9VcJpvIk+KJ
-        1XaxqRFbKyBUQFdR2vGXkkPl4Q==
-X-Google-Smtp-Source: AA0mqf7/d8FABL0kuN5nbJ7lUH8ThjOSPmav6hXaFMvchKZVWrBEHXEfmbYGuz4GxGpPr+zwRJLWhg==
-X-Received: by 2002:ac2:5550:0:b0:4b5:71c4:8cb with SMTP id l16-20020ac25550000000b004b571c408cbmr5732770lfk.12.1671023265166;
-        Wed, 14 Dec 2022 05:07:45 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bf6-20020a056512258600b00498f570aef2sm801176lfb.209.2022.12.14.05.07.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 05:07:44 -0800 (PST)
-Message-ID: <f84697af-3b19-c0aa-2faf-ea624746ea1a@linaro.org>
-Date:   Wed, 14 Dec 2022 14:07:43 +0100
+        Wed, 14 Dec 2022 08:08:35 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A33E4;
+        Wed, 14 Dec 2022 05:08:34 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEB8JH6002833;
+        Wed, 14 Dec 2022 13:08:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=37+qGMJBgVOiGU2Fz4wlebC5TynJF0yFwPx09eBNBsw=;
+ b=nYM4Dv0HlxXWRviVaJRFYRMvCsA+BH35a7Gni52RzhMu3fmC3aqpb9kkK+ydwVUUFmPX
+ zbf4yGA8vQt0HuT6EiDZcwRmh1CwM1hwkJYnvrYk2g2V5381tWASQz9o4i4xuzTHf7lY
+ 4WHu4eauY1+mWgqtioIYoNhhGEMmvH7/ojiWM3s0RI/menLExuWzEXvOHe6ggceu9Sij
+ ysQ236PmvkB0G1uJ3XsyPLKyjR9Cuf/Z7mtRnpJYgaMjPAMufXCXHxzVaS4CnjGyseAb
+ 7Ss8cnZ2TwCOPoOL8u4ASMQypyS+jJKuiMAtMfV7cPXPgcxWw0ZKRom9QgcLz6puMPUr /g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkh8m7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 13:08:25 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BED8ObH027896
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 13:08:24 GMT
+Received: from [10.206.28.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 14 Dec
+ 2022 05:08:20 -0800
+Message-ID: <214c4b8f-b86b-3e1f-d34b-ccfa756f3136@quicinc.com>
+Date:   Wed, 14 Dec 2022 18:38:17 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 17/17] dt-bindings: soc: socionext: Add UniPhier AHCI
- glue layer
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
 Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
- <20221213082449.2721-18-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213082449.2721-18-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        John Keeping <john@metanate.com>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "# 5 . 15" <stable@vger.kernel.org>
+References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
+ <Y5cuCMhFIaKraUyi@kroah.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <Y5cuCMhFIaKraUyi@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: k0qewZkJbsEEUT1ehs75A0VdQku6mViP
+X-Proofpoint-GUID: k0qewZkJbsEEUT1ehs75A0VdQku6mViP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 phishscore=0 malwarescore=0
+ mlxlogscore=959 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140102
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 09:24, Kunihiko Hayashi wrote:
-> Add DT binding schema for components belonging to the platform-specific
-> AHCI glue layer implemented in UniPhier SoCs.
+
+
+On 12-12-22 07:05 pm, Greg Kroah-Hartman wrote:
+> On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
+>> Function pointer ki_complete() expects 'long' as its second
+>> argument, but we pass integer from ffs_user_copy_worker. This
+>> might cause a CFI failure, as ki_complete is an indirect call
+>> with mismatched prototype. Fix this by typecasting the second
+>> argument to long.
 > 
-> This AHCI glue layer works as a sideband logic for the host controller,
-> including core reset, PHYs, and some signals to the controller.
+> "might"?  Does it or not?  If it does, why hasn't this been reported
+> before?
+Sorry for the confusion in commit text, We caught a CFI (Control Flow 
+Integrity) failure internally on 5.15, hence pushed this patch. But 
+later I came to know that CFI was implemented on 5.4 kernel for Android. 
+Will push the same on ACK and share the related details there.
+
+Thanks.
 > 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+>> Cc: <stable@vger.kernel.org> # 5.15
+> 
+> CFI first showed up in 6.1, not 5.15, right?
+> 
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>>
+>> ---
+>>   drivers/usb/gadget/function/f_fs.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index 73dc10a7..9c26561 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -835,7 +835,7 @@ static void ffs_user_copy_worker(struct work_struct *work)
+>>   		kthread_unuse_mm(io_data->mm);
+>>   	}
+>>   
+>> -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
+>> +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
+> 
+> Why just fix up this one instance?  What about ep_user_copy_worker()?
+> And what about all other calls to ki_complete that are not using a
+> (long) cast?
+> 
+> This feels wrong, what exactly is the reported error and how come other
+> kernel calls to this function pointer have not had a problem with CFI?
+> ceph_aio_complete() would be another example, right?
+> 
+> thanks,
+> 
+> greg k-h
