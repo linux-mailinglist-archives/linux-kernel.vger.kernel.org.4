@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEE964C565
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BE664C569
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237882AbiLNI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S237795AbiLNJAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbiLNI7B (ORCPT
+        with ESMTP id S237224AbiLNJAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:59:01 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDED1FCC4;
-        Wed, 14 Dec 2022 00:58:59 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so3541316pjb.0;
-        Wed, 14 Dec 2022 00:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QJpPmTe/XBClfxdnG0INFkwd4DEdd16k8DnX9kH12Oo=;
-        b=nDsigzCB1W7unRbCm/62QVdANiKye41IPr668xqAA/mAmbC5qg+yVVhU3Rq9BCSfr8
-         vZ1Kljwnw7W0Saf6246IeTK3MFXLQtrk67qxycMVU1luzfjhPkC39F6FRskX2IxhdfMJ
-         4QYcjiQ91bNvBbafQwqk2dsjV0CVjZd3HR9JYjz0YdrUe7hEvTAyiujPZxJSlHKscixR
-         tpD5uRf1c7/GidwqXdFBUx5IS7HRpe6IVxSD+2qg4k7Bd0n2I+CLOwzbIOA+Qn+b07Kd
-         DXTa/HFQtMAb0wDq9cUclcQOSzTPxAlj6tcZSEj5IhTO6gNZngH0Vszu64SfpxesjDSm
-         TsOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QJpPmTe/XBClfxdnG0INFkwd4DEdd16k8DnX9kH12Oo=;
-        b=4T2pId9gMb1sdUmeWrHLGokL9524SalcGyBqJXCr+pckmhWpgbEJhcQdXoV2DvKeKX
-         rFW3eg8JYJBhXFCTMcaoqSoj/Hx9DPFHvplwyH1SRDyS8VhCv8hFxQF50ZIPuURJcGDs
-         lNM2r3hqIqe+GiI9nNS/ogBfsc6vbiIHY7Z7KneVKI+6uY267JFespddfRz189HrhhQM
-         kT1Bvr9LALsZrub+FTli4kI2EjvIWepMvPHIOD3RvIf7tHhirXu5OPIiJq7zK0MT1rk9
-         sfQLTd7B0/vhdFZF0CJeqICrmUN9vqyN2sU/fhUXj2fdIM/swkcjq5jngNIrW39smAZh
-         Aj+g==
-X-Gm-Message-State: ANoB5pkzxdcUYhSgWHJllD6WSOKoMI8iAmOAutJyl/e8nk/2oLVp4lLa
-        6lDIoEHbL8T/Xv1qNVoBcZ0=
-X-Google-Smtp-Source: AA0mqf4jHLLcFiPuJmR9AvYsVGZxYSKqcp1xdj0nTpCk4d4X5bTvCxT/+wXnw7Fmpm2x/Im3UKD4Tw==
-X-Received: by 2002:a17:902:6b08:b0:186:639f:6338 with SMTP id o8-20020a1709026b0800b00186639f6338mr5984814plk.6.1671008338906;
-        Wed, 14 Dec 2022 00:58:58 -0800 (PST)
-Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170902b18f00b00189393ab02csm1327487plr.99.2022.12.14.00.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 00:58:58 -0800 (PST)
-Date:   Wed, 14 Dec 2022 21:58:52 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        paulo.miguel.almeida.rodenas@gmail.com
-Subject: [PATCH v2] [next] pcmcia: synclink_cs: replace 1-element array with
- flex-array member
-Message-ID: <Y5mQTOqFOGbJMerV@mail.google.com>
+        Wed, 14 Dec 2022 04:00:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FB4B5F
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:00:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0BD161871
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:00:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB93C433D2;
+        Wed, 14 Dec 2022 09:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671008444;
+        bh=OUrIeBrSPIOjDM5mNSWxlgtbSOIPYTSg6sFJ0j7pkrE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bkU7NPkSngjxvsPtosTu1P/HAKMg9xmLihYrDwsKkNZLlifhpXuAMwGGG5lTTPQFN
+         CIemETBTjYcW2LJcb2G/9VK996Q5fMYYfcKFGxrrat3MLdm5NCGw5Iw5S5wCVr1rML
+         kM6R71HVjf8mnzj5JeU4wUWcdkEjkSLso7qh/x3hh5Ek0POhl1K7o2MqFvE6i784/f
+         4o4PFX6UktkRziSrhQR0y9dPEmdorz1VFoB5ANm1Ch8uFyO5Ad1EPSQesHYVEB5mH0
+         F7FwK6XYmXalK84oele2Ghc/nQ1B+jIBDNIYqZDbkF0GZ9KCsuc6n2FDOaxAP73PRR
+         2jvqEUFD1kLkw==
+Message-ID: <efb41211-e0aa-96f2-5099-677ca6b6d99b@kernel.org>
+Date:   Wed, 14 Dec 2022 11:00:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5mMWEtHWKOiPVU+@mail.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] phy: ti: j721e-wiz: Manage TypeC lane swap if
+ typec-gpio-dir not specified
+Content-Language: en-US
+To:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sinthu Raja <sinthu.raja@ti.com>
+References: <20221213124854.3779-1-sinthu.raja@ti.com>
+ <20221213124854.3779-2-sinthu.raja@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221213124854.3779-2-sinthu.raja@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +63,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with
-flexible array members instead. So, replace one-element array with
-flexible-array member in struct RXBUF. No changes were required
-within the source code because of the existing padding in RXBUF struct
+Hi Sinthu,
 
-It's worth mentioning that doing a build before/after this patch
-results in no binary output differences.
+On 13/12/2022 14:48, Sinthu Raja wrote:
+> It's possible that the Type-C plug orientation on the DIR line will be
+> implemented through hardware design. In that situation, there won't be
+> an external GPIO line available, but the driver still needs to address
+> this since the DT won't use the typec-gpio-dir property.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+The property is actually "typec-dir-gpios"
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+> 
+> Add code to handle LN10 Type-C swap if typec-gpio-dir property is not
+> specified in DT.
+> 
+> Remove typec-gpio-dir check to use minimum debounce from Type-C spec if
+> it is not provided in DT
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Changelog:
+Why?
 
-- v2: removed changes to how the size of RXBUF was calculated. I
-  changed my mind after thinking about the existing padding in the
-  struct. Happy to discuss it if anyone sees it differently.
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> ---
+>  drivers/phy/ti/phy-j721e-wiz.c | 65 +++++++++++++++++++++-------------
+>  1 file changed, 40 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
+> index 141b51af4427..b17eec632d49 100644
+> --- a/drivers/phy/ti/phy-j721e-wiz.c
+> +++ b/drivers/phy/ti/phy-j721e-wiz.c
+> @@ -375,6 +375,7 @@ struct wiz {
+>  	struct gpio_desc	*gpio_typec_dir;
+>  	int			typec_dir_delay;
+>  	u32 lane_phy_type[WIZ_MAX_LANES];
+> +	u32 lane_phy_reg[WIZ_MAX_LANES];
+>  	struct clk		*input_clks[WIZ_MAX_INPUT_CLOCKS];
+>  	struct clk		*output_clks[WIZ_MAX_OUTPUT_CLOCKS];
+>  	struct clk_onecell_data	clk_data;
+> @@ -1231,14 +1232,28 @@ static int wiz_phy_reset_deassert(struct reset_controller_dev *rcdev,
+>  	int ret;
+>  
+>  	/* if typec-dir gpio was specified, set LN10 SWAP bit based on that */
+> -	if (id == 0 && wiz->gpio_typec_dir) {
+> -		if (wiz->typec_dir_delay)
+> -			msleep_interruptible(wiz->typec_dir_delay);
+> -
+> -		if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
+> -			regmap_field_write(wiz->typec_ln10_swap, 1);
+> -		else
+> -			regmap_field_write(wiz->typec_ln10_swap, 0);
+> +	if (id == 0 && wiz->typec_dir_delay) {
+> +		msleep_interruptible(wiz->typec_dir_delay);
 
-- v1: https://lore.kernel.org/lkml/Y5mMWEtHWKOiPVU+@mail.google.com/
----
- drivers/char/pcmcia/synclink_cs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Why do you need to have this debounce delay if there was no GPIO to begin with.
+You need to move the msleep call within the next if {} block.
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index b2735be81ab2..0b03c6d13d59 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -105,7 +105,7 @@ static MGSL_PARAMS default_params = {
- typedef struct {
- 	int count;
- 	unsigned char status;
--	char data[1];
-+	char data[];
- } RXBUF;
- 
- /* The queue of BH actions to be performed */
--- 
-2.38.1
+> +
+> +		if (wiz->gpio_typec_dir) {
+> +			if (gpiod_get_value_cansleep(wiz->gpio_typec_dir))
+> +				regmap_field_write(wiz->typec_ln10_swap, 1);
+> +			else
+> +				regmap_field_write(wiz->typec_ln10_swap, 0);
+> +		} else {
+> +			/* if no typec-dir gpio was specified, and USB lines
+> +			 * are connected to Lane 0 then set LN10 SWAP bit to 1.
+> +			 */
+> +			u32 num_lanes = wiz->num_lanes;
+> +			int i;
+> +
+> +			for (i = 0; i < num_lanes; i++) {typec-dir-gpios:
+> +				if ((wiz->lane_phy_type[i] == PHY_TYPE_USB3) \
+> +						&& wiz->lane_phy_reg[i] == 0) {
+> +					regmap_field_write(wiz->typec_ln10_swap, 1);
+> +				}
+> +			}
+> +		}
+>  	}
+>  
+>  	if (id == 0) {
+> @@ -1370,8 +1385,10 @@ static int wiz_get_lane_phy_types(struct device *dev, struct wiz *wiz)
+>  		dev_dbg(dev, "%s: Lanes %u-%u have phy-type %u\n", __func__,
+>  			reg, reg + num_lanes - 1, phy_type);
+>  
+> -		for (i = reg; i < reg + num_lanes; i++)
+> +		for (i = reg; i < reg + num_lanes; i++) {
+> +			wiz->lane_phy_reg[i] = reg;
+>  			wiz->lane_phy_type[i] = phy_type;
+> +		}
+>  	}
+>  
+>  	return 0;
+> @@ -1464,24 +1481,22 @@ static int wiz_probe(struct platform_device *pdev)
+>  		goto err_addr_to_resource;
+>  	}
+>  
+> -	if (wiz->gpio_typec_dir) {
+> -		ret = of_property_read_u32(node, "typec-dir-debounce-ms",
+> -					   &wiz->typec_dir_delay);
+> -		if (ret && ret != -EINVAL) {
+> -			dev_err(dev, "Invalid typec-dir-debounce property\n");
+> -			goto err_addr_to_resource;
+> -		}
+> +	ret = of_property_read_u32(node, "typec-dir-debounce-ms",
+> +				   &wiz->typec_dir_delay);
+> +	if (ret && ret != -EINVAL) {
+> +		dev_err(dev, "Invalid typec-dir-debounce property\n");
+> +		goto err_addr_to_resource;
+> +	}
 
+Why do you need to know this debounce value if you don't have a valid GPIO line?
+
+>  
+> -		/* use min. debounce from Type-C spec if not provided in DT  */
+> -		if (ret == -EINVAL)
+> -			wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
+> +	/* use min. debounce from Type-C spec if not provided in DT  */
+> +	if (ret == -EINVAL)
+> +		wiz->typec_dir_delay = WIZ_TYPEC_DIR_DEBOUNCE_MIN;
+>  
+> -		if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
+> -		    wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
+> -			ret = -EINVAL;
+> -			dev_err(dev, "Invalid typec-dir-debounce property\n");
+> -			goto err_addr_to_resource;
+> -		}
+> +	if (wiz->typec_dir_delay < WIZ_TYPEC_DIR_DEBOUNCE_MIN ||
+> +	    wiz->typec_dir_delay > WIZ_TYPEC_DIR_DEBOUNCE_MAX) {
+> +		ret = -EINVAL;
+> +		dev_err(dev, "Invalid typec-dir-debounce property\n");
+> +		goto err_addr_to_resource;
+>  	}
+
+All these changes are unnecessary.
+
+>  
+>  	ret = wiz_get_lane_phy_types(dev, wiz);
+
+cheers,
+-roger
