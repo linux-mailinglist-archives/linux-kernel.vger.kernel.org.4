@@ -2,82 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D734E64CD74
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C4E64CD78
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238580AbiLNP4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S238696AbiLNP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238880AbiLNPzm (ORCPT
+        with ESMTP id S238168AbiLNPzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:55:42 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0663A28E18;
-        Wed, 14 Dec 2022 07:52:53 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id l127so2925020oia.8;
-        Wed, 14 Dec 2022 07:52:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H4xHwLe/pd/VD5CKhSEoAMsLKafV5CRSbF22OBqvyP8=;
-        b=NgzX6l6WICjbmWY+o3o951tCy7a/wVFaZ2Fj+N/+ynXwu7llgIqQGBlAXnlJnbkeKE
-         cVKfpPFCgeem0wMkNZQ2Q8x8U1MRyE3XlgvpWRwSYcXGJvC2fsxG9DaTNVEvw5NsnuZg
-         phZVROpk5xOKHl+BUBsZX+8jGEYesL0o6nz7ytvJi0WbR7MolnEaB47Fx8dyR5BYQA8S
-         vYT1GOIc5dCn3Lwq7KAog9zK8Fv0zCfWzd/q8yXN9mxh+HPINkyUj7MGbGGOHWuOQAAq
-         OQ63mS326miAizhGgAUjcX16Nq4DDWvwGBTU7SK3aIWdlWIL2zZ6vruWuJf6aI2L2EZS
-         ko8A==
-X-Gm-Message-State: ANoB5pkXhgrQa+EB5aXHuLfPXOgPeO1L0xvRRutl0jpUa+YveXkUJ5K0
-        zVS2fKTleDHV0vYnGZjuaA==
-X-Google-Smtp-Source: AA0mqf533Y3MXNGVuA3GJkuW7JtzHZqn2fg4QDPst1Zqq/hgTjNtN2e6RQhnUAJ9S1oggdCXIjSXVA==
-X-Received: by 2002:a05:6808:159c:b0:35e:9270:7b0e with SMTP id t28-20020a056808159c00b0035e92707b0emr6784321oiw.29.1671033172176;
-        Wed, 14 Dec 2022 07:52:52 -0800 (PST)
-Received: from robh_at_kernel.org (rrcs-98-6-157-194.sw.biz.rr.com. [98.6.157.194])
-        by smtp.gmail.com with ESMTPSA id z7-20020aca6707000000b0035c073aa0d8sm37229oix.18.2022.12.14.07.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 07:52:51 -0800 (PST)
-Received: (nullmailer pid 1127423 invoked by uid 1000);
-        Wed, 14 Dec 2022 15:52:48 -0000
-Date:   Wed, 14 Dec 2022 09:52:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: adi,ltc2992: correct unit
- address in example
-Message-ID: <167103316837.1127369.14707637163188224968.robh@kernel.org>
-References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
- <20221213092643.20404-2-krzysztof.kozlowski@linaro.org>
+        Wed, 14 Dec 2022 10:55:48 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4549D28E22
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:53:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gtawquJbr4j4KL/a0E8zt+JLEwoREh5/6YFc6c6V6no=; b=qmbneJv+DvannkGKQqEoytBscM
+        t3jplbl9lpSl9+7He82fxjiS1cfW7eTLshIhlQXJ5rg3DxCObB1Mp6XEnv5HL7YYXRSBOgnt7ZSdp
+        +3vMLhMSgpvRL2Un1blxBcT3AGZdp1HjCtae3+LQjtw0yzDduFStYvarKnjymwm/CxVb6YIfspH8N
+        Dmzwfa/oYaSPKKMoaQkm9Bj0u9MaCp6SgbhouFzwKHRLfLLWmQXvrr5QuO2QflpsmnBW0YnNPMJ/D
+        9xgEsrnuuCb5Zx5FI6Njp9KIypiPyCMVoKs4JXk0cqCfGcmKKRryQLg2xDUXGMIyxquCjYgSLPeeh
+        OT04mcrw==;
+Received: from 200-158-226-94.dsl.telesp.net.br ([200.158.226.94] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1p5U4F-003IrC-56; Wed, 14 Dec 2022 16:53:11 +0100
+Message-ID: <b95f7a3d-429a-3564-fc9e-fa05d1d551df@igalia.com>
+Date:   Wed, 14 Dec 2022 12:53:04 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213092643.20404-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [for-next][PATCH 6/8] ftrace: Prevent RCU stall on
+ PREEMPT_VOLUNTARY kernels
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20221214140133.608431204@goodmis.org>
+ <20221214140209.346584113@goodmis.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221214140209.346584113@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/12/2022 11:01, Steven Rostedt wrote:
+> From: "gpiccoli@igalia.com" <gpiccoli@igalia.com>
 
-On Tue, 13 Dec 2022 10:26:42 +0100, Krzysztof Kozlowski wrote:
-> lower-case hex is expected for unit addresses:
+Hi Steve, would be possible to use my full name here, like: Guilherme G.
+Piccoli <gpiccoli@igalia.com> ?
+
+Thanks,
+
+
+Guilherme
+
 > 
->   adi,ltc2992.example.dts:22.24-38.15: Warning (i2c_bus_reg): /example-0/i2c/ltc2992@6F: I2C bus unit address format error, expected "6f"
+> The function match_records() may take a while due to a large
+> number of string comparisons, so when in PREEMPT_VOLUNTARY
+> kernels we could face RCU stalls due to that.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Add a cond_resched() to prevent that.
+> 
+> Link: https://lkml.kernel.org/r/20221115204847.593616-1-gpiccoli@igalia.com
+> 
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Acked-by: Paul E. McKenney <paulmck@kernel.org> # from RCU CPU stall warning perspective
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  kernel/trace/ftrace.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index d04552c0c275..b8e374a372e5 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -4204,6 +4204,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
+>  			}
+>  			found = 1;
+>  		}
+> +		cond_resched();
+>  	} while_for_each_ftrace_rec();
+>   out_unlock:
+>  	mutex_unlock(&ftrace_lock);
