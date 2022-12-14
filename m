@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468DF64D3AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C076264D3B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiLNXsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 18:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S229662AbiLNXvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 18:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiLNXsN (ORCPT
+        with ESMTP id S229488AbiLNXvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:48:13 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4E931ECA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:48:12 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 5754C32008FD;
-        Wed, 14 Dec 2022 18:48:11 -0500 (EST)
-Received: from imap42 ([10.202.2.92])
-  by compute1.internal (MEProxy); Wed, 14 Dec 2022 18:48:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1671061690; x=1671148090; bh=SLgELAxBK4
-        9tyfuwt7e2QpMW23iZgCnbRJyNF5uq7lE=; b=D4/2jYTTdM/2ODNRR9uYHnsLk+
-        j0gaRVMHzHhONiln89+hcHgjxcdzQOlAvnwrSHXOt7rKcEIElEVvlxyJsbERzd8l
-        TNn+XPmd2OSVM4gGdviD6esWGL6Gh1u+SJP1ziF6jR7Lc7Q8tzEIv7198u+lNThC
-        sRtkRlp+d7/0lV8nQ3hO3TA9hQs8UglBSCX9jTDGLoqnIQs2Y+k75cKbAv9ZXv5y
-        u6J9fHjT/QIi056PVHw3bb01YqA6E7Oi3p6GOJpfyD8VJKyZkQTi+4s66rx+Y/tq
-        s/oxMfxHNiZY4wqYy70qrU+i6KQjHijpwufWTjjk+A8eco7yKPuKQsrCpr2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1671061690; x=1671148090; bh=SLgELAxBK49tyfuwt7e2QpMW23iZ
-        gCnbRJyNF5uq7lE=; b=k6X69AvLVBp43zvrSHiCEc0/4UPRC7Cvn9JlPTwbSa6X
-        vYSDRZBZEbXakuMk6/JMIdtgYOwG14hwzKAVRakjD9a6j2uFNQe3l4G+RPWqORfA
-        LZx5r0ACLhVYx5XDtWiyjEkor/Ve+cn0notGfCKiGD4KliFW1LL/enFJY4qaogzl
-        dQ1OPqjhE3JkKZYvgswD6f4oEiKMOBWrFsvRXfxFnktM0OzjvQ9MOkMmDXIx072R
-        tw9XkttWxc8g6UiKFqY0+YuJo1oa7wARu/MzqZFk9kaX+CH3wsap1LfQnRGSYo+g
-        sLzGAw9jIVr4GMTMDVyBrRLn4obNNkNa/yIT3OtLnQ==
-X-ME-Sender: <xms:umCaY0lHCLpQieq48m6V8Zm3R-knbsQdUNBJ52UK0t2yKruaGMbzVA>
-    <xme:umCaYz0M1PL1MbSHWG8KfAIAVrvMSUHlhZdybHKTmCfhjpyvO9UXULr6frnRUXuFr
-    w6w7050SinYXLPa6w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeggdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
-    fuuhhsphgvtghtffhomhgrihhnucdlgeelmdenfghrlhcuvffnffculddvfedmnecujfgu
-    rhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfffgrnhhivg
-    hlucgiuhdfuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepjeel
-    teehvddvfefgteefgfeggfevtdfftedutdehkedvheeukefgtdefgeehveeinecuffhomh
-    grihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgnecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:umCaYypc5AzY65xx_CEdBMrgdbSdJWR0_MQ9vG_G1q-K56swpRmvPw>
-    <xmx:umCaYwlmpE9u-xwv9UA6N13TiYSqrGO6pJJ6BS0DCxVkYwvyal0GFA>
-    <xmx:umCaYy1MO7cnozWQLbPlajg2ISoM6L85zZFlqnzDcqlAwfP0fnc3AA>
-    <xmx:umCaY3_JNNE8wBY9atCYH3AXpQYMglerkMHE6HKGeeEw2B4JVX3DCg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 93645BC0078; Wed, 14 Dec 2022 18:48:10 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <263e2fc0-9833-4bef-84e3-902fb3a8dbad@app.fastmail.com>
-In-Reply-To: <202212121614.1CSzW0Xw-lkp@intel.com>
-References: <202212121614.1CSzW0Xw-lkp@intel.com>
-Date:   Wed, 14 Dec 2022 16:47:49 -0700
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "kernel test robot" <lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Alexei Starovoitov" <ast@kernel.org>
-Subject: Re: progs/test_bpf_nf_fail.c:82:4: error: incomplete definition of type
- 'struct nf_conn'
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        Wed, 14 Dec 2022 18:51:45 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CD0187;
+        Wed, 14 Dec 2022 15:51:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXXFk22wjz4xGR;
+        Thu, 15 Dec 2022 10:51:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1671061898;
+        bh=Jhs0FxkxL1WiMawudA52+qgnbA54iThVsDF4Fvd4VNY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=of1YjaryGKwX2d8tL/g1zkJbffaW989hdvkp2Sm+6HC/unPtFjwVQflvG8OZNeHsV
+         KzLrV2Cao8qqcvRJqQrsa+A7ahPu/WArqUm7OpDCNXgHIdMZ4onM6GKQhTNxNH8fbe
+         gRjW/nOleuKM1tSP3uV6+n612HQrg/CFRaJ+3axrNlS4z+z1FEFe2ec/eeiZgRt+MT
+         CQ/hMr1M19OExj1bt+ocPksUBN5ibML3Aj1TO3Vk63HHS+fOpykg2IzE8/jsWhVve3
+         quFzK4hmbHnG9LatsFryY/oTkQlmRn/iC1bR0ifJ5ym1FKp+8bfrpDdR1qiyPwz+kn
+         Go/i4VYSrnPNg==
+Date:   Thu, 15 Dec 2022 10:51:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: Re: linux-next: manual merge of the iommufd tree with the vfio tree
+Message-ID: <20221215105133.71fc6601@canb.auug.org.au>
+In-Reply-To: <20221206125542.52ea97a7@canb.auug.org.au>
+References: <20221206125542.52ea97a7@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/m4IRHkZ+Nq07H3x/2dNL9DD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,55 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022, at 1:57 AM, kernel test robot wrote:
-> Hi Daniel,
->
-> First bad commit (maybe != root cause):
->
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
-> master
-> head:   830b3c68c1fb1e9176028d02ef86f3cf76aa2476
-> commit: e2d75e954c0a277b8fa0ddf666ddd4f9b73195f7 selftests/bpf: Add 
-> tests for writing to nf_conn:mark
-> date:   3 months ago
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> reproduce:
->         # 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e2d75e954c0a277b8fa0ddf666ddd4f9b73195f7
->         git remote add linus 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e2d75e954c0a277b8fa0ddf666ddd4f9b73195f7
->         make O=/tmp/kselftest headers
->         make O=/tmp/kselftest -C tools/testing/selftests
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> progs/test_bpf_nf_fail.c:82:4: error: incomplete definition of type 'struct nf_conn'
->            ct->status = 0xF00;
->            ~~^
->    progs/test_bpf_nf_fail.c:7:8: note: forward declaration of 'struct nf_conn'
->    struct nf_conn;
->           ^
->    1 error generated.
->
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
-> Attachments:
-> * config
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Not sure what to do about this. Seems like we'd want conditional compilation
-for selftests depending on build config. But maybe effort not worth it since
-there's a specific CI environment? And unlikely that connmarks disabled on
-most distro kernels.
+Hi all,
 
-Lemme know if it's worthwhile to fix. Otherwise I will ignore.
+On Tue, 6 Dec 2022 12:55:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> Today's linux-next merge of the iommufd tree got conflicts in:
+>=20
+>   drivers/vfio/Kconfig
+>   drivers/vfio/Makefile
+>=20
+> between commits:
+>=20
+>   20601c45a0fa ("vfio: Remove CONFIG_VFIO_SPAPR_EEH")
+>   e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
+>=20
+> from the vfio tree and commits:
+>=20
+>   a4d1f91db502 ("vfio-iommufd: Support iommufd for physical VFIO devices")
+>   e5a9ec7e096a ("vfio: Make vfio_container optionally compiled")
+>   c2849d718d26 ("vfio: Move vfio group specific code into group.c")
+>=20
+> from the iommufd tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/vfio/Kconfig
+> index 0b8d53f63c7e,286c1663bd75..000000000000
+> --- a/drivers/vfio/Kconfig
+> +++ b/drivers/vfio/Kconfig
+> @@@ -38,6 -46,17 +46,12 @@@ config VFIO_NOIOMM
+>   	  this mode since there is no IOMMU to provide DMA translation.
+>  =20
+>   	  If you don't know what to do here, say N.
+> + endif
+> +=20
+>  -config VFIO_SPAPR_EEH
+>  -	tristate
+>  -	depends on EEH && VFIO_IOMMU_SPAPR_TCE
+>  -	default VFIO
+>  -
+> + config VFIO_VIRQFD
+>  -	tristate
+> ++	bool
+> + 	select EVENTFD
+> + 	default n
+>  =20
+>   source "drivers/vfio/pci/Kconfig"
+>   source "drivers/vfio/platform/Kconfig"
+> diff --cc drivers/vfio/Makefile
+> index 0721ed4831c9,3783db7e8082..000000000000
+> --- a/drivers/vfio/Makefile
+> +++ b/drivers/vfio/Makefile
+> @@@ -2,12 -2,17 +2,14 @@@
+>   obj-$(CONFIG_VFIO) +=3D vfio.o
+>  =20
+>   vfio-y +=3D vfio_main.o \
+> - 	  iova_bitmap.o \
+> - 	  container.o
+> + 	  group.o \
+> + 	  iova_bitmap.o
+>  +vfio-$(CONFIG_VFIO_VIRQFD) +=3D virqfd.o
+> + vfio-$(CONFIG_IOMMUFD) +=3D iommufd.o
+> + vfio-$(CONFIG_VFIO_CONTAINER) +=3D container.o
+>  =20
+>  -obj-$(CONFIG_VFIO_VIRQFD) +=3D vfio_virqfd.o
+>   obj-$(CONFIG_VFIO_IOMMU_TYPE1) +=3D vfio_iommu_type1.o
+>   obj-$(CONFIG_VFIO_IOMMU_SPAPR_TCE) +=3D vfio_iommu_spapr_tce.o
+>  -obj-$(CONFIG_VFIO_SPAPR_EEH) +=3D vfio_spapr_eeh.o
+>   obj-$(CONFIG_VFIO_PCI) +=3D pci/
+>   obj-$(CONFIG_VFIO_PLATFORM) +=3D platform/
+>   obj-$(CONFIG_VFIO_MDEV) +=3D mdev/
 
-Thanks,
-Daniel
+This is now a conflict between the vfio tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaYYUACgkQAVBC80lX
+0GxoKAf/fYsSNrPra53oL9grnGpMq5ligH47Xo0xm5EHuEWZjUxToFuzSoMfcryi
+5XXAzbrUIjhrHUXexePK889bQtyof6VzIDr/TQbazWxeWZFWnuOuHDWvoGhxnW54
+/npqmoRNeRa71xYcn7wPubbadZef4OjNq/vKV9doQc2OznMQKxPwwxhA48Ie+SpJ
+sZ1gCZxEcOwvscSP4fRk3GjL8Phu75xkM0pZwLlYNSun6+dCj0Lhn4IGzOVvXSQ8
+jFL68jBEuMoP9vwhVgHa1xlyKuE0cW/d9utVZmW2p2FCuGgq4CN5zmTLLULjk+Uk
+IAIpMazUsh1oknoavN9I2DM0LJaegg==
+=v77K
+-----END PGP SIGNATURE-----
+
+--Sig_/m4IRHkZ+Nq07H3x/2dNL9DD--
