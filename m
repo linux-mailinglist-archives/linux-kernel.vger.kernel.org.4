@@ -2,167 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD5F64CFFD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3694A64D000
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239105AbiLNTRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S238912AbiLNTTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239083AbiLNTRv (ORCPT
+        with ESMTP id S239187AbiLNTSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:17:51 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886591B1CE
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671045470; x=1702581470;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=z+Cg/CUw2SP0ojeP/+rnC+1A9xsU4A+XqGCymvuCwS8=;
-  b=CN+reiWPRryJ0EEkACqm8EkmNAYAjmY6u/YMUpQlQnSQ7/m5SA2MTsko
-   9IaETQ26wN9aUm2BcC+0u5BJTUyvaHnNn4Dxc2gkDmgHNMBpnYOmcC8Nw
-   yj+yQY8AjfmPmgMRtaZs2OWUd1DMfjRR5aynpWQWeOX6tDZJH+V6NDV7k
-   8rlby5iUCZyyuXYUNMSknoMAD6lOcBsxj2p4E68TWRjP0eKfWOnwNGVAG
-   2wOof8dXNZhVyxClsD5uxqHN7liMDH9l6rd6UEkkGe4ouHpwAOElMnziI
-   M/tRIA80vnrkdx4aNI+y3qrd5Ukdou48VUhWh2KPzbi28+MSotd2huDOW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="404764104"
-X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
-   d="scan'208";a="404764104"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 11:17:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="737805454"
-X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
-   d="scan'208";a="737805454"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Dec 2022 11:17:49 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 14 Dec 2022 11:17:47 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 14 Dec 2022 11:17:47 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 14 Dec 2022 11:17:46 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KLYMvfih2aHow1pfs663Rua6xLvMPFQjTL+cIUIMF9pSeKQo0WR30kgPSx/swmrM6cuPcc0fGEGxg0q6TRHxutCwc4PrBQPPGRr1NOQ1HorxtkiqJWlsqIM43iuG1U7S1DsdBkirsjqvdQHqWT3Xrd6sdXiV0LxGMcMFYgaeKhvL1/PC9euS1rJ77yuCGSNejD07STyqx8b/zC74/eR+j4kkM5vwdotPI18biphpJxvggqtskbLOrjAZ62e/7RPTAyNaOxQfHoGJFwkwks2bKOwiHbd1LmE59iO5iDpGvzXEGOJXyOoC1Cpbv8tvEYN/SwqKQ25FuT1RARJOYFrkug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qF7JSDMPpWh9MIN7KWXbTg6uVHwgdMqkL0sfPgoSr80=;
- b=GeAlFxQ+mM/QSr1LTKOPlyNxKSjL27xJYHCAZWFEa9vVMBsTaHszFDfCfr0NvLz3mFtjvQQgbarXKFEyYGglyA3Wc2Sk5ZeL0oFDLMIvIVQTfgX+dFcMSh5hqicunite8JOG5K7G3ziNRfyjZbhZqCQSsMXiWZtoX/kvExSaEtKMbObNUJNpSEygs9O2o+H7AfuMquSSAy60G36DeJAd0JzAxQd572zOeYO01rgX4CDOrrtYNYDsyoTOPB9smo20nCasCuUSwpXrgu+41rdycak5NZ5VV+s16grSJrEFQd50BexK7e5zfg6gZD5fRdH+E4Q4qeglS0j8XXLZXlU+7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by BL3PR11MB6410.namprd11.prod.outlook.com (2603:10b6:208:3b9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 14 Dec
- 2022 19:17:25 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a1f7:e4c4:e60:c5b3]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a1f7:e4c4:e60:c5b3%6]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 19:17:24 +0000
-Message-ID: <6f0f4c45-039b-ffaf-b30a-d9e2aae0cc74@intel.com>
-Date:   Wed, 14 Dec 2022 11:17:20 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] x86/resctrl: Fix event counts regression in reused RMIDs
-Content-Language: en-US
-To:     Peter Newman <peternewman@google.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <eranian@google.com>,
-        Babu Moger <Babu.Moger@amd.com>
-References: <20221207112924.3602960-1-peternewman@google.com>
- <f58e6af2-aa16-9461-d40d-1e4e52ee6943@intel.com>
- <CALPaoCiB-vOuXJYkaLLsxSKHcjT55q1RSNBjhHUWmPL9rFdF8A@mail.gmail.com>
- <74cfd689-3c03-5f41-d01c-efab04ce4197@intel.com>
- <CALPaoChbJNYBXvOwftSxApo_ca6BLC7Ej21cDAaKdj9LOJumxw@mail.gmail.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <CALPaoChbJNYBXvOwftSxApo_ca6BLC7Ej21cDAaKdj9LOJumxw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR03CA0027.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::37) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|BL3PR11MB6410:EE_
-X-MS-Office365-Filtering-Correlation-Id: 728f32e0-242d-41f2-273a-08dade07d50c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rx+YWv1NMQXi1DkRTH6PFnGR/m9OmP3G2gzRJ/IXkCZ0mLCTbcEFT748Mv58N4+XJt1wYFR8vHATwkdv2WvxyKGpfoGX8dbE2KUxhjrxXzxHidxYVf+bj31NOiHBdOrkVP7uJkkDsOkkuHY/Z4krxxiwNWt3NTWUYVtTlRxUXhJzP/bEgYIxMtECArJOeSNxoDvDk6hl6dipaM/l+2D094T6w2XskjwWelKk5n1PJ5PMmr6KgASK1IDMfwdPwRmTdSa0ytiiXLlvValj2zysXDChQKNPFb32UTJtIbgU7c1Da9MBX17DDlCWOamJSPduhr0l++UIhKMqUF4uSXths0qBQZmaT1ztln5Oe5QdY1eFES9FFooEiAU1RFrp+0l7mrinIgciVn2id0IMjImuJwX2meEazgcYH47zYrAPbFQGCICFdhv9TSd0IZyn8iWMcXlnBW3xiBNiivjQoE2A/qh3YD2cLtVc3hXD8xYeZbsQHMAzM3UxvWmZZDx2ZViqlFAkmkhhCQhiUe3yJ5ibgOVQsbjsiUCxoxBw1RIb7XTnn5xOTcybZqzC315NlWlRYmLG6yQh6s8AnEkRoEc9Y7QWJZuq3FS0eWLvpIibsfl8by2ChHJzAKIAWxeU+OxaAkUk7iFLPQMoxUSC1EEVS0uMMcGNuI+AbhACKuzESNcpg6FmAprb+uSLscFhDB/4TatTG9/IM2YuGaMmEAXWYUcAbiZARfe+OEM4jW2f2pXfIj+VKeu9cMvY9SioShcG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(346002)(396003)(39860400002)(376002)(451199015)(2906002)(6666004)(82960400001)(966005)(38100700002)(36756003)(66476007)(66946007)(41300700001)(4326008)(66556008)(186003)(83380400001)(6512007)(44832011)(53546011)(26005)(8936002)(5660300002)(6506007)(7416002)(2616005)(6486002)(31696002)(316002)(54906003)(31686004)(86362001)(478600001)(6916009)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?clgybFNvYlRvSWQ2eWZSRDJsR1R0ZUFBbDg3Y0NLSSttcTlJOGVYUjQxZ3Fj?=
- =?utf-8?B?b2RIeXVpK2xqWUI2RVdBaW5PUUxtbDYxTHhrS0FpTkNSNnMzcURPeVg3S0pk?=
- =?utf-8?B?ck9xcC9aNWpGUWhOcHczL3hlQUMwemMzWDZWeityUHdiRlQyd2JjMEQ5dG9Q?=
- =?utf-8?B?d3JvUC9ibHMyTm5TaUg5dkwvUWRzT0tnTDBlRjFnRkM5UG10ME9tVnM0ajB6?=
- =?utf-8?B?U0Z5em1mNDRGd0VmbzRZWUxhdXRIbzJ2MmVNdlhDT3grWHA0bjYxTy9HR01F?=
- =?utf-8?B?Uy8wQmx2Zy93ZG5taEo5UFlyTzBPTHMwWkhOVkU1SWJTMWhaNUc4MmVQaHRX?=
- =?utf-8?B?QmNqbkM1Vk1Fby9sVW05K3IyZjN3MEFPc0dmV2U1TlBpRURwRVRtbGZkbWFl?=
- =?utf-8?B?NWw2YWlYYVJFK1pkYUx4OCtzdDBOWWl5NnZrRksyNGk3VEJrL1dXR2gzekRO?=
- =?utf-8?B?LzN6OHVTQStpZWErZ2k4QjA0RGxPNG9DV0tWSGlDVzVkWmU1aFhvVjZWZ1pq?=
- =?utf-8?B?RzVKRmFIbHBqSmdxTExjSmxPQkZwcDVyZksycXMxbUVIMTMvc3J1dzQzc3FN?=
- =?utf-8?B?eCt1OURJeVA4VnlORS94UTdoMDErM3ZPdm8xNkxZRG9ZTVk0TXV6bGMzOHdj?=
- =?utf-8?B?bHpyV2E2ckpOVGxHTTQ4bW9rNlA2ZEFmRUtMWk5wRnR2NkUxcldhb1lXQ3p2?=
- =?utf-8?B?SkVtNTRXUVE3VzBWSXppQ1NaWGkyS013ODFzZm1CVHJKZDkvUzRISTdGcUIr?=
- =?utf-8?B?Z0VSYmRwT3EzcUNoN25vbVZYano4bkRDY1RxUldxY0EzSDVKNEdlVi91bDdx?=
- =?utf-8?B?djFwMFhNUjJVVDVuSUhDUVpIMHVXZ3JnNy94STBhMXhGd3RwNmNZU2VFU1Nw?=
- =?utf-8?B?K3hmSzF0eWVkN1BPWkJ6RHhYRWpkTTMwMmJUblprR3RQTjNqNFJKQ3BBcHpt?=
- =?utf-8?B?S1IyZWFNZTRjUGlGYWJrT2dIYWI3dlNLNEdIbDBOVUxBLzJ3RitYZVZpdXFV?=
- =?utf-8?B?VnFpY3RkMTJJejNSNis1elpUajIxYjd0ZDlRczRmOVF5RFRUSFE4QnpYMnBW?=
- =?utf-8?B?VXhvSWswN2gxeHpLZEtQSERyY01nM1BZa1crMk1NWjRGSUgxRjU3bTBuSDA4?=
- =?utf-8?B?UTMzUWswOUFrOXlQTERPTE9SMUI4ejVnY2RqK2k5Njl4K0JJWDI4Ly8yY2pY?=
- =?utf-8?B?LytnNmVSY01idTdGOVdmMWFkU3NyQTNVcHlzVjhpem4vd25WUDUwQzVjWEtj?=
- =?utf-8?B?UWFmY2Z0ZmJOTnIvTkJxUTdKUEFIUUtRN0FmclZ1SFdFZ1ptS08wd2xFNUY4?=
- =?utf-8?B?eTVtTC9CbTdxRU9iTEUvR1dEN1V2NllGV1MwZlgzZVEzQ0p5WEhkZG5KR29n?=
- =?utf-8?B?aG1BcXBYZlQ1TnNMZHhJcTNId3ovR25Gam1aTlRCdjM5QzVKSFVRb3JUSHZT?=
- =?utf-8?B?SGdZT0I3Rk1WMTRjUDBhL2hDSSt1VWhoSE5JQ3B1Q2k5eUpFSTE4QmsrcDFs?=
- =?utf-8?B?aXNsNG81dFdQa0t3cW5hZit1NlFsMERMQ0tZeFd2bFU2WlJ5NzRRUTRhcVZD?=
- =?utf-8?B?TjRMQmIyemxwVUdtNmhwZm9Edm9XaURnM3lZYzFCOWVyN2xKdFEwaDRxNVhw?=
- =?utf-8?B?Qm93MnRkYytOSUdwa202OWNFUFBRKzNIaXBhM0FOazJ4MlM4cEd1ZnJ4akN6?=
- =?utf-8?B?VEtqV0E4bk83SlVHOWt1dXZocXVndzZGNlB0NGI0VEpGNkR5eXM5bEEyWWtP?=
- =?utf-8?B?RE9xNzFrdzgwUVpZbXF1M29HSUpkTG52dzg2ZjdKbCtWT2VRRERpUjkzZXZq?=
- =?utf-8?B?UGVjS2Zna24vTDdCemVidHBIRnVlemwvVHhJNGVrck5YUi82QitGUG4vYWJi?=
- =?utf-8?B?Z3JRK3NINWFML1RRVm5YSlJUY29vZ2VnYzJmcGtRSkhpd1VDd3VXQkNPNEJT?=
- =?utf-8?B?UzNLa3Ntdmxod3o2SDd2LzQzRTZqQzhBVXpzTE1iRkJpZVV0ampWamlnQWNL?=
- =?utf-8?B?bWpqbWhLdHhVY0ZsNDU4Y3p4dldYL0tuRVJ4SytQMlBrc1JycDh0R0dTN0JK?=
- =?utf-8?B?eEJHa002TC8zR1FPS3JVeUV4UGNlTDhUS0FQd2ZDNkNGM05ab1MycklINll1?=
- =?utf-8?B?THlxRFBGOHB0bUZOVEFRK2pXRkcxZVNITGtEemhQekFLOGFvRUtBeVpIcnBB?=
- =?utf-8?B?d1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 728f32e0-242d-41f2-273a-08dade07d50c
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 19:17:24.8702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j0j5HkDBTSZGAxRRreVn96avounjA0qcuAKrqQwjLApE4c3EPXVFII5QCAKiUc8RJzwdRVm9RyYA6OPAwyefGqJrohY37/hvDJVoIV6k3j4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6410
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Wed, 14 Dec 2022 14:18:44 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEF82B624
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:18:18 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id ay32so3278926qtb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:18:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QyIMB4aEXbSB/ScB2Z9iWYKFxuCY76NBvLKj0Z9Cka8=;
+        b=lqVQ04g+K8H0vQxnHcPEdP0C8ZtjVr94RzJUqtsq6gCo8F0KEKdnd5us4urq3FADUE
+         SHp0jzKfwNPNmj2EC1hKU6sesci1Y31JqlPkJmq1RkImcw4USFqVulx8nvA1UU3ztibc
+         XNviS3yO9XTrX60oOEZhB42pcBzjbdatOqQG5lTJKc89ZuOYq8avkrRODG5KOz47mrbz
+         4eFWv5Us+85f2enJ0/Qm6Ldids0pj8PwL9iVqTd/UWMLptdsT/hPK4mcHwx10bnaMmjL
+         XxOsovwM2TiQ7g4DIoLz2JBUJW4tgYTr+KfJgj6YOKj8vVd64bOjqeYetWe+vr1ofZYl
+         c0Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QyIMB4aEXbSB/ScB2Z9iWYKFxuCY76NBvLKj0Z9Cka8=;
+        b=2+aSXZ3J3ozKgP7cWiHeP15gmnwgyOgA/zNVGSSLk67CZMfKGsi9j8A35iz+ZdjWob
+         +OBSW5leHHtjirgI7XNcLxzZqvWeAYHfcV3cT8+of+6rW/VO4ujAEvQ6PNCS0WgUqd3Z
+         pn+sg8E3ICjWFtEEEztms5BD3puyyCFdM//z6UjoB2Xl2xKKVPyR1s9g9B0xtfCg18eE
+         QlvsI9vdYP8xGOwdklk7q8yqnyntlnB1d31iqpycHE00cgFDiQti8B+LuV/OuScHzkN3
+         7QeiM4Ef8wLEvZK7AUM/3oOmskU6aNy1KAWq1DTnpQl/0EASzp7Dt++XcAofR1NtqL4G
+         pdyw==
+X-Gm-Message-State: ANoB5plivgh8AomybT7knNwpWXT+wWYotnZtY/BZQ7JjSMMVaqNfO2km
+        2HtjJF/sdwp922OaAjbyjinLQw==
+X-Google-Smtp-Source: AA0mqf6X0Y/BkSyGzWCp0VIlRyouMIyhiy8Ec9HnM6lvFzcvoh5fTt/W+N7JigU0Ax3eab/Yu4VVbA==
+X-Received: by 2002:a05:622a:4d89:b0:3a5:c024:7ed4 with SMTP id ff9-20020a05622a4d8900b003a5c0247ed4mr12046055qtb.17.1671045497992;
+        Wed, 14 Dec 2022 11:18:17 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id ca20-20020a05622a1f1400b003a5fb681ae7sm2182617qtb.3.2022.12.14.11.18.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 14 Dec 2022 11:18:17 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfsplus: fix uninit-value in hfsplus_delete_cat()
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <20221214103707.3893954-1-chenxiaosong2@huawei.com>
+Date:   Wed, 14 Dec 2022 11:18:14 -0800
+Cc:     roman.gushchin@linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0A20C187-6B3E-4C97-8D5C-6AE066781B6E@dubeyko.com>
+References: <20221214103707.3893954-1-chenxiaosong2@huawei.com>
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,93 +77,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
 
-On 12/14/2022 6:21 AM, Peter Newman wrote:
-> On Thu, Dec 8, 2022 at 7:31 PM Reinette Chatre
-> <reinette.chatre@intel.com> wrote:
->>
->> I think this can be cleaned up to make the code more clear. Notice the
->> duplication of following snippet in __mon_event_count():
->> rr->val += tval;
->> return 0;
->>
->> I do not see any need to check the event id before doing the above. That
->> leaves the bulk of the switch just needed for the rr->first handling that
->> can be moved to resctrl_arch_reset_rmid().
->>
->> Something like:
->>
->> void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d, ...
->> {
->> ...
->> struct arch_mbm_state *am;
->> struct mbm_state *m;
->> u64 val = 0;
->> int ret;
->>
->> m = get_mbm_state(d, rmid, eventid); /* get_mbm_state() to be created */
-> 
-> Good call. When prototyping another change, I quickly found the need to
-> create this myself.
-> 
->> if (m)
->> memset(m, 0, sizeof(*m));
-> 
-> mbm_state is arch-independent, so I think putting it here would require
-> the MPAM version to copy this and for get_mbm_state() to be exported.
 
-You are correct, it is arch independent ... so every arch is expected to
-have it.
-I peeked at your series and that looks good also - having cleanup done in
-a central place helps to avoid future mistakes.
+> On Dec 14, 2022, at 2:37 AM, ChenXiaoSong <chenxiaosong2@huawei.com> =
+wrote:
+>=20
+> Syzkaller reported BUG as follows:
+>=20
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>  BUG: KMSAN: uninit-value in hfsplus_subfolders_dec
+>                              fs/hfsplus/catalog.c:248 [inline]
+>  BUG: KMSAN: uninit-value in hfsplus_delete_cat+0x1207/0x14d0
+>                              fs/hfsplus/catalog.c:419
+>   hfsplus_subfolders_dec fs/hfsplus/catalog.c:248 [inline]
+>   hfsplus_delete_cat+0x1207/0x14d0 fs/hfsplus/catalog.c:419
+>   hfsplus_rmdir+0x141/0x3d0 fs/hfsplus/dir.c:425
+>   hfsplus_rename+0x102/0x2e0 fs/hfsplus/dir.c:545
+>   vfs_rename+0x1e4c/0x2800 fs/namei.c:4779
+>   do_renameat2+0x173d/0x1dc0 fs/namei.c:4930
+>   __do_sys_renameat2 fs/namei.c:4963 [inline]
+>   __se_sys_renameat2 fs/namei.c:4960 [inline]
+>   __ia32_sys_renameat2+0x14b/0x1f0 fs/namei.c:4960
+>   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+>   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+>   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+>   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+>   entry_SYSENTER_compat_after_hwframe+0x70/0x82
+>=20
+>  Uninit was stored to memory at:
+>   hfsplus_subfolders_inc fs/hfsplus/catalog.c:232 [inline]
+>   hfsplus_create_cat+0x19e3/0x19f0 fs/hfsplus/catalog.c:314
+>   hfsplus_mknod+0x1fd/0x560 fs/hfsplus/dir.c:494
+>   hfsplus_mkdir+0x54/0x60 fs/hfsplus/dir.c:529
+>   vfs_mkdir+0x62a/0x870 fs/namei.c:4036
+>   do_mkdirat+0x466/0x7b0 fs/namei.c:4061
+>   __do_sys_mkdirat fs/namei.c:4076 [inline]
+>   __se_sys_mkdirat fs/namei.c:4074 [inline]
+>   __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4074
+>   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+>   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+>   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+>   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+>   entry_SYSENTER_compat_after_hwframe+0x70/0x82
+>=20
+>  Uninit was created at:
+>   __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5581
+>   alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
+>   alloc_slab_page mm/slub.c:1794 [inline]
+>   allocate_slab+0x1b5/0x1010 mm/slub.c:1939
+>   new_slab mm/slub.c:1992 [inline]
+>   ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
+>   __slab_alloc mm/slub.c:3279 [inline]
+>   slab_alloc_node mm/slub.c:3364 [inline]
+>   slab_alloc mm/slub.c:3406 [inline]
+>   __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+>   kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
+>   alloc_inode_sb include/linux/fs.h:3125 [inline]
+>   hfsplus_alloc_inode+0x56/0xc0 fs/hfsplus/super.c:627
+>   alloc_inode+0x83/0x440 fs/inode.c:259
+>   iget_locked+0x2a1/0xe20 fs/inode.c:1286
+>   hfsplus_iget+0x5f/0xb60 fs/hfsplus/super.c:64
+>   hfsplus_btree_open+0x13b/0x1cf0 fs/hfsplus/btree.c:150
+>   hfsplus_fill_super+0x12b0/0x2a80 fs/hfsplus/super.c:473
+>   mount_bdev+0x508/0x840 fs/super.c:1401
+>   hfsplus_mount+0x49/0x60 fs/hfsplus/super.c:641
+>   legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+>   vfs_get_tree+0xa1/0x500 fs/super.c:1531
+>   do_new_mount+0x694/0x1580 fs/namespace.c:3040
+>   path_mount+0x71a/0x1eb0 fs/namespace.c:3370
+>   do_mount fs/namespace.c:3383 [inline]
+>   __do_sys_mount fs/namespace.c:3591 [inline]
+>   __se_sys_mount+0x734/0x840 fs/namespace.c:3568
+>   __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
+>   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+>   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+>   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+>   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+>   entry_SYSENTER_compat_after_hwframe+0x70/0x82
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>=20
+> Fix this by initializing 'subfolders' of 'struct hfsplus_inode_info'
+> in hfsplus_iget().
+>=20
+> Link: =
+https://syzkaller.appspot.com/bug?id=3D981f82f21b973f2f5663dfea581ff8cee1d=
+dfef2
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> ---
+> fs/hfsplus/super.c | 1 +
+> 1 file changed, 1 insertion(+)
+>=20
+> diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
+> index 122ed89ebf9f..612c07857667 100644
+> --- a/fs/hfsplus/super.c
+> +++ b/fs/hfsplus/super.c
+> @@ -72,6 +72,7 @@ struct inode *hfsplus_iget(struct super_block *sb, =
+unsigned long ino)
+> 	mutex_init(&HFSPLUS_I(inode)->extents_lock);
+> 	HFSPLUS_I(inode)->flags =3D 0;
+> 	HFSPLUS_I(inode)->extent_state =3D 0;
+> +	HFSPLUS_I(inode)->subfolders =3D 0;
+> 	HFSPLUS_I(inode)->rsrc_inode =3D NULL;
+> 	atomic_set(&HFSPLUS_I(inode)->opencnt, 0);
+>=20
 
->> am = get_arch_mbm_state(hw_dom, rmid, eventid);
->> if (am) {
->> memset(am, 0, sizeof(*am));
->> /* Record any initial, non-zero count value. */
->> ret = __rmid_read(rmid, eventid, &val);
->> if (!ret)
->> am->prev_msr = val;
->> }
->>
->> }
->>
->> Having this would be helpful as reference to Babu's usage.
-> 
-> His usage looks a little different.
-> 
-> According to the comment in Babu's patch:
-> 
-> https://lore.kernel.org/lkml/166990903030.17806.5106229901730558377.stgit@bmoger-ubuntu/
-> 
-> + /*
-> + * When an Event Configuration is changed, the bandwidth counters
-> + * for all RMIDs and Events will be cleared by the hardware. The
-> + * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
-> + * every RMID on the next read to any event for every RMID.
-> + * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
-> + * cleared while it is tracked by the hardware. Clear the
-> + * mbm_local and mbm_total counts for all the RMIDs.
-> + */
-> + resctrl_arch_reset_rmid_all(r, d);
-> 
-> If all the hardware counters are zeroed as the comment suggests, then
-> leaving am->prev_msr zero seems correct. __rmid_read() would likely
-> return an error anyways. The bug I was addressing was one of reusing
-> an RMID which had not been reset.
+Looks good. Thanks for the fix.
 
-You are correct, but there are two things to keep in mind though:
-* the change from which you copied the above snippet introduces a new
-  _generic_ utility far away from this call site. It is thus reasonable to
-  assume that this utility should work for all use cases, not just the one
-  for which it is created. Since there are no other use cases at this time,
-  this may be ok, but I think at minimum the utility will benefit from 
-  a snippet indicating the caveats of its use as a heads up to any future users.
-* the utility does not clear struct mbm_state contents. Again, this is ok
-  for this usage since AMD does not support the software controller but 
-  as far as a generic utility goes the usage should be clear to avoid
-  traps for future changes.
+Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
 
-Reinette
+But we have more fields in struct hfsplus_inode_info:
+
+struct hfsplus_inode_info {=09
+atomic_t opencnt;
+/*
+ * Extent allocation information, protected by extents_lock.
+ */
+u32 first_blocks;=09
+u32 clump_blocks;
+u32 alloc_blocks;
+u32 cached_start;
+u32 cached_blocks;
+hfsplus_extent_rec first_extents;
+hfsplus_extent_rec cached_extents;
+unsigned int extent_state;
+struct mutex extents_lock;
+/*
+ * Immutable data.
+ */=09
+struct inode *rsrc_inode;=09
+__be32 create_date;
+/*
+ * Protected by sbi->vh_mutex.
+ */=09
+u32 linkid;=09
+/*
+ * Accessed using atomic bitops.
+ */=09
+unsigned long flags;=09
+/*
+ * Protected by i_mutex.
+ */=09
+sector_t fs_blocks;=09
+u8 userflags;		/* BSD user file flags */
+u32 subfolders;		/* Subfolder count (HFSX only) */
+struct list_head open_dir_list;
+spinlock_t open_dir_lock;
+loff_t phys_size;
+struct inode vfs_inode;
+};
+
+I believe we need to set initialized more fields in hfsplus_iget() =
+method.
+Could you add the initialization of other missed fields?
+
+Thanks,
+Slava.
+
+> --=20
+> 2.31.1
+>=20
 
