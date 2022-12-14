@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B9264CD4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E0764CD65
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238913AbiLNPsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S238894AbiLNPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238704AbiLNPrh (ORCPT
+        with ESMTP id S238855AbiLNPv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:47:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C190422B09
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:47:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6100161B20
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:47:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63338C433F1;
-        Wed, 14 Dec 2022 15:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671032843;
-        bh=Y8qD8rMmJhmPqz25ZwVyMqlVTaSyGcKy80GqxbqJej8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=g/i7IcSmoXZ9RNvsAZ7TIMNyWEbeHNDlkdnsZfo4Ro3/dFq9BkvJ/600GhHyBc3Dc
-         GOM2nSHHYCBJ+NDAWoQWyxV6r6+8HXFWxTSG88LAtM1Bq1gLAi1Nc3alGzaE67Fo27
-         toCrJXxDNBqeId7BTuhbDATyh2pIihI9ZdvWdA9TCtpfKGdRcbJr1lzhfoGnpOJ4mt
-         ogPmzFrLp0UNMdnWEZChc+4e7ZGEmJO0DbgGdMfOobvJYvzL9KhgF9lwnxkEt/70le
-         T03niXnZdVwoBXYLwj0GCAprN5kDROCEXtNF3MNFbSieGLHpEdxqPObjJ+sEUUwsEZ
-         jXqUQVgllx4qw==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, cy_huang <u0084500@gmail.com>
-Cc:     m.szyprowski@samsung.com, cy_huang@richtek.com,
-        chiaen_wu@richtek.com, gene_chen@richtek.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1670981831-12583-1-git-send-email-u0084500@gmail.com>
-References: <1670981831-12583-1-git-send-email-u0084500@gmail.com>
-Subject: Re: [PATCH] regulator: core: Fix resolve supply lookup issue
-Message-Id: <167103284213.341365.14545132888451712010.b4-ty@kernel.org>
-Date:   Wed, 14 Dec 2022 15:47:22 +0000
+        Wed, 14 Dec 2022 10:51:56 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB429368
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:48:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id fy4so7414025pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WaLTjgWRihQN7b0MKycoZ8sfbj+ZIdN/5VH6BQ1zJG8=;
+        b=XMynpH/QE30AFbSvvPWWkgXqBXOOP1Y7o2E1+jU1ZROwcipnsl43BYfWKz9UVtbJUD
+         FVLlZIdq+s3UiL8JKNXsew7gpKRWx7wcggHKte6wQJLKVPXiwjDE/qbEqakc4+d/kCU2
+         o2eGMGvttgdi6SdN1OzsUGW4UtjOjHLCxTiM4PTKChd0mM4LYT3q+33OqzLuUQhMe/y6
+         CHMJs7HG9S6fYMPMLqzpe5LeKmvI//Ft+/64Ru0nYaHW0Q7FnON5kHJKF4RqxzQH3SYj
+         Ivi5e5hKL/gNehXywqTOr8RChJeVoEFJydOfZFfxG/tuCv6bs8GG84qEb5uroMjXovOr
+         Zsgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WaLTjgWRihQN7b0MKycoZ8sfbj+ZIdN/5VH6BQ1zJG8=;
+        b=BrQ8aiqAhxcL9bu+TMizBYi5rArTZwqzjQSdrD/7eRwOIiDbwHzT23JkobFvrKxAPT
+         KXjhi3ICd1luGntG0j9jYBqqXgSVsI77/cNx60uTFw4xfYVZGYveu7fmwWKWahL+avtb
+         939B93YCrlpwwsW7fzu8F4SFj+EXowDajW9ljM/YmNBb/76o0/3k4aWfHUE5PnwdaNBm
+         /lOPana9YGkuj9cptPTOtf0Zf8VWt/+rIfuV9GDLGelX2ZC7t61Hh8PO4fvEamaNCBUK
+         q17zC6dk75EVgVkH32jqKIpyKiH9WOCJVioTRY/PgZQfRZOXAZS+cJeArTjl9zlgQyrw
+         QO1w==
+X-Gm-Message-State: ANoB5pl5XdCRzXq9ly+7xpowJBQ8wXqJRg2RNRoz1RMrlxg5x4WgEWdz
+        JWKlBFDMxZUgj6JnunViCWHpyg==
+X-Google-Smtp-Source: AA0mqf6vsR5Xz/LK0X/Dvs2lGxaCS6gbU8Zhg3GtAbtn/rjmbDaH9Nm6wzVn56Lrw2ZzX9gI59k7qw==
+X-Received: by 2002:a05:6a21:2d8f:b0:a7:882e:3a18 with SMTP id ty15-20020a056a212d8f00b000a7882e3a18mr576516pzb.1.1671032929053;
+        Wed, 14 Dec 2022 07:48:49 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b28-20020aa78edc000000b0056b2e70c2f5sm57481pfr.25.2022.12.14.07.48.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 07:48:48 -0800 (PST)
+Date:   Wed, 14 Dec 2022 15:48:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Robert Hoo <robert.hu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Greg Thelen <gthelen@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH 0/5] KVM: x86/mmu: TDP MMU fixes for 6.2
+Message-ID: <Y5nwXDS38UzavS7n@google.com>
+References: <20221213033030.83345-1-seanjc@google.com>
+ <acb8adfc5a2ace34010dc70d5ccd2821ff0a1ecb.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-7e003
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acb8adfc5a2ace34010dc70d5ccd2821ff0a1ecb.camel@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 09:37:11 +0800, cy_huang wrote:
-> From Marek's log, the previous change modify the parent of rdev.
-> https://lore.kernel.org/all/58b92e75-f373-dae7-7031-8abd465bb874@samsung.com/
+On Wed, Dec 14, 2022, Robert Hoo wrote:
+> On Tue, 2022-12-13 at 03:30 +0000, Sean Christopherson wrote:
+> > Fix three fatal TDP MMU bugs introduced in 6.2,
 > 
-> In 'regulator_resolve_supply', it uses the parent DT node of rdev as the
-> DT-lookup starting node. But the parent DT node may not exist. This will
-> cause the NULL supply issue.
+> introduced in 6.1? or earlier?
+
+6.2, or more precisely, code sitting in kvm/next that will hopefully become part
+of 6.2-rc1.
+
+> >  harden related code,
+> > and clean up kvm_tdp_mmu_map() to eliminate the need for gotos.
+> > 
+> > Sean Christopherson (5):
+> >   KVM: x86/mmu: Don't attempt to map leaf if target TDP MMU SPTE is
+> >     frozen
+> >   KVM: x86/mmu: Map TDP MMU leaf SPTE iff target level is reached
+> >   KVM: x86/mmu: Re-check under lock that TDP MMU SP hugepage is
+> >     disallowed
+> >   KVM: x86/mmu: Don't install TDP MMU SPTE if SP has unexpected level
+> >   KVM: x86/mmu: Move kvm_tdp_mmu_map()'s prolog and epilog to its
+> > caller
+> > 
+> >  arch/x86/kvm/mmu/mmu.c          |  9 +++++++-
+> >  arch/x86/kvm/mmu/mmu_internal.h |  1 -
+> >  arch/x86/kvm/mmu/tdp_mmu.c      | 39 +++++++++++++++--------------
+> > ----
+> >  3 files changed, 26 insertions(+), 23 deletions(-)
+> > 
+> > 
+> > base-commit: 51229fd7872f82af07498aef5c79ad51baf81ea0
 > 
-> [...]
+> I cannot find this base commit in my tree, where I just pulled to
+> latest queue yesterday. But find this series can be applied to this
+> latest queue as well.
 
-Applied to
+Ya, I have an extra commit in my local repo sitting on top of kvm/queue so that
+my standard builds don't fail.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: core: Fix resolve supply lookup issue
-      commit: 0debed5b117d11e33cba52870c4dcb64f5911891
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index cc3e8c7d0850..2c7f2a26421e 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -898,6 +898,7 @@ bool kvm_hv_assist_page_enabled(struct kvm_vcpu *vcpu)
+                return false;
+        return vcpu->arch.pv_eoi.msr_val & KVM_MSR_ENABLED;
+ }
++EXPORT_SYMBOL_GPL(kvm_hv_assist_page_enabled);
+ 
+ int kvm_hv_get_assist_page(struct kvm_vcpu *vcpu)
+ {
