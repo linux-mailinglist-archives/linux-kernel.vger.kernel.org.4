@@ -2,144 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05FC64CEFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E96464CF03
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238096AbiLNRxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 12:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        id S238187AbiLNRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238257AbiLNRxi (ORCPT
+        with ESMTP id S237486AbiLNRzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:53:38 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9014813D51
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:53:36 -0800 (PST)
-Received: from jupiter.universe (dyndsl-095-033-169-234.ewe-ip-backbone.de [95.33.169.234])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6BE2F6600358;
-        Wed, 14 Dec 2022 17:53:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671040414;
-        bh=lh2jZqSbCvS5f9nm4Fgd9vprbjcQVIH6HrkGVhAfOoM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=C3CDTdU8fsEVnqbSqp/bimvPADiKVuAZvXn+/JPlJfA0jMa+IPqCKR39uEp3p6D+L
-         42Ek4wm7igf4aebhzTxPgux0Nvk9cisJDXieJAhhMZtURGUWOs7ru5F8e78+bnbjBt
-         wgAX8TDjkmI3sT8Ooj7Dx/ZbnedBbp3FBUjyQeTuulQYGGCMw/bx4jF7597OEEdIgM
-         OaKF3DDkqPfXOtmUs9G6XJa6m2dyDbflNqip9ltSHSUG/+7PMn6n4Wmek3nMdm+LIX
-         09rpbZQ/LYPASRxkvy3E1f0DbMUkv0B4d3Tzs0p5u6bAG+5kzJ1U47TtDbftadDi/a
-         zBs2cfXNvIJqg==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 1F9B0480116; Wed, 14 Dec 2022 18:53:32 +0100 (CET)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv2 1/1] ARM: improve Cortex A8/A9 errata help text
-Date:   Wed, 14 Dec 2022 18:53:27 +0100
-Message-Id: <20221214175327.57703-1-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 14 Dec 2022 12:55:40 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFE5F2B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:55:36 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id d10so2197272ilc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5mupyHph60zW1pBiVb4mDSMN7RkjMG8EJ9nxvuoQ3I=;
+        b=DxoQG/CUV6j/eIQ4DQf2r1048BkXOzql3x5HEv6/SDQxco/uInwIFwDzawZcJUoOzy
+         TOCCZICRMLVJhEbwcoApINifHZj1o2D0vyNykiZnyCOu28d3h5PPggPaTE8DXd2SlHVY
+         2ew+bj54yDuwubo8nIw47UKWkPc6BGTDH6LpFjdl0P6nPg2ALs2YUaSbrpHKwRLETY1i
+         b6hO9fAnJku0IUECOSVyXmNX8pUp6cV+UeJMTRODX7/toSNJUVl6b3nyqFVC8eRkGa3b
+         q7aiwYKifPun/jZLJhZYSZYvWte9uhGf2jRtVjAOH54qw84YqN3lo0oDf2z08JdFElTo
+         8mxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/5mupyHph60zW1pBiVb4mDSMN7RkjMG8EJ9nxvuoQ3I=;
+        b=n17ihGK8Kv8CFDIE6cH/qPX4859e+Ng1K8ieHM9OwbaYC5jk0atdCON6pWVu2I2GPL
+         Hzb/tRpHhLZL/BWgXM0T0a85OYwhDtIf6yTxsxHcnDR1Q604Mtp13ITelqhu6UivmIKg
+         UutTt7Yi0tgJyJl6dgW/zIvBP87s8JGUjYjGSo3eGjj5Zv+PjnAHimgrcOvPUxgIfbIv
+         uGGOdqYshlJknDvUmNKc97MOoIkt8MzM1IhwmoS33ULuD6Tbaeyox1Hg7afhcs9mqLbQ
+         q6su8Kbrad96XKZbrXXfcbgEHp7w10oxskGe50fLcTyjTM4VfMj6MDr4YBZDRaLUd+p9
+         b3WQ==
+X-Gm-Message-State: ANoB5pkfEQ3WiAdIdfBUNN4rDAmG2Z79dMfRCOKIbBE+qHliEseb1Gvf
+        Z8ba3qvok0PC1ANX1UowqREFpw==
+X-Google-Smtp-Source: AA0mqf65/Kf9O9EnNDER/ZDoDPXWd03V7lAqgfPJL2N4119ThlOL/HDlJIORW0PhNwXDQJGWscBDHw==
+X-Received: by 2002:a92:dc83:0:b0:302:42c9:8f2f with SMTP id c3-20020a92dc83000000b0030242c98f2fmr2516110iln.1.1671040536091;
+        Wed, 14 Dec 2022 09:55:36 -0800 (PST)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id x5-20020a92dc45000000b002eb1137a774sm2364958ilq.59.2022.12.14.09.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 09:55:35 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Ken Chen <kenchen@google.com>,
+        "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc:     Saravana Kannan <saravanak@google.com>, stable@vger.kernel.org,
+        kernel-team@android.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221208212902.765781-1-isaacmanjarres@google.com>
+References: <20221208212902.765781-1-isaacmanjarres@google.com>
+Subject: Re: [PATCH RESEND v1] loop: Fix the max_loop commandline argument
+ treatment when it is set to 0
+Message-Id: <167104053516.12018.3829902997304947122.b4-ty@kernel.dk>
+Date:   Wed, 14 Dec 2022 10:55:35 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-50ba3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Docuemnt that !ARCH_MULTIPLATFORM is necessary because accessing
-the the errata workaround registers may not work in non-secure
-mode and mention that these erratas should be applied by the
-bootloader instead.
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
-Changes since RFCv1
- * https://lore.kernel.org/all/20221209182000.549179-1-sebastian.reichel@collabora.com/
- * update help text instead of removing !ARCH_MULTIPLATFORM
----
- arch/arm/Kconfig | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+On Thu, 08 Dec 2022 13:29:01 -0800, Isaac J. Manjarres wrote:
+> Currently, the max_loop commandline argument can be used to specify how
+> many loop block devices are created at init time. If it is not
+> specified on the commandline, CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block
+> devices will be created.
+> 
+> The max_loop commandline argument can be used to override the value of
+> CONFIG_BLK_DEV_LOOP_MIN_COUNT. However, when max_loop is set to 0
+> through the commandline, the current logic treats it as if it had not
+> been set, and creates CONFIG_BLK_DEV_LOOP_MIN_COUNT devices anyway.
+> 
+> [...]
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index a08c9d092a33..f81426422df4 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -656,7 +656,9 @@ config ARM_ERRATA_458693
- 	  hazard might then cause a processor deadlock. The workaround enables
- 	  the L1 caching of the NEON accesses and disables the PLD instruction
- 	  in the ACTLR register. Note that setting specific bits in the ACTLR
--	  register may not be available in non-secure mode.
-+	  register may not be available in non-secure mode and thus is not
-+	  available on a multiplatform kernel. This should be applied by the
-+	  bootloader instead.
- 
- config ARM_ERRATA_460075
- 	bool "ARM errata: Data written to the L2 cache can be overwritten with stale data"
-@@ -669,7 +671,9 @@ config ARM_ERRATA_460075
- 	  and overwritten with stale memory contents from external memory. The
- 	  workaround disables the write-allocate mode for the L2 cache via the
- 	  ACTLR register. Note that setting specific bits in the ACTLR register
--	  may not be available in non-secure mode.
-+	  may not be available in non-secure mode and thus is not available on
-+	  a multiplatform kernel. This should be applied by the bootloader
-+	  instead.
- 
- config ARM_ERRATA_742230
- 	bool "ARM errata: DMB operation may be faulty"
-@@ -682,7 +686,10 @@ config ARM_ERRATA_742230
- 	  ordering of the two writes. This workaround sets a specific bit in
- 	  the diagnostic register of the Cortex-A9 which causes the DMB
- 	  instruction to behave as a DSB, ensuring the correct behaviour of
--	  the two writes.
-+	  the two writes. Note that setting specific bits in the diagnostics
-+	  register may not be available in non-secure mode and thus is not
-+	  available on a multiplatform kernel. This should be applied by the
-+	  bootloader instead.
- 
- config ARM_ERRATA_742231
- 	bool "ARM errata: Incorrect hazard handling in the SCU may lead to data corruption"
-@@ -697,7 +704,10 @@ config ARM_ERRATA_742231
- 	  replaced from one of the CPUs at the same time as another CPU is
- 	  accessing it. This workaround sets specific bits in the diagnostic
- 	  register of the Cortex-A9 which reduces the linefill issuing
--	  capabilities of the processor.
-+	  capabilities of the processor. Note that setting specific bits in the
-+	  diagnostics register may not be available in non-secure mode and thus
-+	  is not available on a multiplatform kernel. This should be applied by
-+	  the bootloader instead.
- 
- config ARM_ERRATA_643719
- 	bool "ARM errata: LoUIS bit field in CLIDR register is incorrect"
-@@ -734,7 +744,9 @@ config ARM_ERRATA_743622
- 	  register of the Cortex-A9 which disables the Store Buffer
- 	  optimisation, preventing the defect from occurring. This has no
- 	  visible impact on the overall performance or power consumption of the
--	  processor.
-+	  processor. Note that setting specific bits in the diagnostics register
-+	  may not be available in non-secure mode and thus is not available on a
-+	  multiplatform kernel. This should be applied by the bootloader instead.
- 
- config ARM_ERRATA_751472
- 	bool "ARM errata: Interrupted ICIALLUIS may prevent completion of broadcasted operation"
-@@ -746,6 +758,10 @@ config ARM_ERRATA_751472
- 	  completion of a following broadcasted operation if the second
- 	  operation is received by a CPU before the ICIALLUIS has completed,
- 	  potentially leading to corrupted entries in the cache or TLB.
-+	  Note that setting specific bits in the diagnostics register may
-+	  not be available in non-secure mode and thus is not available on
-+	  a multiplatform kernel. This should be applied by the bootloader
-+	  instead.
- 
- config ARM_ERRATA_754322
- 	bool "ARM errata: possible faulty MMU translations following an ASID switch"
+Applied, thanks!
+
+[1/1] loop: Fix the max_loop commandline argument treatment when it is set to 0
+      commit: 85c50197716c60fe57f411339c579462e563ac57
+
+Best regards,
 -- 
-2.39.0
+Jens Axboe
+
 
