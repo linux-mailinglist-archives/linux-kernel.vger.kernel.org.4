@@ -2,204 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B013364CAD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D182264CAD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238553AbiLNNNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S237595AbiLNNNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238559AbiLNNNF (ORCPT
+        with ESMTP id S238298AbiLNNNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:13:05 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579481DDF4;
-        Wed, 14 Dec 2022 05:13:03 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BED9o6K016302;
-        Wed, 14 Dec 2022 13:13:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=+X8vBTXhuJayZi+n5xcerhZSBoMD6FPhYzBBkxSWiBY=;
- b=qJAtllIL9P+/nSSguVKGi8/bzPD1syOKwH+gMHLqRZJSHhkXKyoiFbfRcpekm3XN0gTc
- JYc7SL/XJrttJF/hD5QYmlOyNh5kf78oL2AG4BnMezz+Era8yqcwciwX5m8fue/g42IT
- B1/yzQmQgt3tJycw3+hxk5rhnY8r0Za5fsEJNSWYNuoJTQ+MFOG9D+Vox6raJNM2HfWT
- XHsQMsCzWFay5nu334pxyynSfDYIZZ1AURV0gRcEibLKCPLSlFAcLaXvDzh4PHBRUb+f
- INfqspsvcVEHaCA+gf+BE908N0m2SoF8VAOfHzge8yfDIO28FaVCULRJku3w6SiMNkXz gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mff4cg32k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 13:12:59 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEDAQAC020179;
-        Wed, 14 Dec 2022 13:12:59 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mff4cg31r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 13:12:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEA7NSh001252;
-        Wed, 14 Dec 2022 13:12:57 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3meyyeha0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 13:12:56 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEDCrdT22348110
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 13:12:53 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9389C2004D;
-        Wed, 14 Dec 2022 13:12:53 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DAF320049;
-        Wed, 14 Dec 2022 13:12:53 +0000 (GMT)
-Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.152.224.238])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Dec 2022 13:12:53 +0000 (GMT)
-Message-ID: <ef18716114c13a932aad195441bb0b79007bdc7b.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 1/9] KVM: s390: Extend MEM_OP ioctl by storage key
- checked cmpxchg
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Thomas Huth <thuth@redhat.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Date:   Wed, 14 Dec 2022 14:12:53 +0100
-In-Reply-To: <44816a09-8567-b2be-84ef-ada621d1beb4@redhat.com>
-References: <20221213165405.2953539-1-scgl@linux.ibm.com>
-         <20221213165405.2953539-2-scgl@linux.ibm.com>
-         <44816a09-8567-b2be-84ef-ada621d1beb4@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 14 Dec 2022 08:13:15 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E47205F7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id f20so6579699lja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
+        b=pH4lW0UzND66hSwgAr90gmNeJlHhMMjKxH++4eW3mWYQyc+QzxOJXFiGhRsFLzgJq3
+         k3+WVeQmb6prwQwLr5tbLcNSDjevfkbBMeexkjwydyfk5wzC2d01uaqZ9KTKR4ZbmmSj
+         P4BbNAO9HG/VNcHskBIak4fVt3eAS+98lwqxCaBfK7/840N6KSl+juF26s9XyI+9zx72
+         v0SctXCPovZc5s4h19qrHjlfhaBFG7899spkzEHoVKHOe5BCc8b80P8G48Su4s+kR1L/
+         flqXg0HjT5iXo4wesLl9SlcpG8/MXK43CZfSuMIKHUY2pU04i7qiRlmDFXAraT+VJGTV
+         D/TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+g8bhbYuaQlXpPh9UOtgjVnfBA2QaGFWh99Dxpg4ZE=;
+        b=h4zbFZKIOYb646pN0xZx14Bdk0hk1FE6ih3ph2gCv8MrQqePIdA4wQbIXmlpNmhkBX
+         ufEx5JhQ3hWMvFSUcIZxTRPyJcnokfPVZ8BMDsuUwp3aiFz3B09pXoai3R4ohwItXEuF
+         3OdknkupM1iOprZd3s8Y/GYMRZFNY46sdUf6R5R/PSJ2GSWCeS2Tzas/Viu3My+dE/iP
+         WNBnh43Or5/nt23IiBHUDX3NaiYA0D49xL/KzTldg12ZILIg+h5pC/UbEvf7++QKn7b4
+         gY4ShtD71/zrs9LxOHjIjoun5F9Y6pPtV9C9nKX4g3jjLdl+O8SbnsYKdGLMnwN3fZX4
+         EVrQ==
+X-Gm-Message-State: ANoB5pm1QA7Ox5vuKCE47FPgqkyMhTR7V9kwvi1PPefDHwOIdaFGniVn
+        Q+BcBVWW6SlwrOQMkmpa597sLA==
+X-Google-Smtp-Source: AA0mqf5PHGVRyKqw0AGxvuMvc+S3bUW9QX8UFoENXdCLSqKdTBPI3OD0tyhSW0GEGTa31bX/AAwYJQ==
+X-Received: by 2002:a05:651c:883:b0:26f:db34:a157 with SMTP id d3-20020a05651c088300b0026fdb34a157mr5864463ljq.26.1671023592549;
+        Wed, 14 Dec 2022 05:13:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bd9-20020a05651c168900b00279e93c9c25sm596663ljb.29.2022.12.14.05.13.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 05:13:11 -0800 (PST)
+Message-ID: <9d7bda38-69c9-95c8-e867-8bd5733debe2@linaro.org>
+Date:   Wed, 14 Dec 2022 14:13:10 +0100
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: osTXaTYPV9eohzN8cZlshfkjKvsoiaGx
-X-Proofpoint-ORIG-GUID: p-7tYJ10CsiWo2h-0h_xUHH5B28Rh3VQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 bulkscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 3/6] dt-bindings: pinctrl: mt7621: add proper function
+ muxing binding
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20221213130430.172876-1-arinc.unal@arinc9.com>
+ <20221213130430.172876-4-arinc.unal@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213130430.172876-4-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-14 at 10:19 +0100, Thomas Huth wrote:
-> On 13/12/2022 17.53, Janis Schoetterl-Glausch wrote:
-> > User space can use the MEM_OP ioctl to make storage key checked reads
-> > and writes to the guest, however, it has no way of performing atomic,
-> > key checked, accesses to the guest.
-> > Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
-> > mode. For now, support this mode for absolute accesses only.
-> >=20
-> > This mode can be use, for example, to set the device-state-change
-> > indicator and the adapter-local-summary indicator atomically.
-> >=20
-> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> > ---
-> >   include/uapi/linux/kvm.h |   7 +++
-> >   arch/s390/kvm/gaccess.h  |   3 ++
-> >   arch/s390/kvm/gaccess.c  | 102 ++++++++++++++++++++++++++++++++++++++=
-+
-> >   arch/s390/kvm/kvm-s390.c |  39 ++++++++++++++-
-> >   4 files changed, 149 insertions(+), 2 deletions(-)
-> >=20
-[...]
-> >=20
-> > @@ -2714,12 +2721,19 @@ static bool access_key_invalid(u8 access_key)
-> >   static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op=
- *mop)
-> >   {
-> >   	void __user *uaddr =3D (void __user *)mop->buf;
-> > +	void __user *old_addr =3D (void __user *)mop->old_addr;
-> > +	union {
-> > +		__uint128_t quad;
-> > +		char raw[sizeof(__uint128_t)];
-> > +	} old =3D { .quad =3D 0}, new =3D { .quad =3D 0 };
-> > +	unsigned int off_in_quad =3D sizeof(new) - mop->size;
-> >   	u64 supported_flags;
-> >   	void *tmpbuf =3D NULL;
-> >   	int r, srcu_idx;
-> >  =20
-> >   	supported_flags =3D KVM_S390_MEMOP_F_SKEY_PROTECTION
-> > -			  | KVM_S390_MEMOP_F_CHECK_ONLY;
-> > +			  | KVM_S390_MEMOP_F_CHECK_ONLY
-> > +			  | KVM_S390_MEMOP_F_CMPXCHG;
-> >   	if (mop->flags & ~supported_flags || !mop->size)
-> >   		return -EINVAL;
-> >   	if (mop->size > MEM_OP_MAX_SIZE)
-> > @@ -2741,6 +2755,19 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
-truct kvm_s390_mem_op *mop)
-> >   	} else {
-> >   		mop->key =3D 0;
-> >   	}
-> > +	if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> > +		/*
-> > +		 * This validates off_in_quad. Checking that size is a power
-> > +		 * of two is not necessary, as cmpxchg_guest_abs_with_key
-> > +		 * takes care of that
-> > +		 */
-> > +		if (mop->size > sizeof(new))
-> > +			return -EINVAL;
->=20
-> I'd maybe add a check for mop->op =3D=3D KVM_S390_MEMOP_ABSOLUTE_WRITE he=
-re,=20
-> since calling the _READ function with the F_CMPXCHG flag set does not mak=
-e=20
-> too much sense.
+On 13/12/2022 14:04, Arınç ÜNAL wrote:
+> Not every function can be muxed to a group. Add proper binding which
+> documents which function can be muxed to a group or set of groups.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../pinctrl/ralink,mt7621-pinctrl.yaml        | 204 +++++++++++++++++-
+>  1 file changed, 197 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> index 61e5c847e8c8..0efb03f1d88e 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml
+> @@ -29,21 +29,212 @@ patternProperties:
+>          $ref: pinmux-node.yaml#
+>  
+>          properties:
+> -          groups:
+> -            description: The pin group to select.
+> -            enum: [i2c, jtag, mdio, pcie, rgmii1, rgmii2, sdhci, spi, uart1,
+> -                   uart2, uart3, wdt]
+> -
+>            function:
+> -            description: The mux function to select.
+> +            description:
+> +              A string containing the name of the function to mux to the group.
+>              enum: [gpio, i2c, i2s, jtag, mdio, nand1, nand2, pcie refclk,
+>                     pcie rst, pcm, rgmii1, rgmii2, sdhci, spdif2, spdif3, spi,
+>                     uart1, uart2, uart3, wdt refclk, wdt rst]
+>  
+> +          groups:
+> +            description:
+> +              An array of strings. Each string contains the name of a group.
 
-Good point.
->=20
-> Anyway, patch looks good to me, so with or without that additional check:
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
+Here and in all patches - please add maxItems:1. The definition of field
+should have some constraints (and your if:then: might miss a case).
 
-Thanks!
->=20
-> > +		if (copy_from_user(&new.raw[off_in_quad], uaddr, mop->size))
-> > +			return -EFAULT;
-> > +		if (copy_from_user(&old.raw[off_in_quad], old_addr, mop->size))
-> > +			return -EFAULT;
-> > +	}
-> >   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
-> >   		tmpbuf =3D vmalloc(mop->size);
-> >   		if (!tmpbuf)
-> > @@ -2771,6 +2798,14 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, s=
-truct kvm_s390_mem_op *mop)
-> >   	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
-> >   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> >   			r =3D check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop-=
->key);
-> > +		} else if (mop->flags & KVM_S390_MEMOP_F_CMPXCHG) {
-> > +			r =3D cmpxchg_guest_abs_with_key(kvm, mop->gaddr, mop->size,
-> > +						       &old.quad, new.quad, mop->key);
-> > +			if (r =3D=3D 1) {
-> > +				r =3D KVM_S390_MEMOP_R_NO_XCHG;
-> > +				if (copy_to_user(old_addr, &old.raw[off_in_quad], mop->size))
-> > +					r =3D -EFAULT;
-> > +			}
-> >   		} else {
-> >   			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> >   				r =3D -EFAULT;
->=20
+Best regards,
+Krzysztof
 
