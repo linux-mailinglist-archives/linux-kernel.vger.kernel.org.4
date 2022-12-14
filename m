@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA43164D149
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6609664D150
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbiLNUfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S230267AbiLNUgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiLNUfF (ORCPT
+        with ESMTP id S229866AbiLNUfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:35:05 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794531572E;
-        Wed, 14 Dec 2022 12:29:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NXRmx3F1Jz4xYQ;
-        Thu, 15 Dec 2022 07:29:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1671049793;
-        bh=JvSot3OZ2NTAEu0YUkSG3UKmeaFnVYAJSjMyGuLbtIk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VqgTEHnMNTMgvq7vZ0iTIM6f4uGU8OQZZEeTZsNvBQS+bE0q8Cvmy6LMBVuyHxJWu
-         FYX9NvP/GV82ngBJCjR0v3N2ohZUT5vyjmOK/55JiNzlZMJ/CmJx117QGgcvNnMp54
-         LHM65Wf7g55mZJ3UmlVyh0L55STq0C61+0RxnQM1sWSowI3RzbxyMOgvvH4aVHaXN3
-         BN0CTOsCxtgfg+oNXajYVIvtukC++m3elmxZBB+RTFPgZKhMf2H9/XUbgid2lY3kb2
-         iXOADOUk5oPIKwoPasBBROADPgg0m+JyjYo0J6b/jvMDssrQz1kTxrRiifoDn8qYVi
-         mA60ib0ur91qQ==
-Date:   Thu, 15 Dec 2022 07:29:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-fixes
- tree
-Message-ID: <20221215072940.0c3538cf@canb.auug.org.au>
+        Wed, 14 Dec 2022 15:35:41 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E0231376
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:45 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so445672pjs.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ct/3m2PY/FS9T1URKRfeRUFxhLFHkaGZAzLhD0lvuyA=;
+        b=pWGr4QtMpreRigeqMX+I/wFjpKYI1x288BNobSD1qxsLyPMo2G12MMXhZfOuR/MWLy
+         j2xET9aSD2dm6YCoUvGF8wk1sZXavwSK/RnpUyGZKgmG87bHZgsLKZznB4PNYiXZqSyM
+         tH+wBVaquRCvPVyq9Sj1DDEuIQNH/YXvGl+tk/inOwm8ZQLW2DY0shs8kPp5wcnEY9rs
+         S5zyTf+hoA9SE5F2xT6/KbQeo33WKZOg7x0yiREtJNLEF443zk6lI0glBDJR1SVp7Kop
+         K9MIjnCs4Ig1HeoLy9WqRP7kagYyIt4flG9tmWceeG0iIOrp5BN0DGWnoOONfV8ZK6Z6
+         dhpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ct/3m2PY/FS9T1URKRfeRUFxhLFHkaGZAzLhD0lvuyA=;
+        b=Tkd7LAS085PLcrMQ7JIreTr9TIJDNeIbWHDBOhqS/IwSX7h/5cmeOVoTpQBPYIiVOj
+         5kPqIkgz6EBNvseZUNQQ05XokoxA1a+JplkaOXIY3iLc4yhNdl6uQFiNeyq7LTnAh1Hb
+         d/GEUobDBFD5mfNux7rbm+L38iTja+kMP09t/YfT+E1NC5w3WbPAbJZiv1JYEcD2LOb3
+         L38TfaFVnEnizaBmQwCSHpE+WzP7ebt7aWX1wvFU1VFUZhpOuj+o7yKfTBplb+xQ7Q0O
+         yCW+Yg1/9p4/ZL1CyITYR1m2nKMgQsaU/rG4Rd+x+SvNhveXdfO1ilc7w89uIoeUljzM
+         c/Zw==
+X-Gm-Message-State: ANoB5pmtBmyohHAS1fhG0x/P2qzQiCgmaJ5CNxVH8zUpZQcaynCzADXY
+        qR+btWnqfekLlOMpMs0FioPdPg==
+X-Google-Smtp-Source: AA0mqf6oaWXA/LJq+F1qibT4R0ukuqqLdc/rX/PcMp201wLwAxIrgIrZtihIZNQ9UxXpzsjy21PmIQ==
+X-Received: by 2002:a17:90a:7e93:b0:219:6626:3b63 with SMTP id j19-20020a17090a7e9300b0021966263b63mr27127615pjl.25.1671049904799;
+        Wed, 14 Dec 2022 12:31:44 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1c60:4bad:5c3:ab51:3d81:6264])
+        by smtp.gmail.com with ESMTPSA id gx13-20020a17090b124d00b00219e38b42f5sm1812238pjb.26.2022.12.14.12.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 12:31:44 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        konrad.dybcio@linaro.org, andersson@kernel.org
+Subject: [PATCH v2 0/3] arm64: dts: sm6115: Add USB SS qmp phy node and perform some cleanups  
+Date:   Thu, 15 Dec 2022 02:01:21 +0530
+Message-Id: <20221214203124.564537-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0k2KlUqh4A/1hXP_JjhdCbe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0k2KlUqh4A/1hXP_JjhdCbe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Changes since v1:
+-----------------
+- v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20221213123823.455731-1-bhupesh.sharma@linaro.org/
+- Addressed the review comments from Konrad and Krzysztof regarding the
+  USB HS and SS Phy usage in sm4250 oneplus board dts ([PATCH 3/3]).
+- Collected R-B received from Konrad on v1 patches [1/3] and [2/3].
 
-Hi all,
+This series adds USB SS qmp phy node for Qualcomm SM6115 / SM4250 SoC
+dtsi and also performs some related cleanups for USB nodes.
 
-Commits
+Note that this series is rebased on linux-next/master and is also
+dependent on the corresponding dt-bindings and driver series sent via [1].
 
-  542d3c03fd89 ("media: sun6i-isp: params: Unregister pending buffer on cle=
-anup")
-  94c34359c887 ("media: sun6i-isp: params: Fix incorrect indentation")
-  7266eb7c5a52 ("media: sun6i-isp: capture: Fix uninitialized variable use")
-  44723b8c4692 ("media: sun6i-isp: proc: Declare subdev ops as static")
-  f72af7709478 ("media: sun6i-isp: proc: Error out on invalid port to fix w=
-arning")
-  504307f2b3ae ("media: sun6i-isp: proc: Fix return code handling in stream=
- off path")
-  761ebebabd09 ("media: sun8i-a83t-mipi-csi2: Clarify return code handling =
-in stream off path")
-  52109d91d2f9 ("media: sun6i-mipi-csi2: Clarify return code handling in st=
-ream off path")
-  f2c174e5018e ("media: sun6i-csi: capture: Remove useless ret initializati=
-on")
-  7fabed7ae618 ("media: sun6i-csi: bridge: Error out on invalid port to fix=
- warning")
+[1]. https://lore.kernel.org/linux-arm-msm/20221213122843.454845-1-bhupesh.sharma@linaro.org/
 
-are missing a Signed-off-by from their committers.
+Bhupesh Sharma (3):
+  arm64: dts: qcom: sm6115: Cleanup USB node's label
+  arm64: dts: qcom: sm6115: Move USB node's 'maximum-speed' and
+    'dr_mode' properties to dts
+  arm64: dts: qcom: sm6115: Add USB SS qmp phy node
 
---=20
-Cheers,
-Stephen Rothwell
+ .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 12 ++++-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 46 ++++++++++++++++---
+ 2 files changed, 49 insertions(+), 9 deletions(-)
 
---Sig_/0k2KlUqh4A/1hXP_JjhdCbe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- 
+2.38.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOaMjUACgkQAVBC80lX
-0GySaAgAiuI50c57bMXd6LB2DANL44mW5Dm5cgLenJRfhgSMxuQLSHyM4Y6J2Q1a
-Ca7GYZzL9erqWgfTbk86ptPoPdH4Qe+NMUBEAD6pXQVoQJsiux73S8XCBaqntxkw
-Xhiv7tr06wwURRjEfD/H1nd2gRLGijncSNel+XwpYIcf14b50I54oP//yOHPCzyQ
-/C0LBct1joesl32rNe74iK37GZxevOU3qTSuNiGunAGPNLqz1be3cKol5Zi807LA
-5US49Vj+x1QuTN0tV+HCQmCq6JJJpMWhUkJAFdJK1Oe7pmvnl1zc1Za19FzUSs3b
-sWU/Rjd6fv5HCd8KJ5xm27pbsoNwIA==
-=jjmh
------END PGP SIGNATURE-----
-
---Sig_/0k2KlUqh4A/1hXP_JjhdCbe--
