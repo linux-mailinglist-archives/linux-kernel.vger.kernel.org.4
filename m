@@ -2,74 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FDA64CCD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B7164CCDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237708AbiLNPIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S238752AbiLNPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237778AbiLNPH5 (ORCPT
+        with ESMTP id S229829AbiLNPJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:07:57 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAC811825;
-        Wed, 14 Dec 2022 07:07:55 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id x66so4651961pfx.3;
-        Wed, 14 Dec 2022 07:07:55 -0800 (PST)
+        Wed, 14 Dec 2022 10:09:38 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D027713F6D;
+        Wed, 14 Dec 2022 07:09:36 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEF47pt019004;
+        Wed, 14 Dec 2022 15:09:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=T6xOha0be92gQK75D7WxIU5etnmBMRiZNTFMYNWzpR0=;
+ b=RMVCRoYTrPiCw26zhgjCkkSHA+I/+ligsNGUOS4QI15Aj3e1T3wnBY1tol5RfHrU4Jxb
+ iZ4xOkH4kQLUTcmgkckHvw0GfqjqNeGxhee0Z2Ao2cXjkhtc7jwrQW091dLF2Jm52hG6
+ UIPWI0bMChI2W/YbTo8m2qIXhFuXQ/nCCSHI3k1mgJroLVKiv12aM6umCmI84JMSL1Q6
+ vmlMdNnFWXJuYGxh18xK8I8whOVDQKg8omoX0w/dk68qmPkkje1niOAS9CBXvuK4+1Br
+ pw3cRf5Xz88c0w7Y7DhlkifJQOAOUArlMgqvZ4BnFcnFubj9ODz9HOXWtt4O974IZrGw VA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3meyex2g7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Dec 2022 15:09:16 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BEEDv9E003995;
+        Wed, 14 Dec 2022 15:09:14 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3meyew6nda-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Dec 2022 15:09:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bMcVZHdc6c8bbJpEIS5CjUdDrAfG0c8TcFsedX0V/q92v+t/RINbbJ4OHWicCReyFpbeOS32PUFyuHHmfH7twPKz7lsxFSmU2Tm78oE7Q4lT5Cal5GjNBYs6qZbBlIjjiucFSfVk16bMSDTeRB800TAkuhSJOZH6FFpLkvqDXlxmT5NJrZaLS3mKJBE+vg2YOSIJlwehMOvENohco1Qgw6wL/CdPW/7YJXz3bFvMiUo27/AS2IRtwg52bl9I1nWMMTaUYLV5icSy3HKA3eV3inW4eJnQJNnbkaumVr/IaHNYP0MrNUxcatLP/qUJPtwy18CU/yj4Sxh5OOeYJB131Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T6xOha0be92gQK75D7WxIU5etnmBMRiZNTFMYNWzpR0=;
+ b=ZXGnlhfxe7EGMnRYYBVUaUHptbh/icBWBqBSxJj7QLCgWAuCQ9GXJZr4r2hJ5oBDPj0nOkm6q/IZshQ4sNYa/mHIrRUA5m3W4qJjLjdBNZGvygwrLz7TqOgcp+VNGNkeHwvq1uNQoJ1gNKwLcVqjhKYnqCpIzz6HNakQtxm59wEj98GZw8Mev0jlq4pEfF7kOB0ZSZyhXpB1/efw+TLyXdEQX/k23lcfNlSXZl3r3DO+Qg6RvgwGiiOZrAkFcVwMhdIIcDTGGXqe1dyMrvg+qRLfm0kidnSbbkolqoTLlGTeEtWgvS5kStUHTcQK6q6xIFvM1GpStgNWbtqGt3gJdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qghbZ1vjirzjUztvBE2sOOI5LO9NPRdxa9b2gkNrWIo=;
-        b=lV7TKJSjN7h9wfcCVyKTNVr7QvjbhZ1bSqcrNg1PIPmWir9yH0rtfb1mzDx2PCfP7c
-         pTQyQ3cBcXUB/+rGR1FZjdhk/CKFPIY+7EdbDsIcSjuAw0a7XM+kcP+740iHTIY1H8VO
-         u+eYXzURbq2UtnYoqcqe8YTjY6uKsdc2ummc51vluIqCc6TxF//pSL9smq9XZHFQBBCl
-         RsvWle3Bo22z9+9hOHEIOIxfMO9MejoCpH28FkrJMijq5Uj6e9d3og0nmhlibG/N4wxE
-         UUw9mz3aJU48cCzPbiWd18xLVlReslMaqU5Akk+xtIyoPZEAJbDNn2ldpf70e2uZXZcE
-         /dIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qghbZ1vjirzjUztvBE2sOOI5LO9NPRdxa9b2gkNrWIo=;
-        b=F/VfME7UO6jzJn1b7KWn6O6ZecQ1FHXQeiGMmqbBEo9DrLxsKtQClyO+GuJ4btHAo3
-         UsQbIR0baw2aamVHOy3Q3r+2kZ8hlHAepBKxI2JI/W2B4NrDjMIKJ9uPnM1nM+J7jIk3
-         /xEycEP+OFBLg3TcMe1n3mtpJ7O6z0jPA8FIO54zuG+6n02TjNUPouQ1DLYyO9zaMMwd
-         bqWYg20Jm/QpqMT5WeJ4N0pnFjOaVvyRiZ54eCJtuhOb3LIo1JLOsZ2QeFitfNUCeVd3
-         Wdpaa7ua6y5YvfPoCPwOb5i3B0bChnUBnLclxu9rOABuOKwEkFfQkfylZOFdh22yEgVe
-         PzHw==
-X-Gm-Message-State: ANoB5plexQmB4Wx6rmiElksY05xbMeJvJeBnuOm2FY3IsdUSufYNhZnA
-        hshMQz2huqkJpThM2mtokoaLXKyDh/jV69NFVQEgmgrF
-X-Google-Smtp-Source: AA0mqf7A2dJWm35FQPh9Y52xY+Fkrmij/4QW3ZLrwJ6xv0D0waWGXR6b5e9heTPpfLeyZgWYYlZJGCSH1DG+DPzuuXM=
-X-Received: by 2002:a05:6a00:2352:b0:572:91c6:9e4e with SMTP id
- j18-20020a056a00235200b0057291c69e4emr81363148pfj.53.1671030475127; Wed, 14
- Dec 2022 07:07:55 -0800 (PST)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T6xOha0be92gQK75D7WxIU5etnmBMRiZNTFMYNWzpR0=;
+ b=AWi+VngwuZ3HJ0T0i+u4QrvGjpLpBIeQ6/Q3y7o0pNCMY2E8+7Zq22Wh8hjAPFZ4AA1Y2plemBXbeCPJAYxOpEhf27LUIzX8AZaa/XopCGz8Y77o5SWPq+x/Ha6qIRVbHRlGcnOz2Np4cljD1MbrtUSb+P/8tB+9d9ycgEk7bIc=
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com (2603:10b6:5:3a1::23)
+ by DS0PR10MB6974.namprd10.prod.outlook.com (2603:10b6:8:148::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Wed, 14 Dec
+ 2022 15:09:12 +0000
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::e208:8886:f6f1:ab09]) by DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::e208:8886:f6f1:ab09%9]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
+ 15:09:12 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Anna Schumaker <anna@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+CC:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>,
+        "chris.chilvers@appsbroker.com" <chris.chilvers@appsbroker.com>,
+        "david.young@appsbroker.com" <david.young@appsbroker.com>,
+        "luis.turcitu@appsbroker.com" <luis.turcitu@appsbroker.com>,
+        "david@sigma-star.at" <david@sigma-star.at>,
+        "benmaynard@google.com" <benmaynard@google.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: Re: [PATCH 3/3] NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
+Thread-Topic: [PATCH 3/3] NFS: nfs_encode_fh: Remove S_AUTOMOUNT check
+Thread-Index: AQHZChf9fDsgUtMhNUKtyOAuOArmha5th9sA
+Date:   Wed, 14 Dec 2022 15:09:12 +0000
+Message-ID: <92B44C88-61B5-4450-B027-60F9F7A614FF@oracle.com>
+References: <20221207084309.8499-1-richard@nod.at>
+ <20221207084309.8499-4-richard@nod.at>
+In-Reply-To: <20221207084309.8499-4-richard@nod.at>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS7PR10MB5134:EE_|DS0PR10MB6974:EE_
+x-ms-office365-filtering-correlation-id: eae3a383-a789-42e4-15ef-08dadde528da
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: blvecmjHqSoiUDyYFPlUjDIt6jupazOpCu9vQ419eNmaOjp3P8Lkdez6T2bLIChMjY52UP0+u4NzzTT1vPa8TJFG3qtxZ0TQPZ7BaFtbdVOTIQK8UblHyqc15+n4p/CvQgMjRhh2KU8C+lBdLD7CtBnvAJVB6pSmYH4Aq3ADvra9mugoL04KwwZCegpAptTRLhhzj9cEiFf1zUVvJ7UIZdwsQr47/qM8zzMRzg79XxuVy0LoiZ9PWtzo2WB7DZ+yHjqpq/hW+y0J3qICBtk+1LN4MiOip3VU+niDkn/4JpIuOQZZjWX4P9yBPIMZAX2UJIcHb9EqR+3xohr3cedsQ4i0SAHsIjfJNxnsG/2e+010sJwa6+R99BrUY9hjI+Jcjs8hEirKU61emmZ+MKgsPYPBM0NBIcd+hUGlUxUAitZYbrxb7TEKN+ob4DWFk3e7T0yJAjqSbZNNVi3lUQfOJZf0sdsGbO6GyPm9NQv5WxrnxNdKk0KmMb091R7wVdNiWIm5+gyxNs3hNiR8fcVx9463gbGKQbq98lvHhQvY2cu090UTYVfd+vhV5fTuKEvqb951LDFlgxPzs9zR/tD45tiPpO0rP/7eOOWhuvzX3uSE68yRtYFhkuo4TJgvMBTELGGwDW1pI2FKOdZJraMuYK7qBa0GNuKiaR7ADbPzsxEOp6T327ocpl//gedexM/8kT9v/+vAD6zjkj9IdzVEqy7i7bjHleKtFmtBBODYAhE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5134.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199015)(6512007)(6486002)(71200400001)(316002)(66946007)(54906003)(110136005)(26005)(66556008)(6506007)(4326008)(66476007)(64756008)(66446008)(91956017)(2616005)(53546011)(478600001)(186003)(76116006)(8676002)(8936002)(41300700001)(83380400001)(4744005)(5660300002)(7416002)(2906002)(33656002)(36756003)(122000001)(38100700002)(38070700005)(86362001)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xrlKzS/m/LxNVxxxrgcBNUY40cCEhmTimJXxJTfWVr7ocfhSYEquvdCJxcQe?=
+ =?us-ascii?Q?4K9OLWyTrbqMNTxBta8AAHMlggrbTy54byM/tQw7H3rTpYLVSkgHcE/y3ilN?=
+ =?us-ascii?Q?zjRI4YAJ3SSYkoeqa0B4rV364TW7KAa4DvDPXhXS/COL2MM14TNFr8ZdDZlc?=
+ =?us-ascii?Q?IlGvkwLklWv0SOazVRt0F76QNsw3dA0XRYmdHrChNOdctjXEHvKSCjc2mcbP?=
+ =?us-ascii?Q?acp5FdBJnGxBWB4/ueCvGmPxAu/mRS+8nhvl65KUt4uop6qnUB3QzDjeZd1X?=
+ =?us-ascii?Q?jOQZTRHZ6TrPMaJxpm/UKZ/5YZwnyfImM4Ojg1N7CAPz2l6wTYB4voyi9XV1?=
+ =?us-ascii?Q?LO+PQd+JmmdVIhMfGAZw8Fxgl1n7P9vJYdTU9joov8Qe/tKk1cDXTxdKGfB7?=
+ =?us-ascii?Q?o59BkaCziV96cGis7RE+t7lGV9I34jAiNjWRcUr1CXCb6AUpvOAYvl4Gs5ek?=
+ =?us-ascii?Q?5Oia0us9Ypmch3oWtI9OiIs1otUCgpgxYvfUPsRYgJO3iklsXQaK6KjuHVJN?=
+ =?us-ascii?Q?2BbE7mVHnnefweQK7NYGYOB4WSGlkGJiZAqbqj9mk0G6sh4iPV4GpeiFAkEM?=
+ =?us-ascii?Q?UkYTKBysJNhCntpb/CyL1/cvWcOtOqBmTIui0HtqGmCP2G4YzPCauKwIclxO?=
+ =?us-ascii?Q?ZGntg/+a8912uI3T/fVNzVKh/IJ2Hb8jf38LVgcOyX/iSXPpa8DaOgNuHR0r?=
+ =?us-ascii?Q?YSWSfxCsBoBHdOZ7vgttBPw+h87M+OjBMXDsm44YZIuXPrtbe2E4j00ELdN/?=
+ =?us-ascii?Q?lmtnlFjvYfmngQfwyxYapXKaiTxCi1kLmsQDPWY2jtJ4Vsl8S0v01HRYBvN6?=
+ =?us-ascii?Q?LuCJ4U3MXd4UuGQ5LoDOa2hohk/uQ1RtoehkSOgEqT1y4Bpy6vznXKHIPeb2?=
+ =?us-ascii?Q?C51r+r+bdocmuBGdkOSdEsNvhd9PzM+WvITHmlvFlIQrcwRqS16gLHCObIlO?=
+ =?us-ascii?Q?W6MaliK9+3Rcwdv7VLo6r5+aA37kU7wcjquRbc/13/z5WRQXC2pL1NJbym+r?=
+ =?us-ascii?Q?taeYMGpVC7f3Hfi59FqvNKN5C2UDA8iWGEH4KllOhwDMh0lfutm00f5XD+bf?=
+ =?us-ascii?Q?+jae2v9Kb+iZaYk8dDOLAcvI084II7L4we+a3eeZQCpPnnA+aMnBzgTO95PF?=
+ =?us-ascii?Q?9lZlpJaZ4kx9sSWnrPQm6IRmZ0MvkqeoA7iwOM81n8MMXm/YP8R5Qr5pBkBw?=
+ =?us-ascii?Q?mi9en7iXuitAUjBXliwEGmxjIYjzTNeh7sqbTlmZX4EyLMQQBKpiDsuyCWIx?=
+ =?us-ascii?Q?1nP7HZRa4+Ozek9nj8x1xqjJOuu0QrtJ1Km29dDuir1XQGSWCIf3/oj5HRiS?=
+ =?us-ascii?Q?74S5bRx96c3sFychuD+NMC/6wRhPepTVULSxvK0EZ8WFhzkLcdLEQA6ZR0wN?=
+ =?us-ascii?Q?8pIfmsvLoy1XOJBiHtiP6FFi6pwRPJiHA0obsH2+oMSsAPWR8L+a9mQI5+M2?=
+ =?us-ascii?Q?NhKToJb5hgDXcpu1qNzC2vjFzoDRrkT7wUJ85cf+3Sw0geR+e1ZasYzFDnPd?=
+ =?us-ascii?Q?PZa/S038X5OfC6tffp9DBVwWQ12C59sau5LsaD/sooxJvvD3o4b5+oiKppm/?=
+ =?us-ascii?Q?8z57PNRkChrDmumVu7oeB2jLpc4JetJlf4KmZ+zmJcZ+G4QtCYtovbXtP4MQ?=
+ =?us-ascii?Q?Sg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BB3FCD4B09512C43A59F138EF848BAC8@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <cover.1665214747.git.houwenlong.hwl@antgroup.com>
- <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
- <Y0bvT8k9vlDUPup+@google.com>
-In-Reply-To: <Y0bvT8k9vlDUPup+@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Wed, 14 Dec 2022 23:07:43 +0800
-Message-ID: <CAJhGHyAENXDLL=2-2KXL3_hKF+XZaFxOfRV2vaf6E5nhUa1Mzw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
- in kvm_set_pte_rmapp()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>, kvm@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5134.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eae3a383-a789-42e4-15ef-08dadde528da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2022 15:09:12.8820
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z2nSujQR1/O/Z2HJxvD25FYykRCI1idEsdiR5BDoile9Js4SsgAlwaF/zARAuqrcmLO7og5UDJHmczOkS30aYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6974
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 bulkscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212140121
+X-Proofpoint-GUID: 3nzQb0tYHnovcu9Cd1QfkEQlZoCuiRRe
+X-Proofpoint-ORIG-GUID: 3nzQb0tYHnovcu9Cd1QfkEQlZoCuiRRe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,78 +160,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 1:00 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Oct 10, 2022, Hou Wenlong wrote:
-> > When the spte of hupe page is dropped in kvm_set_pte_rmapp(), the whole
-> > gfn range covered by the spte should be flushed. However,
-> > rmap_walk_init_level() doesn't align down the gfn for new level like tdp
-> > iterator does, then the gfn used in kvm_set_pte_rmapp() is not the base
-> > gfn of huge page. And the size of gfn range is wrong too for huge page.
-> > Use the base gfn of huge page and the size of huge page for flushing
-> > tlbs for huge page. Also introduce a helper function to flush the given
-> > page (huge or not) of guest memory, which would help prevent future
-> > buggy use of kvm_flush_remote_tlbs_with_address() in such case.
-> >
-> > Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c          |  4 +++-
-> >  arch/x86/kvm/mmu/mmu_internal.h | 10 ++++++++++
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 7de3579d5a27..4874c603ed1c 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -1430,7 +1430,9 @@ static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-> >       }
-> >
-> >       if (need_flush && kvm_available_flush_tlb_with_range()) {
-> > -             kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
-> > +             gfn_t base = gfn_round_for_level(gfn, level);
-> > +
-> > +             kvm_flush_remote_tlbs_gfn(kvm, base, level);
-> >               return false;
-> >       }
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > index 17488d70f7da..249bfcd502b4 100644
-> > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > @@ -168,8 +168,18 @@ void kvm_mmu_gfn_allow_lpage(const struct kvm_memory_slot *slot, gfn_t gfn);
-> >  bool kvm_mmu_slot_gfn_write_protect(struct kvm *kvm,
-> >                                   struct kvm_memory_slot *slot, u64 gfn,
-> >                                   int min_level);
-> > +
-> >  void kvm_flush_remote_tlbs_with_address(struct kvm *kvm,
-> >                                       u64 start_gfn, u64 pages);
-> > +
-> > +/* Flush the given page (huge or not) of guest memory. */
-> > +static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t gfn, int level)
-> > +{
-> > +     u64 pages = KVM_PAGES_PER_HPAGE(level);
-> > +
->
-> Rather than require the caller to align gfn, what about doing gfn_round_for_level()
-> in this helper?  It's a little odd that the caller needs to align gfn but doesn't
-> have to compute the size.
->
-> I'm 99% certain kvm_set_pte_rmap() is the only path that doesn't already align the
-> gfn, but it's nice to not have to worry about getting this right, e.g. alternatively
-> this helper could WARN if the gfn is misaligned, but that's _more work.
->
->         kvm_flush_remote_tlbs_with_address(kvm, gfn_round_for_level(gfn, level),
->                                            KVM_PAGES_PER_HPAGE(level);
->
-> If no one objects, this can be done when the series is applied, i.e. no need to
-> send v5 just for this.
->
 
-Hello Paolo, Sean, Hou,
 
-It seems the patchset has not been queued.  I believe it does
-fix bugs.
+> On Dec 7, 2022, at 3:43 AM, Richard Weinberger <richard@nod.at> wrote:
+>=20
+> Now with NFSD being able to cross into auto mounts,
+> the check can be removed.
+>=20
+> Signed-off-by: Richard Weinberger <richard@nod.at>
+> ---
+> fs/nfs/export.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/nfs/export.c b/fs/nfs/export.c
+> index 01596f2d0a1e..0a5ee1754d50 100644
+> --- a/fs/nfs/export.c
+> +++ b/fs/nfs/export.c
+> @@ -42,7 +42,7 @@ nfs_encode_fh(struct inode *inode, __u32 *p, int *max_l=
+en, struct inode *parent)
+> 	dprintk("%s: max fh len %d inode %p parent %p",
+> 		__func__, *max_len, inode, parent);
+>=20
+> -	if (*max_len < len || IS_AUTOMOUNT(inode)) {
+> +	if (*max_len < len) {
+> 		dprintk("%s: fh len %d too small, required %d\n",
+> 			__func__, *max_len, len);
+> 		*max_len =3D len;
+> --=20
+> 2.26.2
+>=20
 
-Thanks
-Lai
+I plan to take this through the nfsd tree, thus this one needs
+an Ack from the NFS client maintainers.
+
+--
+Chuck Lever
+
+
+
