@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C3864CF1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F6E64CF1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238662AbiLNSGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:06:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S238923AbiLNSGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbiLNSF0 (ORCPT
+        with ESMTP id S238945AbiLNSFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:05:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDDF23147;
-        Wed, 14 Dec 2022 10:04:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7130B819B8;
-        Wed, 14 Dec 2022 18:04:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58301C433F2;
-        Wed, 14 Dec 2022 18:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671041085;
-        bh=juNTL0A67dvslFkB6+bvivV58YYYoa6U9yhFU9rvUFs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dtKuhX8hdulFfjPxjmwWAO0KTg/swO+f8ZcWcMi3Nsv+E4ct28LtJe0m7rZ3Rpiw3
-         8Oj7pm0uHRWX2xxAp2uy3at3TOwHLT2Kr4F91DVhpaI93wgPoIeXlSA90EClkDvjjJ
-         gScA1N+hov7SoTl1erp/j0t668F0Xgeq+DA8xfuc6htVVi56cMlx+mwhpi4/FKBNUD
-         blWHFRb3q903KMf3trFBpcp9sQ3e+/YMKhhFYl/7/VfX08aw8jJ7cPp6SdJ9/E1rbB
-         reK9yUkNOUrCyLcIoLZfC+QQoleFWphqTptQ/EcMZVAk1HpgfCmyQmz4noutQnM4qz
-         y6+z2+ozZft3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44C6CC41612;
-        Wed, 14 Dec 2022 18:04:45 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y5jpKmpwhTAf+r8B@nvidia.com>
-References: <Y5jpKmpwhTAf+r8B@nvidia.com>
-X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y5jpKmpwhTAf+r8B@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: dbc94a0fb81771a38733c0e8f2ea8c4fa6934dc1
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ab425febda94c7d287ea3433cbd0971771d6aeb4
-Message-Id: <167104108527.17244.4207557699245256925.pr-tracker-bot@kernel.org>
-Date:   Wed, 14 Dec 2022 18:04:45 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 13:05:45 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D206B862;
+        Wed, 14 Dec 2022 10:05:44 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3cbdd6c00adso7920657b3.11;
+        Wed, 14 Dec 2022 10:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FBRUrtrmsnAbZI5Nq3EYtelch9Q3LJeA6lHE1domVys=;
+        b=UHRRC0pGANkudw+xnCH/GIFzypLC4qzzMt/5EgGaoOEOiufocLdP8vszChtH4SvV0f
+         zdxSIqX0sxkGsITNjKdCdFW0FqYf3Yp+5vfonJvQZZbu2oyn9iIlor22eh6KaDPoZsEf
+         IFTP29bRpmUiLtR1Px+ulRtw15C5VY4dJx4HMND0ANnW12gQFUSPsC/niRf+r5cRmGa0
+         oGhokcBD56S0L9AMqMCmURXRy2MUuFiLbPPA5JL2RDfZX/M3urqBGYfJfaUfswkgjU05
+         HTzNqoxWfhnchIUe3OhvwfEKl3S2NnqXAu+hIczRzouVxcrWJWujw35c3f5Cwtq/o+Pq
+         MZ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FBRUrtrmsnAbZI5Nq3EYtelch9Q3LJeA6lHE1domVys=;
+        b=yN8PZDRmMvgf19HXpNEiCpGEXK30w45BNGcuX8Z2RHqgtMgcnwNJ/pU4qDVGv70qsz
+         4Dx0KQCCUIr/arLQ5Dfr7wTcywZK5dZCxQIG/k435+lCtCrst4Gvs2iZO1bK/6oZX6qf
+         OUNmxiqh5pIKSujvytGdqbCJtfx8nMvI3hfeIrAmP9XXAugdaaohzBU+jSML/sRT/uaI
+         9yS29z1wVnLJ9SQC5kyYncM6/okAfS98wXBaUmNUI7fc36FWBBSNuUrgEofCM5BnJGRZ
+         NH408ONCePpWpRvLaRoLM3JR+cSX4+nzJaDtfTGIZrGE2x3r10207pVM5qW8zGRz6MXg
+         5G8w==
+X-Gm-Message-State: ANoB5pkC67eZ7DcqFj+QAbtHLEsX82EE1Bu46SfdS1ZWw0DAflu/uPIR
+        jvvhTFJ7nt0+yXgGUHfhDjXizGlB+/U=
+X-Google-Smtp-Source: AA0mqf6v2QbgQCgvdvoe/fB3DWofrvjz8e6NUAkz5YvYVc6gRIOBp/Ze8goIdkeETwTJc2tQ0aqkFw==
+X-Received: by 2002:a05:7500:4889:b0:df:add0:8dbd with SMTP id gr9-20020a057500488900b000dfadd08dbdmr2653895gab.7.1671041142596;
+        Wed, 14 Dec 2022 10:05:42 -0800 (PST)
+Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05620a0c4700b006fc8fc061f7sm10363309qki.129.2022.12.14.10.05.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 10:05:41 -0800 (PST)
+Message-ID: <52c581ff-c2ee-8832-1f49-bcf40847d0b5@gmail.com>
+Date:   Wed, 14 Dec 2022 13:05:40 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-input@vger.kernel.org, lee@kernel.org, lee.jones@linaro.org,
+        michael@walle.cc, Dmitry Torokhov <dmitry.torokhov@gmail.com>
+References: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+Content-Language: en-US
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 13 Dec 2022 17:05:46 -0400:
+Are there any updates?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ab425febda94c7d287ea3433cbd0971771d6aeb4
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+On 12/2/22 06:32, Jesse Taube wrote:
+> Some devices may want to use this driver without having a specific
+> compatible string. Add a generic compatible string to allow this.
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> ---
+>   drivers/mfd/simple-mfd-i2c.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> index f4c8fc3ee463..0bda0dd9276e 100644
+> --- a/drivers/mfd/simple-mfd-i2c.c
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+>   };
+>   
+>   static const struct of_device_id simple_mfd_i2c_of_match[] = {
+> +	{ .compatible = "simple-mfd-i2c-generic" },
+>   	{ .compatible = "kontron,sl28cpld" },
+>   	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
+>   	{}
