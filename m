@@ -2,355 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3558D64CB72
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FDE64CB78
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbiLNNhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
+        id S229898AbiLNNmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238029AbiLNNhv (ORCPT
+        with ESMTP id S229712AbiLNNmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:37:51 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1190A26116
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:37:50 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a16so22523775edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9/0oiXeJdIwrXeoL75luu/HKQ258x1rh0eJuFU+umA=;
-        b=NRphMd/0+abY72b4CCGlqCM4N7nM95gQZCDRMy0tP9hg6392lI9BupwI/TAwZxkmVA
-         /2JbVbO0s+IQZsPGFcqkM6577YQO7xrpGKdg9q3yvpXsGIYB6qFl7+Ap3sXpZ6VbtNjU
-         N8yD+DvpCNOfYGuBDsWiSmqhLR0bGnVslkiU8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9/0oiXeJdIwrXeoL75luu/HKQ258x1rh0eJuFU+umA=;
-        b=leKq08EA4eUHW3N5aruorMG8YGMdAFUYIuprdpAS1O7zRvp6GDK+ZF5YjEIjWpUW8w
-         xfZ2ZPHIJVtGoI+xdZUtXNrtj8fAT/wpfir+pX/e4BHrbSAD5365Ei+kcJFgY2akZ0O/
-         5HSXEOPXBJ2pttfV54RGYEiglfJM2lL850gEiVOovK82Y3ZagTht0mWlJ0/DN18h13wO
-         LzNLxoiw6wcemUJJn80By+7LfHOFEW/Y91oMUbmI4l945Jln0NF3AfHSYI0bPV7re2KN
-         CZ4IvuyZfQB3M5IvXbywVm9/HpmUWTbIkmLTuqJhMG8WXKvaeCdQ9HFz1XushQil003Y
-         13gg==
-X-Gm-Message-State: ANoB5plmbtgjJZiAaVrJ1UFnU4DlqGchHTZfd+psi6iY/YXlH4anAzmU
-        SIdT7hXFasAEz/aQPeO/W8FoHQ==
-X-Google-Smtp-Source: AA0mqf6Tr94coAd6aLZ7nPqCKKIJS9SO/yDXVII3qTlYTCC4QpDXaJWQY+txK4scM/SEw+d4mA5Wlw==
-X-Received: by 2002:a05:6402:3899:b0:468:260e:ad53 with SMTP id fd25-20020a056402389900b00468260ead53mr20652549edb.10.1671025068613;
-        Wed, 14 Dec 2022 05:37:48 -0800 (PST)
-Received: from alco.roam.corp.google.com ([100.104.168.209])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056402134f00b0046b531fcf9fsm6313681edw.59.2022.12.14.05.37.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 05:37:48 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 14 Dec 2022 14:37:19 +0100
-Subject: [PATCH v2] media: uvcvideo: Do not alloc dev->status
+        Wed, 14 Dec 2022 08:42:10 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D6426AC3;
+        Wed, 14 Dec 2022 05:42:06 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4NXGkN0yH9z9snF;
+        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hfhTWXB50so6; Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4NXGkN05yxz9sn7;
+        Wed, 14 Dec 2022 14:42:04 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E7C018B773;
+        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id yYyqfqsYJ_Hn; Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.109])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A4C018B766;
+        Wed, 14 Dec 2022 14:42:03 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2BEDfs3H890976
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 14:41:54 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2BEDfqfY890971;
+        Wed, 14 Dec 2022 14:41:52 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-spi@vger.kernel.org, Herve Codina <herve.codina@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] spi: fsl_spi: Don't change speed while chipselect is active
+Date:   Wed, 14 Dec 2022 14:41:33 +0100
+Message-Id: <8aab84c51aa330cf91f4b43782a1c483e150a4e3.1671025244.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221214-uvc-status-alloc-v2-0-3f1cba6fc734@chromium.org>
-To:     Yunke Cao <yunkec@chromium.org>, Ming Lei <tom.leiming@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Staudt <mstaudt@google.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8229; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=rQaxX08b7d4sBKDdgbVA4UZdlk7CIYYRcmxDrdE+484=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmdGgkthMMZpqD4la7aYb5mcZolzQMzvUZj+YGNZy
- rnAJ34mJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5nRoAAKCRDRN9E+zzrEiBr1D/
- wLfPHW5fYi7vBZBnJqLPKyHoYDszGgIT2x4JlkScUYTHtkTP5cKRUwTWpIuCVVnlSpCieA8fxlSeJi
- E0aG9RikVhrMDoQHr2m+bj09trUKiBb7nu3QKTdpkAlQzrYK3Z/n1khPR3TE89qBIHnkZ67nK39OVJ
- eY0VI/g+WC5WB1sX+dJk6Unrsqly4wsL7QtuwOlJ7BfixM55IXsbbNASCCYj6VCwKRBPu43xKPFnrp
- hCOMUQlNyv1oD6HOTTb1OXFREcPn4yATcWvJ3yBbTjsyIpb3hhoPdpm1UqMoNROkG93artRSv+PIsu
- OoASVBEtVPIiyyAekHVplKeirsjUtWhUEm4JXhj1BJOs/37uYit0uA5xld9F4wwfLyJVGiLyCPA925
- kus3ZR7ogETphwt7It3qDGRabT57dIMRKMMcPYjwedeb4gxWa5k3sXVAguRQmrKT9L2npx8rAxnVA6
- 0HT43Iuql1OZSxa0n0r8AvhYK8bC5RND63P276+Ij5H5NJovYii62KwMRnYJAKj//ur7JVRdkNQkdu
- rRQ9DDRdXAbA5bZX5Hy8JiiB/w5Gy4iJoumerEDNCSjyBYOO3bXUctGBvFu0LF0DHel3Tq9+DbuQ4l
- lYWOOv1LvrnFTAacctecjg1GkRnZXb+wW9rpHVfq7y6xmPgZ+WPHUaBrzx1g==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671025291; l=2546; s=20211009; h=from:subject:message-id; bh=8/jPqVq6+i4ZTuwdyPTYisS3aYHreLAZCFf6R55Qckc=; b=qC4a0ccjJlEsJPlSdNoPiAK0OdPp36lryj0XAXdRWkYMSkTpCRSKsHcmDwFHDrSe4T7embn0AI06 R/d0B4vFB3QmoUTj3Dpc7VRNc76rQnest+fh3CBywicoYi5Lwg4K
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UVC_MAX_STATUS_SIZE is 16 bytes, simplify the code by inlining dev->status.
+Commit c9bfcb315104 ("spi_mpc83xx: much improved driver") made
+modifications to the driver to not perform speed changes while
+chipselect is active. But those changes where lost with the
+convertion to tranfer_one.
 
-Now that we are at it, remove all the castings.
+Previous implementation was allowing speed changes during
+message transfer when cs_change flag was set.
+At the time being, core SPI does not provide any feature to change
+speed while chipselect is off, so do not allow any speed change during
+message transfer, and perform the transfer setup in prepare_message
+in order to set correct speed while chipselect is still off.
 
-To avoid issues with non-coherent DMAs, give the memory the same
-allocation as kmalloc.
-
-This patch kind of reverts:
-Fixes: a31a4055473b ("V4L/DVB:usbvideo:don't use part of buffer for USB transfer #4"
-
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reported-by: Herve Codina <herve.codina@bootlin.com>
+Fixes: 64ca1a034f00 ("spi: fsl_spi: Convert to transfer_one")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Tested-by: Herve Codina <herve.codina@bootlin.com>
 ---
-To: Ming Lei <tom.leiming@gmail.com>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Yunke Cao <yunkec@chromium.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Max Staudt <mstaudt@google.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v2:
-- using __aligned(), to keep the old alignment
-- Adding Johnathan Cameron to:, as he has some similar experience with iio
-- Adding Ming Lei, as this patch kind of revert his patch
-- Link to v1: https://lore.kernel.org/r/20221214-uvc-status-alloc-v1-0-a0098ddc7c93@chromium.org
----
- drivers/media/usb/uvc/uvc_status.c | 69 ++++++++++++--------------------------
- drivers/media/usb/uvc/uvcvideo.h   | 28 +++++++++++++++-
- 2 files changed, 48 insertions(+), 49 deletions(-)
+ drivers/spi/spi-fsl-spi.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 7518ffce22ed..adf63e7616c9 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -73,38 +73,24 @@ static void uvc_input_report_key(struct uvc_device *dev, unsigned int code,
- /* --------------------------------------------------------------------------
-  * Status interrupt endpoint
-  */
--struct uvc_streaming_status {
--	u8	bStatusType;
--	u8	bOriginator;
--	u8	bEvent;
--	u8	bValue[];
--} __packed;
--
--struct uvc_control_status {
--	u8	bStatusType;
--	u8	bOriginator;
--	u8	bEvent;
--	u8	bSelector;
--	u8	bAttribute;
--	u8	bValue[];
--} __packed;
--
- static void uvc_event_streaming(struct uvc_device *dev,
--				struct uvc_streaming_status *status, int len)
-+				struct uvc_status *status, int len)
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 731624f157fc..93152144fd2e 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -333,13 +333,26 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
  {
--	if (len < 3) {
-+	if (len <= offsetof(struct uvc_status, bEvent)) {
- 		uvc_dbg(dev, STATUS,
- 			"Invalid streaming status event received\n");
- 		return;
- 	}
- 
- 	if (status->bEvent == 0) {
--		if (len < 4)
-+		if (len <= offsetof(struct uvc_status, streaming))
- 			return;
+ 	struct mpc8xxx_spi *mpc8xxx_spi = spi_controller_get_devdata(ctlr);
+ 	struct spi_transfer *t;
++	struct spi_transfer *first;
 +
- 		uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
- 			status->bOriginator,
--			status->bValue[0] ? "pressed" : "released", len);
--		uvc_input_report_key(dev, KEY_CAMERA, status->bValue[0]);
-+			status->streaming.button ? "pressed" : "released", len);
-+		uvc_input_report_key(dev, KEY_CAMERA,
-+				     status->streaming.button);
- 	} else {
- 		uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
- 			status->bOriginator, status->bEvent, len);
-@@ -131,7 +117,7 @@ static struct uvc_control *uvc_event_entity_find_ctrl(struct uvc_entity *entity,
- }
++	first = list_first_entry(&m->transfers, struct spi_transfer,
++				 transfer_list);
  
- static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
--					const struct uvc_control_status *status,
-+					const struct uvc_status *status,
- 					struct uvc_video_chain **chain)
- {
- 	list_for_each_entry((*chain), &dev->chains, list) {
-@@ -143,7 +129,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+ 	/*
+ 	 * In CPU mode, optimize large byte transfers to use larger
+ 	 * bits_per_word values to reduce number of interrupts taken.
++	 *
++	 * Some glitches can appear on the SPI clock when the mode changes.
++	 * Check that there is no speed change during the transfer and set it up
++	 * now to change the mode without having a chip-select asserted.
+ 	 */
+-	if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
+-		list_for_each_entry(t, &m->transfers, transfer_list) {
++	list_for_each_entry(t, &m->transfers, transfer_list) {
++		if (t->speed_hz != first->speed_hz) {
++			dev_err(&m->spi->dev,
++				"speed_hz cannot change during message.\n");
++			return -EINVAL;
++		}
++		if (!(mpc8xxx_spi->flags & SPI_CPM_MODE)) {
+ 			if (t->len < 256 || t->bits_per_word != 8)
  				continue;
- 
- 			ctrl = uvc_event_entity_find_ctrl(entity,
--							  status->bSelector);
-+						     status->control.bSelector);
- 			if (ctrl)
- 				return ctrl;
- 		}
-@@ -153,7 +139,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
- }
- 
- static bool uvc_event_control(struct urb *urb,
--			      const struct uvc_control_status *status, int len)
-+			      const struct uvc_status *status, int len)
- {
- 	static const char *attrs[] = { "value", "info", "failure", "min", "max" };
- 	struct uvc_device *dev = urb->context;
-@@ -161,24 +147,24 @@ static bool uvc_event_control(struct urb *urb,
- 	struct uvc_control *ctrl;
- 
- 	if (len < 6 || status->bEvent != 0 ||
--	    status->bAttribute >= ARRAY_SIZE(attrs)) {
-+	    status->control.bAttribute >= ARRAY_SIZE(attrs)) {
- 		uvc_dbg(dev, STATUS, "Invalid control status event received\n");
- 		return false;
- 	}
- 
- 	uvc_dbg(dev, STATUS, "Control %u/%u %s change len %d\n",
--		status->bOriginator, status->bSelector,
--		attrs[status->bAttribute], len);
-+		status->bOriginator, status->control.bSelector,
-+		attrs[status->control.bAttribute], len);
- 
- 	/* Find the control. */
- 	ctrl = uvc_event_find_ctrl(dev, status, &chain);
- 	if (!ctrl)
- 		return false;
- 
--	switch (status->bAttribute) {
-+	switch (status->control.bAttribute) {
- 	case UVC_CTRL_VALUE_CHANGE:
- 		return uvc_ctrl_status_event_async(urb, chain, ctrl,
--						   status->bValue);
-+						   status->control.bValue);
- 
- 	case UVC_CTRL_INFO_CHANGE:
- 	case UVC_CTRL_FAILURE_CHANGE:
-@@ -214,28 +200,22 @@ static void uvc_status_complete(struct urb *urb)
- 
- 	len = urb->actual_length;
- 	if (len > 0) {
--		switch (dev->status[0] & 0x0f) {
-+		switch (dev->status.bStatusType & 0x0f) {
- 		case UVC_STATUS_TYPE_CONTROL: {
--			struct uvc_control_status *status =
--				(struct uvc_control_status *)dev->status;
--
--			if (uvc_event_control(urb, status, len))
-+			if (uvc_event_control(urb, &dev->status, len))
- 				/* The URB will be resubmitted in work context. */
- 				return;
- 			break;
- 		}
- 
- 		case UVC_STATUS_TYPE_STREAMING: {
--			struct uvc_streaming_status *status =
--				(struct uvc_streaming_status *)dev->status;
--
--			uvc_event_streaming(dev, status, len);
-+			uvc_event_streaming(dev, &dev->status, len);
- 			break;
- 		}
- 
- 		default:
- 			uvc_dbg(dev, STATUS, "Unknown status event type %u\n",
--				dev->status[0]);
-+				dev->status.bStatusType);
- 			break;
+ 			if ((t->len & 3) == 0)
+@@ -348,7 +361,7 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
+ 				t->bits_per_word = 16;
  		}
  	}
-@@ -259,15 +239,9 @@ int uvc_status_init(struct uvc_device *dev)
- 
- 	uvc_input_init(dev);
- 
--	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
--	if (dev->status == NULL)
--		return -ENOMEM;
--
- 	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (dev->int_urb == NULL) {
--		kfree(dev->status);
-+	if (!dev->int_urb)
- 		return -ENOMEM;
--	}
- 
- 	pipe = usb_rcvintpipe(dev->udev, ep->desc.bEndpointAddress);
- 
-@@ -281,7 +255,7 @@ int uvc_status_init(struct uvc_device *dev)
- 		interval = fls(interval) - 1;
- 
- 	usb_fill_int_urb(dev->int_urb, dev->udev, pipe,
--		dev->status, UVC_MAX_STATUS_SIZE, uvc_status_complete,
-+		&dev->status, sizeof(dev->status), uvc_status_complete,
- 		dev, interval);
- 
- 	return 0;
-@@ -296,7 +270,6 @@ void uvc_status_unregister(struct uvc_device *dev)
- void uvc_status_cleanup(struct uvc_device *dev)
- {
- 	usb_free_urb(dev->int_urb);
--	kfree(dev->status);
+-	return 0;
++	return fsl_spi_setup_transfer(m->spi, first);
  }
  
- int uvc_status_start(struct uvc_device *dev, gfp_t flags)
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df93db259312..5dfc2896ce88 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -527,6 +527,26 @@ struct uvc_device_info {
- 	const struct uvc_control_mapping **mappings;
- };
- 
-+struct uvc_status_streaming {
-+	u8	button;
-+} __packed;
-+
-+struct uvc_status_control {
-+	u8	bSelector;
-+	u8	bAttribute;
-+	u8	bValue[11];
-+} __packed;
-+
-+struct uvc_status {
-+	u8	bStatusType;
-+	u8	bOriginator;
-+	u8	bEvent;
-+	union {
-+		struct uvc_status_control control;
-+		struct uvc_status_streaming streaming;
-+	};
-+} __packed;
-+
- struct uvc_device {
- 	struct usb_device *udev;
- 	struct usb_interface *intf;
-@@ -559,7 +579,7 @@ struct uvc_device {
- 	/* Status Interrupt Endpoint */
- 	struct usb_host_endpoint *int_ep;
- 	struct urb *int_urb;
--	u8 *status;
-+
- 	struct input_dev *input;
- 	char input_phys[64];
- 
-@@ -572,6 +592,12 @@ struct uvc_device {
- 	} async_ctrl;
- 
- 	struct uvc_entity *gpio_unit;
-+
-+	/*
-+	 * Ensure that status is aligned, making it safe to use with
-+	 * non-coherent DMA.
-+	 */
-+	struct uvc_status status __aligned(ARCH_KMALLOC_MINALIGN);
- };
- 
- enum uvc_handle_state {
-
----
-base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
-change-id: 20221214-uvc-status-alloc-93becb783898
-
-Best regards,
+ static int fsl_spi_transfer_one(struct spi_controller *controller,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.38.1
+
