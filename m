@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1319764C402
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E464C403
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiLNGrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 01:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S237468AbiLNGrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 01:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbiLNGqW (ORCPT
+        with ESMTP id S237415AbiLNGrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 01:46:22 -0500
+        Wed, 14 Dec 2022 01:47:02 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4C27FFA
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:45:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4128724
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:46:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671000338;
+        s=mimecast20190719; t=1671000368;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=v2KQ20azENrWlpIXgyPYqWNgjTYAx1e3sSejLKL9vow=;
-        b=X245QWNE7QDzZN0r119rV9HFiSzhKUo4PocikKTNwsckybY+HaSEuk28mn6Vc/mYPaLgHO
-        hnmX4pa3GucQEFn6ZVLfhvvvLdXUhmUgKKcOkFTy5ijDM+SaJNXaeSV4SPdZCP3o7Q5U/t
-        Z7CiSDp9kDfOIiS4skDuLsRlC91yZrg=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4/uGgWeyPpUkK7Ij8q3Mfl77hPjQRLagdr15VkXWvMU=;
+        b=Q2cQLlnCc9A+uFYdubIEEf5CG1WaIz8PsCfc3IwlN3g1vAKsXZ1Cy83zkS6wBBiEuk71uS
+        KxtL38dIpO8y9adTzpOtOEMQUP2aCAVyYANFiE3CM4weF2WVfLnmigSqYlZyXUxAhlZg2T
+        LKmhJtBNfpOpMNlK+IJGg7b6KIAI1jk=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-292-Ek08j3cIOJiajV_EcqgOOQ-1; Wed, 14 Dec 2022 01:45:34 -0500
-X-MC-Unique: Ek08j3cIOJiajV_EcqgOOQ-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-144da30bb39so4922695fac.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:45:34 -0800 (PST)
+ us-mta-100-m-h_mqPoOo-R1iWy6ufBVg-1; Wed, 14 Dec 2022 01:46:07 -0500
+X-MC-Unique: m-h_mqPoOo-R1iWy6ufBVg-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1441544a0e5so4909497fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:46:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v2KQ20azENrWlpIXgyPYqWNgjTYAx1e3sSejLKL9vow=;
-        b=ecx6jmvvUIUmmdI13P/A0lCKlfHlXJWANy7Fr20lS3kcM509b4jAEoVD3EHve3lM4o
-         tE+7bhVA6QCaxa6haSbR64NWGjZcIYRpgvqsSdJq/681e/ccnGZGG5YbymIvmOOVMd+7
-         kmTqBb+VODBgnl/NDr1LeL8bBImoyCKRYTK/Wa5B8K3wZrK7JZFkRlrKPEiuS0M+WjPe
-         xh3M4vBILa0taWaJ/3q16j9FnCUuPeUtKOeGTTFoHHMwBtgeimjn4/gileA8trGyIDZM
-         S/TvPVl+5joSxCdXuBPQQiSUSpWDG+KRZUUjTraOeFdVZgouhxRT6I2J/c2562QYYv7O
-         h8jw==
-X-Gm-Message-State: ANoB5pnmNlkSvAiS6RTT2Jua7OCWbm2azYDkknTsLppkxX2nSJDs09Vk
-        VwJiKtdjaXf4b0nrISESfSp3qySEZsh/cMwHRo2HrZXPPV6fxlAEwc527Vzzy/zUVmycheddrE3
-        bd52r5JWMjmS3tD97BCF9Req0FH2LPLDoeEw9gzQc
-X-Received: by 2002:a05:6830:6505:b0:66c:fb5b:4904 with SMTP id cm5-20020a056830650500b0066cfb5b4904mr48697763otb.237.1671000333405;
-        Tue, 13 Dec 2022 22:45:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5I79yBPGo1C+IpDxbeyXdMdgrFCGinX6RcAZRE5/0EPgf38hOicBhnKpFMgzV4YlUEFETGHmTKLklDNTq5Gog=
-X-Received: by 2002:a05:6830:6505:b0:66c:fb5b:4904 with SMTP id
- cm5-20020a056830650500b0066cfb5b4904mr48697758otb.237.1671000333117; Tue, 13
- Dec 2022 22:45:33 -0800 (PST)
+        bh=4/uGgWeyPpUkK7Ij8q3Mfl77hPjQRLagdr15VkXWvMU=;
+        b=tUHpKf0evI034SPhxegdSWTLslEhzcKZZQHmwGWnBLuGXScFDU9GjzZ/9qX7pFb8ME
+         /VZ8GZi9wPP/eSXnuwpG0YEvOnxE0CK/A4hEOQLM0PxJYNF0HEpzI+em1X/D+2saTgsE
+         G0I9k8cHIyvHh4VEVfNqTc5mBuknkkCKYVsclZOzVpopCfGgcDYHBg/GxolTtZ3RYLd3
+         KemBH92cTOtaVedUXWilG1kdf//48R4D/EZprbiNmJrqAEP0ASoAGh1eJLief3hrYRqw
+         hyaAcf7Ri9rxc5tSMmJnao43qI3OZF7galUdt9peagI3w/+MAs9lxyZMRfd3Rme6mjqU
+         23QQ==
+X-Gm-Message-State: AFqh2kqENRW+MHT0D3Wg63Gix787uh2v07uX3/XLfqFkPUMM6ARFS4OR
+        b+BWqbKwqshWdGwYrQQI6k/O7Mx5pdCiRnN+N0YN9iYM0PC8K5LxhP1QFg+9HnGpJcvMsO6llzh
+        AMb3qGmR6VOMBOAtI+91wCRXwuCpL1/D3duVKdbI5
+X-Received: by 2002:a05:6870:41c7:b0:144:a97b:1ae2 with SMTP id z7-20020a05687041c700b00144a97b1ae2mr107909oac.35.1671000366426;
+        Tue, 13 Dec 2022 22:46:06 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtcRZ22jl8YXWE+Ou5mo3nHgzRE0JO54AgFrrqC8Ly52HjwSUKGCden9upEeqPXBdroLUSLQS6K+mq6Or1SYYA=
+X-Received: by 2002:a05:6870:41c7:b0:144:a97b:1ae2 with SMTP id
+ z7-20020a05687041c700b00144a97b1ae2mr107900oac.35.1671000366177; Tue, 13 Dec
+ 2022 22:46:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207145428.31544-1-gautam.dawar@amd.com> <20221207145428.31544-8-gautam.dawar@amd.com>
-In-Reply-To: <20221207145428.31544-8-gautam.dawar@amd.com>
+References: <20221207145428.31544-1-gautam.dawar@amd.com> <20221207145428.31544-9-gautam.dawar@amd.com>
+In-Reply-To: <20221207145428.31544-9-gautam.dawar@amd.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 14 Dec 2022 14:45:22 +0800
-Message-ID: <CACGkMEsgJCniBiggqX4V+quhBY-Dj1Jnr7H+YD4w6gESOX1SmQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 07/11] sfc: implement filters for receiving traffic
+Date:   Wed, 14 Dec 2022 14:45:55 +0800
+Message-ID: <CACGkMEtGCbUBZRFh7EUJyymuWZ9uxiAOeJHA6h-dGa9Y3pDZGw@mail.gmail.com>
+Subject: Re: [PATCH net-next 08/11] sfc: implement device status related vdpa
+ config operations
 To:     Gautam Dawar <gautam.dawar@amd.com>
 Cc:     linux-net-drivers@amd.com, netdev@vger.kernel.org,
         eperezma@redhat.com, tanuj.kamde@amd.com, Koushik.Dutta@amd.com,
@@ -71,7 +72,7 @@ Cc:     linux-net-drivers@amd.com, netdev@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,357 +82,187 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Dec 7, 2022 at 10:57 PM Gautam Dawar <gautam.dawar@amd.com> wrote:
 >
-> Implement unicast, broadcast and unknown multicast
-> filters for receiving different types of traffic.
-
-I suggest squashing this into the patch that implements set_config().
-
+> vDPA config opertions to handle get/set device status and device
+> reset have been implemented.
 >
 > Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
 > ---
->  drivers/net/ethernet/sfc/ef100_vdpa.c     | 159 ++++++++++++++++++++++
->  drivers/net/ethernet/sfc/ef100_vdpa.h     |  35 +++++
->  drivers/net/ethernet/sfc/ef100_vdpa_ops.c |  27 +++-
->  3 files changed, 220 insertions(+), 1 deletion(-)
+>  drivers/net/ethernet/sfc/ef100_vdpa.c     |   7 +-
+>  drivers/net/ethernet/sfc/ef100_vdpa.h     |   1 +
+>  drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 133 ++++++++++++++++++++++
+>  3 files changed, 140 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c b/drivers/net/ethernet/sfc/ef100_vdpa.c
-> index 41eb7aef6798..04d64bfe3c93 100644
+> index 04d64bfe3c93..80bca281a748 100644
 > --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
 > +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
-> @@ -17,12 +17,168 @@
->  #include "mcdi_filters.h"
->  #include "mcdi_functions.h"
->  #include "ef100_netdev.h"
-> +#include "filter.h"
-> +#include "efx.h"
+> @@ -225,9 +225,14 @@ static int vdpa_allocate_vis(struct efx_nic *efx, unsigned int *allocated_vis)
 >
-> +#define EFX_INVALID_FILTER_ID -1
+>  static void ef100_vdpa_delete(struct efx_nic *efx)
+>  {
+> +       struct vdpa_device *vdpa_dev;
 > +
-> +/* vDPA queues starts from 2nd VI or qid 1 */
-> +#define EF100_VDPA_BASE_RX_QID 1
-> +
-> +static const char * const filter_names[] = { "bcast", "ucast", "mcast" };
->  static struct virtio_device_id ef100_vdpa_id_table[] = {
->         { .device = VIRTIO_ID_NET, .vendor = PCI_VENDOR_ID_REDHAT_QUMRANET },
->         { 0 },
->  };
->
-> +static int ef100_vdpa_set_mac_filter(struct efx_nic *efx,
-> +                                    struct efx_filter_spec *spec,
-> +                                    u32 qid,
-> +                                    u8 *mac_addr)
-> +{
-> +       int rc;
-> +
-> +       efx_filter_init_rx(spec, EFX_FILTER_PRI_AUTO, 0, qid);
-> +
-> +       if (mac_addr) {
-> +               rc = efx_filter_set_eth_local(spec, EFX_FILTER_VID_UNSPEC,
-> +                                             mac_addr);
-> +               if (rc)
-> +                       pci_err(efx->pci_dev,
-> +                               "Filter set eth local failed, err: %d\n", rc);
-> +       } else {
-> +               efx_filter_set_mc_def(spec);
-> +       }
-> +
-> +       rc = efx_filter_insert_filter(efx, spec, true);
-> +       if (rc < 0)
-> +               pci_err(efx->pci_dev,
-> +                       "Filter insert failed, err: %d\n", rc);
-> +
-> +       return rc;
-> +}
-> +
-> +static int ef100_vdpa_delete_filter(struct ef100_vdpa_nic *vdpa_nic,
-> +                                   enum ef100_vdpa_mac_filter_type type)
-> +{
-> +       struct vdpa_device *vdev = &vdpa_nic->vdpa_dev;
-> +       int rc;
-> +
-> +       if (vdpa_nic->filters[type].filter_id == EFX_INVALID_FILTER_ID)
-> +               return rc;
-> +
-> +       rc = efx_filter_remove_id_safe(vdpa_nic->efx,
-> +                                      EFX_FILTER_PRI_AUTO,
-> +                                      vdpa_nic->filters[type].filter_id);
-> +       if (rc) {
-> +               dev_err(&vdev->dev, "%s filter id: %d remove failed, err: %d\n",
-> +                       filter_names[type], vdpa_nic->filters[type].filter_id,
-> +                       rc);
-> +       } else {
-> +               vdpa_nic->filters[type].filter_id = EFX_INVALID_FILTER_ID;
-> +               vdpa_nic->filter_cnt--;
-> +       }
-> +       return rc;
-> +}
-> +
-> +int ef100_vdpa_add_filter(struct ef100_vdpa_nic *vdpa_nic,
-> +                         enum ef100_vdpa_mac_filter_type type)
-> +{
-> +       struct vdpa_device *vdev = &vdpa_nic->vdpa_dev;
-> +       struct efx_nic *efx = vdpa_nic->efx;
-> +       /* Configure filter on base Rx queue only */
-> +       u32 qid = EF100_VDPA_BASE_RX_QID;
-> +       struct efx_filter_spec *spec;
-> +       u8 baddr[ETH_ALEN];
-> +       int rc;
-> +
-> +       /* remove existing filter */
-> +       rc = ef100_vdpa_delete_filter(vdpa_nic, type);
-> +       if (rc < 0) {
-> +               dev_err(&vdev->dev, "%s MAC filter deletion failed, err: %d",
-> +                       filter_names[type], rc);
-> +               return rc;
-> +       }
-> +
-> +       /* Configure MAC Filter */
-> +       spec = &vdpa_nic->filters[type].spec;
-> +       if (type == EF100_VDPA_BCAST_MAC_FILTER) {
-> +               eth_broadcast_addr(baddr);
-> +               rc = ef100_vdpa_set_mac_filter(efx, spec, qid, baddr);
-> +       } else if (type == EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER) {
-> +               rc = ef100_vdpa_set_mac_filter(efx, spec, qid, NULL);
-> +       } else {
-> +               /* Ensure we have everything required to insert the filter */
-> +               if (!vdpa_nic->mac_configured ||
-> +                   !vdpa_nic->vring[0].vring_created ||
-> +                   !is_valid_ether_addr(vdpa_nic->mac_address))
-> +                       return -EINVAL;
-> +
-> +               rc = ef100_vdpa_set_mac_filter(efx, spec, qid,
-> +                                              vdpa_nic->mac_address);
-> +       }
-> +
-> +       if (rc >= 0) {
-> +               vdpa_nic->filters[type].filter_id = rc;
-> +               vdpa_nic->filter_cnt++;
+>         if (efx->vdpa_nic) {
+> +               vdpa_dev = &efx->vdpa_nic->vdpa_dev;
+> +               ef100_vdpa_reset(vdpa_dev);
 
-I'm not sure I get this, but the code seems doesn't allow the driver
-to set multiple uc filters, so I think filter_cnt should be always 3?
-If yes, I don't see how filter_cnt can help here.
+Any reason we need to reset during delete?
 
 > +
-> +               return 0;
-> +       }
+>                 /* replace with _vdpa_unregister_device later */
+> -               put_device(&efx->vdpa_nic->vdpa_dev.dev);
+> +               put_device(&vdpa_dev->dev);
+>                 efx->vdpa_nic = NULL;
+>         }
+>         efx_mcdi_free_vis(efx);
+> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet/sfc/ef100_vdpa.h
+> index a33edd6dda12..1b0bbba88154 100644
+> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
+> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
+> @@ -186,6 +186,7 @@ int ef100_vdpa_add_filter(struct ef100_vdpa_nic *vdpa_nic,
+>                           enum ef100_vdpa_mac_filter_type type);
+>  int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, u16 nvqs);
+>  void ef100_vdpa_irq_vectors_free(void *data);
+> +int ef100_vdpa_reset(struct vdpa_device *vdev);
+>
+>  static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic *vdpa_nic)
+>  {
+> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
+> index 132ddb4a647b..718b67f6da90 100644
+> --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
+> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
+> @@ -251,6 +251,62 @@ static bool is_qid_invalid(struct ef100_vdpa_nic *vdpa_nic, u16 idx,
+>         return false;
+>  }
+>
+> +static void ef100_reset_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
+> +{
+> +       int i;
 > +
-> +       dev_err(&vdev->dev, "%s MAC filter insert failed, err: %d\n",
-> +               filter_names[type], rc);
+> +       WARN_ON(!mutex_is_locked(&vdpa_nic->lock));
 > +
-> +       if (type != EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER) {
-> +               ef100_vdpa_filter_remove(vdpa_nic);
-> +               return rc;
-> +       }
+> +       if (!vdpa_nic->status)
+> +               return;
 > +
+> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_INITIALIZED;
+> +       vdpa_nic->status = 0;
+> +       vdpa_nic->features = 0;
+> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++)
+> +               reset_vring(vdpa_nic, i);
+> +}
+> +
+> +/* May be called under the rtnl lock */
+> +int ef100_vdpa_reset(struct vdpa_device *vdev)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
+> +
+> +       /* vdpa device can be deleted anytime but the bar_config
+> +        * could still be vdpa and hence efx->state would be STATE_VDPA.
+> +        * Accordingly, ensure vdpa device exists before reset handling
+> +        */
+> +       if (!vdpa_nic)
+> +               return -ENODEV;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       ef100_reset_vdpa_device(vdpa_nic);
+> +       mutex_unlock(&vdpa_nic->lock);
 > +       return 0;
 > +}
 > +
-> +int ef100_vdpa_filter_remove(struct ef100_vdpa_nic *vdpa_nic)
+> +static int start_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
 > +{
-> +       enum ef100_vdpa_mac_filter_type filter;
-> +       int err = 0;
-> +       int rc;
+> +       int rc = 0;
+> +       int i, j;
 > +
-> +       for (filter = EF100_VDPA_BCAST_MAC_FILTER;
-> +            filter <= EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER; filter++) {
-> +               rc = ef100_vdpa_delete_filter(vdpa_nic, filter);
-> +               if (rc < 0)
-> +                       /* store status of last failed filter remove */
-> +                       err = rc;
+> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
+> +               if (can_create_vring(vdpa_nic, i)) {
+> +                       rc = create_vring(vdpa_nic, i);
+
+So I think we can safely remove the create_vring() in set_vq_ready()
+since it's undefined behaviour if set_vq_ready() is called after
+DRIVER_OK.
+
+> +                       if (rc)
+> +                               goto clear_vring;
+> +               }
 > +       }
-> +       return err;
-> +}
+> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_STARTED;
+> +       return rc;
 > +
-> +int ef100_vdpa_filter_configure(struct ef100_vdpa_nic *vdpa_nic)
-> +{
-> +       struct vdpa_device *vdev = &vdpa_nic->vdpa_dev;
-> +       enum ef100_vdpa_mac_filter_type filter;
-> +       int rc;
-> +
-> +       /* remove existing filters, if any */
-> +       rc = ef100_vdpa_filter_remove(vdpa_nic);
-> +       if (rc < 0) {
-> +               dev_err(&vdev->dev,
-> +                       "MAC filter deletion failed, err: %d", rc);
-> +               goto fail;
-> +       }
-> +
-> +       for (filter = EF100_VDPA_BCAST_MAC_FILTER;
-> +            filter <= EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER; filter++) {
-> +               if (filter == EF100_VDPA_UCAST_MAC_FILTER &&
-> +                   !vdpa_nic->mac_configured)
-> +                       continue;
-> +               rc = ef100_vdpa_add_filter(vdpa_nic, filter);
-> +               if (rc < 0)
-> +                       goto fail;
-> +       }
-> +fail:
+> +clear_vring:
+> +       for (j = 0; j < i; j++)
+> +               if (vdpa_nic->vring[j].vring_created)
+> +                       delete_vring(vdpa_nic, j);
 > +       return rc;
 > +}
 > +
->  int ef100_vdpa_init(struct efx_probe_data *probe_data)
->  {
->         struct efx_nic *efx = &probe_data->efx;
-> @@ -168,6 +324,9 @@ static struct ef100_vdpa_nic *ef100_vdpa_create(struct efx_nic *efx,
->         ether_addr_copy(vdpa_nic->mac_address, mac);
->         vdpa_nic->mac_configured = true;
->
-> +       for (i = 0; i < EF100_VDPA_MAC_FILTER_NTYPES; i++)
-> +               vdpa_nic->filters[i].filter_id = EFX_INVALID_FILTER_ID;
-> +
->         for (i = 0; i < (2 * vdpa_nic->max_queue_pairs); i++)
->                 vdpa_nic->vring[i].irq = -EINVAL;
->
-> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h b/drivers/net/ethernet/sfc/ef100_vdpa.h
-> index 3cc33daa0431..a33edd6dda12 100644
-> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
-> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
-> @@ -72,6 +72,22 @@ enum ef100_vdpa_vq_type {
->         EF100_VDPA_VQ_NTYPES
->  };
->
-> +/**
-> + * enum ef100_vdpa_mac_filter_type - vdpa filter types
-> + *
-> + * @EF100_VDPA_BCAST_MAC_FILTER: Broadcast MAC filter
-> + * @EF100_VDPA_UCAST_MAC_FILTER: Unicast MAC filter
-> + * @EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER: Unknown multicast MAC filter to allow
-> + *     IPv6 Neighbor Solicitation Message
-> + * @EF100_VDPA_MAC_FILTER_NTYPES: Number of vDPA filter types
-> + */
-> +enum ef100_vdpa_mac_filter_type {
-> +       EF100_VDPA_BCAST_MAC_FILTER,
-> +       EF100_VDPA_UCAST_MAC_FILTER,
-> +       EF100_VDPA_UNKNOWN_MCAST_MAC_FILTER,
-> +       EF100_VDPA_MAC_FILTER_NTYPES,
-> +};
-> +
->  /**
->   * struct ef100_vdpa_vring_info - vDPA vring data structure
->   *
-> @@ -109,6 +125,17 @@ struct ef100_vdpa_vring_info {
->         struct vdpa_callback cb;
->  };
->
-> +/**
-> + * struct ef100_vdpa_filter - vDPA filter data structure
-> + *
-> + * @filter_id: filter id of this filter
-> + * @efx_filter_spec: hardware filter specs for this vdpa device
-> + */
-> +struct ef100_vdpa_filter {
-> +       s32 filter_id;
-> +       struct efx_filter_spec spec;
-> +};
-> +
->  /**
->   *  struct ef100_vdpa_nic - vDPA NIC data structure
->   *
-> @@ -118,6 +145,7 @@ struct ef100_vdpa_vring_info {
->   * @lock: Managing access to vdpa config operations
->   * @pf_index: PF index of the vDPA VF
->   * @vf_index: VF index of the vDPA VF
-> + * @filter_cnt: total number of filters created on this vdpa device
->   * @status: device status as per VIRTIO spec
->   * @features: negotiated feature bits
->   * @max_queue_pairs: maximum number of queue pairs supported
-> @@ -125,6 +153,7 @@ struct ef100_vdpa_vring_info {
->   * @vring: vring information of the vDPA device.
->   * @mac_address: mac address of interface associated with this vdpa device
->   * @mac_configured: true after MAC address is configured
-> + * @filters: details of all filters created on this vdpa device
->   * @cfg_cb: callback for config change
->   */
->  struct ef100_vdpa_nic {
-> @@ -135,6 +164,7 @@ struct ef100_vdpa_nic {
->         struct mutex lock;
->         u32 pf_index;
->         u32 vf_index;
-> +       u32 filter_cnt;
->         u8 status;
->         u64 features;
->         u32 max_queue_pairs;
-> @@ -142,6 +172,7 @@ struct ef100_vdpa_nic {
->         struct ef100_vdpa_vring_info vring[EF100_VDPA_MAX_QUEUES_PAIRS * 2];
->         u8 *mac_address;
->         bool mac_configured;
-> +       struct ef100_vdpa_filter filters[EF100_VDPA_MAC_FILTER_NTYPES];
->         struct vdpa_callback cfg_cb;
->  };
->
-> @@ -149,6 +180,10 @@ int ef100_vdpa_init(struct efx_probe_data *probe_data);
->  void ef100_vdpa_fini(struct efx_probe_data *probe_data);
->  int ef100_vdpa_register_mgmtdev(struct efx_nic *efx);
->  void ef100_vdpa_unregister_mgmtdev(struct efx_nic *efx);
-> +int ef100_vdpa_filter_configure(struct ef100_vdpa_nic *vdpa_nic);
-> +int ef100_vdpa_filter_remove(struct ef100_vdpa_nic *vdpa_nic);
-> +int ef100_vdpa_add_filter(struct ef100_vdpa_nic *vdpa_nic,
-> +                         enum ef100_vdpa_mac_filter_type type);
->  int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, u16 nvqs);
->  void ef100_vdpa_irq_vectors_free(void *data);
->
-> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> index b7efd3e0c901..132ddb4a647b 100644
-> --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
-> @@ -135,6 +135,15 @@ static int delete_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->         if (vdpa_nic->vring[idx].vring_ctx)
->                 delete_vring_ctx(vdpa_nic, idx);
->
-> +       if (idx == 0 && vdpa_nic->filter_cnt != 0) {
-> +               rc = ef100_vdpa_filter_remove(vdpa_nic);
-> +               if (rc < 0) {
-> +                       dev_err(&vdpa_nic->vdpa_dev.dev,
-> +                               "%s: vdpa remove filter failed, err:%d\n",
-> +                               __func__, rc);
-> +               }
-> +       }
-> +
->         return rc;
+>  static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
+>                                      u16 idx, u64 desc_area, u64 driver_area,
+>                                      u64 device_area)
+> @@ -568,6 +624,80 @@ static u32 ef100_vdpa_get_vendor_id(struct vdpa_device *vdev)
+>         return EF100_VDPA_VENDOR_ID;
 >  }
 >
-> @@ -193,8 +202,22 @@ static int create_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->                 vdpa_nic->vring[idx].doorbell_offset_valid = true;
->         }
->
-> +       /* Configure filters on rxq 0 */
-> +       if (idx == 0) {
+> +static u8 ef100_vdpa_get_status(struct vdpa_device *vdev)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
+> +       u8 status;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       status = vdpa_nic->status;
+> +       mutex_unlock(&vdpa_nic->lock);
+> +       return status;
+> +}
+> +
+> +static void ef100_vdpa_set_status(struct vdpa_device *vdev, u8 status)
+> +{
+> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
+> +       u8 new_status;
+> +       int rc;
+> +
+> +       mutex_lock(&vdpa_nic->lock);
+> +       if (!status) {
+> +               dev_info(&vdev->dev,
+> +                        "%s: Status received is 0. Device reset being done\n",
+> +                        __func__);
+> +               ef100_reset_vdpa_device(vdpa_nic);
+> +               goto unlock_return;
+> +       }
+> +       new_status = status & ~vdpa_nic->status;
+> +       if (new_status == 0) {
+> +               dev_info(&vdev->dev,
+> +                        "%s: New status same as current status\n", __func__);
+> +               goto unlock_return;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_FAILED) {
+> +               ef100_reset_vdpa_device(vdpa_nic);
+> +               goto unlock_return;
+> +       }
+> +
+> +       if (new_status & VIRTIO_CONFIG_S_ACKNOWLEDGE &&
+> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
 
-This seems tricky, can we move this to set_status() when DRIVER_OK is set?
+As replied before, I think there's no need to check
+EF100_VDPA_STATE_INITIALIZED, otherwise it could be a bug somewhere.
+
+> +               vdpa_nic->status |= VIRTIO_CONFIG_S_ACKNOWLEDGE;
+> +               new_status &= ~VIRTIO_CONFIG_S_ACKNOWLEDGE;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_DRIVER &&
+> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
+> +               vdpa_nic->status |= VIRTIO_CONFIG_S_DRIVER;
+> +               new_status &= ~VIRTIO_CONFIG_S_DRIVER;
+> +       }
+> +       if (new_status & VIRTIO_CONFIG_S_FEATURES_OK &&
+> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_INITIALIZED) {
+> +               vdpa_nic->status |= VIRTIO_CONFIG_S_FEATURES_OK;
+> +               vdpa_nic->vdpa_state = EF100_VDPA_STATE_NEGOTIATED;
+
+I think we can simply map EF100_VDPA_STATE_NEGOTIATED to
+VIRTIO_CONFIG_S_FEATURES_OK.
+
+E.g the code doesn't fail the feature negotiation by clearing the
+VIRTIO_CONFIG_S_FEATURES_OK when ef100_vdpa_set_driver_feature fails?
 
 Thanks
-
-
-> +               rc = ef100_vdpa_filter_configure(vdpa_nic);
-> +               if (rc < 0) {
-> +                       dev_err(&vdpa_nic->vdpa_dev.dev,
-> +                               "%s: vdpa configure filter failed, err:%d\n",
-> +                               __func__, rc);
-> +                       goto err_filter_configure;
-> +               }
-> +       }
-> +
->         return 0;
->
-> +err_filter_configure:
-> +       ef100_vdpa_filter_remove(vdpa_nic);
-> +       vdpa_nic->vring[idx].doorbell_offset_valid = false;
->  err_get_doorbell_offset:
->         efx_vdpa_vring_destroy(vdpa_nic->vring[idx].vring_ctx,
->                                &vring_dyn_cfg);
-> @@ -578,8 +601,10 @@ static void ef100_vdpa_set_config(struct vdpa_device *vdev, unsigned int offset,
->         }
->
->         memcpy((u8 *)&vdpa_nic->net_config + offset, buf, len);
-> -       if (is_valid_ether_addr(vdpa_nic->mac_address))
-> +       if (is_valid_ether_addr(vdpa_nic->mac_address)) {
->                 vdpa_nic->mac_configured = true;
-> +               ef100_vdpa_add_filter(vdpa_nic, EF100_VDPA_UCAST_MAC_FILTER);
-> +       }
->  }
->
->  static void ef100_vdpa_free(struct vdpa_device *vdev)
-> --
-> 2.30.1
->
 
