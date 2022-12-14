@@ -2,222 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE80B64CE22
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AEF64CE25
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239108AbiLNQfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:35:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S238908AbiLNQgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239096AbiLNQev (ORCPT
+        with ESMTP id S239092AbiLNQfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:34:51 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E32A738
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:33:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671035596; x=1702571596;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mPLuys5xlDHefxjxgWL2MY3nTSuTSIf/FXCjTq4lP3M=;
-  b=PDbWeHqnK7b3SXD6Fvkw6nSdWXjeKyuYxcsWOf/jI96bcEcrzRRPAtYJ
-   sRGPeSx/aw0+90hIA0/Uh+HR6N+dnZYrrL4Bb2ocXqAZVHj6TGPP3pd3a
-   B0c/VWKf1AtExPBYNaZmbqcFhz4hhlF5027woYa/nN2jq3ReI2VM6p0RR
-   y893lnJIM/L+opgHt6gumREzmReOrtXhy2MdBM1r1uq8ZD3gXkJgC4e/H
-   zCja7GOvXR9/6hXhEqWuM7loPss9EjR9yxQG0DzaBLwuexPaoqJFhZXvm
-   cDdg0ew9MZ1jvfxoZBQRa3eWTF7lnIDMw92VTZzuCof2+hlGgNpyeiEYR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="345527012"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="345527012"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 08:33:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="894365687"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="894365687"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Dec 2022 08:33:13 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p5Ugz-0005dG-0M;
-        Wed, 14 Dec 2022 16:33:13 +0000
-Date:   Thu, 15 Dec 2022 00:32:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: kernel/module/main.c:537:20: warning: Local variable 'arr' shadows
- outer variable [shadowVariable]
-Message-ID: <202212150045.ydmHir9W-lkp@intel.com>
+        Wed, 14 Dec 2022 11:35:41 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4871B17A91;
+        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1442977d77dso17291147fac.6;
+        Wed, 14 Dec 2022 08:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
+        b=ZPJNEtQ9wJ+DV4Dw4CjmW5qiwP8u2MNp2GcqLcoE2CLFKf/pkdihOjjRGcISdALmY/
+         lYj5e/aHTNtAxVddERrRtjz+mT2qfE+2PrBmyIXG8b3nJjlraBGzguHdgZz/clWlRrRu
+         zPA0LuRN7H7mWJESqaoYcdieI4kbaYfyXOKap+UdcGRRbMCkyyl8ojZ5YL8KXH6C72Xc
+         KIKduj6epwd4YyCq5MKepAIFhlkWbBvvDUTiETtqcIwqfzrmOy8V59Zl9l8bKSty3Fyt
+         1cm5t4gC7FQkMXgUc4wzSlKNFDwyUi5sYwxqxpypJZ1sFXPbWDnMFc0yzBWO3xUI/Qjw
+         1FXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P7BkHVo7lr7IoLxj4xozJR7ZfwY1TDrJJZ/qfyWx7lo=;
+        b=GNZCwZVrvqHEG/iVo0PVd6WP/G5TPCLPfvNyI+EE/KFbZl6Z4Wdk7GbAN3RsNTtE8L
+         QE/wbJIUm7gTQr/LdATWwcMjxzO63p/k8slByvkKj5dAv9CzW9M70426ZvhbRNbI/zIw
+         uwkIjnyKU6mvlL6Ftj33Zrre2Ov2nluJhfpVIvoi1VG8bEzLH/6u/W/HstrxRDbEkqB7
+         cYU1Jy48O3knzrZXxEoiRrMFu4MSmbSYQlOv0VH2XPycJmlySCQ0siVP23zadoAG/Pes
+         KAPvuSK+gogpu+q6jUVIaXnuv5T4IENnDz2qlglN4w8uLvYGQ2+I2eDxc55pEsZio5EO
+         5V8w==
+X-Gm-Message-State: ANoB5png6uoGVlyf1zoupMIRThY9g90TEZLvIaKg5hPTOgieSXsDvGRm
+        WjzC/STACG0yQ4r2sOXdpc+bToUTS3U=
+X-Google-Smtp-Source: AA0mqf5I0qwaz6CoKiv1lNLzxBrKXK9kWDmPd0i+okA26FaqgtNUM4DzbWncbGIWvCTUo+hru9Ls1A==
+X-Received: by 2002:a05:6870:3049:b0:144:fc01:370 with SMTP id u9-20020a056870304900b00144fc010370mr12389841oau.0.1671035712365;
+        Wed, 14 Dec 2022 08:35:12 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j19-20020a056870021300b001446d5702b5sm2844422oad.56.2022.12.14.08.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 08:35:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <79a2245d-0a69-836a-fb78-30d2d3ae5185@roeck-us.net>
+Date:   Wed, 14 Dec 2022 08:35:09 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: hwmon: correct indentation and style in
+ examples
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Akshay Gupta <Akshay.Gupta@amd.com>,
+        linux-hwmon@vger.kernel.org,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        Kun Yi <kunyi@google.com>, Jonathan Cameron <jic23@kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Krishna Chatradhi <ch.naveen@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Supreeth Venkatesh <supreeth.venkatesh@amd.com>,
+        devicetree@vger.kernel.org
+References: <20221213092643.20404-1-krzysztof.kozlowski@linaro.org>
+ <167094291641.992665.14962893906742419729.robh@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <167094291641.992665.14962893906742419729.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aaron,
+On 12/13/22 06:48, Rob Herring wrote:
+> 
+> On Tue, 13 Dec 2022 10:26:41 +0100, Krzysztof Kozlowski wrote:
+>> Fix mixed indentation to 4-spaces, remove unnecessary suffix from
+>> i2c node name and use lower-case hex.  No functional impact.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/hwmon/adi,adm1177.yaml           | 12 ++---
+>>   .../bindings/hwmon/adi,adm1266.yaml           |  6 +--
+>>   .../bindings/hwmon/adi,axi-fan-control.yaml   | 20 ++++-----
+>>   .../bindings/hwmon/adi,ltc2947.yaml           | 20 ++++-----
+>>   .../bindings/hwmon/adi,ltc2992.yaml           | 26 +++++------
+>>   .../devicetree/bindings/hwmon/amd,sbrmi.yaml  |  6 +--
+>>   .../devicetree/bindings/hwmon/amd,sbtsi.yaml  |  6 +--
+>>   .../devicetree/bindings/hwmon/iio-hwmon.yaml  |  8 ++--
+>>   .../bindings/hwmon/national,lm90.yaml         | 44 +++++++++----------
+>>   .../bindings/hwmon/ntc-thermistor.yaml        |  2 +-
+>>   .../bindings/hwmon/nuvoton,nct7802.yaml       | 16 +++----
+>>   .../devicetree/bindings/hwmon/ti,tmp513.yaml  | 22 +++++-----
+>>   .../bindings/hwmon/ti,tps23861.yaml           | 16 +++----
+>>   13 files changed, 102 insertions(+), 102 deletions(-)
+>>
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
-commit: cfc1d277891eb499b3b5354df33b30f598683e90 module: Move all into module/
-date:   8 months ago
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout cfc1d277891eb499b3b5354df33b30f598683e90
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+Are you going to apply the series through your tree, or should I
+apply it through hwmon ? I am asking because you applied the
+ntc-thermistor patch, so it might sense to apply this series
+as well.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
+Guenter
 
-cppcheck warnings: (new ones prefixed by >>)
->> kernel/module/main.c:537:20: warning: Local variable 'arr' shadows outer variable [shadowVariable]
-     struct symsearch arr[] = {
-                      ^
-   kernel/module/main.c:519:32: note: Shadowed declaration
-    static const struct symsearch arr[] = {
-                                  ^
-   kernel/module/main.c:537:20: note: Shadow variable
-     struct symsearch arr[] = {
-                      ^
-
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
-
-   kernel/module/main.c:2459:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-      mod->core_layout.size = debug_align(mod->core_layout.size);
-                            ^
-   kernel/module/main.c:2463:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-      mod->core_layout.size = debug_align(mod->core_layout.size);
-                            ^
-   kernel/module/main.c:2467:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-      mod->core_layout.size = debug_align(mod->core_layout.size);
-                            ^
-   kernel/module/main.c:2471:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
-      mod->core_layout.size = debug_align(mod->core_layout.size);
-                            ^
-   kernel/module/main.c:2493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-      mod->init_layout.size = debug_align(mod->init_layout.size);
-                            ^
-   kernel/module/main.c:2497:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-      mod->init_layout.size = debug_align(mod->init_layout.size);
-                            ^
-   kernel/module/main.c:2508:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
-      mod->init_layout.size = debug_align(mod->init_layout.size);
-                            ^
-   kernel/module/main.c:2829:70: warning: Parameter 'debug' can be declared as pointer to const [constParameter]
-   static void dynamic_debug_remove(struct module *mod, struct _ddebug *debug)
-                                                                        ^
-   lib/dynamic_debug.c:1104:14: warning: Comparing pointers that point to different objects [comparePointers]
-    for (; iter < __stop___dyndbg; iter++) {
-                ^
-   lib/dynamic_debug.c:42:23: note: Variable declared here.
-   extern struct _ddebug __start___dyndbg[];
-                         ^
-   lib/dynamic_debug.c:1101:9: note: Array decayed to pointer here.
-    iter = __start___dyndbg;
-           ^
-   lib/dynamic_debug.c:43:23: note: Variable declared here.
-   extern struct _ddebug __stop___dyndbg[];
-                         ^
-   lib/dynamic_debug.c:1104:16: note: Array decayed to pointer here.
-    for (; iter < __stop___dyndbg; iter++) {
-                  ^
-   lib/dynamic_debug.c:1104:14: note: Comparing pointers that point to different objects
-    for (; iter < __stop___dyndbg; iter++) {
-                ^
->> lib/dynamic_debug.c:843:60: warning: Parameter 'pos' can be declared as pointer to const [constParameter]
-   static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
-                                                              ^
->> lib/dynamic_debug.c:866:57: warning: Parameter 'p' can be declared as pointer to const [constParameter]
-   static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
-                                                           ^
-   lib/dynamic_debug.c:170:23: warning: Uninitialized variable: dt->num_ddebugs [uninitvar]
-     for (i = 0; i < dt->num_ddebugs; i++) {
-                         ^
-   lib/dynamic_debug.c:166:21: note: Assuming condition is false
-     if (query->module &&
-                       ^
-   lib/dynamic_debug.c:170:23: note: Uninitialized variable: dt->num_ddebugs
-     for (i = 0; i < dt->num_ddebugs; i++) {
-                         ^
->> lib/dynamic_debug.c:1035:11: warning: Uninitialized variable: dt->mod_name [uninitvar]
-     if (dt->mod_name == mod_name) {
-             ^
->> lib/dynamic_debug.c:102:12: warning: Using argument fb that points at uninitialized variable flags [ctuuninitvar]
-    char *p = fb->buf;
-              ^
-   lib/dynamic_debug.c:900:27: note: Calling function ddebug_describe_flags, 2nd argument is uninitialized
-        ddebug_describe_flags(dp->flags, &flags));
-                             ^
-   lib/dynamic_debug.c:102:12: note: Using argument fb
-    char *p = fb->buf;
-              ^
-
-vim +/arr +537 kernel/module/main.c
-
-de4d8d534654831 kernel/module.c Rusty Russell     2011-04-19  512  
-24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  513  /*
-24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  514   * Find an exported symbol and return it, along with, (optional) crc and
-24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  515   * (optional) module which owns it.  Needs preempt disabled or module_mutex.
-24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  516   */
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  517  static bool find_symbol(struct find_symbol_arg *fsa)
-ad9546c9917d44e kernel/module.c Rusty Russell     2008-05-01  518  {
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  519  	static const struct symsearch arr[] = {
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  520  		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
-367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  521  		  NOT_GPL_ONLY },
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  522  		{ __start___ksymtab_gpl, __stop___ksymtab_gpl,
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  523  		  __start___kcrctab_gpl,
-367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  524  		  GPL_ONLY },
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  525  	};
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  526  	struct module *mod;
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  527  	unsigned int i;
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  528  
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  529  	module_assert_mutex_or_preempt();
-f71d20e961474dd kernel/module.c Arjan van de Ven  2006-06-28  530  
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  531  	for (i = 0; i < ARRAY_SIZE(arr); i++)
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  532  		if (find_exported_symbol_in_section(&arr[i], NULL, fsa))
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  533  			return true;
-^1da177e4c3f415 kernel/module.c Linus Torvalds    2005-04-16  534  
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  535  	list_for_each_entry_rcu(mod, &modules, list,
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  536  				lockdep_is_held(&module_mutex)) {
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02 @537  		struct symsearch arr[] = {
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  538  			{ mod->syms, mod->syms + mod->num_syms, mod->crcs,
-367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  539  			  NOT_GPL_ONLY },
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  540  			{ mod->gpl_syms, mod->gpl_syms + mod->num_gpl_syms,
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  541  			  mod->gpl_crcs,
-367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  542  			  GPL_ONLY },
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  543  		};
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  544  
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  545  		if (mod->state == MODULE_STATE_UNFORMED)
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  546  			continue;
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  547  
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  548  		for (i = 0; i < ARRAY_SIZE(arr); i++)
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  549  			if (find_exported_symbol_in_section(&arr[i], mod, fsa))
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  550  				return true;
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  551  	}
-71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  552  
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  553  	pr_debug("Failed to find symbol %s\n", fsa->name);
-0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  554  	return false;
-^1da177e4c3f415 kernel/module.c Linus Torvalds    2005-04-16  555  }
-f71d20e961474dd kernel/module.c Arjan van de Ven  2006-06-28  556  
-
-:::::: The code at line 537 was first introduced by commit
-:::::: 71e4b309dc4238cba84d144b19004543c76c37e9 module: merge each_symbol_section into find_symbol
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jessica Yu <jeyu@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
