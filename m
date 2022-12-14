@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4D064C9CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B58B64CA47
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238536AbiLNNKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S238555AbiLNNMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238521AbiLNNKW (ORCPT
+        with ESMTP id S238556AbiLNNLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:10:22 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4EDEF3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id p36so10325189lfa.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
-        b=M8aMUswawauJab+7K7Jn2Gkzte5YHY7Wn6tCg37AUcPW73EjMsr4P7NHJrZDpLN60S
-         r6lDMHd+ySIdKe8NosoT/I9d/X1wBMJ5VC6kdckOmmZgxQzXrxOPvi8DFxBYEQi+ahAK
-         FqY1ER0G2r1sNO9GmOzwMMzYEiNI4NfN+cyiZ4DTA8N9U3ukL6H8OqJQocdJ7K47wSFG
-         n459EAdKKHRlnTeL2CurMSujEzBJPR6WjYKBzybCeTQdMJQbZQpBXhj0od7HIMTxOPI5
-         jcv2Q+pyTPBxCbLjOw2lgj4vW8HdpM2Bhs6TmlL8LMN10oVxlzoHAVd80q/rhMJOPv28
-         wsXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
-        b=A/fXlqt27SZmYQ9wRBKeb5ky3NDQYY1tUEYKdDTZz7RpjOKXYq4jLxc/OO+pDhTd/H
-         /AWP9HTYLCZIA+ulqYMyAOTXF1q9/0O0PeYX+0t5xjRB9aPMl2DrjNwkqUdHyx1NUwKe
-         /xZ1+vL9VcoWtnesJNjd99JP/PCy11oWZBc+IeWCJ3sUZSHTaWLNNPnDuf0bdaLOGCg+
-         ihgzL7/GWD8Wx7Hc3vNIfDNxNWey3awdfjdSj0/BAm+AAFndIBrfRKBJ9Yw3PCIy/6Ru
-         EEeX9NoC6W2V0NvCbjk3zReiMqZuPflMB9Lnoqis5g//E7skCaAd1Q+nBCh82+M41lrg
-         lWwg==
-X-Gm-Message-State: ANoB5pngrlQuBTb2w17qIY8cz9ryia0aRoUuUvkVbYXKONG1alvDtrKD
-        O6MICfrwwyB/TvALcPRfsGhh3A==
-X-Google-Smtp-Source: AA0mqf5XSd1rI4+lxJqzcmku43nUYBc930QOD/2bY74bont7jGKG3lndTw+vMTbzm531t15ZEOYTdw==
-X-Received: by 2002:a05:6512:1386:b0:4b5:4606:7ad9 with SMTP id p6-20020a056512138600b004b546067ad9mr8121567lfa.39.1671023416204;
-        Wed, 14 Dec 2022 05:10:16 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b004b48e0f619asm805945lfr.48.2022.12.14.05.10.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 05:10:15 -0800 (PST)
-Message-ID: <286bbd0f-1632-6071-7d08-e56ed16c234c@linaro.org>
-Date:   Wed, 14 Dec 2022 14:10:14 +0100
+        Wed, 14 Dec 2022 08:11:43 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174B51FFAE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:11:25 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BECLZwt013250;
+        Wed, 14 Dec 2022 07:10:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=ECE0JzFx1yAM1iX1f/txwsbLEnwzkF68ppFA5PubotU=;
+ b=TlznTHJLCkLmrelBlqBCUl+EnbVm7D+kg1a1PRTL1HFhooVBtt1Ni2gEsVLoXB5IrWa/
+ tetjOiUX3JVQIF1eHFa12tB1sWE5T1kdt+zXlUvO4y2zb6KzxJXIgjcw2HxBQ0nhaX0f
+ dXMYEGwo6qo6kruD8HOqZi50gcjzRVEryNQhc53UG4GRFoBHeTPas7xjntAr/Rd3oFok
+ k3mxgslgJcrOQtPJwxbP/JDvRE7mNN5FcTPX3lfYZoy4bXmMZpo5W5JLTMxJtglG8N5A
+ J7YCo2D/Sych7nRNMrmiKF09G6nMUHgDV0fQrvCPUPa9/aR9C+Dtr8Jb3m4czcQwQHYA oQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3mf6rw8dk7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 07:10:28 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 14 Dec
+ 2022 07:10:26 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Wed, 14 Dec 2022 07:10:26 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7A6E8459;
+        Wed, 14 Dec 2022 13:10:26 +0000 (UTC)
+Date:   Wed, 14 Dec 2022 13:10:26 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lukasz Majewski <lukma@denx.de>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Stephen Kitt <steve@sk2.org>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] ASoC: wm8940: Remove warning when no plat data
+ present
+Message-ID: <20221214131026.GP105268@ediswmail.ad.cirrus.com>
+References: <20221214123743.3713843-1-lukma@denx.de>
+ <20221214123743.3713843-2-lukma@denx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/6] dt-bindings: pinctrl: mt7620: add proper function
- muxing binding
-Content-Language: en-US
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20221213130430.172876-1-arinc.unal@arinc9.com>
- <20221213130430.172876-3-arinc.unal@arinc9.com>
- <4ffd94b2-e72c-a081-4326-5bc254603ddf@linaro.org>
- <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221214123743.3713843-2-lukma@denx.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: P2Bst2QvLgba_Ha4sbx2JDaHuvWUN8TC
+X-Proofpoint-ORIG-GUID: P2Bst2QvLgba_Ha4sbx2JDaHuvWUN8TC
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 14:03, Arınç ÜNAL wrote:
-> On 14.12.2022 14:55, Krzysztof Kozlowski wrote:
->>>   
->>> +        allOf:
->>> +          - if:
->>> +              properties:
->>> +                function:
->>> +                  const: antenna
->>> +            then:
->>> +              properties:
->>> +                groups:
->>> +                  enum: [i2s]
->>
->> I have doubts such setup is maintainable and readable. I would suggest
->> to leave just few - maybe for gpio, jtag, refclk, utif.
+On Wed, Dec 14, 2022 at 01:37:40PM +0100, Lukasz Majewski wrote:
+> The lack of platform data in the contemporary Linux
+> shall not be the reason to display warnings to the
+> kernel logs.
 > 
-> These bindings are not going to change once all properly defined and I'm 
-> here as a maintainer so I don't see an issue with maintaining the binding.
-> 
-> It's the whole pin configuration of an SoC squashed under a single 
-> document. I guess this is the fate of the pinctrl bindings. The bindings 
-> for mt7622 is not so different:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/pinctrl/mediatek%2Cmt7622-pinctrl.yaml#n63
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> ---
 
-It's much smaller number of if:then: than yours but if you want to
-manage it then sure:
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+Thanks,
+Charles
