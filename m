@@ -2,164 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A642E64C887
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC2E64C88C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238389AbiLNL7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S238395AbiLNMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238349AbiLNL6n (ORCPT
+        with ESMTP id S238360AbiLNL7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:58:43 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE8621E19;
-        Wed, 14 Dec 2022 03:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671019111; x=1702555111;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=V3fSrvP/L4OEGks3zDsYhRCRgh9WISDlG9d3Y5NZZkY=;
-  b=hA4+R7FzrFHSnQjrZyYgsjLtiMC3+IvbRkejFTJ7HMscizmwXtNKB7/0
-   N4rBiJcT2N6V81zaRoSUN5sFshe6AyITeKI3Gc6idSzZDc2eW/8DUoTnH
-   1UCaZgqOzmJ1NvVAd9ZulN1ERl+pVEIuXE3PYR9uBcnNGBZ22BOkvjcuy
-   yL/K8TNPEAu9XoLvQuoy0p33TMCYJuoi4noEiVZx4uauQ+MXX7833mJR0
-   scRblUG8brqja5zjKncmLOW4YBNLyvZPjjcc+B86AonGoExBUesKgaRqK
-   pv5oSAOomJAW1reKNvzZpF7V/Hr1n8Lc4rDyi7wzhNbhmsyQAzLkzIvW4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="317085382"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="317085382"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 03:58:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="679665139"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="679665139"
-Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
-  by orsmga008.jf.intel.com with ESMTP; 14 Dec 2022 03:58:26 -0800
-Message-ID: <247fcfc6de8ec08d0667de125e707046dce903fc.camel@linux.intel.com>
-Subject: Re: [PATCH 3/5] KVM: x86/mmu: Re-check under lock that TDP MMU SP
- hugepage is disallowed
-From:   Robert Hoo <robert.hu@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Thelen <gthelen@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 14 Dec 2022 19:58:25 +0800
-In-Reply-To: <20221213033030.83345-4-seanjc@google.com>
-References: <20221213033030.83345-1-seanjc@google.com>
-         <20221213033030.83345-4-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 06:59:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC04625285
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671019115;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Puk59mM8eVDxnAzNFx5aGXWzYXrsqC20wq+ZEPuJ168=;
+        b=Yh97XS+YfYNfGPpyo0uPY+U0JXVYwp6yiA/2mD+nwczb++s2OvNjRrq1ldhQwGfPjKDGQw
+        k+cHYIGd5e1FFPp6wezHHukyAOXXuG3a9uSegIzN0GM2kGacfGSsR7jkLH0H+nLXhrBHAJ
+        SvFn1tW4fGlR5VKcAcG101VsmxMAX6k=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-121-HHx8-fCyMAy-cMMgND83cw-1; Wed, 14 Dec 2022 06:58:34 -0500
+X-MC-Unique: HHx8-fCyMAy-cMMgND83cw-1
+Received: by mail-wr1-f70.google.com with SMTP id e7-20020adf9bc7000000b00242121eebe2so3439631wrc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:58:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Puk59mM8eVDxnAzNFx5aGXWzYXrsqC20wq+ZEPuJ168=;
+        b=rX1YGgO/cBjdfU/e7jiZ6TwQXHBtUTc2gRR4JApretnUMNwnumNsVc/UV7pQpGcuPA
+         G2bMzMonIETkvB7uwrmHIORYdNwp1LhkwtTynJGOPQTYKV0ACUmewf7F6IL6vsJC5jsw
+         t0KM9SQZvT0h2e/PtdVKUDH4GLzrf/08kJ+zpXaCGdrXswR4pembw3QUAxEygOTIch6W
+         zEGGP6I5FEIiPuWt0AFqgYlP205COMEBi/2oLXcwuhyqgglzX1iOmxsdpxyp/JVeK99w
+         VZAMpo26Rv1pLl4kKk1PfNTdblbrpeUtPZWsSj32RoFhKGjw2sSP4RJyGjzv1Yg2SOKk
+         VTRg==
+X-Gm-Message-State: ANoB5pmVpTXOYKJWo2QpLCqI5vkQWGdiuM2v88vy1ljU+TmtuA3il9Ib
+        dc1YrJMjmO2LiRDoSPeCwlrrPFeBQ0DIMpo2LMKaKAF2Z0xicMJyr+ANqH2c+B2y0467BMf2/7t
+        KjjrNsrcZCs8NNnAwmC1JKaIv
+X-Received: by 2002:a5d:526a:0:b0:242:877d:ca63 with SMTP id l10-20020a5d526a000000b00242877dca63mr16179199wrc.44.1671019113291;
+        Wed, 14 Dec 2022 03:58:33 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4HSxAPf40LKD9a4HZ7iVGC/QK8BhMe6SSXxWXIEd+STJY7Pm38ou+bHRi/WjDGVGhtNtqGUg==
+X-Received: by 2002:a5d:526a:0:b0:242:877d:ca63 with SMTP id l10-20020a5d526a000000b00242877dca63mr16179181wrc.44.1671019113009;
+        Wed, 14 Dec 2022 03:58:33 -0800 (PST)
+Received: from redhat.com (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id u2-20020adff882000000b00241d21d4652sm2635751wrp.21.2022.12.14.03.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 03:58:32 -0800 (PST)
+Date:   Wed, 14 Dec 2022 06:58:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, asowang@redhat.com,
+        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Jian Jun Chen <jian.jun.chen@intel.com>
+Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
+Message-ID: <20221214065417-mutt-send-email-mst@kernel.org>
+References: <20221214053631.3225164-1-conghui.chen@intel.com>
+ <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
+ <Y5mjcuCRP45ynJis@shikoro>
+ <20221214105642.3xagckvbbgu5mubl@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214105642.3xagckvbbgu5mubl@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-13 at 03:30 +0000, Sean Christopherson wrote:
-> Re-check sp->nx_huge_page_disallowed under the tdp_mmu_pages_lock
-> spinlock
-> when adding a new shadow page in the TDP MMU.  To ensure the NX
-> reclaim
-> kthread can't see a not-yet-linked shadow page, the page fault path
-> links
-> the new page table prior to adding the page to
-> possible_nx_huge_pages.
+On Wed, Dec 14, 2022 at 04:26:42PM +0530, Viresh Kumar wrote:
+> On 14-12-22, 11:20, Wolfram Sang wrote:
+> > Dunno if this is really a rule, but if a maintainer steps out and makes
+> > sure there is someone to pick up the work, this is more than welcome.
+> > Way better than a stale entry in the MAINTAINERS file.
 > 
-> If the page is zapped by different task, e.g. because dirty logging
-> is
-> disabled, between linking the page and adding it to the list, KVM can
-> end
-> up triggering use-after-free by adding the zapped SP to the
-> aforementioned
-> list, as the zapped SP's memory is scheduled for removal via RCU
-> callback.
-> The bug is detected by the sanity checks guarded by
-> CONFIG_DEBUG_LIST=y,
-> i.e. the below splat is just one possible signature.
+> Sure, a stale entry is always bad.
 > 
->   ------------[ cut here ]------------
->   list_add corruption. prev->next should be next (ffffc9000071fa70),
-> but was ffff88811125ee38. (prev=ffff88811125ee38).
->   WARNING: CPU: 1 PID: 953 at lib/list_debug.c:30
-> __list_add_valid+0x79/0xa0
->   Modules linked in: kvm_intel
->   CPU: 1 PID: 953 Comm: nx_huge_pages_t Tainted:
-> G        W          6.1.0-rc4+ #71
->   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0
-> 02/06/2015
->   RIP: 0010:__list_add_valid+0x79/0xa0
->   RSP: 0018:ffffc900006efb68 EFLAGS: 00010286
->   RAX: 0000000000000000 RBX: ffff888116cae8a0 RCX: 0000000000000027
->   RDX: 0000000000000027 RSI: 0000000100001872 RDI: ffff888277c5b4c8
->   RBP: ffffc90000717000 R08: ffff888277c5b4c0 R09: ffffc900006efa08
->   R10: 0000000000199998 R11: 0000000000199a20 R12: ffff888116cae930
->   R13: ffff88811125ee38 R14: ffffc9000071fa70 R15: ffff88810b794f90
->   FS:  00007fc0415d2740(0000) GS:ffff888277c40000(0000)
-> knlGS:0000000000000000
->   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   CR2: 0000000000000000 CR3: 0000000115201006 CR4: 0000000000172ea0
->   Call Trace:
->    <TASK>
->    track_possible_nx_huge_page+0x53/0x80
->    kvm_tdp_mmu_map+0x242/0x2c0
->    kvm_tdp_page_fault+0x10c/0x130
->    kvm_mmu_page_fault+0x103/0x680
->    vmx_handle_exit+0x132/0x5a0 [kvm_intel]
->    vcpu_enter_guest+0x60c/0x16f0
->    kvm_arch_vcpu_ioctl_run+0x1e2/0x9d0
->    kvm_vcpu_ioctl+0x271/0x660
->    __x64_sys_ioctl+0x80/0xb0
->    do_syscall_64+0x2b/0x50
->    entry_SYSCALL_64_after_hwframe+0x46/0xb0
->    </TASK>
->   ---[ end trace 0000000000000000 ]---
+> > I mean, it does not limit the chance to have further maintainers, for
+> > example. I believe in meritocracy here. Those who do and collaborate,
+> > shall get responsibility. If not, then not. We can fix this, too, if
+> > needed.
+> > 
+> > What is the reason for your question?
 > 
-> Fixes: 61f94478547b ("KVM: x86/mmu: Set disallowed_nx_huge_page in
-> TDP MMU before setting SPTE")
-> Reported-by: Greg Thelen <gthelen@google.com>
-> Analyzed-by: David Matlack <dmatlack@google.com>
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Ben Gardon <bgardon@google.com>
-> Cc: Mingwei Zhang <mizhang@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> It was a general question that I asked myself and didn't know an
+> answer to. I wasn't sure if adding someone to be a maintainer here to
+> a driver, which they haven't contributed to until now (at least based
+> on open source commits), is right or not, since this isn't a stale
+> entry in MAINTAINERS anyway.
 > 
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index e2e197d41780..fd4ae99790d7 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1203,7 +1203,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu,
-> struct kvm_page_fault *fault)
->  		if (fault->huge_page_disallowed &&
->  		    fault->req_level >= iter.level) {
->  			spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> -			track_possible_nx_huge_page(kvm, sp);
-> +			if (sp->nx_huge_page_disallowed)
-> +				track_possible_nx_huge_page(kvm, sp);
->  			spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
->  		}
->  	}
+> An entry as R: would be okay normally IMO, as this makes sure
+> interested party is kept aware of the development in the area. An M:
+> entry somehow gives a higher level of authority to the person and
+> without any prior contributions, it feels tricky at least.
+> 
+> Anyway, I don't have any objection to the patch at least as it was
+> primarily developed by Intel engineers.
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Is this possible?
-The aforementioned situation happened, i.e. before above hunk
-track_possible_nx_huge_page(), the sp is zapped by some other task,
-tdp_mmu_unlink_sp() --> untrack_possible_nx_huge_page(kvm, sp):
+If a maintainer acks a patch I generally expect that the patch is good.
+If we have a maintainer who's not familiar with the codebase, this
+assumption does not hold.
+R: would be ok with me.
 
---kvm->stat.nx_lpage_splits;
-
-But looks like the stat for this sp hasn't been increased yet.
+> -- 
+> viresh
 
