@@ -2,158 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C0A64C179
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4562C64C17D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 01:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237554AbiLNAsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 19:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
+        id S237038AbiLNAtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 19:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237319AbiLNAsP (ORCPT
+        with ESMTP id S236514AbiLNAtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 19:48:15 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD4F55BF
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 16:48:14 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDLOS0G026444;
-        Wed, 14 Dec 2022 00:47:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=NdRWePg6GPbjNBRaNDRD55/O6zBJSrpDpCb0FFVHQnk=;
- b=Rqa2xAU2jrugtVKE++a+tRE8vCYTHN7jzzMnhzBpTUdcNUNUxuMyew4s9uqMuP4jpmog
- f1aBS/cRw/f2De1j2TnA9m3THX1y/pyIKxSJhHefybkMyclTL5DcbseTqhXsgcpC5L9q
- oJm/d9im1oLa7RLHV1TzL9wQ5NFhZ6T+HuolQoQxePumEgnBJTWNzwP6ZUTTWS2SQXju
- Rq6Kk6Akd5PzSyLtFivLCNusJryHPJHSHpc0skJzQYqpj726WN+IJHB1Mk4Lo4xZqsea
- A9YdDYWzqGKVBnQ/bb3EBAnIungDqdZu9RsWqmfXIcHyOjwNGZMjgzkgtZyNmjTp0/Tl qg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3meyewrp9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 00:47:41 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BDNJT52009648;
-        Wed, 14 Dec 2022 00:47:39 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3meyenw5k8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 00:47:39 +0000
+        Tue, 13 Dec 2022 19:49:18 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2054.outbound.protection.outlook.com [40.107.13.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15755BF;
+        Tue, 13 Dec 2022 16:49:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cn+s+b6uHqsCNL7OYNyMy2E45MoBdifBo3EHskskluBbQmrxTL40ILloQSZu7loYvkxwh8T3BkEYj4woiLeGrO2Aslj215kNmIe5L1NfbbvdNNeY/ybzYThoHydOz5enMzTs0sCh/oNyEUrsSBP79NWT0AayRarmt5wyEyuHmADecBB66xDMWFVKpNkWorIPxBWqyLSpAjbXdYlNhOTKf2KfYdRANUAfopydXFRseCtF4NAu5f7Fo3SEIWbG+lZiraSIisQ02+dFFLvCrmfcLILr4+Og4cKEYI7VUQhO/K99fB6eGSDmVp05czPl1jAK546RUEFvTiIzG7hPBOWQgg==
+ b=N13uYs7T+CDYIiVT9do+yyuELOWsOGaWCht2n2SaxL21IPX81Xsu/E4lNRJQ1lcYuwDN+4JgqfuuH+GEJX3lzl02sDFrIKlxREfundLssIN7H8YluEu8OQz2zklpC72nVhjuzcg5H/dgy7P1wfybLAj0mK0RuZDn6el2puimAJk13uHyRqbcwiVrV4w/C0VKx2/S5pf/EenwJC/Mytsykg2LietvNZOBufOaXIIBf7/RPBj1i4PiA/ED6OESt6WWD85IHj+WSuqmj9Nm21PRIw3m0Lp6p/Dnqj9bglpgnbvhDS4zo7JBdzyBLQqOBOeK+/SgkStI97vCaYu0xhcjgg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NdRWePg6GPbjNBRaNDRD55/O6zBJSrpDpCb0FFVHQnk=;
- b=WqdzEClhp4m40Ru9/I4lVNW6832uF3ZoCzCkSBuiQ7NSWWRg6hCQDrecTr7O6BKq4lsmKzQfjFoeQXaSRbODGe1YYY7ntiPjlx27rw5Ip6S4OZQfy1cAhqbpYUwO3EY4BDzOvqg19j0tbC6BLctI4U9vpfy/OSoOsVHqG8anGlsaFMETV5+mJTXCLQUukkALYwzUEL8bRyFyl4aY5Ght4Hn0b60mDEdqEzDbQgWDhSiclCe25naEnhRQgdpYtoi4jG80ZSdyz08518DroLjTgH2e7ym9ULglQwtTxMUGPBVPrW+/+2uVJUsfZH7eDXob5YjzuIq1BXN6XT56sKxA9Q==
+ bh=oXfFuKc96in6n1JNo7W0mEi8Q6NtFsyTzh4fdlqp18Y=;
+ b=K8+hrCXu9Um2Reu44LUanO7xg2xSkguRekZkcBAtu4+IOtctdY9jJ+nX3igBsriHnrlxNT+XdifWc1YFwM5AQc2HVxt37glF//wFFJuVPNVhijHca67La7vh80y/SPXpt55ZY/+oHDX4bWhu3sHevENgPxUMOaku2S3tMSGLtN1DRHftJZ98jr/Iz7Kg/jpYp3/9Sm/23469iKsuZZbeMHh0TfvW+O/ToawHkIIe2yoogxzGKNSzZtLreRedWEB/3oYLLG5v+jY0NkRs5M/S7fbnQes2/BncItIiSTAUKfJpNRVodMR07iUV7WiQm1TmbmQyg0nd5Ea6uo+2LWpWSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NdRWePg6GPbjNBRaNDRD55/O6zBJSrpDpCb0FFVHQnk=;
- b=KLEZ8+sphpN6X8sOdaC3FIIhop5jEQKQarJToRCEV2qbW3RaWScPQ5/sVU+Ljlybc+e3er+DKlvF8EQEnWAu6uoNz/kmeSVyqp73bJQGUWwOpL/CxrPzd6aBtCFpEO5OfomQ0gU6MzoGJYj6KGtpWtQ97Qz/nAisRBofpG6pWQY=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by IA1PR10MB6050.namprd10.prod.outlook.com (2603:10b6:208:38a::16) with
+ bh=oXfFuKc96in6n1JNo7W0mEi8Q6NtFsyTzh4fdlqp18Y=;
+ b=Mhb81PK0BcNYoBfoDu9aYjYEUeL3gBsY4+pLGg0tPUxBmjm2xMFPz5hl4yUZX74lgDW83D44mLaZoM3GufYq5Zgy8SoFTu5x3sDVplZWYLtx19zdxH4VZ+5p/0/z41BK6DOLTBaNDTUUulX75e9JhF6bnIu4x99b8j33DmYCMHE=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by AM0PR04MB6803.eurprd04.prod.outlook.com (2603:10a6:208:187::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 14 Dec
- 2022 00:47:36 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721%5]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 00:47:36 +0000
-Date:   Tue, 13 Dec 2022 16:47:33 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 12/47] hugetlb: add hugetlb_hgm_walk and
- hugetlb_walk_step
-Message-ID: <Y5kdJQgrPRwvw1VJ@monkey>
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-13-jthoughton@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021163703.3218176-13-jthoughton@google.com>
-X-ClientProxiedBy: MW4PR04CA0111.namprd04.prod.outlook.com
- (2603:10b6:303:83::26) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 14 Dec
+ 2022 00:49:15 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::203a:e5da:a4a:7663%12]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
+ 00:49:15 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "mani@kernel.org" <mani@kernel.org>,
+        "allenbh@gmail.com" <allenbh@gmail.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
+Subject: RE: [EXT] Re: [PATCH v16 7/7] PCI: endpoint: pci-epf-vntb: fix sparse
+ build warning at ntb->reg
+Thread-Topic: [EXT] Re: [PATCH v16 7/7] PCI: endpoint: pci-epf-vntb: fix
+ sparse build warning at ntb->reg
+Thread-Index: AQHY7sTvWWy/9/FSxESkmjmsd2hT965sx/AAgAAFv1A=
+Date:   Wed, 14 Dec 2022 00:49:15 +0000
+Message-ID: <HE1PR0401MB2331E04D41F5EF9F6F1E326288E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20221102141014.1025893-8-Frank.Li@nxp.com>
+ <20221214002642.GA216337@bhelgaas>
+In-Reply-To: <20221214002642.GA216337@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AM0PR04MB6803:EE_
+x-ms-office365-filtering-correlation-id: 0c89292e-e596-487e-0d1c-08dadd6d062b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Z4R6M9U1LI/lUarkODKpuBLEDkDilfyApj0Nb167gdApE+f730/jZlOzk6EdOOKzE5qe1tGuto6FpvKo6/LuNrrklgxJ/0XlNXeRa3XK+ZV3snPNSKmSnFP9D2HIaUDfeA8cK4bAlhIVEo9HOS+nXZZ9RK6zi4zr9QaMlNx2HWq6nhGLn7x99b9AT4Q+fIQO7QPFwONR7B854CR7BjAhwT2e/VDJpOQImLdbXtUYCvVTVasC0d3cslp2zk8x5W0fvbkUJ0Tkc4lqUcm5Bej2Zicq/vUTg7FPQWS0nijMrsJ4Myo5mTiWiHlufrLM2dNp9i5P9uaBIE3nveXPDAtlAqwxzSCWzHpIZfLlc/sUfnEfuWtmRKE5p5YTC76wfMdtl79OwI1uNc9KuXyfBXZ/VgtlllQxR2mEYpux7PIsjGiMSlwzd9QU4xO2RE6xfcwutkus7xF/o/dIfKzfqou5sTX6n8j9oSA7/EWhQpQqCwquj0x8aER3unAJVbebLg4sBR2ktbM1OI6eoPvNWVThwmkm/yYvyCZjAB+3OGFEk3x4NRRVQUd8uyNjdmoVxLmCvcXK5Jy9+PRmtFBKzTayr7rMOf+U/JEXNW7/LvUYRG5mofhpLYuKdh1paeNsAVAmyDOqz49n/OBIZP/1HCXPkMAd6oKhrJ1UPtYLyGwlfKVwvBPOaH8pOAmMoxD79clp+XeBpWQzzWJ8KQ+ylDEnNA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(451199015)(8676002)(41300700001)(4326008)(8936002)(316002)(66946007)(6916009)(86362001)(7696005)(52536014)(26005)(55236004)(64756008)(76116006)(66476007)(478600001)(66446008)(66556008)(83380400001)(122000001)(38070700005)(55016003)(71200400001)(186003)(6506007)(38100700002)(33656002)(9686003)(54906003)(2906002)(7416002)(5660300002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LP06a8504KctKoviBAwDfnfWJDSHsOVIA/Pi5CUZiTXGwcrlAYqAkvp+mZCf?=
+ =?us-ascii?Q?7+hOOThoDcKIpaACQQzMyA36K+BNy2oWkprYh8asa6fDeWM5hM4WyS9V3z4X?=
+ =?us-ascii?Q?4zEkZkobwpDhALyTZKth42IrhdRskPTVWWiDeLs2gvkEF/EoXKo0k+H24l1s?=
+ =?us-ascii?Q?Z+IGFHnSctv+fsPMNZ+lugV4s3YBmztvWnq82jpXMyQ2tPquqZUvvG3rlT/H?=
+ =?us-ascii?Q?XbzS8AsSUa6j+kQzaXR+PMSM2reJ2yzeiZuXsLdKStbK6q7s99PsILrD0TeQ?=
+ =?us-ascii?Q?kMN30/7vGMHSdvI+ttfLGo6QW5TIq/Gg1bvygfHXZmj6HjiMzNURzeN48lhU?=
+ =?us-ascii?Q?OTjEI/yUq8+Tfzu7RSf31pHSDL6V+VXHpxHgnHYe/eJur2GCs7rSppc3qDhq?=
+ =?us-ascii?Q?y7VWc3QMmfCloT3ae5F7O17VAjWI8FPl1Y5mUI0fE5oakyIFsd2kKs0soaC0?=
+ =?us-ascii?Q?TUucBPWuHB+Wxm+Q4jYy3kKtgSNIqpjgF7FbJkPCk3A83WmCmVT4rDYocxAP?=
+ =?us-ascii?Q?mGMSWSV3swqmYpC2aQ38txC8UTHy91NvoVMCwQLAGYO5o3dWxHVNpXEguhhN?=
+ =?us-ascii?Q?VDl5sfBGHIQ0LvAE1idduhvn28yv43FsA8NwhIqEeA6gXIxcdC4gyAhB0y2G?=
+ =?us-ascii?Q?Y2nJGta9MUh0tE2uAekDoSQd+VEJOJXPGccZoRCyNGU2JqWwNuWrOTC8NcVU?=
+ =?us-ascii?Q?spwOYG6hhYhaxhg8F06+9bSJ030aWTczdlQup/cLgNFXoZPC8WQniEpEAwQH?=
+ =?us-ascii?Q?1evk42U7neh7cZDDEGnnDrKRpefDkQHLwSwCUIJtUXTTve1Y4JfH7WMSKRqC?=
+ =?us-ascii?Q?4epzxxrsUj1CS6IxPX8fvf3aolvoIIKjYkwgUKXTGGq2MW6jTJqlITMv4Nun?=
+ =?us-ascii?Q?XhkYfqugS8xDLDLo053y8JqClr1I2uHWti4ANtE3/3x+k1eSmAlNeIJItsc6?=
+ =?us-ascii?Q?NeSFKbYJq4RBKOb+t605ogS0M7G84Jl4GQp2kPJo+VEkL0Cwg1LvFKtCEBJj?=
+ =?us-ascii?Q?0CvuPGDP0nH4ujh09hSuY4duQJgBV5vtd3YKr5IDbil5YP34kpj50OwMa5+E?=
+ =?us-ascii?Q?qV2yzsAfrrF/75ZGK27uh2BPiOLJA1rohdrJ0HOBD3J3X59SD53W7tK4JSs4?=
+ =?us-ascii?Q?msYcHCVcgDOcWSDPC87rXYJ/UXkmnXY6D3Q3KUCwzZCTBVgHq8otCLC1YyUU?=
+ =?us-ascii?Q?xJJMWXaY5XtZkuOVeDk9k+n3UeMMmKKEoXkIqURbPdaZDyyZKMIuqtl3SSaw?=
+ =?us-ascii?Q?BWGL3Entdyp+x/RaOshl8HXyG/j+vIbw44uOhgYekNzwIFiFejLW3cal7dte?=
+ =?us-ascii?Q?W34T2XuYwnYyuaOXyg9tnDq3CUAaPUDXDzCSjorCRcX57MFPOajo/j5OWRBS?=
+ =?us-ascii?Q?Zf+8LSoBnSKXHg/4ZIgvw0SwfkNHB68IJudTrDV2zcR/QenoR5O4p6oT1BDH?=
+ =?us-ascii?Q?vjH9pqV6f45m+peyMwZQC23z1gbiu9UjO2qY6MZFufc1GVXcL0nyG4/1Wat6?=
+ =?us-ascii?Q?mXoIOerlR85tsZpZqgUAZYKI1zDbxdJpvLC8NGGGlXd0xerZnChHgI40eMzB?=
+ =?us-ascii?Q?/u3ghmr4pV2Zgt/1zu4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|IA1PR10MB6050:EE_
-X-MS-Office365-Filtering-Correlation-Id: 90b597e0-2dd0-49af-df2d-08dadd6ccb25
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqW7f0fUNXjhEtQnp92P2I9uChBVgaveYuc3zbrQYBAQed4fN1HyGOxxBvPndlPdhd2p72R3xYAQCe/HgAVckslHHDKgYnSVJBdDlnxBet7Vrkj6wZFUwtFkG4RLbGyYWLuUEC64zcsp8DU9VsMUEg6GGb1dUp9kfUxXjIoctchtpGVckb15iYQ4VUHGef9hf8KCPF8Z5RssjtqT0nG1QbQHXJ4PEs9NHhgzv6PJEMKvgb7KrDVroTgKf1jQ72ItMZ8B7Zus83T4/LURU/0PNpJM8vbqnSraHpwOwmnUpYbaoyHYVpLVI3AfCBf5iuOqhSw4h4ohO+tDa6wuraq6g7Dnis0zEfZCXHrOO7PNFgEgvcl792C9qQh2iQtwG4gLZPpFvy82hmKb1+Z1l+/vMhyOHfysnS965NYy/ZhJmlQAqOn9Vt6N2YNvskHM8loWzYYGDx4wcHsIcVb1Wrpp+y6Hpozb685zYlUeLhh6nhLT3h4EuUS/Kl57CYTI5cW0YmT/pmlcGMhjVZsZswLRSCJ5W6vSH1px4mvVHqvt7o5Z1f8llT457r20Eco1Ik3BDijnC9sHEEvE4QYegnoBaFKBzbxZEv3rJbR7SNWEnSF+AalVTBo3UOo/7VV0XmJeXJyoBjPA7ICc5Lx9mxZ3bw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(136003)(396003)(346002)(376002)(366004)(451199015)(66556008)(4326008)(41300700001)(66899015)(5660300002)(7416002)(66476007)(44832011)(8936002)(8676002)(66946007)(2906002)(6486002)(478600001)(316002)(6916009)(54906003)(53546011)(9686003)(6666004)(6512007)(33716001)(6506007)(26005)(86362001)(38100700002)(186003)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZRjcC49w3BBUQEgVULQY7uHI5QvKx2AxcKE8BIv5zUoSERgn+cN6QFtMtWMI?=
- =?us-ascii?Q?ZkpbjwOHy+9LgrZ6ga+MYzCpW5aZQYMFgvvFbTbcr5iHrBlC7wdF+I4du0i3?=
- =?us-ascii?Q?VBGNXTMbyYdBAX8sDb1WknpGHhI1xAWtZZbCEbfW+XaqPTbdt167T3ZVAnWA?=
- =?us-ascii?Q?6k+nRhpHh/sr7pJbjPHGY/W8u+ZmPlEZLkgqIHoRsOvhxr4yKe6WLBA0r2tC?=
- =?us-ascii?Q?ZvZGjIccZB7xyZKfZjH49G5OLrvkQZ2YKXamp7eg5quWkbSkTpi+2CUKN8BW?=
- =?us-ascii?Q?uMKkUmqrPUbpWkcTCSu9GlKrdhIr2EsnX2kB5AbMMVASxmYugEWcgbLUkzLI?=
- =?us-ascii?Q?S+j+Cx3gcuk8NLMLRXtoih9Vi5xbzR/MTr/pWgFOtD8AVSDZnid4BQ2L+NJG?=
- =?us-ascii?Q?sLK0R0R2T15TojyyPbyullrOxJmxWt2kwaaAm8Pn0/cqv15rTWl6j7/rSRuG?=
- =?us-ascii?Q?NJ9dSwoT9k207qAJNEqQKCmelGy8yMK8gJ2cZWhDpFX52XZxk6G6Kkw60pEy?=
- =?us-ascii?Q?IKg6jMhPxFgTFkKWnrzD09PmiaNAPeVoNKgBbD8ZvvcayxJLRde1DFYYqIhO?=
- =?us-ascii?Q?UrHMuVUyg9AuPc6zVNp+09ch23z7O5NHABv8vKhCAsItYTzTCJBbh4gThFbs?=
- =?us-ascii?Q?exYaeUCotEWOXsj1EFtJ8e2G5ou8c3OaqRrRAI6W8n5Za9AzpQkBw26FYJS3?=
- =?us-ascii?Q?K+EaizHJe22QDghpAvreyJVm9H13B2T85du37i7dhy2iwMRu7b6q17cOUEN3?=
- =?us-ascii?Q?kU38PBLUDsglOy79p3VzDLzz0juIG7W592Q3lbFU4aOgF7LoCsPtpmZdCF3a?=
- =?us-ascii?Q?h24QpVay6Ste3LxXBOY8qzVjS7zshTDV9THJ/NFgF/naQxDqajvgFUQz/gmw?=
- =?us-ascii?Q?AXopcp1w2CQ9O3fo4nAeafKSv1/Ozmbv+S7JRVJDszptSB43Vgx6E4bu+LrG?=
- =?us-ascii?Q?IoY7ZUbOjOBtX0tHy7AHWlA7jMmvpQNmavvtMqsSkFjuo3fkJYk2UzjNJDN8?=
- =?us-ascii?Q?E0uFM0HfNPREWmMmxeU0GtGOrF+oIrz/8ow+q1+BhxqA0Lk8Unz4msQMvnYR?=
- =?us-ascii?Q?96IFEdiCgZJ6nFtu0qdc1TEm0c9sbt2TVI7pr6ASfHQvcdVMrTmVC34D0Z7k?=
- =?us-ascii?Q?va5y1xr4fz0VyLN0zWcdMnqqakTpNDUGmbT6evx2IYErLcTBPUZdcyGB/BfX?=
- =?us-ascii?Q?kbdIpgOu7Mj/mvFicpXRluIP+c1YhLFUWZeyBu/bJTKUe6V57/5VHTYkt0MP?=
- =?us-ascii?Q?yV9lL68xwYA1FO2G5oVXpQ6BqXhG+iC0S5dHI70/BrJ7VPt2PGLaG4JPlfzk?=
- =?us-ascii?Q?0jUNYRE4qqHtXW1lH0RhvrswSWAKL4Q2Y5HBm5oE+0c51rdEBHg3JN3CGVhB?=
- =?us-ascii?Q?Lc/O89l6Y3lBqfVOBw+WYpOGjmxSsvcHBlvVRl+2df4BMjoI/dmh+kTU1F3t?=
- =?us-ascii?Q?TnIRs0oyIxob1pMRKBmHwqE5lYfx5RPQSBcXhjH0k2Hs4DlBUK21rVS1CbJj?=
- =?us-ascii?Q?/6EwBAgZr0NAPeZJsapiInmeAv3r2gmfW8WFnejvhv07pzZ/NOR6hyu2+csK?=
- =?us-ascii?Q?CWcsIRltAK/7PEKFEhGni2R/G750EwI0KMu9vhziWnZI7w3+/5pwrFtbYqEe?=
- =?us-ascii?Q?Pw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90b597e0-2dd0-49af-df2d-08dadd6ccb25
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 00:47:36.3153
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c89292e-e596-487e-0d1c-08dadd6d062b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2022 00:49:15.0536
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cOr4m3zLRhY5Nb9t9zndSORZWS7r4giD6m2yavMoIEYOfoKVE/b20FE1k4M/CNkFqg6v+2fZpoR0MkPf0+7fLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6050
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-13_03,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212140003
-X-Proofpoint-GUID: j7QTz1BI1JM7mLFGaFlnhAa9SClZIVVO
-X-Proofpoint-ORIG-GUID: j7QTz1BI1JM7mLFGaFlnhAa9SClZIVVO
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9/NyrScgAl3e+b+CBw3RrVGdh3MunMWxgpsHaJB6dPF2Ffw7mvd1EPrsJXSkTgXI+be/C8J+nHHbHPPdiZvB2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6803
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -161,231 +127,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 16:36, James Houghton wrote:
-> hugetlb_hgm_walk implements high-granularity page table walks for
-> HugeTLB. It is safe to call on non-HGM enabled VMAs; it will return
-> immediately.
-> 
-> hugetlb_walk_step implements how we step forwards in the walk. For
-> architectures that don't use GENERAL_HUGETLB, they will need to provide
-> their own implementation.
-> 
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->  include/linux/hugetlb.h |  13 +++++
->  mm/hugetlb.c            | 125 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 138 insertions(+)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 003255b0e40f..4b1548adecde 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -276,6 +276,10 @@ u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx);
->  pte_t *huge_pmd_share(struct mm_struct *mm, struct vm_area_struct *vma,
->  		      unsigned long addr, pud_t *pud);
->  
-> +int hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
-> +		     struct hugetlb_pte *hpte, unsigned long addr,
-> +		     unsigned long sz, bool stop_at_none);
-> +
->  struct address_space *hugetlb_page_mapping_lock_write(struct page *hpage);
->  
->  extern int sysctl_hugetlb_shm_group;
-> @@ -288,6 +292,8 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
->  pte_t *huge_pte_offset(struct mm_struct *mm,
->  		       unsigned long addr, unsigned long sz);
->  unsigned long hugetlb_mask_last_page(struct hstate *h);
-> +int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> +		      unsigned long addr, unsigned long sz);
->  int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
->  				unsigned long addr, pte_t *ptep);
->  void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
-> @@ -1066,6 +1072,8 @@ void hugetlb_register_node(struct node *node);
->  void hugetlb_unregister_node(struct node *node);
->  #endif
->  
-> +enum hugetlb_level hpage_size_to_level(unsigned long sz);
-> +
->  #else	/* CONFIG_HUGETLB_PAGE */
->  struct hstate {};
->  
-> @@ -1253,6 +1261,11 @@ static inline void hugetlb_register_node(struct node *node)
->  static inline void hugetlb_unregister_node(struct node *node)
->  {
->  }
-> +
-> +static inline enum hugetlb_level hpage_size_to_level(unsigned long sz)
-> +{
-> +	return HUGETLB_LEVEL_PTE;
-> +}
->  #endif	/* CONFIG_HUGETLB_PAGE */
->  
->  #ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index e3733388adee..90db59632559 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -95,6 +95,29 @@ static void hugetlb_vma_data_free(struct vm_area_struct *vma);
->  static int hugetlb_vma_data_alloc(struct vm_area_struct *vma);
->  static void __hugetlb_vma_unlock_write_free(struct vm_area_struct *vma);
->  
-> +/*
-> + * hpage_size_to_level() - convert @sz to the corresponding page table level
-> + *
-> + * @sz must be less than or equal to a valid hugepage size.
-> + */
-> +enum hugetlb_level hpage_size_to_level(unsigned long sz)
-> +{
-> +	/*
-> +	 * We order the conditionals from smallest to largest to pick the
-> +	 * smallest level when multiple levels have the same size (i.e.,
-> +	 * when levels are folded).
-> +	 */
-> +	if (sz < PMD_SIZE)
-> +		return HUGETLB_LEVEL_PTE;
-> +	if (sz < PUD_SIZE)
-> +		return HUGETLB_LEVEL_PMD;
-> +	if (sz < P4D_SIZE)
-> +		return HUGETLB_LEVEL_PUD;
-> +	if (sz < PGDIR_SIZE)
-> +		return HUGETLB_LEVEL_P4D;
-> +	return HUGETLB_LEVEL_PGD;
-> +}
-> +
->  static inline bool subpool_is_free(struct hugepage_subpool *spool)
->  {
->  	if (spool->count)
-> @@ -7321,6 +7344,70 @@ bool want_pmd_share(struct vm_area_struct *vma, unsigned long addr)
->  }
->  #endif /* CONFIG_ARCH_WANT_HUGE_PMD_SHARE */
->  
-> +/* hugetlb_hgm_walk - walks a high-granularity HugeTLB page table to resolve
-> + * the page table entry for @addr.
-> + *
-> + * @hpte must always be pointing at an hstate-level PTE (or deeper).
-> + *
-> + * This function will never walk further if it encounters a PTE of a size
-> + * less than or equal to @sz.
-> + *
-> + * @stop_at_none determines what we do when we encounter an empty PTE. If true,
-> + * we return that PTE. If false and @sz is less than the current PTE's size,
-> + * we make that PTE point to the next level down, going until @sz is the same
-> + * as our current PTE.
+>=20
+> On Wed, Nov 02, 2022 at 10:10:14AM -0400, Frank Li wrote:
+> > From: Frank Li <frank.li@nxp.com>
+> >
+> >   pci-epf-vntb.c:1128:33: sparse:     expected void [noderef] __iomem
+> *base
+> >   pci-epf-vntb.c:1128:33: sparse:     got struct epf_ntb_ctrl *reg
+> >
+> > Add __iomem type convert in vntb_epf_peer_spad_read() and
+> > vntb_epf_peer_spad_write().
+>=20
+> I don't understand all the bits and pieces here, but I'm a little
+> dubious about adding all these "(void __iomem *)"casts.  There are
+> very few of them in drivers/pci/, and I doubt this driver is so unique
+> that it needs them.
 
-I was a bit confused about 'we return that PTE' when the function is of type
-int.  TBH, I am not a fan of the current scheme of passing in *hpte and having
-the hpte modified by the function.
+sparse compiler report warning without cast.  I write it at commit message.
 
-> + *
-> + * If @stop_at_none is true and @sz is PAGE_SIZE, this function will always
-> + * succeed, but that does not guarantee that hugetlb_pte_size(hpte) is @sz.
-> + *
-> + * Return:
-> + *	-ENOMEM if we couldn't allocate new PTEs.
-> + *	-EEXIST if the caller wanted to walk further than a migration PTE,
-> + *		poison PTE, or a PTE marker. The caller needs to manually deal
-> + *		with this scenario.
-> + *	-EINVAL if called with invalid arguments (@sz invalid, @hpte not
-> + *		initialized).
-> + *	0 otherwise.
-> + *
-> + *	Even if this function fails, @hpte is guaranteed to always remain
-> + *	valid.
-> + */
-> +int hugetlb_hgm_walk(struct mm_struct *mm, struct vm_area_struct *vma,
-> +		     struct hugetlb_pte *hpte, unsigned long addr,
-> +		     unsigned long sz, bool stop_at_none)
+Best regards
+Frank Li=20
 
-Since we are potentially populating lower level page tables, we may want a
-different function name.  It may just be me, but I think of walk as a read
-only operation.  I would suggest putting populate in the name, but as Peter
-pointed out elsewhere, that has other implications.  Sorry, I can not think
-of something better right now.
-
--- 
-Mike Kravetz
-
-> +{
-> +	int ret = 0;
-> +	pte_t pte;
-> +
-> +	if (WARN_ON_ONCE(sz < PAGE_SIZE))
-> +		return -EINVAL;
-> +
-> +	if (!hugetlb_hgm_enabled(vma)) {
-> +		if (stop_at_none)
-> +			return 0;
-> +		return sz == huge_page_size(hstate_vma(vma)) ? 0 : -EINVAL;
-> +	}
-> +
-> +	hugetlb_vma_assert_locked(vma);
-> +
-> +	if (WARN_ON_ONCE(!hpte->ptep))
-> +		return -EINVAL;
-> +
-> +	while (hugetlb_pte_size(hpte) > sz && !ret) {
-> +		pte = huge_ptep_get(hpte->ptep);
-> +		if (!pte_present(pte)) {
-> +			if (stop_at_none)
-> +				return 0;
-> +			if (unlikely(!huge_pte_none(pte)))
-> +				return -EEXIST;
-> +		} else if (hugetlb_pte_present_leaf(hpte, pte))
-> +			return 0;
-> +		ret = hugetlb_walk_step(mm, hpte, addr, sz);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  #ifdef CONFIG_ARCH_WANT_GENERAL_HUGETLB
->  pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
->  			unsigned long addr, unsigned long sz)
-> @@ -7388,6 +7475,44 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
->  	return (pte_t *)pmd;
->  }
->  
-> +/*
-> + * hugetlb_walk_step() - Walk the page table one step to resolve the page
-> + * (hugepage or subpage) entry at address @addr.
-> + *
-> + * @sz always points at the final target PTE size (e.g. PAGE_SIZE for the
-> + * lowest level PTE).
-> + *
-> + * @hpte will always remain valid, even if this function fails.
-> + */
-> +int hugetlb_walk_step(struct mm_struct *mm, struct hugetlb_pte *hpte,
-> +		      unsigned long addr, unsigned long sz)
-> +{
-> +	pte_t *ptep;
-> +	spinlock_t *ptl;
-> +
-> +	switch (hpte->level) {
-> +	case HUGETLB_LEVEL_PUD:
-> +		ptep = (pte_t *)hugetlb_pmd_alloc(mm, hpte, addr);
-> +		if (IS_ERR(ptep))
-> +			return PTR_ERR(ptep);
-> +		hugetlb_pte_populate(hpte, ptep, PMD_SHIFT, HUGETLB_LEVEL_PMD);
-> +		break;
-> +	case HUGETLB_LEVEL_PMD:
-> +		ptep = hugetlb_pte_alloc(mm, hpte, addr);
-> +		if (IS_ERR(ptep))
-> +			return PTR_ERR(ptep);
-> +		ptl = pte_lockptr(mm, (pmd_t *)hpte->ptep);
-> +		hugetlb_pte_populate(hpte, ptep, PAGE_SHIFT, HUGETLB_LEVEL_PTE);
-> +		hpte->ptl = ptl;
-> +		break;
-> +	default:
-> +		WARN_ONCE(1, "%s: got invalid level: %d (shift: %d)\n",
-> +				__func__, hpte->level, hpte->shift);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
->  /*
->   * Return a mask that can be used to update an address to the last huge
->   * page in a page table page mapping size.  Used to skip non-present
-> -- 
-> 2.38.0.135.g90850a2211-goog
-> 
+>=20
+> > @@ -1121,7 +1121,7 @@ static u32 vntb_epf_spad_read(struct ntb_dev
+> *ndev, int idx)
+> >       struct epf_ntb *ntb =3D ntb_ndev(ndev);
+> >       int off =3D ntb->reg->spad_offset, ct =3D ntb->reg->spad_count *
+> sizeof(u32);
+> >       u32 val;
+> > -     void __iomem *base =3D ntb->reg;
+> > +     void __iomem *base =3D (void __iomem *)ntb->reg;
+> >
+> >       val =3D readl(base + off + ct + idx * sizeof(u32));
+> >       return val;
+> > @@ -1132,7 +1132,7 @@ static int vntb_epf_spad_write(struct ntb_dev
+> *ndev, int idx, u32 val)
+> >       struct epf_ntb *ntb =3D ntb_ndev(ndev);
+> >       struct epf_ntb_ctrl *ctrl =3D ntb->reg;
+> >       int off =3D ctrl->spad_offset, ct =3D ctrl->spad_count * sizeof(u=
+32);
+> > -     void __iomem *base =3D ntb->reg;
+> > +     void __iomem *base =3D (void __iomem *)ntb->reg;
+> >
+> >       writel(val, base + off + ct + idx * sizeof(u32));
+>=20
+> These things look gratuitously different to begin with:
+>=20
+>   int off =3D ntb->reg->spad_offset, ct =3D ntb->reg->spad_count * sizeof=
+(u32);
+>   int off =3D ctrl->spad_offset, ct =3D ctrl->spad_count * sizeof(u32);
+>=20
+> They're doing the same thing, and they should do it the same way.
+>=20
+> Since db_data[] and db_offset[] are never referenced except to be
+> initialized to zero, I'm guessing the point of vntb_epf_spad_read()
+> and vntb_epf_spad_write() is to read/write things in those arrays?
+>=20
+> You access other things in ntb->reg directly by dereferencing a
+> pointer, e.g.,
+>=20
+>   ntb->reg->link_status |=3D LINK_STATUS_UP;
+>   addr =3D ntb->reg->addr;
+>   ctrl->command_status =3D COMMAND_STATUS_OK;
+>=20
+> Why don't you just compute the appropriate *index* and access the
+> array directly instead of using readl() and writel()?
+>=20
+> Bjorn
