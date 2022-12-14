@@ -2,131 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B22264D268
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B038064D26F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiLNWg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 17:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S229462AbiLNWhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 17:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiLNWgY (ORCPT
+        with ESMTP id S229446AbiLNWhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 17:36:24 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7255F303DC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:23 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id r3so3869902vkq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MY3UvV8qfuLmW0mh3ybluVgZmmXLT9RgvRtqrNrsplM=;
-        b=D8RE0ezI/Lyj8q5qGGcq3x0sUWunzNzjb66SVYEcT/P+p9Ue1GROhZrW23y28kjnuD
-         TZhbgfsULXArFtBuvJdve4LNtsWToqAoDF6+2rJb1d6Dh6qk6VO0hTlXlomhrggptvrd
-         /wligCEbFkAan+tADLhFsapmTxxu77phHhzTA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MY3UvV8qfuLmW0mh3ybluVgZmmXLT9RgvRtqrNrsplM=;
-        b=UVsO75/ahnFrsUjfqI0foHWwonYtKSdJTetOMiz5FTa44oJ3h/HBE7o1gkYMwdvUzL
-         je2Pc/1Hh2pmA8qwuKHchdpBat4WH/aosfenJY0dFpCmJ2yf9Ulwhb7ejYKhQJ7ixg44
-         BwGdV1A4pH9mNzgnXo53IZed31XNcfQYZgeJY1Z6ufiDNcX+iU6XGxhEnI6zBbC1emTr
-         OwQZLjBAu93oWDfn8C0H0l0UUD/YZJV93sB/NgrT01yCxDjCEZbaKlEjVh5Ff9CoALgy
-         88dMYd/WtaC/V6nl+lAkOrbtuxPucrxnwfZg23ZEzKHr73AS/pkiRmgvXFcTdqJuhuw9
-         elrw==
-X-Gm-Message-State: ANoB5pmzKCiRVUaqAOleXMDszBug3wVk8NX8j3tdLTbW+j0Gloyo+83V
-        fqDFtww390LBJ1B0fHVXUJG4RKjH8Rw4jKrf
-X-Google-Smtp-Source: AA0mqf7n0w1rzdsLlUlSNHBQfnMkxKpq6R74a0L+lUvDn8uCLpBK6gBehSvTf3w4xOBJzeVuELPEEg==
-X-Received: by 2002:ac5:cb73:0:b0:3c0:f9ab:4821 with SMTP id l19-20020ac5cb73000000b003c0f9ab4821mr10331436vkn.5.1671057382134;
-        Wed, 14 Dec 2022 14:36:22 -0800 (PST)
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
-        by smtp.gmail.com with ESMTPSA id d125-20020ae9ef83000000b006ee8874f5fasm10369848qkg.53.2022.12.14.14.36.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 14:36:21 -0800 (PST)
-Received: by mail-qk1-f176.google.com with SMTP id z17so1902777qki.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:21 -0800 (PST)
-X-Received: by 2002:a05:620a:4890:b0:6ff:a7de:ce22 with SMTP id
- ea16-20020a05620a489000b006ffa7dece22mr547175qkb.72.1671057380778; Wed, 14
- Dec 2022 14:36:20 -0800 (PST)
+        Wed, 14 Dec 2022 17:37:51 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D4036C62;
+        Wed, 14 Dec 2022 14:37:49 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5F54620376;
+        Wed, 14 Dec 2022 23:37:47 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "phy: qualcomm: usb28nm: Add MDM9607 init sequence"
+Date:   Wed, 14 Dec 2022 23:37:32 +0100
+Message-Id: <20221214223733.648167-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20221213174234.688534-1-dave.hansen@linux.intel.com>
-In-Reply-To: <20221213174234.688534-1-dave.hansen@linux.intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 14 Dec 2022 14:36:04 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com>
-Message-ID: <CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/mm for 6.2
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kirill.shutemov@linux.intel.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 9:43 AM Dave Hansen <dave.hansen@linux.intel.com> wrote:
->
-> This also contains a new hardware feature: Linear Address Masking
-> (LAM).  It is similar conceptually to the ARM Top-Byte-Ignore (TBI)
-> feature and should allow userspace memory sanitizers to be used
-> with less overhead on x86.
+This reverts commit 557a28811c7e0286d3816842032db5eb7bb5f156.
 
-Christ.
+This commit introduced an init sequence from downstream DT [1] in the
+driver.  As mentioned by the comment above the HSPHY_INIT_CFG macro for
+this sequence:
 
-Is it too late to ask Intel to call this "Top-Bits-Ignore", and
-instead of adding another crazy TLA, we'd just all agree to call this
-"TBI"?
+    /*
+     * The macro is used to define an initialization sequence.  Each tuple
+     * is meant to program 'value' into phy register at 'offset' with 'delay'
+     * in us followed.
+     */
 
-I  know, I know, NIH and all that, but at least as long as we are
-limiting ourselves to regular US-ASCII, we really only have 17576
-TLA's to go around, and at some point it gets not only confusing, but
-really quite wasteful, to have everybody make up their own
-architecture-specific TLA.
+Instead of corresponding to offsets into the phy register, the sequence
+read by the downstream driver [2] is passed into ulpi_write [3] which
+crafts the address-value pair into a new value and writes it into the
+same register at USB_ULPI_VIEWPORT [4].  In other words, this init
+sequence is programmed into the hardware in a totally different way than
+downstream and is unlikely to achieve the desired result, if the hsphy
+is working at all.
 
-And while I'm on the subject: I really think that the changes to
-"untagged_addr()" are fundamentally broken.
+An alternative method needs to be found to write these init values at
+the desired location.  Fortunately mdm9607 did not land upstream yet [5]
+and should have its compatible revised to use the generic one, instead
+of a compatible that writes wrong data to the wrong registers.
 
-Why? That whole LAM (or BTI) is not necessarily per-mm. It can easily
-be per-*thread*.
+[1]: https://android.googlesource.com/kernel/msm/+/android-7.1.0_r0.2/arch/arm/boot/dts/qcom/mdm9607.dtsi#585
+[2]: https://android.googlesource.com/kernel/msm/+/android-7.1.0_r0.2/drivers/usb/phy/phy-msm-usb.c#4183
+[3]: https://android.googlesource.com/kernel/msm/+/android-7.1.0_r0.2/drivers/usb/phy/phy-msm-usb.c#468
+[4]: https://android.googlesource.com/kernel/msm/+/android-7.1.0_r0.2/drivers/usb/phy/phy-msm-usb.c#418
+[5]: https://lore.kernel.org/linux-arm-msm/20210805222812.40731-1-konrad.dybcio@somainline.org/
 
-Imagine, if you will, a setup where you have some threads that use
-tagged pointers, and some threads that don't.
+Reported-by: Michael Srba <Michael.Srba@seznam.cz>
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ .../devicetree/bindings/phy/qcom,usb-hs-28nm.yaml   |  1 -
+ drivers/phy/qualcomm/phy-qcom-usb-hs-28nm.c         | 13 -------------
+ 2 files changed, 14 deletions(-)
 
-For example, maybe the upper bits of the address contains a tag that
-is used only used within a virtual machine? You could even have the
-"native" mode use the full address space, and put itself and its
-private data in the upper bits virtually.
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-28nm.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-28nm.yaml
+index abcc4373f39e..ca6a0836b53c 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-28nm.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-28nm.yaml
+@@ -16,7 +16,6 @@ properties:
+   compatible:
+     enum:
+       - qcom,usb-hs-28nm-femtophy
+-      - qcom,usb-hs-28nm-mdm9607
+ 
+   reg:
+     maxItems: 1
+diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hs-28nm.c b/drivers/phy/qualcomm/phy-qcom-usb-hs-28nm.c
+index 8807e59a1162..a52a9bf13b75 100644
+--- a/drivers/phy/qualcomm/phy-qcom-usb-hs-28nm.c
++++ b/drivers/phy/qualcomm/phy-qcom-usb-hs-28nm.c
+@@ -401,26 +401,13 @@ static const struct hsphy_init_seq init_seq_femtophy[] = {
+ 	HSPHY_INIT_CFG(0x90, 0x60, 0),
+ };
+ 
+-static const struct hsphy_init_seq init_seq_mdm9607[] = {
+-	HSPHY_INIT_CFG(0x80, 0x44, 0),
+-	HSPHY_INIT_CFG(0x81, 0x38, 0),
+-	HSPHY_INIT_CFG(0x82, 0x24, 0),
+-	HSPHY_INIT_CFG(0x83, 0x13, 0),
+-};
+-
+ static const struct hsphy_data hsphy_data_femtophy = {
+ 	.init_seq = init_seq_femtophy,
+ 	.init_seq_num = ARRAY_SIZE(init_seq_femtophy),
+ };
+ 
+-static const struct hsphy_data hsphy_data_mdm9607 = {
+-	.init_seq = init_seq_mdm9607,
+-	.init_seq_num = ARRAY_SIZE(init_seq_mdm9607),
+-};
+-
+ static const struct of_device_id qcom_snps_hsphy_match[] = {
+ 	{ .compatible = "qcom,usb-hs-28nm-femtophy", .data = &hsphy_data_femtophy, },
+-	{ .compatible = "qcom,usb-hs-28nm-mdm9607", .data = &hsphy_data_mdm9607, },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, qcom_snps_hsphy_match);
+-- 
+2.39.0
 
-IOW, imagine using the virtual address masking as not just memory
-sanitizers, but as an actual honest-to-goodness separation feature (eg
-JITed code might fundamentally have access only to the lower bits,
-while the JITter itself sees the whole address space).
-
-Maybe that's not how LAM works on x86, but your changes to
-untagged_addr() are *not* x86-specific.
-
-So I really think this is completely wrong, quite aside from the
-naming. It just makes assumptions that aren't valid.
-
-The fact that you made this mm-specific actually ends up being an
-active bug in the code, even on x86-64. You use the mmap lock to
-serialize this all in prctl_enable_tagged_addr(), but then the read
-side (ie just untagged_addr()) isn't actually serialized at all - and
-*shouldn't* be serialized.
-
-So I really think this is a fundamental design mistake, and while I
-pulled it and sorted out the trivial conflicts, I've unpulled it again
-as being actively mis-designed.
-
-                Linus
