@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC2E64C88C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6110B64C894
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbiLNMAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S238312AbiLNMAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbiLNL7m (ORCPT
+        with ESMTP id S238341AbiLNMAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:59:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC04625285
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:58:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671019115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Puk59mM8eVDxnAzNFx5aGXWzYXrsqC20wq+ZEPuJ168=;
-        b=Yh97XS+YfYNfGPpyo0uPY+U0JXVYwp6yiA/2mD+nwczb++s2OvNjRrq1ldhQwGfPjKDGQw
-        k+cHYIGd5e1FFPp6wezHHukyAOXXuG3a9uSegIzN0GM2kGacfGSsR7jkLH0H+nLXhrBHAJ
-        SvFn1tW4fGlR5VKcAcG101VsmxMAX6k=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-121-HHx8-fCyMAy-cMMgND83cw-1; Wed, 14 Dec 2022 06:58:34 -0500
-X-MC-Unique: HHx8-fCyMAy-cMMgND83cw-1
-Received: by mail-wr1-f70.google.com with SMTP id e7-20020adf9bc7000000b00242121eebe2so3439631wrc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:58:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Puk59mM8eVDxnAzNFx5aGXWzYXrsqC20wq+ZEPuJ168=;
-        b=rX1YGgO/cBjdfU/e7jiZ6TwQXHBtUTc2gRR4JApretnUMNwnumNsVc/UV7pQpGcuPA
-         G2bMzMonIETkvB7uwrmHIORYdNwp1LhkwtTynJGOPQTYKV0ACUmewf7F6IL6vsJC5jsw
-         t0KM9SQZvT0h2e/PtdVKUDH4GLzrf/08kJ+zpXaCGdrXswR4pembw3QUAxEygOTIch6W
-         zEGGP6I5FEIiPuWt0AFqgYlP205COMEBi/2oLXcwuhyqgglzX1iOmxsdpxyp/JVeK99w
-         VZAMpo26Rv1pLl4kKk1PfNTdblbrpeUtPZWsSj32RoFhKGjw2sSP4RJyGjzv1Yg2SOKk
-         VTRg==
-X-Gm-Message-State: ANoB5pmVpTXOYKJWo2QpLCqI5vkQWGdiuM2v88vy1ljU+TmtuA3il9Ib
-        dc1YrJMjmO2LiRDoSPeCwlrrPFeBQ0DIMpo2LMKaKAF2Z0xicMJyr+ANqH2c+B2y0467BMf2/7t
-        KjjrNsrcZCs8NNnAwmC1JKaIv
-X-Received: by 2002:a5d:526a:0:b0:242:877d:ca63 with SMTP id l10-20020a5d526a000000b00242877dca63mr16179199wrc.44.1671019113291;
-        Wed, 14 Dec 2022 03:58:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4HSxAPf40LKD9a4HZ7iVGC/QK8BhMe6SSXxWXIEd+STJY7Pm38ou+bHRi/WjDGVGhtNtqGUg==
-X-Received: by 2002:a5d:526a:0:b0:242:877d:ca63 with SMTP id l10-20020a5d526a000000b00242877dca63mr16179181wrc.44.1671019113009;
-        Wed, 14 Dec 2022 03:58:33 -0800 (PST)
-Received: from redhat.com (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id u2-20020adff882000000b00241d21d4652sm2635751wrp.21.2022.12.14.03.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 03:58:32 -0800 (PST)
-Date:   Wed, 14 Dec 2022 06:58:29 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221214065417-mutt-send-email-mst@kernel.org>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
- <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
- <Y5mjcuCRP45ynJis@shikoro>
- <20221214105642.3xagckvbbgu5mubl@vireshk-i7>
+        Wed, 14 Dec 2022 07:00:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149D9765B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:59:47 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p5QQ4-0005rW-Fq; Wed, 14 Dec 2022 12:59:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p5QQ1-004SUN-5R; Wed, 14 Dec 2022 12:59:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p5QQ0-00511y-V2; Wed, 14 Dec 2022 12:59:24 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] drm/imx/lcdc: Implement DRM driver for imx21
+Date:   Wed, 14 Dec 2022 12:59:19 +0100
+Message-Id: <20221214115921.1845994-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214105642.3xagckvbbgu5mubl@vireshk-i7>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1243; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=E9rmnqIACjL1gD6hd1h/JCLXSWUFev5rGvO+Iia5AqI=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjmbqKutNhz2hpCA8uMWSiFV+KNEi5A7YyVOQwWLD3 mbBX60qJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5m6igAKCRDB/BR4rcrsCbB4B/ 9oCNGQY5wLWXGX9nUovs667z3OpDvVlPSMXtQsflP0KhsltwK4aEKhyr3mErw0Zif3arsN+P5hioLm VFz6Z15BpP9Y6lAM2mt820YUYD22k8nW8CiWVBYYRvi7BT9HB5gDXnFBeMWbegMhFrqVpO8rUz+Vq6 yy8s0w0NZVvJy9J0B6OnY6V2/529xPZ2FqW9PhAozqvBHcQkqFzeKE8Mwaq1pKegF9xbrNIMgUTzfQ ZQ3Qjh/tpyZdCFtUCL9mIsWT8YisqFrRNqsvdUGUR7XiShxfVjYrFXxpvDiC6x0C9oFiwqUBKKV4lx uOU2UNnukIcET9Svw13SzMgpG3a/Dq
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 04:26:42PM +0530, Viresh Kumar wrote:
-> On 14-12-22, 11:20, Wolfram Sang wrote:
-> > Dunno if this is really a rule, but if a maintainer steps out and makes
-> > sure there is someone to pick up the work, this is more than welcome.
-> > Way better than a stale entry in the MAINTAINERS file.
-> 
-> Sure, a stale entry is always bad.
-> 
-> > I mean, it does not limit the chance to have further maintainers, for
-> > example. I believe in meritocracy here. Those who do and collaborate,
-> > shall get responsibility. If not, then not. We can fix this, too, if
-> > needed.
-> > 
-> > What is the reason for your question?
-> 
-> It was a general question that I asked myself and didn't know an
-> answer to. I wasn't sure if adding someone to be a maintainer here to
-> a driver, which they haven't contributed to until now (at least based
-> on open source commits), is right or not, since this isn't a stale
-> entry in MAINTAINERS anyway.
-> 
-> An entry as R: would be okay normally IMO, as this makes sure
-> interested party is kept aware of the development in the area. An M:
-> entry somehow gives a higher level of authority to the person and
-> without any prior contributions, it feels tricky at least.
-> 
-> Anyway, I don't have any objection to the patch at least as it was
-> primarily developed by Intel engineers.
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hello,
 
-If a maintainer acks a patch I generally expect that the patch is good.
-If we have a maintainer who's not familiar with the codebase, this
-assumption does not hold.
-R: would be ok with me.
+Compared to (implicit) v1[1] the device tree binding should be good
+enough now to pass the dts linters.
 
-> -- 
-> viresh
+As before, Marian Cichy is the declared author of the driver, but he
+left Pengutronix, so the email address doesn't work any more.
+
+This is based on top of v6.1 + 93266da2409b ("dt-bindings: display:
+Convert fsl,imx-fb.txt to dt-schema") which is currently in next via
+branch 'for-next' of
+git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git .
+
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/dri-devel/20220128105849.368438-1-u.kleine-koenig@pengutronix.de
+
+Marian Cichy (1):
+  drm/imx/lcdc: Implement DRM driver for imx21
+
+Uwe Kleine-König (1):
+  dt-bindings: display: imx: Describe drm binding for fsl,imx-lcdc
+
+ .../bindings/display/imx/fsl,imx-lcdc.yaml    |  45 +-
+ drivers/gpu/drm/imx/Kconfig                   |   7 +
+ drivers/gpu/drm/imx/Makefile                  |   2 +
+ drivers/gpu/drm/imx/imx-lcdc.c                | 610 ++++++++++++++++++
+ 4 files changed, 663 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/gpu/drm/imx/imx-lcdc.c
+
+
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+prerequisite-patch-id: c3ef3de02516b5c159e76b40d2b4348a5ce0fe51
+-- 
+2.38.1
 
