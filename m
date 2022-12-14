@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9898464CF13
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F35464CF1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbiLNSDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S239163AbiLNSFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238905AbiLNSDM (ORCPT
+        with ESMTP id S239288AbiLNSF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:03:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4D42A278
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JWfCee/Sqeyheu8+ic5pZTBVDz5x2Sw7vv1duxIKk90=; b=AwWn77qXLlBJuLR3KUyVc+7HlT
-        ehUD8PFh1lprVAegIDhIRJYu44O3Nr6AbjR3i8TpysC9CRVHGSE93fkfbYed0xggYIo1noPt1ZY9G
-        sQM6cs14MeyJgpSzKopW5Wp+iDguGos2Pm9Ruz/0E7hbJZoJO4Q8XtfyLittbBetnaCgZXxf6H3rS
-        EaZu3h062isKc/1AgNLrfi/l5yF3eFPfYwExgkuPzooITWk52UTCeNmsluGJignTI+47okzYeReut
-        Uc4AUg/MHJ4xRG60UbgknRqsXPwd3jI5qRNAhu4crOotMmjNdpBraAjMKUlk3NEhv8PRyUx3jL3cX
-        pFIRwN0A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p5W5w-00DTdg-Su; Wed, 14 Dec 2022 18:03:04 +0000
-Date:   Wed, 14 Dec 2022 18:03:04 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: Make const-safe
-Message-ID: <Y5oP2Psz++gHholO@casper.infradead.org>
-References: <20221212144946.2657785-1-willy@infradead.org>
- <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5mTJVi2PBix+Gy6@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 13:05:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6519C1E3C3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:04:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 207E7B818A6
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 18:04:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3F92C433F0;
+        Wed, 14 Dec 2022 18:04:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671041076;
+        bh=Dlun+MRuHE9BKA7bYbc7kq5P/Kzbp1cR+/G+XwunarY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ECFNi2jKLrI8Kx/xD3a82zuEUiHG6gSNrTRLgNKngf9jQlYIsYwZVUXelLCcjMWdG
+         aiTlAME23D6m8QZlBZCk/ExP3EH3G1dIEip0/49xyf7Z6wJZOQJ8PayYYA8Pg2X7qv
+         l5GO4qlgoV5/x5+Czh3GsWlf3ThckjtjDvxJnij9IcPCYoRQ5D+d2sZOSgvu3eZN3w
+         ec+/63OHp2oKLPG20B7zOZf2RyZ6FcKX1a3vwMJ8GU9laNPc3KZEJb3PRfN+lFyRrA
+         rX4tU7Nt8fesq3m6vEteZgom9Ek9GG+psL+UOL8wIw6DaCm8Zrd5wfVfE+Ftwl7pii
+         6w5fJ18HnJUEQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D273AE29F4D;
+        Wed, 14 Dec 2022 18:04:36 +0000 (UTC)
+Subject: Re: [GIT PULL] I3C changes for 6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y5kHHAOgXCz3zQzi@mail.local>
+References: <Y5kHHAOgXCz3zQzi@mail.local>
+X-PR-Tracked-List-Id: <linux-i3c.lists.infradead.org>
+X-PR-Tracked-Message-Id: <Y5kHHAOgXCz3zQzi@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-6.2
+X-PR-Tracked-Commit-Id: 08dcf0732cb4d97b85493d9f60470e48eebf87fe
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a0a6c76cf2a506c061072db6c187f8a641dc85de
+Message-Id: <167104107685.17244.18259461213478551552.pr-tracker-bot@kernel.org>
+Date:   Wed, 14 Dec 2022 18:04:36 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:11:01AM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 12, 2022 at 02:49:46PM +0000, Matthew Wilcox (Oracle) wrote:
-> > With a modified container_of() that preserves constness, the compiler
-> > finds some pointers which should have been marked as const.  task_of()
-> > also needs to become const-preserving for the !FAIR_GROUP_SCHED case so
-> > that cfs_rq_of() can take a const argument.  No change to generated code.
-> 
-> More const more better I suppose.. Thanks!
-> 
-> Happen to have a sha for the container_of() commit handy?
+The pull request you sent on Wed, 14 Dec 2022 00:13:32 +0100:
 
-There isn't one yet.  Obviously we can't make container_of()
-const-preserving until we've fixed all the places which would warn.
-The diff I have in my tree looks like this:
+> git://git.kernel.org/pub/scm/linux/kernel/git/i3c/linux.git tags/i3c/for-6.2
 
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-index 1d898f9158b4..9416e6cc8c88 100644
---- a/include/linux/container_of.h
-+++ b/include/linux/container_of.h
-@@ -20,7 +20,10 @@
-        static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-                      __same_type(*(ptr), void),                        \
-                      "pointer type mismatch in container_of()");       \
--       ((type *)(__mptr - offsetof(type, member))); })
-+       __mptr -= offsetof(type, member);                               \
-+       _Generic(ptr,                                                   \
-+               const typeof(*(ptr)) *: (const type *)__mptr,           \
-+               default: ((type *)__mptr)); })
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a0a6c76cf2a506c061072db6c187f8a641dc85de
 
- /**
-  * container_of_const - cast a member of a structure out to the containing
+Thank you!
 
-I have all of fs/ and net/ compiling cleanly now.  There are a few
-places which really need the const-removing properties, and I've made
-those call a new macro called container_of_not_const(), but I don't
-like that name.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
