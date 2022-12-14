@@ -2,99 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F6E64CF1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DA764CF31
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 19:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238923AbiLNSGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 13:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S238946AbiLNSLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 13:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238945AbiLNSFp (ORCPT
+        with ESMTP id S238998AbiLNSKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 13:05:45 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D206B862;
-        Wed, 14 Dec 2022 10:05:44 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3cbdd6c00adso7920657b3.11;
-        Wed, 14 Dec 2022 10:05:44 -0800 (PST)
+        Wed, 14 Dec 2022 13:10:47 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76802186
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:10:44 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id y16so640517wrm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 10:10:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBRUrtrmsnAbZI5Nq3EYtelch9Q3LJeA6lHE1domVys=;
-        b=UHRRC0pGANkudw+xnCH/GIFzypLC4qzzMt/5EgGaoOEOiufocLdP8vszChtH4SvV0f
-         zdxSIqX0sxkGsITNjKdCdFW0FqYf3Yp+5vfonJvQZZbu2oyn9iIlor22eh6KaDPoZsEf
-         IFTP29bRpmUiLtR1Px+ulRtw15C5VY4dJx4HMND0ANnW12gQFUSPsC/niRf+r5cRmGa0
-         oGhokcBD56S0L9AMqMCmURXRy2MUuFiLbPPA5JL2RDfZX/M3urqBGYfJfaUfswkgjU05
-         HTzNqoxWfhnchIUe3OhvwfEKl3S2NnqXAu+hIczRzouVxcrWJWujw35c3f5Cwtq/o+Pq
-         MZ6g==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nybxgdJczlK9xtFGjAbTfjb9qk52fvIL/a1+enwIgmM=;
+        b=rKhaXbQUggPZdCWaRsZFYOcBD7elT7dcVVUaN1vfyPFjGb2fI3BPdNaYhTmV3dAkeH
+         AbEME5Avhe7kOhXTGK0ULD4flL+51h2MXC8EGR0Uji1O7f85qriSdy+nwGZwWg/rx/hf
+         Sxx8UykaTQ//ct5rT9CwTZGcw2fZpUFPHOmLID8Uw2tnXibscF9WyVNCY25C9tR0WbS6
+         1vAueqKVhath4j5KpnK6822TBPKbPl9+49A0fwRswb9aOhefnnAEsYs5lsSfJhIuzg1T
+         bDLo57p31MqrmE2E08mIBBDAp9HLn3E8IqKpMnvZuW3qWauo2pAT9HUhGurOvYZJh4f4
+         m1uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBRUrtrmsnAbZI5Nq3EYtelch9Q3LJeA6lHE1domVys=;
-        b=yN8PZDRmMvgf19HXpNEiCpGEXK30w45BNGcuX8Z2RHqgtMgcnwNJ/pU4qDVGv70qsz
-         4Dx0KQCCUIr/arLQ5Dfr7wTcywZK5dZCxQIG/k435+lCtCrst4Gvs2iZO1bK/6oZX6qf
-         OUNmxiqh5pIKSujvytGdqbCJtfx8nMvI3hfeIrAmP9XXAugdaaohzBU+jSML/sRT/uaI
-         9yS29z1wVnLJ9SQC5kyYncM6/okAfS98wXBaUmNUI7fc36FWBBSNuUrgEofCM5BnJGRZ
-         NH408ONCePpWpRvLaRoLM3JR+cSX4+nzJaDtfTGIZrGE2x3r10207pVM5qW8zGRz6MXg
-         5G8w==
-X-Gm-Message-State: ANoB5pkC67eZ7DcqFj+QAbtHLEsX82EE1Bu46SfdS1ZWw0DAflu/uPIR
-        jvvhTFJ7nt0+yXgGUHfhDjXizGlB+/U=
-X-Google-Smtp-Source: AA0mqf6v2QbgQCgvdvoe/fB3DWofrvjz8e6NUAkz5YvYVc6gRIOBp/Ze8goIdkeETwTJc2tQ0aqkFw==
-X-Received: by 2002:a05:7500:4889:b0:df:add0:8dbd with SMTP id gr9-20020a057500488900b000dfadd08dbdmr2653895gab.7.1671041142596;
-        Wed, 14 Dec 2022 10:05:42 -0800 (PST)
-Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a0c4700b006fc8fc061f7sm10363309qki.129.2022.12.14.10.05.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 10:05:41 -0800 (PST)
-Message-ID: <52c581ff-c2ee-8832-1f49-bcf40847d0b5@gmail.com>
-Date:   Wed, 14 Dec 2022 13:05:40 -0500
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nybxgdJczlK9xtFGjAbTfjb9qk52fvIL/a1+enwIgmM=;
+        b=QgDLsWkPXGavywefhj7ehk4uLzaPDwIq9NfhRe+oSmfigAmumxFujbR+aHFRi4YULt
+         GaGFZPfKh/UDLfhCdUmOTnsbjiWqUtI6kkCTdyLVQydXu39PiwbF/sQbKXTUxgA8UHPW
+         wDkjLaKP25wyX1pe2HZvhM0QEcBAfjkpTDTWt96DmpC1DO3IjBigrNZOiuh+oLPYnHaA
+         910Ll3kXKKX2/eHSB0NYms5s2fdvszsfG0OXAaKcNODZiVY0fgRcitgu8UTPdGFZ6SZp
+         DmiEwgGSBiwTAChLyjo+rYAySuPIxZxyeInVuIGo6VQ7GuT3YXgFCEkPraDwIZOEPLDs
+         9nkQ==
+X-Gm-Message-State: ANoB5pmBSES4RXcbb9biS6x1FYhdDjFPt46SIPTnJrPnfWT0DKLG8gN8
+        9vLcAZOPXcYoYVGxbmEy06EUF0K73Xo1Arl6/UY3xA==
+X-Google-Smtp-Source: AA0mqf6MNK/WLTJN3L8riDu3wQ0pF0PYVfu3IsI/9xxVW9bP9ieIXPzqBSmaRP+e8JOEzQlpXXS6Wj8B3/KM2j5KcZE=
+X-Received: by 2002:a5d:4a8c:0:b0:242:165e:7a79 with SMTP id
+ o12-20020a5d4a8c000000b00242165e7a79mr28790047wrq.343.1671041443254; Wed, 14
+ Dec 2022 10:10:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-input@vger.kernel.org, lee@kernel.org, lee.jones@linaro.org,
-        michael@walle.cc, Dmitry Torokhov <dmitry.torokhov@gmail.com>
-References: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
-Content-Language: en-US
-From:   Jesse Taube <mr.bossman075@gmail.com>
-In-Reply-To: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213232651.1269909-1-irogers@google.com> <Y5ncNQfPzq8qBP/f@kernel.org>
+ <Y5oPQ0Cf/9JGME3n@kernel.org>
+In-Reply-To: <Y5oPQ0Cf/9JGME3n@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 14 Dec 2022 10:10:31 -0800
+Message-ID: <CAP-5=fW8n-8ayzjLj0q588d0ZVpTPOGNGLB0Oj2GkF7f7CA=cg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] build/libtraceevent resends
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Timothy Hayes <timothy.hayes@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        shaomin Deng <dengshaomin@cdjrlc.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Are there any updates?
+On Wed, Dec 14, 2022 at 10:00 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Dec 14, 2022 at 11:22:45AM -0300, Arnaldo Carvalho de Melo escrev=
+eu:
+> > Em Tue, Dec 13, 2022 at 03:26:46PM -0800, Ian Rogers escreveu:
+> > > All patches on the acme perf/core branch.
+> > >
+> > > Resend incremental build fix python plugin:
+> > > https://lore.kernel.org/lkml/20221205225940.3079667-4-irogers@google.=
+com/
+> > >
+> > > Break apart and resend libtraceevent debug logging support:
+> > > https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irog=
+ers@google.com/
+> > >
+> > > Switch "#if HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE" to "#if
+> > > MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <=3D LIBTRACEEVENT_VERSION",
+> > > ensuring trace-event.h is included as discussed on the mailing list.
+> > >
+> > > Resend removal of --group option:
+> > > https://lore.kernel.org/lkml/20220707195610.303254-1-irogers@google.c=
+om/
+> >
+> > Thanks, applied.
+>
+> Building on arm64:
+>
+> /home/acme/git/perf/tools/perf/util/evsel.c: In function =E2=80=98evsel__=
+rawptr=E2=80=99:
+> /home/acme/git/perf/tools/perf/util/evsel.c:2787:65: error: operator '<=
+=3D' has no right operand
+>  2787 | #if MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <=3D LIBTRACEEVENT_VERSIO=
+N
+>       |                                                                 ^
+> error: command '/usr/bin/gcc' failed with exit code 1
+> cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such =
+file or directory
+>
+> make[2]: *** [Makefile.perf:651: /tmp/build/perf/python/perf.cpython-310-=
+aarch64-linux-gnu.so] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+>   LD      /tmp/build/perf/libbpf/staticobjs/libbpf-in.o
+>
+> Trying to fix...
 
-On 12/2/22 06:32, Jesse Taube wrote:
-> Some devices may want to use this driver without having a specific
-> compatible string. Add a generic compatible string to allow this.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
->   drivers/mfd/simple-mfd-i2c.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> index f4c8fc3ee463..0bda0dd9276e 100644
-> --- a/drivers/mfd/simple-mfd-i2c.c
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
->   };
->   
->   static const struct of_device_id simple_mfd_i2c_of_match[] = {
-> +	{ .compatible = "simple-mfd-i2c-generic" },
->   	{ .compatible = "kontron,sl28cpld" },
->   	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
->   	{}
+Thanks, I suspect the CFLAGS aren't passed through maybe, given this
+is the python code. Perhaps an include of util/trace-event.h is also
+necessary, but I thought that was already present:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
+erf/util/evsel.c?h=3Dperf/core#n43
+
+Thanks for digging into it,
+Ian
+
+> > - Arnaldo
+> >
+> >
+> > > Ian Rogers (5):
+> > >   perf build: Fix python/perf.so library's name
+> > >   perf trace-event: Add libtraceevent version tools to header
+> > >   libtraceevent: Increase libtraceevent logging when verbose
+> > >   perf trace-event: Use version check to avoid 1 define
+> > >   perf evlist: Remove group option.
+> > >
+> > >  tools/perf/Documentation/perf-record.txt      |  4 ----
+> > >  tools/perf/Documentation/perf-top.txt         |  7 ++----
+> > >  tools/perf/Makefile.config                    |  8 +++----
+> > >  tools/perf/Makefile.perf                      |  2 +-
+> > >  tools/perf/builtin-record.c                   |  2 --
+> > >  tools/perf/builtin-stat.c                     |  6 -----
+> > >  tools/perf/builtin-top.c                      |  2 --
+> > >  tools/perf/builtin-trace.c                    |  2 +-
+> > >  tools/perf/tests/attr/README                  |  2 --
+> > >  tools/perf/tests/attr/test-record-group       | 22 -----------------=
+--
+> > >  tools/perf/tests/attr/test-stat-group         | 17 --------------
+> > >  tools/perf/util/data-convert-bt.c             |  3 ++-
+> > >  tools/perf/util/debug.c                       | 10 +++++++++
+> > >  tools/perf/util/evlist.c                      |  2 +-
+> > >  tools/perf/util/evlist.h                      |  2 --
+> > >  tools/perf/util/evsel.c                       |  2 +-
+> > >  tools/perf/util/python.c                      | 10 +--------
+> > >  tools/perf/util/record.c                      |  7 ------
+> > >  tools/perf/util/record.h                      |  1 -
+> > >  .../util/scripting-engines/trace-event-perl.c |  2 +-
+> > >  .../scripting-engines/trace-event-python.c    |  2 +-
+> > >  tools/perf/util/sort.c                        |  3 ++-
+> > >  tools/perf/util/trace-event.h                 | 13 +++++++++++
+> > >  23 files changed, 39 insertions(+), 92 deletions(-)
+> > >  delete mode 100644 tools/perf/tests/attr/test-record-group
+> > >  delete mode 100644 tools/perf/tests/attr/test-stat-group
+> > >
+> > > --
+> > > 2.39.0.314.g84b9a713c41-goog
+> >
+> > --
+> >
+> > - Arnaldo
+>
+> --
+>
+> - Arnaldo
