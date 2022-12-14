@@ -2,95 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0425964C852
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB8964C854
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 12:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237781AbiLNLpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 06:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S238311AbiLNLpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 06:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238282AbiLNLox (ORCPT
+        with ESMTP id S229695AbiLNLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 06:44:53 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8404D20F5A;
-        Wed, 14 Dec 2022 03:44:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671018292; x=1702554292;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bLTygroHr1awOhjJHORd5gWEa2Lf7PhYZ+JxJ4mtm4w=;
-  b=gtcliDlXi8LPBvoLQMzrNyLE53HJuVEm2q2XuUM4GfoAc2TjBY+1tJ4W
-   CsraLQ6HssatmF8T+yAyctdZI7u0UFRBi3flbE9a07G6xJtabCVE9kY12
-   He+4R1dqdf2u47OlQHJ9EOZr4bq/4aQ60YXHz0TWP7jF7OXXnrEjtd+Cf
-   lxU2z/500yqUDZ3tix7+ORSdYgt9rAccZ0PrWjiNFM/j9ebjyt9EdT5eT
-   60AzgP1lddyDxFWlnHKz01aUrFxTpP5Qld9agV/hBuOuqj0hQZq81tLoX
-   O+S01GsPQ29pnpe6Y0B27eLOtoDgBdH0WaYv3IjlqGxD5Y/MiYPr2dDUS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380585159"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="380585159"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 03:44:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="791277863"
-X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
-   d="scan'208";a="791277863"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2022 03:44:48 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p5QBq-009mZL-1v;
-        Wed, 14 Dec 2022 13:44:46 +0200
-Date:   Wed, 14 Dec 2022 13:44:46 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hanna Hawa <hhhawa@amazon.com>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com,
-        lareine@amazon.com
-Subject: Re: [PATCH 1/1] i2c: designware: use u64 for clock freq to avoid u32
- multiplication overflow
-Message-ID: <Y5m3Lh0wte/HN9NH@smile.fi.intel.com>
-References: <20221214103418.64431-1-hhhawa@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214103418.64431-1-hhhawa@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 06:45:02 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C7020F56
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:45:00 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id i9-20020a1c3b09000000b003d21fa95c38so4326668wma.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 03:45:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgnN0QtEEWTyKETKPOOJ3VtCQ7cxhjYteagNX9ETV3M=;
+        b=bXB0wAppfK3GA2HYbRuWqvPsTY3f+aGB1QepHMKJA7vImXpQpYm31VFbXfPrtLWxo3
+         l31asC6VSSz8FeCw53O2jOYzWz5FREHkbkwPvVGX9DQtjgefPrdxNqCIXuZFPhx/dEMx
+         fEvcTISA6ki2F765SfusarEWqS61UtPqwk68EhbtOHx8VT/N8kZrAs1j4oyAnjgt3fnd
+         zIuglo80o3MN2ZZqgRXAiqYiicVNTRIMIlk3ynovic8O66vjoaURSLgYsn4vKk2Ei6Ah
+         gWVuJZd47aotqPqoe9VZAe9xhF+UQDbElM+yssZL0eMnuKZkRCLFLIRmcmKeGiHw3WRt
+         DDHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgnN0QtEEWTyKETKPOOJ3VtCQ7cxhjYteagNX9ETV3M=;
+        b=hG/cTbnqJtq113ivPryJPCcV+5TIo4r/VmJ3kubwQkwa7QngeCATbvPd3SQe6G0BJL
+         A7B/okyxTbOnaJKtLtG0Z6zyij2+BUFyIpKwQ/lzIMIJH/ZuRmh5osie6px6xA7tZpa5
+         TeyG86ZaabEV/5P/rgwSA3ohgAfMsI/g9zxd8+EqQAcDQRiSPwEFQTBOf9rlVf7l/oDJ
+         THGVCe6QMnqynHjifF35gI8xoiHZJwYuxEt6Zk2ZaCPOjwsF/Mpb/IYEbYSD9+NA5M6R
+         gJwoRm3i4OCrwsGho2rxXuW0+7fWjvJxw/OygICxLTnxMnaNGw/IIsOofLveVpb9CUds
+         IBjw==
+X-Gm-Message-State: ANoB5plf0vic4DUek081y55kAcLYUs1sWYYCgxJaGISxzd2Z5k3rxbDW
+        PV+Wu9+YuA5SnNMZm621ita+oslf8k3tNIA3Fg==
+X-Google-Smtp-Source: AA0mqf7PZYyIlItN8gMWiPI+uUBISa7Is0IFGUwElHkY84BBMeF7+mJCdxUek9iWUeerTUeTu2IJjhx3qRTlllYFQw==
+X-Received: from peternewman-vh.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:30cc])
+ (user=peternewman job=sendgmr) by 2002:a1c:6a14:0:b0:3cf:878c:6555 with SMTP
+ id f20-20020a1c6a14000000b003cf878c6555mr184510wmc.38.1671018299448; Wed, 14
+ Dec 2022 03:44:59 -0800 (PST)
+Date:   Wed, 14 Dec 2022 12:44:47 +0100
+In-Reply-To: <20221214114447.1935755-1-peternewman@google.com>
+Mime-Version: 1.0
+References: <20221214114447.1935755-1-peternewman@google.com>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221214114447.1935755-2-peternewman@google.com>
+Subject: [PATCH v5 1/1] x86/resctrl: Fix task CLOSID/RMID update race
+From:   Peter Newman <peternewman@google.com>
+To:     reinette.chatre@intel.com, fenghua.yu@intel.com
+Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
+        hpa@zytor.com, james.morse@arm.com, jannh@google.com,
+        kpsingh@google.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        tglx@linutronix.de, x86@kernel.org,
+        Peter Newman <peternewman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:34:18AM +0000, Hanna Hawa wrote:
-> From: Lareine Khawaly <lareine@amazon.com>
-> 
-> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
-> by depending on the values of the given parameters including the ic_clk.
-> For example in our usecase where ic_clk >= 1000000, multiplication of
+When the user moves a running task to a new rdtgroup using the tasks
+file interface or by deleting its rdtgroup, the resulting change in
+CLOSID/RMID must be immediately propagated to the PQR_ASSOC MSR on the
+task(s) CPUs.
 
-It's hard to count 0:s, can you use plain words instead (like million, billion)?
+x86 allows reordering loads with prior stores, so if the task starts
+running between a task_curr() check that the CPU hoisted before the
+stores in the CLOSID/RMID update then it can start running with the old
+CLOSID/RMID until it is switched again because __rdtgroup_move_task()
+failed to determine that it needs to be interrupted to obtain the new
+CLOSID/RMID.
 
-> ic_clk * 4700 will result in 32 bit overflow.
+Refer to the diagram below:
 
-> This commit change the ic_clk to be u64 parameter to avoid the overflow.
+CPU 0                                   CPU 1
+-----                                   -----
+__rdtgroup_move_task():
+  curr <- t1->cpu->rq->curr
+                                        __schedule():
+                                          rq->curr <- t1
+                                        resctrl_sched_in():
+                                          t1->{closid,rmid} -> {1,1}
+  t1->{closid,rmid} <- {2,2}
+  if (curr == t1) // false
+   IPI(t1->cpu)
 
-Read Submitting Patches about imperative mood in the commit messages.
+A similar race impacts rdt_move_group_tasks(), which updates tasks in a
+deleted rdtgroup.
 
-...
+In both cases, use smp_mb() to order the task_struct::{closid,rmid}
+stores before the loads in task_curr().  In particular, in the
+rdt_move_group_tasks() case, simply execute an smp_mb() on every
+iteration with a matching task.
 
-Smells like you are missing the Fixes tag.
+It is possible to use a single smp_mb() in rdt_move_group_tasks(), but
+this would require two passes and a means of remembering which
+task_structs were updated in the first loop. However, benchmarking
+results below showed too little performance impact in the simple
+approach to justify implementing the two-pass approach.
 
+Times below were collected using `perf stat` to measure the time to
+remove a group containing a 1600-task, parallel workload.
+
+CPU: Intel(R) Xeon(R) Platinum P-8136 CPU @ 2.00GHz (112 threads)
+
+ # mkdir /sys/fs/resctrl/test
+ # echo $$ > /sys/fs/resctrl/test/tasks
+ # perf bench sched messaging -g 40 -l 100000
+
+task-clock time ranges collected using:
+
+ # perf stat rmdir /sys/fs/resctrl/test
+
+Baseline:                     1.54 - 1.60 ms
+smp_mb() every matching task: 1.57 - 1.67 ms
+
+Signed-off-by: Peter Newman <peternewman@google.com>
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f05e787..5993da21d822 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -580,8 +580,10 @@ static int __rdtgroup_move_task(struct task_struct *tsk,
+ 	/*
+ 	 * Ensure the task's closid and rmid are written before determining if
+ 	 * the task is current that will decide if it will be interrupted.
++	 * This pairs with the full barrier between the rq->curr update and
++	 * resctrl_sched_in() during context switch.
+ 	 */
+-	barrier();
++	smp_mb();
+ 
+ 	/*
+ 	 * By now, the task's closid and rmid are set. If the task is current
+@@ -2401,6 +2403,14 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+ 			WRITE_ONCE(t->closid, to->closid);
+ 			WRITE_ONCE(t->rmid, to->mon.rmid);
+ 
++			/*
++			 * Order the closid/rmid stores above before the loads
++			 * in task_curr(). This pairs with the full barrier
++			 * between the rq->curr update and resctrl_sched_in()
++			 * during context switch.
++			 */
++			smp_mb();
++
+ 			/*
+ 			 * If the task is on a CPU, set the CPU in the mask.
+ 			 * The detection is inaccurate as tasks might move or
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.0.rc1.256.g54fd8350bd-goog
 
