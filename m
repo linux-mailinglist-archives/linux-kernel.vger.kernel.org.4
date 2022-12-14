@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4C164CCC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE2C64CBD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238681AbiLNO72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S238391AbiLNOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237778AbiLNO70 (ORCPT
+        with ESMTP id S229781AbiLNOK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:59:26 -0500
-X-Greylist: delayed 2015 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Dec 2022 06:59:24 PST
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3006::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A61224975;
-        Wed, 14 Dec 2022 06:59:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=085ww/mXnOU4Dn+4T1MtfrF1AQxRz6j9A7dCMcwXzxM=; b=JyIgAssOMqBtTh5TQw0i8XztOl
-        G6lRzdc+sTwaL3XSAUs4diXffQDK4IhzzeYzDGmRGFpPftVXYarK5lw2R5RJx/g23N+Ag2FJ0Y7ay
-        g3WLT4q4dldwO73Xi7iechwgVs3URZqoWYuzDhpIIivGX3S8Nk60o3kjjiqP5/XK3fW7s/pzYFZMk
-        IYF7BvsS7ggDAZWdcyJs4KG9XQQJGh01cE1JF94HOca5D0u0LMzpcErfzngPugxSk5y4o/Gif+0xD
-        Lf86Cx0piPXqtsGAst9vrwU5dJqoboZ+dhfcB0EQdl4BNczBHd+FIeDPjJZDaxcYyxStOKfRWM7h2
-        QklykCdA==;
-Received: from 80.81-166-174.customer.lyse.net ([81.166.174.80]:59094 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <noralf@tronnes.org>)
-        id 1p5SPg-00AgNt-I4;
-        Wed, 14 Dec 2022 15:07:13 +0100
-Message-ID: <f54ad441-3758-f4fe-befe-9f77b2de364e@tronnes.org>
-Date:   Wed, 14 Dec 2022 15:07:07 +0100
+        Wed, 14 Dec 2022 09:10:26 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6EC1CB07;
+        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id k3so1275584qki.13;
+        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZOaoIjTxLglAaa4ZBfF7fq+YBzzQI1dyFt1768d7s6Q=;
+        b=buJDK7XncEQgo95HJ4y/PaymrvZ4y5asEKchOP6Xxt/V4IXwlQmCOLbvJyRjy5wmoH
+         Ogk//mGarC8idhWAsPY6VCZ/iTP7vF0WopJGQjM/jmmHIxdd/48Qjbl9gP2R25/y2m3c
+         wZc9MY8OBcp3WtwdksIdSPFgny3Lt2W7AFsTPXnZKIFSS9lfh1CCSp6KCXkQtydDyMZM
+         Z0e/mLWx1aqAS9YAULjDFlpgKdIzMkeFWy4Iy9PW//3fYBj/lzGNl+hf9EngGcqvQWBf
+         SuD6BUbuFcM2vv19FP01AsoGoP5vubhPILV28wmTmCQ6MIcryAUSJkCWywP3FAIUXbfZ
+         aPeA==
+X-Gm-Message-State: ANoB5pnPUbg5VTXV6F8d0nEJEA4fwmjgZd3+Yfw+JLptoWsvKllllNAg
+        WmMYsX2f8AaM/kLy5yVq/hIvAJvN+ro8yd3o5bM=
+X-Google-Smtp-Source: AA0mqf4yN0p9XnWYWoCSWnpNDe91cxcXAlCLQp6mS1ey6TXfOyrXeqP7I6OJ99zfGyO7fmNAUIppldBwc28eaDKDOC8=
+X-Received: by 2002:a05:620a:ec4:b0:6ff:86de:55f with SMTP id
+ x4-20020a05620a0ec400b006ff86de055fmr695889qkm.648.1671027024912; Wed, 14 Dec
+ 2022 06:10:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 0/3] drm/tiny: panel-mipi-dbi: Support separate I/O
- voltage supply
-To:     =?UTF-8?Q?Otto_Pfl=c3=bcger?= <otto.pflueger@abscue.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221201160245.2093816-1-otto.pflueger@abscue.de>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20221201160245.2093816-1-otto.pflueger@abscue.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
+In-Reply-To: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 14 Dec 2022 15:10:13 +0100
+Message-ID: <CAJZ5v0h4RCnGv2C+x1m_Uvu5Hmy273wHDLNzYUuJxT_GFxS5qQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Add ACPI trip points parser helpers
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 12, 2022 at 9:59 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Regarding thermal, the ACPI code parsing the trip points is duplicated
+> inside different Intel drivers. The generic ACPI thermal driver also
+> duplicates this code.
+>
+> Those ACPI parsing actions are used to define trip points and these
+> ones are defined by, and specific to, the backend driver.
+>
+> The different get_trip_* ops, also very similar between each other,
+> are using the specific trip point structure to return the requested
+> trip point information.
+>
+> From there, there is nothing new, all this can be converted to the
+> generic trip point.
+>
+> The first patch provides the functions to parse trip point description
+> from the ACPI table but based on the generic trip point structure. The
+> other patches convert the different Intel driver to use the ACPI
+> functions along with a migration to the generic trip point.
 
+First off, please resend this series with CCs to linux-acpi.
 
-Den 01.12.2022 17.02, skrev Otto Pflüger:
-> As stated in Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yml,
-> the MIPI DBI specification defines two power supplies, one for powering
-> the panel and one for the I/O voltage. The panel-mipi-dbi driver
-> currently only supports specifying a single "power-supply" in the
-> device tree.
-> 
-> Add support for a second power supply defined in a new "io-supply"
-> device tree property to make the driver properly configure the voltage
-> regulators on platforms where separate supplies are used.
-> 
-> Changes in v2:
->  - Don't list power-supply in the properties section of
->    panel-mipi-dbi-spi.yaml because it is already in panel-common.yaml
-> 
-> Otto Pflüger (3):
->   drm/mipi-dbi: Support separate I/O regulator
->   drm/tiny: panel-mipi-dbi: Read I/O supply from DT
->   dt-bindings: display: panel: mipi-dbi-spi: Add io-supply
-> 
+Second, what does it depend on?  I think that it depends on the new
+material that hasn't been integrated yet, doesn't it?
 
-Series applied to drm-misc-next.
-
-Noralf.
+> Daniel Lezcano (5):
+>   thermal/acpi: Add ACPI trip point routines
+>   thermal/drivers/intel: Use generic trip points for intel_pch
+>   thermal/drivers/intel: Use generic trip points int340x
+>   thermal/drivers/intel: Use generic trip points for quark_dts
+>   thermal/drivers/intel: Use generic trip points for
+>     processor_thermal_device_pci
+>
+>  drivers/thermal/Kconfig                       |  13 +
+>  drivers/thermal/Makefile                      |   1 +
+>  .../int340x_thermal/int340x_thermal_zone.c    | 175 +++---------
+>  .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+>  .../processor_thermal_device_pci.c            |  53 ++--
+>  drivers/thermal/intel/intel_pch_thermal.c     |  88 ++-----
+>  .../thermal/intel/intel_quark_dts_thermal.c   |  45 ++--
+>  drivers/thermal/thermal_acpi.c                | 249 ++++++++++++++++++
+>  include/linux/thermal.h                       |  15 ++
+>  9 files changed, 377 insertions(+), 272 deletions(-)
+>  create mode 100644 drivers/thermal/thermal_acpi.c
