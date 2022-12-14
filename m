@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F8E64C6CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E595164C6CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbiLNKIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
+        id S237954AbiLNKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 05:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbiLNKIF (ORCPT
+        with ESMTP id S237780AbiLNKIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:08:05 -0500
+        Wed, 14 Dec 2022 05:08:10 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3168A1A821;
-        Wed, 14 Dec 2022 02:07:19 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE6Q5UO021277;
-        Wed, 14 Dec 2022 10:07:16 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46D82183B;
+        Wed, 14 Dec 2022 02:07:24 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE3ds40016487;
+        Wed, 14 Dec 2022 10:07:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=fRMcv4vJuhnoF3r8iEYrUaG53qUAKWNOOD3c9KV4tz0=;
- b=MB2rYznpaIT0BlVtPvoxBBmu+ov4/yOx10e5MywCbftLt3pUsIVN5RzbixVdnHtHfmkq
- 9gnoalWo6MttdGkvlrE6k8yPdG2trk4pQBzbXcOG3Vr8iaABMMRE0KNq1f42EKK3tdRk
- NJ+lUqNGob41xxNEeljgKdg9YqVkc1rHpFN2+9PLapXRHZsIDbre8PD2i5A4XDW3HLlq
- Wu5EVf8uEg1ULT3Rh59rmdVUeVyTbDXfGrp1dV5H6uCEg6k2sIZYjW89sbiOIzAKkTZ9
- tSgjeGlDcuCnOi+ZMNPZcsMMbboVAydLT1p0DbKBgPEbCTnpjdsy/xGVS/+IqxqoXupW LA== 
+ bh=k4lXKQ3WiCattyHrDJJe9uuAcHx0zRtRDkvAnxjvIOA=;
+ b=OLfyLXdddnI2P+vWCVnRy0uFbW9GL1VA+UVzW0DTwMzVp3VU9CQ6WjDtZ66hP5vTiTom
+ 2xP1D1cV8/KkjY/+08BKEYKKcEHUhSVM2tgFkRX52FjVvWwhv5WvSLou5qvjb/Czhj3C
+ 6nTxody8luUFtLkdXFdGufBQFqeSflJxT0ly/dzbheOU+MbAlwu/oyAf/ayhHPP0ahII
+ r00EwERiGpXJFgwxTtTZf5Zjcx1Ect+VrcoBsuK0R3lUU7lpcUcGm2IpaPBk2bM/hWxa
+ xmmgCVFnyMapErjDxa/gxrq0mn9M2bzp0VCopQtED1H+9qCM7gczCUWaoCFs0g+E0ViI 9A== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6regpye-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6re8prh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 10:07:16 +0000
+        Wed, 14 Dec 2022 10:07:22 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEA7Ghq016699
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEA7LC3016725
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 10:07:16 GMT
+        Wed, 14 Dec 2022 10:07:21 GMT
 Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 14 Dec 2022 02:07:10 -0800
+ 15.2.986.36; Wed, 14 Dec 2022 02:07:16 -0800
 From:   Vinod Polimera <quic_vpolimer@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
@@ -49,9 +49,9 @@ CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
         <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
         <quic_bjorande@quicinc.com>, <quic_aravindh@quicinc.com>,
         <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>
-Subject: [PATCH v9 11/15] drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
-Date:   Wed, 14 Dec 2022 15:35:48 +0530
-Message-ID: <1671012352-1825-12-git-send-email-quic_vpolimer@quicinc.com>
+Subject: [PATCH v9 12/15] drm/msm/disp/dpu: get timing engine status from intf status register
+Date:   Wed, 14 Dec 2022 15:35:49 +0530
+Message-ID: <1671012352-1825-13-git-send-email-quic_vpolimer@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
 References: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
@@ -62,16 +62,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SsITr9EokealMJssGid-ZTZllnx2OPbX
-X-Proofpoint-GUID: SsITr9EokealMJssGid-ZTZllnx2OPbX
+X-Proofpoint-GUID: YzHRMtPSBWn_zLWdwqGtiG5QNORLQGY9
+X-Proofpoint-ORIG-GUID: YzHRMtPSBWn_zLWdwqGtiG5QNORLQGY9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-14_04,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 impostorscore=0
- mlxlogscore=908 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2212140079
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140079
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,114 +81,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable PSR on eDP interface using drm self-refresh librabry.
-This patch uses a trigger from self-refresh library to enter/exit
-into PSR, when there are no updates from framework.
+Recommended way of reading the interface timing gen status is via
+status register. Timing gen status register will give a reliable status
+of the interface especially during ON/OFF transitions. This support was
+added from DPU version 5.0.0.
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
 Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 13 ++++++++++++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
- 3 files changed, 27 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  3 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 12 +++++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c    |  8 +++++++-
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 289d51e..386b037 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -21,6 +21,7 @@
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_rect.h>
- #include <drm/drm_vblank.h>
-+#include <drm/drm_self_refresh_helper.h>
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+index 2196e20..0e410cd 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+@@ -77,7 +77,8 @@
  
- #include "dpu_kms.h"
- #include "dpu_hw_lm.h"
-@@ -1018,6 +1019,9 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+ #define INTF_SC7180_MASK BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE)
  
- 	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
+-#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
++#define INTF_SC7280_MASK \
++	(INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_STATUS_SUPPORTED))
  
-+	if (old_crtc_state->self_refresh_active)
-+		return;
-+
- 	/* Disable/save vblank irq handling */
- 	drm_crtc_vblank_off(crtc);
+ #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+ 			 BIT(MDP_SSPP_TOP0_INTR2) | \
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+index 3b645d5..b16b428 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+@@ -204,17 +204,19 @@ enum {
  
-@@ -1572,7 +1576,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+ /**
+  * INTF sub-blocks
+- * @DPU_INTF_INPUT_CTRL         Supports the setting of pp block from which
+- *                              pixel data arrives to this INTF
+- * @DPU_INTF_TE                 INTF block has TE configuration support
+- * @DPU_DATA_HCTL_EN            Allows data to be transferred at different rate
+-                                than video timing
++ * @DPU_INTF_INPUT_CTRL             Supports the setting of pp block from which
++ *                                  pixel data arrives to this INTF
++ * @DPU_INTF_TE                     INTF block has TE configuration support
++ * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
++ *                                  than video timing
++ * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
+  * @DPU_INTF_MAX
+  */
+ enum {
+ 	DPU_INTF_INPUT_CTRL = 0x1,
+ 	DPU_INTF_TE,
+ 	DPU_DATA_HCTL_EN,
++	DPU_INTF_STATUS_SUPPORTED,
+ 	DPU_INTF_MAX
+ };
+ 
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+index 7ce66bf..84ee2ef 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+@@ -62,6 +62,7 @@
+ #define   INTF_LINE_COUNT               0x0B0
+ 
+ #define   INTF_MUX                      0x25C
++#define   INTF_STATUS                   0x26C
+ 
+ #define INTF_CFG_ACTIVE_H_EN	BIT(29)
+ #define INTF_CFG_ACTIVE_V_EN	BIT(30)
+@@ -297,8 +298,13 @@ static void dpu_hw_intf_get_status(
+ 		struct intf_status *s)
  {
- 	struct drm_crtc *crtc = NULL;
- 	struct dpu_crtc *dpu_crtc = NULL;
--	int i;
-+	int i, ret;
- 
- 	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
- 	if (!dpu_crtc)
-@@ -1610,6 +1614,13 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
- 	/* initialize event handling */
- 	spin_lock_init(&dpu_crtc->event_lock);
- 
-+	ret = drm_self_refresh_helper_init(crtc);
-+	if (ret) {
-+		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
-+			crtc->name, ret);
-+		return ERR_PTR(ret);
-+	}
+ 	struct dpu_hw_blk_reg_map *c = &intf->hw;
++	unsigned long cap = intf->cap->features;
 +
- 	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
- 	return crtc;
- }
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index dbf0d96..a3ba696 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -12,6 +12,7 @@
- #include <linux/kthread.h>
- #include <linux/seq_file.h>
++	if (cap & BIT(DPU_INTF_STATUS_SUPPORTED))
++		s->is_en = DPU_REG_READ(c, INTF_STATUS) & BIT(0);
++	else
++		s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
  
-+#include <drm/drm_atomic.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_file.h>
- #include <drm/drm_probe_helper.h>
-@@ -1237,11 +1238,24 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
- 					struct drm_atomic_state *state)
- {
- 	struct dpu_encoder_virt *dpu_enc = NULL;
-+	struct drm_crtc *crtc;
-+	struct drm_crtc_state *old_state = NULL;
- 	int i = 0;
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
- 	DPU_DEBUG_ENC(dpu_enc, "\n");
- 
-+	crtc = drm_atomic_get_old_crtc_for_encoder(state, drm_enc);
-+	if (crtc)
-+		old_state = drm_atomic_get_old_crtc_state(state, crtc);
-+
-+	/*
-+	 * The encoder is already disabled if self refresh mode was set earlier,
-+	 * in the old_state for the corresponding crtc.
-+	 */
-+	if (old_state && old_state->self_refresh_active)
-+		return;
-+
- 	mutex_lock(&dpu_enc->enc_lock);
- 	dpu_enc->enabled = false;
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index 93221a2..a969874 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -491,7 +491,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
- 		return;
- 	}
- 
--	if (!crtc->state->active) {
-+	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
- 		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
- 		return;
- 	}
+-	s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
+ 	s->is_prog_fetch_en = !!(DPU_REG_READ(c, INTF_CONFIG) & BIT(31));
+ 	if (s->is_en) {
+ 		s->frame_count = DPU_REG_READ(c, INTF_FRAME_COUNT);
 -- 
 2.7.4
 
