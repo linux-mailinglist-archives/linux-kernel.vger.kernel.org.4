@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF65C64CC0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D616564CC29
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiLNOVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S238614AbiLNO1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:27:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbiLNOVx (ORCPT
+        with ESMTP id S238625AbiLNO1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:21:53 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC13F15713
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:21:51 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id pe2so1312824qkn.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDrd5LWHu7SFhoK3ArpQ6anU85veXsI/kgvQs+A5e0s=;
-        b=Y0stoYgLBqwdB2wfw8i5WG0XwH8q4WpC0R3WC95a3HU5FR6ExkD5zOpapq6GvhZafk
-         LF5+8T/VWA1jPogCgbpA9tGXlPMp9jRMRw3eriqhZHnoVU9hwtiKKzxCicyNsam/P6Md
-         SH5u6Alnf9k7b1ltFtFu+kACfi/Y97aOwtDOvv240nRGMCg/ZO+P+40dGT9AmPhSg+Rz
-         hEJmZDmeN+7l3dJcouQTjMv739GQ6cFnLOeXFt2X5QWEuaEwb6jW/L/1rc8eRQG71BdG
-         pqtkg17czi1UHZ33baJAhxKlAI2Z9l2ANesGZd5g3e9Nph+k+/BqtEQDYMJX/vEOOfW+
-         RNtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kDrd5LWHu7SFhoK3ArpQ6anU85veXsI/kgvQs+A5e0s=;
-        b=VpEsfKSEsnDdN0d2l1m0kgx/1oNiYU4ECUl3kXv0p3AQcx8ZDezjAuuewMSj43Z7KD
-         Vy7BlQdaea+MyilO20DpFc1IwfWQcPmEztHZOy3ej7dX0PLacEV24lQVC+GHMnWJH+t6
-         YrNS2I1lNrAy1+DkFI/SriRPXc0K3RsQK16XrqecbZvUzghsWx50cMGrVpy7OnljKawv
-         3EbCRi1Mg/N7R1Vpq/+zlzUELel+2gC0NuMKYSs84wRwTv3/p0yJmU9y726KCXDO3bmp
-         TH7OcIKbbs+ezglPQ6W2mO7dQSeKxQSW00qItkwm14XL/7Z568Lb2k4WMsR4xGfe+YXR
-         REKg==
-X-Gm-Message-State: ANoB5pn9xheS6LK02lhUGhvwwSNet/0ZpiyIIwQRh44rjhY5y1N022Mr
-        q5a67W91H3UZ6pAC2r2oVQkDkmxfkGKpJtedkudTYg==
-X-Google-Smtp-Source: AA0mqf6KAwaKYBr3eFizClFEUVDbvXhmgdwDSVGVmV4rExDnWPo5F35b9e2GE0i2rqr+4oYY8Wxk9V8Ubghm5G45gPw=
-X-Received: by 2002:a05:620a:222d:b0:6ff:ca94:e927 with SMTP id
- n13-20020a05620a222d00b006ffca94e927mr85027qkh.116.1671027710683; Wed, 14 Dec
- 2022 06:21:50 -0800 (PST)
+        Wed, 14 Dec 2022 09:27:03 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9642035F;
+        Wed, 14 Dec 2022 06:27:03 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEEAKXG006834;
+        Wed, 14 Dec 2022 09:26:44 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mf6rn2tpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 09:26:44 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2BEEQhTW004490
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Dec 2022 09:26:43 -0500
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 14 Dec 2022 09:26:42 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 14 Dec 2022 09:26:42 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 14 Dec 2022 09:26:41 -0500
+Received: from IST-LT-40003.ad.analog.com (IST-LT-40003.ad.analog.com [10.25.36.26])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BEEQLNB022112;
+        Wed, 14 Dec 2022 09:26:24 -0500
+From:   Sinan Divarci <Sinan.Divarci@analog.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Sinan Divarci <Sinan.Divarci@analog.com>
+Subject: [PATCH v2 0/3] hwmon: Add max31732 quad remote temperature sensor driver
+Date:   Wed, 14 Dec 2022 17:22:03 +0300
+Message-ID: <20221214142206.13288-1-Sinan.Divarci@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221207112924.3602960-1-peternewman@google.com>
- <f58e6af2-aa16-9461-d40d-1e4e52ee6943@intel.com> <CALPaoCiB-vOuXJYkaLLsxSKHcjT55q1RSNBjhHUWmPL9rFdF8A@mail.gmail.com>
- <74cfd689-3c03-5f41-d01c-efab04ce4197@intel.com>
-In-Reply-To: <74cfd689-3c03-5f41-d01c-efab04ce4197@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 14 Dec 2022 15:21:39 +0100
-Message-ID: <CALPaoChbJNYBXvOwftSxApo_ca6BLC7Ej21cDAaKdj9LOJumxw@mail.gmail.com>
-Subject: Re: [PATCH] x86/resctrl: Fix event counts regression in reused RMIDs
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        linux-kernel@vger.kernel.org, eranian@google.com,
-        Babu Moger <Babu.Moger@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: Z_gpXM6Dh7CTwCWZfRFSunwiyub8hfzu
+X-Proofpoint-ORIG-GUID: Z_gpXM6Dh7CTwCWZfRFSunwiyub8hfzu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 adultscore=0 suspectscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=974 impostorscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140114
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,107 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+changes in v2:
+  - remove Reviewed-by tag
 
-On Thu, Dec 8, 2022 at 7:31 PM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
->
-> I think this can be cleaned up to make the code more clear. Notice the
-> duplication of following snippet in __mon_event_count():
-> rr->val += tval;
-> return 0;
->
-> I do not see any need to check the event id before doing the above. That
-> leaves the bulk of the switch just needed for the rr->first handling that
-> can be moved to resctrl_arch_reset_rmid().
->
-> Something like:
->
-> void resctrl_arch_reset_rmid(struct rdt_resource *r, struct rdt_domain *d, ...
-> {
-> ...
-> struct arch_mbm_state *am;
-> struct mbm_state *m;
-> u64 val = 0;
-> int ret;
->
-> m = get_mbm_state(d, rmid, eventid); /* get_mbm_state() to be created */
+Sinan Divarci (3):
+  drivers: hwmon: Add max31732 quad remote temperature sensor driver
+  docs: hwmon: add max31732 documentation
+  dt-bindings: hwmon: Add bindings for max31732
 
-Good call. When prototyping another change, I quickly found the need to
-create this myself.
+ .../bindings/hwmon/adi,max31732.yaml          |  83 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/max31732.rst              |  62 ++
+ drivers/hwmon/Kconfig                         |  11 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/max31732.c                      | 620 ++++++++++++++++++
+ 6 files changed, 778 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
+ create mode 100644 Documentation/hwmon/max31732.rst
+ create mode 100644 drivers/hwmon/max31732.c
 
-> if (m)
-> memset(m, 0, sizeof(*m));
 
-mbm_state is arch-independent, so I think putting it here would require
-the MPAM version to copy this and for get_mbm_state() to be exported.
+base-commit: e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
+-- 
+2.25.1
 
->
-> am = get_arch_mbm_state(hw_dom, rmid, eventid);
-> if (am) {
-> memset(am, 0, sizeof(*am));
-> /* Record any initial, non-zero count value. */
-> ret = __rmid_read(rmid, eventid, &val);
-> if (!ret)
-> am->prev_msr = val;
-> }
->
-> }
->
-> Having this would be helpful as reference to Babu's usage.
-
-His usage looks a little different.
-
-According to the comment in Babu's patch:
-
-https://lore.kernel.org/lkml/166990903030.17806.5106229901730558377.stgit@bmoger-ubuntu/
-
-+ /*
-+ * When an Event Configuration is changed, the bandwidth counters
-+ * for all RMIDs and Events will be cleared by the hardware. The
-+ * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
-+ * every RMID on the next read to any event for every RMID.
-+ * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
-+ * cleared while it is tracked by the hardware. Clear the
-+ * mbm_local and mbm_total counts for all the RMIDs.
-+ */
-+ resctrl_arch_reset_rmid_all(r, d);
-
-If all the hardware counters are zeroed as the comment suggests, then
-leaving am->prev_msr zero seems correct. __rmid_read() would likely
-return an error anyways. The bug I was addressing was one of reusing
-an RMID which had not been reset.
-
->
-> Also please note that I changed the __rmid_read(). There is no need
-> to require each __rmid_read() caller to test MSR bits for validity, that
-> can be contained within __rmid_read().
->
-> Something like below remains:
->
-> static int __mon_event_count(u32 rmid, struct rmid_read *rr)
-> {
->
-> ...
->
-> if (rr->first) {
-> resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
-> return 0;
-> }
->
-> rr->err = resctrl_arch_rmid_read(rr->r, rr->d, rmid, rr->evtid, &tval);
-> if (rr->err)
-> return rr->err;
->
-> rr->val += tval;
-> return 0;
->
-> }
->
-> What do you think?
-
-Looks much better. This function has been bothering me since the
-refactor. I'll see how close I can get to this in the next patch.
-
-Thanks!
--Peter
