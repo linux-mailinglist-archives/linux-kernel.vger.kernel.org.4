@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B95A64C4D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAC364C4DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237696AbiLNIPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S237632AbiLNIQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiLNIPc (ORCPT
+        with ESMTP id S237590AbiLNIPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:15:32 -0500
+        Wed, 14 Dec 2022 03:15:41 -0500
 Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6A1A2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:15:31 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id nb2-20020a17090b35c200b00221433a393dso3503040pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:15:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D7D631E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:15:39 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id 94-20020a17090a09e700b002191897f70aso3567012pjo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:15:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bn6P4SXTcnnoGxUW7y0CYOxZKX7M0IcTnQS27FExxMo=;
-        b=Z1hr+l4ixtVJKMiMdnsLY34rKqCvYqJ8iorTd8oSWri6sFQGT+myXOL4X38hHToiue
-         bqESQEDRBS6pfrI9bifDCZJ5opUmEYUDKKqUZXUCMP4lvvc5ci584UH4fVwBwBwwaO+d
-         7tPfeV5degxxTMJaY9NWg2y1D0EfoX2ZVYcC2mLwO3iFoqcXGWEGPg8xWItrFU/uqf4S
-         yYSXuS7R9ClT4J6pOB1Qt0CjUqjRXdsRQJ5vfT51TxkC9cKJ3H9F9O+SnHx1ShazrSEl
-         UkobfSc7l1wwUmZt6VG60zTe69m+NdDO3akZIElyTjolTJYiRVLkxILUWG3LbBuyB6QQ
-         fpdw==
+        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
+        b=dkcTJ5yY0DPuZjIwNfNUh0clfXYOIg6v+BRa60N2SdhsarYnRZ3ACBNpqFPdZ+JIgf
+         rhVss6RLEXghltsYgubXVsy4QQ1bOvcYFIfD6VmQC9Ke9WQDEl+JvzE7lSGUdDc3nEHu
+         mlrwozBeVIQvflG/LgXvDlGqU0d2b2S9lb4xQl509RKjmZr4jN25PFQOr/RWcqBpx+w0
+         1uUeUFI2tGYYHDZyJk/mKw8nu3mUltU+nT9izejge1P9xmWwp2otB+B04CQTwUg1VBuP
+         ma7PFx2xBI43X1LprzqckTNUkinyU/ljwglaIKC9n7D9pi6qX0SLo+4ilSCue3Uk5BEW
+         REkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bn6P4SXTcnnoGxUW7y0CYOxZKX7M0IcTnQS27FExxMo=;
-        b=cCzf1ht7v6xf9wI1MM5vTAG7yM32RhrgoHjk8rsrcKSvfGHsK/XJtTZTDktipamNJT
-         9eccfYqEAwrDU8tmi5LpUEk76hSM8wYNt5QnMesMWPl+ktHR/bfZo6PHLWOTfvbvNZmt
-         KRKKc5j0MWxpDbtHmbBAvRP6SJRJsQ3PpIen9Xe+SX7csZo3AeGxRr73pJjkpWnd7idO
-         h09HlPSa3F/Q4sS3IxV9B42VdYOq8hlRVKCmr4mWS1o5ZzTxmVgfXUs/NQv1Tttofqyg
-         8tTG0blJD4TFqZeqYErWpuaNZbcL9QFBEdJStfpupX149KhOJQyqCVfA0XfAEsTdDrsb
-         3wDw==
-X-Gm-Message-State: ANoB5pnuGlC8GOHXlgW3GKJq24WLhP2G22w9P3UU+wFbAvgv+nozbJyW
-        RywzF4WKi5DxBafqPrRLS2HjCvHAV0a8
-X-Google-Smtp-Source: AA0mqf7E9sUGmKs3e0FH+MCFQOXZ2gyiPI7HZUwtZyH71a6cgKc7DVNsSkEtKWmN9URNNbZ+wMdn1EwQHu2l
+        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
+        b=O7ZFynIcIywvHIMTAZEF3HCRgdYi/DO4AhRavyf/Ph1jS8Z1mE/e/VGSM2ury5wX+u
+         Aj2VcV2z1M6GeZ240NpGO/BELC2ynVokdsimwqvQCSgz7keAVztf2kjXhvaRX0IBhjDM
+         dsvWBNol6zXWPv9BOkzkoTBn6zoHNUoT01JboLVH2OJyCl4wbngIT8pdz4JBv7hp7rvV
+         NY5B7+88H4jjzAqbV9BelTkGFsIP0F2c9C/I/dL2HZmNx5pqYGVARuFbH5rxoLVidNeW
+         ewYZ/J2b8d5RF8BhnWgOwLgHQJlhfNt/XSilN2Bm0RgfcueWaxK1BkJ0Q7vxftFSWt+h
+         Xi+Q==
+X-Gm-Message-State: ANoB5pl6Ob/+VS2yK2Hp9Xu48Bxj3jEu4jZeoN/OrfgONq9l/DHVqVlC
+        qMJtmGMLSFeKN5ye6nc8F20cVSIwkG98
+X-Google-Smtp-Source: AA0mqf5x5mm8q42pvr7qS1/4HKVynW1FNFZYEG9MRq8p/qRAj14cWfw2S015p02u7YaTPAS97nj60eebwqBP
 X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:cb1:cbe3:3a49:1751])
- (user=pumahsu job=sendgmr) by 2002:a17:90a:2ecb:b0:219:5b3b:2b9f with SMTP id
- h11-20020a17090a2ecb00b002195b3b2b9fmr95411pjs.2.1671005731042; Wed, 14 Dec
- 2022 00:15:31 -0800 (PST)
-Date:   Wed, 14 Dec 2022 16:14:55 +0800
+ (user=pumahsu job=sendgmr) by 2002:a17:902:e80c:b0:189:f899:bc23 with SMTP id
+ u12-20020a170902e80c00b00189f899bc23mr7111469plg.33.1671005739282; Wed, 14
+ Dec 2022 00:15:39 -0800 (PST)
+Date:   Wed, 14 Dec 2022 16:14:56 +0800
 In-Reply-To: <20221214081456.714859-1-pumahsu@google.com>
-Message-Id: <20221214081456.714859-2-pumahsu@google.com>
+Message-Id: <20221214081456.714859-3-pumahsu@google.com>
 Mime-Version: 1.0
 References: <20221214081456.714859-1-pumahsu@google.com>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Subject: [PATCH v2 1/2] usb: core: add hooks for usb suspend and resume
+Subject: [PATCH v2 2/2] usb: core: add implementations for usb suspend/resume hooks
 From:   Puma Hsu <pumahsu@google.com>
 To:     gregkh@linuxfoundation.org, mka@chromium.org, dianders@chromium.org
 Cc:     albertccwang@google.com, raychi@google.com, howardyen@google.com,
@@ -69,113 +69,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the hooks that designer can design and bypass the original
-suspend/resume. When the handled is set, skip the original
-suspend/resume process.
-
 In mobile, a co-processor can be used for USB audio. When the co-processor
 is working for USB audio, the co-processor is the user/owner of the USB
 driver, and the ACPU is able to sleep in such condition to improve power
-consumption. In original process, the ACPU will suspend/resume until the
-USB suspend/resume. We add the hooks, so we can control USB suspend/resume
-without affecting the ACPU.
+consumption. In order to support this, we implement the hooks to handle USB
+suspend/resume requests.
+
+This commit introduces two hook implementations:
+- usb_device_vendor_suspend()
+  Determine whether we should skip suspend request according to the status
+  of USB audio playback/capture.
+  Return:
+  - true: let driver.c know that we "handled" and it can just return
+          succeeded to ACPU to continue system suspend process.
+  - false: let driver.c know that it still run original suspend process.
+
+- usb_device_vendor_resume()
+  Determine whether we should skip resume request according to the USB
+  device's suspend state.
+  Return:
+  - true: let driver.c know that it doesn't need to run resume process.
+  - false: let driver.c know that it still run original resume process.
 
 Signed-off-by: Puma Hsu <pumahsu@google.com>
-
 ---
-Changes in v2:
-- Remove the wrong input in the Makefile
-- Change description in commit message
+ drivers/usb/core/usb-hooks-impl-goog.c | 72 ++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 drivers/usb/core/usb-hooks-impl-goog.c
 
----
- drivers/usb/core/driver.c | 36 ++++++++++++++++++++++++++++++++++++
- drivers/usb/core/usb.h    |  5 +++++
- 2 files changed, 41 insertions(+)
-
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index 7e7e119c253f..3d2cfb6c2277 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -35,6 +35,25 @@
- #include "usb.h"
- 
- 
-+static struct usb_device_vendor_ops *usb_dev_vendor_ops;
+diff --git a/drivers/usb/core/usb-hooks-impl-goog.c b/drivers/usb/core/usb-hooks-impl-goog.c
+new file mode 100644
+index 000000000000..89dc360babed
+--- /dev/null
++++ b/drivers/usb/core/usb-hooks-impl-goog.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Google Corp.
++ *
++ * Author:
++ *  Puma Hsu <pumahsu@google.com>
++ */
 +
-+int usb_dev_register_vendor_ops(struct usb_device_vendor_ops *vendor_ops)
++#include <linux/usb.h>
++#include "usb.h"
++
++extern int usb_dev_register_vendor_ops(struct usb_device_vendor_ops *vendor_ops);
++
++static bool usb_device_vendor_suspend(struct usb_device *udev, pm_message_t msg)
 +{
-+	if (vendor_ops == NULL)
-+		return -EINVAL;
++	bool usb_playback = false;
++	bool usb_capture = false;
++	bool handled = false;
 +
-+	usb_dev_vendor_ops = vendor_ops;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(usb_dev_register_vendor_ops);
++	if (!udev)
++		return handled;
 +
-+struct usb_device_vendor_ops *usb_vendor_get_ops(void)
-+{
-+	return usb_dev_vendor_ops;
-+}
-+EXPORT_SYMBOL_GPL(usb_vendor_get_ops);
++	/*
++	 * Note: Our private driver provides APIs to know the device is in audio playback
++	 * or capture.
++	 *
++	 * usb_playback = usb_audio_playback_enabled();
++	 * usb_capture = usb_audio_capture_enabled();
++	 */
 +
-+
- /*
-  * Adds a new dynamic USBdevice ID to this driver,
-  * and cause the driver to probe for all devices again.
-@@ -1400,11 +1419,19 @@ static int usb_suspend_both(struct usb_device *udev, pm_message_t msg)
- 	int			status = 0;
- 	int			i = 0, n = 0;
- 	struct usb_interface	*intf;
-+	bool			handled;
-+	struct usb_device_vendor_ops *ops = usb_vendor_get_ops();
- 
- 	if (udev->state == USB_STATE_NOTATTACHED ||
- 			udev->state == USB_STATE_SUSPENDED)
- 		goto done;
- 
-+	if (ops && ops->usb_dev_suspend) {
-+		handled = ops->usb_dev_suspend(udev, msg);
-+		if (handled)
-+			goto done;
++	/*
++	 * Note: When the USB audio is working, we will not let the usb device suspend.
++	 * Return handled = true so that the System core can it's suspend process.
++	 */
++	if (usb_playback || usb_capture) {
++		dev_info(&udev->dev, "%s: skip suspend process (playback:%d,capture:%d)\n",
++			 __func__, usb_playback, usb_capture);
++		handled = true;
 +	}
 +
- 	/* Suspend all the interfaces and then udev itself */
- 	if (udev->actconfig) {
- 		n = udev->actconfig->desc.bNumInterfaces;
-@@ -1501,11 +1528,20 @@ static int usb_resume_both(struct usb_device *udev, pm_message_t msg)
- 	int			status = 0;
- 	int			i;
- 	struct usb_interface	*intf;
-+	bool			handled;
-+	struct usb_device_vendor_ops *ops = usb_vendor_get_ops();
- 
- 	if (udev->state == USB_STATE_NOTATTACHED) {
- 		status = -ENODEV;
- 		goto done;
- 	}
++	return handled;
++}
 +
-+	if (ops && ops->usb_dev_resume) {
-+		handled = ops->usb_dev_resume(udev, msg);
-+		if (handled)
-+			goto done;
++static bool usb_device_vendor_resume(struct usb_device *udev, pm_message_t msg)
++{
++	bool handled = false;
++
++	if (!udev)
++		return handled;
++
++	/*
++	 * Note: If the udev didn't suspend actually, we don't need to do resume.
++	 */
++	if (udev->port_is_suspended || udev->state == USB_STATE_SUSPENDED) {
++		handled = false;
++	} else {
++		dev_info(&udev->dev, "%s: skip resume process\n", __func__);
++		handled = true;
 +	}
 +
- 	udev->can_submit = 1;
- 
- 	/* Resume the device */
-diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
-index 82538daac8b8..9ccb8683071d 100644
---- a/drivers/usb/core/usb.h
-+++ b/drivers/usb/core/usb.h
-@@ -220,3 +220,8 @@ extern acpi_handle usb_get_hub_port_acpi_handle(struct usb_device *hdev,
- static inline int usb_acpi_register(void) { return 0; };
- static inline void usb_acpi_unregister(void) { };
- #endif
++	return handled;
++}
 +
-+struct usb_device_vendor_ops {
-+	bool (*usb_dev_suspend)(struct usb_device *udev, pm_message_t msg);
-+	bool (*usb_dev_resume)(struct usb_device *udev, pm_message_t msg);
++static struct usb_device_vendor_ops usb_dev_vendor_ops = {
++	.usb_dev_suspend = usb_device_vendor_suspend,
++	.usb_dev_resume = usb_device_vendor_resume,
 +};
++
++int usb_vendor_helper_init(void)
++{
++	return usb_dev_register_vendor_ops(&usb_dev_vendor_ops);
++}
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
