@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187E064C741
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C3864C60A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbiLNKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:35:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S237740AbiLNJdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237965AbiLNKfr (ORCPT
+        with ESMTP id S237866AbiLNJdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:35:47 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E9620BE6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:35:45 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id fc4so43367824ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RvFiiCnhAAKi7d+1qBnwz6NP+D+/ZIyHDhOt+BilbQ=;
-        b=2V4nT4w2BZ/X/Hf4t9dDrH6FezCbRaJT9eK8gARAwOK5jTLArjG27ZFq2pWOBuSLpl
-         bCY3WZSuMi6v1+06iAFKfMMs/kttgxTMRcA4PCJaKOVbqdTS5gm+ME6W+Z3l7dxOSOIS
-         5e89STE0Lk+Yj5LDgU/Rde2I+SLS3aJrlkufHUKUG3+RDf+fq6+Q3x42STGClCSCoWR+
-         FQmQfqwqFF6ScBSiX+oAl+IgjoyJ6nXWnUKwlok6TIcqbM7/Jc4Eeih5E95NSaOXfFyy
-         gzam1E6rhlLU2daKpN29DA6aGJoZ9U6nc7hrDqDb2JLOFoKVwOsFjgto9ypjC52kIIfj
-         /wpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2RvFiiCnhAAKi7d+1qBnwz6NP+D+/ZIyHDhOt+BilbQ=;
-        b=xWOm2ysPoaL4pc/QaRgpKiaRxel/RotAKdHI4nL6SBGRaQAfBF7TFON1CqxiGxxe+A
-         12E9gUPFHCCcD4pUOZg+FpEY34MNcGYNpQxfhVS3fLgkDn0+RQ8t5hYytEV1L7T6zpi5
-         VgguWT+crRP9SpMh1qRzenxiaVx6J7g/gggsQT7/9SZceQvqmawtt+1bFWoKp7AMDdEL
-         nXyVtVuZFuBxs1JhJwZqh/pAG7DxpubaCx/S/EPCiItQyHmAMkv1dquay93eDx/N4oSn
-         hkz54LWItubFz2wqTN9TnulwTH9zuVL0YUIHbONCcILsw5FbE593JoKCbHFe1XML1+z1
-         oUHA==
-X-Gm-Message-State: ANoB5pksDDq0wq1CA3U9qriMWDbdTElKZCOzDraiypl1NMdsMSdbFKeT
-        PJrBO+cVPEF2NfpWSL9R8Ehzfw==
-X-Google-Smtp-Source: AA0mqf4bgN78wWncfZNxqYVwCIc6gPyOa9DX5wTQAfud2G1FHgDFnihpW/1nZMNLd9Wb+KeVgmkZ2g==
-X-Received: by 2002:a17:906:698f:b0:7ad:d250:b903 with SMTP id i15-20020a170906698f00b007add250b903mr19732691ejr.56.1671014143640;
-        Wed, 14 Dec 2022 02:35:43 -0800 (PST)
-Received: from blmsp ([185.238.219.46])
-        by smtp.gmail.com with ESMTPSA id 1-20020a170906318100b0077b2b0563f4sm5740827ejy.173.2022.12.14.02.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 02:35:43 -0800 (PST)
-Date:   Wed, 14 Dec 2022 11:35:42 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221214103542.c5g32qtbuvn5mv4u@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221214091406.g6vim5hvlkm34naf@blmsp>
- <20221214091820.geugui5ws3f7a5ng@pengutronix.de>
- <20221214092201.xpb3rnwp5rtvrpkr@pengutronix.de>
- <CAMZ6RqLAZNj9dm_frbKExHK8AYDj9D0rX_9=c8_wk9kFrO-srw@mail.gmail.com>
+        Wed, 14 Dec 2022 04:33:06 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6AC13EA1;
+        Wed, 14 Dec 2022 01:33:02 -0800 (PST)
+Received: from kwepemm600015.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NX96p4LFDzJpKv;
+        Wed, 14 Dec 2022 17:29:22 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 14 Dec
+ 2022 17:32:59 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <roman.gushchin@linux.dev>, <axboe@kernel.dk>,
+        <bvanassche@acm.org>, <tytso@mit.edu>, <akpm@linux-foundation.org>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hfsplus: fix uninit-value in hfsplus_delete_cat()
+Date:   Wed, 14 Dec 2022 18:37:07 +0800
+Message-ID: <20221214103707.3893954-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLAZNj9dm_frbKExHK8AYDj9D0rX_9=c8_wk9kFrO-srw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+Syzkaller reported BUG as follows:
 
-On Wed, Dec 14, 2022 at 07:15:25PM +0900, Vincent MAILHOL wrote:
-> On Wed. 14 Dec. 2022 at 18:28, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 14.12.2022 10:18:20, Marc Kleine-Budde wrote:
-> > > On 14.12.2022 10:14:06, Markus Schneider-Pargmann wrote:
-> > > > Hi Marc,
-> > > >
-> > > > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > > > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > > > > Currently the driver waits to wakeup the queue until the interrupt for
-> > > > > > the transmit event is received and acknowledged. If we want to use the
-> > > > > > hardware FIFO, this is too late.
-> > > > > >
-> > > > > > Instead release the queue as soon as the transmit was transferred into
-> > > > > > the hardware FIFO. We are then ready for the next transmit to be
-> > > > > > transferred.
-> > > > >
-> > > > > If you want to really speed up the TX path, remove the worker and use
-> > > > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
-> > > > >
-> > > > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
-> > > > > per SPI transfer.
-> > > >
-> > > > Just a quick question here, I mplemented a xmit_more() call and I am
-> > > > testing it right now, but it always returns false even under high
-> > > > pressure. The device has a txqueuelen set to 1000. Do I need to turn
-> > > > some other knob for this to work?
-> 
-> I was the first to use BQL in a CAN driver. It also took me time to
-> first figure out the existence of xmit_more() and even more to
-> understand how to make it so that it would return true.
-> 
-> > > AFAIK you need BQL support: see 0084e298acfe ("can: mcp251xfd: add BQL support").
-> > >
-> > > The etas_es58x driver implements xmit_more(), I added the Author Vincent
-> > > on Cc.
-> >
-> > Have a look at netdev_queue_set_dql_min_limit() in the etas driver.
-> 
-> The functions you need are the netdev_send_queue() and the
-> netdev_complete_queue():
-> 
->   https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L3424
-> 
-> For CAN, you probably want to have a look to can_skb_get_frame_len().
-> 
->   https://elixir.bootlin.com/linux/latest/source/include/linux/can/length.h#L166
-> 
-> The netdev_queue_set_dql_min_limit() gives hints by setting a minimum
-> value for BQL. It is optional (and as of today I am the only user of
-> it).
+  =====================================================
+  BUG: KMSAN: uninit-value in hfsplus_subfolders_dec
+                              fs/hfsplus/catalog.c:248 [inline]
+  BUG: KMSAN: uninit-value in hfsplus_delete_cat+0x1207/0x14d0
+                              fs/hfsplus/catalog.c:419
+   hfsplus_subfolders_dec fs/hfsplus/catalog.c:248 [inline]
+   hfsplus_delete_cat+0x1207/0x14d0 fs/hfsplus/catalog.c:419
+   hfsplus_rmdir+0x141/0x3d0 fs/hfsplus/dir.c:425
+   hfsplus_rename+0x102/0x2e0 fs/hfsplus/dir.c:545
+   vfs_rename+0x1e4c/0x2800 fs/namei.c:4779
+   do_renameat2+0x173d/0x1dc0 fs/namei.c:4930
+   __do_sys_renameat2 fs/namei.c:4963 [inline]
+   __se_sys_renameat2 fs/namei.c:4960 [inline]
+   __ia32_sys_renameat2+0x14b/0x1f0 fs/namei.c:4960
+   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+   entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-Thank you for this summary, great that you already invested the time to
-make it work with a CAN driver. I will give it a try in the m_can
-driver.
+  Uninit was stored to memory at:
+   hfsplus_subfolders_inc fs/hfsplus/catalog.c:232 [inline]
+   hfsplus_create_cat+0x19e3/0x19f0 fs/hfsplus/catalog.c:314
+   hfsplus_mknod+0x1fd/0x560 fs/hfsplus/dir.c:494
+   hfsplus_mkdir+0x54/0x60 fs/hfsplus/dir.c:529
+   vfs_mkdir+0x62a/0x870 fs/namei.c:4036
+   do_mkdirat+0x466/0x7b0 fs/namei.c:4061
+   __do_sys_mkdirat fs/namei.c:4076 [inline]
+   __se_sys_mkdirat fs/namei.c:4074 [inline]
+   __ia32_sys_mkdirat+0xc4/0x120 fs/namei.c:4074
+   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+   entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-Best,
-Markus
+  Uninit was created at:
+   __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5581
+   alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
+   alloc_slab_page mm/slub.c:1794 [inline]
+   allocate_slab+0x1b5/0x1010 mm/slub.c:1939
+   new_slab mm/slub.c:1992 [inline]
+   ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
+   __slab_alloc mm/slub.c:3279 [inline]
+   slab_alloc_node mm/slub.c:3364 [inline]
+   slab_alloc mm/slub.c:3406 [inline]
+   __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+   kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
+   alloc_inode_sb include/linux/fs.h:3125 [inline]
+   hfsplus_alloc_inode+0x56/0xc0 fs/hfsplus/super.c:627
+   alloc_inode+0x83/0x440 fs/inode.c:259
+   iget_locked+0x2a1/0xe20 fs/inode.c:1286
+   hfsplus_iget+0x5f/0xb60 fs/hfsplus/super.c:64
+   hfsplus_btree_open+0x13b/0x1cf0 fs/hfsplus/btree.c:150
+   hfsplus_fill_super+0x12b0/0x2a80 fs/hfsplus/super.c:473
+   mount_bdev+0x508/0x840 fs/super.c:1401
+   hfsplus_mount+0x49/0x60 fs/hfsplus/super.c:641
+   legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+   vfs_get_tree+0xa1/0x500 fs/super.c:1531
+   do_new_mount+0x694/0x1580 fs/namespace.c:3040
+   path_mount+0x71a/0x1eb0 fs/namespace.c:3370
+   do_mount fs/namespace.c:3383 [inline]
+   __do_sys_mount fs/namespace.c:3591 [inline]
+   __se_sys_mount+0x734/0x840 fs/namespace.c:3568
+   __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
+   do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+   __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+   do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+   do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+   entry_SYSENTER_compat_after_hwframe+0x70/0x82
+  =====================================================
+
+Fix this by initializing 'subfolders' of 'struct hfsplus_inode_info'
+in hfsplus_iget().
+
+Link: https://syzkaller.appspot.com/bug?id=981f82f21b973f2f5663dfea581ff8cee1ddfef2
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+---
+ fs/hfsplus/super.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/hfsplus/super.c b/fs/hfsplus/super.c
+index 122ed89ebf9f..612c07857667 100644
+--- a/fs/hfsplus/super.c
++++ b/fs/hfsplus/super.c
+@@ -72,6 +72,7 @@ struct inode *hfsplus_iget(struct super_block *sb, unsigned long ino)
+ 	mutex_init(&HFSPLUS_I(inode)->extents_lock);
+ 	HFSPLUS_I(inode)->flags = 0;
+ 	HFSPLUS_I(inode)->extent_state = 0;
++	HFSPLUS_I(inode)->subfolders = 0;
+ 	HFSPLUS_I(inode)->rsrc_inode = NULL;
+ 	atomic_set(&HFSPLUS_I(inode)->opencnt, 0);
+ 
+-- 
+2.31.1
+
