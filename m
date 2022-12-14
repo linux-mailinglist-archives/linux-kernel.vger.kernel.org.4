@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9277A64CE61
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2564CE66
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbiLNQw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S239152AbiLNQxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239172AbiLNQvr (ORCPT
+        with ESMTP id S238847AbiLNQxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:51:47 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4C118B2F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:51:43 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id f7so23381958edc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:51:43 -0800 (PST)
+        Wed, 14 Dec 2022 11:53:38 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7118C1E3E0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:53:35 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p36so11430412lfa.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=czD2rPOx9OiZcdJviML+H8nDE1bCxJVFDnkUjNKkP+g=;
-        b=LEb7HZpqHNLosW6dXyA2OiFJA5bKjR1TN9jw+WfKLEhClD5CLL0XhnsrSv2L52/cU8
-         zJ+wJrRlHXk+bv9u/XHT+erWxwYGz7SC2xfPO0xfOdZDbHsV2ATwck18gEyxqOuAnYWY
-         VLwmSwjjF5HXLbcNg2nLJiarnFZucgdCw6sX1jV9MfQdvWRe8L68Ku6Ft3KkBDcw7k5g
-         C+enr++FiA8f1yNt19eONDe5kTEEeNMB8X3FFg1H7ZaFXS8thAkGk4SXh6T5eJCLxlgw
-         CqW8QncumriceyvwjREh3FkFdovcNlbrqhcmzTtvYQbiNGXnyLylVXkkuAaji1hhelWr
-         T9yQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RKyXcYd+K2kl5Bb5coQGpJv+l4xIR6FutEGrVu5FFGY=;
+        b=yNR5FYDsaaaKUaPntmJ32Bdj2u9KgiOAPzdSM22cPeX7PhWIMaWlUBsmG5nA3ubabK
+         JH7yqFCxzX4h74547NCVMOz6rMsye1fDhzAmKh0tu9aSdSErpxoDDI1IxUBHVXMc1Rxn
+         QlViBkxP7N7mmkhMaiTBdT/GnJsrbb6+VbdNU5pQvHcbEd0gYSWh59LHem4W6+sUC4dq
+         QtscBqhTEh/H8pfU+OIEH/7ob6zXwIXeTBZF16/tJfTGcMzJF/pn0ZFetBAEp/LmouzE
+         jSfv7cV+UdGJZXW4ftDpRM3kKwv+J/Y8YwQTqNOmTbL/uZOsDdJe37CKREvxd/+vv/dV
+         x6lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=czD2rPOx9OiZcdJviML+H8nDE1bCxJVFDnkUjNKkP+g=;
-        b=N03APHGVdUbW3eHSoUk0YGMbWMMnfp57E6LUDh5wiaQbND+DL1X1CV/ukcBVZRfC/5
-         kCWyHB/RomOD/0z+PxulZN5UN6roNPEdp/ztIV94FP6nOMFBMrom4J+N91ABc9TZwrhV
-         uy4dVie1JvhkgSgh0+YLLjfomsXhoZjopIi3IKgod6ukjZYVAAY9hEIQloXuXUqOS/N4
-         fUmW2Mot0Mr/kt6/Yt7qH0UwWYijLvF9Bk5jQjB+xqZsn4SjPWiStkuAARNVGtvUc3id
-         9OWWztVo40+KmF6cP7aE/b4FjJCwVNfX4pPGzBS30dHCjBN3at9WXVTNlreKPCc3wRvN
-         VgsQ==
-X-Gm-Message-State: ANoB5pkX0ZAT2kiC2j/KaLOvsv+dr9W78R39LQm7OtTEq/+/6qnSnw2b
-        9tmeHQLZ/Gry7Ozc6eVAQINuxg==
-X-Google-Smtp-Source: AA0mqf6jNv3/NX9rm+O5/sllvALiPUWVimAqqQ0Ee8xAiZf4HNQ9uqqhxFGKpzX7BsoWPTZm1IGcHQ==
-X-Received: by 2002:a05:6402:110c:b0:46f:7453:a99d with SMTP id u12-20020a056402110c00b0046f7453a99dmr12178462edv.6.1671036702339;
-        Wed, 14 Dec 2022 08:51:42 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id lb19-20020a170907785300b007c0a90663d5sm6010023ejc.162.2022.12.14.08.51.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:51:41 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        allen chen <allen.chen@ite.com.tw>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/bridge: it6505: Add caching for EDID
-Date:   Wed, 14 Dec 2022 17:51:33 +0100
-Message-Id: <167103665890.995711.9267085599513513874.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115112720.911158-1-treapking@chromium.org>
-References: <20221115112720.911158-1-treapking@chromium.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKyXcYd+K2kl5Bb5coQGpJv+l4xIR6FutEGrVu5FFGY=;
+        b=1C6KjZGY1O2yIb4TbB+1l53bGXkH3wCjQPHKLwDGPHP9nP/9cWU9i8zZUgY2yq4iUO
+         MIVuKkbspAkU99cSs9JOHrZrLClZ/nv9ODKBzHhxn9OHDiWezZEed2QQwkLMw2QrhLKj
+         J002iCLwiemWr1eqq7tdYrUASPuF3XBRXhQDzEgIhxeCrhJ86PPtYA2M2PJYJjmxxbIC
+         eQSjZYIdvk1vG4oBsHTkjbs+9KnDPkvTqThO4LNulsh1NVSc8N1VBHCSQS1KYskWMfwU
+         xYEXUh0H8FFG9VLeNNopn4/rHhHqe1iJhaxO9QXRZub1kF9ai0OFHicIf9588aB+SedJ
+         JGpg==
+X-Gm-Message-State: ANoB5pmMgR/klKnm8UspdMpK+JZuYyVUemESt8GrLxi0yFlNvzkjC8s0
+        63YLZoxIRq8D757OvU8+XJPK2g==
+X-Google-Smtp-Source: AA0mqf4Ed0VR9MqjGauPs6u5N1ZY7AZsD7oyKryCMesbCywvn5yZTG8Uy6EKvk2j2WUaMcUxJq3EoA==
+X-Received: by 2002:ac2:4bd5:0:b0:4b4:a460:c995 with SMTP id o21-20020ac24bd5000000b004b4a460c995mr10408240lfq.5.1671036813844;
+        Wed, 14 Dec 2022 08:53:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id x6-20020a056512046600b00494a603953dsm875359lfd.89.2022.12.14.08.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 08:53:33 -0800 (PST)
+Message-ID: <036c3985-0dcc-c860-4db2-22f0dd4550dc@linaro.org>
+Date:   Wed, 14 Dec 2022 17:53:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] dt-bindings: bcm4329-fmac: Add ingenic,iw8103-fmac
+ compatible string
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arend van Spriel <arend@broadcom.com>
+Cc:     list@opendingux.net, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221214155943.15418-1-paul@crapouillou.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221214155943.15418-1-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 19:27:20 +0800, Pin-yen Lin wrote:
-> Add caching when EDID is read, and invalidate the cache until the
-> bridge detects HPD low or sink count changes on HPD_IRQ.
+On 14/12/2022 16:59, Paul Cercueil wrote:
+> The MIPS CI20 board has a Ingenic IW8103 chip, which is supposedly just
+> a rebranded Broadcom BCM4330.
 > 
-> It takes 1.2s for IT6505 bridge to read a 3-block EDID, and skipping
-> one EDID read would be a notable difference on user experience.
-> 
-> 
-> [...]
-
-Applied, thanks!
-
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
 
-[1/1] drm/bridge: it6505: Add caching for EDID
-      (no commit info)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-
-
-rob
+Best regards,
+Krzysztof
 
