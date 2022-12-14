@@ -2,175 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8587F64C30F
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:09:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F36B64C30C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbiLNEJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S237230AbiLNEIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 23:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbiLNEJT (ORCPT
+        with ESMTP id S237402AbiLNEIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:09:19 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E262227B3D;
-        Tue, 13 Dec 2022 20:08:55 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE46i5u031286;
-        Wed, 14 Dec 2022 04:08:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=XrQ5Jw89llK1p/7+oyj2VSzcXyF2nqgQKJ4Q9FtdaLA=;
- b=fKa/kBgMB8l6sfypDsBtj4eMwRGPTjsffS7db0pUMpWwwHVjaQA66tkqt2bCkFnAHO8I
- aTU4ukMwzsNIdL1pqAuX8tpeH2BYAEDU0yCWfarWppyjM0LodbaUqGMKqayAgHJwtKUK
- bfXpL6GQsJjxVaTkdBEWUAxxS/t9AmB5R2dCGSaMXLhcZIsIW9JSBrcsvFVtbvyUCUN8
- E5h+MRLHHZPGI3xCsJ7pQoHJ6JmX1tIzIPmkeATF6u2govHLBLjMShxkzd/dmzCegvIB
- yRnCwwZB/14asJVdwEHOsdPykTy9y57lAnHomrVkhKNa038zx4KMoKjsuO13FfADbd7P HA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rkg1bs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 04:08:38 +0000
-Received: from pps.filterd (NASANPPMTA04.qualcomm.com [127.0.0.1])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2BE46xTB022230;
-        Wed, 14 Dec 2022 04:08:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 3mck6m3hcr-1;
-        Wed, 14 Dec 2022 04:08:37 +0000
-Received: from NASANPPMTA04.qualcomm.com (NASANPPMTA04.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BE48bwg024555;
-        Wed, 14 Dec 2022 04:08:37 GMT
-Received: from stor-presley.qualcomm.com (wsp769891wss.qualcomm.com [192.168.140.85] (may be forged))
-        by NASANPPMTA04.qualcomm.com (PPS) with ESMTP id 2BE48bQQ024551;
-        Wed, 14 Dec 2022 04:08:37 +0000
+        Tue, 13 Dec 2022 23:08:40 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80825DF21;
+        Tue, 13 Dec 2022 20:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1670990919; x=1702526919;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=oIXeANiSO2xeKVP26joYA3LvkoR6iSGiERvirdV0NJg=;
+  b=lZ7JKHYbIzZWJR09PfDXCQHVi6nsjGaZDpd3duezEc/jK5Xyf8Y3ZWHb
+   DxECvZJ1R/F8UD7nlvWwBNXPWCiJDLHtS1Y7kpvwVDL68MOCdYv7K1VSJ
+   12v7X650uBEDSuTfNbUjVTc/55zrqJ9RuXJV3Nz6vS+bo5uPEns0koLkv
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Dec 2022 20:08:38 -0800
+X-QCInternal: smtphost
+Received: from wsp769891wss.qualcomm.com (HELO stor-presley.qualcomm.com) ([192.168.140.85])
+  by ironmsg04-sd.qualcomm.com with ESMTP; 13 Dec 2022 20:08:37 -0800
 Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 3194320DF0; Tue, 13 Dec 2022 20:08:37 -0800 (PST)
+        id BCD4C20DF0; Tue, 13 Dec 2022 20:08:37 -0800 (PST)
 From:   Can Guo <quic_cang@quicinc.com>
 To:     quic_asutoshd@quicinc.com, bvanassche@acm.org, mani@kernel.org,
         stanley.chu@mediatek.com, adrian.hunter@intel.com,
         beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
         martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, Can Guo <quic_cang@quicinc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 2/3] ufs: core: mcq: Add Event Specific Interrupt enable and config APIs
-Date:   Tue, 13 Dec 2022 20:06:01 -0800
-Message-Id: <1670990763-30806-3-git-send-email-quic_cang@quicinc.com>
+Subject: [PATCH v2 3/3] ufs-host: qcom: Add MCQ ESI config vendor specific ops
+Date:   Tue, 13 Dec 2022 20:06:02 -0800
+Message-Id: <1670990763-30806-4-git-send-email-quic_cang@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1670990763-30806-1-git-send-email-quic_cang@quicinc.com>
 References: <1670990763-30806-1-git-send-email-quic_cang@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eLnFj10qD-nFBoUA4aPGtXriOe52caZb
-X-Proofpoint-ORIG-GUID: eLnFj10qD-nFBoUA4aPGtXriOe52caZb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_01,2022-12-13_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140031
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two APIs to enable ESI and config ESI base addresses.
+Add MCQ ESI config vendor specific ops.
 
+Co-developed-by: Asutosh Das <quic_asutoshd@quicinc.com>
+Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
 Signed-off-by: Can Guo <quic_cang@quicinc.com>
 ---
- drivers/ufs/core/ufs-mcq.c | 16 ++++++++++++++++
- include/ufs/ufshcd.h       |  6 ++++++
- include/ufs/ufshci.h       |  2 ++
- 3 files changed, 24 insertions(+)
+ drivers/ufs/host/ufs-qcom.c | 97 +++++++++++++++++++++++++++++++++++++++++++++
+ drivers/ufs/host/ufs-qcom.h |  5 +++
+ 2 files changed, 102 insertions(+)
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index f99c912..c81e424 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -246,6 +246,7 @@ void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i)
- {
- 	writel(val, mcq_opr_base(hba, OPR_CQIS, i) + REG_CQIS);
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 96a58b4..ea5b5f7 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1568,6 +1568,101 @@ static int ufs_qcom_get_outstanding_cqs(struct ufs_hba *hba,
+ 	return 0;
  }
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_write_cqis);
  
++#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
++static void ufs_qcom_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
++{
++	struct device *dev = msi_desc_to_dev(desc);
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	ufshcd_mcq_config_esi(hba, msg);
++}
++
++static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *__hba)
++{
++	struct ufs_hba *hba = __hba;
++	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	u32 id = irq - host->esi_base;
++	struct ufs_hw_queue *hwq = &hba->uhq[id];
++
++	ufshcd_mcq_write_cqis(hba, 0x1, id);
++	ufshcd_mcq_poll_cqe_nolock(hba, hwq);
++
++	return IRQ_HANDLED;
++}
++
++static int ufs_qcom_config_esi(struct ufs_hba *hba)
++{
++	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	struct msi_desc *desc;
++	struct msi_desc *failed_desc = NULL;
++	int nr_irqs, ret;
++
++	if (host->esi_enabled)
++		return 0;
++	else if (host->esi_base < 0)
++		return -EINVAL;
++
++	/*
++	 * 1. We only handle CQs as of now.
++	 * 2. Poll queues do not need ESI.
++	 */
++	nr_irqs = hba->nr_hw_queues - hba->nr_queues[HCTX_TYPE_POLL];
++	ret = platform_msi_domain_alloc_irqs(hba->dev, nr_irqs,
++					     ufs_qcom_write_msi_msg);
++	if (ret)
++		goto out;
++
++	msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
++		if (!desc->msi_index)
++			host->esi_base = desc->irq;
++
++		ret = devm_request_irq(hba->dev, desc->irq,
++				       ufs_qcom_mcq_esi_handler,
++				       IRQF_SHARED, "qcom-mcq-esi", hba);
++		if (ret) {
++			dev_err(hba->dev, "%s: Fail to request IRQ for %d, err = %d\n",
++				__func__, desc->irq, ret);
++			failed_desc = desc;
++			break;
++		}
++	}
++
++	if (ret) {
++		/* Rewind */
++		msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
++			if (desc == failed_desc)
++				break;
++			devm_free_irq(hba->dev, desc->irq, hba);
++		}
++		platform_msi_domain_free_irqs(hba->dev);
++	} else {
++		if (host->hw_ver.major == 6 && host->hw_ver.minor == 0 &&
++		    host->hw_ver.step == 0) {
++			ufshcd_writel(hba,
++				      ufshcd_readl(hba, REG_UFS_CFG3) | 0x1F000,
++				      REG_UFS_CFG3);
++		}
++		ufshcd_mcq_enable_esi(hba);
++	}
++
++out:
++	if (ret) {
++		host->esi_base = -1;
++		dev_warn(hba->dev, "Failed to request Platform MSI %d\n", ret);
++	} else {
++		host->esi_enabled = true;
++	}
++
++	return ret;
++}
++
++#else
++static int ufs_qcom_config_esi(struct ufs_hba *hba)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++
  /*
-  * Current MCQ specification doesn't provide a Task Tag or its equivalent in
-@@ -293,6 +294,7 @@ unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
- 
- 	return completed_reqs;
- }
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
- 
- unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
- 				       struct ufs_hw_queue *hwq)
-@@ -370,6 +372,20 @@ void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba)
- 	}
- }
- 
-+void ufshcd_mcq_enable_esi(struct ufs_hba *hba)
-+{
-+	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x2,
-+		      REG_UFS_MEM_CFG);
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_enable_esi);
-+
-+void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg)
-+{
-+	ufshcd_writel(hba, msg->address_lo, REG_UFS_ESILBA);
-+	ufshcd_writel(hba, msg->address_hi, REG_UFS_ESIUBA);
-+}
-+EXPORT_SYMBOL_GPL(ufshcd_mcq_config_esi);
-+
- int ufshcd_mcq_init(struct ufs_hba *hba)
- {
- 	struct Scsi_Host *host = hba->host;
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 7f0139b..660ccd3 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -16,6 +16,7 @@
- #include <linux/blk-crypto-profile.h>
- #include <linux/blk-mq.h>
- #include <linux/devfreq.h>
-+#include <linux/msi.h>
- #include <linux/pm_runtime.h>
- #include <scsi/scsi_device.h>
- #include <ufs/unipro.h>
-@@ -1201,6 +1202,11 @@ void ufshcd_parse_dev_ref_clk_freq(struct ufs_hba *hba, struct clk *refclk);
- void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val);
- void ufshcd_hba_stop(struct ufs_hba *hba);
- void ufshcd_schedule_eh_work(struct ufs_hba *hba);
-+void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
-+unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
-+					 struct ufs_hw_queue *hwq);
-+void ufshcd_mcq_enable_esi(struct ufs_hba *hba);
-+void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg);
- 
- /**
-  * ufshcd_set_variant - set variant specific data to the hba
-diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-index 1df8425..9b74194 100644
---- a/include/ufs/ufshci.h
-+++ b/include/ufs/ufshci.h
-@@ -59,6 +59,8 @@ enum {
- 
- 	REG_UFS_MEM_CFG				= 0x300,
- 	REG_UFS_MCQ_CFG				= 0x380,
-+	REG_UFS_ESILBA				= 0x384,
-+	REG_UFS_ESIUBA				= 0x388,
- 	UFSHCI_CRYPTO_REG_SPACE_SIZE		= 0x400,
+  * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
+  *
+@@ -1595,6 +1690,7 @@ static const struct ufs_hba_variant_ops ufs_hba_qcom_vops = {
+ 	.get_hba_mac		= ufs_qcom_get_hba_mac,
+ 	.op_runtime_config	= ufs_qcom_op_runtime_config,
+ 	.get_outstanding_cqs	= ufs_qcom_get_outstanding_cqs,
++	.config_esi		= ufs_qcom_config_esi,
  };
  
+ /**
+@@ -1628,6 +1724,7 @@ static int ufs_qcom_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_get_sync(&(pdev)->dev);
+ 	ufshcd_remove(hba);
++	platform_msi_domain_free_irqs(hba->dev);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+index 6912bdf..7937b41 100644
+--- a/drivers/ufs/host/ufs-qcom.h
++++ b/drivers/ufs/host/ufs-qcom.h
+@@ -54,6 +54,8 @@ enum {
+ 	 * added in HW Version 3.0.0
+ 	 */
+ 	UFS_AH8_CFG				= 0xFC,
++
++	REG_UFS_CFG3				= 0x271C,
+ };
+ 
+ /* QCOM UFS host controller vendor specific debug registers */
+@@ -226,6 +228,9 @@ struct ufs_qcom_host {
+ 	struct reset_controller_dev rcdev;
+ 
+ 	struct gpio_desc *device_reset;
++
++	int esi_base;
++	bool esi_enabled;
+ };
+ 
+ static inline u32
 -- 
 2.7.4
 
