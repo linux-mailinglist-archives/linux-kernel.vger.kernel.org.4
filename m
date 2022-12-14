@@ -2,82 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C405564CD29
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBAB64CD2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238177AbiLNPhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S238503AbiLNPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238805AbiLNPhE (ORCPT
+        with ESMTP id S229772AbiLNPjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:37:04 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F520F4A;
-        Wed, 14 Dec 2022 07:37:02 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEETXOg032294;
-        Wed, 14 Dec 2022 15:36:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=K34UEmoqbP0hWiVBhYRS7Hke1YifchYcU0nimLAPkjA=;
- b=N+OcPXCzcbOAtDBEozHDEsEMlE10THeXOePL9ZeUE4i45KMNyWXjZ9wfsZMqBo2IYTa0
- CRUqeedDNfGTWdYGtnuqto+6sloMHJ55mgYe7qWO/C9KQfBhUIWZtBVvoq6D4YvIxRmx
- hAiE1X/TK9knov7dYK7aOyH0TSMyAEEKR52ZRAKvPEZRYbP/QDk9lvvV6nZqUZ2POzq3
- AQtNZnWY6QXcqxen8wzzQNu5MqbtXgVSL0rsRIliVKYkKSJtLoGpxpoLDRvnpi5NOrfx
- slYBFT68A8yPAEdkA5mlTifl38gj0CFdqdahRgICOvo2ZSdTmqiGkhSjo7TUQDQR4Ybm RQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6re9jyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 15:36:56 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BEFattS008841
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 15:36:55 GMT
-Received: from [10.216.38.200] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 14 Dec
- 2022 07:36:51 -0800
-Message-ID: <6ab9171e-127b-12f3-cfe6-0fbf2b37080c@quicinc.com>
-Date:   Wed, 14 Dec 2022 21:06:48 +0530
+        Wed, 14 Dec 2022 10:39:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5672A0;
+        Wed, 14 Dec 2022 07:39:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9767DB818E5;
+        Wed, 14 Dec 2022 15:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97066C433D2;
+        Wed, 14 Dec 2022 15:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671032343;
+        bh=WV8Ks/w5GzfCJYbihJ02iBiB3DlG+fE3MpPxGRtjLmQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mCZlGxg2ymMDDCfzP4rC3sLdn5J/Hz+r6apM01YKMc0RIzYAq4W7tE+voD9fmQpqV
+         wa8E+dT5tcbtVSwXZfEpEmsVSNwuUVh+Vodq8o69cDRHycQY5okpYZyaLWCj6SzcKH
+         ySMEPQH7dy85bfjNkGpwSp18YJ83uC0yLvcX4N9ONikOWXzqRbMIWa8PTkhhNrnanv
+         jRxbnBC1Z+nRh6b9NbsLSlKt4TRxtw9cXEX43gO0FrIPdN3RPHmu5IaK7/HzZimgt1
+         BefqCk8JgOg2cBYdGP2y4QT9CR3A5n9rdFeKKmvrOSJLlbFt4TH/kUVOM23qTvR1YO
+         m5/hhblbLwfnQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH] riscv: Allow to downgrade paging mode from the command
+ line
+In-Reply-To: <20221214143311.960266-1-alexghiti@rivosinc.com>
+References: <20221214143311.960266-1-alexghiti@rivosinc.com>
+Date:   Wed, 14 Dec 2022 16:38:57 +0100
+Message-ID: <87cz8m3sha.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/4] arm64: dts: qcom: sa8540p-ride: add qup1_i2c15 and
- qup2_i2c18 nodes
-Content-Language: en-US
-To:     Brian Masney <bmasney@redhat.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ahalaney@redhat.com>,
-        <echanude@redhat.com>
-References: <20221212182314.1902632-1-bmasney@redhat.com>
- <20221212182314.1902632-4-bmasney@redhat.com>
- <309b3fad-933c-6c45-5cd7-4e082da62c15@linaro.org> <Y5nB1epKN4nbk3ma@x1>
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-In-Reply-To: <Y5nB1epKN4nbk3ma@x1>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PFH_am0EmoDmQGnZn6Wm7Mwmuoc0x-av
-X-Proofpoint-ORIG-GUID: PFH_am0EmoDmQGnZn6Wm7Mwmuoc0x-av
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_07,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 priorityscore=1501 spamscore=0 phishscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140125
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,108 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Alexandre Ghiti <alexghiti@rivosinc.com> writes:
+
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index b56a0a75533f..8140fefe0e57 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -752,12 +752,35 @@ static void __init disable_pgtable_l4(void)
+>   * then read SATP to see if the configuration was taken into account
+>   * meaning sv48 is supported.
+>   */
+> -static __init void set_satp_mode(void)
+> +static __init void set_satp_mode(uintptr_t dtb_pa)
+>  {
+>  	u64 identity_satp, hw_satp;
+>  	uintptr_t set_satp_mode_pmd =3D ((unsigned long)set_satp_mode) & PMD_MA=
+SK;
+>  	bool check_l4 =3D false;
+>=20=20
+> +#ifndef CONFIG_KASAN
+> +	/*
+> +	 * The below fdt functions are kasan instrumented, since at this point
+> +	 * there is no mapping for the kasan shadow memory, this can't be used
+> +	 * when kasan is enabled.
+> +	 */
+> +	int chosen_node;
+> +
+> +	chosen_node =3D fdt_path_offset((void *)dtb_pa, "/chosen");
+> +	if (chosen_node >=3D 0) {
+> +		const char *cmdline =3D fdt_getprop((void *)dtb_pa, chosen_node,
+> +						  "bootargs", NULL);
+
+The command line handling needs to honor CONFIG_CMDLINE_FORCE and
+CONFIG_CMDLINE_EXTEND (which makes it possible to use no{4,5}lvl *and*
+KASAN ;-)).
 
 
-On 12/14/2022 6:00 PM, Brian Masney wrote:
-> On Tue, Dec 13, 2022 at 03:48:27PM +0100, Konrad Dybcio wrote:
->>> +	qup1_i2c15_default: qup1-i2c15-state {
->>> +		mux-pins {
->>> +			pins = "gpio36", "gpio37";
->>> +			function = "qup15";
->>> +		};
->>> +
->>> +		config-pins {
->>> +			pins = "gpio36", "gpio37";
->>> +			drive-strength = <0x02>;
->>> +			bias-pull-up;
->>> +		};
->>> +	};
->>
->> You can drop mux/config-pins and have the pin properties live directly
->> under the qup1-i2cN-state node.
-> 
-> Hi Konrad (and Shazad below),
-> 
-> I need to enable 5 i2c buses (0, 1, 12, 15, 18) on this board. I tried
-> the following combinations with the pin mapping configuration and the
-> only one that seems to work reliably for me is what I originally had.
-> 
-> With the following, only 2 out of the 5 buses are detected. There's no
-> i2c mesages in dmesg.
-> 
->      i2c0_default: i2c0-default-state {
->          pins = "gpio135", "gpio136";
->          function = "qup15";
->      };
-> 
-> Next, I added a drive-strength and bias-pull-up. All 5 buses are
-> detected. One bus throws read errors when I probe it with i2cdetect, two
-> others 'i2cdetect -a -y $BUSNUM' takes ~5 seconds to run, and the
-
-This I have also observed on downstream as well, where scanning all 
-addresses takes some amount of time near to 5-6 seconds.
-
-> remaining two are fast.
-> 
->      i2c0_default: i2c0-default-state {
->          pins = "gpio135", "gpio136";
->          function = "qup15";
->          drive-strength = <2>;
->          bias-pull-up;
->      };
-> 
-
-This is the default config we should use.
-
-> This is the style where i2cdetect seems to be happy for all 5 buses and
-> is fast:
-> 
->      i2c0_default: i2c0-default-state {
->          mux-pins {
->              pins = "gpio135", "gpio136";
->              function = "qup0";
->          };
-> 
->          config-pins {
->              pins = "gpio135", "gpio136";
->              drive-strength = <2>;
->              bias-pull-up;
->          };
->      };
-> 
-> 
-> Shazad: 'i2cdetect -a -y $BUSNUM) shows that all 5 buses have the same
-> addresses listening. Is that expected? That seems a bit odd to me.
-> 
-
-Brian, even I haven't checked with all enabled, let me check this on 
-other projects and with downstream as well and get back to you.
-
--Shazad
-
-> [root@localhost ~]# i2cdetect -a -y 0
-> Warning: Can't use SMBus Quick Write command, will skip some addresses
->       0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:
-> 10:
-> 20:
-> 30: -- -- -- -- -- -- -- --
-> 40:
-> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 60:
-> 70:
-> 
-> I triple checked that I have the QUP pins defined correctly for the 5
-> buses. I checked them against what's in the downstream kernel and I also
-> checked them against what's in upstream's
-> drivers/pinctrl/qcom/pinctrl-sc8280xp.c. This is the pin mapping that I
-> have:
-> 
->      i2c0: gpio135, gpio136
->      i2c1: gpio158, gpio159
->      i2c12: gpio0, gpio1
->      i2c15: gpio36, gpio37
->      i2c18: gpio66, gpio67
-> 
-> Brian
-> 
+Bj=C3=B6rn
