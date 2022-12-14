@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1684D64C40C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817B564C40F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiLNGtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 01:49:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S229755AbiLNGuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 01:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237454AbiLNGtH (ORCPT
+        with ESMTP id S237429AbiLNGuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 01:49:07 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DADE10C4;
-        Tue, 13 Dec 2022 22:48:46 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0D60D4A7;
-        Wed, 14 Dec 2022 07:48:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671000524;
-        bh=aWvF6R8clbwuZGWiji4dHrljqrYWOPhc/SD7bKTJUq0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RK3HB20rcl0riCXzpYcLQipuvhcvlB9FFTMu/vD9sHou82a8haJheiASdyYjJeHtJ
-         spLmyA8u0BdckJn5JDAT8yA7eQyhXTYX4u/D4sjnydc594vFcGRGojIi/XVVh1sAsO
-         5wkAYssHrumXkRp+fL9ddMRaL5vU4Mi7D1a6GRsg=
-Message-ID: <894c40aa-3dae-4b4b-1ad9-f3608bcaacab@ideasonboard.com>
-Date:   Wed, 14 Dec 2022 08:48:39 +0200
+        Wed, 14 Dec 2022 01:50:12 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160335582;
+        Tue, 13 Dec 2022 22:50:12 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BE6nvnP001784;
+        Wed, 14 Dec 2022 06:49:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4CAMOAoT1vKR8K7w6oaD0wYZOnCGRfFMwebmU+kI0qM=;
+ b=S1N3ZcNS8rqU0GE9E3h/o4PsNeImQh7gfzFpKQxCuLCG5BtNNsKrG6r4r9faWR90Dvpq
+ tbccth34Uy4X6dP+WJVmLy5Osq1s8DKMXK6WQXvSQMzQXphEDnhQiMbTS8n720gBMicf
+ a+JIqeeCwYMoW3LIBGCcwZKdZBA8h475U14k2TeMz5nJg0e21gfmj85fFbpcvRMU/sdb
+ 9KwM6wb4C5Lth7Gb1r16P13RG2tqYb70H4n05COzYJ89jDvka7r8NGq69KKYRI+iRSW0
+ eFI2oSZRes+bG1anQ9e6Zl/g2tm12blJ/mNP6BvMJLS+U3JpYW2IUH9+0dcOGRZDTzpv JQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mf6rvr9y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 06:49:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BE6nuhI026386
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 06:49:56 GMT
+Received: from [10.79.43.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 13 Dec
+ 2022 22:49:51 -0800
+Message-ID: <96c1e60d-de12-5e60-4c06-70ea4b9c49f8@quicinc.com>
+Date:   Wed, 14 Dec 2022 12:19:48 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: Introduce a carveout for modem
+ metadata
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
- <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <manivannan.sadhasivam@linaro.org>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>, <amit.pundir@linaro.org>,
+        <regressions@leemhuis.info>, <sumit.semwal@linaro.org>,
+        <will@kernel.org>, <catalin.marinas@arm.com>,
+        <robin.murphy@arm.com>
+References: <20221213140724.8612-1-quic_sibis@quicinc.com>
+ <20221213140724.8612-2-quic_sibis@quicinc.com>
+ <7ea03855-4806-f4ca-e0c3-4044e1095d6b@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <7ea03855-4806-f4ca-e0c3-4044e1095d6b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nSoDid_FslDSpaeZjubIm-cUJMoWkhNY
+X-Proofpoint-ORIG-GUID: nSoDid_FslDSpaeZjubIm-cUJMoWkhNY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_02,2022-12-13_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140049
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,25 +87,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hey Krzysztof,
 
-On 11/12/2022 20:33, Laurent Pinchart wrote:
-> Hi Tomi,
-> 
-> Thank you for the patch.
-> 
-> On Thu, Dec 08, 2022 at 12:40:05PM +0200, Tomi Valkeinen wrote:
->> Add driver for TI DS90UB913 FPDLink-3 Serializer.
+Thanks for taking time to review the series.
+
+On 12/14/22 01:10, Krzysztof Kozlowski wrote:
+> On 13/12/2022 15:07, Sibi Sankar wrote:
+>> Introduce a new carveout for modem metadata. This will serve as a
+>> replacement for the memory region used by MSA to authenticate modem
+>> ELF headers.
 >>
->> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> ---
->>   drivers/media/i2c/Kconfig     |  13 +
->>   drivers/media/i2c/Makefile    |   2 +-
->>   drivers/media/i2c/ds90ub913.c | 892 ++++++++++++++++++++++++++++++++++
->>   3 files changed, 906 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/media/i2c/ds90ub913.c
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+>>   
+>>   	aliases {
+>> @@ -865,7 +870,7 @@ hp_i2c: &i2c9 {
+>>   	clock-names = "iface", "bus", "nav", "snoc_axi", "mnoc_axi", "xo";
+>>   
+>>   	iommus = <&apps_smmu 0x461 0x0>, <&apps_smmu 0x444 0x3>;
+>> -	memory-region = <&mba_mem &mpss_mem>;
+>> +	memory-region = <&mba_mem>, <&mpss_mem>, <&mdata_mem>;
+>>   
+>>   	/* This gets overridden for SKUs with LTE support. */
+>>   	firmware-name = "qcom/sc7180-trogdor/modem-nolte/mba.mbn",
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>> index bf522a64b172..bda0495aa0b5 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>> @@ -17,6 +17,11 @@
+>>   			reg = <0x0 0x9c700000 0x0 0x200000>;
+>>   			no-map;
+>>   		};
+>> +
+>> +		mdata_mem: memory@9d100000 {
+>> +			reg = <0x0 0x9d100000 0x0 0x4000>;
+>> +			no-map;
+>> +		};
+>>   	};
+>>   };
+>>   
+>> @@ -32,7 +37,7 @@
+>>   
+>>   	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+>>   	interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
+>> -	memory-region = <&mba_mem>, <&mpss_mem>;
+>> +	memory-region = <&mba_mem>, <&mpss_mem>, <&mdata_mem>;
+> 
+> Only two memory regions are allowed by bindings... unless you fix it in
+> further patchset. If so, please re-order to have the bindings first. It
+> helps reviewers not to have such questions. :)
 
-Many of your comments here also apply to the ub953 driver. I'll fix those.
+I felt that Rob's dt_bindings check bot might report an error
+if the dt changes weren't placed before the bindings changes.
+But since you asked for the logical order I guess the bindings
+check are done only after the entire series is applied. I'll
+change the order in the next re-spin.
 
-  Tomi
-
+- Sibi
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
