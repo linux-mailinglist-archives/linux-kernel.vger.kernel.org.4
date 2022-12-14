@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4C664C899
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C39C64C89D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238251AbiLNMBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S237848AbiLNMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238374AbiLNMAy (ORCPT
+        with ESMTP id S238265AbiLNMBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:00:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC561D648
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:00:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671019205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ORJ82nUqgmRWHPSLvhoNWLJ0+9bS/SAj60kUH3rLBhw=;
-        b=MOSMM2kQrAq1q5srvZDDwdIkI0kfgkP3iBsd3xG0sH3INj/YYTleJaHF0vF9AYp0InRWve
-        zZ/yuugfEnWUZ5UbXPf6/nDhbsmE6RZTb4iH/+crITKqoB24chZ0l5o+SO4OI/QyuVhKgT
-        cdNHN58jctER5OtWQLIdPakLcTQ656M=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-338-3S6JxOJZMtqILFkVAbQZew-1; Wed, 14 Dec 2022 07:00:04 -0500
-X-MC-Unique: 3S6JxOJZMtqILFkVAbQZew-1
-Received: by mail-wm1-f70.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso4084297wml.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:00:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ORJ82nUqgmRWHPSLvhoNWLJ0+9bS/SAj60kUH3rLBhw=;
-        b=jacGhNcRIbfjOWkqiP7LC657VqezhyHC6f2g+AxSyd1yWXBFpS6kp6WmdgUATQNmXz
-         ciAOolIAi4Xn0nwqA0AQd8Q/nEBoSOj5BkwtqO9V0tBcOK20uQCUqKvH1BQX22cNOaFf
-         dO3fxZrhGJXJmH7kkS3sWTazyvoAKvz7eC3jtG7+bkiJTI/zM3J9h/elAX7tUBbXOHR4
-         35rElCFtxCymAXk9BC2A0Nl/NPasjc80CVBtD/HkJf/xaQh6dsgGn5Kc5SDr11SyMZHY
-         B9TEFj/tpCXeK5JzLUhgxYkjb66b7sd/SHPNrS5grDtmrlKg5GnziFIq3WuhetKBazXq
-         TQ/Q==
-X-Gm-Message-State: ANoB5plu8/4Iv3u/avAjydmwyhoc7il8zTj8cWg+g9mHZVDuJk0xwIYT
-        587S2+vblivit7CZdkhxGyU78MUjucMEs3modnXJ08iUTeFkCF9Yz2q3IkI1k8l34FPBxSeJdUq
-        U47nURfSG6pUalzSeUQ884MJF
-X-Received: by 2002:a5d:464d:0:b0:242:19ba:c325 with SMTP id j13-20020a5d464d000000b0024219bac325mr14267626wrs.30.1671019203248;
-        Wed, 14 Dec 2022 04:00:03 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf70rUn2JP0a8uV9qrEQRacU9eDMVqCZ636ZVH7ao6T+VGi+4vl1vzH82Lks4swv/K9ZhapOSw==
-X-Received: by 2002:a5d:464d:0:b0:242:19ba:c325 with SMTP id j13-20020a5d464d000000b0024219bac325mr14267609wrs.30.1671019202999;
-        Wed, 14 Dec 2022 04:00:02 -0800 (PST)
-Received: from redhat.com (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id l7-20020a5d6687000000b002425787c5easm2609121wru.96.2022.12.14.04.00.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 04:00:02 -0800 (PST)
-Date:   Wed, 14 Dec 2022 07:00:00 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221214065856-mutt-send-email-mst@kernel.org>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
- <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
- <Y5mjcuCRP45ynJis@shikoro>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5mjcuCRP45ynJis@shikoro>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 07:01:12 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142F320F74;
+        Wed, 14 Dec 2022 04:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671019268; x=1702555268;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fuR/7HxR7Oiga7wEFtKODLYaZ2RDSEctAuCeIpD5vCU=;
+  b=b6K29/nlwWJ+8aMkzClXeaWPJH9XfeRQssvjkJ+I+0uYVKl9MiVR8cMy
+   V00EyhNUuUNmFppUkkevxicllCjXJRCEEDsMNltn9WD8G1i4didqozZ0O
+   d6AITGVq6Ws1zoOBTqst5JVAgO8FAbJkpkheJuIp/fRr6tkC8u/ZszPlX
+   /vGt+/7YRLrUDtc27Eb6nWOaNDJKW7i8wSZCONO57PwcAKg6mSzS5Zb/i
+   OaKFJ5+B2ktymPIautYqIbGcBFFMXCcVBN9IIi2F7o4O07MjPMfA4veyt
+   20PDv5wq2Lyj5QAHvcjfhWyErgNisYO9CQVTa6ZW86AocIohryUcUKFTl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380587779"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="380587779"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 04:01:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="717590085"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="717590085"
+Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Dec 2022 04:01:05 -0800
+Message-ID: <acb8adfc5a2ace34010dc70d5ccd2821ff0a1ecb.camel@linux.intel.com>
+Subject: Re: [PATCH 0/5] KVM: x86/mmu: TDP MMU fixes for 6.2
+From:   Robert Hoo <robert.hu@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Thelen <gthelen@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Date:   Wed, 14 Dec 2022 20:01:04 +0800
+In-Reply-To: <20221213033030.83345-1-seanjc@google.com>
+References: <20221213033030.83345-1-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:20:34AM +0100, Wolfram Sang wrote:
-> Hi Viresh,
-> 
-> > I understand that it is okay to pass the maintainership, within the
-> > company, for platform specific parts from one person to another, since
-> > they have the best knowledge of the code and are the only one
-> > interested in maintaining it too.
-> > 
-> > But what is the rule for generic drivers like this one ?
-> 
-> Dunno if this is really a rule, but if a maintainer steps out and makes
-> sure there is someone to pick up the work, this is more than welcome.
-> Way better than a stale entry in the MAINTAINERS file.
-> 
-> I mean, it does not limit the chance to have further maintainers, for
-> example. I believe in meritocracy here. Those who do and collaborate,
-> shall get responsibility.
+On Tue, 2022-12-13 at 03:30 +0000, Sean Christopherson wrote:
+> Fix three fatal TDP MMU bugs introduced in 6.2,
 
-Exactly. I'd like to see Jian Jun Chen do and collaborate first.
+introduced in 6.1? or earlier?
 
-> If not, then not. We can fix this, too, if
-> needed.
+>  harden related code,
+> and clean up kvm_tdp_mmu_map() to eliminate the need for gotos.
 > 
-> What is the reason for your question?
+> Sean Christopherson (5):
+>   KVM: x86/mmu: Don't attempt to map leaf if target TDP MMU SPTE is
+>     frozen
+>   KVM: x86/mmu: Map TDP MMU leaf SPTE iff target level is reached
+>   KVM: x86/mmu: Re-check under lock that TDP MMU SP hugepage is
+>     disallowed
+>   KVM: x86/mmu: Don't install TDP MMU SPTE if SP has unexpected level
+>   KVM: x86/mmu: Move kvm_tdp_mmu_map()'s prolog and epilog to its
+> caller
 > 
-> All the best,
+>  arch/x86/kvm/mmu/mmu.c          |  9 +++++++-
+>  arch/x86/kvm/mmu/mmu_internal.h |  1 -
+>  arch/x86/kvm/mmu/tdp_mmu.c      | 39 +++++++++++++++--------------
+> ----
+>  3 files changed, 26 insertions(+), 23 deletions(-)
 > 
->    Wolfram
 > 
+> base-commit: 51229fd7872f82af07498aef5c79ad51baf81ea0
 
+I cannot find this base commit in my tree, where I just pulled to
+latest queue yesterday. But find this series can be applied to this
+latest queue as well.
+
+commit 9d75a3251adfbcf444681474511b58042a364863 (origin/queue, queue)
+Author: Sean Christopherson <seanjc@google.com>
+Date:   Wed Dec 7 00:09:59 2022 +0000
+
+    KVM: x86: Add proper ReST tables for userspace MSR exits/flags
 
