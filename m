@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2CF64D137
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D05F564D138
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiLNUa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S229917AbiLNUcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiLNUaB (ORCPT
+        with ESMTP id S230211AbiLNUb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:30:01 -0500
+        Wed, 14 Dec 2022 15:31:26 -0500
 Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D736031DC5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:18:22 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id fy4so8221124pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:18:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164FD53ED6;
+        Wed, 14 Dec 2022 12:20:05 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id js9so8188101pjb.2;
+        Wed, 14 Dec 2022 12:20:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZ1n8+nIX2hZn3XsXYGq2hnC9XLQZy4UoT+8m2Z4kb0=;
-        b=TGPBdcm94aFHv9Hel/S/gt3YaCFowv1ATI2xs9dHbFllFBpJjqpraZHUTu8hakg2EH
-         JH+KQV05qZStUJdzHvvTsWTzsviroFniuzTmlbtHm3BUbeQBvWYKze7+2wZ2REGMDgc4
-         lXm1dREGmZYvfR0VkhwpFjyeoqV4CszWtUoaRPfyZLEbaDAyECXgcp0Et3te/l/srJj3
-         tRxE2DOG9g2soP2PJkJ79IJv/BWPQbI7bGMFUv/FfFejb62gtA57kX5m1mH/J/N4C3g4
-         9vDYgy8/tbZenvvPcUYtWT4DLzoLXDFSTuCzQYs6tqoJXZMJywizr1ooZJE/Yqj0KQwC
-         H4ug==
+        bh=TCMuwp6GHgx/gJjEvxb/mxRR0z43kVs2zMyGQJ7ZUao=;
+        b=AQLztXK1M1qpPDgvPdbon4vR2HPGNB1ixFvO2/yz7mYIcNQUkP4VB8nDMKJ1MDUHny
+         KRfaA1kWY1m9vCttGMDGCvr987BlUkF7z5vsZVOEhUNE/ipFMbjCWOeJevCM8BRSlvnF
+         /uoCeMieK2qUfkQe/cf9pKw7B7dbtCIscRX3KfW8tpIwJi+j+9Ua3j24IGoWrbNbeZyp
+         lsGbD4P7Mi3Gzw7ng0QCHRFM0FaV2eTk6B1Zgp+pn8Z/F9wcUkh6+Rhh3vhtlOhDYSe4
+         WJHV9AueDIql8WMy/ete+n9+jA9JhTm20u6JY1Ms5KBbbSLsNAtlmX4Er3ignpT7+EO8
+         e/oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XZ1n8+nIX2hZn3XsXYGq2hnC9XLQZy4UoT+8m2Z4kb0=;
-        b=W2spajl3bATulupmXVx9jrGas6KwNzgmwwLfIVcCw+6hnoKcJceo3HKqXZCFQ7NKRh
-         +91wHEcyFWrLKwa2hJTEr66TAs+URO3Vvwq4h+qJJrV/sgqgr0Gpu2kUuu3kZA8aNbdY
-         aji4JovVbv2UD6AzzC9RIGtB556s6DcSufzs79IuvExXuNvBqXR3zcWpEYrGW0zl4mEy
-         UdKygaexunjnF1jpgaXj7tKcnv/XQdkWViTkQdgXrvw9Z9tof2UrOmCtQUo3O/wdB9ok
-         CFFMvTmMR7Qh99/8OMZJWMy3uFQFCMAE1CNwdEzGqbcyPibobeWq+F0p8ZJ3Y/RUy7eV
-         jUnQ==
-X-Gm-Message-State: ANoB5pn1YZbz8PE3iJ8uCm65JEILa2BZhRZvF4ZkvmJbAsIV2RLnD/6O
-        Qr5qW5XGkZAchPNTbPY4rJEm8Q==
-X-Google-Smtp-Source: AA0mqf7b4mseBOFUuKioL6u6q2TVXaZahq2LyEAjz2IeFqIcLn3TQifnz7xlQm/6M5KXgsh+4C4ZlQ==
-X-Received: by 2002:a17:902:da8d:b0:189:3a04:4466 with SMTP id j13-20020a170902da8d00b001893a044466mr1011167plx.2.1671049102301;
-        Wed, 14 Dec 2022 12:18:22 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0017d97d13b18sm2290816plb.65.2022.12.14.12.18.21
+        bh=TCMuwp6GHgx/gJjEvxb/mxRR0z43kVs2zMyGQJ7ZUao=;
+        b=oU3NNl/pXAQMeaEq0+8aO7p0yN+UjloZAwLpnUg4LYUlmP6AOnlfx/+GOhSPbhDL7t
+         aQgsp2fQ9/dZkFz0E1gpDv5oBZkrFqDEF5tEtZ5i5E/rjXodL1eFkLuRf01qUV25If7z
+         pIP2CHaVJDFK8ikPYwTTitcECL4HLTg6iWCtJ1/XYJx5PSCnlHRFtZch4hM7v2KjecQR
+         GvFcf0UYWQEIB98KhZVE4uX/Rmi13HEJ3QDmKEUsbAZyvZ/GckD1FFdxH8R0k2VQlBOf
+         NLBTbiN9GKfrK3PDlZWqf+RRMCELn2JkxZzwnyOxUmzm/bzL0BqQkv8vlH84km2pFUXd
+         Zxiw==
+X-Gm-Message-State: ANoB5pmQgl7PIWhDfSIgHv/mIWI7VXendu2zSaH6eWIQEUidoQs3Q1UC
+        0FQ86XCb2gz888Zn1AdHpbE=
+X-Google-Smtp-Source: AA0mqf4Jsc2fjFSItEtwphKipl2TY//QD0Mh80VZfcRorAkD8vYu2Vbs2W8MwLmkec5JO29/RJjG4g==
+X-Received: by 2002:a17:902:bf47:b0:189:e904:c831 with SMTP id u7-20020a170902bf4700b00189e904c831mr6529639pls.3.1671049204468;
+        Wed, 14 Dec 2022 12:20:04 -0800 (PST)
+Received: from mail.google.com (125-237-37-88-fibre.sparkbb.co.nz. [125.237.37.88])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b00189a50d2a38sm2283486pln.38.2022.12.14.12.20.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 12:18:21 -0800 (PST)
-Date:   Wed, 14 Dec 2022 20:18:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zhang Chen <chen.zhang@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Chao Gao <chao.gao@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardware
- mitigations
-Message-ID: <Y5oviY0471JytWPo@google.com>
-References: <20221210160046.2608762-1-chen.zhang@intel.com>
- <20221210160046.2608762-6-chen.zhang@intel.com>
+        Wed, 14 Dec 2022 12:20:04 -0800 (PST)
+Date:   Thu, 15 Dec 2022 09:19:57 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        paulo.miguel.almeida.rodenas@gmail.com
+Subject: Re: [PATCH v2] [next] pcmcia: synclink_cs: replace 1-element array
+ with flex-array member
+Message-ID: <Y5ov7fgIX4IICSSq@mail.google.com>
+References: <Y5mMWEtHWKOiPVU+@mail.google.com>
+ <Y5mQTOqFOGbJMerV@mail.google.com>
+ <CAHp75Vd914H7swqqqydSLYOJh-4=+rWNCUdqizaQQxmVtpiMSA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221210160046.2608762-6-chen.zhang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <CAHp75Vd914H7swqqqydSLYOJh-4=+rWNCUdqizaQQxmVtpiMSA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,25 +79,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022, Zhang Chen wrote:
-> From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+On Wed, Dec 14, 2022 at 12:43:48PM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 14, 2022 at 10:58 AM Paulo Miguel Almeida
+> <paulo.miguel.almeida.rodenas@gmail.com> wrote:
+> >
+> > One-element arrays are deprecated, and we are replacing them with
+> > flexible array members instead. So, replace one-element array with
+> > flexible-array member in struct RXBUF. No changes were required
+> > within the source code because of the existing padding in RXBUF struct
 > 
-> Guests that have different family/model than the host may not be aware
-> of hardware mitigations(such as RRSBA_DIS_S) available on host. This is
-> particularly true when guests migrate. To solve this problem Intel
-> processors have added a virtual MSR interface
+> You shouldn't rely on padding. Make you change robust independently on
+> the padding. See also below.
+> 
+> > It's worth mentioning that doing a build before/after this patch
+> > results in no binary output differences.
+> 
+> This is interesting...
+> 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [1].
+> >
+> > Link: https://github.com/KSPP/linux/issues/79
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+> 
+> >
+> 
+> The blank lines are not allowed in the tag block (in case you want to
+> have Link: to be recognized as a tag).
+> 
+> > Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> > ---
+> > Changelog:
+> >
+> > - v2: removed changes to how the size of RXBUF was calculated. I
+> >   changed my mind after thinking about the existing padding in the
+> >   struct. Happy to discuss it if anyone sees it differently.
+> 
+> I feel worried about in particular this code:
+> 
+> /* each buffer has header and data */
+> info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+> 
+> which means that entire rx_alloc_buffers() should be revisited. Also
+> take into account the use of one or more macros from overflow.h for
+> memory allocation.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 
-Is there any actual "processor" support here?  To me, this looks like Intel is
-foisting a paravirt interface on KVM and other hypervisors without collaborating
-with said hypervisors' developers and maintainers.
+Hi Kees, Hi Andy, Thanks for taking the time to review this patch.
 
-I get that some of the mitigations are vendor specific, but things like RETPOLINE
-aren't vendor specific.  I haven't followed all of the mitigation stuff very
-closely, but I wouldn't be surprised if there are mitigations now or in the future
-that are common across architectures, e.g. arm64 and x86-64.  Intel doing its own
-thing means AMD and arm64 will likely follow suit, and suddenly KVM is supporting
-multiple paravirt interfaces for very similar things, without having any control
-over the APIs.  That's all kinds of backwards.
+As both of you had similar points, I will reply them here.
 
-And having to wait for Intel to roll out new documentation when software inevitably
-comes up with some clever new mitigation doesn't exactly fill my heart with joy.
+The reasons why it had no binary changes was because of the combination
+of this 2 things:
+
+1) Existing padding - so sizeof(RXBUF) returned 8 bytes in both cases.
+
+pahole -C RXBUF gcc/before/drivers/char/pcmcia/synclink_cs.ko
+typedef struct {
+        int                        count;                /*     0     4 */
+        unsigned char              status;               /*     4     1 */
+        char                       data[1];              /*     5     1 */
+
+        /* size: 8, cachelines: 1, members: 3 */
+        /* padding: 2 */
+        /* last cacheline: 8 bytes */
+} RXBUF;
+
+pahole -C RXBUF gcc/after/drivers/char/pcmcia/synclink_cs.ko
+typedef struct {
+        int                        count;                /*     0     4 */
+        unsigned char              status;               /*     4     1 */
+        char                       data[];               /*     5     0 */
+
+        /* size: 8, cachelines: 1, members: 3 */
+        /* padding: 3 */
+        /* last cacheline: 8 bytes */
+} RXBUF;
+
+2) RXBUF (as implemented now) is just  like a pair of lenses from which a
+developer can have access to one of the circular buffers in MGSLPC_INFO
+struct called 'rx_buf'.
+
+2611 static int rx_alloc_buffers(MGSLPC_INFO *info)
+2612 {
+2613         /* each buffer has header and data */
+2614         info->rx_buf_size = sizeof(RXBUF) + info->max_frame_size;
+2615
+2616         /* calculate total allocation size for 8 buffers */
+2617         info->rx_buf_total_size = info->rx_buf_size * 8;
+2618
+2619         /* limit total allocated memory */
+2620         if (info->rx_buf_total_size > 0x10000)
+2621                 info->rx_buf_total_size = 0x10000;
+2622
+2623         /* calculate number of buffers */
+2624         info->rx_buf_count = info->rx_buf_total_size / info->rx_buf_size;
+2625
+2626         info->rx_buf = kmalloc(info->rx_buf_total_size, GFP_KERNEL);
+
+To be honest, char data[_1_] in RXBUF was never required to be there.
+The code base seems to make sure that it doesn't run past its limits by
+keeping track of size buffer on MGSLPC_INFO->rx_buf_size (and sometimes
+RXBUF->count)
+
+(Addressing one point made by Andy about using of of the macros in
+overflow.h)
+        struct_size(buf, data, 1) would return 9 bytes which could
+        potentially break the existing driver as it produces binary
+        changes.
+
+Let me know your thoughts
+
+thanks!
+
+- Paulo A.
