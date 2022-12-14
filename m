@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BFA64D32C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386C964D32D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiLNXR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 18:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S229793AbiLNXTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 18:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiLNXRt (ORCPT
+        with ESMTP id S229864AbiLNXSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:17:49 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CB49B49;
-        Wed, 14 Dec 2022 15:17:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so916860pjp.1;
-        Wed, 14 Dec 2022 15:17:46 -0800 (PST)
+        Wed, 14 Dec 2022 18:18:45 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F914A5B2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:18:44 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3bd1ff8fadfso15109057b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIGH7Q/tUQ519IA4wcnkyGldKKnQTukjBHzEHHiHFbw=;
-        b=i3WVs51zn+N+OffvOHIVd+M4i0ujqu/Cy9c3krFuZXIhJyIf56AzyLf6ffk+GjtMGo
-         3gtFiIhj8vh8N9zfGOdUdLk6uK+5dki1qEvKQbPPnpUBlJ1RlKI4SaSx6KIX6V+Fs5DC
-         f/Zv2NDBVJYocAD06d+xCELQZy/SVC+gWjcQ85EN9qP7ioVemzn9LbhJC/Da1//w4srP
-         jzLbzCVtsMQ+J7JWBXJ32GRMDCwdYIHdi3I1evw9qgaSO5Bwe3/jKzfG7juyrNAinELu
-         2jL3uWZLrwlURyu3gzUDwZndcnH3ZOFKgJ/71gIQsRow+L1pwMM90O37H4BNorooaAv7
-         XOqQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sz3EsdlLQi6luft4uKgNHjeoND5SWdEjOQijkdP8nN8=;
+        b=MjA2UQchowrEJVjRbTlPCUFNeyUVAftiWyJUJZ3Phg8OYTLv3seNUDt769fthusDjN
+         JMDWjn9nACLzbWNE59zoGrUUqWnn5Qsg/9+LZSHCxb5m6WdX4e4LrE3rXSj+G43rP3PO
+         Pav0MT4k68KHa7am0FD9lxX7ejCjmmvO4zqkOnhJOdsgOeuAbOw0AvY9cqOlP6PLXzLf
+         qfcstg1xNe+P5u2YlXQGp4ukr89NU5KyllUjrMzFgWKxkf1WIz07VlohnJpxGwQG2xU0
+         KAx9yp2mbhj+axMEaq38ZdSscFZAXh8Rj02gzwGc8f4NydcXvthcIht1wMrOgnfnfikO
+         O+Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gIGH7Q/tUQ519IA4wcnkyGldKKnQTukjBHzEHHiHFbw=;
-        b=LJnglBtFNUcaPWhISKG/xDpGf81eerZycuNZPs0/LdXRjvS7iw+q1t0riTkE0N+okU
-         5fIEjXbgOSgUWRt99X28D0BSxS2+fgZR34QkJKjUTj3kcMKbp063h4W2GNCEGgf8e2Gm
-         p8lsTc1ghN1pTQhqgWg6brUzhYeMpj2Vylq/fHTCoO4MSsh/4yOOkBgsKQH4+32uUo3j
-         grni9EwDql3pmV0l4kwuP38h5kcjJALa34KJ/Hcg96mqK+WULP9C2HSLipcFUjGaUO3c
-         hrhmlmG9z1VvPs4YWUYLCUhE+lZ5V6LkFduZmzhaJOIMDUzVpGnMtawdRUv8R/hMjT+e
-         MQbg==
-X-Gm-Message-State: ANoB5pms3H3xyuDnAM1vCeInyX+UyczcypLgsWf4FOyFC6ix1UAdiOVb
-        oS0n25x0+ZPf6y/lMyeJE4e9IOW4RWk+bN+ppvI=
-X-Google-Smtp-Source: AA0mqf5RagTfHbxJPy0nWx53AnnqIn9z0nCtM3YIC3fPyj8aX541gPdPw6c0U1mGn0rsDBmc+RqH9OCKq/bY2z3LK3Q=
-X-Received: by 2002:a17:902:ce8e:b0:174:b537:266d with SMTP id
- f14-20020a170902ce8e00b00174b537266dmr78785131plg.144.1671059866194; Wed, 14
- Dec 2022 15:17:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20221213074726.51756-1-lianglixuehao@126.com> <Y5l5pUKBW9DvHJAW@unreal>
- <20221214085106.42a88df1@kernel.org> <Y5obql8TVeYEsRw8@unreal>
- <20221214125016.5a23c32a@kernel.org> <4576ee79-1040-1998-6d91-7ef836ae123b@gmail.com>
-In-Reply-To: <4576ee79-1040-1998-6d91-7ef836ae123b@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Wed, 14 Dec 2022 15:17:34 -0800
-Message-ID: <CAKgT0UdZUmFD8qYdF6k47ZmRgB0jS-graOYgB5Se+y+4fKqW8w@mail.gmail.com>
-Subject: Re: [PATCH v7] igb: Assign random MAC address instead of fail in case
- of invalid one
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Lixue Liang <lianglixuehao@126.com>,
-        anthony.l.nguyen@intel.com, linux-kernel@vger.kernel.org,
-        jesse.brandeburg@intel.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        lianglixue@greatwall.com.cn
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sz3EsdlLQi6luft4uKgNHjeoND5SWdEjOQijkdP8nN8=;
+        b=ngjlDSXip1wW9Wd7yBmHYDOvGwK+hwaRjgJHgYUREXuckuQQpUGp8htO20y7GK+3fU
+         2yDJvK7Xux30+LsG1z7FFYGq31/UlCaE1G8G4upFZR+CBRIrKTugox4XkrdNoIV1BgoR
+         EbADX+B3oz/qqvxcDeBBI97wiIEzMiQwt24GBUTh8e/Qy8EnzXg+IJnnNT7UU7oz48MD
+         DAjjrKMLRyD1/w0o3dZxJF/eWBQ/EASKqrcvLRrUQp8mu0Zn/p43c3X5eQoj8znRKcps
+         KB8kcezfGRT/Jhqh0TZYwYcyC89jD3s8BuNwarNrxxxHDcJUIFU5B6VvftW6mbAZIQVq
+         Z6sA==
+X-Gm-Message-State: ANoB5pn+Y8H6zPPDfomHGTFKK/K2llHdvyx1d7iGezTVK23oskKBK+7N
+        EUo3iV3Mzr5W7BA4zKssC2bgq2cR0il7hVWFj79Ql6vGAxi5pplHExmBmduXRle/7WVKHtasUfl
+        jUxb2V35CoLRZF5hggkbdHPD6SlB/kadreATWgoQjMUhVXB+2VN2K4fYwL8DIH1cw2oLsD0M=
+X-Google-Smtp-Source: AA0mqf5wTl6erjuPrEaEfp/M0fJ/LsiW2kTZNYKYjyyPqYEFjdS5sfs6NvNzZN0zuOSDMHwTt/MAk+0lPzgQ
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a25:50cd:0:b0:707:18f:7226 with SMTP id
+ e196-20020a2550cd000000b00707018f7226mr11427904ybb.505.1671059923320; Wed, 14
+ Dec 2022 15:18:43 -0800 (PST)
+Date:   Wed, 14 Dec 2022 23:18:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221214231834.3711880-1-jstultz@google.com>
+Subject: [PATCH v2] pstore: Switch pmsg_lock to an rt_mutex to avoid priority inversion
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        "Connor O'Brien" <connoro@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 1:43 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->
-> On 14.12.2022 21:50, Jakub Kicinski wrote:
-> > On Wed, 14 Dec 2022 20:53:30 +0200 Leon Romanovsky wrote:
-> >> On Wed, Dec 14, 2022 at 08:51:06AM -0800, Jakub Kicinski wrote:
-> >>> On Wed, 14 Dec 2022 09:22:13 +0200 Leon Romanovsky wrote:
-> >>>> NAK to any module driver parameter. If it is applicable to all drivers,
-> >>>> please find a way to configure it to more user-friendly. If it is not,
-> >>>> try to do the same as other drivers do.
-> >>>
-> >>> I think this one may be fine. Configuration which has to be set before
-> >>> device probing can't really be per-device.
-> >>
-> >> This configuration can be different between multiple devices
-> >> which use same igb module. Module parameters doesn't allow such
-> >> separation.
-> >
-> > Configuration of the device, sure, but this module param is more of
-> > a system policy. BTW the name of the param is not great, we're allowing
-> > the use of random address, not an invalid address.
-> >
-> >> Also, as a user, I despise random module parameters which I need
-> >> to set after every HW update/replacement.
-> >
-> > Agreed, IIUC the concern was alerting users to incorrect EEPROM values.
-> > I thought falling back to a random address was relatively common, but
-> > I haven't done the research.
->
-> My 2ct, because I once added the fallback to a random MAC address to r8169:
-> Question is whether there's any scenario where you would prefer bailing out
-> in case of invalid MAC address over assigning a random MAC address (that the
-> user may manually change later) plus a warning.
-> I'm not aware of such a scenario. Therefore I decided to hardcode this
-> fallback in the driver.
+Wei Wang reported seeing priority inversion caused latencies
+caused by contention on pmsg_lock, and suggested it be switched
+to a rt_mutex.
 
-I've seen issues with such a solution in the past. In addition it is
-very easy for the user to miss the warning and when the EEPROM is
-corrupted on the Intel NICs it has other side effects. That is one of
-the reasons why the MAC address is used as a requirement for us to
-spawn a netdev.
+I was initially hesitant this would help, as the tasks in that
+trace all seemed to be SCHED_NORMAL, so the benefit would be
+limited to only nice boosting.
 
-As far as the discussion for module parameter vs something else. The
-problem with the driver is that it is monolithic so it isn't as if
-there is a devlink interface to configure a per-network parameter
-before the network portion is loaded. The module parameter is a
-compromise that should only be used to enable the workaround so that
-the driver can be loaded so that the EEPROM can then be edited. If
-anything, tying the EEPROM to ethtool is the issue. If somebody wants
-to look at providing an option to edit the EEPROM via devlink that
-would solve the issue as then the driver could expose the devlink
-interface to edit the EEPROM without having to allocate and register a
-netdev.
+However, another similar issue was raised where the priority
+inversion was seen did involve a blocked RT task so it is clear
+this would be helpful in that case.
+
+Cc: Wei Wang <wvw@google.com>
+Cc: Midas Chien<midaschieh@google.com>
+Cc: Connor O'Brien <connoro@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Anton Vorontsov <anton@enomsg.org>
+Cc: Colin Cross <ccross@android.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: kernel-team@android.com
+Fixes: 9d5438f462ab ("pstore: Add pmsg - user-space accessible pstore object")
+Reported-by: Wei Wang <wvw@google.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+v2: Added Fixes tag
+---
+ fs/pstore/pmsg.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+index d8542ec2f38c..18cf94b597e0 100644
+--- a/fs/pstore/pmsg.c
++++ b/fs/pstore/pmsg.c
+@@ -7,9 +7,10 @@
+ #include <linux/device.h>
+ #include <linux/fs.h>
+ #include <linux/uaccess.h>
++#include <linux/rtmutex.h>
+ #include "internal.h"
+ 
+-static DEFINE_MUTEX(pmsg_lock);
++static DEFINE_RT_MUTEX(pmsg_lock);
+ 
+ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+ 			  size_t count, loff_t *ppos)
+@@ -28,9 +29,9 @@ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+ 	if (!access_ok(buf, count))
+ 		return -EFAULT;
+ 
+-	mutex_lock(&pmsg_lock);
++	rt_mutex_lock(&pmsg_lock);
+ 	ret = psinfo->write_user(&record, buf);
+-	mutex_unlock(&pmsg_lock);
++	rt_mutex_unlock(&pmsg_lock);
+ 	return ret ? ret : count;
+ }
+ 
+-- 
+2.39.0.314.g84b9a713c41-goog
+
