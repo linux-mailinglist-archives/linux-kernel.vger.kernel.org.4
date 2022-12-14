@@ -2,254 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6581864CEFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5067164CEFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbiLNRwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 12:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S236910AbiLNRxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbiLNRwQ (ORCPT
+        with ESMTP id S237321AbiLNRxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:52:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9F1274D;
-        Wed, 14 Dec 2022 09:52:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2B33B819D8;
-        Wed, 14 Dec 2022 17:52:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F68C433EF;
-        Wed, 14 Dec 2022 17:52:11 +0000 (UTC)
-Date:   Wed, 14 Dec 2022 12:52:09 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH] tracing: Add a way to filter function addresses to function
- names
-Message-ID: <20221214125209.09d736dd@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 14 Dec 2022 12:53:18 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712201274D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:53:17 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id pe2so1598005qkn.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtzqksgbDSBUnfThhwNIuG565HLgSHV/Y7SFXSX6iRk=;
+        b=Uo4p9ILjJJYHbbHc3nJgt5xQFrwb3luZ6P6bVtkhqfKaeP3jDnRd6GXebGp25O1t3H
+         cd2MP63e1aX2ujsbzlY3acrZbjlxvH+WKpV9udfhvXXTIm7pTrnBtS6UKUsdBjFyR9ZA
+         me9TX1JZ5xpN4SV5vgLl3Bp3F4EcDGabBjuWUjSRqb5T3Sc5+EXPYUx1QgU1ppU+owo9
+         HiBede2+++uqyp1C1faFk3XpPsZ5W62tfkD3I6SN2eIDB3texOcYkSwNrhK8mXi9uiaY
+         HA88oxlHm1vVoUML4lIbjAqPuRqfZD22ZQso1JPnOzvxTRvAHjVh2UMOPwnTsVwmPAOe
+         OoCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qtzqksgbDSBUnfThhwNIuG565HLgSHV/Y7SFXSX6iRk=;
+        b=En+wSaQyw/0L+tjzuluCqOprRgPAiC5h+wMCqQtRe7qD/E9Oyd3Yd3dXOWz0oJC81U
+         5mCT2PIwAwrB/Q21Xt5g5Y9Ccu0j+7Z/KwsrmTHsrdwgIb1AaUogN2HoLgJW0TJou4QH
+         0oK1jnSma1pHuaYpz2afnXonznenXgPCJJFQcpw7ZxMOETr1s/hn1HYDpTjBmCcZbl8V
+         XskCy5Ev+Xl9rk7BnksMTCmg1U+wXANqEswadbwbHrXdCKSJE8FdBDmIpZbGffCZv9As
+         M7NrBl61hbSJCIKAr1yhuBGz2tAEm7kD5JOeCl3fLCw4rS5d3qfQoTn64VoH4LHAOjcS
+         fJkQ==
+X-Gm-Message-State: ANoB5pmk68FnqUW0OfepNna+8r580avLcsuB7ilZ5GXonpem1nf43EOG
+        3EkVOStkGdItE6x24Q5n6L9UBUtTWC5nWoUW358koQ==
+X-Google-Smtp-Source: AA0mqf7sok6JDxBUsgOA7+BuK5IYefYnUo0u4V0WhrMLpoqG4afD6PuUwYTrli1heFAoEK+jlsyrscDySVaWUO5VXgo=
+X-Received: by 2002:a37:808:0:b0:6fe:d95e:3cae with SMTP id
+ 8-20020a370808000000b006fed95e3caemr8831426qki.768.1671040396424; Wed, 14 Dec
+ 2022 09:53:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206173601.549281-1-bgardon@google.com> <20221206173601.549281-3-bgardon@google.com>
+ <Y5O+/1CYivRishFE@google.com> <CANgfPd8-i=B_c60MFn6symaqpUMXqu+HHJFDkQm8OuzOLnHQ+A@mail.gmail.com>
+ <Y5kf2KI5oharI0xZ@google.com>
+In-Reply-To: <Y5kf2KI5oharI0xZ@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 14 Dec 2022 09:53:05 -0800
+Message-ID: <CANgfPd9xkRgm691Hy=Zbk=SAx-gaW-Hkk0XWQE0UsH9mJwLU-A@mail.gmail.com>
+Subject: Re: [PATCH 2/7] KVM: x86/MMU: Move rmap_iterator to rmap.h
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Matlack <dmatlack@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Vipin Sharma <vipinsh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Dec 13, 2022 at 4:59 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Tue, Dec 13, 2022, Ben Gardon wrote:
+> > On Fri, Dec 9, 2022 at 3:04 PM David Matlack <dmatlack@google.com> wrote:
+> > >
+> > > > +/*
+> > > > + * Used by the following functions to iterate through the sptes linked by a
+> > > > + * rmap.  All fields are private and not assumed to be used outside.
+> > > > + */
+> > > > +struct rmap_iterator {
+> > > > +     /* private fields */
+> > > > +     struct pte_list_desc *desc;     /* holds the sptep if not NULL */
+> > > > +     int pos;                        /* index of the sptep */
+> > > > +};
+> > > > +
+> > > > +u64 *rmap_get_first(struct kvm_rmap_head *rmap_head,
+> > > > +                 struct rmap_iterator *iter);
+> > > > +u64 *rmap_get_next(struct rmap_iterator *iter);
+> > > > +
+> > > > +#define for_each_rmap_spte(_rmap_head_, _iter_, _spte_)                      \
+> > > > +     for (_spte_ = rmap_get_first(_rmap_head_, _iter_);              \
+> > > > +          _spte_; _spte_ = rmap_get_next(_iter_))
+> > > > +
+> > >
+> > > I always found these function names and kvm_rmap_head confusing since
+>
+> Heh, you definitely aren't the only one.
+>
+> > > they are about iterating through the pte_list_desc data structure. The
+> > > rmap (gfn -> list of sptes) is a specific application of the
+> > > pte_list_desc structure, but not the only application. There's also
+> > > parent_ptes in struct kvm_mmu_page, which is not an rmap, just a plain
+> > > old list of ptes.
+> >
+> > > While you are refactoring this code, what do you think about doing the
+> > > following renames?
+> > >
+> > >   struct kvm_rmap_head  -> struct pte_list_head
+> > >   struct rmap_iterator  -> struct pte_list_iterator
+> > >   rmap_get_first()      -> pte_list_get_first()
+> > >   rmap_get_next()       -> pte_list_get_next()
+> > >   for_each_rmap_spte()  -> for_each_pte_list_entry()
+>
+> I would strongly prefer to keep "spte" in this one regardless of what other naming
+> changes we do (see below).  Maybe just for_each_spte()?  IMO, "pte_list_entry"
+> unnecessarily obfuscates that it's a list of SPTEs.
+>
+> > > Then we can reserve the term "rmap" just for the actual rmap
+> > > (slot->arch.rmap), and code that deals with sp->parent_ptes will become
+> > > a lot more clear IMO (because it will not longer mention rmap).
+> > >
+> > > e.g. We go from this:
+> > >
+> > >   struct rmap_iterator iter;
+> > >   u64 *sptep;
+> > >
+> > >   for_each_rmap_spte(&sp->parent_ptes, &iter, sptep) {
+> > >      ...
+> > >   }
+> > >
+> > > To this:
+> > >
+> > >   struct pte_list_iterator iter;
+> > >   u64 *sptep;
+> > >
+> > >   for_each_pte_list_entry(&sp->parent_ptes, &iter, sptep) {
+> > >      ...
+> > >   }
+> >
+> > I like this suggestion, and I do think it'll make things more
+> > readable. It's going to be a huge patch to rename all the instances of
+> > kvm_rmap_head, but it's probably worth it.
+>
+> I generally like this idea too, but tying into my above comment, before jumping
+> in I think we should figure out what end state we want, i.e. get the bikeshedding
+> out of the way now to hopefully avoid dragging out a series while various things
+> get nitpicked.
+>
+> E.g. if we if we just rename the structs and their macros, then we'll end up with
+> things like
+>
+>         static bool slot_rmap_write_protect(struct kvm *kvm,
+>                                             struct pte_list_head *rmap_head,
+>                                             const struct kvm_memory_slot *slot)
+>         {
+>                 return rmap_write_protect(rmap_head, false);
+>         }
+>
+> which isn't terrible, but there's still opportunity for cleanup, e.g.
+> rmap_write_protect() could easily be sptes_write_protect() or write_protect_sptes().
+>
+> That will generate a naming conflict of sorts with pte_list_head if we don't also
+> rename that to spte_list_head.  And I think capturing that it's a list of SPTEs and
+> not guest PTEs will be helpful in general.
+>
+> And if we rename pte_list_head, then we might as well commit 100% and use consisnent
+> nomenclature across the board, e.g. end up with
+>
+>         static bool sptes_clear_dirty(struct kvm *kvm, struct sptes_list_head *head,
+>                                       const struct kvm_memory_slot *slot)
+>         {
+>                 u64 *sptep;
+>                 struct spte_list_iterator iter;
+>                 bool flush = false;
+>
+>                 for_each_spte(head, &iter, sptep) {
+>                         if (spte_ad_need_write_protect(*sptep))
+>                                 flush |= spte_wrprot_for_clear_dirty(sptep);
+>                         else
+>                                 flush |= spte_clear_dirty(sptep);
+>                 }
+>
+>                 return flush;
+>         }
+>
+> versus the current
+>
+>         static bool __rmap_clear_dirty(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+>                                        const struct kvm_memory_slot *slot)
+>         {
+>                 u64 *sptep;
+>                 struct rmap_iterator iter;
+>                 bool flush = false;
+>
+>                 for_each_rmap_spte(rmap_head, &iter, sptep)
+>                         if (spte_ad_need_write_protect(*sptep))
+>                                 flush |= spte_wrprot_for_clear_dirty(sptep);
+>                         else
+>                                 flush |= spte_clear_dirty(sptep);
+>
+>                 return flush;
+>         }
 
-There's been several times where an event records a function address in
-its field and I needed to filter on that address for a specific function
-name. It required looking up the function in kallsyms, finding its size,
-and doing a compare of "field >= function_start && field < function_end".
+I'd be happy to see some consistent SPTE-based naming in the Shadow
+MMU and more or less get rid of the rmap naming scheme. Once you
+change to spte_list_head or whatever, the use of the actual rmap (an
+array of spte_list_heads) becomes super narrow.
 
-But this would change from boot to boot and is unreliable in scripts.
-Also, it is useful to have this at boot up, where the addresses will not
-be known. For example, on the boot command line:
+Given the potential for enormous scope creep on what's already going
+to be a long series, I'm inclined to split this work into two parts:
+1. Move code from mmu.c to shadow_mmu.c with minimal cleanups /
+refactors / renames; just move the code
+2. Clean up naming conventions: make the functions exported in
+shadow_mmu.h consistent, get rid of the whole rmap naming scheme, etc.
 
-  trace_trigger="initcall_finish.traceoff if initcall_finish.function == acpi_init"
-
-To implement this, add a ".function" prefix, that will check that the
-field is of size long, and the only operations allowed (so far) are "=="
-and "!=".
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-[ Resending due to claws-mail messing up the format of the
-  original patch ]
-
- Documentation/trace/events.rst     | 12 +++++
- kernel/trace/trace_events.c        |  2 +-
- kernel/trace/trace_events_filter.c | 79 +++++++++++++++++++++++++++++-
- 3 files changed, 91 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index c47f381d0c00..d0fd5c7220b7 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -207,6 +207,18 @@ field name::
- As the kernel will have to know how to retrieve the memory that the pointer
- is at from user space.
- 
-+You can convert any long type to a function address and search by function name::
-+
-+  call_site.function == security_prepare_creds
-+
-+The above will filter when the field "call_site" falls on the address within
-+"security_prepare_creds". That is, it will compare the value of "call_site" and
-+the filter will return true if it is greater than or equal to the start of
-+the function "security_prepare_creds" and less than the end of that function.
-+
-+The ".function" postfix can only be attached to values of size long, and can only
-+be compared with "==" or "!=".
-+
- 5.2 Setting filters
- -------------------
- 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 33e0b4f8ebe6..db6e2f399440 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2822,7 +2822,7 @@ static __init int setup_trace_triggers(char *str)
- 		if (!trigger)
- 			break;
- 		bootup_triggers[i].event = strsep(&trigger, ".");
--		bootup_triggers[i].trigger = strsep(&trigger, ".");
-+		bootup_triggers[i].trigger = strsep(&trigger, "");
- 		if (!bootup_triggers[i].trigger)
- 			break;
- 	}
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 96acc2b71ac7..eef6426051bb 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -64,6 +64,7 @@ enum filter_pred_fn {
- 	FILTER_PRED_FN_PCHAR_USER,
- 	FILTER_PRED_FN_PCHAR,
- 	FILTER_PRED_FN_CPU,
-+	FILTER_PRED_FN_FUNCTION,
- 	FILTER_PRED_FN_,
- 	FILTER_PRED_TEST_VISITED,
- };
-@@ -71,6 +72,7 @@ enum filter_pred_fn {
- struct filter_pred {
- 	enum filter_pred_fn 	fn_num;
- 	u64 			val;
-+	u64 			val2;
- 	struct regex		regex;
- 	unsigned short		*ops;
- 	struct ftrace_event_field *field;
-@@ -103,6 +105,7 @@ struct filter_pred {
- 	C(INVALID_FILTER,	"Meaningless filter expression"),	\
- 	C(IP_FIELD_ONLY,	"Only 'ip' field is supported for function trace"), \
- 	C(INVALID_VALUE,	"Invalid value (did you forget quotes)?"), \
-+	C(NO_FUNCTION,		"Function not found"),			\
- 	C(ERRNO,		"Error"),				\
- 	C(NO_FILTER,		"No filter found")
- 
-@@ -876,6 +879,17 @@ static int filter_pred_comm(struct filter_pred *pred, void *event)
- 	return cmp ^ pred->not;
- }
- 
-+/* Filter predicate for functions. */
-+static int filter_pred_function(struct filter_pred *pred, void *event)
-+{
-+	unsigned long *addr = (unsigned long *)(event + pred->offset);
-+	unsigned long start = (unsigned long)pred->val;
-+	unsigned long end = (unsigned long)pred->val2;
-+	int ret = *addr >= start && *addr < end;
-+
-+	return pred->op == OP_EQ ? ret : !ret;
-+}
-+
- /*
-  * regex_match_foo - Basic regex callbacks
-  *
-@@ -1335,6 +1349,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
- 		return filter_pred_pchar(pred, event);
- 	case FILTER_PRED_FN_CPU:
- 		return filter_pred_cpu(pred, event);
-+	case FILTER_PRED_FN_FUNCTION:
-+		return filter_pred_function(pred, event);
- 	case FILTER_PRED_TEST_VISITED:
- 		return test_pred_visited_fn(pred, event);
- 	default:
-@@ -1350,8 +1366,13 @@ static int parse_pred(const char *str, void *data,
- 	struct trace_event_call *call = data;
- 	struct ftrace_event_field *field;
- 	struct filter_pred *pred = NULL;
-+	unsigned long offset;
-+	unsigned long size;
-+	unsigned long ip;
- 	char num_buf[24];	/* Big enough to hold an address */
- 	char *field_name;
-+	char *name;
-+	bool function = false;
- 	bool ustring = false;
- 	char q;
- 	u64 val;
-@@ -1393,6 +1414,12 @@ static int parse_pred(const char *str, void *data,
- 		i += len;
- 	}
- 
-+	/* See if the field is a user space string */
-+	if ((len = str_has_prefix(str + i, ".function"))) {
-+		function = true;
-+		i += len;
-+	}
-+
- 	while (isspace(str[i]))
- 		i++;
- 
-@@ -1423,7 +1450,57 @@ static int parse_pred(const char *str, void *data,
- 	pred->offset = field->offset;
- 	pred->op = op;
- 
--	if (ftrace_event_is_function(call)) {
-+	if (function) {
-+		/* The field must be the same size as long */
-+		if (field->size != sizeof(long)) {
-+			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
-+			goto err_free;
-+		}
-+
-+		/* Function only works with '==' or '!=' and an unquoted string */
-+		switch (op) {
-+		case OP_NE:
-+		case OP_EQ:
-+			break;
-+		default:
-+			parse_error(pe, FILT_ERR_INVALID_OP, pos + i);
-+			goto err_free;
-+		}
-+
-+		if (isdigit(str[i])) {
-+			ret = kstrtol(num_buf, 0, &ip);
-+			if (ret) {
-+				parse_error(pe, FILT_ERR_INVALID_VALUE, pos + i);
-+				goto err_free;
-+			}
-+		} else {
-+			s = i;
-+			for (; str[i] && !isspace(str[i]); i++)
-+				;
-+
-+			len = i - s;
-+			name = kmemdup_nul(str + s, len, GFP_KERNEL);
-+			if (!name)
-+				goto err_mem;
-+			ip = kallsyms_lookup_name(name);
-+			kfree(name);
-+			if (!ip) {
-+				parse_error(pe, FILT_ERR_NO_FUNCTION, pos + i);
-+				goto err_free;
-+			}
-+		}
-+
-+		/* Now find the function start and end address */
-+		if (!kallsyms_lookup_size_offset(ip, &size, &offset)) {
-+			parse_error(pe, FILT_ERR_NO_FUNCTION, pos + i);
-+			goto err_free;
-+		}
-+
-+		pred->fn_num = FILTER_PRED_FN_FUNCTION;
-+		pred->val = ip - offset;
-+		pred->val2 = pred->val + size;
-+
-+	} else if (ftrace_event_is_function(call)) {
- 		/*
- 		 * Perf does things different with function events.
- 		 * It only allows an "ip" field, and expects a string.
--- 
-2.35.1
-
+That way git-blame will preserve context around the renames /
+refactors which would be obfuscated if we did 2 before 1, and we can
+reduce merge conflicts.
