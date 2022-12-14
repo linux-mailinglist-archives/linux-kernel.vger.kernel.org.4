@@ -2,306 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B3164C48A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADAF64C496
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbiLNH55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 02:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S237287AbiLNIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLNH5w (ORCPT
+        with ESMTP id S230004AbiLNIFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 02:57:52 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFD11208D;
-        Tue, 13 Dec 2022 23:57:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671004671; x=1702540671;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5EGx2rrGNoBHFxRaG/ySuYrGao3DoNsHJZVDc4+/Q8I=;
-  b=hl26l2VLCzcZcWlnJ36ZmW7zuEigeLxhGUip1sky4am6P0+K9S2eqg88
-   AMucs4oR0Iow37OQ0B/Z/tBXLtige7nBvKhMDuFs8P/s3vwCb+esOjsrR
-   ApaCbU4VtFqDf3e2K//f1JGky8jmbgEA66qygAI7ZoB8uiOyZSDwAfBlx
-   gmpWDH/EUrHiXmplfROQCVw4/Te2KP6mHWrEgdU9PSB8u5Mn/9lGuBK9P
-   V+nRhyfCO5GRtQZHBmBDV7oIaKO495i41ZE42SHRmz2O3raN0h99demN/
-   cOWx4fbeedmA6NmWKUeDkANZocFVtYl7SaVHg1NkjsLkvKAvNRuWYlTPp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="298022874"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="298022874"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 23:57:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="823184907"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="823184907"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga005.jf.intel.com with ESMTP; 13 Dec 2022 23:57:50 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 13 Dec 2022 23:57:50 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 13 Dec 2022 23:57:50 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 23:57:49 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 13 Dec 2022 23:57:49 -0800
+        Wed, 14 Dec 2022 03:05:21 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CF81DA67
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:05:20 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gnr+SjIF320Q6V40WBvdSi7VBhcRG3j5vQ9vQ47ARv5KnhDml5Z1oagQ0GOG1NuTPuhs37ahguOZL6wnvgYONiYlmD2+AKpmvbAvEs4kbISbIi9wafglSwyq6d+TUhaxoQ6nfuECjafM3dADS7KI9zw4pMCMT0VoQHiQja6e7YvCZXGeNzuBv/q77X2J4HlkEL0pQlmxnQPxddLGbIPm07xA8A+FqNsZcc+/ZsN93y/1gY2EHPGRE0UAggquuCynx904qK3YDJmeu7qMarJty/XM6Z3uY80DAmoAL3XRho10sLjbGFNEKnM35063qH3ry1k1OejY+U25zPQZw64FEw==
+ b=b4EiGf89HOyW17MM1cQ3/yGUViwQo8APTZEdqbjSDdihkuTZKPgrTvpZc/wtMbvNG2fJRX/ouPYl3SRH9agUZfYeJnBaNxyOaN5eNQ+8PR9SZEOjsKqpvV8S6mQHGGpm6FPwoXV8LboODpaCy+WD5SP8cENOEvsStf6h1R92S0T60LA0acI/C5GORr3KLOUOgxM1+OLUbr0mqd27iwd/Tt8wWBMOx6uriHmQ7r2LDAwGZW6AJ12XRyA9wnm8+CxmJ9HCVw0fRhyJjzp/0HLykFidLM+8DKtam4eISIo8Dqil5sYViSdlEY2TZ3YWprMf125W2cufzP3yCehPNR1NuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1eXSAVjP6pvcGNE2qtzfIB3G4FOQybdK9wFW3SaDOsY=;
- b=S8qItZFu6jtelu7tyoaxXvw+eKKUyLv+B5uKYtCsHNKYRaHCvQrVoZkgyfATeYmyv7Cor6C09m8NIlDFKanViVD2sZhXdDsD0KYkarCMDlypsNtlKXRjJwTy2UHPsl4nmSqJfuu0rK7QBW0kbR+nrXrbCSac9WeuPEN50NPpUKdCkQMtRfdUSR/IpvfHCGUVhYqY58Hq4rrn54XuAMtbtBxikfr5CyLALkqekwY9pBsiRc/tfO7pYgnIOPPi3uIWKcajCuabG8VZPYEhTaWdc2D0ioSR/TYrQ3HbuIOBD5Ad8uFKx0fHfTR9V5+D065/175neMewTaYzRnmcnaGosQ==
+ bh=VCEgxWQ3pat7h84+z6Dt19MdxvwduH5ayBOqE+99IG8=;
+ b=VIJ7pIRi+W2TKpVulJs9lZtVf9Bn2c+oehXjTCD3Td25BkhZar+9I5ezpXns1SkUhphdkSyI0C01TXX23IyoxWTgmz5tVWabppckNRCvkUcyf4vDTqAr7emcjdNK2Pb5clZBbXAXWswm9NFrKbY6JIhuGnnWVBzD5Sb7iN0+L8GK6ncsKQbQP6R0nxxq8fjjfz8D8WrCeyRB4tD/kRlkerq74oZIGTlIxnNV7qGrRNyf4srsPrYNg5Y22WMofDmXyD9QPOdhWeB68Z/2ptynzswSm/3NMy5whmBRJc5H21ZXQer9S0N4ZRHkUmkC31hnWlOH/2cWdy4NBN6TVeSHnQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB0031.namprd11.prod.outlook.com (2603:10b6:301:69::37)
- by MW4PR11MB6933.namprd11.prod.outlook.com (2603:10b6:303:22a::10) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VCEgxWQ3pat7h84+z6Dt19MdxvwduH5ayBOqE+99IG8=;
+ b=i4jUeUxXsqfnb2ldHnDY+bkpLpTd4hM7ZoaA7/l2UZ71MEAlt5SrnRW0+Jt6nweWvbrdkE3co3pWL7GLn6NunC3vaG2GLAW3TXloyTWaxyt0rcHCUqllQnAbLcOUG6F/shcnfvXwfoR7y8rz3AmVyFnxpXac3TFNpIAdBl5Vw2M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN7PR12MB7911.namprd12.prod.outlook.com (2603:10b6:806:32a::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 14 Dec
- 2022 07:57:46 +0000
-Received: from MWHPR11MB0031.namprd11.prod.outlook.com
- ([fe80::b05:c765:b545:78c5]) by MWHPR11MB0031.namprd11.prod.outlook.com
- ([fe80::b05:c765:b545:78c5%7]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 07:57:46 +0000
-From:   "Zhang, Chen" <chen.zhang@intel.com>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: RE: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardware
- mitigations
-Thread-Topic: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardware
- mitigations
-Thread-Index: AQHZDLMhDxurDeM6YkqaqujyHlpxN65qtdEAgAJS9ZA=
-Date:   Wed, 14 Dec 2022 07:57:46 +0000
-Message-ID: <MWHPR11MB0031350E012516655F42F42D9BE09@MWHPR11MB0031.namprd11.prod.outlook.com>
-References: <20221210160046.2608762-1-chen.zhang@intel.com>
- <20221210160046.2608762-6-chen.zhang@intel.com>
- <20221212202334.ldrgv7fnkgjtsogg@desk>
-In-Reply-To: <20221212202334.ldrgv7fnkgjtsogg@desk>
-Accept-Language: en-US
+ 2022 08:05:17 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::80d8:934f:caa7:67b0]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::80d8:934f:caa7:67b0%3]) with mapi id 15.20.5924.011; Wed, 14 Dec 2022
+ 08:05:11 +0000
+Message-ID: <4b1f104f-3b2a-532d-3354-11c68c5b9aa6@amd.com>
+Date:   Wed, 14 Dec 2022 09:05:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [git pull] drm for 6.2-rc1
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB0031:EE_|MW4PR11MB6933:EE_
-x-ms-office365-filtering-correlation-id: d705a3a8-de5d-49ab-5553-08dadda8e36d
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dwaww1bRoBylySoDDCuGoiL/FcmPNfL6Z7qepWN0wjpjZqTrPKXyu2yvl6OklH9AzhiWHCdLs6kiDsK8v6eMEHhgz9wtqAAM9EviP/qY/uszDRP0YLy8BqiewfV+tC2MLbRna2d/eeLiqS1ODdbFzMIQoxxnuqn9FtigFG9dB/pTDgG1t5izpdAX4qyxfKmJg8ex2DSJwMT9S6GDay97GmbcL8NHHu2o60gEqt+QAX1Quj2PztPRXsdiZkpTuox0M9RyzPIMo432h/FXpXSH7TlaZqIDyIewB04ISxrXTXFs0m7xS61FUcQ2xZAPWG7B/pyd9VmiQt2iIDS4bifkdq0XonwVs2Y4NtaEST6yfKMkN6muGXdTbob0UO0+PyslsyWRB1TJBmcpp5vFFuAkbPbKmNG5K2Wiqaa2kyH1qqU0hoRV4wAbWK5jg38toWs5TFa+UWZrxfX+k/Nizp4sGW+L34tQkC2apxodTxP2S4Mnk3/lRI6kX933e7Zy9yOmQfRAnE3AJ9VF6pH0lKUN3+8wvGu9jAYFt6oVtcKBlyXHUH7fUql2z+lS14hOsj4dC0DoQfK9p1rnMR9a+VAchizeixoH/xzGmhpX8tNbbfvEwkmLQpXWclCOgDoadaYF+daVe8jIJX95Z3FAeRdozFsCU1yMqbvKCJNXFvAOVBDlwRDhfoH9O5YddcqlCcVWxZDS/pDMQsmlX9ZxiDwVtQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0031.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(396003)(39860400002)(136003)(451199015)(83380400001)(55016003)(186003)(82960400001)(2906002)(38100700002)(122000001)(86362001)(33656002)(9686003)(71200400001)(7416002)(52536014)(41300700001)(38070700005)(5660300002)(8936002)(316002)(26005)(6916009)(6506007)(54906003)(478600001)(76116006)(66556008)(4326008)(66476007)(8676002)(66446008)(53546011)(64756008)(7696005)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WoBuVwCR2FERK9hpCPIXAWsFsegT+/JAZNFZfnOcYDbKoYL3tR+j03hopOZo?=
- =?us-ascii?Q?CN7Kcz5oIUm4A5MZvIaPolBcgDxc/dmU+7FZwZ24LuJUYshn0+pWOgxZsQsG?=
- =?us-ascii?Q?ZoQ/sZNpIgleMdKaw3sGvs+tGTbPq41No16QYFlzMDkR4FYm70BuzTZAX1SI?=
- =?us-ascii?Q?g8br1OfzSmaxddEaa1cHUZ1dyzQ2m6oNXgoU+TDGZOWIraxZWxi+1NbOTEWt?=
- =?us-ascii?Q?+gmnJHsmF6p8T279NSnz3VhchF00xVT/+FKr7iR5IW6ou60kTqjbDnURpxj+?=
- =?us-ascii?Q?sXMDlSmKERjAd7KyKMZbt8tbIxRDBEgGi2LAvjz59lJ8Is6Bw9VfeabG5ZbF?=
- =?us-ascii?Q?y6OsY1JCvGbCdwuMdP4RrnErFUoYm/ObG17XC0yJm8oKnANpDjRXgLmBu0f9?=
- =?us-ascii?Q?ugt2ERuGVEl88xaVIfBO8rWHTtHYVo08q6azi/3HiuwP8o6fcGqDHnEmCZE0?=
- =?us-ascii?Q?Z4hP3nPh9qxSiE1SGxQg9hUni/c8SNNShSlHOAjiwS5EniGlcNhfOaDmF7AO?=
- =?us-ascii?Q?DK8jCODqZQVyTKFCZ1LEAaSyWH99EzSIVztMhI5axsjttQqzVvTHoiIy3lmT?=
- =?us-ascii?Q?q1EuPzEQgrpGTmfOnVkHPexGmAfiMeg3hZkwmrgf8VR0wLqFy6wwO9HC1apz?=
- =?us-ascii?Q?vCMQXOFMgPiHCFJX3AwPIt1Tu2ZOn8BVrU2V4viuo6T6llmc6zivg240ThiG?=
- =?us-ascii?Q?xg7j0grKHdiYLXx1wc1Z1PxPu+2xJQWcDE/evsiW1trCuW25FKWEdbQko0Vr?=
- =?us-ascii?Q?VljuNdh2TIMZYLd6Fhn4FKXmopfajsel+lg0Dk/2lPhvxuqdea65A1npeWLP?=
- =?us-ascii?Q?81/kGcA1p8x8xcSoicdg5wpdnbVGTt+3/orFXE/MA+23zyf1OgDFB/8o4uRs?=
- =?us-ascii?Q?c8qYndvGIDqwWVGh6EQvXgK3+/0sNbqLJ2MkicsbLXnIZkm0E3bHEMBO6e/w?=
- =?us-ascii?Q?hQlsKeyd9So0wyddXa/2Pp/38YqLXe5fbRklD4aK0p1H93ZPIvmEbxtRrhzL?=
- =?us-ascii?Q?FEFMJrnX3qHGBU56u4hKz96oi+IA9Tp+r+F+e5/YSyNE+px0vrry172IaLO0?=
- =?us-ascii?Q?cZDbWoJBIoYLiR4Kmk+XLV6R2vnidrnSTK5dzC/U/CF1EVFPnoIevMw6Y80P?=
- =?us-ascii?Q?jcWCxqAW27l9wBjQMznxG83BkKZBebhIXQjw0d5YOel1Z+euMC1b4NwbTADc?=
- =?us-ascii?Q?7lWirpPAFrAB2lLiDIsydX6duTXhy1g+puZ67iNYNs6g9IzycHxHut2jCThi?=
- =?us-ascii?Q?n72Ms+v1sh30ZLOny6HNQ0rymL6tLlgCNw9TFzZ8NYpTX1W3VEFhToAw+Vwq?=
- =?us-ascii?Q?teQLG1A+nw2YJGU0E1pHS3AWqhloSw0UXz46oyZpsuUsoBsBJcJPCHIg1pEs?=
- =?us-ascii?Q?tlNqGrYJaqZHYDK7r2ZAUU8JLZ1XwXkZAuJ5EJ1OO13KsJnS/ZFWkeuLvqVH?=
- =?us-ascii?Q?VDhgRPQqn65RQvBLcId0IQAx+82gtmbQiQn34Mu4dD7qH6oBSt/xpxPFkO+I?=
- =?us-ascii?Q?Z0IGAWJkECNiyiftp4rqr3k44a4baYMzQfSq/3gBzBEWx7ij7sOwiF8j5gIx?=
- =?us-ascii?Q?vhU/2DooO/4b2229WVQKz5ZUrk7c4Fj9nD1Pc9RJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <CAPM=9txGCMqyriq_xiwgFCUBa-PpHvSuRQuptAHusHcjpH+zqA@mail.gmail.com>
+ <CAHk-=whVsxgtwvnK2=WRvs_i+miknfB2R7dQ4U8oooBFJZYH6w@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAHk-=whVsxgtwvnK2=WRvs_i+miknfB2R7dQ4U8oooBFJZYH6w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0122.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::6) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SN7PR12MB7911:EE_
+X-MS-Office365-Filtering-Correlation-Id: 500c3e7a-8b8f-47ec-1c60-08dadda9ec88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xI9MMiJdsX5a4FY01F5BAWB+CmNz7wOwoaB0Jj7dgp0hy+UvE9oOFdIkVUCNcnKVcpqjWYQxjTJiEa/qYAI0B7fQGlSkyTUnKcFvAQVwdbuLGu+b59kWCMB5ugGvja/dXsiG1uAleqf5m1zzkNtlWNVC1JAwLtJO4vwtZREHMT/qgI3JaLj2pQa11PNDH6xJVUhxFpWcfeZnJ7WgFMLeuXav18wLv65MRxmEeRjuBEyiTNHXgI5dwywce4y1yDmS0chjxMK4LUFJTYTsspznnnlx4N5DXCe1Rf5B7gaFTvqUL4/PrZSHA3pz0uX3wfNugwOXCkTlOXoZiUfCv9y3c8DQD+9TmvGcWJLMW+H52ZaFTQk5vBLH1YUigLu3lyJnDLEmg5SYXsRYmF2mLhx1gE+he0dSiwm6d2P1oxKBY5/y5zSq5ApZeSNlgT7QgLD29iRfm9ad920I4/v5Ce6duJhH7J0bOQGVHSw7Wn9QmwrHLKm4lReLklCVGVIgOydEQ/OnFe0/lfudwWghSqGu4oFkNXbEXtl5+1qdiqqvij+7xD95yGo9rTFu4co91/Ci3PWlv8Kv3jL6ws21txu4sXcjLcffE/joW1d8n6MSExgYxa16DA21fOwbMKi414CCc/WcHEy8WybTugHu7j0MijMzJzIEeMxcn3UBWw3BKut6kT9uQvRmjX7waj7JujdlOSlvY9ZkAHgz3DTcHnc1Gpv4jvJwaVuVxw7rHrxdMa8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199015)(83380400001)(8936002)(5660300002)(2906002)(41300700001)(86362001)(31696002)(36756003)(38100700002)(53546011)(316002)(6486002)(6512007)(54906003)(110136005)(478600001)(6636002)(66946007)(8676002)(66556008)(66476007)(4326008)(186003)(6666004)(31686004)(6506007)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RllwanFpMkpaMFl2eDk4T3Z1M3VIYVZyNWhlOEZrRVhQbHpINXU5N3FMT2E1?=
+ =?utf-8?B?NlJZMTRYT3MyQkIwMllseWVST05yL3NBZzlyZC9Lb1E2a1JUMW5IUTg1V25z?=
+ =?utf-8?B?N1orblliSyt1OFNpcUcydVB1VXdJREdNdG42bzQ4eFVNTFE3a2E0UFhPRngw?=
+ =?utf-8?B?UXBZWlB5VktkSlprV2U1dDFxSzkwTEVYZjZTZEEyTWRZampQU3FHMEF1SVNZ?=
+ =?utf-8?B?Yi8xSXR0U2dTcjhlVml3M3ZXdndMdzUveFFWNm9xeWoxNzU3YzJ1d1RlVWNC?=
+ =?utf-8?B?NS8rT1ZSRzZYM2JCdXdwemVBT3RMYmpLbFNMY1ZvRWFpYzdGQWh6ci9XeE96?=
+ =?utf-8?B?dEp2bEFRV090SXkzTlc2L25rakNzWHpESFFpMTQ0Mlh0MXorTU4zWkpnNUVV?=
+ =?utf-8?B?eXgrOTVmTU44dGhwNkYrM3Yya0JWUnBlVEE3bTBUTGRhWFNaMTRaNTZPeDFL?=
+ =?utf-8?B?blNrQUlyQ3MyRndkWEhIYUZ5bEpSZ295eVJUdFJZZi92K2NCekdqcHVaTHJH?=
+ =?utf-8?B?bzdIa3pjMDdISGZ1b3dKZzZvRTZxK3VwYWd2eHViYitHOFo2OVp2d1ZjWHZK?=
+ =?utf-8?B?VzBNQWk5RTRvWTlGU1N2aU9uVWNsWmQ3b3hpTkRaOXg2RS96UWJpZmdFYXR5?=
+ =?utf-8?B?TlFLUTJuSDJLRC9tQkFzaXN1NkpYQ01OMU5GcitQa0tsNEdWOEFtaWpJN1pa?=
+ =?utf-8?B?OTN5SVhKY2pBaHN2RGV6L293eTBJNlN0ci9xQUNXWTlzN2lqQndFS2dxYUgr?=
+ =?utf-8?B?ZE9Yam1uTEQ3MGhvdjZsQVArb21NWGVMZXZVZG9aNmlHeUZLNTFiLzNDdk5U?=
+ =?utf-8?B?NW02cTU2M0pIN1N4TFhqM0E0OVU1aFNDZURJTERBVElEK2ZjVE5FT0w1aWMz?=
+ =?utf-8?B?LzFrb2ZjUUhqVnFCZW9DeUJRZklzdFI5STNhNWNWbGduNnZhUUJ4ejJ1SWcw?=
+ =?utf-8?B?U3AwWDMycndKVWY0QzY5THI3bmV3Ylh1bWtYNzFwUzhEQ3ZOR2tEM1UzZlY5?=
+ =?utf-8?B?N050K3ZqcTJTa3luK2NaZEFzSXE3UzlucG1XOGNlOGtEcEordWVVSXJYcVNY?=
+ =?utf-8?B?SUJrTC9IRkFrUjAxM01vRU1kNzBOSWN3a25qQkVjWHZISGNkcEJOU2JLSkox?=
+ =?utf-8?B?dzBicHk0djk2V2ZtRHF5R1hHWW9KSEh3UnRVL2JhKzh5MTA0YktMMXU2aHlL?=
+ =?utf-8?B?NzBYc0ZWWGpGMUFYeUhqMjJJS0s4dGtXVFlrQWoxVHNLdmJVZVNkY1FMYnB5?=
+ =?utf-8?B?T3VOWGNJMWlqNkdBTzhvandOK0JNT1NWVFNzRmJBTEt1V0ZUWlZZRjBkdXJ2?=
+ =?utf-8?B?S2RoeTVYaCtjckQ5azB2QXdsYzBrdzdiZUZBS3pqVzhzWlZxSXNzL3BUbE91?=
+ =?utf-8?B?MUVVMk53Y0hTZnZjdjRHQVpIQ1M0SytuQVhtdjI1M0dkWElGdytwcHFKQ2Zi?=
+ =?utf-8?B?SW5YNU5RQVpiUnZqVjFhNEhuWTZUT2JnNU5tbkxNYnMxU3dkdFRWazJaUXJs?=
+ =?utf-8?B?WTQxR3dXOGs0dWdaZFFZbWg3aElhUXlUWXJGOXgwTDBuZ2tNNzlaQVdvZ0FR?=
+ =?utf-8?B?VmlsNTl6T2NhVDJOdGxORWh5MkRzL0tXZnZyWUMyRHZaU2tRejhQM1NqTEQr?=
+ =?utf-8?B?bTZINTdMRm1RSGo3ZnR1M1hiSyt2cmcrU0xLNGpkMGlUUVZQSUJFT205NE4r?=
+ =?utf-8?B?TS9QWTNYRVBzK2NndnV4bkRTREdidndvUkR5NjZIUjlMVnFwWVkvTTFSR1Rm?=
+ =?utf-8?B?dUFPbVo4SlVYUE9BbGVaRVkxaENLVndwWDFLMWNCUURtbVJNRDllUGlBUllO?=
+ =?utf-8?B?TFpNSWw3dTdHb0RMRGQxYjlkdjRLN3VQNmNZNTBEb3dFVDFHTTZqbFRFRUcr?=
+ =?utf-8?B?YTQ0T1ByRUZyRjg1NDhwSTh1Z0dYd1BiVC9DYTJqN0x0U3l6azlNMmZyaWlu?=
+ =?utf-8?B?eUVOM3UzVDMzRE1NQmIyemt2V3MvQ1VVOGNHcjJ6amhBY09TMU9McEszSDZ3?=
+ =?utf-8?B?WW14MXppUEczNlN1Q1ZVWGt5M29RdWRHdFRTdVZhcjlLTWZ5QXdmeit5QkdL?=
+ =?utf-8?B?TTFpTGxXTldOZXFOR083a0g2THBJanZvcUROM21uSTZMNmxjcmlUWDgyRUhD?=
+ =?utf-8?B?UU01UHNOS2lMOFJpUzRLeEJlWlNldkN3MnIzY0JhUDB3WUJ4bjVpNEhVMnpn?=
+ =?utf-8?Q?V8hfVlG7P5HGnqPfDKOr8A2mOfzDB2DbFRm6Vn7q8Rxl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 500c3e7a-8b8f-47ec-1c60-08dadda9ec88
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0031.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d705a3a8-de5d-49ab-5553-08dadda8e36d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2022 07:57:46.5559
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 08:05:11.5932
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fyMWGQ6BRbNkcUpy90p3GhPdieV9DN8yvS4l+P/FgpyJtG/kpvbqM5uTQtaJYNIQUI8ESfoyP+N6Sv2GV7N2Mg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6933
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8NZbGfAmTtfPxvdWCwB+isGqNbosTfw25Po6DYz6TxOMqJuv5vwIZTiTYLNQQ5S8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7911
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 13.12.22 um 21:14 schrieb Linus Torvalds:
+> On Mon, Dec 12, 2022 at 6:56 PM Dave Airlie <airlied@gmail.com> wrote:
+>> There are a bunch of conflicts, one in amdgpu is a bit nasty, I've
+>> cc'ed Christian/Alex to make sure they know to check whatever
+>> resolution you find. The one I have is what we have in drm-tip tree.
+> Hmm. My merge resolution is slightly different from yours.
+>
+> You seem to have basically dropped commit b09d6acba1d9 ("drm/amdgpu:
+> handle gang submit before VMID").
+>
+> Now, there are other fence changes in the drm tree that may mean that
+> that commit *should* be dropped, so it's entirely possible that my
+> resolution which kept that ordering change might be wrong and your
+> resolution that just took the drm tip code is the right one.
+>
+> Christian? Alex? Can you please double-check what I just pushed out?
 
+Yeah, that's certainly not correct. The ordering problem b09d6acba1d9 
+fixed is back there again.
 
-> -----Original Message-----
-> From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Sent: Tuesday, December 13, 2022 4:24 AM
-> To: Zhang, Chen <chen.zhang@intel.com>
-> Cc: x86@kernel.org; linux-kernel@vger.kernel.org; kvm@vger.kernel.org; Ga=
-o,
-> Chao <chao.gao@intel.com>; Paolo Bonzini <pbonzini@redhat.com>;
-> Christopherson,, Sean <seanjc@google.com>; H. Peter Anvin
-> <hpa@zytor.com>; Dave Hansen <dave.hansen@linux.intel.com>; Borislav
-> Petkov <bp@alien8.de>; Ingo Molnar <mingo@redhat.com>; Thomas Gleixner
-> <tglx@linutronix.de>
-> Subject: Re: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardwa=
-re
-> mitigations
->=20
-> On Sun, Dec 11, 2022 at 12:00:42AM +0800, Zhang Chen wrote:
-> > From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> >
-> > Guests that have different family/model than the host may not be aware
-> > of hardware mitigations(such as RRSBA_DIS_S) available on host. This
-> > is particularly true when guests migrate. To solve this problem Intel
-> > processors have added a virtual MSR interface through which guests can
-> > report their mitigation status and request VMM to deploy relevant
-> > hardware mitigations.
-> >
-> > Use this virtualized MSR interface to request relevant hardware
-> > controls for retpoline mitigation.
-> >
-> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > ---
-> >  arch/x86/include/asm/msr-index.h | 23 +++++++++++++++++++++++
-> >  arch/x86/kernel/cpu/bugs.c       | 24 ++++++++++++++++++++++++
-> >  2 files changed, 47 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/msr-index.h
-> > b/arch/x86/include/asm/msr-index.h
-> > index 1143ac9400c3..1166b472377c 100644
-> > --- a/arch/x86/include/asm/msr-index.h
-> > +++ b/arch/x86/include/asm/msr-index.h
-> > @@ -165,6 +165,7 @@
-> >  						 *
-> IA32_XAPIC_DISABLE_STATUS MSR
-> >  						 * supported
-> >  						 */
-> > +#define ARCH_CAP_VIRTUAL_ENUM		BIT(63)	/*
-> MSR_VIRTUAL_ENUMERATION supported */
-> >
-> >  #define MSR_IA32_FLUSH_CMD		0x0000010b
-> >  #define L1D_FLUSH			BIT(0)	/*
-> > @@ -1062,6 +1063,28 @@
-> >  #define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
-> >  #define MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS (1ULL <<
-> 29)
-> >  #define MSR_IA32_VMX_MISC_PREEMPTION_TIMER_SCALE   0x1F
-> > +
-> > +/* Intel virtual MSRs */
-> > +#define MSR_VIRTUAL_ENUMERATION			0x50000000
-> > +#define VIRT_ENUM_MITIGATION_CTRL_SUPPORT	BIT(0)	/*
-> > +							 * Mitigation ctrl via
-> virtual
-> > +							 * MSRs supported
-> > +							 */
-> > +
-> > +#define MSR_VIRTUAL_MITIGATION_ENUM		0x50000001
-> > +#define MITI_ENUM_BHB_CLEAR_SEQ_S_SUPPORT	BIT(0)	/* VMM
-> supports BHI_DIS_S */
-> > +#define MITI_ENUM_RETPOLINE_S_SUPPORT		BIT(1)	/*
-> VMM supports RRSBA_DIS_S */
-> > +
-> > +#define MSR_VIRTUAL_MITIGATION_CTRL		0x50000002
-> > +#define MITI_CTRL_BHB_CLEAR_SEQ_S_USED		BIT(0)	/*
-> > +							 * Request VMM to
-> deploy
-> > +							 * BHI_DIS_S
-> mitigation
-> > +							 */
-> > +#define MITI_CTRL_RETPOLINE_S_USED		BIT(1)	/*
-> > +							 * Request VMM to
-> deploy
-> > +							 * RRSBA_DIS_S
-> mitigation
-> > +							 */
-> > +
-> >  /* AMD-V MSRs */
-> >
-> >  #define MSR_VM_CR                       0xc0010114
-> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> > index 3e3230cccaa7..a9e869f568ee 100644
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> > @@ -1379,6 +1379,28 @@ static void __init
-> spectre_v2_determine_rsb_fill_type_at_vmexit(enum spectre_v2_
-> >  	dump_stack();
-> >  }
-> >
-> > +/* Speculation control using virtualized MSRs */ static void __init
-> > +spec_ctrl_setup_virtualized_msr(void)
-> > +{
-> > +	u64 msr_virt_enum, msr_mitigation_enum, msr_mitigation_ctrl;
-> > +
-> > +	if (!(x86_read_arch_cap_msr() & ARCH_CAP_VIRTUAL_ENUM))
-> > +		return;
-> > +
-> > +	rdmsrl(MSR_VIRTUAL_ENUMERATION, msr_virt_enum);
-> > +	if (!(msr_virt_enum & VIRT_ENUM_MITIGATION_CTRL_SUPPORT))
-> > +		return;
-> > +
-> > +	rdmsrl(MSR_VIRTUAL_MITIGATION_ENUM, msr_mitigation_enum);
-> > +	/* When retpoline is being used, request relevant hardware controls
-> */
-> > +	if (boot_cpu_has(X86_FEATURE_RETPOLINE) &&
-> > +	    msr_mitigation_enum & MITI_ENUM_RETPOLINE_S_SUPPORT) {
-> > +		rdmsrl(MSR_VIRTUAL_MITIGATION_CTRL,
-> msr_mitigation_ctrl);
-> > +		msr_mitigation_ctrl |=3D MITI_CTRL_RETPOLINE_S_USED;
-> > +		wrmsrl(MSR_VIRTUAL_MITIGATION_CTRL,
-> msr_mitigation_ctrl);
-> > +	}
-> > +}
-> > +
-> >  static void __init spectre_v2_select_mitigation(void)
-> >  {
-> >  	enum spectre_v2_mitigation_cmd cmd =3D spectre_v2_parse_cmdline();
-> @@
-> > -1485,6 +1507,8 @@ static void __init spectre_v2_select_mitigation(void=
-)
-> >  	    mode =3D=3D SPECTRE_V2_RETPOLINE)
-> >  		spec_ctrl_disable_kernel_rrsba();
-> >
-> > +	spec_ctrl_setup_virtualized_msr();
->=20
-> I think this also needs to be called during secondary CPU initialization.
+I'm like 99% sure that I did the right thing and my local drm-tip 
+certainly at some point had the right conflict resolution because I've 
+used that for testing the change.
 
-Yes, we need setup virtual MSRs for each CPU.
-I will add the " spec_ctrl_setup_virtualized_msr()" to the "start_secondary=
-()" in the arch/x86/kernel/smpboot.c  next version.
+The last 1% is that it's possible that I only fixed this on the build 
+server and never pushed into the upstream repository.
 
-Thanks
-Chen
+Anyway we need to re-apply b09d6acba1d9 which should be trivial.
+
+Thanks,
+Christian.
+
+>
+>              Linus
 
