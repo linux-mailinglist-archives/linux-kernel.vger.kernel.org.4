@@ -2,141 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F1564D263
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B22264D268
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbiLNW3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 17:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S229514AbiLNWg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 17:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLNW3k (ORCPT
+        with ESMTP id S229446AbiLNWgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 17:29:40 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067F4B1C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:29:38 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id m18so47995824eji.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:29:37 -0800 (PST)
+        Wed, 14 Dec 2022 17:36:24 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7255F303DC
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:23 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id r3so3869902vkq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1bSdi2nTZFfN0KO3twl810Uns3X1CbpenS2xYlJiGPM=;
-        b=QS+/BUVNsbN6h+tQwIBW7N0LXW4/Jg584fdK+n867YoxGH2EVT3pvpOv0U+9ZxfOF/
-         rC+A8JiiEJr2R7MGbILNYNFTad0rr0C8KD/sy/c1V8PbqBkKH32/xb29IPq+heVzZkXp
-         klpRQ11wYfFmdLXqkEepJLbDXUndJHe8njFAk=
+        bh=MY3UvV8qfuLmW0mh3ybluVgZmmXLT9RgvRtqrNrsplM=;
+        b=D8RE0ezI/Lyj8q5qGGcq3x0sUWunzNzjb66SVYEcT/P+p9Ue1GROhZrW23y28kjnuD
+         TZhbgfsULXArFtBuvJdve4LNtsWToqAoDF6+2rJb1d6Dh6qk6VO0hTlXlomhrggptvrd
+         /wligCEbFkAan+tADLhFsapmTxxu77phHhzTA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1bSdi2nTZFfN0KO3twl810Uns3X1CbpenS2xYlJiGPM=;
-        b=q0MyNNfRN0L7UH37Q7pv4vo9yiFIrDFq6EiMVGCHgV0cT5qXPSgD6EeCOo8ApxRxaW
-         flmWnfUVKFfe/TwQrWiyS5pSSBHhy8lUrbro30xaB4SjdBdy3G6la8O7G0TBOjIf59K8
-         EvH9aW9MI13bQwIqaGVVahI1DiZxc4P1Vv3cIUgiUdvT1X4UHcxl2c1u6n1iXKhoJB57
-         GAY+9vjRulTeRTrqx+QSyegkqXqnduHEiqV9f4yIw0XL9X9OzrFEkSg7O1Q049dkT1tp
-         yOpcWDoJM+/G/CMZVhOVVGlqoBe0x+8jLLZjUDnHOXm4Y8ur4fXuWN2OFELMLpjZ1pZ+
-         1fHw==
-X-Gm-Message-State: ANoB5plT6o52RQ33Da2Lf4hpq/akc5/EhHqIioulEUTZ4ZCqABlrGzqw
-        4HO+f12FcTa7D9/6/n8/kBkO/I+OCiIi4aT2bJs=
-X-Google-Smtp-Source: AA0mqf4zSdfAb2h8QTSCI2C/sPMtUTkPkYE0yJC0G1vWMGcokv4bKARuGoVEEAzRdSGc0RwugTXPhw==
-X-Received: by 2002:a17:906:408e:b0:7c0:eba3:e2e with SMTP id u14-20020a170906408e00b007c0eba30e2emr20452325ejj.31.1671056976375;
-        Wed, 14 Dec 2022 14:29:36 -0800 (PST)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170906055100b007806c1474e1sm6177648eja.127.2022.12.14.14.29.35
+        bh=MY3UvV8qfuLmW0mh3ybluVgZmmXLT9RgvRtqrNrsplM=;
+        b=UVsO75/ahnFrsUjfqI0foHWwonYtKSdJTetOMiz5FTa44oJ3h/HBE7o1gkYMwdvUzL
+         je2Pc/1Hh2pmA8qwuKHchdpBat4WH/aosfenJY0dFpCmJ2yf9Ulwhb7ejYKhQJ7ixg44
+         BwGdV1A4pH9mNzgnXo53IZed31XNcfQYZgeJY1Z6ufiDNcX+iU6XGxhEnI6zBbC1emTr
+         OwQZLjBAu93oWDfn8C0H0l0UUD/YZJV93sB/NgrT01yCxDjCEZbaKlEjVh5Ff9CoALgy
+         88dMYd/WtaC/V6nl+lAkOrbtuxPucrxnwfZg23ZEzKHr73AS/pkiRmgvXFcTdqJuhuw9
+         elrw==
+X-Gm-Message-State: ANoB5pmzKCiRVUaqAOleXMDszBug3wVk8NX8j3tdLTbW+j0Gloyo+83V
+        fqDFtww390LBJ1B0fHVXUJG4RKjH8Rw4jKrf
+X-Google-Smtp-Source: AA0mqf7n0w1rzdsLlUlSNHBQfnMkxKpq6R74a0L+lUvDn8uCLpBK6gBehSvTf3w4xOBJzeVuELPEEg==
+X-Received: by 2002:ac5:cb73:0:b0:3c0:f9ab:4821 with SMTP id l19-20020ac5cb73000000b003c0f9ab4821mr10331436vkn.5.1671057382134;
+        Wed, 14 Dec 2022 14:36:22 -0800 (PST)
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
+        by smtp.gmail.com with ESMTPSA id d125-20020ae9ef83000000b006ee8874f5fasm10369848qkg.53.2022.12.14.14.36.21
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 14:29:35 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso573079wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:29:35 -0800 (PST)
-X-Received: by 2002:a05:600c:2d91:b0:3d0:69f4:d3d0 with SMTP id
- i17-20020a05600c2d9100b003d069f4d3d0mr191822wmg.93.1671056974914; Wed, 14 Dec
- 2022 14:29:34 -0800 (PST)
+        Wed, 14 Dec 2022 14:36:21 -0800 (PST)
+Received: by mail-qk1-f176.google.com with SMTP id z17so1902777qki.11
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:36:21 -0800 (PST)
+X-Received: by 2002:a05:620a:4890:b0:6ff:a7de:ce22 with SMTP id
+ ea16-20020a05620a489000b006ffa7dece22mr547175qkb.72.1671057380778; Wed, 14
+ Dec 2022 14:36:20 -0800 (PST)
 MIME-Version: 1.0
-References: <1671052890-11627-1-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1671052890-11627-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 14 Dec 2022 14:29:21 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UTeCU7BcfPMXz8J-9uOp_7Fn9PFdtFMsu46x5wKa0RyQ@mail.gmail.com>
-Message-ID: <CAD=FV=UTeCU7BcfPMXz8J-9uOp_7Fn9PFdtFMsu46x5wKa0RyQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if irq
- is not for aux transfer
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221213174234.688534-1-dave.hansen@linux.intel.com>
+In-Reply-To: <20221213174234.688534-1-dave.hansen@linux.intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 14 Dec 2022 14:36:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com>
+Message-ID: <CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/mm for 6.2
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kirill.shutemov@linux.intel.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Dec 14, 2022 at 1:21 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+On Tue, Dec 13, 2022 at 9:43 AM Dave Hansen <dave.hansen@linux.intel.com> wrote:
 >
-> There are 3 possible interrupt sources are handled by DP controller,
-> HPDstatus, Controller state changes and Aux read/write transaction.
-> At every irq, DP controller have to check isr status of every interrupt
-> sources and service the interrupt if its isr status bits shows interrupts
-> are pending. There is potential race condition may happen at current aux
-> isr handler implementation since it is always complete dp_aux_cmd_fifo_tx()
-> even irq is not for aux read or write transaction. This may cause aux read
-> transaction return premature if host aux data read is in the middle of
-> waiting for sink to complete transferring data to host while irq happen.
-> This will cause host's receiving buffer contains unexpected data. This
-> patch fixes this problem by checking aux isr and return immediately at
-> aux isr handler if there are no any isr status bits set.
->
-> Follows are the signature at kernel logs when problem happen,
-> EDID has corrupt header
-> panel-simple-dp-aux aux-aea0000.edp: Couldn't identify panel via EDID
-> panel-simple-dp-aux aux-aea0000.edp: error -EIO: Couldn't detect panel nor find a fallback
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_aux.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_aux.c b/drivers/gpu/drm/msm/dp/dp_aux.c
-> index d030a93..8f8b12a 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_aux.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_aux.c
-> @@ -423,6 +423,13 @@ void dp_aux_isr(struct drm_dp_aux *dp_aux)
->
->         isr = dp_catalog_aux_get_irq(aux->catalog);
->
-> +       /*
-> +        * if this irq is not for aux transfer,
-> +        * then return immediately
-> +        */
+> This also contains a new hardware feature: Linear Address Masking
+> (LAM).  It is similar conceptually to the ARM Top-Byte-Ignore (TBI)
+> feature and should allow userspace memory sanitizers to be used
+> with less overhead on x86.
 
-Why do you need 4 lines for a comment that fits on one line?
+Christ.
 
-> +       if (!isr)
-> +               return;
+Is it too late to ask Intel to call this "Top-Bits-Ignore", and
+instead of adding another crazy TLA, we'd just all agree to call this
+"TBI"?
 
-I can confirm that this works for me. I could reproduce the EDID
-problems in the past and I can't after this patch. ...so I could give
-a:
+I  know, I know, NIH and all that, but at least as long as we are
+limiting ourselves to regular US-ASCII, we really only have 17576
+TLA's to go around, and at some point it gets not only confusing, but
+really quite wasteful, to have everybody make up their own
+architecture-specific TLA.
 
-Tested-by: Douglas Anderson <dianders@chromium.org>
+And while I'm on the subject: I really think that the changes to
+"untagged_addr()" are fundamentally broken.
 
-I'm not an expert on this part of the code, so feel free to ignore my
-other comments if everyone else thinks this patch is fine as-is, but
-to me something here feels a little fragile. It feels a little weird
-that we'll "complete" for _any_ interrupt that comes through now
-rather than relying on dp_aux_native_handler() / dp_aux_i2c_handler()
-to specifically identify interrupts that caused the end of the
-transfer. I guess that idea is that every possible interrupt we get
-causes the end of the transfer?
+Why? That whole LAM (or BTI) is not necessarily per-mm. It can easily
+be per-*thread*.
 
--Doug
+Imagine, if you will, a setup where you have some threads that use
+tagged pointers, and some threads that don't.
+
+For example, maybe the upper bits of the address contains a tag that
+is used only used within a virtual machine? You could even have the
+"native" mode use the full address space, and put itself and its
+private data in the upper bits virtually.
+
+IOW, imagine using the virtual address masking as not just memory
+sanitizers, but as an actual honest-to-goodness separation feature (eg
+JITed code might fundamentally have access only to the lower bits,
+while the JITter itself sees the whole address space).
+
+Maybe that's not how LAM works on x86, but your changes to
+untagged_addr() are *not* x86-specific.
+
+So I really think this is completely wrong, quite aside from the
+naming. It just makes assumptions that aren't valid.
+
+The fact that you made this mm-specific actually ends up being an
+active bug in the code, even on x86-64. You use the mmap lock to
+serialize this all in prctl_enable_tagged_addr(), but then the read
+side (ie just untagged_addr()) isn't actually serialized at all - and
+*shouldn't* be serialized.
+
+So I really think this is a fundamental design mistake, and while I
+pulled it and sorted out the trivial conflicts, I've unpulled it again
+as being actively mis-designed.
+
+                Linus
