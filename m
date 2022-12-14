@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8170664CFDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07EA64CFE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239049AbiLNTDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S238780AbiLNTJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239009AbiLNTDV (ORCPT
+        with ESMTP id S238688AbiLNTJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:03:21 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DFC2A953
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:03:19 -0800 (PST)
-Received: from TimeMachine.lan (adsl-d248.84-47-10.t-com.sk [84.47.10.248])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 3EC7D20370;
-        Wed, 14 Dec 2022 20:03:18 +0100 (CET)
-From:   Martin Botka <martin.botka@somainline.org>
-To:     martin.botka1@gmail.com
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] regulator: axp20x: Add support for AXP1530 variant
-Date:   Wed, 14 Dec 2022 20:03:05 +0100
-Message-Id: <20221214190305.3354669-4-martin.botka@somainline.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221214190305.3354669-1-martin.botka@somainline.org>
-References: <20221214190305.3354669-1-martin.botka@somainline.org>
+        Wed, 14 Dec 2022 14:09:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A045E80
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:09:51 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEInYtq010704;
+        Wed, 14 Dec 2022 19:09:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=gAwL5yOsP8eZyWzRSC0r/H4vhJ07hATE2/rquZmH+J0=;
+ b=oAYma+elAQ/ivhGPD1C7G+dajSsDpOqmQz3xpLcSucBkLxjqSHDeEcSuTg/EhmDWmbC3
+ yzb8PqL4SwGZPgj0Gfwby7OaDDbFdf3LnrpAjKK9bE/zFNR12E4yPSwLI2OTHR1QC6LM
+ gmy5WoY2AnQLdXPfryj7SbYhXPTjYTQmqWI316U1rsgDJhMe3SNBLBnSj2qb3uT2cSYL
+ K4NoW5zUwZI//FnnzIPq5DCZPyZ7PCLV70+sN5vXSpELHQJRlmLrqaxfCFWUXaTZ1Bn4
+ kqusKJuwZal9465HOMPPgC+J/QWotrw7vBEKf6AKKLb/hkJmThq4E4HiQ/cyWO2KuR/m Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfm3xgt34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 19:09:41 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEIqKig019087;
+        Wed, 14 Dec 2022 19:09:40 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfm3xgsws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 19:09:40 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEBg8Fd030324;
+        Wed, 14 Dec 2022 19:04:35 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mf0519bh2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 19:04:35 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEJ4X2r41025796
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Dec 2022 19:04:33 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D71120043;
+        Wed, 14 Dec 2022 19:04:33 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CA85220049;
+        Wed, 14 Dec 2022 19:04:30 +0000 (GMT)
+Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.67.101])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 14 Dec 2022 19:04:30 +0000 (GMT)
+Date:   Thu, 15 Dec 2022 00:34:27 +0530
+From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
+To:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2] staging: vme_user: Replace the "<<" with BIT macro
+Message-ID: <Y5oeO4QQIhqrYb+R@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: lSzDMoRQUuEQDpQpy3Xb2veXFiBo-Th-
+X-Proofpoint-GUID: 7ecFUHCXvvw8oy7JncZP1lZhyMEY3WHM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-14_09,2022-12-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212140155
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AXP1530 has a few regulators that are controlled via I2C Bus.
+Replace the "<<" operator with BIT macro, in accordance to the
+checkpatch.pl script and Linux kernel coding-style guidelines.
 
-Add support for them.
-
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
+Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
 ---
- drivers/regulator/axp20x-regulator.c | 44 ++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Changes in v2:
+	- Replace the previously used "<<" operator with BIT macro
 
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index d260c442b788..9420839ff4f9 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -1001,6 +1001,40 @@ static const struct regulator_desc axp813_regulators[] = {
- 		    AXP22X_PWR_OUT_CTRL2, AXP22X_PWR_OUT_DC1SW_MASK),
- };
+ drivers/staging/vme_user/vme.h | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
+index 98da8d039d60..faa9816046a9 100644
+--- a/drivers/staging/vme_user/vme.h
++++ b/drivers/staging/vme_user/vme.h
+@@ -2,6 +2,8 @@
+ #ifndef _VME_H_
+ #define _VME_H_
  
-+static const struct linear_range axp1530_dcdc1_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-+	REGULATOR_LINEAR_RANGE(1600000, 0x58, 0x6A, 100000),
-+};
++#include <linux/bitops.h>
 +
-+static const struct linear_range axp1530_dcdc2_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x57, 20000),
-+};
-+
-+static const struct linear_range axp1530_dcdc3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0x0, 0x46, 10000),
-+	REGULATOR_LINEAR_RANGE(1220000, 0x47, 0x66, 20000),
-+};
-+
-+static const struct regulator_desc axp1530_regulators[] = {
-+	AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", axp1530_dcdc1_ranges,
-+					0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(0)),
-+	AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", axp1530_dcdc2_ranges,
-+					0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(1)),
-+	AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", axp1530_dcdc3_ranges,
-+					0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
-+					BIT(2)),
-+	AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
-+					AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-+					BIT(3)),
-+	AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
-+					AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
-+					BIT(4)),
-+};
-+
- static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- {
- 	struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
-@@ -1040,6 +1074,12 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
- 		def = 3000;
- 		step = 150;
- 		break;
-+	case AXP1530_ID:
-+		/*
-+		 * Do not set the DCDC frequency on AXP1530
-+		 */
-+		return 0;
-+		break;
- 	default:
- 		dev_err(&pdev->dev,
- 			"Setting DCDC frequency for unsupported AXP variant\n");
-@@ -1220,6 +1260,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
- 	bool drivevbus = false;
+ /* Resource Type */
+ enum vme_resource_type {
+ 	VME_MASTER,
+@@ -54,20 +56,20 @@ enum vme_resource_type {
+ #define VME_R_ROBIN_MODE	0x1
+ #define VME_PRIORITY_MODE	0x2
  
- 	switch (axp20x->variant) {
-+	case AXP1530_ID:
-+		regulators = axp1530_regulators;
-+		nregulators = AXP1530_REG_ID_MAX;
-+		break;
- 	case AXP202_ID:
- 	case AXP209_ID:
- 		regulators = axp20x_regulators;
+-#define VME_DMA_PATTERN			(1<<0)
+-#define VME_DMA_PCI			(1<<1)
+-#define VME_DMA_VME			(1<<2)
++#define VME_DMA_PATTERN		BIT(0)
++#define VME_DMA_PCI			BIT(1)
++#define VME_DMA_VME			BIT(2)
+ 
+-#define VME_DMA_PATTERN_BYTE		(1<<0)
+-#define VME_DMA_PATTERN_WORD		(1<<1)
+-#define VME_DMA_PATTERN_INCREMENT	(1<<2)
++#define VME_DMA_PATTERN_BYTE		BIT(0)
++#define VME_DMA_PATTERN_WORD		BIT(1)
++#define VME_DMA_PATTERN_INCREMENT	BIT(2)
+ 
+-#define VME_DMA_VME_TO_MEM		(1<<0)
+-#define VME_DMA_MEM_TO_VME		(1<<1)
+-#define VME_DMA_VME_TO_VME		(1<<2)
+-#define VME_DMA_MEM_TO_MEM		(1<<3)
+-#define VME_DMA_PATTERN_TO_VME		(1<<4)
+-#define VME_DMA_PATTERN_TO_MEM		(1<<5)
++#define VME_DMA_VME_TO_MEM		BIT(0)
++#define VME_DMA_MEM_TO_VME		BIT(1)
++#define VME_DMA_VME_TO_VME		BIT(2)
++#define VME_DMA_MEM_TO_MEM		BIT(3)
++#define VME_DMA_PATTERN_TO_VME		BIT(4)
++#define VME_DMA_PATTERN_TO_MEM		BIT(5)
+ 
+ struct vme_dma_attr {
+ 	u32 type;
 -- 
-2.38.1
+2.31.1
 
