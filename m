@@ -2,381 +2,578 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455B664D133
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0659D64D135
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiLNU2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S230033AbiLNU3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiLNU2e (ORCPT
+        with ESMTP id S229988AbiLNU3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:28:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572F863C9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671048939;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xuWbRlu0A4fv1LOtBTJbD3K+c6vvdenfz7MWVW00HF0=;
-        b=LAh2Z+651bE8wV5yz9rzsFJUFAw8ZbRw8ZnIynqkIRY23KAUI5pajuiLPcBu5t5tq5O7z1
-        WTWfHpvFo31yl8CeVQ7IzI6L+0F+2LO9XA8MU9gpgC3//paioOHt8z+4H+9vXgzwhwquG4
-        oIZk4eZqskYXOF28mHFUOTKA8ehHmj0=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-224-ESDmVfuUOcmhOVUq4rghdQ-1; Wed, 14 Dec 2022 15:15:37 -0500
-X-MC-Unique: ESDmVfuUOcmhOVUq4rghdQ-1
-Received: by mail-ua1-f72.google.com with SMTP id f16-20020ab014d0000000b00419c9d3424dso340454uae.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:15:36 -0800 (PST)
+        Wed, 14 Dec 2022 15:29:13 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC71F30568
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:17:18 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b13so12364526lfo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xVCzLs9D4iYxpfqj24EzHAUSz5EHGUoRFeOu3fx9tXA=;
+        b=ygY6f1uDy6PQVrgq3liO18DWIg23Q25cp2LqBqD33rr3dpOMX1F4ZWQ53xxQsYfmrz
+         Ww15xobuVSL9b/EdC/HOuZDYDhWfD3kEv/9x9dXO+w2SUBRJ0X6mNiD7nWGhbW0Tsp0g
+         P7l44egFmR7MDaIR4ZWYqjsCc+r48R/SnJ0pDtzc4/CAQHW3OCtd85ER7x9WNepMMutj
+         XyjUyq0vr/2HeV6oZMwbVplOvXm77YmzpHf+8QJhCAA1vrscIJ/4nqM0nCfMjQBWksj2
+         NxMveiH437h39e6JxzGhfWcpNKDS95ni3SRQRak2ZaCLKtDSGT4pYx6h6Lfsq7Mpe+yI
+         WD9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xuWbRlu0A4fv1LOtBTJbD3K+c6vvdenfz7MWVW00HF0=;
-        b=txcKULZZieqTHTbAEU/SsBkNShNBINZgAkBo9cK5D54J1UGO3n4fqzJEyAE56K/bsB
-         vnjMtvHCV7dhVnr62JWHbQAA9Ze5H2O2MoT1INQk4gWjJjEmfsmRnaXZxBNt9KPEaSjT
-         Hq7FjEIiNezINYn914ljHirQqmEJSNPw6hT9Zag1HrMX10xtQ5J+HL8w1dtys25WSiOO
-         iKovYfCTs1E0KqGegTlnl3PjWtmO4m8fE9EQSxRt7q3TEJu8h8WNM1hkDZJ2AcNtk5g+
-         cCRhfWkXWIkegIe8Uxd/MVsh8d963jF+x2qTf4gJWTLd7KeoB20KfdVI2y0PiVTrvQzf
-         9AcA==
-X-Gm-Message-State: AFqh2kpH2PK4HpCD7luClH10Q3HTlRTtX72z03bFO580uptsnmGtk6xJ
-        +Dpm4B+kQoFUTlDjZSquuk44z+RonjJ1PQXY93xltnJqel+6vwz+fBTjHMLUjLtI80jYDCiV3G3
-        Waa8sln4fMZY0N99DDcOBqnIi
-X-Received: by 2002:a1f:4186:0:b0:3c4:799f:7627 with SMTP id o128-20020a1f4186000000b003c4799f7627mr2884540vka.13.1671048936158;
-        Wed, 14 Dec 2022 12:15:36 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvHXCW5HX/wRdv5LJX5FR/40WcdEXrBPmQsh0rU9l/f4xd4cihIPpW2nHxYW1GZSq2zDUFZ0Q==
-X-Received: by 2002:a1f:4186:0:b0:3c4:799f:7627 with SMTP id o128-20020a1f4186000000b003c4799f7627mr2884516vka.13.1671048935865;
-        Wed, 14 Dec 2022 12:15:35 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
-        by smtp.gmail.com with ESMTPSA id ay42-20020a05620a17aa00b006ef1a8f1b81sm10583405qkb.5.2022.12.14.12.15.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 12:15:35 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>, peterx@redhat.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: [PATCH v2] mm/uffd: Always wr-protect pte in pte|pmd_mkuffd_wp()
-Date:   Wed, 14 Dec 2022 15:15:33 -0500
-Message-Id: <20221214201533.1774616-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xVCzLs9D4iYxpfqj24EzHAUSz5EHGUoRFeOu3fx9tXA=;
+        b=Oof2DQsMRehj1fitBYuSgYgNjNwUNGUXbIg527yLaTEe1QDoKOjTcvzuJgb4S63RaB
+         hkdkdg4HZfNBu+x9IS/gwyi87+R5R8cW/G85wuW8nPiTNFw2G31yJguwqFs6HmHevFr4
+         J3Zmu+0lpGWjSgL0Fj5IemwsiiATt4LqPWy6BMKAXKk9tDwg1fN9fexcCRlvkAklVJJZ
+         GzhEgW6CnG3yTwAnCVUfl0XCBeXZSHiGMH0X4MhsN5psgmFc/j1yns5r6ldU0RIy6lNs
+         b1c3w55xyWFqLaZS7BasZuUAJydxCSwdBEJjkhLPGyxEVKCGcGsdivHQxZtAsFUpdxyq
+         X/FA==
+X-Gm-Message-State: ANoB5pk3Ad55CvazpRfE/LwSiooMKia8QvkKpWuC2HdH0zbRPXDgKJCm
+        cG/OxZolcG04PyCEhpziScdAhSQNxb/smNHB8FPjKw==
+X-Google-Smtp-Source: AA0mqf7K66olADXQFu8z7rpJyj1Hb3u+MKjYRnnnwsTP5ymnBDUeoO12x4aocwT/naEiY9zWYrOK4erYNR7nagCtBUY=
+X-Received: by 2002:a05:6512:16a4:b0:4b2:5c79:ae9c with SMTP id
+ bu36-20020a05651216a400b004b25c79ae9cmr33556193lfb.619.1671049036909; Wed, 14
+ Dec 2022 12:17:16 -0800 (PST)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221115153753.2065803-1-ben.levinsky@xilinx.com>
+ <20221115153753.2065803-2-ben.levinsky@xilinx.com> <20221125180509.GA622847@p14s>
+ <C981698C-5B9B-49B6-9EC2-CC7A0737B155@amd.com> <20221202170042.GA165812@p14s>
+ <ba21b0e5-80e2-d976-1bf3-98a91825086b@amd.com> <20221208190523.GA636328@p14s>
+ <b49ad56a-f008-55e3-22a7-c47afe5bdd3e@amd.com> <20221213215318.GA893317@p14s>
+ <20221213222123.GA1128798@p14s> <D93BFC0C-F90C-413E-899F-9CF5C6FB794A@amd.com>
+ <f996e5a4-13c3-a195-ccc8-73e09c485112@amd.com>
+In-Reply-To: <f996e5a4-13c3-a195-ccc8-73e09c485112@amd.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Wed, 14 Dec 2022 13:17:05 -0700
+Message-ID: <CANLsYkzjmkqfp9uQydB=cFx70LxuG=3AtVVhX10dhfT92iJb8g@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] remoteproc: Introduce rproc_get_by_id API
+To:     Ben Levinsky <ben.levinsky@amd.com>
+Cc:     "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        "bill.mills@linaro.com" <bill.mills@linaro.com>,
+        "Shah, Tanmay" <tanmay.shah@amd.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is a cleanup to always wr-protect pte/pmd in mkuffd_wp paths.
+On Wed, 14 Dec 2022 at 10:17, Ben Levinsky <ben.levinsky@amd.com> wrote:
+>
+> Can confirm this works for my use case! Thank you!
+>
 
-The reasons I still think this patch is worthwhile, are:
+Thanks for getting back to me.  I will send an official patch in the
+coming hour, please add your R-B or T-B and I will queue it when
+6.2-rc2 comes out on the 26th.
 
-  (1) It is a cleanup already; diffstat tells.
-
-  (2) It just feels natural after I thought about this, if the pte is uffd
-      protected, let's remove the write bit no matter what it was.
-
-  (2) Since x86 is the only arch that supports uffd-wp, it also redefines
-      pte|pmd_mkuffd_wp() in that it should always contain removals of
-      write bits.  It means any future arch that want to implement uffd-wp
-      should naturally follow this rule too.  It's good to make it a
-      default, even if with vm_page_prot changes on VM_UFFD_WP.
-
-  (3) It covers more than vm_page_prot.  So no chance of any potential
-      future "accident" (like pte_mkdirty() sparc64 or loongarch, even
-      though it just got its pte_mkdirty fixed <1 month ago).  It'll be
-      fairly clear when reading the code too that we don't worry anything
-      before a pte_mkuffd_wp() on uncertainty of the write bit.
-
-We may call pte_wrprotect() one more time in some paths (e.g. thp split),
-but that should be fully local bitop instruction so the overhead should be
-negligible.
-
-Although this patch should logically also fix all the known issues on
-uffd-wp too recently on page migration (not for numa hint recovery - that
-may need another explcit pte_wrprotect), but this is not the plan for that
-fix.  So no fixes, and stable doesn't need this.
-
-Acked-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
-v2:
-- Fix commit message
-- Added a-b
----
- arch/x86/include/asm/pgtable.h | 24 ++++++++++++------------
- include/asm-generic/hugetlb.h  | 16 ++++++++--------
- mm/huge_memory.c               |  8 +++-----
- mm/hugetlb.c                   |  4 ++--
- mm/memory.c                    |  8 +++-----
- mm/mprotect.c                  |  6 ++----
- mm/userfaultfd.c               | 18 ++----------------
- 7 files changed, 32 insertions(+), 52 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 0564edd24ffb..1c843395a8b3 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -289,6 +289,11 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
- 	return native_make_pte(v & ~clear);
- }
- 
-+static inline pte_t pte_wrprotect(pte_t pte)
-+{
-+	return pte_clear_flags(pte, _PAGE_RW);
-+}
-+
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
- static inline int pte_uffd_wp(pte_t pte)
- {
-@@ -313,7 +318,7 @@ static inline int pte_uffd_wp(pte_t pte)
- 
- static inline pte_t pte_mkuffd_wp(pte_t pte)
- {
--	return pte_set_flags(pte, _PAGE_UFFD_WP);
-+	return pte_wrprotect(pte_set_flags(pte, _PAGE_UFFD_WP));
- }
- 
- static inline pte_t pte_clear_uffd_wp(pte_t pte)
-@@ -332,11 +337,6 @@ static inline pte_t pte_mkold(pte_t pte)
- 	return pte_clear_flags(pte, _PAGE_ACCESSED);
- }
- 
--static inline pte_t pte_wrprotect(pte_t pte)
--{
--	return pte_clear_flags(pte, _PAGE_RW);
--}
--
- static inline pte_t pte_mkexec(pte_t pte)
- {
- 	return pte_clear_flags(pte, _PAGE_NX);
-@@ -401,6 +401,11 @@ static inline pmd_t pmd_clear_flags(pmd_t pmd, pmdval_t clear)
- 	return native_make_pmd(v & ~clear);
- }
- 
-+static inline pmd_t pmd_wrprotect(pmd_t pmd)
-+{
-+	return pmd_clear_flags(pmd, _PAGE_RW);
-+}
-+
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
- static inline int pmd_uffd_wp(pmd_t pmd)
- {
-@@ -409,7 +414,7 @@ static inline int pmd_uffd_wp(pmd_t pmd)
- 
- static inline pmd_t pmd_mkuffd_wp(pmd_t pmd)
- {
--	return pmd_set_flags(pmd, _PAGE_UFFD_WP);
-+	return pmd_wrprotect(pmd_set_flags(pmd, _PAGE_UFFD_WP));
- }
- 
- static inline pmd_t pmd_clear_uffd_wp(pmd_t pmd)
-@@ -428,11 +433,6 @@ static inline pmd_t pmd_mkclean(pmd_t pmd)
- 	return pmd_clear_flags(pmd, _PAGE_DIRTY);
- }
- 
--static inline pmd_t pmd_wrprotect(pmd_t pmd)
--{
--	return pmd_clear_flags(pmd, _PAGE_RW);
--}
--
- static inline pmd_t pmd_mkdirty(pmd_t pmd)
- {
- 	return pmd_set_flags(pmd, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
-diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-index a57d667addd2..d7f6335d3999 100644
---- a/include/asm-generic/hugetlb.h
-+++ b/include/asm-generic/hugetlb.h
-@@ -25,6 +25,13 @@ static inline pte_t huge_pte_mkwrite(pte_t pte)
- 	return pte_mkwrite(pte);
- }
- 
-+#ifndef __HAVE_ARCH_HUGE_PTE_WRPROTECT
-+static inline pte_t huge_pte_wrprotect(pte_t pte)
-+{
-+	return pte_wrprotect(pte);
-+}
-+#endif
-+
- static inline pte_t huge_pte_mkdirty(pte_t pte)
- {
- 	return pte_mkdirty(pte);
-@@ -37,7 +44,7 @@ static inline pte_t huge_pte_modify(pte_t pte, pgprot_t newprot)
- 
- static inline pte_t huge_pte_mkuffd_wp(pte_t pte)
- {
--	return pte_mkuffd_wp(pte);
-+	return huge_pte_wrprotect(pte_mkuffd_wp(pte));
- }
- 
- static inline pte_t huge_pte_clear_uffd_wp(pte_t pte)
-@@ -104,13 +111,6 @@ static inline int huge_pte_none_mostly(pte_t pte)
- 	return huge_pte_none(pte) || is_pte_marker(pte);
- }
- 
--#ifndef __HAVE_ARCH_HUGE_PTE_WRPROTECT
--static inline pte_t huge_pte_wrprotect(pte_t pte)
--{
--	return pte_wrprotect(pte);
--}
--#endif
--
- #ifndef __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
- static inline int prepare_hugepage_range(struct file *file,
- 		unsigned long addr, unsigned long len)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 1d9ad909c87c..86f1ecb0f9b4 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1913,17 +1913,15 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	oldpmd = pmdp_invalidate_ad(vma, addr, pmd);
- 
- 	entry = pmd_modify(oldpmd, newprot);
--	if (uffd_wp) {
--		entry = pmd_wrprotect(entry);
-+	if (uffd_wp)
- 		entry = pmd_mkuffd_wp(entry);
--	} else if (uffd_wp_resolve) {
-+	else if (uffd_wp_resolve)
- 		/*
- 		 * Leave the write bit to be handled by PF interrupt
- 		 * handler, then things like COW could be properly
- 		 * handled.
- 		 */
- 		entry = pmd_clear_uffd_wp(entry);
--	}
- 
- 	/* See change_pte_range(). */
- 	if ((cp_flags & MM_CP_TRY_CHANGE_WRITABLE) && !pmd_write(entry) &&
-@@ -3267,7 +3265,7 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
- 	if (is_writable_migration_entry(entry))
- 		pmde = maybe_pmd_mkwrite(pmde, vma);
- 	if (pmd_swp_uffd_wp(*pvmw->pmd))
--		pmde = pmd_wrprotect(pmd_mkuffd_wp(pmde));
-+		pmde = pmd_mkuffd_wp(pmde);
- 	if (!is_migration_entry_young(entry))
- 		pmde = pmd_mkold(pmde);
- 	/* NOTE: this may contain setting soft-dirty on some archs */
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 1088f2f41c88..a10cb7038a04 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5749,7 +5749,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
- 	 * if populated.
- 	 */
- 	if (unlikely(pte_marker_uffd_wp(old_pte)))
--		new_pte = huge_pte_wrprotect(huge_pte_mkuffd_wp(new_pte));
-+		new_pte = huge_pte_mkuffd_wp(new_pte);
- 	set_huge_pte_at(mm, haddr, ptep, new_pte);
- 
- 	hugetlb_count_add(pages_per_huge_page(h), mm);
-@@ -6550,7 +6550,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 			pte = huge_pte_modify(old_pte, newprot);
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			if (uffd_wp)
--				pte = huge_pte_mkuffd_wp(huge_pte_wrprotect(pte));
-+				pte = huge_pte_mkuffd_wp(pte);
- 			else if (uffd_wp_resolve)
- 				pte = huge_pte_clear_uffd_wp(pte);
- 			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
-diff --git a/mm/memory.c b/mm/memory.c
-index aad226daf41b..1e2628bf8de1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -882,7 +882,7 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
- 	pte = maybe_mkwrite(pte_mkdirty(pte), dst_vma);
- 	if (userfaultfd_pte_wp(dst_vma, *src_pte))
- 		/* Uffd-wp needs to be delivered to dest pte as well */
--		pte = pte_wrprotect(pte_mkuffd_wp(pte));
-+		pte = pte_mkuffd_wp(pte);
- 	set_pte_at(dst_vma->vm_mm, addr, dst_pte, pte);
- 	return 0;
- }
-@@ -3950,10 +3950,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	flush_icache_page(vma, page);
- 	if (pte_swp_soft_dirty(vmf->orig_pte))
- 		pte = pte_mksoft_dirty(pte);
--	if (pte_swp_uffd_wp(vmf->orig_pte)) {
-+	if (pte_swp_uffd_wp(vmf->orig_pte))
- 		pte = pte_mkuffd_wp(pte);
--		pte = pte_wrprotect(pte);
--	}
- 	vmf->orig_pte = pte;
- 
- 	/* ksm created a completely new copy */
-@@ -4296,7 +4294,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
- 	if (write)
- 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
- 	if (unlikely(uffd_wp))
--		entry = pte_mkuffd_wp(pte_wrprotect(entry));
-+		entry = pte_mkuffd_wp(entry);
- 	/* copy-on-write page */
- 	if (write && !(vma->vm_flags & VM_SHARED)) {
- 		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 093cb50f2fc4..a816ec34c234 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -177,12 +177,10 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 			oldpte = ptep_modify_prot_start(vma, addr, pte);
- 			ptent = pte_modify(oldpte, newprot);
- 
--			if (uffd_wp) {
--				ptent = pte_wrprotect(ptent);
-+			if (uffd_wp)
- 				ptent = pte_mkuffd_wp(ptent);
--			} else if (uffd_wp_resolve) {
-+			else if (uffd_wp_resolve)
- 				ptent = pte_clear_uffd_wp(ptent);
--			}
- 
- 			/*
- 			 * In some writable, shared mappings, we might want
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index b7a9479bece2..7d28f9f02892 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -74,24 +74,10 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	_dst_pte = pte_mkdirty(_dst_pte);
- 	if (page_in_cache && !vm_shared)
- 		writable = false;
--
--	/*
--	 * Always mark a PTE as write-protected when needed, regardless of
--	 * VM_WRITE, which the user might change.
--	 */
--	if (wp_copy) {
--		_dst_pte = pte_mkuffd_wp(_dst_pte);
--		writable = false;
--	}
--
- 	if (writable)
- 		_dst_pte = pte_mkwrite(_dst_pte);
--	else
--		/*
--		 * We need this to make sure write bit removed; as mk_pte()
--		 * could return a pte with write bit set.
--		 */
--		_dst_pte = pte_wrprotect(_dst_pte);
-+	if (wp_copy)
-+		_dst_pte = pte_mkuffd_wp(_dst_pte);
- 
- 	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
- 
--- 
-2.37.3
-
+> On 12/14/22 9:16 AM, Levinsky, Ben wrote:
+> >
+> >
+> > =EF=BB=BFOn 12/13/22, 2:21 PM, "Mathieu Poirier" <mathieu.poirier@linar=
+o.org> wrote:
+> >
+> >      On Tue, Dec 13, 2022 at 02:53:18PM -0700, Mathieu Poirier wrote:
+> >      > On Fri, Dec 09, 2022 at 11:01:47AM -0800, Ben Levinsky wrote:
+> >      > > Hi Mathieu,
+> >      > >
+> >      > > On 12/8/22 11:05 AM, Mathieu Poirier wrote:
+> >      > > > On Tue, Dec 06, 2022 at 08:23:13AM -0800, Ben Levinsky wrote=
+:
+> >      > > > > Good Morning Mathieu,
+> >      > > > >
+> >      > > > >
+> >      > > > > I did some testing and replied inline.
+> >      > > > >
+> >      > > > >
+> >      > > > > On 12/2/22 9:00 AM, Mathieu Poirier wrote:
+> >      > > > > > On Wed, Nov 30, 2022 at 09:39:33PM +0000, Levinsky, Ben =
+wrote:
+> >      > > > > > > Hi Mathieu,
+> >      > > > > > >
+> >      > > > > > > Thank you for your review. Please see my reply inline.
+> >      > > > > > >
+> >      > > > > > > Thanks
+> >      > > > > > > Ben
+> >      > > > > > >
+> >      > > > > > > On 11/25/22, 10:05 AM, "Mathieu Poirier"<mathieu.poiri=
+er@linaro.org>  wrote:
+> >      > > > > > >
+> >      > > > > > >       CAUTION: This message has originated from an Ext=
+ernal Source. Please use proper judgment and caution when opening attachmen=
+ts, clicking links, or responding to this email.
+> >      > > > > > >
+> >      > > > > > >
+> >      > > > > > >       Hi Ben,
+> >      > > > > > >
+> >      > > > > > >       On Tue, Nov 15, 2022 at 07:37:53AM -0800, Ben Le=
+vinsky wrote:
+> >      > > > > > >       > Allow users of remoteproc the ability to get a=
+ handle to an rproc by
+> >      > > > > > >       > passing in node that has parent rproc device a=
+nd an ID that matches
+> >      > > > > > >       > an expected rproc struct's index field.
+> >      > > > > > >       >
+> >      > > > > > >       > This enables to get rproc structure for remote=
+proc drivers that manage
+> >      > > > > > >       > more than 1 remote processor (e.g. TI and Xili=
+nx R5 drivers).
+> >      > > > > > >       >
+> >      > > > > > >       > Signed-off-by: Ben Levinsky<ben.levinsky@xilin=
+x.com>
+> >      > > > > > >       > ---
+> >      > > > > > >       >  drivers/remoteproc/remoteproc_core.c | 64 +++=
+++++++++++++++++++++++++-
+> >      > > > > > >       >  include/linux/remoteproc.h           |  1 +
+> >      > > > > > >       >  2 files changed, 64 insertions(+), 1 deletion=
+(-)
+> >      > > > > > >       >
+> >      > > > > > >       > diff --git a/drivers/remoteproc/remoteproc_cor=
+e.c b/drivers/remoteproc/remoteproc_core.c
+> >      > > > > > >       > index 775df165eb45..6f7058bcc80c 100644
+> >      > > > > > >       > --- a/drivers/remoteproc/remoteproc_core.c
+> >      > > > > > >       > +++ b/drivers/remoteproc/remoteproc_core.c
+> >      > > > > > >       > @@ -40,6 +40,7 @@
+> >      > > > > > >       >  #include <linux/virtio_ring.h>
+> >      > > > > > >       >  #include <asm/byteorder.h>
+> >      > > > > > >       >  #include <linux/platform_device.h>
+> >      > > > > > >       > +#include <linux/of_platform.h>
+> >      > > > > > >       >
+> >      > > > > > >       >  #include "remoteproc_internal.h"
+> >      > > > > > >       >
+> >      > > > > > >       > @@ -2203,13 +2204,74 @@ struct rproc *rproc_ge=
+t_by_phandle(phandle phandle)
+> >      > > > > > >       >
+> >      > > > > > >       >       return rproc;
+> >      > > > > > >       >  }
+> >      > > > > > >       > +
+> >      > > > > > >       > +/**
+> >      > > > > > >       > + * rproc_get_by_id() - find a remote processo=
+r by ID
+> >      > > > > > >       > + * @phandle: phandle to the rproc
+> >      > > > > > >       > + * @id: Index into rproc list that uniquely i=
+dentifies the rproc struct
+> >      > > > > > >       > + *
+> >      > > > > > >       > + * Finds an rproc handle using the remote pro=
+cessor's index, and then
+> >      > > > > > >       > + * return a handle to the rproc. Before retur=
+ning, ensure that the
+> >      > > > > > >       > + * parent node's driver is still loaded.
+> >      > > > > > >       > + *
+> >      > > > > > >       > + * This function increments the remote proces=
+sor's refcount, so always
+> >      > > > > > >       > + * use rproc_put() to decrement it back once =
+rproc isn't needed anymore.
+> >      > > > > > >       > + *
+> >      > > > > > >       > + * Return: rproc handle on success, and NULL =
+on failure
+> >      > > > > > >       > + */
+> >      > > > > > >       > +
+> >      > > > > > >       > +struct rproc *rproc_get_by_id(phandle phandle=
+, unsigned int id)
+> >      > > > > > >       > +{
+> >      > > > > > >       > +     struct rproc *rproc =3D NULL, *r;
+> >      > > > > > >       > +     struct platform_device *parent_pdev;
+> >      > > > > > >       > +     struct device_node *np;
+> >      > > > > > >       > +
+> >      > > > > > >       > +     np =3D of_find_node_by_phandle(phandle);
+> >      > > > > > >       > +     if (!np)
+> >      > > > > > >       > +             return NULL;
+> >      > > > > > >       > +
+> >      > > > > > >       > +     parent_pdev =3D of_find_device_by_node(n=
+p->parent);
+> >      > > > > > >       > +     if (!parent_pdev) {
+> >      > > > > > >       > +             dev_err(&parent_pdev->dev,
+> >      > > > > > >       > +                     "no platform device for =
+node %pOF\n", np);
+> >      > > > > > >       > +             of_node_put(np);
+> >      > > > > > >       > +             return NULL;
+> >      > > > > > >       > +     }
+> >      > > > > > >       > +
+> >      > > > > > >       > +     /* prevent underlying implementation fro=
+m being removed */
+> >      > > > > > >       > +     if (!try_module_get(parent_pdev->dev.dri=
+ver->owner)) {
+> >      > > > > > >       > +             dev_err(&parent_pdev->dev, "can'=
+t get owner\n");
+> >      > > > > > >       > +             of_node_put(np);
+> >      > > > > > >       > +             return NULL;
+> >      > > > > > >       > +     }
+> >      > > > > > >       > +
+> >      > > > > > >       > +     rcu_read_lock();
+> >      > > > > > >       > +     list_for_each_entry_rcu(r, &rproc_list, =
+node) {
+> >      > > > > > >       > +             if (r->index =3D=3D id) {
+> >      > > > > > >       > +                     rproc =3D r;
+> >      > > > > > >       > +                     get_device(&rproc->dev);
+> >      > > > > > >       > +                     break;
+> >      > > > > > >       > +             }
+> >      > > > > > >       > +     }
+> >      > > > > > >
+> >      > > > > > >       This won't work because several remote processor=
+s can be on the list.  If
+> >      > > > > > >       another remote processor was discovered before t=
+he one @phandle is associated
+> >      > > > > > >       with, the remote processor pertaining to that pr=
+evious one will returned.
+> >      > > > > > >
+> >      > > > > > > I didn't understand. From my point of view passing in =
+the phandle of the child-platform device here will work because each child-=
+platform will have its own entry in the remoteproc list.
+> >      > > > > > You are correct, each child platform device will have it=
+s own entry in
+> >      > > > > > @rproc_list.  The problem is that r->index may not match=
+ @id that is passed as a
+> >      > > > > > parameter.
+> >      > > > > >
+> >      > > > > > > Also " If    another remote processor was discovered b=
+efore the one" Here this prevented from what I can see because the remotepr=
+oc_list is protected by a mutex_lock. Seehttps://github.com/torvalds/linux/=
+blob/master/drivers/remoteproc/remoteproc_core.c#L2288  for the mutex_lock.
+> >      > > > > > >
+> >      > > > > > > Additionally the calls to zynqmp_r5_add_rproc_core() a=
+re called sequentially so this also prevents the race condition.
+> >      > > > > > >
+> >      > > > > > > I think I am missing something in your paragraph above=
+. Can you expand on this issue?
+> >      > > > > > As explained above, the issue is not about race conditio=
+ns but the value of
+> >      > > > > > r->index and @id.
+> >      > > > > >
+> >      > > > > > >    Do you mean to say that if we use the cluster platf=
+orm device you think using one of the existing APIs will work? For example =
+rproc_get_by_child() or rproc_get_by_phandle()
+> >      > > > > > >
+> >      > > > > > > Athttps://git.kernel.org/pub/scm/linux/kernel/git/remo=
+teproc/linux.git/tree/drivers/remoteproc/xlnx_r5_remoteproc.c?h=3Drproc-nex=
+t#n923  " zynqmp_r5_add_rproc_core(&child_pdev->dev);" Here if we use clust=
+er->dev this will work? To dig deeper into this for both the Xilinx and TI =
+R5 remoteproc drivers, I think this proposed solution will create an issue =
+in that for Split modes, the existing getter APIs will not be able to retur=
+n one of the corresponding rproc instances because both cores will refer to=
+ the same platform-device structure.
+> >      > > > > > >
+> >      > > > > > > I can bring up the above in the community call.
+> >      > > > > > >
+> >      > > > > > >       There is also an issue with rproc_put().
+> >      > > > > > >
+> >      > > > > > > If passing the cluster platform device works for the a=
+bove then rproc_put() should work correct? We can test this on our side as =
+well. That being said I can bring this up in the community call
+> >      > > > > > Yes, using the cluster platform device will work with rp=
+roc_put().
+> >      > > > > >
+> >      > > > > > >
+> >      > > > > > >       I think your description of the problem is mostl=
+y correct.  The intermediate
+> >      > > > > > >       devices created by the cascading entries for ind=
+ividual remote processors in the
+> >      > > > > > >       device tree are causing an issue.  The "compatib=
+le" string for each remote
+> >      > > > > > >       processor can't be handled by any platform drive=
+rs (as it should be), which
+> >      > > > > > >       makes try_module_get() fail because r->dev.paren=
+t->driver is not bound to
+> >      > > > > > >       anything.
+> >      > > > > > >
+> >      > > > > > >       Looking at the code for Xilinx's R5F support tha=
+t I just queued[1], the simplest
+> >      > > > > > >       solution may be to pass @dev, which is in fact @=
+cluster->dev, to
+> >      > > > > > >       zynqmp_r5_add_rproc_core() rather than the devic=
+e associated with the
+> >      > > > > > >       intermediate platform device.
+> >      > > > > > >
+> >      > > > > > >       That _should_ work.  It is hard for me to know f=
+or sure since I don't have a
+> >      > > > > > >       platform that has dual core remote processor to =
+test with.
+> >      > > > > > >
+> >      > > > > > >       Get back to me with how that turned out and we'l=
+l go from there.
+> >      > > > > > >
+> >      > > > > > >       Thanks,
+> >      > > > > > >       Mathieu
+> >      > > > > > >
+> >      > > > > > >
+> >      > > > > > >
+> >      > > > > > >
+> >      > > > > > >       [1].https://git.kernel.org/pub/scm/linux/kernel/=
+git/remoteproc/linux.git/tree/drivers/remoteproc/xlnx_r5_remoteproc.c?h=3Dr=
+proc-next#n923
+> >      > > > >
+> >      > > > > I have an update on this.
+> >      > > > >
+> >      > > > >
+> >      > > > >
+> >      > > > > I tested the following using the RPU-cluster platform devi=
+ce:
+> >      > > > >
+> >      > > > > test 1: RPU split with 2 core
+> >      > > > >
+> >      > > > > test 2: RPU split with 1 core
+> >      > > > >
+> >      > > > > test 3: lockstep RPU
+> >      > > > >
+> >      > > > >
+> >      > > > > I tested with the zynqmp-r5-remoteproc platform probe usin=
+g the (RPU)
+> >      > > > > cluster platform device instead of the core/child platform=
+ device. When I
+> >      > > > > used this I was unable to properly use the API rproc_get_b=
+y_phandle() and
+> >      > > > > there was _only_ an issue for test 1. This was because eac=
+h core will have
+> >      > > > > its own call to rproc_alloc(), rproc_add() and each core's=
+ remoteproc
+> >      > > > > structure has the same parent device.
+> >      > > >
+> >      > > > You haven't specified if my proposal worked with test 2 and =
+3.  I'm guessing
+> >      > > > that it does.
+> >      > > >
+> >      > > Sorry, yes tests 2 and 3 work with your proposal.
+> >      > > > >
+> >      > > > > This results in the later call to rproc_get_by_phandle() n=
+ot behaving
+> >      > > > > properly because the function will return whichever core h=
+ad its entries
+> >      > > > > added to the list first.
+> >      > > > >
+> >      > > >
+> >      > > > That is a valid observation, but at least we are getting clo=
+ser.  The next step
+> >      > > > is to find the right remote processor and I think we should =
+look at np->name and
+> >      > > > rproc->name.  They should be quite close because rproc_alloc=
+() is called with
+> >      > > > dev_name(cdev).
+> >      > > >
+> >      > > > I will look into this further tomorrow morning if I have tim=
+e, but I encourage
+> >      > > > you to do the same on your side.
+> >      > > >
+> >      > >
+> >      > > For the case where the cluster is in split mode and there are =
+2 child nodes
+> >      > > here is my update:
+> >      > >
+> >      > > 1. The rproc_list has 2 entries as follows:
+> >      > >
+> >      > >   as expected each entry has the same r->dev.parent (E.g. the =
+cluster node)
+> >      > >
+> >      > >   The entries have the  with device name rproc->dev name 'remo=
+teproc0' and
+> >      > > 'remoteproc1'
+> >      > >
+> >      > >
+> >      > >
+> >      > > 2. For my use case I am trying to pass in the phandle of the c=
+ore node
+> >      > > (child of the cluster). If I pass in the core node then
+> >      > > rproc_get_by_phandle() returns NULL because the r->dev.parent-=
+>of_node does
+> >      > > not match. This is expected because at rproc_alloc() we passed=
+ in the
+> >      > > cluster and not the core.
+> >      > >
+> >      >
+> >      >
+> >      > I had a serious look into this and trying to do something with t=
+he rproc->name and
+> >      > device_node->name won't work.  As such, I suggest the following =
+(uncompiled and
+> >      > untested):
+> >      >
+> >      > struct rproc *rproc_get_by_phandle(phandle phandle)
+> >      > {
+> >      >         struct platform_device *cluster_pdev;
+> >      >        struct rproc *rproc =3D NULL, *r;
+> >      >         struct device_driver *driver;
+> >      >        struct device_node *np;
+> >      >
+> >      >        np =3D of_find_node_by_phandle(phandle);
+> >      >        if (!np)
+> >      >                return NULL;
+> >      >
+> >      >        rcu_read_lock();
+> >      >        list_for_each_entry_rcu(r, &rproc_list, node) {
+> >      >                if (r->dev.parent && r->dev.parent->of_node =3D=
+=3D np) {
+> >      >                        /* prevent underlying implementation from=
+ being removed */
+> >      >
+> >      >                         /*
+> >      >                          * If the remoteproc's parent has a driv=
+er, the
+> >      >                          * remoteproc is not part of a cluster a=
+nd we can use
+> >      >                          * that driver.
+> >      >                          */
+> >      >                         driver =3D r->dev.parent->driver;
+> >      >
+> >      >                         /*
+> >      >                          * If the remoteproc's parent does not h=
+ave a driver,
+> >      >                          * look for the driver associated with t=
+he cluster.
+> >      >                          */
+> >      >                         if (!driver) {
+> >      >                                 cluster_pdev =3D of_find_device_=
+by_node(np->parent);
+> >      >                                 if (!cluster_pdev) {
+> >      >                                         dev_err(&r->dev, "can't =
+get driver\n");
+> >      >                                         break;
+> >      >                                 }
+> >      >
+> >      >                                 driver =3D cluster_pdev->dev.par=
+ent->driver;
+> >
+> >      This should be:
+> >
+> >                                        driver =3D cluster_pdev->dev.dri=
+ver;
+> >
+> >      >                                 put_device(&cluster_pdev->dev);
+> >      >                         }
+> >      >
+> >      >                        if (!try_module_get(driver->owner)) {
+> >      >                                dev_err(&r->dev, "can't get owner=
+\n");
+> >      >                                break;
+> >      >                        }
+> >      >
+> >      >                        rproc =3D r;
+> >      >                        get_device(&rproc->dev);
+> >      >                        break;
+> >      >                }
+> >      >        }
+> >      >        rcu_read_unlock();
+> >      >
+> >      >        of_node_put(np);
+> >      >
+> >      >        return rproc;
+> >      > }
+> >      >
+> >      > Let me know if that works for you.
+> >      >
+> >      > Thanks,
+> >      > Mathieu
+> >      >
+> >      >
+> >      >
+> >      > > np->name in the loop is then name of the cluster node in my sa=
+mple device
+> >      > > tree that I booted with that is 'r5f_0' where the cluster is '=
+rf5ss'.
+> >      > >
+> >      > > If I am trying to get the rproc entry with name 'remoteproc0' =
+and I pass in
+> >      > > to rproc_get_by_phandle() the cluster node's phandle (that is =
+of rf5ss) then
+> >      > > the API _does_ work for getting the first entry from the rproc=
+ list.
+> >      > >
+> >      > > But If I am trying to the second rproc entry (dev name 'remote=
+proc1') and I
+> >      > > pass into rproc_get_by_phandle()  I will still get the 'remote=
+proc0' entry
+> >      > > because the phandle of the first entry also matches in the loo=
+p.
+> >      > >
+> >      > > Thanks
+> >      > > Ben
+> >      > >
+> >      > > > >
+> >      > > > > For reference I placed the logic for API rproc_get_by_phan=
+dle() that loops
+> >      > > > > through device and the rproc_alloc() line where the dev pa=
+rent is set:
+> >      > > > >
+> >      > > > >
+> >      > > > > Here is the getter API where the loop checking the remotep=
+roc dev parent is:
+> >      > > > >
+> >      > > > > https://github.com/torvalds/linux/blob/master/drivers/remo=
+teproc/remoteproc_core.c#L2109
+> >      > > > >
+> >      > > > >
+> >      > > > > if(r->dev.parent&& r->dev.parent->of_node=3D=3D np) {
+> >      > > > >
+> >      > > > >
+> >      > > > > Here is the rproc_alloc() call where they set remoteproc d=
+ev parent:
+> >      > > > >
+> >      > > > > https://github.com/torvalds/linux/blob/master/drivers/remo=
+teproc/remoteproc_core.c#L2448
+> >      > > > >
+> >      > > > >
+> >      > > > > rproc->dev.parent=3D dev;
+> >      > > > >
+> >      > > > > Thanks,
+> >      > > > >
+> >      > > > > Ben
+> >      > > > >
+> >      > > >
+> >
+> > ep
+> > is to find the right remote processor and I think we should look at np-=
+>name and
+> > rproc->name.  They should be quite close because rproc_alloc() is calle=
+d with
+> > dev_name(cdev).
+> >
+> > I will look into this further tomorrow morning if I have time, but I en=
+courage
+> > you to do the same on your side.
+> >
+> >>
+> >> For reference I placed the logic for API rproc_get_by_phandle() that l=
+oops
+> >> through device and the rproc_alloc() line where the dev parent is set:
+> >>
+> >>
+> >> Here is the getter API where the loop checking the remoteproc dev pare=
+nt is:
+> >>
+> >> https://github.com/torvalds/linux/blob/master/drivers/remoteproc/remot=
+eproc_core.c#L2109
+> >>
+> >>
+> >> if(r->dev.parent&& r->dev.parent->of_node=3Dnp) {
+> >>
+> >>
+> >> Here is the rproc_alloc() call where they set remoteproc dev parent:
+> >>
+> >> https://github.com/torvalds/linux/blob/master/drivers/remoteproc/remot=
+eproc_core.c#L2448
+> >>
+> >>
+> >> rproc->dev.parent=3Dev;
+> >>
+> >> Thanks,
+> >>
+> >> Ben
+> >>
+> >
