@@ -2,279 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B050E64CE18
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8658864CE21
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239061AbiLNQcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S239067AbiLNQeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239065AbiLNQbt (ORCPT
+        with ESMTP id S238982AbiLNQdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:31:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD5614D1F
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:31:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671035468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zUQYRaS8aTqjl4sq2+Qu5cD5eqcY+9WtPJEWRyeBg18=;
-        b=GrlYnINXsNDr3cPuvstru/DvbdJfke0TdLjVX5xjbx10e+7TVzHIMT8yH5p5ErZObbDtm9
-        U/JJaJlwG+APiZxQFVzYQiF5O9FtvBxGZzTEW5yfaxzY7iEk0+j6gA3Vh3ms8NNXWfDOGJ
-        ZyK85G+YXWZBxTjAWVYQhmBvMbew+Nk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-213-UB5gaN5DOlay4P6mJ8r0uA-1; Wed, 14 Dec 2022 11:31:01 -0500
-X-MC-Unique: UB5gaN5DOlay4P6mJ8r0uA-1
-Received: by mail-wr1-f71.google.com with SMTP id d6-20020adfa346000000b0024211c0f988so61227wrb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:31:01 -0800 (PST)
+        Wed, 14 Dec 2022 11:33:40 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DFF2A436
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:32:22 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id i15so23292947edf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MVrlltRx17nfXTGhP7yPJwRU3y4M8/9HTbuxEEs49iU=;
+        b=aXv6T3ty9OZD4OYRcWL5+4mKME8v/e1WDdI9AA+KQJzPhv03AdE8drDDUqdiblA3yP
+         s3/zhNBDtfTEYSkUNDB0AoiAz16cuPGibNxtKMzRSH9ilTXaJbDoVQ2FCuMzaGR2CKlx
+         ERlbbfHgFDDGKgxdZXQ7Jy8oTG0/idZ4EWhqs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zUQYRaS8aTqjl4sq2+Qu5cD5eqcY+9WtPJEWRyeBg18=;
-        b=k1wPjVWGWlOUCvvYNHtnAEnRny5jNf+o9mUSBpf4s1Qn4UkIuQyhj94+JWwHXdpJ8c
-         pijgH/TKrPnofVcBImRyZLgreTUnWwzqjSKB1rMfamfB5+a2wvkwEEQ2uUyy1Sr+XxBz
-         O8pqZWtE9C/lXFnFkAU9w8y0fxKv4D9JR+1h5LE7INhpTZW5EL4V6iPGm9xpNlK8tt0q
-         VRrg/jDxnowaPII/1wfL3gdnHIw/8usxjWvuwDqJETztrWdg1X9SZQploQjS5g62MBnr
-         8CGW0PKZuLaeXKZGPyp1aY9QO4yZulbXcQaSiPLiu8UuXr4bpubbb7QPsF5FijZYYYVo
-         WkKA==
-X-Gm-Message-State: ANoB5pmSMfNeFA0Q/eu9gYyX70S0pPZrfi9nGcXzzYw2WqYbAulqAt1E
-        3RE6bpEVuxThNe8x54mpno9344rWQ7fZ1ZCL/bfUKURfQT5mbGbbbgEwFal0/qjuJdoCuZSaXeF
-        bbN4NooyZVX3DkbN1DOy+Nlvo
-X-Received: by 2002:a05:600c:3b1b:b0:3d1:fe12:fe34 with SMTP id m27-20020a05600c3b1b00b003d1fe12fe34mr19040160wms.39.1671035460471;
-        Wed, 14 Dec 2022 08:31:00 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf61ilOWeas/kVNtW9HKu0e1ntW+e3+kM18c3C5LDa9pJ8S3z9wCuW0PcuQ0VElABaMa/0wSoA==
-X-Received: by 2002:a05:600c:3b1b:b0:3d1:fe12:fe34 with SMTP id m27-20020a05600c3b1b00b003d1fe12fe34mr19040142wms.39.1671035460286;
-        Wed, 14 Dec 2022 08:31:00 -0800 (PST)
-Received: from step1.redhat.com (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id c6-20020a05600c0a4600b003d1e3b1624dsm3850323wmq.2.2022.12.14.08.30.58
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MVrlltRx17nfXTGhP7yPJwRU3y4M8/9HTbuxEEs49iU=;
+        b=2Pps8jqq63aWJWU5exAAYio4JldIxeRctdJcYKmljXYkuE+7xYrRt9hdceCQx1ViRQ
+         TbM3YBSuSdmGfjqucpTAIOcE1Z3PYbjOAL9RN3tntop7EhlwmNeM7wpUiGpfzxjB4jxg
+         WQ0CvtNBDeYkOaeX8wgPIItUWIW//Agc8y3q3bKyQArVC9mt59qTJ9zml9QL6EYGTRUk
+         TSAZQ7Ji8sTOmxTR4Veh19TuK0cObb6YXAqJfN2/qYBNnOe/hSMYrdKxnvr3uHMSQ2/r
+         XJalbakLD7hiYPC1ts1JSAlKxEK/SkCjLlpl91DWZdSKaYWUqo26CHMfxGlHrxNk0NZv
+         a3Tg==
+X-Gm-Message-State: ANoB5pnUJttQNWnZZaYuAemFD2TU8UYta8gA+rRFPQU7l2bf9qam318e
+        OX8/G7HW9GaqPcBfAc9Zr9wLAg==
+X-Google-Smtp-Source: AA0mqf41+3D5Js+uQP1l7WfEZEbOf6NiTJkGvwte5sA62Fzt/SILgjAyev/3jho0mOvjeKhWFRtVfA==
+X-Received: by 2002:aa7:cd46:0:b0:46d:e3f8:4ed4 with SMTP id v6-20020aa7cd46000000b0046de3f84ed4mr17653967edw.21.1671035541045;
+        Wed, 14 Dec 2022 08:32:21 -0800 (PST)
+Received: from alco.roam.corp.google.com ([100.104.168.209])
+        by smtp.gmail.com with ESMTPSA id ee48-20020a056402293000b004615f7495e0sm6395908edb.8.2022.12.14.08.32.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:30:59 -0800 (PST)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
-        stefanha@redhat.com, netdev@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [RFC PATCH 6/6] vdpa_sim: add support for user VA
-Date:   Wed, 14 Dec 2022 17:30:25 +0100
-Message-Id: <20221214163025.103075-7-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221214163025.103075-1-sgarzare@redhat.com>
-References: <20221214163025.103075-1-sgarzare@redhat.com>
+        Wed, 14 Dec 2022 08:32:20 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 14 Dec 2022 17:31:55 +0100
+Subject: [PATCH v4] media: uvcvideo: Fix race condition with usb_kill_urb
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221212-uvc-race-v4-0-38d7075b03f5@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@google.com>
+Cc:     linux-media@vger.kernel.org, stable@vger.kernel.org,
+        Yunke Cao <yunkec@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4414; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=ogVdjybS9LEoywx0YwN/okaYfuH/y03AYQsWkydp3kQ=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmfqNKqeDuIPruv3HRUGHzLrKhw0xXerfWXVR/oWJ
+ Mh7m06eJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5n6jQAKCRDRN9E+zzrEiGEBD/
+ 9paXuRWZxtIqzclORW4HCZGYi73FtH4rtSGo1FNlEq1R7vGpC1gQ796/GNRy0vTNoPO+QxaG6poI5J
+ 8vAFLwLc3YCxAUXzcN/QuRqSznplWWU+TiGxWm/I2x+dlNbE0tk30rBktBkJ0rYvQev/gODgWCgghN
+ JKnkI1XV3lxO9nCa/7WllWLHsNpjcGE0reWbaPRdpmwgQxUZyQsn0v1UjsGkI2EPfhhCBA9pLym2ie
+ qJguxwajBM0LmK/ds6p5rVXdEmdz1BoOTa91s5QN89Qfu2n9gPljroekcxObhSEAR7A+TH4JCenRYJ
+ zfstu4W4xhtU5LdCrdBumpkkOmxjw4mDZR4yYtH/asavDzAMEM98ceXIkSRT4ipCkbcQCeDfcD3339
+ e7BLYFB+fh7dO0R2dEZdw/i0vmr0gxk79TPbMbp/21RZutJPl/Ht2JMQfGOLfv/tojT7MT35xsEjqi
+ ZTlGsBuRhEjLFLnjSEmAKs+AITV2Js6CV0xeCPwkwVkyyS/D4qhsv3NNxGuKjqvutOAcTKVaKNx7OD
+ M75UhkjEUu9w2EF9WyCuIrjRO3YLkRQUrDrN9vqCGLuElX71HVPqqCTn9zxpYlYwQ2RnzYpt+fQe7k
+ 4LxOvbbN2nLIE8NqmuMp9hiq5+moqyLr+SNq2O3Nlg0YoGQiXc424GQnJdlA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new "use_va" module parameter (default: false) is used in
-vdpa_alloc_device() to inform the vDPA framework that the device
-supports VA.
+usb_kill_urb warranties that all the handlers are finished when it
+returns, but does not protect against threads that might be handling
+asynchronously the urb.
 
-vringh is initialized to use VA only when "use_va" is true and the
-user's mm has been bound. So, only when the bus supports user VA
-(e.g. vhost-vdpa).
+For UVC, the function uvc_ctrl_status_event_async() takes care of
+control changes asynchronously.
 
-vdpasim_mm_work_fn work is used to attach the kthread to the user
-address space when the .bind_mm callback is invoked, and to detach
-it when the device is reset.
+ If the code is executed in the following order:
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+uvc_ctrl_status_event_work()
+					uvc_status_start() -> FAIL
+
+Then uvc_status_start will keep failing and this error will be shown:
+
+<4>[    5.540139] URB 0000000000000000 submitted while active
+drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+
+Let's improve the current situation, by not re-submiting the urb if
+we are stopping the status event. Also process the queued work
+(if any) during stop.
+
+CPU 0					CPU 1
+===== 					=====
+uvc_status_complete()
+					uvc_status_stop()
+					uvc_status_start()
+uvc_ctrl_status_event_work() -> FAIL
+
+Hopefully, with the usb layer protection this should be enough to cover
+all the cases.
+
+Cc: stable@vger.kernel.org
+Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+Reviewed-by: Yunke Cao <yunkec@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim.h |   1 +
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 104 ++++++++++++++++++++++++++++++-
- 2 files changed, 103 insertions(+), 2 deletions(-)
+uvc: Fix race condition on uvc
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 07ef53ea375e..1b010e5c0445 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -55,6 +55,7 @@ struct vdpasim {
- 	struct vdpasim_virtqueue *vqs;
- 	struct kthread_worker *worker;
- 	struct kthread_work work;
-+	struct mm_struct *mm_bound;
- 	struct vdpasim_dev_attr dev_attr;
- 	/* spinlock to synchronize virtqueue state */
- 	spinlock_t lock;
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 36a1d2e0a6ba..6e07cedef30c 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -36,10 +36,90 @@ module_param(max_iotlb_entries, int, 0444);
- MODULE_PARM_DESC(max_iotlb_entries,
- 		 "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
+Make sure that all the async work is finished when we stop the status urb.
+
+To: Yunke Cao <yunkec@chromium.org>
+To: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Max Staudt <mstaudt@google.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v4:
+- Replace bool with atomic_t to avoid compiler reordering
+- First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
+- Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
+
+Changes in v3:
+- Remove the patch for dev->status, makes more sense in another series, and makes
+  the zero day less nervous.
+- Update reviewed-by (thanks Yunke!).
+- Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+
+Changes in v2:
+- Add a patch for not kalloc dev->status
+- Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+- Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+---
+ drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
+ drivers/media/usb/uvc/uvc_status.c | 6 ++++++
+ drivers/media/usb/uvc/uvcvideo.h   | 1 +
+ 3 files changed, 10 insertions(+)
+
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index c95a2229f4fa..1be6897a7d6d 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
  
-+static bool use_va;
-+module_param(use_va, bool, 0444);
-+MODULE_PARM_DESC(use_va, "Enable the device's ability to use VA");
-+
- #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
- #define VDPASIM_QUEUE_MAX 256
- #define VDPASIM_VENDOR_ID 0
+ 	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
  
-+struct vdpasim_mm_work {
-+	struct kthread_work work;
-+	struct task_struct *owner;
-+	struct mm_struct *mm;
-+	bool bind;
-+	int ret;
-+};
-+
-+static void vdpasim_mm_work_fn(struct kthread_work *work)
-+{
-+	struct vdpasim_mm_work *mm_work =
-+		container_of(work, struct vdpasim_mm_work, work);
-+
-+	mm_work->ret = 0;
-+
-+	if (mm_work->bind) {
-+		kthread_use_mm(mm_work->mm);
-+#if 0
-+		if (mm_work->owner)
-+			mm_work->ret = cgroup_attach_task_all(mm_work->owner,
-+							      current);
-+#endif
-+	} else {
-+#if 0
-+		//TODO: check it
-+		cgroup_release(current);
-+#endif
-+		kthread_unuse_mm(mm_work->mm);
-+	}
-+}
-+
-+static void vdpasim_worker_queue_mm(struct vdpasim *vdpasim,
-+				    struct vdpasim_mm_work *mm_work)
-+{
-+	struct kthread_work *work = &mm_work->work;
-+
-+	kthread_init_work(work, vdpasim_mm_work_fn);
-+	kthread_queue_work(vdpasim->worker, work);
-+
-+	spin_unlock(&vdpasim->lock);
-+	kthread_flush_work(work);
-+	spin_lock(&vdpasim->lock);
-+}
-+
-+static int vdpasim_worker_bind_mm(struct vdpasim *vdpasim,
-+				  struct mm_struct *new_mm,
-+				  struct task_struct *owner)
-+{
-+	struct vdpasim_mm_work mm_work;
-+
-+	mm_work.owner = owner;
-+	mm_work.mm = new_mm;
-+	mm_work.bind = true;
-+
-+	vdpasim_worker_queue_mm(vdpasim, &mm_work);
-+
-+	if (!mm_work.ret)
-+		vdpasim->mm_bound = new_mm;
-+
-+	return mm_work.ret;
-+}
-+
-+static void vdpasim_worker_unbind_mm(struct vdpasim *vdpasim)
-+{
-+	struct vdpasim_mm_work mm_work;
-+
-+	if (!vdpasim->mm_bound)
++	if (atomic_read(&dev->flush_status))
 +		return;
 +
-+	mm_work.mm = vdpasim->mm_bound;
-+	mm_work.bind = false;
-+
-+	vdpasim_worker_queue_mm(vdpasim, &mm_work);
-+
-+	vdpasim->mm_bound = NULL;
-+}
- static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
- {
- 	return container_of(vdpa, struct vdpasim, vdpa);
-@@ -66,8 +146,10 @@ static void vdpasim_vq_notify(struct vringh *vring)
- static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
- {
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
-+	bool va_enabled = use_va && vdpasim->mm_bound;
+ 	/* Resubmit the URB. */
+ 	w->urb->interval = dev->int_ep->desc.bInterval;
+ 	ret = usb_submit_urb(w->urb, GFP_KERNEL);
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 7518ffce22ed..4a95850cdc1b 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+ 	if (dev->int_urb == NULL)
+ 		return 0;
  
--	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false, false,
-+	vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false,
-+			  va_enabled,
- 			  (struct vring_desc *)(uintptr_t)vq->desc_addr,
- 			  (struct vring_avail *)
- 			  (uintptr_t)vq->driver_addr,
-@@ -96,6 +178,9 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- {
- 	int i;
- 
-+	//TODO: should we cancel the works?
-+	vdpasim_worker_unbind_mm(vdpasim);
-+
- 	spin_lock(&vdpasim->iommu_lock);
- 
- 	for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
-@@ -275,7 +360,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 
- 	vdpasim = vdpa_alloc_device(struct vdpasim, vdpa, NULL, ops,
- 				    dev_attr->ngroups, dev_attr->nas,
--				    dev_attr->name, false);
-+				    dev_attr->name, use_va);
- 	if (IS_ERR(vdpasim)) {
- 		ret = PTR_ERR(vdpasim);
- 		goto err_alloc;
-@@ -657,6 +742,19 @@ static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
- 	return ret;
++	atomic_set(&dev->flush_status, 0);
+ 	return usb_submit_urb(dev->int_urb, flags);
  }
  
-+static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *mm,
-+			   struct task_struct *owner)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int ret;
+ void uvc_status_stop(struct uvc_device *dev)
+ {
++	struct uvc_ctrl_work *w = &dev->async_ctrl;
 +
-+	spin_lock(&vdpasim->lock);
-+	ret = vdpasim_worker_bind_mm(vdpasim, mm, owner);
-+	spin_unlock(&vdpasim->lock);
-+
-+	return ret;
-+}
-+
- static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
- 			   u64 iova, u64 size,
- 			   u64 pa, u32 perm, void *opaque)
-@@ -744,6 +842,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.set_group_asid         = vdpasim_set_group_asid,
- 	.dma_map                = vdpasim_dma_map,
- 	.dma_unmap              = vdpasim_dma_unmap,
-+	.bind_mm		= vdpasim_bind_mm,
- 	.free                   = vdpasim_free,
- };
++	atomic_set(&dev->flush_status, 1);
++	if (cancel_work_sync(&w->work))
++		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+ 	usb_kill_urb(dev->int_urb);
+ }
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index df93db259312..1274691f157f 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -560,6 +560,7 @@ struct uvc_device {
+ 	struct usb_host_endpoint *int_ep;
+ 	struct urb *int_urb;
+ 	u8 *status;
++	atomic_t flush_status;
+ 	struct input_dev *input;
+ 	char input_phys[64];
  
-@@ -776,6 +875,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_iova_range         = vdpasim_get_iova_range,
- 	.set_group_asid         = vdpasim_set_group_asid,
- 	.set_map                = vdpasim_set_map,
-+	.bind_mm		= vdpasim_bind_mm,
- 	.free                   = vdpasim_free,
- };
- 
--- 
-2.38.1
 
+---
+base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+change-id: 20221212-uvc-race-09276ea68bf8
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
