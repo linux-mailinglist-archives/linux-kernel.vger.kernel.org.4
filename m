@@ -2,115 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CD664CFEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DDA64CFEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbiLNTLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S239038AbiLNTOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238879AbiLNTLd (ORCPT
+        with ESMTP id S238759AbiLNTN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:11:33 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEACDECF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:11:32 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so219548pjp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k9cGqAjg4onQOK2CDcNCWzuxJXzOE93Rua+7XFpp9qQ=;
-        b=rNSjP36539bQaZ50jWk1UKjWFkvEwm2WoMxQBCIFBR6GjWJ0DzUyyCfRsOFGuQtoFG
-         194yYYY4LwjCTVwPAEsXO2dLrAzxROlPVtz/BqhF/7b8eOloavcHNc6/ddF10ACn5GPX
-         ae3m2kQ6OoooDmZuoTIklSktWJMasHeYtivba72UWQ4cmcu9tb8NlbQzldqr7hv0Fbsg
-         WNkplU9RJT2DQUMdFT9a8znpGwfkoPq4X0z63l9fkEoI1GBGHzABK/ehtK4TGtk1/4tV
-         1ybhvM+iU/yGA5HuyiWcjZmEJ6XQxI9UctxGnPX9Tr5BwDtSAfN/zob3oqsgqTP1OTVC
-         mQnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k9cGqAjg4onQOK2CDcNCWzuxJXzOE93Rua+7XFpp9qQ=;
-        b=n09TnAJtiHmU32HOuW7FS5wG2Z0rqUlX7x8E7FXwxmGCaV5I2/9DpImhm9CohW6a3T
-         h8TicgWRSGtwDn1DDvNvein5AW0Dr98dXTMW+Rdx7+8N2nrWKnzFPvYQB1+kA0NiDdrP
-         nsTI8qnfeIeuyPa8HfVt54WCaqfqhegWeYuc4NH4RYQc7yrCv9LgX1H+qY1lcCDuhPVm
-         /BN8vgf/uzwGc4kc3CQTIWKbaSXaaoo/IbvPRPkqTUKyUjXyLTpEGt0FYGlNGKsoBN2M
-         YoUC7WSz1SO4fQDwZmyc4EW/wsBO7CRccBpmqb0tvuG1EvHqiUm+4pnWBVcbE9yEylxN
-         yG0w==
-X-Gm-Message-State: AFqh2kpXFp5WVufxzzv5XdddXsv7EV86BvHjmRA0hnp82gs0gJ7M/dN2
-        ofDGFHFOnebL/SZaWlJ+Bc7R5Q==
-X-Google-Smtp-Source: AMrXdXtS9+OW8PChs6xxp1Xeqb/YR3Cz7OEFTIwUSqoYiAAJza0TfZ5AkSO4GplC8QT33sBUH1DyCA==
-X-Received: by 2002:a17:902:b187:b0:189:58a8:282 with SMTP id s7-20020a170902b18700b0018958a80282mr543017plr.3.1671045091469;
-        Wed, 14 Dec 2022 11:11:31 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t14-20020a1709027fce00b00188fce6e8absm2175827plb.280.2022.12.14.11.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 11:11:30 -0800 (PST)
-Date:   Wed, 14 Dec 2022 19:11:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>, kvm@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] KVM: x86/mmu: Fix wrong gfn range of tlb flushing
- in kvm_set_pte_rmapp()
-Message-ID: <Y5of3zZtfogg1Rml@google.com>
-References: <cover.1665214747.git.houwenlong.hwl@antgroup.com>
- <0ce24d7078fa5f1f8d64b0c59826c50f32f8065e.1665214747.git.houwenlong.hwl@antgroup.com>
- <Y0bvT8k9vlDUPup+@google.com>
- <CAJhGHyAENXDLL=2-2KXL3_hKF+XZaFxOfRV2vaf6E5nhUa1Mzw@mail.gmail.com>
+        Wed, 14 Dec 2022 14:13:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D7A1DDC7;
+        Wed, 14 Dec 2022 11:13:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26A66B81A1A;
+        Wed, 14 Dec 2022 19:13:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B44C433D2;
+        Wed, 14 Dec 2022 19:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671045235;
+        bh=lbcQbBDqs7Qx+KzgAaODIuLRdgR43Oa9oNjsW16WLH8=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=Q8ppirq+NJCrqYeme+mkCmshi9MzdRHyYnYRknmyqdaRNCg0sPvKnrg36stwEa02L
+         BxxsJjxI4WhaZdFsBspwNa5UwvYijJs3tL7mGbjozcXXm2ywPWTex4ekv36o4dqfq+
+         AAn8OAPWVZrvGt2gh+6V6FplbBjsldr4+v3+QHgF11yEsoN7Vu6K+qEkkl6/ZxeLj9
+         26ZMDFJ+gu8peOov34Fw+HbtUvuxgOCna/qK7wjurx4Sq1gfqkLnmTMZu0Ps5+prmh
+         uEG4FQJWZWiDwAmBeaHGFDWHh5rkVdgBFV6y85otZqv2wW6X2TvE2b7fWJg6YxT4G6
+         Uib2b0gftw3pw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 687D05C0327; Wed, 14 Dec 2022 11:13:55 -0800 (PST)
+Date:   Wed, 14 Dec 2022 11:13:55 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     boqun.feng@gmail.com, frederic@kernel.org, joel@joelfernandes.org,
+        neeraj.iitr10@gmail.com, urezki@gmail.com
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RFC] srcu: Yet more detail for
+ srcu_readers_active_idx_check() comments
+Message-ID: <20221214191355.GA2596199@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJhGHyAENXDLL=2-2KXL3_hKF+XZaFxOfRV2vaf6E5nhUa1Mzw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022, Lai Jiangshan wrote:
-> On Thu, Oct 13, 2022 at 1:00 AM Sean Christopherson <seanjc@google.com> wrote:
-> > > +/* Flush the given page (huge or not) of guest memory. */
-> > > +static inline void kvm_flush_remote_tlbs_gfn(struct kvm *kvm, gfn_t gfn, int level)
-> > > +{
-> > > +     u64 pages = KVM_PAGES_PER_HPAGE(level);
-> > > +
-> >
-> > Rather than require the caller to align gfn, what about doing gfn_round_for_level()
-> > in this helper?  It's a little odd that the caller needs to align gfn but doesn't
-> > have to compute the size.
-> >
-> > I'm 99% certain kvm_set_pte_rmap() is the only path that doesn't already align the
-> > gfn, but it's nice to not have to worry about getting this right, e.g. alternatively
-> > this helper could WARN if the gfn is misaligned, but that's _more work.
-> >
-> >         kvm_flush_remote_tlbs_with_address(kvm, gfn_round_for_level(gfn, level),
-> >                                            KVM_PAGES_PER_HPAGE(level);
-> >
-> > If no one objects, this can be done when the series is applied, i.e. no need to
-> > send v5 just for this.
-> >
-> 
-> Hello Paolo, Sean, Hou,
-> 
-> It seems the patchset has not been queued.  I believe it does
-> fix bugs.
+The comment in srcu_readers_active_idx_check() following the smp_mb()
+is out of date, hailing from a simpler time when preemption was disabled
+across the bulk of __srcu_read_lock().  The fact that preemption was
+disabled meant that the number of tasks that had fetched the old index
+but not yet incremented counters was limited by the number of CPUs.
 
-It's on my list of things to get merged for 6.3.  I haven't been more agressive
-in getting it queued because I assume there are very few KVM-on-HyperV users that
-are likely to be affected.
+In our more complex modern times, the number of CPUs is no longer a limit.
+This commit therefore updates this comment, additionally giving more
+memory-ordering detail.
+
+Reported-by: Boqun Feng <boqun.feng@gmail.com>
+Reported-by: Frederic Weisbecker <frederic@kernel.org>
+Reported-by: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Reported-by: Neeraj Upadhyay <neeraj.iitr10@gmail.com>
+Reported-by: Uladzislau Rezki <urezki@gmail.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 68b8d8b150db1..ba12c50ee3658 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -469,24 +469,53 @@ static bool srcu_readers_active_idx_check(struct srcu_struct *ssp, int idx)
+ 
+ 	/*
+ 	 * If the locks are the same as the unlocks, then there must have
+-	 * been no readers on this index at some time in between. This does
+-	 * not mean that there are no more readers, as one could have read
+-	 * the current index but not have incremented the lock counter yet.
++	 * been no readers on this index at some point in this function.
++	 * But there might be more readers, as a task might have read
++	 * the current ->srcu_idx but not yet have incremented its CPU's
++	 * ->srcu_lock_count[idx] counter.  In fact, it is possible
++	 * that most of the tasks have been preempted between fetching
++	 * ->srcu_idx and incrementing ->srcu_lock_count[idx].  And there
++	 * could be almost (ULONG_MAX / sizeof(struct task_struct)) tasks
++	 * in a system whose address space was fully populated with memory.
++	 * Call this quantity Nt.
+ 	 *
+-	 * So suppose that the updater is preempted here for so long
+-	 * that more than ULONG_MAX non-nested readers come and go in
+-	 * the meantime.  It turns out that this cannot result in overflow
+-	 * because if a reader modifies its unlock count after we read it
+-	 * above, then that reader's next load of ->srcu_idx is guaranteed
+-	 * to get the new value, which will cause it to operate on the
+-	 * other bank of counters, where it cannot contribute to the
+-	 * overflow of these counters.  This means that there is a maximum
+-	 * of 2*NR_CPUS increments, which cannot overflow given current
+-	 * systems, especially not on 64-bit systems.
++	 * So suppose that the updater is preempted at this point in the
++	 * code for a long time.  That now-preempted updater has already
++	 * flipped ->srcu_idx (possibly during the preceding grace period),
++	 * done an smp_mb() (again, possibly during the preceding grace
++	 * period), and summed up the ->srcu_unlock_count[idx] counters.
++	 * How many times can a given one of the aforementioned Nt tasks
++	 * increment the old ->srcu_idx value's ->srcu_lock_count[idx]
++	 * counter, in the absence of nesting?
+ 	 *
+-	 * OK, how about nesting?  This does impose a limit on nesting
+-	 * of floor(ULONG_MAX/NR_CPUS/2), which should be sufficient,
+-	 * especially on 64-bit systems.
++	 * It can clearly do so once, given that it has already fetched
++	 * the old value of ->srcu_idx and is just about to use that value
++	 * to index its increment of ->srcu_lock_count[idx].  But as soon as
++	 * it leaves that SRCU read-side critical section, it will increment
++	 * ->srcu_unlock_count[idx], which must follow the updater's above
++	 * read from that same value.  Thus, as soon the reading task does
++	 * an smp_mb() and a later fetch from ->srcu_idx, that task will be
++	 * guaranteed to get the new index.  Except that the increment of
++	 * ->srcu_unlock_count[idx] in __srcu_read_unlock() is after the
++	 * smp_mb(), and the fetch from ->srcu_idx in __srcu_read_lock()
++	 * is before the smp_mb().  Thus, that task might not see the new
++	 * value of ->srcu_idx until the -second- __srcu_read_lock(),
++	 * which in turn means that this task might well increment
++	 * ->srcu_lock_count[idx] for the old value of ->srcu_idx twice,
++	 * not just once.
++	 *
++	 * That is, there can be almost 2 * Nt further increments of
++	 * ->srcu_lock_count[idx] for the old index.  But this is OK because
++	 * the size of the task_struct structure limits the value of Nt.
++	 *
++	 * OK, but what about nesting?  This does impose a limit on
++	 * nesting of half of the size of the task_struct structure
++	 * (measured in bytes), which should be sufficient.  A late 2022
++	 * TREE01 rcutorture run reported this size to be no less than
++	 * 9408 bytes, allowing up to 4704 levels of nesting, which is
++	 * comfortably beyond excessive.  Especially on 64-bit systems,
++	 * which are unlikely to be configured with an address space fully
++	 * populated with memory, at least not anytime soon.
+ 	 */
+ 	return srcu_readers_lock_idx(ssp, idx) == unlocks;
+ }
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index ee8a6a711719a..399c818fe47ce 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4900,6 +4900,7 @@ void __init rcu_init(void)
+ 	// Kick-start any polled grace periods that started early.
+ 	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
+ 		(void)start_poll_synchronize_rcu_expedited();
++	pr_alert("sizeof(struct task_struct) = %lu\n", sizeof(struct task_struct));
+ }
+ 
+ #include "tree_stall.h"
