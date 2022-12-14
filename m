@@ -2,84 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D6764D1D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 22:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A658A64D1C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 22:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiLNVdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 16:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S229844AbiLNVZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 16:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLNVda (ORCPT
+        with ESMTP id S229870AbiLNVZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 16:33:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CB389DD
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 13:32:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671053564;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=FUzpeAfgvzVz/5w9XcHGMTUv81BEJmGgs/I3fDj9iOo=;
-        b=hpol03xLZCt+E84I8MRrLSBhxvLk4I3aGUiWKkePJhxHlNKMiGfbzqjILW2WOkfSKLSomV
-        M+KcIH2djdNopkySX9+rpa8QbK1bl7tAPhTtpIxq2ZG9baiHZTJBG2H1iHvTCoYpvddeTe
-        SV1XVKlbGv64tpciH/oS7PCM0laISPY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-IoSSDzglOjKf0WznFZ0RgQ-1; Wed, 14 Dec 2022 16:32:42 -0500
-X-MC-Unique: IoSSDzglOjKf0WznFZ0RgQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E70C6280BCA2;
-        Wed, 14 Dec 2022 21:32:41 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1F8F940C2064;
-        Wed, 14 Dec 2022 21:32:40 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Define _GNU_SOURCE for a declaration of strptime
-Date:   Wed, 14 Dec 2022 22:32:39 +0100
-Message-ID: <87fsdhllhk.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Wed, 14 Dec 2022 16:25:26 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2F63722B;
+        Wed, 14 Dec 2022 13:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671053122; x=1702589122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gXLE+mSz9Ky8I8FcVZY8tiBfQ6uUmNqDpsoYD6oEPHo=;
+  b=Mf/y0Rjsv0kY3z1R/3EH72tvzIbNmgPVUaMuczsJgrAV3QNKG3e+XA8L
+   iXpmyf39KrI2EcEfwXyy9JsDbnmlF3+Lw5mHNl6LNnPAKELMHviehkWvc
+   cOUfqzQwA5JiD3OccvDSTGcRH1YP/MIUcI0PmNwW5kMgqTu6AZXsz9gTk
+   OWqUtfIRn9AVR6/OQVyHsoFlHyX3txtWhQtaVokL4G2n2ZqH534UvTzIo
+   cZV6cyTfRFdX2NZmWBVbUeJPYvvznYsqB9jt108ss0Ofi9uSTs2H6RVIO
+   CvWooKxCXnGDsY/H0HQ3Fme+80aIS9Qy1xGAdKoqkKP8k60PpNC/pAU69
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="316153726"
+X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
+   d="scan'208";a="316153726"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 13:25:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="737832125"
+X-IronPort-AV: E=Sophos;i="5.96,245,1665471600"; 
+   d="scan'208";a="737832125"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Dec 2022 13:25:21 -0800
+Date:   Wed, 14 Dec 2022 13:33:35 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Zhang Chen <chen.zhang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Chao Gao <chao.gao@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 2/9] KVM: x86: Add a kvm-only leaf for RRSBA_CTRL
+Message-ID: <20221214213335.GB16072@ranerica-svr.sc.intel.com>
+References: <20221210160046.2608762-1-chen.zhang@intel.com>
+ <20221210160046.2608762-3-chen.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221210160046.2608762-3-chen.zhang@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is needed for compatibility with future C compilers which reject
-implicit function declarations by default.  Without _GNU_SOURCE (or a
-similar feature test macro), <time.h> does not declare the strptime
-function, and compilation can fail.
+On Sun, Dec 11, 2022 at 12:00:39AM +0800, Zhang Chen wrote:
+> KVM needs to check if guests can see RRSBA_CTRL. If a guest is using
+> retpoline and cannot see RRSBA_CTRL and the host enumerates RRSBA,
+> KVM is responsible for setting RRSBA_DIS_S for the guest.
+> 
+> This allows VM migration from parts doesn't enumerates RRSBA to those
 
----
- Make.rules | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+perhaps s/parts doesn't enumerates/parts that do not enumerate/ reads
+better?
 
-diff --git a/Make.rules b/Make.rules
-index 903a5a4..d4de1ef 100644
---- a/Make.rules
-+++ b/Make.rules
-@@ -14,7 +14,7 @@ else
- $(error unknown architecture $(ARCH))
- endif
- INCDIR	   = -I$(TOPDIR)include/ -I/usr/include/efi -I/usr/include/efi/$(ARCH) -I/usr/include/efi/protocol
--CPPFLAGS   = -DCONFIG_$(ARCH)
-+CPPFLAGS   = -DCONFIG_$(ARCH) -D_GNU_SOURCE
- CFLAGS	   = -O2 -g $(ARCH3264) -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants -fno-stack-protector -ffreestanding -fno-stack-check
- LDFLAGS	   = -nostdlib
- CRTOBJ		= crt0-efi-$(ARCH).o
+> that enumerate RRSBA.
 
-Related to:
+and here maybe s/that enumerate RRSBA/do/ ?
 
-  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
-  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
-
+Thanks and BR,
+Ricardo
