@@ -2,134 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8963664CB53
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FC164CB5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238244AbiLNNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S238126AbiLNNcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238126AbiLNNbG (ORCPT
+        with ESMTP id S229695AbiLNNcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:31:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C4E248FE
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671024621;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p5nDSovtGcMOmECeVBK2QeZhfWdznopYC9ScdOLMtVw=;
-        b=Ro3mMm7YnH7Ptu+BItXyzI49B5S1yb5yruA2AT2RqtdChW47xPMMe1FXHYoztKLu3R7x/D
-        8RMBzivkE9mzL4q+AcL1cXs1HAgo0j0vuGK1lSq+eGsak7dImg+H+b4b4bCrXm7cTj/POf
-        d8Hl03T5R76eNBeS6n+k4UBthoqVLNg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-SkU2T6obNHq0jzOTvgDD4g-1; Wed, 14 Dec 2022 08:30:17 -0500
-X-MC-Unique: SkU2T6obNHq0jzOTvgDD4g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 74DA9101A52E;
-        Wed, 14 Dec 2022 13:30:17 +0000 (UTC)
-Received: from T590 (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C956514171C0;
-        Wed, 14 Dec 2022 13:30:13 +0000 (UTC)
-Date:   Wed, 14 Dec 2022 21:30:08 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhong Jinghua <zhongjinghua@huawei.com>,
-        Dennis Zhou <dennis@kernel.org>
-Subject: Re: [PATCH 3/3] lib/percpu-refcount: drain ->release() in
- perpcu_ref_exit()
-Message-ID: <Y5nP4JC00zTepHue@T590>
-References: <20221214025101.1268437-1-ming.lei@redhat.com>
- <20221214081651.954-1-hdanton@sina.com>
+        Wed, 14 Dec 2022 08:32:00 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0946360
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:31:59 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEAosHJ030155;
+        Wed, 14 Dec 2022 07:31:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=0ZmkgIHHH2z0Z3N58VJyuMPU40yJoMjSH3qtapRnbuE=;
+ b=Z/8I6l8EL/lnWOsYK5CeeicPmqPN5go0y339LUCcw8HrJ6+Ka5Rjt0UXENYdilkwsAkG
+ 8+VUYXqOl7k/rsn24/SL6CqwIfWEhxG81w/cdFvB26fkj1Zv+S7Kp/X5kyEQ8529qVLe
+ Ce615jIL9q5q2W6mMdrh3Cc8HKigIXI5l4x0+/It+cgdyDxF0j/w70ozNYfXqz1y5AAa
+ UuIRpoNIDYay9MTPUW7u0InZ3b59hBkUjLKeDYK7hcukJxc11E7OQsXyRa0D6qsvAF5Y
+ Et0uAUBNCk8yjsLFE9NMKQH0UQcvt8PkamwPwo1Tlg0UvrPKnt1BnO8dlvmY8Jybyh1k Cw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3mf6rh8e69-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Dec 2022 07:31:37 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 14 Dec
+ 2022 07:31:36 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Wed, 14 Dec 2022 07:31:36 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3153E458;
+        Wed, 14 Dec 2022 13:31:36 +0000 (UTC)
+Date:   Wed, 14 Dec 2022 13:31:36 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lukasz Majewski <lukma@denx.de>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Stephen Kitt <steve@sk2.org>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/4] ASoC: wm8940: Rewrite code to set proper clocks
+Message-ID: <20221214133136.GQ105268@ediswmail.ad.cirrus.com>
+References: <20221214123743.3713843-1-lukma@denx.de>
+ <20221214123743.3713843-3-lukma@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221214081651.954-1-hdanton@sina.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221214123743.3713843-3-lukma@denx.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: ciLYuOB-zJb_vroAegOl3Jla7YXlKn3d
+X-Proofpoint-GUID: ciLYuOB-zJb_vroAegOl3Jla7YXlKn3d
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 04:16:51PM +0800, Hillf Danton wrote:
-> On 14 Dec 2022 10:51:01 +0800 Ming Lei <ming.lei@redhat.com>
-> > The pattern of wait_event(percpu_ref_is_zero()) has been used in several
+On Wed, Dec 14, 2022 at 01:37:41PM +0100, Lukasz Majewski wrote:
+> Without this change, the wm8940 driver is not working when
+> set_sysclk callback (wm8940_set_dai_sysclk) is called with
+> frequency not listed in the switch clause.
 > 
-> For example?
-
-blk_mq_freeze_queue_wait() and target_wait_for_sess_cmds().
-
+> This change adjusts this driver to allow non-standard frequency
+> set (just after the boot) being adjusted afterwards by the sound
+> system core code.
 > 
-> > kernel components, and this way actually has the following risk:
-> > 
-> > - percpu_ref_is_zero() can be returned just between
-> >   atomic_long_sub_and_test() and ref->data->release(ref)
-> > 
-> > - given the refcount is found as zero, percpu_ref_exit() could
-> >   be called, and the host data structure is freed
-> > 
-> > - then use-after-free is triggered in ->release() when the user host
-> >   data structure is freed after percpu_ref_exit() returns
+> Moreover, support for internal wm8940's PLL is provided, so it
+> can generate clocks when HOST system is not able to do it.
 > 
-> The race between exit and the release callback should be considered at the
-> corresponding callsite, given the comment below, and closed for instance
-> by synchronizing rcu.
+> Code in this commit is based on previous change done for wm8974
+> (SHA1: 51b2bb3f2568e6d9d81a001d38b8d70c2ba4af99).
 > 
-> /**
->  * percpu_ref_put_many - decrement a percpu refcount
->  * @ref: percpu_ref to put
->  * @nr: number of references to put
->  *
->  * Decrement the refcount, and if 0, call the release function (which was passed
->  * to percpu_ref_init())
->  *
->  * This function is safe to call as long as @ref is between init and exit.
->  */
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> ---
+>  	struct snd_soc_component *component = dai->component;
+> +	struct wm8940_priv *priv = snd_soc_component_get_drvdata(component);
+>  	u16 iface = snd_soc_component_read(component, WM8940_IFACE) & 0xFD9F;
+>  	u16 addcntrl = snd_soc_component_read(component, WM8940_ADDCNTRL) & 0xFFF1;
+>  	u16 companding =  snd_soc_component_read(component,
+>  						WM8940_COMPANDINGCTL) & 0xFFDF;
+>  	int ret;
+>  
+> +	priv->fs = params_rate(params);
+> +	ret = wm8940_update_clocks(dai);
+> +	if (ret)
+> +		return ret;
+> +
 
-Not sure if the above comment implies that the callsite should cover the
-race.
+I think this all looks mostly good, my only slight concern would
+be the interaction with the manual functions for settings the PLL
+etc. I guess under this code, whatever manual settings were
+configured will be overwritten with the new auto settings, I
+think this should be fine as the PLL wants to be run in a pretty
+narrow band anyway, so the settings are likely identical. Do you
+have any thoughts?
 
-But blk-mq can really avoid the trouble by using the existed call_rcu():
-
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 3866b6c4cd88..9321767470dc 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -254,14 +254,15 @@ EXPORT_SYMBOL_GPL(blk_clear_pm_only);
- 
- static void blk_free_queue_rcu(struct rcu_head *rcu_head)
- {
--	kmem_cache_free(blk_requestq_cachep,
--			container_of(rcu_head, struct request_queue, rcu_head));
-+	struct request_queue *q = container_of(rcu_head,
-+			struct request_queue, rcu_head);
-+
-+	percpu_ref_exit(&q->q_usage_counter);
-+	kmem_cache_free(blk_requestq_cachep, q);
- }
- 
- static void blk_free_queue(struct request_queue *q)
- {
--	percpu_ref_exit(&q->q_usage_counter);
--
- 	if (q->poll_stat)
- 		blk_stat_remove_callback(q, q->poll_cb);
- 	blk_stat_free_callback(q->poll_cb);
-
-
-Thanks, 
-Ming
-
+Thanks,
+Charles
