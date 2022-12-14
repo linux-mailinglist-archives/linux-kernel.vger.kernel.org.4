@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C4E64CD78
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4CC64CD7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiLNP4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S238735AbiLNP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238168AbiLNPzs (ORCPT
+        with ESMTP id S238543AbiLNPzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:55:48 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4549D28E22
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:53:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gtawquJbr4j4KL/a0E8zt+JLEwoREh5/6YFc6c6V6no=; b=qmbneJv+DvannkGKQqEoytBscM
-        t3jplbl9lpSl9+7He82fxjiS1cfW7eTLshIhlQXJ5rg3DxCObB1Mp6XEnv5HL7YYXRSBOgnt7ZSdp
-        +3vMLhMSgpvRL2Un1blxBcT3AGZdp1HjCtae3+LQjtw0yzDduFStYvarKnjymwm/CxVb6YIfspH8N
-        Dmzwfa/oYaSPKKMoaQkm9Bj0u9MaCp6SgbhouFzwKHRLfLLWmQXvrr5QuO2QflpsmnBW0YnNPMJ/D
-        9xgEsrnuuCb5Zx5FI6Njp9KIypiPyCMVoKs4JXk0cqCfGcmKKRryQLg2xDUXGMIyxquCjYgSLPeeh
-        OT04mcrw==;
-Received: from 200-158-226-94.dsl.telesp.net.br ([200.158.226.94] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1p5U4F-003IrC-56; Wed, 14 Dec 2022 16:53:11 +0100
-Message-ID: <b95f7a3d-429a-3564-fc9e-fa05d1d551df@igalia.com>
-Date:   Wed, 14 Dec 2022 12:53:04 -0300
+        Wed, 14 Dec 2022 10:55:49 -0500
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13228E2E;
+        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so1986009otb.1;
+        Wed, 14 Dec 2022 07:53:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ky7CWyr1K56tgcvD1JqeLwmsHrDvSN4irv7fwBETXmo=;
+        b=lnHTUM19TWA3os/xeNrBSUyUfj1xf1/uDwOEv0dO9EdVei2bJCGkDyyuwVoLiqk3vz
+         tHkLg3H0xjiVrCP2lixr0S+9BfIX3lMI2RYpJ/cZI9FHvTtuS6OlOWFkCgfuVvKveACE
+         p2QO21aqBnQgfoE9ISkQ2sRJSHftYKxz+0ivNBSiw91KrJVaIy7dbhbO5dxU8hsJ4aud
+         pGpO9cYnMAYAe4EyCqErnQUaBPszhQouQSqLJ+yoDol5DqbDcRUleXJv2ndZt3hWfOau
+         M4jdsnU73llZ2RnniC6V3/0SQEGNalRVVg4LAKgnPJwqJP2PjE5JrkTXyQ823ATu/iMG
+         2ouw==
+X-Gm-Message-State: ANoB5pmiSh5uoy2R3S4hSzdwXfnqAc+CwuTkKgQ6IgBN1s1Sx//XnPPy
+        xyuCRpssXzkn49aO3cO+5Q==
+X-Google-Smtp-Source: AA0mqf6Jy4JxfKbg0+GmdD9/xG8edNlc+K2I6SLZBGFlYNtCsBXx1+2czz2rWLJhnt4uFNrSJIz7nw==
+X-Received: by 2002:a9d:7cc7:0:b0:670:5d89:b1d4 with SMTP id r7-20020a9d7cc7000000b006705d89b1d4mr12535835otn.35.1671033200310;
+        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
+Received: from robh_at_kernel.org (rrcs-98-6-157-194.sw.biz.rr.com. [98.6.157.194])
+        by smtp.gmail.com with ESMTPSA id a2-20020a05683012c200b006705829996fsm2488526otq.56.2022.12.14.07.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 07:53:20 -0800 (PST)
+Received: (nullmailer pid 1128398 invoked by uid 1000);
+        Wed, 14 Dec 2022 15:53:19 -0000
+Date:   Wed, 14 Dec 2022 09:53:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: hwmon: ntc-thermistor: drop Naveen Krishna
+ Chatradhi from maintainers
+Message-ID: <167103319775.1128325.7970103574763866861.robh@kernel.org>
+References: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [for-next][PATCH 6/8] ftrace: Prevent RCU stall on
- PREEMPT_VOLUNTARY kernels
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20221214140133.608431204@goodmis.org>
- <20221214140209.346584113@goodmis.org>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20221214140209.346584113@goodmis.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213100626.36150-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 11:01, Steven Rostedt wrote:
-> From: "gpiccoli@igalia.com" <gpiccoli@igalia.com>
 
-Hi Steve, would be possible to use my full name here, like: Guilherme G.
-Piccoli <gpiccoli@igalia.com> ?
-
-Thanks,
-
-
-Guilherme
-
+On Tue, 13 Dec 2022 11:06:26 +0100, Krzysztof Kozlowski wrote:
+> Emails to Naveen Krishna Chatradhi bounce ("550 5.1.1 Recipient address
+> rejected: User unknown").
 > 
-> The function match_records() may take a while due to a large
-> number of string comparisons, so when in PREEMPT_VOLUNTARY
-> kernels we could face RCU stalls due to that.
-> 
-> Add a cond_resched() to prevent that.
-> 
-> Link: https://lkml.kernel.org/r/20221115204847.593616-1-gpiccoli@igalia.com
-> 
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Acked-by: Paul E. McKenney <paulmck@kernel.org> # from RCU CPU stall warning perspective
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  kernel/trace/ftrace.c | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/devicetree/bindings/hwmon/ntc-thermistor.yaml | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index d04552c0c275..b8e374a372e5 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -4204,6 +4204,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
->  			}
->  			found = 1;
->  		}
-> +		cond_resched();
->  	} while_for_each_ftrace_rec();
->   out_unlock:
->  	mutex_unlock(&ftrace_lock);
+
+Applied, thanks!
