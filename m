@@ -2,162 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B06564CEE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A150564CEE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiLNRe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 12:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S237818AbiLNRfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLNRe1 (ORCPT
+        with ESMTP id S229561AbiLNRfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:34:27 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2072.outbound.protection.outlook.com [40.107.8.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B11E25;
-        Wed, 14 Dec 2022 09:34:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=niYzYVAX62N/CekmYLaGG7/0yonyPBIxiBjDR1GL4I4/EccwotIllImR3FfUO2QeIJkJGh7/WWErogEcxaHd6g9F4QlkfweczBQoQzgzN6o+rJ8eFiMAK3LLnPkf+T6icFfUK2jTt8wXcERWhG6Fj90oO0UzbPwrYGFeTAhqBn1jXuNpNcRwM+4P/tNOXRIyDzzHcovIm1Z5KZQ7fSu1zzJcTk6Ck7dswGqiW9mBUD1ik0HaemVbWLwBjyy+u65MpXJ9kWqq4a32Z3eUjocYK7xUXTXvMJTWPqitc/k9rn7k+D58v87TdRLDg2l067xI8vurXsgw+D3gxhxOOGBtjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L5FkmtlR3EPrYuZXZLi6Pl3AQ/Jtu+febR4ZtM5Li2Y=;
- b=T+kwSUsTFu4sCaQUUrUWDpst38lXO/8qkm80dENJvXF2W2xw9bgv9A99kSdPU0sKrWS7RbBsIhP3/rWkoN7mw/qhxz2pcqQm17ikFASthmpnIZx6ARXwHLzLSBxQM/YRhvLF2TAHX0akff9m/QZYI5gU8JWFbaUFRh4hmINLsel81uiLVMaxUp3z7+GlgOCxc1OBRV4smM3YaB3FD3mi2egVBBYg8jy3FTxitsc2VuKOss7eC9IrQ2rCPn62tLhnIgxEF72tYm3m/0bsAk6IRS90gHsr7qnMMAOxicavzn4/gTFF4Kep+8U+K02Nc3VaVRtGweeF5kiBzPO4jIgcyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L5FkmtlR3EPrYuZXZLi6Pl3AQ/Jtu+febR4ZtM5Li2Y=;
- b=qNCCZxnqC45W2i502QWWmfYa0fXnfa2HBYu1LkOzpR1/E219mP3qtdzrhEk5hSWpiOod2KMhFWfB4X1mniy5BG5AHbFUpd3AiTzr4SmOXm4vGK7Q+3LMY6J8dkUqEBSFe+eKhKE9Ca2MWUkBAXQIoc15Mrs5jY3HumLKpZCkHYE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AS8PR04MB8948.eurprd04.prod.outlook.com (2603:10a6:20b:42f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Wed, 14 Dec
- 2022 17:34:22 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::9317:77dc:9be2:63b%7]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 17:34:22 +0000
-Date:   Wed, 14 Dec 2022 19:34:18 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     iommu@lists.linux.dev, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH] iommu/arm-smmu: don't unregister on shutdown
-Message-ID: <20221214173418.iwovyxlbogkspjxy@skbuf>
-References: <20221208165350.3895136-1-vladimir.oltean@nxp.com>
- <d3517811-232c-592d-f973-2870bb5ec3ac@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3517811-232c-592d-f973-2870bb5ec3ac@arm.com>
-X-ClientProxiedBy: BE1P281CA0059.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:23::18) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Wed, 14 Dec 2022 12:35:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48384E25;
+        Wed, 14 Dec 2022 09:35:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D731361B79;
+        Wed, 14 Dec 2022 17:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1456FC433EF;
+        Wed, 14 Dec 2022 17:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671039304;
+        bh=gc8zeNDEuZKdGQgmQ907LP9lyq1u/4yg+3L7iqX/3KM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JCV0Fd/a9Y0U5jszw4Y4B/oOHklPRieIYq40WRRza9kmAVVjO2pZ1jZ/13nrMo1kA
+         N41D8kUyiBukl/c+nKUxJsfoEizz6H/l0o57t0zZx5ENef3YCSk1UlRSe3A7weKRw2
+         ftkY9lA9z9hOXtIAw5v7d5Jk4ls04s1AodfklQWm8ls+1lEdz9rcyqL/R5EFQUb2ct
+         cx7SB65Pk34+N8CvuiTe+rML+dSJt/UaHLq16XmZ1vBddcjlU9W9Hb3tCya99zgP6z
+         jUJF9AjVC8ThptasDNqV7hxfjv71hSyId4bPWm5yDhsVbW1Z6cAsLUt20k11l22mnT
+         b+ISWAXnCIACg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1A20440367; Wed, 14 Dec 2022 14:35:01 -0300 (-03)
+Date:   Wed, 14 Dec 2022 14:35:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        =?iso-8859-1?Q?Adri=E1n?= Herrera Arcila 
+        <adrian.herrera@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, songliubraving@fb.com,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org
+Subject: Re: [PATCH 2/2] perf stat: fix unexpected delay behaviour
+Message-ID: <Y5oJRXnlRju3gDxl@kernel.org>
+References: <20220729161244.10522-1-adrian.herrera@arm.com>
+ <20220729161244.10522-2-adrian.herrera@arm.com>
+ <e3e123db-5321-c96e-1753-27059c729640@arm.com>
+ <Y5iPsjF/lEsEldU8@kernel.org>
+ <CAM9d7cj=Pu2QAONzd2JSVzd_X9DakeV=khcFGD_d-ES5zrx+KQ@mail.gmail.com>
+ <Y5ngs0bh/R8xPFvo@kernel.org>
+ <Y5nyYeVWpLA/IH1E@leoy-yangtze.lan>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|AS8PR04MB8948:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45f01e8e-6f6f-4ed8-76c0-08daddf96fce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 21AlQxuAJyJz8cnY/6OdEbrkksSjUpQAQ4myOupmDA8lH48d/FiIIYKPbL9oemuG40+oQ5roJt07ZPrDYiqIrSPkFXripE8sddjMo4TL6Fqg0TFVxLH2FAF4jQw4a5Y5FUnuoBhud//PPZ2c6/dgL3LDW6PdrYzAYsAkzaisL7jnFKsStNrknJgr131hHcGwEjlcPqUmuWSimeZupcuft/+jycTJWG58v5EFocgEAtQHlDaaowlDX5lBitn+YhxLoTd+kJOAVolygnd5LGvfX9alub0Ll5Xn2iGRE9xPwHKYEv7kx38Sl8Wx7AH7MG2qz7LwVByFI45s/zLt2xHVWnlFoWsVUBDST2zWttxxeGKdwfWsqilDEzDpQFBopzrDIMrM2aEhWiL/UDk49jTP+Xp6k7SVysCsaUVawRYK7G9IoApDY+7tWgkkDgiu7P5gVYL819YyPcscMw/6wWql+RAzBOk/w6oVjvi4kogFtXiG1w6T4/ykRhohRkpRy0hPw5fboMAm1gbRrOwuZsM1HJBA3IFotDdO59giZQdwU3M2lYNRXmgTohzK7MQCV+NhZMpkpbuy6SCRvJBW3XIi3L/vhneXNOw83qv3bpnyT/iMg7ODLqpg7ijTt1zIrRrktNR3Wa/pSb7qlE/tbxtKIw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199015)(2906002)(3716004)(5660300002)(8936002)(44832011)(83380400001)(86362001)(1076003)(38100700002)(54906003)(6916009)(186003)(316002)(6512007)(6486002)(9686003)(6666004)(41300700001)(26005)(33716001)(4326008)(66556008)(8676002)(66476007)(478600001)(6506007)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZDnMGXzUH4hYdfISdno7627auG7LNCcC8mtj3X41erDj6UDqxvL8sbpUQkq4?=
- =?us-ascii?Q?cvwCZIUhez1Mnd2MoqigOqGxEdfoMTRe7gSHzapoCDbGyK2nGjfWfmejT43e?=
- =?us-ascii?Q?Db80lDmdv7IFdYO+Leat0fABTEhUOG9VInBopO+YJrPwqBRYThIxeBKtMkLx?=
- =?us-ascii?Q?a+s6gXhDN/gUtmpneooD3/NIt2kcZstcn+5RANozqxXl0LDeBYDAv3XtRRWZ?=
- =?us-ascii?Q?M8V22st1Y+qeftwXNRGlpnAkdEMwR1hb00L0mbypWMzyPLMP9fdqHQbqxzg9?=
- =?us-ascii?Q?2JdWA+oWQ33Qh2U0fZFo0uw3gbAbHPJC7UHwRTNG2Mxk7AVJUcDs+/KPQLDS?=
- =?us-ascii?Q?G1CDIg0uiYYoxD5CTzH1dC7YuxSBglhZ/Q/vLl10M57N6gdN3HvatyXt0z4e?=
- =?us-ascii?Q?cOPUDh9zeSeOo+ooICLiUFkfBslIQ0Qov6E4GWhHTaOauD+Oisk2vpX0UpJT?=
- =?us-ascii?Q?aaIVc9pfqxc+zL5XaqfAc84eIX2d6qWTsvDS+K4y8BrFky2BA0ENCq32pG2J?=
- =?us-ascii?Q?+AZe1hBiEZadk3Ot5vV/os8yORMa04p6SbN6/B/mnvAr5GhiZrAQ5wo0N1KO?=
- =?us-ascii?Q?qM34yW+BPemCFRWHwrFxEOaj0W0xtrrXZWou66XV7vcYmyv2MDJLZA3Ir+dw?=
- =?us-ascii?Q?vlYSxYvrFN58lwV/+kUqcYGgDmraMHaIviyNMKWp9MLZy2cgndtpvSk5H1g0?=
- =?us-ascii?Q?d0qg9xWdqOMqtVb6KF/SMuY+YwtVwtk1eCr7tlPJ5WJ/g7mjoRqpgAqi6tpt?=
- =?us-ascii?Q?bISZJty0WT1DP1GhmcVfts1PjJa9m8JLrFUH8ywUOXBP4/ieyDODMeYytMIw?=
- =?us-ascii?Q?rXoXRLB3D3s4TjsBb2zYO9U4gRhQjsaA1KCyMgXJGzNl910uTvQJc+5e/tFG?=
- =?us-ascii?Q?XtmxCxIcDhfy5rdpPMyTiYuch3kws8gMFo9GauCuWu7rCeLtfW+gY6W7mtxv?=
- =?us-ascii?Q?2Fgvm/P7fJZTuPqPPj61lLPb/fjqoChbfnGgtklOFkDfLsTKblQtQjRKk0Au?=
- =?us-ascii?Q?uHVfrajkXBCp6h3gr5m+5Wh5eRZdO0ddiNjBfr9fJt6+JtnZ0OTdmeo2tjO4?=
- =?us-ascii?Q?Nnad4V7hFoTic4gSyox5T73QcjaNIKeME/buwGEsSpokXdGX2AwVFXfzfosM?=
- =?us-ascii?Q?B0d5S/W15tL65fEJN6KLTAwDdkWmBPqQKVJcKrdpufGBzHTA8I4Y/Iop0YqR?=
- =?us-ascii?Q?zOT/VnYw91boKglN/oi1spWqhUnwxyP4tiO4OQvDgQ+y1mWQaQVl+rUe/kSA?=
- =?us-ascii?Q?6KIMWagssfgY3AOEVOOblPDcgxYAg+t+G4fxuoMt/UHiR4DesDFf0/ESGMvH?=
- =?us-ascii?Q?I+1iKIJB4HeVd8mirFxHVfV9zYMi2TXmWv/TMnaVPVgLp5RRZdpUymjgErTy?=
- =?us-ascii?Q?YzOfFF5oc3AH2UIXVwV136h+uSNVExnyW4y3Se67nsfzcEZLiidmkK5PyGMv?=
- =?us-ascii?Q?pEpK8z+TK++dSVyx46P2nEPNh3yqHnnwE3XpRgEFkiGBKjg/YLqSkelJpp6j?=
- =?us-ascii?Q?ulpfqAYK4gJGvP8hDjeLaRaPaz56kWcnWftCMcYoeRis71rIBARy4FQR0Ucu?=
- =?us-ascii?Q?P0007xaJoipBgEGapDIOFBH3nWkPJJ5BNEnChNOlrakQi4C9R6zyAtwm9t+l?=
- =?us-ascii?Q?cw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45f01e8e-6f6f-4ed8-76c0-08daddf96fce
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 17:34:22.2180
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L6VwnOnw2Ks9weUdWC3+4AmFsYIJF6lz8aZCVAIlC0ALgwl7pIRehj6MMFuI79MjD02Q4Uf9pIvUBivDG1Ry7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8948
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5nyYeVWpLA/IH1E@leoy-yangtze.lan>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 11:24:32AM +0000, Robin Murphy wrote:
-> > Fixes: b06c076ea962 ("Revert "iommu/arm-smmu: Make arm-smmu explicitly non-modular"")
+Em Wed, Dec 14, 2022 at 11:57:21PM +0800, Leo Yan escreveu:
+> On Wed, Dec 14, 2022 at 11:41:55AM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Tue, Dec 13, 2022 at 08:40:31AM -0800, Namhyung Kim escreveu:
+> > > Hi,
+> > > 
+> > > On Tue, Dec 13, 2022 at 6:44 AM Arnaldo Carvalho de Melo
+> > > <acme@kernel.org> wrote:
+> > > >
+> > > > Em Mon, Aug 01, 2022 at 09:20:37AM +0100, James Clark escreveu:
+> > > > >
+> > > > >
+> > > > > On 29/07/2022 17:12, Adrián Herrera Arcila wrote:
+> > > > > > The described --delay behaviour is to delay the enablement of events, but
+> > > > > > not the execution of the command, if one is passed, which is incorrectly
+> > > > > > the current behaviour.
+> > > > > >
+> > > > > > This patch decouples the enablement from the delay, and enables events
+> > > > > > before or after launching the workload dependent on the options passed
+> > > > > > by the user. This code structure is inspired by that in perf-record, and
+> > > > > > tries to be consistent with it.
+> > > > > >
+> > > > > > Link: https://lore.kernel.org/linux-perf-users/7BFD066E-B0A8-49D4-B635-379328F0CF4C@fb.com
+> > > > > > Fixes: d0a0a511493d ("perf stat: Fix forked applications enablement of counters")
+> > > > > > Signed-off-by: Adrián Herrera Arcila <adrian.herrera@arm.com>
+> > > > > > ---
+> > > > > >  tools/perf/builtin-stat.c | 56 ++++++++++++++++++++++-----------------
+> > > > > >  1 file changed, 32 insertions(+), 24 deletions(-)
+> > > > >
+> > > > > Looks good to me. Fixes the counter delay issue and the code is pretty
+> > > > > similar to perf record now. Although I would wait for Leo's or Song's
+> > > > > comment as well because they were involved.
+> > > >
+> > > > I think I didn't notice Leo's ack, it still applies, so I'm doing it
+> > > > now.
+> > > 
+> > > I think the BPF counters should be enabled/disabled together.
+> > 
+> > Ok, so I removed this one and applied Namhyung's.
 > 
-> I think that's semantically correct, but I'm pretty sure at that point it
-> would have been benign in practice - the observable splat will be a much
-> more recent fallout from me changing the iommu_device_unregister() behaviour
-> in 57365a04c921 ("iommu: Move bus setup to IOMMU device registration"). The
-> assumption therein is that unregister would only happen on probe failure,
-> before the IOMMU instance is in use, or on module unload, which would not be
-> allowed while active devices still hold module references. I overlooked that
-> the SMMU drivers were doing what they do, sorry about that.
+> I can guess why Adrián doesn't enable/disable BPF counters together :)
+> 
+> Since 'perf stat' doesn't enable BPF counters with other normal PMU
+> events in the first place, I believe this is deliberately by Song's
+> patch fa853c4b839e ("perf stat: Enable counting events for BPF
+> programs"), it says:
+> 
+> "'perf stat -b' creates per-cpu perf_event and loads fentry/fexit BPF
+> programs (monitor-progs) to the target BPF program (target-prog). The
+> monitor-progs read perf_event before and after the target-prog, and
+> aggregate the difference in a BPF map. Then the user space reads data
+> from these maps".
+> 
+> IIUC, when loading eBPF (counter) program, perf tool needs to handle
+> eBPF program map specially (so that perf tool can know the latest eBPF
+> program's map in kernel).
+> 
+> I don't know anything for eBPF counter, so this is why I am still a bit
+> puzzle which way is right to do (bind vs separate eBPF counters).  But
+> I personally prefer to let eBPF counter to respect delay, so it's fine
+> for me to apply Namhyung's patch.
 
-Ok, I'll change the Fixes: tag, I didn't notice that iommu_device_unregister()
-changed in behavior only later, I just looked at current trees and tried
-to infer what went wrong.
+"I'm fine" can be read as an Acked-by, right? :-)
 
-> The change itself looks sensible. The point of this shutdown hook is simply
-> not to leave active translations in place that might confuse future software
-> after reboot/kexec; any housekeeping in the current kernel state is a waste
-> of time anyway. Fancy doing the same for SMMUv3 as well?
-
-I can try, but I won't have hardware to test.
-
-Basically the only thing truly relevant for shutdown from arm_smmu_device_remove()
-is arm_smmu_device_disable(), would you agree to a patch which changes
-things as below?
-
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 6d5df91c5c46..d4d8bfee9feb 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -3854,7 +3854,9 @@ static int arm_smmu_device_remove(struct platform_device *pdev)
- 
- static void arm_smmu_device_shutdown(struct platform_device *pdev)
- {
--	arm_smmu_device_remove(pdev);
-+	struct arm_smmu_device *smmu = platform_get_drvdata(pdev);
-+
-+	arm_smmu_device_disable(smmu);
- }
- 
- static const struct of_device_id arm_smmu_of_match[] = {
+- Arnaldo
