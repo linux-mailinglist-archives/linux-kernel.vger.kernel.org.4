@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7201C64C9B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFDA64C9B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbiLNNGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S238369AbiLNNGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLNNG1 (ORCPT
+        with ESMTP id S238391AbiLNNGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:06:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9772F9FCF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:06:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EEBF61A53
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 13:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12022C433EF;
-        Wed, 14 Dec 2022 13:06:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671023185;
-        bh=lDTCePU+j9rTmUoYes8Iq93CXo/8hTpg8U7Xkcd7nSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bpOQNBvOIxYPP5gha0MzWOwEbjSLjH+Dpxd5pdWy+dq48PGHa0SHi25xqKtlz/dX+
-         hPakhCKAJZHH7tb/0jzt3zANCux/YV6pzDnuh+4FoDdWqYOtCRFcBlbSw3WcAk5KLx
-         d5iUM1Qg4MyMbe5KaCL78nXlHvtzlEA+5ycESor5Fg1O2ekz1dMvAllkulDvwE1BVs
-         1FO8mn0hJdG2tMoFZ32AqEpT3KPX4HBWo3jZrkignyxDCJzoUzt5jOGMKndrH9SpcY
-         hhDyLR3BGEDu73I3M7qCEYQkbnhJO9Puq4EBFuQyi8/lfd7YxFQEViYfw/pLHV3mW5
-         TaYYMklb2IGZA==
-Date:   Wed, 14 Dec 2022 14:06:22 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     atomlin@redhat.com, cl@linux.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v9 1/5] mm/vmstat: Add CPU-specific variable to track a
- vmstat discrepancy
-Message-ID: <20221214130622.GD1930067@lothringen>
-References: <20221206161826.698593151@redhat.com>
- <20221206162416.404740300@redhat.com>
+        Wed, 14 Dec 2022 08:06:39 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86181E4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:06:38 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id x11so6553026ljh.7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RoQRXkX5X4uwB+IhDZoYKCKReZh3tL0j2RPpSXrZWzo=;
+        b=MBV4DAQE6vtbboqOHiO5SrAbZve9Tbn3G2iCSqkjvVtxHOLXbCiefuKshGQfUoddf8
+         bnMKILxuYVWVgHYutUWEG4kdyofQm3fNRbDPmxRGr323IfTWo8Xy4tibWuJi+mAMXRIs
+         Klglnr4DO4BJcOOY2w0eKVW+tVw8ux12l0bIhVev8SK9a20FK2TZ1Y48E0D/zOX4K4l4
+         MMk0ZD9OV6QQmAo8dTWv0pYImDKYTbNJVT2SRqfDZooggPKKmCeCOFMJZOat9xsdo4LX
+         BTDwOZvUE2VupQcz802Oxkl9nr5eCCs0U0qIC33QfA2Bp9H6RNdFJ8mRzSw+nytepqmb
+         o5Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RoQRXkX5X4uwB+IhDZoYKCKReZh3tL0j2RPpSXrZWzo=;
+        b=Ry8lD+Em/8NLx2d0hUvYnLuuMDx9v7+EBjtFYEPult4ttXkYQmVFOuHdJlXYkOFRwg
+         22V3UH1UUA181viKWTfemu5xKvZxiKaSl9qvtOpCVY/G4aVV1gUpg25QtOJEC1SuFIhf
+         xteRNiS/kHXLURH+HUyjeIxoS4MqK18EBL86kVSrsz1T0vZVg5DnEnDdI0NlnxxA2KKi
+         d4ljosu62ZT+JhP8kELkZ+JpkCPuLPh0OJ79bj8xx2gh+nMlTNNJRkmUvKieU6d8/wDM
+         hBlhE82OePHOLuzrsqWE/nKP6IMednhJd2xYyFRCIXZl0HnHHKF07xHIz9+zibrzGuPp
+         jNWw==
+X-Gm-Message-State: AFqh2krLUQD7VR5brsgwwRJX59ITHtRmGmERWXBeuPStrI/+RcFwIB/y
+        hGmsIFIimrC84G4m/8FR6DkUmg==
+X-Google-Smtp-Source: AMrXdXuHhlyvyA4y6M1GW9MKvaUDRZneUKFJhXvgIvNnzM2M7zWMF0ExMyDuU2u8/BgL/SC6tRGmDw==
+X-Received: by 2002:a2e:a4a3:0:b0:27d:7e6c:f0d1 with SMTP id g3-20020a2ea4a3000000b0027d7e6cf0d1mr449759ljm.50.1671023196823;
+        Wed, 14 Dec 2022 05:06:36 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v14-20020a2ea44e000000b0027da3a87ff6sm95246ljn.83.2022.12.14.05.06.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 05:06:36 -0800 (PST)
+Message-ID: <c76c8004-021a-12db-12b8-3bb9a73b7cfe@linaro.org>
+Date:   Wed, 14 Dec 2022 14:06:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206162416.404740300@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 13/17] dt-bindings: soc: socionext: Add UniPhier media
+ I/O block
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221213082449.2721-1-hayashi.kunihiko@socionext.com>
+ <20221213082449.2721-14-hayashi.kunihiko@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213082449.2721-14-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,50 +78,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:18:27PM -0300, Marcelo Tosatti wrote:
-> From: Aaron Tomlin <atomlin@redhat.com>
+On 13/12/2022 09:24, Kunihiko Hayashi wrote:
+> Add devicetree binding schema for the media I/O block implemented on
+> Socionext Uniphier SoCs. This block is implemented on LD4, sLD8, Pro4,
+> and LD11 SoCs.
 > 
-> Introduce a CPU-specific variable namely vmstat_dirty to indicate
-> if a vmstat imbalance is present for a given CPU. Therefore, at
-> the appropriate time, we can fold all the remaining differentials.
-> This patch also provides trivial helpers for modification and testing.
+> Media I/O block implemented on Socionext UniPhier SoCs is an integrated
+> component of the stream type peripherals including SD, USB2.0, eMMC,
+> and MIO-DMAC.
 > 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> Media I/O block has a common logic to control the component.
+> 
 
-Your SOB is also missing here and on other patches.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks.
+Best regards,
+Krzysztof
 
-> ---
->  mm/vmstat.c |   16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> Index: linux-2.6/mm/vmstat.c
-> ===================================================================
-> --- linux-2.6.orig/mm/vmstat.c
-> +++ linux-2.6/mm/vmstat.c
-> @@ -194,6 +194,22 @@ void fold_vm_numa_events(void)
->  #endif
->  
->  #ifdef CONFIG_SMP
-> +static DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
-> +
-> +static inline void vmstat_mark_dirty(void)
-> +{
-> +	this_cpu_write(vmstat_dirty, true);
-> +}
-> +
-> +static inline void vmstat_clear_dirty(void)
-> +{
-> +	this_cpu_write(vmstat_dirty, false);
-> +}
-> +
-> +static inline bool is_vmstat_dirty(void)
-> +{
-> +	return this_cpu_read(vmstat_dirty);
-> +}
->  
->  int calculate_pressure_threshold(struct zone *zone)
->  {
-> 
-> 
