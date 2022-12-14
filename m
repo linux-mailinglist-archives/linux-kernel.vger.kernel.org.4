@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F73164C3CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C7564C3D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbiLNGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 01:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S229754AbiLNGdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 01:33:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236805AbiLNGbM (ORCPT
+        with ESMTP id S237066AbiLNGdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 01:31:12 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5918227CE9
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:31:11 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c7so3752274pfc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HQixYPUGx3dNHQMvwFeapmdpykALcgOAixIE0qar/eQ=;
-        b=hObCXhW5iEBR2JFX/mOosGX4M4dNVoaPDKLQuYphAMJR2iH1N0ZyLeowQm8rX0Tp6p
-         NEQqrI4Pkpj2tITzrxE1la/qkpmrpXzeqiB6D4LWqaCOMG2dn7yXC9JCDb4VW5yCWqQ9
-         zynVEqWHHjV3Lu/urILjfNimtEABgHwDj6CJ9YsZxRIGUhMh48PgHPCPTKdcf/I8MQf1
-         jwyoWmnci25Q6vx59fvkTEZdf5PRZ2Q6T8CNWfLTPaHj2y21FgZnVH5RMZpf71qzWE2w
-         tif9t28PD/Aef+evFGr+dfo5S7DF0rruRHoG1VZ+UN6W6kzOGElYgoFEsCr5Kx3qtIrQ
-         oXKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HQixYPUGx3dNHQMvwFeapmdpykALcgOAixIE0qar/eQ=;
-        b=0klzarx28NIb8fdK3DaMTE4K11ZedfaLfMEZPCBefZWaEKYYrXoBbnKY5s1bgR0yRV
-         uetX2I/bKCoiqzWr20sW9fh965xLgARxFEqPFP923BkR4k8QV+6aBIA8nM3YD1AImZE+
-         A6vPOvb3lFkUJecO8QHB+u5xFgqcsPX73/kKoPOwxjBZisgEzRvE+DXxy+yTIHWauLLk
-         rSX44M+nyKq5dK5wn/ywtecIhXbODZrH4aabg3Wjtcq0LR4IRfabd2N2zW7elDGmpzbY
-         PjI77dcEdToHljSh+xjedy6brbU+xALi7I+ikToC7+M8Qp3Hohsi3cixd9EeCzSixt6d
-         FBoA==
-X-Gm-Message-State: ANoB5pmjrotKtuGJYuFZ/b0UckHrY5XmXUbnt30AClxHjUSmVl0TuBwA
-        DwXbq4Q3iqLGy+4skizfT0IjNB3H+jD+7t0V
-X-Google-Smtp-Source: AA0mqf70gvWGruQzLDmnl4KVdvtPjvp7ABTpAaEQSwPuOQ6LDXC2rUoVyUX0jd6/rE8xHeazM6qp3Q==
-X-Received: by 2002:aa7:8f2d:0:b0:576:8027:a2fc with SMTP id y13-20020aa78f2d000000b005768027a2fcmr23462513pfr.12.1670999470608;
-        Tue, 13 Dec 2022 22:31:10 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id f5-20020aa79685000000b0057726bd7335sm8632515pfk.121.2022.12.13.22.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 22:31:09 -0800 (PST)
-Date:   Wed, 14 Dec 2022 12:01:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     wsa@kernel.org
-Cc:     mst@redhat.com, asowang@redhat.com,
-        Conghui <conghui.chen@intel.com>, linux-i2c@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Jian Jun Chen <jian.jun.chen@intel.com>
-Subject: Re: [PATCH] MAINTAINERS: Update maintainer list for virtio i2c
-Message-ID: <20221214063107.fazrfq3n26hw4ndl@vireshk-i7>
-References: <20221214053631.3225164-1-conghui.chen@intel.com>
+        Wed, 14 Dec 2022 01:33:12 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7711D66C;
+        Tue, 13 Dec 2022 22:33:10 -0800 (PST)
+Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4585B20B8768;
+        Tue, 13 Dec 2022 22:33:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4585B20B8768
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1670999590;
+        bh=FdaBi9/UQGf58YdgIgm2T4j7hu0zNGTVpigliN7T3i4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R6dHAnLbwUkjs/eiq7E52J+K2L1QTd6SDIA182EE03p/YhKBNoOv9DtSYl/DM0J71
+         eozeLtZq1pT7U+UGEsOtgUC41rzmh5Yj+oNGEXcJIlGHtywpGLcU/Wsl2fwYliw/Na
+         gDjqM+bNza2sNHio/S9XtgYkgWAFlKPb9u0ffotY=
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+To:     jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: [PATCH v9 0/5] Add support running nested Microsoft Hypervisor
+Date:   Wed, 14 Dec 2022 06:32:59 +0000
+Message-Id: <cover.1670749201.git.jinankjain@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1667406350.git.jinankjain@linux.microsoft.com>
+References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214053631.3225164-1-conghui.chen@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-12-22, 13:36, Conghui wrote:
-> This updates the maintainer for virtio i2c drvier
-> 
-> Signed-off-by: Conghui <conghui.chen@intel.com>
-> Acked-by: Jian Jun Chen <jian.jun.chen@intel.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a8c8f6b42436..44747f4641a6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21920,7 +21920,7 @@ F:	include/uapi/linux/virtio_snd.h
->  F:	sound/virtio/*
->  
->  VIRTIO I2C DRIVER
-> -M:	Conghui Chen <conghui.chen@intel.com>
-> +M:	Jian Jun Chen <jian.jun.chen@intel.com>
->  M:	Viresh Kumar <viresh.kumar@linaro.org>
->  L:	linux-i2c@vger.kernel.org
->  L:	virtualization@lists.linux-foundation.org
+This patch series plans to add support for running nested Microsoft
+Hypervisor. In case of nested Microsoft Hypervisor there are few
+privileged hypercalls which need to go L0 Hypervisor instead of L1
+Hypervisor. This patches series basically identifies such hypercalls and
+replace them with nested hypercalls.
 
-Wolfram,
+Jinank Jain (5):
+  x86/hyperv: Add support for detecting nested hypervisor
+  Drivers: hv: Setup synic registers in case of nested root partition
+  x86/hyperv: Add an interface to do nested hypercalls
+  Drivers: hv: Enable vmbus driver for nested root partition
+  x86/hyperv: Change interrupt vector for nested root partition
 
-I understand that it is okay to pass the maintainership, within the
-company, for platform specific parts from one person to another, since
-they have the best knowledge of the code and are the only one
-interested in maintaining it too.
+[v4]
+- Fix ARM64 compilation
 
-But what is the rule for generic drivers like this one ?
+[v5]
+- Fix comments from Michael Kelly
+
+[v6]
+- Send the correct patches from the right folder
+
+[v7]
+- Fix linker issues for CONFIG_HYPERV=n pointed out by Michael
+- Fix comments from Nuno: created two separate functions for fetching
+  nested vs non-nested registers.
+
+[v8]
+- Refactor as per the recommendation from Michael Kelly
+
+[v9]
+- Address comments from Michael and Nuno.
+
+ arch/x86/include/asm/hyperv-tlfs.h | 17 +++++-
+ arch/x86/include/asm/idtentry.h    |  2 +
+ arch/x86/include/asm/irq_vectors.h |  6 +++
+ arch/x86/include/asm/mshyperv.h    | 72 +++++++++++++++----------
+ arch/x86/kernel/cpu/mshyperv.c     | 87 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/idt.c              | 10 ++++
+ drivers/hv/hv.c                    | 19 +++++--
+ drivers/hv/hv_common.c             |  9 ++--
+ drivers/hv/vmbus_drv.c             |  5 +-
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  1 +
+ 11 files changed, 190 insertions(+), 39 deletions(-)
 
 -- 
-viresh
+2.25.1
+
