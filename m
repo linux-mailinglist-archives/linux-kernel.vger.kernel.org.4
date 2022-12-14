@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9208D64C529
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5FD64C52E
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237502AbiLNIij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:38:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S237607AbiLNIkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiLNIih (ORCPT
+        with ESMTP id S229739AbiLNIkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:38:37 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BA164DB
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:38:33 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 2B4FD3F3E7;
-        Wed, 14 Dec 2022 09:38:30 +0100 (CET)
-Date:   Wed, 14 Dec 2022 09:38:28 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 5/6] drm/msm/dsi: Flip greater-than check for
- slice_count and slice_per_intf
-Message-ID: <20221214083828.3jblczd5h5vyp3o5@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        sunliming <sunliming@kylinos.cn>, Sam Ravnborg <sam@ravnborg.org>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221213232207.113607-1-marijn.suijten@somainline.org>
- <20221213232207.113607-6-marijn.suijten@somainline.org>
- <c5e33d9f-0dc4-fdd2-244a-3d463be1c4e8@linaro.org>
+        Wed, 14 Dec 2022 03:40:12 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6AC12D2C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:40:12 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o12so6164570pjo.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AIedX/a+ZyVoKz+m/UL7d9+fegiypi7Lib9P6OHv4HU=;
+        b=TWJZ/jV8kbAA5Jh3iCtarFZ+0x5RqRIuROyJufDM578IYkUfN/I/sUlwS1KCrzRH4w
+         fJMYxb9U4lDzQOMW7BY9NqG8ussOBUgIhgwdgOuPGKwPtQOChbKg8YEm/D7+FByky3VL
+         vLyfvyArtmq3rAjo2QY/okLuHluZ4BlaJfPJIGo29UJ1jgnVDOx4BLDMxD1z94JUd6MA
+         NZ/82k5rZ3JzCq35uUjTDdueAxG1YzxqVJGMrAWGmN4noWZ9VzFTI5aKwFih7BhnWW+x
+         mcJN0kekjysUM5cFJA7DgyAQaWNne6jRfsLdYfgewvZR6cIiP1vnaQsB2rmLTCQHT0P3
+         GUkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AIedX/a+ZyVoKz+m/UL7d9+fegiypi7Lib9P6OHv4HU=;
+        b=1Tb96FKF8JxNSC79nqmsNylYOiSggB6Di/FE2Lyui+MJkPzqr9Z0dukq67yHMCCwWu
+         sLMJK0NpSvsN5BmYdtJgpbf+KBLVX9dqvxK3rnuF6BlM1YL5TDpWDdOq/mAY6wuL1uoQ
+         b3qHKQ7ynNt99YpH0KfsMz1OqPbjaZPA8LBWPj7mJSXe8V5GrnmULihGllX4yBLDRwnO
+         6LXSxDaSJVOruvmE+6IcCQQb9i+nde0rRfcH+lM7/VhQv3s7bwOMOdStlnpJgIj8p4Nh
+         +K8sdG2xHLmvrv2+MFbfpNI+gqYwLkuxOnokVtpAlT68XQs6MHKvizlEMvOAH34az0Mn
+         nPOg==
+X-Gm-Message-State: ANoB5pknVvjiTQqV5uj/C+itoydylZlT7RpppEQKTGvn2XBrWmq7RT7t
+        Xg4iFRsB6XeiwlXvHzYMI0Wc7q0fHgmPxYNFDmA=
+X-Google-Smtp-Source: AA0mqf6T0mEk5pNZJIPVJtrH8qnl+ff48CYVPMxa1zSuLBNs4KHrSw9yY5Z/Xk8Uoea7qt9D28+CRA==
+X-Received: by 2002:a17:902:8ec1:b0:188:6a62:9d89 with SMTP id x1-20020a1709028ec100b001886a629d89mr22284999plo.54.1671007211573;
+        Wed, 14 Dec 2022 00:40:11 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id y4-20020a17090322c400b00189b910c6ccsm1282362plg.125.2022.12.14.00.40.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 00:40:11 -0800 (PST)
+Message-ID: <921915e5-6b36-9d2d-ebd7-632403e3086a@9elements.com>
+Date:   Wed, 14 Dec 2022 14:10:08 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5e33d9f-0dc4-fdd2-244a-3d463be1c4e8@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221116205822.1128275-1-Naresh.Solanki@9elements.com>
+ <20221116205822.1128275-3-Naresh.Solanki@9elements.com>
+ <Y3YJ2EkYNW+gA+/R@google.com>
+ <5d9e41b8-7b2a-d60b-3e92-641cea5a9f4a@9elements.com>
+ <Y5HXWk4d5J9VgFBV@google.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <Y5HXWk4d5J9VgFBV@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,44 +79,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-14 01:02:14, Konrad Dybcio wrote:
+Hi Lee
+
+On 08-12-2022 05:53 pm, Lee Jones wrote:
+> On Fri, 18 Nov 2022, Naresh Solanki wrote:
 > 
+>>
+>>
+>> On 17-11-2022 03:45 pm, Lee Jones wrote:
+>>> On Wed, 16 Nov 2022, Naresh Solanki wrote:
+>>>
+>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>>
+>>>> Implement a regulator driver with IRQ support for fault management.
+>>>> Written against documentation [1] and [2] and tested on real hardware.
+>>>>
+>>>> Every channel has its own regulator supplies nammed 'vss1-supply' and
+>>>> 'vss2-supply'. The regulator supply is used to determine the output
+>>>> voltage, as the smart switch provides no output regulation.
+>>>> The driver requires the 'shunt-resistor-micro-ohms' property to be
+>>>> present in Device Tree to properly calculate current related
+>>>> values.
+>>>>
+>>>> Datasheet links:
+>>>> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+>>>> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+>>>>
+>>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>> Co-developed-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>>>> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>>> ---
+>>>>    drivers/mfd/Kconfig         |  12 +++++
+>>>>    drivers/mfd/Makefile        |   1 +
+>>>>    drivers/mfd/max597x.c       |  93 +++++++++++++++++++++++++++++++++
+>>>>    include/linux/mfd/max597x.h | 101 ++++++++++++++++++++++++++++++++++++
+>>>>    4 files changed, 207 insertions(+)
+>>>>    create mode 100644 drivers/mfd/max597x.c
+>>>>    create mode 100644 include/linux/mfd/max597x.h
+>>>
+>>> Ignoring my comments won't make them go away. :)
+>>>
+>>> Please tell me why you need a whole new driver, instead of adding
+>>> support to simple-mfd-i2c?
+>>>
+>> I felt current implementation to be simpler, clearer & straight forward.
 > 
-> On 14.12.2022 00:22, Marijn Suijten wrote:
-> > According to downstream /and the comment copied from it/ this comparison
-> > should be the other way around.  In other words, when the panel driver
-> > requests to use more slices per packet than what could be sent over this
-> > interface, it is bumped down to only use a single slice per packet (and
-> > strangely not the number of slices that could fit on the interface).
-> > 
-> > Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
-
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-> > ---
-> Missing s-o-b
-
-Thanks for catching, checkpatch would've pointed this out (in addition
-to a typo in the cover letter) if I had ran it.
-
-> >  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > index 0686c35a6fd4..9bdfa0864cdf 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> > @@ -855,11 +855,11 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
-> >  	 */
-> >  	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->slice_width);
-> >  
-> > -	/* If slice_per_pkt is greater than slice_per_intf
-> > +	/* If slice_count is greater than slice_per_intf
-> >  	 * then default to 1. This can happen during partial
-> >  	 * update.
-> >  	 */
-> > -	if (slice_per_intf > dsc->slice_count)
-> > +	if (dsc->slice_count > slice_per_intf)
-> >  		dsc->slice_count = 1;
-> >  
-> >  	total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
+> If you can make it work with simple-mfd-i2c, please do so.
+simple-mfd-i2c doesn't has mechanism to pass device type(max5978 vs 
+max5970).
+> 
+> No need to submit an entirely new driver for these simple use-cases.
+> 
+Regards,
+Naresh
