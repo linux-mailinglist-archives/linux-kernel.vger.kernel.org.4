@@ -2,114 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72EC64C923
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAED064C927
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238454AbiLNMjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S238434AbiLNMjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbiLNMil (ORCPT
+        with ESMTP id S238278AbiLNMjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:38:41 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CC23BC3;
-        Wed, 14 Dec 2022 04:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1671021430; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=HLzDDpFo+NMrWAFFyUZ9LuVUJTHVwxs+VXTyDfaqs9Q=;
-        b=xop6fV11aNUmenrUx59Oup4N5Niw2ZMg1q1ul/H5H7lsj2z9Ci1uiyTU528q8AiTyTzSCP
-        gX69xAHuHtARmUqSyjNNI+M61CdYnQeokcms2dEbkWQmRs8yugxr9XwDNztgvl89Cy9d/I
-        IpUOFSv9WkaFsPih5Lo7Ai3EzrPj3vI=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
-Subject: [PATCH] clk: ingenic: jz4760: Update M/N/OD calculation algorithm
-Date:   Wed, 14 Dec 2022 13:37:04 +0100
-Message-Id: <20221214123704.7305-1-paul@crapouillou.net>
+        Wed, 14 Dec 2022 07:39:24 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713DB1DF0B
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:38:07 -0800 (PST)
+Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id A2FE385163;
+        Wed, 14 Dec 2022 13:38:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671021485;
+        bh=aZYpr7PdIIEjRHAo8aMLeYDllEQgPdCTCsRbDEX5RrE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jdIEWdtiQi/UuZ1yVszQKCK5h9Qg9GUZVF38U3I9a3Y2XQtr8QLlbCLiWSm3BV7nP
+         oCLOl76rJzoC4jAo2eiOWGonPPRp/+u4cRqYV6D/Zj8+4BAcz+bdkaNYEMFfw7mL3M
+         0B9UT3uoY7CNfS4fVcYe2xl1UIQuBmNxgtj8taM5JVLyfLCFqsDt0Ion9Lv5KdtttP
+         nXkuWEjl7o1znyRvKvE99vnqL1qkcGKW8rtIVloAsqlb+/GeWTRggWME2od6R3dWwh
+         V3jPF1jmnWAk9c5oKacT8lBUA6i/TvotzFP+kVuzWidgA8Kzk3DQy7EA/coXcsumdH
+         X0xb4RA0rrVpg==
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Stephen Kitt <steve@sk2.org>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>
+Subject: [PATCH 0/4] ASoC: Fixes for WM8940 codec
+Date:   Wed, 14 Dec 2022 13:37:39 +0100
+Message-Id: <20221214123743.3713843-1-lukma@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous algorithm was pretty broken.
+This patch series provides fixes for WM8940 codec.
 
-- The inner loop had a '(m > m_max)' condition, and the value of 'm'
-  would increase in each iteration;
+The most notable change is the clock rewrite, so this driver now
+can either generate proper clock frequency by itself or use one
+provided from the clock subsystem of the SoC.
 
-- Each iteration would actually multiply 'm' by two, so it is not needed
-  to re-compute the whole equation at each iteration;
+Lukasz Majewski (4):
+  ASoC: wm8940: Remove warning when no plat data present
+  ASoC: wm8940: Rewrite code to set proper clocks
+  ASoC: wm8940: Mute also the speaker output
+  ASoC: wm8940: Read chip ID when wm8940 codec probing
 
-- It would loop until (m & 1) == 0, which means it would loop at most
-  once.
+ sound/soc/codecs/wm8940.c | 129 +++++++++++++++++++++++++++++++-------
+ sound/soc/codecs/wm8940.h |   6 ++
+ 2 files changed, 111 insertions(+), 24 deletions(-)
 
-- The outer loop would divide the 'n' value by two at the end of each
-  iteration. This meant that for a 12 MHz parent clock and a 1.2 GHz
-  requested clock, it would first try n=12, then n=6, then n=3, then
-  n=1, none of which would work; the only valid value is n=2 in this
-  case.
-
-Simplify this algorithm with a single for loop, which decrements 'n'
-after each iteration, addressing all of the above problems.
-
-Fixes: bdbfc029374f ("clk: ingenic: Add support for the JZ4760")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/clk/ingenic/jz4760-cgu.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
-index ecd395ac8a28..e407f00bd594 100644
---- a/drivers/clk/ingenic/jz4760-cgu.c
-+++ b/drivers/clk/ingenic/jz4760-cgu.c
-@@ -58,7 +58,7 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
- 		       unsigned long rate, unsigned long parent_rate,
- 		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
- {
--	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 2;
-+	unsigned int m, n, od, m_max = (1 << pll_info->m_bits) - 1;
- 
- 	/* The frequency after the N divider must be between 1 and 50 MHz. */
- 	n = parent_rate / (1 * MHZ);
-@@ -66,19 +66,17 @@ jz4760_cgu_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
- 	/* The N divider must be >= 2. */
- 	n = clamp_val(n, 2, 1 << pll_info->n_bits);
- 
--	for (;; n >>= 1) {
--		od = (unsigned int)-1;
-+	rate /= MHZ;
-+	parent_rate /= MHZ;
- 
--		do {
--			m = (rate / MHZ) * (1 << ++od) * n / (parent_rate / MHZ);
--		} while ((m > m_max || m & 1) && (od < 4));
--
--		if (od < 4 && m >= 4 && m <= m_max)
--			break;
-+	for (m = m_max; m >= m_max && n >= 2; n--) {
-+		m = rate * n / parent_rate;
-+		od = m & 1;
-+		m <<= od;
- 	}
- 
- 	*pm = m;
--	*pn = n;
-+	*pn = n + 1;
- 	*pod = 1 << od;
- }
- 
 -- 
-2.35.1
+2.20.1
 
