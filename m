@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517C764CE1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DEA64CE0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239140AbiLNQcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S238997AbiLNQb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239135AbiLNQcG (ORCPT
+        with ESMTP id S238993AbiLNQbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:32:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F0F15822
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:31:18 -0800 (PST)
+        Wed, 14 Dec 2022 11:31:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA3D113C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:30:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671035477;
+        s=mimecast20190719; t=1671035438;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1lGOBSIFe5pUAxEjRFkRz63QN+FtG9EzKvnfhz76nOw=;
-        b=gyS/Qx853+tG0y4ovn67hBzzpO64kyq3nBrzKQUACMOe6ZnjkeKHPEGK8Ccv6Qhm33uXfE
-        2bCYy169o40L4NsytQeIpg4dWuLiCPDXbvsmSBq7IwA10zUgcl3cW/rnmB+8zZJPUpnc3H
-        YfAm69GsIV9anrgt3gPAhy0oC9gYCn8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ntjy4bIssvEAdzLttb0Oirdk6ECvBiYBnXEucLTwyX4=;
+        b=Qbgp1/VVy3Mx7jzfThfQ5F71naalQjDuO4OQrMr1/6ynoyJrYSR7E8Ybo9/lHJxFFNfPqh
+        314C7koTYRd+8WoUf9EgpPeE8MF7Y9smb6tSS415g4FPkgYoo3n6woqdr4okRpCv3hQCEp
+        4YM6XsU93eb01eyD2gGdgep3GPQPdCE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-1Nx6bXeDMpObx7rj-DH6Bw-1; Wed, 14 Dec 2022 11:30:31 -0500
-X-MC-Unique: 1Nx6bXeDMpObx7rj-DH6Bw-1
-Received: by mail-wm1-f72.google.com with SMTP id h81-20020a1c2154000000b003d1c8e519fbso7427625wmh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:30:31 -0800 (PST)
+ us-mta-48-ha83elm3PGec7Jkojlbzcw-1; Wed, 14 Dec 2022 11:30:33 -0500
+X-MC-Unique: ha83elm3PGec7Jkojlbzcw-1
+Received: by mail-wm1-f70.google.com with SMTP id m38-20020a05600c3b2600b003d1fc5f1f80so7439899wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:30:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1lGOBSIFe5pUAxEjRFkRz63QN+FtG9EzKvnfhz76nOw=;
-        b=RokKwjW9b/kM/OFzUzGQtn1NxNz9OSBzdy4Izk/JS/WreBoHAXqKEa5ff3Hh28++fO
-         r2YacpO8EqbAV1HDJ/6xDrNwlT2N33QUjJVWCCN0T27JZThpuLAopcueePKvxrtbEie4
-         vyshU2kesCr8rbrgj8lHoF4IVGbDye9lWzSy6y+zyTTfEJMvO1oQBp4GlWfxUSBD/cyi
-         uP95LFHJZIHn7s20v1rkNmh3nypMf8H3P3GdhqXLccE2UHE/7iS8CYYAX/ESYTCwKHti
-         6JqkGAoGFgXCyT6WNSjbHpK5ypYkoq1qF1vz1RJS/K91pFloICQVHnhNukPsseogH+pp
-         RcuQ==
-X-Gm-Message-State: AFqh2kosOInhESHrbDgulDXsLP6YAfRoeCZrQJ1HWgMWNwUAqlZTL+7S
-        C7Shy1uLLuBFq3MzdBQB9XthQy6g6oh43/IgbInmtyb0fenytlTHgtVioAQLiePcSCVNEazLUdb
-        psQZERKW8gVwATWqy13KMD/hh
-X-Received: by 2002:a5d:6b82:0:b0:254:e300:df10 with SMTP id n2-20020a5d6b82000000b00254e300df10mr3175569wrx.0.1671035430299;
-        Wed, 14 Dec 2022 08:30:30 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtON+i2KOCKckOC+y5p1sstetwPc0ECbYZbXcpC/pxYXEHqSVOOlJPZuP9yMFAhSEmoSjaS2Q==
-X-Received: by 2002:a5d:6b82:0:b0:254:e300:df10 with SMTP id n2-20020a5d6b82000000b00254e300df10mr3175558wrx.0.1671035430129;
-        Wed, 14 Dec 2022 08:30:30 -0800 (PST)
+        bh=ntjy4bIssvEAdzLttb0Oirdk6ECvBiYBnXEucLTwyX4=;
+        b=cCKG4Kxz59XXq9h64uTs61JTnfnt47vfYh9lGGlUEH7Dbr4XgCgG/uV4IGuhFwf/66
+         v6ULay4HdBnQO9BX0CPiNhqxlm81p/838/sI32fF6j6N5QIHLS2//Eei9zdd5lmthjsg
+         dGowpO2E7I8dcttFdLpPazYFo5nLGboxjOu33KKrU7kLTXG6SsjFXbXm/Kmg6VQQPgVA
+         FHpLlUqjalY6UvLR7qByFFUF1/S83dhnc/CAGOCtT7iLwo54yrsyjEK8asa9nkvtIOev
+         YuGMx+NSJdG02lXbAOFvQw8o6u0x8fnw2S5JA14hRRs7ilkFS8GUvZRkwVH0YT/ZCEy5
+         eFoQ==
+X-Gm-Message-State: ANoB5pm6lgMHDodXzddzTzxp66pkFPO1LpdHNm412vVYUXf4lKFz/Up5
+        TovteVbAvS4BoWdQ+csMzgaM3cAgLhbO/ZcpQq6fOJALpXhNDKA/Up4yaSN6lgJjprEgBcxlKVt
+        zrsLDRIIUcn47pBp6CQSa3Obp
+X-Received: by 2002:a5d:43c8:0:b0:242:659f:9411 with SMTP id v8-20020a5d43c8000000b00242659f9411mr18656563wrr.9.1671035432137;
+        Wed, 14 Dec 2022 08:30:32 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf749Y7E+BT4q6kPhJknMxXoEgk8H6qeSlLUTLbG1hIMjBAx7MTauP5T5GnuPa8o2ZC6K5qBtA==
+X-Received: by 2002:a5d:43c8:0:b0:242:659f:9411 with SMTP id v8-20020a5d43c8000000b00242659f9411mr18656541wrr.9.1671035431915;
+        Wed, 14 Dec 2022 08:30:31 -0800 (PST)
 Received: from step1.redhat.com (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b002422816aa25sm3791759wrr.108.2022.12.14.08.30.28
+        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b002422816aa25sm3791759wrr.108.2022.12.14.08.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:30:29 -0800 (PST)
+        Wed, 14 Dec 2022 08:30:31 -0800 (PST)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Jason Wang <jasowang@redhat.com>,
@@ -64,9 +64,9 @@ Cc:     Jason Wang <jasowang@redhat.com>,
         "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
         stefanha@redhat.com, netdev@vger.kernel.org,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [RFC PATCH 1/6] vdpa: add bind_mm callback
-Date:   Wed, 14 Dec 2022 17:30:20 +0100
-Message-Id: <20221214163025.103075-2-sgarzare@redhat.com>
+Subject: [RFC PATCH 2/6] vhost-vdpa: use bind_mm device callback
+Date:   Wed, 14 Dec 2022 17:30:21 +0100
+Message-Id: <20221214163025.103075-3-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221214163025.103075-1-sgarzare@redhat.com>
 References: <20221214163025.103075-1-sgarzare@redhat.com>
@@ -83,42 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new optional callback is used to bind the device to a specific
-address space so the vDPA framework can use VA when this callback
-is implemented.
+When the user call VHOST_SET_OWNER ioctl and the vDPA device
+has `use_va` set to true, let's call the bind_mm callback.
 
-Suggested-by: Jason Wang <jasowang@redhat.com>
+In this way we can bind the device to the user address space
+and directly use the user VA.
+
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- include/linux/vdpa.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/vhost/vdpa.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-index 6d0f5e4e82c2..34388e21ef3f 100644
---- a/include/linux/vdpa.h
-+++ b/include/linux/vdpa.h
-@@ -282,6 +282,12 @@ struct vdpa_map_file {
-  *				@iova: iova to be unmapped
-  *				@size: size of the area
-  *				Returns integer: success (0) or error (< 0)
-+ * @bind_mm:			Bind the device to a specific address space
-+ *				so the vDPA framework can use VA when this
-+ *				callback is implemented. (optional)
-+ *				@vdev: vdpa device
-+ *				@mm: address space to bind
-+ *				@owner: process that owns the address space
-  * @free:			Free resources that belongs to vDPA (optional)
-  *				@vdev: vdpa device
-  */
-@@ -341,6 +347,8 @@ struct vdpa_config_ops {
- 			 u64 iova, u64 size);
- 	int (*set_group_asid)(struct vdpa_device *vdev, unsigned int group,
- 			      unsigned int asid);
-+	int (*bind_mm)(struct vdpa_device *vdev, struct mm_struct *mm,
-+		       struct task_struct *owner);
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index b08e07fc7d1f..a775d1a52c77 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -219,6 +219,17 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+ 	return vdpa_reset(vdpa);
+ }
  
- 	/* Free device resources */
- 	void (*free)(struct vdpa_device *vdev);
++static long vhost_vdpa_bind_mm(struct vhost_vdpa *v)
++{
++	struct vdpa_device *vdpa = v->vdpa;
++	const struct vdpa_config_ops *ops = vdpa->config;
++
++	if (!vdpa->use_va || !ops->bind_mm)
++		return 0;
++
++	return ops->bind_mm(vdpa, v->vdev.mm, current);
++}
++
+ static long vhost_vdpa_get_device_id(struct vhost_vdpa *v, u8 __user *argp)
+ {
+ 	struct vdpa_device *vdpa = v->vdpa;
+@@ -276,6 +287,10 @@ static long vhost_vdpa_set_status(struct vhost_vdpa *v, u8 __user *statusp)
+ 		ret = vdpa_reset(vdpa);
+ 		if (ret)
+ 			return ret;
++
++		ret = vhost_vdpa_bind_mm(v);
++		if (ret)
++			return ret;
+ 	} else
+ 		vdpa_set_status(vdpa, status);
+ 
+@@ -679,6 +694,13 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
+ 		break;
+ 	default:
+ 		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
++		if (!r && cmd == VHOST_SET_OWNER) {
++			r = vhost_vdpa_bind_mm(v);
++			if (r) {
++				vhost_dev_reset_owner(&v->vdev, NULL);
++				break;
++			}
++		}
+ 		if (r == -ENOIOCTLCMD)
+ 			r = vhost_vdpa_vring_ioctl(v, cmd, argp);
+ 		break;
 -- 
 2.38.1
 
