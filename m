@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2108864CEEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E073964CEEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238562AbiLNRfP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 14 Dec 2022 12:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S238125AbiLNRk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238064AbiLNRfJ (ORCPT
+        with ESMTP id S229558AbiLNRkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:35:09 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A1226ACC
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:35:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-4-oxZQ4DUbPQStXoCR3WtWJQ-1; Wed, 14 Dec 2022 17:35:03 +0000
-X-MC-Unique: oxZQ4DUbPQStXoCR3WtWJQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 14 Dec
- 2022 17:35:01 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Wed, 14 Dec 2022 17:35:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Keeping <john@metanate.com>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "# 5 . 15" <stable@vger.kernel.org>
-Subject: RE: usb: f_fs: Fix CFI failure in ki_complete
-Thread-Topic: usb: f_fs: Fix CFI failure in ki_complete
-Thread-Index: AQHZDjGpwikydY+vnkC/L44cbfn06q5tpHEA
-Date:   Wed, 14 Dec 2022 17:35:01 +0000
-Message-ID: <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
-References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
- <Y5cuCMhFIaKraUyi@kroah.com>
-In-Reply-To: <Y5cuCMhFIaKraUyi@kroah.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 14 Dec 2022 12:40:24 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F0019024
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:40:22 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id d20so23664717edn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=InYm6sLvKrBj85IOoD7cel+odEmWBz2TRkO1Wbhx8jE=;
+        b=zLiEPdGWeIplHyN5iSpM7exWPqLSjBujwmhH9CaDqwcZLozyIDL1wj7f/A4x0f7xhw
+         lkD8XiLJnLny851wmw6zGpDjB6arYxXyLU41sJvAl3YWqKMcu/bfpzPN2AAEobUO5Qpa
+         W+OxWPzArHW5QPgSWm6iu8T9qq/PAFK9GbfHcrpe1gh9ygZhgbyJ1+3/VYviiZ0ZkQix
+         c8YTQI07Tib+u3vBjLkP0pGoA5MjveOUWP7Z6mKVzXFz5vyydsDQvlty5Bk07Vobz3xz
+         R2/3XxCeEWRcDRVRl7LaIao+kY00sliQuEY1kr8G/Vbrjx/ObRPeswtJpUQOXtGewE6f
+         l1uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=InYm6sLvKrBj85IOoD7cel+odEmWBz2TRkO1Wbhx8jE=;
+        b=cWisGhzz490ZrdIZNpnjX+Gkm9aZckvV1rItHT0HjKwNr++P8W2votVAdiU6AiaPef
+         XeY8FuzhYXL862oQqVAYQuGDoqN34RzpVkUI3Dmz9FzMq8YuX8a1nNI/BBGCxbHtcj5T
+         E62ZxVHvF/TVhCzpQr/VzHl3wukknDRkn9JvMIvenh2Fm92Y7Hy89YMCUs+b21ySIzoZ
+         2YHImAKbAmcHmsZd490pf2W/I9gvtazEj1JxDVYgUu9Xklrl5T3zV8K/o8foFRb68tLy
+         2ufSRnhYesaaRcK/4qlIwadQZyn7JuO4D9xPBLhmyelsK+3lLKNvktVw5PvhDE+hQ8In
+         lC4Q==
+X-Gm-Message-State: ANoB5pnv93mVGL8K1s21rG8kS9oR8rCSyT6lGQi2xq7o0FFEgIhewjRN
+        1HjujoZWWGxE1qZCEt9R/rIcDQ==
+X-Google-Smtp-Source: AA0mqf5eBsgtyrMc/qDoNucSvmTB8WxIbAXdWIFwHNigRd4BitOiOXIkxygy1uff1xLKC+6DbCVocg==
+X-Received: by 2002:a05:6402:194a:b0:461:a699:7c5c with SMTP id f10-20020a056402194a00b00461a6997c5cmr19543406edz.22.1671039620871;
+        Wed, 14 Dec 2022 09:40:20 -0800 (PST)
+Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
+        by smtp.gmail.com with ESMTPSA id d10-20020a50f68a000000b0045b3853c4b7sm6696181edn.51.2022.12.14.09.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 09:40:20 -0800 (PST)
+Date:   Wed, 14 Dec 2022 18:40:19 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: memcg reclaim demotion wrt. isolation
+Message-ID: <Y5oKg4KFsFIYOYuZ@cmpxchg.org>
+References: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
+ <Y5ik+CCmvapf87Mb@cmpxchg.org>
+ <Y5maoIUuH79KrfJt@dhcp22.suse.cz>
+ <Y5nEQeXj6HQBEHEY@cmpxchg.org>
+ <Y5nrwrP0twm9IIDl@dhcp22.suse.cz>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5nrwrP0twm9IIDl@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,52 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman
-> Sent: 12 December 2022 13:35
+Hey Michal,
+
+On Wed, Dec 14, 2022 at 04:29:06PM +0100, Michal Hocko wrote:
+> On Wed 14-12-22 13:40:33, Johannes Weiner wrote:
+> > The only way to prevent cgroups from disrupting each other on NUMA
+> > nodes is NUMA constraints. Cgroup per-node limits. That shields not
+> > only from demotion, but also from DoS-mbinding, or aggressive
+> > promotion. All of these can result in some form of premature
+> > reclaim/demotion, proactive demotion isn't special in that way.
 > 
-> On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
-> > Function pointer ki_complete() expects 'long' as its second
-> > argument, but we pass integer from ffs_user_copy_worker. This
-> > might cause a CFI failure, as ki_complete is an indirect call
-> > with mismatched prototype. Fix this by typecasting the second
-> > argument to long.
-> 
-> "might"?  Does it or not?  If it does, why hasn't this been reported
-> before?
+> Any numa based balancing is a real challenge with memcg semantic. I do
+> not see per numa node memcg limits without a major overhaul of how we do
+> charging though. I am not sure this is on the table even long term.
+> Unless I am really missing something here we have to live with the
+> existing semantic for a foreseeable future.
 
-Does the cast even help at all.
+Yes, I think you're quite right.
 
-...
-> > -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
-> > +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
-...
+We've been mostly skirting the NUMA issue in cgroups (and to a degree
+in MM code in general) with two possible answers:
 
-If definition of the parameter in the structure member ki_complete()
-definition is 'long' then the compiler has to promote 'ret' to long
-anyway. CFI has nothing to do with it.
+a) The NUMA distances are close enough that we ignore it and pretend
+   all memory is (mostly) fungible.
 
-OTOH if you've used a cast to assign a function with a
-different prototype to ki_complete then 'all bets are off'
-and you get all the run time errors you deserve.
-CFI just converts some of them to compile time errors.
+b) The NUMA distances are big enough that it matters, in which case
+   the best option is to avoid sharing, and use bindings to keep
+   workloads/containers isolated to their own CPU+memory domains.
 
-For instance if you assign xx_complete(long) to (*ki_complete)(int)
-then it is very likely that xx_complete() will an argument
-with some of the high bits set.
-But adding a cast to the call - ki_complete((long)int_var)
-will make absolutely no difference.
-The compiler wont zero/sign extend int_var to 64bits for you,
-that will just get optimised away and the high bits will
-be unchanged.
+Tiered memory forces the issue by providing memory that must be shared
+between workloads/containers, but is not fungible. At least not
+without incurring priority inversions between containers, where a
+lopri container promotes itself to the top and demotes the hipri
+workload, while staying happily within its global memory allowance.
 
-You're description seems to be the other way around (which might
-be safe, but CFI probably still barfs).
-But you need to fix the indirect calls so the function types
-match.
+This applies to mbind() cases as much as it does to NUMA balancing.
 
-	David
+If these setups proliferate, it seems inevitable to me that sooner or
+later the full problem space of memory cgroups - dividing up a shared
+resource while allowing overcommit - applies not just to "RAM as a
+whole", but to each memory tier individually.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Whether we need the full memcg interface per tier or per node, I'm not
+sure. It might be enough to automatically apportion global allowances
+to nodes; so if you have 32G toptier and 16G lowtier, and a cgroup has
+a 20G allowance, it gets 13G on top and 7G on low.
 
+(That, or we settle on multi-socket systems with private tiers, such
+that memory continues to be unshared :-)
+
+Either way, I expect this issue will keep coming up as we try to use
+containers on such systems.
