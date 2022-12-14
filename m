@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E073964CEEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:40:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C6864CEF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 18:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238125AbiLNRk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 12:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
+        id S238245AbiLNRlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 12:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLNRkY (ORCPT
+        with ESMTP id S229558AbiLNRl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 12:40:24 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F0019024
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:40:22 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id d20so23664717edn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:40:22 -0800 (PST)
+        Wed, 14 Dec 2022 12:41:28 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E51DF1D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:41:27 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id e141so615610ybh.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 09:41:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=InYm6sLvKrBj85IOoD7cel+odEmWBz2TRkO1Wbhx8jE=;
-        b=zLiEPdGWeIplHyN5iSpM7exWPqLSjBujwmhH9CaDqwcZLozyIDL1wj7f/A4x0f7xhw
-         lkD8XiLJnLny851wmw6zGpDjB6arYxXyLU41sJvAl3YWqKMcu/bfpzPN2AAEobUO5Qpa
-         W+OxWPzArHW5QPgSWm6iu8T9qq/PAFK9GbfHcrpe1gh9ygZhgbyJ1+3/VYviiZ0ZkQix
-         c8YTQI07Tib+u3vBjLkP0pGoA5MjveOUWP7Z6mKVzXFz5vyydsDQvlty5Bk07Vobz3xz
-         R2/3XxCeEWRcDRVRl7LaIao+kY00sliQuEY1kr8G/Vbrjx/ObRPeswtJpUQOXtGewE6f
-         l1uw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0pzIXqtCSP5BhXl91JWX0th+uLCttVTq944NZd+G/g=;
+        b=Rr3Dv2MEorup2HoTxjUzemEffSaYNNtOiQTCDx8Udx9Ue7bImsJ/xybk4UJ2fYiP4P
+         olyWKTMrerRfQNLeveBB/PF8pi6etoJBB09AlnU13OytKhb4n7DVcJQ9rarDUgqYl2tb
+         qb22xgbngSqLsgHHJlrfl6u6n5wnhOoub+XOLBOqpW4cnxdbgpl8OxhBg0L1l++qJJFM
+         xqjf1V8otf3al1CALBKGbEUx769u13OKaEaS3T0ysLCZvLN3I0mHCr29CSh4eEFxAVJ4
+         VlgtyIy73mP5R2CbWQ/yTiNN9DrlzHDl6K0NCYwK1D+hwEBr056dLQP2ITnYi/bskEKy
+         8Qow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=InYm6sLvKrBj85IOoD7cel+odEmWBz2TRkO1Wbhx8jE=;
-        b=cWisGhzz490ZrdIZNpnjX+Gkm9aZckvV1rItHT0HjKwNr++P8W2votVAdiU6AiaPef
-         XeY8FuzhYXL862oQqVAYQuGDoqN34RzpVkUI3Dmz9FzMq8YuX8a1nNI/BBGCxbHtcj5T
-         E62ZxVHvF/TVhCzpQr/VzHl3wukknDRkn9JvMIvenh2Fm92Y7Hy89YMCUs+b21ySIzoZ
-         2YHImAKbAmcHmsZd490pf2W/I9gvtazEj1JxDVYgUu9Xklrl5T3zV8K/o8foFRb68tLy
-         2ufSRnhYesaaRcK/4qlIwadQZyn7JuO4D9xPBLhmyelsK+3lLKNvktVw5PvhDE+hQ8In
-         lC4Q==
-X-Gm-Message-State: ANoB5pnv93mVGL8K1s21rG8kS9oR8rCSyT6lGQi2xq7o0FFEgIhewjRN
-        1HjujoZWWGxE1qZCEt9R/rIcDQ==
-X-Google-Smtp-Source: AA0mqf5eBsgtyrMc/qDoNucSvmTB8WxIbAXdWIFwHNigRd4BitOiOXIkxygy1uff1xLKC+6DbCVocg==
-X-Received: by 2002:a05:6402:194a:b0:461:a699:7c5c with SMTP id f10-20020a056402194a00b00461a6997c5cmr19543406edz.22.1671039620871;
-        Wed, 14 Dec 2022 09:40:20 -0800 (PST)
-Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
-        by smtp.gmail.com with ESMTPSA id d10-20020a50f68a000000b0045b3853c4b7sm6696181edn.51.2022.12.14.09.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 09:40:20 -0800 (PST)
-Date:   Wed, 14 Dec 2022 18:40:19 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: memcg reclaim demotion wrt. isolation
-Message-ID: <Y5oKg4KFsFIYOYuZ@cmpxchg.org>
-References: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
- <Y5ik+CCmvapf87Mb@cmpxchg.org>
- <Y5maoIUuH79KrfJt@dhcp22.suse.cz>
- <Y5nEQeXj6HQBEHEY@cmpxchg.org>
- <Y5nrwrP0twm9IIDl@dhcp22.suse.cz>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i0pzIXqtCSP5BhXl91JWX0th+uLCttVTq944NZd+G/g=;
+        b=hFy+olCfY4fV7TtusvsxfQWj66gAWD0SsmbLP1Vv+tcSBUixdaA6bDr+NX0XY+AhVB
+         LWTtGDXEjJ8HF/+GvQHTkv5F9XeslWWqzSDl/VcfwW70KHbcdtZnsOZCGCsE/KGZ+0pE
+         ZvghtWkztSVBpYvaYnT5brLX8xjtcG00CJmRcH+btehPFCfwtLq3KyukmHi4kjUNqiHM
+         NXaIzF4dZA4ntekkUUs+m81E4DTX3Qggm32xQQWvapB730Fa1aH2viofUHPymTABsXdt
+         3fRWGTNixSUrPUWEi20Ts4CjiWCWfVZ/OWjwi6YsWSijl4CIrBQOHW+onNOASVvNOmbz
+         YwRg==
+X-Gm-Message-State: ANoB5pnm2E+RMsxFkzfD9ysB6CAhUCWelbCm/nWraNn0++BmjOAOw+bi
+        eRmZHmr8Rgj74Pn8K2Ljk5LWSAxH78tzV0PP/dNOwA==
+X-Google-Smtp-Source: AA0mqf69oXdmKWJAfPefpo7KpkzHuaJWGX2rYmP2D46nMlMw3xkxWCB7JT6qaFTmfgiph12mt/cL6YMSSUv3fJatgCk=
+X-Received: by 2002:a25:5091:0:b0:703:8471:c745 with SMTP id
+ e139-20020a255091000000b007038471c745mr13651067ybb.358.1671039686305; Wed, 14
+ Dec 2022 09:41:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5nrwrP0twm9IIDl@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <Y5fdgI4uTpXZQ9yn@mail.google.com> <Y5jf59VCL/HAt60q@mail.google.com>
+In-Reply-To: <Y5jf59VCL/HAt60q@mail.google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Wed, 14 Dec 2022 09:40:50 -0800
+Message-ID: <CAHVum0eNp5Dup_KyrS2N0zu5TfrtcCxphRnLuBFZa5PxahVg7A@mail.gmail.com>
+Subject: Re: [PATCH v3] scripts/tags.sh: choose which directories to exclude
+ from being indexed
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,54 +76,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Michal,
+On Tue, Dec 13, 2022 at 12:26 PM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
+>
+> It's common for drivers that share same physical components to also
+> duplicate source code (or at least portions of it). A good example is
+> both drivers/gpu/drm/amdgpu/* and drivers/gpu/drm/radeon/* have a header
+> file called atombios.h.
+>
+> While their contents aren't the same, a lot of their structs have
+> the exact same names which makes navigating through the code base a bit
+> messy as cscope will show up 'references' across drivers which aren't
+> exactly correct.
+>
+> Add IGNORE_DIRS variable, which specifies which directories
+> to be ignored from indexing.
+>
+> Example:
+>         make ARCH=x86 IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> Changelog:
+>
+> - v3: change commit message wording and rst syntax (Req Bagas Sanjaya)
+>       change makefile variable scope to global, use blank space
+>       separator and change variable name to IGNORE_DIRS.
+>       (Req: Vipin Sharma)
+> - v2: change approach to include everything unless specified by the
+>   IGNOREDIRS variable: (Req: Vipin Sharma)
+> - v1: https://lore.kernel.org/lkml/Y5OKDvbGk4Kro6MK@mail.google.com/
+> ---
+>  Documentation/kbuild/kbuild.rst | 7 +++++++
+>  scripts/tags.sh                 | 7 +++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+> index 08f575e6236c..5202186728b4 100644
+> --- a/Documentation/kbuild/kbuild.rst
+> +++ b/Documentation/kbuild/kbuild.rst
+> @@ -278,6 +278,13 @@ To get all available archs you can also specify all. E.g.::
+>
+>      $ make ALLSOURCE_ARCHS=all tags
+>
+> +IGNORE_DIRS
+> +-----------
+> +For tags/TAGS/cscope targets, you can choose which directories won't
+> +be included in the databases, separated by blank space. E.g.::
+> +
+> +    $ make IGNORE_DIRS="drivers/gpu/drm/radeon tools" cscope
+> +
+>  KBUILD_BUILD_TIMESTAMP
+>  ----------------------
+>  Setting this to a date string overrides the timestamp used in the
+> diff --git a/scripts/tags.sh b/scripts/tags.sh
+> index e137cf15aae9..1ad45f17179a 100755
+> --- a/scripts/tags.sh
+> +++ b/scripts/tags.sh
+> @@ -17,6 +17,13 @@ ignore="$(echo "$RCS_FIND_IGNORE" | sed 's|\\||g' )"
+>  # tags and cscope files should also ignore MODVERSION *.mod.c files
+>  ignore="$ignore ( -name *.mod.c ) -prune -o"
+>
+> +# ignore arbitrary directories
+> +if [ -n "${IGNORE_DIRS}" ]; then
+> +       for i in ${IGNORE_DIRS}; do
+> +               ignore="${ignore} ( -path $i ) -prune -o"
+> +       done
+> +fi
+> +
+>  # Use make KBUILD_ABS_SRCTREE=1 {tags|cscope}
+>  # to force full paths for a non-O= build
+>  if [ "${srctree}" = "." -o -z "${srctree}" ]; then
+> --
+> 2.38.1
+>
 
-On Wed, Dec 14, 2022 at 04:29:06PM +0100, Michal Hocko wrote:
-> On Wed 14-12-22 13:40:33, Johannes Weiner wrote:
-> > The only way to prevent cgroups from disrupting each other on NUMA
-> > nodes is NUMA constraints. Cgroup per-node limits. That shields not
-> > only from demotion, but also from DoS-mbinding, or aggressive
-> > promotion. All of these can result in some form of premature
-> > reclaim/demotion, proactive demotion isn't special in that way.
-> 
-> Any numa based balancing is a real challenge with memcg semantic. I do
-> not see per numa node memcg limits without a major overhaul of how we do
-> charging though. I am not sure this is on the table even long term.
-> Unless I am really missing something here we have to live with the
-> existing semantic for a foreseeable future.
+Thanks for the patch.
 
-Yes, I think you're quite right.
-
-We've been mostly skirting the NUMA issue in cgroups (and to a degree
-in MM code in general) with two possible answers:
-
-a) The NUMA distances are close enough that we ignore it and pretend
-   all memory is (mostly) fungible.
-
-b) The NUMA distances are big enough that it matters, in which case
-   the best option is to avoid sharing, and use bindings to keep
-   workloads/containers isolated to their own CPU+memory domains.
-
-Tiered memory forces the issue by providing memory that must be shared
-between workloads/containers, but is not fungible. At least not
-without incurring priority inversions between containers, where a
-lopri container promotes itself to the top and demotes the hipri
-workload, while staying happily within its global memory allowance.
-
-This applies to mbind() cases as much as it does to NUMA balancing.
-
-If these setups proliferate, it seems inevitable to me that sooner or
-later the full problem space of memory cgroups - dividing up a shared
-resource while allowing overcommit - applies not just to "RAM as a
-whole", but to each memory tier individually.
-
-Whether we need the full memcg interface per tier or per node, I'm not
-sure. It might be enough to automatically apportion global allowances
-to nodes; so if you have 32G toptier and 16G lowtier, and a cgroup has
-a 20G allowance, it gets 13G on top and 7G on low.
-
-(That, or we settle on multi-socket systems with private tiers, such
-that memory continues to be unshared :-)
-
-Either way, I expect this issue will keep coming up as we try to use
-containers on such systems.
+Reviewed-by: Vipin Sharma <vipinsh@google.com>
