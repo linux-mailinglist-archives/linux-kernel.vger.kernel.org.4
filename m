@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EA864D154
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BF364D153
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiLNUgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S229976AbiLNUgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiLNUfn (ORCPT
+        with ESMTP id S229927AbiLNUfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Dec 2022 15:35:43 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240CB3137B
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:49 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id x2so3283364plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:49 -0800 (PST)
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D627226C1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:52 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so450617pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 12:31:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xfisaX1yRNC7eLaChTG8lYX6QtvwXvGxy+CVBHfkvYY=;
-        b=iXwjzWxm8czKkuv24mdSFWh1miR+KRa+tM7sG71WvNRjMJsKUYbqluXDfKVle+Yra5
-         alPu5buTji1JguvriqfWjHTI7PE2qaYG5MK1py017BGe7E4lg4y9Jcuk91iVj1rLCzDJ
-         xQune/lj6T2xB3yQ1GI6aoXukCBiVmohQuu7DHtU/ArKIFxlxNJve/EOfzSMNJHRyUK9
-         F1cfn/y4P6+g/96uaNZHDD0k3NlcUqt7zAgc76DZ2ttFTVbW2xvTa2YWx298HJz4MHTd
-         +WllCDUW2O/HWSfNWp1WJLCKzYChvSOAqYZ16mLdan8LgrOA1vb0wlkQ1raKqC2pgNRN
-         xiAQ==
+        bh=iXo7ON+W+HqSzfMLSf0nu5/9om0aVHW6nmyC6DVkBmI=;
+        b=XMacLbFeRR4Jifz4+Q63pAto3sNGhGFs7D/C1Jtc9QQeGCWJRFI9tvaxikbQ2t/Dco
+         G4gssaES0KuTv0xIEbouEsR5nQPUN12ph2mTl7f99Uj+lsVkI/5E7vYiBMxy95HKhXdC
+         4g20V7tkXglVZZRAL3X4miN88lXYqVjsHqTp+83qH2J4i0oVpcJR6jXyE4gclz3NfinW
+         LQn4wBQ5M4Uj63PvZevVA5hRSggTsXftzAenddpZxNwfgW7p+Hez6dSAXeTTYDeoXjF/
+         PLX0+mxUxBiprC6yxUcGwXSIxO/DapOC27xIn07FyGShU/pveYYzB+vvAaN1qsUhHqhK
+         VZ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xfisaX1yRNC7eLaChTG8lYX6QtvwXvGxy+CVBHfkvYY=;
-        b=s9xYgzLL7B7t2/FFADTRbiciGZN4BYjDDwb0S78pECKc5nlHuusH5DoQxYcPbB95aS
-         EeFzSqxPWTrXsze/wsZj0QxbCPQHWeel7YbVQQfTgq0Xe6GnU0riSIpU6SI6ffhJWA4S
-         K46JoX+4l23xXAMCvqQ8/u3NHv9baPKcsfJHexeY4nUmz7ZtNjHjMYumOhO4gGRaYrDJ
-         VfvrhO0c6tw1BBBYd9QsM9wdXC00OBHMmlgQe3flyFz4mf34koifHMeriECcZsxsau4X
-         xBwOmb3m02xaO1HQsZccPnz8SOcOrLhxMgU/FaOO1wOH8jys4sezbWyi2g9NeI4pvfWx
-         Ya6g==
-X-Gm-Message-State: ANoB5pkeRgK5OGGVamep85iTmZsYstdwxfU/uj+MSxhDz2MK4XamHENt
-        vD471N1aDFF6bopsFEPZKEqTlpHRr4mZSkTmfpQ=
-X-Google-Smtp-Source: AA0mqf4IoGccZZP7169MteNGpn2PFmUOvL3DOXR55Lib2aZ7FjigSY7EK8yOhRrrZpc//QLEPCNBAg==
-X-Received: by 2002:a17:90a:710b:b0:21f:e5c:9852 with SMTP id h11-20020a17090a710b00b0021f0e5c9852mr21559709pjk.1.1671049908588;
-        Wed, 14 Dec 2022 12:31:48 -0800 (PST)
+        bh=iXo7ON+W+HqSzfMLSf0nu5/9om0aVHW6nmyC6DVkBmI=;
+        b=vX1g4K8l/CXrqB/ZGQ/yUjLNgPii+J8GS1q/wBUHFddOp3u2/OF7EljfNrMqSvU2/z
+         dDrWK4N72SI+FYb+dEfgbRdbybS/7igRBnIoRL/q4p1KUgk+dqwc6A8nzI3AS0fkf40q
+         +I2Tu5Fk8Ds2apfe/gcLBNOODIS/dWB/eaWXOWJIxnaqd9QNApzmzm0pVsRtqqF9uQQ5
+         HLZEU7mWSROwMxz7Uj2uqfaXc7bgi3wl9yEvu2hAOmICbS/IphYcIjaUrzLf8z6NTgU2
+         82nOa7c6AvbXJ0W1fnuW6FI8VT71nVeAfXov0JtL3bmM853bqb7Z9GXtaMuRKXGyPB5u
+         +RBA==
+X-Gm-Message-State: ANoB5plMRAlKYbpv18JLbCoIBNjBKbiZskuuxq3TABwMITUg1C4raR4/
+        RwbiF0f8TToDhsc3iTgRMSSNQQ==
+X-Google-Smtp-Source: AA0mqf7gbCnQyLrxJw4M6FcVDByhc7Y4y2bkdQGassD9WGwBwZ9ttLkWeVbsTZim+PqXUoslZyKT+w==
+X-Received: by 2002:a17:90b:378c:b0:21e:1282:af42 with SMTP id mz12-20020a17090b378c00b0021e1282af42mr23121685pjb.40.1671049912274;
+        Wed, 14 Dec 2022 12:31:52 -0800 (PST)
 Received: from localhost.localdomain ([2401:4900:1c60:4bad:5c3:ab51:3d81:6264])
-        by smtp.gmail.com with ESMTPSA id gx13-20020a17090b124d00b00219e38b42f5sm1812238pjb.26.2022.12.14.12.31.45
+        by smtp.gmail.com with ESMTPSA id gx13-20020a17090b124d00b00219e38b42f5sm1812238pjb.26.2022.12.14.12.31.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 12:31:48 -0800 (PST)
+        Wed, 14 Dec 2022 12:31:51 -0800 (PST)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     agross@kernel.org, bhupesh.sharma@linaro.org,
         bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
         konrad.dybcio@linaro.org, andersson@kernel.org
-Subject: [PATCH v2 1/3] arm64: dts: qcom: sm6115: Cleanup USB node's label
-Date:   Thu, 15 Dec 2022 02:01:22 +0530
-Message-Id: <20221214203124.564537-2-bhupesh.sharma@linaro.org>
+Subject: [PATCH v2 2/3] arm64: dts: qcom: sm6115: Move USB node's 'maximum-speed' and 'dr_mode' properties to dts
+Date:   Thu, 15 Dec 2022 02:01:23 +0530
+Message-Id: <20221214203124.564537-3-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221214203124.564537-1-bhupesh.sharma@linaro.org>
 References: <20221214203124.564537-1-bhupesh.sharma@linaro.org>
@@ -66,79 +66,57 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is only one USB controller present on SM6115 / SM4250
-Qualcomm SoC, so drop the numbering used with USB node's label
-names in the dtsi and the related sm4250-oneplus-billie2.dts.
+Normally the 'maximum-speed' and 'dr_mode' properties
+of a USB controller + port is dependent on the type of
+the ports, regulators and mode change interrupt routing
+available on the board(s).
+
+So, move the same from the sm6115 dtsi file to respective
+board file(s).
 
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts | 4 ++--
- arch/arm64/boot/dts/qcom/sm6115.dtsi                | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts | 5 +++++
+ arch/arm64/boot/dts/qcom/sm6115.dtsi                | 2 --
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-index a3f1c7c41fd73..fa57f4bf58256 100644
+index fa57f4bf58256..3f39f25e0721e 100644
 --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
 +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-@@ -225,11 +225,11 @@ &ufs_mem_phy {
+@@ -229,6 +229,11 @@ &usb {
  	status = "okay";
  };
  
--&usb_1 {
-+&usb {
- 	status = "okay";
- };
- 
--&usb_1_hsphy {
-+&usb_hsphy {
++&usb_dwc3 {
++	maximum-speed = "high-speed";
++	dr_mode = "peripheral";
++};
++
+ &usb_hsphy {
  	vdd-supply = <&vreg_l4a>;
  	vdda-pll-supply = <&vreg_l12a>;
- 	vdda-phy-dpdm-supply = <&vreg_l15a>;
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 572bf04adf906..b5f7480c2e713 100644
+index b5f7480c2e713..e4ce135264f3d 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -565,7 +565,7 @@ gcc: clock-controller@1400000 {
- 			#power-domain-cells = <1>;
- 		};
- 
--		usb_1_hsphy: phy@1613000 {
-+		usb_hsphy: phy@1613000 {
- 			compatible = "qcom,sm6115-qusb2-phy";
- 			reg = <0x01613000 0x180>;
- 			#phy-cells = <0>;
-@@ -991,7 +991,7 @@ spi5: spi@4a94000 {
+@@ -1031,8 +1031,6 @@ usb_dwc3: usb@4e00000 {
+ 				snps,has-lpm-erratum;
+ 				snps,hird-threshold = /bits/ 8 <0x10>;
+ 				snps,usb3_lpm_capable;
+-				maximum-speed = "high-speed";
+-				dr_mode = "peripheral";
  			};
  		};
  
--		usb_1: usb@4ef8800 {
-+		usb: usb@4ef8800 {
- 			compatible = "qcom,sm6115-dwc3", "qcom,dwc3";
- 			reg = <0x04ef8800 0x400>;
- 			#address-cells = <1>;
-@@ -1019,11 +1019,11 @@ usb_1: usb@4ef8800 {
- 			qcom,select-utmi-as-pipe-clk;
- 			status = "disabled";
- 
--			usb_1_dwc3: usb@4e00000 {
-+			usb_dwc3: usb@4e00000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x04e00000 0xcd00>;
- 				interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
--				phys = <&usb_1_hsphy>;
-+				phys = <&usb_hsphy>;
- 				phy-names = "usb2-phy";
- 				iommus = <&apps_smmu 0x120 0x0>;
- 				snps,dis_u2_susphy_quirk;
 -- 
 2.38.1
 
