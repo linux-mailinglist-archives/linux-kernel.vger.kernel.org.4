@@ -2,139 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E5664C3BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00D064C3B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 07:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiLNGT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 01:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S237184AbiLNGPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 01:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiLNGTx (ORCPT
+        with ESMTP id S229446AbiLNGO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 01:19:53 -0500
-X-Greylist: delayed 319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 22:19:52 PST
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73823167ED;
-        Tue, 13 Dec 2022 22:19:52 -0800 (PST)
-Received: from toolbox.int.toradex.com ([106.185.144.150]) by
- mrelay.perfora.net (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0Lij1v-1oUtgB2izd-00d05e; Wed, 14 Dec 2022 07:14:07 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] arm64: dts: verdin-imx8mp: add pcie support
-Date:   Wed, 14 Dec 2022 07:13:54 +0100
-Message-Id: <20221214061354.174072-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 14 Dec 2022 01:14:59 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940651057A
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:14:58 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id a66so8385371vsa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 22:14:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gwP00HaRKNntjcX+wACKDLZ52in31pSO44L1T14/KNA=;
+        b=mnGHwohdnQDmfaJjDf/nCcIiK+ONq6oZcCtN68MM/RQGpcGR3NXSt0FSJOMcDELSwc
+         TAv6iZlAbYCEkxnSmAUn9ZokaH4MpyMAE5j2Mcg4n6uEzTlKQY2tKwmlPpYFwRLFPIIG
+         eaxClv08CY9tsEvvoeBHY34QWV5o1/aPb+0w9eJPrVoCwpxL/zrFbaceNNGZSDnXdbYt
+         cJxhftdotcJ3umGU5bmrZpPo9nvFVOEZM/AcehRjBYKvJ1fxqc1Ga5udvWj1tUjofADP
+         wReQlmEHNKDciELJXT4+ryAWkOwbaoHZHUSTdc7L2nU4pbYjM+70vPXvqlhWjoRnieWR
+         Oy+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gwP00HaRKNntjcX+wACKDLZ52in31pSO44L1T14/KNA=;
+        b=2cDa7eidtHQ4/J/rc6CSXm4qNHYFpW1v3FlpEsHoT40nc9QzxSZtFmCKqgDVl1XyZa
+         jpprjDxOwFrxaE+9oxZhplFVcj/ZhaSNn8VRdzGOwhcuHlWHVi2d6p+XOptHzB/66T8B
+         arKFo5zFKUgXTIkhXeA6Jzbg6w0q5E36h4ALr3ueUOWLBf28aNiunYFojeVwyRcIaF3z
+         8F9g1ziSYJh4QW1RmMenSSBhg/rjiWLY9R7Kw5S0ITQx5OxX6McSd4polWHylgaTrI6m
+         5tncCpLTB9B73Evhf1kkqwO1XhkzzMfusBbhTrjhslK+BJOvXy3oeXx4lIIJkT/VOJyz
+         JZOA==
+X-Gm-Message-State: ANoB5pnNdhx7BxwvMJ57SzBWx7+8A+4gP4am80KSlkWAGSU9eQjZLiqX
+        t4xO212dkbMHl4NyqSEXMZJcKEbmBU0GCx3BWVESxw==
+X-Google-Smtp-Source: AA0mqf5znL8dl58w9Cvl0lnGwwvSC/YNoKpWfp7qIIZT3R+MvRjVoJg6HFabQPeHqMYglbunt+onIURScTHP+M1Qqo4=
+X-Received: by 2002:a05:6102:3ca1:b0:3b5:d38:9d4 with SMTP id
+ c33-20020a0561023ca100b003b50d3809d4mr1176068vsv.9.1670998497525; Tue, 13 Dec
+ 2022 22:14:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:EXCyTQnANcnHc8rJV9g/dT94JKpnbGsF8DjKVs4wrRHVYuBxaTH
- VB6tSKl9MXJYQJSxQRNFBjVCuw9CYsXquRLH8ho4LUJ3Rc5BNat80Xs9uyaNLMIImIpLLCA
- oXMxXyEzIobYD36Szw//5GAo8KImH/7gBSw/LY3ta9esI1jfb9cJfvRD+iRmorF8sZT4fSv
- xSyFCM1qWjid1Pvp4ewHA==
-UI-OutboundReport: notjunk:1;M01:P0:V0WoA2c6Flc=;1zRVYEZLAmTJT0ax99Feg9lQusQ
- oxWNIRZUCiRvb8sEbU0Q+BkkQjzzN2saZzUG4HlJ+E69gMseEttMr8cuBUybkHpFN2oCuBb79
- +HolxGbAaOJr1RVnjpNbBAnikb5J19DE7KsGi3mYPolkInYOP+Q+tT7iTgZN5y6c1OvIBxCL6
- MtSsfL960aWBVJ7hb/fIDj4ruG6wZWKF8X5L/tQDjJeyRKQcBmkolW2xG1+DMl2Vd+nCMpn8l
- ERd71JOrqSfjLdGXHOdn8ABL3pgvkTNfLbkTZUzGaxF+ZhXmgGgLimnI6IwQfq33OBMSqa5Tr
- oC0aj70aB9WOPsLs6sjUNUUUTwdwGOodIzEwv+D8TK59nN1Mf08Yz9CUDQVLXhQi285C0YjvQ
- 0iiSaH5HgV1q544v4mtL1VpXc0czoLJPrH2rEOJWzJSsVMszGJCGL4P5lbJR4PcwOgQ5cbt+Y
- GjAUC4x0XOdhgs5yYEevkRx15vGFjttqLI1Ai/PzRQmD4hpqNvgRMG/ehYFGIMUJxyCCH/MFu
- ti3iEMgXtUgQBFI+3UvihfGzTq4JKMSBr/W0BALxAy3iCQXpkW1CRw2kFot6L278k1vGEAs6J
- 9m4th1tfTQOx+iyw6p5TZ3c6EaqhEB+e7YCF1l8seSQH11h9iwWOLNrAEzjzWdnkYRdtO+34v
- 15olD8oMNwCaIRpHlWvt9xNXYQLX11UOlTlipjrgCg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221213150409.357752716@linuxfoundation.org>
+In-Reply-To: <20221213150409.357752716@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 14 Dec 2022 11:44:46 +0530
+Message-ID: <CA+G9fYsaO+TVzsMZfZ1iQZHc7ZHQ44jRL2k6vhSNNJR+18rv=w@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/98] 5.10.159-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Tue, 13 Dec 2022 at 20:35, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.159 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 15 Dec 2022 15:03:44 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.159-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Add PCIe support on the Verdin iMX8M Plus.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
----
-This has successfully been tested with Lucas' imx8mp-hsio-blk-ctrl high
-performance PLL clock exposure patch set [1] a later version thereof
-hopefully may land together with my humble patch. Thanks!
+## Build
+* kernel: 5.10.159-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 2c8c8e98b2ec8658a461e9400b1e5ab632957a17
+* git describe: v5.10.158-99-g2c8c8e98b2ec
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.158-99-g2c8c8e98b2ec
 
-[1] https://lore.kernel.org/all/20221213160112.1900410-1-l.stach@pengutronix.de/
+## Test Regressions (compared to v5.10.158-107-gd2432186ff47)
 
- .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  9 +++++++-
- .../boot/dts/freescale/imx8mp-verdin.dtsi     | 22 ++++++++++++++++++-
- 2 files changed, 29 insertions(+), 2 deletions(-)
+## Metric Regressions (compared to v5.10.158-107-gd2432186ff47)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-index 80db1ad7c230..56b0e4b865c9 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-@@ -67,7 +67,14 @@ &i2c4 {
- 	/* TODO: Audio Codec */
- };
- 
--/* TODO: Verdin PCIE_1 */
-+/* Verdin PCIE_1 */
-+&pcie {
-+	status = "okay";
-+};
-+
-+&pcie_phy {
-+	status = "okay";
-+};
- 
- /* Verdin PWM_1 */
- &pwm1 {
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 6a1890a4b5d8..f3a46f4caf49 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -749,7 +749,27 @@ eeprom_carrier_board: eeprom@57 {
- 	};
- };
- 
--/* TODO: Verdin PCIE_1 */
-+/* Verdin PCIE_1 */
-+&pcie {
-+	assigned-clocks = <&clk IMX8MP_CLK_PCIE_AUX>;
-+	assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_50M>;
-+	assigned-clock-rates = <10000000>;
-+	clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-+		 <&clk IMX8MP_CLK_PCIE_ROOT>,
-+		 <&clk IMX8MP_CLK_HSIO_AXI>;
-+	clock-names = "pcie", "pcie_aux", "pcie_bus";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie>;
-+	/* PCIE_1_RESET# (SODIMM 244) */
-+	reset-gpio = <&gpio4 19 GPIO_ACTIVE_LOW>;
-+};
-+
-+&pcie_phy {
-+	clocks = <&hsio_blk_ctrl>;
-+	clock-names = "ref";
-+	fsl,clkreq-unsupported;
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_OUTPUT>;
-+};
- 
- /* Verdin PWM_1 */
- &pwm1 {
--- 
-2.36.1
+## Test Fixes (compared to v5.10.158-107-gd2432186ff47)
 
+## Metric Fixes (compared to v5.10.158-107-gd2432186ff47)
+
+## Test result summary
+total: 143152, pass: 124378, fail: 2501, skip: 15776, xfail: 497
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
