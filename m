@@ -2,166 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A385264C451
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89A864C453
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237454AbiLNHQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 02:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S237431AbiLNHRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 02:17:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLNHQV (ORCPT
+        with ESMTP id S237347AbiLNHQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 02:16:21 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B4D23381;
-        Tue, 13 Dec 2022 23:16:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671002180; x=1702538180;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=VwZs05pVUP7LqVeCoKXF+sKs0Nd4RnRQHbZbxbbWEUM=;
-  b=F/ZCHz4f9CQXiU0q0fu9QtlL8zYjBMOhbvA4fnPZZjW5VBAnqYqCw9VR
-   6jByAKuS0r0v0LOkwx8aysVGrM0Z2RYn3r+m2JkaoIKghDReNRmgXn+oW
-   xZcpiTaU94BuJUbAUBAkgQ5pyXDr40PBus7JL0YB2Vtzn3+Qhtwr+4HfN
-   YDEGRicmrQRXzylyUSJRLm337TANrumheHebkhyOtNVfSL91J388t2GVQ
-   E69ZfrfU1ERyWnsrd7x24OYlybDvhwlukzwQfXogprKl09oipkmtF1W4f
-   6K3XRsKm6nkIha/f9SkGfo8uYZLsVeL6nuqUqCHjlz+C4NU6PYhJqcc6o
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="298013865"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="298013865"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 23:16:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="894183341"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="894183341"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 23:16:15 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
-References: <20221202223533.1785418-1-almasrymina@google.com>
-        <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
-        <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
-        <Y5g41HF2TcLzro4o@dhcp22.suse.cz> <Y5iet+ch24YrvExA@cmpxchg.org>
-Date:   Wed, 14 Dec 2022 15:15:17 +0800
-In-Reply-To: <Y5iet+ch24YrvExA@cmpxchg.org> (Johannes Weiner's message of
-        "Tue, 13 Dec 2022 16:58:50 +0100")
-Message-ID: <87fsdifoca.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 14 Dec 2022 02:16:47 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CFD233B2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 23:16:45 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id t2so2460997ply.2
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 23:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/c2imGywrXMtFxA7big1ynKkwWHj2fMs98/T/6C4pE=;
+        b=KZl4nVIgtb+Mf+JF7RIGzeSuGfFTUnAn1pGugolhqXd0hlt4rjbHJjmmsz5cS4bdW/
+         pYCkm2f+TEiDbKVVoeOCjK6H+N5TqQT7ZUtJRNcjM7LDfaXxXn0jwVArs2F5eLIDrXQo
+         AuW1wwuPC5AdnsM794ICUfAQYSES3udZI13eXfo/E/eWQE+MD05hXD1Lzr6lpW71Ll6j
+         pLzXM7qmqEH5/FX9uWmVC6FC7DrDgkBTMCX/3LrbirxDDIZg2XZvPTS6utvVdzuu3x8f
+         Jq/dpGj/6bs2CQ/gO1EWEDmQzsR4Imvy31SnktIiacHBIXqFXyevERxOd0tZ3MhJXRRV
+         B/Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r/c2imGywrXMtFxA7big1ynKkwWHj2fMs98/T/6C4pE=;
+        b=LFetm7AcPqkH5ciZyAWeC1QEOpL3pqby2Y08ed5gSIO5eoVGRTRPshIyE9NJOZ+cEE
+         +Q6U4VvPa8QqhH+U4kCACbuc1bPrJ6kTS2vrNdekQMsIUY+mraoa4vyEITYdZ5JbjqwG
+         ZzV4YaJWcV/e5z9qt4wZT1JdKpgQ1PPTp760O7eOdHlQFctJd8p9Dg8qvl63n33/jGK4
+         rzb4eLlqW8MsELM48CyKcDmJJ0hgguqwYivguhg9Yej3i/AzYV8UDyjdZDGgW5sYPhzP
+         4NTY6UG+Huz6PNATmoemtKC2v0hry7U9b4ZP0flveMOMmbLBBSZELxSJkpLIYZF3cy2+
+         27iw==
+X-Gm-Message-State: ANoB5pm0psafkp7bD8znQmHjLMJE4doK75v/lZRdC/F0Le7O7BIBsCB6
+        mK6/MObaGNsCvtpCILj0Vh0utILcybZyqeWJ98bYc7B3
+X-Google-Smtp-Source: AA0mqf4oNSM6h5mjH9kXsmyHt7JPwMmcPl2OvfaKWmEwaL7nnMxpxbr9FSu90DocYjg56JCQTvbz0Wj9pRhQJV6mbc4=
+X-Received: by 2002:a17:903:3052:b0:189:651c:f023 with SMTP id
+ u18-20020a170903305200b00189651cf023mr63925289pla.78.1671002205320; Tue, 13
+ Dec 2022 23:16:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221213043936.6345-1-richard.xnu.clark@gmail.com>
+In-Reply-To: <20221213043936.6345-1-richard.xnu.clark@gmail.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Wed, 14 Dec 2022 15:16:33 +0800
+Message-ID: <CAJhGHyA--bPT9ya+mFzZ7h4yUfTXFJ5-BFdynGFC61A-4gdLWg@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: Add a new flag to spot the potential UAF error
+To:     Richard Clark <richard.xnu.clark@gmail.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Johannes Weiner <hannes@cmpxchg.org> writes:
+On Tue, Dec 13, 2022 at 12:40 PM Richard Clark
+<richard.xnu.clark@gmail.com> wrote:
+>
+> Currently if the user queues a new work item unintentionally
+> into a wq after the destroy_workqueue(wq), the work still can
+> be queued and scheduled without any noticeable kernel message
+> before the end of a RCU grace period.
+>
+> As a debug-aid facility, this commit adds a new flag
+> __WQ_DESTROYING to spot that issue by triggering a kernel WARN
+> message.
+>
+> Signed-off-by: Richard Clark <richard.xnu.clark@gmail.com>
 
-> On Tue, Dec 13, 2022 at 09:33:24AM +0100, Michal Hocko wrote:
->> I do recognize your need to control the demotion but I argue that it is
->> a bad idea to rely on an implicit behavior of the memory reclaim and an
->> interface which is _documented_ to primarily _reclaim_ memory.
->
-> I think memory.reclaim should demote as part of page aging. What I'd
-> like to avoid is *having* to manually control the aging component in
-> the interface (e.g. making memory.reclaim *only* reclaim, and
-> *requiring* a coordinated use of memory.demote to ensure progress.)
->
->> Really, consider that the current demotion implementation will change
->> in the future and based on a newly added heuristic memory reclaim or
->> compression would be preferred over migration to a different tier.  This
->> might completely break your current assumptions and break your usecase
->> which relies on an implicit demotion behavior.  Do you see that as a
->> potential problem at all? What shall we do in that case? Special case
->> memory.reclaim behavior?
->
-> Shouldn't that be derived from the distance propertiers in the tier
-> configuration?
->
-> I.e. if local compression is faster than demoting to a slower node, we
-> should maybe have a separate tier for that. Ignoring proactive reclaim
-> or demotion commands for a second: on that node, global memory
-> pressure should always compress first, while the oldest pages from the
-> compression cache should demote to the other node(s) - until they
-> eventually get swapped out.
->
-> However fine-grained we make proactive reclaim control over these
-> stages, it should at least be possible for the user to request the
-> default behavior that global pressure follows, without jumping through
-> hoops or requiring the coordinated use of multiple knobs. So IMO there
-> is an argument for having a singular knob that requests comprehensive
-> aging and reclaiming across the configured hierarchy.
->
-> As far as explicit control over the individual stages goes - no idea
-> if you would call the compression stage demotion or reclaim. The
-> distinction still does not make much of sense to me, since reclaim is
-> just another form of demotion. Sure, page faults have a different
-> access latency than dax to slower memory. But you could also have 3
-> tiers of memory where the difference between tier 1 and 2 is much
-> smaller than the difference between 2 and 3, and you might want to
-> apply different demotion rates between them as well.
->
-> The other argument is that demotion does not free cgroup memory,
-> whereas reclaim does. But with multiple memory tiers of vastly
-> different performance, isn't there also an argument for granting
-> cgroups different shares of each memory? So that a higher priority
-> group has access to a bigger share of the fastest memory, and lower
-> prio cgroups are relegated to lower tiers. If we split those pools,
-> then "demotion" will actually free memory in a cgroup.
->
-> This is why I liked adding a nodes= argument to memory.reclaim the
-> best. It doesn't encode a distinction that may not last for long.
->
-> The problem comes from how to interpret the input argument and the
-> return value, right? Could we solve this by requiring the passed
-> nodes= to all be of the same memory tier? Then there is no confusion
-> around what is requested and what the return value means.
-
-Yes.  The definition is clear if nodes= from the same memory tier.
-
-> And if no nodes are passed, it means reclaim (from the lowest memory
-> tier) X pages and demote as needed, then return the reclaimed pages.
-
-It appears that the definition isn't very clear here.  How many pages
-should be demoted?  The target number is the value echoed to
-memory.reclaim?  Or requested_number - pages_in_lowest_tier?  Should we
-demote in as many tiers as possible or in as few tiers as possible?  One
-possibility is to take advantage of top tier memory as much as
-possible.  That is, try to reclaim pages in lower tiers only.
-
->> Now to your specific usecase. If there is a need to do a memory
->> distribution balancing then fine but this should be a well defined
->> interface. E.g. is there a need to not only control demotion but
->> promotions as well? I haven't heard anybody requesting that so far
->> but I can easily imagine that like outsourcing the memory reclaim to
->> the userspace someone might want to do the same thing with the numa
->> balancing because $REASONS. Should that ever happen, I am pretty sure
->> hooking into memory.reclaim is not really a great idea.
->
-> Should this ever happen, it would seem fair that that be a separate
-> knob anyway, no? One knob to move the pipeline in one direction
-> (aging), one knob to move it the other way.
-
-Agree.
-
-Best Regards,
-Huang, Ying
+Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
