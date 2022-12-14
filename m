@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475EB64CE30
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1874664CE31
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbiLNQiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S239047AbiLNQi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238971AbiLNQiW (ORCPT
+        with ESMTP id S239013AbiLNQiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 14 Dec 2022 11:38:22 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB03F60C7
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD7CF5FD7
         for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:38:20 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h11so269689wrw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7XQ9UK+L/0iK+KFqjWQesqR3gEiIaaEkyB4WhDQSSEk=;
-        b=1sRvZWk4v6BhCyZTXJ2+f46RRZoXBbAchW/Nd0IonBe71PFBY3xQlZJN78/B1C9AOX
-         O6U60oJ6kHQUPkFxgtYaux8Z8Fz+bVSKvBTLykYbGs5prvLBsaqwXgWA0XV/ice73Hdf
-         oyz7kh52knuU7/BrncKSqlfagE7nHPX4LaaaoYADWYkF3baBh0tDQXVbXNlj+KL6St5x
-         lxvKv88iCD2u8zD/Wm89B0n6pfUBOjctLvm+HkFc/sqZG/Bx8btVe/MC/JOZN3vDCW1B
-         4i7BO8w0bu5RWUH2A5OAHRRc9OupsX7aegDRYTPXh8MsbK8IJcJlCoNc6CptrKQ2pg50
-         ku+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7XQ9UK+L/0iK+KFqjWQesqR3gEiIaaEkyB4WhDQSSEk=;
-        b=iiHJmWYbSUhpjO4GxHgLPXdWr4l9neY50bmnAmSjIfiNci262/3BTxNUKXXZi94vDd
-         IfPMeHtPnLTl1ZzjE8OqKE/zkkBWzJwtfye/k1UUMYfR3MTVRdr7doPvZBxBUgRT2mWB
-         a6+YPYNW5eicAlcueweeZPmeRAWdRUmor8QEORHEckNNYB2lWNCgYqCK0qqVEX3hFhBD
-         2ys2LYbS8q1yKijhUUlbk+JCDe8T4we87JQXCOI05oLDghUy16PnVNkMA9SkXq/q9t88
-         UcJ4goj2Tao+NHK621Yf/6gXHv4mgiEi8B2M2gNSA/Z0MAc0eydB80ycwy392C1am7nY
-         P/3w==
-X-Gm-Message-State: ANoB5pl1MMJxUkvXr3NYWcneG2V1tM5sEq1KvuwOetEx8eAU9qpS8qUb
-        nm+DmxaDxzAu80jB102X5UIcU3eqUrB7PV8rQyNOMQ==
-X-Google-Smtp-Source: AA0mqf7Vq9T9tV5/hj5nHZjSecDz/ZDSCVTGbOpMMHcUxGzyHQ6ylbSGIsEibGaAkuvj3IzOFsHOLo7QrFmxZzz/y1E=
-X-Received: by 2002:a05:6000:1a4e:b0:242:71b:e3cf with SMTP id
- t14-20020a0560001a4e00b00242071be3cfmr36380152wry.144.1671035899393; Wed, 14
- Dec 2022 08:38:19 -0800 (PST)
+Received: from localhost.localdomain ([146.241.66.6])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id 5UltpKir27DIo5UlupwQy3; Wed, 14 Dec 2022 17:38:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1671035898; bh=dsR3rZ2jkGJDSz8NDGqgHLaVYGKUo3DjuM532qLmDdo=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=BbOVC9LpubGCVmqJfFqbm3TINglE+3+I/cQXESnPHWQppjzb1IPTGLAQFhVik18uO
+         iJLvEYeZ7Hxf+eAOjaoyOWLDAyum8B8/CAtKQsAzprpQ93k9WnXyt16hipGdQzSGbr
+         E2zZFpB5yzOvl4NHhMDTI8wPAo47EaWE72RFHIFuCXwCsW3SV1XQj1yeyz+F9N2Y7i
+         dfd1h9DkiRorliUmAAPK/GHGykqlBUafhZHMzbQtxAZ0N4LdaKhcPIBQP+RMpGS3YI
+         PAhqTROdE3BphT8w8W5GOpQ4zvqSiF0MAmwmH5fmUnWQrJG7ROuy0hYdUEYQOtFiIL
+         buPNS1Aqj0Hjw==
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Bough Chen <haibo.chen@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Jesse Taube <mr.bossman075@gmail.com>
+Subject: [PATCH v4] ARM: dts: imxrt1050: increase mmc max-frequency property
+Date:   Wed, 14 Dec 2022 17:38:17 +0100
+Message-Id: <20221214163817.55909-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221214143311.960266-1-alexghiti@rivosinc.com> <87cz8m3sha.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87cz8m3sha.fsf@all.your.base.are.belong.to.us>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Wed, 14 Dec 2022 17:38:08 +0100
-Message-ID: <CAHVXubidb5gQBHSFMJiY=egoi4QOiqOh884VvAhxYqADxNDB6A@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Allow to downgrade paging mode from the command line
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfCL3RHjrhS7KC74i6WassEwaV/G661sMy9IAaO2gQ7ot+2jadR5fQWAGAeHDCdzr7jYns2MVCOWI5hSX0BkuJhtVoEnOQ4WcYMB1xnociMjDEhUUI8L9
+ 9dTSvKTkmB2WxHlzTJXHQobs9gvedmBrvEJAy/R6d82vwKO50nGgk1JjrkrEsEswxYlWw/tuUu8twFdkw83+76Fh0aiRuRbrP7UHfRcdv/5oLnjsoRA+2xiA
+ tXMYcQrc482BGYyr6sdd3EUA9y7MFTLqcHX9isas4eodnEJ3SclqipmGpZn5cbTOkmH3IKJu4pB4mnJiTt1xA4XLe0GSHG/NGN5R8fkdSj6MBwbAg2CZnOpv
+ ZjaYKSsexUW+sjdNhVZhTFPLXRPx+BjzgDppYdKfJPV02x9jeYnARl09tawe+/hN1he2+7cr0Wvzt4+9wJCIP3iq6ayOtHSwQAaGYevnG8FepjvQrcsNG1y+
+ 2T5CJWR6Wq9KOec2BA3S9/ihlThQIJ4+t9QSd6tp0o+peRSL8pL/wxLZFQLFhDesZ4yx4SMJWyAGv9TKER+XkCcgNPkFNQuHNB/SyFTFEFnFVQd3xDdeErGM
+ qKiLS/WtekFn1tnaqEj65q+xPYRoQrBAVGby0/j5xxfYbnI7c7Ju+Atz+40VrM0jiqJH9FQ3bJ+uCXgq0hI4+L3o
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 4:39 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
-ote:
->
-> Alexandre Ghiti <alexghiti@rivosinc.com> writes:
->
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index b56a0a75533f..8140fefe0e57 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -752,12 +752,35 @@ static void __init disable_pgtable_l4(void)
-> >   * then read SATP to see if the configuration was taken into account
-> >   * meaning sv48 is supported.
-> >   */
-> > -static __init void set_satp_mode(void)
-> > +static __init void set_satp_mode(uintptr_t dtb_pa)
-> >  {
-> >       u64 identity_satp, hw_satp;
-> >       uintptr_t set_satp_mode_pmd =3D ((unsigned long)set_satp_mode) & =
-PMD_MASK;
-> >       bool check_l4 =3D false;
-> >
-> > +#ifndef CONFIG_KASAN
-> > +     /*
-> > +      * The below fdt functions are kasan instrumented, since at this =
-point
-> > +      * there is no mapping for the kasan shadow memory, this can't be=
- used
-> > +      * when kasan is enabled.
-> > +      */
-> > +     int chosen_node;
-> > +
-> > +     chosen_node =3D fdt_path_offset((void *)dtb_pa, "/chosen");
-> > +     if (chosen_node >=3D 0) {
-> > +             const char *cmdline =3D fdt_getprop((void *)dtb_pa, chose=
-n_node,
-> > +                                               "bootargs", NULL);
->
-> The command line handling needs to honor CONFIG_CMDLINE_FORCE and
-> CONFIG_CMDLINE_EXTEND (which makes it possible to use no{4,5}lvl *and*
-> KASAN ;-)).
->
+According to i.MXRT1050 Datasheet usdhc supports up to 200Mhz clock so
+let's increase max-frequency property to 200Mhz.
 
-Indeed, I forgot that, thanks for noticing! I'll prepare the "real"
-command line before matching the new parameters.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Acked-by: Jesse Taube <mr.bossman075@gmail.com>
+---
+V1->V2:
+* set max-frequency to 200Mhz instead of removing it as suggested by
+  Bough Chen
+V2->V3:
+* added Jesse Taube's Acked-by:
+V3->V4:
+* added forgotten [PATCH V4] in subject
+---
+ arch/arm/boot/dts/imxrt1050.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks again,
+diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
+index 8768715adda4..fb531542609b 100644
+--- a/arch/arm/boot/dts/imxrt1050.dtsi
++++ b/arch/arm/boot/dts/imxrt1050.dtsi
+@@ -93,7 +93,7 @@ usdhc1: mmc@402c0000 {
+ 			bus-width = <4>;
+ 			fsl,wp-controller;
+ 			no-1-8-v;
+-			max-frequency = <4000000>;
++			max-frequency = <200000000>;
+ 			fsl,tuning-start-tap = <20>;
+ 			fsl,tuning-step = <2>;
+ 			status = "disabled";
+-- 
+2.34.1
 
-Alex
-
->
-> Bj=C3=B6rn
