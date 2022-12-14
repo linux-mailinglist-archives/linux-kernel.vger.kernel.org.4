@@ -2,140 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E870764CCF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BAA64CD08
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbiLNPRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S238796AbiLNPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiLNPRm (ORCPT
+        with ESMTP id S238370AbiLNPZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:17:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909C6F18;
-        Wed, 14 Dec 2022 07:17:41 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEFEhMM029717;
-        Wed, 14 Dec 2022 15:17:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ifm5cje8JO86NL+EoVvyBX85qNpnytEUIdIWSk8yn8c=;
- b=s9qUQ0BZTcmMk7LQsWT0fcp4tQewYwHLEkD90hUBn0kk4PE89MBePlq68nnwMwc2RSx5
- jWzvR8V6FFvsvjfeS2XyTwDuA64UR27HXw7jEso+tJgA87upVMtWp+1FNg6TzzVPwO6W
- cgrrBcH2VC2Jecu7GmsD1htkdsnifl1MiMG4hT359ytrBsSLT7/0WdayT9PJm+BV1KTr
- 2v8m3ZB/QzIksvHjTXtxYrhBCNjEuEU6mOoojfHWG0D6wy2/+gCvlYuIEMQYOWzEst+g
- NqbKfamjkgKEbSra7JERibGz+S2mFohHcrM0Zx5HhQrYAytGD35Y+rnCrUpEmWIujOwy Tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfgy3r2e9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 15:17:39 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEFFTUc032475;
-        Wed, 14 Dec 2022 15:17:38 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfgy3r2du-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 15:17:38 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEECIBo011612;
-        Wed, 14 Dec 2022 15:16:38 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3meyyhpkjs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 15:16:37 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEFGa5X6423056
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 15:16:36 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E6C758043;
-        Wed, 14 Dec 2022 15:16:36 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E86AF58059;
-        Wed, 14 Dec 2022 15:16:34 +0000 (GMT)
-Received: from [9.60.84.117] (unknown [9.60.84.117])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 14 Dec 2022 15:16:34 +0000 (GMT)
-Message-ID: <f528148d-0074-8173-09fc-c1b50bbabe75@linux.ibm.com>
-Date:   Wed, 14 Dec 2022 10:16:34 -0500
+        Wed, 14 Dec 2022 10:25:14 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F09EAE73;
+        Wed, 14 Dec 2022 07:25:13 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id kw15so45303436ejc.10;
+        Wed, 14 Dec 2022 07:25:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pyBUH3WX+Oy1sPUYcOHZQQujYgyDt0tZIAPGgn38vpc=;
+        b=j+ECA3ObDcDwKZ/gOsVb6iqxOmK9c6mpjTRYn8FOVx+iVAlCV+OW4eWgiSwyDFfL/d
+         Kykb62y2LxaSy24jDd96VaD1OfZgYM3RUnvek60Mcwtws83ya0qExR1LXyWdYvh5xeJC
+         o1BFo/vtUXtqvvMkXMnDsUeJSj6AXNgtOMT6QhupxaxvdkMkXaE53F7xZu8ROLEky59A
+         w6Cw+alGPhNWOUdEvMP5chTSzc2oQPV+6Ry0uDuLIg9lzHKhc1R5WBDGTIMu4ymNSw7H
+         4d8PEsVGfitbyKdyLRtA1Q6gn38CR722NG5b/ctbp60rU2B/ZgOSflKcwNpQEmg9jrhw
+         bokw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pyBUH3WX+Oy1sPUYcOHZQQujYgyDt0tZIAPGgn38vpc=;
+        b=1PQuge9f3ZAxe7PSXyB4u6P+sDrYQK/3PBNuau7qlewiWd9W6wa3OrpSxjh/7dCkHz
+         pjkUyOwsQIhyIIGs1A1+EGF9uo8dton4FXHsYbbSMWf+V+QRQAX9TSlXwoVsabwqie7Y
+         e4H37oe40YVcVlMCWt9OzipbmIZT4QpvnPSWFkOlR7iew/xR9rYCvqrxZPlusttS6z9h
+         e7MA1AN486r3rCrsKlJPDsOWUeX9C40eL24jM0RqkX/qt6Za5lQl+OP2w8vgygZ/qxmj
+         6dikiCM2nf32iIk1UFtBnMetAghtYZcaUL5ob+MwC5n30kJwSZy45G/KlyGTNyaQEsKp
+         iA8Q==
+X-Gm-Message-State: ANoB5plb5CRPxuFVo+OY42JgIxYQEpl1OGkPYHKLUn222Hl12x1D1bbU
+        PUtW72a8f7Sj/DG5Lso4C9q9Fkj8/my9hunhM/0=
+X-Google-Smtp-Source: AA0mqf7BvOBLnE/e3JdF0ZoLKJyRIBaYiuR33FQeKjpxC/JyHueVYPzmJpbffFlYUxrjFOYCS2qcwLOqdC74OCB369E=
+X-Received: by 2002:a17:906:4792:b0:7c1:3e9e:adc0 with SMTP id
+ cw18-20020a170906479200b007c13e9eadc0mr1260307ejc.312.1671031511829; Wed, 14
+ Dec 2022 07:25:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 0/7] improve AP queue reset processing
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20221213154437.15480-1-akrowiak@linux.ibm.com>
-Content-Language: en-US
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-In-Reply-To: <20221213154437.15480-1-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: blB5BTZYyz-dDiNmQZdqEwo19HR3VuMd
-X-Proofpoint-GUID: _ukCk9mC_AbRmHaQVbr10x66ZApubymO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_06,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- bulkscore=0 malwarescore=0 adultscore=0 phishscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140120
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAA42iKxeinZ4gKfttg_K8PdRt+p-p=KjqgcbGjtxzOqn_C0F9g@mail.gmail.com>
+ <CAGRyCJGCrR_FVjCmsnbYhs76bDc0rD83n-=2ros2p9W_GeVq-w@mail.gmail.com> <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
+In-Reply-To: <CAA42iKzssPn2DAheYW3dczgj__pAJm1utR7NP1hushLPmrFSTA@mail.gmail.com>
+From:   Daniele Palmas <dnlplm@gmail.com>
+Date:   Wed, 14 Dec 2022 16:18:12 +0100
+Message-ID: <CAGRyCJGQpdLUzsaqdmbw4E9Sp=im-b6TQFEp1RpG1Wj3x_KVug@mail.gmail.com>
+Subject: Re: [PATCH] net: Fix for packets being rejected in the xHCI
+ controller's ring buffer
+To:     "Seija K." <doremylover123@gmail.com>
+Cc:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Seija,
 
-On 12/13/22 10:44 AM, Tony Krowiak wrote:
-> This series introduces several improvements to the function that performs
-> AP queue resets:
-> 
-> * Breaks up reset processing into multiple smaller, more concise functions.
-> 
-> * Use TAPQ to verify completion of a reset in progress rather than mulitple
->    invocations of ZAPQ.
-> 
-> * Check TAPQ response codes when verifying successful completion of ZAPQ.
-> 
-> * Fix erroneous handling of some error response codes.
-> 
-> * Increase the maximum amount of time to wait for successful completion of
->    ZAPQ.
-> 
-> * Always clean up IRQ resources when the ZAPQ response code indicates an
->    error.
-> 
-> * Consider reset complete when ZAPQ response code indicates the adapter to
->    which a queue is connected is deconfigured. All queues associated with an
->    adapter are reset when it is deconfigured.
-> 
-> Tony Krowiak (7):
->    s390/vfio-ap: verify reset complete in separate function
->    s390/vfio_ap: check TAPQ response code when waiting for queue reset
->    s390/vfio_ap: use TAPQ to verify reset in progress completes
->    s390/vfio_ap: verify ZAPQ completion after return of response code
->      zero
->    s390/vfio_ap: fix handling of error response codes
->    s390/vfio_ap: increase max wait time for reset verification
->    s390/vfio_ap: always clean up IRQ resources
-> 
->   drivers/s390/crypto/vfio_ap_ops.c | 106 ++++++++++++++++++++----------
->   1 file changed, 73 insertions(+), 33 deletions(-)
+Il giorno mar 13 dic 2022 alle ore 20:55 Seija K.
+<doremylover123@gmail.com> ha scritto:
+> On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
+> >
+> > Did you test this change with QMAP?
+> >
+> > To support qmap dl aggregated blocks qmi_wwan relies on the
+> > usbnet_change_mtu behavior of changing the rx_urb_size.
+> >
+> > Thanks,
+> > Daniele
+>
+> Yes, I did.
+>
 
+I've applied your change and verified that the rx_urb_size can't be
+changed anymore by modifying the mtu of the wwan netdevice and stays
+fixed to 1504.
 
-This series largely matches what I've already reviewed. I like the way 
-you broke this up, it does a better job telling the story.
+Just a heads-up, that this change is not working fine with qmap setup
+procedure, since the URB size can't be changed anymore to the value of
+the maximum dl aggregated block set through wda_set_data_format.
 
-Here's my R-b for the entire series.
-Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
+I know that linking MTU with the rx_urb_size is odd, but this is how
+it's done currently.
+
+Regards,
+Daniele
+
+> On Tue, Dec 13, 2022 at 1:23 PM Daniele Palmas <dnlplm@gmail.com> wrote:
+> >
+> > Hello Seija,
+> >
+> > Il giorno mar 13 dic 2022 alle ore 18:44 Seija K.
+> > <doremylover123@gmail.com> ha scritto:
+> > >
+> > > When a packet larger than MTU arrives in Linux from the modem, it is
+> > > discarded with -EOVERFLOW error (Babble error).
+> > >
+> > > This is seen on USB3.0 and USB2.0 buses.
+> > >
+> > > This is because the MRU (Max Receive Size) is not a separate entity
+> > > from the MTU (Max Transmit Size), and the received packets can be
+> > > larger than those transmitted.
+> > >
+> > > Following the babble error, there was an endless supply of zero-length
+> > > URBs that were rejected with -EPROTO (increasing the rx input error
+> > > counter each time).
+> > >
+> > > This is only seen on USB3.0. These continue to come ad infinitum until
+> > > the modem is shut down.
+> > >
+> > > There appears to be a bug in the core USB handling code in Linux that
+> > > doesn't deal with network MTUs smaller than 1500 bytes well.
+> > >
+> > > By default, the dev->hard_mtu (the real MTU) is in lockstep with
+> > > dev->rx_urb_size (essentially an MRU), and the latter is causing
+> > > trouble.
+> > >
+> > > This has nothing to do with the modems; the issue can be reproduced by
+> > > getting a USB-Ethernet dongle, setting the MTU to 1430, and pinging
+> > > with size greater than 1406.
+> > >
+> > > Signed-off-by: Seija Kijin <doremylover123@gmail.com>
+> > >
+> > > Co-Authored-By: TarAldarion <gildeap@tcd.ie>
+> > > ---
+> > > drivers/net/usb/qmi_wwan.c | 7 +++++++
+> > > 1 file changed, 7 insertions(+)
+> > >
+> > > diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> > > index 554d4e2a84a4..39db53a74b5a 100644
+> > > --- a/drivers/net/usb/qmi_wwan.c
+> > > +++ b/drivers/net/usb/qmi_wwan.c
+> > > @@ -842,6 +842,13 @@ static int qmi_wwan_bind(struct usbnet *dev,
+> > > struct usb_interface *intf)
+> > > }
+> > > dev->net->netdev_ops = &qmi_wwan_netdev_ops;
+> > > dev->net->sysfs_groups[0] = &qmi_wwan_sysfs_attr_group;
+> > > + /* LTE Networks don't always respect their own MTU on the receiving side;
+> > > + * e.g. AT&T pushes 1430 MTU but still allows 1500 byte packets from
+> > > + * far-end networks. Make the receive buffer large enough to accommodate
+> > > + * them, and add four bytes so MTU does not equal MRU on network
+> > > + * with 1500 MTU. Otherwise, usbnet_change_mtu() will change both.
+> > > + */
+> > > + dev->rx_urb_size = ETH_DATA_LEN + 4;
+> >
+> > Did you test this change with QMAP?
+> >
+> > To support qmap dl aggregated blocks qmi_wwan relies on the
+> > usbnet_change_mtu behavior of changing the rx_urb_size.
+> >
+> > Thanks,
+> > Daniele
+> >
+> > > err:
+> > > return status;
+> > > }
+> > > --
+> > > 2.38.2
