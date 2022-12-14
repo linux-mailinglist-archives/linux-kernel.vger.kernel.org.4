@@ -2,173 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBAB64C25A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D5664C2AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 04:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbiLNCn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 21:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S237272AbiLNDRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 22:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237133AbiLNCnv (ORCPT
+        with ESMTP id S237285AbiLNDRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 21:43:51 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70220559E;
-        Tue, 13 Dec 2022 18:43:48 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NX06k3Cthz4f3tpj;
-        Wed, 14 Dec 2022 10:43:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgAnGqlfOJljIQ9HCA--.54156S4;
-        Wed, 14 Dec 2022 10:43:45 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v2] block, bfq: fix possible uaf for 'bfqq->bic'
-Date:   Wed, 14 Dec 2022 11:04:30 +0800
-Message-Id: <20221214030430.3304151-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 13 Dec 2022 22:17:02 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C027B16
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:17:00 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id g10so1966798plo.11
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 19:17:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=zjoUL1OFj4FUNqJzzW9IevB/AH024BCp8wmz9LscwDA=;
+        b=Bg2FP3HI+WEXQvFSI0TqRDR4m1oL6bTW0FrDv+c06vvkLtYqiPJUmZJOJY2IMmpDYc
+         yXF9WSsfJFZ4TmnRaKa9iPxJs+F9fa8zvzoMt56jjv5GEo8FeuedhMqnveEOPS0H45xF
+         h6gy3Jvx/IX4vtLEw5bgy8x7gV8C6DNdcLW63QrZTuifecsh8DcXZNEXxNpWT3ubHbg3
+         zhbz/ILvgzd4clijyw47zUgkuPYbpjd0sTL275TrBb1IkI5D5Cn+h6MElaLkd1JK4qOi
+         JliqwHIwsfx819pNkqf0AGpV50Ph7FIdWiBi2XPnhyrD0D4BqVz8Qzp7RHtsIhxM+he/
+         AEZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zjoUL1OFj4FUNqJzzW9IevB/AH024BCp8wmz9LscwDA=;
+        b=0MWsc/QcLuyfgo/Exbw7t23CjGw4csjcFRTvyKRi5UndH/0r4c2pO75KTYkaHv7a5R
+         HMgJ51e3HcC9dj/7HHPTzVsOZbdfxANHQqDvi/2+VzM2+zBL9+GWTzHl+4JSxNHLQnP+
+         HGmrqPlQoXpxY+8b8TZlsRORHI3ur2bxxkrpRF4FB9L/pyfDCUYl8x9K/MYXO1Y692Jo
+         5O1CQfuZaiYYo8ZAOP6SOiw9b0iqxduHkHaLYXHTgfn3wT0i5XU4T8+6XfrJeKoxCwv5
+         QPZ0JVu4j7bIJ29ORPt7lw3XfFMwLvGIzCYKDmIzM7tWkHjs1Q4L+J5cNMjSJDu7CjwM
+         2x/g==
+X-Gm-Message-State: ANoB5pk+D8tvfRpEzitKkGYVpR+6PB8SPMF+81SLgefvXXh5YoeKpXJt
+        iOKeKWzCWY/61zCqQYmBnPHYi9cKFm6+VA==
+X-Google-Smtp-Source: AA0mqf69EfFCdvv9HMZYDsuIdsnWrILf95v4hW03+BwNiLvXJbkkqznMV4X41PRmPP8P8TG5vY/Lfg==
+X-Received: by 2002:a05:6a20:13a3:b0:a5:df86:f0e1 with SMTP id w35-20020a056a2013a300b000a5df86f0e1mr34252993pzh.16.1670987819802;
+        Tue, 13 Dec 2022 19:16:59 -0800 (PST)
+Received: from MBP ([39.170.101.209])
+        by smtp.gmail.com with ESMTPSA id n6-20020a63ee46000000b0047681fa88d1sm7472285pgk.53.2022.12.13.19.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 19:16:58 -0800 (PST)
+References: <20221115140233.21981-1-schspa@gmail.com>
+ <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+ <m2bko8c0yh.fsf@gmail.com> <m2pmcoag55.fsf@gmail.com>
+ <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+User-agent: mu4e 1.8.10; emacs 29.0.60
+From:   Schspa Shi <schspa@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
+        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] umh: fix UAF when the process is being killed
+Date:   Wed, 14 Dec 2022 10:28:11 +0800
+In-reply-to: <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+Message-ID: <m2v8me8yjj.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAnGqlfOJljIQ9HCA--.54156S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4rtw4fuF1kGryDGw4fGrg_yoW5trWkpr
-        sxtayfZr48JryYgw47Zr10gF18Xws3Wry7Jr1Sqwn3Xry5Zr1qqFyqyF18ZFW0grZ5u39r
-        Wr1DGrZ7Xr1IvaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
 
-Our test report a uaf for 'bfqq->bic' in 5.10:
+Luis Chamberlain <mcgrof@kernel.org> writes:
 
-==================================================================
-BUG: KASAN: use-after-free in bfq_select_queue+0x378/0xa30
+> On Mon, Dec 12, 2022 at 09:38:31PM +0800, Schspa Shi wrote:
+>> I'd like to upload a V2 patch with the new solution if you prefer the
+>> following way.
+>> 
+>> diff --git a/kernel/umh.c b/kernel/umh.c
+>> index 850631518665..8023f11fcfc0 100644
+>> --- a/kernel/umh.c
+>> +++ b/kernel/umh.c
+>> @@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>                 /* umh_complete() will see NULL and free sub_info */
+>>                 if (xchg(&sub_info->complete, NULL))
+>>                         goto unlock;
+>> +               /*
+>> +                * kthreadd (or new kernel thread) will call complete()
+>> +                * shortly.
+>> +                */
+>> +               wait_for_completion(&done);
+>>         }
+>
+> Yes much better. Did you verify it fixes the splat found by the bots?
+>
 
-CPU: 6 PID: 2318352 Comm: fsstress Kdump: loaded Not tainted 5.10.0-60.18.0.50.h602.kasan.eulerosv2r11.x86_64 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.12.1-0-ga5cab58-20220320_160524-szxrtosci10000 04/01/2014
-Call Trace:
- bfq_select_queue+0x378/0xa30
- bfq_dispatch_request+0xe8/0x130
- blk_mq_do_dispatch_sched+0x62/0xb0
- __blk_mq_sched_dispatch_requests+0x215/0x2a0
- blk_mq_sched_dispatch_requests+0x8f/0xd0
- __blk_mq_run_hw_queue+0x98/0x180
- __blk_mq_delay_run_hw_queue+0x22b/0x240
- blk_mq_run_hw_queue+0xe3/0x190
- blk_mq_sched_insert_requests+0x107/0x200
- blk_mq_flush_plug_list+0x26e/0x3c0
- blk_finish_plug+0x63/0x90
- __iomap_dio_rw+0x7b5/0x910
- iomap_dio_rw+0x36/0x80
- ext4_dio_read_iter+0x146/0x190 [ext4]
- ext4_file_read_iter+0x1e2/0x230 [ext4]
- new_sync_read+0x29f/0x400
- vfs_read+0x24e/0x2d0
- ksys_read+0xd5/0x1b0
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
+Yes, it will fix it.
 
-Commit 3bc5e683c67d ("bfq: Split shared queues on move between cgroups")
-changes that move process to a new cgroup will allocate a new bfqq to
-use, however, the old bfqq and new bfqq can point to the same bic:
+>   Luis
 
-1) Initial state, two process with io in the same cgroup.
 
-Process 1       Process 2
- (BIC1)          (BIC2)
-  |  Λ            |  Λ
-  |  |            |  |
-  V  |            V  |
-  bfqq1           bfqq2
-
-2) bfqq1 is merged to bfqq2.
-
-Process 1       Process 2
- (BIC1)          (BIC2)
-  |               |
-   \-------------\|
-                  V
-  bfqq1           bfqq2(coop)
-
-3) Process 1 exit, then issue new io(denoce IOA) from Process 2.
-
- (BIC2)
-  |  Λ
-  |  |
-  V  |
-  bfqq2(coop)
-
-4) Before IOA is completed, move Process 2 to another cgroup and issue io.
-
-Process 2
- (BIC2)
-   Λ
-   |\--------------\
-   |                V
-  bfqq2           bfqq3
-
-Now that BIC2 points to bfqq3, while bfqq2 and bfqq3 both point to BIC2.
-If all the requests are completed, and Process 2 exit, BIC2 will be
-freed while there is no guarantee that bfqq2 will be freed before BIC2.
-
-Fix the problem by clearing bfqq->bic while bfqq is detached from bic.
-
-Fixes: 3bc5e683c67d ("bfq: Split shared queues on move between cgroups")
-Suggested-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
-Changes in v2:
- - Use a new solution as suggested by Jan.
-
- block/bfq-iosched.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index a72304c728fc..b111a7b8dca6 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -386,6 +386,12 @@ static void bfq_put_stable_ref(struct bfq_queue *bfqq);
- 
- void bic_set_bfqq(struct bfq_io_cq *bic, struct bfq_queue *bfqq, bool is_sync)
- {
-+	struct bfq_queue *old_bfqq = bic->bfqq[is_sync];
-+
-+	/* Clear bic pointer if bfqq is detached from this bic */
-+	if (old_bfqq && old_bfqq->bic == bic)
-+		old_bfqq->bic = NULL;
-+
- 	/*
- 	 * If bfqq != NULL, then a non-stable queue merge between
- 	 * bic->bfqq and bfqq is happening here. This causes troubles
-@@ -5311,7 +5317,6 @@ static void bfq_exit_icq_bfqq(struct bfq_io_cq *bic, bool is_sync)
- 		unsigned long flags;
- 
- 		spin_lock_irqsave(&bfqd->lock, flags);
--		bfqq->bic = NULL;
- 		bfq_exit_bfqq(bfqd, bfqq);
- 		bic_set_bfqq(bic, NULL, is_sync);
- 		spin_unlock_irqrestore(&bfqd->lock, flags);
 -- 
-2.31.1
-
+BRs
+Schspa Shi
