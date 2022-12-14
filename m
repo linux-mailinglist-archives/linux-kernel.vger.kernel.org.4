@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A0564C4AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7482364C4BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 09:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237510AbiLNIHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 03:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S237390AbiLNIMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 03:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237578AbiLNIH2 (ORCPT
+        with ESMTP id S237460AbiLNILh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 03:07:28 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08C01EAE4
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:07:27 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id u12so18400380wrr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:07:27 -0800 (PST)
+        Wed, 14 Dec 2022 03:11:37 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606231EAEE
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:09:10 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b3so9173529lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 00:09:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YmisXUUTcc/2wLYtw2JwGMf2iLn2WSeYXglBIEeZoho=;
-        b=M8/xtqY2O3i3K2Yz6NqK5+aza3ypoIX9p/uaSSc4ZVwUCb2XQrkVHtxv0yjcN/kSiB
-         SGrwjRxkjHrn4YoUiOL3CBahkHHkRXa5uywll9J70oIMl45KBCMDE7FLt4JI243Fg4ja
-         K8iOUVGS5VrRSnXxN4xPHIIdPEAnOQGQPQb+hxvJeH3FWJUbZy19/E4ZwH3b1a/b2bpA
-         nR/JTjWlp8NuTdqnNYny0Lk10aey91oh75kRrEB0cRD/TfNF+q3o5dhKT5Sm5FlU0XwX
-         E6ioTc5CGAovSvL4kZfhRj9MsJ54hdrA/CnUmttLwo8v53mBwMIh1Utm8tOfM7KbqCcJ
-         NIUQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OpxduO24RNKiHe7qgJOcOcCob/2sJ/YLTZskR12FTNA=;
+        b=BeVHY8eEoIKiIZpXg/sfmOQ4jlKDpPHhWyAhDMWNpXLZ4442OJXmgb6yfpAPrH/drL
+         8dEtmBRLQ8VXtcNHcMarxqm7r+Cx01k+E+VRi3+9QgAVNO7DZIdKe90IQ6fmnLdxAWZS
+         E9GIcv+tPgYLuoELD6C2awAYDxglz1nTg7ycrLqxfEQVV3Ufk1OJbSERfQn8o4kLuKLL
+         GXVxRkrwx0akTCUZ4tIMx5yuRubk4T2aek4YXHywxdJpFmkqUvLmwbua5R75ii20vvfy
+         gajh/9wzRxyKoKYiO8rjb7oT0RPxC97aZvjH8YPJ8xGTKLuLvBv2ESqOOJpUm2ZHDNFU
+         YoFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YmisXUUTcc/2wLYtw2JwGMf2iLn2WSeYXglBIEeZoho=;
-        b=3kMwk5HJC6Y7wCJQxO/Qhlhf3EjhYHN1sbwv5fc8LeNzGIfzP0fIexQ06twCeOjSZs
-         wr8PbZOccgbf4BYZZNkNky07xYGzVnU3Z5KUw5aeX0aCQ7ZH8LmAmHULlc+YYaMi79j7
-         BANL3u563E2cs5ML7JX+LdY8iN0+UwiNrifkZ+4hAWdNVdWfyUFmh4IW5PkflhQgq6sY
-         Surwk/iIy8kLln8BLQ5v9tmeABJpQtMpNUW+sMLJKxzXbZ5r15MhDnuUPcbpdXFEZ2YK
-         rJkpcy+W6+LAjsk9CeVm9zYXV2S6k3iyzodD2jqaGOJfYJLrH2iy92pfhOa0tfq+JkAN
-         NSSg==
-X-Gm-Message-State: ANoB5pnScnvNQ9JzLtkWVNOHwaCPX3N/RPWHGIPeteQOGoX7yj6TwHr2
-        gJQgTzfeVE+pSv9r6TqiyrS+pQ==
-X-Google-Smtp-Source: AA0mqf4Z8Akd3gcq3Hav9sh318ZeCAA5u0fwpbqKxLHue73ihu02VidHzoLUGXJ+rEEJnl57nImA3w==
-X-Received: by 2002:a05:6000:1290:b0:242:733b:af28 with SMTP id f16-20020a056000129000b00242733baf28mr17016908wrx.5.1671005246307;
-        Wed, 14 Dec 2022 00:07:26 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id k3-20020a5d5183000000b002422bc69111sm2500781wrv.9.2022.12.14.00.07.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 00:07:26 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH RESEND v6 5/5] hwmon: (pmbus/core): Notify regulator events
-Date:   Wed, 14 Dec 2022 09:07:15 +0100
-Message-Id: <20221214080715.2700442-5-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
-References: <20221214080715.2700442-1-Naresh.Solanki@9elements.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OpxduO24RNKiHe7qgJOcOcCob/2sJ/YLTZskR12FTNA=;
+        b=LqGrzRBKcgNJVNOqaQ9bJPVhseCkNeeZd/vVe81MGyXT5akwrovFHyopu1lrl/QYY0
+         ciRYZ92ahWfwAjv2dufU8jB9S3tu/FcPnx9FHcE52cjrcOu0eNBxZ5FN0GP8XrdB3g2K
+         hSwMUTgtPgaGx6DgibX0noDD559bWx63ABr1bVW2J08AEsxCCLHoi885TGAbYGDSB9O9
+         ImVvQPR6p3RFVQhLNOOFmAXbJNgFGgZNHWPrq8ZQtbd+98hH/tQauyfCpWPLofmQjY4y
+         ENyLX9Eio0jh04flYRHNRY42CZkdeJRJ5rSuohImYyjTpumnEdyGpnUKIqRXXPBj4GJR
+         lQxg==
+X-Gm-Message-State: ANoB5pnhCsUkFCqt2qS2C3q4oMhSoXNQc+2clZVauyucfQ8ud7WCvv4L
+        N+VSPLVbfgDNjicxYHXKMKOmOg==
+X-Google-Smtp-Source: AA0mqf5ORcU2VhODrzF1Mr8QjolUDvL4SNlSAy9EI75Xqlqtp44H45VTH4pKT45haDrIPNCNoEki6A==
+X-Received: by 2002:a05:6512:1329:b0:4b5:853c:ed30 with SMTP id x41-20020a056512132900b004b5853ced30mr9575872lfu.23.1671005348688;
+        Wed, 14 Dec 2022 00:09:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id n13-20020a056512310d00b004b59c9b7fb4sm707250lfb.126.2022.12.14.00.09.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 00:09:08 -0800 (PST)
+Message-ID: <c4ef3f7f-5b1d-5a11-f869-d1c61dd2c26e@linaro.org>
+Date:   Wed, 14 Dec 2022 09:09:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: Introduce a carveout for modem
+ metadata
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        manivannan.sadhasivam@linaro.org
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, amit.pundir@linaro.org,
+        regressions@leemhuis.info, sumit.semwal@linaro.org,
+        will@kernel.org, catalin.marinas@arm.com, robin.murphy@arm.com
+References: <20221213140724.8612-1-quic_sibis@quicinc.com>
+ <20221213140724.8612-2-quic_sibis@quicinc.com>
+ <7ea03855-4806-f4ca-e0c3-4044e1095d6b@linaro.org>
+ <96c1e60d-de12-5e60-4c06-70ea4b9c49f8@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <96c1e60d-de12-5e60-4c06-70ea4b9c49f8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,42 +84,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Notify regulator events in PMBus irq handler.
+On 14/12/2022 07:49, Sibi Sankar wrote:
+> Hey Krzysztof,
+> 
+> Thanks for taking time to review the series.
+> 
+> On 12/14/22 01:10, Krzysztof Kozlowski wrote:
+>> On 13/12/2022 15:07, Sibi Sankar wrote:
+>>> Introduce a new carveout for modem metadata. This will serve as a
+>>> replacement for the memory region used by MSA to authenticate modem
+>>> ELF headers.
+>>>
+>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>>   
+>>>   	aliases {
+>>> @@ -865,7 +870,7 @@ hp_i2c: &i2c9 {
+>>>   	clock-names = "iface", "bus", "nav", "snoc_axi", "mnoc_axi", "xo";
+>>>   
+>>>   	iommus = <&apps_smmu 0x461 0x0>, <&apps_smmu 0x444 0x3>;
+>>> -	memory-region = <&mba_mem &mpss_mem>;
+>>> +	memory-region = <&mba_mem>, <&mpss_mem>, <&mdata_mem>;
+>>>   
+>>>   	/* This gets overridden for SKUs with LTE support. */
+>>>   	firmware-name = "qcom/sc7180-trogdor/modem-nolte/mba.mbn",
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>>> index bf522a64b172..bda0495aa0b5 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+>>> @@ -17,6 +17,11 @@
+>>>   			reg = <0x0 0x9c700000 0x0 0x200000>;
+>>>   			no-map;
+>>>   		};
+>>> +
+>>> +		mdata_mem: memory@9d100000 {
+>>> +			reg = <0x0 0x9d100000 0x0 0x4000>;
+>>> +			no-map;
+>>> +		};
+>>>   	};
+>>>   };
+>>>   
+>>> @@ -32,7 +37,7 @@
+>>>   
+>>>   	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
+>>>   	interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
+>>> -	memory-region = <&mba_mem>, <&mpss_mem>;
+>>> +	memory-region = <&mba_mem>, <&mpss_mem>, <&mdata_mem>;
+>>
+>> Only two memory regions are allowed by bindings... unless you fix it in
+>> further patchset. If so, please re-order to have the bindings first. It
+>> helps reviewers not to have such questions. :)
+> 
+> I felt that Rob's dt_bindings check bot might report an error
+> if the dt changes weren't placed before the bindings changes.
+> But since you asked for the logical order I guess the bindings
+> check are done only after the entire series is applied. I'll
+> change the order in the next re-spin.
 
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+AFAIR, Rob's bot ignores DTS patches anyway.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 22176f266891..c8fae2a9502d 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -3154,7 +3154,7 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- {
- 	struct pmbus_data *data = pdata;
- 	struct i2c_client *client = to_i2c_client(data->dev);
--	int i, status, ret, event;
-+	int i, j, status, ret, event;
- 
- 	for (i = 0; i < data->info->pages; i++) {
- 
-@@ -3163,6 +3163,15 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
- 		if (ret)
- 			return ret;
- 
-+		if (event) {
-+			for (j = 0; j < data->info->num_regulators; j++) {
-+				if (i == rdev_get_id(data->rdevs[i])) {
-+					regulator_notifier_call_chain(data->rdevs[i], event, NULL);
-+					ret = IRQ_HANDLED;
-+				}
-+			}
-+		}
-+
- 		mutex_lock(&data->update_lock);
- 		status = pmbus_read_status_word(client, i);
- 		if (status < 0) {
--- 
-2.37.3
+Best regards,
+Krzysztof
 
