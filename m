@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBDF64C446
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C3464C44A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiLNHJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 02:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S237124AbiLNHOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 02:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237517AbiLNHJP (ORCPT
+        with ESMTP id S229454AbiLNHOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 02:09:15 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E42654E;
-        Tue, 13 Dec 2022 23:09:14 -0800 (PST)
-Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NX5zw36R2zRq3H;
-        Wed, 14 Dec 2022 15:08:12 +0800 (CST)
-Received: from build.huawei.com (10.175.101.6) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 14 Dec 2022 15:09:12 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH 2/2] scsi:iscsi_tcp:Do not skip lun inquiry returns PQ=1
-Date:   Wed, 14 Dec 2022 15:08:46 +0800
-Message-ID: <20221214070846.1808300-3-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221214070846.1808300-1-haowenchao@huawei.com>
-References: <20221214070846.1808300-1-haowenchao@huawei.com>
+        Wed, 14 Dec 2022 02:14:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663641D670;
+        Tue, 13 Dec 2022 23:14:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CF8AB816A6;
+        Wed, 14 Dec 2022 07:14:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD59C433EF;
+        Wed, 14 Dec 2022 07:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671002076;
+        bh=qbAihjpG0hqxnwg5/R/2utT9d69udoAMVXoe/KSOKQg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oGZXL4b6UeK9ojKydvCv1Kv6v6M13Gy9/0AcckVUhV8OA37W4kRswwB17O8chCO1L
+         6mdCzJTXSgiQxMlYzz5osJd2MtqPtxV4+8srqqz6gt+GUPO/CgDSVGMjRKRghjBcWd
+         IInQNdzBY0zKwx7pkkbxRvzWMMydDy1hCX8UVTcVrAeo0dwwOEveIphAIkvnjpusOy
+         XQqqmgl++J0GocBB/J222yJ7oX2fWUlYWr/dZPa5bK3DgeIFkF+gXsEevr6ANJElEW
+         d5v1edCXpfXH07JvlUgeDwM3FQOlLctgYPab7QajcajVhs8m6RHRSuhzmIZk7VZb99
+         fU7MgZKpBdCuw==
+Date:   Wed, 14 Dec 2022 09:14:31 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     weiyongjun1@huawei.com, davem@davemloft.net, edumazet@google.com,
+        f.fainelli@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH net v2] r6040: Fix kmemleak in probe and remove
+Message-ID: <Y5l312DJ4sSwBWUX@unreal>
+References: <7f35ca55-cbed-98ac-4988-1b783db21dc5@huawei.com>
+ <20221213125614.927754-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213125614.927754-1-lizetao1@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When luns inquiry return PQ=1, do not skip this lun and try to
-map these luns to an sg device.
+On Tue, Dec 13, 2022 at 08:56:14PM +0800, Li Zetao wrote:
+> There is a memory leaks reported by kmemleak:
+> 
+>   unreferenced object 0xffff888116111000 (size 2048):
+>     comm "modprobe", pid 817, jiffies 4294759745 (age 76.502s)
+>     hex dump (first 32 bytes):
+>       00 c4 0a 04 81 88 ff ff 08 10 11 16 81 88 ff ff  ................
+>       08 10 11 16 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+>       [<ffffffff827e20ee>] phy_device_create+0x4e/0x90
+>       [<ffffffff827e6072>] get_phy_device+0xd2/0x220
+>       [<ffffffff827e7844>] mdiobus_scan+0xa4/0x2e0
+>       [<ffffffff827e8be2>] __mdiobus_register+0x482/0x8b0
+>       [<ffffffffa01f5d24>] r6040_init_one+0x714/0xd2c [r6040]
+>       ...
+> 
+> The problem occurs in probe process as follows:
+>   r6040_init_one:
+>     mdiobus_register
+>       mdiobus_scan    <- alloc and register phy_device,
+>                          the reference count of phy_device is 3
+>     r6040_mii_probe
+>       phy_connect     <- connect to the first phy_device,
+>                          so the reference count of the first
+>                          phy_device is 4, others are 3
+>     register_netdev   <- fault inject succeeded, goto error handling path
+> 
+>     // error handling path
+>     err_out_mdio_unregister:
+>       mdiobus_unregister(lp->mii_bus);
+>     err_out_mdio:
+>       mdiobus_free(lp->mii_bus);    <- the reference count of the first
+>                                        phy_device is 1, it is not released
+>                                        and other phy_devices are released
+>   // similarly, the remove process also has the same problem
+> 
+> The root cause is traced to the phy_device is not disconnected when
+> removes one r6040 device in r6040_remove_one() or on error handling path
+> after r6040_mii probed successfully. In r6040_mii_probe(), a net ethernet
+> device is connected to the first PHY device of mii_bus, in order to
+> notify the connected driver when the link status changes, which is the
+> default behavior of the PHY infrastructure to handle everything.
+> Therefore the phy_device should be disconnected when removes one r6040
+> device or on error handling path.
+> 
+> Fix it by adding phy_disconnect() when removes one r6040 device or on
+> error handling path after r6040_mii probed successfully.
+> 
+> Fixes: 3831861b4ad8 ("r6040: implement phylib")
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> ---
+> v1 -> v2: change the subject prefix "PATCH" to "PATCH net" and change
+> the goto label name "err_out_r6040_mii_remove" to "err_out_phy_disconnect"
+> 
+>  drivers/net/ethernet/rdc/r6040.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- drivers/scsi/iscsi_tcp.c | 1 +
- 1 file changed, 1 insertion(+)
+Please don't send new patches as reply-to.
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index 5fb1f364e815..316e2e17c72d 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -941,6 +941,7 @@ iscsi_sw_tcp_session_create(struct iscsi_endpoint *ep, uint16_t cmds_max,
- 	shost->max_id = 0;
- 	shost->max_channel = 0;
- 	shost->max_cmd_len = SCSI_MAX_VARLEN_CDB_SIZE;
-+	shost->no_skip_pq1 = 1;
- 
- 	rc = iscsi_host_get_max_scsi_cmds(shost, cmds_max);
- 	if (rc < 0)
--- 
-2.32.0
-
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
