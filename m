@@ -2,88 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 092D864CBE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE47564CBF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbiLNOPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S238302AbiLNORG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238370AbiLNOPq (ORCPT
+        with ESMTP id S238503AbiLNORA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:15:46 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78E110C0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:15:43 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so10686399wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8I9fpa0h/Xtdec1pPADK+rW1eXfIYJbi/7+lsXWKshc=;
-        b=mqwC4AsXWnBdyvmy1Zh7/B6UDRXSFzEkk8TRt28/H59WOEqu5tVF+rNE4UbP00C32b
-         0TiJ9W/cldHdN8BcsOMbUle3ZsPX4hiJTUwBu6LcaxdpzdRJafAzi83J/34PSFLKa78g
-         r6uW3t5iwOQ6V9sslABeZiazk6CjsiCmTGO81o6/PabJBNRY/dHEKofkpATipsAu1oLa
-         qexxRKchqfHX3JXqwo0v1jchfJJH1iGsVG61/avUx3YhaJ/U39td3iR5UuQ/V03mNJ65
-         AA6XJcxr5lsV8topUViJ0q/4aiSTdf/LAsdaEPh6WoLLh5cDecA2XUW+e3AwTsYMkUaw
-         7bWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8I9fpa0h/Xtdec1pPADK+rW1eXfIYJbi/7+lsXWKshc=;
-        b=rFlJEh16Gu0/YJDvrhDvf4aW/L2UIeXFHirayaLvoQUb8XTCkk0HZO+4cd764DSDCn
-         sFC/4hT4JGvmjQVvxSwRbLivdTjjCwHl4gam8lV8x+TEaHRYi1CpfIQoffVeRlG1hYKe
-         Se83aAgLA7V4hvc8PRJQ3f8DrsM0lmqTancsORrKhR3Og9cws34/yvJakhAgYV5R8t1f
-         C5Z8zN0AV7uw0dRDUtTKxUnak89wwRURBeVpSo5PiGcXaqaj9f05HUtlMaLPNZLVhzsc
-         mh8f2rwtIaVOF2UUzmmWJnT0lNE0saak1GnMV0kmRkTOG31enbEKGexcQLGD6pbqbONJ
-         K/tw==
-X-Gm-Message-State: ANoB5pl27ePhEQDG2IuhJtI54ok0IJBdc55o8C6LCRp313xlmSV4vu7Q
-        lFNgI4ZFAObnlWDPSd6tzP8KLwjTuS8vOinZWY8=
-X-Google-Smtp-Source: AA0mqf7iPboYYtpCZd2hu9ktE3TAxbzQTs/ESF1byMN4kyHK1MDPTxdhjYjOV9VkE+tJTme/oZsl2g==
-X-Received: by 2002:a05:600c:1f14:b0:3c9:2598:d1c5 with SMTP id bd20-20020a05600c1f1400b003c92598d1c5mr19723107wmb.7.1671027342505;
-        Wed, 14 Dec 2022 06:15:42 -0800 (PST)
-Received: from [192.168.1.25] ([84.76.199.78])
-        by smtp.gmail.com with ESMTPSA id d1-20020adffd81000000b0023662d97130sm2985695wrr.20.2022.12.14.06.15.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 06:15:42 -0800 (PST)
-Message-ID: <453ff357-a91b-192b-00a1-502cc273870d@linaro.org>
-Date:   Wed, 14 Dec 2022 15:15:40 +0100
+        Wed, 14 Dec 2022 09:17:00 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A54222BC5;
+        Wed, 14 Dec 2022 06:16:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 589FC200AC;
+        Wed, 14 Dec 2022 14:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671027416;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J8zM93onZ+wyMUx2u678a0EiovzGYDh0EbHR+OS2gn0=;
+        b=FfZ/yjlgGnXm/bhZDI11fbcxfTDq/MOJC/fhiM0WESLXwiqqzw2eZjoK6MlGHkisNV5IV2
+        mBt59slsftdZzE8lkN1vtnJsDAbEOLC55s8bTqYNEyPcrTTQ5iJFKW0EUY2Tlh7i8280Tn
+        sH2K9BNO7VtSxyfyHykj7RVJyC6/ec4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671027416;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J8zM93onZ+wyMUx2u678a0EiovzGYDh0EbHR+OS2gn0=;
+        b=JHU4ur/czOhI4MsVTsQxzwtlFJrWvATEEDYHWRhdGrVDIEgBROaBP7F58ADZlIztiob2mr
+        jDGiN/my7PyzxDAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14FF5138F6;
+        Wed, 14 Dec 2022 14:16:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Vt5QBNjamWPJIQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 14 Dec 2022 14:16:56 +0000
+Date:   Wed, 14 Dec 2022 15:16:13 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        syzbot <syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com>,
+        clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KMSAN: uninit-value in longest_match
+Message-ID: <20221214141613.GB10499@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <0000000000004f995905ef61a764@google.com>
+ <Y5geWpk1WfgwjzuA@sol.localdomain>
+ <CAG_fn=XDN23qMwwMCPi=8drv9kE6Z-goFQ8nNN8Qux3bdrnvLw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] hwspinlock: Use device_match_of_node()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, andersson@kernel.org
-Cc:     ohad@wizery.com, baolin.wang@linux.alibaba.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <202211251544369078587@zte.com.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <202211251544369078587@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=XDN23qMwwMCPi=8drv9kE6Z-goFQ8nNN8Qux3bdrnvLw@mail.gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/22 08:44, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Wed, Dec 14, 2022 at 02:56:56PM +0100, Alexander Potapenko wrote:
+> On Tue, Dec 13, 2022 at 7:40 AM Eric Biggers <ebiggers@kernel.org> wrote:
+> > On Fri, Dec 09, 2022 at 01:19:41AM -0800, syzbot wrote:
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    30d2727189c5 kmsan: fix memcpy tests
+> > > git tree:       https://github.com/google/kmsan.git master
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=117d38f5880000
+> > > kernel config:
+> > https://syzkaller.appspot.com/x/.config?x=a2144983ada8b4f3
+> > > dashboard link:
+> > https://syzkaller.appspot.com/bug?extid=14d9e7602ebdf7ec0a60
+> > > compiler:       clang version 15.0.0 (
+> > https://github.com/llvm/llvm-project.git
+> > 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian)
+> > 2.35.2
+> > > userspace arch: i386
+> > >
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >
+> > > Downloadable assets:
+> > > disk image:
+> > https://storage.googleapis.com/syzbot-assets/1e8c2d419c2e/disk-30d27271.raw.xz
+> > > vmlinux:
+> > https://storage.googleapis.com/syzbot-assets/9e8a728a72a9/vmlinux-30d27271.xz
+> > > kernel image:
+> > https://storage.googleapis.com/syzbot-assets/89f71c80c707/bzImage-30d27271.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the
+> > commit:
+> > > Reported-by: syzbot+14d9e7602ebdf7ec0a60@syzkaller.appspotmail.com
+> > >
+> > > =====================================================
+> > > BUG: KMSAN: uninit-value in longest_match+0xc88/0x1220
+> > lib/zlib_deflate/deflate.c:668
+> > >  longest_match+0xc88/0x1220 lib/zlib_deflate/deflate.c:668
+> > >  deflate_fast+0x1838/0x2280 lib/zlib_deflate/deflate.c:954
+> > >  zlib_deflate+0x1783/0x22b0 lib/zlib_deflate/deflate.c:410
+> > >  zlib_compress_pages+0xd34/0x1f90 fs/btrfs/zlib.c:178
+> > >  compression_compress_pages fs/btrfs/compression.c:77 [inline]
+> > >  btrfs_compress_pages+0x325/0x440 fs/btrfs/compression.c:1208
+> > >  compress_file_range+0x11ac/0x3510 fs/btrfs/inode.c:730
+> > >  async_cow_start+0x33/0xd0 fs/btrfs/inode.c:1458
+> > >  btrfs_work_helper+0x55a/0x990 fs/btrfs/async-thread.c:280
+> > >  process_one_work+0xb27/0x13e0 kernel/workqueue.c:2289
+> > >  worker_thread+0x1076/0x1d60 kernel/workqueue.c:2436
+> > >  kthread+0x31b/0x430 kernel/kthread.c:376
+> > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> >
+> > zlib has long been known to use initialized values in longest_match().
+> > This
+> > issue is mentioned in the zlib FAQ.  I personally consider this to be a
+> > bug, as
+> > the code could be written in a way such that it doesn't use uninitialized
+> > memory.  However, zlib considers it to be "safe" and "working as intended".
+> >
+> > Note that the copy of zlib in Linux is not really being maintained, and it
+> > is
+> > based on a 25-year old version of zlib.  However, upstream zlib does not
+> > change
+> > much anyway (it's very hard to get changes accepted into it), and as far
+> > as I
+> > can tell even the latest version of upstream zlib has this same issue.
+> >
+> > So I suppose the way to resolve this syzbot report is to just add
+> > __no_kmsan_checks to longest_match().  The real issue, though, is that zlib
+> > hasn't kept up with the times (nor has Linux kept up with zlib).
+> >
+> >
+> Can't we just pass __GFP_ZERO when allocating the workspace here:
 > 
-> Replace the open-code with device_match_of_node().
+> diff --git a/fs/btrfs/zlib.c b/fs/btrfs/zlib.c
+> index b4f44662cda7c..23dc5628f8209 100644
+> --- a/fs/btrfs/zlib.c
+> +++ b/fs/btrfs/zlib.c
+> @@ -63,7 +63,8 @@ struct list_head *zlib_alloc_workspace(unsigned int level)
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->   drivers/hwspinlock/hwspinlock_core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>         workspacesize = max(zlib_deflate_workspacesize(MAX_WBITS,
+> MAX_MEM_LEVEL),
+>                         zlib_inflate_workspacesize());
+> -       workspace->strm.workspace = kvmalloc(workspacesize, GFP_KERNEL);
+> +       workspace->strm.workspace = kvmalloc(workspacesize,
+> +                                            GFP_KERNEL | __GFP_ZERO);
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Currently none of the compression workspaces does allocation with
+zeroing. I'm not sure if we should actually zero the work memory right
+before use, in the *get_workspace helpers so that each compression
+starts from the same state. But this will be a performance hit and not
+actually necessary if it's not required by the compression methods.
 
-
+Which would leave only the allocation as the place to zero the memory.
+If it's really just zlib that needs that then Ok, I'd suggest to use the
+kvzalloc instead of __GFP_ZERO.
