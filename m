@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07EA64CFE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116DB64CFE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 20:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbiLNTJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 14:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S229795AbiLNTJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 14:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238688AbiLNTJw (ORCPT
+        with ESMTP id S237321AbiLNTJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 14:09:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A045E80
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:09:51 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEInYtq010704;
-        Wed, 14 Dec 2022 19:09:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : mime-version : content-type; s=pp1;
- bh=gAwL5yOsP8eZyWzRSC0r/H4vhJ07hATE2/rquZmH+J0=;
- b=oAYma+elAQ/ivhGPD1C7G+dajSsDpOqmQz3xpLcSucBkLxjqSHDeEcSuTg/EhmDWmbC3
- yzb8PqL4SwGZPgj0Gfwby7OaDDbFdf3LnrpAjKK9bE/zFNR12E4yPSwLI2OTHR1QC6LM
- gmy5WoY2AnQLdXPfryj7SbYhXPTjYTQmqWI316U1rsgDJhMe3SNBLBnSj2qb3uT2cSYL
- K4NoW5zUwZI//FnnzIPq5DCZPyZ7PCLV70+sN5vXSpELHQJRlmLrqaxfCFWUXaTZ1Bn4
- kqusKJuwZal9465HOMPPgC+J/QWotrw7vBEKf6AKKLb/hkJmThq4E4HiQ/cyWO2KuR/m Ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfm3xgt34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 19:09:41 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BEIqKig019087;
-        Wed, 14 Dec 2022 19:09:40 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mfm3xgsws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 19:09:40 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEBg8Fd030324;
-        Wed, 14 Dec 2022 19:04:35 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3mf0519bh2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 19:04:35 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BEJ4X2r41025796
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 14 Dec 2022 19:04:33 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D71120043;
-        Wed, 14 Dec 2022 19:04:33 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA85220049;
-        Wed, 14 Dec 2022 19:04:30 +0000 (GMT)
-Received: from li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com (unknown [9.43.67.101])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 14 Dec 2022 19:04:30 +0000 (GMT)
-Date:   Thu, 15 Dec 2022 00:34:27 +0530
-From:   Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Subject: [PATCH v2] staging: vme_user: Replace the "<<" with BIT macro
-Message-ID: <Y5oeO4QQIhqrYb+R@li-27defe4c-32e1-11b2-a85c-e202e9981075.ibm.com>
+        Wed, 14 Dec 2022 14:09:10 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AFEE80
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:09:09 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so189693pjo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 11:09:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FIlNxfH2N14uQxL9gQjMu+4jFBzMKkxQj54k3fDEAoM=;
+        b=ki7KXMuMgFSwbFlvvSqSuOQhI4nnWJpLKfKstanOkB/onj5nUHoVz525QhfZ8nokKB
+         VXeBAUiQXL7JxbcSrDvQSoa4lSwXeMjbkvKivBYSZ0TEpYbXer0eJBuO5rSLLr9It5WK
+         fvs+dp4wbuKBP0yy+S1uOP84czNeK8nhe/1Uifui5WzzQ+tKUtXjnaV2x0inbQFe8dNk
+         qOUQLOFp3Ks0/MP/nhesJP/lViUPuMv+FypbFBL4U08YgIe7ET0AWrPZN0TUa7vtcmVX
+         4UPcD3345eJMKynVDVcjhWoPJZZ1z1i5AX6S+YpLVZ/1/YeT1xAjXv5yV02NAAay6VtC
+         Kq4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FIlNxfH2N14uQxL9gQjMu+4jFBzMKkxQj54k3fDEAoM=;
+        b=LXbfZW1Pg0lCpetZQY53Xwbatrz1UBDLK0nZ+2+b7rhib/MD8MWbnYSiHvP1FjG6uz
+         IE+sNFI3bZoCCPBgXHPMcjOfc8I+adZZmvKEBoqw0p8UyToW/gvqabkd5ogE1RxgIAvP
+         bcmC6fQq46gr6jdRmveGMmA+YUN6spWjnKhvH1c8E/C5yVCdVKE9OFobzZxvd3Ps34rC
+         80VAuPr6xyHxkjl3gxzH+xFIFzZ7nIYpT5pPFAfAVJTCieuiXQB7N+THRGVlncs3wcyL
+         5Nt/oNLOn6apBp0CunWHaUp/Zw1JLfTdAUsB/25QCeFZCGyz7hXHoVT9y0EBLwBD6p45
+         zCwg==
+X-Gm-Message-State: ANoB5pla/Ks5HmPP2CBtqq5ck8AV0knr4zghUYrc5YjE63RoLyoYRmw9
+        KDZoigzf4KsL8UFI5klw45T6AA==
+X-Google-Smtp-Source: AA0mqf7VDwtO7bD7iDYUg1CUV8sCconizPsDQAtMy4jK4dIm4X3K9Vibe1wrX4pKJoLBdYIM/pjdjg==
+X-Received: by 2002:a05:6a21:2d8f:b0:a7:882e:3a18 with SMTP id ty15-20020a056a212d8f00b000a7882e3a18mr671791pzb.1.1671044948611;
+        Wed, 14 Dec 2022 11:09:08 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e28-20020aa7981c000000b00575b6f8b84esm234502pfl.26.2022.12.14.11.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 11:09:06 -0800 (PST)
+Date:   Wed, 14 Dec 2022 19:09:02 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH 1/2] kvm: x86/mmu: Reduce the update to the spte in
+ FNAME(sync_page)
+Message-ID: <Y5ofTvOwg46xHeDk@google.com>
+References: <20221212153205.3360-1-jiangshanlai@gmail.com>
+ <20221212153205.3360-2-jiangshanlai@gmail.com>
+ <Y5jAbS4kwRAdrWwM@google.com>
+ <CAJhGHyAksXZHO_BC391ax4rHgQLE=xWeZu6dxN60gSgGij+ZLg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lSzDMoRQUuEQDpQpy3Xb2veXFiBo-Th-
-X-Proofpoint-GUID: 7ecFUHCXvvw8oy7JncZP1lZhyMEY3WHM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-14_09,2022-12-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- spamscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- impostorscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212140155
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJhGHyAksXZHO_BC391ax4rHgQLE=xWeZu6dxN60gSgGij+ZLg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the "<<" operator with BIT macro, in accordance to the
-checkpatch.pl script and Linux kernel coding-style guidelines.
+On Wed, Dec 14, 2022, Lai Jiangshan wrote:
+> Hello Sean,
+> 
+> On Wed, Dec 14, 2022 at 2:12 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Dec 12, 2022, Lai Jiangshan wrote:
+> > > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> > >
+> > > Sometimes when the guest updates its pagetable, it adds only new gptes
+> > > to it without changing any existed one, so there is no point to update
+> > > the sptes for these existed gptes.
+> > >
+> > > Also when the sptes for these unchanged gptes are updated, the AD
+> > > bits are also removed since make_spte() is called with prefetch=true
+> > > which might result unneeded TLB flushing.
+> >
+> > If either of the proposed changes is kept, please move this to a separate patch.
+> > Skipping updates for PTEs with the same protections is separate logical change
+> > from skipping updates when making the SPTE writable.
+> >
+> > Actually, can't we just pass @prefetch=false to make_spte()?  FNAME(prefetch_invalid_gpte)
+> > has already verified the Accessed bit is set in the GPTE, so at least for guest
+> > correctness there's no need to access-track the SPTE.  Host page aging is already
+> > fuzzy so I don't think there are problems there.
+> 
+> FNAME(prefetch_invalid_gpte) has already verified the Accessed bit is set
+> in the GPTE and FNAME(protect_clean_gpte) has already verified the Dirty
+> bit is set in the GPTE.  These are only for guest AD bits.
+> 
+> And I don't think it is a good idea to pass @prefetch=false to make_spte(),
+> since the host might have cleared AD bit in the spte for aging or dirty-log,
+> The AD bits in the spte are better to be kept as before.
 
-Signed-off-by: Abhirup Deb <abhirupdeb@linux.vnet.ibm.com>
----
-Changes in v2:
-	- Replace the previously used "<<" operator with BIT macro
+Drat, I was thinking KVM never flushes when aging SPTEs, but forgot about
+clear_flush_young().
 
- drivers/staging/vme_user/vme.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+Rather than skipping if the Accessed bit is the only thing that's changing, what
+about simply preserving the Accessed bit?  And s/prefetch/accessed in make_spte()
+so that future changes to make_spte() don't make incorrect assumptions about the
+meaning of "prefetch".
 
-diff --git a/drivers/staging/vme_user/vme.h b/drivers/staging/vme_user/vme.h
-index 98da8d039d60..faa9816046a9 100644
---- a/drivers/staging/vme_user/vme.h
-+++ b/drivers/staging/vme_user/vme.h
-@@ -2,6 +2,8 @@
- #ifndef _VME_H_
- #define _VME_H_
- 
-+#include <linux/bitops.h>
-+
- /* Resource Type */
- enum vme_resource_type {
- 	VME_MASTER,
-@@ -54,20 +56,20 @@ enum vme_resource_type {
- #define VME_R_ROBIN_MODE	0x1
- #define VME_PRIORITY_MODE	0x2
- 
--#define VME_DMA_PATTERN			(1<<0)
--#define VME_DMA_PCI			(1<<1)
--#define VME_DMA_VME			(1<<2)
-+#define VME_DMA_PATTERN		BIT(0)
-+#define VME_DMA_PCI			BIT(1)
-+#define VME_DMA_VME			BIT(2)
- 
--#define VME_DMA_PATTERN_BYTE		(1<<0)
--#define VME_DMA_PATTERN_WORD		(1<<1)
--#define VME_DMA_PATTERN_INCREMENT	(1<<2)
-+#define VME_DMA_PATTERN_BYTE		BIT(0)
-+#define VME_DMA_PATTERN_WORD		BIT(1)
-+#define VME_DMA_PATTERN_INCREMENT	BIT(2)
- 
--#define VME_DMA_VME_TO_MEM		(1<<0)
--#define VME_DMA_MEM_TO_VME		(1<<1)
--#define VME_DMA_VME_TO_VME		(1<<2)
--#define VME_DMA_MEM_TO_MEM		(1<<3)
--#define VME_DMA_PATTERN_TO_VME		(1<<4)
--#define VME_DMA_PATTERN_TO_MEM		(1<<5)
-+#define VME_DMA_VME_TO_MEM		BIT(0)
-+#define VME_DMA_MEM_TO_VME		BIT(1)
-+#define VME_DMA_VME_TO_VME		BIT(2)
-+#define VME_DMA_MEM_TO_MEM		BIT(3)
-+#define VME_DMA_PATTERN_TO_VME		BIT(4)
-+#define VME_DMA_PATTERN_TO_MEM		BIT(5)
- 
- struct vme_dma_attr {
- 	u32 type;
--- 
-2.31.1
+Another alternative would be to conditionally preserve the Accessed bit, i.e. clear
+it if a flush is needed anyways, but that seems unnecessarily complex.
 
+> Though passing @prefetch=false would not cause any correctness problem
+> in the view of maintaining guest AD bits.
+> 
+> >
+> > > Do nothing if the permissions are unchanged or only write-access is
+> > > being added.
+> >
+> > I'm pretty sure skipping the "make writable" case is architecturally wrong.  On a
+> > #PF, any TLB entries for the faulting virtual address are required to be removed.
+> > That means KVM _must_ refresh the SPTE if a vCPU takes a !WRITABLE fault on an
+> > unsync page.  E.g. see kvm_inject_emulated_page_fault().
+> 
+> I might misunderstand what you meant or I failed to connect it with
+> the SDM properly.
+> 
+> I think there is no #PF here.
+> 
+> And even if the guest is requesting writable, the hypervisor is allowed to
+> set it non-writable and prepared to handle it in the ensuing write-fault.
+
+Yeah, you're right.  The host will see the "spurious" page fault but it will
+never get injected into the guest.
+
+> Skipping to make it writable is a kind of lazy operation and considered
+> to be "the hypervisor doesn't grant the writable permission for a period
+> before next write-fault".
+
+But that raises the question of why?  No TLB flush is needed precisely because any
+!WRITABLE fault will be treated as a spurious fault.  The cost of writing the
+SPTE is minimal.  So why skip?  Skipping just to reclaim a low SPTE bit doesn't
+seem like a good tradeoff, especially without a concrete use case for the SPTE bit.
+
+E.g. on pre-Nehalem Intel CPUs, i.e. CPUs that don't support EPT and thus have
+to use shadow paging, the CPU automatically retries accesses after the TLB flush
+on permission faults.  The lazy approach might introduce a noticeable performance
+regression on such CPUs due to causing more #PF VM-Exits than the current approach.
