@@ -2,215 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8658864CE21
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE80B64CE22
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239067AbiLNQeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S239108AbiLNQfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiLNQdk (ORCPT
+        with ESMTP id S239096AbiLNQev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:33:40 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DFF2A436
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:32:22 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id i15so23292947edf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MVrlltRx17nfXTGhP7yPJwRU3y4M8/9HTbuxEEs49iU=;
-        b=aXv6T3ty9OZD4OYRcWL5+4mKME8v/e1WDdI9AA+KQJzPhv03AdE8drDDUqdiblA3yP
-         s3/zhNBDtfTEYSkUNDB0AoiAz16cuPGibNxtKMzRSH9ilTXaJbDoVQ2FCuMzaGR2CKlx
-         ERlbbfHgFDDGKgxdZXQ7Jy8oTG0/idZ4EWhqs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MVrlltRx17nfXTGhP7yPJwRU3y4M8/9HTbuxEEs49iU=;
-        b=2Pps8jqq63aWJWU5exAAYio4JldIxeRctdJcYKmljXYkuE+7xYrRt9hdceCQx1ViRQ
-         TbM3YBSuSdmGfjqucpTAIOcE1Z3PYbjOAL9RN3tntop7EhlwmNeM7wpUiGpfzxjB4jxg
-         WQ0CvtNBDeYkOaeX8wgPIItUWIW//Agc8y3q3bKyQArVC9mt59qTJ9zml9QL6EYGTRUk
-         TSAZQ7Ji8sTOmxTR4Veh19TuK0cObb6YXAqJfN2/qYBNnOe/hSMYrdKxnvr3uHMSQ2/r
-         XJalbakLD7hiYPC1ts1JSAlKxEK/SkCjLlpl91DWZdSKaYWUqo26CHMfxGlHrxNk0NZv
-         a3Tg==
-X-Gm-Message-State: ANoB5pnUJttQNWnZZaYuAemFD2TU8UYta8gA+rRFPQU7l2bf9qam318e
-        OX8/G7HW9GaqPcBfAc9Zr9wLAg==
-X-Google-Smtp-Source: AA0mqf41+3D5Js+uQP1l7WfEZEbOf6NiTJkGvwte5sA62Fzt/SILgjAyev/3jho0mOvjeKhWFRtVfA==
-X-Received: by 2002:aa7:cd46:0:b0:46d:e3f8:4ed4 with SMTP id v6-20020aa7cd46000000b0046de3f84ed4mr17653967edw.21.1671035541045;
-        Wed, 14 Dec 2022 08:32:21 -0800 (PST)
-Received: from alco.roam.corp.google.com ([100.104.168.209])
-        by smtp.gmail.com with ESMTPSA id ee48-20020a056402293000b004615f7495e0sm6395908edb.8.2022.12.14.08.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:32:20 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 14 Dec 2022 17:31:55 +0100
-Subject: [PATCH v4] media: uvcvideo: Fix race condition with usb_kill_urb
+        Wed, 14 Dec 2022 11:34:51 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E32A738
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671035596; x=1702571596;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mPLuys5xlDHefxjxgWL2MY3nTSuTSIf/FXCjTq4lP3M=;
+  b=PDbWeHqnK7b3SXD6Fvkw6nSdWXjeKyuYxcsWOf/jI96bcEcrzRRPAtYJ
+   sRGPeSx/aw0+90hIA0/Uh+HR6N+dnZYrrL4Bb2ocXqAZVHj6TGPP3pd3a
+   B0c/VWKf1AtExPBYNaZmbqcFhz4hhlF5027woYa/nN2jq3ReI2VM6p0RR
+   y893lnJIM/L+opgHt6gumREzmReOrtXhy2MdBM1r1uq8ZD3gXkJgC4e/H
+   zCja7GOvXR9/6hXhEqWuM7loPss9EjR9yxQG0DzaBLwuexPaoqJFhZXvm
+   cDdg0ew9MZ1jvfxoZBQRa3eWTF7lnIDMw92VTZzuCof2+hlGgNpyeiEYR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="345527012"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="345527012"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 08:33:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="894365687"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="894365687"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Dec 2022 08:33:13 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p5Ugz-0005dG-0M;
+        Wed, 14 Dec 2022 16:33:13 +0000
+Date:   Thu, 15 Dec 2022 00:32:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: kernel/module/main.c:537:20: warning: Local variable 'arr' shadows
+ outer variable [shadowVariable]
+Message-ID: <202212150045.ydmHir9W-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-uvc-race-v4-0-38d7075b03f5@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Staudt <mstaudt@google.com>
-Cc:     linux-media@vger.kernel.org, stable@vger.kernel.org,
-        Yunke Cao <yunkec@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4414; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ogVdjybS9LEoywx0YwN/okaYfuH/y03AYQsWkydp3kQ=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjmfqNKqeDuIPruv3HRUGHzLrKhw0xXerfWXVR/oWJ
- Mh7m06eJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5n6jQAKCRDRN9E+zzrEiGEBD/
- 9paXuRWZxtIqzclORW4HCZGYi73FtH4rtSGo1FNlEq1R7vGpC1gQ796/GNRy0vTNoPO+QxaG6poI5J
- 8vAFLwLc3YCxAUXzcN/QuRqSznplWWU+TiGxWm/I2x+dlNbE0tk30rBktBkJ0rYvQev/gODgWCgghN
- JKnkI1XV3lxO9nCa/7WllWLHsNpjcGE0reWbaPRdpmwgQxUZyQsn0v1UjsGkI2EPfhhCBA9pLym2ie
- qJguxwajBM0LmK/ds6p5rVXdEmdz1BoOTa91s5QN89Qfu2n9gPljroekcxObhSEAR7A+TH4JCenRYJ
- zfstu4W4xhtU5LdCrdBumpkkOmxjw4mDZR4yYtH/asavDzAMEM98ceXIkSRT4ipCkbcQCeDfcD3339
- e7BLYFB+fh7dO0R2dEZdw/i0vmr0gxk79TPbMbp/21RZutJPl/Ht2JMQfGOLfv/tojT7MT35xsEjqi
- ZTlGsBuRhEjLFLnjSEmAKs+AITV2Js6CV0xeCPwkwVkyyS/D4qhsv3NNxGuKjqvutOAcTKVaKNx7OD
- M75UhkjEUu9w2EF9WyCuIrjRO3YLkRQUrDrN9vqCGLuElX71HVPqqCTn9zxpYlYwQ2RnzYpt+fQe7k
- 4LxOvbbN2nLIE8NqmuMp9hiq5+moqyLr+SNq2O3Nlg0YoGQiXc424GQnJdlA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_kill_urb warranties that all the handlers are finished when it
-returns, but does not protect against threads that might be handling
-asynchronously the urb.
+Hi Aaron,
 
-For UVC, the function uvc_ctrl_status_event_async() takes care of
-control changes asynchronously.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
- If the code is executed in the following order:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e2ca6ba6ba0152361aa4fcbf6067db71b2c7a770
+commit: cfc1d277891eb499b3b5354df33b30f598683e90 module: Move all into module/
+date:   8 months ago
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout cfc1d277891eb499b3b5354df33b30f598683e90
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-CPU 0					CPU 1
-===== 					=====
-uvc_status_complete()
-					uvc_status_stop()
-uvc_ctrl_status_event_work()
-					uvc_status_start() -> FAIL
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Then uvc_status_start will keep failing and this error will be shown:
+cppcheck warnings: (new ones prefixed by >>)
+>> kernel/module/main.c:537:20: warning: Local variable 'arr' shadows outer variable [shadowVariable]
+     struct symsearch arr[] = {
+                      ^
+   kernel/module/main.c:519:32: note: Shadowed declaration
+    static const struct symsearch arr[] = {
+                                  ^
+   kernel/module/main.c:537:20: note: Shadow variable
+     struct symsearch arr[] = {
+                      ^
 
-<4>[    5.540139] URB 0000000000000000 submitted while active
-drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
 
-Let's improve the current situation, by not re-submiting the urb if
-we are stopping the status event. Also process the queued work
-(if any) during stop.
+   kernel/module/main.c:2459:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+      mod->core_layout.size = debug_align(mod->core_layout.size);
+                            ^
+   kernel/module/main.c:2463:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+      mod->core_layout.size = debug_align(mod->core_layout.size);
+                            ^
+   kernel/module/main.c:2467:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+      mod->core_layout.size = debug_align(mod->core_layout.size);
+                            ^
+   kernel/module/main.c:2471:26: warning: Redundant assignment of 'mod->core_layout.size' to itself. [selfAssignment]
+      mod->core_layout.size = debug_align(mod->core_layout.size);
+                            ^
+   kernel/module/main.c:2493:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+      mod->init_layout.size = debug_align(mod->init_layout.size);
+                            ^
+   kernel/module/main.c:2497:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+      mod->init_layout.size = debug_align(mod->init_layout.size);
+                            ^
+   kernel/module/main.c:2508:26: warning: Redundant assignment of 'mod->init_layout.size' to itself. [selfAssignment]
+      mod->init_layout.size = debug_align(mod->init_layout.size);
+                            ^
+   kernel/module/main.c:2829:70: warning: Parameter 'debug' can be declared as pointer to const [constParameter]
+   static void dynamic_debug_remove(struct module *mod, struct _ddebug *debug)
+                                                                        ^
+   lib/dynamic_debug.c:1104:14: warning: Comparing pointers that point to different objects [comparePointers]
+    for (; iter < __stop___dyndbg; iter++) {
+                ^
+   lib/dynamic_debug.c:42:23: note: Variable declared here.
+   extern struct _ddebug __start___dyndbg[];
+                         ^
+   lib/dynamic_debug.c:1101:9: note: Array decayed to pointer here.
+    iter = __start___dyndbg;
+           ^
+   lib/dynamic_debug.c:43:23: note: Variable declared here.
+   extern struct _ddebug __stop___dyndbg[];
+                         ^
+   lib/dynamic_debug.c:1104:16: note: Array decayed to pointer here.
+    for (; iter < __stop___dyndbg; iter++) {
+                  ^
+   lib/dynamic_debug.c:1104:14: note: Comparing pointers that point to different objects
+    for (; iter < __stop___dyndbg; iter++) {
+                ^
+>> lib/dynamic_debug.c:843:60: warning: Parameter 'pos' can be declared as pointer to const [constParameter]
+   static void *ddebug_proc_start(struct seq_file *m, loff_t *pos)
+                                                              ^
+>> lib/dynamic_debug.c:866:57: warning: Parameter 'p' can be declared as pointer to const [constParameter]
+   static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+                                                           ^
+   lib/dynamic_debug.c:170:23: warning: Uninitialized variable: dt->num_ddebugs [uninitvar]
+     for (i = 0; i < dt->num_ddebugs; i++) {
+                         ^
+   lib/dynamic_debug.c:166:21: note: Assuming condition is false
+     if (query->module &&
+                       ^
+   lib/dynamic_debug.c:170:23: note: Uninitialized variable: dt->num_ddebugs
+     for (i = 0; i < dt->num_ddebugs; i++) {
+                         ^
+>> lib/dynamic_debug.c:1035:11: warning: Uninitialized variable: dt->mod_name [uninitvar]
+     if (dt->mod_name == mod_name) {
+             ^
+>> lib/dynamic_debug.c:102:12: warning: Using argument fb that points at uninitialized variable flags [ctuuninitvar]
+    char *p = fb->buf;
+              ^
+   lib/dynamic_debug.c:900:27: note: Calling function ddebug_describe_flags, 2nd argument is uninitialized
+        ddebug_describe_flags(dp->flags, &flags));
+                             ^
+   lib/dynamic_debug.c:102:12: note: Using argument fb
+    char *p = fb->buf;
+              ^
 
-CPU 0					CPU 1
-===== 					=====
-uvc_status_complete()
-					uvc_status_stop()
-					uvc_status_start()
-uvc_ctrl_status_event_work() -> FAIL
+vim +/arr +537 kernel/module/main.c
 
-Hopefully, with the usb layer protection this should be enough to cover
-all the cases.
+de4d8d534654831 kernel/module.c Rusty Russell     2011-04-19  512  
+24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  513  /*
+24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  514   * Find an exported symbol and return it, along with, (optional) crc and
+24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  515   * (optional) module which owns it.  Needs preempt disabled or module_mutex.
+24b9f0d22081455 kernel/module.c Sergey Shtylyov   2020-11-07  516   */
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  517  static bool find_symbol(struct find_symbol_arg *fsa)
+ad9546c9917d44e kernel/module.c Rusty Russell     2008-05-01  518  {
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  519  	static const struct symsearch arr[] = {
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  520  		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
+367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  521  		  NOT_GPL_ONLY },
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  522  		{ __start___ksymtab_gpl, __stop___ksymtab_gpl,
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  523  		  __start___kcrctab_gpl,
+367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  524  		  GPL_ONLY },
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  525  	};
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  526  	struct module *mod;
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  527  	unsigned int i;
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  528  
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  529  	module_assert_mutex_or_preempt();
+f71d20e961474dd kernel/module.c Arjan van de Ven  2006-06-28  530  
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  531  	for (i = 0; i < ARRAY_SIZE(arr); i++)
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  532  		if (find_exported_symbol_in_section(&arr[i], NULL, fsa))
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  533  			return true;
+^1da177e4c3f415 kernel/module.c Linus Torvalds    2005-04-16  534  
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  535  	list_for_each_entry_rcu(mod, &modules, list,
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  536  				lockdep_is_held(&module_mutex)) {
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02 @537  		struct symsearch arr[] = {
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  538  			{ mod->syms, mod->syms + mod->num_syms, mod->crcs,
+367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  539  			  NOT_GPL_ONLY },
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  540  			{ mod->gpl_syms, mod->gpl_syms + mod->num_gpl_syms,
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  541  			  mod->gpl_crcs,
+367948220fcefca kernel/module.c Christoph Hellwig 2021-02-02  542  			  GPL_ONLY },
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  543  		};
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  544  
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  545  		if (mod->state == MODULE_STATE_UNFORMED)
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  546  			continue;
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  547  
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  548  		for (i = 0; i < ARRAY_SIZE(arr); i++)
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  549  			if (find_exported_symbol_in_section(&arr[i], mod, fsa))
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  550  				return true;
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  551  	}
+71e4b309dc4238c kernel/module.c Christoph Hellwig 2021-02-02  552  
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  553  	pr_debug("Failed to find symbol %s\n", fsa->name);
+0b96615cdc091bc kernel/module.c Christoph Hellwig 2021-01-20  554  	return false;
+^1da177e4c3f415 kernel/module.c Linus Torvalds    2005-04-16  555  }
+f71d20e961474dd kernel/module.c Arjan van de Ven  2006-06-28  556  
 
-Cc: stable@vger.kernel.org
-Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
-Reviewed-by: Yunke Cao <yunkec@chromium.org>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-uvc: Fix race condition on uvc
+:::::: The code at line 537 was first introduced by commit
+:::::: 71e4b309dc4238cba84d144b19004543c76c37e9 module: merge each_symbol_section into find_symbol
 
-Make sure that all the async work is finished when we stop the status urb.
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jessica Yu <jeyu@kernel.org>
 
-To: Yunke Cao <yunkec@chromium.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Max Staudt <mstaudt@google.com>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v4:
-- Replace bool with atomic_t to avoid compiler reordering
-- First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
-- Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
-
-Changes in v3:
-- Remove the patch for dev->status, makes more sense in another series, and makes
-  the zero day less nervous.
-- Update reviewed-by (thanks Yunke!).
-- Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
-
-Changes in v2:
-- Add a patch for not kalloc dev->status
-- Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
-- Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
----
- drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
- drivers/media/usb/uvc/uvc_status.c | 6 ++++++
- drivers/media/usb/uvc/uvcvideo.h   | 1 +
- 3 files changed, 10 insertions(+)
-
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index c95a2229f4fa..1be6897a7d6d 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
- 
- 	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
- 
-+	if (atomic_read(&dev->flush_status))
-+		return;
-+
- 	/* Resubmit the URB. */
- 	w->urb->interval = dev->int_ep->desc.bInterval;
- 	ret = usb_submit_urb(w->urb, GFP_KERNEL);
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 7518ffce22ed..4a95850cdc1b 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
- 	if (dev->int_urb == NULL)
- 		return 0;
- 
-+	atomic_set(&dev->flush_status, 0);
- 	return usb_submit_urb(dev->int_urb, flags);
- }
- 
- void uvc_status_stop(struct uvc_device *dev)
- {
-+	struct uvc_ctrl_work *w = &dev->async_ctrl;
-+
-+	atomic_set(&dev->flush_status, 1);
-+	if (cancel_work_sync(&w->work))
-+		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
- 	usb_kill_urb(dev->int_urb);
- }
-diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-index df93db259312..1274691f157f 100644
---- a/drivers/media/usb/uvc/uvcvideo.h
-+++ b/drivers/media/usb/uvc/uvcvideo.h
-@@ -560,6 +560,7 @@ struct uvc_device {
- 	struct usb_host_endpoint *int_ep;
- 	struct urb *int_urb;
- 	u8 *status;
-+	atomic_t flush_status;
- 	struct input_dev *input;
- 	char input_phys[64];
- 
-
----
-base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
-change-id: 20221212-uvc-race-09276ea68bf8
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp
