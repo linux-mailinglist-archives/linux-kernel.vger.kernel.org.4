@@ -2,75 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3676064D378
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEF464D37B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Dec 2022 00:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiLNXeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 18:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S229842AbiLNXeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 18:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiLNXdd (ORCPT
+        with ESMTP id S229867AbiLNXdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 18:33:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931085446D
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:32:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44AD9B81A7C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E79BAC433D2;
-        Wed, 14 Dec 2022 23:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671060727;
-        bh=C1oR475LzvcrnuKDhjJpDf7Nmz68L+U/EbN5VutAOZQ=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mGeuVTY48BJN/LPQFF/sajLxFX0sBmBybXTLBqIlNKNXZD0M5praH5dZhSL+u+5sA
-         hgO5M0KSzFBtvW4cpiE3zEaPbpzEXbKa7Lymvy8K0AsWhT7nwGmXuimw7+Hfo5xCuM
-         C8ZKc51lW/FR+CfZIFRNqQAolpI2j1/tYeoAfcp3bHNPb7iVFy8MKUcxByaCn/XHKv
-         gk+gcfBv6e/Oqi+ZnhvrFM6SSRhGYBZWiNIEUrv9dCkQvLWL7P8Bs9E9SSwcYMcz8g
-         N/YLfKG6zpICRfyCPWH8/ZrrBhfUDvZG9HtH8hlQmMN2obb75zZH+jxQP8THXlM9Sx
-         pRkFVpx+8MwFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB89DC41612;
-        Wed, 14 Dec 2022 23:32:07 +0000 (UTC)
-Subject: Re: [GIT PULL] f2fs update for 6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y5pQnBPCtfPkiCkF@google.com>
-References: <Y5pQnBPCtfPkiCkF@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y5pQnBPCtfPkiCkF@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.2-rc1
-X-PR-Tracked-Commit-Id: 26a8057a1ada97b528b93fdf3ac4fd03170f1900
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 041fae9c105ae342a4245cf1e0dc56a23fbb9d3c
-Message-Id: <167106072782.28623.17181629431391785161.pr-tracker-bot@kernel.org>
-Date:   Wed, 14 Dec 2022 23:32:07 +0000
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 18:33:40 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B01146
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:32:54 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id v3so3056958pgh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 15:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EX38wRipK6YZXjwZPd7Su4K9Er1H54jvjyAx9rqRw1Q=;
+        b=PDEg3nH3xgHnheIK+JiFoLehsOV0gTUq21j4kLrRR1ZLvl25FbD7m8LX1fSIYwz/87
+         PIxzI5e9Pfn8V6aq1oOKcTbffZGDbFjXTXJhyLPaPkgFnINJjvhacuxaIOC1x6UwmVsZ
+         d3iVOkBRfgId+oB/p//Pexfh3cuN+6pDvx6QMWBzGeykcVt02UbhvWYbj5G/9VF1Mrgi
+         SOuvClJPMP6WbasvMUuLP1kVi84M3frkmNzV0VYdxvfWNm8RJXyMUXR2L9ZznH7S//1F
+         vMvSYMesxZ8hHbbrwxzlnOR/mS/6Ywx+ti6WoVXe+D/TlHqjypG2vGA+5YOFEjXALgM4
+         JWEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EX38wRipK6YZXjwZPd7Su4K9Er1H54jvjyAx9rqRw1Q=;
+        b=ACZCFS+0CKXOBBv6B1Ozd2h0rcnMB6j/5tLxZw3Hcerso3dLINor49mM3fKgWqVu1b
+         T+p8xBjb4VE6BX/FkASXbLP3LuC20CdEFkEZYgLmLAM+3yd5pe2IfiCCwYfWcTYuwvyI
+         +88d1SDWYxWSjFBpChmM72M7y9wRZytpx351dixP+ezMwVslnTIWL6tFSKxAQq0x8Mbl
+         EKIBcLyOLaxTILjQPVsvKzgOKEhCvNwseMQR5tFoAxLqIvzUVPMur4sxImzlPQZCzHTv
+         WH5sn+nJT1FS6gndwNzIPRMwaT5XHDHnr4z1vmQBHtH5ZjUceoSWvBK2lOI1fzwY7lsS
+         ICXw==
+X-Gm-Message-State: ANoB5pmvMxNtEOgaAWazY93N/t7wiJB1qJ+FD4WDl22DV7EGYUQHkUf0
+        /TOcZDsDCR1Dh9Dm7OacQDLDTZqB3KX9pzxzp7dCQw==
+X-Google-Smtp-Source: AA0mqf6FrLS1D7V7SRNCy3k8CyVO9nDpptYhTX527VVCoLeeGz/DIxUaHIqaRhNRIJVDOOmwzpQTEeBAzUWYmJerZnw=
+X-Received: by 2002:a63:f04d:0:b0:470:5d17:a62e with SMTP id
+ s13-20020a63f04d000000b004705d17a62emr68719053pgj.620.1671060773915; Wed, 14
+ Dec 2022 15:32:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20221209160453.3246150-1-jeffxu@google.com> <202212141053.7F5D1F6@keescook>
+In-Reply-To: <202212141053.7F5D1F6@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 14 Dec 2022 15:32:16 -0800
+Message-ID: <CALmYWFss4hGOgJaeah8p7q86xmE7AOwOazxggGCuY=A+ZUVWhQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 14 Dec 2022 14:39:24 -0800:
+On Wed, Dec 14, 2022 at 10:54 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Fri, Dec 09, 2022 at 04:04:47PM +0000, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@google.com>
+> >
+> > Since Linux introduced the memfd feature, memfd have always had their
+> > execute bit set, and the memfd_create() syscall doesn't allow setting
+> > it differently.
+> >
+> > However, in a secure by default system, such as ChromeOS, (where all
+> > executables should come from the rootfs, which is protected by Verified
+> > boot), this executable nature of memfd opens a door for NoExec bypass
+> > and enables =E2=80=9Cconfused deputy attack=E2=80=9D.  E.g, in VRP bug =
+[1]: cros_vm
+> > process created a memfd to share the content with an external process,
+> > however the memfd is overwritten and used for executing arbitrary code
+> > and root escalation. [2] lists more VRP in this kind.
+> >
+> > On the other hand, executable memfd has its legit use, runc uses memfd=
+=E2=80=99s
+> > seal and executable feature to copy the contents of the binary then
+> > execute them, for such system, we need a solution to differentiate runc=
+'s
+> > use of  executable memfds and an attacker's [3].
+> >
+> > To address those above, this set of patches add following:
+> > 1> Let memfd_create() set X bit at creation time.
+> > 2> Let memfd to be sealed for modifying X bit.
+> > 3> A new pid namespace sysctl: vm.memfd_noexec to control the behavior =
+of
+> >    X bit.For example, if a container has vm.memfd_noexec=3D2, then
+> >    memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> > 4> A new security hook in memfd_create(). This make it possible to a ne=
+w
+> > LSM, which rejects or allows executable memfd based on its security pol=
+icy.
+>
+> I think patch 1-5 look good to land. The LSM hook seems separable, and
+> could continue on its own. Thoughts?
+>
+Agreed.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git tags/f2fs-for-6.2-rc1
+> (Which tree should memfd change go through?)
+>
+I'm not sure, is there a recommendation ?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/041fae9c105ae342a4245cf1e0dc56a23fbb9d3c
+Thanks.
+Jeff
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> -Kees
+>
+> --
+> Kees Cook
