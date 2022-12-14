@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF2E64C655
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F47264C657
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbiLNJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S238097AbiLNJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiLNJuu (ORCPT
+        with ESMTP id S237999AbiLNJux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:50:50 -0500
+        Wed, 14 Dec 2022 04:50:53 -0500
 Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A412188C;
-        Wed, 14 Dec 2022 01:50:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CA9DEB4;
+        Wed, 14 Dec 2022 01:50:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671011439; x=1702547439;
+  t=1671011442; x=1702547442;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=V0ClKsMY3FdP1g701gqMkgtISnKb8gAvvri+sfKXjbg=;
-  b=Gcte6Pj7/9I7Twy6Wtd05WaejbPG3bjOVSR5ZzijuCcYmfnIChM2IjjQ
-   4miOwbqljihM8+rS1pjfsW+9XkXV6n1V9RTNlh5WEy+rNJmfOpIogWVd+
-   8BK5sCxo3PSJvIBnecLOGEhrD5m0m/l4ninbtbDu8Laff8omZXRt94eAa
-   kjymPAutjnaPAIssMMjh9ltHpf1624arCcLZXrJW5rUGZ11/oZJPkMztu
-   eIUeaG8AhgA+P6ZdZv8HNut0GI6YEow60toBVEdDWZMeccPc04qWV+5oY
-   S1cqOXnVhswO3tbny93qD4ahCgN6iFMAUBomTvCPxEK8oY6VXvgP98UDy
-   Q==;
+  bh=69zno3M60qAV367e6Uw903iTsxOyrn8t8oVcNIbb1Mc=;
+  b=AnFzmL8RPY+52E46cpliy4k9zX52mgvr8EWZT6bgtfZ7/j3yHKssvmoS
+   5cFqMwdf16k8z3nWDNOT67IPs89YsEmoJcHUWGT7BPPMQeKOvVEWI/voB
+   uF/mrFz9sjD1ieab07KDh3ygPyuhk1ppHETIwMQ0vLz4t5SxBGsqMS+bU
+   5PjeOlSfnMN+VG4it7b34025J4dkgWh8ODN766tCR9w9z98AI62NMZTUA
+   F/Hte0NWiOFYNKgq+kUS1awGGIo3VH/tSSgtygt+Kt0K0EpaZkGWzL8oT
+   It+WFZvbeNufAae5GF7xzDZ5HWL5mSShZoxIHiq+2RyScrTmYPmjkXpuP
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,244,1665417600"; 
-   d="scan'208";a="218870764"
+   d="scan'208";a="218870767"
 Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:39 +0800
-IronPort-SDR: tqNKfsd9S2jXepeipJyVIRcuSqHJQ9jb/QoV6eEEJLCUZclyDexGLQPVVGQXF/Wok5hXQXHS0b
- 5q3lRf8nsvTZs6pzNjQtdDlu/i6Udmhd03K/nTNSqhkcVU3ZDtn8X95Dhzjxzqxa44Wd+0and1
- wSQ0rCeHdG6PwOIO12eYRBtieEAGNgrljlVS1NHuHs5ZSoFS6WPPGQLcgB2ZzymzhOf74xwk3r
- 5U8yKsRT1h+Vl8mjxXSprszg4Cp3xba5ccsciUriUxKqmWIPc961kwOzOFJSWiga+dsy4vazTu
- mNo=
+  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:42 +0800
+IronPort-SDR: hgUrkFkkkP2XXm213beGnsCwtSMjo6N4P8PNWK9LTIJ+Jtj1REvpvDM8JuOXQy97rger7pgQOT
+ lVJlde8jHHMNWTy5nbAo4wexFPaD5ya30qDibXkPWltyhDmQPHd3jlllERlnGy772iUAA7g51D
+ T6q5clHY3VOBrDF4slXuDnP9IP0GnEldnpOZC068FLb6TDrj6kpYlgdfDDtJbH5EpaZV099pK1
+ y2H42nMK+KWBi+PU81k60036ClUwS+ne+T9iBJah/a+87qcaM3JQ1H9/1LReuheUgOK9/5u/tQ
+ VAM=
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:09:02 -0800
-IronPort-SDR: tmo2Tf1EeZsSIi9zbqeeDcrt5Mhqjdv3Q3e5KCAdft+PjjJadkzDJoOpUR6319n4VWWqbGmsEW
- O3mmTdXzP5NI4afSeZjTfP+/tDaE9TlZKEsWMkWFnMVn8+feodH3Rj33+NJK+b73pGwng3Wm7q
- 4S7f6wYW7ZrRVOwaWuMjJ/AnEjF2VDJoy8tNZtoFpDf30P32HxA8zptwnxPTIhSPn4hDzPLBDa
- x2ST+ZXweBMN21LMP6aBH7jdZfxMMsb88EK6EFQ3Qb/gWJqGrZqbyTMoK02v6ovW8ok02E6M0u
- SUY=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:09:05 -0800
+IronPort-SDR: NwO40jDqDkRlof8sYwhctsynsU2NrjjaLOkxMfISI/LVXPwwMx1KdIVpMBtH8o3tHfDIkhNGJB
+ MWcaPbVEYtO8oESXXu3RXKgNkKE98kSUwGBG77WaxL9S7Tc7NRJ7f9GSdZnrRqiW0wYk1OIvBs
+ tUJKzp1/FTdTg98csbRzjV9H679iY+4DsMAae7C4PL4rBc6TcVc+NSEwD0um2/6lTvqd7nE63+
+ Acwbmj7lc2J+Nt02O64eaE8sBAmGoj+jTWOoF5/dOijstTPqt4V4DL3WfN6P5QwKryA0etVnuW
+ 13o=
 WDCIronportException: Internal
 Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
-  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:38 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:41 -0800
 From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
 To:     martin.petersen@oracle.com
 Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH v6 3/4] ufs: core: Remove len parameter from ufshcd_set_active_icc_lvl
-Date:   Wed, 14 Dec 2022 11:50:26 +0200
-Message-Id: <1671011427-26184-4-git-send-email-Arthur.Simchaev@wdc.com>
+Subject: [PATCH v6 4/4] ufs: core: Remove ufshcd_map_desc_id_to_length function
+Date:   Wed, 14 Dec 2022 11:50:27 +0200
+Message-Id: <1671011427-26184-5-git-send-email-Arthur.Simchaev@wdc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
 References: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
@@ -67,43 +67,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-len argument is not used anymore in ufshcd_set_active_icc_lvl function.
+There shouldn't be any restriction of the descriptor size
+(not the descriptor id for that matter) up to QUERY_DESC_MAX_SIZE.
+According to the spec, the caller can use any descriptor size,
+and it is up to the device to return the actual size.
+Therefore there shouldn't be any sizes hardcoded in the kernel,
+nor any need to cache it, hence ufshcd_map_desc_id_to_length function is
+redundant. Always read the descriptors with QUERY_DESC_MAX_SIZE size.
 
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Reviewed-by: Bean Huo <beanhuo@micron.com>
+Suggested-by: Bean Huo <beanhuo@micron.com>
 Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
 ---
- drivers/ufs/core/ufshcd.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/ufs/core/ufs_bsg.c |  1 -
+ drivers/ufs/core/ufshcd.c  | 23 +++++++++++------------
+ 2 files changed, 11 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
+index 7eec38c..dc441ac 100644
+--- a/drivers/ufs/core/ufs_bsg.c
++++ b/drivers/ufs/core/ufs_bsg.c
+@@ -16,7 +16,6 @@ static int ufs_bsg_get_query_desc_size(struct ufs_hba *hba, int *desc_len,
+ 				       struct utp_upiu_query *qr)
+ {
+ 	int desc_size = be16_to_cpu(qr->length);
+-	int desc_id = qr->idn;
+ 
+ 	if (desc_size <= 0)
+ 		return -EINVAL;
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 97eb5a6..99806c7 100644
+index 99806c7..0a33e53 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -7402,12 +7402,11 @@ static u32 ufshcd_get_max_icc_level(int sup_curr_uA, u32 start_scan,
-  * In case regulators are not initialized we'll return 0
-  * @hba: per-adapter instance
-  * @desc_buf: power descriptor buffer to extract ICC levels from.
-- * @len: length of desc_buff
-  *
-  * Returns calculated ICC level
-  */
- static u32 ufshcd_find_max_sup_active_icc_level(struct ufs_hba *hba,
--						const u8 *desc_buf, int len)
-+						const u8 *desc_buf)
- {
- 	u32 icc_level = 0;
+@@ -3395,12 +3395,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 	if (desc_id >= QUERY_DESC_IDN_MAX || !param_size)
+ 		return -EINVAL;
  
-@@ -7465,8 +7464,7 @@ static void ufshcd_set_active_icc_lvl(struct ufs_hba *hba)
+-	if (param_offset >= buff_len) {
+-		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
+-			__func__, param_offset, desc_id, buff_len);
+-		return -EINVAL;
+-	}
+-
+ 	/* Check whether we need temp memory */
+ 	if (param_offset != 0 || param_size < buff_len) {
+ 		desc_buf = kzalloc(buff_len, GFP_KERNEL);
+@@ -3413,15 +3407,23 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 
+ 	/* Request for full descriptor */
+ 	ret = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,
+-					desc_id, desc_index, 0,
+-					desc_buf, &buff_len);
+-
++					    desc_id, desc_index, 0,
++					    desc_buf, &buff_len);
+ 	if (ret) {
+ 		dev_err(hba->dev, "%s: Failed reading descriptor. desc_id %d, desc_index %d, param_offset %d, ret %d\n",
+ 			__func__, desc_id, desc_index, param_offset, ret);
  		goto out;
  	}
  
--	icc_level = ufshcd_find_max_sup_active_icc_level(hba, desc_buf,
--							 QUERY_DESC_MAX_SIZE);
-+	icc_level = ufshcd_find_max_sup_active_icc_level(hba, desc_buf);
- 	dev_dbg(hba->dev, "%s: setting icc_level 0x%x", __func__, icc_level);
++	/* Update descriptor length */
++	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
++
++	if (param_offset >= buff_len) {
++		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
++			__func__, param_offset, desc_id, buff_len);
++		return -EINVAL;
++	}
++
+ 	/* Sanity check */
+ 	if (desc_buf[QUERY_DESC_DESC_TYPE_OFFSET] != desc_id) {
+ 		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header\n",
+@@ -3430,9 +3432,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 		goto out;
+ 	}
  
- 	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_WRITE_ATTR,
+-	/* Update descriptor length */
+-	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
+-
+ 	if (is_kmalloc) {
+ 		/* Make sure we don't copy more data than available */
+ 		if (param_offset >= buff_len)
 -- 
 2.7.4
 
