@@ -2,204 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0634164D0C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DE364D0D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 21:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLNUKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 15:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S229835AbiLNUMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 15:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiLNUJx (ORCPT
+        with ESMTP id S229760AbiLNULv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 15:09:53 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1BC2C13D;
-        Wed, 14 Dec 2022 12:02:12 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1p5Xwt-0001md-V8; Wed, 14 Dec 2022 21:01:52 +0100
-Date:   Wed, 14 Dec 2022 20:01:48 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
- init/do_mounts.c
-Message-ID: <Y5orrN6THpkTuiA8@makrotopia.org>
-References: <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
- <Y3XM62P7CaeKXFsz@infradead.org>
- <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
- <Y3zCdJr5dKsADsnM@infradead.org>
- <Y5NpsmN/npnG8lxY@makrotopia.org>
- <Y5buTVuu0pfqBQh+@infradead.org>
- <Y5cKSRmZ45OJq6Qq@makrotopia.org>
- <Y5ggLBy+XBjl/vYj@infradead.org>
- <Y5hz5+yXWDadDhRB@makrotopia.org>
- <Y5n9MYEkrnAF4Ztv@infradead.org>
+        Wed, 14 Dec 2022 15:11:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D132DA95;
+        Wed, 14 Dec 2022 12:03:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46ABF61BAD;
+        Wed, 14 Dec 2022 20:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34F4C433D2;
+        Wed, 14 Dec 2022 20:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671048213;
+        bh=LuM96yeF21ctL5PzTyNsYuJ6k4tHYP8q+wx7BHmFcdk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=c3icnLPQAeY1jmKGVq91T6iqzw1+BhkD1afHRVn6fbnN3jJvMQc4E/Lm+XpkAwqQy
+         tiFu3+PUjjI+NTX82EMlk3efSkEmljNEiwNK2qdOw02rBFGY5zR7p8ZrUJAwnfuuTT
+         sOteQqZpvBY58q5SidnQmQ1ZBQDICVzR0wGIVquNlu2rySpyOsKzHn9YGzQ9wcc+ft
+         px/zdTVrn9/2wzsJFqTWYF1OUrnQb/xw5p56y6BxwNR5rnqI5wubGwvXbWMO5GWXMB
+         HR4mfMyFEqzr8ukkowxIrJFdLP6swg+nkcL/YR8/uR/Y/JK81wPDiL8KgBq6eFo3zU
+         bAHLZh6mlbsdg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 42BA85C0A6A; Wed, 14 Dec 2022 12:03:33 -0800 (PST)
+Date:   Wed, 14 Dec 2022 12:03:33 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing: Do not synchronize freeing of trigger filter on
+ boot up
+Message-ID: <20221214200333.GA3208104@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221213172429.7774f4ba@gandalf.local.home>
+ <20221214084954.e759647a2f5f1a38bc78b371@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5n9MYEkrnAF4Ztv@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221214084954.e759647a2f5f1a38bc78b371@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 08:43:29AM -0800, Christoph Hellwig wrote:
-> On Tue, Dec 13, 2022 at 12:45:27PM +0000, Daniel Golle wrote:
-> > > Yes, but a completely non-standard format that nests inside an
-> > > partition.
+On Wed, Dec 14, 2022 at 08:49:54AM +0900, Masami Hiramatsu wrote:
+> On Tue, 13 Dec 2022 17:24:29 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > > 
-> > The reason for this current discussion (see subject line) is exactly
-> > that you didn't like the newly introduced partition type GUID which
-> > then calls the newly introduced partition parser taking care of the
-> > uImage.FIT content of a partition.
-> 
-> Which is the exact nesting I'm complaining about.  Why do you need
-> to use your format inside a GPT partition table?
-
-The GPT partition table is typically written only once to an eMMC-
-based device in factory. Firmware images (typically uImage.FIT) are
-stored in partitions because there are sometimes two of them (for
-A/B dual-boot, or recovery/production dual-boot).
-
-As a working device firmware consists of kernel, dtb and rootfs, all
-these three things have to be written and used together, typically
-they also come together in one file for firmware upgrade (ie.
-rootfs appended to kernel, tarballs, or uImage.FIT containing all three
-of them).
-
-As the size of kernel and rootfs cannot be determined accurately at
-the time the device is made, having individual GPT partitions for
-kernel and rootfs ends up to either being a limit to future groth of
-the kernel image or wastes space by overestimating the kernel size.
-
-Changing the GPT partitioning when updating the device to match the
-exact sizes is also not an option as a damage to the GPT would then
-present a single point of failure (backup GPT also wouldn't help
-much here), so for dual-boot to actually be meaningful, we shouldn't
-ever write to any parts of the disk/flash which affect more than one
-of the dual-boot options.
-
-> What you're doing is bascially nesting a partition table format
-> inside another one, which doesn't make any sense at all.
-
-See the last paragraph of this message for good reasons why one would
-want to do exactly that.
-
-> 
-> > This block driver (if built-into the kernel and relied upon to expose
-> > the block device used as root filesystem) will need to identify the
-> > lower device it should work on. And for that the helper functions such
-> > as devt_from_devname() need to be available for that driver.
-> 
-> And devt_from_devname must not be used by more non-init code.  It is
-> bad it got exposed at all, but new users are not acceptable.
-
-I assume that implementing anything similar using blk_lookup_devt in
-the driver itself is then also not acceptable, right?
-
-Yet another option would be to implement a way to acquire this
-information from device tree. Ie. have a reference to the disk device
-as well as an unsigned integer in the 'chosen' node which the
-bootloader can use to communicate this to the kernel. Example:
-chosen {
-	bootdev = <&mmc0 3>;
-};
-
-It's a bit more tricky for ubiblock or mtdblock devices because they
-don't have *any* representation in device tree at all at this point.
-
-In case of an MTD partition (for mtdblockX) we would just reference
-the mtd partition in the same way.
-
-To do this cleanly with NAND/UBI, I'd start with adding
-device-tree-based attaching of an MTD partition to UBI using a
-device-tree attribute 'compatible = "linux,ubi"' on the MTD partition.
-We could then have sub-nodes referencing specific UBI volumes, to
-select them for use with ubiblock but also for those nodes then
-being a valid reference for use with the to-be-introduced 'bootdev'
-attribute in 'chosen'.
-
-Does that sound acceptable from your perspective?
-
-> 
-> > A block representation is the common denominator of all the
-> > above. Sure, I could implement splitting MTD devices according to
-> > uImage.FIT and then add MTD support to squashfs. Then implement
-> > splitting of UBI volumes and add UBI support to squashfs.
-> 
-> Implementing MTD and/or UBI support would allow you to build a
-> kernel without CONFIG_BLOCK, which will save you a lot more than
-> the 64k you were whining about above.
-
-Even devices with NOR flash may still want support for removable
-block devices like USB pendrives or SD cards... Many home-routers
-got only 8MiB of NOR flash and yet come with USB 2.0 ports intended
-for a pendrive which is then shared via Samba.
-
-Also, heavily customzied per-device kernel builds would never
-scale up to support thousands of devices -- hence OpenWrt uses the
-exact same kernel build for many devices, which makes both, the
-build process and also debugging kernel bugs, much much easier (or
-even doable at all).
-
-> 
-> > > None of this explains the silly nesting inside the GPT partition.
-> > > It is not needed for the any use cases and the root probem here.
+> > If a trigger filter on the kernel command line fails to apply (due to
+> > syntax error), it will be freed. The freeing will call
+> > tracepoint_synchronize_unregister(), but this is not needed during early
+> > boot up, and will even trigger a lockdep splat.
 > > 
-> > So where would you store the uImage (which will have to exist
-> > even to just load kernel and DTB in U-Boot, even without containing
-> > the root filesystem) on devices with eMMC then?
+> > Avoid calling the synchronization function when system_state is
+> > SYSTEM_BOOTING.
 > 
-> Straight on the block device, where else?
+> Shouldn't this be done inside tracepoint_synchronize_unregister()?
+> Then, it will prevent similar warnings if we expand boot time feature.
 
-As the first few blocks are typically used for bootloader code and
-bootloader environment, we would then need to hard-code the offset(s)
-of the uImage.FIT on the block device. Imho this becomes messy and just
-using partitions seemed like a straight forward solution.
+How about the following wide-spectrum fix within RCU_LOCKDEP_WARN()?
+Just in case there are ever additional issues of this sort?
 
-And what about dual-boot systems where you have more than one firmware
-image? Hard-code more offsets? For each device?
+							Thanx, Paul
 
-In a way, I was considering this by using blkdevparts= cmdline option
-instead of GPT, but 
+------------------------------------------------------------------------
 
-> 
-> > Are you suggesting to come up with an entirely new type of partition
-> > table only for that purpose? Which will require its own tools and
-> > implementation in both, U-Boot and Linux? What would be the benefit
-> > over just using GPT partitioning?
-> 
-> Why do you need another layer of partitioning instead of storing
-> all your information either in the uImage, or in some other
-> partition format of your choice?
+commit d493ffca2df6c1963bd1d7b8f8c652a172f095ae
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Wed Dec 14 11:41:44 2022 -0800
 
-The reason is the different life-cycle of the device main partition
-table, bootloader, bootloader environment, ... on one hand and each
-firmware image on a dual boot system on the other hand.
-Hence there is more than just one uImage: typically bootloader,
-bootloader environment, firmware A (uImage.FIT) and firmware B.
-Relace "A" and "B" with "recovery" and "production", depending on the
-dual-boot style implemented.
+    rcu: Make RCU_LOCKDEP_WARN() avoid early lockdep checks
+    
+    Currently, RCU_LOCKDEP_WARN() checks the condition before checking
+    to see if lockdep is still enabled.  This is necessary to avoid the
+    false-positive splats fixed by commit 3066820034b5dd ("rcu: Reject
+    RCU_LOCKDEP_WARN() false positives").  However, the current state can
+    result in false-positive splats during early boot before lockdep is fully
+    initialized.  This commit therefore checks debug_lockdep_rcu_enabled()
+    both before and after checking the condition, thus avoiding both sets
+    of false-positive error reports.
+    
+    Reported-by: Steven Rostedt <rostedt@goodmis.org>
+    Reported-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+    Reported-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Boqun Feng <boqun.feng@gmail.com>
+    Cc: Matthew Wilcox <willy@infradead.org>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
 
-Therefore re-writing the whole disk during firmware upgrades is not an
-option because it is risky, eg. in case of a sudden power failure we
-could end up with a hard-bricked system. So to me it makes sense that
-for a firmware upgrade, we write only to one partition and don't touch
-GPT or anything else on the device. So in case something goes wrong,
-the device will still boot, the bootloader will realize that the
-uImage.FIT in one partition is broken (uImage.FIT also comes with
-hashes to ensure image integrity) and it will load something else (from
-another partition) instead.
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index aa1b1c3546d7a..1aec1d53b0c91 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -364,11 +364,18 @@ static inline int debug_lockdep_rcu_enabled(void)
+  * RCU_LOCKDEP_WARN - emit lockdep splat if specified condition is met
+  * @c: condition to check
+  * @s: informative message
++ *
++ * This checks debug_lockdep_rcu_enabled() before checking (c) to
++ * prevent early boot splats due to lockdep not yet being initialized,
++ * and rechecks it after checking (c) to prevent false-positive splats
++ * due to races with lockdep being disabled.  See commit 3066820034b5dd
++ * ("rcu: Reject RCU_LOCKDEP_WARN() false positives") for more detail.
+  */
+ #define RCU_LOCKDEP_WARN(c, s)						\
+ 	do {								\
+ 		static bool __section(".data.unlikely") __warned;	\
+-		if ((c) && debug_lockdep_rcu_enabled() && !__warned) {	\
++		if (debug_lockdep_rcu_enabled() && (c) &&		\
++		    debug_lockdep_rcu_enabled() && !__warned) {		\
+ 			__warned = true;				\
+ 			lockdep_rcu_suspicious(__FILE__, __LINE__, s);	\
+ 		}							\
