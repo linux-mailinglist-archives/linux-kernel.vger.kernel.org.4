@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAF264D21E
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F26064D230
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 23:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiLNWH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 17:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S229536AbiLNWMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 17:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLNWHZ (ORCPT
+        with ESMTP id S229437AbiLNWMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 17:07:25 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18A61EEF5;
-        Wed, 14 Dec 2022 14:07:23 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id x11so3665239qtv.13;
-        Wed, 14 Dec 2022 14:07:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/39cbinCm2DlY6z44q1qFPXCL75QR7vAT6pW5+yC8Y=;
-        b=iLYrwhVnnNIL/F6TsTsvS9Shdni52MY2EjTZE2RucUeMYmjxAiipoGvckF8Hv8cXzO
-         XQrblOKgcOqF5DxvUJlpsPLHeVhF9+sBjCUbW8hZ3n2GaSsLWAuV773rMukDU0z+QUGY
-         5Pow4U6J+dk0BU556isbAaQG0ZhxN1F6hX9LFuoXlg5QZqGtcscAsJeTAulmfTRBLfKL
-         jINWBk4+2Dz7FIHt65DQbvfgVdDpCdqalUqyN+ei4MUn0URzwnng8dwKbqSrbje7w6NJ
-         mdl+g1JU8rKZno5jIRa9tUisz4UnaN/ZHUV19wxGx2lP9wUrfBMexoTiX6nXjp33vr2O
-         48MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5/39cbinCm2DlY6z44q1qFPXCL75QR7vAT6pW5+yC8Y=;
-        b=jCCfFR+8ZGVwaSm/ugSObWxlxXYEZUUi2JQJZ+ZOKHt+mnnH5BMHypj3NXMcil+028
-         YODR3Zm7wxsUYi64k3AjtX5OSdcQ3d9K/jP3TFXQBhf+wS3kjZ2mJyfF3wMC7Vto48+Q
-         bKECP9U2EuhGY5VKxTPJEBCIQqOqnZvYChAoeH1LVZDPpKYGG8IlJJCzK/gwJgzV7BU/
-         oaBFDH2euy4LpLb8tv3KmdgAi5bgV0jMHceLXj0zgk1jn+/fyV5y2EnjelNcUpW7J/9B
-         QFqv3xbOA5ePI3ZAxK/OrJVwZVdi1dd9lRg08unlSoeA4tmf4ZwzHfMxtZ2eoCjOgH4+
-         YWPA==
-X-Gm-Message-State: ANoB5pm6eTb2t1d58SKiiDJYieVLSEZw0MZ+jHSJV/YtdXG8BEe1GzQ2
-        UEoO+lt9byHTL55lzyRQiiiPCeZ8s5Ff+UW+lCQ=
-X-Google-Smtp-Source: AA0mqf6mUwKlSDOlkhQHSbAqiZFQHKjcVjQaDVm2zvGjx0vP0jSbepa69mG+0GZTmQab4bXnHCqn1uaWHvBy7nQpFE4=
-X-Received: by 2002:ac8:730c:0:b0:3a8:175b:a966 with SMTP id
- x12-20020ac8730c000000b003a8175ba966mr854132qto.384.1671055643046; Wed, 14
- Dec 2022 14:07:23 -0800 (PST)
-MIME-Version: 1.0
-References: <Y5mMWEtHWKOiPVU+@mail.google.com> <202212141124.736E3DE2A8@keescook>
- <Y5otilaHc6HBPCAF@mail.google.com> <CAHp75VdHU3g_t8u-hr1C=mttvEq-jWmMuCwaQqXToP-kH3xstQ@mail.gmail.com>
- <202212141347.9AD66DEBC8@keescook>
-In-Reply-To: <202212141347.9AD66DEBC8@keescook>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 15 Dec 2022 00:06:46 +0200
-Message-ID: <CAHp75VdqUMs1uz8zeyDi6rJKayFt6UMrm0A=-Hp8tQpCUSGujQ@mail.gmail.com>
-Subject: Re: [PATCH] [next] pcmcia: synclink_cs: replace 1-element array with
- flex-array member
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
+        Wed, 14 Dec 2022 17:12:08 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Dec 2022 14:12:04 PST
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B874D1057D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 14:12:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+        t=1671055923; bh=vicrB952dHHvQY2TZFp0CXJmQ/sCAr/INTB321LfMgw=;
+        h=X-UI-Sender-Class:Subject:From:Reply-To:To:Date;
+        b=IJssX+ylyVTiEeBUCrYx1mNDhdkEjXPr9p8JJsFt7n9xVY963puXLKVRsRA9jrvLV
+         21Qih05aLqWI5TGiikg8Fnrk3kbmVpPr05YeN99wFnXufbPRZvS5ITk/0TNNG4rRb6
+         lcN3em7/mgJCqNsV32Geow1AulwQ10anZI7qL5jFGpmHfcNC6rizQH9IUZe9GdgAe0
+         TA3je/2sR+QONmyQMdTeDmtmjW7UUmfyaCwecw03RWIsl8eFkOiULccQH8on9XjWPv
+         56j2LnfPzgzJOg8HXbw8Ucy+x2Lk4gP9LzPugOh3BVlqRwX1HkegLbo+GIAJaJ70gU
+         diF1rkj7koN+A==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MOm0x-1pHLdE1Rvj-00QFfi for
+ <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 23:06:59 +0100
+Message-ID: <43ffd361ecfc124af611e893c600d06893cae3ef.camel@web.de>
+Subject: Re: [git pull] drm for 6.2-rc1
+From:   Bert Karwatzki <spasswolf@web.de>
+Reply-To: "CAHk&#45;=whnOofeSoLu2wWN7H0GZQmdj6R_T0b8MavC1zLvgCUapA"@mail.gmail.com
+To:     linux-kernel@vger.kernel.org
+Date:   Wed, 14 Dec 2022 23:06:58 +0100
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2-1 
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:Oxze1YiMlhFHjYkXqil/1GTRqcQzWOL6DomfTLp8STEYjNCfMR7
+ 6dChs3CpIuH2jiJnHJBAh2D8WDxrT44L5iMkvbhpo2HkEu3kdUY0VOHshsOvV8RkT340auS
+ TyDbNlCD7FHs8mZ4GEYzNFVZ5ybD4u07WY1uLsFzSD/iGrIvXDam4qZDzYCzRrRgXvgd9GO
+ Ol8jfqjrRCmkhsyrN6yzg==
+UI-OutboundReport: notjunk:1;M01:P0:HyHR6zzGsL0=;yBmv0mBj/FA02hcjDSq10VCXntU
+ dCZWxUc44hHxyDzxxqG0w83U7zj1tpPuLTwETUXuTqG7Z1UOjxhfv9oA1ByldvBgtgL2kV93+
+ OV2Vcxr5Al5Cn/tbhl4ovmx4lDT/I8eco4H6wZzuxlMvpDbT/mEf/ImWJM0lMkH17YLWgKa4c
+ foedI5aWfIuNbJd1IiU7q5WPMjmBliwyg8jnr2BYKAKYzM5PPausSVg2FggWX2EoCaGJJ9qcm
+ 105O2G4cGcdEY42HuPbvXCfK45N4ZI/SU+rtCOr5+P9crM26vXT8UwPd3iS3RNlxjktOqPEzv
+ J6zWSNfEcZY8HgcsH+u/mWTXDEOnloWMPCYC+PN8saFZPbs1Vgj0Az7MBLR+U3E2FJGSSLpIm
+ lotVeb/K/Yvnzo8baCt3LQY8VWtGUD/YvPTogDcJ4wbhexPbgbA5KZ4ouLvt2Nfz71dFKf4gJ
+ 1QoMO6jqF/JWDSdV4w7Ftkqh/NjZi+uHkMk3YYZl9RROG6wtEio0o3DdGTwwcdFUSP9E5DIHD
+ 4AZK97/jBSGUSpw9IXWryFH42qpbP+e5oS53bIxhqijYQekFugaXvhYseRJvWejtvh9Sg/Y3F
+ bZDiEwj9J6aGofZX4XWQKvynXac3EdMrzoknFuzrrUPm7XJZ544sIpXb/T2PzThUm0F4+4AS4
+ M7fS7uogAW/9xO8yCK25C0wwkjzl3Bx9pCMV8AbwP1QqN+C3aVik6peF1bryhEpalFUs2+NXf
+ /U2g8GrtWv+QUrx+ScmH3z1NT62l3ysSTK0R1Xxch8qiTcrObvAZCu/sWSNz+5YpIgTgsI1AI
+ i1Ge58MkQ6UcldcZNIOZtALK7dRTmeWE/ZIjA7jfQmeJtOObYsEO1D1NzRgjfrIhXzrVEGpNo
+ +guA9KXhYCzqyEx4NkFYctC7OFYLYY3Ub1J21owO4npJtlfww2Rr0AyoRTds8DhRkKgp6W5IO
+ AW3fzk3+Dj9GIONyd+eYywtTMX4=
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +68,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 11:49 PM Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Dec 14, 2022 at 10:39:52PM +0200, Andy Shevchenko wrote:
-> > Yes, and Try to make it work with __packed. As I said, the problem is
-> > that the code is relying on something which is architecture dependent
-> > strictly speaking. And hence I disagree with Kees that v2 is okay to
-> > go.
->
-> I meant that v2 is functionally identical to the existing code.
+The refcounting errors seems to be present here, too:
 
-Ah, sorry for misunderstanding.
+https://gitlab.freedesktop.org/drm/amd/-/issues/2281
 
-> > The full change should be something like
-> >
-> > check_add(sizeof(), max_frame_size)
-> > kcalloc(8, size)
->
-> Right -- this would fix the existing mistakes in size calculation (and
-> is certainly better).
-
-Glad to hear that we are on the same page.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Bert Karwatzki
