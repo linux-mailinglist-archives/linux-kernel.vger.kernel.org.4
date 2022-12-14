@@ -2,133 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB07F64C701
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A56E64C704
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237688AbiLNKXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
+        id S237744AbiLNKXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 05:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237528AbiLNKX3 (ORCPT
+        with ESMTP id S237735AbiLNKXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:23:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9085D62F8
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671013364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oZg5ofo237mNt8jPqIOFvrjJ9UGaIyH2k2lFEM+AU7I=;
-        b=Ef77flpVzPGOPTm0e8AINjLKUQqM3YK00C0A10D9zTGMqdXLzbHdMUMIcMkX3JPa9IKQk2
-        f/1mkmBrSPktHrgjVqV0S0UVSms/Ih16HkGIllq6ZJxyFU4c3Ub6+SDKs9NCfEbsn1vT0O
-        i0htJpuZqdaTmLsM0yWIp2jGtdrKchU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-186--9q-irxbMyq2ZG8mi8jnxA-1; Wed, 14 Dec 2022 05:22:42 -0500
-X-MC-Unique: -9q-irxbMyq2ZG8mi8jnxA-1
-Received: by mail-wm1-f70.google.com with SMTP id ay19-20020a05600c1e1300b003cf758f1617so7012761wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:22:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:organization:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oZg5ofo237mNt8jPqIOFvrjJ9UGaIyH2k2lFEM+AU7I=;
-        b=cDRKU9cruFH2eXByvMKwwKmIwDS6rOluiR9NDw+noie7Lx0s4/+jrWANTT5SGtqjQh
-         J8XbadhgcpT/fEfWRR5uqpEtqdTm+GxtlrqjLX4ekdW5nuzRwu9zCSDevb/JWONx4DG1
-         i1ZE+Y3zzs5PywfsAjBjeNAEWu6UXGCiAOwjGKSnwm0vbIzfTMC80bV8fUyJ5kHbZocp
-         mZvBZP9QKxvvtOpG3E4oFTvQ0o/1BpT8SnVKBdJsRUQjrk1rQc4Q0SF+CTTTq8YQwGJP
-         CHuVWxtyfjhJdm68fBoqzZEoLBICrZPW207WG1js5+J9hsjSfDJHFcjOuzdWD7RWwiGe
-         DocQ==
-X-Gm-Message-State: ANoB5pkUyxuPbhy3t7s6+GdUqN5TUYscBL9JtJu/MmogE11leLeyrRbO
-        kGmFycnVtZvYhj1odlfwNKDFxVNDC5YNyzJjc5iWyJ/UPC8MxcxZXzbSOuVqSLcPQFMfOSYijmo
-        MS2fffjHG5O8Hn7T90fk74d6j
-X-Received: by 2002:a5d:490d:0:b0:242:fa5:ce83 with SMTP id x13-20020a5d490d000000b002420fa5ce83mr17530655wrq.37.1671013361353;
-        Wed, 14 Dec 2022 02:22:41 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6eqNaTD3L0zpw19VpnMEoi1p3BYCcKA3C58XAoVlwb8be+bNLsFo0uG8nChzy/fA/DaBgKOw==
-X-Received: by 2002:a5d:490d:0:b0:242:fa5:ce83 with SMTP id x13-20020a5d490d000000b002420fa5ce83mr17530636wrq.37.1671013361043;
-        Wed, 14 Dec 2022 02:22:41 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c668c.dip0.t-ipconnect.de. [91.12.102.140])
-        by smtp.gmail.com with ESMTPSA id o26-20020a5d58da000000b002420dba6447sm2442291wrf.59.2022.12.14.02.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 02:22:40 -0800 (PST)
-Message-ID: <fbefc16e-84d3-8afc-8c8e-4229bded0c8a@redhat.com>
-Date:   Wed, 14 Dec 2022 11:22:39 +0100
+        Wed, 14 Dec 2022 05:23:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FE61CFE9;
+        Wed, 14 Dec 2022 02:23:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 73346220F3;
+        Wed, 14 Dec 2022 10:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1671013413; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fxBVCTztKvCx7NZz2W8gthEPH9JUIWAZ4+V+PfsVmzY=;
+        b=IojBzwyziVtYiucjSQDvGHnCXVjXg2p/sHVYk80E3xfs7e5jBbeS9JU65R1LNQ8A+RlA3V
+        nVZqvAW9UjKHw/QmPgCvEjbeBUhDxCLc2YH+bnaeQwiWi1j0MPSlkXpy3rHQMIUkQMDreQ
+        Z/LmeErn8iJyWo5NQRig0Hzxee4+ACc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 517C61333E;
+        Wed, 14 Dec 2022 10:23:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XCt/ESWkmWMbHwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 14 Dec 2022 10:23:33 +0000
+Date:   Wed, 14 Dec 2022 11:23:32 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        "Huang, Ying" <ying.huang@intel.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, bagasdotme@gmail.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v3] mm: Add nodes= arg to memory.reclaim
+Message-ID: <Y5mkJL6I5Zlc1k97@dhcp22.suse.cz>
+References: <20221202223533.1785418-1-almasrymina@google.com>
+ <Y5bsmpCyeryu3Zz1@dhcp22.suse.cz>
+ <CAHS8izM-XdLgFrQ1k13X-4YrK=JGayRXV_G3c3Qh4NLKP7cH_g@mail.gmail.com>
+ <87k02volwe.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y5h+gHBneexFQcR3@cmpxchg.org>
+ <Y5iGJ/9PMmSCwqLj@dhcp22.suse.cz>
+ <CAHS8izOuT_-p-N1xPApi+BPJQ+P--2YVSUeiWBROGvGinN0vcg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Dubious usage of VM_SHARED in atomisp_fops.c
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izOuT_-p-N1xPApi+BPJQ+P--2YVSUeiWBROGvGinN0vcg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue 13-12-22 11:29:45, Mina Almasry wrote:
+> On Tue, Dec 13, 2022 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 13-12-22 14:30:40, Johannes Weiner wrote:
+> > > On Tue, Dec 13, 2022 at 02:30:57PM +0800, Huang, Ying wrote:
+> > [...]
+> > > > After these discussion, I think the solution maybe use different
+> > > > interfaces for "proactive demote" and "proactive reclaim".  That is,
+> > > > reconsider "memory.demote".  In this way, we will always uncharge the
+> > > > cgroup for "memory.reclaim".  This avoid the possible confusion there.
+> > > > And, because demotion is considered aging, we don't need to disable
+> > > > demotion for "memory.reclaim", just don't count it.
+> > >
+> > > Hm, so in summary:
+> > >
+> > > 1) memory.reclaim would demote and reclaim like today, but it would
+> > >    change to only count reclaimed pages against the goal.
+> > >
+> > > 2) memory.demote would only demote.
+> > >
+> 
+> If the above 2 points are agreeable then yes, this sounds good to me
+> and does address our use case.
+> 
+> > >    a) What if the demotion targets are full? Would it reclaim or fail?
+> > >
+> 
+> Wei will chime in if he disagrees, but I think we _require_ that it
+> fails, not falls back to reclaim. The interface is asking for
+> demotion, and is called memory.demote. For such an interface to fall
+> back to reclaim would be very confusing to userspace and may trigger
+> reclaim on a high priority job that we want to shield from proactive
+> reclaim.
 
-going over all VM_SHARED and VM_MAYSHARE user in the kernel, I stumbled 
-over the following dubious code in 
-drivers/staging/media/atomisp/pci/atomisp_fops.c:
+But what should happen if the immediate demotion target is full but
+lower tiers are still usable. Should the first one demote before
+allowing to demote from the top tier?
+ 
+> > > 3) Would memory.reclaim and memory.demote still need nodemasks?
+> 
+> memory.demote will need a nodemask, for sure. Today the nodemask would
+> be useful if there is a specific node in the top tier that is
+> overloaded and we want to reduce the pressure by demoting. In the
+> future there will be N tiers and the nodemask says which tier to
+> demote from.
 
+OK, so what is the exact semantic of the node mask. Does it control
+where to demote from or to or both?
 
-if (!(vma->vm_flags & (VM_WRITE | VM_READ)))
-	return -EACCES;
+> I don't think memory.reclaim would need a nodemask anymore? At least I
+> no longer see the use for it for us.
+> 
+> > >    Would
+> > >    they return -EINVAL if a) memory.reclaim gets passed only toptier
+> > >    nodes or b) memory.demote gets passed any lasttier nodes?
+> >
+> 
+> Honestly it would be great if memory.reclaim can force reclaim from a
+> top tier nodes. It breaks the aginig pipeline, yes, but if the user is
+> specifically asking for that because they decided in their usecase
+> it's a good idea then the kernel should comply IMO. Not a strict
+> requirement for us. Wei will chime in if he disagrees.
 
-...
+That would require a nodemask to say which nodes to reclaim, no? The
+default behavior should be in line with what standard memory reclaim
+does. If the demotion is a part of that process so should be
+memory.reclaim part of it. If we want to have a finer control then a
+nodemask is really a must and then the nodemaks should constrain both
+agining and reclaim.
 
-if (!(vma->vm_flags & VM_SHARED)) {
-	/* Map private buffer.
-	 * Set VM_SHARED to the flags since we need
-	 * to map the buffer page by page.
-	 * Without VM_SHARED, remap_pfn_range() treats
-	 * this kind of mapping as invalid.
-	 */
-	vma->vm_flags |= VM_SHARED;
-	ret = hmm_mmap(vma, vma->vm_pgoff << PAGE_SHIFT);
-	...
-}
+> memory.demote returning -EINVAL for lasttier nodes makes sense to me.
+> 
+> > I would also add
+> > 4) Do we want to allow to control the demotion path (e.g. which node to
+> >    demote from and to) and how to achieve that?
+> 
+> We care deeply about specifying which node to demote _from_. That
+> would be some node that is approaching pressure and we're looking for
+> proactive saving from. So far I haven't seen any reason to control
+> which nodes to demote _to_. The kernel deciding that based on the
+> aging pipeline and the node distances sounds good to me. Obviously
+> someone else may find that useful.
 
+Please keep in mind that the interface should be really prepared for
+future extensions so try to abstract from your immediate usecases.
 
-We're converting a writable MAP_PRIVATE mapping ("COW mapping") into a 
-writable MAP_SHARED mapping, to hack around the is_cow_mapping() check 
-in remap_pfn_range_notrack().
+> > 5) Is the demotion api restricted to multi-tier systems or any numa
+> >    configuration allowed as well?
+> >
+> 
+> demotion will of course not work on single tiered systems. The
+> interface may return some failure on such systems or not be available
+> at all.
 
-We're not even setting VM_MAYSHARE and turn the mapping silently into 
-something with completely different semantics.
-
-
-That code has to go.
-
-
-One approach would be to reject such mappings (no idea if user space 
-relies on private mappings), the other one would be to remove this 
-driver. Judging that the driver already was marked broken in 2020 
-(ad85094b293e ("Revert "media: staging: atomisp: Remove driver"")), 
-maybe it's time for the driver to go.
-
-Thoughts?
-
+Is there any strong reason for that? We do not have any interface to
+control NUMA balancing from userspace. Why cannot we use the interface
+for that purpose? 
 -- 
-Thanks,
-
-David / dhildenb
-
+Michal Hocko
+SUSE Labs
