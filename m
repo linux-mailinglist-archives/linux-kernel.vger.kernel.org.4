@@ -2,185 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9AD64CC5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FFD64CC61
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238601AbiLNOd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S238432AbiLNOek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238517AbiLNOdZ (ORCPT
+        with ESMTP id S238624AbiLNOeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:33:25 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAA423176
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:33:24 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id w15so19484400wrl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:33:24 -0800 (PST)
+        Wed, 14 Dec 2022 09:34:37 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F0B112E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:34:35 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so44889161ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 06:34:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OuqN6i3xDgWDQgdyvZ62ncqNwC02Nmosxvyp2oT1Vek=;
-        b=kA8djj3SxcJzPd/tkyA19nr3VqDPI2W2mU4PabaNpfy0KhdGPok5EOhpPqRRkgHEp7
-         UsKlkYzkhjJsubXy7jcirzMdIKXYiXOt1FzNgYnyMhZf2WV901v4IKLYc71zKUWapzXU
-         BoJpjUXMGDRMpk2qasc76sLgOIB1gJdRcXp9M+rr+1R43dtYejor15lFhGeG+yivQk1/
-         GWsl63/+gB8hodUg9lU56b1NKlQlXMe4xosZ2yPrQCM3Gk4nq2BXfWVb92TW2T0UR1Yy
-         CQQRcoIm4tebkW+I57ebyGM7YG72xZ9njf/560IBLB3nCsNqh9b1JfwCSPBLyo5OU0Df
-         5y5w==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NpdIC9yfEfML+JTsasPerHswhdeXgtUUncwQhuMnyqE=;
+        b=XLKf1zw+Pg5X/5RU+NqTJXZbD6289aN9/me5ZGVd8EVaQRYyJ2A1JlBdG/Z3vsSDhk
+         Qmz9aiiZNObRESdS/CH7NwQdJvzHJFIDjkC0casil4G4a0N9QFE5mfSjYWXd8ZJ15YF4
+         rGJgGKsHjpVfDDZj6p5BrCfquqIHmoSjSxlcAftAz1JUO8wSbof7/g91hgr1+XKPPePu
+         kfMlDQb3+qMJ6DUrRCH6VLm3UIt74/cQiWtTtE3ylBHYgQVQ6Aor3fbMntGxp9AmnQtV
+         ejTOcc664SpZgkLUI0eTSEsPKw0r8GbVeA1KvrhoplnpFLRnnWk+D6rtNKmjsnXEgo5H
+         Iehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OuqN6i3xDgWDQgdyvZ62ncqNwC02Nmosxvyp2oT1Vek=;
-        b=qiznIrgLLalVgamIlIXiF8WyW7CqPX3ZgHA0/W89DHWqeADEUnsY1HOmILxPbvfKLp
-         65QnNPzZqCXB3B4VUDligrW4k4RHpG3W7JV7smUgnE1uRVnSQ6fEmBMfE6q4mdx82GqR
-         RHpVNYuvD+Gdz83efDbUxIEg1XDMrz7I1Aee8hu/gA0XJ/sEuq5Nc4t/Tzc/RGDVN3kj
-         IeX9ygrzmafBkrEsrpysAjDLKJ3mL0rc2UrdT2XtjkmsEeQlKjudrbGd1blV5wVEOfSN
-         yuUGWIx/MhIRUKog3Yw1iFtuCFiVgnq+o8xWR7WaG8nhC6o8cvDZSu1KFk7m3orAv+MU
-         MeHg==
-X-Gm-Message-State: ANoB5pnGhBS+OsV6yjCCc/xd/Zxi8JWSsg8L2DJ5Sg6bLdC9BRn0G0bV
-        vAIuYlh3TGCIScToJGDWvOKw2w==
-X-Google-Smtp-Source: AA0mqf7xIJIgXYZsxK2tSCzIVle8ET5dDH8ooORx5cJ2R6fVlqM69PBiGsZ4kH0G3Q+gQWAxnTgswA==
-X-Received: by 2002:adf:f206:0:b0:242:4b69:883 with SMTP id p6-20020adff206000000b002424b690883mr16140492wro.10.1671028403021;
-        Wed, 14 Dec 2022 06:33:23 -0800 (PST)
-Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id d22-20020a05600c34d600b003cfa80443a0sm2741896wmq.35.2022.12.14.06.33.22
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NpdIC9yfEfML+JTsasPerHswhdeXgtUUncwQhuMnyqE=;
+        b=Z728rwdo0xPdKA2MG5N630R5l6T4d039VuKjoCcVHL01PjWlzKh9T6cV6n8ZDAKGRe
+         Ga3lV19KadNnZVBXtoITeP8MIVvZavbfJGmKncdCpuUjPo3wlngYlusM9sg1AwVokyqG
+         qp6Gh8INE+hsD3l+WjIte9NBKV7nZf65aqgFRPDxCuSoJAdUIBEMUGkFX4GCIiJM67dW
+         MhUISEWOh9RhBgedh0Ec09mOOUiC/80Tu1sVFe5V1d3yje15SQ3bdY2FxmIC53qcafom
+         0gTHJoXHJOSMfnN2ApEz8RgR6qXZJUbH6uf6GKQR81XSvum60DKSKacRYkAUQ3x7bmG4
+         sfOw==
+X-Gm-Message-State: ANoB5pnpaXwdf7o3aA6jVuxsOn9zO9p1t3O0YDrUb0e0eHhqRjqfYnQJ
+        rAH8pjXoGiugosbvxcNGgnC7tA==
+X-Google-Smtp-Source: AA0mqf6CmxqK+9dd28/XPm5VnoWGfEXLHPyKVsjaVNohL2FH1YAqanoPm55ZEQuTbm9gGFjhahizfg==
+X-Received: by 2002:a17:906:1d01:b0:7c1:36:9002 with SMTP id n1-20020a1709061d0100b007c100369002mr20212671ejh.67.1671028474394;
+        Wed, 14 Dec 2022 06:34:34 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
+        by smtp.gmail.com with ESMTPSA id ko5-20020a170907986500b007bd1ef2cccasm5896464ejc.48.2022.12.14.06.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 06:33:22 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
+        Wed, 14 Dec 2022 06:34:33 -0800 (PST)
+Date:   Wed, 14 Dec 2022 15:34:32 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH] riscv: Allow to downgrade paging mode from the command line
-Date:   Wed, 14 Dec 2022 15:33:11 +0100
-Message-Id: <20221214143311.960266-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v5 1/6] riscv: asm: alternative-macros: Introduce
+ ALTERNATIVE_3() macro
+Message-ID: <20221214143432.4micw2gipvhfqwoa@kamzik>
+References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221212115505.36770-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdXXXN9g8o1j7k-TC=F-kuyf-KngFSKi7z9z0SY9BLxmHA@mail.gmail.com>
+ <CA+V-a8s9iAtFVzdA4R_tSMuBTkoY3JmZ12MJw__Pgfyetsz34g@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CA+V-a8s9iAtFVzdA4R_tSMuBTkoY3JmZ12MJw__Pgfyetsz34g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 2 early command line parameters called "no5lvl" and "no4lvl" (using
-the same naming as x86) to allow a user to downgrade from sv57 (the
-default mode if the hardware supports it) to sv48 or sv39.
+On Tue, Dec 13, 2022 at 05:49:32PM +0000, Lad, Prabhakar wrote:
+> Hi Geert,
+> 
+> Thank you for the review.
+> 
+> On Tue, Dec 13, 2022 at 5:21 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Hi Prabhakar,
+> >
+> > On Mon, Dec 12, 2022 at 12:58 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Introduce ALTERNATIVE_3() macro.
+> > >
+> > > A vendor wants to replace an old_content, but another vendor has used
+> > > ALTERNATIVE_2() to patch its customized content at the same location.
+> > > In this case, this vendor can use macro ALTERNATIVE_3() and then replace
+> > > ALTERNATIVE_2() with ALTERNATIVE_3() to append its customized content.
+> > >
+> > > While at it update comment above ALTERNATIVE_2() macro and make it generic
+> > > so that the comment holds good for any new addition of ALTERNATIVE_X()
+> > > macros.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > v4->v5
+> > > * Rebased the patch on top of Andrew's series (now in Palmers for next-branch)
+> > > * Updated comment for ALTERNATIVE_x() as suggested by Heiko
+> >
+> > Thanks for the update!
+> >
+> > > --- a/arch/riscv/include/asm/alternative-macros.h
+> > > +++ b/arch/riscv/include/asm/alternative-macros.h
+> > > @@ -50,8 +50,17 @@
+> > >         ALT_NEW_CONTENT \vendor_id_2, \errata_id_2, \enable_2, \new_c_2
+> > >  .endm
+> > >
+> > > +.macro ALTERNATIVE_CFG_3 old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,   \
+> > > +                               new_c_2, vendor_id_2, errata_id_2, enable_2,    \
+> > > +                               new_c_3, vendor_id_3, errata_id_3, enable_3
+> > > +       ALTERNATIVE_CFG_2 \old_c, \new_c_1, \vendor_id_1, \errata_id_1, \enable_1,      \
+> > > +                                 \new_c_2, \vendor_id_2, \errata_id_2, \enable_2
+> > > +       ALT_NEW_CONTENT \vendor_id_3, \errata_id_3, \enable_3, \new_c_3
+> > > +.endm
+> > > +
+> > >  #define __ALTERNATIVE_CFG(...)         ALTERNATIVE_CFG __VA_ARGS__
+> > >  #define __ALTERNATIVE_CFG_2(...)       ALTERNATIVE_CFG_2 __VA_ARGS__
+> > > +#define __ALTERNATIVE_CFG_3(...)       ALTERNATIVE_CFG_3 __VA_ARGS__
+> > >
+> > >  #else /* !__ASSEMBLY__ */
+> > >
+> > > @@ -98,6 +107,13 @@
+> > >         __ALTERNATIVE_CFG(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1)   \
+> > >         ALT_NEW_CONTENT(vendor_id_2, errata_id_2, enable_2, new_c_2)
+> > >
+> > > +#define __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1,        \
+> > > +                                  new_c_2, vendor_id_2, errata_id_2, enable_2, \
+> > > +                                  new_c_3, vendor_id_3, errata_id_3, enable_3) \
+> > > +       __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, enable_1, \
+> > > +                                   new_c_2, vendor_id_2, errata_id_2, enable_2)        \
+> > > +       ALT_NEW_CONTENT(vendor_id_3, errata_id_3, enable_3, new_c_3)
+> > > +
+> > >  #endif /* __ASSEMBLY__ */
+> > >
+> > >  #define _ALTERNATIVE_CFG(old_c, new_c, vendor_id, errata_id, CONFIG_k) \
+> > > @@ -108,6 +124,13 @@
+> > >         __ALTERNATIVE_CFG_2(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
+> > >                                    new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2))
+> > >
+> > > +#define _ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, CONFIG_k_1,               \
+> > > +                                 new_c_2, vendor_id_2, errata_id_2, CONFIG_k_2,                \
+> > > +                                 new_c_3, vendor_id_3, errata_id_3, CONFIG_k_3)                \
+> > > +       __ALTERNATIVE_CFG_3(old_c, new_c_1, vendor_id_1, errata_id_1, IS_ENABLED(CONFIG_k_1),   \
+> > > +                                  new_c_2, vendor_id_2, errata_id_2, IS_ENABLED(CONFIG_k_2),   \
+> > > +                                  new_c_3, vendor_id_3, errata_id_3, IS_ENABLED(CONFIG_k_3))
+> > > +
+> > >  #else /* CONFIG_RISCV_ALTERNATIVE */
+> >
+> > To avoid breaking the build for K210 (and VexRiscv), you need to provide
+> > _ALTERNATIVE_CFG_3() for the !CONFIG_RISCV_ALTERNATIVE case, too:
+> >
+> Thanks for testing this.
+> 
+> > @@ -144,6 +144,9 @@
+> >  #define _ALTERNATIVE_CFG_2(old_c, ...) \
+> >         ALTERNATIVE_CFG old_c
+> >
+> > +#define _ALTERNATIVE_CFG_3(old_c, ...) \
+> > +       ALTERNATIVE_CFG old_c
+> > +
+> >  #else /* !__ASSEMBLY__ */
+> >
+> >  #define __ALTERNATIVE_CFG(old_c)       \
+> > @@ -155,6 +158,9 @@
+> >  #define _ALTERNATIVE_CFG_2(old_c, ...) \
+> >         __ALTERNATIVE_CFG(old_c)
+> >
+> > +#define _ALTERNATIVE_CFG_3(old_c, ...) \
+> > +       __ALTERNATIVE_CFG(old_c)
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> >  #endif /* CONFIG_RISCV_ALTERNATIVE */
+> >
+> > Else it fails (on riscv/for-next) with:
+> >
+> I'll include the above hunk in next version.
 
-Note that going through the device tree to get the kernel command line
-works with ACPI too since the efi stub creates a device tree anyway with
-the command line.
+Yes, those two hunks are in my example in [1] as well.
 
-Also, as those params are treated very early in the boot process and we
-use standard device tree functions that may be kasan instrumented, we
-only enable them for !KASAN configurations.
+[1] https://lore.kernel.org/all/20221129150053.50464-1-ajones@ventanamicro.com/
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
+Thanks,
+drew
 
-Tested on both DT/ACPI kernel successfully
-
- .../admin-guide/kernel-parameters.txt         |  5 ++-
- arch/riscv/mm/init.c                          | 43 ++++++++++++++++++-
- 2 files changed, 45 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774..6741524aa980 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3548,7 +3548,10 @@
- 			emulation library even if a 387 maths coprocessor
- 			is present.
- 
--	no5lvl		[X86-64] Disable 5-level paging mode. Forces
-+	no4lvl		[RISCV] Disable 4-level paging mode. Forces
-+			kernel to use 3-level paging instead.
-+
-+	no5lvl		[X86-64,RISCV] Disable 5-level paging mode. Forces
- 			kernel to use 4-level paging instead.
- 
- 	nofsgsbase	[X86] Disables FSGSBASE instructions.
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index b56a0a75533f..8140fefe0e57 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -752,12 +752,35 @@ static void __init disable_pgtable_l4(void)
-  * then read SATP to see if the configuration was taken into account
-  * meaning sv48 is supported.
-  */
--static __init void set_satp_mode(void)
-+static __init void set_satp_mode(uintptr_t dtb_pa)
- {
- 	u64 identity_satp, hw_satp;
- 	uintptr_t set_satp_mode_pmd = ((unsigned long)set_satp_mode) & PMD_MASK;
- 	bool check_l4 = false;
- 
-+#ifndef CONFIG_KASAN
-+	/*
-+	 * The below fdt functions are kasan instrumented, since at this point
-+	 * there is no mapping for the kasan shadow memory, this can't be used
-+	 * when kasan is enabled.
-+	 */
-+	int chosen_node;
-+
-+	chosen_node = fdt_path_offset((void *)dtb_pa, "/chosen");
-+	if (chosen_node >= 0) {
-+		const char *cmdline = fdt_getprop((void *)dtb_pa, chosen_node,
-+						  "bootargs", NULL);
-+		if (strstr(cmdline, "no5lvl")) {
-+			disable_pgtable_l5();
-+			check_l4 = true;
-+		} else if (strstr(cmdline, "no4lvl")) {
-+			disable_pgtable_l5();
-+			disable_pgtable_l4();
-+			return;
-+		}
-+	}
-+#endif
-+
- 	create_p4d_mapping(early_p4d,
- 			set_satp_mode_pmd, (uintptr_t)early_pud,
- 			P4D_SIZE, PAGE_TABLE);
-@@ -800,6 +823,22 @@ static __init void set_satp_mode(void)
- 	memset(early_pud, 0, PAGE_SIZE);
- 	memset(early_pmd, 0, PAGE_SIZE);
- }
-+
-+#ifndef CONFIG_KASAN
-+static int __init print_no4lvl(char *p)
-+{
-+	pr_info("Disabled 4-level and 5-level paging");
-+	return 0;
-+}
-+early_param("no4lvl", print_no4lvl);
-+
-+static int __init print_no5lvl(char *p)
-+{
-+	pr_info("Disabled 5-level paging");
-+	return 0;
-+}
-+early_param("no5lvl", print_no5lvl);
-+#endif
- #endif
- 
- /*
-@@ -979,7 +1018,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- #endif
- 
- #if defined(CONFIG_64BIT) && !defined(CONFIG_XIP_KERNEL)
--	set_satp_mode();
-+	set_satp_mode(dtb_pa);
- #endif
- 
- 	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
--- 
-2.37.2
-
+> 
+> > arch/riscv/mm/pmem.c: In function ‘arch_wb_cache_pmem’:
+> > arch/riscv/include/asm/alternative-macros.h:198:8: error: expected
+> > string literal before ‘_ALTERNATIVE_CFG_3’
+> >   198 |        _ALTERNATIVE_CFG_3(old_content, new_content_1,
+> > vendor_id_1, errata_id_1, CONFIG_k_1, \
+> >       |        ^~~~~~~~~~~~~~~~~~
+> > arch/riscv/include/asm/errata_list.h:128:14: note: in expansion of
+> > macro ‘ALTERNATIVE_3’
+> >   128 | asm volatile(ALTERNATIVE_3(      \
+> >       |              ^~~~~~~~~~~~~
+> > arch/riscv/mm/pmem.c:13:2: note: in expansion of macro ‘ALT_CMO_OP’
+> >    13 |  ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size, 0, 0);
+> >       |  ^~~~~~~~~~
+> >
+> > Gr{oetje,eeting}s,
+> >
+> >                         Geert
+> >
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> >
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds
