@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8750864C6F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D7164C6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 11:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237367AbiLNKSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 05:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S237543AbiLNKTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 05:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiLNKSl (ORCPT
+        with ESMTP id S237536AbiLNKS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 05:18:41 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5790610057
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:18:33 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id b2so43319972eja.7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 02:18:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mLalDC+faDZhVjo0ECWibu1fmKTUBj0rla2gydjMZrM=;
-        b=RxOR8bIy+HJRPAp6Peto06EWFY8DKwNgommhbORx1wsPoAAv6Q8dwMFMj/GLNHQalT
-         EoSgmQuFST1hIYgaG5ATbGo1pfNcoJ6C9+kelhG6oaVeeqvwV9IUy30tRX1zMJRD4X3W
-         vD8lzsXRckJsbMuuc8MSaVb9ceVkqwHt0+leBnqI/NxlVMsNT49H5EK0YTRAnUJIMW7y
-         oNWKZNi959DESwfoZMmIvUO+UrCRXluaioxezFZQiGf3GfZ1Kwt5zI6nqqOxFbPkYStM
-         W/RWRQl8/9lbLor8l3afS8gP0cmWDJ7HV9vQTZ8tB1fVx6bJp/18ITUnM7XMkFyTJgpS
-         DVKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mLalDC+faDZhVjo0ECWibu1fmKTUBj0rla2gydjMZrM=;
-        b=Xmi1gzZr90B+kyYaVszQDNPIdO28GgGiQ0zWNldEJItmyUfTOSwXusuuhf1QRWAF3m
-         UiGdMIj92TRxudgGDLgs1KMaZhXNLdQFUTyyG7lw5rtrpc3LvrIPq77DyvFjd/lbYJJy
-         V15jkaAktGJBTcK8H89PmkR5aBHItqBN7h2nnuVvifsMZWq2VC7SRpJTk6F1ec6bwCHL
-         2x8fBb47hyVA57xokNlCNMcyL3KA8BvvSN2bohPRlUws5nX8mOjnywzplfpQfQFbzn7T
-         VUO3Adyc9bAgHuPNXfw3uvocK4el0OYl68L7whk548ZPWhKlEADPF419SKF0GW0kGEiY
-         vnuQ==
-X-Gm-Message-State: ANoB5plVRU7sznkwCrN1Sqlh9zlR/DgW+eD5NH6h+6Njtge0R1TDJRi4
-        nHwVSnRkBZ7Ct75stLOyF/y6PuoFESGsUDxD
-X-Google-Smtp-Source: AA0mqf7054axkoyePS2xnMsSz7v3kbLmSaLz2+Y9T8DQhpB1uheYt81n1MMkrcoXNsEL693SJS72XA==
-X-Received: by 2002:a17:906:144f:b0:7c1:28a9:c277 with SMTP id q15-20020a170906144f00b007c128a9c277mr21590331ejc.6.1671013111900;
-        Wed, 14 Dec 2022 02:18:31 -0800 (PST)
-Received: from blmsp ([185.238.219.17])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906311100b0073d81b0882asm5664082ejx.7.2022.12.14.02.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 02:18:31 -0800 (PST)
-Date:   Wed, 14 Dec 2022 11:18:30 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221214101830.vmujo3js66aozik2@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221214091406.g6vim5hvlkm34naf@blmsp>
- <20221214091820.geugui5ws3f7a5ng@pengutronix.de>
- <20221214092201.xpb3rnwp5rtvrpkr@pengutronix.de>
+        Wed, 14 Dec 2022 05:18:56 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEE13E35;
+        Wed, 14 Dec 2022 02:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671013132; x=1702549132;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=On71BZpK9q1l2+c1xKWnMY3lgFjb7Dio1wCnc04xUG8=;
+  b=GCHE1GQNkHQznviMz8mmTOhVagkwCsJ45b3jboYdLSnqvagg/DRpOmAw
+   8A3tNY0v1k/gbnzYME6xedGCtz1P39m7mWRuNVfCoFaR/JhbhANRmyGIx
+   QMrT3ZbCfsLGz93NaUWT5Mc3gNF6dyy646/XS98VeDa1sQo0idHkjqV/B
+   3ok0vrWSR01sCBmzRWYf6m/ReBvCjCGka0O0ElJSv/7EMHp561drRvM8X
+   zXE86O2+1Xq9JUttaiBymU7k2w+26xFK1PLt83MwQ5smSGsdxwvyzudue
+   iMv1kOkUmRZYUHjGJogqs8pRGNz7k9IHDfpCP4qebSFlkgEEIXQndxM5e
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="317066785"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="317066785"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 02:18:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="791257203"
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="791257203"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Dec 2022 02:18:50 -0800
+Message-ID: <1fe8f8a7-c88f-0c91-e74f-4d3f2f885c89@linux.intel.com>
+Date:   Wed, 14 Dec 2022 12:20:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221214092201.xpb3rnwp5rtvrpkr@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221213-xhci-max_seg_size-v1-0-608f716a3792@chromium.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci-pci: set the dma max_seg_size
+In-Reply-To: <20221213-xhci-max_seg_size-v1-0-608f716a3792@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:22:01AM +0100, Marc Kleine-Budde wrote:
-> On 14.12.2022 10:18:20, Marc Kleine-Budde wrote:
-> > On 14.12.2022 10:14:06, Markus Schneider-Pargmann wrote:
-> > > Hi Marc,
-> > > 
-> > > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > > > Currently the driver waits to wakeup the queue until the interrupt for
-> > > > > the transmit event is received and acknowledged. If we want to use the
-> > > > > hardware FIFO, this is too late.
-> > > > > 
-> > > > > Instead release the queue as soon as the transmit was transferred into
-> > > > > the hardware FIFO. We are then ready for the next transmit to be
-> > > > > transferred.
-> > > > 
-> > > > If you want to really speed up the TX path, remove the worker and use
-> > > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
-> > > > 
-> > > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
-> > > > per SPI transfer.
-> > > 
-> > > Just a quick question here, I mplemented a xmit_more() call and I am
-> > > testing it right now, but it always returns false even under high
-> > > pressure. The device has a txqueuelen set to 1000. Do I need to turn
-> > > some other knob for this to work?
-> > 
-> > AFAIK you need BQL support: see 0084e298acfe ("can: mcp251xfd: add BQL support").
-> > 
-> > The etas_es58x driver implements xmit_more(), I added the Author Vincent
-> > on Cc.
+On 13.12.2022 17.08, Ricardo Ribalda wrote:
+> Allow devices to have dma operations beyond 64K, and avoid warnings such
+> as:
 > 
-> Have a look at netdev_queue_set_dql_min_limit() in the etas driver.
+> xhci_hcd 0000:00:14.0: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+> 
+> Cc: Takashi Iwai <tiwai@suse.de>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> To: Mathias Nyman <mathias.nyman@intel.com>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>   drivers/usb/host/xhci-pci.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 7bccbe50bab1..116a2f328772 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -453,6 +453,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>   	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
+>   		pm_runtime_allow(&dev->dev);
+>   
+> +	dma_set_max_seg_size(&dev->dev, UINT_MAX);
+> +
 
-Thank you, I need to implement BQL, I wasn't aware of that. I may need
-to delay this a bit just to get some feedback on the current state of my
-patches, so I know what I need to work on first.
+Thanks, this should be ok.
 
-But it seems to be just accounting... Anyways, thank you :)
+Preferred max segment size of sg list would be 64k as xHC hardware has 64k TRB payload size
+limit, but xhci driver will take care of larger segments, splitting them into 64k chunks.
 
-Best,
-Markus
+-Mathias
+
