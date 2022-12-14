@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E3764C1E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6164364C1E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 02:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236847AbiLNBfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 20:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S236864AbiLNBi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 20:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236790AbiLNBfQ (ORCPT
+        with ESMTP id S229870AbiLNBi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 20:35:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2042ADA;
-        Tue, 13 Dec 2022 17:35:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1686E617BC;
-        Wed, 14 Dec 2022 01:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F97C433EF;
-        Wed, 14 Dec 2022 01:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670981714;
-        bh=InZ0Yk/rNc1Gi7tVUXOaAYsQddfKxjS2U9stB0Jg02w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O7t02eoj6huI37qEVBZ+w9JV0ZAAYdbvSd6cBMhS5FrtDtmaHqtBCGpss8V9slFM4
-         +lBH+cr1CqsQUKRMj9t2iM6ApULGbqgLNNpkoYq8myOhnxxGZ0U0zlsrIpRU7N8Qqh
-         Fo5UFz3Jj3sM1yPjrSkv16CzuMJDHz1kHFhUlWegzHCwsafeaiHwj6X4PzuUqXK5aP
-         jK1tC2aejiIccqJHpQGw77c1BzTQ4SX7pQ+v0Aw+87fFWmGDl9A9aDuz5BUP6+gnDg
-         2GT7SU2h/UfNwWy8X872oB6AzHLGiFMk8qfssJZJHqGraTbLgPg9Op/DbI1v26zxg9
-         AmW6v643M4/QQ==
-Date:   Tue, 13 Dec 2022 17:35:12 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Pranavi Somisetty <pranavi.somisetty@amd.com>
-Cc:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <git@amd.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
-        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
-Subject: Re: [LINUX RFC PATCH] net: macb: Add support for partial store and
- forward
-Message-ID: <20221213173512.7902e7df@kernel.org>
-In-Reply-To: <20221213121245.13981-1-pranavi.somisetty@amd.com>
-References: <20221213121245.13981-1-pranavi.somisetty@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 13 Dec 2022 20:38:26 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A29A1B1C4
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:38:25 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id p24so1833763plw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 17:38:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1+X+IlnDqYuFPQTAvWtr2QazQA6Soh/VIDkNFnd7BDc=;
+        b=eFgVwWxRnFPSv+O1XkeQ4RrcC1gUB9yJwdiEj/nYAmAbztlHeE3RDrgYcFF59+uSEm
+         eT9Uw3XGt6Xz/eanAEkbYsny/stwxcG/O+FV0HUri7P/cscnxNgWAtLZZj2DXTy374a+
+         UwM8xWJbTDDWGVEcrSOtHAPcNIJXDN9nplMshnZ1cbuEHUilJNi4tDIdy6YvJMqxzLol
+         md6FVrgmv9JhtfiGf/VPtVjTCfg6bnLg6+4W1sj5CJzjPef3JkDBl9c9gcQCeJ3yK+Sm
+         qm6RWp+AqUgFKGoSin4rAuP3o2UzWrwsiL7VTjP/NGYLu1qRMxExH1kTgoUQ8k4o6jCB
+         u8VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1+X+IlnDqYuFPQTAvWtr2QazQA6Soh/VIDkNFnd7BDc=;
+        b=LWxJQoVOYtSjdCwEg2QjmCDsa0kk9To6EnoNTRQVNfhXN6DqDNLDlW59/Y3neW5sHx
+         NgMAYh08c+L0lCD8JGLfj+XqnlZ1+JHmS0LzsKhU++tx4q9tA1qyf9+HC2sgvQMu0ZuO
+         FMUFohOWGnSrM4Zrd6zJqdi37H+dkkE+zhtUa6jsaM3D2zShTRu+fzJs1pP26bgmrknL
+         lxwieSJXMcEiRGp1QbOA7LbhBVJBzy5+MBaGMw1Je3LbO6/01BI12lMZDlXnhxQA1Xwi
+         EvFHha17fZCwzvsi99SmsZE15T0pkAHSZt9JQCFe4B/aTBpKi5XXmb13A6YEqV1lWIfB
+         hqZA==
+X-Gm-Message-State: ANoB5pmSP6jhXWTNd/XrSIBsyeVxl602DWgUOoymIzxFDAH3Hfzu/Aqp
+        23ml/1pfYA4EQ8U5FlXChyViUgb54rI=
+X-Google-Smtp-Source: AA0mqf4UEsAM9v1lIylewMhtwxoNlUndWQGkxqGJ2m5kVKLY0V63D+ApmAujN8LX2Qe1otOydEaa7w==
+X-Received: by 2002:a17:902:6a8c:b0:185:441e:4cef with SMTP id n12-20020a1709026a8c00b00185441e4cefmr21583269plk.31.1670981904609;
+        Tue, 13 Dec 2022 17:38:24 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:487:c29a:45bc:c5bc:b838:9a0b])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090341c400b00187033cac81sm518486ple.145.2022.12.13.17.38.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Dec 2022 17:38:24 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     broonie@kernel.org, lgirdwood@gmail.com
+Cc:     m.szyprowski@samsung.com, cy_huang@richtek.com,
+        chiaen_wu@richtek.com, gene_chen@richtek.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] regulator: core: Fix resolve supply lookup issue
+Date:   Wed, 14 Dec 2022 09:37:11 +0800
+Message-Id: <1670981831-12583-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 05:12:45 -0700 Pranavi Somisetty wrote:
-> From: Maulik Jodhani <maulik.jodhani@xilinx.com>
-> 
-> - Validate FCS in receive interrupt handler if Rx checksum offloading
->   is disabled
-> - Get rx-watermark value from DT
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Sounds like two separate changes, please split into two patches
+From Marek's log, the previous change modify the parent of rdev.
+https://lore.kernel.org/all/58b92e75-f373-dae7-7031-8abd465bb874@samsung.com/
 
-> @@ -1375,6 +1385,16 @@ static int gem_rx(struct macb_queue *queue, struct napi_struct *napi,
->  				 bp->rx_buffer_size, DMA_FROM_DEVICE);
->  
->  		skb->protocol = eth_type_trans(skb, bp->dev);
-> +
-> +		/* Validate MAC fcs if RX checsum offload disabled */
-> +		if (!(bp->dev->features & NETIF_F_RXCSUM)) {
+In 'regulator_resolve_supply', it uses the parent DT node of rdev as the
+DT-lookup starting node. But the parent DT node may not exist. This will
+cause the NULL supply issue.
 
-RXCSUM is for L4 (TCP/UDP) checksums, FCS is simply assumed 
-to be validated by HW.
+This patch modify the parent of rdev back to the device that provides
+from 'regulator_config' in 'regulator_register'.
 
-> +			if (macb_validate_hw_csum(skb)) {
-> +				netdev_err(bp->dev, "incorrect FCS\n");
+Fixes: 8f3cbcd6b440 ("regulator: core: Use different devices for resource allocation and DT lookup")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+ drivers/regulator/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This can flood logs, and is likely unnecessary since we have a
-dedicated statistics for crc errors (rx_crc_errors).
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index ace4ecc..729c453 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -5540,7 +5540,7 @@ regulator_register(struct device *dev,
+ 
+ 	/* register with sysfs */
+ 	rdev->dev.class = &regulator_class;
+-	rdev->dev.parent = dev;
++	rdev->dev.parent = config->dev;
+ 	dev_set_name(&rdev->dev, "regulator.%lu",
+ 		    (unsigned long) atomic_inc_return(&regulator_no));
+ 	dev_set_drvdata(&rdev->dev, rdev);
+-- 
+2.7.4
 
-> +				bp->dev->stats.rx_dropped++;
-
-CRC errors are errors not drops see the comment above struct
-rtnl_link_stats64 for more info.
-
-> +				break;
-> +			}
-> +		}
-
-> @@ -3812,10 +3862,29 @@ static void macb_configure_caps(struct macb *bp,
->  				const struct macb_config *dt_conf)
->  {
->  	u32 dcfg;
-> +	int retval;
->  
->  	if (dt_conf)
->  		bp->caps = dt_conf->caps;
->  
-> +	/* By default we set to partial store and forward mode for zynqmp.
-> +	 * Disable if not set in devicetree.
-> +	 */
-> +	if (bp->caps & MACB_CAPS_PARTIAL_STORE_FORWARD) {
-> +		retval = of_property_read_u16(bp->pdev->dev.of_node,
-> +					      "rx-watermark",
-> +					      &bp->rx_watermark);
-
-is this property documented in the bindings?
