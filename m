@@ -2,150 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B85364C26B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9015464C272
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 03:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbiLNCxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 21:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S236955AbiLNCzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 21:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbiLNCw7 (ORCPT
+        with ESMTP id S235717AbiLNCzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 21:52:59 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F3065CE
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:52:43 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id t2so1968191ply.2
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 18:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XcHaJrtlRfUwYPTK4kJLL2u6ZuEblPsEK62crrbzYPI=;
-        b=N2dHZ9eAI2dH7pfB/08LBYO7pUpwpDW4Wy142jTM4YqjtM2E3y8UEZ0G2+HQFOb7/5
-         5jwoh+re26kk5KXPPX56Mu9hd+gihHltN66R7uOzcvDHueMFyKGUXDHMaIadXO9UsLMd
-         mmrlUlOoUKm/T1fBypIojBpuqo57SCXJmRCCLpEuWpOVZM8ahdmn9et5dQMhAKjFs/g/
-         nTMtvqr5ko2iZN6RphOa7zezvz8H6bYxwhQ+Dz7OhOU5dCSadoRxD84Ex+dnrBFYndhJ
-         Eqesy0ZMoRAal2PXvo5pC/8hVoXaTkkNs8BPvyuHENzemvslOOJinbv5x4xyvdvqOjC4
-         Eitg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XcHaJrtlRfUwYPTK4kJLL2u6ZuEblPsEK62crrbzYPI=;
-        b=oqKBxlG/q1pF2UOMjIyyyBnAc+CTkRKn5W0QYDfZ49s9M2q+U7WMN/++pLSDzYgvw+
-         LAcmX9dIr4eUdC3UPGEB5ZvYFoRIm07utGBuW4RIdAp8Rqki1eIQokLG6JQWPBhDMkNH
-         O7WB8YLlZzMobvPTyKsNmlW44YcdqtE2TBeHLZCxZzLR7So3/Ym6FH94a5A4hUxvRkag
-         7OrgOyiZhWqk2VagS16qx1LZhTz184sQVnQIok9MVBG/+oOMj2jzVp+WiVvb4HYbw82H
-         BsAi4e0VKGB7ZjPjSWaYSlebDEPZDdB70TdDy++a+M8Ecc7rNPeKUu+wjGKrXCA3WDRb
-         fx+w==
-X-Gm-Message-State: ANoB5pmS7TlN58Q5KUmM5Mminpj+N1WajmR5iTS+Uht7DgyIQLoEhyaG
-        UBPujzqBsLDL4g/HgWmj3hU=
-X-Google-Smtp-Source: AA0mqf6ms57T/CgfmMaEmP+WW0cCtQKATxKqSxQFbMTAKJgl/wkIyJVcKx8wHTHGLRTQYOFNW6heSg==
-X-Received: by 2002:a05:6a21:9212:b0:9f:2dd1:c2bc with SMTP id tl18-20020a056a21921200b0009f2dd1c2bcmr27401857pzb.49.1670986363493;
-        Tue, 13 Dec 2022 18:52:43 -0800 (PST)
-Received: from ubuntu.localdomain ([118.73.12.140])
-        by smtp.gmail.com with ESMTPSA id r19-20020a63d913000000b00478e7f87f3bsm7304690pgg.67.2022.12.13.18.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 18:52:42 -0800 (PST)
-From:   Donglin Peng <dolinux.peng@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, xiehuan09@gmail.com,
-        linux-kernel@vger.kernel.org,
-        Donglin Peng <dolinux.peng@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] tracing/probe: add a char type to print the character value of traced arguments
-Date:   Tue, 13 Dec 2022 18:52:18 -0800
-Message-Id: <20221214025218.8737-1-dolinux.peng@gmail.com>
+        Tue, 13 Dec 2022 21:55:00 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07808B52;
+        Tue, 13 Dec 2022 18:54:57 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAAHD5fXOpljjICpBg--.26176S2;
+        Wed, 14 Dec 2022 10:54:15 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] usb: gadget: aspeed_udc: Add check for dma_alloc_coherent
+Date:   Wed, 14 Dec 2022 10:54:14 +0800
+Message-Id: <20221214025414.44866-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAAHD5fXOpljjICpBg--.26176S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrWfGw4fZF4Uur1rZry8Grg_yoWkCrbE9F
+        4UWF15Wryava9Fgr1jvw13Aryq9a48u34kW3WvkF13Aa43Ga4xXr1jqr95ur47ZFy7uFn8
+        Aas0krW7X3y7XjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbVAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUHWlkUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are scenes that we want to show the character value of traced
-arguments other than a decimal or hexadecimal or string value for debug
-convinience. Add a new type named 'char' to do it.
+Add the check for the return value of dma_alloc_coherent in order to
+avoid NULL pointer dereference.
 
-For example:
+This flaw was found using an experimental static analysis tool we are
+developing, APP-Miner, which has not been disclosed.
 
-echo 'p:myprobe xxxx +0($arg1):char' > kprobe_events
+The allyesconfig build using GCC 9.3.0 shows no new warning. As we
+don't have a UDC device to test with, no runtime testing was able to
+be performed.
 
-echo 'p:myprobe xxxx +0($arg1):char[2]' > kprobe_events
-
-Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
-Changes in v2:
- - fix build warnings reported by kernel test robot
- - modify commit log
----
- Documentation/trace/kprobetrace.rst | 3 ++-
- kernel/trace/trace_probe.c          | 2 ++
- kernel/trace/trace_probe.h          | 1 +
- 3 files changed, 5 insertions(+), 1 deletion(-)
+Changelog:
 
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-index 4274cc6a2f94..007972a3c5c4 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -58,7 +58,7 @@ Synopsis of kprobe_events
-   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
- 		  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
--		  (x8/x16/x32/x64), "string", "ustring" and bitfield
-+		  (x8/x16/x32/x64), "char", "string", "ustring" and bitfield
- 		  are supported.
+v1 -> v2:
+
+1. Add "goto err;" when allocation fails.
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 01968e2167f9..7dc2457c7460 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -1516,6 +1516,10 @@ static int ast_udc_probe(struct platform_device *pdev)
+ 					  AST_UDC_EP_DMA_SIZE *
+ 					  AST_UDC_NUM_ENDPOINTS,
+ 					  &udc->ep0_buf_dma, GFP_KERNEL);
++	if (!udc->ep0_buf) {
++		rc = -ENOMEM;
++		goto err;
++	}
  
-   (\*1) only for the probe on function entry (offs == 0).
-@@ -80,6 +80,7 @@ E.g. 'x16[4]' means an array of x16 (2bytes hex) with 4 elements.
- Note that the array can be applied to memory type fetchargs, you can not
- apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
- wrong, but '+8($stack):x8[8]' is OK.)
-+Char type can be used to show the character value of traced arguments.
- String type is a special type, which fetches a "null-terminated" string from
- kernel space. This means it will fail and store NULL if the string container
- has been paged out. "ustring" type is an alternative of string for user-space.
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 36dff277de46..a4abf7f6c295 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -50,6 +50,7 @@ DEFINE_BASIC_PRINT_TYPE_FUNC(x8,  u8,  "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x16, u16, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x32, u32, "0x%x")
- DEFINE_BASIC_PRINT_TYPE_FUNC(x64, u64, "0x%Lx")
-+DEFINE_BASIC_PRINT_TYPE_FUNC(char, u8, "%c")
- 
- int PRINT_TYPE_FUNC_NAME(symbol)(struct trace_seq *s, void *data, void *ent)
- {
-@@ -93,6 +94,7 @@ static const struct fetch_type probe_fetch_types[] = {
- 	ASSIGN_FETCH_TYPE_ALIAS(x16, u16, u16, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x32, u32, u32, 0),
- 	ASSIGN_FETCH_TYPE_ALIAS(x64, u64, u64, 0),
-+	ASSIGN_FETCH_TYPE_ALIAS(char, u8, u8,  0),
- 	ASSIGN_FETCH_TYPE_ALIAS(symbol, ADDR_FETCH_TYPE, ADDR_FETCH_TYPE, 0),
- 
- 	ASSIGN_FETCH_TYPE_END
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index de38f1c03776..8c86aaa8b0c9 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -164,6 +164,7 @@ DECLARE_BASIC_PRINT_TYPE_FUNC(x16);
- DECLARE_BASIC_PRINT_TYPE_FUNC(x32);
- DECLARE_BASIC_PRINT_TYPE_FUNC(x64);
- 
-+DECLARE_BASIC_PRINT_TYPE_FUNC(char);
- DECLARE_BASIC_PRINT_TYPE_FUNC(string);
- DECLARE_BASIC_PRINT_TYPE_FUNC(symbol);
- 
+ 	udc->gadget.speed = USB_SPEED_UNKNOWN;
+ 	udc->gadget.max_speed = USB_SPEED_HIGH;
 -- 
 2.25.1
 
