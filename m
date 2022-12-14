@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD9E64C649
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35264C651
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237948AbiLNJuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S237976AbiLNJuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237949AbiLNJuH (ORCPT
+        with ESMTP id S237960AbiLNJue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:50:07 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6BBDE9C
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:50:06 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id q6so9477476lfm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6FFmcD51ezj3o5LArcwRpZL3dKHNUEgb+0z4MfXTfq4=;
-        b=SrsMIWLnZ2e6dc6WjP29rF3goK6Oi7KHTo5Ppr3cYCvz+pvDmiQW2Qzrue1wNWAoXM
-         caJNYe7onWKVS739Q+tE7eyfCy5PFWmY8j0194eoE83MxT5RteG2t03i4rTlzlBikFaD
-         eaxthxz+mZOelmAfyVkjmM3Tqq99hf3zRus2n+t7OcR0A2Bdj/TdgjUCeC9lPRvOQNYI
-         faxibn3JYwdd9CpWJ7ODBKBMk270Xa/23xMLNSRWn8Fy1k7IG76oXNubS2HeGkGXMVBk
-         aIsalme/c9b0Ccy1nrOe+NVO+T5x/4TdJhYXRgvjJDnL/Nm3ErS0EQ9HHRUCZy8DcjQg
-         3tOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6FFmcD51ezj3o5LArcwRpZL3dKHNUEgb+0z4MfXTfq4=;
-        b=BS83MaxoLCkJvvcXg09q/iyTxG/JfQKrb+vvdV8z4hNASWADwSVhWwZGuvSzDODdHk
-         /W3wWhAxA8wwYyleudHIbzXaTWkE3rxxPJxdHC85mUbfxHwHYF/iyKE7clKnR9ysfZ4U
-         b7OL7sx87aL20xatlToOk4qCst2hiHa6b+seeqNgUhCz3jc66uf5DnuTndhv44dWrjWw
-         T06yOjRKCl9IAljgU7obnK3vsgONwFPZF0UmwYXCc7XTt2IqfupWitVyUFzkyqyxisfh
-         h/WAZXW+1iDNtaYhhD6TSsuJsbyLa4YWN/ANAQnzGbbp+nB6yM4dCescIK2NxdQAMvBd
-         XuUg==
-X-Gm-Message-State: ANoB5pmpbcrioOUGARvE7u5Gn4DEIN9CJUAlf1EJnv+ynubpDlV93kzZ
-        kR/F6C5bIlySQRoguyj/gEOtLw==
-X-Google-Smtp-Source: AA0mqf4SavdtlFRgcw48pbLo6Dl14dBz5Gqm4lHo+/bQ+6ShOHcif1m01CggfXPrdDxkIq1cQzF74g==
-X-Received: by 2002:a05:6512:340f:b0:4b6:f0ea:4f42 with SMTP id i15-20020a056512340f00b004b6f0ea4f42mr2326922lfr.59.1671011405009;
-        Wed, 14 Dec 2022 01:50:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e12-20020ac25cac000000b004b5480edf67sm746645lfq.36.2022.12.14.01.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 01:50:04 -0800 (PST)
-Message-ID: <1975245f-93e5-358c-4488-692fefe4285d@linaro.org>
-Date:   Wed, 14 Dec 2022 10:50:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/4] dt-bindings: ufs: qcom: Add SM6125 compatible string
-Content-Language: en-US
-To:     Lux Aliaga <they@mint.lgbt>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221214093053.152713-1-they@mint.lgbt>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221214093053.152713-1-they@mint.lgbt>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 14 Dec 2022 04:50:34 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD1E5FDE;
+        Wed, 14 Dec 2022 01:50:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1671011433; x=1702547433;
+  h=from:to:cc:subject:date:message-id;
+  bh=lNdVFhzpDK6ZRn8cspcCrkrVHGXbdDJwrbhpIaJaCdQ=;
+  b=n6qF0oq/znFodv2R2F59uhFp1M5Y7p5gJg4SHFshhF4LhhshYHUAGWPS
+   8kGX1RShpYE1KRUZjOcd8aYC+WSY7ZMgBzpbNvTTlyTJPMva7eLxlfw78
+   Z1jeXQkwXi0wIBlc+Oqs/vnZtuedWVB4eWiXuBvySt5P9p6iC0sjaMhDQ
+   eV2TJsOpUnWqWqiNJY/f4cBaKzQPwMpFrSa9oKRimd6RrXyCBm+3XBttE
+   j3GR6yoUA35IlyPjXDLmKHR/JKI4nHdb3vcoIvWl2aZei5YeLoRLLvpCa
+   AMC+taCHcORMByv3Fe03fz6J0ZxabpbgRuKcyU8DoNfzOPiYE7HIwLS7y
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,244,1665417600"; 
+   d="scan'208";a="218870759"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Dec 2022 17:50:32 +0800
+IronPort-SDR: /I1FWXGPu9AqshsQT94/g2+hAhQ0RX77yJafqF5xnAl2+ohoXqxFOpskM7c6t8JyS7gf2IjsJZ
+ a1ALsS18GQROmgACUTv/3qjCwPme6+gmDHUBkr2V89MrfUOJ3vqGV0MA3S7ZIHAUlRS6JqkpUE
+ E8gxiscBUOl1jpRTOE/sW1eo4m8Z6tdsVbw2tVVT8EUJrJ07CI2bgI3LukD66EOHbFk4A07WFn
+ iVDw3yFnzwCHfG0Pub0uMAV3BWAvfdK2dJBVUK2Ttn2EWDtVpZQ8427AfekYQzA4BEtVAum4VV
+ y+I=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Dec 2022 01:08:54 -0800
+IronPort-SDR: u8LeKzOHkfCLvuTPtI/isU3jvNZSZRjgKTAjliABEYcgBLqVFrsl/1Nt6Ff3ivgo0+4dG1yEV7
+ a3vPnNSmgQNKSAbSCTdo47UEPlZaMG7jVQjbkii47P5OWw1h9IqJ/QY1tmzSIJIhKjmeY28nKa
+ W8FDo5pOCRmeNQJ2QGkVwwZB7HACrdt39P1hzGfNFPvTI+pMJCsgb1O4IeHVfe34G5WHTLUmw+
+ NhqsfPyR6FojWX5jYubvMVDU9NZ2mFvn3t+qW4qVk101NOYIkJgLAb2uwiNyw603YDcVlzMQwM
+ jYM=
+WDCIronportException: Internal
+Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
+  by uls-op-cesaip02.wdc.com with ESMTP; 14 Dec 2022 01:50:31 -0800
+From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
+To:     martin.petersen@oracle.com
+Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>
+Subject: [PATCH v6 0/4] ufs: core: Always read the descriptors with max length
+Date:   Wed, 14 Dec 2022 11:50:23 +0200
+Message-Id: <1671011427-26184-1-git-send-email-Arthur.Simchaev@wdc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/12/2022 10:30, Lux Aliaga wrote:
-> Document the compatible for UFS found on the SM6125.
-> 
-> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+v5--v6:
+  Add Bart's "Reviewed-by" to patch 2 and 4
 
-Please rebase on top of:
-https://lore.kernel.org/all/20221030094258.486428-2-iskren.chernev@gmail.com/
+v4--v5:
+  Change patch 2 according to Bart's comment
 
-so the change will be much smaller.
+v3--v4:
+  Add "Reviewed-by" to patch's commits
+  Use kzalloc instead of kmalloc in drivers/ufs/core/ufshcd.c - patch 2/4
 
-Best regards,
-Krzysztof
+v2--v3:
+  Based on Bean's comments:
+  1)Use kzalloc instead of kmalloc in ufshcd_set_active_icc_lvl - patch 2/4
+  2)Delete  UFS_RPMB_UNIT definition - patch 2/4
+  3)Delete len description - patch 3/4
+
+v1--v2:
+  Fix argument warning in ufshpb.c
+
+Read any descriptor with a maximum size of QUERY_DESC_MAX_SIZE.
+According to the spec the device rerurns the actual size.
+Thus can improve code readability and save CPU cycles.
+While at it, cleanup few leftovers around the descriptor size parameter.
+
+Suggested-by: Bean Huo <beanhuo@micron.com>
+
+Arthur Simchaev (4):
+  ufs:core: Remove redundant wb check
+  ufs:core: Remove redundant desc_size variable from hba
+  ufs: core: Remove len parameter from ufshcd_set_active_icc_lvl
+  ufs: core: Remove ufshcd_map_desc_id_to_length function
+
+ drivers/ufs/core/ufs_bsg.c     |   7 +--
+ drivers/ufs/core/ufshcd-priv.h |   3 --
+ drivers/ufs/core/ufshcd.c      | 100 ++++++++++-------------------------------
+ drivers/ufs/core/ufshpb.c      |   5 +--
+ include/ufs/ufshcd.h           |   1 -
+ 5 files changed, 26 insertions(+), 90 deletions(-)
+
+-- 
+2.7.4
 
