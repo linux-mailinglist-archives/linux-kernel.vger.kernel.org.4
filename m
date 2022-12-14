@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D965364CE81
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300B364CE80
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 17:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239217AbiLNQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 11:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S239195AbiLNQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 11:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239193AbiLNQ46 (ORCPT
+        with ESMTP id S239200AbiLNQ47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 11:56:58 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B1A29375
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:56:57 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id i83so3696500ioa.11
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:56:57 -0800 (PST)
+        Wed, 14 Dec 2022 11:56:59 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B407B140C7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:56:58 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id p6so3689841iod.13
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 08:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+IqN/UFmzZrEibODg3m/L1J+2MIkf8gPpvi4AhxE0rI=;
-        b=Tr9KjKxPfOrvyg/SlAr3G0wYWAk1UreVI+Jp0ogHuK9sYGPI6TLN2bdwSO7JE9YN5P
-         ksq36k620RJublNfl2UgV0rcqufHvRy3WPZ1/DwJY5mEzTkXsKBQpFeYNSQafVJs/g5m
-         bddWHvyIRkWIjk6XLgscQ22NQRzC1MS/db8GVzT3NAYZmp4T13GzoGp9XmQLdGHWALMt
-         0WokKjmKiiOxdGDB4hkRHUOCnT/AeUKWtXKcLAEmpX/i/FeNibZqDKuK34fXQ4DdD9lX
-         kMHALlS4FAY2jJZj/5A9zLlipomJ24/3huviN/0VKdXs7IKs+uzS51RYhIZDc3VLHkem
-         1LiA==
+        bh=6Ju0SN0CEVcplXYOw1X7EyarT02yn23kHgLqVSbDEE4=;
+        b=QhWtChl13fEjzn+c7stogJNanm2k7IHx55x+oP67ZKqO6ImEwYdM+5fiS9G+uqiooE
+         a1/ZHEP9J+4tgZZZNRYS2+lcbPgkq2Jfcdz0vFEDOM36QIQUIlzMj1qza+w6pOueO7n3
+         tZZJeS227c7o6UQSCclnUN28FezhrZrlkv/Yj+TtnCSJfgWNZTjRKZbvTAIdi4/kHL84
+         5oWKCJHAD34g81IWBxv7KeV1EE/JMQ0Lkk9R40PZIrUcx+b4TtXyuw5IU4wTgLw/1IHG
+         gg5CCs44vTq7EwWicegB+poRTotw8JsjL13C/6+Sly36aZVJMT5gNJmRBpsYzYxeDF5l
+         3pOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+IqN/UFmzZrEibODg3m/L1J+2MIkf8gPpvi4AhxE0rI=;
-        b=Fd2z1rtnJ8njT9xpv2FfObKIPUiXLynqRFacJfpmbMbKVCHwCZEsFYSvuLFP0Hj4Ns
-         gDUjmIm7CRl8m2yoRx5wwwCeS9pX2FoZJR14LNval0ZVt86jewBE+2udxTbOwvKlk74e
-         93svOo2iKToqZxZuboSOqEppMAG147kTIDVDcipeHQPYAlWo9QMfRouT3Uz6UiEK+PCO
-         p3D7Xjr0Vbk3I2MfOwj0Bo1l40Oh0s19jNB89RKRzhuSMqkLYPoh7N4+ojBZH2MPV5M/
-         xAApqzb7dyTkikRj6W6SsZM5iU63jNuMlFm9q7rbhDi8dMZeNkk9+xRmRQgAePuB/EmD
-         TiXg==
-X-Gm-Message-State: ANoB5pl5i3jw+xn3WSSgtbfc8nftAHqjlwcwEBqLfS+wEHuEViO4LYvR
-        ZMgU4qd26CgoUzKJnEvcjF+uRw==
-X-Google-Smtp-Source: AA0mqf6hY/cxfbLGBy5lpJsAXpenWJGKz6PStcJNLjvFqomX4RsJ7597HGshXcMaRC/vLki1ccjSeg==
-X-Received: by 2002:a5d:9496:0:b0:6da:6978:29bd with SMTP id v22-20020a5d9496000000b006da697829bdmr2713516ioj.0.1671037016734;
-        Wed, 14 Dec 2022 08:56:56 -0800 (PST)
+        bh=6Ju0SN0CEVcplXYOw1X7EyarT02yn23kHgLqVSbDEE4=;
+        b=NjnvdmAAWqSZf7r2ncO5Fh2krB5kLOuKcZfJSyyAVt/j8eIAJPdYw4HABtK7kU/pdA
+         +1UOaFrMcPT7oE7PyrWHub9YaFDHE7kxRe5YnmmAuVJ2DBZFjn4cUG6NOh1BM9qlvIG4
+         ctU0FN7HQQ9xhtnCbi5DFjo9H2p/4C5wEwEP5sDMwXae1xiPFd8xrXDCR10LLLs92D+6
+         zHKmblBRvVOb83ST1/l4kasqaLOuD17scddiDmiZIdlpqroj+u0GmKW1DXs160mFCFv+
+         9qFIw9upcVkXX0P5nYjFJlwmjfLEnIT3B/Lv1Hr9WTW4eZAsxWH+UuONOyDISd5CHhkM
+         1F2g==
+X-Gm-Message-State: ANoB5plOuc6MlCwz/u9t+uyMCAABZtQUO9QXz98n/5LpD6cB/oxPGsZg
+        BML0YoOC1hLGyuxtgMCakDLjeA==
+X-Google-Smtp-Source: AA0mqf7BMcqzrhfanZkvUyfWE7632ujYz6f26WUmSC5MB1Ub7wpu0VFEZXO6pYWYl7NDTPViNmT0Dw==
+X-Received: by 2002:a05:6602:21c2:b0:6e2:d939:4f30 with SMTP id c2-20020a05660221c200b006e2d9394f30mr2514770ioc.0.1671037017900;
+        Wed, 14 Dec 2022 08:56:57 -0800 (PST)
 Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id j21-20020a0566022cd500b006bbddd49984sm102876iow.9.2022.12.14.08.56.55
+        by smtp.gmail.com with ESMTPSA id j21-20020a0566022cd500b006bbddd49984sm102876iow.9.2022.12.14.08.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 08:56:56 -0800 (PST)
+        Wed, 14 Dec 2022 08:56:57 -0800 (PST)
 From:   Jens Axboe <axboe@kernel.dk>
-To:     paolo.valente@linaro.org, tj@kernel.org, josef@toxicpanda.com,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-In-Reply-To: <20221214033155.3455754-1-yukuai1@huaweicloud.com>
-References: <20221214033155.3455754-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH 0/2] block, bfq: minor cleanups
-Message-Id: <167103701587.7871.17006883057809106433.b4-ty@kernel.dk>
-Date:   Wed, 14 Dec 2022 09:56:55 -0700
+To:     Tejun Heo <tj@kernel.org>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+In-Reply-To: <20221213120826.17446-1-jirislaby@kernel.org>
+References: <20221213120826.17446-1-jirislaby@kernel.org>
+Subject: Re: [PATCH v3] block/blk-iocost (gcc13): keep large values in a new enum
+Message-Id: <167103701689.7871.5096840115794235278.b4-ty@kernel.dk>
+Date:   Wed, 14 Dec 2022 09:56:56 -0700
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -75,23 +75,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 14 Dec 2022 11:31:53 +0800, Yu Kuai wrote:
-> Yu Kuai (2):
->   block, bfq: don't return bfqg from __bfq_bic_change_cgroup()
->   block, bfq: replace 0/1 with false/true in bic apis
-> 
-> block/bfq-cgroup.c  | 16 +++++++---------
->  block/bfq-iosched.c |  4 ++--
->  2 files changed, 9 insertions(+), 11 deletions(-)
+On Tue, 13 Dec 2022 13:08:26 +0100, Jiri Slaby (SUSE) wrote:
+> Since gcc13, each member of an enum has the same type as the enum [1]. And
+> that is inherited from its members. Provided:
+>   VTIME_PER_SEC_SHIFT     = 37,
+>   VTIME_PER_SEC           = 1LLU << VTIME_PER_SEC_SHIFT,
+>   ...
+>   AUTOP_CYCLE_NSEC        = 10LLU * NSEC_PER_SEC,
+> the named type is unsigned long.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] block, bfq: don't return bfqg from __bfq_bic_change_cgroup()
-      commit: 452af7dc59033a76372d51a24682503377872b11
-[2/2] block, bfq: replace 0/1 with false/true in bic apis
-      commit: 337366e02b370d2800110fbc99940f6ddddcbdfa
+[1/1] block/blk-iocost (gcc13): keep large values in a new enum
+      commit: ff1cc97b1f4c10db224f276d9615b22835b8c424
 
 Best regards,
 -- 
