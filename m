@@ -2,338 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B201E64C319
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446B264C31F
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 05:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbiLNEQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 13 Dec 2022 23:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S236731AbiLNETe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 13 Dec 2022 23:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236731AbiLNEQ1 (ORCPT
+        with ESMTP id S229694AbiLNETb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 13 Dec 2022 23:16:27 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2075.outbound.protection.outlook.com [40.107.13.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844E92793C;
-        Tue, 13 Dec 2022 20:16:25 -0800 (PST)
+        Tue, 13 Dec 2022 23:19:31 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4111326D7;
+        Tue, 13 Dec 2022 20:19:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670991569; x=1702527569;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gD5qUs4zvHK9tSZZg4PIwU/i16qoXYxEwgoTgtshsig=;
+  b=ZMGhjlR+K3+sCBIxqqSM9c2zMeM8T868ky6QgKDINUDuies35u7aKVx8
+   X5CsMgik55J6hKNBSQKZBdQA7nDmzlehxaLKQiKXpZ73Axn834OZ6zFVH
+   UO1X4xmmlZhCIhVJHdiPXN2H0fggtDrwbFkcQWKlcZV2EDLmlQnlOS0nE
+   5RiZ3GzaYxtegUl7hi8chOjzPl6ma7NCtNaOaC/D7mwNLkqSKwuMTFY4V
+   gfeGK8cbxDAcB0x8rWw2S31Orss2sIdHGYXYgz0E7/He4PDVXI8fCfYAG
+   coh8/NYY1++Nwq8JyIzQcXpkj/lco4IeeYnEJVSbcL69YxcuA4N/lFB9L
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="382607526"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="382607526"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 20:19:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="737597730"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="737597730"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Dec 2022 20:19:28 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 13 Dec 2022 20:19:27 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 13 Dec 2022 20:19:27 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 13 Dec 2022 20:19:27 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fjFleDS1yuPEQuJOMYceSzTwV7ZR9M0qPaN97ZBecqxICOQRrgqxLyWkyOuJTI6qpTOR9y7nFZU++bEgDk35gnNVF5Zfgw8tJs8gkUQcOBdfqTS9IpZmhpl3UruPt2Ylo958a5SjAEz3gnpYP6hh49g+arJtA8MyuS8gkkQEOE4xte2Nz5OA9QClKSE/3Hn/dQBcD0mpOjnMf/bgTRHwltv56ZhtpYTqjz1p2EU3RHHLFCvtACZXkNCntsXvP6BeKcljMW8ANtcU6xB8hiVoYW7PSF15HXl4O2scB87SwH1mWrif8ozX/Ah+UMI+2+7Dtklfn7yuxRhBW7DUYbc/Ow==
+ b=iJZ/M1x0Ohanc6mLD+l0Feud0JwCP2gscsm1xjle+QMYTYxGbQSEOsD4Y7uPxkY6Dm+72M/Ov0p1hV05gCugsrQ9Q0ry/2PaHnTgcYczILDLCsyJ/7hm359OW9EmClmFpSTVFyPRlhR5APiyH/h/B2h6gIn+hUNZEKn8L+3q2KTGzsD+fDdEAId9cFFogKLSWWo0os/7oNOugJL9bIDqD42dz6DBhT4oPRnDjE09TTRyCBG4mv044Ga6gO2rgJkRH4H8WOf/JZFjg20UfOfee5DjbSqspprkywYKPclYnS8zuoBU/u9s3iILdVsnMZ0SYpiTKbbFN+09Iv93bqIqPw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n/mQMnlXZGjF8ApvpGnB4atA8/E+6O3KFNPZkQ3SpXg=;
- b=XCWefs51WKLxXAJr7lrH8iMqpAWsXi48pIet8NYRlO2dK71XzfuXOq7Lz3E66AGZ0H75i1CdkfCr9JLOUqqGeJAevKI2RZlWJnJtGv8aNrld7GSBVHnOepFKoqlnkaMzwq4h0c5vkTK3cISOd0+wSf/1+OUzI578HZExSvJPgd1qT7494Mzb041L7hs2oJMvDomCj4sYQM1WNu7iPc/vpVsqlEtfMgO0JRrUqkHToMFkpCpqNlnxNlKqinyINcmbMAAGbhbmw2b5zynwZpOO/dI440m6yDmKN27OhCPXZz+RuF3HrndG1OytbExxBzOhVWz/ns5tQUTQT15+4CiLFQ==
+ bh=XeEzVarl+eSCjWciuPgSghZNS1Sm50pgFpNNu8ld48M=;
+ b=eT8hH/9EACy1FNqDV5tNN6Dmeif0d4Zna7IK7OyIcA3L/cJti07IC1J4q5NPwQiCJ4AkSmHHojRonJrzXN9Ix/Vix7aKIybhWzUxYW0s2nNcpJWE7N2DraHh8HURI4OyRsIcUx/h96qyo+bvFmL7cH5/bVlp3Gmd63KfaBXdP6dunk7amtdQ4psjV1GizpOc74Y6gO5YNqepMQ/WI43RT3IbzbTHPdhvhzZMeIw81+r0ZzWdrN+PZ+M5PDCExn6sTseI7XKY70ma23U7gbn2iikdn7SbkvPx5qsjRv7wLfDroWTJHwWSbt+D99bvThl1Y+4cFJn8eC03dUWdTB8D1Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n/mQMnlXZGjF8ApvpGnB4atA8/E+6O3KFNPZkQ3SpXg=;
- b=Thfdiu/93goQH62PQ++eZMU3VXiq3SsCHK9KMJkdIkxFXF3fogiuHlK2TSojGZj+gk0DQC3yVHe3lgocIMZ4hBwv9ciJwFnmuWtDrlHI011gXmcNDd45jqF9awzAfE1+fbkDVI4jQRtoNN/GlgiMSQ+jLSBaFcTkwq0puDYpN8g=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by DBBPR04MB7770.eurprd04.prod.outlook.com (2603:10a6:10:1ed::13) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+ by DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Wed, 14 Dec
- 2022 04:16:22 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::203a:e5da:a4a:7663]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::203a:e5da:a4a:7663%12]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
- 04:16:21 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Chanh Nguyen <chanh@amperemail.onmicrosoft.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "linhaoguo86@gmail.com" <linhaoguo86@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        Chanh Nguyen <chanh@os.amperecomputing.com>
-Subject: RE: [EXT] Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for
- each configfs driver
-Thread-Topic: [EXT] Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for
- each configfs driver
-Thread-Index: AQHZDz7Xq5KKpC+MIEabnI9j9xs4gK5sY74AgABYmICAAAhLsA==
-Date:   Wed, 14 Dec 2022 04:16:21 +0000
-Message-ID: <HE1PR0401MB2331334C46777CD7D992496888E09@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20221213220354.628013-1-Frank.Li@nxp.com>
- <67878b69-89af-6a0c-24c6-ff111dae6ce6@wanadoo.fr>
- <f1bb6995-6901-3def-3ff0-a7438339625a@amperemail.onmicrosoft.com>
-In-Reply-To: <f1bb6995-6901-3def-3ff0-a7438339625a@amperemail.onmicrosoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|DBBPR04MB7770:EE_
-x-ms-office365-filtering-correlation-id: e5593416-e2cc-43f0-e61e-08dadd89f509
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kOyVlppMMgwf8lGn+KkFja9kBrNbTaD3G9x4PAJLrFCFoXIrjvF7fXDxifySjFe58u1OY4qBJ0jEpwadlc3Si9yL8QN5RgmAvm0TayZUYJoUbEjvPKlcChA0ZJ/IHUPq2VCp1yZ8wYRsay/ht3QyXB5mH6SUcQudO7HHQKaCNHijVom442nFawkKCBbYkuWgWpJc5NQfG7YDmSohYbStxTR5jjbwsKLylTndzolw0rd/yjz4OugWYOTp+ZqmZI3ui6ysimZ32oPqFMqsrijp2+6DyQtU+ZMe0U6036dtv6d2YJxNDtQa/KccFruN75RD+qAS+ldqz7ADP+BAMO2NQLTTDQc1gWSpHd7k69Lv05fjqqhmOIW9uA5M2QRihR8WFAHn1oav1uU6DiQ/g9RzYlf7vCYXrvFzUWuqujKWyt5aKErdLNfU+t9yzHZONZOEG+rcAfwdqq+3Sh03BbDk4mAceEI8Ld7LVwOw5OLFOtNacKJkX4SSRsYJ/mCBgEx09g/GPgy19ea0g9McxfsxBt8dCyc4GwE3khWxKK0TV/BfRrDzSrUXrTWrE5czt8mScP4mdkGohIUta0kYT4BhyUuR6mICr0g2fkwsun5nfW37N1eAGC4GtQ0fPic1Wpw4DCPZxHqeaykowSxuXsq0BtAHrGXft/V97NVCahaE5PcABLm5uvBf8TTzUOMFmua7rzyRGJ8FEtTfLz6oAbgjHDuUrwDNF3q52sisi1EwAgM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199015)(33656002)(54906003)(4326008)(110136005)(316002)(296002)(66556008)(8676002)(66946007)(41300700001)(64756008)(38070700005)(66476007)(76116006)(66446008)(83380400001)(38100700002)(122000001)(55016003)(86362001)(6506007)(7696005)(71200400001)(52536014)(8936002)(7416002)(5660300002)(2906002)(44832011)(26005)(966005)(186003)(478600001)(45080400002)(55236004)(9686003)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?NH3MZS+A2QNL44njjK8GJOyxpXa4sgQkpyUN7KnVhnHedZdRqPk827CIdH?=
- =?iso-8859-1?Q?AdaNAe5KsouhfQhvOcka3RwtifqoktaeLgPIM5M+vPODSTR5USaOb/EsaN?=
- =?iso-8859-1?Q?C4AxEVwL5kDPRJYX5QEQCqQJDyoIjf48y3lz1feiX9JzJ4gIF1Wfc2SpG3?=
- =?iso-8859-1?Q?JyeDl8yaEJMM0Qfk+pNxd9Kboxb1pAsuRfYsNEPBLrbbO2ETwB8NVUsJGB?=
- =?iso-8859-1?Q?XA6ro/KotiuHdaRYJovBL2L4Kn2i5unoyOWabIxMqgbXfLa/WQVRgQUDKo?=
- =?iso-8859-1?Q?h1ATaoGYw13LP4pHrvwtjwf2ufb9Fa8Q7bM1YNQqVDYVWzMECj590xDm+o?=
- =?iso-8859-1?Q?N7Q8eK2zg2nwVPzV6EBsxm2oogGEBL+2eVZcvso7DM8xkTa7I4xR4ZwoHG?=
- =?iso-8859-1?Q?rxMIrfACVDTgQSAIVmVR+7M2qlNFfRNREeV/KqSZFKbV0/JMCO3AscoX9t?=
- =?iso-8859-1?Q?xaWmBaZG33+yja6J3ryDjtdbWScxe3MT2QV/xElCaHi7+6XMKBpqd/BfSD?=
- =?iso-8859-1?Q?Op/Xxkrcf9qUQACw55ffYp/s1+tQNhca7drDO2kTEYzttVFS/GBV+Xk6xt?=
- =?iso-8859-1?Q?fKj4DGleLj+2VyDrjR56+R7RNLef2myUGMPkaWRPjuLvJCUMvNvK1ZIz/V?=
- =?iso-8859-1?Q?oFDQduEQwr0Cls9yfa+Ka2X2QpP/speqFujHTwmIpoXjj66CLThQN0zoQI?=
- =?iso-8859-1?Q?Lds6P8XqDzyTKD++sO7pAqrZQlF1lOWfZUCJud55ecpNhTTlKNcbWdJD9C?=
- =?iso-8859-1?Q?+JssV+OqOkO8wqCXbtmZV/KD1qAAObydjr/cXtNEPqa0BYbvr+pN0Wpnp+?=
- =?iso-8859-1?Q?KPzleMkC06QR5ac8Uy2aIufV0vYEP53h+6XvwgjfRSbG56EVmjljF8579e?=
- =?iso-8859-1?Q?FGLsB25ottsW8w3X/YnL1gp+kcE2blVfiy86bTtJ8jNz1au/PThgYRM5sV?=
- =?iso-8859-1?Q?J3aQK8hl28xcToCJW0EzWaWVeP1Lu8mQ3DeNhDSy4PevL8K7PxDhGA8FcR?=
- =?iso-8859-1?Q?yucegi+FeRHaFrzhqfgL6K2gIz5Piy4Fd05wYTA3/23YpCJpIts2OBUnHB?=
- =?iso-8859-1?Q?aS4/OvtfQwZQezkQnH4CCxnOY9Rkps4049oROZNa5KELNE2fGHkokyMrwt?=
- =?iso-8859-1?Q?kRcbN+1WOtJguVGEmhxFy73ctzOn7q+bQIy1+P502mvEZcxcMYi4K3aDJN?=
- =?iso-8859-1?Q?4Mgp9OmsMoKFXiC3B/JTBS3Gqkr96h3C4vPw/I6IDeUAxEyo+vO+EXXLLa?=
- =?iso-8859-1?Q?Y89fv/APvITgp3yp+whXY9Tp/bU+91DscgyOHaeMlofkB6yz90haE+P7jC?=
- =?iso-8859-1?Q?sn7l2Wse+kk+7y9vg7n8NNcapY//OKhfgBjYlvDl1wZuRremRcvUUuDySs?=
- =?iso-8859-1?Q?zljDmGfg1vMhqGByU/CFfVkNhWIhUxPOUSMo2ucq4uIxivnL1Lcxk144AP?=
- =?iso-8859-1?Q?FBrFXsyPxd9IvXqge2tj2k4eDw8TLodZ9iDobyC5y8aDX7K//jE5ps+HN1?=
- =?iso-8859-1?Q?pY2vU3ebJrUSpEW5+FFjBKdhdwJ+Js9Cs8MNZa9GgmV7LheRw0bbFxeY6Y?=
- =?iso-8859-1?Q?G9AglFjpUTWcPW9jnnpu+8STjsimV3sj6JNuSBW1xuqQFbrRhlWp4reRQn?=
- =?iso-8859-1?Q?zRJE2mhg/pMUc=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 14 Dec
+ 2022 04:19:26 +0000
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::226c:31ef:73cb:3a28]) by PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::226c:31ef:73cb:3a28%4]) with mapi id 15.20.5880.019; Wed, 14 Dec 2022
+ 04:19:25 +0000
+Date:   Wed, 14 Dec 2022 12:19:59 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     <yebin10@huawei.com>
+CC:     <jack@suse.cz>, <linux-kernel@vger.kernel.org>,
+        <linux-ext4@vger.kernel.org>, <tytso@mit.edu>, <heng.su@intel.com>,
+        <pengfei.xu@intel.com>
+Subject: [Syzkaller & bisect] There is "possible deadlock in ext4_bmap" issue
+ in v6.1 kernel
+Message-ID: <Y5lO7xPYh/c6Qyq/@xpf.sh.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SI2PR02CA0006.apcprd02.prod.outlook.com
+ (2603:1096:4:194::8) To PH0PR11MB4839.namprd11.prod.outlook.com
+ (2603:10b6:510:42::18)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|DM4PR11MB5327:EE_
+X-MS-Office365-Filtering-Correlation-Id: b526e0ec-c422-4cb9-9790-08dadd8a625f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rHZY10bhUuHAnz/COu53//Fce84Nshqz1mZBzuuJ0Lo0afNI7hN5AApvZecGmSNNzIy6G7iY5DpdpOctCunHvV8CzQPJ4Fgj2HhgTKnXOi+haJg3RUKT2ykZvkvq3obsL/7//lEIdQ5EQ38J06ReDCDfa+jHL33PHpMkIUsZyg7JQYOnUlppGyWf2gIa8rdrsxxNJlrx7YyhAeLNC/nFnDvH72rN8+5ndzmfA6i6VWo6F/y6tECG+UFrq3owqFoFd4dS7lGAJqbAEgSWl/zoIXlNssi08RENs4IzivO/6iC37oQP8QCpluhwY4XlrJT4egoV6GUx4+0e/Tg6Buna5A8t9YY67x3cYRo8duGUok/l40OvP9FQC1UHs0AcM5taQ2c5+6qDuMe018RbHUC5AH3I0Gv+KhhW8aE33/0XdQPF7mdt6eTRhuKvbmsjvvdfSgAJHZP1jdrBT5SkyL0Fo5OflnX0fc3Hn+76tkFxDNKKAHV/u/1zwYNefAIFIwI0v9915nzpGtVFRkG47en7mcKV42SLZ7HwMf5cUI3cdNznqQ20sEyYmxQyYce8zO2e3zDJYyKVIjl00hKaa2RiqwWZyFbldpluqjwsFBoT1FW74pQmOWNi2Qek3FNtObYQCbcwrDBWpAl8B9z/BqH4EJog943TN0ZOVI4Wzn+kZO7U7wkRxMlbbCY7w/puaAWXkfYtjO+JVua09UpLjsPoZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(107886003)(6666004)(966005)(6486002)(478600001)(38100700002)(86362001)(8936002)(82960400001)(5660300002)(44832011)(41300700001)(4326008)(8676002)(6916009)(186003)(66556008)(66946007)(66476007)(26005)(6506007)(316002)(2906002)(6512007)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fh6gVWsKjVDYRIwpX917jsSgXVrIl3rjn7u1kPjsMLzJo75erE7xek6XymD4?=
+ =?us-ascii?Q?vIpsm95JpUw1p1kD45xTwtJs3flI7YhQAIll0W3G9zKZ2T6+WgRCvTV/tKYx?=
+ =?us-ascii?Q?pS/K9GW7F2C+YBCRcuvhN87BnHTDNEkQGwFRtp4JPtYFnG/4stXdpNzZSQG8?=
+ =?us-ascii?Q?6Z2do902qnltcg2xj3fF8bftDSqu9PnoP3ymmQBUCvzTaGHsBLfr/83WdAjK?=
+ =?us-ascii?Q?/3vETkj51yx5q6OTQ7VuRpm8z/yhclMlWv5K6sP6lvBWoot7H6sWmva/gn+3?=
+ =?us-ascii?Q?O0g24RFKjHeC5NL0DOiAWjUpcsrERLOGxbA1FCg6Leb+eHwwWTsggm8bFVRp?=
+ =?us-ascii?Q?TBeDMJhWfEbSXpa16SGhPqjMeNxbxJxUTXzL+I0ob+Mjx4sG4NZpdtQbxhFX?=
+ =?us-ascii?Q?IQV2//gdHJao3e6JA1NxOzkhNdr9cCF4FCyRegdLcpPn/9ACy4FWJyM+1jVe?=
+ =?us-ascii?Q?sPl9sQ1XwUfDU8DZ084oxo+42UDV6vGhOk77uDgpN8l0BPYo6i+vCW3RC6RT?=
+ =?us-ascii?Q?JRqQ10Yw7OQMsPhed2ACEqOG+EUUvnCVavQIIZSvY6z+mYIqFFw0hvn7z9gz?=
+ =?us-ascii?Q?o+9inw77YW5kDW/BCGe0C8jZG6xbhhySjAINizBCgzPXu6kIGzppZQbrPRhC?=
+ =?us-ascii?Q?B517xn+lBgJv4NrDAV1PD2Q/Ock0z858tARFvtyDyudjebDX9hMtk5L9MMyo?=
+ =?us-ascii?Q?AcWp9O66mYRpKHMTtmpMJEQEQH6zWNXUb8Zx4qnFxztfVjANg1yl09Qchb/d?=
+ =?us-ascii?Q?H2ic0qDeyI4iP5te2golfIDpWtRlJetmQ0q9ITOHIhO0DsbZmgghcerstLzs?=
+ =?us-ascii?Q?yrqGZoezfoJnp/+vhsiORTCrYKx+bXO5CO4ZMrcdFesR0BuSeApyZnvCNhUR?=
+ =?us-ascii?Q?FWcrhbavI8fE3+jAzRE42PBrfPr7l3LSM2uy95rBGoQTHdCoNEE88iOk1p/Q?=
+ =?us-ascii?Q?vvTgG3C4imIaJPZ+DxzNdOp2HIusWhiUhvI2GCzyV81drOdcH9pkXWZNUjlX?=
+ =?us-ascii?Q?ccgn/qmPyaao71Ifz6FZGk1yRVoGw5X9kILGItTHU+pEWstbSdelBtd9qTEA?=
+ =?us-ascii?Q?AT4mwEPwPUTaFEsFw14tp2k0mSClGmtApZCf5a4W93Wb3qCp2m4QYvJm9MtQ?=
+ =?us-ascii?Q?3RqkiTA2BvVHTsgN9snmjfqAhw3k4+1dget/W5Qjy1/ovmleU/yDsPo0pgSa?=
+ =?us-ascii?Q?vxye84bXxp7fO6EU10xm71NrwU1i1/ltQG4B21B7XmPFWAc9sbyiE0YWlBdk?=
+ =?us-ascii?Q?yPBo6JF77iHUSiLwOkLtfNQy6u0VG1D4rcupK+OJbkN1WDuZOfXL6fnCxGjW?=
+ =?us-ascii?Q?cdcLhjAYNqHGqoJzaVI1MRyYX34wiPONk20bfujOs8UBhMGZC0fd14Q40vh1?=
+ =?us-ascii?Q?W0mhEU+ohweike3iCvTh34AjM4Bt/stYWmcPkGT6+rXt4puwNDsaZX5mHbWD?=
+ =?us-ascii?Q?8V1K8KyHw8vvt4ZzIT/0FDgv7C2/ahomb7PlPQzGs2UoIXaY8OF6+mq47Sms?=
+ =?us-ascii?Q?4nKDv8i5zuoiDqyovYrUbCh5U8tsPPgXEMdhYbEVO7oyZUNRUlvqAb1FVBpS?=
+ =?us-ascii?Q?xyneYwaiwzbuMrGZMuwbJG4CDgk4OYFhcj1AkL33jCB4QPiJBYumw6o5AB/Y?=
+ =?us-ascii?Q?rA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b526e0ec-c422-4cb9-9790-08dadd8a625f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5593416-e2cc-43f0-e61e-08dadd89f509
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2022 04:16:21.7358
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2022 04:19:25.3253
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ArPpzgYORuaoNaxjEdc0zhTTRWlhkBOniYrOjJOZXHvsZeublKn6IwuL77z24Yp5e6QtsDw/6LO+X0+/GFI4BA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7770
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xpqWDUFlFO9dHGjfQgtxLdX3k00Sq1spewqJR61S74HK2pnEGvlDc+Epu/5/bejrH3MMuKDSnMc+zJhNyAJZgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5327
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ye Bin and ext4 expert,
+
+Greeting!
+
+There is "possible deadlock in ext4_bmap" issue in v6.1 kernel:
+"
+[   28.421104] 
+[   28.421671] ======================================================
+[   28.422016] WARNING: possible circular locking dependency detected
+[   28.422358] 6.1.0-830b3c68c1fb #1 Not tainted
+[   28.422607] ------------------------------------------------------
+[   28.422956] repro/588 is trying to acquire lock:
+[   28.423217] ff110000060e5980 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_bmap+0x39/0x1c0
+[   28.423729] 
+[   28.423729] but task is already holding lock:
+[   28.424055] ff110000093323f8 (&journal->j_checkpoint_mutex){+.+.}-{3:3}, at: jbd2_journal_flush+0x267/0x5f0
+[   28.424610] 
+[   28.424610] which lock already depends on the new lock.
+[   28.424610] 
+[   28.425057] 
+[   28.425057] the existing dependency chain (in reverse order) is:
+[   28.425467] 
+[   28.425467] -> #3 (&journal->j_checkpoint_mutex){+.+.}-{3:3}:
+[   28.425877]        mutex_lock_io_nested+0xad/0xd60
+[   28.426156]        jbd2_journal_flush+0xcf/0x5f0
+[   28.426429]        __ext4_ioctl+0x225/0x25c0
+[   28.426680]        ext4_ioctl+0x2e/0x40
+[   28.426908]        __x64_sys_ioctl+0x10e/0x160
+[   28.427171]        do_syscall_64+0x3b/0x90
+[   28.427417]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   28.427739] 
+[   28.427739] -> #2 (&journal->j_barrier){+.+.}-{3:3}:
+[   28.428105]        __mutex_lock+0x9c/0xf30
+[   28.428342]        mutex_lock_nested+0x1f/0x30
+[   28.428600]        jbd2_journal_lock_updates+0xbe/0x1a0
+[   28.428909]        ext4_change_inode_journal_flag+0xd4/0x2c0
+[   28.429234]        ext4_fileattr_set+0x86d/0xe60
+[   28.429501]        vfs_fileattr_set+0x365/0x4e0
+[   28.429765]        do_vfs_ioctl+0x378/0xcc0
+[   28.430010]        __x64_sys_ioctl+0xca/0x160
+[   28.430265]        do_syscall_64+0x3b/0x90
+[   28.430508]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   28.430832] 
+[   28.430832] -> #1 (&sbi->s_writepages_rwsem){++++}-{0:0}:
+[   28.431224]        percpu_down_write+0x4d/0x2d0
+[   28.431487]        ext4_ind_migrate+0xcc/0x390
+[   28.431748]        ext4_fileattr_set+0xbba/0xe60
+[   28.432018]        vfs_fileattr_set+0x365/0x4e0
+[   28.432280]        do_vfs_ioctl+0x378/0xcc0
+[   28.432525]        __x64_sys_ioctl+0xca/0x160
+[   28.432780]        do_syscall_64+0x3b/0x90
+[   28.433027]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   28.433349] 
+[   28.433349] -> #0 (&sb->s_type->i_mutex_key#8){++++}-{3:3}:
+[   28.433751]        __lock_acquire+0x1023/0x1d20
+[   28.434022]        lock_acquire+0xd6/0x2f0
+[   28.434259]        down_read+0x45/0x160
+[   28.434483]        ext4_bmap+0x39/0x1c0
+[   28.434718]        bmap+0x40/0x70
+[   28.434925]        jbd2_journal_bmap+0x61/0xe0
+[   28.435186]        jbd2_journal_flush+0x461/0x5f0
+[   28.435459]        __ext4_ioctl+0x225/0x25c0
+[   28.435708]        ext4_ioctl+0x2e/0x40
+[   28.435935]        __x64_sys_ioctl+0x10e/0x160
+[   28.436193]        do_syscall_64+0x3b/0x90
+[   28.436436]        entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   28.436757] 
+[   28.436757] other info that might help us debug this:
+[   28.436757] 
+[   28.437194] Chain exists of:
+[   28.437194]   &sb->s_type->i_mutex_key#8 --> &journal->j_barrier --> &journal->j_checkpoint_mutex
+[   28.437194] 
+[   28.437924]  Possible unsafe locking scenario:
+[   28.437924] 
+[   28.438251]        CPU0                    CPU1
+[   28.438505]        ----                    ----
+[   28.438759]   lock(&journal->j_checkpoint_mutex);
+[   28.439030]                                lock(&journal->j_barrier);
+[   28.439388]                                lock(&journal->j_checkpoint_mutex);
+[   28.439788]   lock(&sb->s_type->i_mutex_key#8);
+[   28.440052] 
+[   28.440052]  *** DEADLOCK ***
+[   28.440052] 
+[   28.440378] 2 locks held by repro/588:
+[   28.440595]  #0: ff11000009332170 (&journal->j_barrier){+.+.}-{3:3}, at: jbd2_journal_lock_updates+0xbe/0x1a0
+[   28.441168]  #1: ff110000093323f8 (&journal->j_checkpoint_mutex){+.+.}-{3:3}, at: jbd2_journal_flush+0x267/0x5f0
+[   28.441746] 
+[   28.441746] stack backtrace:
+[   28.441994] CPU: 1 PID: 588 Comm: repro Not tainted 6.1.0-830b3c68c1fb #1
+[   28.442375] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[   28.443004] Call Trace:
+[   28.443148]  <TASK>
+[   28.443275]  dump_stack_lvl+0xa7/0xdb
+[   28.443497]  dump_stack+0x19/0x1f
+[   28.443699]  print_circular_bug.isra.46.cold.67+0x13e/0x143
+[   28.444031]  check_noncircular+0x102/0x120
+[   28.444277]  ? write_comp_data+0x2f/0x90
+[   28.444508]  ? __sanitizer_cov_trace_pc+0x25/0x60
+[   28.444783]  __lock_acquire+0x1023/0x1d20
+[   28.445025]  lock_acquire+0xd6/0x2f0
+[   28.445236]  ? ext4_bmap+0x39/0x1c0
+[   28.445453]  down_read+0x45/0x160
+[   28.445652]  ? ext4_bmap+0x39/0x1c0
+[   28.445865]  ? ext4_invalidate_folio+0x1e0/0x1e0
+[   28.446143]  ext4_bmap+0x39/0x1c0
+[   28.446347]  ? ext4_invalidate_folio+0x1e0/0x1e0
+[   28.446622]  bmap+0x40/0x70
+[   28.446800]  jbd2_journal_bmap+0x61/0xe0
+[   28.447038]  jbd2_journal_flush+0x461/0x5f0
+[   28.447287]  __ext4_ioctl+0x225/0x25c0
+[   28.447510]  ? __sanitizer_cov_trace_pc+0x25/0x60
+[   28.447782]  ? do_vfs_ioctl+0xb8/0xcc0
+[   28.448006]  ? __sanitizer_cov_trace_pc+0x25/0x60
+[   28.448281]  ext4_ioctl+0x2e/0x40
+[   28.448480]  __x64_sys_ioctl+0x10e/0x160
+[   28.448712]  ? ext4_fileattr_set+0xe60/0xe60
+[   28.448964]  do_syscall_64+0x3b/0x90
+[   28.449183]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   28.449479] RIP: 0033:0x7f839e4b959d
+[   28.449689] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 8
+[   28.450702] RSP: 002b:00007ffd48343808 EFLAGS: 00000217 ORIG_RAX: 0000000000000010
+[   28.451127] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f839e4b959d
+[   28.451523] RDX: 0000000020000080 RSI: 000000004004662b RDI: 0000000000000004
+[   28.451922] RBP: 00007ffd48343820 R08: 00007ffd48343900 R09: 00007ffd48343900
+[   28.452317] R10: 00007ffd48343900 R11: 0000000000000217 R12: 0000000000401060
+[   28.452712] R13: 00007ffd48343900 R14: 0000000000000000 R15: 0000000000000000
+[   28.453116]  </TASK>
+[   28.675120] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   28.898857] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   29.121957] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   29.343926] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   29.563709] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   29.783732] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   30.002988] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   30.222407] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   30.442175] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   33.495841] ext4_ioctl_checkpoint: 13 callbacks suppressed
+[   33.495853] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   33.714325] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   33.932831] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   34.151299] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   34.370576] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   34.589091] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   34.808403] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   35.028663] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+[   35.247587] warning: checkpointing journal with EXT4_IOC_CHECKPOINT_FLAG_ZEROOUT can be slow
+"
+Bisect and found that, the first bad commit is:
+51ae846cff568c8c29921b1b28eb2dfbcd4ac12d
+ext4: fix warning in ext4_iomap_begin as race between bmap and write
+
+After reverted the bad commit on top of v6.1, this issue was gone.
+
+All above bisect info, kconfig, reproduced code from syzkaller is in link:
+https://github.com/xupengfe/syzkaller_logs/tree/main/221212_234319_ext4_bmap
+
+============================================================================
 
 
-> -----Original Message-----
-> From: Chanh Nguyen <chanh@amperemail.onmicrosoft.com>
-> Sent: Tuesday, December 13, 2022 9:38 PM
-> To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>; Frank Li
-> <frank.li@nxp.com>
-> Cc: balbi@kernel.org; gregkh@linuxfoundation.org; imx@lists.linux.dev;
-> linhaoguo86@gmail.com; linux-kernel@vger.kernel.org; linux-
-> usb@vger.kernel.org; stern@rowland.harvard.edu; Chanh Nguyen
-> <chanh@os.amperecomputing.com>
-> Subject: [EXT] Re: [PATCH v2 1/1] usb: gadget: Assign an unique name for
-> each configfs driver
->=20
-> Caution: EXT Email
->=20
-> On 14/12/2022 05:20, Christophe JAILLET wrote:
-> > Le 13/12/2022 =E0 23:03, Frank Li a =E9crit :
-> >> From: Rondreis <linhaoguo86@gmail.com>
-> >>
-> >> When use configfs to attach more than one gadget.
-> >>
-> >> Error: Driver 'configfs-gadget' is already registered, aborting...
-> >>
-> >>     UDC core: g1: driver registration failed: -16
-> >>
-> >> The problem is that when creating multiple gadgets with configfs and
-> >> binding them to different UDCs, the UDC drivers have the same name
-> >> "configfs-gadget". Because of the addition of the "gadget" bus, naming
-> >> conflicts will occur when more than one UDC drivers registered to the
-> >> bus.
-> >>
-> >> It's not an isolated case, this patch refers to the commit f2d8c260682=
-5
-> >> ("usb: gadget: Fix non-unique driver names in raw-gadget driver").
-> >> Each configfs-gadget driver will be assigned a unique name
-> >> "configfs-gadget.N", with a different value of N for each driver
-> >> instance.
-> >>
-> >> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> >>
-> >> Signed-off-by: Rondreis <linhaoguo86@gmail.com>
-> >> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> >> ---
-> >>
-> >> This patch is based on
-> >>
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
-k
-> ernel.org%2Flkml%2F20220907112210.11949-1-
-> linhaoguo86%40gmail.com%2F&amp;data=3D05%7C01%7CFrank.Li%40nxp.com
-> %7C1c0810ddd7e94971373208dadd849636%7C686ea1d3bc2b4c6fa92cd99c5c3
-> 01635%7C0%7C0%7C638065858780321185%7CUnknown%7CTWFpbGZsb3d8e
-> yJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D
-> %7C3000%7C%7C%7C&amp;sdata=3DdDLDGL9ie0hzjPa44qHt2oAnIurcZo01Mcz
-> xBAjUoQk%3D&amp;reserved=3D0
-> >> fixed the all greg's comments.
-> >>
-> >> I met the same issue.  Look likes Rodrieis have not continue to work t=
-his
-> >> patch since Sep, 2022.
-> >>
-> >> I don't know full name of Rondreis.
-> >
-> > Hi,
-> >
-> > Also, out of curiosity, any link with this patch:
-> >
-> >
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
-k
-> ernel.org%2Fall%2F20221213041203.21080-1-
-> chanh%40os.amperecomputing.com%2F&amp;data=3D05%7C01%7CFrank.Li%4
-> 0nxp.com%7C1c0810ddd7e94971373208dadd849636%7C686ea1d3bc2b4c6fa9
-> 2cd99c5c301635%7C0%7C0%7C638065858780321185%7CUnknown%7CTWFpb
-> GZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI
-> 6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DHuD9mWg4D%2B%2BOPjUA6b
-> 0DoktyubY52TwtWdEpMuMfuk0%3D&amp;reserved=3D0
-> > ?
-> >
-> > Not exactly the same, but not very different.
-> >
-> > (adding Chanh Nguyen in cc)
-> >
->=20
-> What a coincident :-)
->=20
-> I did not aware there are some similar attempts to fix the same issue
-> and see both patches posted same time.
->=20
-> We start to see the issue when OpenBMC started to adopt kernel 6.0 and
-> try to fix the issue since then (beginning of Oct 2022)
->=20
-> We then could be able to identify the issue and try to fix it follow the
-> commit f2d8c2606825317b77db1f9ba0fc26ef26160b30
->=20
-> Going forward, as we have both Frank and Rondreis interested in the
-> patch, we are really happy if you both could review and share the
-> comment. I'd really appreciate if you could help with that part.
->=20
-> FYI, we have reviewed and made some changes based on CJ's comment in
-> my
-> last patch (v1) yesterday. We are trying to test it as much as possible.
-> If it looks good we will re-post it as v2 shortly for further comment.
+There was one more similar "possible deadlock in jbd2_journal_lock_updates"
+issue found by syzkaller, and bisected and found that the first bad commit is
+also 51ae846cff568c8c29921b1b28eb2dfbcd4ac12d
 
-I almost just reused rondreis patch.=20
-I can review your v2 version. =20
+Reverted above commit on top of v6.1, the jbd2_journal_lock_updates issue was
+gone also.
 
-I prefer move kfree(gi->composite.gadget_driver.driver.name) into
- gadget_info_attr_release,  just before free(gi).
+Related issue bisect info, reproduced code is in link:
+https://github.com/xupengfe/syzkaller_logs/tree/main/221213_160256_jbd2_journal_lock_updates
 
-Best regards
-Frank Li
 
->=20
-> Thanks a lot for interesting in the patch.
-> - Chanh
->=20
-> >
-> >>
-> >>   drivers/usb/gadget/configfs.c | 30 ++++++++++++++++++++++++++----
-> >>   1 file changed, 26 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/gadget/configfs.c
-> >> b/drivers/usb/gadget/configfs.c
-> >> index 3a6b4926193e..785be6aea720 100644
-> >> --- a/drivers/usb/gadget/configfs.c
-> >> +++ b/drivers/usb/gadget/configfs.c
-> >> @@ -4,12 +4,17 @@
-> >>   #include <linux/slab.h>
-> >>   #include <linux/device.h>
-> >>   #include <linux/nls.h>
-> >> +#include <linux/idr.h>
-> >>   #include <linux/usb/composite.h>
-> >>   #include <linux/usb/gadget_configfs.h>
-> >>   #include "configfs.h"
-> >>   #include "u_f.h"
-> >>   #include "u_os_desc.h"
-> >> +#define DRIVER_NAME "configfs-gadget"
-> >> +
-> >> +static DEFINE_IDA(driver_id_numbers);
-> >> +
-> >>   int check_user_usb_string(const char *name,
-> >>           struct usb_gadget_strings *stringtab_dev)
-> >>   {
-> >> @@ -46,6 +51,7 @@ struct gadget_info {
-> >>       struct usb_composite_driver composite;
-> >>       struct usb_composite_dev cdev;
-> >> +    int driver_id_number;
-> >>       bool use_os_desc;
-> >>       char b_vendor_code;
-> >>       char qw_sign[OS_STRING_QW_SIGN_LEN];
-> >> @@ -392,6 +398,8 @@ static void gadget_info_attr_release(struct
-> >> config_item *item)
-> >>       WARN_ON(!list_empty(&gi->string_list));
-> >>       WARN_ON(!list_empty(&gi->available_func));
-> >>       kfree(gi->composite.gadget_driver.function);
-> >> +    kfree(gi->composite.gadget_driver.driver.name);
-> >> +    ida_free(&driver_id_numbers, gi->driver_id_number);
-> >>       kfree(gi);
-> >>   }
-> >> @@ -1571,7 +1579,6 @@ static const struct usb_gadget_driver
-> >> configfs_driver_template =3D {
-> >>       .max_speed    =3D USB_SPEED_SUPER_PLUS,
-> >>       .driver =3D {
-> >>           .owner          =3D THIS_MODULE,
-> >> -        .name        =3D "configfs-gadget",
-> >>       },
-> >>       .match_existing_only =3D 1,
-> >>   };
-> >> @@ -1581,6 +1588,7 @@ static struct config_group *gadgets_make(
-> >>           const char *name)
-> >>   {
-> >>       struct gadget_info *gi;
-> >> +    int ret =3D 0;
-> >>       gi =3D kzalloc(sizeof(*gi), GFP_KERNEL);
-> >>       if (!gi)
-> >> @@ -1622,16 +1630,30 @@ static struct config_group *gadgets_make(
-> >>       gi->composite.gadget_driver =3D configfs_driver_template;
-> >> +    ret =3D ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> >> +    if (ret < 0)
-> >> +        goto err;
-> >> +    gi->driver_id_number =3D ret;
-> >> +
-> >> +    gi->composite.gadget_driver.driver.name =3D
-> >> +        kasprintf(GFP_KERNEL, DRIVER_NAME ".%d", gi-
-> >driver_id_number);
-> >> +
-> >>       gi->composite.gadget_driver.function =3D kstrdup(name, GFP_KERNE=
-L);
-> >>       gi->composite.name =3D gi->composite.gadget_driver.function;
-> >> -    if (!gi->composite.gadget_driver.function)
-> >> -        goto err;
-> >> +    if (!gi->composite.gadget_driver.function) {
-> >> +        ret =3D -ENOMEM;
-> >> +        goto err_func;
-> >> +    }
-> >>       return &gi->group;
-> >> +
-> >> +err_func:
-> >> +    kfree(gi->composite.gadget_driver.driver.name);
-> >> +    ida_free(&driver_id_numbers, gi->driver_id_number);
-> >>   err:
-> >>       kfree(gi);
-> >> -    return ERR_PTR(-ENOMEM);
-> >> +    return ERR_PTR(ret);
-> >>   }
-> >>   static void gadgets_drop(struct config_group *group, struct
-> >> config_item *item)
-> >
+Thanks!
+BR.
