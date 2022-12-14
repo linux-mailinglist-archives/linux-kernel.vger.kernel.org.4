@@ -2,87 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3B164C9D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4D064C9CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 14:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiLNNLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 08:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S238536AbiLNNKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 08:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238567AbiLNNLN (ORCPT
+        with ESMTP id S238521AbiLNNKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 08:11:13 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361CB201B7
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:11:06 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BEAosGP030155;
-        Wed, 14 Dec 2022 07:10:16 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=uqTM1X1FgdfVNHTySLwZxLVD1Clcyid2R85NS87Xe08=;
- b=OnEhJX3LRlKcfOVP9tmTc8nhffaYoPXsU5e9ykqT72GXzu7qsy2ojgMIxQAwMQII2r2w
- iPz+2n4jbbr1hOJeMwftf3Ik4xs25iyE+C6B/hJ2fmNcpLdVfA9ukb4omyG4jjV1iKMg
- XQvmh0/2XDbrQKRkERoLaOl/ob90KwdeiMext1H1Bpp2nj422t7um9IVGMxVE/wht9Ht
- 4dAPzA7O26bZUZf3WacQFacKEJnXMMHzJnJU+yhHgI5GJg6Svn/Ho/RqZ+vUReaJhEMw
- jAD7SmEpfAHs1FOtPRsqTaWHD+ddc+Xm4f/+PKhD9+2aS/GJX+jjGRnUhfAq53ah6dp5 jA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3mf6rh8dhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Dec 2022 07:10:16 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 14 Dec
- 2022 07:10:14 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Wed, 14 Dec 2022 07:10:14 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5D61711CB;
-        Wed, 14 Dec 2022 13:10:14 +0000 (UTC)
-Date:   Wed, 14 Dec 2022 13:10:14 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Lukasz Majewski <lukma@denx.de>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Stephen Kitt <steve@sk2.org>,
-        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] ASoC: wm8940: Read chip ID when wm8940 codec probing
-Message-ID: <20221214131014.GO105268@ediswmail.ad.cirrus.com>
-References: <20221214123743.3713843-1-lukma@denx.de>
- <20221214123743.3713843-5-lukma@denx.de>
+        Wed, 14 Dec 2022 08:10:22 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4EDEF3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id p36so10325189lfa.12
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 05:10:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
+        b=M8aMUswawauJab+7K7Jn2Gkzte5YHY7Wn6tCg37AUcPW73EjMsr4P7NHJrZDpLN60S
+         r6lDMHd+ySIdKe8NosoT/I9d/X1wBMJ5VC6kdckOmmZgxQzXrxOPvi8DFxBYEQi+ahAK
+         FqY1ER0G2r1sNO9GmOzwMMzYEiNI4NfN+cyiZ4DTA8N9U3ukL6H8OqJQocdJ7K47wSFG
+         n459EAdKKHRlnTeL2CurMSujEzBJPR6WjYKBzybCeTQdMJQbZQpBXhj0od7HIMTxOPI5
+         jcv2Q+pyTPBxCbLjOw2lgj4vW8HdpM2Bhs6TmlL8LMN10oVxlzoHAVd80q/rhMJOPv28
+         wsXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L/OQxm+OmJ40HtGirwGYwb1GzeOKY9S3W4yB7HO1YOI=;
+        b=A/fXlqt27SZmYQ9wRBKeb5ky3NDQYY1tUEYKdDTZz7RpjOKXYq4jLxc/OO+pDhTd/H
+         /AWP9HTYLCZIA+ulqYMyAOTXF1q9/0O0PeYX+0t5xjRB9aPMl2DrjNwkqUdHyx1NUwKe
+         /xZ1+vL9VcoWtnesJNjd99JP/PCy11oWZBc+IeWCJ3sUZSHTaWLNNPnDuf0bdaLOGCg+
+         ihgzL7/GWD8Wx7Hc3vNIfDNxNWey3awdfjdSj0/BAm+AAFndIBrfRKBJ9Yw3PCIy/6Ru
+         EEeX9NoC6W2V0NvCbjk3zReiMqZuPflMB9Lnoqis5g//E7skCaAd1Q+nBCh82+M41lrg
+         lWwg==
+X-Gm-Message-State: ANoB5pngrlQuBTb2w17qIY8cz9ryia0aRoUuUvkVbYXKONG1alvDtrKD
+        O6MICfrwwyB/TvALcPRfsGhh3A==
+X-Google-Smtp-Source: AA0mqf5XSd1rI4+lxJqzcmku43nUYBc930QOD/2bY74bont7jGKG3lndTw+vMTbzm531t15ZEOYTdw==
+X-Received: by 2002:a05:6512:1386:b0:4b5:4606:7ad9 with SMTP id p6-20020a056512138600b004b546067ad9mr8121567lfa.39.1671023416204;
+        Wed, 14 Dec 2022 05:10:16 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b004b48e0f619asm805945lfr.48.2022.12.14.05.10.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Dec 2022 05:10:15 -0800 (PST)
+Message-ID: <286bbd0f-1632-6071-7d08-e56ed16c234c@linaro.org>
+Date:   Wed, 14 Dec 2022 14:10:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221214123743.3713843-5-lukma@denx.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: cMSJ_BuhSNqGoxW1BWcSdrrFv3uT8ncy
-X-Proofpoint-GUID: cMSJ_BuhSNqGoxW1BWcSdrrFv3uT8ncy
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 2/6] dt-bindings: pinctrl: mt7620: add proper function
+ muxing binding
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20221213130430.172876-1-arinc.unal@arinc9.com>
+ <20221213130430.172876-3-arinc.unal@arinc9.com>
+ <4ffd94b2-e72c-a081-4326-5bc254603ddf@linaro.org>
+ <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e4b6b334-44c3-9e73-adaa-9972ff9e6fd5@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:37:43PM +0100, Lukasz Majewski wrote:
-> The wm8940 provides the chip ID information via I2C. In this
-> patch this information is read and if not matching expected
-> value, the probe function is aborted.
+On 14/12/2022 14:03, Arınç ÜNAL wrote:
+> On 14.12.2022 14:55, Krzysztof Kozlowski wrote:
+>>>   
+>>> +        allOf:
+>>> +          - if:
+>>> +              properties:
+>>> +                function:
+>>> +                  const: antenna
+>>> +            then:
+>>> +              properties:
+>>> +                groups:
+>>> +                  enum: [i2s]
+>>
+>> I have doubts such setup is maintainable and readable. I would suggest
+>> to leave just few - maybe for gpio, jtag, refclk, utif.
 > 
-> This prevents from using (i.e. inserting) other wm89* modules
-> which use the sam I2C bus address.
+> These bindings are not going to change once all properly defined and I'm 
+> here as a maintainer so I don't see an issue with maintaining the binding.
 > 
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> ---
+> It's the whole pin configuration of an SoC squashed under a single 
+> document. I guess this is the fate of the pinctrl bindings. The bindings 
+> for mt7622 is not so different:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/pinctrl/mediatek%2Cmt7622-pinctrl.yaml#n63
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+It's much smaller number of if:then: than yours but if you want to
+manage it then sure:
 
-Thanks,
-Charles
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
+
