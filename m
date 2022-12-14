@@ -2,141 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A119A64CC15
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85AE64CC1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 15:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbiLNOWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 09:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S237918AbiLNOZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 09:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbiLNOWv (ORCPT
+        with ESMTP id S229867AbiLNOZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 09:22:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D79275F9;
-        Wed, 14 Dec 2022 06:22:49 -0800 (PST)
+        Wed, 14 Dec 2022 09:25:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299E6BF56;
+        Wed, 14 Dec 2022 06:25:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C2BB61AAF;
-        Wed, 14 Dec 2022 14:22:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F69C433D2;
-        Wed, 14 Dec 2022 14:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671027768;
-        bh=L/6XW+ZNaYBnNXDgz9LNIZ/Q7OYbAfpqXmx5Wzw2qkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k7/zSKAJKvG7+Zwh+DD4UGlFvaZgRCvibaA0dl7Kjlnhnsy6KTWrxtQQ19tjTCgoR
-         mHSXJ9tzVfw30SaPC4zisqeZ6adHrRegKJwJC/aQ8cGImGF3wIsMFHyEPbR9yK2UjZ
-         tFR/Hgl34OUOB9K6Llbp9d4jxONI8mBHG0+urs5n7/4PgWtYE/x+ymQTgVtFbGTRff
-         RE5JjZK4Z6a4mv285VRNGlkg8ZjpfWYa+tI9fh6T39MTHmpNnW5U3F5/DoE3hLx5yJ
-         Vl87uKGKHfs5xDtSdzlo6FSKE2G70V0EwIEVry6rHsSaqEI4+T64QdfGmGiUU3g3km
-         ewwjAfGtSd+Lw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 35BAE40367; Wed, 14 Dec 2022 11:22:45 -0300 (-03)
-Date:   Wed, 14 Dec 2022 11:22:45 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        German Gomez <german.gomez@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Timothy Hayes <timothy.hayes@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        shaomin Deng <dengshaomin@cdjrlc.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 0/5] build/libtraceevent resends
-Message-ID: <Y5ncNQfPzq8qBP/f@kernel.org>
-References: <20221213232651.1269909-1-irogers@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA0F861ABD;
+        Wed, 14 Dec 2022 14:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1170C433D2;
+        Wed, 14 Dec 2022 14:25:52 +0000 (UTC)
+Date:   Wed, 14 Dec 2022 09:25:50 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/2] trace: allocate temparary buffer for trace
+ output usage
+Message-ID: <20221214092550.1691829e@gandalf.local.home>
+In-Reply-To: <1671027102-21403-2-git-send-email-quic_linyyuan@quicinc.com>
+References: <1671027102-21403-1-git-send-email-quic_linyyuan@quicinc.com>
+        <1671027102-21403-2-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221213232651.1269909-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 13, 2022 at 03:26:46PM -0800, Ian Rogers escreveu:
-> All patches on the acme perf/core branch.
-> 
-> Resend incremental build fix python plugin:
-> https://lore.kernel.org/lkml/20221205225940.3079667-4-irogers@google.com/
-> 
-> Break apart and resend libtraceevent debug logging support:
-> https://lore.kernel.org/linux-perf-users/20210923001024.550263-4-irogers@google.com/
-> 
-> Switch "#if HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE" to "#if
-> MAKE_LIBTRACEEVENT_VERSION(1, 5, 0) <= LIBTRACEEVENT_VERSION",
-> ensuring trace-event.h is included as discussed on the mailing list.
-> 
-> Resend removal of --group option:
-> https://lore.kernel.org/lkml/20220707195610.303254-1-irogers@google.com/
+On Wed, 14 Dec 2022 22:11:42 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
 
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Ian Rogers (5):
->   perf build: Fix python/perf.so library's name
->   perf trace-event: Add libtraceevent version tools to header
->   libtraceevent: Increase libtraceevent logging when verbose
->   perf trace-event: Use version check to avoid 1 define
->   perf evlist: Remove group option.
+> there is one dwc3 trace event declare as below,
+> DECLARE_EVENT_CLASS(dwc3_log_event,
+> 	TP_PROTO(u32 event, struct dwc3 *dwc),
+> 	TP_ARGS(event, dwc),
+> 	TP_STRUCT__entry(
+> 		__field(u32, event)
+> 		__field(u32, ep0state)
+> 		__dynamic_array(char, str, DWC3_MSG_MAX)
+> 	),
+> 	TP_fast_assign(
+> 		__entry->event = event;
+> 		__entry->ep0state = dwc->ep0state;
+> 	),
+> 	TP_printk("event (%08x): %s", __entry->event,
+> 			dwc3_decode_event(__get_str(str), DWC3_MSG_MAX,
+> 				__entry->event, __entry->ep0state))
+> );
+> the problem is when trace function called, it will allocate up to
+> DWC3_MSG_MAX bytes from trace event buffer, but never fill the buffer
+> during fast assignment, it only fill the buffer when output function are
+> called, so this means if output function are not called, the buffer will
+> never used.
 > 
->  tools/perf/Documentation/perf-record.txt      |  4 ----
->  tools/perf/Documentation/perf-top.txt         |  7 ++----
->  tools/perf/Makefile.config                    |  8 +++----
->  tools/perf/Makefile.perf                      |  2 +-
->  tools/perf/builtin-record.c                   |  2 --
->  tools/perf/builtin-stat.c                     |  6 -----
->  tools/perf/builtin-top.c                      |  2 --
->  tools/perf/builtin-trace.c                    |  2 +-
->  tools/perf/tests/attr/README                  |  2 --
->  tools/perf/tests/attr/test-record-group       | 22 -------------------
->  tools/perf/tests/attr/test-stat-group         | 17 --------------
->  tools/perf/util/data-convert-bt.c             |  3 ++-
->  tools/perf/util/debug.c                       | 10 +++++++++
->  tools/perf/util/evlist.c                      |  2 +-
->  tools/perf/util/evlist.h                      |  2 --
->  tools/perf/util/evsel.c                       |  2 +-
->  tools/perf/util/python.c                      | 10 +--------
->  tools/perf/util/record.c                      |  7 ------
->  tools/perf/util/record.h                      |  1 -
->  .../util/scripting-engines/trace-event-perl.c |  2 +-
->  .../scripting-engines/trace-event-python.c    |  2 +-
->  tools/perf/util/sort.c                        |  3 ++-
->  tools/perf/util/trace-event.h                 | 13 +++++++++++
->  23 files changed, 39 insertions(+), 92 deletions(-)
->  delete mode 100644 tools/perf/tests/attr/test-record-group
->  delete mode 100644 tools/perf/tests/attr/test-stat-group
-> 
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
+> add __alloc_buf() and __get_buf() which will not allocate event buffer
+> when trace function called, but when trace output function called, it will
+> kmalloc buffer with size DWC3_MSG_MAX for temprary usage and free it
+> before trace output function return.
 
--- 
+This looks exactly like what the trace_seq *p is to be used for.
 
-- Arnaldo
+static notrace enum print_line_t					\
+trace_raw_output_##call(struct trace_iterator *iter, int flags,		\
+			struct trace_event *trace_event)		\
+{									\
+	struct trace_seq *s = &iter->seq;				\
+	struct trace_seq __maybe_unused *p = &iter->tmp_seq;		\
+                                        ^^^^^^^^^^^^^^^^^^^^
+
+	struct trace_event_raw_##call *field;				\
+	int ret;							\
+									\
+	field = (typeof(field))iter->ent;				\
+									\
+	ret = trace_raw_output_prep(iter, trace_event);			\
+	if (ret != TRACE_TYPE_HANDLED)					\
+		return ret;						\
+									\
+	trace_event_printf(iter, print);				\
+									\
+	return trace_handle_return(s);					\
+}									\
+
+That is a trace_seq buffer that is for temporary usage during the output.
+
+See:
+  include/trace/events/libata.h
+  include/trace/events/scsi.h
+
+As well as the macros trace_print_bitmask_seq(), trace_print_flags_seq(),
+trace_print_symbols_seq(), etc.
+
+-- Steve
+
