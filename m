@@ -2,147 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEC464CD36
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7666664CD3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 16:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbiLNPnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 10:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S238801AbiLNPq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 10:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLNPn0 (ORCPT
+        with ESMTP id S229719AbiLNPqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 10:43:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D48222BF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671032558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AQzHZwjuXupiqlJusdYzgBRFmDan+a9C8lcInQhXBVM=;
-        b=L9rdWYUuWyAsojbfDi2YyoSIYOuWD2M4eF0FmJT9j+lOvLScZgJTL3MC6gBs7CkajxiFGE
-        irA/zI85sEfojX3DwPKyP2x+z6ddlYOUNFhm3CzwSEujWuYGjci9+3ncAgegbKJeBK24QJ
-        vjvfGcpamdWpaJEfDoKfibuz1gg3Lg4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-526-2sPc03NbMbiTOBQqW-HvXw-1; Wed, 14 Dec 2022 10:42:37 -0500
-X-MC-Unique: 2sPc03NbMbiTOBQqW-HvXw-1
-Received: by mail-ed1-f71.google.com with SMTP id x20-20020a05640226d400b0046cbe2b85caso9710029edd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 07:42:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQzHZwjuXupiqlJusdYzgBRFmDan+a9C8lcInQhXBVM=;
-        b=ITOQc7aEToxwof0HISYm8mXJKcUOi7eiZ2j32IzrzevvRZDcK6qewDmS1cM+18YKLQ
-         MkR4mejPCXDJKBOpxjpAvsXDPZjfdHz59PfhMUxX+2rBHd+sKnjWMelj67y0kBpljRl2
-         nGJrbS5MAWPif6DVEgx60RPe+PKegouk6IZjqXd08ECJxD1keaROjaUe/Taj8jcFI0n0
-         u7xMmJMYbhzMEYKsvvjy24FFc5ujlLhmc/XtI5gjOGmclAMiezVKuw2GkzP5NHzuKCU+
-         0Btjh3B4SykG35RNDUuBPOU2m3iNS5dNm5YA5JuMWT1YJNbGTu9iNAm1s3qDjNJWCCff
-         Jfqw==
-X-Gm-Message-State: ANoB5pmpnlsjPMOd08eWDJtdCX1+AeFI+cq+/4OY1JIV6pd4ZuWYnx78
-        UkWbkKx2EBZWze8JLZ1nr56BNz5Lb2j+GAThCnZcAjmpLlPNkKpUYmYZtenaEHOsOvnkoVzod1I
-        Uig8XeScUTzJoBefK9mLH8gWz
-X-Received: by 2002:a17:907:90d8:b0:7c0:e302:b523 with SMTP id gk24-20020a17090790d800b007c0e302b523mr16515543ejb.59.1671032556383;
-        Wed, 14 Dec 2022 07:42:36 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf63c7L8UGtfrL6TE+DGeYWq+KxeHIlGEceOMBDac035oAfK6UfailMlLf0IPYbKTOyjFxbIWg==
-X-Received: by 2002:a17:907:90d8:b0:7c0:e302:b523 with SMTP id gk24-20020a17090790d800b007c0e302b523mr16515530ejb.59.1671032556231;
-        Wed, 14 Dec 2022 07:42:36 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id q10-20020a17090676ca00b007c4ed5ced79sm888756ejn.73.2022.12.14.07.42.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 07:42:35 -0800 (PST)
-Message-ID: <92358ff1-86ca-76b0-c4f3-3d4e0dddc80a@redhat.com>
-Date:   Wed, 14 Dec 2022 16:42:34 +0100
+        Wed, 14 Dec 2022 10:46:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25052229C;
+        Wed, 14 Dec 2022 07:46:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53AD5B816ED;
+        Wed, 14 Dec 2022 15:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A5AC433D2;
+        Wed, 14 Dec 2022 15:46:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671032812;
+        bh=uf3uJ29IRF0B6jfTi/OVGxE/9DAFHln2ROkzkp71rHc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FXnN+3zUOVM5czozcyTDUlQWG0s8L+cQNzyWJM/n4Kls9ZdaxDc5BRHw5wZ9nF+nF
+         kveQRq28AgAJy5lmhaG4Mty/sHbfF1SHFeiwPWML3VKo9ibW6kd3iWvg8RizZdf5vM
+         GkBwizeckfU9yGiUZX+Y4xyGgQWo/iNf+VCJN7j0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.336
+Date:   Wed, 14 Dec 2022 16:46:47 +0100
+Message-Id: <167103280818230@kroah.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] Add HP Stream 8 to bytcr_rt5640.c
-Content-Language: en-US, nl
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Moises Cardona <moisesmcardona@gmail.com>,
-        cezary.rojewski@intel.com
-Cc:     liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, oder_chiou@realtek.com, akihiko.odaki@gmail.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20221213173550.1567875-1-moisesmcardona@gmail.com>
- <08403fff-359b-b5f4-d039-18eeef660637@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <08403fff-359b-b5f4-d039-18eeef660637@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+I'm announcing the release of the 4.9.336 kernel.
 
-On 12/13/22 20:04, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 12/13/22 11:35, Moises Cardona wrote:
->> The HP Stream 8 tablet is identical to the HP Stream 7 in terms of the PCB,
->> with the exception of the added SIM Card Slot. 
->> Therefore, I'm submitting this patch which properly initializes the audio 
->> and enables the headphone jack to work, just like it does in the 
->> HP Stream 7.
->>
->> Signed-off-by: Moises Cardona <moisesmcardona@gmail.com>
-> 
-> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+All users of the 4.9 kernel series must upgrade.
 
-Note this is the old version which wrongly contains the
-BYT_RT5640_MONO_SPEAKER flag.
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Mark, please merge the new version (which unfortunately
-was not marked as v2) which correctly drops
-the BYT_RT5640_MONO_SPEAKER flag.
+thanks,
 
-(this tablet has 2 speakers so it should not have the mono flag)
+greg k-h
 
-Regards,
+------------
 
-Hans
+ Makefile                                           |    2 
+ arch/arm/boot/dts/rk3036-evb.dts                   |    2 
+ arch/arm/boot/dts/rk3188-radxarock.dts             |    2 
+ arch/arm/boot/dts/rk3288-evb-act8846.dts           |    2 
+ arch/arm/boot/dts/rk3288-firefly.dtsi              |    2 
+ arch/arm/boot/dts/rk3288-miqi.dts                  |    2 
+ arch/arm/boot/dts/rk3288-rock2-square.dts          |    2 
+ arch/arm/include/asm/perf_event.h                  |    2 
+ drivers/gpio/gpio-amd8111.c                        |    4 
+ drivers/hid/hid-core.c                             |    3 
+ drivers/hid/hid-lg4ff.c                            |    6 
+ drivers/media/v4l2-core/v4l2-dv-timings.c          |   20 +
+ drivers/mmc/host/sdhci.c                           |   73 +++++-
+ drivers/mmc/host/sdhci.h                           |   12 -
+ drivers/net/ethernet/aeroflex/greth.c              |    1 
+ drivers/net/ethernet/hisilicon/hisi_femac.c        |    2 
+ drivers/net/ethernet/hisilicon/hix5hd2_gmac.c      |    2 
+ drivers/net/ethernet/intel/e1000e/netdev.c         |    4 
+ drivers/net/ethernet/intel/igb/igb_ethtool.c       |    2 
+ drivers/net/ethernet/marvell/mvneta.c              |    2 
+ drivers/net/ethernet/microchip/encx24j600-regmap.c |    4 
+ drivers/net/ieee802154/cc2520.c                    |    2 
+ drivers/net/plip/plip.c                            |    4 
+ drivers/net/xen-netback/common.h                   |   14 -
+ drivers/net/xen-netback/interface.c                |   22 --
+ drivers/net/xen-netback/netback.c                  |  229 +++++++++++----------
+ drivers/net/xen-netback/rx.c                       |   10 
+ net/bluetooth/6lowpan.c                            |    1 
+ net/mac802154/iface.c                              |    1 
+ net/nfc/nci/ntf.c                                  |    6 
+ net/tipc/link.c                                    |    4 
+ sound/core/seq/seq_memory.c                        |   11 -
+ sound/soc/soc-pcm.c                                |    2 
+ tools/testing/selftests/rcutorture/bin/kvm.sh      |    8 
+ tools/testing/selftests/rcutorture/bin/mkinitrd.sh |   60 +++++
+ 35 files changed, 341 insertions(+), 184 deletions(-)
 
+Adrian Hunter (1):
+      mmc: sdhci: Fix voltage switch delay
 
-> 
->> ---
->>  sound/soc/intel/boards/bytcr_rt5640.c | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> diff --git a/sound/soc/intel/boards/bytcr_rt5640.c b/sound/soc/intel/boards/bytcr_rt5640.c
->> index fb9d9e271845..1d964b1ceff4 100644
->> --- a/sound/soc/intel/boards/bytcr_rt5640.c
->> +++ b/sound/soc/intel/boards/bytcr_rt5640.c
->> @@ -796,6 +796,17 @@ static const struct dmi_system_id byt_rt5640_quirk_table[] = {
->>  					BYT_RT5640_SSP0_AIF1 |
->>  					BYT_RT5640_MCLK_EN),
->>  	},
->> +	{	/* HP Stream 8 */
->> +		.matches = {
->> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Hewlett-Packard"),
->> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "HP Stream 8 Tablet"),
->> +		},
->> +		.driver_data = (void *)(BYTCR_INPUT_DEFAULTS |
->> +					BYT_RT5640_MONO_SPEAKER |
->> +					BYT_RT5640_JD_NOT_INV |
->> +					BYT_RT5640_SSP0_AIF1 |
->> +					BYT_RT5640_MCLK_EN),
->> +	},
->>  	{	/* I.T.Works TW891 */
->>  		.matches = {
->>  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "To be filled by O.E.M."),
-> 
+Akihiko Odaki (2):
+      e1000e: Fix TX dispatch condition
+      igb: Allocate MSI-X vector when testing
+
+Anastasia Belova (1):
+      HID: hid-lg4ff: Add check for empty lbuf
+
+Connor Shu (1):
+      rcutorture: Automatically create initrd directory
+
+Dan Carpenter (2):
+      net: mvneta: Prevent out of bounds read in mvneta_config_rss()
+      net: mvneta: Fix an out of bounds check
+
+Greg Kroah-Hartman (1):
+      Linux 4.9.336
+
+Hans Verkuil (1):
+      media: v4l2-dv-timings.c: fix too strict blanking sanity checks
+
+Johan Jonker (1):
+      ARM: dts: rockchip: fix ir-receiver node names
+
+Juergen Gross (3):
+      xen/netback: do some code cleanup
+      xen/netback: don't call kfree_skb() with interrupts disabled
+      xen/netback: fix build warning
+
+Kees Cook (2):
+      ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
+      NFC: nci: Bounds check struct nfc_target arrays
+
+Liu Jian (2):
+      net: hisilicon: Fix potential use-after-free in hisi_femac_rx()
+      net: hisilicon: Fix potential use-after-free in hix5hd2_rx()
+
+Masahiro Yamada (1):
+      mmc: sdhci: use FIELD_GET for preset value bit masks
+
+Ross Lagerwall (1):
+      xen/netback: Ensure protocol headers don't fall in the non-linear area
+
+Sebastian Reichel (1):
+      arm: dts: rockchip: fix node name for hym8563 rtc
+
+Srinivasa Rao Mandadapu (1):
+      ASoC: soc-pcm: Add NULL check in BE reparenting
+
+Tomislav Novak (1):
+      ARM: 9251/1: perf: Fix stacktraces for tracepoint events in THUMB2 kernels
+
+Valentina Goncharenko (2):
+      net: encx24j600: Add parentheses to fix precedence
+      net: encx24j600: Fix invalid logic in reading of MISTAT register
+
+Wang ShaoBo (1):
+      Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
+
+Wei Yongjun (1):
+      mac802154: fix missing INIT_LIST_HEAD in ieee802154_if_add()
+
+Xiongfeng Wang (1):
+      gpio: amd8111: Fix PCI device reference count leak
+
+Yang Yingliang (1):
+      net: plip: don't call kfree_skb/dev_kfree_skb() under spin_lock_irq()
+
+YueHaibing (1):
+      tipc: Fix potential OOB in tipc_link_proto_rcv()
+
+Zhang Changzhong (1):
+      ethernet: aeroflex: fix potential skb leak in greth_init_rings()
+
+ZhangPeng (1):
+      HID: core: fix shift-out-of-bounds in hid_report_raw_event
+
+Ziyang Xuan (1):
+      ieee802154: cc2520: Fix error return code in cc2520_hw_init()
 
