@@ -2,179 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DBF64C43B
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB96864C443
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 08:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237317AbiLNHIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 02:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S237379AbiLNHJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 02:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237499AbiLNHHl (ORCPT
+        with ESMTP id S237499AbiLNHJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 02:07:41 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EEFB1D0
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 23:07:32 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-348608c1cd3so198713077b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 13 Dec 2022 23:07:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
-        b=S+ZBF0aetxStcQmCeGXzwYt5EYr7NqwSqJG8AaIaHEbqVpEpSuzSjYiSUhXEiNbImV
-         Ea2GwSaPoQtaG8OF5d5huZF63W3lOkhWYFBhUN4HaXVfI5kKpUCHmE56fYPUv4HE3TRZ
-         AJGNUmrvAUpDemnzYe+M/w6HXUE6IyRoOn00f/cCeosedEWCZ7NRvAQBBQzInBW+LvqH
-         RMOyqbRFhjmyfTvTiUzIdN02SO9Q24DA+MljcTeC7wSNU9/sYR4oFxxCQxXgiJqW6kPo
-         Fa0u60FF0bOFRWFEHRXhwPiB9SWZ8B1p3GspHFf5Ehg484k4HqLEH+gP3sh1YIarVrMD
-         8S7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwk10ScpIHN3TWeoCLrvB+vfcB+zS8T8ixzqnuDxGoQ=;
-        b=yxhkPFaAm6sblGgBqRdfAZ5zMccYA+znTMXUQlsE39sEJlB9/3EV9q1Rad5syiWVbS
-         wA/k4ZVrbaeUgVeOZS/++ttoMi2UbZTw16kqBNZLwA9wbMtA3UEctkY/qg/6XQppFhA0
-         mkuKHLjPwqihpgW1/a+ZKCearFhzK4RosbKqRvFwS4GQ5nHlL8pBgCL1wq/wYTb0UCG/
-         YTNsZkQn92Kt8tg495FMZAuA6pTRJW8rbaCz+xTHXNdr/OzgjCfEovTir4X+uU6LFT0q
-         Al0xxffqLAbbBMAm+SEGTHFMOKDwn4tdfXhqFXtTGRTSIGt8E7vEIZSfc80HkmAXMKah
-         /3ig==
-X-Gm-Message-State: ANoB5pkZxSHQsSnqMvLwOo1lCKnx0FNba9mAz0FgbKJ8ADPTHLAvmf1q
-        L7TYuDePAs+BAb3F/xrQWWB/Gg5AhLrr
-X-Google-Smtp-Source: AA0mqf7avn4Qaej3IKAY16Oodzg8JnzSJ4uRyWnL1FJxff/YhffcMhV0BRcdqYY6ra/CH47c9Wb2HHr+juUv
-X-Received: from pumahsu.ntc.corp.google.com ([2401:fa00:fc:202:cb1:cbe3:3a49:1751])
- (user=pumahsu job=sendgmr) by 2002:a5b:d0d:0:b0:6fe:bdb1:1529 with SMTP id
- y13-20020a5b0d0d000000b006febdb11529mr22480701ybp.628.1671001651345; Tue, 13
- Dec 2022 23:07:31 -0800 (PST)
-Date:   Wed, 14 Dec 2022 15:06:50 +0800
-In-Reply-To: <20221214070650.703793-1-pumahsu@google.com>
-Message-Id: <20221214070650.703793-3-pumahsu@google.com>
-Mime-Version: 1.0
-References: <20221214070650.703793-1-pumahsu@google.com>
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Subject: [PATCH 2/2] usb: core: add implementations for usb suspend/resume hooks
-From:   Puma Hsu <pumahsu@google.com>
-To:     gregkh@linuxfoundation.org, mka@chromium.org, dianders@chromium.org
-Cc:     albertccwang@google.com, raychi@google.com, howardyen@google.com,
-        leejj@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Puma Hsu <pumahsu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 14 Dec 2022 02:09:15 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7D6C34;
+        Tue, 13 Dec 2022 23:09:13 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NX5zv2WLyzRq37;
+        Wed, 14 Dec 2022 15:08:11 +0800 (CST)
+Received: from build.huawei.com (10.175.101.6) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 14 Dec 2022 15:09:11 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH 0/2] scsi:donot skip lun if inquiry returns PQ=1 for all hosts
+Date:   Wed, 14 Dec 2022 15:08:44 +0800
+Message-ID: <20221214070846.1808300-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mobile, a co-processor can be used for USB audio. When the co-processor
-is working for USB audio, the co-processor is the user/owner of the USB
-driver, and the ACPU is able to sleep in such condition to improve power
-consumption. In order to support this, we implement the hooks to handle USB
-suspend/resume requests.
+commit 948e922fc4461 ("scsi: core: map PQ=1, PDT=other values to
+SCSI_SCAN_TARGET_PRESENT") returns SCSI_SCAN_TARGET_PRESENT if inquiry
+returns PQ=1.
 
-This commit introduces two hook implementations:
-- usb_device_vendor_suspend()
-  Determine whether we should skip suspend request according to the status
-  of USB audio playback/capture.
-  Return:
-  - true: let driver.c know that we "handled" and it can just return
-          succeeded to ACPU to continue system suspend process.
-  - false: let driver.c know that it still run original suspend process.
+According to the SPC, PQ=1 means the addressed logical unit having the
+indicated device type is not accessible, it does not mean the addressed
+logical unit is invalid. We still can map this lun to an sg device.
 
-- usb_device_vendor_resume()
-  Determine whether we should skip resume request according to the USB
-  device's suspend state.
-  Return:
-  - true: let driver.c know that it doesn't need to run resume process.
-  - false: let driver.c know that it still run original resume process.
+In some conditions, we do not want to skip these devices, for example
+with iSCSI:
 
-Signed-off-by: Puma Hsu <pumahsu@google.com>
----
- drivers/usb/core/usb-hooks-impl-goog.c | 72 ++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 drivers/usb/core/usb-hooks-impl-goog.c
+When iSCSI initiator logged in target, the target attached none valid
+lun but lun0. lun0 is not an valid disk, while it would response
+inquiry command with PQ=1 and other general scsi commands like probe lun.
+The others luns of target is added/removed dynamicly.
 
-diff --git a/drivers/usb/core/usb-hooks-impl-goog.c b/drivers/usb/core/usb-hooks-impl-goog.c
-new file mode 100644
-index 000000000000..89dc360babed
---- /dev/null
-+++ b/drivers/usb/core/usb-hooks-impl-goog.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Google Corp.
-+ *
-+ * Author:
-+ *  Puma Hsu <pumahsu@google.com>
-+ */
-+
-+#include <linux/usb.h>
-+#include "usb.h"
-+
-+extern int usb_dev_register_vendor_ops(struct usb_device_vendor_ops *vendor_ops);
-+
-+static bool usb_device_vendor_suspend(struct usb_device *udev, pm_message_t msg)
-+{
-+	bool usb_playback = false;
-+	bool usb_capture = false;
-+	bool handled = false;
-+
-+	if (!udev)
-+		return handled;
-+
-+	/*
-+	 * Note: Our private driver provides APIs to know the device is in audio playback
-+	 * or capture.
-+	 *
-+	 * usb_playback = usb_audio_playback_enabled();
-+	 * usb_capture = usb_audio_capture_enabled();
-+	 */
-+
-+	/*
-+	 * Note: When the USB audio is working, we will not let the usb device suspend.
-+	 * Return handled = true so that the System core can it's suspend process.
-+	 */
-+	if (usb_playback || usb_capture) {
-+		dev_info(&udev->dev, "%s: skip suspend process (playback:%d,capture:%d)\n",
-+			 __func__, usb_playback, usb_capture);
-+		handled = true;
-+	}
-+
-+	return handled;
-+}
-+
-+static bool usb_device_vendor_resume(struct usb_device *udev, pm_message_t msg)
-+{
-+	bool handled = false;
-+
-+	if (!udev)
-+		return handled;
-+
-+	/*
-+	 * Note: If the udev didn't suspend actually, we don't need to do resume.
-+	 */
-+	if (udev->port_is_suspended || udev->state == USB_STATE_SUSPENDED) {
-+		handled = false;
-+	} else {
-+		dev_info(&udev->dev, "%s: skip resume process\n", __func__);
-+		handled = true;
-+	}
-+
-+	return handled;
-+}
-+
-+static struct usb_device_vendor_ops usb_dev_vendor_ops = {
-+	.usb_dev_suspend = usb_device_vendor_suspend,
-+	.usb_dev_resume = usb_device_vendor_resume,
-+};
-+
-+int usb_vendor_helper_init(void)
-+{
-+	return usb_dev_register_vendor_ops(&usb_dev_vendor_ops);
-+}
+We want the lun0 to be mapped to an sg device in initiator, so we can
+probe luns of target based on lun0.
+
+In first patch, I add an interface to control if to skip luns return
+PQ=1 for inquiry.
+
+In second patch, make iscsi_tcp do not skip luns return PQ=1 as default,
+since I do not have iscsi_tcp environment, so here just modified the
+iscsi_tcp.
+
+Wenchao Hao (2):
+  scsi:core:Add sysfs interface to control if skip lun with PQ=1
+  scsi:iscsi_tcp:Do not skip lun inquiry returns PQ=1
+
+ drivers/scsi/iscsi_tcp.c  |  1 +
+ drivers/scsi/scsi_scan.c  |  9 ++++++---
+ drivers/scsi/scsi_sysfs.c | 29 +++++++++++++++++++++++++++++
+ include/scsi/scsi_host.h  |  3 +++
+ 4 files changed, 39 insertions(+), 3 deletions(-)
+
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog
+2.32.0
 
