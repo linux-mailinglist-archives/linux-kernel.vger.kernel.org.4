@@ -2,106 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC51664C5CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F4664C5D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 10:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237565AbiLNJYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 04:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S237621AbiLNJZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 04:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbiLNJYC (ORCPT
+        with ESMTP id S229867AbiLNJZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 04:24:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D4B25F5
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:23:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671009794;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7575zCJt/W+bOCfmNqE0fJaW9dUNr74ly+FhAEM/HvY=;
-        b=jKdH75PBV6Y0RGJXsuf3lw87WhziL/G9ZDowNQL+qLycPiqtkRs1lEFgJjKAh/S7N5kIWU
-        LAps7GjW7FVuJb8thUBL2VG/Vxdk5oLTotW3EJsutUcHx6rQAeD7kkF/97726YwN7m0tna
-        wrb+HPdXeLMQoMK7iJR3jrQeWgWMEX8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-625-suOO3Z3HPiughgphRX60mQ-1; Wed, 14 Dec 2022 04:23:12 -0500
-X-MC-Unique: suOO3Z3HPiughgphRX60mQ-1
-Received: by mail-wm1-f71.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so3941464wmg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 01:23:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7575zCJt/W+bOCfmNqE0fJaW9dUNr74ly+FhAEM/HvY=;
-        b=yZQQLd0ndLDFJ2rsJ9NRn3sa6rYrSxY8ZqwJ69mveOeUe2KSRDQkBYy/tfYFZyYujQ
-         T4QayuPX4Rz1YM2SQYY5eplCnXrGwfQCIAPAJZhUsCBHbAk6KFp/sG1oqcfLVI18AxEB
-         xqe2mI4fHvFf3kzuKlUeQ9A1HXBRMF9G4u6AF4scO+nGiyE7VYUfwMtLF7AxyJQ1qb/i
-         Z+Fm198RRfxnhIp2Ztd2P0MohRHWS+Sl83WEcLJzTX1TNv+X/xlGEJZxSTHJ7NF/pRyL
-         l/7YEpd8h9UXzUTY4xze5nZqJ50fVYX/kwhIZoxZoC1dwJGdsL4cVe9fbmTQZseF3YWq
-         gyhQ==
-X-Gm-Message-State: ANoB5plYjE0vFfY4KBb0P6w/9GE4e4U30uFG1Spn5vSF+GMkGEy9GW0Y
-        obnxd4kgztW4U1fl3IKTF5x5Fy5nItVCCeS1+3pvI+8Lu9a4Y1Zahv3pcTukE7INEiasLtj9ut9
-        s1eoqu/4aAJmZsczbl5dGK07C
-X-Received: by 2002:a05:6000:1f81:b0:250:22e4:b8a6 with SMTP id bw1-20020a0560001f8100b0025022e4b8a6mr5865928wrb.39.1671009791764;
-        Wed, 14 Dec 2022 01:23:11 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5BsrFQrZiqcKQNGodRXeWHRfYLzojFhTjRKPMU8We633YCGl8jewbotKhhnFGoVJScipq0ng==
-X-Received: by 2002:a05:6000:1f81:b0:250:22e4:b8a6 with SMTP id bw1-20020a0560001f8100b0025022e4b8a6mr5865908wrb.39.1671009791515;
-        Wed, 14 Dec 2022 01:23:11 -0800 (PST)
-Received: from [192.168.0.5] (ip-109-43-178-56.web.vodafone.de. [109.43.178.56])
-        by smtp.gmail.com with ESMTPSA id s18-20020a5d4ed2000000b00242271fd2besm2257482wrv.89.2022.12.14.01.23.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 01:23:10 -0800 (PST)
-Message-ID: <4e8cc757-13e2-3be4-fea2-3ef3dcd0688d@redhat.com>
-Date:   Wed, 14 Dec 2022 10:23:09 +0100
+        Wed, 14 Dec 2022 04:25:43 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E6B25F5;
+        Wed, 14 Dec 2022 01:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1671009943; x=1702545943;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=jdLGkBrqaiJB+dzchBoVMXO4tcey19FNxVWX7NoFdCs=;
+  b=GaaB98lyfsZoqWSE0XKHBQABEWdnKH+bl58JcCpU4w14uUrLOf3mNXQt
+   +qZ62dAvyx2EbRqcsUK4cIcRXnKb6m9ERVUZxRXnlOCLrbHwQPaWJk4nK
+   fvUSVJlu9KVo1npSyyW/Wi+m2x9eVrJMif+KJd+kxjY/i2+VyZMeyGvnO
+   DAgho4l8VdkiOdK7KoPwCMJQJxfniBqfNmlOeixIw5k1GKf/RRTE2zXur
+   pJ5TfvgJPwo8K74BFE08JMrNDFdYbl8OHU6xFNqrNSk3UHx51F+okm63i
+   dianbEYXjAIefxn6r0aFfxuQerXgeJc4KKpgCkPGjiO93dpj2scN1U+gg
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,244,1665471600"; 
+   d="scan'208";a="188100259"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Dec 2022 02:25:42 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 14 Dec 2022 02:25:39 -0700
+Received: from training-HP-280-G1-MT-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Wed, 14 Dec 2022 02:25:35 -0700
+From:   Divya Koppera <Divya.Koppera@microchip.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <richardcochran@gmail.com>
+CC:     <UNGLinuxDriver@microchip.com>
+Subject: [RESEND PATCH v5 net-next 0/2] Fixed warnings
+Date:   Wed, 14 Dec 2022 14:55:22 +0530
+Message-ID: <20221214092524.21399-1-Divya.Koppera@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v4 4/9] KVM: s390: selftest: memop: Replace macros by
- functions
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-References: <20221213165405.2953539-1-scgl@linux.ibm.com>
- <20221213165405.2953539-5-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20221213165405.2953539-5-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/12/2022 17.54, Janis Schoetterl-Glausch wrote:
-> Replace the DEFAULT_* test helpers by functions, as they don't
-> need the exta flexibility.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
->   tools/testing/selftests/kvm/s390x/memop.c | 82 +++++++++++------------
->   1 file changed, 39 insertions(+), 43 deletions(-)
+Fixed warnings related to PTR_ERR and initialization.
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+Divya Koppera (2):
+  net: phy: micrel: Fixed error related to uninitialized symbol ret
+  net: phy: micrel: Fix warn: passing zero to PTR_ERR
+
+ drivers/net/phy/micrel.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+--
+2.17.1
 
