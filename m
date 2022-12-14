@@ -2,146 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8206764C933
-	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C1E64C937
+	for <lists+linux-kernel@lfdr.de>; Wed, 14 Dec 2022 13:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238110AbiLNMmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Dec 2022 07:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S238359AbiLNMoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Dec 2022 07:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237905AbiLNMmY (ORCPT
+        with ESMTP id S229660AbiLNMoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Dec 2022 07:42:24 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EE31EA
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:40:35 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id vv4so44192510ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Dec 2022 04:40:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A1xhBzpDoBPavmG4HUeBFEFL1GXCLdg20tEeRb+nhZE=;
-        b=hPdCW45Imw+etSsnMztT0eq0wgnMv1RHYJPFB3G3fTMGsVF/RjcwDuJJlO2Rg1+iVY
-         SmfwUEQAoxqJ4/G6OV+1V4ZjkvJADA1slFCIw7WahEiUEHRtfEWtZpVL3CkTSWw6Ey3y
-         hZUHcNJymx+J3cZvnfnWmHdLLlXsKA9Sf6Ns3QzFnwufSLBDj+VJZiqAhQxdfIy2HoFA
-         J3/Qr5U4mjB2f11TKpyoGVTg6SJg/lfiaS6nb8DbITTgt4frVYW1/cVxwNaRWzBAsv8n
-         sD9Oc5SlxghQXqHdME/65WZLp852Z4cd1V9/9MxypUZs9vMu4Vlz94pVyPYnWLTvsvzA
-         ujZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A1xhBzpDoBPavmG4HUeBFEFL1GXCLdg20tEeRb+nhZE=;
-        b=Q8CfqSM4CAYIlNBH5ffnGKcMqaBe3UNsH9euDW8balL5UHOUGFg3ZXABCsrP9vISJx
-         glTBos6st2Xv+9+aRAHwls2W4IHVcLgNPiRRyc/0V6GjUJFt9p1QmwAbF0SF3hWnXrEJ
-         Bz4rM83shKGK62ln1abtJwOtccSGemaUlzRIGy/rE4S71XWBAtGsjpjHU+AMedicPCc1
-         +E0CKNP0XlhuN7lZdjXCVLjqm/RhBmyq9ISOrjRzcVryr20PEauCEWf3n0LyWwyQiGbP
-         il0S1QI3/+KJwB8uyv3oovaYE32KeeUKTP0CaFlgJhiPIIfzVpbd3sq6toOLBvjbsva5
-         9bJw==
-X-Gm-Message-State: ANoB5pntwJzWAD5FTk7TlCuOLYVEmqPVTki35mktGtFV4ACtfDMaD/oP
-        7o1L4V4vvccdLfZ9DatcaZFg8A==
-X-Google-Smtp-Source: AA0mqf6BSY63Rg2Sgvtvd1MMLbdz7V4US4tlxmtn3trGpirP5EV4S/iHOmyfp6egzbvk7BQ6DIT5cA==
-X-Received: by 2002:a17:906:4b53:b0:7c1:4d21:abb9 with SMTP id j19-20020a1709064b5300b007c14d21abb9mr15468514ejv.14.1671021634452;
-        Wed, 14 Dec 2022 04:40:34 -0800 (PST)
-Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
-        by smtp.gmail.com with ESMTPSA id la1-20020a170907780100b007c073be0127sm5653253ejc.202.2022.12.14.04.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 04:40:34 -0800 (PST)
-Date:   Wed, 14 Dec 2022 13:40:33 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: memcg reclaim demotion wrt. isolation
-Message-ID: <Y5nEQeXj6HQBEHEY@cmpxchg.org>
-References: <Y5idFucjKVbjatqc@dhcp22.suse.cz>
- <Y5ik+CCmvapf87Mb@cmpxchg.org>
- <Y5maoIUuH79KrfJt@dhcp22.suse.cz>
+        Wed, 14 Dec 2022 07:44:01 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6DE28E3B;
+        Wed, 14 Dec 2022 04:41:42 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6AE1D8B;
+        Wed, 14 Dec 2022 13:41:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671021700;
+        bh=r0EoOrwjHeYsu+s8tUZb8V5okl74SiOjfAdRUuidrGk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8M4PCtZ31cFcRgFIv8tXBfDqc2DPSHNCOdMTq1ZDTeReBY7lbAQB8QPs0YCdjODI
+         /pHkiW/rjvdci+1Vg5J6UB1urFzYsqgUQ8qQchpXQ6jB3Ek2HRflhB6QgLkioHZIkY
+         1P7he56DSJqnqEeHAMma7kLvIN9EZb8nzf8mp3mM=
+Date:   Wed, 14 Dec 2022 14:41:36 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Max Staudt <mstaudt@google.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] media: uvcvideo: Fix race condition with usb_kill_urb
+Message-ID: <Y5nEgDOXFNDPf8/Y@pendragon.ideasonboard.com>
+References: <20221212-uvc-race-v3-0-954efc752c9a@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y5maoIUuH79KrfJt@dhcp22.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221212-uvc-race-v3-0-954efc752c9a@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:42:56AM +0100, Michal Hocko wrote:
-> On Tue 13-12-22 17:14:48, Johannes Weiner wrote:
-> > On Tue, Dec 13, 2022 at 04:41:10PM +0100, Michal Hocko wrote:
-> > > Hi,
-> > > I have just noticed that that pages allocated for demotion targets
-> > > includes __GFP_KSWAPD_RECLAIM (through GFP_NOWAIT). This is the case
-> > > since the code has been introduced by 26aa2d199d6f ("mm/migrate: demote
-> > > pages during reclaim"). I suspect the intention is to trigger the aging
-> > > on the fallback node and either drop or further demote oldest pages.
-> > > 
-> > > This makes sense but I suspect that this wasn't intended also for
-> > > memcg triggered reclaim. This would mean that a memory pressure in one
-> > > hierarchy could trigger paging out pages of a different hierarchy if the
-> > > demotion target is close to full.
-> > 
-> > This is also true if you don't do demotion. If a cgroup tries to
-> > allocate memory on a full node (i.e. mbind()), it may wake kswapd or
-> > enter global reclaim directly which may push out the memory of other
-> > cgroups, regardless of the respective cgroup limits.
+Hi Ricardo,
+
+Thank you for the patch.
+
+On Wed, Dec 14, 2022 at 12:18:52PM +0100, Ricardo Ribalda wrote:
+> usb_kill_urb warranties that all the handlers are finished when it
+> returns, but does not protect against threads that might be handling
+> asynchronously the urb.
 > 
-> You are right on this. But this is describing a slightly different
-> situaton IMO. 
+> For UVC, the function uvc_ctrl_status_event_async() takes care of
+> control changes asynchronously.
 > 
-> > The demotion allocations don't strike me as any different. They're
-> > just allocations on behalf of a cgroup. I would expect them to wake
-> > kswapd and reclaim physical memory as needed.
+>  If the code is executed in the following order:
 > 
-> I am not sure this is an expected behavior. Consider the currently
-> discussed memory.demote interface when the userspace can trigger
-> (almost) arbitrary demotions. This can deplete fallback nodes without
-> over-committing the memory overall yet push out demoted memory from
-> other workloads. From the user POV it would look like a reclaim while
-> the overall memory is far from depleted so it would be considered as
-> premature and a warrant a bug report.
+> CPU 0					CPU 1
+> ===== 					=====
+> uvc_status_complete()
+> 					uvc_status_stop()
+> uvc_ctrl_status_event_work()
+> 					uvc_status_start() -> FAIL
+
+
+
+> Then uvc_status_start will keep failing and this error will be shown:
 > 
-> The reclaim behavior would make more sense to me if it was constrained
-> to the allocating memcg hierarchy so unrelated lruvecs wouldn't be
-> disrupted.
+> <4>[    5.540139] URB 0000000000000000 submitted while active
+> drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+> 
+> Let's improve the current situation, by not re-submiting the urb if
+> we are stopping the status event. Also process the queued work
+> (if any) during stop.
+> 
+> CPU 0					CPU 1
+> ===== 					=====
+> uvc_status_complete()
+> 					uvc_status_stop()
+> 					uvc_status_start()
+> uvc_ctrl_status_event_work() -> FAIL
+> 
+> Hopefully, with the usb layer protection this should be enough to cover
+> all the cases.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+> Reviewed-by: Yunke Cao <yunkec@chromium.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> uvc: Fix race condition on uvc
+> 
+> Make sure that all the async work is finished when we stop the status urb.
+> 
+> To: Yunke Cao <yunkec@chromium.org>
+> To: Sergey Senozhatsky <senozhatsky@chromium.org>
+> To: Max Staudt <mstaudt@google.com>
+> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v3:
+> - Remove the patch for dev->status, makes more sense in another series, and makes
+>   the zero day less nervous.
+> - Update reviewed-by (thanks Yunke!).
+> - Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+> 
+> Changes in v2:
+> - Add a patch for not kalloc dev->status
+> - Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+> - Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+> ---
+>  drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
+>  drivers/media/usb/uvc/uvc_status.c | 6 ++++++
+>  drivers/media/usb/uvc/uvcvideo.h   | 1 +
+>  3 files changed, 10 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> index c95a2229f4fa..5160facc8e20 100644
+> --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> @@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+>  
+>  	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+>  
+> +	if (dev->flush_status)
+> +		return;
+> +
+>  	/* Resubmit the URB. */
+>  	w->urb->interval = dev->int_ep->desc.bInterval;
+>  	ret = usb_submit_urb(w->urb, GFP_KERNEL);
+> diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+> index 7518ffce22ed..09a5802dc974 100644
+> --- a/drivers/media/usb/uvc/uvc_status.c
+> +++ b/drivers/media/usb/uvc/uvc_status.c
+> @@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+>  	if (dev->int_urb == NULL)
+>  		return 0;
+>  
+> +	dev->flush_status = false;
+>  	return usb_submit_urb(dev->int_urb, flags);
+>  }
+>  
+>  void uvc_status_stop(struct uvc_device *dev)
+>  {
+> +	struct uvc_ctrl_work *w = &dev->async_ctrl;
+> +
+> +	dev->flush_status = true;
+>  	usb_kill_urb(dev->int_urb);
 
-What if the second tier is full, and the memcg you're trying to demote
-doesn't have any pages to vacate on that tier yet? Will it fail to
-demote?
+Isn't this still racy ?
 
-Does that mean that a shared second tier node is only usable for the
-cgroup that demotes to it first? And demotion stops for everybody else
-until that cgroup vacates the node voluntarily?
+CPU0					CPU1
+====					====
 
-As you can see, these would be unprecedented and quite surprising
-first-come-first-serve memory protection semantics.
+uvc_status_stop()			uvc_ctrl_status_event_work()
+{					{
+						if (dev->flush_status)
+							return;
 
-The only way to prevent cgroups from disrupting each other on NUMA
-nodes is NUMA constraints. Cgroup per-node limits. That shields not
-only from demotion, but also from DoS-mbinding, or aggressive
-promotion. All of these can result in some form of premature
-reclaim/demotion, proactive demotion isn't special in that way.
+	dev->flush_status = true;
+	usb_kill_urb(dev->int_urb);
 
-The default behavior for cgroups is that without limits or
-protections, resource access is unconstrained and competitive. Without
-NUMA constraints, it's very much expected that cgroups compete over
-nodes, and that the hottest pages win out. Per aging rules, freshly
-demoted pages are hotter than anything else on the target node, so it
-should displace accordingly.
+						/* Resubmit the URB. */
+						w->urb->interval = dev->int_ep->desc.bInterval;
+						ret = usb_submit_urb(w->urb, GFP_KERNEL);
+					}
 
-Consider the case where you have two lower tier nodes and there are
-cpuset isolation for the main workloads, but some maintenance thing
-runs and pollutes one of the lower tier nodes. Or consider the case
-where a shared lower tier node is divvied up between two cgroups using
-protection settings to allow overcommit, i.e. per-node memory.low.
+	if (cancel_work_sync(&w->work))
+		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+}
 
-Demotions, proactive or not, MUST do global reclaim on a full node.
+uvc_status_start() will then return an error, right ?
+
+> +	if (cancel_work_sync(&w->work))
+> +		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+>  }
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index df93db259312..6a9b72d6789e 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -560,6 +560,7 @@ struct uvc_device {
+>  	struct usb_host_endpoint *int_ep;
+>  	struct urb *int_urb;
+>  	u8 *status;
+> +	bool flush_status;
+>  	struct input_dev *input;
+>  	char input_phys[64];
+>  
+> 
+> ---
+> base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+> change-id: 20221212-uvc-race-09276ea68bf8
+
+-- 
+Regards,
+
+Laurent Pinchart
